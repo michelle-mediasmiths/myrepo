@@ -1,13 +1,17 @@
 package com.medismiths.foxtel.mpa;
 
-import java.io.File;
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
 
 public class AgentCli {
 
 	/**
 	 * @param args
+	 * @throws JAXBException 
+	 * @throws SAXException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JAXBException, SAXException {
 		
 			//read configuration files
 		

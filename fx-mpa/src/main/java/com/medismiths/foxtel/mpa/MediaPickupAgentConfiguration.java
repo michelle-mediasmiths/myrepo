@@ -1,17 +1,29 @@
 package com.medismiths.foxtel.mpa;
 
-import java.net.URI;
-
-public class MediaPickupAgentConfiguration {
+public class MediaPickupAgentConfiguration
+{
 
 	private String mediaExchangeXSDPath = "MediaExchange_V1.2.xsd";
+	private String mediaFolderPath = "/tmp";
 
-	public String getMediaExchangeXSD() {
+	public String getMediaFolderPath()
+	{
+		return mediaFolderPath;
+	}
+
+	public void setMediaFolderPath(String mediaFolderPath)
+	{
+		this.mediaFolderPath = mediaFolderPath;
+	}
+
+	public String getMediaExchangeXSD()
+	{
 		return mediaExchangeXSDPath;
 	}
 
-	public void setMediaExchangeXSD(String mediaExchangeXSD) {
+	public void setMediaExchangeXSD(String mediaExchangeXSD)
+	{
 		this.mediaExchangeXSDPath = mediaExchangeXSD;
-	} 
-	
+	}
+
 }
