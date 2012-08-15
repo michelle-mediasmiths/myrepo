@@ -52,7 +52,7 @@ public class MediaPickupAgent extends FileWatcherMethod
 	{
 		// see : FOXTEL Content Factory - MAM Project - Phase 1 - Workflow Engine v3.1.pdf
 		// 2.1.2.2 Media file is delivered without the companion XML file (or with a corrupt XML file)
-		logger.fatal("Not implemented");
+		logger.fatal("handleInvalidXML Not implemented");
 		//TODO: implement!
 	}
 
@@ -90,7 +90,7 @@ public class MediaPickupAgent extends FileWatcherMethod
 	protected void onMXFArrival(File mxf)
 	{
 		// notify workflow engine of medias arrival
-		logger.fatal("Not implemented");
+		logger.fatal("onMXFArrival Not implemented");
 		//TODO: implement!
 	}
 
@@ -144,7 +144,7 @@ public class MediaPickupAgent extends FileWatcherMethod
 				Programme programme = (Programme) unmarshalled;
 				// notify workflow engine of programme xmls arrival
 				//TODO: implement!
-				logger.fatal("Not implemented");
+				logger.fatal("notify workflow engine of programme xmls arrival Not implemented");
 			}
 			else
 			{
