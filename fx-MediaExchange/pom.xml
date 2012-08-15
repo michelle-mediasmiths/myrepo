@@ -30,10 +30,30 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.6</source>
+					<target>1.6</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jvnet.jaxb2.maven2</groupId>
+				<artifactId>maven-jaxb2-plugin</artifactId>
+				<version>0.8.2</version>
+				<configuration>
+					<schemaDirectory>src/main/resources</schemaDirectory>
+					<outputDirectory>src/main/java/com/mediasmiths/foxtel/generated</outputDirectory>
+					<generatePackage>com.mediasmiths.foxtel.generated</generatePackage>
+					<strict>true</strict>
+					<extension>true</extension>
+				</configuration>
+				<executions>
+					<execution>
+						<id>generate</id>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
