@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>com.mediasmiths.foxtel</groupId>
+	<artifactId>foxtel-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	
+	<name>Foxtel Solution</name>
+	
+	<modules>
+		<module>fx-mpa</module>
+		<module>fx-MediaExchange</module>
+	</modules>
+	
+	<distributionManagement>
+		<repository>
+			<id>mediasmiths-internal-repo</id>
+			<name>Mediasmiths-releases</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>mediasmiths-internal-repo</id>
+			<name>Mediasmiths-snapshots</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+</project>
