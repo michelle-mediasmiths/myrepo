@@ -4,6 +4,8 @@ import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
 
+import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
+
 public class AgentCli {
 
 	/**

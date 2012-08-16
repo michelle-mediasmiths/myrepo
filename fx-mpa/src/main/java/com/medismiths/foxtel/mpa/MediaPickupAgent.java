@@ -3,59 +3,58 @@ package com.medismiths.foxtel.mpa;
 import java.io.File;
 import java.io.IOException;
 
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.FileWatcher.FileWatcherMethod;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
+import com.medismiths.foxtel.mpa.delivery.FileDelivery;
+import com.medismiths.foxtel.mpa.validation.MediaExchangeValidator;
 
 public class MediaPickupAgent extends FileWatcherMethod
 {
 
 	private static Logger logger = Logger.getLogger(MediaPickupAgent.class);
 
-	//agent configuration, holds xsd and watch folder locations
-	final MediaPickupAgentConfiguration configuration;
+	// agent configuration, holds xsd and watch folder locations
+	private final MediaPickupAgentConfiguration configuration;
 
-	//jaxbcontext and a marshaller for reading xml files
-	final JAXBContext jc;
-	
-	//schema for validating xml files
-	final Schema schema;
-	final Unmarshaller unmarhsaller;
+	// jaxbcontext and a marshaller for reading xml files
+	private final JAXBContext jc;
+	private final Unmarshaller unmarhsaller;
+
+	//validates incoming xml against schema
+	private final MediaExchangeValidator mediaExchangeValidator;
 
 	public MediaPickupAgent(MediaPickupAgentConfiguration configuration) throws JAXBException, SAXException
 	{
 		this.configuration = configuration;
-		this.jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated");
+		this.jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MediaExchange");
 		this.unmarhsaller = jc.createUnmarshaller();
-		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		schema = schemaFactory.newSchema(new StreamSource(this.getClass().getResourceAsStream(configuration.getMediaExchangeXSD())));		
+		this.mediaExchangeValidator = new MediaExchangeValidator(configuration.getMediaExchangeXSD());
 	}
 
 	/**
-	 * Called when an invalid xml files arrives
-	 * 
-	 * @param xml
+	 * Starts the agent
 	 */
-	private void handleInvalidXML(File xml, String reason)
+	public void start()
 	{
-		// see : FOXTEL Content Factory - MAM Project - Phase 1 - Workflow Engine v3.1.pdf
-		// 2.1.2.2 Media file is delivered without the companion XML file (or with a corrupt XML file)
-		logger.fatal("handleInvalidXML Not implemented");
-		//TODO: implement!
+		// start watching for files (needs more config for intervals and things, FileWatcher still in prototype)
+		try
+		{
+			fileWatcher(configuration.getMediaFolderPath());
+		}
+		catch (IOException e)
+		{
+			logger.fatal("Could not start MediaPickupAgent", e);
+		}
 	}
-
+	
 	@Override
 	/**
 	 * Checks type of incoming files, validates xml files
@@ -68,7 +67,7 @@ public class MediaPickupAgent extends FileWatcherMethod
 		if (fileName.toLowerCase().endsWith(".xml"))
 		{
 			logger.info("An xml file has arrived");
-			boolean isSchemaValid = schemaValid(file);
+			boolean isSchemaValid = mediaExchangeValidator.isValid(file);
 			onXmlArrival(file, isSchemaValid);
 		}
 		else if (fileName.toLowerCase().endsWith(".mxf"))
@@ -80,18 +79,6 @@ public class MediaPickupAgent extends FileWatcherMethod
 		{
 			logger.warn("An unexpected file type has arrived");
 		}
-	}
-
-	/**
-	 * Called when an mxf has arrived (notified by FolderWatcher)
-	 * 
-	 * @param mxf
-	 */
-	protected void onMXFArrival(File mxf)
-	{
-		// notify workflow engine of medias arrival
-		logger.fatal("onMXFArrival Not implemented");
-		//TODO: implement!
 	}
 
 	/**
@@ -142,10 +129,13 @@ public class MediaPickupAgent extends FileWatcherMethod
 			if (unmarshalled instanceof Programme)// if the supplied xml represents a programme
 			{
 				Programme programme = (Programme) unmarshalled;
-				// notify workflow engine of programme xmls arrival
-				onProgrammeArrival(programme, xml);
-	
+				onProgrammeXmlArrival(programme, xml);
 			}
+			
+			// TODO : 2.2.2.1 TNS File Delivery – Associated Content 
+			//else if unmarshalled instance of  (blackspot metadata, companion assets metadata (commerial??))
+			
+						
 			else
 			{
 				logger.error(String.format("XML at %s does not describe a programme", xml));
@@ -161,56 +151,58 @@ public class MediaPickupAgent extends FileWatcherMethod
 
 	/**
 	 * Called when a programme arrives
-	 * @param programme - the unmarshalled xml
-	 * @param xml - the delivered xmlfile
+	 * 
+	 * @param programme
+	 *            - the unmarshalled xml
+	 * @param xml
+	 *            - the delivered xmlfile
 	 */
-	private void onProgrammeArrival(Programme programme, File xml)
+	private void onProgrammeXmlArrival(Programme programme, File xml)
 	{
-		//TODO: implement!
-		logger.fatal("notify workflow engine of programme xmls arrival Not implemented");
+	 
+		logger.fatal("onProgrammeXmlArrival Not implemented");
 		
-		String assetFilename = programme.getMedia().getFilename();
+		// TODO: we dont know if the xml or mxf will arrive first, and of course one may arrive and not the other
+		//probably best for the sake of resiliance to not assume an order they arrive in 
+		//and once we see one wait a configurable amount of time before giving up on the other?
+
 		
-		//TODO: clarify which are the correct fields
-		String supplier = programme.getDetail().getSUPPLIER();
-		String title = programme.getDetail().getTitle();
-		String titleId = programme.getDetail().getCATALOGCODE();
+		//assume here we have both (obviously this wont work yet)
+		new FileDelivery().onAssetAndXMLArrival(new File("foo.mxf"), programme, xml);
 		
 	}
 
-	private boolean schemaValid(File xml)
+	/**
+	 * Called when an mxf has arrived (notified by FolderWatcher)
+	 * 
+	 * @param mxf
+	 */
+	protected void onMXFArrival(File mxf)
 	{
-		Validator validator = schema.newValidator();
-		Source xmlFile = new StreamSource(xml);
-		try
-		{
-			validator.validate(xmlFile);
-			logger.info(String.format("xml file %s validates against schema", xml.getAbsolutePath()));
-			return true;
-		}
-		catch (SAXException e)
-		{
-			logger.info(String.format("xml file %s  doesnt validate against schema", xml.getAbsolutePath()), e);
-		}
-		catch (IOException e)
-		{
-			logger.error(String.format("IOException trying to validate xml file against schema"), e);
-		}
+		logger.fatal("onMXFArrival Not implemented");
 
-		return false;
+		// TODO:we dont know if the xml or mxf will arrive first, and of course one may arrive and not the other
+		//probably best for the sake of resiliance to not assume an order they arrive in
+		//and once we see one wait a configurable amount of time before giving up on the other?
+		
+		//assume here we have both (obviously this wont work yet)
+		new FileDelivery().onAssetAndXMLArrival(mxf, new Programme(), new File("bar.xml"));
+		
+	}
+	
+	
+	/**
+	 * Called when an invalid xml files arrives
+	 * 
+	 * @param xml
+	 */
+	private void handleInvalidXML(File xml, String reason)
+	{
+		// see : FOXTEL Content Factory - MAM Project - Phase 1 - Workflow Engine v3.1.pdf
+		// 2.1.2.2 Media file is delivered without the companion XML file (or with a corrupt XML file)
+		logger.fatal("handleInvalidXML Not implemented");
+		// TODO: handleInvalidXML
 	}
 
-	public void start()
-	{
-		// start watching for files (needs more config for intervals and things, FileWatcher still in prototype)
-		try
-		{
-			fileWatcher(configuration.getMediaFolderPath());
-		}
-		catch (IOException e)
-		{
-			logger.fatal("Could not start MediaPickupAgent",e);
-		}
-	}
 
 }

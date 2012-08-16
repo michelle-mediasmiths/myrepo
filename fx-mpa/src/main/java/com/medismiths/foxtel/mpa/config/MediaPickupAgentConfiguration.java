@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa;
+package com.medismiths.foxtel.mpa.config;
 
 public class MediaPickupAgentConfiguration
 {
