@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://foxtel.com.au/mam/ws/materials" xmlns:ns="http://foxtel.com.au/mam/ws/materials" targetNamespace="http://foxtel.com.au/mam/ws/materials">
+	<wsdl:types>
+		<xsi:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://foxtel.com.au/mam/ws/materials" targetNamespace="http://foxtel.com.au/mam/ws/materials" elementFormDefault="qualified" attributeFormDefault="unqualified">
+			<xsi:complexType name="titleDetailType">
+				<xsi:sequence>
+					<xsi:element name="Name" type="xsi:string"/>
+					<xsi:element name="Created" type="xsi:dateTime"/>
+					<xsi:element name="LastModified" type="xsi:dateTime"/>
+					<xsi:element name="Owner">
+						<xsi:annotation>
+							<xsi:documentation>Most likey the Channel Group (i.e. organisation), but could just be the Channel.</xsi:documentation>
+						</xsi:annotation>
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="Name" type="xsi:string"/>
+							</xsi:sequence>
+							<xsi:attribute name="ownerID" type="xsi:string" use="required">
+								<xsi:annotation>
+									<xsi:documentation>Organistation or Channel ID</xsi:documentation>
+								</xsi:annotation>
+							</xsi:attribute>
+						</xsi:complexType>
+					</xsi:element>
+					<xsi:element name="LicensePeriod">
+						<xsi:complexType>
+							<xsi:choice>
+								<xsi:element name="Evergreen" type="xsi:boolean">
+									<xsi:annotation>
+										<xsi:documentation>Content owned and can be kept indefinately</xsi:documentation>
+									</xsi:annotation>
+								</xsi:element>
+								<xsi:element name="Period">
+									<xsi:complexType>
+										<xsi:sequence>
+											<xsi:element name="Start" type="xsi:dateTime" nillable="true"/>
+											<xsi:element name="End" type="xsi:dateTime" nillable="true"/>
+										</xsi:sequence>
+									</xsi:complexType>
+								</xsi:element>
+							</xsi:choice>
+						</xsi:complexType>
+					</xsi:element>
+					<xsi:element name="SeriesDetail" minOccurs="0">
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="SeriesName" type="xsi:string"/>
+								<xsi:element name="EpisodeTitle" type="xsi:string"/>
+								<xsi:element name="EpisodeNumber" type="xsi:string"/>
+							</xsi:sequence>
+						</xsi:complexType>
+					</xsi:element>
+					<xsi:element name="SourceMedia">
+						<xsi:annotation>
+							<xsi:documentation>The supply master</xsi:documentation>
+						</xsi:annotation>
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="RequiredBy" type="xsi:dateTime">
+									<xsi:annotation>
+										<xsi:documentation>The date/time the supply master is required to be delivered by.</xsi:documentation>
+									</xsi:annotation>
+								</xsi:element>
+								<xsi:choice>
+									<xsi:element name="VideoFile" type="tns:videoFileType">
+										<xsi:annotation>
+											<xsi:documentation>Only one video file is expected per title.</xsi:documentation>
+										</xsi:annotation>
+									</xsi:element>
+									<xsi:element name="VideoTapes">
+										<xsi:complexType>
+											<xsi:sequence>
+												<xsi:element name="Tape" type="tns:videoTapeType" maxOccurs="unbounded"/>
+											</xsi:sequence>
+										</xsi:complexType>
+									</xsi:element>
+								</xsi:choice>
+							</xsi:sequence>
+							<xsi:attribute name="mediaID" type="xsi:string" use="required">
+								<xsi:annotation>
+									<xsi:documentation>Supply Master ID (Version Zero autoID)</xsi:documentation>
+								</xsi:annotation>
+							</xsi:attribute>
+						</xsi:complexType>
+					</xsi:element>
+					<xsi:element name="Versions">
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="Version" type="tns:versionType" maxOccurs="unbounded">
+									<xsi:annotation>
+										<xsi:documentation>Tx Versions</xsi:documentation>
+									</xsi:annotation>
+								</xsi:element>
+							</xsi:sequence>
+						</xsi:complexType>
+					</xsi:element>
+				</xsi:sequence>
+				<xsi:attribute name="titleID" type="xsi:string" use="required"/>
+			</xsi:complexType>
+			<xsi:complexType name="titleListType">
+				<xsi:sequence>
+					<xsi:element name="Titles">
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="Title" type="tns:titleDetailType" minOccurs="0" maxOccurs="unbounded"/>
+							</xsi:sequence>
+						</xsi:complexType>
+					</xsi:element>
+				</xsi:sequence>
+			</xsi:complexType>
+			<xsi:complexType name="destinationType">
+				<xsi:sequence minOccurs="0">
+					<xsi:element name="Name" type="xsi:string">
+						<xsi:annotation>
+							<xsi:documentation>A user-freindly destination name</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+				</xsi:sequence>
+				<xsi:attribute name="platformID" use="required">
+					<xsi:annotation>
+						<xsi:documentation>Specifies the platform. For example, Foxtel playout. </xsi:documentation>
+					</xsi:annotation>
+				</xsi:attribute>
+				<xsi:attribute name="channelID" type="xsi:string" use="required">
+					<xsi:annotation>
+						<xsi:documentation>The platform channel. For example, Fox 8</xsi:documentation>
+					</xsi:annotation>
+				</xsi:attribute>
+			</xsi:complexType>
+			<xsi:complexType name="versionType">
+				<xsi:sequence>
+					<xsi:element name="Destination" type="tns:destinationType">
+						<xsi:annotation>
+							<xsi:documentation>Destination headend. This will be the broadcast platform channel in most cases</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+					<xsi:element name="Classification" type="xsi:string"/>
+					<xsi:element name="NumberOfSegments" type="xsi:positiveInteger"/>
+					<xsi:element name="FirstTransmition" type="xsi:dateTime">
+						<xsi:annotation>
+							<xsi:documentation>The first Tx date/time. Used to prioritise work.</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+				</xsi:sequence>
+				<xsi:attribute name="versionID" type="xsi:string" use="required"/>
+				<xsi:attribute name="parentVersionID" type="xsi:string"/>
+				<xsi:attribute name="compiled" type="xsi:boolean" use="required">
+					<xsi:annotation>
+						<xsi:documentation>If set true then the version requires new physical media be  compiled from the parent version's physical media. If parent version isn't provided then the source media (supply master) is assumed.</xsi:documentation>
+					</xsi:annotation>
+				</xsi:attribute>
+			</xsi:complexType>
+			<xsi:complexType name="videoTapeType">
+				<xsi:sequence minOccurs="0">
+					<xsi:annotation>
+						<xsi:documentation>This section, if present, indicates library content. It's only needed to enable Flexicart ingest.</xsi:documentation>
+					</xsi:annotation>
+					<xsi:element name="AutomationID" type="xsi:string"/>
+					<xsi:element name="Segments">
+						<xsi:complexType>
+							<xsi:sequence>
+								<xsi:element name="Segment" maxOccurs="unbounded">
+									<xsi:complexType>
+										<xsi:sequence>
+											<xsi:element name="SOM" type="xsi:string"/>
+											<xsi:element name="EOM" type="xsi:string"/>
+										</xsi:sequence>
+									</xsi:complexType>
+								</xsi:element>
+							</xsi:sequence>
+						</xsi:complexType>
+					</xsi:element>
+				</xsi:sequence>
+				<xsi:attribute name="libraryID" type="xsi:string"/>
+				<xsi:attribute name="reelNum" type="xsi:positiveInteger" use="required"/>
+			</xsi:complexType>
+			<xsi:complexType name="videoFileType">
+				<xsi:sequence>
+					<xsi:element name="AutoQualityCheck" type="xsi:boolean">
+						<xsi:annotation>
+							<xsi:documentation>Set if 3rd party QC is required or the supply master</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+					<xsi:element name="Path" minOccurs="0">
+						<xsi:annotation>
+							<xsi:documentation>Optional path string. This could be used to specifiy the dropbox or it could be the name of the distributor/aggregator</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+					<xsi:element name="Filename" minOccurs="0">
+						<xsi:annotation>
+							<xsi:documentation>The filename of the video file if available.</xsi:documentation>
+						</xsi:annotation>
+					</xsi:element>
+				</xsi:sequence>
+			</xsi:complexType>
+		</xsi:schema>
+	</wsdl:types>
+	<wsdl:message name="ModifiedTitlesRequest">
+		<wsdl:part name="From" type="xs:dateTime">
+			<wsdl:documentation>Period start</wsdl:documentation>
+		</wsdl:part>
+		<wsdl:part name="To" type="xs:dateTime">
+			<wsdl:documentation>Period End</wsdl:documentation>
+		</wsdl:part>
+		<wsdl:part name="Limit" type="xs:positiveInteger">
+			<wsdl:documentation>Limit the number of titles</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ModifiedTitlesResponse">
+		<wsdl:part name="TitleList" type="tns:titleListType">
+			<wsdl:documentation>A list of zero or more titles</wsdl:documentation>
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TitleDetailRequest">
+		<wsdl:part name="TitleID" type="xs:string"/>
+	</wsdl:message>
+	<wsdl:message name="TitleDetailResponse">
+		<wsdl:part name="TitleDetail" type="tns:titleDetailType"/>
+	</wsdl:message>
+	<wsdl:message name="ModifiedTitlesFromRequest">
+		<wsdl:part name="From" type="xs:dateTime">
+			<wsdl:documentation>Period start</wsdl:documentation>
+		</wsdl:part>
+		<wsdl:part name="Limit" type="xs:positiveInteger"/>
+	</wsdl:message>
+	<wsdl:portType name="MaterialsInterface">
+		<wsdl:documentation>An interface to provide material information from Paradigm/Progratron</wsdl:documentation>
+		<wsdl:operation name="ListModifiedTitles">
+			<wsdl:documentation>Return a list of titles that have been modified on or between the specified period</wsdl:documentation>
+			<wsdl:input message="tns:ModifiedTitlesRequest"/>
+			<wsdl:output message="tns:ModifiedTitlesResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="MaterialsInterfaceHttpSoapBinding" type="tns:MaterialsInterface">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="ListModifiedTitles">
+			<soap:operation soapAction="Materials.ListModifiedTitles"/>
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="MaterialsService">
+		<wsdl:port name="MaterialsEndpoint" binding="tns:MaterialsInterfaceHttpSoapBinding">
+			<soap:address location="No Target Adress"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

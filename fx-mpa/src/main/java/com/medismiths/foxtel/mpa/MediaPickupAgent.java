@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.FileWatcher.FileWatcherMethod;
-import com.mediasmiths.foxtel.generated.Programme;
+import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 
 public class MediaPickupAgent extends FileWatcherMethod
 {
@@ -143,8 +143,8 @@ public class MediaPickupAgent extends FileWatcherMethod
 			{
 				Programme programme = (Programme) unmarshalled;
 				// notify workflow engine of programme xmls arrival
-				//TODO: implement!
-				logger.fatal("notify workflow engine of programme xmls arrival Not implemented");
+				onProgrammeArrival(programme, xml);
+	
 			}
 			else
 			{
@@ -157,6 +157,25 @@ public class MediaPickupAgent extends FileWatcherMethod
 			logger.error(String.format("Exception unmarshalling %s", xml.getAbsolutePath()), e);
 			handleInvalidXML(xml, "Unmarshalling error " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Called when a programme arrives
+	 * @param programme - the unmarshalled xml
+	 * @param xml - the delivered xmlfile
+	 */
+	private void onProgrammeArrival(Programme programme, File xml)
+	{
+		//TODO: implement!
+		logger.fatal("notify workflow engine of programme xmls arrival Not implemented");
+		
+		String assetFilename = programme.getMedia().getFilename();
+		
+		//TODO: clarify which are the correct fields
+		String supplier = programme.getDetail().getSUPPLIER();
+		String title = programme.getDetail().getTitle();
+		String titleId = programme.getDetail().getCATALOGCODE();
+		
 	}
 
 	private boolean schemaValid(File xml)
