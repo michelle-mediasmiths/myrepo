@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://foxtel.com.au/cf/mam/pms/000/003" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://foxtel.com.au/cf/mam/pms/000/003" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- Content Factory - Media Asset Management  -->
+	<!-- Placeholder Management Schema - Version 0.4, 18th July 2012 -->
+	<!-- Contact: Matthew Bennetts, Foxtel -->
+	<xs:element name="PlaceholderMessage">
+		<xs:annotation>
+			<xs:documentation>The definition for a placeholder message - the root element.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Actions">
+					<xs:complexType>
+						<xs:choice maxOccurs="unbounded">
+							<xs:element name="CreateOrUpdateTitle">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TitleDescription" type="titleDescriptionType"/>
+										<xs:element name="Rights" type="rightsType"/>
+									</xs:sequence>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify each title in the MAM. Values must be unique and must be prefixed with a FOXTEL assigned string.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="restrictAccess" type="xs:boolean"/>
+									<xs:attribute name="purgeProtect" type="xs:boolean"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="PurgeTitle">
+								<xs:complexType>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify the title to purge from the MAM.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AddItem">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item" type="itemType"/>
+									</xs:sequence>
+									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="DeleteItem">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Item">
+											<xs:complexType>
+												<xs:attribute name="itemID" type="itemIdType" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AddOrUpdateTxPackage">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TxPackage" type="txPackageType"/>
+									</xs:sequence>
+									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="DeleteTxPackage">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TxPackage">
+											<xs:complexType>
+												<xs:attribute name="autoID" type="automationIdType" use="required"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="PrivateMessageData" type="xs:anyType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:attribute name="senderID" type="senderIdType" use="required">
+				<xs:annotation>
+					<xs:documentation>A unique id used to identify who sent the message; simialr to the "From" field of an email. Identifiers are assigned by FOXTEL.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="messageID" type="messageIdType" use="required">
+				<xs:annotation>
+					<xs:documentation>A unique id used to identify each message; similar to a transaction identifier. Values must be unique for each message within the scope of the sender. Values must not be reused inside the timeframe specified by FOXTEL.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<!--Complex Type Definitions-->
+	<xs:complexType name="txPackageType">
+		<xs:annotation>
+			<xs:documentation>The definition for the TX Package entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ItemID" type="itemIdType"/>
+			<xs:element name="Classification" type="classificationType" minOccurs="0"/>
+			<xs:element name="ConsumerAdvise" type="consumerAdviseType" minOccurs="0"/>
+			<xs:element name="NumberOfSegments" type="xs:positiveInteger">
+				<xs:annotation>
+					<xs:documentation>Estimated number of segments</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TargetDate" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The first Tx date/time. Used to prioritise work.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Notes" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="autoID" type="automationIdType" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="tapeType">
+		<xs:annotation>
+			<xs:documentation>The definition for the Tape entity.</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="autoID" type="automationIdType" use="required"/>
+		<xs:attribute name="libraryID" type="libraryIdType"/>
+	</xs:complexType>
+	<xs:complexType name="titleDescriptionType">
+		<xs:annotation>
+			<xs:documentation>The definition for the Title Description entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Title" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Series name or non episodic programme title.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="EpisodeTitle" type="xs:string" minOccurs="0"/>
+			<xs:element name="ProductionNumber" type="xs:string" minOccurs="0"/>
+			<xs:element name="EpisodeNumber" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="CountryOfProduction" type="xs:string" minOccurs="0"/>
+			<xs:element name="YearOfProduction" type="yearType" minOccurs="0"/>
+			<xs:element name="Style" type="xs:string" minOccurs="0"/>
+			<xs:element name="Show" type="xs:string" minOccurs="0"/>
+			<xs:element name="Series" type="xs:nonNegativeInteger" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="rightsType">
+		<xs:annotation>
+			<xs:documentation>The definition for the Rights entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="License" maxOccurs="unbounded">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="LicenseHolder">
+							<xs:complexType>
+								<xs:attribute name="organistaionID" type="organisationIdType" use="required"/>
+								<xs:attribute name="organistationName" type="xs:string"/>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="LicensePeriod">
+							<xs:complexType>
+								<xs:attribute name="startDate" type="xs:dateTime" use="required"/>
+								<xs:attribute name="endDate" type="xs:dateTime"/>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Channels">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Channel" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:attribute name="channelTag" type="channelTagType" use="required"/>
+											<xs:attribute name="channelName" type="xs:string"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="itemType">
+		<xs:annotation>
+			<xs:documentation>The definition for an Item entity.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="RequiredBy" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="RequiredFormat" type="requiredFormatEnumType" minOccurs="0"/>
+			<xs:element name="QualityCheckTask" type="qualityCheckEnumType" minOccurs="0"/>
+			<xs:element name="Source" minOccurs="0">
+				<xs:complexType>
+					<xs:choice>
+						<xs:element name="Aggregation">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Order" minOccurs="0">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="OrderCreated" type="xs:dateTime" minOccurs="0"/>
+												<xs:element name="OrderReference" type="xs:string" minOccurs="0"/>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="Aggregator" minOccurs="0">
+										<xs:complexType>
+											<xs:attribute name="aggregatorID" type="aggregatorIdType" use="required"/>
+											<xs:attribute name="aggregatorName" type="xs:string"/>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Compile">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="ParentItemID" type="itemIdType"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Library">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Tape" type="tapeType" maxOccurs="unbounded"/>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="itemID" type="itemIdType" use="required"/>
+	</xs:complexType>
+	<!--Simple Type Definitions-->
+	<xs:simpleType name="automationIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for automation identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="titleIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for title identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="messageIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for message identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="classificationType">
+		<xs:annotation>
+			<xs:documentation>A string type used for asset classification details.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="channelTagType">
+		<xs:annotation>
+			<xs:documentation>A string type used for channel tags.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="itemIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for item identifiers. Items are physical assets held in the MAM</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="senderIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for message sender identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="organisationIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for organisation identifers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="aggregatorIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for aggregator identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="mediumType">
+		<xs:annotation>
+			<xs:documentation>A string type used for media types.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="libraryIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for library identifiers.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="qualityCheckEnumType">
+		<xs:annotation>
+			<xs:documentation>A string enumeration for quality checking task types</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="AutomaticOnIngest"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="requiredFormatEnumType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SD"/>
+			<xs:enumeration value="HD"/>
+			<xs:enumeration value="3D"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="consumerAdviseType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:simpleType name="yearType">
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:pattern value="\d\d\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
