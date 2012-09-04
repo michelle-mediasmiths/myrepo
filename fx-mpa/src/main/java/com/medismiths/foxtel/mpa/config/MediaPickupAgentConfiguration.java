@@ -3,7 +3,9 @@ package com.medismiths.foxtel.mpa.config;
 public class MediaPickupAgentConfiguration
 {
 
+	//file path to xsd describing schema
 	private String mediaExchangeXSDPath = "MediaExchange_V1.2.xsd";
+	//folder to watch for incoming media
 	private String mediaFolderPath = "/tmp";
 
 	public String getMediaFolderPath()

@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.log4j.Logger;
 
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
-import com.medismiths.foxtel.mpa.delivery.exception.DeliveryException;
 
 /**
  * 
@@ -20,13 +19,13 @@ public class FileDelivery
 	/**
 	 * Called once both an asset and corresponding xml arrive
 	 * 
-	 * TODO: allow for addition xml with blackspot metadata
+	 * TODO: allow for additional xml with blackspot metadata
 	 * 
 	 * @param asset
-	 * @param programme
 	 * @param programmeXml
+	 * @param programme
 	 */
-	public void onAssetAndXMLArrival(File asset, Programme programme, File programmeXml)
+	public void onAssetAndXMLArrival(File xmlFile, File mediaFile, Programme programme)
 	{
 
 		// TODO: find master ID and aggregator
