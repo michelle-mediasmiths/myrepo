@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- create an Item
+FAIL - titleID is null-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<Actions>
+<AddItem>
+  <Item>
+    <itemRequiredBy>2013-10-25T00:00:00.000+01:00</itemRequiredBy>
+    <itemRequiredFormat>mp4</itemRequiredFormat>
+    <source>
+      <aggregation>
+        <order>
+          <orderCreated>2011-02-13T00:00:00.000Z</orderCreated>
+          <orderReference>ABC123</orderReference>
+        </order>
+        <aggregator>
+          <aggregatorID>ABC123</aggregatorID>
+          <aggregatorName>aggregatorName</aggregatorName>
+        </aggregator>
+      </aggregation>
+      <compile>
+        <parentID>ABC123</parentID>
+      </compile>
+    </source>
+    <itemID>abc123</itemID>
+  </Item>
+</AddItem></Actions>
+</PlaceholderMessage>

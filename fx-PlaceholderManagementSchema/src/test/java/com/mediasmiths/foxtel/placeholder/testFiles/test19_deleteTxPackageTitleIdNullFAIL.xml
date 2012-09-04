@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- delete TxPackage
+FAIL - titleID is null-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<Actions>
+<DeleteTxPackage>
+  <TxPackage autoID="abc123"/>
+</DeleteTxPackage></Actions>
+</PlaceholderMessage>

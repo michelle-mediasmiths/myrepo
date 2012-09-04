@@ -5,6 +5,7 @@
         xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc">
 
 	<jaxb:bindings schemaLocation="PlaceholderManagement.xsd">
+	 <jaxb:globalBindings localScoping="toplevel"/>
         	<jaxb:schemaBindings>
             		<jaxb:package name="au.com.foxtel.cf.mam.pms" />
         	</jaxb:schemaBindings>

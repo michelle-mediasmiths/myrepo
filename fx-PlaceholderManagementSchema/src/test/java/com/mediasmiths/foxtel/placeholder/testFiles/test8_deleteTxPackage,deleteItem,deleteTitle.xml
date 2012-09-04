@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--PASS - deletes a TxPackage, Item and Title -->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <Actions>
+        <DeleteTxPackage titleID="Keeping Up AppearancesS04E03">
+            <TxPackage autoID="abc123"/>
+        </DeleteTxPackage>
+        <DeleteItem titleID="Keeping Up AppearancesS04E03">
+            <Item itemID="fgh456"/>
+        </DeleteItem>
+        <PurgeTitle titleID="Keeping Up AppearancesS04E03"/>
+    </Actions>
+</PlaceholderMessage>
