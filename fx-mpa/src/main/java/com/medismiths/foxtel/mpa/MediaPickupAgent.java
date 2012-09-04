@@ -42,6 +42,7 @@ public class MediaPickupAgent extends FileWatcherMethod {
 	private final Set<File> lonelyMXFs = new HashSet<File>();
 	private final Map<File, Programme> lonelyXmls = new HashMap<File, Programme>();
 
+	// the importer runs in a seperate thread to file watching, it is informed of pairs of files (xml + mxf) that are ready to be imported
 	private final Importer importer = new Importer();
 	private final Thread importerThread = new Thread(importer);
 
@@ -134,9 +135,9 @@ public class MediaPickupAgent extends FileWatcherMethod {
 		try {
 			Object unmarshalled = unmarshallFile(xml);
 
-			if (unmarshalled instanceof Programme)// if the supplied xml
-													// represents a programme
+			if (unmarshalled instanceof Programme)
 			{
+				// if the supplied xml represents a programme
 				Programme programme = (Programme) unmarshalled;
 				onProgrammeXmlArrival(programme, xml);
 			}
