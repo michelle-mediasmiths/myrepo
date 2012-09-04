@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.placeholder.test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.junit.Test;
+
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.MSTxPackage;
 
@@ -45,18 +47,15 @@ public class TestAddOrUpdateTxPackage {
 		return addTxPackage;
 	}
 
-	public static void main(String[] args)
-			throws DatatypeConfigurationException {
+	@Test
+	public void testAddOrUpdateTxPackage()
+ throws Exception {
 		TestAddOrUpdateTxPackage tap = new TestAddOrUpdateTxPackage();
 		PlaceholderMessage message = tap.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
-
-		try {
-			writer.writeObjectToFile(message,
+		writer.writeObjectToFile(message,
 					"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testAddOrUpdateTxPackage.xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
 
 	}
 

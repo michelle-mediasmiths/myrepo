@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.test;
 
+import org.junit.Test;
+
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -33,17 +35,14 @@ public class TestPurgeTitle {
 		return purgeTitle;
 	}
 	
-	public static void main (String[]args) {
+	@Test
+	public void testPurgeTitle () throws Exception {
 		
 		TestPurgeTitle tpt = new TestPurgeTitle();
 		PlaceholderMessage message = tpt.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
+		writer.writeObjectToFile(message, "/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testPurgeTitle.xml");
 		
-		try {
-			writer.writeObjectToFile(message, "/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testPurgeTitle.xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }

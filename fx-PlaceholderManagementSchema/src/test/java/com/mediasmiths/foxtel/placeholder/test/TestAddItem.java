@@ -7,6 +7,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.junit.Test;
+
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.MSItem;
 
@@ -37,18 +39,15 @@ public class TestAddItem {
 		return message;
 	}
 
-	public static void main(String[] args)
-			throws DatatypeConfigurationException {
+	@Test
+	public void testAddItem() throws Exception {
 
 		TestAddItem tai = new TestAddItem();
 		PlaceholderMessage message = tai.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
 
-		try {
-			writer.writeObjectToFile(message,
-					"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testAddItem.xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		writer.writeObjectToFile(message,
+				"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testAddItem.xml");
+
 	}
 }

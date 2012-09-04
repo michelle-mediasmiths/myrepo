@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.placeholder.test;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.junit.Test;
+
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.MSRights;
 import com.mediasmiths.foxtel.placeholder.MSTitleDescription;
@@ -48,19 +50,16 @@ public class TestCreateOrUpdateTitle {
 		return message;
 	}
 
-	public static void main(String[] args)
-			throws DatatypeConfigurationException {
+	@Test
+	public void testCreateOrUpdateTitle() throws Exception {
 
 		TestCreateOrUpdateTitle tct = new TestCreateOrUpdateTitle();
 		PlaceholderMessage message = tct.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
 
-		try {
-			writer.writeObjectToFile(message,
-					"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testCreateOrUpdateTitle.xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		writer.writeObjectToFile(message,
+				"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testCreateOrUpdateTitle.xml");
+
 	}
 
 }

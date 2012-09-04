@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.test;
 
+import org.junit.Test;
+
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -37,17 +39,14 @@ public class TestDeleteTxPackage {
 		return deleteTx;
 	}
 	
-	public static void main (String [] args) {
+	@Test
+	public void testDeleteTxPackage() throws Exception {
 		
 		TestDeleteTxPackage tdp = new TestDeleteTxPackage();
 		PlaceholderMessage message = tdp.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
+		writer.writeObjectToFile(message, "/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testDeleteTxPackage.xml");
 		
-		try {
-			writer.writeObjectToFile(message, "/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testDeleteTxPackage.xml");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 }
