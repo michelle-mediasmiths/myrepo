@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--updates an existing TxPackage
+FAIL - no matching Item-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <Actions>
+        <AddOrUpdateTxPackage titleID="Only Fools and HorsesS04E03">
+            <TxPackage autoID="abc123">
+                <ItemID>abc123</ItemID>
+                <Classification>PG</Classification>
+                <ConsumerAdvise>Generally suitable for all</ConsumerAdvise>
+                <NumberOfSegments>4</NumberOfSegments>
+                <TargetDate>2014-08-11T12:00:51.382+01:00</TargetDate>
+                <Notes>none</Notes>
+            </TxPackage>
+        </AddOrUpdateTxPackage>
+    </Actions>
+</PlaceholderMessage>

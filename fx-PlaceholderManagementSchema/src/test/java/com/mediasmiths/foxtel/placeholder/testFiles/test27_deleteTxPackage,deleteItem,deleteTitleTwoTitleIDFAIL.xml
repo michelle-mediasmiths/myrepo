@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--delete TxPackage, Item and Title
+FAIL - titleID for PurgeTitle does not match DeleteTxPackage or DeleteItem-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <Actions>
+        <DeleteTxPackage titleID="Keeping Up AppearancesS04E03">
+            <TxPackage autoID="abc123"/>
+        </DeleteTxPackage>
+        <DeleteItem titleID="Keeping Up AppearancesS04E03">
+            <Item itemID="fgh456"/>
+        </DeleteItem>
+        <PurgeTitle titleID="OutnumberedS04E03"/>
+    </Actions>
+</PlaceholderMessage>

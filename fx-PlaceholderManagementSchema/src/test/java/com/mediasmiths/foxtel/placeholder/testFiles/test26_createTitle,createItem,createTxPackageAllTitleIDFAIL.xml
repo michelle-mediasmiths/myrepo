@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- create new Title, Item and TxPackage
+FAIL - titleID's for CreateOrUpdateTitle, AddItem and AddOrUpdateTxPackage do not match-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<Actions>
+<CreateOrUpdateTitle titleID="Fawlty TowersS04E03" restrictAccess="true" purgeProtect="false">
+	<TitleDescription>
+	 	<Title>Life on MarsS04E03</Title>
+		<EpisodeTitle>Life on MarsS04E03</EpisodeTitle>
+		<ProductionNumber>123</ProductionNumber>
+    	<EpisodeNumber>11</EpisodeNumber>
+    	<CountryOfProduction>Britian</CountryOfProduction>
+    	<YearOfProduction>2002</YearOfProduction>
+   		<Style>Comedy</Style>
+   	 	<Show>Life on MarsS04E03</Show>
+        <Series>2</Series>
+     </TitleDescription>
+     <Rights>
+        <License>
+           <LicenseHolder organistaionID="abc123" organistationName="TNC"/>
+        	<LicensePeriod startDate="2014-03-19T11:32:50.640Z" endDate="2014-05-13T11:32:50.650+01:00"/>
+            <Channels>
+            	<Channel channelTag="BBC" channelName="British Broadcasting Company"/>
+            </Channels>
+        </License>
+     </Rights>
+</CreateOrUpdateTitle>
+<AddItem titleID="Life on MarsS04E03">
+	<Item itemID="abc123">
+    	<RequiredBy>2013-11-30T11:36:24.787Z</RequiredBy>
+        <RequiredFormat>SD</RequiredFormat>
+        <Source>
+        	<Aggregation>
+            	<Order>
+             		<OrderCreated>2012-02-02T11:36:24.775Z</OrderCreated>
+                    <OrderReference>ABC123</OrderReference>
+                </Order>
+                <Aggregator aggregatorID="ABC123" aggregatorName="aggregatorName"/>
+            </Aggregation>
+         </Source>
+    </Item>
+</AddItem>
+<AddOrUpdateTxPackage titleID="Only Fools and HorsesS04E03">
+	<TxPackage autoID="abc123">
+    	<ItemID>abc123</ItemID>
+        <Classification>PG</Classification>
+        <ConsumerAdvise>Generally suitable for all</ConsumerAdvise>
+        <NumberOfSegments>4</NumberOfSegments>
+        <TargetDate>2013-08-11T12:00:51.382+01:00</TargetDate>
+        <Notes>none</Notes>
+     </TxPackage>
+</AddOrUpdateTxPackage>
+</Actions>
+</PlaceholderMessage>

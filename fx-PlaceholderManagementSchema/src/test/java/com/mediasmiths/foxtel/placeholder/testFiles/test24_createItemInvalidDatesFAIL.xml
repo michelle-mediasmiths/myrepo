@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- create Item
+FAIL - RequiredBy date is before OrderCreated-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <Actions>
+        <AddItem titleID="Fawlty TowersS04E03">
+            <Item itemID="abc123">
+                <RequiredBy>2012-04-14T00:00:00.000+01:00</RequiredBy>
+                <RequiredFormat>SD</RequiredFormat>
+                <Source>
+                    <Aggregation>
+                        <Order>
+                            <OrderCreated>2013-01-02T00:00:00.000Z</OrderCreated>
+                            <OrderReference>ABC123</OrderReference>
+                        </Order>
+                        <Aggregator aggregatorID="ABC123" aggregatorName="aggregatorName"/>
+                    </Aggregation>
+                </Source>
+            </Item>
+        </AddItem>
+    </Actions>
+</PlaceholderMessage>

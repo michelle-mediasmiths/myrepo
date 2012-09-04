@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <!--PASS - creates a new Title followed by creating a matching Item-->
+    <Actions>
+        <CreateOrUpdateTitle titleID="Life on MarsS04E03" restrictAccess="true" purgeProtect="false">
+            <TitleDescription>
+                <Title>Life on MarsS04E03</Title>
+                <EpisodeTitle>Life on MarsS04E03</EpisodeTitle>
+                <ProductionNumber>123</ProductionNumber>
+                <EpisodeNumber>11</EpisodeNumber>
+                <CountryOfProduction>Britian</CountryOfProduction>
+                <YearOfProduction>2002</YearOfProduction>
+                <Style>Comedy</Style>
+                <Show>Life on MarsS04E03</Show>
+                <Series>2</Series>
+            </TitleDescription>
+            <Rights>
+                <License>
+                    <LicenseHolder organistaionID="abc123" organistationName="TNC"/>
+                    <LicensePeriod startDate="2014-03-19T11:32:50.640Z" endDate="2014-05-13T11:32:50.650+01:00"/>
+                    <Channels>
+                        <Channel channelTag="BBC" channelName="British Broadcasting Company"/>
+                    </Channels>
+                </License>
+            </Rights>
+        </CreateOrUpdateTitle>
+        <AddItem titleID="Life on MarsS04E03">
+            <Item itemID="abc123">
+                <RequiredBy>2013-11-30T11:36:24.787Z</RequiredBy>
+                <RequiredFormat>SD</RequiredFormat>
+                <Source>
+                    <Aggregation>
+                        <Order>
+                            <OrderCreated>2012-02-02T11:36:24.775Z</OrderCreated>
+                            <OrderReference>ABC123</OrderReference>
+                        </Order>
+                        <Aggregator aggregatorID="ABC123" aggregatorName="aggregatorName"/>
+                    </Aggregation>
+                </Source>
+            </Item>
+        </AddItem>
+    </Actions>
+</PlaceholderMessage>

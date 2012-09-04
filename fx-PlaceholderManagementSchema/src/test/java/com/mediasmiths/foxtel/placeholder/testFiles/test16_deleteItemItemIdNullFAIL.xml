@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Delete an Item
+FAIL - itemID is null-->
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<Actions>
+<DeleteItem titleID="Absolutley FabulousS04E03">
+  <Item/>
+</DeleteItem></Actions>
+</PlaceholderMessage>
