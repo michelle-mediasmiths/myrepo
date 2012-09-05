@@ -1,11 +1,11 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteTxPackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.TxPackage;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 
 public class TestDeleteTxPackage extends PlaceHolderMessageTest {
 	

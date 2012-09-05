@@ -2,13 +2,13 @@ package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-import com.mediasmiths.foxtel.placeholder.MSTxPackage;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateTxPackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.TxPackageType;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTxPackage;
 
 public class TestAddOrUpdateTxPackage extends PlaceHolderMessageTest{
 

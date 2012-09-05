@@ -2,15 +2,15 @@ package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-import com.mediasmiths.foxtel.placeholder.MSRights;
-import com.mediasmiths.foxtel.placeholder.MSTitleDescription;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSRights;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
 
 public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 

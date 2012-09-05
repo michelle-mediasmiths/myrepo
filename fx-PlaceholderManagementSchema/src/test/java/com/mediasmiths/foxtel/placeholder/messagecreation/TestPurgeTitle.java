@@ -1,10 +1,10 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 
 public class TestPurgeTitle extends PlaceHolderMessageTest {
 	

@@ -1,12 +1,12 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-import com.mediasmiths.foxtel.placeholder.MSItem;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddItem;
 import au.com.foxtel.cf.mam.pms.ItemType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSItem;
 
 public class TestAddItem extends PlaceHolderMessageTest{
 
