@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+    <Actions>
+        <DeleteTxPackage titleID="Life on MarsS04E03">
+            <TxPackage autoID="abc123"/>
+        </DeleteTxPackage>
+    </Actions>
+</PlaceholderMessage>

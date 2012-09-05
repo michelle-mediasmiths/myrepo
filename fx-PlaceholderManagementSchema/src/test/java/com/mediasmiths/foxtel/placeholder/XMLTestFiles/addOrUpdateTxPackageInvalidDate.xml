@@ -1,0 +1,11 @@
+<AddOrUpdateTxPackage titleID="SpooksS04E03">
+  <TxPackage>
+    <ItemId>abc123</ItemId>
+    <Classification>PG</Classification>
+    <ConsumerAdvise>Generally suitable for all</ConsumerAdvise>
+    <NumberOfSegments>4</NumberOfSegments>
+    <TargetDate>2012-10-17T00:00:00.000+01:00</TargetDate>
+    <Notes>none</Notes>
+    <AutoID>abc123</AutoID>
+  </TxPackage>
+</AddOrUpdateTxPackage>

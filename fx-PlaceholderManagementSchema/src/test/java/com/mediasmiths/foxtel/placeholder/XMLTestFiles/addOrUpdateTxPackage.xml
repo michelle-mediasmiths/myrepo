@@ -1,0 +1,11 @@
+<AddOrUpdateTxPackage titleId="Absolutley FabulousS04E03">
+  <TxPackage>
+    <itemId>abc123</itemId>
+    <classification>PG</classification>
+    <consumerAdvise>Generally suitable for all</consumerAdvise>
+    <numberOfSegments>4</numberOfSegments>
+    <targetDate>2012-12-12T00:00:00.000Z</targetDate>
+    <notes>none</notes>
+    <autoId>abc123</autoId>
+  </TxPackage>
+</AddOrUpdateTxPackage>
