@@ -45,13 +45,19 @@ public class MayamClient {
 		mqClient = new MqClient(injector);
 	}
 	
-	public void tidyUp()
+	public void shutdown()
 	{
 		mqClient.dispose();
 	}
 	
 	//Title - Creating a title asset in Mayam
 	public MayamClientErrorCode createTitle(Programme.Detail title)
+	{
+		
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	}
+	
+	public MayamClientErrorCode createTitle(TitleDescriptionType title)
 	{
 		
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
@@ -76,7 +82,24 @@ public class MayamClient {
 	//Title - Updating a title asset in Mayam
 	public MayamClientErrorCode updateTitle(Programme.Detail programme)
 	{
+		AttributeMap asset;
+		try {
+			//TODO: Determine id to be used from programme object
+			asset = client.getAsset(AssetType.SER, programme.getTitle());
+			
+			asset.setAttribute(Attribute.SERIES_TITLE, programme.getTitle());
+			client.updateAsset(asset);
 
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			e.printRemoteMessages(System.err);
+		}
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	}
+	
+	public MayamClientErrorCode updateTitle(TitleDescriptionType title)
+	{
+		
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
@@ -102,6 +125,12 @@ public class MayamClient {
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
+	public MayamClientErrorCode createMedia(ItemType media)
+	{
+
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	}
+	
 	public MayamClientErrorCode createMedia(TitleDetailType.SourceMedia media)
 	{
 		final AttributeMap assetAttributes = client.createAttributeMap();
@@ -120,7 +149,17 @@ public class MayamClient {
 	//Media - Updating a media asset in Mayam
 	public MayamClientErrorCode updateMedia(Programme.Media media)
 	{
+		AttributeMap asset;
+		try {
+			asset = client.getAsset(AssetType.ITEM, media.getId());
+			asset.setAttribute(Attribute.ASSET_TITLE, media.getFilename());
+			
+			client.updateAsset(asset);
 
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			e.printRemoteMessages(System.err);
+		}
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
@@ -130,8 +169,16 @@ public class MayamClient {
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
+	public MayamClientErrorCode updateMedia(ItemType media)
+	{
+
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	}
+	
+	//TODO: Tx-Packaging needs added into Mayam API
+	
 	//Version - Creating a version asset in Mayam
-	public MayamClientErrorCode createVersion()
+	public MayamClientErrorCode createVersion(TxPackageType txPackage)
 	{
 
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
@@ -144,7 +191,7 @@ public class MayamClient {
 	}
 	
 	//Version - Updating a version asset in Mayam
-	public MayamClientErrorCode updateVersion()
+	public MayamClientErrorCode updateVersion(TxPackageType txPackage)
 	{
 
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
