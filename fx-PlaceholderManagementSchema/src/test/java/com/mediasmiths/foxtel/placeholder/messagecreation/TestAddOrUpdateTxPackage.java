@@ -1,8 +1,6 @@
-package com.mediasmiths.foxtel.placeholder.test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.junit.Test;
 
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.MSTxPackage;
@@ -12,9 +10,9 @@ import au.com.foxtel.cf.mam.pms.AddOrUpdateTxPackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.TxPackageType;
 
-public class TestAddOrUpdateTxPackage {
+public class TestAddOrUpdateTxPackage extends PlaceHolderMessageTest{
 
-	private PlaceholderMessage generatePlaceholderMessage()
+	protected PlaceholderMessage generatePlaceholderMessage()
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
@@ -47,16 +45,9 @@ public class TestAddOrUpdateTxPackage {
 		return addTxPackage;
 	}
 
-	@Test
-	public void testAddOrUpdateTxPackage()
- throws Exception {
-		TestAddOrUpdateTxPackage tap = new TestAddOrUpdateTxPackage();
-		PlaceholderMessage message = tap.generatePlaceholderMessage();
-		FileWriter writer = new FileWriter();
-		writer.writeObjectToFile(message,
-					"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testAddOrUpdateTxPackage.xml");
-		
-
+	@Override
+	protected String getFileName() {
+		return "testAddOrUpdateTxPackage.xml";
 	}
 
 }

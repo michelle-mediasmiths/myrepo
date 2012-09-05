@@ -1,15 +1,13 @@
-package com.mediasmiths.foxtel.placeholder.test;
-
-import org.junit.Test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteItem;
 import au.com.foxtel.cf.mam.pms.Item;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-public class TestDeleteItem {
+public class TestDeleteItem extends PlaceHolderMessageTest{
 
-	private PlaceholderMessage generatePlaceholderMessage() {
+	protected PlaceholderMessage generatePlaceholderMessage() throws Exception {
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID("123abc");
 		message.setSenderID("987xyz");
@@ -28,14 +26,8 @@ public class TestDeleteItem {
 		return message;
 	}
 
-	@Test
-	public void testDeleteItem() throws Exception {
-		TestDeleteItem tdi = new TestDeleteItem();
-		PlaceholderMessage message = tdi.generatePlaceholderMessage();
-		FileWriter writer = new FileWriter();
-
-		writer.writeObjectToFile(message,
-				"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testDeleteItem.xml");
-
+	@Override
+	protected String getFileName() {
+		return "testDeleteItem.xml";
 	}
 }

@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -8,6 +8,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.io.FilenameUtils;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -35,6 +36,12 @@ public class FileWriter {
 		Schema schema = factory.newSchema(TestAddItem.class.getClassLoader()
 				.getResource("PlaceholderManagement.xsd"));
 		marshaller.setSchema(schema);
+		
+		File dir = new File(FilenameUtils.getFullPath(filepath));
+		
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
 
 		marshaller.marshal(message, new FileOutputStream(new File(filepath)));
 	}

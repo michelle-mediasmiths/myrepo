@@ -1,6 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.test;
-
-import org.junit.Test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 
@@ -9,9 +7,9 @@ import au.com.foxtel.cf.mam.pms.DeleteTxPackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.TxPackage;
 
-public class TestDeleteTxPackage {
+public class TestDeleteTxPackage extends PlaceHolderMessageTest {
 	
-	private PlaceholderMessage generatePlaceholderMessage () {
+	protected PlaceholderMessage generatePlaceholderMessage () throws Exception {
 		
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID("123abc");
@@ -38,15 +36,10 @@ public class TestDeleteTxPackage {
 		
 		return deleteTx;
 	}
-	
-	@Test
-	public void testDeleteTxPackage() throws Exception {
-		
-		TestDeleteTxPackage tdp = new TestDeleteTxPackage();
-		PlaceholderMessage message = tdp.generatePlaceholderMessage();
-		FileWriter writer = new FileWriter();
-		writer.writeObjectToFile(message, "/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testDeleteTxPackage.xml");
-		
+
+	@Override
+	protected String getFileName() {
+		return "testDeleteTxPackage.xml";
 	}
 
 }

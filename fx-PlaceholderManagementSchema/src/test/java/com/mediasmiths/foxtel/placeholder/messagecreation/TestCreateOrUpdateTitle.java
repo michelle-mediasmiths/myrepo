@@ -1,8 +1,6 @@
-package com.mediasmiths.foxtel.placeholder.test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.junit.Test;
 
 import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.MSRights;
@@ -14,9 +12,9 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
-public class TestCreateOrUpdateTitle {
+public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 
-	private PlaceholderMessage generatePlaceholderMessage()
+	protected PlaceholderMessage generatePlaceholderMessage()
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
@@ -50,16 +48,9 @@ public class TestCreateOrUpdateTitle {
 		return message;
 	}
 
-	@Test
-	public void testCreateOrUpdateTitle() throws Exception {
-
-		TestCreateOrUpdateTitle tct = new TestCreateOrUpdateTitle();
-		PlaceholderMessage message = tct.generatePlaceholderMessage();
-		FileWriter writer = new FileWriter();
-
-		writer.writeObjectToFile(message,
-				"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testCreateOrUpdateTitle.xml");
-
+	@Override
+	protected String getFileName() {
+		return "testCreateOrUpdateTitle.xml";
 	}
 
 }

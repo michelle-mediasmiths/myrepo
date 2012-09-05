@@ -1,21 +1,17 @@
-package com.mediasmiths.foxtel.placeholder.test;
+package com.mediasmiths.foxtel.placeholder.messagecreation;
+
+import com.mediasmiths.foxtel.placeholder.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.MSItem;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddItem;
 import au.com.foxtel.cf.mam.pms.ItemType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import javax.xml.datatype.DatatypeConfigurationException;
+public class TestAddItem extends PlaceHolderMessageTest{
 
-import org.junit.Test;
-
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
-import com.mediasmiths.foxtel.placeholder.MSItem;
-
-public class TestAddItem {
-
-	private PlaceholderMessage generatePlaceholderMessage()
-			throws DatatypeConfigurationException {
+	protected PlaceholderMessage generatePlaceholderMessage()
+			throws Exception {
 
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID("123abc");
@@ -39,15 +35,8 @@ public class TestAddItem {
 		return message;
 	}
 
-	@Test
-	public void testAddItem() throws Exception {
-
-		TestAddItem tai = new TestAddItem();
-		PlaceholderMessage message = tai.generatePlaceholderMessage();
-		FileWriter writer = new FileWriter();
-
-		writer.writeObjectToFile(message,
-				"/Users/alisonboal/Documents/Foxtel/XMLTestFiles/testAddItem.xml");
-
+	@Override
+	protected String getFileName() {
+		return "testAddItem.xml";
 	}
 }
