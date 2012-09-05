@@ -14,7 +14,8 @@
 		<module>fx-mpa</module>
 		<module>fx-MediaExchange</module>
 		<module>fx-MaterialsService</module>
-		<module>placeholdermanagment</module>
+		<module>fx-PlaceholderManagementSchema</module>
+		<module>fx-MayamClient</module>
 	</modules>
 	
 	<distributionManagement>
