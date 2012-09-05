@@ -11,6 +11,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.mq.AttributeMessageBuilder;
+import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
@@ -23,12 +24,16 @@ public class MayamClient {
 	final Injector injector;
 	final TasksClient client;
 	final Provider<AttributeMessageBuilder> attributeMessageBuilder;
-
+	final Mq mq;
+	final MqClient mqClient;
+	
 	public MayamClient() throws MalformedURLException {
 		url = new URL("http://localhost:8084/tasks-ws");
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
 		client = injector.getInstance(TasksClient.class).setup(url, token);
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
+		mq = injector.getInstance(Mq.class);
+		mqClient = new MqClient(injector);
 	}
 	
 	public MayamClient(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException {
@@ -36,6 +41,13 @@ public class MayamClient {
 		injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
 		client = injector.getInstance(TasksClient.class).setup(url, userToken);
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
+		mq = injector.getInstance(Mq.class);
+		mqClient = new MqClient(injector);
+	}
+	
+	public void tidyUp()
+	{
+		mqClient.dispose();
 	}
 	
 	//Title - Creating a title asset in Mayam
