@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
-    <Actions>
-        <DeleteItem titleID="Gavin and StaceyS04E03">
-            <Item itemID="fgh456"/>
-        </DeleteItem>
-    </Actions>
-</PlaceholderMessage>
