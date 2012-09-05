@@ -9,12 +9,29 @@
 	</parent>
 
 	<groupId>au.com.foxtel.cf.mam</groupId>
-	<artifactId>placeholdermanagment</artifactId>
+	<artifactId>fx-PlaceholderManagment</artifactId>
 	<packaging>jar</packaging>
 	<version>0.4-SNAPSHOT</version>
 	<name>PlaceholderManagementSystem-schema</name>
 
 	<dependencies>
+
+		<!-- begin test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version> 
+			<scope>test</scope>
+		</dependency>
+		<!-- end test dependencies -->
+
+		<!-- commons io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>
 			<artifactId>jaxb-impl</artifactId>
@@ -72,9 +89,11 @@
 				<inherited>true</inherited>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 
