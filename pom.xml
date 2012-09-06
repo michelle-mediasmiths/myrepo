@@ -13,6 +13,7 @@
 	<modules>
 		<module>fx-mpa</module>
 		<module>fx-MediaExchange</module>
+		<module>fx-PlaceholderManagement</module>
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-MayamClient</module>
 	</modules>
