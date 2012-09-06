@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,6 +23,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Validator {
+	
+	private static Logger logger = Logger.getLogger(Validator.class);
 
 	/**
 	 * Checks the structure of a given xml file against the xsd
@@ -41,13 +44,12 @@ public class Validator {
 			SchemaFactory factory = SchemaFactory
 					.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			Schema schema = factory.newSchema(new StreamSource(
-					"PlaceholderManagement.xsd"));
+					Validator.class.getClassLoader().getResourceAsStream("PlaceholderManagement.xsd")));
 			javax.xml.validation.Validator validator = schema.newValidator();
 			validator.validate(new StreamSource(filepath));
 			pass = true;
 		} catch (Exception e) {
-			System.out.println("ERROR: invalid structure");
-			e.printStackTrace();
+			logger.error("invalid structure",e);			
 		}
 
 		return pass;
@@ -230,7 +232,7 @@ public class Validator {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	public static void validateFile(String filepath) throws SAXException,
+	public static boolean validateFile(String filepath) throws SAXException,
 			ParserConfigurationException, IOException {
 
 		boolean validSchema = false;
@@ -269,7 +271,10 @@ public class Validator {
 			} else {
 				System.out.println("Invalid schema");
 			}
+			
+			return validSchema;
 		}
+		return againstXSD;
 	}
 
 	/**

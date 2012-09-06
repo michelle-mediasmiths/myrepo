@@ -7,6 +7,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 public class MSTxPackage {
 
@@ -22,6 +23,7 @@ public class MSTxPackage {
 			throws DatatypeConfigurationException {
 
 		txPackage.setMaterialID("abc123");
+		txPackage.setPresentationFormat(PresentationFormatType.HD);
 		txPackage.setClassification(ClassificationEnumType.PG);
 		txPackage.setConsumerAdvice("Generally suitable for all");
 		txPackage.setNumberOfSegments(new BigInteger("4"));

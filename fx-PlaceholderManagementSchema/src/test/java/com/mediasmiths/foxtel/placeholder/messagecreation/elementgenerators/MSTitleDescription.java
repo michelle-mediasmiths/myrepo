@@ -18,6 +18,7 @@ public class MSTitleDescription {
 
 		titleDescription.setEpisodeTitle(titleId);
 		titleDescription.setEpisodeTitle(titleId);
+		titleDescription.setProgrammeTitle("programmetitle");
 		titleDescription.setProductionNumber("123");
 		titleDescription.setEpisodeNumber(new BigInteger("11"));
 		titleDescription.setCountryOfProduction("Britian");
