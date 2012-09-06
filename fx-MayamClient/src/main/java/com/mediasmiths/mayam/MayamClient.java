@@ -2,21 +2,21 @@ package com.mediasmiths.mayam;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-
+import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.MaterialType;
+import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mayam.wf.attributes.server.AttributesModule;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.mq.AttributeMessageBuilder;
-import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
-import com.mediasmiths.foxtel.generated.MaterialsService.TitleDetailType;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.mayam.controllers.MayamPackageController;
+import com.mediasmiths.mayam.controllers.MayamTitleController;
 
 public class MayamClient {
 	final URL url;
@@ -24,16 +24,20 @@ public class MayamClient {
 	final Injector injector;
 	final TasksClient client;
 	final Provider<AttributeMessageBuilder> attributeMessageBuilder;
-	final Mq mq;
 	final MqClient mqClient;
+	final MayamTitleController titleController;
+	final MayamMaterialController materialController;
+	final MayamPackageController packageController;
 	
 	public MayamClient() throws MalformedURLException {
 		url = new URL("http://localhost:8084/tasks-ws");
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
 		client = injector.getInstance(TasksClient.class).setup(url, token);
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mq = injector.getInstance(Mq.class);
 		mqClient = new MqClient(injector);
+		titleController = new MayamTitleController(client, mqClient);
+		materialController = new MayamMaterialController(client, mqClient);
+		packageController = new MayamPackageController(client, mqClient);
 	}
 	
 	public MayamClient(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException {
@@ -41,8 +45,10 @@ public class MayamClient {
 		injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
 		client = injector.getInstance(TasksClient.class).setup(url, userToken);
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mq = injector.getInstance(Mq.class);
 		mqClient = new MqClient(injector);
+		titleController = new MayamTitleController(client, mqClient);
+		materialController = new MayamMaterialController(client, mqClient);
+		packageController = new MayamPackageController(client, mqClient);
 	}
 	
 	public void shutdown()
@@ -50,156 +56,73 @@ public class MayamClient {
 		mqClient.dispose();
 	}
 	
-	//Title - Creating a title asset in Mayam
 	public MayamClientErrorCode createTitle(Programme.Detail title)
 	{
-		
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return titleController.createTitle(title);
 	}
 	
-	public MayamClientErrorCode createTitle(TitleDescriptionType title)
+	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title)
 	{
-		
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return titleController.createTitle(title);
 	}
-	
-	public MayamClientErrorCode createTitle(TitleDetailType title)
-	{
-		final AttributeMap assetAttributes = client.createAttributeMap();
-		assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
-		assetAttributes.setAttribute(Attribute.SERIES_TITLE, title.getName());
 
-		AttributeMap result;
-		try {
-			result = client.createAsset(assetAttributes);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	//Title - Updating a title asset in Mayam
 	public MayamClientErrorCode updateTitle(Programme.Detail programme)
 	{
-		AttributeMap asset;
-		try {
-			//TODO: Determine id to be used from programme object
-			asset = client.getAsset(AssetType.SER, programme.getTitle());
-			
-			asset.setAttribute(Attribute.SERIES_TITLE, programme.getTitle());
-			client.updateAsset(asset);
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return titleController.updateTitle(programme);
 	}
 	
-	public MayamClientErrorCode updateTitle(TitleDescriptionType title)
+	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title)
 	{
+		return titleController.updateTitle(title);
+	}
+	
+	public MayamClientErrorCode purgeTitle(PurgeTitle title)
+	{
+		return titleController.purgeTitle(title);
+	}
+	
+	public MayamClientErrorCode createMaterial(Programme.Media media)
+	{
+		return materialController.createMaterial(media);
+	}
+	
+	public MayamClientErrorCode createMaterial(MaterialType material)
+	{
+		return materialController.createMaterial(material);
+	}
 		
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	public MayamClientErrorCode updateMaterial(Programme.Media media)
+	{
+		return materialController.updateMaterial(media);
 	}
 	
-	public MayamClientErrorCode updateTitle(TitleDetailType title)
+	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
-		AttributeMap asset;
-		try {
-			asset = client.getAsset(AssetType.SER, title.getTitleID());
-			asset.setAttribute(Attribute.SERIES_TITLE, title.getName());
-			client.updateAsset(asset);
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return materialController.updateMaterial(material);
 	}
 	
-	//Media - Creating a media asset in Mayam
-	public MayamClientErrorCode createMedia(Programme.Media media)
+	public MayamClientErrorCode createPackage(PackageType txPackage)
 	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return packageController.createPackage(txPackage);
 	}
 	
-	public MayamClientErrorCode createMedia(ItemType media)
+	public MayamClientErrorCode createPackage()
 	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return packageController.createPackage();
 	}
 	
-	public MayamClientErrorCode createMedia(TitleDetailType.SourceMedia media)
+	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
-		final AttributeMap assetAttributes = client.createAttributeMap();
-		assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
-
-		AttributeMap result;
-		try {
-			result = client.createAsset(assetAttributes);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return packageController.updatePackage(txPackage);
 	}
 	
-	//Media - Updating a media asset in Mayam
-	public MayamClientErrorCode updateMedia(Programme.Media media)
+	public MayamClientErrorCode updatePackage()
 	{
-		AttributeMap asset;
-		try {
-			asset = client.getAsset(AssetType.ITEM, media.getId());
-			asset.setAttribute(Attribute.ASSET_TITLE, media.getFilename());
-			
-			client.updateAsset(asset);
-
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return packageController.updatePackage();
 	}
 	
-	public MayamClientErrorCode updateMedia(TitleDetailType.SourceMedia media)
+	public MayamClientErrorCode purgePackage()
 	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	public MayamClientErrorCode updateMedia(ItemType media)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	//TODO: Tx-Packaging needs added into Mayam API
-	
-	//Version - Creating a version asset in Mayam
-	public MayamClientErrorCode createVersion(TxPackageType txPackage)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	public MayamClientErrorCode createVersion(TitleDetailType.Versions versions)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	//Version - Updating a version asset in Mayam
-	public MayamClientErrorCode updateVersion(TxPackageType txPackage)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
-	public MayamClientErrorCode updateVersion(TitleDetailType.Versions versions)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		return packageController.purgePackage();
 	}
 }
