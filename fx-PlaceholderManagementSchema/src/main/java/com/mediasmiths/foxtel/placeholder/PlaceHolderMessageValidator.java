@@ -38,8 +38,6 @@ public class PlaceHolderMessageValidator {
 	// PlaceHolderManagement.xsd
 	private final SchemaValidator schemaValidator;
 	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
-	
-	private final MayamClient mayamClient;
 
 	public PlaceHolderMessageValidator(Unmarshaller unmarshaller)
 			throws SAXException {
