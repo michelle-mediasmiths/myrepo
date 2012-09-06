@@ -5,20 +5,20 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
-import au.com.foxtel.cf.mam.pms.ItemType;
+import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.Source;
 
 public class MSItem {
 
 	/**
-	 * Creates a valid object of type ItemType 
+	 * Creates a valid object of type MaterialType 
 	 * @param item
 	 * @param titleId
 	 * @return item
 	 * @throws DatatypeConfigurationException
 	 */
-	public ItemType validItem (ItemType item, String titleId) throws DatatypeConfigurationException {
+	public MaterialType validItem (MaterialType item, String titleId) throws DatatypeConfigurationException {
 		
 		Source source = new Source();
 		Aggregation aggregation = new Aggregation();
@@ -36,13 +36,13 @@ public class MSItem {
 		item.setRequiredBy(xmlCal);
 		item.setRequiredFormat("SD");
 		item.setSource(source);
-		item.setItemID("abc123");
+		item.setMaterialD("abc123");
 		
 		return item;
 	}
 	
 	/**
-	 * Creates a valid object of type Aggregation to be used as part of an ItemType
+	 * Creates a valid object of type Aggregation to be used as part of an MaterialType
 	 * @param aggregation
 	 * @return aggregation
 	 * @throws DatatypeConfigurationException

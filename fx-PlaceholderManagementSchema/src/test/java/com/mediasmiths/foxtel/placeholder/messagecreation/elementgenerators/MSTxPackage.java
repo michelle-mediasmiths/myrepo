@@ -5,30 +5,31 @@ import java.math.BigInteger;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import au.com.foxtel.cf.mam.pms.TxPackageType;
+import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
+import au.com.foxtel.cf.mam.pms.PackageType;
 
 public class MSTxPackage {
 
 	/**
-	 * Creates a valid object of type TxPackageType
+	 * Creates a valid object of type PackageType
 	 * 
 	 * @param txPackage
 	 * @param titleId
 	 * @return
 	 * @throws DatatypeConfigurationException
 	 */
-	public TxPackageType validTxPackage(TxPackageType txPackage, String titleId)
+	public PackageType validTxPackage(PackageType txPackage, String titleId)
 			throws DatatypeConfigurationException {
 
-		txPackage.setItemID("abc123");
-		txPackage.setClassification("PG");
-		txPackage.setConsumerAdvise("Generally suitable for all");
+		txPackage.setMaterialID("abc123");
+		txPackage.setClassification(ClassificationEnumType.PG);
+		txPackage.setConsumerAdvice("Generally suitable for all");
 		txPackage.setNumberOfSegments(new BigInteger("4"));
 		HelperMethods method = new HelperMethods();
 		XMLGregorianCalendar xmlCal = method.giveValidDate();
 		txPackage.setTargetDate(xmlCal);
 		txPackage.setNotes("none");
-		txPackage.setAutoID("abc123");
+		txPackage.setPresentationID("abc123");
 
 		return txPackage;
 	}

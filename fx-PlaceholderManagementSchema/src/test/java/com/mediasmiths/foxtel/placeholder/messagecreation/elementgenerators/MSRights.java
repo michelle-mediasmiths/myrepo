@@ -3,11 +3,11 @@ package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import au.com.foxtel.cf.mam.pms.Channel;
+import au.com.foxtel.cf.mam.pms.ChannelType;
 import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.License;
-import au.com.foxtel.cf.mam.pms.LicenseHolder;
-import au.com.foxtel.cf.mam.pms.LicensePeriod;
+import au.com.foxtel.cf.mam.pms.LicenseHolderType;
+import au.com.foxtel.cf.mam.pms.LicensePeriodType;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
 public class MSRights {
@@ -24,13 +24,13 @@ public class MSRights {
 
 		License license1 = new License();
 
-		LicenseHolder licenseHolder = new LicenseHolder();
-		LicensePeriod licensePeriod = new LicensePeriod();
-		Channel channel1 = new Channel();
+		LicenseHolderType licenseHolder = new LicenseHolderType();
+		LicensePeriodType licensePeriod = new LicensePeriodType();
+		ChannelType channel1 = new ChannelType();
 		Channels channels = new Channels();
 
-		licenseHolder.setOrganistaionID("abc123");
-		licenseHolder.setOrganistationName("TNC");
+		licenseHolder.setOrganisationID("abc123");
+		licenseHolder.setOrganisationName("TNC");
 		license1.setLicenseHolder(licenseHolder);
 
 		HelperMethods method = new HelperMethods();

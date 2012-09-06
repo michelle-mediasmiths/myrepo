@@ -41,7 +41,7 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 		createTitle.setPurgeProtect(false);
 
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddItem().add(createTitle);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(createTitle);
 
 		message.setActions(actions);
 

@@ -17,7 +17,7 @@ public class TestPurgeTitle extends PlaceHolderMessageTest {
 		PurgeTitle purgeTitle = generatePurgeTitle();
 		
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddItem().add(purgeTitle);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(purgeTitle);
 		message.setActions(actions);
 		
 		return message;

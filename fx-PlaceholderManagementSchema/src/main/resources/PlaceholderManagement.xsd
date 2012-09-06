@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://foxtel.com.au/cf/mam/pms/000/003" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://foxtel.com.au/cf/mam/pms/000/003" elementFormDefault="qualified" attributeFormDefault="unqualified">
-	<!-- Content Factory - Media Asset Management  -->
-	<!-- Placeholder Management Schema - Version 0.4, 18th July 2012 -->
-	<!-- Contact: Matthew Bennetts, Foxtel -->
+<xs:schema xmlns="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<!-- 
+		== Project: Content Factory - Media Asset Management
+		== Title: Placeholder Management Schema
+		== Version: 1.0
+		== Author: Matthew Bennetts - matthew.bennetts@foxtel.com.au
+		== 
+		== @(#)$Id: PlaceholderManagement_V1.0.xsd 5 2012-09-05 04:51:19Z bennettm $
+		== 
+	-->
 	<xs:element name="PlaceholderMessage">
 		<xs:annotation>
 			<xs:documentation>The definition for a placeholder message - the root element.</xs:documentation>
@@ -23,57 +29,89 @@
 											<xs:documentation>A string used to uniquely identify each title in the MAM. Values must be unique and must be prefixed with a FOXTEL assigned string.</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
-									<xs:attribute name="restrictAccess" type="xs:boolean"/>
-									<xs:attribute name="purgeProtect" type="xs:boolean"/>
+									<xs:attribute name="restrictAccess" type="xs:boolean">
+										<xs:annotation>
+											<xs:documentation>True/False value to indicate hightened user security restriction for the content</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="purgeProtect" type="xs:boolean">
+										<xs:annotation>
+											<xs:documentation>True/False value.  True prohibits MAM purge. Default it is false.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
 							<xs:element name="PurgeTitle">
 								<xs:complexType>
 									<xs:attribute name="titleID" type="titleIdType" use="required">
 										<xs:annotation>
-											<xs:documentation>A string used to uniquely identify the title to purge from the MAM.</xs:documentation>
+											<xs:documentation>A string used to uniquely identify each title in the MAM. Values must be unique and must be prefixed with a FOXTEL assigned string.  This title ID indicates the Title that will be purged</xs:documentation>
 										</xs:annotation>
 									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="AddItem">
+							<xs:element name="AddOrUpdateMaterial">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="Item" type="itemType"/>
+										<xs:element name="Material" type="materialType"/>
 									</xs:sequence>
-									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify the title which is associated with the Media </xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="DeleteItem">
+							<xs:element name="DeleteMaterial">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="Item">
+										<xs:element name="Material">
 											<xs:complexType>
-												<xs:attribute name="itemID" type="itemIdType" use="required"/>
+												<xs:attribute name="materialID" type="materialIdType" use="required">
+													<xs:annotation>
+														<xs:documentation>a unique identifier for the material that will get deleted</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
-									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify the title which is associated with the Media</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="AddOrUpdateTxPackage">
+							<xs:element name="AddOrUpdatePackage">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="TxPackage" type="txPackageType"/>
+										<xs:element name="Package" type="packageType"/>
 									</xs:sequence>
-									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify the title which is associated with the TX</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
-							<xs:element name="DeleteTxPackage">
+							<xs:element name="DeletePackage">
 								<xs:complexType>
 									<xs:sequence>
-										<xs:element name="TxPackage">
+										<xs:element name="Package">
 											<xs:complexType>
-												<xs:attribute name="autoID" type="automationIdType" use="required"/>
+												<xs:attribute name="presentationID" type="presentationIdType" use="required">
+													<xs:annotation>
+														<xs:documentation>A string used to uniquely identify the Transmission Package to purge from the MAM</xs:documentation>
+													</xs:annotation>
+												</xs:attribute>
 											</xs:complexType>
 										</xs:element>
 									</xs:sequence>
-									<xs:attribute name="titleID" type="titleIdType" use="required"/>
+									<xs:attribute name="titleID" type="titleIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>A string used to uniquely identify the title which is associated with the TX</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
 								</xs:complexType>
 							</xs:element>
 						</xs:choice>
@@ -93,15 +131,40 @@
 			</xs:attribute>
 		</xs:complexType>
 	</xs:element>
+	<!-- -->
 	<!--Complex Type Definitions-->
-	<xs:complexType name="txPackageType">
+	<!-- -->
+	<xs:complexType name="packageType">
 		<xs:annotation>
 			<xs:documentation>The definition for the TX Package entity.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="ItemID" type="itemIdType"/>
-			<xs:element name="Classification" type="classificationType" minOccurs="0"/>
-			<xs:element name="ConsumerAdvise" type="consumerAdviseType" minOccurs="0"/>
+			<xs:element name="MaterialID" type="materialIdType">
+				<xs:annotation>
+					<xs:documentation>A text used to uniquely identify the meida associated with the TX Package</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PresentationFormat" type="presentationFormatType">
+				<xs:annotation>
+					<xs:documentation>Specifies the output format. For example, SD or HD.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Classification" type="classificationEnumType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A categorisation of content to indiate suitable audience.  Values such as NC, G, PG, M, MA, R</xs:documentation>
+					<xs:appinfo>
+						<altova:exampleValues>
+							<altova:example value="PG"/>
+							<altova:example value="M"/>
+						</altova:exampleValues>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ConsumerAdvice" type="consumerAdviseType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>descriptors that alert consumers to potentially sensitive content or contentious elements like “horror” or "nudity“ or "violence”</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="NumberOfSegments" type="xs:positiveInteger">
 				<xs:annotation>
 					<xs:documentation>Estimated number of segments</xs:documentation>
@@ -112,35 +175,141 @@
 					<xs:documentation>The first Tx date/time. Used to prioritise work.</xs:documentation>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="Notes" type="xs:string" minOccurs="0"/>
+			<xs:element name="Notes" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="500"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="autoID" type="automationIdType" use="required"/>
+		<xs:attribute name="presentationID" type="presentationIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>A text used to uniquely identify the Transmission Package</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="tapeType">
 		<xs:annotation>
 			<xs:documentation>The definition for the Tape entity.</xs:documentation>
 		</xs:annotation>
-		<xs:attribute name="autoID" type="automationIdType" use="required"/>
-		<xs:attribute name="libraryID" type="libraryIdType"/>
+		<xs:attribute name="presentationID" type="presentationIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>unique id to  identify the media on tape</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="libraryID" type="libraryIdType">
+			<xs:annotation>
+				<xs:documentation>ID used to uniquely identify the Tape in tape library system</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="titleDescriptionType">
 		<xs:annotation>
 			<xs:documentation>The definition for the Title Description entity.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="Title" type="xs:string">
+			<xs:element name="ProgrammeTitle">
 				<xs:annotation>
-					<xs:documentation>Series name or non episodic programme title.</xs:documentation>
+					<xs:documentation>Title of the programme.  Series name or non episodic programme title.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="ProductionNumber" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Programme Production Identifier</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="EpisodeTitle" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Title of the Episode</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SeriesNumber" type="xs:nonNegativeInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Season Number of the Program</xs:documentation>
+					<xs:appinfo>
+						<altova:exampleValues>
+							<altova:example value="1"/>
+							<altova:example value="2"/>
+							<altova:example value="3"/>
+						</altova:exampleValues>
+					</xs:appinfo>
 				</xs:annotation>
 			</xs:element>
-			<xs:element name="EpisodeTitle" type="xs:string" minOccurs="0"/>
-			<xs:element name="ProductionNumber" type="xs:string" minOccurs="0"/>
-			<xs:element name="EpisodeNumber" type="xs:nonNegativeInteger" minOccurs="0"/>
-			<xs:element name="CountryOfProduction" type="xs:string" minOccurs="0"/>
-			<xs:element name="YearOfProduction" type="yearType" minOccurs="0"/>
-			<xs:element name="Style" type="xs:string" minOccurs="0"/>
-			<xs:element name="Show" type="xs:string" minOccurs="0"/>
-			<xs:element name="Series" type="xs:nonNegativeInteger" minOccurs="0"/>
+			<xs:element name="EpisodeNumber" type="xs:nonNegativeInteger" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Episode number of the current season</xs:documentation>
+					<xs:appinfo>
+						<altova:exampleValues>
+							<altova:example value="1"/>
+							<altova:example value="2"/>
+							<altova:example value="3"/>
+						</altova:exampleValues>
+					</xs:appinfo>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="YearOfProduction" type="yearType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Year when programme was produced.The format for this field will be YYYY (4 digits always).</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="CountryOfProduction" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The country of production.</xs:documentation>
+					<xs:appinfo>
+						<altova:exampleValues>
+							<altova:example value=""/>
+						</altova:exampleValues>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Style" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Style of Title eg: Movie/Series/Special</xs:documentation>
+					<xs:appinfo>
+						<altova:exampleValues>
+							<altova:example value="Movie"/>
+							<altova:example value="Series"/>
+							<altova:example value="Special"/>
+						</altova:exampleValues>
+					</xs:appinfo>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="50"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="Show" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Show the programme belongs to.  Eg 'The Simpsons'</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 	<xs:complexType name="rightsType">
@@ -151,27 +320,12 @@
 			<xs:element name="License" maxOccurs="unbounded">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="LicenseHolder">
-							<xs:complexType>
-								<xs:attribute name="organistaionID" type="organisationIdType" use="required"/>
-								<xs:attribute name="organistationName" type="xs:string"/>
-							</xs:complexType>
-						</xs:element>
-						<xs:element name="LicensePeriod">
-							<xs:complexType>
-								<xs:attribute name="startDate" type="xs:dateTime" use="required"/>
-								<xs:attribute name="endDate" type="xs:dateTime"/>
-							</xs:complexType>
-						</xs:element>
+						<xs:element name="LicenseHolder" type="licenseHolderType"/>
+						<xs:element name="LicensePeriod" type="licensePeriodType"/>
 						<xs:element name="Channels">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="Channel" maxOccurs="unbounded">
-										<xs:complexType>
-											<xs:attribute name="channelTag" type="channelTagType" use="required"/>
-											<xs:attribute name="channelName" type="xs:string"/>
-										</xs:complexType>
-									</xs:element>
+									<xs:element name="Channel" type="channelType" maxOccurs="unbounded"/>
 								</xs:sequence>
 							</xs:complexType>
 						</xs:element>
@@ -180,14 +334,113 @@
 			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="itemType">
+	<xs:complexType name="licenseHolderType">
+		<xs:annotation>
+			<xs:documentation>The definition for the license holder entity</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="organisationID" type="organisationIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>Uniqu ID iassigned to the  distributor for the Title</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="FOXTEL"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="organisationName">
+			<xs:annotation>
+				<xs:documentation>Name of the distributor</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="Foxtel Management Pty Ltd"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="100"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="licensePeriodType">
+		<xs:annotation>
+			<xs:documentation>The definition for the license period entity</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="startDate" type="xs:dateTime" use="required">
+			<xs:annotation>
+				<xs:documentation>Date when License start</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="2011-07-18T00:00:00+10:00"/>
+						<altova:example value="2011-05-15T00:00:00+10:00"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="endDate" type="xs:dateTime">
+			<xs:annotation>
+				<xs:documentation>Date when License end or blank if License doesn't expire</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="2013-05-15T09:00:00+10:00"/>
+						<altova:example value="2012-07-18T12:00:00+10:00"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="channelType">
+		<xs:annotation>
+			<xs:documentation>The definition for the channel entity</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="channelTag" type="channelTagType" use="required">
+			<xs:annotation>
+				<xs:documentation>A text to uniquely identify the channel for which the title has rights</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="FO8"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="channelName">
+			<xs:annotation>
+				<xs:documentation>Name of the channel</xs:documentation>
+				<xs:appinfo>
+					<altova:exampleValues>
+						<altova:example value="Fox 8"/>
+					</altova:exampleValues>
+				</xs:appinfo>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:maxLength value="100"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="materialType">
 		<xs:annotation>
 			<xs:documentation>The definition for an Item entity.</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
-			<xs:element name="RequiredBy" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="RequiredFormat" type="requiredFormatEnumType" minOccurs="0"/>
-			<xs:element name="QualityCheckTask" type="qualityCheckEnumType" minOccurs="0"/>
+			<xs:element name="RequiredBy" type="xs:dateTime" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>A datetime value when the Media is required to be received by Foxtel</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="RequiredFormat" type="formatEnumType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>describes the format of the Media(one of  SD,HD or 3D) </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="QualityCheckTask" type="qualityCheckEnumType" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>type of quality check(s) to be performed on Media</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 			<xs:element name="Source" minOccurs="0">
 				<xs:complexType>
 					<xs:choice>
@@ -197,15 +450,34 @@
 									<xs:element name="Order" minOccurs="0">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="OrderCreated" type="xs:dateTime" minOccurs="0"/>
-												<xs:element name="OrderReference" type="xs:string" minOccurs="0"/>
+												<xs:element name="OrderCreated" type="xs:dateTime" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>A date/time when order was made to acquire a media</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+												<xs:element name="OrderReference" minOccurs="0">
+													<xs:annotation>
+														<xs:documentation>A reference ID associated with the order</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:string">
+															<xs:maxLength value="100"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
 									<xs:element name="Aggregator" minOccurs="0">
 										<xs:complexType>
 											<xs:attribute name="aggregatorID" type="aggregatorIdType" use="required"/>
-											<xs:attribute name="aggregatorName" type="xs:string"/>
+											<xs:attribute name="aggregatorName">
+												<xs:simpleType>
+													<xs:restriction base="xs:string">
+														<xs:maxLength value="100"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:attribute>
 										</xs:complexType>
 									</xs:element>
 								</xs:sequence>
@@ -214,7 +486,11 @@
 						<xs:element name="Compile">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="ParentItemID" type="itemIdType"/>
+									<xs:element name="ParentMaterialID" type="materialIdType">
+										<xs:annotation>
+											<xs:documentation>source media from which this item will get created</xs:documentation>
+										</xs:annotation>
+									</xs:element>
 								</xs:sequence>
 							</xs:complexType>
 						</xs:element>
@@ -229,96 +505,213 @@
 				</xs:complexType>
 			</xs:element>
 		</xs:sequence>
-		<xs:attribute name="itemID" type="itemIdType" use="required"/>
+		<xs:attribute name="materialD" type="materialIdType" use="required">
+			<xs:annotation>
+				<xs:documentation>a unique identifier which remains constant for the same material</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
 	</xs:complexType>
+	<!-- -->
 	<!--Simple Type Definitions-->
-	<xs:simpleType name="automationIdType">
+	<!-- -->
+	<xs:simpleType name="presentationIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for automation identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="ABC12345"/>
+				</altova:exampleValues>
+			</xs:appinfo>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="titleIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for title identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="P335111190922002"/>
+				</altova:exampleValues>
+			</xs:appinfo>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="messageIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for message identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="20120718220211341"/>
+				</altova:exampleValues>
+			</xs:appinfo>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
-	<xs:simpleType name="classificationType">
-		<xs:annotation>
-			<xs:documentation>A string type used for asset classification details.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="channelTagType">
 		<xs:annotation>
 			<xs:documentation>A string type used for channel tags.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="itemIdType">
+	<xs:simpleType name="materialIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for item identifiers. Items are physical assets held in the MAM</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="33511110"/>
+				</altova:exampleValues>
+			</xs:appinfo>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="senderIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for message sender identifiers.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="organisationIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for organisation identifers.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="aggregatorIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for aggregator identifiers.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
-	<xs:simpleType name="mediumType">
-		<xs:annotation>
-			<xs:documentation>A string type used for media types.</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="libraryIdType">
 		<xs:annotation>
 			<xs:documentation>A string type used for library identifiers.</xs:documentation>
 		</xs:annotation>
-		<xs:restriction base="xs:string"/>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="yearType">
+		<xs:annotation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="2012"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+			<xs:documentation>Defines the format for specifying a year date.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:pattern value="\d\d\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="presentationFormatType">
+		<xs:annotation>
+			<xs:documentation>A fixed list of strings used to specify the package format. For example, SD or HD.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SD"/>
+			<xs:enumeration value="HD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="consumerAdviseType">
+		<xs:annotation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value=""/>
+				</altova:exampleValues>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="classificationEnumType">
+		<xs:annotation>
+			<xs:documentation>A string type used for asset classification details.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="NC">
+				<xs:annotation>
+					<xs:documentation>Not Classifiable</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="P">
+				<xs:annotation>
+					<xs:documentation>Preschool</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="C">
+				<xs:annotation>
+					<xs:documentation>Children</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="G">
+				<xs:annotation>
+					<xs:documentation>General Viewing</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PG">
+				<xs:annotation>
+					<xs:documentation>Parental Guidance</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="M">
+				<xs:annotation>
+					<xs:documentation>Mature</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MA">
+				<xs:annotation>
+					<xs:documentation>Mature Accompanied</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="AV">
+				<xs:annotation>
+					<xs:documentation>Adult Violence</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="R">
+				<xs:annotation>
+					<xs:documentation>Restricted</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="qualityCheckEnumType">
 		<xs:annotation>
 			<xs:documentation>A string enumeration for quality checking task types</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="AutomaticOnIngest"/>
+			<xs:enumeration value="AutomaticOnIngest">
+				<xs:annotation>
+					<xs:documentation>Run automated technical checks before ingesting the material</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 		</xs:restriction>
 	</xs:simpleType>
-	<xs:simpleType name="requiredFormatEnumType">
+	<xs:simpleType name="formatEnumType">
+		<xs:annotation>
+			<xs:documentation>A string enumeration for format type (e.g. SD, HD, or 3D)</xs:documentation>
+		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="SD"/>
 			<xs:enumeration value="HD"/>
 			<xs:enumeration value="3D"/>
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="consumerAdviseType">
-		<xs:restriction base="xs:string"/>
-	</xs:simpleType>
-	<xs:simpleType name="yearType">
-		<xs:restriction base="xs:nonNegativeInteger">
-			<xs:pattern value="\d\d\d\d"/>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

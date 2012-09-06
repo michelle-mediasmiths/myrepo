@@ -16,7 +16,7 @@ public class MSTitleDescription {
 	public TitleDescriptionType validTitleDescription(
 			TitleDescriptionType titleDescription, String titleId) {
 
-		titleDescription.setTitle(titleId);
+		titleDescription.setEpisodeTitle(titleId);
 		titleDescription.setEpisodeTitle(titleId);
 		titleDescription.setProductionNumber("123");
 		titleDescription.setEpisodeNumber(new BigInteger("11"));
@@ -24,7 +24,7 @@ public class MSTitleDescription {
 		titleDescription.setYearOfProduction(new BigInteger("2002"));
 		titleDescription.setStyle("Comedy");
 		titleDescription.setShow(titleId);
-		titleDescription.setSeries(new BigInteger("2"));
+		titleDescription.setSeriesNumber(new BigInteger("2"));
 
 		return titleDescription;
 	}

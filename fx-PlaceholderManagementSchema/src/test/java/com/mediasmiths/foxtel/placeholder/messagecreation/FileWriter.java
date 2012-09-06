@@ -33,7 +33,7 @@ public class FileWriter {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		SchemaFactory factory = SchemaFactory
 				.newInstance("http://www.w3.org/2001/XMLSchema");
-		Schema schema = factory.newSchema(TestAddItem.class.getClassLoader()
+		Schema schema = factory.newSchema(TestAddOrUpdateMaterial.class.getClassLoader()
 				.getResource("PlaceholderManagement.xsd"));
 		marshaller.setSchema(schema);
 		

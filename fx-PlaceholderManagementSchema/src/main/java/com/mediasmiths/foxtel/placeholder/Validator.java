@@ -238,8 +238,8 @@ public class Validator {
 		boolean againstXSD = againstXSD(filepath);
 
 		if (againstXSD) {
-			String[] schemaTitles = { "CreateOrUpdateTitle", "AddItem",
-					"AddOrUpdateTxPackage", "DeleteTxPackage", "DeleteItem",
+			String[] schemaTitles = { "CreateOrUpdateTitle", "AddOrUpdateMaterial",
+					"AddOrUpdatePackage", "DeletePackage", "DeleteMaterial",
 					"PurgeTitle" };
 			String schema = null;
 			for (int i = 0; i < schemaTitles.length; i++) {
@@ -252,14 +252,14 @@ public class Validator {
 
 			if (schema.equals("CreateOrUpdateTitle")) {
 				validSchema = validateCreateTitle(filepath);
-			} else if (schema.equals("AddItem")) {
+			} else if (schema.equals("AddOrUpdateMaterial")) {
 				validSchema = validateCreateItem(filepath);
-			} else if (schema.equals("AddOrUpdateTxPackage")) {
+			} else if (schema.equals("AddOrUpdatePackage")) {
 				validSchema = validateCreateTxPackage(filepath);
-			} else if (schema.equals("DeleteTxPackage")) {
-				validSchema = validateDeleteTxPackage(filepath);
-			} else if (schema.equals("DeleteItem")) {
-				validSchema = validateDeleteItem(filepath);
+			} else if (schema.equals("DeletePackage")) {
+				validSchema = validateDeletePackage(filepath);
+			} else if (schema.equals("DeleteMaterial")) {
+				validSchema = validateDeleteMaterial(filepath);
 			} else if (schema.equals("PurgeTitle")) {
 				validSchema = validateDeleteTitle(filepath);
 			}
@@ -303,7 +303,7 @@ public class Validator {
 	}
 
 	/**
-	 * Checks that an AddItem schema is valid existing title, existing title is
+	 * Checks that an AddOrUpdateMaterial schema is valid existing title, existing title is
 	 * valid, titleId matches, OrderCreated is before RequiredBy
 	 * 
 	 * @param filepath
@@ -326,7 +326,7 @@ public class Validator {
 			if (createTitleValid) {
 				String titleTitleID = readXMLAttribute(filepath,
 						"CreateOrUpdateTitle", "titleID");
-				String itemTitleID = readXMLAttribute(filepath, "AddItem",
+				String itemTitleID = readXMLAttribute(filepath, "AddOrUpdateMaterial",
 						"titleID");
 
 				if (titleTitleID.equals(itemTitleID)) {
@@ -351,7 +351,7 @@ public class Validator {
 	}
 
 	/**
-	 * Checks if an AddOrUpdateTxPackage schema is vaild existing item, existing
+	 * Checks if an AddOrUpdatePackage schema is vaild existing item, existing
 	 * item is valid, titleID matches, TargetDate is before RequiredBy
 	 * 
 	 * @param filepath
@@ -366,16 +366,16 @@ public class Validator {
 		System.out.println("Validating txPackage...");
 		boolean pass = false;
 
-		boolean existingItem = searchForElement(filepath, "AddItem");
+		boolean existingItem = searchForElement(filepath, "AddOrUpdateMaterial");
 
 		if (existingItem) {
 			boolean createItemValid = validateCreateItem(filepath);
 
 			if (createItemValid) {
-				String itemTitleID = readXMLAttribute(filepath, "AddItem",
+				String itemTitleID = readXMLAttribute(filepath, "AddOrUpdateMaterial",
 						"titleID");
 				String txTitleID = readXMLAttribute(filepath,
-						"AddOrUpdateTxPackage", "titleID");
+						"AddOrUpdatePackage", "titleID");
 
 				if (itemTitleID.equals(txTitleID)) {
 					String sTarget = readXMLElement(filepath, "TargetDate");
@@ -399,7 +399,7 @@ public class Validator {
 	}
 
 	/**
-	 * Checks if a DeleteTxPackage schema is valid
+	 * Checks if a DeletePackage schema is valid
 	 * 
 	 * @param filepath
 	 * @return
@@ -407,7 +407,7 @@ public class Validator {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	public static boolean validateDeleteTxPackage(String filepath)
+	public static boolean validateDeletePackage(String filepath)
 			throws SAXException, ParserConfigurationException, IOException {
 
 		boolean pass = false;
@@ -421,7 +421,7 @@ public class Validator {
 	}
 
 	/**
-	 * Checks if a DeleteItem schema is valid associated txPackage has been
+	 * Checks if a DeleteMaterial schema is valid associated txPackage has been
 	 * deleted, titleID matches
 	 * 
 	 * @param filepath
@@ -430,19 +430,19 @@ public class Validator {
 	 * @throws SAXException
 	 * @throws IOException
 	 */
-	public static boolean validateDeleteItem(String filepath)
+	public static boolean validateDeleteMaterial(String filepath)
 			throws ParserConfigurationException, SAXException, IOException {
 
 		boolean pass = false;
 
-		boolean existingTx = searchForElement(filepath, "DeleteTxPackage");
+		boolean existingTx = searchForElement(filepath, "DeletePackage");
 		if (existingTx) {
-			boolean deleteTxValid = validateDeleteTxPackage(filepath);
+			boolean deleteTxValid = validateDeletePackage(filepath);
 
 			if (deleteTxValid) {
 				String txTitleID = readXMLAttribute(filepath,
-						"DeleteTxPackage", "titleID");
-				String itemTitleID = readXMLAttribute(filepath, "DeleteItem",
+						"DeletePackage", "titleID");
+				String itemTitleID = readXMLAttribute(filepath, "DeleteMaterial",
 						"titleID");
 
 				if (txTitleID.equals(itemTitleID)) {
@@ -472,12 +472,12 @@ public class Validator {
 
 		boolean pass = false;
 
-		boolean existingItem = searchForElement(filepath, "DeleteItem");
+		boolean existingItem = searchForElement(filepath, "DeleteMaterial");
 		if (existingItem) {
-			boolean deleteItemValid = validateDeleteItem(filepath);
+			boolean DeleteMaterialValid = validateDeleteMaterial(filepath);
 
-			if (deleteItemValid) {
-				String itemTitleID = readXMLAttribute(filepath, "DeleteItem",
+			if (DeleteMaterialValid) {
+				String itemTitleID = readXMLAttribute(filepath, "DeleteMaterial",
 						"titleID");
 				String titleTitleID = readXMLAttribute(filepath, "PurgeTitle",
 						"titleID");
