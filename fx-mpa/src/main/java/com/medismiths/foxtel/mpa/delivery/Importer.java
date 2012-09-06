@@ -34,7 +34,7 @@ public class Importer implements Runnable {
 			}
 			
 			try {
-				Thread.currentThread().sleep(sleepTime);
+				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
 				logger.warn("Importer thread interrupted",e);
 			}

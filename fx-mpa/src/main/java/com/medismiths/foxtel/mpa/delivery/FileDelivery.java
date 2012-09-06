@@ -2,7 +2,7 @@ package com.medismiths.foxtel.mpa.delivery;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 
@@ -14,7 +14,7 @@ import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 public class FileDelivery
 {
 
-	private static Logger logger = Logger.getLogger(FileDelivery.class);
+//	private static Logger logger = Logger.getLogger(FileDelivery.class);
 
 	/**
 	 * Called once both an asset and corresponding xml arrive
