@@ -1,11 +1,19 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 public class TestDeleteMaterial extends PlaceHolderMessageTest{
+
+	public TestDeleteMaterial() throws JAXBException, SAXException {
+		super();
+	}
 
 	protected PlaceholderMessage generatePlaceholderMessage() throws Exception {
 		PlaceholderMessage message = new PlaceholderMessage();

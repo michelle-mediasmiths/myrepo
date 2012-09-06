@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!-- delete TxPackage 
 FAIL - autoID is null-->
-<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<PlaceholderMessage xmlns="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" messageID="def456" senderID="abc123">
 <Actions>
 <DeleteTxPackage titleID="Fawlty TowersS04E03">
   <TxPackage/>

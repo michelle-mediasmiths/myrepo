@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--create a new Title 
 FAIL = titleID is null-->
-<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+<PlaceholderMessage xmlns="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" senderID="987xyz" messageID="123abc">
     <Actions>
         <CreateOrUpdateTitle restrictAccess="true" purgeProtect="false">
             <TitleDescription>

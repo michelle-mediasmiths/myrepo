@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <!--create TxPackage
 FAIL - no existing Item-->
-<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" senderID="987xyz" messageID="123abc">
+<PlaceholderMessage xmlns="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" senderID="987xyz" messageID="123abc">
     <Actions>
         <AddOrUpdateTxPackage titleID="Only Fools and HorsesS04E03">
             <TxPackage autoID="abc123">

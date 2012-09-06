@@ -1,5 +1,9 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
@@ -8,6 +12,10 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 
 public class TestPurgeTitle extends PlaceHolderMessageTest {
 	
+	public TestPurgeTitle() throws JAXBException, SAXException {
+		super();
+	}
+
 	protected PlaceholderMessage generatePlaceholderMessage () {
 		
 		PlaceholderMessage message = new PlaceholderMessage();

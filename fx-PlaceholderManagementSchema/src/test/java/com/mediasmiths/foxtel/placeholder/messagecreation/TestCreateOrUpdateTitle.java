@@ -1,6 +1,9 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
+
+import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -13,6 +16,10 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSRi
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
 
 public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
+
+	public TestCreateOrUpdateTitle() throws JAXBException, SAXException {
+		super();
+	}
 
 	protected PlaceholderMessage generatePlaceholderMessage()
 			throws DatatypeConfigurationException {

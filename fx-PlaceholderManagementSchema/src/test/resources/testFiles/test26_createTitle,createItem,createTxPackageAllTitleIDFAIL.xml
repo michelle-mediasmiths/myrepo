@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!-- create new Title, Item and TxPackage
 FAIL - titleID's for CreateOrUpdateTitle, AddItem and AddOrUpdateTxPackage do not match-->
-<PlaceholderMessage xmlns="http://foxtel.com.au/cf/mam/pms/000/003" messageID="def456" senderID="abc123">
+<PlaceholderMessage xmlns="http://foxtel.com.au/schemas/MAM/Placeholders/001/000" messageID="def456" senderID="abc123">
 <Actions>
 <CreateOrUpdateTitle titleID="Fawlty TowersS04E03" restrictAccess="true" purgeProtect="false">
 	<TitleDescription>

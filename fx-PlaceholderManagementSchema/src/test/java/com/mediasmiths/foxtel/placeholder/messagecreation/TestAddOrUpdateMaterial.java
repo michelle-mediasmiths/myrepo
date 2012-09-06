@@ -1,5 +1,9 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import javax.xml.bind.JAXBException;
+
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.MaterialType;
@@ -9,6 +13,10 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSItem;
 
 public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
+
+	public TestAddOrUpdateMaterial() throws JAXBException, SAXException {
+		super();
+	}
 
 	protected PlaceholderMessage generatePlaceholderMessage()
 			throws Exception {
