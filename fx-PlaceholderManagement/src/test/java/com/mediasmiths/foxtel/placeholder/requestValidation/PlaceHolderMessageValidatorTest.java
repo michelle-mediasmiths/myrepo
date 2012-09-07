@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,7 +22,14 @@ public abstract class PlaceHolderMessageValidatorTest {
 
 	protected PlaceHolderMessageValidator toTest;
 	protected MayamClient mayamClient = mock(MayamClient.class);
+	
+	protected final static String MESSAGE_ID = "123456asdfg";
+	protected final static String SENDER_ID = "123456asdfg";
 
+	protected final static GregorianCalendar JAN1st = new GregorianCalendar(2000, 1, 1, 0, 0, 1);
+	protected final static GregorianCalendar JAN10th = new GregorianCalendar(2000, 1, 10, 0, 0, 1);
+	
+	
 	public PlaceHolderMessageValidatorTest() throws JAXBException, SAXException {
 
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");

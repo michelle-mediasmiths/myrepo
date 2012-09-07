@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.requestValidation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -25,7 +24,6 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
-import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -38,11 +36,8 @@ public class AddMaterialTest extends PlaceHolderMessageValidatorTest {
 	private final static String EXISTING_TITLE = "EXISTING";
 	private final static String NOT_EXISTING_TITLE = "NOT_EXISTING";
 	private final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
-	private final static String MESSAGE_ID = "123456asdfg";
-	private final static String SENDER_ID = "123456asdfg";
 	
-	private final static GregorianCalendar JAN1st = new GregorianCalendar(2000, 1, 1, 0, 0, 1);
-	private final static GregorianCalendar JAN10th = new GregorianCalendar(2000, 1, 10, 0, 0, 1);
+	
 	
 	@Test
 	public void testValidAddMaterial() throws Exception{
