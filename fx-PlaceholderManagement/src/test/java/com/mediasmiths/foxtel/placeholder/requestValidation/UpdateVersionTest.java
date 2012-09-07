@@ -18,4 +18,6 @@ public class UpdateVersionTest extends PlaceHolderMessageValidatorTest {
 	public void testNotImplemented() {
 		assertTrue(false);
 	}
+
+	
 }

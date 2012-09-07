@@ -20,4 +20,5 @@ public class CreateTitleTest extends PlaceHolderMessageValidatorTest {
 	public void testNotImplemented(){
 		assertTrue(false);
 	}
+
 }

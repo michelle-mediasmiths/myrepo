@@ -17,4 +17,5 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 	public void testNotImplemented(){
 		assertTrue(false);
 	}
+	
 }

@@ -27,6 +27,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media;
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
@@ -116,9 +117,6 @@ public class PlaceHolderMessageValidator {
 		String senderID = message.getSenderID();
 		Object privateMessageData = message.getPrivateMessageData();
 
-		// TODO currently returns on first validation failure, should we keep
-		// going so we can report any other failures?
-
 		if (!validateMesageID(messageID)) {
 			return PlaceHolderMessageValidationResult.INVALID_MESSAGE_ID;
 		}
@@ -131,13 +129,15 @@ public class PlaceHolderMessageValidator {
 			return PlaceHolderMessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
 		}
 
-		if (validateActions(actions) == PlaceHolderMessageValidationResult.IS_VALID) {
-			// TODO need a means of bubbling up inner failure reasons?
-			return PlaceHolderMessageValidationResult.INVALID_ACTIONS;
+		PlaceHolderMessageValidationResult validateActions = validateActions(actions);
+
+		if (validateActions == PlaceHolderMessageValidationResult.IS_VALID) {
+			logger.info("PlaceholderMessage validated");
+		} else {
+			logger.warn("Message Actions did not validate");
 		}
 
-		logger.info("PlaceholderMessage validated");
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return validateActions;
 	}
 
 	/**
@@ -156,7 +156,8 @@ public class PlaceHolderMessageValidator {
 
 		if (actionList.size() != 1) {
 			logger.error("Actions element contained multiple actions");
-			// MD04.1 - Interconnect to Placeholder Management Interface V3.0.doc : 
+			// MD04.1 - Interconnect to Placeholder Management Interface
+			// V3.0.doc :
 			// 2.1.2 Each XML file will contain a single message of one of the
 			// following nine types
 			return PlaceHolderMessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS;
@@ -226,27 +227,32 @@ public class PlaceHolderMessageValidator {
 		// 24.1.1.3 Version purge requests
 		// check that the parent item in ardome is not flagged as
 		String packageID = action.getPackage().getPresentationID();
-		
-		boolean materialForPackageProtected=false;
+
+		boolean materialForPackageProtected = false;
 		try {
-			materialForPackageProtected = mayamClient.isMaterialForPackageProtected(packageID);
+			materialForPackageProtected = mayamClient
+					.isMaterialForPackageProtected(packageID);
 		} catch (MayamClientException e) {
-			logger.error(String.format("MayamClientException when querying isMaterialForPackageProtected for package %s",packageID),e);
+			logger.error(
+					String.format(
+							"MayamClientException when querying isMaterialForPackageProtected for package %s",
+							packageID), e);
 			throw e;
 		}
-		
-		if(materialForPackageProtected){
+
+		if (materialForPackageProtected) {
 			return PlaceHolderMessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
 		}
-		
+
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
 
 	private PlaceHolderMessageValidationResult validateDeleteMaterial(
 			DeleteMaterial action) {
 		// 24.1.1.2 Master purge requests
-		
-		//TODO : do we check if the material is marked as protected as with the other delete requests? its not specified
+
+		// TODO : do we check if the material is marked as protected as with the
+		// other delete requests? its not specified
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
 
@@ -255,21 +261,25 @@ public class PlaceHolderMessageValidator {
 
 		// 24.1.1.1 Title purge requests
 		// check that the title is not marked as protected in ardome
-		// check that lower level entries are not procteted, as this should cause the request to fail
+		// check that lower level entries are not procteted, as this should
+		// cause the request to fail
 		String titleID = action.getTitleID();
-		
+
 		boolean titleProtected = false;
 		try {
 			titleProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
 		} catch (MayamClientException e) {
-			logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s",titleID),e);
+			logger.error(
+					String.format(
+							"MayamClientException when querying isTitleOrDescendentsProtected for title %s",
+							titleID), e);
 			throw e;
 		}
-			
-		if(titleProtected){
+
+		if (titleProtected) {
 			return PlaceHolderMessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
 		}
-	
+
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
 
@@ -305,7 +315,7 @@ public class PlaceHolderMessageValidator {
 			XMLGregorianCalendar requiredBy = action.getMaterial()
 					.getRequiredBy();
 
-			if (orderCreated.compare(requiredBy) == DatatypeConstants.LESSER) {
+			if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
 				logger.warn("Required by date is before order created date!");
 				return PlaceHolderMessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
 			}
@@ -336,7 +346,7 @@ public class PlaceHolderMessageValidator {
 					.getStartDate();
 			XMLGregorianCalendar endDate = l.getLicensePeriod().getEndDate();
 
-			if (startDate.compare(endDate) == DatatypeConstants.LESSER) {
+			if (startDate.compare(endDate) == DatatypeConstants.GREATER) {
 				logger.error("End date before start date");
 				return PlaceHolderMessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}

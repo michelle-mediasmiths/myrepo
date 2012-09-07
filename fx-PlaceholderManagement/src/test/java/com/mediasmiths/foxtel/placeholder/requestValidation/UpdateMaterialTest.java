@@ -17,4 +17,5 @@ public class UpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 	public void testNotImplemented(){
 		assertTrue(false);
 	}
+
 }
