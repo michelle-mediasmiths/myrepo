@@ -205,4 +205,9 @@ public class MayamMaterialController {
 		}
 		return returnCode;
 	}
+
+	public boolean materialExists(String materialID) {
+		// TODO implement materialExists
+		return true;
+	}
 }

@@ -32,11 +32,12 @@ import com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media;
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class PlaceHolderMessageValidator {
 
 	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
-	
+
 	private static Logger logger = Logger
 			.getLogger(PlaceHolderMessageValidator.class);
 
@@ -47,8 +48,8 @@ public class PlaceHolderMessageValidator {
 	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
 
-	public PlaceHolderMessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient)
-			throws SAXException {
+	public PlaceHolderMessageValidator(Unmarshaller unmarshaller,
+			MayamClient mayamClient) throws SAXException {
 		this.unmarhsaller = unmarshaller;
 		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
 		this.mayamClient = mayamClient;
@@ -68,7 +69,6 @@ public class PlaceHolderMessageValidator {
 		return schemaValidator.isValid(new File(filepath));
 	}
 
-
 	/**
 	 * Validates an xml file according to the rules
 	 * 
@@ -76,9 +76,11 @@ public class PlaceHolderMessageValidator {
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws IOException
+	 * @throws MayamClientException
 	 */
 	public PlaceHolderMessageValidationResult validateFile(String filepath)
-			throws SAXException, ParserConfigurationException, IOException {
+			throws SAXException, ParserConfigurationException, IOException,
+			MayamClientException {
 
 		// first check the xml file conforms to the schema
 		boolean againstXSD = againstXSD(filepath);
@@ -107,7 +109,7 @@ public class PlaceHolderMessageValidator {
 	}
 
 	private PlaceHolderMessageValidationResult validatePlaceHolderMessage(
-			PlaceholderMessage message) {
+			PlaceholderMessage message) throws MayamClientException {
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
@@ -129,8 +131,8 @@ public class PlaceHolderMessageValidator {
 			return PlaceHolderMessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
 		}
 
-		if (validateActions(actions) ==PlaceHolderMessageValidationResult.IS_VALID ) {			
-			//TODO need a means of bubbling up inner failure reasons?
+		if (validateActions(actions) == PlaceHolderMessageValidationResult.IS_VALID) {
+			// TODO need a means of bubbling up inner failure reasons?
 			return PlaceHolderMessageValidationResult.INVALID_ACTIONS;
 		}
 
@@ -139,17 +141,22 @@ public class PlaceHolderMessageValidator {
 	}
 
 	/**
-	 * Validates that only single action has been requested and that action is valid
+	 * Validates that only single action has been requested and that action is
+	 * valid
+	 * 
 	 * @param actions
 	 * @return
+	 * @throws MayamClientException
 	 */
-	private PlaceHolderMessageValidationResult validateActions(Actions actions) {
+	private PlaceHolderMessageValidationResult validateActions(Actions actions)
+			throws MayamClientException {
 
 		List<Object> actionList = actions
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial();
 
 		if (actionList.size() != 1) {
 			logger.error("Actions element contained multiple actions");
+			// MD04.1 - Interconnect to Placeholder Management Interface V3.0.doc : 
 			// 2.1.2 Each XML file will contain a single message of one of the
 			// following nine types
 			return PlaceHolderMessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS;
@@ -159,7 +166,8 @@ public class PlaceHolderMessageValidator {
 
 	}
 
-	private PlaceHolderMessageValidationResult validateAction(Object action) {
+	private PlaceHolderMessageValidationResult validateAction(Object action)
+			throws MayamClientException {
 
 		boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
 		boolean isPurgeTitle = (action instanceof PurgeTitle);
@@ -188,67 +196,121 @@ public class PlaceHolderMessageValidator {
 	}
 
 	private PlaceHolderMessageValidationResult validateAddOrUpdatePackage(
-			AddOrUpdatePackage action) {
-		
-		//TODO check corresponding item exists in ardome
-		boolean itemExists = true;
-		
-		if(!itemExists){
+			AddOrUpdatePackage action) throws MayamClientException {
+
+		String materialID = action.getPackage().getMaterialID();
+		boolean materialExists = false;
+
+		// check that material\item for package exists
+		try {
+			materialExists = mayamClient.materialExists(materialID);
+		} catch (MayamClientException e) {
+			// catch this exception for logging purposes then throw back up, or
+			// should we have a new exception type with e as its cause?
+			logger.error(String.format(
+					"MayamClientException when querying if material %s exists",
+					materialID), e);
+			throw e;
+		}
+
+		if (!materialExists) {
 			logger.error("No existing material for requested package");
 			return PlaceHolderMessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
+		}
+
+		return PlaceHolderMessageValidationResult.IS_VALID;
+	}
+
+	private PlaceHolderMessageValidationResult validateDeletePackage(
+			DeletePackage action) throws MayamClientException {
+		// 24.1.1.3 Version purge requests
+		// check that the parent item in ardome is not flagged as
+		String packageID = action.getPackage().getPresentationID();
+		
+		boolean materialForPackageProtected=false;
+		try {
+			materialForPackageProtected = mayamClient.isMaterialForPackageProtected(packageID);
+		} catch (MayamClientException e) {
+			logger.error(String.format("MayamClientException when querying isMaterialForPackageProtected for package %s",packageID),e);
+			throw e;
+		}
+		
+		if(materialForPackageProtected){
+			return PlaceHolderMessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
 		}
 		
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
 
-	
-	private PlaceHolderMessageValidationResult validateDeletePackage(
-			DeletePackage action) {
-		//24.1.1.3 Version purge requests		
-		//TODO : check that the parent item in ardome is not flagged as protected
-		return PlaceHolderMessageValidationResult.IS_VALID;
-	}
-	
 	private PlaceHolderMessageValidationResult validateDeleteMaterial(
 			DeleteMaterial action) {
+		// 24.1.1.2 Master purge requests
 		
-		//24.1.1.2 Master purge requests		
-		// TODO : check that the material and lower level entries is not marked as protected in ardome? (need clarification)
+		//TODO : do we check if the material is marked as protected as with the other delete requests? its not specified
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
-	
+
 	private PlaceHolderMessageValidationResult validatePurgeTitle(
-			PurgeTitle action) {
+			PurgeTitle action) throws MayamClientException {
+
+		// 24.1.1.1 Title purge requests
+		// check that the title is not marked as protected in ardome
+		// check that lower level entries are not procteted, as this should cause the request to fail
+		String titleID = action.getTitleID();
 		
-		//24.1.1.1 Title purge requests		
-		// TODO check that the title is not marked as protected in ardome
-		// TODO check that lower level entries are not procteted, as this should cause the request to fail
+		boolean titleProtected = false;
+		try {
+			titleProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
+		} catch (MayamClientException e) {
+			logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s",titleID),e);
+			throw e;
+		}
+			
+		if(titleProtected){
+			return PlaceHolderMessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
+		}
+	
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
 
 	/**
-	 * Validates an AddOrUpdateMaterial request, checks material was ordered before its required by date
+	 * Validates an AddOrUpdateMaterial request, checks material was ordered
+	 * before its required by date
 	 * 
 	 * @param action
 	 * @return
 	 */
 	private PlaceHolderMessageValidationResult validateAddOrUpdateMaterial(
-			AddOrUpdateMaterial action) {
-		
-		// TODO check title exists for the material
-		boolean titleExists = true;
-		
+			AddOrUpdateMaterial action) throws MayamClientException {
+
+		// check if title for material exists
+		String titleID = action.getTitleID();
+		boolean titleExists = false;
+
+		try {
+			titleExists = mayamClient.titleExists(titleID);
+		} catch (MayamClientException e) {
+			// catch this exception for logging purposes then throw back up, or
+			// should we have a new exception type with e as its cause?
+			logger.error(String.format(
+					"MayamClientException when querying if title %s exists",
+					titleID), e);
+			throw e;
+		}
+
 		if (titleExists) {
-			
-			XMLGregorianCalendar orderCreated = action.getMaterial().getSource().getAggregation().getOrder().getOrderCreated();
-			XMLGregorianCalendar requiredBy = action.getMaterial().getRequiredBy();
-			
+
+			XMLGregorianCalendar orderCreated = action.getMaterial()
+					.getSource().getAggregation().getOrder().getOrderCreated();
+			XMLGregorianCalendar requiredBy = action.getMaterial()
+					.getRequiredBy();
+
 			if (orderCreated.compare(requiredBy) == DatatypeConstants.LESSER) {
-				logger.error("Required by date is before order created date!");
+				logger.warn("Required by date is before order created date!");
 				return PlaceHolderMessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
 			}
 		} else {
-			logger.error("Title for material does not exist");
+			logger.warn("Title for material does not exist");
 			return PlaceHolderMessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
 		}
 
@@ -285,7 +347,7 @@ public class PlaceHolderMessageValidator {
 	}
 
 	private boolean validatePrivateMessageData(Object privateMessageData) {
-		// TODO implement validatePrivateMessageData
+		// private message data can be of any type
 		return true;
 	}
 
@@ -307,105 +369,141 @@ public class PlaceHolderMessageValidator {
 	}
 
 	public static void main(String[] args) throws SAXException, IOException,
-			ParserConfigurationException, JAXBException {
+			ParserConfigurationException, JAXBException, MayamClientException {
 
 		String filepath = "/Users/alisonboal/Documents/Foxtel/XMLTests/test30_createTitle,createItem,createTxPackageInvalidDatesFAIL.xml";
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		
-		PlaceHolderMessageValidator validator = new PlaceHolderMessageValidator(unmarhsaller,new MayamClient(){
 
-			@Override
-			public void shutdown() {
-				// TODO Auto-generated method stub
-				
-			}
+		PlaceHolderMessageValidator validator = new PlaceHolderMessageValidator(
+				unmarhsaller, new MayamClient() {
 
-			@Override
-			public MayamClientErrorCode createTitle(Detail title) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public void shutdown() {
+						// TODO Auto-generated method stub
 
-			@Override
-			public MayamClientErrorCode createTitle(CreateOrUpdateTitle title) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					}
 
-			@Override
-			public MayamClientErrorCode updateTitle(Detail programme) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createTitle(Detail title) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createTitle(
+							CreateOrUpdateTitle title) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode purgeTitle(PurgeTitle title) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode updateTitle(Detail programme) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode createMaterial(Media media) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode updateTitle(
+							CreateOrUpdateTitle title) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode createMaterial(MaterialType material) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode purgeTitle(PurgeTitle title) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode updateMaterial(Media media) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createMaterial(Media media) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode updateMaterial(MaterialType material) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createMaterial(
+							MaterialType material) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode createPackage(PackageType txPackage) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode updateMaterial(Media media) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode createPackage() {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode updateMaterial(
+							MaterialType material) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode updatePackage(PackageType txPackage) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createPackage(
+							PackageType txPackage) {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode updatePackage() {
-				// TODO Auto-generated method stub
-				return null;
-			}
+					@Override
+					public MayamClientErrorCode createPackage() {
+						// TODO Auto-generated method stub
+						return null;
+					}
 
-			@Override
-			public MayamClientErrorCode purgePackage() {
-				// TODO Auto-generated method stub
-				return null;
-			}});
+					@Override
+					public MayamClientErrorCode updatePackage(
+							PackageType txPackage) {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public MayamClientErrorCode updatePackage() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public MayamClientErrorCode purgePackage() {
+						// TODO Auto-generated method stub
+						return null;
+					}
+
+					@Override
+					public boolean titleExists(String titleID)
+							throws MayamClientException {
+						// TODO Auto-generated method stub
+						return false;
+					}
+
+					@Override
+					public boolean materialExists(String materialID)
+							throws MayamClientException {
+						// TODO Auto-generated method stub
+						return false;
+					}
+
+					@Override
+					public boolean isMaterialForPackageProtected(
+							String packageID) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+
+					@Override
+					public boolean isTitleOrDescendentsProtected(String titleID)
+							throws MayamClientException {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				});
 		validator.validateFile(filepath);
-	
+
 	}
 
 }

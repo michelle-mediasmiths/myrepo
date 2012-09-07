@@ -193,4 +193,9 @@ public class MayamTitleController {
 		//TODO: How to delete an asset in Mayam?
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
+
+	public boolean titleExists(String titleID) {
+		//TODO: try to fetch title
+		return true;
+	}
 }

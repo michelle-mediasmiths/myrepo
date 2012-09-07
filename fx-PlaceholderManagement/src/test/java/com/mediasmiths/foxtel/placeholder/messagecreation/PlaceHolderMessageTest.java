@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public abstract class PlaceHolderMessageTest {
 
@@ -125,6 +126,33 @@ public abstract class PlaceHolderMessageTest {
 			public MayamClientErrorCode createMaterial(Media media) {
 				// TODO Auto-generated method stub
 				return null;
+			}
+
+			@Override
+			public boolean titleExists(String titleID)
+					throws MayamClientException {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean materialExists(String materialID)
+					throws MayamClientException {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean isMaterialForPackageProtected(String packageID) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+
+			@Override
+			public boolean isTitleOrDescendentsProtected(String titleID)
+					throws MayamClientException {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 

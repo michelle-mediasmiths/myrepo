@@ -185,4 +185,34 @@ public class MayamClientImpl implements MayamClient {
 	{
 		return packageController.purgePackage();
 	}
+
+	/**
+	 * Returns true if a title with the specified ID exists, otherwise false
+	 */
+	@Override
+	public boolean titleExists(String titleID) {
+		return titleController.titleExists(titleID);
+	}
+
+	@Override
+	public boolean materialExists(String materialID)
+			throws MayamClientException {
+		return materialController.materialExists(materialID);
+	}
+
+	@Override
+	public boolean isMaterialForPackageProtected(String packageID) {
+		//TODO implement
+		// will need to fetch the material for the given package and check its protected status flag		
+		return false;
+	}
+
+	@Override
+	public boolean isTitleOrDescendentsProtected(String titleID)
+			throws MayamClientException {
+		// TODO implement
+		// will need to fetch the specified title and check it is not protected
+		// then need to check its material + packages are not protected either
+		return false;
+	}
 }
