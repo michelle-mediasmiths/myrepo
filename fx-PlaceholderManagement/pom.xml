@@ -16,12 +16,17 @@
 	<name>Placeholder Management System</name>
 
 	<dependencies>
-	
-		<!-- Foxtel Solution Dependencies-->
+
+		<!-- Foxtel Solution Dependencies -->
 		<dependency>
 			<groupId>au.com.foxtel.cf.mam</groupId>
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths</groupId>
+			<artifactId>fx-MayamClient</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- begin test dependencies -->

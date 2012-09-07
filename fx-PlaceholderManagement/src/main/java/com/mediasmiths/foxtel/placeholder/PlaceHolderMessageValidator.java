@@ -26,9 +26,12 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
+import com.mediasmiths.mayam.MayamClient;
 
 public class PlaceHolderMessageValidator {
 
+	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
+	
 	private static Logger logger = Logger
 			.getLogger(PlaceHolderMessageValidator.class);
 
@@ -37,12 +40,13 @@ public class PlaceHolderMessageValidator {
 	// schema will be used for validating files against
 	// PlaceHolderManagement.xsd
 	private final SchemaValidator schemaValidator;
-	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
+	private final MayamClient mayamClient;
 
-	public PlaceHolderMessageValidator(Unmarshaller unmarshaller)
+	public PlaceHolderMessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient)
 			throws SAXException {
 		this.unmarhsaller = unmarshaller;
 		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
+		this.mayamClient = mayamClient;
 	}
 
 	/**
