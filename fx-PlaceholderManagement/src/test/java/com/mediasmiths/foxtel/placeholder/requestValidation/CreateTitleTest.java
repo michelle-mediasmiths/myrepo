@@ -1,39 +1,29 @@
 package com.mediasmiths.foxtel.placeholder.requestValidation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
-import com.mediasmiths.mayam.MayamClientException;
-
 import au.com.foxtel.cf.mam.pms.Actions;
-import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
-import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.ChannelType;
 import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.LicenseHolderType;
 import au.com.foxtel.cf.mam.pms.LicensePeriodType;
-import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
-import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+
+import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
 
 public class CreateTitleTest extends PlaceHolderMessageValidatorTest {
 
