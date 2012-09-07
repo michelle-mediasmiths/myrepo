@@ -78,6 +78,11 @@ public class AddMaterialTest extends PlaceHolderMessageValidatorTest {
 	public void testAddMaterialOrderCreatedAfterRequiredBy(){
 		assertTrue(false);
 	}
+	
+	@Test
+	public void testAddMaterialTitleExistRequestFails() throws Exception{
+		
+	}
 
 	private PlaceholderMessage buildAddMaterialRequest(String titleID)
 			throws DatatypeConfigurationException {
