@@ -3,6 +3,8 @@ package com.mediasmiths.foxtel.placeholder.requestValidation;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -41,6 +43,27 @@ public class CreateTitleTest extends PlaceHolderMessageValidatorTest {
 		//test that the generated placeholder message is valid
 		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
 	}
+	
+	@Test
+	public void testCreateTitleInvalidDates() throws IOException, Exception {
+		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+		
+		
+		List<License> license = ((CreateOrUpdateTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0)).getRights().getLicense();
+		
+		XMLGregorianCalendar startDate = license.get(0).getLicensePeriod().getStartDate();
+		XMLGregorianCalendar endDate = license.get(0).getLicensePeriod().getEndDate();
+		
+		//swap start and end dates to create an invalid request
+		license.get(0).getLicensePeriod().setStartDate(endDate);
+		license.get(0).getLicensePeriod().setEndDate(startDate);
+		
+		File temp = createTempXMLFile(pm,"createTitleInvalidDates");
+		
+		//test that the generated placeholder message is valid
+		assertEquals(PlaceHolderMessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,toTest.validateFile(temp.getAbsolutePath()));
+	}
+	
 	
 	private PlaceholderMessage buildCreateTitleRequestSingleLicence(String titleID) throws DatatypeConfigurationException{
 		//build request

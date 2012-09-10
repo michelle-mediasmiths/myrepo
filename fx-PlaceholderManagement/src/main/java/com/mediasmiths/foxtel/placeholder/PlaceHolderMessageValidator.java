@@ -209,7 +209,7 @@ public class PlaceHolderMessageValidator {
 			// catch this exception for logging purposes then throw back up, or
 			// should we have a new exception type with e as its cause?
 			logger.error(String.format(
-					"MayamClientException when querying if material %s exists",
+					"MayamClientException %s when querying if material %s exists", e.getErrorcode().toString(),
 					materialID), e);
 			throw e;
 		}
@@ -218,6 +218,9 @@ public class PlaceHolderMessageValidator {
 			logger.error("No existing material for requested package");
 			return PlaceHolderMessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
+		
+		//TODO validate consumer advice (command seperated list of characters);
+		logger.warn("No validation of consumer advice has taken place");
 
 		return PlaceHolderMessageValidationResult.IS_VALID;
 	}
