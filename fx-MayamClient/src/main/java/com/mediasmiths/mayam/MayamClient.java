@@ -34,6 +34,7 @@ public interface MayamClient {
 	public MayamClientErrorCode updatePackage(PackageType txPackage);
 	public MayamClientErrorCode updatePackage();
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
+	public boolean packageExists(String presentationID) throws MayamClientException;
 
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;

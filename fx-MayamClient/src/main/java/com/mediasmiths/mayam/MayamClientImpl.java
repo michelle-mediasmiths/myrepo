@@ -224,4 +224,11 @@ public class MayamClientImpl implements MayamClient {
 		return null;
 	}
 
+	@Override
+	public boolean packageExists(String presentationID)
+			throws MayamClientException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
