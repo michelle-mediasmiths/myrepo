@@ -2,9 +2,7 @@ package com.medismiths.foxtel.mpa.delivery;
 
 import java.io.File;
 
-//import org.apache.log4j.Logger;
-
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 
 /**
  * 
@@ -25,7 +23,7 @@ public class FileDelivery
 	 * @param programmeXml
 	 * @param programme
 	 */
-	public void onAssetAndXMLArrival(File xmlFile, File mediaFile, Programme programme)
+	public void onAssetAndXMLArrival(File xmlFile, File mediaFile, Material programme)
 	{
 
 		// TODO: find master ID and aggregator

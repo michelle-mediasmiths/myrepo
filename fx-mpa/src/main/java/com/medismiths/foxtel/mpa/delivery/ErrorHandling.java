@@ -2,7 +2,7 @@ package com.medismiths.foxtel.mpa.delivery;
 
 import java.io.File;
 
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.medismiths.foxtel.mpa.delivery.exception.DeliveryException;
 
 /**
@@ -12,7 +12,7 @@ import com.medismiths.foxtel.mpa.delivery.exception.DeliveryException;
  */
 public class ErrorHandling
 {
-	public void handleFileDeliveryError(DeliveryException e, File asset, Programme programme, File programmeXml)
+	public void handleFileDeliveryError(DeliveryException e, File asset, Material programme, File programmeXml)
 	{
 		// TODO: move asset and xml to quarantine
 

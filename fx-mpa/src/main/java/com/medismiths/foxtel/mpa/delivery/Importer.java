@@ -29,7 +29,7 @@ public class Importer implements Runnable {
 			
 			if(pi != null){
 				logger.info("Picked up an import");
-				new FileDelivery().onAssetAndXMLArrival(pi.getXmlFile(),pi.getMediaFile(),pi.getProgramme());
+				new FileDelivery().onAssetAndXMLArrival(pi.getXmlFile(),pi.getMediaFile(),pi.getMaterial());
 				logger.trace("Finished with import");
 			}
 			

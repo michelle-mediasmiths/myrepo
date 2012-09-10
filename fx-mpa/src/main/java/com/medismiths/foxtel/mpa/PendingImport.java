@@ -2,7 +2,7 @@ package com.medismiths.foxtel.mpa;
 
 import java.io.File;
 
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 
 public class PendingImport {
 
@@ -14,18 +14,18 @@ public class PendingImport {
 		return mediaFile;
 	}
 
-	public Programme getProgramme() {
-		return programme;
+	public Material getMaterial() {
+		return material;
 	}
 
 	private final File xmlFile;
 	private final File mediaFile;
-	private final Programme programme;
+	private final Material material;
 	
-	public PendingImport(File xmlFile, File mediaFile, Programme programme){
+	public PendingImport(File xmlFile, File mediaFile, Material material){
 		this.xmlFile = xmlFile;
 		this.mediaFile = mediaFile;
-		this.programme = programme;		
+		this.material = material;		
 	}
 	
 }

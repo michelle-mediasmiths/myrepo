@@ -15,8 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.FileWatcher.FileWatcherMethod;
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
 import com.medismiths.foxtel.mpa.delivery.Importer;
 import com.medismiths.foxtel.mpa.validation.MediaExchangeValidator;
@@ -40,7 +39,7 @@ public class MediaPickupAgent extends FileWatcherMethod {
 	
 	// TODO: configure some way to give up on a lonely file if its partner does not arrive in N miliseconds
 	private final Set<File> lonelyMXFs = new HashSet<File>();
-	private final Map<File, Programme> lonelyXmls = new HashMap<File, Programme>();
+	private final Map<File, Material> lonelyXmls = new HashMap<File, Material>();
 
 	// the importer runs in a seperate thread to file watching, it is informed of pairs of files (xml + mxf) that are ready to be imported
 	private final Importer importer = new Importer();
@@ -135,11 +134,11 @@ public class MediaPickupAgent extends FileWatcherMethod {
 		try {
 			Object unmarshalled = unmarshallFile(xml);
 
-			if (unmarshalled instanceof Programme)
+			if (unmarshalled instanceof Material)
 			{
-				// if the supplied xml represents a programme
-				Programme programme = (Programme) unmarshalled;
-				onProgrammeXmlArrival(programme, xml);
+				// if the supplied xml represents a Material
+				Material programme = (Material) unmarshalled;
+				onMaterialXmlArrival(programme, xml);
 			}
 
 			// TODO : 2.2.2.1 TNS File Delivery – Associated Content
@@ -148,8 +147,8 @@ public class MediaPickupAgent extends FileWatcherMethod {
 
 			else {
 				logger.error(String.format(
-						"XML at %s does not describe a programme", xml));
-				handleInvalidXML(xml, "Does not describe a programme");
+						"XML at %s does not describe a Material", xml));
+				handleInvalidXML(xml, "Does not describe a Material");
 			}
 		} catch (JAXBException e) {
 			logger.error(
@@ -167,7 +166,7 @@ public class MediaPickupAgent extends FileWatcherMethod {
 	}
 
 	/**
-	 * Called when a programme arrives
+	 * Called when a Material arrives
 	 * 
 	 * 
 	 * Looks for the media file described by an xml file, if the media has been seen then the pair are added to a list of pending imports
@@ -180,7 +179,7 @@ public class MediaPickupAgent extends FileWatcherMethod {
 	 * @param xml
 	 *            - the delivered xmlfile
 	 */
-	private synchronized void onProgrammeXmlArrival(Programme programme,
+	private synchronized void onMaterialXmlArrival(Material material,
 			File xml) {
 
 		logger.fatal("onProgrammeXmlArrival Not implemented");
@@ -203,13 +202,13 @@ public class MediaPickupAgent extends FileWatcherMethod {
 			// we have picked up the xml for a media file awaiting a sidecar,
 			// add pending import
 			PendingImport pendingImport = new PendingImport(xml, mxfFile,
-					programme);
+					material);
 			importer.addPendingImport(pendingImport);
 		} else {
 			logger.info(String.format(
 					"Have not yet seen the media file for %s",
 					xml.getAbsolutePath()));
-			lonelyXmls.put(xml, programme);
+			lonelyXmls.put(xml, material);
 		}
 
 	}
@@ -244,11 +243,11 @@ public class MediaPickupAgent extends FileWatcherMethod {
 					"found an xml file %s for media file file %s",
 					xmlFile.getAbsolutePath(), mxf.getAbsolutePath()));
 
-			Programme programme = lonelyXmls.get(xmlFile);
+			Material material = lonelyXmls.get(xmlFile);
 
 			// add pending import
 			PendingImport pendingImport = new PendingImport(xmlFile, mxf,
-					programme);
+					material);
 			importer.addPendingImport(pendingImport);
 		} else {
 			logger.info(String.format("Have not yet seen the xml file for %s",mxf.getAbsolutePath()));
