@@ -13,7 +13,7 @@ import com.mediasmiths.mayam.MayamClientImpl;
 
 public class PlaceHolderManagerCLI {
 
-	static Logger logger = Logger.getLogger(PlaceHolderManagerCLI.class);
+	private static Logger logger = Logger.getLogger(PlaceHolderManagerCLI.class);
 
 	/**
 	 * @param args
@@ -24,6 +24,8 @@ public class PlaceHolderManagerCLI {
 	public static void main(String[] args) throws JAXBException, SAXException,
 			MalformedURLException {
 
+		logger.info("Placeholdermanger cli starting up");
+		
 		//load configuration
 		PlaceHolderManagerConfiguration configuration = null;
 		try {
@@ -39,7 +41,9 @@ public class PlaceHolderManagerCLI {
 
 		if (configuration != null) {
 			// TODO use values from configuration for mayam client connection
+			
 			MayamClient mc = new MayamClientImpl();
+	
 			// start agent:
 			new PlaceHolderManager(mc, configuration).run();
 		}
