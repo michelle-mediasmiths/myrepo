@@ -43,7 +43,7 @@
 
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MediaExchange</artifactId>
+			<artifactId>fx-MaterialExchange</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
