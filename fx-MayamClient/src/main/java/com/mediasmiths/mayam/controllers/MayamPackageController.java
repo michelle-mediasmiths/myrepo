@@ -119,7 +119,7 @@ public class MayamPackageController {
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
-	public MayamClientErrorCode purgePackage()
+	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		//TODO: How to delete an asset from Mayam?
 		return MayamClientErrorCode.NOT_IMPLEMENTED;

@@ -1,6 +1,8 @@
 package com.mediasmiths.mayam;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.DeleteMaterial;
+import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
@@ -23,6 +25,7 @@ public interface MayamClient {
 	public MayamClientErrorCode createMaterial(MaterialType material);
 	public MayamClientErrorCode updateMaterial(Programme.Media media);
 	public MayamClientErrorCode updateMaterial(MaterialType material);
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
 	public boolean materialExists(String materialID) throws MayamClientException;
 
 	/* packages */
@@ -30,7 +33,7 @@ public interface MayamClient {
 	public MayamClientErrorCode createPackage();
 	public MayamClientErrorCode updatePackage(PackageType txPackage);
 	public MayamClientErrorCode updatePackage();
-	public MayamClientErrorCode purgePackage();
+	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;

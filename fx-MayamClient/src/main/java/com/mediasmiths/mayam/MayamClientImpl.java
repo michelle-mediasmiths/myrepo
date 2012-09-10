@@ -3,6 +3,8 @@ package com.mediasmiths.mayam;
 import java.net.MalformedURLException;
 import java.net.URL;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.DeleteMaterial;
+import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
@@ -181,9 +183,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#purgePackage()
 	 */
 	@Override
-	public MayamClientErrorCode purgePackage()
+	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		return packageController.purgePackage();
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
 	}
 
 	/**
@@ -215,4 +217,11 @@ public class MayamClientImpl implements MayamClient {
 		// then need to check its material + packages are not protected either
 		return false;
 	}
+
+	@Override
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

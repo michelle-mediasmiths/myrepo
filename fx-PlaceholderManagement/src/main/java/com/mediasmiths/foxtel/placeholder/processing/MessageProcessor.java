@@ -111,7 +111,7 @@ public class MessageProcessor implements Runnable {
 	}
 
 	private void deletePackage(DeletePackage action) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	private void addOrUpdatePackage(AddOrUpdatePackage action) {
