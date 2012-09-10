@@ -16,7 +16,7 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -34,7 +34,7 @@ public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 		
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
-		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
 	}
 	
 	@Test
@@ -44,7 +44,7 @@ public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 		
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
-		assertEquals(PlaceHolderMessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,toTest.validateFile(temp.getAbsolutePath()));
 	}
 
 	@Test(expected = MayamClientException.class)

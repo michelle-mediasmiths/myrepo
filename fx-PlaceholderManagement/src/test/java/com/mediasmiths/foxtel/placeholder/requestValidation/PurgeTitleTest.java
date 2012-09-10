@@ -15,7 +15,7 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -36,7 +36,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
 				.thenReturn(false);
 
-		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,
+		assertEquals(MessageValidationResult.IS_VALID,
 				toTest.validateFile(temp.getAbsolutePath()));
 	}
 
@@ -49,7 +49,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 				.thenReturn(true);
 
 		assertEquals(
-				PlaceHolderMessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
+				MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
 				toTest.validateFile(temp.getAbsolutePath()));
 	}
 

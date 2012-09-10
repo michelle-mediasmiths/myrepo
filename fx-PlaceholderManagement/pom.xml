@@ -29,6 +29,13 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
+		<!-- Mediasmiths Dependencies -->
+		<dependency>
+			<groupId>com.mediasmiths</groupId>
+			<artifactId>FileWatcher</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- begin test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>

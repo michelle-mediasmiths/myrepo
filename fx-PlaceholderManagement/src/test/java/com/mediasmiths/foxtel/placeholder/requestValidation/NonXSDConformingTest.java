@@ -13,7 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientException;
 
 public class NonXSDConformingTest extends PlaceHolderMessageValidatorTest{
@@ -30,9 +30,9 @@ public class NonXSDConformingTest extends PlaceHolderMessageValidatorTest{
 		
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		IOUtils.write(loremIpsum, new FileOutputStream(temp));		
-		PlaceHolderMessageValidationResult validateFile = toTest.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = toTest.validateFile(temp.getAbsolutePath());
 		
-		assertEquals(PlaceHolderMessageValidationResult.FAILS_XSD_CHECK, validateFile);
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		
 	}
 

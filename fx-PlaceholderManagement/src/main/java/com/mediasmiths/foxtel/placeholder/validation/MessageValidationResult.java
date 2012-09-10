@@ -1,6 +1,6 @@
-package com.mediasmiths.foxtel.placeholder;
+package com.mediasmiths.foxtel.placeholder.validation;
 
-public enum PlaceHolderMessageValidationResult {
+public enum MessageValidationResult {
 	IS_VALID, 
 	FAILS_XSD_CHECK, 
 	FAILED_TO_UNMARSHALL, 

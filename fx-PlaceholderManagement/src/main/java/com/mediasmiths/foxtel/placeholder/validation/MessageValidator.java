@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder;
+package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,12 +28,12 @@ import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class PlaceHolderMessageValidator {
+public class MessageValidator {
 
 	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
 
 	private static Logger logger = Logger
-			.getLogger(PlaceHolderMessageValidator.class);
+			.getLogger(MessageValidator.class);
 
 	// an unmarshaller for turning xml files into objects
 	private final Unmarshaller unmarhsaller;
@@ -42,7 +42,7 @@ public class PlaceHolderMessageValidator {
 	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
 
-	public PlaceHolderMessageValidator(Unmarshaller unmarshaller,
+	public MessageValidator(Unmarshaller unmarshaller,
 			MayamClient mayamClient) throws SAXException {
 		this.unmarhsaller = unmarshaller;
 		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
@@ -72,7 +72,7 @@ public class PlaceHolderMessageValidator {
 	 * @throws IOException
 	 * @throws MayamClientException
 	 */
-	public PlaceHolderMessageValidationResult validateFile(String filepath)
+	public MessageValidationResult validateFile(String filepath)
 			throws SAXException, ParserConfigurationException, IOException,
 			MayamClientException {
 
@@ -80,7 +80,7 @@ public class PlaceHolderMessageValidator {
 		boolean againstXSD = againstXSD(filepath);
 
 		if (!againstXSD) {
-			return PlaceHolderMessageValidationResult.FAILS_XSD_CHECK;
+			return MessageValidationResult.FAILS_XSD_CHECK;
 		}
 
 		// xml file has valid schema, unmarshall then continue validation
@@ -92,17 +92,17 @@ public class PlaceHolderMessageValidator {
 		} catch (JAXBException e) {
 			logger.fatal("Failed to unmarshall file " + filepath
 					+ " that had validated against schema");
-			return PlaceHolderMessageValidationResult.FAILED_TO_UNMARSHALL;
+			return MessageValidationResult.FAILED_TO_UNMARSHALL;
 		} catch (ClassCastException cce) {
 			logger.fatal("Unmarshalled file from placeholder management schema that was not a PlaceholderMessage");
-			return PlaceHolderMessageValidationResult.UNEXPECTED_TYPE;
+			return MessageValidationResult.UNEXPECTED_TYPE;
 		}
 
 		return validatePlaceHolderMessage(message);
 
 	}
 
-	private PlaceHolderMessageValidationResult validatePlaceHolderMessage(
+	private MessageValidationResult validatePlaceHolderMessage(
 			PlaceholderMessage message) throws MayamClientException {
 
 		Actions actions = message.getActions();
@@ -111,20 +111,20 @@ public class PlaceHolderMessageValidator {
 		Object privateMessageData = message.getPrivateMessageData();
 
 		if (!validateMesageID(messageID)) {
-			return PlaceHolderMessageValidationResult.INVALID_MESSAGE_ID;
+			return MessageValidationResult.INVALID_MESSAGE_ID;
 		}
 
 		if (!validateSenderID(senderID)) {
-			return PlaceHolderMessageValidationResult.INVALID_SENDER_ID;
+			return MessageValidationResult.INVALID_SENDER_ID;
 		}
 
 		if (!validatePrivateMessageData(privateMessageData)) {
-			return PlaceHolderMessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
+			return MessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
 		}
 
-		PlaceHolderMessageValidationResult validateActions = validateActions(actions);
+		MessageValidationResult validateActions = validateActions(actions);
 
-		if (validateActions == PlaceHolderMessageValidationResult.IS_VALID) {
+		if (validateActions == MessageValidationResult.IS_VALID) {
 			logger.info("PlaceholderMessage validated");
 		} else {
 			logger.warn("Message Actions did not validate");
@@ -141,7 +141,7 @@ public class PlaceHolderMessageValidator {
 	 * @return
 	 * @throws MayamClientException
 	 */
-	private PlaceHolderMessageValidationResult validateActions(Actions actions)
+	private MessageValidationResult validateActions(Actions actions)
 			throws MayamClientException {
 
 		List<Object> actionList = actions
@@ -153,14 +153,14 @@ public class PlaceHolderMessageValidator {
 			// V3.0.doc :
 			// 2.1.2 Each XML file will contain a single message of one of the
 			// following nine types
-			return PlaceHolderMessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS;
+			return MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS;
 		}
 
 		return validateAction(actionList.get(0));
 
 	}
 
-	private PlaceHolderMessageValidationResult validateAction(Object action)
+	private MessageValidationResult validateAction(Object action)
 			throws MayamClientException {
 
 		boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
@@ -184,12 +184,12 @@ public class PlaceHolderMessageValidator {
 			return validateDeletePackage((DeletePackage) action);
 		else {
 			logger.error("Supplied action is not an action type");
-			return PlaceHolderMessageValidationResult.UNEXPECTED_TYPE;
+			return MessageValidationResult.UNEXPECTED_TYPE;
 		}
 
 	}
 
-	private PlaceHolderMessageValidationResult validateAddOrUpdatePackage(
+	private MessageValidationResult validateAddOrUpdatePackage(
 			AddOrUpdatePackage action) throws MayamClientException {
 
 		String materialID = action.getPackage().getMaterialID();
@@ -209,16 +209,16 @@ public class PlaceHolderMessageValidator {
 
 		if (!materialExists) {
 			logger.error("No existing material for requested package");
-			return PlaceHolderMessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
+			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 		
 		//TODO validate consumer advice (command seperated list of characters);
 		logger.warn("No validation of consumer advice has taken place");
 
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
-	private PlaceHolderMessageValidationResult validateDeletePackage(
+	private MessageValidationResult validateDeletePackage(
 			DeletePackage action) throws MayamClientException {
 		// 24.1.1.3 Version purge requests
 		// check that the parent item in ardome is not flagged as
@@ -237,22 +237,22 @@ public class PlaceHolderMessageValidator {
 		}
 
 		if (materialForPackageProtected) {
-			return PlaceHolderMessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
+			return MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
 		}
 
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
-	private PlaceHolderMessageValidationResult validateDeleteMaterial(
+	private MessageValidationResult validateDeleteMaterial(
 			DeleteMaterial action) {
 		// 24.1.1.2 Master purge requests
 
 		// TODO : do we check if the material is marked as protected as with the
 		// other delete requests? its not specified
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
-	private PlaceHolderMessageValidationResult validatePurgeTitle(
+	private MessageValidationResult validatePurgeTitle(
 			PurgeTitle action) throws MayamClientException {
 
 		// 24.1.1.1 Title purge requests
@@ -273,10 +273,10 @@ public class PlaceHolderMessageValidator {
 		}
 
 		if (titleProtected) {
-			return PlaceHolderMessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
+			return MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
 		}
 
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
 	/**
@@ -286,7 +286,7 @@ public class PlaceHolderMessageValidator {
 	 * @param action
 	 * @return
 	 */
-	private PlaceHolderMessageValidationResult validateAddOrUpdateMaterial(
+	private MessageValidationResult validateAddOrUpdateMaterial(
 			AddOrUpdateMaterial action) throws MayamClientException {
 
 		// check if title for material exists
@@ -313,14 +313,14 @@ public class PlaceHolderMessageValidator {
 
 			if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
 				logger.warn("Required by date is before order created date!");
-				return PlaceHolderMessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
+				return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
 			}
 		} else {
 			logger.warn("Title for material does not exist");
-			return PlaceHolderMessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
+			return MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
 		}
 
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
 	/**
@@ -331,7 +331,7 @@ public class PlaceHolderMessageValidator {
 	 * @param action
 	 * @return
 	 */
-	private PlaceHolderMessageValidationResult validateCreateOrUpdateTitle(
+	private MessageValidationResult validateCreateOrUpdateTitle(
 			CreateOrUpdateTitle action) {
 		logger.debug("Validating CreateOrUpdateTitle");
 
@@ -344,12 +344,12 @@ public class PlaceHolderMessageValidator {
 
 			if (startDate.compare(endDate) == DatatypeConstants.GREATER) {
 				logger.error("End date before start date");
-				return PlaceHolderMessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
+				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
 		}
 
 		// TODO : complete validation of CreateOrUpdateTitle action
-		return PlaceHolderMessageValidationResult.IS_VALID;
+		return MessageValidationResult.IS_VALID;
 	}
 
 	private boolean validatePrivateMessageData(Object privateMessageData) {

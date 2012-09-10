@@ -25,7 +25,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
 public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 
@@ -41,7 +41,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 		File temp = createTempXMLFile(pm,"validCreateTitle");
 		
 		//test that the generated placeholder message is valid
-		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
 	}
 	
 	@Test
@@ -61,7 +61,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 		File temp = createTempXMLFile(pm,"createTitleInvalidDates");
 		
 		//test that the generated placeholder message is valid
-		assertEquals(PlaceHolderMessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,toTest.validateFile(temp.getAbsolutePath()));
 	}
 	
 	

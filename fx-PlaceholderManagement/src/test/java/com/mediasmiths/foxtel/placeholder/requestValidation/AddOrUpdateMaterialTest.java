@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -33,7 +33,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 
 		// test that the generated placeholder message is valid
-		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,
+		assertEquals(MessageValidationResult.IS_VALID,
 				toTest.validateFile(temp.getAbsolutePath()));
 	}
 
@@ -48,7 +48,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		// test that the generated placeholder message fails validation for the
 		// correct reason
 		assertEquals(
-				PlaceHolderMessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL,
+				MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL,
 				toTest.validateFile(temp.getAbsolutePath()));
 	}
 
@@ -63,7 +63,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		// test that the generated placeholder message fails validation for the
 		// correct reason
 		assertEquals(
-				PlaceHolderMessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER,
+				MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER,
 				toTest.validateFile(temp.getAbsolutePath()));
 	}
 

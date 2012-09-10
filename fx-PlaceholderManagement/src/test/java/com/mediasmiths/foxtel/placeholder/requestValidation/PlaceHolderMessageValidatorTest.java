@@ -23,13 +23,13 @@ import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageValidatorTest {
 
-	protected PlaceHolderMessageValidator toTest;
+	protected MessageValidator toTest;
 	protected MayamClient mayamClient = mock(MayamClient.class);
 
 	protected final static String MESSAGE_ID = "123456asdfg";
@@ -50,7 +50,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		toTest = new PlaceHolderMessageValidator(unmarhsaller, mayamClient);
+		toTest = new MessageValidator(unmarhsaller, mayamClient);
 
 	}
 

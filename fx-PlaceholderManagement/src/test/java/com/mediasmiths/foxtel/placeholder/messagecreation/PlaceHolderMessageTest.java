@@ -12,8 +12,8 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageTest {
@@ -23,7 +23,7 @@ public abstract class PlaceHolderMessageTest {
 	
     protected MayamClient mayamClient = mock(MayamClient.class);
 	
-	private PlaceHolderMessageValidator toTest;
+	private MessageValidator toTest;
 	
 	protected String getFilePath(){
 		return "/tmp/Foxtel/TestData/" + getFileName();
@@ -32,7 +32,7 @@ public abstract class PlaceHolderMessageTest {
 	public PlaceHolderMessageTest() throws JAXBException, SAXException{
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		toTest = new PlaceHolderMessageValidator(unmarhsaller, mayamClient);
+		toTest = new MessageValidator(unmarhsaller, mayamClient);
 
 	}
 	
@@ -43,7 +43,7 @@ public abstract class PlaceHolderMessageTest {
 		FileWriter writer = new FileWriter();
 		writer.writeObjectToFile(message, getFilePath());
 		//test that the generated placeholder message is valid
-		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,toTest.validateFile(getFilePath()));
+		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(getFilePath()));
 		
 	}
 	
