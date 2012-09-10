@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mediasmiths.foxtel</groupId>
-	<artifactId>fx-MediaExchange</artifactId>
+	<artifactId>fx-MaterialExchange</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Foxtel MediaExchange Types</name>
+	<name>Foxtel Material Exchange Types</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
@@ -41,8 +41,8 @@
 				<version>0.8.2</version>
 				<configuration>
 					<schemaDirectory>src/main/resources</schemaDirectory>
-					<outputDirectory>src/main/java/com/mediasmiths/foxtel/generated/MediaExchange</outputDirectory>
-					<generatePackage>com.mediasmiths.foxtel.generated.MediaExchange</generatePackage>
+					<outputDirectory>src/main/java/com/mediasmiths/foxtel/generated/MaterialExchange</outputDirectory>
+					<generatePackage>com.mediasmiths.foxtel.generated.MaterialExchange</generatePackage>
 					<strict>true</strict>
 					<extension>true</extension>
 				</configuration>

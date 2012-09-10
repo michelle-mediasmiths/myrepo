@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://foxtel.tv/engineering/broadcast/schemas/2/0/mediaExchange" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://foxtel.tv/engineering/broadcast/schemas/2/0/mediaExchange" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<!-- 
+		== Project: Content Factory - Media Asset Management
+		== Title: Material Exchange Schema
+		== Version: 2.0
+		== Author: Matthew Bennetts - matthew.bennetts@foxtel.com.au
+		== 
+		== @(#)$Id: MaterialExchange_V2.0.xsd 6 2012-09-05 05:34:59Z bennettm $
+		== 
+	-->
+	<xs:element name="Material">
+		<xs:annotation>
+			<xs:documentation>This is the root element for material information</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Details">
+					<xs:annotation>
+						<xs:documentation>Provides material delivery information.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Supplier">
+								<xs:annotation>
+									<xs:documentation>The details about the organisation who is delivering the material.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="supplierID" type="supplierIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>The key value used by Foxtel to uniquely identify the supplier. Each supplier will be assigned a value by Foxtel, which must be used here.</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="supplierName">
+										<xs:annotation>
+											<xs:documentation>The supplier's name.  This is an optional attribute but it's recommended that suppliers provide their organisation's title here.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="DateOfDelivery" type="xs:dateTime">
+								<xs:annotation>
+									<xs:documentation>The date and time of delivery.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="DeliveryVersion" type="xs:positiveInteger">
+								<xs:annotation>
+									<xs:documentation>The number of times  this specific material has been updated and redelivered. The very first delivery is 1, and the number must be incremented by 1 with each redelivery.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="OrderReference" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The order reference code. This should be supplied by Foxtel when material is ordered. If the code is available then it must be provided here to assist with order reconciliation for payment(s).</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="AdditionalSupplierDetail" type="xs:anyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Additional supplier information can be provided here.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Title">
+					<xs:annotation>
+						<xs:documentation>Provides information about the material being delivered for a title.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ProgrammeTitle" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>A descriptive title for the programme. For example, The Simpsons.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ProductionNumber" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Programme Production Identifier</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="50"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="EpisodeTitle" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>A descriptive title for the episode. For example, Replaceable You  </xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="100"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="SeriesNumber" type="xs:nonNegativeInteger" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The season or series number. For example, 4.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="EpisodeNumber" type="xs:nonNegativeInteger" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The episode number. For example, 490.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="YearOfProduction" type="yearType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The year in which the production completed.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="CountryOfProduction" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>The country of production.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="50"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Distributor" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Information about the distributor.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:attribute name="distributorID" type="distributorIdType" use="required">
+										<xs:annotation>
+											<xs:documentation>The code used to uniquely identify the distributor. This code should be supplied by Foxtel when material is ordered and if supplied must be provided here. </xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="distributorName">
+										<xs:annotation>
+											<xs:documentation>The distributor's name.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:maxLength value="100"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+							<xs:choice>
+								<xs:element name="ProgrammeMaterial" type="programmeMaterialType">
+									<xs:annotation>
+										<xs:documentation>Information about programme material.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+								<xs:element name="MarketingMaterial" type="marketingMaterialType">
+									<xs:annotation>
+										<xs:documentation>Information about marketing material.</xs:documentation>
+									</xs:annotation>
+								</xs:element>
+							</xs:choice>
+							<xs:element name="AdditionalTitleDetail" type="xs:anyType" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Additional title information can be provided here.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="titleID" type="titleIdType" use="required">
+							<xs:annotation>
+								<xs:documentation>The unique code used to identify which title the material is for. This code will be supplied by Foxtel when material is ordered and must be provided here.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="mediaType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>This abstract type defines the basic elements, attributes, and format for media information. It's used as a base for more concrete definitions of media such as a video file.</xs:documentation>
+		</xs:annotation>
+	</xs:complexType>
+	<xs:complexType name="fileMediaType">
+		<xs:annotation>
+			<xs:documentation>This type defines the elements, attributes, and format for describing file media. </xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="mediaType">
+				<xs:sequence>
+					<xs:element name="Format" type="fileFormatEnumType">
+						<xs:annotation>
+							<xs:documentation>The file format</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="FileSize" type="xs:positiveInteger" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The file media size.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+					<xs:element name="Checksum" type="xs:positiveInteger" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>The file's checksum.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="filename" type="xs:string" use="required">
+					<xs:annotation>
+						<xs:documentation>The unique name given to the file media.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="materialType" abstract="true">
+		<xs:annotation>
+			<xs:documentation>This abstract type defines the basic elements, attributes, and format for material information. It's used as a base for more concrete definitions of material such as programme material.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="AdultMaterial" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Indicates if this material is for Adults Only (AO) services. This must be set correctly to ensure AO content does not get mixed in with other content. </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Format" type="formatEnumType">
+				<xs:annotation>
+					<xs:documentation>The format screen format of the content. For example, SD or HD, or 3D.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AspectRatio" type="aspectRatioEnumType">
+				<xs:annotation>
+					<xs:documentation>The aspect ratio of the content. For example, 16F16.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="FirstFrameTimecode" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The timecode of the first frame of active vision.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="LastFrameTimecode" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The timecode of the last frame of active vision.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The active duration of the content.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Media" type="mediaType">
+				<xs:annotation>
+					<xs:documentation>Information about the media. This is an abstract definition of media, and one of the defined concrete definitions must be used here. For example, use the FileMedia type.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="AudioTracks">
+				<xs:annotation>
+					<xs:documentation>Information about audio tracks</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Track" maxOccurs="8">
+							<xs:annotation>
+								<xs:documentation>Information about an audio track</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TrackNumber">
+										<xs:annotation>
+											<xs:documentation>The track number.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:positiveInteger">
+												<xs:totalDigits value="1"/>
+												<xs:minInclusive value="1"/>
+												<xs:maxInclusive value="8"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="TrackEncoding" type="audioEncodingEnumType">
+										<xs:annotation>
+											<xs:documentation>The encoding type used for the track. For example, PCM or DOLBY_E.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="TrackName" type="audioTrackEnumType">
+										<xs:annotation>
+											<xs:documentation>The track name. For example, STEREO_LEFT.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="segmentationType">
+		<xs:sequence>
+			<xs:element name="Segment" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>Information about a segment</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SegmentTitle" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The segment title. If there's a descriptive segment title it should be provided here.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SegmentNumber">
+							<xs:annotation>
+								<xs:documentation>The segment number.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:positiveInteger">
+									<xs:minInclusive value="1"/>
+									<xs:maxInclusive value="99"/>
+									<xs:totalDigits value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SOM" type="timecodeType">
+							<xs:annotation>
+								<xs:documentation>The Start Of Message timecode for the first frame of  active vision for the segment.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:annotation>
+								<xs:documentation>You have a choice of providing EOM or the duration.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="EOM" type="timecodeType">
+								<xs:annotation>
+									<xs:documentation>The End Of Message timecode for the last frame of  active vision for the segment.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Duration" type="timecodeType">
+								<xs:annotation>
+									<xs:documentation>The duration, using timecode format, of the segment.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="programmeMaterialType">
+		<xs:annotation>
+			<xs:documentation>This type defines the elements, attributes, and format for describing programme material.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="materialType">
+				<xs:sequence>
+					<xs:choice>
+						<xs:element name="OriginalConform" type="segmentationType">
+							<xs:annotation>
+								<xs:documentation>The origianl conform  structure (e.g. natural break structure).</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="Presentation">
+							<xs:annotation>
+								<xs:documentation>Presentation packages</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="Package" maxOccurs="unbounded">
+										<xs:annotation>
+											<xs:documentation>Presentation package</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="Segmentation">
+													<xs:annotation>
+														<xs:documentation>Information about any segmentation of the content.</xs:documentation>
+													</xs:annotation>
+													<xs:complexType>
+														<xs:complexContent>
+															<xs:extension base="segmentationType"/>
+														</xs:complexContent>
+													</xs:complexType>
+												</xs:element>
+											</xs:sequence>
+											<xs:attribute name="presentationID" type="presentationIdType" use="required">
+												<xs:annotation>
+													<xs:documentation>A code used to identify the presentation package (e.g. the Foxtel transmission id).</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+					<xs:element name="AdditionalProgrammeDetail" type="xs:anyType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Additional material metadata can be defined here.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+				<xs:attribute name="materialID" type="materialIdType" use="required">
+					<xs:annotation>
+						<xs:documentation>The code used by Foxtel to uniqely identify the material. This code will be supplied by Foxtel when ordering content, and must be provided here with programme material.</xs:documentation>
+					</xs:annotation>
+				</xs:attribute>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="marketingMaterialType">
+		<xs:annotation>
+			<xs:documentation>This type defines the elements, attributes, and format for describing marketing material.</xs:documentation>
+		</xs:annotation>
+		<xs:complexContent>
+			<xs:extension base="materialType">
+				<xs:sequence>
+					<xs:element name="AdditionalMarketingDetail" type="xs:anyType" minOccurs="0">
+						<xs:annotation>
+							<xs:documentation>Additional material metadata can be defined here.</xs:documentation>
+						</xs:annotation>
+					</xs:element>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="titleIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for title identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="P335111190922002"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="materialIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for material identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="33511110"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="formatEnumType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the format of the content. For example, SD or HD or 3D.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SD">
+				<xs:annotation>
+					<xs:documentation>Standard Definition</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HD">
+				<xs:annotation>
+					<xs:documentation>High Definition</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3D">
+				<xs:annotation>
+					<xs:documentation>3D content</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="timecodeType" final="restriction">
+		<xs:annotation>
+			<xs:documentation>This type defines the format that must be used for timecode values.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]):([0-1][0-9]|[2][0-4])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="aspectRatioEnumType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the aspect ratio of content. For example, 16F16 for 16:9 full frame.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="16F16">
+				<xs:annotation>
+					<xs:documentation>16:9 Full Frame</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="12P16">
+				<xs:annotation>
+					<xs:documentation>16:9 Pillar Boxed</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="12R16">
+				<xs:annotation>
+					<xs:documentation>16:9 resized. Used to correct letterboxed content without causing a postage stamp effect.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="16L12">
+				<xs:annotation>
+					<xs:documentation>16:9 material displayed in 4:3 aspect ratio (4:3 Letterboxed)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="16C12">
+				<xs:annotation>
+					<xs:documentation>16:9 material displayed in 4:3 aspect ratio (4:3 Centrecut)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="audioTrackEnumType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the different audio tracks of the content. For example, STEREO_LEFT or SURROUND_RIGHT</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="STEREO_LEFT">
+				<xs:annotation>
+					<xs:documentation>Left stereo.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="STEREO_RIGHT">
+				<xs:annotation>
+					<xs:documentation>Right stereo.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MIX_AND_EFFECTS">
+				<xs:annotation>
+					<xs:documentation>Mix and effect.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FRONT_LEFT">
+				<xs:annotation>
+					<xs:documentation>Front left of centre.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="FRONT_RIGHT">
+				<xs:annotation>
+					<xs:documentation>Front right of centre.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="CENTER">
+				<xs:annotation>
+					<xs:documentation>Front centre.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LFE">
+				<xs:annotation>
+					<xs:documentation>Low frequency effects</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SURROUND_LEFT">
+				<xs:annotation>
+					<xs:documentation>Back Left</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SURROUND_RIGHT">
+				<xs:annotation>
+					<xs:documentation>Back right</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SILENCE">
+				<xs:annotation>
+					<xs:documentation>Silence</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DATA">
+				<xs:annotation>
+					<xs:documentation>Data</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="audioEncodingEnumType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the encoding type used by an audio track. For example, PCM or DOLBY_E.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="PCM">
+				<xs:annotation>
+					<xs:documentation>Uncompressed PCM audio</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DOLBY_E">
+				<xs:annotation>
+					<xs:documentation>Dolby E encoded audio</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="fileFormatEnumType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the file format. For example, </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="MXF_OP1a_IMX_D10_50"/>
+			<xs:enumeration value="MXF_OP1a_XDCAM_HD_422_50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="supplierIdType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="yearType">
+		<xs:annotation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="2012"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+			<xs:documentation>Defines the format for specifying a year date.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:pattern value="\d\d\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="distributorIdType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="presentationIdType">
+		<xs:annotation>
+			<xs:documentation>A string type used for automation identifiers.</xs:documentation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="ABC12345"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="32"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
