@@ -330,7 +330,7 @@ public class MayamTitleController {
 		return titleFound;
 	}
 	
-	public AttributeMap getMaterial(String titleID) {
+	public AttributeMap getTitle(String titleID) {
 		AttributeMap assetAttributes = null;
 		try {
 			assetAttributes = client.getAsset(AssetType.SER, titleID);

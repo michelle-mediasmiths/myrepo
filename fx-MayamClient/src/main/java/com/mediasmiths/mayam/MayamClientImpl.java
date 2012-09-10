@@ -12,6 +12,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mayam.wf.attributes.server.AttributesModule;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
@@ -185,15 +187,30 @@ public class MayamClientImpl implements MayamClient {
 	public boolean isMaterialForPackageProtected(String packageID) {
 		//TODO implement
 		// will need to fetch the material for the given package and check its protected status flag		
-		return false;
+		boolean isProtected = true;
+		AttributeMap packageAttributes = packageController.getPackage(packageID);
+		if (packageAttributes != null) {
+			//TODO: need to make use of parent ID attribute once Mayam add it
+		}
+		return isProtected;
 	}
 
 	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException {
-		// TODO implement
-		// will need to fetch the specified title and check it is not protected
-		// then need to check its material + packages are not protected either
-		return false;
+		boolean isProtected = true;
+		AttributeMap titleAttributes = titleController.getTitle(titleID);
+		
+		if (titleAttributes != null) {
+			//TODO: Are we checking accessRestriction or purgeProtection?
+			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
+			//isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
+			
+			if (!isProtected) {
+				// TODO: check its material + packages are not protected either
+			}
+		}
+		
+		return isProtected;
 	}
 
 	@Override
