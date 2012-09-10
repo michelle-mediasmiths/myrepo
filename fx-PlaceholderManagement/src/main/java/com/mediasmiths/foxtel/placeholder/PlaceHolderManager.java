@@ -35,6 +35,8 @@ public class PlaceHolderManager {
 			PlaceHolderManagerConfiguration config) throws JAXBException,
 			SAXException {
 
+		logger.trace("Placeholdermanager constructor enter");
+		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 
@@ -51,16 +53,24 @@ public class PlaceHolderManager {
 		messageProcessor = new MessageProcessor(filePathsPendingProcessing, unmarshaller,mc);
 		messageProcessorThread = new Thread(messageProcessor);
 		
+		logger.trace("Placeholdermanager constructor return");
+		
 	}
 
 	public void run(){
 		
+		logger.debug("PlaceHolderManager run");
+		
 		addShutdownHooks();
 		
+		logger.trace("starting directory watcher");
 		directoryWatcherThread.start();
+		logger.trace("starting message validator");
 		messageValidatorThread.start();
+		logger.trace("starting message processor");
 		messageProcessorThread.start();		
 		
+		logger.debug("Threads started");
 	}
 
 	private void addShutdownHooks() {
