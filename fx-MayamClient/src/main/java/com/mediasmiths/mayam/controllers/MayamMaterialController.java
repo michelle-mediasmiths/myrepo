@@ -13,11 +13,17 @@ import au.com.foxtel.cf.mam.pms.TapeType;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AspectRatio;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MqClient;
 
@@ -29,12 +35,6 @@ public class MayamMaterialController {
 	public MayamMaterialController(TasksClient mayamClient, MqClient mqClient) {
 		client = mayamClient;
 		mq = mqClient;
-	}
-	
-	public MayamClientErrorCode createMaterial(Programme.Media media)
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 	
 	public MayamClientErrorCode createMaterial(MaterialType material)
@@ -106,20 +106,73 @@ public class MayamMaterialController {
 	}
 		
 	//Material - Updating a media asset in Mayam
-	public MayamClientErrorCode updateMaterial(Programme.Media media)
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
 	{
-		AttributeMap asset;
-		try {
-			asset = client.getAsset(AssetType.ITEM, media.getId());
-			asset.setAttribute(Attribute.ASSET_TITLE, media.getFilename());
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		if (material != null) {
+			AttributeMap assetAttributes = null;
 			
-			client.updateAsset(asset);
+			try {
+				assetAttributes = client.getAsset(AssetType.ITEM, material.getMaterialID());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+			}
 
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
+			if (assetAttributes != null) {
+				//TODO: Confirm aspect ratio is in the correct notation, otherwise have conversion method
+				assetAttributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
+				
+				assetAttributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
+				assetAttributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+				
+				//TODO: No appropriate attributes for start and end frame markers
+				material.getLastFrameTimecode();
+				material.getFirstFrameTimecode();
+				
+				
+				//TODO: How to handle multiple audio tracks and segments?
+/*				SegmentationType segmentation = material.getOriginalConform();
+				List<Segment> segments = segmentation.getSegment();
+				for (int i = 0; i < segments.size(); i++) {
+					Segment segment = segments.get(i);
+					segment.getDuration();
+					segment.getEOM();
+					segment.getSegmentNumber();
+					segment.getSegmentTitle();
+					segment.getSOM();
+				}
+				
+				AudioTracks audioTracks = material.getAudioTracks();
+				List<Track> tracks = audioTracks.getTrack();
+				for (int i = 0; i < tracks.size(); i++) {
+					Track track = tracks.get(i);
+					track.getTrackEncoding().toString();
+					track.getTrackName().toString();
+					track.getTrackNumber();
+				}*/
+				
+				AttributeMap result;
+				try {
+					result = client.updateAsset(assetAttributes);
+					if (result != null) {
+						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
+					}
+				} catch (RemoteException e) {
+					e.printStackTrace();
+					e.printRemoteMessages(System.err);
+					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				}
+			}
+			else {
+				returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
+			}
 		}
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		else {
+			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;	
+		}
+		return returnCode;
 	}
 	
 	public MayamClientErrorCode updateMaterial(MaterialType material)
@@ -207,7 +260,16 @@ public class MayamMaterialController {
 	}
 
 	public boolean materialExists(String materialID) {
-		// TODO implement materialExists
-		return true;
+		boolean materialFound = false;
+		try {
+			AttributeMap assetAttributes = client.getAsset(AssetType.ITEM, materialID);
+			if (assetAttributes != null) {
+				materialFound = true;
+			}
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return materialFound;
 	}
 }

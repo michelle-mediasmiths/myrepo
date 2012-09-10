@@ -1,11 +1,17 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.List;
+
 import au.com.foxtel.cf.mam.pms.PackageType;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MqClient;
 
@@ -58,12 +64,6 @@ public class MayamPackageController {
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode createPackage()
-	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-	}
-	
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
@@ -77,8 +77,6 @@ public class MayamPackageController {
 			}
 			
 			if (assetAttributes != null) {
-				assetAttributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
-				
 				//TODO: Asset Parent ID to be added by Mayam shortly
 				//assetAttributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 				
@@ -113,10 +111,51 @@ public class MayamPackageController {
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode updatePackage()
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
 	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		if (txPackage != null) {
+			AttributeMap assetAttributes = null;
+			try {
+				assetAttributes = client.getAsset(AssetType.PACK, txPackage.getPresentationID());
+			} catch (RemoteException e1) {
+				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				e1.printStackTrace();
+			}
+			
+			if (assetAttributes != null) {
+				//TODO: How to map segmentation data?
+/*				Segmentation segmentation = txPackage.getSegmentation();
+				List<Segment> segments = segmentation.getSegment();
+				for (int j = 0; j< segments.size(); j++) {
+					Segment segment = segments.get(j);
+					segment.getDuration();
+					segment.getEOM();
+					segment.getSegmentNumber();
+					segment.getSegmentTitle();
+					segment.getSOM();
+				}*/
+				
+				AttributeMap result;
+				try {
+					result = client.updateAsset(assetAttributes);
+					if (result == null) {
+						returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED;
+					}
+				} catch (RemoteException e) {
+					e.printStackTrace();
+					e.printRemoteMessages(System.err);
+					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				}
+			}
+			else {
+				returnCode = MayamClientErrorCode.PACKAGE_FIND_FAILED;	
+			}
+		}
+		else {
+			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;	
+		}
+		return returnCode;
 	}
 	
 	public MayamClientErrorCode deletePackage(String presentationID)
