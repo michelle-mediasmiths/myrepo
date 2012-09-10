@@ -27,11 +27,11 @@ import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
 
-public class CreateTitleTest extends PlaceHolderMessageValidatorTest {
+public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 
 	private final static String NEW_TITLE = "NEW_TITLE";
 	
-	public CreateTitleTest() throws JAXBException, SAXException {
+	public CreateOrUpdateTitleTest() throws JAXBException, SAXException {
 		super();		
 	}
 

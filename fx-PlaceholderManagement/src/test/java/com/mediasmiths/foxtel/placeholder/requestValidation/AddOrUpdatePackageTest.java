@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.requestValidation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -13,10 +12,6 @@ import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
-import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MayamClientException;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
@@ -24,7 +19,11 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
-public class AddPackageTest extends PlaceHolderMessageValidatorTest {
+import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
+
+public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 
 	protected final static String EXISTING_TITLE = "EXISTING_TITLE";
 	protected final static String EXISTING_MATERIAL = "EXISTING_MATERIAL";
@@ -32,7 +31,7 @@ public class AddPackageTest extends PlaceHolderMessageValidatorTest {
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
 
-	public AddPackageTest() throws JAXBException, SAXException {
+	public AddOrUpdatePackageTest() throws JAXBException, SAXException {
 		super();
 	}
 

@@ -39,6 +39,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 	protected final static String NOT_EXISTING_TITLE = "NOT_EXISTING";
 	protected final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
 	protected final static String EXISTING_MATERIAL_ID = "NEW_MATERIAL";
+	protected final static String EXISTING_PACKAGE_ID = "NEW_MATERIAL";
 
 	protected final static GregorianCalendar JAN1st = new GregorianCalendar(
 			2000, 1, 1, 0, 0, 1);

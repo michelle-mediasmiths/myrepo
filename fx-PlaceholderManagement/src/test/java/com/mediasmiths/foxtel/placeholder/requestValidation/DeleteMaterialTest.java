@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.requestValidation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,13 +11,12 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
-import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
+import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
 
 public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
 
@@ -30,7 +28,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
 	public void testDeleteMaterialNotProtected() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteMaterialNotProtected");
+		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
 		assertEquals(PlaceHolderMessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
 	}
 
