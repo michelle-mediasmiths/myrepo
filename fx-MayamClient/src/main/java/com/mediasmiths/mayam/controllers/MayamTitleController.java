@@ -329,4 +329,15 @@ public class MayamTitleController {
 		}
 		return titleFound;
 	}
+	
+	public AttributeMap getMaterial(String titleID) {
+		AttributeMap assetAttributes = null;
+		try {
+			assetAttributes = client.getAsset(AssetType.SER, titleID);
+		} catch (RemoteException e1) {
+			//TODO: Error Handling
+			e1.printStackTrace();
+		}
+		return assetAttributes;
+	}
 }

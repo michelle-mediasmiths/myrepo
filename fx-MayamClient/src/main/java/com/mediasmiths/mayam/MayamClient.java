@@ -21,6 +21,7 @@ public interface MayamClient {
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title);
 	public MayamClientErrorCode purgeTitle(PurgeTitle title);
 	public boolean titleExists(String titleID) throws MayamClientException;
+	
 	/* material */
 	public MayamClientErrorCode createMaterial(MaterialType material);
 	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material);

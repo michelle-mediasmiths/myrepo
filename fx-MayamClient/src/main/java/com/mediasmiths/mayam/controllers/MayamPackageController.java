@@ -163,4 +163,29 @@ public class MayamPackageController {
 		//TODO: How to delete an asset from Mayam?
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
+
+	public boolean packageExists(String presentationID) {
+		boolean packageFound = false;
+		try {
+			AttributeMap assetAttributes = client.getAsset(AssetType.PACK, presentationID);
+			if (assetAttributes != null) {
+				packageFound = true;
+			}
+		} catch (RemoteException e1) {
+			//TODO: Error Handling
+			e1.printStackTrace();
+		}
+		return packageFound;
+	}
+	
+	public AttributeMap getPackage(String presentationID) {
+		AttributeMap assetAttributes = null;
+		try {
+			assetAttributes = client.getAsset(AssetType.PACK, presentationID);
+		} catch (RemoteException e1) {
+			//TODO: Error Handling
+			e1.printStackTrace();
+		}
+		return assetAttributes;
+	}
 }

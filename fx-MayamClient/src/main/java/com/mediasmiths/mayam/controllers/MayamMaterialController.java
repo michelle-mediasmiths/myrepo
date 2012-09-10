@@ -272,4 +272,15 @@ public class MayamMaterialController {
 		}
 		return materialFound;
 	}
+	
+	public AttributeMap getMaterial(String materialID) {
+		AttributeMap assetAttributes = null;
+		try {
+			assetAttributes = client.getAsset(AssetType.ITEM, materialID);
+		} catch (RemoteException e1) {
+			//TODO: Error Handling
+			e1.printStackTrace();
+		}
+		return assetAttributes;
+	}
 }

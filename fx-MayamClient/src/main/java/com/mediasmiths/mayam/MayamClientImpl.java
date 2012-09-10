@@ -200,8 +200,7 @@ public class MayamClientImpl implements MayamClient {
 	@Override
 	public boolean packageExists(String presentationID)
 			throws MayamClientException {
-		// TODO Auto-generated method stub
-		return false;
+		return packageController.packageExists(presentationID);
 	}
 
 }
