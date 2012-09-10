@@ -15,6 +15,8 @@ import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -63,15 +65,6 @@ public class MayamClientImpl implements MayamClient {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
-	 */
-	@Override
-	public MayamClientErrorCode createTitle(Programme.Detail title)
-	{
-		return titleController.createTitle(title);
-	}
-	
-	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createTitle(au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle)
 	 */
 	@Override
@@ -84,9 +77,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
 	 */
 	@Override
-	public MayamClientErrorCode updateTitle(Programme.Detail programme)
+	public MayamClientErrorCode updateTitle(Material.Title title)
 	{
-		return titleController.updateTitle(programme);
+		return titleController.updateTitle(title);
 	}
 	
 	/* (non-Javadoc)
@@ -108,15 +101,6 @@ public class MayamClientImpl implements MayamClient {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media)
-	 */
-	@Override
-	public MayamClientErrorCode createMaterial(Programme.Media media)
-	{
-		return materialController.createMaterial(media);
-	}
-	
-	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(au.com.foxtel.cf.mam.pms.MaterialType)
 	 */
 	@Override
@@ -129,9 +113,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(Programme.Media media)
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
 	{
-		return materialController.updateMaterial(media);
+		return materialController.updateMaterial(material);
 	}
 	
 	/* (non-Javadoc)
@@ -151,16 +135,7 @@ public class MayamClientImpl implements MayamClient {
 	{
 		return packageController.createPackage(txPackage);
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createPackage()
-	 */
-	@Override
-	public MayamClientErrorCode createPackage()
-	{
-		return packageController.createPackage();
-	}
-	
+		
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage(au.com.foxtel.cf.mam.pms.PackageType)
 	 */
@@ -174,9 +149,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage()
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
 	{
-		return packageController.updatePackage();
+		return packageController.updatePackage(txPackage);
 	}
 	
 	/* (non-Javadoc)
@@ -197,8 +172,7 @@ public class MayamClientImpl implements MayamClient {
 	}
 
 	@Override
-	public boolean materialExists(String materialID)
-			throws MayamClientException {
+	public boolean materialExists(String materialID) throws MayamClientException {
 		return materialController.materialExists(materialID);
 	}
 
@@ -210,8 +184,7 @@ public class MayamClientImpl implements MayamClient {
 	}
 
 	@Override
-	public boolean isTitleOrDescendentsProtected(String titleID)
-			throws MayamClientException {
+	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException {
 		// TODO implement
 		// will need to fetch the specified title and check it is not protected
 		// then need to check its material + packages are not protected either

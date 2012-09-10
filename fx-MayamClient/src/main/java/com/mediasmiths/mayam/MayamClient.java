@@ -7,6 +7,8 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 
 public interface MayamClient {
@@ -14,25 +16,22 @@ public interface MayamClient {
 	public void shutdown();
 
 	/* titles */
-	public MayamClientErrorCode createTitle(Programme.Detail title);
 	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title);
-	public MayamClientErrorCode updateTitle(Programme.Detail programme);
+	public MayamClientErrorCode updateTitle(Material.Title title);
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title);
 	public MayamClientErrorCode purgeTitle(PurgeTitle title);
 	public boolean titleExists(String titleID) throws MayamClientException;
 	/* material */
-	public MayamClientErrorCode createMaterial(Programme.Media media);
 	public MayamClientErrorCode createMaterial(MaterialType material);
-	public MayamClientErrorCode updateMaterial(Programme.Media media);
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material);
 	public MayamClientErrorCode updateMaterial(MaterialType material);
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
 	public boolean materialExists(String materialID) throws MayamClientException;
 
 	/* packages */
 	public MayamClientErrorCode createPackage(PackageType txPackage);
-	public MayamClientErrorCode createPackage();
 	public MayamClientErrorCode updatePackage(PackageType txPackage);
-	public MayamClientErrorCode updatePackage();
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage);
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 	public boolean packageExists(String presentationID) throws MayamClientException;
 
