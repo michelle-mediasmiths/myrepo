@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
@@ -21,18 +20,12 @@ import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.License;
-import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
-import com.google.inject.Inject;
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail;
-import com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media;
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
 public class PlaceHolderMessageValidator {

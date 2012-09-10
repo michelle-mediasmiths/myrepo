@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.requestValidation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -12,15 +11,13 @@ import javax.xml.bind.JAXBException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import au.com.foxtel.cf.mam.pms.Actions;
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
+
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-
-import au.com.foxtel.cf.mam.pms.Actions;
-import au.com.foxtel.cf.mam.pms.DeleteMaterial;
-import au.com.foxtel.cf.mam.pms.Material;
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 
