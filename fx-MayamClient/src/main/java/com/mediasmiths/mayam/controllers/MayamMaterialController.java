@@ -283,4 +283,9 @@ public class MayamMaterialController {
 		}
 		return assetAttributes;
 	}
+
+	public MayamClientErrorCode deleteMaterial(String materialID) {
+		// TODO Find out how to delete assets in Mayam
+		return null;
+	}
 }

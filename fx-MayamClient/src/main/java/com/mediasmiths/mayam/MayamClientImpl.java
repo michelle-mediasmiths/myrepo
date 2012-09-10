@@ -127,6 +127,11 @@ public class MayamClientImpl implements MayamClient {
 		return materialController.updateMaterial(material);
 	}
 	
+	@Override
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
+		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createPackage(au.com.foxtel.cf.mam.pms.PackageType)
 	 */
@@ -189,12 +194,6 @@ public class MayamClientImpl implements MayamClient {
 		// will need to fetch the specified title and check it is not protected
 		// then need to check its material + packages are not protected either
 		return false;
-	}
-
-	@Override
-	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
