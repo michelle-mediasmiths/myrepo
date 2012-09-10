@@ -57,19 +57,6 @@
 
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
-	
-	<distributionManagement>
-		<repository>
-			<id>mediasmiths-internal-repo</id>
-			<name>Mediasmiths-releases</name>
-			<url>http://build.mediasmiths.com/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>mediasmiths-internal-repo</id>
-			<name>Mediasmiths-snapshots</name>
-			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 	<build>
 		<plugins>
