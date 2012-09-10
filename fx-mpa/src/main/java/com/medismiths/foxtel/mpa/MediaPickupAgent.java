@@ -15,12 +15,14 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.mediasmiths.FileWatcher.DirectoryWatcher;
+import com.mediasmiths.FileWatcher.FileWatcherMain;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
 import com.medismiths.foxtel.mpa.delivery.Importer;
 import com.medismiths.foxtel.mpa.validation.MediaExchangeValidator;
 
-public class MediaPickupAgent extends FileWatcherMethod {
+public class MediaPickupAgent extends DirectoryWatcher {
 
 	private static Logger logger = Logger.getLogger(MediaPickupAgent.class);
 
@@ -67,7 +69,7 @@ public class MediaPickupAgent extends FileWatcherMethod {
 		// start watching for files (needs more config for intervals and things,
 		// FileWatcher still in prototype)
 		try {
-			fileWatcher(configuration.getMediaFolderPath());
+			start(configuration.getMediaFolderPath());
 		} catch (IOException e) {
 			logger.fatal("Could not start MediaPickupAgent", e);
 		}
