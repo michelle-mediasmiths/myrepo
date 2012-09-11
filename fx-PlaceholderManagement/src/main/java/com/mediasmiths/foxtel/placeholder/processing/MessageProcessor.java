@@ -2,14 +2,12 @@ package com.mediasmiths.foxtel.placeholder.processing;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.mockito.internal.stubbing.answers.Returns;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
@@ -20,6 +18,8 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.google.inject.Inject;
+import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
@@ -38,7 +38,7 @@ public class MessageProcessor implements Runnable {
 
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
-	private final LinkedBlockingQueue<String> filePathsPending;
+	protected final FilesPendingProcessingQueue filePathsPending;
 	private boolean stopRequested = false;
 
 	private final Unmarshaller unmarhsaller;
@@ -46,8 +46,8 @@ public class MessageProcessor implements Runnable {
 	private final MessageValidator messageValidator;
 	private final ReceiptWriter receiptWriter;
 
-	public MessageProcessor(
-			LinkedBlockingQueue<String> filePathsPendingProcessing,
+	@Inject
+	public MessageProcessor(FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator messageValidator, ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller, MayamClient mayamClient) {
 		this.filePathsPending = filePathsPendingProcessing;
@@ -237,7 +237,7 @@ public class MessageProcessor implements Runnable {
 		checkResult(result);
 	}
 
-	private void validateThenProcessFile(String filePath) {
+	protected void validateThenProcessFile(String filePath) {
 		try {
 			MessageValidationResult result = messageValidator
 					.validateFile(filePath);

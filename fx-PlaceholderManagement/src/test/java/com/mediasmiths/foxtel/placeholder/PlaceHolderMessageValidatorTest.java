@@ -5,7 +5,6 @@ import static org.mockito.Mockito.mock;
 import java.io.File;
 import java.io.IOException;
 import java.util.GregorianCalendar;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -14,7 +13,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -56,7 +54,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		validator = new MessageValidator(unmarhsaller, mayamClient);
-		processor = new MessageProcessor( new LinkedBlockingQueue<String>(), validator, new ReceiptWriter( System.getProperty("java.io.tmpdir")),
+		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter( System.getProperty("java.io.tmpdir")),
 				unmarhsaller, mayamClient);
 
 	}

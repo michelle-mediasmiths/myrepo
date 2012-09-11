@@ -24,6 +24,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -41,6 +42,7 @@ public class MessageValidator {
 	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
 
+	@Inject
 	public MessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient)
 			throws SAXException {
 		this.unmarhsaller = unmarshaller;

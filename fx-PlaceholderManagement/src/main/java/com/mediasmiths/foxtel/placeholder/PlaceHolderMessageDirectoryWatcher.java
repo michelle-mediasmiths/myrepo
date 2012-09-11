@@ -3,7 +3,6 @@ package com.mediasmiths.foxtel.placeholder;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -11,17 +10,20 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
 
-class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher implements
+public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher implements
 		Runnable {
 
 	private final String path;
-	private final LinkedBlockingQueue<String> filePathsPendingValidation;
+	private final FilesPendingProcessingQueue filePathsPendingValidation;
 
 	private static Logger logger = Logger.getLogger(PlaceHolderMessageDirectoryWatcher.class);
 	
-	public PlaceHolderMessageDirectoryWatcher(LinkedBlockingQueue<String> filePathsPendingValidation, String path) {
+	@Inject
+	public PlaceHolderMessageDirectoryWatcher(FilesPendingProcessingQueue filePathsPendingValidation, @Named("placeholder.path.message") String path) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
 		this.path = path;
 		setFormatCheck(true);

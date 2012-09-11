@@ -1,14 +1,11 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
@@ -18,43 +15,31 @@ public class PlaceHolderManager {
 
 	static Logger logger = Logger.getLogger(PlaceHolderManager.class);
 
-	private final LinkedBlockingQueue<String> filePathsPending = new LinkedBlockingQueue<String>();
-	
-	private final MessageValidator messageValidator;
 	private final MessageProcessor messageProcessor;
 	private final Thread messageProcessorThread;
-	
-	private final ReceiptWriter receiptWriter;
 
 	private final PlaceHolderMessageDirectoryWatcher directoryWatcher;
 	private final Thread directoryWatcherThread;
 
-	public PlaceHolderManager(MayamClient mc,
-			PlaceHolderManagerConfiguration config) throws JAXBException,
+	@Inject
+	public PlaceHolderManager(MayamClient mc,MessageValidator validator, MessageProcessor processor,ReceiptWriter receiptWriter,PlaceHolderMessageDirectoryWatcher directoryWatcher) throws JAXBException,
 			SAXException {
 
 		logger.trace("Placeholdermanager constructor enter");
-		
-		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
-		Unmarshaller unmarshaller = jc.createUnmarshaller();
 
 		//directory watching
-		directoryWatcher = new PlaceHolderMessageDirectoryWatcher(filePathsPending, config.getMessagePath());
-		directoryWatcherThread = new Thread(directoryWatcher);
-		
-		//message receipt writer
-		receiptWriter = new ReceiptWriter(config.getReceiptPath());
-		
+		this.directoryWatcher = directoryWatcher;
+		this.directoryWatcherThread = new Thread(directoryWatcher);
+
 		//message validation + processing
-		messageValidator = new MessageValidator(unmarshaller, mc);
-		messageProcessor = new MessageProcessor(filePathsPending, messageValidator, receiptWriter,unmarshaller,mc);
-		messageProcessorThread = new Thread(messageProcessor);
+		this.messageProcessor=processor;
+		this.messageProcessorThread = new Thread(messageProcessor);
 		
 		logger.trace("Placeholdermanager constructor return");
 		
 	}
 
-	public void run(){
+	public void run() throws InterruptedException{
 		
 		logger.debug("PlaceHolderManager run");
 		
@@ -66,6 +51,14 @@ public class PlaceHolderManager {
 		messageProcessorThread.start();		
 		
 		logger.debug("Threads started");
+		
+		directoryWatcherThread.join();
+		messageProcessorThread.join();
+	}
+	
+	public void stop(){
+		messageProcessor.stop();
+		directoryWatcher.setContinueWatching(false);
 	}
 
 	private void addShutdownHooks() {
@@ -73,8 +66,8 @@ public class PlaceHolderManager {
 
 		
 			public void run() {
-				messageProcessor.stop();
-				directoryWatcher.setContinueWatching(false);
+				stop();
+			
 			}
 		}));
 	}

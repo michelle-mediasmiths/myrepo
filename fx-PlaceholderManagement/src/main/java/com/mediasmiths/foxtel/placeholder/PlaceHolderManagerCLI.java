@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 import javax.xml.bind.JAXBException;
@@ -8,8 +7,8 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientImpl;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class PlaceHolderManagerCLI {
 
@@ -20,40 +19,17 @@ public class PlaceHolderManagerCLI {
 	 * @throws JAXBException
 	 * @throws SAXException
 	 * @throws MalformedURLException
+	 * @throws InterruptedException 
 	 */
 	public static void main(String[] args) throws JAXBException, SAXException,
-			MalformedURLException {
+			MalformedURLException, InterruptedException {
 
 		logger.info("Placeholdermanger cli starting up");
 		
-		//load configuration
-		PlaceHolderManagerConfiguration configuration = null;
-		try {
-			configuration = new PlaceHolderManagerConfiguration(
-					"placeholdermanagement.properties");
-
-			//TODO : check configuration (make sure folders exist etc)
-			
-		} catch (IOException e) {
-			logger.fatal("Failed to load configuration", e);
-			System.exit(1);
-		}
-
-		if (configuration != null) {
-			// TODO use values from configuration for mayam client connection
-			
-			MayamClient mc = null;
-			try {
-				mc = new MayamClientImpl();
-			} catch (IOException e) {
-				logger.fatal("Failed to initilise mayam client",e);
-				System.exit(1);
-			}
-	
-			// start agent:
-			new PlaceHolderManager(mc, configuration).run();
-		}
-
+		Injector injector = Guice.createInjector(new PlaceHolderMangementModule());
+		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
+		pm.run();
+		
 	}
 
 }

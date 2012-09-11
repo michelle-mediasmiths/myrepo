@@ -51,6 +51,13 @@
 		</dependency>
 		<!-- end test dependencies -->
 
+		<!-- guice -->
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+
 		<!-- logging -->
 		<dependency>
 			<groupId>log4j</groupId>

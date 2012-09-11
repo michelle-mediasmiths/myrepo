@@ -8,12 +8,16 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 public class ReceiptWriter {
 
 	private static Logger logger = Logger.getLogger(ReceiptWriter.class);
 	private final String receiptPath;
 	
-	public ReceiptWriter(String receiptPath){
+	@Inject
+	public ReceiptWriter(@Named("placeholder.path.receipt") String receiptPath){
 		this.receiptPath=receiptPath;
 	}
 	
