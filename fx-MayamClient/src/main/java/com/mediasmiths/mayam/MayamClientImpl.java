@@ -3,6 +3,8 @@ package com.mediasmiths.mayam;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
+
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
@@ -15,9 +17,11 @@ import com.google.inject.Provider;
 import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
@@ -198,7 +202,7 @@ public class MayamClientImpl implements MayamClient {
 
 	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException {
-		boolean isProtected = true;
+		boolean isProtected = false;
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 		
 		if (titleAttributes != null) {
@@ -207,7 +211,35 @@ public class MayamClientImpl implements MayamClient {
 			//isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
 			
 			if (!isProtected) {
-				// TODO: check its material + packages are not protected either
+				try {
+					List<AttributeMap> materials = client.getAssetChildren(AssetType.SER, titleID, AssetType.ITEM);
+					for (int i = 0; i < materials.size(); i++) {
+						AttributeMap materialAttributes = materials.get(i);
+						
+						//TODO: Are we checking accessRestriction or purgeProtection?
+						//materialAttributes.getAttribute(Attribute.AUX_FLAG);
+						if (materialAttributes.getAttribute(Attribute.APP_FLAG)) {
+							isProtected = true;
+							break;
+						}	
+					}
+					
+					List<AttributeMap> packages = client.getAssetChildren(AssetType.SER, titleID, AssetType.PACK);
+					for (int i = 0; i < packages.size(); i++) {
+						AttributeMap packageAttributes = packages.get(i);
+						
+						//TODO: Are we checking accessRestriction or purgeProtection?
+						//packageAttributes.getAttribute(Attribute.AUX_FLAG);
+						if (packageAttributes.getAttribute(Attribute.APP_FLAG)) {
+							isProtected = true;
+							break;
+						}	
+					}
+					
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
