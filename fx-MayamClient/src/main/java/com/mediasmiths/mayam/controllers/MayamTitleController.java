@@ -21,8 +21,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
 
-//TODO: Attribute validator
-
 public class MayamTitleController {
 	private final TasksClient client;
 	private final MqClient mq;
@@ -35,27 +33,29 @@ public class MayamTitleController {
 	public MayamClientErrorCode createTitle(Material.Title title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		MayamAttributeController attributes = new MayamAttributeController(client);
+		boolean attributesValid = true;
+		
 		if (title != null)
 		{
-			final AttributeMap assetAttributes = client.createAttributeMap();
-			assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
-			assetAttributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
 			
-			assetAttributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-			assetAttributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
 			
-			assetAttributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-			assetAttributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
 			
-			assetAttributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
-			assetAttributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-			assetAttributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
 			
 			//TODO: Rights attributes are not the ideal location for distributor values
 			Distributor distributor = title.getDistributor();
 			if (distributor != null) {
-				assetAttributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-				assetAttributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
 			}
 			
 			//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
@@ -76,9 +76,13 @@ public class MayamTitleController {
 				track.getTrackEncoding().toString();
 			}*/
 			
+			if (!attributesValid) {
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
+			
 			AttributeMap result;
 			try {
-				result = client.createAsset(assetAttributes);
+				result = client.createAsset(attributes.getAttributes());
 				if (result == null) {
 					returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 				}
@@ -97,13 +101,14 @@ public class MayamTitleController {
 	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		MayamAttributeController attributes = new MayamAttributeController(client);
+		boolean attributesValid = true;
+		
 		if (title != null)
 		{
 			TitleDescriptionType titleDescription = title.getTitleDescription();
 			
-			if (titleDescription != null) {
-				final AttributeMap assetAttributes = client.createAttributeMap();
-				
+			if (titleDescription != null) {				
 				//	TODO: Rights management - Mayam to add a new complex type to allow Rights attributes to be added
 				//	RightsType titleRights = title.getRights();		
 				//	List<License> licenses = titleRights.getLicense();
@@ -120,28 +125,32 @@ public class MayamTitleController {
 				//	channel.getChannelName();
 				//	channel.getChannelTag();
 				
-				assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
 		
-				assetAttributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
-				assetAttributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
 				
-				assetAttributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-				assetAttributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
 				
-				assetAttributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-				assetAttributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
 				
-				assetAttributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
-				assetAttributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-				assetAttributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-				assetAttributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 				
-				assetAttributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-				assetAttributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+				
+				if (!attributesValid) {
+					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				}
 				
 				AttributeMap result;
 				try {
-					result = client.createAsset(assetAttributes);
+					result = client.createAsset(attributes.getAttributes());
 					if (result == null) {
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 					}
@@ -164,8 +173,11 @@ public class MayamTitleController {
 	public MayamClientErrorCode updateTitle(Material.Title title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		boolean attributesValid = true;
+		
 		if (title != null) {
 				AttributeMap assetAttributes = null;
+				MayamAttributeController attributes = null;
 				
 				try {
 					assetAttributes = client.getAsset(AssetType.SER, title.getTitleID());
@@ -176,21 +188,23 @@ public class MayamTitleController {
 				}
 				
 				if (assetAttributes != null) {
-					assetAttributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-					assetAttributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
+					attributes = new MayamAttributeController(assetAttributes);
 					
-					assetAttributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-					assetAttributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
 					
-					assetAttributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
-					assetAttributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-					assetAttributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+					
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
 					
 					//TODO: Rights attributes are not the ideal location for distributor values
 					Distributor distributor = title.getDistributor();
 					if (distributor != null) {
-						assetAttributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-						assetAttributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
 					}
 					
 					//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
@@ -211,9 +225,13 @@ public class MayamTitleController {
 						track.getTrackEncoding().toString();
 					}*/
 					
+					if (!attributesValid) {
+						returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+					}
+					
 					AttributeMap result;
 					try {
-						result = client.updateAsset(assetAttributes);
+						result = client.updateAsset(attributes.getAttributes());
 						if (result == null) {
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
@@ -238,11 +256,14 @@ public class MayamTitleController {
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		boolean attributesValid = true;
+		
 		if (title != null) {
 			TitleDescriptionType titleDescription = title.getTitleDescription();
 			
 			if (titleDescription != null) {
 				AttributeMap assetAttributes = null;
+				MayamAttributeController attributes = null;
 				
 				try {
 					assetAttributes = client.getAsset(AssetType.SER, title.getTitleID());
@@ -253,6 +274,8 @@ public class MayamTitleController {
 				}
 				
 				if (assetAttributes != null) {
+					attributes = new MayamAttributeController(assetAttributes);
+					
 					//	TODO: Rights management - Mayam to add a new complex type to allow Rights attributes to be added
 					//	RightsType titleRights = title.getRights();		
 					//	List<License> licenses = titleRights.getLicense();
@@ -269,24 +292,28 @@ public class MayamTitleController {
 					//	channel.getChannelName();
 					//	channel.getChannelTag();
 					
-					assetAttributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
-					assetAttributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-					assetAttributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
 					
-					assetAttributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-					assetAttributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
 					
-					assetAttributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
-					assetAttributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-					assetAttributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-					assetAttributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 					
-					assetAttributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-					assetAttributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+					
+					if (!attributesValid) {
+						returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+					}
 					
 					AttributeMap result;
 					try {
-						result = client.updateAsset(assetAttributes);
+						result = client.updateAsset(attributes.getAttributes());
 						if (result == null) {
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
