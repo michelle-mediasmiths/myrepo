@@ -9,6 +9,7 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.mockito.internal.stubbing.answers.Returns;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
@@ -19,6 +20,7 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
@@ -42,15 +44,17 @@ public class MessageProcessor implements Runnable {
 	private final Unmarshaller unmarhsaller;
 	private final MayamClient mayamClient;
 	private final MessageValidator messageValidator;
+	private final ReceiptWriter receiptWriter;
 
 	public MessageProcessor(
 			LinkedBlockingQueue<String> filePathsPendingProcessing,
-			MessageValidator messageValidator, Unmarshaller unmarhsaller,
-			MayamClient mayamClient) {
+			MessageValidator messageValidator, ReceiptWriter receiptWriter,
+			Unmarshaller unmarhsaller, MayamClient mayamClient) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller;
 		this.mayamClient = mayamClient;
 		this.messageValidator = messageValidator;
+		this.receiptWriter = receiptWriter;
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action)
@@ -114,8 +118,7 @@ public class MessageProcessor implements Runnable {
 			logger.info("Action successfully processed");
 		} else {
 			logger.error(String.format(
-					"Failed to process action, result was %s",
-					result));
+					"Failed to process action, result was %s", result));
 			throw new MessageProcessingFailedException();
 		}
 	}
@@ -159,10 +162,14 @@ public class MessageProcessor implements Runnable {
 
 	/**
 	 * Processes a given filepath : assumes it has already been validated
+	 * 
 	 * @param filePath
+	 * @throws MessageProcessingFailedException
+	 * @returns the messageID of the message at filePath
 	 */
-	public void processFile(String filePath) {
-		
+	public String processFile(String filePath)
+			throws MessageProcessingFailedException {
+
 		try {
 
 			Object unmarshalled = unmarhsaller.unmarshal(new File(filePath));
@@ -175,20 +182,25 @@ public class MessageProcessor implements Runnable {
 			} catch (MessageProcessingFailedException e) {
 				logger.error(String.format("Message processing failed for %s",
 						filePath), e);
-
-				// TODO : handle failed messages
+				throw e;
 			}
+
+			return message.getMessageID();
 
 		} catch (JAXBException e) {
 			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
+			throw new MessageProcessingFailedException();
 		} catch (ClassCastException cce) {
 			logger.fatal("A prevously validated file did not have an action of one of the expected types");
+			throw new MessageProcessingFailedException();
 		}
 
 	}
 
 	/**
-	 * Processes a PlaceHoldermessage (which is assumed to have already been validated)
+	 * Processes a PlaceHoldermessage (which is assumed to have already been
+	 * validated)
+	 * 
 	 * @param message
 	 * @throws MessageProcessingFailedException
 	 */
@@ -228,51 +240,64 @@ public class MessageProcessor implements Runnable {
 		checkResult(result);
 	}
 
+	private void validateThenProcessFile(String filePath) {
+		try {
+			MessageValidationResult result = messageValidator
+					.validateFile(filePath);
+
+			if (result == MessageValidationResult.IS_VALID) {
+				logger.info(String.format(
+						"Placeholder message at %s validates", filePath));
+				try {
+					String messageID = processFile(filePath);
+					writeReceipt(filePath, messageID);
+				} catch (MessageProcessingFailedException e) {
+					logger.error(
+							String.format("Error processing %s", filePath), e);
+					// TODO: move erroroneous xmls to some configurable location
+				}
+			} else {
+				// TODO: move erroroneous xmls to some configurable location
+				logger.warn(String.format(
+						"Placeholder message at %s did not validate", filePath));
+			}
+
+		} catch (SAXException e) {
+			logger.error("SAXException:", e);
+			// TODO: move erroroneous xmls to some configurable
+		} catch (ParserConfigurationException e) {
+			logger.error("ParserConfigurationException:", e);
+			// TODO: move erroroneous xmls to some configurable
+		} catch (IOException e) {
+			logger.error("IOException:", e);
+			// TODO: move erroroneous xmls to some configurable
+		} catch (MayamClientException e) {
+			logger.error(
+					String.format("MayamClientException %s", e.getErrorcode()),
+					e);
+			// TODO: move erroroneous xmls to some configurable location
+		}
+	}
+
+	private void writeReceipt(String filePath, String messageID) {
+		try {
+			receiptWriter.writeRecipet(filePath, messageID);
+		} catch (IOException e) {
+			logger.error("Failed to write receipt for message"
+					+ messageID);
+		}
+	}
+
 	@Override
-	//TODO this method is too big
 	public void run() {
 
 		while (!stopRequested) {
 			try {
 				String filePath = filePathsPending.take();
-
-				try {
-					MessageValidationResult result = messageValidator
-							.validateFile(filePath);
-
-					if (result == MessageValidationResult.IS_VALID) {
-						logger.info(String
-								.format("Placeholder message at %s validates",
-										filePath));
-						try {
-							processFile(filePath);
-						} catch (Exception e) {
-							logger.error(String.format("Error processing %s",
-									filePath), e);
-						}
-					} else {
-						// TODO: move erroroneous xmls to some configurable
-						// location
-
-						logger.warn(String.format(
-								"Placeholder message at %s did not validate",
-								filePath));
-					}
-
-				} catch (SAXException e) {
-					logger.error("SAXException:", e);
-				} catch (ParserConfigurationException e) {
-					logger.error("ParserConfigurationException:", e);
-				} catch (IOException e) {
-					logger.error("IOException:", e);
-				} catch (MayamClientException e) {
-					logger.error(
-							String.format("MayamClientException %s",
-									e.getErrorcode()), e);
-				}
-
+				validateThenProcessFile(filePath);
 			} catch (InterruptedException e) {
-				logger.warn("Interruped!", e);
+				logger.info("Interruped!", e);
+				stop();
 			}
 		}
 

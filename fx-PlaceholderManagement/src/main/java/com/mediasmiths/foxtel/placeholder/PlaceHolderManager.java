@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
@@ -22,6 +23,8 @@ public class PlaceHolderManager {
 	private final MessageValidator messageValidator;
 	private final MessageProcessor messageProcessor;
 	private final Thread messageProcessorThread;
+	
+	private final ReceiptWriter receiptWriter;
 
 	private final PlaceHolderMessageDirectoryWatcher directoryWatcher;
 	private final Thread directoryWatcherThread;
@@ -39,9 +42,12 @@ public class PlaceHolderManager {
 		directoryWatcher = new PlaceHolderMessageDirectoryWatcher(filePathsPending, config.getMessagePath());
 		directoryWatcherThread = new Thread(directoryWatcher);
 		
+		//message receipt writer
+		receiptWriter = new ReceiptWriter(config.getReceiptPath());
+		
 		//message validation + processing
 		messageValidator = new MessageValidator(unmarshaller, mc);
-		messageProcessor = new MessageProcessor(filePathsPending, messageValidator, unmarshaller,mc);
+		messageProcessor = new MessageProcessor(filePathsPending, messageValidator, receiptWriter,unmarshaller,mc);
 		messageProcessorThread = new Thread(messageProcessor);
 		
 		logger.trace("Placeholdermanager constructor return");

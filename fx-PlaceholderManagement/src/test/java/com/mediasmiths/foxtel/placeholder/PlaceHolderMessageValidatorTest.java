@@ -14,6 +14,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.io.IOUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -26,6 +27,7 @@ import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
@@ -54,7 +56,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		validator = new MessageValidator(unmarhsaller, mayamClient);
-		processor = new MessageProcessor( new LinkedBlockingQueue<String>(), validator,
+		processor = new MessageProcessor( new LinkedBlockingQueue<String>(), validator, new ReceiptWriter( System.getProperty("java.io.tmpdir")),
 				unmarhsaller, mayamClient);
 
 	}
