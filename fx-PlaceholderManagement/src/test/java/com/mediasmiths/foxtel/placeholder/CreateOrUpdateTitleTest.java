@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.validation;
+package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
 
