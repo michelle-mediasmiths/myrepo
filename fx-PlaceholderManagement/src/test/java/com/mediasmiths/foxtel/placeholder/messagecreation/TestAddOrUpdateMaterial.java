@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
+
 import javax.xml.bind.JAXBException;
 
 import org.xml.sax.SAXException;
@@ -11,6 +14,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSItem;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 
@@ -43,6 +47,19 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 		return message;
 	}
 
+	@Override
+	protected void mockCalls(){
+		
+		//make mayamclient say any title exists
+		
+		try {
+			when(mayamClient.titleExists(anyString())).thenReturn(new Boolean(true));
+		} catch (MayamClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	protected String getFileName() {
 		return "testAddOrUpdateMaterial.xml";

@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -12,6 +15,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTxPackage;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class TestAddOrUpdatePackage extends PlaceHolderMessageTest{
 
@@ -33,6 +37,19 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest{
 		message.setActions(actions);
 
 		return message;
+	}
+	
+	@Override
+	protected void mockCalls(){
+		
+		//make mayamclient say any material exists
+		
+		try {
+			when(mayamClient.materialExists(anyString())).thenReturn(new Boolean(true));
+		} catch (MayamClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private AddOrUpdatePackage generateAddOrUpdatePackage()

@@ -36,7 +36,7 @@ public class MSRights {
 		HelperMethods method = new HelperMethods();
 		XMLGregorianCalendar xmlCal = method.giveValidDate();
 		licensePeriod.setStartDate(xmlCal);
-		xmlCal = method.giveValidDate();
+		xmlCal = method.giveValidDateAfter(xmlCal.toGregorianCalendar());
 		licensePeriod.setEndDate(xmlCal);
 		license1.setLicensePeriod(licensePeriod);
 

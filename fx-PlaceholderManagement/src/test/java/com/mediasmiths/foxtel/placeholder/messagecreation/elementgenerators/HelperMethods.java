@@ -66,8 +66,11 @@ public class HelperMethods {
 	 */
 	public XMLGregorianCalendar giveValidDate()
 			throws DatatypeConfigurationException {
-
-		Calendar calDate = new GregorianCalendar();
+		return giveValidDateAfter(new GregorianCalendar());		
+	}
+	
+	public XMLGregorianCalendar giveValidDateAfter(Calendar calDate) throws DatatypeConfigurationException{
+		
 		int numberOfDaysToAdd = (int) (Math.random() * 730 + 1);
 		calDate.add(Calendar.DAY_OF_YEAR, numberOfDaysToAdd);
 
@@ -77,6 +80,7 @@ public class HelperMethods {
 		XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance()
 				.newXMLGregorianCalendar(gregDate);
 		return xmlDate;
+		
 	}
 
 	/**

@@ -36,12 +36,17 @@ public abstract class PlaceHolderMessageTest {
 
 	}
 	
+	protected void mockCalls() {
+		
+	}
+	
 	@Test
 	public final void testWritePlaceHolderMessage () throws Exception {
 		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		FileWriter writer = new FileWriter();
 		writer.writeObjectToFile(message, getFilePath());
+		mockCalls();
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(getFilePath()));
 		
