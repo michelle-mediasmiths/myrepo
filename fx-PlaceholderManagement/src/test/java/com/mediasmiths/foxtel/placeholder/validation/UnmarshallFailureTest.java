@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.requestValidation;
+package com.mediasmiths.foxtel.placeholder.validation;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
