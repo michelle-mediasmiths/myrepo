@@ -1,12 +1,15 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
@@ -16,13 +19,14 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
 /**
- * Processes placeholder messages taken from a queue, performs no validation!
+ * Processes placeholder messages taken from a queue
  * 
  * @author Mediasmiths Forge
  * @see MessageValidator
@@ -32,18 +36,21 @@ public class MessageProcessor implements Runnable {
 
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
-	private final LinkedBlockingQueue<String> filePathsPendingProcessing;
+	private final LinkedBlockingQueue<String> filePathsPending;
 	private boolean stopRequested = false;
 
 	private final Unmarshaller unmarhsaller;
 	private final MayamClient mayamClient;
+	private final MessageValidator messageValidator;
 
 	public MessageProcessor(
 			LinkedBlockingQueue<String> filePathsPendingProcessing,
-			Unmarshaller unmarhsaller, MayamClient mayamClient) {
-		this.filePathsPendingProcessing = filePathsPendingProcessing;
+			MessageValidator messageValidator, Unmarshaller unmarhsaller,
+			MayamClient mayamClient) {
+		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller;
 		this.mayamClient = mayamClient;
+		this.messageValidator = messageValidator;
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action)
@@ -88,15 +95,17 @@ public class MessageProcessor implements Runnable {
 					action.getPackage().getPresentationID()), e);
 
 			// TODO : indicate this was a result of service failure rather than
-			// a problem with the reuqest?
+			// a problem with the request?
 			throw new MessageProcessingFailedException();
 		}
 	}
 
 	/**
 	 * Checks if a MayamClientErrorCode indicated success or not
+	 * 
 	 * @param result
-	 * @throws MessageProcessingFailedException if result != MayamClientErrorCode.SUCCESS
+	 * @throws MessageProcessingFailedException
+	 *             if result != MayamClientErrorCode.SUCCESS
 	 */
 	private void checkResult(MayamClientErrorCode result)
 			throws MessageProcessingFailedException {
@@ -208,17 +217,46 @@ public class MessageProcessor implements Runnable {
 	}
 
 	@Override
+	//TODO this method is too big
 	public void run() {
 
 		while (!stopRequested) {
 			try {
-				String filePath = filePathsPendingProcessing.take();
+				String filePath = filePathsPending.take();
 
 				try {
-					processFile(filePath);
-				} catch (Exception e) {
+					MessageValidationResult result = messageValidator
+							.validateFile(filePath);
+
+					if (result == MessageValidationResult.IS_VALID) {
+						logger.info(String
+								.format("Placeholder message at %s validates",
+										filePath));
+						try {
+							processFile(filePath);
+						} catch (Exception e) {
+							logger.error(String.format("Error processing %s",
+									filePath), e);
+						}
+					} else {
+						// TODO: move erroroneous xmls to some configurable
+						// location
+
+						logger.warn(String.format(
+								"Placeholder message at %s did not validate",
+								filePath));
+					}
+
+				} catch (SAXException e) {
+					logger.error("SAXException:", e);
+				} catch (ParserConfigurationException e) {
+					logger.error("ParserConfigurationException:", e);
+				} catch (IOException e) {
+					logger.error("IOException:", e);
+				} catch (MayamClientException e) {
 					logger.error(
-							String.format("Error processing %s", filePath), e);
+							String.format("MayamClientException %s",
+									e.getErrorcode()), e);
 				}
 
 			} catch (InterruptedException e) {

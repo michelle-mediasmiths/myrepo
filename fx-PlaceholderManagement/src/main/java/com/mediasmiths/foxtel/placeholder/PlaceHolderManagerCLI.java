@@ -42,7 +42,13 @@ public class PlaceHolderManagerCLI {
 		if (configuration != null) {
 			// TODO use values from configuration for mayam client connection
 			
-			MayamClient mc = new MayamClientImpl();
+			MayamClient mc = null;
+			try {
+				mc = new MayamClientImpl();
+			} catch (IOException e) {
+				logger.fatal("Failed to initilise mayam client",e);
+				System.exit(1);
+			}
 	
 			// start agent:
 			new PlaceHolderManager(mc, configuration).run();

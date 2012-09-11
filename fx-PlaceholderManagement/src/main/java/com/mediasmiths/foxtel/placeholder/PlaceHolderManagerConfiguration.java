@@ -37,7 +37,7 @@ public class PlaceHolderManagerConfiguration {
 	 * @return
 	 */
 	public String getMessagePath() {
-		return properties.getProperty("messagepath");
+		return properties.getProperty("placeholder.path.message");
 	}
 
 	/**
@@ -45,7 +45,7 @@ public class PlaceHolderManagerConfiguration {
 	 * @return
 	 */
 	public String getFailurePath() {
-		return properties.getProperty("failurepath");
+		return properties.getProperty("placeholder.path.failure");
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class PlaceHolderManagerConfiguration {
 	 * @return
 	 */
 	public String getArchivedMessagesPath() {
-		return properties.getProperty("archivepath");
+		return properties.getProperty("placeholder.path.archive");
 	}
 	
 	/**
@@ -61,6 +61,6 @@ public class PlaceHolderManagerConfiguration {
 	 * @return
 	 */
 	public String getReceiptPath(){
-		return properties.getProperty("receiptpath");
+		return properties.getProperty("placeholder.path.receipt");
 	}
 }

@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -31,10 +32,10 @@ public class MayamClientImpl implements MayamClient {
 	final MayamMaterialController materialController;
 	final MayamPackageController packageController;
 	
-	public MayamClientImpl() throws MalformedURLException {
+	public MayamClientImpl() throws MalformedURLException, IOException {
 		url = new URL("http://localhost:8084/tasks-ws");
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
-		client = injector.getInstance(TasksClient.class).setup(url, token);
+		client = injector.getInstance(TasksClient.class).setup(url, token); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		mqClient = new MqClient(injector);
 		titleController = new MayamTitleController(client, mqClient);
@@ -42,10 +43,10 @@ public class MayamClientImpl implements MayamClient {
 		packageController = new MayamPackageController(client, mqClient);
 	}
 	
-	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException {
+	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException {
 		url = tasksURL;
 		injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
-		client = injector.getInstance(TasksClient.class).setup(url, userToken);
+		client = injector.getInstance(TasksClient.class).setup(url, userToken); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		mqClient = new MqClient(injector);
 		titleController = new MayamTitleController(client, mqClient);

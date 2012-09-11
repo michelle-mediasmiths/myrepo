@@ -11,20 +11,15 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidatorRunnable;
 import com.mediasmiths.mayam.MayamClient;
 
 public class PlaceHolderManager {
 
 	static Logger logger = Logger.getLogger(PlaceHolderManager.class);
 
-	private final LinkedBlockingQueue<String> filePathsPendingValidation = new LinkedBlockingQueue<String>();
-	private final LinkedBlockingQueue<String> filePathsPendingProcessing = new LinkedBlockingQueue<String>();
-
+	private final LinkedBlockingQueue<String> filePathsPending = new LinkedBlockingQueue<String>();
+	
 	private final MessageValidator messageValidator;
-	private final MessageValidatorRunnable messageValidatorRunnable;
-	private final Thread messageValidatorThread;
-
 	private final MessageProcessor messageProcessor;
 	private final Thread messageProcessorThread;
 
@@ -41,16 +36,12 @@ public class PlaceHolderManager {
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
 
 		//directory watching
-		directoryWatcher = new PlaceHolderMessageDirectoryWatcher(filePathsPendingValidation, config.getMessagePath());
+		directoryWatcher = new PlaceHolderMessageDirectoryWatcher(filePathsPending, config.getMessagePath());
 		directoryWatcherThread = new Thread(directoryWatcher);
 		
-		//message validation
+		//message validation + processing
 		messageValidator = new MessageValidator(unmarshaller, mc);
-		messageValidatorRunnable = new MessageValidatorRunnable(filePathsPendingValidation, messageValidator, filePathsPendingProcessing);
-		messageValidatorThread = new Thread(messageValidatorRunnable);
-		
-		//message processing
-		messageProcessor = new MessageProcessor(filePathsPendingProcessing, unmarshaller,mc);
+		messageProcessor = new MessageProcessor(filePathsPending, messageValidator, unmarshaller,mc);
 		messageProcessorThread = new Thread(messageProcessor);
 		
 		logger.trace("Placeholdermanager constructor return");
@@ -63,11 +54,9 @@ public class PlaceHolderManager {
 		
 		addShutdownHooks();
 		
-		logger.trace("starting directory watcher");
+		logger.debug("starting directory watcher");
 		directoryWatcherThread.start();
-		logger.trace("starting message validator");
-		messageValidatorThread.start();
-		logger.trace("starting message processor");
+		logger.debug("starting message processor");
 		messageProcessorThread.start();		
 		
 		logger.debug("Threads started");
@@ -78,7 +67,6 @@ public class PlaceHolderManager {
 
 		
 			public void run() {
-				messageValidatorRunnable.stop();
 				messageProcessor.stop();
 				directoryWatcher.setContinueWatching(false);
 			}
