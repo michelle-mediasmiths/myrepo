@@ -70,6 +70,7 @@ public class MessageProcessor implements Runnable {
 			logger.error(String.format(
 					"MayamClientException querying if material %s exists",
 					action.getMaterial().getMaterialD()), e);
+			throw new MessageProcessingFailedException();
 		}
 	}
 
@@ -114,7 +115,7 @@ public class MessageProcessor implements Runnable {
 		} else {
 			logger.error(String.format(
 					"Failed to process action, result was %s",
-					result.toString()));
+					result));
 			throw new MessageProcessingFailedException();
 		}
 	}
@@ -136,6 +137,7 @@ public class MessageProcessor implements Runnable {
 			logger.error(String.format(
 					"MayamClientException querying if title %s exists",
 					action.getTitleID()), e);
+			throw new MessageProcessingFailedException();
 		}
 	}
 
@@ -155,9 +157,12 @@ public class MessageProcessor implements Runnable {
 
 	}
 
-	private void processFile(String filePath) {
-		// we assume that the file at filePath has already been validated
-
+	/**
+	 * Processes a given filepath : assumes it has already been validated
+	 * @param filePath
+	 */
+	public void processFile(String filePath) {
+		
 		try {
 
 			Object unmarshalled = unmarhsaller.unmarshal(new File(filePath));
@@ -182,7 +187,12 @@ public class MessageProcessor implements Runnable {
 
 	}
 
-	private void processPlaceholderMesage(PlaceholderMessage message)
+	/**
+	 * Processes a PlaceHoldermessage (which is assumed to have already been validated)
+	 * @param message
+	 * @throws MessageProcessingFailedException
+	 */
+	public void processPlaceholderMesage(PlaceholderMessage message)
 			throws MessageProcessingFailedException {
 		Object action = message.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()

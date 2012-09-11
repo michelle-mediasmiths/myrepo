@@ -35,7 +35,7 @@ public class MultipleActionsInMessageTest extends PlaceHolderMessageValidatorTes
 		File temp = createTempXMLFile(pm,"multipleActions");
 		
 		//test that the correct validation result is returned
-		assertEquals(MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS,validator.validateFile(temp.getAbsolutePath()));
 	}
 	
 }

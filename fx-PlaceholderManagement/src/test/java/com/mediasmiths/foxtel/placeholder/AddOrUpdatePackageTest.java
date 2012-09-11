@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -48,7 +50,78 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
+	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidAddPackageProcessing() throws Exception {
+
+
+		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
+				EXISTING_MATERIAL,EXISTING_TITLE);
+		
+		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		//prepare mock mayamClient
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenReturn(
+				new Boolean(false));
+		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		//verfiy update call took place
+		verify(mayamClient).createPackage(aoup.getPackage());
+	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidUpdatePackageProcessing() throws Exception {
+
+		PlaceholderMessage pm = buildCreatePackage(EXISTING_PACKAGE_ID,
+				EXISTING_MATERIAL,EXISTING_TITLE);
+		
+		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		//prepare mock mayamClient
+		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(
+				new Boolean(true));
+		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		//verfiy update call took place
+		verify(mayamClient).updatePackage(aoup.getPackage());
+
+		
+	}
+
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddPackageProcessingFailsOnQueryingExistingPackage() throws Exception {
+
+		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
+				EXISTING_MATERIAL,EXISTING_TITLE);
+		
+		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		//prepare mock mayamClient
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		
+	}
+	
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddPackageProcessingFailesOnCreatePackage() throws Exception {
+
+		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
+				EXISTING_MATERIAL,EXISTING_TITLE);
+		
+		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		//prepare mock mayamClient
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenReturn(
+				new Boolean(false));
+		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.PACKAGE_CREATION_FAILED);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+				
 	}
 	
 	@Test(expected = MayamClientException.class)
@@ -62,7 +135,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 
 		// try to call validation, expect an exception
-		toTest.validateFile(temp.getAbsolutePath());
+		validator.validateFile(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -77,7 +150,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 
 		// test that the validation result is correct
 		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 	private PlaceholderMessage buildCreatePackage(String packageid,

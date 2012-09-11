@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,8 +13,10 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
+import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -26,7 +29,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testValidAddMaterial() throws Exception {
+	public void testValidAddMaterialValidation() throws Exception {
 
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validAddMaterial");
@@ -36,8 +39,69 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidAddMaterialProcessing() throws Exception {
+
+		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		// prepare mock mayamClient
+		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
+		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		//check create material was called
+		verify(mayamClient).createMaterial(aoum.getMaterial());
+		
+	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidUpdateMaterialProcessing() throws Exception {
+
+		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		// prepare mock mayamClient
+		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(true);
+		when(mayamClient.updateMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		//check create material was called
+		verify(mayamClient).updateMaterial(aoum.getMaterial());
+		
+	}
+
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddMaterialProcessingFailsOnQueryingExistingMaterial() throws Exception {
+
+		//test that we get a MessageProcessingFailedException when the query on existing material failes
+		
+		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		// prepare mock mayamClient
+		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION));
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);		
+	}
+	
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddMaterialProcessingFailesOnCreateMaterial() throws Exception {
+
+		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		// prepare mock mayamClient
+		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
+		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		
+	}
+	
 
 	@Test
 	@Category(ValidationTests.class)
@@ -52,7 +116,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		// correct reason
 		assertEquals(
 				MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 	@Test
@@ -68,7 +132,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		// correct reason
 		assertEquals(
 				MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 	@Test(expected = MayamClientException.class)
@@ -82,7 +146,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 
 		// try to call validation, expect an exception
-		toTest.validateFile(temp.getAbsolutePath());
+		validator.validateFile(temp.getAbsolutePath());
 	}
 
 }

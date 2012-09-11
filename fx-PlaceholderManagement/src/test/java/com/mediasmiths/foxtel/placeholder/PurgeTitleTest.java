@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -39,7 +41,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 				.thenReturn(false);
 
 		assertEquals(MessageValidationResult.IS_VALID,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 	@Test
@@ -53,8 +55,44 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 
 		assertEquals(
 				MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
-				toTest.validateFile(temp.getAbsolutePath()));
+				validator.validateFile(temp.getAbsolutePath()));
 	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testPurgeTitleProcessing() throws MessageProcessingFailedException{
+		
+		PlaceholderMessage pm =  buildDeleteTitleRequest(false, EXISTING_TITLE);
+		
+		PurgeTitle pt = (PurgeTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		
+		//prepare mock mayam client
+		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.SUCCESS);
+		
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		
+		//verify expected calls
+		verify(mayamClient).purgeTitle(pt);
+		
+		
+	}
+	
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testPurgeTitleProcessingFails() throws MessageProcessingFailedException{
+		
+	PlaceholderMessage pm =  buildDeleteTitleRequest(false, EXISTING_TITLE);
+		
+		PurgeTitle pt = (PurgeTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		
+		//prepare mock mayam client
+		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.TITLE_UPDATE_FAILED);
+		
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);		
+	}
+
 
 	@Test(expected = MayamClientException.class)
 	@Category(ValidationTests.class)
@@ -66,7 +104,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 				.thenThrow(
 						new MayamClientException(MayamClientErrorCode.FAILURE));
 
-		toTest.validateFile(temp.getAbsolutePath());
+		validator.validateFile(temp.getAbsolutePath());
 	}
 
 	private PlaceholderMessage buildDeleteTitleRequest(boolean b, String titleID) {

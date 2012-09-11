@@ -32,7 +32,7 @@ public class NonXSDConformingTest extends PlaceHolderMessageValidatorTest{
 		
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		IOUtils.write(loremIpsum, new FileOutputStream(temp));		
-		MessageValidationResult validateFile = toTest.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		

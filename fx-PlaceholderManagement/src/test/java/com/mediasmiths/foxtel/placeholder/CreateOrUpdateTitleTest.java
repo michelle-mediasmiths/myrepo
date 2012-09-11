@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,91 +28,176 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 
 	private final static String NEW_TITLE = "NEW_TITLE";
-	
+
 	public CreateOrUpdateTitleTest() throws JAXBException, SAXException {
-		super();		
+		super();
 	}
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testValidCreateTitle() throws Exception{
+	public void testValidCreateTitle() throws Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		File temp = createTempXMLFile(pm,"validCreateTitle");
-		
-		//test that the generated placeholder message is valid
-		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
+		File temp = createTempXMLFile(pm, "validCreateTitle");
+
+		// test that the generated placeholder message is valid
+		assertEquals(MessageValidationResult.IS_VALID,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
-	
+
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidAddTitleProcessing() throws Exception {
+
+		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+
+		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+		// prepare mock mayamClient
+		when(mayamClient.titleExists(NEW_TITLE)).thenReturn(new Boolean(false));
+		when(mayamClient.createTitle(coup)).thenReturn(
+				MayamClientErrorCode.SUCCESS);
+		// the call we are testing
+		processor.processPlaceholderMesage(pm);
+		// verfiy update call took place
+		verify(mayamClient).createTitle(coup);
+	}
+
+	@Test
+	@Category(ProcessingTests.class)
+	public void testValidUpdateTitleProcessing() throws Exception {
+
+		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(EXISTING_TITLE);
+
+		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+		// prepare mock mayamClient
+		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(
+				new Boolean(true));
+		when(mayamClient.updateTitle(coup)).thenReturn(
+				MayamClientErrorCode.SUCCESS);
+		// the call we are testing
+		processor.processPlaceholderMesage(pm);
+		// verfiy update call took place
+		verify(mayamClient).updateTitle(coup);
+
+	}
+
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddTitleProcessingFailsOnQueryingExistingTitle()
+			throws Exception {
+
+		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+
+		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+		// prepare mock mayamClient
+		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
+				new MayamClientException(MayamClientErrorCode.FAILURE));
+		// the call we are testing
+		processor.processPlaceholderMesage(pm);
+	}
+
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testValidAddTitleProcessingFailesOnCreateTitle()
+			throws Exception {
+		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+
+		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+		// prepare mock mayamClient
+		when(mayamClient.titleExists(NEW_TITLE)).thenReturn(new Boolean(false));
+		when(mayamClient.createTitle(coup)).thenReturn(
+				MayamClientErrorCode.TITLE_CREATION_FAILED);
+		// the call we are testing
+		processor.processPlaceholderMesage(pm);
+	}
+
 	@Test
 	@Category(ValidationTests.class)
 	public void testCreateTitleInvalidDates() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		
-		
-		List<License> license = ((CreateOrUpdateTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0)).getRights().getLicense();
-		
-		XMLGregorianCalendar startDate = license.get(0).getLicensePeriod().getStartDate();
-		XMLGregorianCalendar endDate = license.get(0).getLicensePeriod().getEndDate();
-		
-		//swap start and end dates to create an invalid request
+
+		List<License> license = ((CreateOrUpdateTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0)).getRights().getLicense();
+
+		XMLGregorianCalendar startDate = license.get(0).getLicensePeriod()
+				.getStartDate();
+		XMLGregorianCalendar endDate = license.get(0).getLicensePeriod()
+				.getEndDate();
+
+		// swap start and end dates to create an invalid request
 		license.get(0).getLicensePeriod().setStartDate(endDate);
 		license.get(0).getLicensePeriod().setEndDate(startDate);
-		
-		File temp = createTempXMLFile(pm,"createTitleInvalidDates");
-		
-		//test that the generated placeholder message is valid
-		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,toTest.validateFile(temp.getAbsolutePath()));
+
+		File temp = createTempXMLFile(pm, "createTitleInvalidDates");
+
+		// test that the generated placeholder message is valid
+		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
-	
-	
-	private PlaceholderMessage buildCreateTitleRequestSingleLicence(String titleID) throws DatatypeConfigurationException{
-		//build request
-		XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(JAN1st);
-		XMLGregorianCalendar endDate =  DatatypeFactory.newInstance().newXMLGregorianCalendar(JAN10th);
-		
+
+	private PlaceholderMessage buildCreateTitleRequestSingleLicence(
+			String titleID) throws DatatypeConfigurationException {
+		// build request
+		XMLGregorianCalendar startDate = DatatypeFactory.newInstance()
+				.newXMLGregorianCalendar(JAN1st);
+		XMLGregorianCalendar endDate = DatatypeFactory.newInstance()
+				.newXMLGregorianCalendar(JAN10th);
+
 		TitleDescriptionType tdt = new TitleDescriptionType();
 		tdt.setProgrammeTitle("PROGRAMMETITLE");
-		
+
 		LicensePeriodType licencePeriod = new LicensePeriodType();
 		licencePeriod.setStartDate(startDate);
 		licencePeriod.setEndDate(endDate);
-	
+
 		LicenseHolderType licenceHolder = new LicenseHolderType();
 		licenceHolder.setOrganisationID("ORGID");
 		licenceHolder.setOrganisationName("ORGNAME");
-		
+
 		ChannelType channelType = new ChannelType();
 		channelType.setChannelTag("AAA");
 		channelType.setChannelName("Channel Name");
-		
+
 		Channels channels = new Channels();
 		channels.getChannel().add(channelType);
-		
+
 		License licence = new License();
 		licence.setLicensePeriod(licencePeriod);
 		licence.setLicenseHolder(licenceHolder);
 		licence.setChannels(channels);
-		
+
 		RightsType rights = new RightsType();
 		rights.getLicense().add(licence);
-		
+
 		CreateOrUpdateTitle coup = new CreateOrUpdateTitle();
 		coup.setTitleID(titleID);
 		coup.setTitleDescription(tdt);
 		coup.setRights(rights);
-		
+
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(coup);
-		
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(
+				coup);
+
 		PlaceholderMessage pm = new PlaceholderMessage();
 		pm.setMessageID(MESSAGE_ID);
 		pm.setSenderID(SENDER_ID);
 		pm.setActions(actions);
 		return pm;
-}
+	}
 }

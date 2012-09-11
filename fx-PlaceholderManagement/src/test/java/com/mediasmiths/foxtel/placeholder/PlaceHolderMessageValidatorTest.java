@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import java.io.File;
 import java.io.IOException;
 import java.util.GregorianCalendar;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -24,14 +25,16 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageValidatorTest {
 
-	protected MessageValidator toTest;
-	protected MayamClient mayamClient = mock(MayamClient.class);
-
+	protected final MessageValidator validator;
+	protected final MessageProcessor processor;
+	protected final MayamClient mayamClient = mock(MayamClient.class);
+		
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 
@@ -50,7 +53,9 @@ public abstract class PlaceHolderMessageValidatorTest {
 
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		toTest = new MessageValidator(unmarhsaller, mayamClient);
+		validator = new MessageValidator(unmarhsaller, mayamClient);
+		processor = new MessageProcessor( new LinkedBlockingQueue<String>(), validator,
+				unmarhsaller, mayamClient);
 
 	}
 
@@ -66,7 +71,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 	protected static PlaceholderMessage buildAddMaterialRequest(String titleID,
 			GregorianCalendar created, GregorianCalendar required)
 			throws DatatypeConfigurationException {
-		MaterialType m = buildMaterial(NEW_MATERIAL_ID,created, required);
+		MaterialType m = buildMaterial(NEW_MATERIAL_ID, created, required);
 
 		AddOrUpdateMaterial aum = new AddOrUpdateMaterial();
 		aum.setTitleID(titleID);
@@ -83,12 +88,14 @@ public abstract class PlaceHolderMessageValidatorTest {
 		return pm;
 	}
 
-	protected static MaterialType buildMaterial(String materialID) throws DatatypeConfigurationException{
-		return buildMaterial(materialID,JAN1st,JAN10th);
+	protected static MaterialType buildMaterial(String materialID)
+			throws DatatypeConfigurationException {
+		return buildMaterial(materialID, JAN1st, JAN10th);
 	}
-	
-	private static MaterialType buildMaterial(String materialID,GregorianCalendar created,
-			GregorianCalendar required) throws DatatypeConfigurationException {
+
+	private static MaterialType buildMaterial(String materialID,
+			GregorianCalendar created, GregorianCalendar required)
+			throws DatatypeConfigurationException {
 		// build request
 		XMLGregorianCalendar orderCreated = DatatypeFactory.newInstance()
 				.newXMLGregorianCalendar(created);

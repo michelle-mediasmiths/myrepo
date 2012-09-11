@@ -1,7 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
-
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,7 +18,9 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
 
@@ -31,7 +34,42 @@ public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
-		assertEquals(MessageValidationResult.IS_VALID,toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+	}
+	
+	@Test
+	@Category(ProcessingTests.class)
+	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException{
+		
+		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
+		
+		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		
+		//prepare mock mayam client
+		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.SUCCESS);
+		
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
+		
+		//verify expected calls
+		verify(mayamClient).deleteMaterial(dm);
+		
+		
+	}
+	
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testDeleteMaterialProcessingFails() throws DatatypeConfigurationException, MessageProcessingFailedException{
+		
+		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
+		
+		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		
+		//prepare mock mayam client
+		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+		
+		//the call we are testing
+		processor.processPlaceholderMesage(pm);
 	}
 
 	private PlaceholderMessage buildDeleteMaterialRequest(boolean materialProtected, String titleID) throws DatatypeConfigurationException {
