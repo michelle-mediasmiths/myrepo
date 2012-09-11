@@ -40,13 +40,14 @@ public class MayamMaterialController {
 	public MayamClientErrorCode createMaterial(MaterialType material)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		final AttributeMap assetAttributes = client.createAttributeMap();
+		MayamAttributeController attributes = new MayamAttributeController(client);
+		boolean attributesValid = true;
 			
-		assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
-		assetAttributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
-		assetAttributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-		assetAttributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
-		assetAttributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 		
 		Source source = material.getSource();
 		if (source != null) {
@@ -56,13 +57,13 @@ public class MayamMaterialController {
 				Order order = aggregation.getOrder();
 				if (aggregator != null) {
 					// TODO: Approval attributes are not ideal for aggregator values
-					assetAttributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
-					assetAttributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 				}
 				if (order != null) {
 					// TODO: Task operation attributes are not ideal for aggregator values
-					assetAttributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
-					assetAttributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
 				}
 			}
 		}
@@ -70,7 +71,7 @@ public class MayamMaterialController {
 		Compile compile = source.getCompile();
 		if (compile != null) {
 			//TODO: Asset Parent ID to be added by Mayam shortly
-			//assetAttributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 		}
 		
 		Library library = source.getLibrary();
@@ -87,13 +88,17 @@ public class MayamMaterialController {
 						tapeIds.add(tape.getPresentationID());
 					}
 				}
-				assetAttributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 			}
+		}
+		
+		if (!attributesValid) {
+			returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 		}
 		
 		AttributeMap result;
 		try {
-			result = client.createAsset(assetAttributes);
+			result = client.createAsset(attributes.getAttributes());
 			if (result != null) {
 				returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
 			}
@@ -109,7 +114,10 @@ public class MayamMaterialController {
 	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		boolean attributesValid = true;
+		
 		if (material != null) {
+			MayamAttributeController attributes = null;
 			AttributeMap assetAttributes = null;
 			
 			try {
@@ -121,15 +129,17 @@ public class MayamMaterialController {
 			}
 
 			if (assetAttributes != null) {
-				//TODO: Confirm aspect ratio is in the correct notation, otherwise have conversion method
-				assetAttributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
+				attributes = new MayamAttributeController(assetAttributes);
 				
-				assetAttributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
-				assetAttributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+				//TODO: Confirm aspect ratio is in the correct notation, otherwise have conversion method
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
+				
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 				
 				//TODO: No appropriate attributes for start and end frame markers
-				material.getLastFrameTimecode();
-				material.getFirstFrameTimecode();
+				//material.getLastFrameTimecode();
+				//material.getFirstFrameTimecode();
 				
 				
 				//TODO: How to handle multiple audio tracks and segments?
@@ -153,9 +163,13 @@ public class MayamMaterialController {
 					track.getTrackNumber();
 				}*/
 				
+				if (!attributesValid) {
+					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				}
+				
 				AttributeMap result;
 				try {
-					result = client.updateAsset(assetAttributes);
+					result = client.updateAsset(attributes.getAttributes());
 					if (result != null) {
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
@@ -178,8 +192,10 @@ public class MayamMaterialController {
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		boolean attributesValid = true;
 		if (material != null) {
 			AttributeMap assetAttributes = null;
+			MayamAttributeController attributes = null;
 			
 			try {
 				assetAttributes = client.getAsset(AssetType.ITEM, material.getMaterialD());
@@ -190,9 +206,11 @@ public class MayamMaterialController {
 			}
 
 			if (assetAttributes != null) {
-				assetAttributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-				assetAttributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
-				assetAttributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
+				attributes = new MayamAttributeController(assetAttributes);
+				
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 				
 				Source source = material.getSource();
 				if (source != null) {
@@ -202,13 +220,13 @@ public class MayamMaterialController {
 						Order order = aggregation.getOrder();
 						if (aggregator != null) {
 							// TODO: Approval attributes are not ideal for aggregator values
-							assetAttributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
-							assetAttributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 						}
 						if (order != null) {
 							// TODO: Task operation attributes are not ideal for aggregator values
-							assetAttributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
-							assetAttributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
 						}
 					}
 				}
@@ -216,7 +234,7 @@ public class MayamMaterialController {
 				Compile compile = source.getCompile();
 				if (compile != null) {
 					//TODO: Asset Parent ID to be added by Mayam shortly
-					//assetAttributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 				}
 				
 				Library library = source.getLibrary();
@@ -233,13 +251,17 @@ public class MayamMaterialController {
 								tapeIds.add(tape.getPresentationID());
 							}
 						}
-						assetAttributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 					}
+				}
+				
+				if (!attributesValid) {
+					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 				
 				AttributeMap result;
 				try {
-					result = client.updateAsset(assetAttributes);
+					result = client.updateAsset(attributes.getAttributes());
 					if (result != null) {
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}

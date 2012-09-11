@@ -5,6 +5,8 @@ import java.util.List;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mayam.wf.attributes.shared.BasicAttributeValidator;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
@@ -27,28 +29,34 @@ public class MayamPackageController {
 	public MayamClientErrorCode createPackage(PackageType txPackage)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		MayamAttributeController attributes = new MayamAttributeController(client);
+		boolean attributesValid = true;
+		
 		if (txPackage != null) {
-			AttributeMap assetAttributes = client.createAttributeMap();
-			
+
 			//TODO: Confirm Asset Type with Mayam
-			assetAttributes.setAttribute(Attribute.ASSET_TYPE, AssetType.PACK);	
-			assetAttributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.PACK);	
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 			
 			//TODO: Asset Parent ID to be added by Mayam shortly
-			//assetAttributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 			
 			//TODO: Any need to store number of segments?
-			//assetAttributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 			
-			assetAttributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
-			assetAttributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-			assetAttributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-			assetAttributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-			assetAttributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+			
+			if (!attributesValid) {
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
 			
 			AttributeMap result;
 			try {
-				result = client.createAsset(assetAttributes);
+				result = client.createAsset(attributes.getAttributes());
 				if (result == null) {
 					returnCode = MayamClientErrorCode.PACKAGE_CREATION_FAILED;
 				}
@@ -66,9 +74,12 @@ public class MayamPackageController {
 	
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;		
+		boolean attributesValid = true;
+		
 		if (txPackage != null) {
 			AttributeMap assetAttributes = null;
+			MayamAttributeController attributes = null;
 			try {
 				assetAttributes = client.getAsset(AssetType.PACK, txPackage.getPresentationID());
 			} catch (RemoteException e1) {
@@ -77,21 +88,27 @@ public class MayamPackageController {
 			}
 			
 			if (assetAttributes != null) {
+				attributes = new MayamAttributeController(assetAttributes);
+				
 				//TODO: Asset Parent ID to be added by Mayam shortly
-				//assetAttributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 				
 				//TODO: Any need to store number of segments?
-				//assetAttributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
+				//attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 				
-				assetAttributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
-				assetAttributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-				assetAttributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-				assetAttributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-				assetAttributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+				
+				if (!attributesValid) {
+					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				}
 				
 				AttributeMap result;
 				try {
-					result = client.updateAsset(assetAttributes);
+					result = client.updateAsset(attributes.getAttributes());
 					if (result == null) {
 						returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED;
 					}
@@ -114,8 +131,10 @@ public class MayamPackageController {
 	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		boolean attributesValid = true;
 		if (txPackage != null) {
 			AttributeMap assetAttributes = null;
+			MayamAttributeController attributes = null;
 			try {
 				assetAttributes = client.getAsset(AssetType.PACK, txPackage.getPresentationID());
 			} catch (RemoteException e1) {
@@ -124,6 +143,8 @@ public class MayamPackageController {
 			}
 			
 			if (assetAttributes != null) {
+				attributes = new MayamAttributeController(assetAttributes);
+				
 				//TODO: How to map segmentation data?
 /*				Segmentation segmentation = txPackage.getSegmentation();
 				List<Segment> segments = segmentation.getSegment();
@@ -136,9 +157,13 @@ public class MayamPackageController {
 					segment.getSOM();
 				}*/
 				
+				if (!attributesValid) {
+					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				}
+				
 				AttributeMap result;
 				try {
-					result = client.updateAsset(assetAttributes);
+					result = client.updateAsset(attributes.getAttributes());
 					if (result == null) {
 						returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED;
 					}
@@ -188,4 +213,5 @@ public class MayamPackageController {
 		}
 		return assetAttributes;
 	}
+	
 }
