@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -27,6 +28,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testDeleteTitleNotProtected() throws IOException, Exception {
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
@@ -41,6 +43,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testDeleteTitleIsProected() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteTitleMaterialProtected");
@@ -54,6 +57,7 @@ public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test(expected = MayamClientException.class)
+	@Category(ValidationTests.class)
 	public void testDeleteTitleRequestFail() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteTitleRequestFailure");

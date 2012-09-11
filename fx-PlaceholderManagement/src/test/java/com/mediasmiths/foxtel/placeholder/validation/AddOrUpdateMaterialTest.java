@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
@@ -24,6 +25,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testValidAddMaterial() throws Exception {
 
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
@@ -38,6 +40,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testAddMaterialTitleDoesntExist() throws Exception {
 		PlaceholderMessage pm = buildAddMaterialRequest(NOT_EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "addMaterialTitleDoesntExist");
@@ -53,6 +56,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testAddMaterialOrderCreatedAfterRequiredBy()
 			throws IOException, Exception {
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE,
@@ -68,6 +72,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test(expected = MayamClientException.class)
+	@Category(ValidationTests.class)
 	public void testAddMaterialTitleExistRequestFails() throws Exception {
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "addMaterialTitleExistRequestFails");

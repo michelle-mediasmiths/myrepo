@@ -10,6 +10,7 @@ import java.math.BigInteger;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -36,6 +37,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testAddValidPackage() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
@@ -50,6 +52,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 	
 	@Test(expected = MayamClientException.class)
+	@Category(ValidationTests.class)
 	public void testAddPackageRequestFails() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
@@ -63,6 +66,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 	
 	@Test
+	@Category(ValidationTests.class)
 	public void testAddPackageInvalidMaterial() throws IOException, Exception{
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				NOT_EXISTING_MATERIAL,EXISTING_TITLE);

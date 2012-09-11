@@ -14,6 +14,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
@@ -35,6 +36,7 @@ public class UnmarshallFailureTest {
 	}
 	
 	@Test
+	@Category(ValidationTests.class)
 	public void testUnmarshallFailure() throws Exception{
 	
 		PlaceholderMessage pm = createMessage();		
@@ -46,6 +48,7 @@ public class UnmarshallFailureTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testUnexpectedTypeAfterUnmarshalling() throws Exception{
 		
 		PlaceholderMessage pm = createMessage();		

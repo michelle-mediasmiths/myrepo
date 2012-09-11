@@ -9,6 +9,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -25,6 +26,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testDeleteMaterialNotProtected() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);

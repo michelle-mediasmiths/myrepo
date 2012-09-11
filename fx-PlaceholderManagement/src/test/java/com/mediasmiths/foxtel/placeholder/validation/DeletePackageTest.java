@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -27,6 +28,7 @@ public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 	
 	@Test
+	@Category(ValidationTests.class)
 	public void testDeletePackageNotProtected() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
@@ -38,6 +40,7 @@ public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 	
 	@Test
+	@Category(ValidationTests.class)
 	public void testDeletePackageIsProected() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialProtected");
@@ -48,6 +51,7 @@ public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test(expected = MayamClientException.class)
+	@Category(ValidationTests.class)
 	public void testDeletePackageRequestFail() throws IOException, Exception{
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageRequestFailure");

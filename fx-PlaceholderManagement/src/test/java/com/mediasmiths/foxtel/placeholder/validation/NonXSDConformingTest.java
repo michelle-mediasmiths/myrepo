@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
@@ -25,6 +26,7 @@ public class NonXSDConformingTest extends PlaceHolderMessageValidatorTest{
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testNonXSDConformingFileFails() throws IOException, SAXException, ParserConfigurationException, MayamClientException{
 		
 		

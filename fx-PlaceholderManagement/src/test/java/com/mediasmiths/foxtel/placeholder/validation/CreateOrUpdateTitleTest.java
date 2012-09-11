@@ -12,6 +12,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -36,6 +37,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 	}
 
 	@Test
+	@Category(ValidationTests.class)
 	public void testValidCreateTitle() throws Exception{
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
 		File temp = createTempXMLFile(pm,"validCreateTitle");
@@ -45,6 +47,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 	}
 	
 	@Test
+	@Category(ValidationTests.class)
 	public void testCreateTitleInvalidDates() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
 		
