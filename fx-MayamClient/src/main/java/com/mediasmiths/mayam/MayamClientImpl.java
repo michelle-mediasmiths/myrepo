@@ -13,9 +13,13 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.mayam.wf.attributes.server.AttributesModule;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MediaExchange.Programme;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -64,15 +68,6 @@ public class MayamClientImpl implements MayamClient {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
-	 */
-	@Override
-	public MayamClientErrorCode createTitle(Programme.Detail title)
-	{
-		return titleController.createTitle(title);
-	}
-	
-	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createTitle(au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle)
 	 */
 	@Override
@@ -85,9 +80,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
 	 */
 	@Override
-	public MayamClientErrorCode updateTitle(Programme.Detail programme)
+	public MayamClientErrorCode updateTitle(Material.Title title)
 	{
-		return titleController.updateTitle(programme);
+		return titleController.updateTitle(title);
 	}
 	
 	/* (non-Javadoc)
@@ -109,15 +104,6 @@ public class MayamClientImpl implements MayamClient {
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media)
-	 */
-	@Override
-	public MayamClientErrorCode createMaterial(Programme.Media media)
-	{
-		return materialController.createMaterial(media);
-	}
-	
-	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(au.com.foxtel.cf.mam.pms.MaterialType)
 	 */
 	@Override
@@ -130,9 +116,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(Programme.Media media)
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
 	{
-		return materialController.updateMaterial(media);
+		return materialController.updateMaterial(material);
 	}
 	
 	/* (non-Javadoc)
@@ -144,6 +130,11 @@ public class MayamClientImpl implements MayamClient {
 		return materialController.updateMaterial(material);
 	}
 	
+	@Override
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
+		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#createPackage(au.com.foxtel.cf.mam.pms.PackageType)
 	 */
@@ -152,16 +143,7 @@ public class MayamClientImpl implements MayamClient {
 	{
 		return packageController.createPackage(txPackage);
 	}
-	
-	/* (non-Javadoc)
-	 * @see com.mediasmiths.mayam.MayamClient#createPackage()
-	 */
-	@Override
-	public MayamClientErrorCode createPackage()
-	{
-		return packageController.createPackage();
-	}
-	
+		
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage(au.com.foxtel.cf.mam.pms.PackageType)
 	 */
@@ -175,9 +157,9 @@ public class MayamClientImpl implements MayamClient {
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage()
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
 	{
-		return packageController.updatePackage();
+		return packageController.updatePackage(txPackage);
 	}
 	
 	/* (non-Javadoc)
@@ -198,8 +180,7 @@ public class MayamClientImpl implements MayamClient {
 	}
 
 	@Override
-	public boolean materialExists(String materialID)
-			throws MayamClientException {
+	public boolean materialExists(String materialID) throws MayamClientException {
 		return materialController.materialExists(materialID);
 	}
 
@@ -207,29 +188,36 @@ public class MayamClientImpl implements MayamClient {
 	public boolean isMaterialForPackageProtected(String packageID) {
 		//TODO implement
 		// will need to fetch the material for the given package and check its protected status flag		
-		return false;
+		boolean isProtected = true;
+		AttributeMap packageAttributes = packageController.getPackage(packageID);
+		if (packageAttributes != null) {
+			//TODO: need to make use of parent ID attribute once Mayam add it
+		}
+		return isProtected;
 	}
 
 	@Override
-	public boolean isTitleOrDescendentsProtected(String titleID)
-			throws MayamClientException {
-		// TODO implement
-		// will need to fetch the specified title and check it is not protected
-		// then need to check its material + packages are not protected either
-		return false;
-	}
-
-	@Override
-	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException {
+		boolean isProtected = true;
+		AttributeMap titleAttributes = titleController.getTitle(titleID);
+		
+		if (titleAttributes != null) {
+			//TODO: Are we checking accessRestriction or purgeProtection?
+			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
+			//isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
+			
+			if (!isProtected) {
+				// TODO: check its material + packages are not protected either
+			}
+		}
+		
+		return isProtected;
 	}
 
 	@Override
 	public boolean packageExists(String presentationID)
 			throws MayamClientException {
-		// TODO Auto-generated method stub
-		return false;
+		return packageController.packageExists(presentationID);
 	}
 
 }
