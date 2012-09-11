@@ -32,8 +32,7 @@ public class MessageValidator {
 
 	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
 
-	private static Logger logger = Logger
-			.getLogger(MessageValidator.class);
+	private static Logger logger = Logger.getLogger(MessageValidator.class);
 
 	// an unmarshaller for turning xml files into objects
 	private final Unmarshaller unmarhsaller;
@@ -42,8 +41,8 @@ public class MessageValidator {
 	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
 
-	public MessageValidator(Unmarshaller unmarshaller,
-			MayamClient mayamClient) throws SAXException {
+	public MessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient)
+			throws SAXException {
 		this.unmarhsaller = unmarshaller;
 		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
 		this.mayamClient = mayamClient;
@@ -122,15 +121,25 @@ public class MessageValidator {
 			return MessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
 		}
 
-		MessageValidationResult validateActions = validateActions(actions);
+		try {
+			MessageValidationResult validateActions = validateActions(actions);
 
-		if (validateActions == MessageValidationResult.IS_VALID) {
-			logger.info("PlaceholderMessage validated");
-		} else {
-			logger.warn("Message Actions did not validate");
+			if (validateActions == MessageValidationResult.IS_VALID) {
+				logger.info("PlaceholderMessage validated");
+			} else {
+				logger.warn("Message Actions did not validate");
+			}
+			return validateActions;
+			
+		} catch (Exception e) {
+			if(!(e instanceof MayamClientException)){
+				logger.warn("unknown validation failure!", e);
+				return MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
+			}
+			else{
+				throw (MayamClientException) e;
+			}
 		}
-
-		return validateActions;
 	}
 
 	/**
@@ -201,9 +210,10 @@ public class MessageValidator {
 		} catch (MayamClientException e) {
 			// catch this exception for logging purposes then throw back up, or
 			// should we have a new exception type with e as its cause?
-			logger.error(String.format(
-					"MayamClientException %s when querying if material %s exists", e.getErrorcode().toString(),
-					materialID), e);
+			logger.error(
+					String.format(
+							"MayamClientException %s when querying if material %s exists",
+							e.getErrorcode().toString(), materialID), e);
 			throw e;
 		}
 
@@ -211,15 +221,15 @@ public class MessageValidator {
 			logger.error("No existing material for requested package");
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
-		
-		//TODO validate consumer advice (command seperated list of characters);
+
+		// TODO validate consumer advice (command seperated list of characters);
 		logger.warn("No validation of consumer advice has taken place");
 
 		return MessageValidationResult.IS_VALID;
 	}
 
-	private MessageValidationResult validateDeletePackage(
-			DeletePackage action) throws MayamClientException {
+	private MessageValidationResult validateDeletePackage(DeletePackage action)
+			throws MayamClientException {
 		// 24.1.1.3 Version purge requests
 		// check that the parent item in ardome is not flagged as
 		String packageID = action.getPackage().getPresentationID();
@@ -243,8 +253,7 @@ public class MessageValidator {
 		return MessageValidationResult.IS_VALID;
 	}
 
-	private MessageValidationResult validateDeleteMaterial(
-			DeleteMaterial action) {
+	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) {
 		// 24.1.1.2 Master purge requests
 
 		// TODO : do we check if the material is marked as protected as with the
@@ -252,8 +261,8 @@ public class MessageValidator {
 		return MessageValidationResult.IS_VALID;
 	}
 
-	private MessageValidationResult validatePurgeTitle(
-			PurgeTitle action) throws MayamClientException {
+	private MessageValidationResult validatePurgeTitle(PurgeTitle action)
+			throws MayamClientException {
 
 		// 24.1.1.1 Title purge requests
 		// check that the title is not marked as protected in ardome

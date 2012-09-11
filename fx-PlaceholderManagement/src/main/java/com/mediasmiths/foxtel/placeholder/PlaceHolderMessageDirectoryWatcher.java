@@ -2,8 +2,13 @@ package com.mediasmiths.foxtel.placeholder;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
 
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
@@ -36,11 +41,45 @@ class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher implements
 
 	@Override
 	public void run() {
+		
+		//first of all look for existing xml files before we start monitoring for new ones
+		queueExistingFiles();
+		
 		try {
 			this.start(path);
 		} catch (IOException e) {
 			PlaceHolderManager.logger.fatal("Failed to register watch service", e);
 			System.exit(1);
+		}
+	}
+
+	/**
+	 * On startup check for any existing placeholder messages that may have arrived when the serivce was not running
+	 */
+	private void queueExistingFiles() {
+		
+		logger.info("Checking for existing files");
+		
+		//first of all look for existing xml files before we start monitoring for new ones
+		Collection<File> existingFiles = FileUtils.listFiles(new File(path), new IOFileFilter() {
+			
+			@Override
+			public boolean accept(File dir, String name) {
+				return FilenameUtils.getExtension(name).toLowerCase().equals("xml");
+			}
+			
+			@Override
+			public boolean accept(File file) {
+				return FilenameUtils.getExtension(file.getName()).toLowerCase().equals("xml");
+			}
+		}, TrueFileFilter.INSTANCE);
+		
+		
+		for(File f : existingFiles){
+			logger.info("Queuing existing file: "+f.getAbsolutePath());
+			
+			//TODO : check there is not already a receipt for this file before trying to process
+			filePathsPendingValidation.add(f.getAbsolutePath());
 		}
 	}
 

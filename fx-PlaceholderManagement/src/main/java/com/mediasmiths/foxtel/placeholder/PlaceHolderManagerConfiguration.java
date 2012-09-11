@@ -13,6 +13,20 @@ public class PlaceHolderManagerConfiguration {
 	
 	private final Properties properties;
 	
+	
+	private static PlaceHolderManagerConfiguration instance;
+	public static PlaceHolderManagerConfiguration getInstance() throws IOException{
+		if(instance==null){
+			instance = new PlaceHolderManagerConfiguration();
+		}
+		
+		return instance;
+	}
+	
+	public PlaceHolderManagerConfiguration() throws IOException{
+		this("placeholdermanagement.properties");
+	}
+	
 	public PlaceHolderManagerConfiguration(String resource) throws IOException{
 		
 		InputStream propertiesStream = this.getClass().getClassLoader().getResourceAsStream(resource);

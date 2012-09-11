@@ -74,7 +74,7 @@ public class MessageProcessor implements Runnable {
 			logger.error(String.format(
 					"MayamClientException querying if material %s exists",
 					action.getMaterial().getMaterialD()), e);
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
 		}
 	}
 
@@ -98,10 +98,7 @@ public class MessageProcessor implements Runnable {
 			logger.error(String.format(
 					"MayamClientException querying if package %s exists",
 					action.getPackage().getPresentationID()), e);
-
-			// TODO : indicate this was a result of service failure rather than
-			// a problem with the request?
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
 		}
 	}
 
@@ -119,7 +116,7 @@ public class MessageProcessor implements Runnable {
 		} else {
 			logger.error(String.format(
 					"Failed to process action, result was %s", result));
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
 		}
 	}
 
@@ -140,7 +137,7 @@ public class MessageProcessor implements Runnable {
 			logger.error(String.format(
 					"MayamClientException querying if title %s exists",
 					action.getTitleID()), e);
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
 		}
 	}
 
@@ -189,10 +186,10 @@ public class MessageProcessor implements Runnable {
 
 		} catch (JAXBException e) {
 			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.UNMARSHALL_FAILED);
 		} catch (ClassCastException cce) {
 			logger.fatal("A prevously validated file did not have an action of one of the expected types");
-			throw new MessageProcessingFailedException();
+			throw new MessageProcessingFailedException(MesageProcessingFailureReason.UNKNOWN_ACTION);
 		}
 
 	}

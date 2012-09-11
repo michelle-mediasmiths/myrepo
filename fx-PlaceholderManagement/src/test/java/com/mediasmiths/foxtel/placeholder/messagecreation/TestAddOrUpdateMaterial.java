@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -26,8 +27,8 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 			throws Exception {
 
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID("123abc");
-		message.setSenderID("987xyz");
+		message.setMessageID(RandomStringUtils.random(6));
+		message.setSenderID(RandomStringUtils.random(6));
 
 		HelperMethods method = new HelperMethods();
 		String titleId = method.validTitleId();
