@@ -21,9 +21,14 @@ public class ReceiptWriter {
 		this.receiptPath=receiptPath;
 	}
 	
+	public String receiptPathForMessageID(String messageID){
+		String path = receiptPath + IOUtils.DIR_SEPARATOR + messageID+ ".txt";
+		return path;
+	}
+	
 	public void writeRecipet(String filePath, String messageID) throws FileNotFoundException, IOException {
 		
-		String path = receiptPath + IOUtils.DIR_SEPARATOR + messageID+ ".txt";
+		String path = receiptPathForMessageID(messageID);
 		
 		logger.info(String.format("Writing reciept for messageID %s (%s) to %s", messageID,filePath,path));
 		

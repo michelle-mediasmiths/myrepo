@@ -25,6 +25,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
 import com.google.inject.Inject;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -41,13 +42,16 @@ public class MessageValidator {
 	// PlaceHolderManagement.xsd
 	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
+	
+	private final ReceiptWriter receiptWriter;
 
 	@Inject
-	public MessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient)
+	public MessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient, ReceiptWriter receiptWriter)
 			throws SAXException {
 		this.unmarhsaller = unmarshaller;
 		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
 		this.mayamClient = mayamClient;
+		this.receiptWriter=receiptWriter;
 	}
 
 	/**
@@ -374,8 +378,18 @@ public class MessageValidator {
 	}
 
 	private boolean validateMesageID(String messageID) {
-		// TODO implement validateMesageID
-		return true;
+		//TODO : check there is not already a receipt for this file
+		
+		File receiptFile = new File(receiptWriter.receiptPathForMessageID(messageID));
+		boolean exists= receiptFile.exists();
+		
+		if(exists){
+			logger.warn(String.format("A recipt file already exists for message %s", messageID));
+		}
+		
+		return (! exists);
+		
+		
 	}
 
 	private Object unmarshallFile(File xml) throws JAXBException {

@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,8 +21,10 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.TestReceiptWriterAlwaysReturnsNonExistantFiles;
 import com.mediasmiths.mayam.MayamClient;
 
 public class UnmarshallFailureTest {
@@ -29,10 +32,10 @@ public class UnmarshallFailureTest {
 	protected MessageValidator toTest;
 	protected MayamClient mayamClient = mock(MayamClient.class);
 	protected Unmarshaller unmarshaller = mock(Unmarshaller.class);
-	
+		
 	@Before
 	public void beforeTest() throws SAXException{
-		toTest = new MessageValidator(unmarshaller, mayamClient); 
+		toTest = new MessageValidator(unmarshaller, mayamClient,new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp")); 
 	}
 	
 	@Test
@@ -43,7 +46,7 @@ public class UnmarshallFailureTest {
 		File temp = writeFile("UnmarshallFailure",pm);
 				
 		when(unmarshaller.unmarshal(temp)).thenThrow(new JAXBException("test jaxbexception"));
-		
+			
 		assertEquals(MessageValidationResult.FAILED_TO_UNMARSHALL, toTest.validateFile(temp.getAbsolutePath()));
 	}
 
@@ -55,6 +58,7 @@ public class UnmarshallFailureTest {
 		File temp = writeFile("UnexpectedTypeAfterMarshalling",pm);
 				
 		when(unmarshaller.unmarshal(temp)).thenReturn(new String("not a placeholder message"));
+		
 		
 		assertEquals(MessageValidationResult.UNEXPECTED_TYPE, toTest.validateFile(temp.getAbsolutePath()));
 	}

@@ -3,6 +3,8 @@ package com.mediasmiths.foxtel.placeholder.messagecreation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +29,9 @@ import com.google.inject.name.Names;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderManager;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMangementModule;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageDirectoryWatcher;
+import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidatorTest;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
@@ -40,7 +44,8 @@ public abstract class PlaceHolderMessageTest {
 	protected abstract String getFileName();
 	
     protected MayamClient mayamClient = mock(MayamClient.class);
-	
+	protected final ReceiptWriter receiptWriter = mock(ReceiptWriter.class);
+    
 	private MessageValidator validator;
 	
 	protected String getFilePath() throws IOException{
@@ -50,7 +55,7 @@ public abstract class PlaceHolderMessageTest {
 	public PlaceHolderMessageTest() throws JAXBException, SAXException{
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient);
+		validator = new MessageValidator(unmarhsaller, mayamClient,receiptWriter);
 
 	}
 	
@@ -72,6 +77,7 @@ public abstract class PlaceHolderMessageTest {
 		String filePath = getFilePath();
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
+		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn("/tmp/"+RandomStringUtils.randomAlphabetic(30));
 		mockCalls(message);
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));

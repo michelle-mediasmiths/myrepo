@@ -79,8 +79,6 @@ public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher impleme
 		
 		for(File f : existingFiles){
 			logger.info("Queuing existing file: "+f.getAbsolutePath());
-			
-			//TODO : check there is not already a receipt for this file before trying to process
 			filePathsPendingValidation.add(f.getAbsolutePath());
 		}
 	}

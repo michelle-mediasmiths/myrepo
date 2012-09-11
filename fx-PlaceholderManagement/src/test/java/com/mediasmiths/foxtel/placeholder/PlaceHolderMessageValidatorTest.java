@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.TestReceiptWriterAlwaysReturnsNonExistantFiles;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageValidatorTest {
@@ -34,7 +35,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 	protected final MessageValidator validator;
 	protected final MessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
-		
+			
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 
@@ -53,8 +54,8 @@ public abstract class PlaceHolderMessageValidatorTest {
 
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient);
-		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter( System.getProperty("java.io.tmpdir")),
+		validator = new MessageValidator(unmarhsaller, mayamClient, new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp"));
+		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp"),
 				unmarhsaller, mayamClient);
 
 	}
