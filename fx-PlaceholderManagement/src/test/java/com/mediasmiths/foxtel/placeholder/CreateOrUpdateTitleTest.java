@@ -1,8 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,9 +99,6 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
 
-		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
-				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
-				.get(0);
 		// prepare mock mayamClient
 		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));

@@ -1,7 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.when;
 
 import javax.xml.bind.JAXBException;
 

@@ -1,8 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,7 +81,6 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 		//test that we get a MessageProcessingFailedException when the query on existing material failes
 		
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
-		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION));
 		//the call we are testing

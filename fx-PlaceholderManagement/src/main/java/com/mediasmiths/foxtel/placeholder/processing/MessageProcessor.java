@@ -217,6 +217,8 @@ public class MessageProcessor implements Runnable {
 			addOrUpdatePackage((AddOrUpdatePackage) action);
 		} else if (isDeletePackage) {
 			deletePackage((DeletePackage) action);
+		} else {
+			logger.fatal("Either there is a new action type or something has gone very wrong");
 		}
 	}
 

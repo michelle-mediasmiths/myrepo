@@ -1,8 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.IOException;
@@ -99,7 +99,6 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
 		
-		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
 		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		//the call we are testing
