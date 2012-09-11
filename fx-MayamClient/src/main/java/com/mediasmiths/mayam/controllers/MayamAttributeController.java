@@ -5,7 +5,6 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.BasicAttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.MqClient;
 
 public class MayamAttributeController {
 	private final AttributeValidator validator;
@@ -27,7 +26,7 @@ public class MayamAttributeController {
 	public boolean setAttribute(Attribute attribute, Object value) {
 		boolean isValid = validator.isValidValue(attribute, value);
 		if (isValid) {
-			attributes.setAttribute(attribute, value);
+			attributes.setAttributeFromString(attribute, value.toString());
 		}
 		return isValid;
 	}
