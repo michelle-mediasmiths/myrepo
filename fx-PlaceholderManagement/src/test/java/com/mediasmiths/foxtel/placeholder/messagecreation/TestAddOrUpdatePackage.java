@@ -35,23 +35,20 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest{
 		Actions actions = new Actions();
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(addTxPackage);
 		message.setActions(actions);
-
+ 
 		return message;
 	}
 	
 	@Override
-	protected void mockCalls(){
+	protected void mockCalls(PlaceholderMessage message) throws Exception{
 		
 		//make mayamclient say any material exists
+		when(mayamClient.materialExists(anyString())).thenReturn(new Boolean(true));
 		
-		try {
-			when(mayamClient.materialExists(anyString())).thenReturn(new Boolean(true));
-		} catch (MayamClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
+	
+	
 	private AddOrUpdatePackage generateAddOrUpdatePackage()
 			throws DatatypeConfigurationException {
 
@@ -74,4 +71,5 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest{
 		return "testAddOrUpdatePackage.xml";
 	}
 
+	
 }

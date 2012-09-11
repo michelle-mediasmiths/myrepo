@@ -38,4 +38,6 @@ public class TestDeleteMaterial extends PlaceHolderMessageTest{
 	protected String getFileName() {
 		return "testDeleteMaterial.xml";
 	}
+
+	
 }

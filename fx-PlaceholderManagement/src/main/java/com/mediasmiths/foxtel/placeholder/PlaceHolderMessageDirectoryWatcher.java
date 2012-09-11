@@ -58,9 +58,9 @@ public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher impleme
 	/**
 	 * On startup check for any existing placeholder messages that may have arrived when the serivce was not running
 	 */
-	private void queueExistingFiles() {
+	protected void queueExistingFiles() {
 		
-		logger.info("Checking for existing files");
+		logger.info("Checking for existing files in " + path);
 		
 		//first of all look for existing xml files before we start monitoring for new ones
 		Collection<File> existingFiles = FileUtils.listFiles(new File(path), new IOFileFilter() {
