@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.3-SNAPSHOT</version>
+		<version>0.0.3</version>
 	</parent>
 
 	<groupId>au.com.foxtel.cf.mam</groupId>
 	<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 	<packaging>jar</packaging>
-	<version>1.2-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<name>Placeholder Management Schema</name>
 
 	<build>
