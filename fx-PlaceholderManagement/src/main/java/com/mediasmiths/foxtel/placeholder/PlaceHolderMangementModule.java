@@ -19,17 +19,6 @@ public class PlaceHolderMangementModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(MayamClient.class).to(MayamClientImpl.class);
-
-//		try {
-//			Properties properties = new Properties();
-//			properties.load(this.getClass().getClassLoader()
-//					.getResourceAsStream("placeholdermanagement.properties"));
-//			Names.bindProperties(binder(), properties);
-//		} catch (IOException ex) {
-//			logger.fatal("could not load properties", ex);
-//			System.exit(1);
-//		}
-
 	}
 
 	@Provides

@@ -16,7 +16,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class TestDeleteMaterial extends PlaceHolderMessageTest{
+public class TestDeleteMaterial extends ValidMessagePickTest{
 
 	public TestDeleteMaterial() throws JAXBException, SAXException {
 		super();

@@ -8,17 +8,15 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
+
+import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
 public class ValidMessageIDTest extends PlaceHolderMessageValidatorTest {
 

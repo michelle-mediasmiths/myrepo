@@ -19,7 +19,7 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSItem;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest {
+public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 
 	public TestAddOrUpdateMaterial() throws JAXBException, SAXException {
 		super();
@@ -60,7 +60,6 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest {
 		when(mayamClient.materialExists(anyString())).thenReturn(
 				new Boolean(false));
 		// return success status on mayamClient material create
-		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) getAction(message);
 		when(mayamClient.createMaterial((MaterialType) anyObject()))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 	}
@@ -82,7 +81,6 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest {
 		when(mayamClient.materialExists(anyString())).thenReturn(
 				new Boolean(false));
 		// return success status on mayamClient material create
-		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) getAction(message);
 		when(mayamClient.createMaterial((MaterialType) anyObject()))
 				.thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 

@@ -22,7 +22,7 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTi
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest {
+public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 
 	public TestCreateOrUpdateTitle() throws JAXBException, SAXException {
 		super();

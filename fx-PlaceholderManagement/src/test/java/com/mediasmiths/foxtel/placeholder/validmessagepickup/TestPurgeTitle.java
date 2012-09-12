@@ -16,7 +16,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class TestPurgeTitle extends PlaceHolderMessageTest {
+public class TestPurgeTitle extends ValidMessagePickTest {
 
 	public TestPurgeTitle() throws JAXBException, SAXException {
 		super();
