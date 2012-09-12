@@ -5,16 +5,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Injector;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.Mq;
-import com.mayam.wf.mq.MqException;
-import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
 import com.mayam.wf.mq.Mq.Listener;
-import com.mayam.wf.mq.common.ContentTypes;
-import com.mayam.wf.mq.common.Queues;
+import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.common.Topics;
 import com.mayam.wf.ws.client.TasksClient;
 

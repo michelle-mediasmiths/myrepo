@@ -1,11 +1,9 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
-
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -14,7 +12,6 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
-import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 

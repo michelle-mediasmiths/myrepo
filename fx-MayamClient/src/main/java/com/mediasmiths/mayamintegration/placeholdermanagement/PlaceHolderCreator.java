@@ -4,21 +4,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.log4j.Logger;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Injector;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetAccess;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FilterCriteria;
-import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.attributes.shared.type.Approval.Entry;
 import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
-import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.FilterResult;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 
 class PlaceHolderCreator implements Runnable {

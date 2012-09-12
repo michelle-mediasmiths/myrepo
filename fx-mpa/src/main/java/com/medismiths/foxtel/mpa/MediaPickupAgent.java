@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
-import com.mediasmiths.FileWatcher.FileWatcherMain;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
 import com.medismiths.foxtel.mpa.delivery.Importer;

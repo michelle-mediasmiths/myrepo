@@ -7,10 +7,10 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
+import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
-import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.mq.common.Queues;
 

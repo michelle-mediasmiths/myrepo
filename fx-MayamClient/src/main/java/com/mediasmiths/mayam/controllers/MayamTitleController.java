@@ -1,7 +1,5 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.util.List;
-
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
@@ -11,15 +9,10 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
-import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MqClient;
-
-import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MqClient;
 
 public class MayamTitleController {
 	private final TasksClient client;

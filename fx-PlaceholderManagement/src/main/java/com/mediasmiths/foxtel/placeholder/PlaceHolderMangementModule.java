@@ -1,8 +1,5 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -11,7 +8,6 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.google.inject.name.Names;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 

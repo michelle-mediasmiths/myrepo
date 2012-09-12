@@ -10,7 +10,6 @@ import org.xml.sax.SAXException;
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.placeholder.guice.PlaceholderManagementSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
-import com.mediasmiths.std.guice.apploader.impl.GuiceRegistry;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
 public class PlaceHolderManagerCLI {
