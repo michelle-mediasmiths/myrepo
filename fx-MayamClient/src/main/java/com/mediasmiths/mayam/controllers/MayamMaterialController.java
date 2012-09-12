@@ -303,6 +303,6 @@ public class MayamMaterialController {
 
 	public MayamClientErrorCode deleteMaterial(String materialID) {
 		// TODO Find out how to delete assets in Mayam
-		return null;
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 }

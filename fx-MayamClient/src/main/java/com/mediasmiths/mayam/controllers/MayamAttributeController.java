@@ -11,14 +11,28 @@ public class MayamAttributeController {
 	private final TasksClient client;
 	private AttributeMap attributes;
 	
+	// Constructors for creating new Attribute Maps
 	public MayamAttributeController(TasksClient mayamClient) {
 		validator = new BasicAttributeValidator();
 		client = mayamClient;
 		attributes = client.createAttributeMap();
 	}
 	
+	public MayamAttributeController(TasksClient mayamClient, AttributeValidator attributeValidator) {
+		validator = attributeValidator;
+		client = mayamClient;
+		attributes = client.createAttributeMap();
+	}
+	
+	// Constructors for updating existing Attribute Maps
 	public MayamAttributeController(AttributeMap attributeMap) {
 		validator = new BasicAttributeValidator();
+		client = null;
+		attributes = attributeMap;
+	}
+	
+	public MayamAttributeController(AttributeMap attributeMap, AttributeValidator attributeValidator) {
+		validator = attributeValidator;
 		client = null;
 		attributes = attributeMap;
 	}
