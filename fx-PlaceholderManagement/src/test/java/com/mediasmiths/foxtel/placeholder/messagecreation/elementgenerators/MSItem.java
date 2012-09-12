@@ -9,6 +9,8 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.Source;
 
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods.Relative;
+
 public class MSItem {
 
 	/**
@@ -20,9 +22,14 @@ public class MSItem {
 	 */
 	public MaterialType validItem (MaterialType item, String titleId) throws DatatypeConfigurationException {
 		
+		HelperMethods method = new HelperMethods();		
+		XMLGregorianCalendar requiredBy = method.giveValidDate();
+		XMLGregorianCalendar orderCreated = method.giveValidDate(Relative.BEFORE,requiredBy.toGregorianCalendar());
+		
+		
 		Source source = new Source();
 		Aggregation aggregation = new Aggregation();
-		aggregation = createAggregation(aggregation);
+		aggregation = createAggregation(aggregation,orderCreated);
 		//Compile compile = new Compile();
 		//Library library = new Library();
 		
@@ -30,10 +37,7 @@ public class MSItem {
 		
 		source.setAggregation(aggregation);;
 		//source.setCompile(compile);
-		
-		HelperMethods method = new HelperMethods();
-		XMLGregorianCalendar xmlCal = method.giveValidDate();
-		item.setRequiredBy(xmlCal);
+		item.setRequiredBy(requiredBy);
 		item.setRequiredFormat("SD");
 		item.setSource(source);
 		item.setMaterialD("abc123");
@@ -44,13 +48,14 @@ public class MSItem {
 	/**
 	 * Creates a valid object of type Aggregation to be used as part of an MaterialType
 	 * @param aggregation
+	 * @param orderCreated 
 	 * @return aggregation
 	 * @throws DatatypeConfigurationException
 	 */
-	public Aggregation createAggregation (Aggregation aggregation) throws DatatypeConfigurationException {
+	public Aggregation createAggregation (Aggregation aggregation, XMLGregorianCalendar orderCreated) throws DatatypeConfigurationException {
 		
 		Order order = new Order();
-		order = createOrder(order);
+		order = createOrder(order, orderCreated);
 		Aggregator aggregator = new Aggregator();
 		aggregator = createAggregator(aggregator);
 		aggregation.setOrder(order);
@@ -62,14 +67,14 @@ public class MSItem {
 	/**
 	 * Creates a valid object of type Order to be used as part of an aggregation
 	 * @param order
+	 * @param orderCreated 
 	 * @return
 	 * @throws DatatypeConfigurationException
 	 */
-	public Order createOrder (Order order) throws DatatypeConfigurationException {
+	public Order createOrder (Order order, XMLGregorianCalendar orderCreated) throws DatatypeConfigurationException {
 		
 		HelperMethods method = new HelperMethods();
-		XMLGregorianCalendar xmlCal = method.giveValidDate();
-		order.setOrderCreated(xmlCal);
+		order.setOrderCreated(orderCreated);
 		order.setOrderReference("ABC123");
 		
 		return order;

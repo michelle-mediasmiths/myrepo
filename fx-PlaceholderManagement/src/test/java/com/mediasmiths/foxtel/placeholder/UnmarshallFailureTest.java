@@ -12,7 +12,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,11 +19,11 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
-import com.mediasmiths.foxtel.placeholder.validation.TestReceiptWriterAlwaysReturnsNonExistantFiles;
+import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;
 import com.mediasmiths.mayam.MayamClient;
 
 public class UnmarshallFailureTest {
@@ -35,7 +34,7 @@ public class UnmarshallFailureTest {
 		
 	@Before
 	public void beforeTest() throws SAXException{
-		toTest = new MessageValidator(unmarshaller, mayamClient,new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp")); 
+		toTest = new MessageValidator(unmarshaller, mayamClient,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp")); 
 	}
 	
 	@Test

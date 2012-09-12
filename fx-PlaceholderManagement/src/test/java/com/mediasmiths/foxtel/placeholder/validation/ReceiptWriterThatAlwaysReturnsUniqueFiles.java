@@ -15,11 +15,11 @@ import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
  * @author bmcleod
  *
  */
-public class TestReceiptWriterAlwaysReturnsNonExistantFiles extends
+public class ReceiptWriterThatAlwaysReturnsUniqueFiles extends
 		ReceiptWriter {
 
 	@Inject
-	public TestReceiptWriterAlwaysReturnsNonExistantFiles(String receiptPath) {
+	public ReceiptWriterThatAlwaysReturnsUniqueFiles(String receiptPath) {
 		super(receiptPath);
 	}
 	

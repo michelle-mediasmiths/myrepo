@@ -25,9 +25,8 @@ import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
-import com.mediasmiths.foxtel.placeholder.validation.TestReceiptWriterAlwaysReturnsNonExistantFiles;
+import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageValidatorTest {
@@ -54,8 +53,8 @@ public abstract class PlaceHolderMessageValidatorTest {
 
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient, new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp"));
-		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new TestReceiptWriterAlwaysReturnsNonExistantFiles("/tmp"),
+		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"));
+		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"),
 				unmarhsaller, mayamClient);
 
 	}

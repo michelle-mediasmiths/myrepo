@@ -30,7 +30,7 @@ public class HelperMethods {
 				"Crystal Maze", "Dad's Army", "Doctor Who", "Fawlty Towers",
 				"Gavin and Stacey", "Horizon", "Hustle", "I'm Alan Partridge",
 				"Jeeves and Wooster", "Keeping Up Appearances", "Life on Mars",
-				"Max and Paddy's Road To Nowhere", "Mr Bean", "New Tricks",
+				"Mr Bean", "New Tricks",
 				"Not Going Out", "Only Fools and Horses", "Outnumbered",
 				"Planet Earth", "QI", "Question of Sport", "Rab C Nesbitt",
 				"Silent Witness", "Some Mothers Do Av Em", "Spooks",
@@ -50,9 +50,9 @@ public class HelperMethods {
 	public String validTitleId() {
 
 		Random randomGenerator = new Random();
-		int randomInt = randomGenerator.nextInt(36);
 		ArrayList<String> programTitles = new ArrayList<String>();
 		generateList(programTitles);
+		int randomInt = randomGenerator.nextInt(programTitles.size());
 		String titleId = programTitles.get(randomInt) + "S04E03";
 
 		return titleId;
@@ -66,12 +66,17 @@ public class HelperMethods {
 	 */
 	public XMLGregorianCalendar giveValidDate()
 			throws DatatypeConfigurationException {
-		return giveValidDateAfter(new GregorianCalendar());		
+		return giveValidDate(Relative.AFTER,new GregorianCalendar());		
 	}
 	
-	public XMLGregorianCalendar giveValidDateAfter(Calendar calDate) throws DatatypeConfigurationException{
+	public XMLGregorianCalendar giveValidDate(Relative relativeTo, Calendar calDate) throws DatatypeConfigurationException{
 		
 		int numberOfDaysToAdd = (int) (Math.random() * 730 + 1);
+		
+		if(relativeTo.equals(Relative.BEFORE)){
+			numberOfDaysToAdd *= -1;
+		}
+		
 		calDate.add(Calendar.DAY_OF_YEAR, numberOfDaysToAdd);
 
 		GregorianCalendar gregDate = new GregorianCalendar();
@@ -81,6 +86,10 @@ public class HelperMethods {
 				.newXMLGregorianCalendar(gregDate);
 		return xmlDate;
 		
+	}
+	
+	enum Relative{
+		BEFORE,AFTER;
 	}
 
 	/**

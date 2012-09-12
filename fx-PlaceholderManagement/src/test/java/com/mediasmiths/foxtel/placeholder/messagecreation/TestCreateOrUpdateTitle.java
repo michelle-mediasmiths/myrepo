@@ -1,8 +1,13 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -14,8 +19,10 @@ import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSRights;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
-public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
+public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest {
 
 	public TestCreateOrUpdateTitle() throws JAXBException, SAXException {
 		super();
@@ -25,8 +32,8 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID("123abc");
-		message.setSenderID("987xyz");
+		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		HelperMethods method = new HelperMethods();
 		String titleId = method.validTitleId();
@@ -48,7 +55,8 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 		createTitle.setPurgeProtect(false);
 
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(createTitle);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(
+				createTitle);
 
 		message.setActions(actions);
 
@@ -56,10 +64,28 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest{
 	}
 
 	@Override
+	protected void mockCalls(PlaceholderMessage message) throws Exception {
+		CreateOrUpdateTitle createTitle  = (CreateOrUpdateTitle) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		
+		when(mayamClient.titleExists(createTitle.getTitleID())).thenReturn(new Boolean(false));
+		when(mayamClient.createTitle((CreateOrUpdateTitle) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+	}
+
+	@Override
+	protected void verifyCalls(PlaceholderMessage message) {
+		CreateOrUpdateTitle createTitle  = (CreateOrUpdateTitle) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+				
+		try {
+			verify(mayamClient).titleExists(createTitle.getTitleID());
+		} catch (MayamClientException e) {
+			e.printStackTrace();
+		}
+		verify(mayamClient).createTitle((CreateOrUpdateTitle) anyObject());
+	}
+
+	@Override
 	protected String getFileName() {
 		return "testCreateOrUpdateTitle.xml";
 	}
-
-	
 
 }

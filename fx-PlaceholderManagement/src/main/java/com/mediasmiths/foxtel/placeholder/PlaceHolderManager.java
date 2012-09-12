@@ -11,8 +11,10 @@ import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.std.guice.apploader.GuiceApplication;
+import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 
-public class PlaceHolderManager implements GuiceApplication{
+public class PlaceHolderManager implements StoppableService{
 
 	static Logger logger = Logger.getLogger(PlaceHolderManager.class);
 
@@ -23,7 +25,7 @@ public class PlaceHolderManager implements GuiceApplication{
 	private final Thread directoryWatcherThread;
 
 	@Inject
-	public PlaceHolderManager(MayamClient mc,MessageValidator validator, MessageProcessor processor,ReceiptWriter receiptWriter,PlaceHolderMessageDirectoryWatcher directoryWatcher) throws JAXBException,
+	public PlaceHolderManager(MayamClient mc,MessageValidator validator, MessageProcessor processor,ReceiptWriter receiptWriter,PlaceHolderMessageDirectoryWatcher directoryWatcher, ShutdownManager shutdownManager) throws JAXBException,
 			SAXException {
 
 		logger.trace("Placeholdermanager constructor enter");
@@ -35,6 +37,9 @@ public class PlaceHolderManager implements GuiceApplication{
 		//message validation + processing
 		this.messageProcessor=processor;
 		this.messageProcessorThread = new Thread(messageProcessor);
+		
+		//register with shutdown manager
+		shutdownManager.register(this);
 		
 		logger.trace("Placeholdermanager constructor return");
 		
@@ -56,14 +61,8 @@ public class PlaceHolderManager implements GuiceApplication{
 	}
 
 	@Override
-	public void configured() {
-		logger.debug("configured");
-		
-	}
-
-	@Override
-	public void stopping() {
+	public void shutdown() {
 		messageProcessor.stop();
-		directoryWatcher.setContinueWatching(false);
+		directoryWatcher.setContinueWatching(false);		
 	}
 }

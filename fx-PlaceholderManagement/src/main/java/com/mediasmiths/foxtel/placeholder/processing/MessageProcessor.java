@@ -111,6 +111,8 @@ public class MessageProcessor implements Runnable {
 	 */
 	private void checkResult(MayamClientErrorCode result)
 			throws MessageProcessingFailedException {
+		logger.trace("checkResult("+result+")");
+		
 		if (result == MayamClientErrorCode.SUCCESS) {
 			logger.info("Action successfully processed");
 		} else {
@@ -233,6 +235,7 @@ public class MessageProcessor implements Runnable {
 
 	private void purgeTitle(PurgeTitle action)
 			throws MessageProcessingFailedException {
+		logger.trace("mayamClient.purgeTitle(...)");
 		MayamClientErrorCode result = mayamClient.purgeTitle(action);
 		checkResult(result);
 	}

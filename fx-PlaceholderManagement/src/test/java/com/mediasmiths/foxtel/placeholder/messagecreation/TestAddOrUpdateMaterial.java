@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation;
 
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import javax.xml.bind.JAXBException;
 
@@ -31,7 +31,7 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
-
+		
 		HelperMethods method = new HelperMethods();
 		String titleId = method.validTitleId();
 
@@ -42,7 +42,7 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 		AddOrUpdateMaterial AddOrUpdateMaterial = new AddOrUpdateMaterial();
 		AddOrUpdateMaterial.setTitleID(titleId);
 		AddOrUpdateMaterial.setMaterial(material);
-
+		
 		Actions actions = new Actions();
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(AddOrUpdateMaterial);
 		message.setActions(actions);

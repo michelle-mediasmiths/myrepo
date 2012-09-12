@@ -2,12 +2,14 @@ package com.mediasmiths.foxtel.placeholder.messagecreation;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyString;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.bind.JAXBContext;
@@ -18,23 +20,28 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.name.Names;
+import com.google.inject.Module;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderManager;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMangementModule;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageDirectoryWatcher;
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageValidatorTest;
+import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
+import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.std.guice.apploader.GuiceSetup;
+import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
+import com.mediasmiths.std.io.PropertyFile;
 
 public abstract class PlaceHolderMessageTest {
 
@@ -43,8 +50,11 @@ public abstract class PlaceHolderMessageTest {
 	protected abstract PlaceholderMessage generatePlaceholderMessage () throws Exception;
 	protected abstract String getFileName();
 	
-    protected MayamClient mayamClient = mock(MayamClient.class);
-	protected final ReceiptWriter receiptWriter = mock(ReceiptWriter.class);
+	protected final JAXBContext jc;
+	protected final Unmarshaller unmarhsaller;
+	
+    protected MayamClient mayamClient;
+	protected ReceiptWriter receiptWriter;
     
 	private MessageValidator validator;
 	
@@ -52,11 +62,22 @@ public abstract class PlaceHolderMessageTest {
 		return "/tmp" + IOUtils.DIR_SEPARATOR + getFileName();
 	}
 	
+	@Before
+	public void before(){
+		mayamClient = mock(MayamClient.class);
+		receiptWriter = mock(ReceiptWriter.class);
+		try {
+			validator = new MessageValidator(unmarhsaller, mayamClient,receiptWriter);
+		} catch (SAXException e) {
+			logger.fatal("Exception constructing mesage validator",e);
+		}
+	}
+	
+	
 	public PlaceHolderMessageTest() throws JAXBException, SAXException{
-		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
-		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient,receiptWriter);
 
+		 this.jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
+		 this.unmarhsaller= jc.createUnmarshaller();
 	}
 	
 	protected void mockCalls(PlaceholderMessage mesage) throws Exception{
@@ -73,6 +94,7 @@ public abstract class PlaceHolderMessageTest {
 	
 	
 	@Test
+	@Category(MessageCreation.class)
 	public final void testWrittenPlaceHolderMessagesValidate () throws Exception {
 		String filePath = getFilePath();
 		PlaceholderMessage message = this.generatePlaceholderMessage();
@@ -91,6 +113,7 @@ public abstract class PlaceHolderMessageTest {
 	}
 	
 	@Test
+	@Category(PickuptoReceipt.class)
 	public final void testPlaceHolderPickupToReciept() throws IOException, Exception{
 		
 		String messagePath = prepareTempFolder();
@@ -102,10 +125,33 @@ public abstract class PlaceHolderMessageTest {
 		mockCalls(message);
 		
     	//start up a placeholder manager to process the created message
-		Injector injector = Guice.createInjector(new TestPlaceHolderMangementModule(mayamClient,messagePath,receiptPath));
+		
+		//override some properties to use temp folders
+		PropertyFile propertyFile = new PropertyFile();
+		propertyFile.merge(PropertyFile.find("service.properties"));
+		
+		Properties overridenProperties = new Properties();
+		overridenProperties.put("placeholder.path.message", messagePath);
+		overridenProperties.put("placeholder.path.receipt", receiptPath);
+		propertyFile.merge(overridenProperties);
+		
+		//setup guice injector
+		final List<Module> moduleList = Collections.<Module>singletonList(new TestPlaceHolderMangementModule(mayamClient));
+		Injector injector = GuiceInjectorBootstrap.createInjector(propertyFile,new GuiceSetup() {
+			
+			@Override
+			public void registerModules(List<Module> modules, PropertyFile config) {
+				modules.addAll(moduleList);
+			}
+			@Override
+			public void injectorCreated(Injector injector) {
+			}
+		});		
+		//run placeholder manager
 		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
 		pm.run();
 		
+
 		verifyCalls(message);
 		
 		//after manager has run and processed the single task we should have a receipt		
@@ -119,13 +165,8 @@ public abstract class PlaceHolderMessageTest {
 	class TestPlaceHolderMangementModule extends PlaceHolderMangementModule{
 		
 		private final MayamClient mc;
-		private final String messagepath;
-		private final String receiptPath;
-		
-		public TestPlaceHolderMangementModule(MayamClient mc, String messagepath, String receiptPath){
+		public TestPlaceHolderMangementModule(MayamClient mc){
 			this.mc =mc;
-			this.messagepath=messagepath;
-			this.receiptPath = receiptPath;
 		}
 		
 		@Override
@@ -133,25 +174,7 @@ public abstract class PlaceHolderMessageTest {
 			bind(MayamClient.class).toInstance(mc);
 			bind(MessageProcessor.class).to(SingleMessageProcessor.class);
 			bind(PlaceHolderMessageDirectoryWatcher.class).to(PickupExistingFilesOnlyDirectoryWatcher.class);
-			
-			try {
-				Properties properties = new Properties();
-				properties.load(this.getClass().getClassLoader()
-						.getResourceAsStream("service.properties"));
-				
-				//override message path so we only pick up one
-				properties.put("placeholder.path.message", messagepath);
-				properties.put("placeholder.path.receipt", receiptPath);
-				Names.bindProperties(binder(), properties);
-				
-			} catch (IOException ex) {
-				logger.fatal("could not load properties", ex);
-				System.exit(1);
-			}
-
 		}
-
-		
 	}
 	
 	private String prepareTempFolder() throws IOException {

@@ -10,6 +10,8 @@ import au.com.foxtel.cf.mam.pms.LicenseHolderType;
 import au.com.foxtel.cf.mam.pms.LicensePeriodType;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods.Relative;
+
 public class MSRights {
 
 	/**
@@ -34,10 +36,10 @@ public class MSRights {
 		license1.setLicenseHolder(licenseHolder);
 
 		HelperMethods method = new HelperMethods();
-		XMLGregorianCalendar xmlCal = method.giveValidDate();
-		licensePeriod.setStartDate(xmlCal);
-		xmlCal = method.giveValidDateAfter(xmlCal.toGregorianCalendar());
-		licensePeriod.setEndDate(xmlCal);
+		XMLGregorianCalendar startDate = method.giveValidDate();
+		licensePeriod.setStartDate(startDate);
+		XMLGregorianCalendar endDate = method.giveValidDate(Relative.AFTER,startDate.toGregorianCalendar());
+		licensePeriod.setEndDate(endDate);
 		license1.setLicensePeriod(licensePeriod);
 
 		channel1.setChannelTag("BBC");

@@ -207,6 +207,7 @@ public class MessageValidator {
 	private MessageValidationResult validateAddOrUpdatePackage(
 			AddOrUpdatePackage action) throws MayamClientException {
 
+		logger.info("Validating an AddOrUpdatePackage");
 		String materialID = action.getPackage().getMaterialID();
 		boolean materialExists = false;
 
@@ -236,6 +237,9 @@ public class MessageValidator {
 
 	private MessageValidationResult validateDeletePackage(DeletePackage action)
 			throws MayamClientException {
+		
+		logger.info("Validating a DeletePackage");
+		
 		// 24.1.1.3 Version purge requests
 		// check that the parent item in ardome is not flagged as
 		String packageID = action.getPackage().getPresentationID();
@@ -260,6 +264,8 @@ public class MessageValidator {
 	}
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) {
+
+		logger.info("Validating a DeleteMaterial");
 		// 24.1.1.2 Master purge requests
 
 		// TODO : do we check if the material is marked as protected as with the
@@ -270,6 +276,8 @@ public class MessageValidator {
 	private MessageValidationResult validatePurgeTitle(PurgeTitle action)
 			throws MayamClientException {
 
+		logger.info("Validating a PurgeTitle");
+		
 		// 24.1.1.1 Title purge requests
 		// check that the title is not marked as protected in ardome
 		// check that lower level entries are not procteted, as this should
@@ -304,6 +312,8 @@ public class MessageValidator {
 	private MessageValidationResult validateAddOrUpdateMaterial(
 			AddOrUpdateMaterial action) throws MayamClientException {
 
+		logger.info("Validating an AddOrUpdateMaterial");
+		
 		// check if title for material exists
 		String titleID = action.getTitleID();
 		boolean titleExists = false;
