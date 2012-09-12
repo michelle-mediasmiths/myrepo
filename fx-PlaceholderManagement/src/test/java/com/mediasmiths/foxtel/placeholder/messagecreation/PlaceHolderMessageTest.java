@@ -179,7 +179,7 @@ public abstract class PlaceHolderMessageTest {
 	
 	private String prepareTempFolder() throws IOException {
 		//create a random folder		
-		String path = FileUtils.getTempDirectoryPath() + RandomStringUtils.randomAlphabetic(10);
+		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10);
 				
 		File dir = new File(path);
 		
