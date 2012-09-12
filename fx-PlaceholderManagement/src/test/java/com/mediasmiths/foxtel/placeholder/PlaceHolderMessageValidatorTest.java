@@ -23,10 +23,10 @@ import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
-import com.mediasmiths.foxtel.placeholder.messagecreation.FileWriter;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;
+import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageValidatorTest {
@@ -55,7 +55,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"));
 		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"),
-				unmarhsaller, mayamClient);
+				unmarhsaller, mayamClient, "failure path");
 
 	}
 

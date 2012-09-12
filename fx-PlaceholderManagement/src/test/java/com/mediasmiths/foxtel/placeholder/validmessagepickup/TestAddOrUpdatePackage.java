@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
@@ -42,15 +42,38 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest {
 
 		return message;
 	}
+	
+	@Override
+	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+		mockCalls(message, MayamClientErrorCode.SUCCESS);
+	}
+	
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage message) throws Exception {
+		mockCalls(message, MayamClientErrorCode.FAILURE);
+	}
 
 	@Override
-	protected void mockCalls(PlaceholderMessage message) throws Exception {
-
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verifyCalls(message);
+		
+	}
+	@Override
+	protected void verifyValidCalls(PlaceholderMessage message) {
+		verifyCalls(message);
+	}
+	
+	
+	private void mockCalls(PlaceholderMessage message,
+			MayamClientErrorCode result) throws MayamClientException {
 		AddOrUpdatePackage addTxPackage = (AddOrUpdatePackage) message
 				.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
 
+		//let validation pass
+		
 		// make mayamclient say the material exists
 		when(
 				mayamClient.materialExists(addTxPackage.getPackage()
@@ -59,15 +82,18 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest {
 		when(
 				mayamClient.packageExists(addTxPackage.getPackage()
 						.getPresentationID())).thenReturn(new Boolean(false));
-		// return success on createpackge
+		
+		
+		//make processing pass\fail
+		
+		// return result on createpackge
 		when(mayamClient.createPackage((PackageType) anyObject())).thenReturn(
-				MayamClientErrorCode.SUCCESS);
-
+				result);
 	}
 
-	@Override
-	protected void verifyCalls(PlaceholderMessage message) {
 
+
+	private void verifyCalls(PlaceholderMessage message){
 		AddOrUpdatePackage addTxPackage = (AddOrUpdatePackage) message
 				.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -89,7 +115,7 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest {
 		}
 
 	}
-
+	
 	private AddOrUpdatePackage generateAddOrUpdatePackage()
 			throws DatatypeConfigurationException {
 
@@ -112,4 +138,5 @@ public class TestAddOrUpdatePackage extends PlaceHolderMessageTest {
 		return "testAddOrUpdatePackage.xml";
 	}
 
+	
 }

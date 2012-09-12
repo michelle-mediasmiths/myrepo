@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
@@ -18,28 +18,29 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class TestDeletePackage extends PlaceHolderMessageTest {
-	
+
 	public TestDeletePackage() throws JAXBException, SAXException {
 		super();
 	}
 
-	protected PlaceholderMessage generatePlaceholderMessage () throws Exception {
-		
+	protected PlaceholderMessage generatePlaceholderMessage() throws Exception {
+
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
-		
+
 		DeletePackage deleteTx = generateDeletePackage();
 
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(deleteTx);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(
+				deleteTx);
 		message.setActions(actions);
 
 		return message;
 	}
-	
-	private DeletePackage generateDeletePackage () {
-		
+
+	private DeletePackage generateDeletePackage() {
+
 		DeletePackage deleteTx = new DeletePackage();
 		HelperMethods method = new HelperMethods();
 		String titleId = method.validTitleId();
@@ -47,25 +48,38 @@ public class TestDeletePackage extends PlaceHolderMessageTest {
 		txPackage.setPresentationID("abc123");
 		deleteTx.setPackage(txPackage);
 		deleteTx.setTitleID(titleId);
-		
+
 		return deleteTx;
 	}
 
 	@Override
-	protected void mockCalls(PlaceholderMessage message) throws Exception {
-		when(mayamClient.deletePackage((DeletePackage) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+		when(mayamClient.deletePackage((DeletePackage) anyObject()))
+				.thenReturn(MayamClientErrorCode.SUCCESS);
 	}
 
 	@Override
-	protected void verifyCalls(PlaceholderMessage message) {
+	protected void verifyValidCalls(PlaceholderMessage message) {
 		verify(mayamClient).deletePackage((DeletePackage) anyObject());
 	}
-	
+
 	@Override
 	protected String getFileName() {
 		return "testDeletePackage.xml";
 	}
 
-	
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.deletePackage((DeletePackage) anyObject()))
+				.thenReturn(MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
+
+	}
+
+	@Override
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verifyValidCalls(message);
+
+	}
 
 }

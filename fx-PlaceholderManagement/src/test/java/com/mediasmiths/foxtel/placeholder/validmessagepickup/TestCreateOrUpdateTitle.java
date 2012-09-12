@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
@@ -64,17 +64,34 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest {
 	}
 
 	@Override
-	protected void mockCalls(PlaceholderMessage message) throws Exception {
-		CreateOrUpdateTitle createTitle  = (CreateOrUpdateTitle) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-		
-		when(mayamClient.titleExists(createTitle.getTitleID())).thenReturn(new Boolean(false));
-		when(mayamClient.createTitle((CreateOrUpdateTitle) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+		mockCalls(message, MayamClientErrorCode.SUCCESS);
 	}
 
 	@Override
-	protected void verifyCalls(PlaceholderMessage message) {
-		CreateOrUpdateTitle createTitle  = (CreateOrUpdateTitle) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-				
+	protected void verifyValidCalls(PlaceholderMessage message) {
+		verifyCalls(message);
+	}
+
+	private void mockCalls(PlaceholderMessage message,
+			MayamClientErrorCode result) throws MayamClientException {
+		CreateOrUpdateTitle createTitle = (CreateOrUpdateTitle) message
+				.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+
+		when(mayamClient.titleExists(createTitle.getTitleID())).thenReturn(
+				new Boolean(false));
+		when(mayamClient.createTitle((CreateOrUpdateTitle) anyObject()))
+				.thenReturn(result);
+	}
+
+	private void verifyCalls(PlaceholderMessage message) {
+		CreateOrUpdateTitle createTitle = (CreateOrUpdateTitle) message
+				.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+
 		try {
 			verify(mayamClient).titleExists(createTitle.getTitleID());
 		} catch (MayamClientException e) {
@@ -86,6 +103,19 @@ public class TestCreateOrUpdateTitle extends PlaceHolderMessageTest {
 	@Override
 	protected String getFileName() {
 		return "testCreateOrUpdateTitle.xml";
+	}
+
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		mockCalls(message, MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
+	}
+
+	@Override
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verifyCalls(message);
+
 	}
 
 }

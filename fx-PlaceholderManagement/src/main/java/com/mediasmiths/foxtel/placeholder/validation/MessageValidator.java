@@ -388,7 +388,7 @@ public class MessageValidator {
 	}
 
 	private boolean validateMesageID(String messageID) {
-		//TODO : check there is not already a receipt for this file
+		//check there is not already a receipt for this file, otherwise this is considered a duplicate
 		
 		File receiptFile = new File(receiptWriter.receiptPathForMessageID(messageID));
 		boolean exists= receiptFile.exists();

@@ -1,10 +1,11 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
@@ -25,9 +26,9 @@ public class SingleMessageProcessor extends MessageProcessor {
 	public SingleMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, MayamClient mayamClient) {
+			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("placeholder.path.failure")  String failurePath) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller, mayamClient);
+				unmarhsaller, mayamClient,failurePath);
 	}
 
 	@Override

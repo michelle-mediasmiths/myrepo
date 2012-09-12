@@ -7,6 +7,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
@@ -19,6 +22,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
@@ -45,16 +49,18 @@ public class MessageProcessor implements Runnable {
 	private final MayamClient mayamClient;
 	private final MessageValidator messageValidator;
 	private final ReceiptWriter receiptWriter;
-
+	private final String failurePath;
+	
 	@Inject
 	public MessageProcessor(FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, MayamClient mayamClient) {
+			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("placeholder.path.failure")  String failurePath) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller;
 		this.mayamClient = mayamClient;
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
+		this.failurePath=failurePath;
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action)
@@ -179,8 +185,8 @@ public class MessageProcessor implements Runnable {
 			try {
 				processPlaceholderMesage(message);
 			} catch (MessageProcessingFailedException e) {
-				logger.error(String.format("Message processing failed for %s",
-						filePath), e);
+				logger.error(String.format("Message processing failed for %s and reason %s",
+						filePath,e.getReason()), e);
 				throw e;
 			}
 
@@ -254,31 +260,50 @@ public class MessageProcessor implements Runnable {
 				} catch (MessageProcessingFailedException e) {
 					logger.error(
 							String.format("Error processing %s", filePath), e);
-					// TODO: move erroroneous xmls to some configurable location
+					moveMessageToFailureFolder(filePath);
 				}
 			} else {
-				// TODO: move erroroneous xmls to some configurable location
 				logger.warn(String.format(
 						"Placeholder message at %s did not validate", filePath));
+				moveMessageToFailureFolder(filePath);
 			}
 
 		} catch (SAXException e) {
 			logger.error("SAXException:", e);
-			// TODO: move erroroneous xmls to some configurable
+			moveMessageToFailureFolder(filePath);
 		} catch (ParserConfigurationException e) {
 			logger.error("ParserConfigurationException:", e);
-			// TODO: move erroroneous xmls to some configurable
+			moveMessageToFailureFolder(filePath);
 		} catch (IOException e) {
 			logger.error("IOException:", e);
-			// TODO: move erroroneous xmls to some configurable
+			moveMessageToFailureFolder(filePath);
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format("MayamClientException %s", e.getErrorcode()),
 					e);
-			// TODO: move erroroneous xmls to some configurable location
+			moveMessageToFailureFolder(filePath);
 		}
 	}
 
+	/**
+	 * Moves erroneous placeholder messages to a configurable location
+	 * @param messagePath
+	 * @param messageID
+	 */
+	private void moveMessageToFailureFolder(String messagePath){
+		logger.info(String.format("Message %s is invalid, sending to failure folder", messagePath));
+		logger.debug(String.format("Failure folder is: ",failurePath));
+		
+		final String destination = failurePath + IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
+		
+		try {
+			FileUtils.moveFile(new File(messagePath), new File(destination));
+		} catch (IOException e) {
+			logger.error(String.format("IOException moving invalid placeholder message %s to %s",messagePath,destination),e);
+		}
+		
+	}
+	
 	private void writeReceipt(String filePath, String messageID) {
 		try {
 			receiptWriter.writeRecipet(filePath, messageID);

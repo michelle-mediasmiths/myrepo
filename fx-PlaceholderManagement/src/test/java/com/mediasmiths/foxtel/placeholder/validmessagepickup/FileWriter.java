@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import java.io.File;
 import java.io.FileOutputStream;

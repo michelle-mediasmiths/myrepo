@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
@@ -49,18 +49,33 @@ public class TestPurgeTitle extends PlaceHolderMessageTest {
 	}
 
 	@Override
-	protected void mockCalls(PlaceholderMessage mesage) throws Exception {
-		when(mayamClient.purgeTitle((PurgeTitle) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+	protected void mockValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.purgeTitle((PurgeTitle) anyObject())).thenReturn(
+				MayamClientErrorCode.SUCCESS);
 	}
-	
+
 	@Override
-	protected void verifyCalls(PlaceholderMessage message){
+	protected void verifyValidCalls(PlaceholderMessage message) {
 		verify(mayamClient).purgeTitle((PurgeTitle) anyObject());
 	}
 
 	@Override
 	protected String getFileName() {
 		return "testPurgeTitle.xml";
+	}
+
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.purgeTitle((PurgeTitle) anyObject())).thenReturn(
+				MayamClientErrorCode.TITLE_UPDATE_FAILED);
+
+	}
+
+	@Override
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verify(mayamClient).purgeTitle((PurgeTitle) anyObject());
+
 	}
 
 }

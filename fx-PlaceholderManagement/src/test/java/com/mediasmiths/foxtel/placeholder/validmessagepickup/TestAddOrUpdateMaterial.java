@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.anyString;
@@ -19,19 +19,18 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSItem;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
+public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest {
 
 	public TestAddOrUpdateMaterial() throws JAXBException, SAXException {
 		super();
 	}
 
-	protected PlaceholderMessage generatePlaceholderMessage()
-			throws Exception {
+	protected PlaceholderMessage generatePlaceholderMessage() throws Exception {
 
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
-		
+
 		HelperMethods method = new HelperMethods();
 		String titleId = method.validTitleId();
 
@@ -42,39 +41,63 @@ public class TestAddOrUpdateMaterial extends PlaceHolderMessageTest{
 		AddOrUpdateMaterial AddOrUpdateMaterial = new AddOrUpdateMaterial();
 		AddOrUpdateMaterial.setTitleID(titleId);
 		AddOrUpdateMaterial.setMaterial(material);
-		
+
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(AddOrUpdateMaterial);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(
+				AddOrUpdateMaterial);
 		message.setActions(actions);
 
 		return message;
 	}
 
 	@Override
-	protected void mockCalls(PlaceholderMessage message) throws Exception{
-		
-		//make mayamclient say any title exists
-		when(mayamClient.titleExists(anyString())).thenReturn(new Boolean(true));
-		//make maysamclient say no materials exists
-		when(mayamClient.materialExists(anyString())).thenReturn(new Boolean(false));
-		//return success status on mayamClient material create
+	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+
+		// make mayamclient say any title exists
+		when(mayamClient.titleExists(anyString()))
+				.thenReturn(new Boolean(true));
+		// make maysamclient say no materials exists
+		when(mayamClient.materialExists(anyString())).thenReturn(
+				new Boolean(false));
+		// return success status on mayamClient material create
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) getAction(message);
-		when(mayamClient.createMaterial((MaterialType) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.createMaterial((MaterialType) anyObject()))
+				.thenReturn(MayamClientErrorCode.SUCCESS);
 	}
-	
+
 	@Override
-	protected void verifyCalls(PlaceholderMessage message){
-		
+	protected void verifyValidCalls(PlaceholderMessage message) {
+
 		verify(mayamClient).createMaterial((MaterialType) anyObject());
-		
+
 	}
-	
-	
-	
+
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		// make mayamclient say any title exists
+		when(mayamClient.titleExists(anyString()))
+				.thenReturn(new Boolean(true));
+		// make maysamclient say no materials exists
+		when(mayamClient.materialExists(anyString())).thenReturn(
+				new Boolean(false));
+		// return success status on mayamClient material create
+		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) getAction(message);
+		when(mayamClient.createMaterial((MaterialType) anyObject()))
+				.thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+
+	}
+
+	@Override
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verify(mayamClient).createMaterial((MaterialType) anyObject());
+
+	}
+
 	@Override
 	protected String getFileName() {
 		return "testAddOrUpdateMaterial.xml";
 	}
 
-	
 }

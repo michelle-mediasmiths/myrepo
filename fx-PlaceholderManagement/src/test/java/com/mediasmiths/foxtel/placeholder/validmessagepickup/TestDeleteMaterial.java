@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
@@ -42,18 +42,29 @@ public class TestDeleteMaterial extends PlaceHolderMessageTest{
 	}
 	
 	@Override
-	protected void mockCalls(PlaceholderMessage message) throws Exception {
+	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
 		when(mayamClient.deleteMaterial((DeleteMaterial) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
 	}
 
 	@Override
-	protected void verifyCalls(PlaceholderMessage message) {
+	protected void verifyValidCalls(PlaceholderMessage message) {
 		verify(mayamClient).deleteMaterial((DeleteMaterial) anyObject());
 	}
 
 	@Override
 	protected String getFileName() {
 		return "testDeleteMaterial.xml";
+	}
+
+	@Override
+	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.deleteMaterial((DeleteMaterial) anyObject())).thenReturn(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+	}
+
+	@Override
+	protected void verifyInValidCalls(PlaceholderMessage message)
+			throws Exception {
+		verifyValidCalls(message);
 	}
 
 	

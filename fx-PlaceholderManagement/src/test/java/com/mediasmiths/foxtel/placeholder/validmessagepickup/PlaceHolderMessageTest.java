@@ -1,6 +1,7 @@
-package com.mediasmiths.foxtel.placeholder.messagecreation;
+package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -17,6 +18,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -33,6 +35,7 @@ import com.mediasmiths.foxtel.placeholder.PlaceHolderManager;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMangementModule;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageDirectoryWatcher;
 import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
+import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
@@ -80,13 +83,10 @@ public abstract class PlaceHolderMessageTest {
 		 this.unmarhsaller= jc.createUnmarshaller();
 	}
 	
-	protected void mockCalls(PlaceholderMessage mesage) throws Exception{
-		
-	}
-	
-	protected void verifyCalls(PlaceholderMessage message){
-		
-	}
+	protected abstract void mockValidCalls(PlaceholderMessage mesage) throws Exception;
+	protected abstract void verifyValidCalls(PlaceholderMessage message) throws Exception;
+	protected abstract void mockInValidCalls(PlaceholderMessage mesage) throws Exception;
+	protected abstract void verifyInValidCalls(PlaceholderMessage message) throws Exception;
 	
 	protected Object getAction(PlaceholderMessage message){
 		return message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
@@ -100,7 +100,7 @@ public abstract class PlaceHolderMessageTest {
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
 		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn("/tmp/"+RandomStringUtils.randomAlphabetic(30));
-		mockCalls(message);
+		mockValidCalls(message);
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));
 		
@@ -113,17 +113,75 @@ public abstract class PlaceHolderMessageTest {
 	}
 	
 	@Test
-	@Category(PickuptoReceipt.class)
-	public final void testPlaceHolderPickupToReciept() throws IOException, Exception{
+	@Category(PickuptoFailure.class)
+	/**
+	 * Tests that valid messages whos processing fails get moved to the failure folder
+	 * 
+	 * Extending classes should provide implementations of mockInValidCalls (which should at some point cause a failure) and verifyInValidCalls 
+	 * 
+	 * @throws Exception
+	 */
+	public final void testValidRequestThatFailsProcessesToFailure() throws Exception{
 		
-		String messagePath = prepareTempFolder();
-		String receiptPath = prepareTempFolder();
-		String fileName = getFileName();
+		String messagePath = prepareTempFolder("MESSAGE");
+		String receiptPath = prepareTempFolder("RECEIPT");
+		String failurePath = prepareTempFolder("FAILURE");
+		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
+		mockInValidCalls(message);
+		
+		String messageFilePath = writeMessageAndRunManager(message,messagePath,receiptPath,failurePath);
+
+		verifyInValidCalls(message);
+		
+		//after manager has run and processed the single task the request should now be in the failure folder
+		File failFile = new File(failurePath + IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messageFilePath));
+		File messageFile = new File(messageFilePath);
+		logger.info("Looking for "+failFile.getAbsolutePath());
+		assertTrue(failFile.exists());
+		logger.info("Looking for "+messageFile.getAbsolutePath());
+		assertFalse(messageFile.exists());
+		
+	}
+	
+	
+	@Test
+	@Category(PickuptoReceipt.class)
+	/**
+	 * Tests that a valid request gets processed an a receipt placed in the receipts folder, extending classes should implement mockValidCalls and verifyValid calls to guide  and validate the tests
+	 * 
+	 * @throws IOException
+	 * @throws Exception
+	 */
+	public final void testValidRequestProcessesToReceipt() throws IOException, Exception{
+		
+		String messagePath = prepareTempFolder("MESSAGE");
+		String receiptPath = prepareTempFolder("RECEIPT");
+		String failurePath = prepareTempFolder("FAILURE");
+		
+		PlaceholderMessage message = this.generatePlaceholderMessage();
+		mockValidCalls(message);
+		
+		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath);
+
+		verifyValidCalls(message);
+		
+		//after manager has run and processed the single task we should have a receipt		
+		File receiptFile = new File(receiptPath + IOUtils.DIR_SEPARATOR +  message.getMessageID() + ".txt");	
+		logger.info("Looking for "+receiptFile.getAbsolutePath());
+		assertTrue(receiptFile.exists());
+		
+		//TODO what happens to the xml in the message folder after is has finished processing?
+		
+		
+	}
+	private String writeMessageAndRunManager(PlaceholderMessage message, String messagePath, String receiptPath, String failurePath)
+			throws IOException, Exception, InterruptedException {
+	
+		
+		String fileName = getFileName();
 		writePlaceHolderMessage(message, messagePath + IOUtils.DIR_SEPARATOR + fileName);
-		
-		mockCalls(message);
-		
+			
     	//start up a placeholder manager to process the created message
 		
 		//override some properties to use temp folders
@@ -133,6 +191,7 @@ public abstract class PlaceHolderMessageTest {
 		Properties overridenProperties = new Properties();
 		overridenProperties.put("placeholder.path.message", messagePath);
 		overridenProperties.put("placeholder.path.receipt", receiptPath);
+		overridenProperties.put("placeholder.path.failure", failurePath);
 		propertyFile.merge(overridenProperties);
 		
 		//setup guice injector
@@ -149,16 +208,9 @@ public abstract class PlaceHolderMessageTest {
 		});		
 		//run placeholder manager
 		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
-		pm.run();
+		pm.run();		
 		
-
-		verifyCalls(message);
-		
-		//after manager has run and processed the single task we should have a receipt		
-		File receiptFile = new File(receiptPath + IOUtils.DIR_SEPARATOR +  message.getMessageID() + ".txt");	
-		logger.info("Looking for "+receiptFile.getAbsolutePath());
-		assertTrue(receiptFile.exists());
-		
+		return fileName;
 	}
 	
 	
@@ -172,14 +224,16 @@ public abstract class PlaceHolderMessageTest {
 		@Override
 		protected void configure() {
 			bind(MayamClient.class).toInstance(mc);
+			//we are only testing the processing of a single file
 			bind(MessageProcessor.class).to(SingleMessageProcessor.class);
+			//we dont need to continue to monitor the message folder as we are only picking up a single file for this test
 			bind(PlaceHolderMessageDirectoryWatcher.class).to(PickupExistingFilesOnlyDirectoryWatcher.class);
 		}
 	}
 	
-	private String prepareTempFolder() throws IOException {
+	private String prepareTempFolder(String description) throws IOException {
 		//create a random folder		
-		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10);
+		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
 				
 		File dir = new File(path);
 		
