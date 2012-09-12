@@ -7,8 +7,10 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mediasmiths.foxtel.placeholder.guice.PlaceholderManagementSetup;
+import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
+import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
 public class PlaceHolderManagerCLI {
 
@@ -26,10 +28,20 @@ public class PlaceHolderManagerCLI {
 
 		logger.info("Placeholdermanger cli starting up");
 		
-		Injector injector = Guice.createInjector(new PlaceHolderMangementModule());
-		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
-		pm.run();
 		
+		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderManagementSetup());
+
+		try
+		{
+			PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
+			pm.run();
+		}
+		finally
+		{
+			// Cleanly shutdown
+			injector.getInstance(ShutdownManager.class).shutdown();
+		}
+				
 	}
 
 }

@@ -10,8 +10,9 @@ import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.std.guice.apploader.GuiceApplication;
 
-public class PlaceHolderManager {
+public class PlaceHolderManager implements GuiceApplication{
 
 	static Logger logger = Logger.getLogger(PlaceHolderManager.class);
 
@@ -43,8 +44,6 @@ public class PlaceHolderManager {
 		
 		logger.debug("PlaceHolderManager run");
 		
-		addShutdownHooks();
-		
 		logger.debug("starting directory watcher");
 		directoryWatcherThread.start();
 		logger.debug("starting message processor");
@@ -55,20 +54,16 @@ public class PlaceHolderManager {
 		directoryWatcherThread.join();
 		messageProcessorThread.join();
 	}
-	
-	public void stop(){
-		messageProcessor.stop();
-		directoryWatcher.setContinueWatching(false);
+
+	@Override
+	public void configured() {
+		logger.debug("configured");
+		
 	}
 
-	private void addShutdownHooks() {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-
-		
-			public void run() {
-				stop();
-			
-			}
-		}));
+	@Override
+	public void stopping() {
+		messageProcessor.stop();
+		directoryWatcher.setContinueWatching(false);
 	}
 }
