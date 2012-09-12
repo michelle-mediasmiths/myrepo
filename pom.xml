@@ -24,22 +24,40 @@
 		<commons-io.version>2.4</commons-io.version>
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<pushChanges>false</pushChanges>
+					<localCheckout>true</localCheckout>
+					<preparationGoals>install</preparationGoals>
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<repositories>
 		<repository>
-			<id>mediasmiths-internal-repo</id>
-			<url>http://build.mediasmiths.com/nexus/content/groups/public/</url>
+			<id>mediasmiths-releases</id>
+			<name>mediasmiths</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/releases</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		<repository>
-			<id>mediasmiths-internal-snapshots</id>
-			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots/</url>
+			<id>mediasmiths-snapshots</id>
+			<name>mediasmiths</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
 			<releases>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</releases>
 			<snapshots>
 				<enabled>true</enabled>
@@ -59,7 +77,6 @@
 			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
 	<scm>
 		<connection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</connection>
 		<developerConnection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</developerConnection>
