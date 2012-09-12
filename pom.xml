@@ -9,6 +9,25 @@
 
 	<name>Foxtel Solution</name>
 
+	<scm>
+		<connection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</connection>
+		<developerConnection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</developerConnection>
+		<url>scm:git:git@github.com:MediasmithsInternational/foxtel.git</url>
+	</scm>
+	
+	<distributionManagement>
+		<repository>
+			<id>mediasmiths-internal-repo</id>
+			<name>Mediasmiths-releases</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>mediasmiths-internal-repo</id>
+			<name>Mediasmiths-snapshots</name>
+			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<modules>
 		<module>fx-mpa</module>
 		<module>fx-MaterialExchange</module>
@@ -16,6 +35,8 @@
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-MayamClient</module>
 	</modules>
+
+
 
 	<properties>
 		<junit.version>4.10</junit.version>
@@ -65,22 +86,4 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>mediasmiths-internal-repo</id>
-			<name>Mediasmiths-releases</name>
-			<url>http://build.mediasmiths.com/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>mediasmiths-internal-repo</id>
-			<name>Mediasmiths-snapshots</name>
-			<url>http://build.mediasmiths.com/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-	<scm>
-		<connection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</connection>
-		<developerConnection>scm:git:git@github.com:MediasmithsInternational/foxtel.git</developerConnection>
-		<url>scm:git:git@github.com:MediasmithsInternational/foxtel.git</url>
-	</scm>
 </project>
