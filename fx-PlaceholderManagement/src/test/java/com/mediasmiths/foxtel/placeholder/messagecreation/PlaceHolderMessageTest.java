@@ -115,6 +115,7 @@ public abstract class PlaceHolderMessageTest {
 		
 	}
 	
+	
 	class TestPlaceHolderMangementModule extends PlaceHolderMangementModule{
 		
 		private final MayamClient mc;
@@ -136,7 +137,7 @@ public abstract class PlaceHolderMessageTest {
 			try {
 				Properties properties = new Properties();
 				properties.load(this.getClass().getClassLoader()
-						.getResourceAsStream("placeholdermanagement.properties"));
+						.getResourceAsStream("service.properties"));
 				
 				//override message path so we only pick up one
 				properties.put("placeholder.path.message", messagepath);
