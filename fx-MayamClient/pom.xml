@@ -29,12 +29,6 @@
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MediaExchange</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>3.8.1</version>
@@ -43,12 +37,12 @@
 		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>wf-mq</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${worklists.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>tasks-ws-client</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${worklists.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
@@ -84,7 +78,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MaterialExchange</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>2.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
