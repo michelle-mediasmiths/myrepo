@@ -36,7 +36,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
 
-	public AddOrUpdatePackageTest() throws JAXBException, SAXException {
+	public AddOrUpdatePackageTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
 

@@ -26,7 +26,7 @@ import com.mediasmiths.mayam.MayamClientException;
 
 public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
 
-	public PurgeTitleTest() throws JAXBException, SAXException {
+	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
 		super();
 		// TODO Auto-generated constructor stub
 	}

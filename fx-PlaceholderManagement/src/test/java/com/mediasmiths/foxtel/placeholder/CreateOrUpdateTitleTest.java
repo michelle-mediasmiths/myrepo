@@ -39,7 +39,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
 
 	private final static String NEW_TITLE = "NEW_TITLE";
 
-	public CreateOrUpdateTitleTest() throws JAXBException, SAXException {
+	public CreateOrUpdateTitleTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
 

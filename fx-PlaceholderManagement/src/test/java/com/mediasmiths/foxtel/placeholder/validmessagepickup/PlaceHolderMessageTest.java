@@ -39,6 +39,7 @@ import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
@@ -123,9 +124,10 @@ public abstract class PlaceHolderMessageTest {
 	 */
 	public final void testValidRequestThatFailsProcessesToFailure() throws Exception{
 		
-		String messagePath = prepareTempFolder("MESSAGE");
-		String receiptPath = prepareTempFolder("RECEIPT");
-		String failurePath = prepareTempFolder("FAILURE");
+		String messagePath = Util.prepareTempFolder("MESSAGE");
+		String receiptPath = Util.prepareTempFolder("RECEIPT");
+		String failurePath = Util.prepareTempFolder("FAILURE");
+		
 		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockInValidCalls(message);
@@ -155,9 +157,9 @@ public abstract class PlaceHolderMessageTest {
 	 */
 	public final void testValidRequestProcessesToReceipt() throws IOException, Exception{
 		
-		String messagePath = prepareTempFolder("MESSAGE");
-		String receiptPath = prepareTempFolder("RECEIPT");
-		String failurePath = prepareTempFolder("FAILURE");
+		String messagePath = Util.prepareTempFolder("MESSAGE");
+		String receiptPath = Util.prepareTempFolder("RECEIPT");
+		String failurePath = Util.prepareTempFolder("FAILURE");
 		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockValidCalls(message);
@@ -231,20 +233,6 @@ public abstract class PlaceHolderMessageTest {
 		}
 	}
 	
-	private String prepareTempFolder(String description) throws IOException {
-		//create a random folder		
-		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
-				
-		File dir = new File(path);
-		
-		if(dir.exists()){
-			FileUtils.cleanDirectory(dir);
-		}
-		else{
-			dir.mkdirs();
-		}
-		
-		return path;
-	}
+	
 	
 }

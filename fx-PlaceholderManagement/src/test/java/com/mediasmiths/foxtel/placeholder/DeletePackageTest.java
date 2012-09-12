@@ -27,7 +27,7 @@ import com.mediasmiths.mayam.MayamClientException;
 
 public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
 
-	public DeletePackageTest() throws JAXBException, SAXException {
+	public DeletePackageTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	

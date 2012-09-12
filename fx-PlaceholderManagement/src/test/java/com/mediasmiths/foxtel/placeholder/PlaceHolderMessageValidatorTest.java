@@ -24,6 +24,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
+import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
@@ -44,17 +46,21 @@ public abstract class PlaceHolderMessageValidatorTest {
 	protected final static String EXISTING_MATERIAL_ID = "NEW_MATERIAL";
 	protected final static String EXISTING_PACKAGE_ID = "NEW_MATERIAL";
 
+	protected final String receiptFolderPath;
+	
 	protected final static GregorianCalendar JAN1st = new GregorianCalendar(
 			2000, 1, 1, 0, 0, 1);
 	protected final static GregorianCalendar JAN10th = new GregorianCalendar(
 			2000, 1, 10, 0, 0, 1);
 
-	public PlaceHolderMessageValidatorTest() throws JAXBException, SAXException {
+	public PlaceHolderMessageValidatorTest() throws JAXBException, SAXException, IOException {
 
+		receiptFolderPath = Util.prepareTempFolder("RECEIPTS");
+		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"));
-		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"),
+		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath));
+		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
 				unmarhsaller, mayamClient, "failure path");
 
 	}

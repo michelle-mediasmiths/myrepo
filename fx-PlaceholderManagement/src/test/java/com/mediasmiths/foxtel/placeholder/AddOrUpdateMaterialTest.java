@@ -25,7 +25,7 @@ import com.mediasmiths.mayam.MayamClientException;
 
 public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
 
-	public AddOrUpdateMaterialTest() throws JAXBException, SAXException {
+	public AddOrUpdateMaterialTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
 

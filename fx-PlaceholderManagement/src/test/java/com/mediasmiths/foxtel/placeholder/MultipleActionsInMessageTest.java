@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.placeholder;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -17,7 +18,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
 public class MultipleActionsInMessageTest extends PlaceHolderMessageValidatorTest{
 
-	public MultipleActionsInMessageTest() throws JAXBException, SAXException {
+	public MultipleActionsInMessageTest() throws JAXBException, SAXException, IOException {
 		super();	
 	}
 
