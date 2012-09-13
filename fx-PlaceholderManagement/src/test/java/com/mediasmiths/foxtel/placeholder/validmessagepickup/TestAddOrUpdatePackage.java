@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -25,12 +26,12 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 		super();
 	}
 
-	protected PlaceholderMessage generatePlaceholderMessage()
+	public PlaceholderMessage generatePlaceholderMessage()
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID("123abc");
-		message.setSenderID("987xyz");
+		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		AddOrUpdatePackage addTxPackage = generateAddOrUpdatePackage();
 
@@ -114,7 +115,7 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 		AddOrUpdatePackage addTxPackage = new AddOrUpdatePackage();
 
 		HelperMethods method = new HelperMethods();
-		String titleId = method.validTitleId();
+		String titleId = method.generateTitleID();
 		MSTxPackage msTxPackage = new MSTxPackage();
 		PackageType txPackage = new PackageType();
 		txPackage = msTxPackage.validTxPackage(txPackage, titleId);

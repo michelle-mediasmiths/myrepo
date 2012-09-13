@@ -3,6 +3,8 @@ package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang.RandomStringUtils;
+
 import au.com.foxtel.cf.mam.pms.ChannelType;
 import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.License;
@@ -31,8 +33,8 @@ public class MSRights {
 		ChannelType channel1 = new ChannelType();
 		Channels channels = new Channels();
 
-		licenseHolder.setOrganisationID("abc123");
-		licenseHolder.setOrganisationName("TNC");
+		licenseHolder.setOrganisationID("ID"+RandomStringUtils.randomAlphanumeric(20));
+		licenseHolder.setOrganisationName("NAME"+RandomStringUtils.randomAlphanumeric(20));
 		license1.setLicenseHolder(licenseHolder);
 
 		HelperMethods method = new HelperMethods();
@@ -42,8 +44,8 @@ public class MSRights {
 		licensePeriod.setEndDate(endDate);
 		license1.setLicensePeriod(licensePeriod);
 
-		channel1.setChannelTag("BBC");
-		channel1.setChannelName("British Broadcasting Company");
+		channel1.setChannelTag(RandomStringUtils.randomAlphabetic(3));
+		channel1.setChannelName(RandomStringUtils.randomAlphanumeric(20));
 		channels.getChannel().add(channel1);
 		license1.setChannels(channels);
 

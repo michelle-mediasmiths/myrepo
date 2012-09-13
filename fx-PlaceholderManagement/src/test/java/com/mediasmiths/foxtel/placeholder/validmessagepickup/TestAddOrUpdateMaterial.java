@@ -31,8 +31,8 @@ public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
-		HelperMethods method = new HelperMethods();
-		String titleId = method.validTitleId();
+		HelperMethods helper = new HelperMethods();
+		String titleId = helper.generateTitleID();
 
 		MSItem msItem = new MSItem();
 		MaterialType material = new MaterialType();

@@ -43,7 +43,7 @@ public class TestDeletePackage extends ValidMessagePickTest {
 
 		DeletePackage deleteTx = new DeletePackage();
 		HelperMethods method = new HelperMethods();
-		String titleId = method.validTitleId();
+		String titleId = method.generateTitleID();
 		Package txPackage = new Package();
 		txPackage.setPresentationID("abc123");
 		deleteTx.setPackage(txPackage);

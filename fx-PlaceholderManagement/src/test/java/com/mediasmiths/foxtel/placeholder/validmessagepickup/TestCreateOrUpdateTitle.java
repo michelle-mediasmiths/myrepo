@@ -28,7 +28,7 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 		super();
 	}
 
-	protected PlaceholderMessage generatePlaceholderMessage()
+	public PlaceholderMessage generatePlaceholderMessage()
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
@@ -36,12 +36,12 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		HelperMethods method = new HelperMethods();
-		String titleId = method.validTitleId();
+		String titleId = method.generateTitleID();
 
 		MSTitleDescription msTitleDescription = new MSTitleDescription();
 		TitleDescriptionType titleDescription = new TitleDescriptionType();
 		titleDescription = msTitleDescription.validTitleDescription(
-				titleDescription, titleId);
+				titleDescription);
 
 		MSRights msRights = new MSRights();
 		RightsType rights = new RightsType();

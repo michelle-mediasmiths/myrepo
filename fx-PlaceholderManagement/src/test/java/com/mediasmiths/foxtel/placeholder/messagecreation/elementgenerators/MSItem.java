@@ -1,7 +1,12 @@
 package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 
+import java.util.Random;
+import java.util.UUID;
+
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.commons.lang.RandomStringUtils;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
@@ -13,6 +18,8 @@ import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.Help
 
 public class MSItem {
 
+	protected final String[] formats = new String[]{"SD","HD","3D"};
+	
 	/**
 	 * Creates a valid object of type MaterialType 
 	 * @param item
@@ -38,9 +45,9 @@ public class MSItem {
 		source.setAggregation(aggregation);;
 		//source.setCompile(compile);
 		item.setRequiredBy(requiredBy);
-		item.setRequiredFormat("SD");
+		item.setRequiredFormat(formats[new Random(System.currentTimeMillis()).nextInt(formats.length)]);
 		item.setSource(source);
-		item.setMaterialD("abc123");
+		item.setMaterialD(RandomStringUtils.randomAlphanumeric(6));
 		
 		return item;
 	}
@@ -74,7 +81,7 @@ public class MSItem {
 	public Order createOrder (Order order, XMLGregorianCalendar orderCreated) throws DatatypeConfigurationException {
 		
 		order.setOrderCreated(orderCreated);
-		order.setOrderReference("ABC123");
+		order.setOrderReference(UUID.randomUUID().toString());
 		
 		return order;
 	}
@@ -85,8 +92,9 @@ public class MSItem {
 	 */
 	public Aggregator createAggregator (Aggregator aggregator) {
 		
-		aggregator.setAggregatorID("ABC123");
-		aggregator.setAggregatorName("aggregatorName");
+		aggregator.setAggregatorID(RandomStringUtils.randomAlphanumeric(6));
+		aggregator.setAggregatorName(RandomStringUtils.randomAlphanumeric(20));
 		return aggregator;
 	}
+	
 }

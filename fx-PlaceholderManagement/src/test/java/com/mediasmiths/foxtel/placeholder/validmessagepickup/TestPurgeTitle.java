@@ -42,7 +42,7 @@ public class TestPurgeTitle extends ValidMessagePickTest {
 
 		PurgeTitle purgeTitle = new PurgeTitle();
 		HelperMethods method = new HelperMethods();
-		String titleId = method.validTitleId();
+		String titleId = method.generateTitleID();
 		purgeTitle.setTitleID(titleId);
 
 		return purgeTitle;
