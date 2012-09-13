@@ -25,7 +25,7 @@ public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 		super();
 	}
 
-	protected PlaceholderMessage generatePlaceholderMessage() throws Exception {
+	public PlaceholderMessage generatePlaceholderMessage() throws Exception {
 
 		PlaceholderMessage message = new PlaceholderMessage();
 		message.setMessageID(RandomStringUtils.randomAlphabetic(6));

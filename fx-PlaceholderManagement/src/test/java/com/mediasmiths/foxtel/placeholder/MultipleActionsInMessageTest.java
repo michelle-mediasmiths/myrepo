@@ -16,7 +16,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
-public class MultipleActionsInMessageTest extends PlaceHolderMessageValidatorTest{
+public class MultipleActionsInMessageTest extends PlaceHolderMessageShortTest{
 
 	public MultipleActionsInMessageTest() throws JAXBException, SAXException, IOException {
 		super();	

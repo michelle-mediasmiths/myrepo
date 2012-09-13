@@ -24,7 +24,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class PurgeTitleTest extends PlaceHolderMessageValidatorTest {
+public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 
 	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
 		super();

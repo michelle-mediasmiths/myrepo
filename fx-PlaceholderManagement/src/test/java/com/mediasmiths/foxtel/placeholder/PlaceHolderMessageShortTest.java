@@ -30,7 +30,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.MayamClient;
 
-public abstract class PlaceHolderMessageValidatorTest {
+public abstract class PlaceHolderMessageShortTest {
 
 	protected final MessageValidator validator;
 	protected final MessageProcessor processor;
@@ -52,7 +52,7 @@ public abstract class PlaceHolderMessageValidatorTest {
 	protected final static GregorianCalendar JAN10th = new GregorianCalendar(
 			2000, 1, 10, 0, 0, 1);
 
-	public PlaceHolderMessageValidatorTest() throws JAXBException, SAXException, IOException {
+	public PlaceHolderMessageShortTest() throws JAXBException, SAXException, IOException {
 
 		receiptFolderPath = Util.prepareTempFolder("RECEIPTS");
 		

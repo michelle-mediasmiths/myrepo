@@ -17,7 +17,6 @@ public class PlaceholderManagementSetup implements GuiceSetup {
 
 	@Override
 	public void injectorCreated(Injector injector) {
-		
 	}
 
 }

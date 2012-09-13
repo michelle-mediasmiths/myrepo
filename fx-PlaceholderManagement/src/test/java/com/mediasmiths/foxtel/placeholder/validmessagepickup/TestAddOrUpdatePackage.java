@@ -42,14 +42,15 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 
 		return message;
 	}
-	
+
 	@Override
 	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
 		mockCalls(message, MayamClientErrorCode.SUCCESS);
 	}
-	
+
 	@Override
-	protected void mockInValidCalls(PlaceholderMessage message) throws Exception {
+	protected void mockInValidCalls(PlaceholderMessage message)
+			throws Exception {
 		mockCalls(message, MayamClientErrorCode.FAILURE);
 	}
 
@@ -57,14 +58,14 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 	protected void verifyInValidCalls(PlaceholderMessage message)
 			throws Exception {
 		verifyCalls(message);
-		
+
 	}
+
 	@Override
-	protected void verifyValidCalls(PlaceholderMessage message) {
+	protected void verifyValidCalls(PlaceholderMessage message) throws MayamClientException {
 		verifyCalls(message);
 	}
-	
-	
+
 	private void mockCalls(PlaceholderMessage message,
 			MayamClientErrorCode result) throws MayamClientException {
 		AddOrUpdatePackage addTxPackage = (AddOrUpdatePackage) message
@@ -72,8 +73,8 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
 
-		//let validation pass
-		
+		// let validation pass
+
 		// make mayamclient say the material exists
 		when(
 				mayamClient.materialExists(addTxPackage.getPackage()
@@ -82,40 +83,32 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 		when(
 				mayamClient.packageExists(addTxPackage.getPackage()
 						.getPresentationID())).thenReturn(new Boolean(false));
-		
-		
-		//make processing pass\fail
-		
+
+		// make processing pass\fail
+
 		// return result on createpackge
 		when(mayamClient.createPackage((PackageType) anyObject())).thenReturn(
 				result);
 	}
 
-
-
-	private void verifyCalls(PlaceholderMessage message){
+	private void verifyCalls(PlaceholderMessage message)
+			throws MayamClientException {
 		AddOrUpdatePackage addTxPackage = (AddOrUpdatePackage) message
 				.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
 
 		// make mayamclient say the material exists
-		try {
-			verify(mayamClient).materialExists(
-					addTxPackage.getPackage().getMaterialID());
-			// make mayamclient say the package does not exist
-			verify(mayamClient).packageExists(
-					addTxPackage.getPackage().getPresentationID());
-			// return success on createpackge
-			verify(mayamClient).createPackage((PackageType) anyObject());
-		} catch (MayamClientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			assertTrue(false);
-		}
+		verify(mayamClient).materialExists(
+				addTxPackage.getPackage().getMaterialID());
+		// make mayamclient say the package does not exist
+		verify(mayamClient).packageExists(
+				addTxPackage.getPackage().getPresentationID());
+		// return success on createpackge
+		verify(mayamClient).createPackage((PackageType) anyObject());
 
 	}
-	
+
 	private AddOrUpdatePackage generateAddOrUpdatePackage()
 			throws DatatypeConfigurationException {
 
@@ -138,5 +131,4 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 		return "testAddOrUpdatePackage.xml";
 	}
 
-	
 }

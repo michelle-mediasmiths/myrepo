@@ -25,7 +25,7 @@ import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedExce
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class DeleteMaterialTest extends PlaceHolderMessageValidatorTest {
+public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 
 	public DeleteMaterialTest() throws JAXBException, SAXException, IOException {
 		super();

@@ -8,6 +8,7 @@ import org.xml.sax.SAXException;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
+import com.mediasmiths.foxtel.placeholder.validation.ConfigValidator;
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
@@ -24,7 +25,7 @@ public class PlaceHolderManager implements StoppableService{
 	private final Thread directoryWatcherThread;
 
 	@Inject
-	public PlaceHolderManager(MayamClient mc,MessageValidator validator, MessageProcessor processor,ReceiptWriter receiptWriter,PlaceHolderMessageDirectoryWatcher directoryWatcher, ShutdownManager shutdownManager) throws JAXBException,
+	public PlaceHolderManager(MayamClient mc,MessageValidator validator, MessageProcessor processor,ReceiptWriter receiptWriter,PlaceHolderMessageDirectoryWatcher directoryWatcher, ShutdownManager shutdownManager, ConfigValidator configValidator) throws JAXBException,
 			SAXException {
 
 		logger.trace("Placeholdermanager constructor enter");
@@ -61,7 +62,19 @@ public class PlaceHolderManager implements StoppableService{
 
 	@Override
 	public void shutdown() {
+		//ask workers to stop nicely
 		messageProcessor.stop();
-		directoryWatcher.setContinueWatching(false);		
+		directoryWatcher.setContinueWatching(false);
+		
+		//wait for a while
+		try {
+			Thread.sleep(5000L);
+		} catch (InterruptedException e) {
+			logger.info("Interrupted during shutdown",e);
+		}
+		
+		//interrupt workers who may be blocked on a queue or some other wait operation
+		messageProcessorThread.interrupt();
+		directoryWatcherThread.interrupt();
 	}
 }

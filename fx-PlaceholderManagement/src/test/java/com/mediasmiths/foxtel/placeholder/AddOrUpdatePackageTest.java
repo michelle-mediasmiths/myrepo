@@ -28,7 +28,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class AddOrUpdatePackageTest extends PlaceHolderMessageValidatorTest {
+public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 	protected final static String EXISTING_TITLE = "EXISTING_TITLE";
 	protected final static String EXISTING_MATERIAL = "EXISTING_MATERIAL";

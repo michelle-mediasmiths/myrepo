@@ -67,18 +67,18 @@ public abstract class PlaceholderManagerTest {
 		writer.writeObjectToFile(message, path);
 	}
 
-	protected void writeMessageAndRunManager(PlaceholderMessage message, String messagePath, String receiptPath, String failurePath, String messageFileName)
+	protected void writeMessageAndRunManager(PlaceholderMessage message, String messagePath, String receiptPath, String failurePath, String archivePath, String messageFileName)
 			throws IOException, Exception, InterruptedException {
 	
 		writePlaceHolderMessage(message, messagePath + IOUtils.DIR_SEPARATOR + messageFileName);
 			
     	//start up a placeholder manager to process the created message		
-		runPlaceholderManager(messagePath, receiptPath, failurePath);		
+		runPlaceholderManager(messagePath, receiptPath, failurePath,archivePath);		
 		
 	}
 
 	protected void runPlaceholderManager(String messagePath, String receiptPath,
-			String failurePath) throws InterruptedException {
+			String failurePath, String archivePath) throws InterruptedException {
 		//override some properties to use temp folders
 		PropertyFile propertyFile = new PropertyFile();
 		propertyFile.merge(PropertyFile.find("service.properties"));
@@ -87,6 +87,7 @@ public abstract class PlaceholderManagerTest {
 		overridenProperties.put("placeholder.path.message", messagePath);
 		overridenProperties.put("placeholder.path.receipt", receiptPath);
 		overridenProperties.put("placeholder.path.failure", failurePath);
+		overridenProperties.put("placeholder.path.archive", archivePath);
 		propertyFile.merge(overridenProperties);
 		
 		//setup guice injector

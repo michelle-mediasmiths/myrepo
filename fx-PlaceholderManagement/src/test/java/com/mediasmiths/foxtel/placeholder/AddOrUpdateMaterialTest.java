@@ -23,7 +23,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class AddOrUpdateMaterialTest extends PlaceHolderMessageValidatorTest {
+public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 
 	public AddOrUpdateMaterialTest() throws JAXBException, SAXException, IOException {
 		super();

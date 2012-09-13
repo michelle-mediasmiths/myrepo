@@ -25,7 +25,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class DeletePackageTest extends PlaceHolderMessageValidatorTest {
+public class DeletePackageTest extends PlaceHolderMessageShortTest {
 
 	public DeletePackageTest() throws JAXBException, SAXException, IOException {
 		super();

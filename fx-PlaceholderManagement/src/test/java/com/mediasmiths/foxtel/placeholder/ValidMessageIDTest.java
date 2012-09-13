@@ -18,7 +18,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
-public class ValidMessageIDTest extends PlaceHolderMessageValidatorTest {
+public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 
 	private final static String EXISTING_MESSAGE_ID =  "EXISTING_MESSAGE_ID";
 	

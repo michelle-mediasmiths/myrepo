@@ -69,7 +69,7 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 	}
 
 	@Override
-	protected void verifyValidCalls(PlaceholderMessage message) {
+	protected void verifyValidCalls(PlaceholderMessage message) throws MayamClientException {
 		verifyCalls(message);
 	}
 
@@ -86,17 +86,13 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 				.thenReturn(result);
 	}
 
-	private void verifyCalls(PlaceholderMessage message) {
+	private void verifyCalls(PlaceholderMessage message) throws MayamClientException {
 		CreateOrUpdateTitle createTitle = (CreateOrUpdateTitle) message
 				.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
 
-		try {
-			verify(mayamClient).titleExists(createTitle.getTitleID());
-		} catch (MayamClientException e) {
-			e.printStackTrace();
-		}
+		verify(mayamClient).titleExists(createTitle.getTitleID());
 		verify(mayamClient).createTitle((CreateOrUpdateTitle) anyObject());
 	}
 

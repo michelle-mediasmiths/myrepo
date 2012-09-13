@@ -35,7 +35,7 @@ import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class CreateOrUpdateTitleTest extends PlaceHolderMessageValidatorTest {
+public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 
 	private final static String NEW_TITLE = "NEW_TITLE";
 

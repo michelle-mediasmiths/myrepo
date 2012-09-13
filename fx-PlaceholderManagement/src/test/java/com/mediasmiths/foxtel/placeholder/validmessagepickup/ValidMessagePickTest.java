@@ -49,11 +49,6 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 	protected abstract void mockInValidCalls(PlaceholderMessage mesage) throws Exception;
 	protected abstract void verifyInValidCalls(PlaceholderMessage message) throws Exception;
 	
-	protected Object getAction(PlaceholderMessage message){
-		return message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-	}
-	
-	
 	@Test
 	@Category(MessageCreation.class)
 	public final void testWrittenPlaceHolderMessagesValidate () throws Exception {
@@ -81,12 +76,13 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String messagePath = Util.prepareTempFolder("MESSAGE");
 		String receiptPath = Util.prepareTempFolder("RECEIPT");
 		String failurePath = Util.prepareTempFolder("FAILURE");
+		String archivePath = Util.prepareTempFolder("ARCHIVE");
 			
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockInValidCalls(message);
 		
 		String messageFilePath = messagePath + getFileName();				
-		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,messageFilePath);
+		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,archivePath,messageFilePath);
 
 		verifyInValidCalls(message);
 		
@@ -114,12 +110,13 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String messagePath = Util.prepareTempFolder("MESSAGE");
 		String receiptPath = Util.prepareTempFolder("RECEIPT");
 		String failurePath = Util.prepareTempFolder("FAILURE");
+		String archivePath = Util.prepareTempFolder("ARCHIVE");
 		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockValidCalls(message);
 		
 		String messageFilePath = getFilePath();
-		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,messageFilePath);
+		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,archivePath,messageFilePath);
 
 		verifyValidCalls(message);
 		
