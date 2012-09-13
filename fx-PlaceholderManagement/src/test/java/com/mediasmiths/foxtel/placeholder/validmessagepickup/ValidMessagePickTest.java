@@ -81,13 +81,11 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String messagePath = Util.prepareTempFolder("MESSAGE");
 		String receiptPath = Util.prepareTempFolder("RECEIPT");
 		String failurePath = Util.prepareTempFolder("FAILURE");
-		
-		
+			
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockInValidCalls(message);
 		
-		String messageFilePath = getFilePath();
-				
+		String messageFilePath = messagePath + getFileName();				
 		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,messageFilePath);
 
 		verifyInValidCalls(message);

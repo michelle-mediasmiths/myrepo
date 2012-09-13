@@ -72,8 +72,13 @@ public abstract class PlaceholderManagerTest {
 	
 		writePlaceHolderMessage(message, messagePath + IOUtils.DIR_SEPARATOR + messageFileName);
 			
-    	//start up a placeholder manager to process the created message
+    	//start up a placeholder manager to process the created message		
+		runPlaceholderManager(messagePath, receiptPath, failurePath);		
 		
+	}
+
+	protected void runPlaceholderManager(String messagePath, String receiptPath,
+			String failurePath) throws InterruptedException {
 		//override some properties to use temp folders
 		PropertyFile propertyFile = new PropertyFile();
 		propertyFile.merge(PropertyFile.find("service.properties"));
@@ -98,8 +103,7 @@ public abstract class PlaceholderManagerTest {
 		});		
 		//run placeholder manager
 		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
-		pm.run();		
-		
+		pm.run();
 	}
 	
 	

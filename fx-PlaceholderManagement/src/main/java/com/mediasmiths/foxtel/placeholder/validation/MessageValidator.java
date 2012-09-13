@@ -63,8 +63,8 @@ public class MessageValidator {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	private boolean againstXSD(String filepath) throws SAXException,
-			ParserConfigurationException, IOException {
+	private boolean againstXSD(String filepath)
+	{
 		return schemaValidator.isValid(new File(filepath));
 	}
 
@@ -78,8 +78,7 @@ public class MessageValidator {
 	 * @throws MayamClientException
 	 */
 	public MessageValidationResult validateFile(String filepath)
-			throws SAXException, ParserConfigurationException, IOException,
-			MayamClientException {
+			throws	MayamClientException {
 
 		// first check the xml file conforms to the schema
 		boolean againstXSD = againstXSD(filepath);

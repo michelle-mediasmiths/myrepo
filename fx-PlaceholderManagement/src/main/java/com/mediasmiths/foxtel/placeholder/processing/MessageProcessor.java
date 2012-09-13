@@ -61,6 +61,7 @@ public class MessageProcessor implements Runnable {
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
 		this.failurePath=failurePath;
+		logger.debug("Using failure path "+failurePath);
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action)
@@ -268,18 +269,10 @@ public class MessageProcessor implements Runnable {
 				moveMessageToFailureFolder(filePath);
 			}
 
-		} catch (SAXException e) {
-			logger.error("SAXException:", e);
-			moveMessageToFailureFolder(filePath);
-		} catch (ParserConfigurationException e) {
-			logger.error("ParserConfigurationException:", e);
-			moveMessageToFailureFolder(filePath);
-		} catch (IOException e) {
-			logger.error("IOException:", e);
-			moveMessageToFailureFolder(filePath);
-		} catch (MayamClientException e) {
+		} 		
+		catch (MayamClientException e) {
 			logger.error(
-					String.format("MayamClientException %s", e.getErrorcode()),
+					String.format("MayamClientException validating placeholder message %s", e.getErrorcode()),
 					e);
 			moveMessageToFailureFolder(filePath);
 		}
@@ -292,7 +285,7 @@ public class MessageProcessor implements Runnable {
 	 */
 	private void moveMessageToFailureFolder(String messagePath){
 		logger.info(String.format("Message %s is invalid, sending to failure folder", messagePath));
-		logger.debug(String.format("Failure folder is: ",failurePath));
+		logger.debug(String.format("Failure folder is: %s ",failurePath));
 		
 		final String destination = failurePath + IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
 		
