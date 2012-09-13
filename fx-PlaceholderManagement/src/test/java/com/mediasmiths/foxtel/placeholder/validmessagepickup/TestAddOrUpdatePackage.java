@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

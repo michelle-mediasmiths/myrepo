@@ -73,7 +73,6 @@ public class MSItem {
 	 */
 	public Order createOrder (Order order, XMLGregorianCalendar orderCreated) throws DatatypeConfigurationException {
 		
-		HelperMethods method = new HelperMethods();
 		order.setOrderCreated(orderCreated);
 		order.setOrderReference("ABC123");
 		

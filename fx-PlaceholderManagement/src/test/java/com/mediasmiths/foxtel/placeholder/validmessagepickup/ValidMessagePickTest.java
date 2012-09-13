@@ -115,7 +115,6 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockValidCalls(message);
 		
-		String messageFilePath = messagePath + IOUtils.DIR_SEPARATOR + getFileName();	
 		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,archivePath,getFileName());
 
 		verifyValidCalls(message);
