@@ -15,6 +15,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.google.inject.Inject;
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
@@ -25,11 +26,12 @@ public class MediaPickupAgent extends DirectoryWatcher {
 
 	private static Logger logger = Logger.getLogger(MediaPickupAgent.class);
 
+	private final static String SCHEMA_PATH = "MaterialExchange_V2.0.xsd";
+	
 	// agent configuration, holds xsd and watch folder locations
 	private final MediaPickupAgentConfiguration configuration;
 
 	// jaxbcontext and a marshaller for reading xml files
-	private final JAXBContext jc;
 	private final Unmarshaller unmarhsaller;
 
 	// validates incoming xml against schema
@@ -46,14 +48,12 @@ public class MediaPickupAgent extends DirectoryWatcher {
 	private final Importer importer = new Importer();
 	private final Thread importerThread = new Thread(importer);
 
-	public MediaPickupAgent(MediaPickupAgentConfiguration configuration)
+	@Inject
+	public MediaPickupAgent(MediaPickupAgentConfiguration configuration, Unmarshaller unmarshaller)
 			throws JAXBException, SAXException {
 		this.configuration = configuration;
-		this.jc = JAXBContext
-				.newInstance("com.mediasmiths.foxtel.generated.MediaExchange");
-		this.unmarhsaller = jc.createUnmarshaller();
-		this.mediaExchangeValidator = new MediaExchangeValidator(
-				configuration.getMediaExchangeXSD());
+		this.unmarhsaller=unmarshaller;
+		this.mediaExchangeValidator = new MediaExchangeValidator(SCHEMA_PATH);
 	}
 
 	/**

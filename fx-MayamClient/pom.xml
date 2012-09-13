@@ -7,7 +7,7 @@
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.mediasmiths</groupId>
+	<groupId>com.mediasmiths.foxtel</groupId>
 	<artifactId>fx-MayamClient</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<packaging>jar</packaging>

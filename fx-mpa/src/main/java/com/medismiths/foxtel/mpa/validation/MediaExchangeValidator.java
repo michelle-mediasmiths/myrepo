@@ -23,7 +23,7 @@ public class MediaExchangeValidator
 	public MediaExchangeValidator(String schemaLocation) throws SAXException{
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		schema = schemaFactory.newSchema(new StreamSource(
-				this.getClass().getResourceAsStream(schemaLocation)));
+				this.getClass().getClassLoader().getResourceAsStream(schemaLocation)));
 	}
 	
 	public boolean isValid(File xml)

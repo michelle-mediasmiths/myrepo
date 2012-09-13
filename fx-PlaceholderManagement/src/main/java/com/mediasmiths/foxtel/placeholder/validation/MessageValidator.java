@@ -228,7 +228,7 @@ public class MessageValidator {
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
-		// TODO validate consumer advice (command seperated list of characters);
+		// TODO validate consumer advice?
 		logger.warn("No validation of consumer advice has taken place");
 
 		return MessageValidationResult.IS_VALID;
