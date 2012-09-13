@@ -26,9 +26,9 @@ public class SingleMessageProcessor extends MessageProcessor {
 	public SingleMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("placeholder.path.failure")  String failurePath) {
+			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("placeholder.path.failure")  String failurePath,@Named("placeholder.path.archive")  String archivePath) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller, mayamClient,failurePath);
+				unmarhsaller, mayamClient,failurePath,archivePath);
 	}
 
 	@Override

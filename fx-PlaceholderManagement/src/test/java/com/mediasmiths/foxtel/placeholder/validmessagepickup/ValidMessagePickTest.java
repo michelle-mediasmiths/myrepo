@@ -115,8 +115,8 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockValidCalls(message);
 		
-		String messageFilePath = getFilePath();
-		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,archivePath,messageFilePath);
+		String messageFilePath = messagePath + IOUtils.DIR_SEPARATOR + getFileName();	
+		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,archivePath,getFileName());
 
 		verifyValidCalls(message);
 		
@@ -124,10 +124,10 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		File receiptFile = new File(receiptPath + IOUtils.DIR_SEPARATOR +  message.getMessageID() + ".txt");	
 		logger.info("Looking for "+receiptFile.getAbsolutePath());
 		assertTrue(receiptFile.exists());
-		
-		//TODO what happens to the xml in the message folder after is has finished processing?
-		
-		
+		//the message should be moved to the archive folder
+		File archiveFile = new File(archivePath + IOUtils.DIR_SEPARATOR + getFileName());
+		logger.info("Looking for "+archiveFile.getAbsolutePath());
+		assertTrue(archiveFile.exists());
 	}
 	
 	

@@ -372,7 +372,7 @@ public class MessageValidator {
 			}
 		}
 
-		// TODO : complete validation of CreateOrUpdateTitle action
+		// TODO : validate channels
 		return MessageValidationResult.IS_VALID;
 	}
 

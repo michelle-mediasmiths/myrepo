@@ -60,7 +60,7 @@ public abstract class PlaceHolderMessageShortTest {
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath));
 		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
-				unmarhsaller, mayamClient, "failure path");
+				unmarhsaller, mayamClient, "failure path", "receipt path");
 
 	}
 

@@ -24,22 +24,34 @@ public class ConfigValidator {
 		
 		boolean anyFailures = false;
 		
-		if(!haveReadWritePermissions(messagePath)){
+		if(haveReadWritePermissions(messagePath)){
+			configValidationPasses(MESSAGE_PATH, messagePath);
+		}
+		else{
 			anyFailures = true;
 			configValidationFails(MESSAGE_PATH, messagePath);
 		}
 		
-		if(!haveReadWritePermissions(failurePath)){
+		if(haveReadWritePermissions(failurePath)){
+			configValidationPasses(FAILURE_PATH, failurePath);
+		}
+		else{
 			anyFailures = true;
 			configValidationFails(FAILURE_PATH, failurePath);
 		}
 		
-		if(!haveReadWritePermissions(archivePath)){
+		if(haveReadWritePermissions(archivePath)){
+			configValidationPasses(ARCHIVE_PATH, archivePath);
+		}
+		else{
 			anyFailures = true;
 			configValidationFails(ARCHIVE_PATH, archivePath);
 		}
 		
-		if(!haveReadWritePermissions(receiptPath)){
+		if(haveReadWritePermissions(receiptPath)){
+			configValidationPasses(RECEIPT_PATH, receiptPath);
+		}
+		else{
 			anyFailures = true;
 			configValidationFails(RECEIPT_PATH, receiptPath);
 		}
@@ -48,6 +60,10 @@ public class ConfigValidator {
 			logger.fatal("There are config validation failures");
 			throw new ConfigValidationFailureException(); //by throwing this exception guice will not construct a PlaceholderManager (which required a ConfigValidator)
 		}
+	}
+	
+	private void configValidationPasses(String name, String value){
+		logger.info(String.format("Using %s for %s VALIDATES", value,name));
 	}
 	
 	private void configValidationFails(String name, String value){
