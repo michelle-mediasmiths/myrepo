@@ -33,7 +33,7 @@
 		<module>fx-MaterialExchange</module>
 		<module>fx-MayamClient</module>
 		<module>fx-Agent</module>
-		<module>fx-PlaceholderManagement</module>
+		<module>fx-PlaceholderAgent</module>
 		<module>fx-MediaPickupAgent</module>
 	</modules>
 
