@@ -15,8 +15,8 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
-import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+import au.com.foxtel.cf.mam.pms.Package;
 
 import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.MessageValidationResult;
