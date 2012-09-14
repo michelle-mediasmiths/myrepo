@@ -28,6 +28,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -59,6 +60,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -68,7 +70,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.createTitle(coup)).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 		// the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		// verfiy update call took place
 		verify(mayamClient).createTitle(coup);
 	}
@@ -78,6 +80,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidUpdateTitleProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -88,7 +91,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.updateTitle(coup)).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 		// the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		// verfiy update call took place
 		verify(mayamClient).updateTitle(coup);
 
@@ -100,12 +103,13 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 			throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 
 		// prepare mock mayamClient
 		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 		// the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 	}
 
 	@Test(expected = MessageProcessingFailedException.class)
@@ -113,6 +117,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessingFailesOnCreateTitle()
 			throws Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -122,7 +127,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.createTitle(coup)).thenReturn(
 				MayamClientErrorCode.TITLE_CREATION_FAILED);
 		// the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 	}
 
 	@Test

@@ -8,14 +8,15 @@ import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.XmlWatchingAgent;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
 public class PlaceholderAgent extends XmlWatchingAgent<PlaceholderMessage> {
 
 	@Inject
-	public PlaceholderAgent(DirectoryWatchingQueuer directoryWatcher,
+	public PlaceholderAgent(ConfigValidator configValidator,DirectoryWatchingQueuer directoryWatcher,
 			MessageProcessor<PlaceholderMessage> messageProcessor,
 			ShutdownManager shutdownManager) throws JAXBException {
-		super(directoryWatcher, messageProcessor, shutdownManager);
+		super(configValidator,directoryWatcher, messageProcessor, shutdownManager);
 	}
 }

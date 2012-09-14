@@ -14,6 +14,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
@@ -165,8 +166,11 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	 * @throws MessageProcessingFailedException
 	 */
 	@Override
-	public void processMessage(PlaceholderMessage message)
+	public void processMessage(MessageEnvelope<PlaceholderMessage> envelope)
 			throws MessageProcessingFailedException {
+		
+		PlaceholderMessage message = envelope.getMessage();
+		
 		Object action = message.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
@@ -215,6 +219,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					unmarshalled.getClass().toString()));
 		}
 		
+	}
+
+	@Override
+	protected void processNonMessageFile(String filePath) {
+		logger.error("Placeholder Agent does not expect non message files");	
+		throw new RuntimeException(String.format("Placeholder Agent does not expect non message files %s",filePath));
 	}
 
 }

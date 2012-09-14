@@ -21,6 +21,7 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -62,6 +63,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -69,7 +71,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		//verfiy update call took place
 		verify(mayamClient).createPackage(aoup.getPackage());
 	}
@@ -80,6 +82,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(EXISTING_PACKAGE_ID,
 				EXISTING_MATERIAL,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -87,7 +90,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(true));
 		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		//verfiy update call took place
 		verify(mayamClient).updatePackage(aoup.getPackage());
 
@@ -100,11 +103,12 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		//prepare mock mayamClient
 		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		
 	}
 	
@@ -114,6 +118,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -121,7 +126,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.PACKAGE_CREATION_FAILED);
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 				
 	}
 	

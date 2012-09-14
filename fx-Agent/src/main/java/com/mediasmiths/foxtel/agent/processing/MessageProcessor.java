@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.agent.processing;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -76,7 +78,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 			@SuppressWarnings("unchecked")
 			T message = (T) unmarshalled;
 			try {
-				processMessage(message);
+				processMessage(new MessageEnvelope<T>(new File(filePath), message));
 			} catch (MessageProcessingFailedException e) {
 				logger.error(String.format(
 						"Message processing failed for %s and reason %s",
@@ -133,7 +135,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		
 	}
 	
-	protected abstract void processMessage(T message) throws MessageProcessingFailedException;
+	protected abstract void processMessage(MessageEnvelope<T> envelope) throws MessageProcessingFailedException;
 	
 	/**
 	 * Moves erroneous messages to a configurable location
@@ -201,13 +203,26 @@ public abstract class MessageProcessor<T> implements Runnable {
 		while (!stopRequested) {
 			try {
 				String filePath = getFilePathsPending().take();
-				validateThenProcessFile(filePath);
+				
+				if(isMessage(filePath)){
+					validateThenProcessFile(filePath);	
+				}
+				else{
+					processNonMessageFile(filePath);
+				}
+				
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
 				stop();
 			}
 		}
 
+	}
+
+	protected abstract void processNonMessageFile(String filePath);
+	
+	protected boolean isMessage(String filePath) {
+		return FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH).equals("xml");
 	}
 
 	public void stop() {

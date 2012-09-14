@@ -1,76 +1,43 @@
 package com.medismiths.foxtel.mpa.delivery;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.medismiths.foxtel.mpa.PendingImport;
+import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
 
 public class Importer implements Runnable {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
-	
-	//imports that have been identified and are waiting to be processed
-	private final Set<PendingImport> pendingImports = new HashSet<PendingImport>();
-	//the time to sleep each iteration before checking for pending imports
-	private final long sleepTime = 5000L;
-	
-	public Importer() {
+
+	private final PendingImportQueue pendingImports;
+	private boolean stopRequested = false;
+
+	@Inject
+	public Importer(PendingImportQueue pendingImports) {
+		this.pendingImports=pendingImports;
 	}
 
 	@Override
 	public void run() {
-
-		while(true){
-			
-			PendingImport pi = pickupAnImport();
-			
-			if(pi != null){
+		logger.debug("Importer start");
+		
+		while (!stopRequested) {
+			try {
+				PendingImport pi = pendingImports.take();	
 				logger.info("Picked up an import");
 				new FileDelivery().onAssetAndXMLArrival(pi.getXmlFile(),pi.getMediaFile(),pi.getMaterial());
 				logger.trace("Finished with import");
-			}
-			
-			try {
-				Thread.sleep(sleepTime);
 			} catch (InterruptedException e) {
-				logger.warn("Importer thread interrupted",e);
+				logger.info("Interruped!", e);
+				stop();
 			}
 		}
 		
-	}
-
-	private PendingImport pickupAnImport() {
-		PendingImport pi = null;
-		
-		synchronized (pendingImports) {
-			
-			int pendingImportsSize = pendingImports.size();
-			
-			logger.trace("PendingImports size = "+pendingImportsSize);
-			
-			if(pendingImportsSize > 0){
-				Iterator<PendingImport> iterator = pendingImports.iterator();
-				pi = iterator.next();
-				iterator.remove();				
-			}
-		}
-		return pi;
+		logger.debug("Importer stop");
 	}
 	
-	/**
-	 * Adds a pending import to be picked up by this imported
-	 * @param pendingImport
-	 */
-	public void addPendingImport(PendingImport pendingImport){
-		
-		logger.info("Adding pending import");
-		synchronized (pendingImports) {
-			pendingImports.add(pendingImport);
-		}
-		
+	public void stop() {
+		stopRequested = true;
 	}
-
 }

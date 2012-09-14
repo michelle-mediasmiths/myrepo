@@ -1,223 +1,35 @@
 package com.medismiths.foxtel.mpa;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.Inject;
-import com.mediasmiths.FileWatcher.DirectoryWatcher;
 import com.mediasmiths.foxtel.agent.XmlWatchingAgent;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
-import com.medismiths.foxtel.mpa.config.MediaPickupAgentConfiguration;
 import com.medismiths.foxtel.mpa.delivery.Importer;
-import com.medismiths.foxtel.mpa.validation.MediaExchangeValidator;
 
 public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 
 	private static Logger logger = Logger.getLogger(MediaPickupAgent.class);
 
+	private final Importer importer;
+	private final Thread importerThread;
 	
-
-	// the lonelyMXFs and lonelyXmls collections hold files which we have seen but have not
-	// yet processed as they are still awaiting a companion file
-	
-	// TODO: configure some way to give up on a lonely file if its partner does not arrive in N miliseconds
-	private final Set<File> lonelyMXFs = new HashSet<File>();
-	private final Map<File, Material> lonelyXmls = new HashMap<File, Material>();
-
-	// the importer runs in a seperate thread to file watching, it is informed of pairs of files (xml + mxf) that are ready to be imported
-	private final Importer importer = new Importer();
-	private final Thread importerThread = new Thread(importer);
-
 	@Inject
-	public MediaPickupAgent(DirectoryWatchingQueuer directoryWatcher,
+	public MediaPickupAgent(ConfigValidator configValidator,DirectoryWatchingQueuer directoryWatcher,
 			MessageProcessor<Material> messageProcessor,
-			ShutdownManager shutdownManager) throws JAXBException {
-		super(directoryWatcher, messageProcessor, shutdownManager);
+			ShutdownManager shutdownManager, Importer importer) throws JAXBException {
+		super(configValidator,directoryWatcher, messageProcessor, shutdownManager);
+		
+		this.importer=importer;
+		this.importerThread = new Thread(importer);
+		this.importerThread.setName("Importer");
+		registerThread(importerThread);
 	}
-
-//
-//	@Override
-//	/**
-//	 * Checks type of incoming files, validates xml files
-//	 * @see com.mediasmiths.FileWatcher.FileWatcherMethod.newFileCheck(String FilePath, String FileName)
-//	 */
-//	public void newFileCheck(String filePath, String fileName) {
-//		File file = new File(filePath + fileName);
-//
-//		if (fileName.toLowerCase().endsWith(".xml")) {
-//			logger.info("An xml file has arrived");
-//			boolean isSchemaValid = mediaExchangeValidator.isValid(file);
-//			onXmlArrival(file, isSchemaValid);
-//		} else if (fileName.toLowerCase().endsWith(".mxf")) {
-//			logger.info("An mxf file has arrived");
-//			onMXFArrival(file);
-//		} else {
-//			logger.warn("An unexpected file type has arrived");
-//		}
-//	}
-
-//
-//
-//	/**
-//	 * Called when an xml file conforming to our xsd arrived
-//	 * 
-//	 * @param xml
-//	 *            - a File object referencing the xml file
-//	 */
-//	private void processSchemaValidXML(File xml) {
-//
-//		// an xml file has arrived and it has validated against the schema so we
-//		// should be able to unmarshall
-//		logger.debug(String.format("about to unmarshall %s",
-//				xml.getAbsolutePath()));
-//
-//		try {
-//			Object unmarshalled = unmarshallFile(xml);
-//
-//			if (unmarshalled instanceof Material)
-//			{
-//				// if the supplied xml represents a Material
-//				Material programme = (Material) unmarshalled;
-//				onMaterialXmlArrival(programme, xml);
-//			}
-//
-//			// TODO : 2.2.2.1 TNS File Delivery – Associated Content
-//			// else if unmarshalled instance of (blackspot metadata, companion
-//			// assets metadata (commerial??))
-//
-//			else {
-//				logger.error(String.format(
-//						"XML at %s does not describe a Material", xml));
-//				handleInvalidXML(xml, "Does not describe a Material");
-//			}
-//		} catch (JAXBException e) {
-//			logger.error(
-//					String.format("Exception unmarshalling %s",
-//							xml.getAbsolutePath()), e);
-//			handleInvalidXML(xml, "Unmarshalling error " + e.getMessage());
-//		}
-//	}
-
-
-//	/**
-//	 * Called when a Material arrives
-//	 * 
-//	 * 
-//	 * Looks for the media file described by an xml file, if the media has been seen then the pair are added to a list of pending imports
-//	 * 
-//	 * If the media has not been seen then the xml file is added to a list of xml files awaiting media
-//	 * 
-//	 * 
-//	 * @param programme
-//	 *            - the unmarshalled xml
-//	 * @param xml
-//	 *            - the delivered xmlfile
-//	 */
-//	private synchronized void onMaterialXmlArrival(Material material,
-//			File xml) {
-//
-//		logger.fatal("onProgrammeXmlArrival Not implemented");
-//
-//		// we dont know if the xml or mxf will arrive first, and of course one
-//		// may arrive and not the other so we keep a list of 'lonely' files
-//		// until we see their partner
-//		// TODO: add configurable time before giving up on a partner
-//
-//		String xmlAbsolutePath = xml.getAbsolutePath();
-//		String basename = FilenameUtils.getBaseName(xmlAbsolutePath);
-//		String path = FilenameUtils.getPath(xmlAbsolutePath);
-//		File mxfFile = new File(path + System.getProperty("file.separator")
-//				+ basename + FilenameUtils.EXTENSION_SEPARATOR + "mxf");
-//
-//		if (lonelyMXFs.contains(mxfFile)) {
-//			logger.info(String.format("found a media file %s for xml file %s",
-//					mxfFile.getAbsolutePath(), xml.getAbsolutePath()));
-//
-//			// we have picked up the xml for a media file awaiting a sidecar,
-//			// add pending import
-//			PendingImport pendingImport = new PendingImport(xml, mxfFile,
-//					material);
-//			importer.addPendingImport(pendingImport);
-//		} else {
-//			logger.info(String.format(
-//					"Have not yet seen the media file for %s",
-//					xml.getAbsolutePath()));
-//			lonelyXmls.put(xml, material);
-//		}
-//
-//	}
-//
-//	/**
-//	 * Called when an mxf has arrived (notified by FolderWatcher)
-//	 * 
-//	 * Looks for the medias sidecar xml, if the xml has been seen then the pair are added to a list of pending imports
-//	 * 
-//	 * If the sidecar xml has not been seen then the mxf file is added to a list of mxfs awaiting xml files
-//	 * 
-//	 * @param mxf
-//	 */
-//	protected synchronized void onMXFArrival(File mxf) {
-//		logger.fatal("onMXFArrival Not implemented");
-//
-//		// we dont know if the xml or mxf will arrive first, and of course one
-//		// may arrive and not the other so we keep a list of 'lonely' files
-//		// until we see their partner
-//		// TODO: add configurable time before giving up on a partner
-//	
-//		
-//		String xmlAbsolutePath = mxf.getAbsolutePath();
-//		String basename = FilenameUtils.getBaseName(xmlAbsolutePath);
-//		String path = FilenameUtils.getPath(xmlAbsolutePath);
-//		File xmlFile = new File(path + System.getProperty("file.separator")
-//				+ basename + FilenameUtils.EXTENSION_SEPARATOR + "xml");
-//
-//		// look for the xml file corresponding to this mxf
-//		if (lonelyXmls.containsKey(xmlFile)) {
-//			logger.info(String.format(
-//					"found an xml file %s for media file file %s",
-//					xmlFile.getAbsolutePath(), mxf.getAbsolutePath()));
-//
-//			Material material = lonelyXmls.get(xmlFile);
-//
-//			// add pending import
-//			PendingImport pendingImport = new PendingImport(xmlFile, mxf,
-//					material);
-//			importer.addPendingImport(pendingImport);
-//		} else {
-//			logger.info(String.format("Have not yet seen the xml file for %s",mxf.getAbsolutePath()));
-//			lonelyMXFs.add(mxf);
-//		}
-//
-//	}
-
-//	/**
-//	 * Called when an invalid xml files arrives
-//	 * 
-//	 * @param xml
-//	 */
-//	private void handleInvalidXML(File xml, String reason) {
-//		// see : FOXTEL Content Factory - MAM Project - Phase 1 - Workflow
-//		// Engine v3.1.pdf
-//		// 2.1.2.2 Media file is delivered without the companion XML file (or
-//		// with a corrupt XML file)
-//		logger.fatal("handleInvalidXML Not implemented");
-//		// TODO: handleInvalidXML
-//	}
 
 }

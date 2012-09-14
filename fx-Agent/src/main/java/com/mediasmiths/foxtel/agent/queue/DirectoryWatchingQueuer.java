@@ -42,8 +42,12 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		
 		if (fileName.toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
 			logger.info("An xml file has arrived");
-			this.filePathsPendingValidation.add(file.getAbsolutePath());
+			queueFile(file);
 		}
+	}
+
+	protected boolean queueFile(File file) {
+		return this.filePathsPendingValidation.add(file.getAbsolutePath());
 	}
 
 	@Override
@@ -91,6 +95,10 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		return existingFilesList;
 	}
 
+	protected IOFileFilter getExistingFilesFilter(){
+		return acceptXMLFilesFilter;
+	}
+	
 	private static IOFileFilter acceptXMLFilesFilter = new IOFileFilter() {
 		
 		@Override
@@ -105,6 +113,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	};
 	
 	private Collection<File> listFiles() {
+		logger.debug("Listing files in "+path);
 		Collection<File> existingFiles = FileUtils.listFiles(new File(path), acceptXMLFilesFilter, TrueFileFilter.INSTANCE);
 		return existingFiles;
 	}

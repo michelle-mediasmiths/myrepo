@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
@@ -13,11 +14,12 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamClient;
 
-public class MediaExchangeValidator extends MessageValidator<Material> {
+public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 	private final MayamClient mayamClient;
 
-	public MediaExchangeValidator(Unmarshaller unmarshaller,
+	@Inject
+	public MaterialExchangeValidator(Unmarshaller unmarshaller,
 			MayamClient mayamClient, ReceiptWriter receiptWriter,
 			SchemaValidator schemaValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
@@ -25,7 +27,7 @@ public class MediaExchangeValidator extends MessageValidator<Material> {
 	}
 
 	private static Logger logger = Logger
-			.getLogger(MediaExchangeValidator.class);
+			.getLogger(MaterialExchangeValidator.class);
 
 	@Override
 	protected MessageValidationResult validateMessage(Material message) {

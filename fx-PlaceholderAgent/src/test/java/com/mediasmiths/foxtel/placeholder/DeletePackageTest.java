@@ -18,6 +18,7 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Package;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -59,6 +60,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageProcessing() throws MessageProcessingFailedException{
 		
 		PlaceholderMessage pm =buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		DeletePackage dp = (DeletePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -66,7 +68,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deletePackage(dp)).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		
 		//verify expected calls
 		verify(mayamClient).deletePackage(dp);
@@ -79,14 +81,15 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageProcessingFails() throws MessageProcessingFailedException{
 		
 	PlaceholderMessage pm =buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
-		
+	MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);	
+	
 		DeletePackage dp = (DeletePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
 		//prepare mock mayam client
 		when(mayamClient.deletePackage(dp)).thenReturn(MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
 		
 		//the call we are testing
-		processor.processMessage(pm);		
+		processor.processMessage(envelope);		
 	}
 
 

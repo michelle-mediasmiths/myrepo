@@ -43,7 +43,7 @@ public class PlaceholderMessageValidator extends
 			SchemaValidator schemaValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
-	}
+	} 
 
 	protected MessageValidationResult validateMessage(PlaceholderMessage message) {
 

@@ -19,6 +19,7 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -45,6 +46,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -52,7 +54,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 		
 		//verify expected calls
 		verify(mayamClient).deleteMaterial(dm);
@@ -65,6 +67,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 	public void testDeleteMaterialProcessingFails() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -72,7 +75,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 		
 		//the call we are testing
-		processor.processMessage(pm);
+		processor.processMessage(envelope);
 	}
 
 	private PlaceholderMessage buildDeleteMaterialRequest(boolean materialProtected, String titleID) throws DatatypeConfigurationException {

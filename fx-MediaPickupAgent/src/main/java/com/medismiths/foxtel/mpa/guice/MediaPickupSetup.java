@@ -12,13 +12,10 @@ public class MediaPickupSetup implements GuiceSetup {
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config) {
 		modules.add(new MediaPickupModule());
-
 	}
 
 	@Override
 	public void injectorCreated(Injector injector) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

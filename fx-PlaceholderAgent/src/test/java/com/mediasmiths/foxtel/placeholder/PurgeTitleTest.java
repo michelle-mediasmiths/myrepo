@@ -17,6 +17,7 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -55,46 +56,55 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
 				.thenReturn(true);
 
-		assertEquals(
-				MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
 				validator.validateFile(temp.getAbsolutePath()));
 	}
-	
+
 	@Test
 	@Category(ProcessingTests.class)
-	public void testPurgeTitleProcessing() throws MessageProcessingFailedException{
-		
-		PlaceholderMessage pm =  buildDeleteTitleRequest(false, EXISTING_TITLE);
-		
-		PurgeTitle pt = (PurgeTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-		
-		//prepare mock mayam client
-		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.SUCCESS);
-		
-		//the call we are testing
-		processor.processMessage(pm);
-		
-		//verify expected calls
+	public void testPurgeTitleProcessing()
+			throws MessageProcessingFailedException {
+
+		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
+				new File("/dev/null"), pm);
+
+		PurgeTitle pt = (PurgeTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+
+		// prepare mock mayam client
+		when(mayamClient.purgeTitle(pt)).thenReturn(
+				MayamClientErrorCode.SUCCESS);
+
+		// the call we are testing
+		processor.processMessage(envelope);
+
+		// verify expected calls
 		verify(mayamClient).purgeTitle(pt);
-		
-		
-	}
-	
-	@Test(expected = MessageProcessingFailedException.class)
-	@Category(ProcessingTests.class)
-	public void testPurgeTitleProcessingFails() throws MessageProcessingFailedException{
-		
-	PlaceholderMessage pm =  buildDeleteTitleRequest(false, EXISTING_TITLE);
-		
-		PurgeTitle pt = (PurgeTitle) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-		
-		//prepare mock mayam client
-		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.TITLE_UPDATE_FAILED);
-		
-		//the call we are testing
-		processor.processMessage(pm);		
+
 	}
 
+	@Test(expected = MessageProcessingFailedException.class)
+	@Category(ProcessingTests.class)
+	public void testPurgeTitleProcessingFails()
+			throws MessageProcessingFailedException {
+
+		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
+				new File("/dev/null"), pm);
+
+		PurgeTitle pt = (PurgeTitle) pm.getActions()
+				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0);
+
+		// prepare mock mayam client
+		when(mayamClient.purgeTitle(pt)).thenReturn(
+				MayamClientErrorCode.TITLE_UPDATE_FAILED);
+
+		// the call we are testing
+		processor.processMessage(envelope);
+	}
 
 	@Test
 	@Category(ValidationTests.class)
@@ -107,8 +117,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 						new MayamClientException(MayamClientErrorCode.FAILURE));
 
 		// try to call validation, expect a mayam client error
-		assertEquals(
-				MessageValidationResult.MAYAM_CLIENT_ERROR,
+		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,
 				validator.validateFile(temp.getAbsolutePath()));
 	}
 
