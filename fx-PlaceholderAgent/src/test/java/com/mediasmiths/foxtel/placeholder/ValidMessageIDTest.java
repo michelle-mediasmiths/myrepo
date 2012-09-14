@@ -16,7 +16,7 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 
 public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 

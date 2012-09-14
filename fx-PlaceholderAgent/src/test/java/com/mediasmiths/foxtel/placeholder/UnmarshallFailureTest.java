@@ -19,8 +19,8 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
-import com.mediasmiths.foxtel.agent.SchemaValidator;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;

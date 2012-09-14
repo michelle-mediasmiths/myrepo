@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.agent;
+package com.mediasmiths.foxtel.agent.processing;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,10 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 
 /**
  * Processes messages taken from a queue
@@ -85,11 +89,11 @@ public abstract class MessageProcessor<T> implements Runnable {
 		} catch (JAXBException e) {
 			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNMARSHALL_FAILED,e);
+					MessageProcessingFailureReason.UNMARSHALL_FAILED,e);
 		} catch (ClassCastException cce) {
 			logger.fatal("A prevously validated file did not have an action of one of the expected types",cce);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNKNOWN_ACTION,cce);
+					MessageProcessingFailureReason.UNKNOWN_ACTION,cce);
 		}
 
 	}

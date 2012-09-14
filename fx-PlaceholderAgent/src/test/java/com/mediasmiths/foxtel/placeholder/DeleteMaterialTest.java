@@ -19,8 +19,8 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.mayam.MayamClientErrorCode;

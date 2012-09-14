@@ -21,7 +21,7 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
 import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;

@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.agent;
+package com.mediasmiths.foxtel.agent.queue;
 
 import java.io.File;
 import java.io.IOException;

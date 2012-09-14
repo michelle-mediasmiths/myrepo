@@ -22,9 +22,10 @@ import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
-import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.SchemaValidator;
+import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
+
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.util.Util;

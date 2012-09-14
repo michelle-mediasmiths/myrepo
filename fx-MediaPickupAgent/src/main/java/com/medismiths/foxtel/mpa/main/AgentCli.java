@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa;
+package com.medismiths.foxtel.mpa.main;
 
 import javax.xml.bind.JAXBException;
 
@@ -8,6 +8,8 @@ import org.xml.sax.SAXException;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.medismiths.foxtel.mpa.MediaPickupAgent;
+import com.medismiths.foxtel.mpa.guice.MediaPickupSetup;
 
 public class AgentCli {
 
@@ -17,8 +19,9 @@ public class AgentCli {
 	 * @param args
 	 * @throws JAXBException 
 	 * @throws SAXException 
+	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws JAXBException, SAXException {
+	public static void main(String[] args) throws JAXBException, SAXException, InterruptedException {
 
 		logger.info("Agentcli starting up");
 		
@@ -28,7 +31,7 @@ public class AgentCli {
 		try
 		{
 			MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);
-			mpa.start();
+			mpa.run();
 		}
 		finally
 		{

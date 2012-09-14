@@ -22,10 +22,10 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
-import com.mediasmiths.foxtel.agent.MessageValidator;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.SchemaValidator;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 

@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.agent.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 
 public class NonXSDConformingTest extends PlaceHolderMessageShortTest{

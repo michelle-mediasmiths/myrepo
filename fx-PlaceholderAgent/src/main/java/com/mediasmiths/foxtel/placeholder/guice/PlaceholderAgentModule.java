@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.mediasmiths.foxtel.agent.MessageProcessor;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;

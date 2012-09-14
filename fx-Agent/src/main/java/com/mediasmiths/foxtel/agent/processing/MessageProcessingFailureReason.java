@@ -1,6 +1,6 @@
-package com.mediasmiths.foxtel.agent;
+package com.mediasmiths.foxtel.agent.processing;
 
-public enum MesageProcessingFailureReason {
+public enum MessageProcessingFailureReason {
 	
 	MAYAM_CLIENT_EXCEPTION,
 	MAYAM_CLIENT_ERRORCODE,

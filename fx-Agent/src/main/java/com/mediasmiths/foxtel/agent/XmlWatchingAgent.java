@@ -4,6 +4,8 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
 
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 
@@ -37,7 +39,7 @@ public abstract class XmlWatchingAgent<T> implements StoppableService {
 		logger.trace("XmlWatchingAgent constructor return");
 	}
 	
-public void run() throws InterruptedException{
+	public void run() throws InterruptedException{
 		
 		logger.debug("XmlWatchingAgent run");
 		

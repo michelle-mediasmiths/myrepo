@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.agent;
+package com.mediasmiths.foxtel.agent.validation;
 
 import java.io.File;
 
@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.google.inject.Inject;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
 
 public abstract class MessageValidator<T> {
 

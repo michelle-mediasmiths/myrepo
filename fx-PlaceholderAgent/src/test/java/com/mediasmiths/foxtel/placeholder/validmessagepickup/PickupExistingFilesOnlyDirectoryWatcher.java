@@ -4,8 +4,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.DirectoryWatchingQueuer;
-import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 
 public class PickupExistingFilesOnlyDirectoryWatcher extends
 		DirectoryWatchingQueuer {

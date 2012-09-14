@@ -14,11 +14,11 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.agent.MesageProcessingFailureReason;
-import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.agent.MessageProcessor;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -68,7 +68,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if material %s exists",
 					action.getMaterial().getMaterialD()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if package %s exists",
 					action.getPackage().getPresentationID()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.error(String.format(
 					"Failed to process action, result was %s", result));
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+					MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
 		}
 	}
 
@@ -136,7 +136,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if title %s exists",
 					action.getTitleID()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 
