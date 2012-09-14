@@ -11,10 +11,10 @@ public class ConfigValidator {
 
 	private static Logger logger = Logger.getLogger(ConfigValidator.class);
 	
-	private static final String MESSAGE_PATH = "agent.path.message";
-	private static final String FAILURE_PATH = "agent.path.failure";
-	private static final String ARCHIVE_PATH = "agent.path.archive";
-	private static final String RECEIPT_PATH = "agent.path.receipt";
+	protected static final String MESSAGE_PATH = "agent.path.message";
+	protected static final String FAILURE_PATH = "agent.path.failure";
+	protected static final String ARCHIVE_PATH = "agent.path.archive";
+	protected static final String RECEIPT_PATH = "agent.path.receipt";
 	
 	@Inject
 	public ConfigValidator(@Named(MESSAGE_PATH) String messagePath,
@@ -57,20 +57,24 @@ public class ConfigValidator {
 		}
 		
 		if(anyFailures){
-			logger.fatal("There are config validation failures");
-			throw new ConfigValidationFailureException(); //by throwing this exception guice will not construct a PlaceholderManager (which required a ConfigValidator)
+			onFailure();
 		}
 	}
+
+	protected final void onFailure() throws ConfigValidationFailureException {
+		logger.fatal("There are config validation failures");
+		throw new ConfigValidationFailureException(); //by throwing this exception guice will not construct a PlaceholderManager (which required a ConfigValidator)
+	}
 	
-	private void configValidationPasses(String name, String value){
+	protected final void configValidationPasses(String name, String value){
 		logger.info(String.format("Using %s for %s VALIDATES", value,name));
 	}
 	
-	private void configValidationFails(String name, String value){
+	protected final void configValidationFails(String name, String value){
 		logger.error(String.format("Do not have read + write permissions on %s, check config value %s", value, name));
 	}
 	
-	private boolean haveReadWritePermissions(String folderPath){
+	protected final boolean haveReadWritePermissions(String folderPath){
 		
 		File folder = new File(folderPath);		
 		return (folder.canRead() && folder.canWrite());

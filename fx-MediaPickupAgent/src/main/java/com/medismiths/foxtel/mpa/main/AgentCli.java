@@ -9,7 +9,6 @@ import com.google.inject.Injector;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.medismiths.foxtel.mpa.MediaPickupAgent;
-import com.medismiths.foxtel.mpa.delivery.Importer;
 import com.medismiths.foxtel.mpa.guice.MediaPickupSetup;
 
 public class AgentCli {

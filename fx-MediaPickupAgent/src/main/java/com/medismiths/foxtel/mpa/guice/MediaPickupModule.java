@@ -12,11 +12,13 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.medismiths.foxtel.mpa.queue.MaterialFolderWatcher;
+import com.medismiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
 public class MediaPickupModule extends AbstractModule {
 
@@ -27,25 +29,27 @@ public class MediaPickupModule extends AbstractModule {
 	protected void configure() {
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
-		bind(new TypeLiteral<MessageProcessor<Material>>(){}).to(MaterialExchangeProcessor.class);
+		bind(messageProcessorLiteral).to(MaterialExchangeProcessor.class);
+		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
 	}
 
+	private static TypeLiteral<MessageProcessor<Material>> messageProcessorLiteral =  new TypeLiteral<MessageProcessor<Material>>(){};
 
 	@Provides
-	Unmarshaller provideUnmarshaller() {
+	Unmarshaller provideUnmarshaller() throws JAXBException {
 		JAXBContext jc = null;
 		try {
 			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");
 		} catch (JAXBException e) {
 			logger.fatal("Could not create jaxb context", e);
-			System.exit(1);
+			throw e;
 		}
 		Unmarshaller unmarshaller = null;
 		try {
 			unmarshaller = jc.createUnmarshaller();
 		} catch (JAXBException e) {
 			logger.fatal("Could not create unmarshaller", e);
-			System.exit(1);
+			throw e;
 		}
 		return unmarshaller;
 	}

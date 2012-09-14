@@ -27,7 +27,9 @@ public interface MayamClient {
 	public MayamClientErrorCode updateMaterial(MaterialType material);
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
 	public boolean materialExists(String materialID) throws MayamClientException;
-
+	//returns true if the specified material has not had media\essence ingested
+	public boolean isMaterialPlaceholder(String materialID);
+	
 	/* packages */
 	public MayamClientErrorCode createPackage(PackageType txPackage);
 	public MayamClientErrorCode updatePackage(PackageType txPackage);
@@ -37,6 +39,8 @@ public interface MayamClient {
 
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
+
+	
 
 
 }

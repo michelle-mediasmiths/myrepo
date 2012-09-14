@@ -252,4 +252,9 @@ public class MayamClientImpl implements MayamClient {
 		return packageController.packageExists(presentationID);
 	}
 
+	@Override
+	public boolean isMaterialPlaceholder(String materialID) {
+		throw new RuntimeException("isMaterialPlaceholder not implemented");
+	}
+
 }

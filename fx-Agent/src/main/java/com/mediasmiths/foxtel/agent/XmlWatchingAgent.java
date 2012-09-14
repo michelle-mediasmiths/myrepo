@@ -7,6 +7,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
@@ -27,10 +28,13 @@ public abstract class XmlWatchingAgent<T> implements StoppableService {
 	
 	private final List<Thread> threads = new ArrayList<Thread>();
 
+	@Inject
 	public XmlWatchingAgent(ConfigValidator configValidator, DirectoryWatchingQueuer directoryWatcher,
 			MessageProcessor<T> messageProcessor,ShutdownManager shutdownManager) throws JAXBException {
 		logger.trace("XmlWatchingAgent constructor enter");
 
+		//configvalidator is injected by guice, its constructor can fail. this prevents the application even starting if there is a problem with the config
+		
 		// directory watching
 		this.directoryWatcher = directoryWatcher;
 		this.directoryWatcherThread = new Thread(directoryWatcher);
@@ -49,7 +53,7 @@ public abstract class XmlWatchingAgent<T> implements StoppableService {
 		logger.trace("XmlWatchingAgent constructor return");
 	}
 	
-	protected void registerThread(Thread t){
+	protected final void registerThread(Thread t){
 		logger.debug(String.format("Registering thread %s", t.getName()));
 		threads.add(t);
 	}

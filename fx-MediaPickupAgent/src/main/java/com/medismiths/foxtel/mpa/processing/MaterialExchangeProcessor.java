@@ -3,6 +3,7 @@ package com.medismiths.foxtel.mpa.processing;
 import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -17,10 +18,15 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.medismiths.foxtel.mpa.PendingImport;
 import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
 import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
@@ -92,6 +98,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	protected void processMessage(MessageEnvelope<Material> envelope)
 			throws MessageProcessingFailedException {
 		
+		updateMamWithMaterialInformation(envelope.getMessage());	
+		
 		// we dont know if the xml or mxf will arrive first, and of course one
 		// may arrive and not the other so we keep a list of 'lonely' files
 		// until we see their partner
@@ -123,6 +131,50 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		}
 	}
 
+	/**
+	 * Update any missing metadata for the Item in Viz Ardome with the aggregator information from the XML file
+	 * @param message
+	 * @throws MessageProcessingFailedException 
+	 */
+	private void updateMamWithMaterialInformation(Material message) throws MessageProcessingFailedException {
+		updateTitle(message.getTitle());
+		updateMaterial(message.getTitle().getProgrammeMaterial());
+		updatePackages(message.getTitle().getProgrammeMaterial().getPresentation().getPackage());		
+	}
+
+	private void updateTitle(Title title) throws MessageProcessingFailedException {
+		MayamClientErrorCode result = mayamClient.updateTitle(title);
+		
+		if(result != MayamClientErrorCode.SUCCESS){
+			logger.error(String.format("Error updating title %s", title.getTitleID()));
+			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+		}
+	}
+	
+	private void updateMaterial(ProgrammeMaterialType programmeMaterial) throws MessageProcessingFailedException{
+		MayamClientErrorCode result =mayamClient.updateMaterial(programmeMaterial);
+		
+		if(result != MayamClientErrorCode.SUCCESS){
+			logger.error(String.format("Error updating programme material %s", programmeMaterial.getMaterialID()));
+			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+		}
+	}
+	
+	private void updatePackages(List<Package> packages) throws MessageProcessingFailedException{
+		for(Package txPackage : packages){
+			updatePackage(txPackage);
+		}
+	}
+	
+	private void updatePackage(Package txPackage) throws MessageProcessingFailedException{
+		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
+		
+		if(result != MayamClientErrorCode.SUCCESS){
+			logger.error(String.format("Error updating package %s", txPackage.getPresentationID()));
+			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+		}
+	}
+	
 	
 	/**
 	 * Called when an mxf has arrived
