@@ -37,70 +37,77 @@ public class MayamMaterialController {
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
+		
+		if (material != null) 
+		{
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 			
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
-		
-		Source source = material.getSource();
-		if (source != null) {
-			Aggregation aggregation = source.getAggregation();
-			if (aggregation != null) {
-				Aggregator aggregator = aggregation.getAggregator();
-				Order order = aggregation.getOrder();
-				if (aggregator != null) {
-					// TODO: Approval attributes are not ideal for aggregator values
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
-				}
-				if (order != null) {
-					// TODO: Task operation attributes are not ideal for aggregator values
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
-				}
-			}
-		}
-	
-		Compile compile = source.getCompile();
-		if (compile != null) {
-			//TODO: Asset Parent ID to be added by Mayam shortly
-			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
-		}
-		
-		Library library = source.getLibrary();
-		if (library != null) {
-			List<TapeType> tapeList = library.getTape();
-			if (tapeList != null) {
-				IdSet tapeIds = new IdSet();
-				for (int i = 0; i < tapeList.size(); i++) {
-					TapeType tape = tapeList.get(i);
-					if (tape != null) {
-						// TODO: Should we store the tape library ids, the presentation (package) id, or both?
-						// If both are required then we will need a new way of storing the Attribute values
-						tape.getLibraryID();
-						tapeIds.add(tape.getPresentationID());
+			Source source = material.getSource();
+			if (source != null) {
+				Aggregation aggregation = source.getAggregation();
+				if (aggregation != null) {
+					Aggregator aggregator = aggregation.getAggregator();
+					Order order = aggregation.getOrder();
+					if (aggregator != null) {
+						// TODO: Approval attributes are not ideal for aggregator values
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
+					}
+					if (order != null) {
+						// TODO: Task operation attributes are not ideal for aggregator values
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
 					}
 				}
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+	
+		
+				Compile compile = source.getCompile();
+				if (compile != null) {
+					//TODO: Asset Parent ID to be added by Mayam shortly
+					//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+				}
+				
+				Library library = source.getLibrary();
+				if (library != null) {
+					List<TapeType> tapeList = library.getTape();
+					if (tapeList != null) {
+						IdSet tapeIds = new IdSet();
+						for (int i = 0; i < tapeList.size(); i++) {
+							TapeType tape = tapeList.get(i);
+							if (tape != null) {
+								// TODO: Should we store the tape library ids, the presentation (package) id, or both?
+								// If both are required then we will need a new way of storing the Attribute values
+								tape.getLibraryID();
+								tapeIds.add(tape.getPresentationID());
+							}
+						}
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+					}
+				}
+			}
+			
+			if (!attributesValid) {
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
+			
+			AttributeMap result;
+			try {
+				result = client.createAsset(attributes.getAttributes());
+				if (result == null) {
+					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
+				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				e.printRemoteMessages(System.err);
+				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
-		
-		if (!attributesValid) {
-			returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
-		}
-		
-		AttributeMap result;
-		try {
-			result = client.createAsset(attributes.getAttributes());
-			if (result != null) {
-				returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
-			}
-		} catch (RemoteException e) {
-			e.printStackTrace();
-			e.printRemoteMessages(System.err);
-			returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+		else {
+			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
 	}
@@ -165,7 +172,7 @@ public class MayamMaterialController {
 				AttributeMap result;
 				try {
 					result = client.updateAsset(attributes.getAttributes());
-					if (result != null) {
+					if (result == null) {
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
 				} catch (RemoteException e) {
@@ -224,29 +231,29 @@ public class MayamMaterialController {
 							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
 						}
 					}
-				}
-			
-				Compile compile = source.getCompile();
-				if (compile != null) {
-					//TODO: Asset Parent ID to be added by Mayam shortly
-					//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
-				}
-				
-				Library library = source.getLibrary();
-				if (library != null) {
-					List<TapeType> tapeList = library.getTape();
-					if (tapeList != null) {
-						IdSet tapeIds = new IdSet();
-						for (int i = 0; i < tapeList.size(); i++) {
-							TapeType tape = tapeList.get(i);
-							if (tape != null) {
-								// TODO: Should we store the tape library ids, the presentation (package) id, or both?
-								// If both are required then we will need a new way of storing the Attribute values
-								tape.getLibraryID();
-								tapeIds.add(tape.getPresentationID());
+
+					Compile compile = source.getCompile();
+					if (compile != null) {
+						//TODO: Asset Parent ID to be added by Mayam shortly
+						//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					}
+					
+					Library library = source.getLibrary();
+					if (library != null) {
+						List<TapeType> tapeList = library.getTape();
+						if (tapeList != null) {
+							IdSet tapeIds = new IdSet();
+							for (int i = 0; i < tapeList.size(); i++) {
+								TapeType tape = tapeList.get(i);
+								if (tape != null) {
+									// TODO: Should we store the tape library ids, the presentation (package) id, or both?
+									// If both are required then we will need a new way of storing the Attribute values
+									tape.getLibraryID();
+									tapeIds.add(tape.getPresentationID());
+								}
 							}
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 						}
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 					}
 				}
 				
@@ -257,7 +264,7 @@ public class MayamMaterialController {
 				AttributeMap result;
 				try {
 					result = client.updateAsset(attributes.getAttributes());
-					if (result != null) {
+					if (result == null) {
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
 				} catch (RemoteException e) {
