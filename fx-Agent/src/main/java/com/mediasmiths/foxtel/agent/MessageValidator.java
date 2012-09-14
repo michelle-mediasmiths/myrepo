@@ -1,11 +1,9 @@
 package com.mediasmiths.foxtel.agent;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
@@ -17,11 +15,11 @@ public abstract class MessageValidator<T> {
 	private static Logger logger = Logger.getLogger(MessageValidator.class);
 
 	// an unmarshaller for turning xml files into objects
-	protected final Unmarshaller unmarhsaller;
+	private final Unmarshaller unmarhsaller;
 	// schema will be used for validating files against the schema
-	protected final SchemaValidator schemaValidator;
+	private final SchemaValidator schemaValidator;
 		
-	protected final ReceiptWriter receiptWriter;
+	private final ReceiptWriter receiptWriter;
 
 	@Inject
 	public MessageValidator(Unmarshaller unmarshaller, ReceiptWriter receiptWriter, SchemaValidator schemaValidator)
@@ -56,7 +54,7 @@ public abstract class MessageValidator<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public final MessageValidationResult validateFile(String filepath)
-			throws	Exception {
+	 {
 
 		// first check the xml file conforms to the schema
 		boolean againstXSD = againstXSD(filepath);
@@ -84,7 +82,7 @@ public abstract class MessageValidator<T> {
 
 	}
 
-	protected abstract MessageValidationResult validateMessage(T message) throws Exception;
+	protected abstract MessageValidationResult validateMessage(T message);
 
 
 	protected final Object unmarshallFile(File xml) throws JAXBException {
@@ -101,5 +99,9 @@ public abstract class MessageValidator<T> {
 	 * @throws ClassCastException if the unmarshalled object is not of the expected type
 	 */
 	protected abstract void typeCheck(Object unmarshalled) throws ClassCastException;
+
+	public ReceiptWriter getReceiptWriter() {
+		return receiptWriter;
+	}
 
 }

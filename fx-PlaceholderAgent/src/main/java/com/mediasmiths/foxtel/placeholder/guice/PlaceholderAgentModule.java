@@ -25,20 +25,20 @@ public class PlaceholderAgentModule extends AbstractModule {
 	}
 
 	@Provides
-	Unmarshaller provideUnmarshaller() {
+	Unmarshaller provideUnmarshaller() throws JAXBException {
 		JAXBContext jc = null;
 		try {
 			jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		} catch (JAXBException e) {
 			logger.fatal("Could not create jaxb context", e);
-			System.exit(1);
+			throw e;
 		}
 		Unmarshaller unmarshaller = null;
 		try {
 			unmarshaller = jc.createUnmarshaller();
 		} catch (JAXBException e) {
 			logger.fatal("Could not create unmarshaller", e);
-			System.exit(1);
+			throw e;
 		}
 		return unmarshaller;
 	}

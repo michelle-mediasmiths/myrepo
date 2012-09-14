@@ -21,7 +21,7 @@ public class SchemaValidator
 	
 	private static Logger logger = Logger.getLogger(SchemaValidator.class);
 	
-	final Schema schema;
+	private final Schema schema;
 	
 	@Inject
 	public SchemaValidator(@Named("schema.location")String schemaLocation) throws SAXException{

@@ -113,7 +113,7 @@ public class MediaPickupAgent extends DirectoryWatcher {
 						xml.getAbsolutePath()));
 				handleInvalidXML(xml, "Does not validate against schema");
 			}
-		} catch (Throwable t) {
+		} catch (Exception t) {
 			logger.fatal("Unhandled exception", t);
 		}
 	}

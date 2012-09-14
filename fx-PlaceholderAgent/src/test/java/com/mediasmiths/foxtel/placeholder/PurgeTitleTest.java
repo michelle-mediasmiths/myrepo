@@ -96,7 +96,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 	}
 
 
-	@Test(expected = MayamClientException.class)
+	@Test
 	@Category(ValidationTests.class)
 	public void testDeleteTitleRequestFail() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
@@ -106,7 +106,10 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 				.thenThrow(
 						new MayamClientException(MayamClientErrorCode.FAILURE));
 
-		validator.validateFile(temp.getAbsolutePath());
+		// try to call validation, expect a mayam client error
+		assertEquals(
+				MessageValidationResult.MAYAM_CLIENT_ERROR,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 	private PlaceholderMessage buildDeleteTitleRequest(boolean b, String titleID) {

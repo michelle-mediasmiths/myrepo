@@ -90,7 +90,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	}
 
 
-	@Test(expected = MayamClientException.class)
+	@Test
 	@Category(ValidationTests.class)
 	public void testDeletePackageRequestFail() throws IOException, Exception{
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
@@ -98,7 +98,10 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
-		validator.validateFile(temp.getAbsolutePath());
+		// try to call validation, expect a mayam client error
+		assertEquals(
+				MessageValidationResult.MAYAM_CLIENT_ERROR,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 	
 	private PlaceholderMessage buildDeletePackageRequest(boolean b,

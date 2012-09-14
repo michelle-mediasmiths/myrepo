@@ -125,7 +125,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				
 	}
 	
-	@Test(expected = MayamClientException.class)
+	@Test
 	@Category(ValidationTests.class)
 	public void testAddPackageRequestFails() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
@@ -135,8 +135,10 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(EXISTING_MATERIAL)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 
-		// try to call validation, expect an exception
-		validator.validateFile(temp.getAbsolutePath());
+		// try to call validation, expect a mayam client error
+		assertEquals(
+				MessageValidationResult.MAYAM_CLIENT_ERROR,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 	
 	@Test

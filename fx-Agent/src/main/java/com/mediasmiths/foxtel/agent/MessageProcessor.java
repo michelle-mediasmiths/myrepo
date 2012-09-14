@@ -25,7 +25,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
-	protected final FilesPendingProcessingQueue filePathsPending;
+	private final FilesPendingProcessingQueue filePathsPending;
 	private boolean stopRequested = false;
 
 	private final Unmarshaller unmarhsaller;
@@ -58,7 +58,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * @throws MessageProcessingFailedException
 	 * @returns the messageID of the message at filePath
 	 */
-	public final String processFile(String filePath)
+	public String processFile(String filePath)
 			throws MessageProcessingFailedException {
 
 		try {
@@ -85,11 +85,11 @@ public abstract class MessageProcessor<T> implements Runnable {
 		} catch (JAXBException e) {
 			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNMARSHALL_FAILED);
+					MesageProcessingFailureReason.UNMARSHALL_FAILED,e);
 		} catch (ClassCastException cce) {
-			logger.fatal("A prevously validated file did not have an action of one of the expected types");
+			logger.fatal("A prevously validated file did not have an action of one of the expected types",cce);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNKNOWN_ACTION);
+					MesageProcessingFailureReason.UNKNOWN_ACTION,cce);
 		}
 
 	}
@@ -104,9 +104,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 	
 	protected abstract String getIDFromMessage(T message);
 
-	protected final void validateThenProcessFile(String filePath) {
-		try {
-			MessageValidationResult result = messageValidator
+	protected void validateThenProcessFile(String filePath) {
+		MessageValidationResult result = messageValidator
 					.validateFile(filePath);
 
 			if (result == MessageValidationResult.IS_VALID) {
@@ -127,11 +126,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 				moveMessageToFailureFolder(filePath);
 			}
 
-		} catch (Exception e) {
-			logger.error(String.format(
-					"Exception validating message"), e);
-			moveMessageToFailureFolder(filePath);
-		}
+		
 	}
 	
 	protected abstract void processMessage(T message) throws MessageProcessingFailedException;
@@ -142,7 +137,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * @param messagePath
 	 * @param messageID
 	 */
-	private final void moveMessageToFailureFolder(String messagePath) {
+	private void moveMessageToFailureFolder(String messagePath) {
 		logger.info(String
 				.format("Message %s is invalid, sending to failure folder",
 						messagePath));
@@ -162,7 +157,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * Moves messages which have been processed, to the archive path
 	 * @param messagePath
 	 */
-	private final void moveMessageToArchiveFolder(String messagePath) {
+	private void moveMessageToArchiveFolder(String messagePath) {
 		logger.info(String.format(
 				"Message %s is complete, sending to archive folder",
 				messagePath));
@@ -178,7 +173,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	private final void moveMessageToFolder(String messagePath,
+	private void moveMessageToFolder(String messagePath,
 			String destinationFolderPath) throws IOException {
 		final String destination = destinationFolderPath
 				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
@@ -201,7 +196,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 		while (!stopRequested) {
 			try {
-				String filePath = filePathsPending.take();
+				String filePath = getFilePathsPending().take();
 				validateThenProcessFile(filePath);
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
@@ -211,7 +206,11 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	public final void stop() {
+	public void stop() {
 		stopRequested = true;
+	}
+
+	public FilesPendingProcessingQueue getFilePathsPending() {
+		return filePathsPending;
 	}
 }

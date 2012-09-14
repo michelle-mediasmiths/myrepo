@@ -35,8 +35,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 	private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
 
-	protected final FilesPendingProcessingQueue filePathsPending;
-
 	private final MayamClient mayamClient;
 
 	@Inject
@@ -47,8 +45,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			@Named("agent.path.failure") String failurePath,
 			@Named("agent.path.archive") String archivePath) {
 		super(filePathsPendingProcessing,messageValidator,receiptWriter,unmarhsaller,failurePath,archivePath);
-		
-		this.filePathsPending = filePathsPendingProcessing;
 		this.mayamClient = mayamClient;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
@@ -72,7 +68,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if material %s exists",
 					action.getMaterial().getMaterialD()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
+					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 
@@ -97,7 +93,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if package %s exists",
 					action.getPackage().getPresentationID()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
+					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 
@@ -140,7 +136,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if title %s exists",
 					action.getTitleID()), e);
 			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
+					MesageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
 		}
 	}
 

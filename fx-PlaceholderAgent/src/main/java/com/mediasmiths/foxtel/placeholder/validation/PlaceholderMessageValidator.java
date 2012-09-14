@@ -29,23 +29,23 @@ import com.mediasmiths.foxtel.agent.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMessage> {
+public class PlaceholderMessageValidator extends
+		MessageValidator<PlaceholderMessage> {
 
-	private static Logger logger = Logger.getLogger(PlaceholderMessageValidator.class);
+	private static Logger logger = Logger
+			.getLogger(PlaceholderMessageValidator.class);
 
 	private final MayamClient mayamClient;
-	
 
 	@Inject
-	public PlaceholderMessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient, ReceiptWriter receiptWriter,SchemaValidator schemaValidator)
-			throws SAXException {
-		super(unmarshaller,receiptWriter,schemaValidator);
+	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
+			MayamClient mayamClient, ReceiptWriter receiptWriter,
+			SchemaValidator schemaValidator) throws SAXException {
+		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
 	}
 
-
-	protected MessageValidationResult validateMessage(
-			PlaceholderMessage message) throws Exception {
+	protected MessageValidationResult validateMessage(PlaceholderMessage message) {
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
@@ -73,15 +73,13 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 				logger.warn("Message Actions did not validate");
 			}
 			return validateActions;
-			
+
+		} catch (MayamClientException e) {
+			logger.error("Mayam Client error", e);
+			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		} catch (Exception e) {
-			if(!(e instanceof MayamClientException)){
-				logger.warn("unknown validation failure!", e);
-				return MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
-			}
-			else{
-				throw (MayamClientException) e;
-			}
+			logger.error("unknown validation failure!", e);
+			return MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
 		}
 	}
 
@@ -122,19 +120,19 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 		boolean isAddOrUpdatePackage = (action instanceof AddOrUpdatePackage);
 		boolean isDeletePackage = (action instanceof DeletePackage);
 
-		if (isCreateOrUpdateTitle)
+		if (isCreateOrUpdateTitle) {
 			return validateCreateOrUpdateTitle((CreateOrUpdateTitle) action);
-		else if (isPurgeTitle)
+		} else if (isPurgeTitle) {
 			return validatePurgeTitle((PurgeTitle) action);
-		else if (isAddOrUpdateMaterial)
+		} else if (isAddOrUpdateMaterial) {
 			return validateAddOrUpdateMaterial((AddOrUpdateMaterial) action);
-		else if (isDeleteMaterial)
+		} else if (isDeleteMaterial) {
 			return validateDeleteMaterial((DeleteMaterial) action);
-		else if (isAddOrUpdatePackage)
+		} else if (isAddOrUpdatePackage) {
 			return validateAddOrUpdatePackage((AddOrUpdatePackage) action);
-		else if (isDeletePackage)
+		} else if (isDeletePackage) {
 			return validateDeletePackage((DeletePackage) action);
-		else {
+		} else {
 			logger.error("Supplied action is not an action type");
 			return MessageValidationResult.UNEXPECTED_TYPE;
 		}
@@ -174,9 +172,9 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 
 	private MessageValidationResult validateDeletePackage(DeletePackage action)
 			throws MayamClientException {
-		
+
 		logger.info("Validating a DeletePackage");
-		
+
 		// 24.1.1.3 Version purge requests
 		// check that the parent item in ardome is not flagged as
 		String packageID = action.getPackage().getPresentationID();
@@ -202,7 +200,7 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) {
 
-		logger.info("Validating a DeleteMaterial");
+		logger.info("Validating a DeleteMaterial " + action);
 		// 24.1.1.2 Master purge requests
 
 		// TODO : do we check if the material is marked as protected as with the
@@ -214,7 +212,7 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 			throws MayamClientException {
 
 		logger.info("Validating a PurgeTitle");
-		
+
 		// 24.1.1.1 Title purge requests
 		// check that the title is not marked as protected in ardome
 		// check that lower level entries are not procteted, as this should
@@ -250,7 +248,7 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 			AddOrUpdateMaterial action) throws MayamClientException {
 
 		logger.info("Validating an AddOrUpdateMaterial");
-		
+
 		// check if title for material exists
 		String titleID = action.getTitleID();
 		boolean titleExists = false;
@@ -316,37 +314,49 @@ public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMes
 
 	private boolean validatePrivateMessageData(Object privateMessageData) {
 		// private message data can be of any type
+		if(privateMessageData != null){
+		logger.debug("Validating private message data"
+				+ privateMessageData.toString());
+		}
+		else{
+			logger.debug("privateMessageData is null");
+		}
+		
 		return true;
 	}
 
 	private boolean validateSenderID(String senderID) {
+		logger.debug("Validating sender id"+senderID);
 		// TODO implement validateSenderID
 		return true;
 	}
 
 	private boolean validateMesageID(String messageID) {
-		//check there is not already a receipt for this file, otherwise this is considered a duplicate
-		
-		File receiptFile = new File(receiptWriter.receiptPathForMessageID(messageID));
-		boolean exists= receiptFile.exists();
-		
-		if(exists){
-			logger.warn(String.format("A recipt file already exists for message %s", messageID));
+		// check there is not already a receipt for this file, otherwise this is
+		// considered a duplicate
+
+		File receiptFile = new File(getReceiptWriter().receiptPathForMessageID(
+				messageID));
+		boolean exists = receiptFile.exists();
+
+		if (exists) {
+			logger.warn(String.format(
+					"A recipt file already exists for message %s", messageID));
 		}
-		
-		return (! exists);
-		
-		
+
+		return (!exists);
+
 	}
 
 	@Override
 	protected void typeCheck(Object unmarshalled) throws ClassCastException {
-		
-		if(! (unmarshalled instanceof PlaceholderMessage)){
-			throw new ClassCastException(String.format("unmarshalled type %s is not a PlaceholderMessage",
+
+		if (!(unmarshalled instanceof PlaceholderMessage)) {
+			throw new ClassCastException(String.format(
+					"unmarshalled type %s is not a PlaceholderMessage",
 					unmarshalled.getClass().toString()));
 		}
-		
+
 	}
 
 }

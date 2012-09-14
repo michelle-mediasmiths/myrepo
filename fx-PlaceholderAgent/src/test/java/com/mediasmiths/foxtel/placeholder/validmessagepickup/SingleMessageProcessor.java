@@ -37,7 +37,7 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 		logger.trace("SingleMessageProcessor.run() enter");
 
 		try {
-			String filePath = filePathsPending.take();
+			String filePath = getFilePathsPending().take();
 			validateThenProcessFile(filePath);
 		} catch (InterruptedException e) {
 			logger.info("Interruped!", e);

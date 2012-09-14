@@ -136,7 +136,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 				validator.validateFile(temp.getAbsolutePath()));
 	}
 
-	@Test(expected = MayamClientException.class)
+	@Test
 	@Category(ValidationTests.class)
 	public void testAddMaterialTitleExistRequestFails() throws Exception {
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
@@ -146,8 +146,10 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 
-		// try to call validation, expect an exception
-		validator.validateFile(temp.getAbsolutePath());
+		// try to call validation, expect a mayam client error
+		assertEquals(
+				MessageValidationResult.MAYAM_CLIENT_ERROR,
+				validator.validateFile(temp.getAbsolutePath()));
 	}
 
 }

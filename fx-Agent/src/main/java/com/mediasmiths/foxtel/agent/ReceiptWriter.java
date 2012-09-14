@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.agent;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -26,7 +25,7 @@ public class ReceiptWriter {
 		return path;
 	}
 	
-	public void writeRecipet(String filePath, String receiptText) throws FileNotFoundException, IOException {
+	public void writeRecipet(String filePath, String receiptText) throws IOException {
 		
 		String path = receiptPathForMessageID(receiptText);
 		

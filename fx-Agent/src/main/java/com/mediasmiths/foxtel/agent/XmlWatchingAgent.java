@@ -9,6 +9,8 @@ import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 
 public abstract class XmlWatchingAgent<T> implements StoppableService {
 
+	private static final long FIVE_SECONDS = 5000L;
+
 	private static Logger logger = Logger.getLogger(XmlWatchingAgent.class);
 
 	private final MessageProcessor<T> messageProcessor;
@@ -58,7 +60,7 @@ public void run() throws InterruptedException{
 
 		// wait for a while
 		try {
-			Thread.sleep(5000L);
+			Thread.sleep(FIVE_SECONDS);
 		} catch (InterruptedException e) {
 			logger.info("Interrupted during shutdown", e);
 		}
