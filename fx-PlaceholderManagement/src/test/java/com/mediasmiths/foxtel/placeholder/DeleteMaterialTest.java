@@ -19,10 +19,10 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
@@ -52,7 +52,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		
 		//verify expected calls
 		verify(mayamClient).deleteMaterial(dm);
@@ -72,7 +72,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deleteMaterial(dm)).thenReturn(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 	}
 
 	private PlaceholderMessage buildDeleteMaterialRequest(boolean materialProtected, String titleID) throws DatatypeConfigurationException {

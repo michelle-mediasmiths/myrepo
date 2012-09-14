@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
 
 /**
  * Used to stub out some request validation behavior for testing

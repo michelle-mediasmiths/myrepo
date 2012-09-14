@@ -3,21 +3,18 @@ package com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.placeholder.AddOrUpdatePackageTest;
-import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdateMaterial;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdatePackage;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestCreateOrUpdateTitle;
-
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 public class GenerateTestData {
 	

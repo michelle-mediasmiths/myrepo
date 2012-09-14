@@ -4,15 +4,14 @@ import java.util.List;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMangementModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
-public class PlaceholderManagementSetup implements GuiceSetup {
+public class PlaceholderAgentSetup implements GuiceSetup {
 
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config) {
-		modules.add(new PlaceHolderMangementModule());
+		modules.add(new PlaceholderAgentModule());
 	}
 
 	@Override

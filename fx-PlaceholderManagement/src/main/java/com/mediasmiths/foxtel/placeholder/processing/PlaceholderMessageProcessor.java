@@ -1,14 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
@@ -21,10 +14,12 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.MesageProcessingFailureReason;
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageProcessor;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -33,37 +28,28 @@ import com.mediasmiths.mayam.MayamClientException;
  * Processes placeholder messages taken from a queue
  * 
  * @author Mediasmiths Forge
- * @see MessageValidator
+ * @see PlaceholderMessageValidator
  * 
  */
-public class MessageProcessor implements Runnable {
+public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage> {
 
-	private static Logger logger = Logger.getLogger(MessageProcessor.class);
+	private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
 
 	protected final FilesPendingProcessingQueue filePathsPending;
-	private boolean stopRequested = false;
 
-	private final Unmarshaller unmarhsaller;
 	private final MayamClient mayamClient;
-	private final MessageValidator messageValidator;
-	private final ReceiptWriter receiptWriter;
-	private final String failurePath;
-	private final String archivePath;
 
 	@Inject
-	public MessageProcessor(
+	public PlaceholderMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
-			MessageValidator messageValidator, ReceiptWriter receiptWriter,
+			PlaceholderMessageValidator messageValidator, ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller, MayamClient mayamClient,
-			@Named("placeholder.path.failure") String failurePath,
-			@Named("placeholder.path.archive") String archivePath) {
+			@Named("agent.path.failure") String failurePath,
+			@Named("agent.path.archive") String archivePath) {
+		super(filePathsPendingProcessing,messageValidator,receiptWriter,unmarhsaller,failurePath,archivePath);
+		
 		this.filePathsPending = filePathsPendingProcessing;
-		this.unmarhsaller = unmarhsaller;
 		this.mayamClient = mayamClient;
-		this.messageValidator = messageValidator;
-		this.receiptWriter = receiptWriter;
-		this.failurePath = failurePath;
-		this.archivePath = archivePath;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
 	}
@@ -174,45 +160,6 @@ public class MessageProcessor implements Runnable {
 
 	}
 
-	/**
-	 * Processes a given filepath : assumes it has already been validated
-	 * 
-	 * @param filePath
-	 * @throws MessageProcessingFailedException
-	 * @returns the messageID of the message at filePath
-	 */
-	public String processFile(String filePath)
-			throws MessageProcessingFailedException {
-
-		try {
-
-			Object unmarshalled = unmarhsaller.unmarshal(new File(filePath));
-			logger.debug(String.format("unmarshalled object of type %s",
-					unmarshalled.getClass().toString()));
-
-			PlaceholderMessage message = (PlaceholderMessage) unmarshalled;
-			try {
-				processPlaceholderMesage(message);
-			} catch (MessageProcessingFailedException e) {
-				logger.error(String.format(
-						"Message processing failed for %s and reason %s",
-						filePath, e.getReason()), e);
-				throw e;
-			}
-
-			return message.getMessageID();
-
-		} catch (JAXBException e) {
-			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
-			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNMARSHALL_FAILED);
-		} catch (ClassCastException cce) {
-			logger.fatal("A prevously validated file did not have an action of one of the expected types");
-			throw new MessageProcessingFailedException(
-					MesageProcessingFailureReason.UNKNOWN_ACTION);
-		}
-
-	}
 
 	/**
 	 * Processes a PlaceHoldermessage (which is assumed to have already been
@@ -221,7 +168,8 @@ public class MessageProcessor implements Runnable {
 	 * @param message
 	 * @throws MessageProcessingFailedException
 	 */
-	public void processPlaceholderMesage(PlaceholderMessage message)
+	@Override
+	public void processMessage(PlaceholderMessage message)
 			throws MessageProcessingFailedException {
 		Object action = message.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -258,113 +206,19 @@ public class MessageProcessor implements Runnable {
 		checkResult(result);
 	}
 
-	protected void validateThenProcessFile(String filePath) {
-		try {
-			MessageValidationResult result = messageValidator
-					.validateFile(filePath);
-
-			if (result == MessageValidationResult.IS_VALID) {
-				logger.info(String.format(
-						"Placeholder message at %s validates", filePath));
-				try {
-					String messageID = processFile(filePath);
-					writeReceipt(filePath, messageID);
-					moveMessageToArchiveFolder(filePath);
-				} catch (MessageProcessingFailedException e) {
-					logger.error(
-							String.format("Error processing %s", filePath), e);
-					moveMessageToFailureFolder(filePath);
-				}
-			} else {
-				logger.warn(String.format(
-						"Placeholder message at %s did not validate", filePath));
-				moveMessageToFailureFolder(filePath);
-			}
-
-		} catch (MayamClientException e) {
-			logger.error(String.format(
-					"MayamClientException validating placeholder message %s",
-					e.getErrorcode()), e);
-			moveMessageToFailureFolder(filePath);
-		}
-	}
-
-	/**
-	 * Moves erroneous placeholder messages to a configurable location
-	 * 
-	 * @param messagePath
-	 * @param messageID
-	 */
-	private void moveMessageToFailureFolder(String messagePath) {
-		logger.info(String
-				.format("Message %s is invalid, sending to failure folder",
-						messagePath));
-		logger.debug(String.format("Failure folder is: %s ", failurePath));
-
-		try {
-			moveMessageToFolder(messagePath, failurePath);
-		} catch (IOException e) {
-			logger.error(String.format(
-					"IOException moving invalid placeholder message %s to %s",
-					messagePath, failurePath), e);
-		}
-
-	}
-
-	/**
-	 * Moves placeholder messages which have been processes, to the arcive paths
-	 * @param messagePath
-	 */
-	private void moveMessageToArchiveFolder(String messagePath) {
-		logger.info(String.format(
-				"Message %s is complete, sending to archive folder",
-				messagePath));
-		logger.debug(String.format("Archive folder is: %s ", archivePath));
-
-		try {
-			moveMessageToFolder(messagePath, archivePath);
-		} catch (IOException e) {
-			logger.error(String.format(
-					"IOException moving placeholder message %s to archive %s",
-					messagePath, archivePath), e);
-		}
-
-	}
-
-	private void moveMessageToFolder(String messagePath,
-			String destinationFolderPath) throws IOException {
-		final String destination = destinationFolderPath
-				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
-		
-		logger.trace(String.format("Moving file from %s to %s", messagePath,destination));
-		
-		FileUtils.moveFile(new File(messagePath), new File(destination));
-	}
-
-	private void writeReceipt(String filePath, String messageID) {
-		try {
-			receiptWriter.writeRecipet(filePath, messageID);
-		} catch (IOException e) {
-			logger.error("Failed to write receipt for message" + messageID);
-		}
+	@Override
+	protected String getIDFromMessage(PlaceholderMessage message) {
+		return message.getMessageID();
 	}
 
 	@Override
-	public void run() {
-
-		while (!stopRequested) {
-			try {
-				String filePath = filePathsPending.take();
-				validateThenProcessFile(filePath);
-			} catch (InterruptedException e) {
-				logger.info("Interruped!", e);
-				stop();
-			}
+	protected void typeCheck(Object unmarshalled) throws ClassCastException {
+		
+		if(! (unmarshalled instanceof PlaceholderMessage)){
+			throw new ClassCastException(String.format("unmarshalled type %s is not a PlaceholderMessage",
+					unmarshalled.getClass().toString()));
 		}
-
+		
 	}
 
-	public void stop() {
-		stopRequested = true;
-	}
 }

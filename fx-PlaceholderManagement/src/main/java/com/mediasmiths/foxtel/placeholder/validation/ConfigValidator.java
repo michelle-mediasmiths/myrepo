@@ -11,10 +11,10 @@ public class ConfigValidator {
 
 	private static Logger logger = Logger.getLogger(ConfigValidator.class);
 	
-	private static final String MESSAGE_PATH = "placeholder.path.message";
-	private static final String FAILURE_PATH = "placeholder.path.failure";
-	private static final String ARCHIVE_PATH = "placeholder.path.archive";
-	private static final String RECEIPT_PATH = "placeholder.path.receipt";
+	private static final String MESSAGE_PATH = "agent.path.message";
+	private static final String FAILURE_PATH = "agent.path.failure";
+	private static final String ARCHIVE_PATH = "agent.path.archive";
+	private static final String RECEIPT_PATH = "agent.path.receipt";
 	
 	@Inject
 	public ConfigValidator(@Named(MESSAGE_PATH) String messagePath,

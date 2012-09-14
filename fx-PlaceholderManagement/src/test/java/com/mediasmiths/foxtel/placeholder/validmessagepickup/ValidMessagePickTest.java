@@ -21,12 +21,12 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
 import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
 import com.mediasmiths.foxtel.placeholder.util.Util;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 
 public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 
@@ -81,8 +81,8 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockInValidCalls(message);
 		
-		String messageFilePath = messagePath + getFileName();				
-		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,archivePath,messageFilePath);
+		String messageFilePath = messagePath  + IOUtils.DIR_SEPARATOR + getFileName();				
+		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,archivePath,getFileName());
 
 		verifyInValidCalls(message);
 		

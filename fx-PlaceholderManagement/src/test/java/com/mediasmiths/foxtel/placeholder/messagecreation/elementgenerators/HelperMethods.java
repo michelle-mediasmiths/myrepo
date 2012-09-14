@@ -7,44 +7,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.RandomStringUtils;
-import org.apache.log4j.Logger;
 
 public class HelperMethods {
-
-	private static Logger logger = Logger.getLogger(HelperMethods.class);
-	
-	
-	private final Random random = new Random();
-	
-	String[] programTitles = { "Absolutley Fabulous",
-			"AfterYou've Gone", "Allo, Allo", "Basil Brush", "Black Books",
-			"Crystal Maze", "Dad's Army", "Doctor Who", "Fawlty Towers",
-			"Gavin and Stacey", "Horizon", "Hustle", "I'm Alan Partridge",
-			"Jeeves and Wooster", "Keeping Up Appearances", "Life on Mars",
-			"Mr Bean", "New Tricks",
-			"Not Going Out", "Only Fools and Horses", "Outnumbered",
-			"Planet Earth", "QI", "Question of Sport", "Rab C Nesbitt",
-			"Silent Witness", "Some Mothers Do Av Em", "Spooks",
-			"Top Gear", "Torchwood", "Ultimate Force", "Vicar of Dibley",
-			"Waiting For God", "Whose Line Is It Anyway", "Yes Minister" };
-	
-	/**
-	 * returns a programme title
-	 * @return titleID
-	 */
-	public String getProgrammeTitle() {
-		return programTitles[random.nextInt(programTitles.length)];
-	}
 
 	/**
 	 * Generates a random date after todays date

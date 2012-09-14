@@ -16,10 +16,10 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -54,7 +54,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
 		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		//check create material was called
 		verify(mayamClient).createMaterial(aoum.getMaterial());
 		
@@ -70,7 +70,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(true);
 		when(mayamClient.updateMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		//check create material was called
 		verify(mayamClient).updateMaterial(aoum.getMaterial());
 		
@@ -86,7 +86,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION));
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);		
+		processor.processMessage(pm);		
 	}
 	
 	@Test(expected = MessageProcessingFailedException.class)
@@ -99,7 +99,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
 		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		
 	}
 	

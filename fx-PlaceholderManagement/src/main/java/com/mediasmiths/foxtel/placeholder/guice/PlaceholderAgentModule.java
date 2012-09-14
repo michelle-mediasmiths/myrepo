@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder;
+package com.mediasmiths.foxtel.placeholder.guice;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -8,17 +8,20 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.mediasmiths.foxtel.agent.MessageProcessor;
+import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 
-public class PlaceHolderMangementModule extends AbstractModule {
+public class PlaceholderAgentModule extends AbstractModule {
 
 	private static Logger logger = Logger
-			.getLogger(PlaceHolderMangementModule.class);
+			.getLogger(PlaceholderAgentModule.class);
 
 	@Override
 	protected void configure() {
 		bind(MayamClient.class).to(MayamClientImpl.class);
+		bind(MessageProcessor.class).to(PlaceholderMessageProcessor.class);
 	}
 
 	@Provides

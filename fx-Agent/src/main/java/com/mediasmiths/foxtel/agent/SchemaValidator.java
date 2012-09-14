@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.xmlutil;
+package com.mediasmiths.foxtel.agent;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,9 @@ import javax.xml.validation.Validator;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+
 public class SchemaValidator
 {
 	
@@ -20,7 +23,8 @@ public class SchemaValidator
 	
 	final Schema schema;
 	
-	public SchemaValidator(String schemaLocation) throws SAXException{
+	@Inject
+	public SchemaValidator(@Named("schema.location")String schemaLocation) throws SAXException{
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		schema = schemaFactory.newSchema(new StreamSource(
 				this.getClass().getClassLoader().getResourceAsStream(schemaLocation)));

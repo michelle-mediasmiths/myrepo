@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder;
+package com.mediasmiths.foxtel.placeholder.main;
 
 import java.net.MalformedURLException;
 
@@ -8,13 +8,14 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.google.inject.Injector;
-import com.mediasmiths.foxtel.placeholder.guice.PlaceholderManagementSetup;
+import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
+import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
-public class PlaceHolderManagerCLI {
+public class PlaceholderAgentMain {
 
-	private static Logger logger = Logger.getLogger(PlaceHolderManagerCLI.class);
+	private static Logger logger = Logger.getLogger(PlaceholderAgentMain.class);
 
 	/**
 	 * @param args
@@ -29,11 +30,11 @@ public class PlaceHolderManagerCLI {
 		logger.info("Placeholdermanger cli starting up");
 		
 		
-		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderManagementSetup());
+		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderAgentSetup());
 
 		try
 		{
-			PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
+			PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
 			pm.run();
 		}
 		finally

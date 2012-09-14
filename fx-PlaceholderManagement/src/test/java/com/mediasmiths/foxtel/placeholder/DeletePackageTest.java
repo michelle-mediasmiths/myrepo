@@ -18,10 +18,10 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -66,7 +66,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deletePackage(dp)).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		
 		//verify expected calls
 		verify(mayamClient).deletePackage(dp);
@@ -86,7 +86,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.deletePackage(dp)).thenReturn(MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);		
+		processor.processMessage(pm);		
 	}
 
 

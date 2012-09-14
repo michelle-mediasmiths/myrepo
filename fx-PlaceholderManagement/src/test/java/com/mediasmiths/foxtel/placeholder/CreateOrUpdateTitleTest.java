@@ -28,10 +28,10 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -68,7 +68,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.createTitle(coup)).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 		// the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		// verfiy update call took place
 		verify(mayamClient).createTitle(coup);
 	}
@@ -88,7 +88,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.updateTitle(coup)).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 		// the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		// verfiy update call took place
 		verify(mayamClient).updateTitle(coup);
 
@@ -105,7 +105,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 		// the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 	}
 
 	@Test(expected = MessageProcessingFailedException.class)
@@ -122,7 +122,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.createTitle(coup)).thenReturn(
 				MayamClientErrorCode.TITLE_CREATION_FAILED);
 		// the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 	}
 
 	@Test

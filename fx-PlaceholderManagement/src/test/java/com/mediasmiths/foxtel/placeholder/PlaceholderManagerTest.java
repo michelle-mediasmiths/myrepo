@@ -20,9 +20,13 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.google.inject.TypeLiteral;
+import com.mediasmiths.foxtel.agent.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.MessageProcessor;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.SchemaValidator;
+import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentModule;
+import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.PickupExistingFilesOnlyDirectoryWatcher;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.SingleMessageProcessor;
@@ -41,7 +45,7 @@ public abstract class PlaceholderManagerTest {
     protected MayamClient mayamClient;
 	protected ReceiptWriter receiptWriter;
     
-	protected MessageValidator validator;
+	protected PlaceholderMessageValidator validator;
 	
 	public PlaceholderManagerTest() throws JAXBException, SAXException{
 
@@ -54,7 +58,7 @@ public abstract class PlaceholderManagerTest {
 		mayamClient = mock(MayamClient.class);
 		receiptWriter = mock(ReceiptWriter.class);
 		try {
-			validator = new MessageValidator(unmarhsaller, mayamClient,receiptWriter);
+			validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,receiptWriter, new SchemaValidator("PlaceholderManagement.xsd"));
 		} catch (SAXException e) {
 			logger.fatal("Exception constructing mesage validator",e);
 		}
@@ -84,10 +88,10 @@ public abstract class PlaceholderManagerTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 		
 		Properties overridenProperties = new Properties();
-		overridenProperties.put("placeholder.path.message", messagePath);
-		overridenProperties.put("placeholder.path.receipt", receiptPath);
-		overridenProperties.put("placeholder.path.failure", failurePath);
-		overridenProperties.put("placeholder.path.archive", archivePath);
+		overridenProperties.put("agent.path.message", messagePath);
+		overridenProperties.put("agent.path.receipt", receiptPath);
+		overridenProperties.put("agent.path.failure", failurePath);
+		overridenProperties.put("agent.path.archive", archivePath);
 		propertyFile.merge(overridenProperties);
 		
 		//setup guice injector
@@ -103,12 +107,12 @@ public abstract class PlaceholderManagerTest {
 			}
 		});		
 		//run placeholder manager
-		PlaceHolderManager pm = injector.getInstance(PlaceHolderManager.class);
+		PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
 		pm.run();
 	}
 	
 	
-	class TestPlaceHolderMangementModule extends PlaceHolderMangementModule{
+	class TestPlaceHolderMangementModule extends PlaceholderAgentModule{
 		
 		private final MayamClient mc;
 		public TestPlaceHolderMangementModule(MayamClient mc){
@@ -119,9 +123,9 @@ public abstract class PlaceholderManagerTest {
 		protected void configure() {
 			bind(MayamClient.class).toInstance(mc);
 			//we are only testing the processing of a single file
-			bind(MessageProcessor.class).to(SingleMessageProcessor.class);
+			bind(new TypeLiteral<MessageProcessor<PlaceholderMessage>>(){}).to(SingleMessageProcessor.class);
 			//we dont need to continue to monitor the message folder as we are only picking up a single file for this test
-			bind(PlaceHolderMessageDirectoryWatcher.class).to(PickupExistingFilesOnlyDirectoryWatcher.class);
+			bind(DirectoryWatchingQueuer.class).to(PickupExistingFilesOnlyDirectoryWatcher.class);
 		}
 	}
 	

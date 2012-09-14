@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.processing;
+package com.mediasmiths.foxtel.agent;
 
 public class MessageProcessingFailedException extends Exception {
 

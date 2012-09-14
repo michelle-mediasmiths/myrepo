@@ -23,17 +23,19 @@ import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.SchemaValidator;
+import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.util.Util;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class PlaceHolderMessageShortTest {
 
-	protected final MessageValidator validator;
-	protected final MessageProcessor processor;
+	protected final PlaceholderMessageValidator validator;
+	protected final PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
 			
 	protected final static String MESSAGE_ID = "123456asdfg";
@@ -58,8 +60,8 @@ public abstract class PlaceHolderMessageShortTest {
 		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new MessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath));
-		processor = new MessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
+		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"));
+		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
 				unmarhsaller, mayamClient, "failure path", "receipt path");
 
 	}

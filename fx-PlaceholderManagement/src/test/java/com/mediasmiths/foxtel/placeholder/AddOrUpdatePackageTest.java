@@ -21,10 +21,10 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -69,7 +69,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		//verfiy update call took place
 		verify(mayamClient).createPackage(aoup.getPackage());
 	}
@@ -87,7 +87,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(true));
 		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		//verfiy update call took place
 		verify(mayamClient).updatePackage(aoup.getPackage());
 
@@ -104,7 +104,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		//prepare mock mayamClient
 		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		
 	}
 	
@@ -121,7 +121,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.PACKAGE_CREATION_FAILED);
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 				
 	}
 	

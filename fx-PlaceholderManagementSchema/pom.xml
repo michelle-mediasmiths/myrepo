@@ -12,7 +12,7 @@
 	<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>Placeholder Management Schema</name>
+	<name>Foxtel Placeholder Management Schema</name>
 
 	<build>
 

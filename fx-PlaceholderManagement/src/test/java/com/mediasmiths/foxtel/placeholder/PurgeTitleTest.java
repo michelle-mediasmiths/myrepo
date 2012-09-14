@@ -17,10 +17,10 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.agent.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessingFailedException;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -72,7 +72,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);
+		processor.processMessage(pm);
 		
 		//verify expected calls
 		verify(mayamClient).purgeTitle(pt);
@@ -92,7 +92,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.purgeTitle(pt)).thenReturn(MayamClientErrorCode.TITLE_UPDATE_FAILED);
 		
 		//the call we are testing
-		processor.processPlaceholderMesage(pm);		
+		processor.processMessage(pm);		
 	}
 
 

@@ -1,14 +1,11 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
@@ -25,89 +22,30 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
-import com.mediasmiths.foxtel.xmlutil.SchemaValidator;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.MessageValidator;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.SchemaValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class MessageValidator {
+public class PlaceholderMessageValidator extends MessageValidator<PlaceholderMessage> {
 
-	private final static String SCHEMA_PATH = "PlaceholderManagement.xsd";
+	private static Logger logger = Logger.getLogger(PlaceholderMessageValidator.class);
 
-	private static Logger logger = Logger.getLogger(MessageValidator.class);
-
-	// an unmarshaller for turning xml files into objects
-	private final Unmarshaller unmarhsaller;
-	// schema will be used for validating files against
-	// PlaceHolderManagement.xsd
-	private final SchemaValidator schemaValidator;
 	private final MayamClient mayamClient;
 	
-	private final ReceiptWriter receiptWriter;
 
 	@Inject
-	public MessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient, ReceiptWriter receiptWriter)
+	public PlaceholderMessageValidator(Unmarshaller unmarshaller, MayamClient mayamClient, ReceiptWriter receiptWriter,SchemaValidator schemaValidator)
 			throws SAXException {
-		this.unmarhsaller = unmarshaller;
-		this.schemaValidator = new SchemaValidator(SCHEMA_PATH);
+		super(unmarshaller,receiptWriter,schemaValidator);
 		this.mayamClient = mayamClient;
-		this.receiptWriter=receiptWriter;
 	}
 
-	/**
-	 * Checks the structure of a given xml file against the xsd
-	 * 
-	 * @param filepath
-	 * @return pass
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 */
-	private boolean againstXSD(String filepath)
-	{
-		return schemaValidator.isValid(new File(filepath));
-	}
 
-	/**
-	 * Validates an xml file according to the rules
-	 * 
-	 * @param filepath
-	 * @throws SAXException
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws MayamClientException
-	 */
-	public MessageValidationResult validateFile(String filepath)
-			throws	MayamClientException {
-
-		// first check the xml file conforms to the schema
-		boolean againstXSD = againstXSD(filepath);
-
-		if (!againstXSD) {
-			return MessageValidationResult.FAILS_XSD_CHECK;
-		}
-
-		// xml file has valid schema, unmarshall then continue validation
-		PlaceholderMessage message = null;
-
-		try {
-			message = (PlaceholderMessage) unmarshallFile(new File(filepath));
-
-		} catch (JAXBException e) {
-			logger.fatal("Failed to unmarshall file " + filepath
-					+ " that had validated against schema");
-			return MessageValidationResult.FAILED_TO_UNMARSHALL;
-		} catch (ClassCastException cce) {
-			logger.fatal("Unmarshalled file from placeholder management schema that was not a PlaceholderMessage");
-			return MessageValidationResult.UNEXPECTED_TYPE;
-		}
-
-		return validatePlaceHolderMessage(message);
-
-	}
-
-	private MessageValidationResult validatePlaceHolderMessage(
-			PlaceholderMessage message) throws MayamClientException {
+	protected MessageValidationResult validateMessage(
+			PlaceholderMessage message) throws Exception {
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
@@ -401,11 +339,14 @@ public class MessageValidator {
 		
 	}
 
-	private Object unmarshallFile(File xml) throws JAXBException {
-		Object unmarshalled = unmarhsaller.unmarshal(xml);
-		logger.debug(String.format("unmarshalled object of type %s",
-				unmarshalled.getClass().toString()));
-		return unmarshalled;
+	@Override
+	protected void typeCheck(Object unmarshalled) throws ClassCastException {
+		
+		if(! (unmarshalled instanceof PlaceholderMessage)){
+			throw new ClassCastException(String.format("unmarshalled type %s is not a PlaceholderMessage",
+					unmarshalled.getClass().toString()));
+		}
+		
 	}
 
 }

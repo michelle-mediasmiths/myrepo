@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder.receipt;
+package com.mediasmiths.foxtel.agent;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +17,7 @@ public class ReceiptWriter {
 	private final String receiptPath;
 	
 	@Inject
-	public ReceiptWriter(@Named("placeholder.path.receipt") String receiptPath){
+	public ReceiptWriter(@Named("agent.path.receipt") String receiptPath){
 		this.receiptPath=receiptPath;
 	}
 	
@@ -26,13 +26,13 @@ public class ReceiptWriter {
 		return path;
 	}
 	
-	public void writeRecipet(String filePath, String messageID) throws FileNotFoundException, IOException {
+	public void writeRecipet(String filePath, String receiptText) throws FileNotFoundException, IOException {
 		
-		String path = receiptPathForMessageID(messageID);
+		String path = receiptPathForMessageID(receiptText);
 		
-		logger.info(String.format("Writing reciept for messageID %s (%s) to %s", messageID,filePath,path));
+		logger.info(String.format("Writing reciept for messageID %s (%s) to %s", receiptText,filePath,path));
 		
-		IOUtils.write(messageID, new FileOutputStream(new File(path)));
+		IOUtils.write(receiptText, new FileOutputStream(new File(path)));
 	}
 
 }

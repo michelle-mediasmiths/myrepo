@@ -14,7 +14,7 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 
 public class MultipleActionsInMessageTest extends PlaceHolderMessageShortTest{
 

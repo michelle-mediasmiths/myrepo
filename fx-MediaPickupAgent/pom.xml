@@ -7,7 +7,7 @@
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>fx-mpa</artifactId>
+	<artifactId>fx-MediaPickupAgent</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Foxtel Media Pickup Agent</name>

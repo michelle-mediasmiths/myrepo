@@ -4,19 +4,19 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageDirectoryWatcher;
+import com.mediasmiths.foxtel.agent.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
 
 public class PickupExistingFilesOnlyDirectoryWatcher extends
-		PlaceHolderMessageDirectoryWatcher {
+		DirectoryWatchingQueuer {
 
 	private static Logger logger = Logger.getLogger(PickupExistingFilesOnlyDirectoryWatcher.class);
 	
 	@Inject
 	public PickupExistingFilesOnlyDirectoryWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation,@Named("placeholder.path.message") String path) {
+			FilesPendingProcessingQueue filePathsPendingValidation,@Named("agent.path.message") String path) {
 		super(filePathsPendingValidation, path);
-	}
+	} 
 
 	
 	@Override

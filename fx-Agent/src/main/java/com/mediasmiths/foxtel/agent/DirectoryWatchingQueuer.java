@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.placeholder;
+package com.mediasmiths.foxtel.agent;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,23 +18,23 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
 
-public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher implements
+public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		Runnable {
 
 	private final String path;
 	private final FilesPendingProcessingQueue filePathsPendingValidation;
 
-	private static Logger logger = Logger.getLogger(PlaceHolderMessageDirectoryWatcher.class);
+	private static Logger logger = Logger.getLogger(DirectoryWatchingQueuer.class);
 	
 	@Inject
-	public PlaceHolderMessageDirectoryWatcher(FilesPendingProcessingQueue filePathsPendingValidation, @Named("placeholder.path.message") String path) {
+	public DirectoryWatchingQueuer(FilesPendingProcessingQueue filePathsPendingValidation, @Named("agent.path.message") String path) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
 		this.path = path;
 		setFormatCheck(true);
 	}
 
 	@Override
-	public void newFileCheck(String filePath, String fileName) {
+	public final void newFileCheck(String filePath, String fileName) {
 		File file = new File(filePath);
 		
 		logger.debug(String.format("A file %s has arrived with path %s", fileName, filePath));
@@ -54,15 +54,15 @@ public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher impleme
 		try {
 			this.start(path);
 		} catch (IOException e) {
-			PlaceHolderManager.logger.fatal("Failed to register watch service", e);
+			logger.fatal("Failed to register watch service", e);
 			System.exit(1);
 		}
 	}
 
 	/**
-	 * On startup check for any existing placeholder messages that may have arrived when the serivce was not running
+	 * On startup check for any existing messages that may have arrived when the serivce was not running
 	 */
-	protected void queueExistingFiles() {
+	protected final void queueExistingFiles() {
 		
 		logger.info("Checking for existing files in " + path);
 		
@@ -78,7 +78,7 @@ public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher impleme
 		}
 	}
 
-	private List<File> sortFilesByDate(Collection<File> existingFiles) {
+	private final List<File> sortFilesByDate(Collection<File> existingFiles) {
 		List<File> existingFilesList  = new ArrayList<File>(existingFiles);		
 		Collections.sort(existingFilesList, new Comparator<File>(){
 
@@ -89,7 +89,7 @@ public class PlaceHolderMessageDirectoryWatcher extends DirectoryWatcher impleme
 		return existingFilesList;
 	}
 
-	private Collection<File> listFiles() {
+	private final Collection<File> listFiles() {
 		Collection<File> existingFiles = FileUtils.listFiles(new File(path), new IOFileFilter() {
 			
 			@Override

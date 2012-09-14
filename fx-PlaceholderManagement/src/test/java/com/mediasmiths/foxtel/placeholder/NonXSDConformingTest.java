@@ -7,16 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
 
+import com.mediasmiths.foxtel.agent.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidationResult;
-import com.mediasmiths.mayam.MayamClientException;
 
 public class NonXSDConformingTest extends PlaceHolderMessageShortTest{
 	
@@ -28,7 +26,7 @@ public class NonXSDConformingTest extends PlaceHolderMessageShortTest{
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testNonXSDConformingFileFails() throws IOException, SAXException, ParserConfigurationException, MayamClientException{
+	public void testNonXSDConformingFileFails() throws Exception{
 		
 		
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");

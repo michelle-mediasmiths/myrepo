@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.placeholder.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.placeholder.processing.MessageProcessor;
-import com.mediasmiths.foxtel.placeholder.receipt.ReceiptWriter;
-import com.mediasmiths.foxtel.placeholder.validation.MessageValidator;
+import com.mediasmiths.foxtel.agent.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
+import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 
 /**
@@ -17,7 +17,7 @@ import com.mediasmiths.mayam.MayamClient;
  * @author bmcleod
  *
  */
-public class SingleMessageProcessor extends MessageProcessor {
+public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 
 	protected static Logger logger = Logger
 			.getLogger(SingleMessageProcessor.class);
@@ -25,17 +25,17 @@ public class SingleMessageProcessor extends MessageProcessor {
 	@Inject
 	public SingleMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
-			MessageValidator messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("placeholder.path.failure")  String failurePath,@Named("placeholder.path.archive")  String archivePath) {
+			PlaceholderMessageValidator messageValidator, ReceiptWriter receiptWriter,
+			Unmarshaller unmarhsaller, MayamClient mayamClient,  @Named("agent.path.failure")  String failurePath,@Named("agent.path.archive")  String archivePath) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
 				unmarhsaller, mayamClient,failurePath,archivePath);
 	}
-
+	
 	@Override
 	public void run() {
 
 		logger.trace("SingleMessageProcessor.run() enter");
-		
+
 		try {
 			String filePath = filePathsPending.take();
 			validateThenProcessFile(filePath);
@@ -45,7 +45,8 @@ public class SingleMessageProcessor extends MessageProcessor {
 		}
 
 		logger.trace("SingleMessageProcessor.run() exit");
-		
+
 	}
+
 
 }
