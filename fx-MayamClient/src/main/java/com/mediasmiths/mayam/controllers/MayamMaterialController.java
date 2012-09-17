@@ -18,6 +18,10 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MqClient;
@@ -111,7 +115,62 @@ public class MayamMaterialController {
 		}
 		return returnCode;
 	}
+	
+	public MayamClientErrorCode createMaterial(MarketingMaterialType material) {
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		MayamAttributeController attributes = new MayamAttributeController(client);
+		boolean attributesValid = true;
 		
+		if (material != null) 
+		{
+			//TODO: What all data can we get from this 'Object'
+			//Object additionalMaterial = material.getAdditionalMarketingDetail();
+			
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, material.getAspectRatio());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
+			
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, material.isAdultMaterial());
+			
+			//TODO: Require attributes for timecode
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute., material.getLastFrameTimecode());
+			
+			//TODO: What should Media be set as?
+			//MediaType media = material.getMedia();
+
+			//TODO: List of audio data
+/*			AudioTracks audioTracks = material.getAudioTracks();
+			List<Track> tracks = audioTracks.getTrack();
+			for (int i = 0; i < tracks.size(); i++) {
+				Track track = tracks.get(i);
+				track.getTrackEncoding().toString();
+				track.getTrackName().toString();
+				track.getTrackNumber();
+			}*/
+			
+			if (!attributesValid) {
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
+			
+			AttributeMap result;
+			try {
+				result = client.createAsset(attributes.getAttributes());
+				if (result == null) {
+					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
+				}
+			} catch (RemoteException e) {
+				e.printStackTrace();
+				e.printRemoteMessages(System.err);
+				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+			}
+		}
+		else {
+			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
+		}
+		return returnCode;
+	}
+	
 	//Material - Updating a media asset in Mayam
 	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
 	{

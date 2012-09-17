@@ -283,10 +283,43 @@ public class MayamClientImpl implements MayamClient {
 	 */
 	@Override
 	public String createMaterial(String titleID, MarketingMaterialType material)  throws MayamClientException{
-		//TODO implement createMaterial(MarketingMaterialType material)
+		AttributeMap titleAttributes = titleController.getTitle(titleID);
 		
-		//2.2 Associated Media File Ingest
-		throw new RuntimeException("createMaterial not implemented");
+		if (titleAttributes == null) {
+			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+		}
+		
+		//TODO: set some id relating to material - origin of id TBC
+		String materialID = "???";
+		
+		titleAttributes.setAttribute(Attribute.MOB_ID, materialID);
+		try {
+			client.updateAsset(titleAttributes);
+		} catch (RemoteException e) {
+			throw new MayamClientException(MayamClientErrorCode.TITLE_UPDATE_FAILED);
+		}
+		
+		//TODO: need to generate an id for the material? or can we trust the one that Mayam will create?
+		MayamClientErrorCode returnCode = materialController.createMaterial(material);
+		if (returnCode != MayamClientErrorCode.SUCCESS) {
+			throw new MayamClientException(returnCode);
+		}
+		
+		AttributeMap materialAttributes = materialController.getMaterial(materialID);
+		
+		if (materialAttributes == null) {
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+		
+		//TODO: Set parent ID once implemented
+		//materialAttributes.setAttribute(Attribute., titleID);
+		try {
+			client.updateAsset(materialAttributes);
+		} catch (RemoteException e) {
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+		}
+
+		return materialID;
 	}
 
 }
