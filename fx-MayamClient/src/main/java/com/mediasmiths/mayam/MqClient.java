@@ -53,14 +53,17 @@ public class MqClient {
 			public void onMessage(MqMessage msg) throws Throwable {
 				System.out.println(msg.getContent());
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
-	
 					AttributeMap messageAttributes = msg.getSubject();
-	
+					//TODO: Handle incoming attribute messages
 					String assetTitle = messageAttributes.getAttribute(Attribute.ASSET_TITLE);
 	
 					if (assetTitle != null) {
 							
 					}
+				}
+				else if (msg.getType().equals(ContentTypes.PLAYLIST)) {
+					AttributeMap messageAttributes = msg.getSubject();
+					//TODO: Handle incoming playlist messages
 				}
 	
 			}
@@ -69,15 +72,14 @@ public class MqClient {
 		attachListener(Queues.MAM_INCOMING, listener);
 	}
 	
-	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message)
+	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try {
 			mq.send(destination, message);
 		} catch (MqException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			returnCode = MayamClientErrorCode.FAILURE;
+			returnCode = MayamClientErrorCode.MQ_MESSAGE_SEND_FAILED;
+			throw new MayamClientException(returnCode);
 		}
 		return returnCode;
 	}
