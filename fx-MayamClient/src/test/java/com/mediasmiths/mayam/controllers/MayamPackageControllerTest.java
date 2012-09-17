@@ -5,17 +5,30 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.argThat;
 import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.anyObject;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.doThrow;
+
+import java.math.BigInteger;
+
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
 
+import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.ws.client.jaxws.MayamApiException_Exception;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MqClient;
@@ -25,6 +38,9 @@ public class MayamPackageControllerTest {
 	MayamPackageController controller;
 	TasksClient client;
 	MqClient mqClient;
+	PackageType txPackage;
+	AttributeMap map;
+	ProgrammeMaterialType.Presentation.Package updatePackage;
 	
 	public MayamPackageControllerTest() {
 		super();
@@ -32,7 +48,13 @@ public class MayamPackageControllerTest {
 	
 	class AttributeMapMatcher extends ArgumentMatcher<AttributeMap> {
 	     public boolean matches(Object attributes) {
-	         return true;
+	         return attributes instanceof AttributeMap;
+	     }
+	 }
+	
+	class AttributeMatcher extends ArgumentMatcher<Attribute> {
+	     public boolean matches(Object attribute) {
+	         return attribute instanceof Attribute;
 	     }
 	 }
 	 
@@ -42,108 +64,105 @@ public class MayamPackageControllerTest {
 		client = mock(TasksClient.class);
 		mqClient = mock(MqClient.class);
 		controller = new MayamPackageController(client, mqClient);
+		
+		txPackage = mock(PackageType.class);
+		when(txPackage.getClassification()).thenReturn(ClassificationEnumType.PG);
+		when(txPackage.getPresentationFormat()).thenReturn(PresentationFormatType.HD);
+		when(txPackage.getPresentationID()).thenReturn("");
+		when(txPackage.getConsumerAdvice()).thenReturn("");
+		when(txPackage.getMaterialID()).thenReturn("");
+		when(txPackage.getNotes()).thenReturn("");
+		when(txPackage.getNumberOfSegments()).thenReturn(BigInteger.ZERO);
+		when(txPackage.getTargetDate()).thenReturn(mock(XMLGregorianCalendar.class));
+		
+		map = mock(AttributeMap.class);
+		map.injectHelpers(mock(AttributeValidator.class), mock(AttributeDescription.Producer.class));
+		when(map.setAttributeFromString(argThat(new AttributeMatcher()), anyString())).thenReturn(map);
+		
+		updatePackage = mock(ProgrammeMaterialType.Presentation.Package.class);
 	}
 	
 	@Test
 	public void testCreatePackage() 
 	{
-		PackageType txPackage = mock(PackageType.class);
-		
 		try {
+			when(client.createAttributeMap()).thenReturn(map);
 			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
 
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	
 	@Test
 	public void testUpdatePackage() 
 	{
-		PackageType txPackage = mock(PackageType.class);
-		ProgrammeMaterialType.Presentation.Package updatePackage = mock(ProgrammeMaterialType.Presentation.Package.class);
-		
 		try {
-			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(map);
+			when(client.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
 		} catch (RemoteException e) {
 			fail();
 		}
 
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 		
 		returnCode = controller.updatePackage(updatePackage);
-		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	
 	@Test
 	public void testCreatePackageFailed() 
 	{
-		PackageType txPackage = mock(PackageType.class);
-		
 		try {
+			when(client.createAttributeMap()).thenReturn(map);
 			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
 
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_CREATION_FAILED);
+		assertEquals(MayamClientErrorCode.PACKAGE_CREATION_FAILED, returnCode);
 	}
 	
 	@Test
 	public void testUpdatePackageFailed() 
 	{
-		PackageType txPackage = mock(PackageType.class);
-		ProgrammeMaterialType.Presentation.Package updatePackage = mock(ProgrammeMaterialType.Presentation.Package.class);
-		
 		try {
-			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(map);
+			when(client.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
 
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_CREATION_FAILED);
+		assertEquals(MayamClientErrorCode.PACKAGE_UPDATE_FAILED, returnCode);
 		
 		returnCode = controller.updatePackage(updatePackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_CREATION_FAILED);
+		assertEquals(MayamClientErrorCode.PACKAGE_UPDATE_FAILED, returnCode);
 	}
 	
 	@Test
-	public void testCreatePackageException() 
+	public void testCreatePackageException() throws Exception 
 	{
-		PackageType txPackage = mock(PackageType.class);
-
-		try {
-			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenThrow(new RemoteException(null, null));
-		} catch (RemoteException e) {
-			fail();
-		}
-
+		when(client.createAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+		when(client.createAttributeMap()).thenReturn(map);
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.MAYAM_EXCEPTION);
+		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 	
 	@Test
-	public void testUpdatePackageException() 
+	public void testUpdatePackageException() throws Exception
 	{
-		PackageType txPackage = mock(PackageType.class);
-		ProgrammeMaterialType.Presentation.Package updatePackage = mock(ProgrammeMaterialType.Presentation.Package.class);
-		
-		try {
-			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenThrow(new RemoteException(null, null));
-		} catch (RemoteException e) {
-			fail();
-		}
-
-		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.MAYAM_EXCEPTION);
+		when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(map);
+		when(client.updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
+		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 		
 		returnCode = controller.updatePackage(updatePackage);
-		assertEquals(returnCode, MayamClientErrorCode.MAYAM_EXCEPTION);
+		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 
 	@Test
@@ -151,7 +170,7 @@ public class MayamPackageControllerTest {
 	{
 		PackageType txPackage = null;
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
+		assertEquals(MayamClientErrorCode.PACKAGE_UNAVAILABLE, returnCode);
 	}
 		
 	@Test
@@ -159,58 +178,54 @@ public class MayamPackageControllerTest {
 	{
 		PackageType txPackage = null;
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
+		assertEquals(MayamClientErrorCode.PACKAGE_UNAVAILABLE, returnCode);
 		
 		ProgrammeMaterialType.Presentation.Package updatePackage = null;
 		returnCode = controller.updatePackage(updatePackage);
-		assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
+		assertEquals(MayamClientErrorCode.PACKAGE_UNAVAILABLE, returnCode);
 	}
 	
 	@Test
 	public void testPackageExistsTrue() 
 	{
 		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenReturn(new AttributeMap());
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.packageExists(anyString());
-		assertEquals(returnCode, true);
+		boolean returnCode = controller.packageExists(eq(anyString()));
+		assertEquals(true, returnCode);
 	}
 	
 	@Test
 	public void testPackageExistsFalse() 
 	{
 		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenReturn(null);
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.packageExists(anyString());
-		assertEquals(returnCode, false);
+		boolean returnCode = controller.packageExists(eq(anyString()));
+		assertEquals(false, returnCode);
 	}
 	
 	@Test
-	public void testPackageExistsException() 
+	public void testPackageExistsException() throws Exception 
 	{
-		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenThrow(new RemoteException(null, null));
-		} catch (RemoteException e) {
-			fail();
-		}
-		boolean returnCode = controller.packageExists(anyString());
-		assertEquals(returnCode, false);
+		when(client.getAsset(eq(AssetType.PACK), anyString())).thenThrow(mock(RemoteException.class));
+		boolean returnCode = controller.packageExists(eq(anyString()));
+		assertEquals(false, returnCode);
 	}
 	
 	@Test
 	public void testGetPackageValid() 
 	{
 		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenReturn(new AttributeMap());
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackage(anyString());
+		AttributeMap attributes = controller.getPackage(eq(anyString()));
 		assertTrue(attributes != null);
 	}
 	
@@ -218,30 +233,26 @@ public class MayamPackageControllerTest {
 	public void testGetPackageInValid() 
 	{
 		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenReturn(null);
+			when(client.getAsset(eq(AssetType.PACK), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackage(anyString());
-		assertEquals(attributes, null);
+		AttributeMap attributes = controller.getPackage(eq(anyString()));
+		assertEquals(null, attributes);
 	}
 	
 	@Test
-	public void testGetPackageException() 
+	public void testGetPackageException() throws Exception
 	{
-		try {
-			when(client.getAsset(AssetType.PACK, anyString())).thenThrow(new RemoteException(null, null));
-		} catch (RemoteException e) {
-			fail();
-		}
-		AttributeMap attributes = controller.getPackage(anyString());
-		assertEquals(attributes, null);
+		when(client.getAsset(eq(AssetType.PACK), anyString())).thenThrow(mock(RemoteException.class));
+		AttributeMap attributes = controller.getPackage(eq(anyString()));
+		assertEquals(null, attributes);
 	}
 	
 	@Test
 	public void deletePackage() 
 	{
 		MayamClientErrorCode returnCode = controller.deletePackage(anyString());
-		assertEquals(returnCode, MayamClientErrorCode.NOT_IMPLEMENTED);
+		assertEquals(MayamClientErrorCode.NOT_IMPLEMENTED, returnCode);
 	}
 }

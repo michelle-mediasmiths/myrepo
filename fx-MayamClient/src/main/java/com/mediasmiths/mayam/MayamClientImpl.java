@@ -19,6 +19,7 @@ import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
@@ -256,8 +257,19 @@ public class MayamClientImpl implements MayamClient {
 
 	@Override
 	public boolean isMaterialPlaceholder(String materialID) {
-		//TODO implement isMaterialPlaceholder(String materialID) 
-		throw new RuntimeException("isMaterialPlaceholder not implemented");
+		boolean isPlaceholder = true;
+		AttributeMap materialAttributes = materialController.getMaterial(materialID);
+		
+		if (materialAttributes != null) {
+			IdSet sourceIds = materialAttributes.getAttribute(Attribute.SOURCE_IDS);
+			if (sourceIds != null) {
+				isPlaceholder = false;
+			}
+			else {
+				//TODO: Need to check segment data once implemented in order to determind if placeholder
+			}
+		}
+		return isPlaceholder;	
 	}
 
 	@Override

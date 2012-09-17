@@ -42,17 +42,25 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 	private MessageValidationResult validateTitle(Title title) {
 
-		try {
-			if (!mayamClient.titleExists(title.getTitleID())) {
-				return MessageValidationResult.TITLE_DOES_NOT_EXIST;
+		if (title.getProgrammeMaterial() != null) {
+
+			// title only has to exist already if we are receiving programme
+			// material (not marketing)
+			try {
+				if (!mayamClient.titleExists(title.getTitleID())) {
+					return MessageValidationResult.TITLE_DOES_NOT_EXIST;
+				}
+			} catch (MayamClientException e) {
+				logger.error("Mayam client error", e);
+				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
-		} catch (MayamClientException e) {
-			logger.error("Mayam client error",e);
-			return MessageValidationResult.MAYAM_CLIENT_ERROR;
+
+			return validateProgrammeMaterial(title.getProgrammeMaterial());
+		} else {
+			// TODO more validation of marketing material?
+			return MessageValidationResult.IS_VALID;
 		}
 
-		// TODO validate marketing material
-		return validateProgrammeMaterial(title.getProgrammeMaterial());
 	}
 
 	private MessageValidationResult validateProgrammeMaterial(
@@ -65,31 +73,31 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 				return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 			}
 
-			 if(! mayamClient.isMaterialPlaceholder(materialID)){
-				 return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
-			 }
+			if (!mayamClient.isMaterialPlaceholder(materialID)) {
+				return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+			}
 
 		} catch (MayamClientException e) {
-			logger.error("Mayam client error",e);
+			logger.error("Mayam client error", e);
 			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		}
-		
+
 		return validatePackages(programmeMaterial.getPresentation());
-		
+
 	}
 
 	private MessageValidationResult validatePackages(Presentation presentation) {
-		for (Package pack : presentation.getPackage()){
+		for (Package pack : presentation.getPackage()) {
 			try {
-				if(! mayamClient.packageExists(pack.getPresentationID())){
+				if (!mayamClient.packageExists(pack.getPresentationID())) {
 					return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 				}
 			} catch (MayamClientException e) {
-				logger.error("Mayam client error querying if package exists",e);
+				logger.error("Mayam client error querying if package exists", e);
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 		}
-		
+
 		return MessageValidationResult.IS_VALID;
 	}
 
@@ -101,7 +109,6 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 					"unmarshalled type %s is not a PlaceholderMessage",
 					unmarshalled.getClass().toString()));
 		}
-
 	}
 
 }

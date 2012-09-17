@@ -47,8 +47,7 @@ public class Importer implements Runnable {
 	private void deliver(PendingImport pi){
 		
 		File src = pi.getMediaFile();
-		//TODO : get the material id from somewhere better, this assumes a programme, what about marketing material?
-		File dst = new File(targetFolder, pi.getMaterial().getTitle().getProgrammeMaterial().getMaterialID()+".mxf");
+		File dst = new File(targetFolder, pi.getMaterialEnvelope().getMasterID()+".mxf");
 		
 		try {
 			FileUtils.moveFile(src, dst);
