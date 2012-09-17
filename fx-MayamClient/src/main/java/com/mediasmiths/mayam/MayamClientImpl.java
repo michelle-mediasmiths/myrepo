@@ -82,6 +82,11 @@ public class MayamClientImpl implements MayamClient {
 	{
 		return titleController.createTitle(title);
 	}
+	
+	@Override
+	public MayamClientErrorCode createTitle(Title title) {
+		return titleController.createTitle(title);
+	}
 
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
@@ -270,12 +275,6 @@ public class MayamClientImpl implements MayamClient {
 			}
 		}
 		return isPlaceholder;	
-	}
-
-	@Override
-	public MayamClientErrorCode createTitle(Title title) {
-		//TODO implement createTitle(Title title)
-		throw new RuntimeException("createTitle not implemented");
 	}
 
 	/**
