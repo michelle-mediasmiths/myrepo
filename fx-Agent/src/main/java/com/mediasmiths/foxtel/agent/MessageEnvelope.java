@@ -12,6 +12,10 @@ public class MessageEnvelope<T> {
 		this.message=message;
 	}
 	
+	public MessageEnvelope<T> getInstance(File file, T message){
+		return new MessageEnvelope<T>(file,message);
+	}
+	
 	public File getFile() {
 		return file;
 	}

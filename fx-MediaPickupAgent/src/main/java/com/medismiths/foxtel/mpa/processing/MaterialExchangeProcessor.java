@@ -23,7 +23,6 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -31,6 +30,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.medismiths.foxtel.mpa.MaterialEnvelope;
 import com.medismiths.foxtel.mpa.PendingImport;
 import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
 import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
@@ -46,7 +46,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	// TODO: configure some way to give up on a lonely file if its partner does
 	// not arrive in N miliseconds
 	private final Set<File> lonelyMXFs = new HashSet<File>();
-	private final Map<File, MaterialMessageEnvelope> lonelyXmls = new HashMap<File, MaterialMessageEnvelope>();
+	private final Map<File, MaterialEnvelope> lonelyXmls = new HashMap<File,MaterialEnvelope>();
 
 	private final PendingImportQueue filesPendingImport;
 
@@ -113,7 +113,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 		String masterID = updateMamWithMaterialInformation(envelope
 				.getMessage());
-//		logger.info(String.for);
+		// logger.info(String.for);
 
 		// we dont know if the xml or mxf will arrive first, and of course one
 		// may arrive and not the other so we keep a list of 'lonely' files
@@ -135,13 +135,15 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 			// we have picked up the xml for a media file awaiting a sidecar,
 			// add pending import
-			PendingImport pendingImport = new PendingImport(mxfFile, new MaterialMessageEnvelope(envelope,masterID));
+			PendingImport pendingImport = new PendingImport(mxfFile,
+					new MaterialEnvelope(envelope, masterID));
 			filesPendingImport.add(pendingImport);
 		} else {
 			logger.info(String.format(
 					"Have not yet seen the media file for %s",
 					xml.getAbsolutePath()));
-			lonelyXmls.put(xml, new MaterialMessageEnvelope(envelope,masterID));
+			lonelyXmls
+					.put(xml, new MaterialEnvelope(envelope, masterID));
 		}
 	}
 
@@ -185,7 +187,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 					"found an xml file %s for media file file %s",
 					xmlFile.getAbsolutePath(), mxf.getAbsolutePath()));
 
-			MaterialMessageEnvelope material = lonelyXmls.get(xmlFile);
+			MaterialEnvelope material = lonelyXmls.get(xmlFile);
 
 			// add pending import
 			PendingImport pendingImport = new PendingImport(mxf, material);
@@ -220,6 +222,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			try {
 				createOrUpdateTitle(message.getTitle());
 				String masterID = mayamClient.createMaterial(message.getTitle()
+						.getTitleID(), message.getTitle()
 						.getMarketingMaterial());
 				return masterID;
 			} catch (MayamClientException e) {
