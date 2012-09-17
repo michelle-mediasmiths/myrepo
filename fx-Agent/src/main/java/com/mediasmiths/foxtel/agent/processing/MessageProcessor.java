@@ -74,11 +74,13 @@ public abstract class MessageProcessor<T> implements Runnable {
 					unmarshalled.getClass().toString()));
 
 			typeCheck(unmarshalled);
-			
+
 			@SuppressWarnings("unchecked")
 			T message = (T) unmarshalled;
+			MessageEnvelope<T> envelope = new MessageEnvelope<T>(new File(filePath),
+					message);
 			try {
-				processMessage(new MessageEnvelope<T>(new File(filePath), message));
+				processMessage(envelope);
 			} catch (MessageProcessingFailedException e) {
 				logger.error(String.format(
 						"Message processing failed for %s and reason %s",
@@ -86,57 +88,71 @@ public abstract class MessageProcessor<T> implements Runnable {
 				throw e;
 			}
 
-			return getIDFromMessage(message);
+			return getIDFromMessage(envelope);
 
 		} catch (JAXBException e) {
 			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
 			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.UNMARSHALL_FAILED,e);
+					MessageProcessingFailureReason.UNMARSHALL_FAILED, e);
 		} catch (ClassCastException cce) {
-			logger.fatal("A prevously validated file did not have an action of one of the expected types",cce);
+			logger.fatal(
+					"A prevously validated file did not have an action of one of the expected types",
+					cce);
 			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.UNKNOWN_ACTION,cce);
+					MessageProcessingFailureReason.UNKNOWN_ACTION, cce);
 		}
 
 	}
-	
-	/**
-	 *  Called to check the type of an unmarshalled object, left up to implementing classes as (unmarshalled instanceof T) cannot be checked;
-	 * @param unmsarhalled
-	 * @throws ClassCastException if the unmarshalled object is not of the expected type
-	 */
-	protected abstract void typeCheck(Object unmarshalled) throws ClassCastException;
 
-	
-	protected abstract String getIDFromMessage(T message);
+	/**
+	 * Called to check the type of an unmarshalled object, left up to
+	 * implementing classes as (unmarshalled instanceof T) cannot be checked;
+	 * 
+	 * @param unmsarhalled
+	 * @throws ClassCastException
+	 *             if the unmarshalled object is not of the expected type
+	 */
+	protected abstract void typeCheck(Object unmarshalled)
+			throws ClassCastException;
+
+	protected abstract String getIDFromMessage(MessageEnvelope<T> envelope);
 
 	protected void validateThenProcessFile(String filePath) {
 		MessageValidationResult result = messageValidator
-					.validateFile(filePath);
+				.validateFile(filePath);
 
-			if (result == MessageValidationResult.IS_VALID) {
-				logger.info(String.format(
-						"Message at %s validates", filePath));
-				try {
-					String messageID = processFile(filePath);
-					writeReceipt(filePath, messageID);
+		if (result == MessageValidationResult.IS_VALID) {
+			logger.info(String.format("Message at %s validates", filePath));
+			try {
+				String messageID = processFile(filePath);
+				writeReceipt(filePath, messageID);
+				if (shouldArchiveMessages()) {
 					moveMessageToArchiveFolder(filePath);
-				} catch (MessageProcessingFailedException e) {
-					logger.error(
-							String.format("Error processing %s", filePath), e);
-					moveMessageToFailureFolder(filePath);
 				}
-			} else {
-				logger.warn(String.format(
-						"Message at %s did not validate", filePath));
+			} catch (MessageProcessingFailedException e) {
+				logger.error(String.format("Error processing %s", filePath), e);
 				moveMessageToFailureFolder(filePath);
 			}
+		} else {
+			logger.warn(String.format("Message at %s did not validate",
+					filePath));
+			messageValidationFailed(filePath, result);
+			moveMessageToFailureFolder(filePath);
+		}
 
-		
 	}
-	
-	protected abstract void processMessage(MessageEnvelope<T> envelope) throws MessageProcessingFailedException;
-	
+
+	/**
+	 * informs MessageProcesors of a message validation failure, does not move messages to the failure folder
+	 * @param filePath
+	 * @param result
+	 */
+	protected abstract void messageValidationFailed(String filePath,
+			MessageValidationResult result);
+
+	protected abstract void processMessage(MessageEnvelope<T> envelope)
+			throws MessageProcessingFailedException;
+
 	/**
 	 * Moves erroneous messages to a configurable location
 	 * 
@@ -153,14 +169,15 @@ public abstract class MessageProcessor<T> implements Runnable {
 			moveMessageToFolder(messagePath, failurePath);
 		} catch (IOException e) {
 			logger.error(String.format(
-					"IOException moving invalid message %s to %s",
-					messagePath, failurePath), e);
+					"IOException moving invalid message %s to %s", messagePath,
+					failurePath), e);
 		}
 
 	}
 
 	/**
 	 * Moves messages which have been processed, to the archive path
+	 * 
 	 * @param messagePath
 	 */
 	private void moveMessageToArchiveFolder(String messagePath) {
@@ -173,8 +190,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 			moveMessageToFolder(messagePath, archivePath);
 		} catch (IOException e) {
 			logger.error(String.format(
-					"IOException moving message %s to archive %s",
-					messagePath, archivePath), e);
+					"IOException moving message %s to archive %s", messagePath,
+					archivePath), e);
 		}
 
 	}
@@ -183,9 +200,10 @@ public abstract class MessageProcessor<T> implements Runnable {
 			String destinationFolderPath) throws IOException {
 		final String destination = destinationFolderPath
 				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
-		
-		logger.trace(String.format("Moving file from %s to %s", messagePath,destination));
-		
+
+		logger.trace(String.format("Moving file from %s to %s", messagePath,
+				destination));
+
 		FileUtils.moveFile(new File(messagePath), new File(destination));
 	}
 
@@ -203,14 +221,13 @@ public abstract class MessageProcessor<T> implements Runnable {
 		while (!stopRequested) {
 			try {
 				String filePath = getFilePathsPending().take();
-				
-				if(isMessage(filePath)){
-					validateThenProcessFile(filePath);	
-				}
-				else{
+
+				if (isMessage(filePath)) {
+					validateThenProcessFile(filePath);
+				} else {
 					processNonMessageFile(filePath);
 				}
-				
+
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
 				stop();
@@ -220,9 +237,12 @@ public abstract class MessageProcessor<T> implements Runnable {
 	}
 
 	protected abstract void processNonMessageFile(String filePath);
-	
+
+	protected abstract boolean shouldArchiveMessages();
+
 	protected boolean isMessage(String filePath) {
-		return FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH).equals("xml");
+		return FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
+				.equals("xml");
 	}
 
 	public void stop() {

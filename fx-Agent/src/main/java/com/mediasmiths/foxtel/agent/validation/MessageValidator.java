@@ -1,9 +1,11 @@
 package com.mediasmiths.foxtel.agent.validation;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;

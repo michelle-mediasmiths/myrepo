@@ -22,7 +22,7 @@ public class MaterialEnvelope extends MessageEnvelope<Material> {
 		return masterID;
 	}
 
-	public void setMasterID(String masterID) {
+	public final void setMasterID(String masterID) {
 		this.masterID = masterID;
 	}
 

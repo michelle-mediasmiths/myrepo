@@ -20,6 +20,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -207,8 +208,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 
 	@Override
-	protected String getIDFromMessage(PlaceholderMessage message) {
-		return message.getMessageID();
+	protected String getIDFromMessage(MessageEnvelope<PlaceholderMessage> envelope) {
+		return envelope.getMessage().getMessageID();
 	}
 
 	@Override
@@ -225,6 +226,19 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	protected void processNonMessageFile(String filePath) {
 		logger.error("Placeholder Agent does not expect non message files");	
 		throw new RuntimeException(String.format("Placeholder Agent does not expect non message files %s",filePath));
+	}
+
+	@Override
+	protected boolean shouldArchiveMessages() {
+		return true;
+	}
+
+	@Override
+	protected void messageValidationFailed(String filePath,
+			MessageValidationResult result) {
+	
+		//TODO notify someone of the failure
+		
 	}
 
 }
