@@ -23,7 +23,9 @@ import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -254,7 +256,26 @@ public class MayamClientImpl implements MayamClient {
 
 	@Override
 	public boolean isMaterialPlaceholder(String materialID) {
+		//TODO implement isMaterialPlaceholder(String materialID) 
 		throw new RuntimeException("isMaterialPlaceholder not implemented");
+	}
+
+	@Override
+	public MayamClientErrorCode createTitle(Title title) {
+		//TODO implement createTitle(Title title)
+		throw new RuntimeException("createTitle not implemented");
+	}
+
+	/**
+	 * creates an item in viz ardome for associated media files.
+	 * @return the master ID of the created item
+	 */
+	@Override
+	public String createMaterial(String titleID, MarketingMaterialType material)  throws MayamClientException{
+		//TODO implement createMaterial(MarketingMaterialType material)
+		
+		//2.2 Associated Media File Ingest
+		throw new RuntimeException("createMaterial not implemented");
 	}
 
 }

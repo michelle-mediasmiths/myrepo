@@ -7,7 +7,9 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 
 public interface MayamClient {
@@ -16,6 +18,7 @@ public interface MayamClient {
 
 	/* titles */
 	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title);
+	public MayamClientErrorCode createTitle(Title title); //may be called when marketing material arrives with no placeholder
 	public MayamClientErrorCode updateTitle(Material.Title title);
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title);
 	public MayamClientErrorCode purgeTitle(PurgeTitle title);
@@ -23,6 +26,7 @@ public interface MayamClient {
 	
 	/* material */
 	public MayamClientErrorCode createMaterial(MaterialType material);
+	public String createMaterial(String titleID, MarketingMaterialType material) throws MayamClientException;
 	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material);
 	public MayamClientErrorCode updateMaterial(MaterialType material);
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
@@ -39,6 +43,7 @@ public interface MayamClient {
 
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
+
 
 	
 
