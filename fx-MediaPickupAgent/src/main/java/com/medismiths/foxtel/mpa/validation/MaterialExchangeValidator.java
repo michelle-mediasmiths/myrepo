@@ -81,6 +81,8 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			logger.error("Mayam client error", e);
 			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		}
+		
+		//TODO: sanity check start\end\duration
 
 		return validatePackages(programmeMaterial.getPresentation());
 

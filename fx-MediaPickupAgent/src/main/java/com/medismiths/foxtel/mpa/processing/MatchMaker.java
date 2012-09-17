@@ -64,6 +64,9 @@ public class MatchMaker {
 		if (mxfs.contains(mxfFile)) {
 			// remove from list of as yet unmatched mxfs
 			mxfs.remove(mxfFile);
+			
+			//TODO : sanity check Material Description against Media (checksum, filesize etc)
+			
 			return mxfFile.getFile();
 		} else {
 			logger.info(String.format(

@@ -125,8 +125,6 @@ public class Importer implements Runnable {
 			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
 					.getMasterID() + ".xml");
 
-			// did we write receipts already? moving the xml will fail if so
-
 			try {
 				FileUtils.moveFile(src, dst);
 			} catch (IOException e) {
