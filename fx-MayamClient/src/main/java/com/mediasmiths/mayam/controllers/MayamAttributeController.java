@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Set;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
@@ -35,6 +37,10 @@ public class MayamAttributeController {
 		validator = attributeValidator;
 		client = null;
 		attributes = attributeMap;
+	}
+	
+	public void copyAttributes(AttributeMap originalAttributes) {
+		attributes.putAll(originalAttributes);
 	}
 	
 	public boolean setAttribute(Attribute attribute, Object value) {
