@@ -203,7 +203,7 @@ public class PlaceholderMessageValidator extends
 		logger.info("Validating a DeleteMaterial " + action);
 		// 24.1.1.2 Master purge requests
 
-		// TODO : do we check if the material is marked as protected as with the
+		// TODO : FX-28 do we check if the material is marked as protected as with the
 		// other delete requests? its not specified
 		return MessageValidationResult.IS_VALID;
 	}
@@ -327,7 +327,7 @@ public class PlaceholderMessageValidator extends
 
 	private boolean validateSenderID(String senderID) {
 		logger.debug("Validating sender id"+senderID);
-		// TODO implement validateSenderID
+		// TODO is any validation of this field required?
 		return true;
 	}
 

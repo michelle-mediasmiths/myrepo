@@ -26,7 +26,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 	@Inject
 	public UnmatchedMaterialProcessor(
-			@Named("86400000") Long timeout,
+			@Named("media.companion.timeout") Long timeout,
 			@Named("media.path.ardomeemergencyimportfolder") String emergencyImportFolder,
 			MatchMaker matchMaker) {
 		this.timeout = timeout;
@@ -54,7 +54,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 		}
 	}
 
-	private void process() {
+	protected void process() {
 
 		processUnmatchedMessages();
 		processUnmatchedMXFs();

@@ -39,6 +39,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 	private final MayamClient mayamClient;
 
+	//TODO create compliance task if placeholder was for such
+	
 	@Inject
 	public PlaceholderMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,

@@ -27,6 +27,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.medismiths.foxtel.mpa.MaterialEnvelope;
 import com.medismiths.foxtel.mpa.PendingImport;
+import com.medismiths.foxtel.mpa.Util;
 import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
 import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
@@ -161,7 +162,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	private String updateMamWithMaterialInformation(Material message)
 			throws MessageProcessingFailedException {
 
-		if (message.getTitle().getProgrammeMaterial() != null) {
+		if (Util.isProgramme(message)) {
 			// programme material
 			updateTitle(message.getTitle());
 			updateProgrammeMaterial(message.getTitle().getProgrammeMaterial());

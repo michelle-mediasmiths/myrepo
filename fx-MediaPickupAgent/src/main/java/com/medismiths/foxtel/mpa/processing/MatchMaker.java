@@ -1,6 +1,11 @@
 package com.medismiths.foxtel.mpa.processing;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,13 +15,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
 import com.medismiths.foxtel.mpa.MaterialEnvelope;
+import com.medismiths.foxtel.mpa.Util;
 
 /**
  * 
@@ -35,15 +46,18 @@ public class MatchMaker {
 	// but have not
 	// yet processed as they are still awaiting a companion file
 
-	// TODO: configure some way to give up on a lonely file if its partner does
-	// not arrive in N miliseconds
-
 	private final Set<UnmatchedFile> mxfs = new HashSet<UnmatchedFile>();
 	private final Map<UnmatchedFile, MaterialEnvelope> xmls = new HashMap<UnmatchedFile, MaterialEnvelope>();
 
-	@Inject
-	public MatchMaker() {
+	private final MessageDigest digest; // for validating file checksums
 
+	@Inject
+	public MatchMaker(@Named("media.digest.algorithm") String digestAlgorithm) {
+		digest = DigestUtils.getDigest(digestAlgorithm); // throws
+															// IllegalArgumentException
+															// if the supplied
+															// algorithm doesnt
+															// exist
 	}
 
 	/**
@@ -58,24 +72,31 @@ public class MatchMaker {
 		String xmlAbsolutePath = envelope.getFile().getAbsolutePath();
 		String basename = FilenameUtils.getBaseName(xmlAbsolutePath);
 		String path = FilenameUtils.getPath(xmlAbsolutePath);
-		UnmatchedFile mxfFile = new UnmatchedFile(new File(path + IOUtils.DIR_SEPARATOR
-				+ basename + FilenameUtils.EXTENSION_SEPARATOR + "mxf"));
+		UnmatchedFile mxfFile = new UnmatchedFile(new File(path
+				+ IOUtils.DIR_SEPARATOR + basename
+				+ FilenameUtils.EXTENSION_SEPARATOR + "mxf"));
 
 		if (mxfs.contains(mxfFile)) {
 			// remove from list of as yet unmatched mxfs
 			mxfs.remove(mxfFile);
-			
-			//TODO : sanity check Material Description against Media (checksum, filesize etc)
-			
-			return mxfFile.getFile();
+
+			if (mediaCheck(mxfFile.getFile(), envelope)) { // TODO should this
+															// check be
+															// performed here or
+															// at the importer
+															// stage?
+				return mxfFile.getFile();
+			} else {
+				return null;
+			}
 		} else {
 			logger.info(String.format(
 					"Have not yet seen the media file for %s", envelope
 							.getFile().getAbsolutePath()));
 			// add xml to list of seen xmls
 			xmls.put(
-					new UnmatchedFile(System.currentTimeMillis(), envelope.getFile()),
-					envelope);
+					new UnmatchedFile(System.currentTimeMillis(), envelope
+							.getFile()), envelope);
 			return null;
 		}
 
@@ -94,8 +115,9 @@ public class MatchMaker {
 		String mxfAbsolutePath = mxf.getAbsolutePath();
 		String basename = FilenameUtils.getBaseName(mxfAbsolutePath);
 		String path = FilenameUtils.getPath(mxfAbsolutePath);
-		UnmatchedFile xmlFile = new UnmatchedFile(new File(path + IOUtils.DIR_SEPARATOR
-				+ basename + FilenameUtils.EXTENSION_SEPARATOR + "xml"));
+		UnmatchedFile xmlFile = new UnmatchedFile(new File(path
+				+ IOUtils.DIR_SEPARATOR + basename
+				+ FilenameUtils.EXTENSION_SEPARATOR + "xml"));
 
 		// look for the xml file corresponding to this mxf
 		if (xmls.containsKey(xmlFile)) {
@@ -114,6 +136,67 @@ public class MatchMaker {
 			// add mxf to list of seen mxfs
 			mxfs.add(new UnmatchedFile(System.currentTimeMillis(), mxf));
 			return null;
+		}
+	}
+
+	private boolean mediaCheck(File mxf, MaterialEnvelope description) {
+		// check mxf matched descriptioin.
+		MaterialType material = Util.getMaterialTypeForMaterial(description
+				.getMessage());
+
+		if (!(material.getMedia() instanceof FileMediaType)) {
+			logger.error("Unknown media type");
+			return false;
+		} else {
+			FileMediaType media = (FileMediaType) material.getMedia();
+			return fileSizeMatches(mxf, media) && checkSumMatches(mxf, media);
+		}
+		// TODO check file format? (could be quite difficult!)
+	}
+
+	protected boolean fileSizeMatches(File mxf, FileMediaType media) {
+
+		long fileSize = mxf.length();
+		long expectedSize = media.getFileSize().longValue();
+
+		if (fileSize == expectedSize) {
+			logger.debug(String.format(
+					"File size of %s is %d expected size is %d",
+					mxf.getAbsolutePath(), fileSize, expectedSize));
+			return true;
+		} else {
+			logger.warn(String.format(
+					"File size of %s is %d expected size is %d",
+					mxf.getAbsolutePath(), fileSize, expectedSize));
+			return false;
+		}
+
+	}
+
+	protected boolean checkSumMatches(File mxf, FileMediaType media) {
+
+		BigInteger checksum = media.getChecksum();
+
+		try {
+			if (digest.isEqual(checksum.toString(64).getBytes(),
+					IOUtils.toByteArray(new FileInputStream(mxf)))) {
+				// TODO : replace naive stupid implementation that reads the
+				// entire file into memory (see java.nio)
+				logger.debug(String.format("Checksum passes %s",
+						mxf.getAbsolutePath()));
+				return true;
+			} else {
+				logger.warn(String.format("Checksum failure %s",
+						mxf.getAbsolutePath()));
+				return false;
+			}
+
+		} catch (IOException e) {
+			logger.error(
+					String.format(
+							"IOException calculating media checksum for %s, sanity check fails",
+							mxf.getAbsolutePath()), e);
+			return false;
 		}
 	}
 
@@ -150,7 +233,8 @@ public class MatchMaker {
 	/**
 	 * finds unmatched mxf files seen more than olderThan millis ago
 	 */
-	public synchronized Collection<UnmatchedFile> purgeUnmatchedMXFs(long olderThan) {
+	public synchronized Collection<UnmatchedFile> purgeUnmatchedMXFs(
+			long olderThan) {
 
 		List<UnmatchedFile> old = new ArrayList<UnmatchedFile>();
 

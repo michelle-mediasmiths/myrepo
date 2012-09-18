@@ -32,7 +32,7 @@ public class MediaPickupModule extends AbstractModule {
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
 	}
 
-	private static TypeLiteral<MessageProcessor<Material>> messageProcessorLiteral =  new TypeLiteral<MessageProcessor<Material>>(){};
+	protected static TypeLiteral<MessageProcessor<Material>> messageProcessorLiteral =  new TypeLiteral<MessageProcessor<Material>>(){};
 
 	@Provides
 	Unmarshaller provideUnmarshaller() throws JAXBException {

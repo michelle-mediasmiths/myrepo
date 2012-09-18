@@ -1,5 +1,7 @@
 package com.medismiths.foxtel.mpa.validation;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidationFailureException;
@@ -9,6 +11,8 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
 	protected static final String ARDOME_IMPORT_FOLDER = "media.path.ardomeimportfolder";
 	protected static final String ARDOME_EMERGENCY_IMPORT_FOLDER = "media.path.ardomeemergencyimportfolder";
+	
+	private static Logger logger = Logger.getLogger(MediaPickupAgentConfigValidator.class);
 	
 	@Inject
 	public MediaPickupAgentConfigValidator(@Named(MESSAGE_PATH) String messagePath,
@@ -22,7 +26,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 		
 		boolean anyFailures = false;
 		
-		if(haveReadWritePermissions(ARDOME_IMPORT_FOLDER)){
+		if(haveReadWritePermissions(importFolder)){
 			configValidationPasses(ARDOME_IMPORT_FOLDER, importFolder);
 		}
 		else{
@@ -30,7 +34,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			configValidationFails(ARDOME_IMPORT_FOLDER, importFolder);
 		}
 		
-		if(haveReadWritePermissions(ARDOME_EMERGENCY_IMPORT_FOLDER)){
+		if(haveReadWritePermissions(emergencyImportFolder)){
 			configValidationPasses(ARDOME_EMERGENCY_IMPORT_FOLDER, emergencyImportFolder);
 		}
 		else{

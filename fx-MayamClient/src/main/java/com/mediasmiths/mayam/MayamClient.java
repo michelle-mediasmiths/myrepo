@@ -32,7 +32,7 @@ public interface MayamClient {
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
 	public boolean materialExists(String materialID) throws MayamClientException;
 	//returns true if the specified material has not had media\essence ingested
-	public boolean isMaterialPlaceholder(String materialID);
+	public boolean isMaterialPlaceholder(String materialID) throws MayamClientException;
 	
 	/* packages */
 	public MayamClientErrorCode createPackage(PackageType txPackage);

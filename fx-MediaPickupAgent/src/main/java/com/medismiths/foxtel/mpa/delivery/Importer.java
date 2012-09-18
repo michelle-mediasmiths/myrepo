@@ -77,6 +77,9 @@ public class Importer implements Runnable {
 			logger.error(String.format("Error moving file from %s to %s",
 					src.getAbsolutePath(), dst.getAbsolutePath()));
 			onDeliveryFailure(pi);
+			
+			//TODO allow a configurable number of retries
+			
 			return;
 		}
 

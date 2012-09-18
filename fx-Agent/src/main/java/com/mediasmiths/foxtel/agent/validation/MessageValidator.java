@@ -74,10 +74,10 @@ public abstract class MessageValidator<T> {
 			
 		} catch (JAXBException e) {
 			logger.fatal("Failed to unmarshall file " + filepath
-					+ " that had validated against schema");
+					+ " that had validated against schema",e);
 			return MessageValidationResult.FAILED_TO_UNMARSHALL;
 		} catch (ClassCastException cce) {
-			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type");
+			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type",cce);
 			return MessageValidationResult.UNEXPECTED_TYPE;
 		} 
 		

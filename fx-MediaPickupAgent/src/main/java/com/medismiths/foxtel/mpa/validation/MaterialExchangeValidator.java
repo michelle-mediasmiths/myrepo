@@ -17,6 +17,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.medismiths.foxtel.mpa.Util;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 
@@ -42,7 +43,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 	private MessageValidationResult validateTitle(Title title) {
 
-		if (title.getProgrammeMaterial() != null) {
+		if (Util.isProgramme(title)) {
 
 			// title only has to exist already if we are receiving programme
 			// material (not marketing)
@@ -81,22 +82,28 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			logger.error("Mayam client error", e);
 			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		}
-		
-		//TODO: sanity check start\end\duration
 
+		// TODO: sanity check start\end\duration
+
+		//TODO validate orignial conform
+		
 		return validatePackages(programmeMaterial.getPresentation());
 
 	}
 
 	private MessageValidationResult validatePackages(Presentation presentation) {
-		for (Package pack : presentation.getPackage()) {
-			try {
-				if (!mayamClient.packageExists(pack.getPresentationID())) {
-					return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
+		if (presentation != null && presentation.getPackage() != null) {
+
+			for (Package pack : presentation.getPackage()) {
+				try {
+					if (!mayamClient.packageExists(pack.getPresentationID())) {
+						return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
+					}
+				} catch (MayamClientException e) {
+					logger.error(
+							"Mayam client error querying if package exists", e);
+					return MessageValidationResult.MAYAM_CLIENT_ERROR;
 				}
-			} catch (MayamClientException e) {
-				logger.error("Mayam client error querying if package exists", e);
-				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 		}
 
@@ -108,8 +115,8 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 		if (!(unmarshalled instanceof Material)) {
 			throw new ClassCastException(String.format(
-					"unmarshalled type %s is not a PlaceholderMessage",
-					unmarshalled.getClass().toString()));
+					"unmarshalled type %s is not a Material", unmarshalled
+							.getClass().toString()));
 		}
 	}
 
