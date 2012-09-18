@@ -8,21 +8,19 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.MqClient;
 
 public class MayamTaskController {
 	private final TasksClient client;
-	private final MqClient mq;
 	
-	public MayamTaskController(TasksClient mayamClient, MqClient mqClient) {
+	public MayamTaskController(TasksClient mayamClient) {
 		client = mayamClient;
-		mq = mqClient;
 	}
 	
-	public MayamClientErrorCode createTask(String assetID, MayamAssetType assetType, MayamTaskListType taskList)
+	public long createTask(String assetID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		long taskID = 0;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		
@@ -30,13 +28,13 @@ public class MayamTaskController {
 		try {
 			assetAttributes = client.getAsset(assetTypeMapper(assetType), assetID);
 		} catch (RemoteException e) {
-			returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 		}
 		
 		if (assetAttributes != null) 
 		{
 			//TODO: Generate Task ID
-			//long taskID = 0;
+			//taskID = 0;
 			//attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_ID, taskID);
 			
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
@@ -48,11 +46,11 @@ public class MayamTaskController {
 			try {
 				client.createTask(attributes.getAttributes());
 			} catch (RemoteException e) {
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
 			
 		}
-		return returnCode;
+		return taskID;
 	}
 	
 	public MayamClientErrorCode updateTaskState(long taskID )

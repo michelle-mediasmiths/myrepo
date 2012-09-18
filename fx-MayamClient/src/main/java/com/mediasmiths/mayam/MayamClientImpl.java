@@ -30,6 +30,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
+import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 
 public class MayamClientImpl implements MayamClient {
@@ -42,13 +43,15 @@ public class MayamClientImpl implements MayamClient {
 	final MayamTitleController titleController;
 	final MayamMaterialController materialController;
 	final MayamPackageController packageController;
+	final MayamTaskController tasksController;	
 	
 	public MayamClientImpl() throws MalformedURLException, IOException {
 		url = new URL("http://localhost:8084/tasks-ws");
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
 		client = injector.getInstance(TasksClient.class).setup(url, token); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mqClient = new MqClient(injector);
+		tasksController = new MayamTaskController(client);
+		mqClient = new MqClient(injector, client, tasksController);
 		titleController = new MayamTitleController(client, mqClient);
 		materialController = new MayamMaterialController(client, mqClient);
 		packageController = new MayamPackageController(client, mqClient);
@@ -59,7 +62,8 @@ public class MayamClientImpl implements MayamClient {
 		injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
 		client = injector.getInstance(TasksClient.class).setup(url, userToken); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mqClient = new MqClient(injector);
+		tasksController = new MayamTaskController(client);
+		mqClient = new MqClient(injector, client, tasksController);
 		titleController = new MayamTitleController(client, mqClient);
 		materialController = new MayamMaterialController(client, mqClient);
 		packageController = new MayamPackageController(client, mqClient);
