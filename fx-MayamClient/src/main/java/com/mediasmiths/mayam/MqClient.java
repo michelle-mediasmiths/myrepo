@@ -145,7 +145,7 @@ public class MqClient {
 					//TODO: Check if parent_ID has been updated, add sources to title and remove from any purge lists
 					
 					AttributeMap filterEqualities = client.createAttributeMap();
-					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST);
+					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 					filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
@@ -168,7 +168,7 @@ public class MqClient {
 				if (contentType.equals("Associated") || contentType.equals("Edit Clips")) 
 				{
 					AttributeMap filterEqualities = client.createAttributeMap();
-					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST);
+					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 					filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
@@ -219,6 +219,26 @@ public class MqClient {
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
 				//TODO: IMPLEMENT
 				// - Segmentation task complete - TX-Ready - then start tx task and kick off workflow
+				AttributeMap messageAttributes = msg.getSubject();
+				String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
+				if (taskListID.equals(MayamTaskListType.SEGMENTATION)) {
+					TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
+					if (taskState == TaskState.FINISHED) {
+						messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						client.updateTask(messageAttributes);
+						
+						String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+						String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.TX_DELIVERY);
+						AttributeMap newTask = client.getTask(taskID);
+						newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+						client.updateTask(newTask);
+						
+						//TODO: Initiate workflow
+						
+					}
+				}
+				
 			}
 		}
 	};
