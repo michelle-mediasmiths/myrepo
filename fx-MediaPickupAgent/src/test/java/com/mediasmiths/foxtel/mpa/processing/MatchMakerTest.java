@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
+import java.util.Collection;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -13,6 +14,7 @@ import org.junit.Test;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
 import com.medismiths.foxtel.mpa.MaterialEnvelope;
 import com.medismiths.foxtel.mpa.processing.MatchMaker;
+import com.medismiths.foxtel.mpa.processing.UnmatchedFile;
 
 public class MatchMakerTest {
 	
@@ -95,9 +97,33 @@ public class MatchMakerTest {
 	
 	/**
 	 * foo.xml arrives and then nothing for a while, foo.xml should be discarded when purge is called
+	 * @throws DatatypeConfigurationException 
+	 * @throws InterruptedException 
 	 */
 	@Test
-	public void lonelyfilesexpire(){
+	public void lonelyfilesexpire() throws DatatypeConfigurationException, InterruptedException{
+		
+		final long ONE_MILLISECOND = 1l;
+		final long ONE_SECOND = 1000l;
+	
+		MaterialEnvelope env = getEnvelope(FOOXML);
+		MaterialEnvelope barenv = getEnvelope(BARXML);
+		
+		assertNull(toTest.matchMXF(FOOMXF));
+		assertNull(toTest.matchXML(barenv));
+		
+		Thread.currentThread().sleep(ONE_SECOND);
+		
+		Collection<MaterialEnvelope> purgeUnmatchedMessages = toTest.purgeUnmatchedMessages(ONE_MILLISECOND);
+		assertEquals(1, purgeUnmatchedMessages.size());
+		assertEquals(barenv, purgeUnmatchedMessages.iterator().next());
+		
+		Collection<UnmatchedFile> purgeUnmatchedMXFs = toTest.purgeUnmatchedMXFs(ONE_MILLISECOND);
+		assertEquals(1, purgeUnmatchedMXFs.size());
+		assertEquals(new UnmatchedFile(FOOMXF.getAbsolutePath()), purgeUnmatchedMXFs.iterator().next());
+		
+		assertNull(toTest.matchXML(env));
+		assertNull(toTest.matchMXF(BARMXF));
 		
 	}
 	private MaterialEnvelope getEnvelope(File forXML) throws DatatypeConfigurationException{
