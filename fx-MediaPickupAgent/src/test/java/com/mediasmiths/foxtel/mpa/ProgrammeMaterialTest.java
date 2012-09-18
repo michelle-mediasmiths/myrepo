@@ -145,7 +145,7 @@ public class ProgrammeMaterialTest {
 				});
 		// run pickup agent
 		MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);
-		mpa.run();
+//		mpa.run();
 	}
 
 	class TestMediaPickupModule extends MediaPickupModule {
