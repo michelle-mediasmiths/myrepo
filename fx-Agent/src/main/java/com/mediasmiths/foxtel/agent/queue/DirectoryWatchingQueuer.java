@@ -114,7 +114,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	
 	private Collection<File> listFiles() {
 		logger.debug("Listing files in "+path);
-		Collection<File> existingFiles = FileUtils.listFiles(new File(path), acceptXMLFilesFilter, TrueFileFilter.INSTANCE);
+		Collection<File> existingFiles = FileUtils.listFiles(new File(path), getExistingFilesFilter(), TrueFileFilter.INSTANCE);
 		return existingFiles;
 	}
 

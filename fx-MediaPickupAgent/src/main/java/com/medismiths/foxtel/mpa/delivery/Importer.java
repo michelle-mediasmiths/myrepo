@@ -15,7 +15,7 @@ public class Importer implements Runnable {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
 
-	private final PendingImportQueue pendingImports;
+	protected final PendingImportQueue pendingImports;
 	private boolean stopRequested = false;
 	private final String targetFolder;
 	private final String quarrentineFolder;
@@ -62,7 +62,7 @@ public class Importer implements Runnable {
 	 * 
 	 * @param pi
 	 */
-	private void deliver(PendingImport pi) {
+	protected void deliver(PendingImport pi) {
 
 		File src = pi.getMediaFile();
 		File dst = new File(targetFolder, pi.getMaterialEnvelope()

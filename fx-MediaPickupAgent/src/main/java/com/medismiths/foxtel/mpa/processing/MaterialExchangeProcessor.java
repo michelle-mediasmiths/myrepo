@@ -71,8 +71,10 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 	@Override
 	protected String getIDFromMessage(MessageEnvelope<Material> envelope) {
-		//TODO this is just returning the xmls file name which may not be unique at all (but lets hope it is for now!)		
-		String id = FilenameUtils.getBaseName(envelope.getFile().getAbsolutePath());
+		// TODO this is just returning the xmls file name which may not be
+		// unique at all (but lets hope it is for now!)
+		String id = FilenameUtils.getBaseName(envelope.getFile()
+				.getAbsolutePath());
 		logger.debug(String.format("getIDFromMessage = %s", id));
 		return id;
 	}
@@ -118,7 +120,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		String mxfFile = matchMaker.matchXML(materialEnvelope);
 
 		if (mxfFile != null) {
-			logger.info(String.format("found mxf %s for material",mxfFile));
+			logger.info(String.format("found mxf %s for material", mxfFile));
 			// we have an xml and an mxf, add pending import
 			PendingImport pendingImport = new PendingImport(new File(mxfFile),
 					materialEnvelope);
@@ -152,7 +154,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		MaterialEnvelope materialEnvelope = matchMaker.matchMXF(mxf);
 
 		if (materialEnvelope != null) {
-			logger.info(String.format("found material description %s for mxf",materialEnvelope.getFile().getAbsolutePath()));
+			logger.info(String.format("found material description %s for mxf",
+					materialEnvelope.getFile().getAbsolutePath()));
 			// we have an xml and an mxf, add pending import
 			PendingImport pendingImport = new PendingImport(mxf,
 					materialEnvelope);
@@ -174,8 +177,11 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			// programme material
 			updateTitle(message.getTitle());
 			updateProgrammeMaterial(message.getTitle().getProgrammeMaterial());
-			updatePackages(message.getTitle().getProgrammeMaterial()
-					.getPresentation().getPackage());
+			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
+
+				updatePackages(message.getTitle().getProgrammeMaterial()
+						.getPresentation().getPackage());
+			}
 			return message.getTitle().getProgrammeMaterial().getMaterialID();
 		} else {
 			// marketing material
@@ -296,11 +302,11 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	@Override
 	protected void messageValidationFailed(String filePath,
 			MessageValidationResult result) {
-		
-			//TODO notify someone of the error via email
-		
+
+		// TODO notify someone of the error via email
+
 	}
-	
+
 	private boolean mediaCheck(File mxf, MaterialEnvelope description) {
 		// check mxf matched descriptioin.
 		MaterialType material = Util.getMaterialTypeForMaterial(description
@@ -361,6 +367,11 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			return false;
 		}
 	}
-	@Named("media.digest.algorithm") private final MessageDigest digest =  DigestUtils.getDigest("md5"); // for validating file checksums
+
+	@Named("media.digest.algorithm")
+	private final MessageDigest digest = DigestUtils.getDigest("md5"); // for
+																		// validating
+																		// file
+																		// checksums
 
 }

@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.mpa;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -44,14 +47,21 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.mpa.delivery.DoNothingImporter;
+import com.mediasmiths.foxtel.mpa.delivery.SingleImporter;
+import com.mediasmiths.foxtel.mpa.processing.DoNothingUnmatchedMaterial;
 import com.mediasmiths.foxtel.mpa.processing.SingleMessageProcessor;
+import com.mediasmiths.foxtel.mpa.queue.MaterialFolderExistingFilesOnly;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
 import com.medismiths.foxtel.mpa.MediaPickupAgent;
+import com.medismiths.foxtel.mpa.delivery.Importer;
 import com.medismiths.foxtel.mpa.guice.MediaPickupModule;
 import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
+import com.medismiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
 import com.medismiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.medismiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
@@ -80,15 +90,28 @@ public class ProgrammeMaterialTest {
 
 		String messageName = RandomStringUtils.randomAlphabetic(10);
 
-		Material material = getMaterialNoPackages(RandomStringUtils.randomAlphabetic(10),RandomStringUtils.randomAlphabetic(10));
+		String titleID = RandomStringUtils.randomAlphabetic(10);
+		String materialID = RandomStringUtils.randomAlphabetic(10);
+		
+		Material material = getMaterialNoPackages(titleID,materialID);
+		String materialPath =  incomingPath + IOUtils.DIR_SEPARATOR
+				+ messageName + FilenameUtils.EXTENSION_SEPARATOR + "xml";
+		logger.debug(String.format("Material path %s", materialPath));
+		
 		// write material message
-		Util.writeMaterialToFile(material, incomingPath + IOUtils.DIR_SEPARATOR
-				+ messageName + FilenameUtils.EXTENSION_SEPARATOR + "xml");
+		Util.writeMaterialToFile(material,materialPath);
 		// write 'media' file
 		IOUtils.write(new byte[1000], new FileOutputStream(new File(
 				incomingPath + IOUtils.DIR_SEPARATOR + messageName
 						+ FilenameUtils.EXTENSION_SEPARATOR + "mxf")));
 
+		when(mayamClient.titleExists(titleID)).thenReturn(true);
+		when(mayamClient.materialExists(materialID)).thenReturn(true);
+		when(mayamClient.isMaterialPlaceholder(materialID)).thenReturn(true);
+		
+		when(mayamClient.updateTitle((Title) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updateMaterial((ProgrammeMaterialType) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+		
 		startMediaPickupAgent(incomingPath, receiptPath, failurePath,
 				archivePath, ardomeImportPath, ardomeEmergencyImportPath,
 				"md5", "10000");
@@ -145,7 +168,7 @@ public class ProgrammeMaterialTest {
 				});
 		// run pickup agent
 		MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);
-//		mpa.run();
+		mpa.run();
 	}
 
 	class TestMediaPickupModule extends MediaPickupModule {
@@ -160,10 +183,12 @@ public class ProgrammeMaterialTest {
 		protected void configure() {
 			//we dont call super.configure as we want to be trying to bind the same thing twice
 			bind(MayamClient.class).toInstance(mc);
-			bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
 			bind(messageProcessorLiteral).to(SingleMessageProcessor.class);
 			bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
-
+			bind(DirectoryWatchingQueuer.class).to(MaterialFolderExistingFilesOnly.class);
+			
+			bind(Importer.class).to(DoNothingImporter.class);
+			bind(UnmatchedMaterialProcessor.class).to(DoNothingUnmatchedMaterial.class);
 		}
 	
 	}
