@@ -104,6 +104,7 @@ public class MqClient {
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
 				//TODO: IMPLEMENT
 				// - Deletion has occurred in Viz Ardome, close all related workflow tasks - DG: Mayam or us?
+				// - How to tell if an asset is deleted?
 			}
 		}
 	};
@@ -114,6 +115,7 @@ public class MqClient {
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
 				//TODO: IMPLEMENT
 				// - Purge of temporary assets notification received, remove from other worklist
+				// - How to tell if an asset is ready to be purged? Check the Expiry date?
 			}
 		}
 	};
@@ -126,6 +128,7 @@ public class MqClient {
 				// - Emergency ingest - ACLS updated in Ardome - 
 				// Check if asset exists
 				// If not then create placeholder for it
+				// How do we check if the content already exists if we dont have an ID for it?
 			}
 		}
 	};
