@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.processing.MatchMaker.UnmatchedFile;
 
 public class UnmatchedMaterialProcessor implements Runnable {
 
@@ -19,8 +18,8 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private final String emergencyImportFolder;
 	private boolean stopRequested = false;
 
-	private static final long ONE_MINUTE_IN_MILLIS=1000L * 60L;
-	
+	private static final long ONE_MINUTE_IN_MILLIS = 1000L * 60L;
+
 	private static Logger logger = Logger
 			.getLogger(UnmatchedMaterialProcessor.class);
 
@@ -69,7 +68,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 		for (UnmatchedFile mxf : unmatchedMXFs) {
 			logger.info(String.format("no material message found for %s",
-					mxf.getFile().getAbsolutePath()));
+					mxf.getFilePath()));
 			/*
 			 * 2.1.2.2 Media file is delivered without the companion XML file
 			 * (or with a corrupt XML file) If a media file is delivered without
@@ -81,7 +80,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			 */
 
 			try {
-				FileUtils.moveFileToDirectory(mxf.getFile(), new File(emergencyImportFolder), false);
+				FileUtils.moveFileToDirectory(new File(mxf.getFilePath()), new File(emergencyImportFolder), false);
 			} catch (IOException e) {
 				logger.fatal("IOException moving umatched mxf to emergency import folder",e);
 			}

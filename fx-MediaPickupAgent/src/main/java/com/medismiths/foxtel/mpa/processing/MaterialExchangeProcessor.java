@@ -1,12 +1,18 @@
 package com.medismiths.foxtel.mpa.processing;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.List;
 import java.util.Locale;
 
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -18,7 +24,9 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
@@ -107,12 +115,12 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		MaterialEnvelope materialEnvelope = new MaterialEnvelope(envelope,
 				masterID);
 		// try to get the mxf file for this xml
-		File mxfFile = matchMaker.matchXML(materialEnvelope);
+		String mxfFile = matchMaker.matchXML(materialEnvelope);
 
 		if (mxfFile != null) {
-			logger.info(String.format("found mxf %s for material",mxfFile.getAbsolutePath()));
+			logger.info(String.format("found mxf %s for material",mxfFile));
 			// we have an xml and an mxf, add pending import
-			PendingImport pendingImport = new PendingImport(mxfFile,
+			PendingImport pendingImport = new PendingImport(new File(mxfFile),
 					materialEnvelope);
 			filesPendingImport.add(pendingImport);
 		}
@@ -292,5 +300,67 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			//TODO notify someone of the error via email
 		
 	}
+	
+	private boolean mediaCheck(File mxf, MaterialEnvelope description) {
+		// check mxf matched descriptioin.
+		MaterialType material = Util.getMaterialTypeForMaterial(description
+				.getMessage());
+
+		if (!(material.getMedia() instanceof FileMediaType)) {
+			logger.error("Unknown media type");
+			return false;
+		} else {
+			FileMediaType media = (FileMediaType) material.getMedia();
+			return fileSizeMatches(mxf, media) && checkSumMatches(mxf, media);
+		}
+		// TODO check file format? (could be quite difficult!)
+	}
+
+	protected boolean fileSizeMatches(File mxf, FileMediaType media) {
+
+		long fileSize = mxf.length();
+		long expectedSize = media.getFileSize().longValue();
+
+		if (fileSize == expectedSize) {
+			logger.debug(String.format(
+					"File size of %s is %d expected size is %d",
+					mxf.getAbsolutePath(), fileSize, expectedSize));
+			return true;
+		} else {
+			logger.warn(String.format(
+					"File size of %s is %d expected size is %d",
+					mxf.getAbsolutePath(), fileSize, expectedSize));
+			return false;
+		}
+
+	}
+
+	protected boolean checkSumMatches(File mxf, FileMediaType media) {
+
+		BigInteger checksum = media.getChecksum();
+
+		try {
+			if (digest.isEqual(checksum.toString(64).getBytes(),
+					IOUtils.toByteArray(new FileInputStream(mxf)))) {
+				// TODO : replace naive stupid implementation that reads the
+				// entire file into memory (see java.nio)
+				logger.debug(String.format("Checksum passes %s",
+						mxf.getAbsolutePath()));
+				return true;
+			} else {
+				logger.warn(String.format("Checksum failure %s",
+						mxf.getAbsolutePath()));
+				return false;
+			}
+
+		} catch (IOException e) {
+			logger.error(
+					String.format(
+							"IOException calculating media checksum for %s, sanity check fails",
+							mxf.getAbsolutePath()), e);
+			return false;
+		}
+	}
+	@Named("media.digest.algorithm") private final MessageDigest digest =  DigestUtils.getDigest("md5"); // for validating file checksums
 
 }
