@@ -10,17 +10,12 @@ import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.controllers.MayamTitleControllerTest.AttributeMatcher;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
-
-import junit.framework.TestCase;
 
 public class MayamAttributeControllerTest {
 	

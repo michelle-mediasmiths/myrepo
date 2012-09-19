@@ -6,8 +6,6 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.argThat;
-import static org.mockito.Mockito.anyString;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -28,8 +26,6 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.controllers.MayamPackageControllerTest.AttributeMatcher;
-import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamMaterialControllerTest {
 

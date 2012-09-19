@@ -6,7 +6,6 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.argThat;
 
 import java.math.BigInteger;
 
@@ -27,8 +26,6 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.controllers.MayamPackageControllerTest.AttributeMatcher;
-import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamTitleControllerTest {
 
