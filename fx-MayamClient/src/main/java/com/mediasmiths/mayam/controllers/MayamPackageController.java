@@ -13,11 +13,9 @@ import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamPackageController {
 	private final TasksClient client;
-	private final MqClient mq;
-	
-	public MayamPackageController(TasksClient mayamClient, MqClient mqClient) {
+
+	public MayamPackageController(TasksClient mayamClient) {
 		client = mayamClient;
-		mq = mqClient;
 	}
 	
 	public MayamClientErrorCode createPackage(PackageType txPackage)

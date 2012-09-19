@@ -5,9 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.argThat;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.anyObject;
 import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.doThrow;
 
 import java.math.BigInteger;
 
@@ -28,16 +26,13 @@ import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
-import com.mayam.wf.ws.client.jaxws.MayamApiException_Exception;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamPackageControllerTest {
 
 	MayamPackageController controller;
 	TasksClient client;
-	MqClient mqClient;
 	PackageType txPackage;
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
@@ -62,8 +57,7 @@ public class MayamPackageControllerTest {
 	public void setup()
 	{
 		client = mock(TasksClient.class);
-		mqClient = mock(MqClient.class);
-		controller = new MayamPackageController(client, mqClient);
+		controller = new MayamPackageController(client);
 		
 		txPackage = mock(PackageType.class);
 		when(txPackage.getClassification()).thenReturn(ClassificationEnumType.PG);

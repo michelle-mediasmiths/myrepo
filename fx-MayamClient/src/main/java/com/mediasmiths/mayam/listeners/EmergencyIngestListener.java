@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.listeners;
 
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
@@ -25,7 +26,12 @@ public class EmergencyIngestListener
 					// If not then create placeholder for it
 					// How do we check if the content already exists if we dont have an ID for it?
 					
-					client.createAsset(messageAttributes);
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					
+					if (assetID == null || assetID.equals(""))
+					{			
+						client.createAsset(messageAttributes);
+					}
 				}
 			}
 		};
