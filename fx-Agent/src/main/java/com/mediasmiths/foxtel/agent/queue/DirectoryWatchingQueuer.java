@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.agent.queue;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,12 +36,12 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	}
 
 	@Override
-	public void newFileCheck(String filePath, String fileName) {
-		File file = new File(filePath);
+	public void newFileCheck(Path path) {
+		File file = path.toFile();
 		
-		logger.debug(String.format("A file %s has arrived with path %s", fileName, filePath));
+		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));
 		
-		if (fileName.toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
+		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
 			logger.info("An xml file has arrived");
 			queueFile(file);
 		}

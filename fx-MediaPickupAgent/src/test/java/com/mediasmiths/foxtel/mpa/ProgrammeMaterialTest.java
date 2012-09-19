@@ -78,6 +78,7 @@ public class ProgrammeMaterialTest {
 	}
 
 	@Test
+	@Ignore
 	public void testProgrammeMaterialWithMxf() throws Exception {
 
 		String incomingPath = Util.prepareTempFolder("INCOMING");

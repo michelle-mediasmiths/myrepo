@@ -1,6 +1,7 @@
 package com.medismiths.foxtel.mpa.queue;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
@@ -24,17 +25,17 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 	}
 	
 	@Override
-	public void newFileCheck(String filePath, String fileName) {
-		File file = new File(filePath);
+	public void newFileCheck(Path path) {
+		File file = path.toFile();
 		
-		logger.debug(String.format("A file %s has arrived with path %s", fileName, filePath));
+		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));
 		
-		if (fileName.toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
+		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
 			logger.info("An xml file has arrived");
 			queueFile(file);
 		}
 		
-		if (fileName.toLowerCase(Locale.ENGLISH).endsWith(".mxf")) {
+		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".mxf")) {
 			logger.info("An mxf file has arrived");
 			queueFile(file);
 		}
@@ -49,13 +50,19 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 		
 		@Override
 		public boolean accept(File dir, String name) {
-			return FilenameUtils.getExtension(name).toLowerCase(Locale.ENGLISH).equals("xml");
+			return accept(name);
 		}
 		
 		@Override
 		public boolean accept(File file) {
-			return FilenameUtils.getExtension(file.getName()).toLowerCase(Locale.ENGLISH).equals("xml");
+			return accept(file.getName());
 		}
+		
+		protected boolean accept(String name){
+			String extension = FilenameUtils.getExtension(name).toLowerCase(Locale.ENGLISH);	
+			return extension.equals("xml") || extension.equals("mxf");
+		}
+		
 	};
 
 }
