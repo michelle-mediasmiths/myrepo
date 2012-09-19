@@ -56,17 +56,10 @@ public class MayamTaskController {
 		return taskID;
 	}
 	
-	public MayamClientErrorCode updateTaskState(long taskID )
+	public MayamClientErrorCode deleteTask(long taskID )
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS; 
-		AttributeMap task = null;
-		try {
-			task = client.getTask(taskID);
-		} catch (RemoteException e) {
-			returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
-		}
-		
-		return returnCode;
+
+		return MayamClientErrorCode.NOT_IMPLEMENTED;
 	}
 
 }

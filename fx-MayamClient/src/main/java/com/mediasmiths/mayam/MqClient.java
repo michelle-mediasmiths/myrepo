@@ -88,12 +88,26 @@ public class MqClient {
 			System.out.println(msg.getContent());
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
 				AttributeMap messageAttributes = msg.getSubject();
-				//TODO: Handle incoming attribute messages - check content format for unmatched media
 				String contentFormat = messageAttributes.getAttribute(Attribute.CONT_FMT);
 	
-//				if (contentFormat.equals("Unmatched")) {
-//						
-//				}
+				//TODO: Confirm the actual value of the Unmatched field
+				if (contentFormat.equals("Unmatched")) {
+//						TODO: Initiate QC workflow
+				
+//						Set ACLs for temporary item
+				
+//						Add to purge candidate list with expiry date of 30 days
+						String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+						String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
+						
+						AttributeMap newTask = client.getTask(taskID);
+						newTask.putAll(messageAttributes);
+						Calendar date = Calendar.getInstance();
+						date.add(Calendar.DAY_OF_MONTH, 30);
+						newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+						client.updateTask(newTask);
+				}
 			}
 		}
 	};
@@ -124,11 +138,15 @@ public class MqClient {
 		public void onMessage(MqMessage msg) throws Throwable {
 			System.out.println(msg.getContent());
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
+				AttributeMap messageAttributes = msg.getSubject();
+				
 				//TODO: IMPLEMENT
 				// - Emergency ingest - ACLS updated in Ardome - 
 				// Check if asset exists
 				// If not then create placeholder for it
 				// How do we check if the content already exists if we dont have an ID for it?
+				
+				client.createAsset(messageAttributes);
 			}
 		}
 	};
@@ -216,12 +234,12 @@ public class MqClient {
 		}
 	};
 	
+	// Listen for a completed Segmentation task - Change the asset to TX-Ready - then start tx task and kick off workflow
 	private Listener segmentationCompleteListener = new Listener() {
 		public void onMessage(MqMessage msg) throws Throwable {
 			System.out.println(msg.getContent());
 			if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
-				//TODO: IMPLEMENT
-				// - Segmentation task complete - TX-Ready - then start tx task and kick off workflow
+
 				AttributeMap messageAttributes = msg.getSubject();
 				String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
 				if (taskListID.equals(MayamTaskListType.SEGMENTATION)) {
