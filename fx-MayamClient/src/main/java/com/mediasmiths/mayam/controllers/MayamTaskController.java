@@ -26,7 +26,7 @@ public class MayamTaskController {
 		
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(assetTypeMapper(assetType), assetID);
+			assetAttributes = client.getAsset(AssetType.valueOf(assetType.toString()), assetID);
 		} catch (RemoteException e) {
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 		}
@@ -50,6 +50,9 @@ public class MayamTaskController {
 			}
 			
 		}
+		else {
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);	
+		}
 		return taskID;
 	}
 	
@@ -65,19 +68,5 @@ public class MayamTaskController {
 		
 		return returnCode;
 	}
-	
-	private AssetType assetTypeMapper(MayamAssetType assetType)
-	{
-		AssetType returnType = null;
-		if (assetType == MayamAssetType.TITLE) {
-			returnType = AssetType.SER;
-		}
-		else if (assetType == MayamAssetType.MATERIAL) {
-			returnType = AssetType.ITEM;
-		}
-		else if (assetType == MayamAssetType.PACKAGE) {
-			returnType = AssetType.PACK;
-		}
-		return returnType;
-	}
+
 }
