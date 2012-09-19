@@ -16,11 +16,9 @@ import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamTitleController {
 	private final TasksClient client;
-	private final MqClient mq;
 	
-	public MayamTitleController(TasksClient mayamClient, MqClient mqClient) {
+	public MayamTitleController(TasksClient mayamClient) {
 		client = mayamClient;
-		mq = mqClient;
 	}
 	
 	public MayamClientErrorCode createTitle(Material.Title title)

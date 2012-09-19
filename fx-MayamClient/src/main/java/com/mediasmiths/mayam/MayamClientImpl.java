@@ -53,9 +53,10 @@ public class MayamClientImpl implements MayamClient {
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		tasksController = new MayamTaskController(client);
 		mqClient = new MqClient(injector, client, tasksController);
-		titleController = new MayamTitleController(client, mqClient);
-		materialController = new MayamMaterialController(client, mqClient);
-		packageController = new MayamPackageController(client, mqClient);
+		mqClient.attachIncomingListners();
+		titleController = new MayamTitleController(client);
+		materialController = new MayamMaterialController(client);
+		packageController = new MayamPackageController(client);
 	}
 	
 	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException {
@@ -65,9 +66,10 @@ public class MayamClientImpl implements MayamClient {
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		tasksController = new MayamTaskController(client);
 		mqClient = new MqClient(injector, client, tasksController);
-		titleController = new MayamTitleController(client, mqClient);
-		materialController = new MayamMaterialController(client, mqClient);
-		packageController = new MayamPackageController(client, mqClient);
+		mqClient.attachIncomingListners();
+		titleController = new MayamTitleController(client);
+		materialController = new MayamMaterialController(client);
+		packageController = new MayamPackageController(client);
 	}
 	
 	/* (non-Javadoc)
