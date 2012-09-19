@@ -31,7 +31,7 @@ import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mayam.wf.ws.client.jaxws.MayamApiException_Exception;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MqClient;
+import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamPackageControllerTest {
 

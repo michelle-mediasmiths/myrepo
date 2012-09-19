@@ -12,7 +12,7 @@ import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MqClient;
+import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamTitleController {
 	private final TasksClient client;

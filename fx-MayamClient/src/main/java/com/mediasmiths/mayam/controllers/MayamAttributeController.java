@@ -1,7 +1,5 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.util.Set;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;

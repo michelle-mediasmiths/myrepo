@@ -32,6 +32,7 @@ import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamClientImpl implements MayamClient {
 	final URL url;
