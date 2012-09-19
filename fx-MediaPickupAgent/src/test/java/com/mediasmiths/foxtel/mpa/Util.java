@@ -22,8 +22,10 @@ public class Util {
 	
 	public static String prepareTempFolder(String description) throws IOException {
 		//create a random folder		
-		String path = FileUtils.getTempDirectoryPath() + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
+		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
 				
+		path = path.replace("//", "/"); //on some systems  FileUtils.getTempDirectoryPath() returns a trailing slash and on some it does not
+		
 		File dir = new File(path);
 		
 		if(dir.exists()){
