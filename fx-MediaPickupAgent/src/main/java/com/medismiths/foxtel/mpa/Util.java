@@ -6,6 +6,10 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 
 public class Util {
 
+	private Util(){
+		//hide utility class constructor
+	}
+	
 	public static MaterialType getMaterialTypeForMaterial(Material material) {
 
 		if (isProgramme(material)) {

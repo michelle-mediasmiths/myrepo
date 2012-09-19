@@ -343,6 +343,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 	protected boolean checkSumMatches(File mxf, FileMediaType media) {
 
+		//TODO : FX-29 caluclate checksum
+		
 		BigInteger checksum = media.getChecksum();
 
 		try {
@@ -350,6 +352,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 					IOUtils.toByteArray(new FileInputStream(mxf)))) {
 				// TODO : replace naive stupid implementation that reads the
 				// entire file into memory (see java.nio)
+				
+				//also messagedigest and checksum arnt really the same thing are they, this whole method is likely to change
 				logger.debug(String.format("Checksum passes %s",
 						mxf.getAbsolutePath()));
 				return true;

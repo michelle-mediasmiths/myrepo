@@ -15,6 +15,10 @@ public class AgentCli {
 
 	private static Logger logger = Logger.getLogger(AgentCli.class);
 	
+	private AgentCli(){
+		//hiding constructor, this class's only purpose is its main method
+	}
+	
 	/**
 	 * @param args
 	 * @throws JAXBException 
