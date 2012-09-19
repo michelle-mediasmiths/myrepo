@@ -42,6 +42,7 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final static String SENDER_ID = "123456asdfg";
 
 	protected final static String EXISTING_TITLE = "EXISTING";
+	protected final static String PROTECTED_TITLE = "PROTECTED_TITLE";
 	protected final static String NOT_EXISTING_TITLE = "NOT_EXISTING";
 	protected final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
 	protected final static String EXISTING_MATERIAL_ID = "NEW_MATERIAL";

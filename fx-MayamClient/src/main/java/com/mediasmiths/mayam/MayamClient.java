@@ -44,6 +44,8 @@ public interface MayamClient {
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
+	
+
 
 	
 

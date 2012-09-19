@@ -16,9 +16,10 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private final Long timeout;
 	private final MatchMaker matchMaker;
 	private final String emergencyImportFolder;
+	private final String failedMessagesFolder;
+	private final long sleepTime;
 	private boolean stopRequested = false;
 
-	private static final long ONE_MINUTE_IN_MILLIS = 1000L * 60L;
 
 	private static Logger logger = Logger
 			.getLogger(UnmatchedMaterialProcessor.class);
@@ -26,11 +27,15 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	@Inject
 	public UnmatchedMaterialProcessor(
 			@Named("media.companion.timeout") Long timeout,
+			@Named("media.unmatched.timebetweenpurges") Long sleepTime,
 			@Named("media.path.ardomeemergencyimportfolder") String emergencyImportFolder,
+			@Named("agent.path.failure") String failedMessagesFolder,
 			MatchMaker matchMaker) {
 		this.timeout = timeout;
 		this.matchMaker = matchMaker;
 		this.emergencyImportFolder = emergencyImportFolder;
+		this.failedMessagesFolder=failedMessagesFolder;
+		this.sleepTime=sleepTime.longValue();
 	}
 
 	@Override
@@ -39,7 +44,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 			try {
 				logger.trace("going to sleep");
-				Thread.sleep(ONE_MINUTE_IN_MILLIS);
+				Thread.sleep(sleepTime);
 				logger.trace("woke up");
 				process();
 
@@ -85,6 +90,8 @@ public class UnmatchedMaterialProcessor implements Runnable {
 				logger.fatal("IOException moving umatched mxf to emergency import folder",e);
 			}
 			
+			// TODO : notify someone via email?
+			
 		}
 
 	}
@@ -98,6 +105,14 @@ public class UnmatchedMaterialProcessor implements Runnable {
 		for (MaterialEnvelope me : unmatchedMessages) {
 			logger.info(String.format("no mxf for %s", me.getFile()
 					.getAbsolutePath()));
+			
+			//move message to failure folder
+			try {
+				FileUtils.moveFileToDirectory(me.getFile(), new File(failedMessagesFolder), false);
+			} catch (IOException e) {
+				logger.fatal("IOException moving umatched xml to the failed messages folder",e);
+			}
+			
 			// TODO : notify someone via email?
 		}
 	}

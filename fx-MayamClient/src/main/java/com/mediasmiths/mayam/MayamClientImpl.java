@@ -326,5 +326,4 @@ public class MayamClientImpl implements MayamClient {
 
 		return materialID;
 	}
-
 }

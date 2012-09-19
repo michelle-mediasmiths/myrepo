@@ -42,6 +42,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+		verify(mayamClient).isMaterialForPackageProtected(EXISTING_PACKAGE_ID);
 	}
 	
 	@Test
@@ -53,6 +54,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
 		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+		verify(mayamClient).isMaterialForPackageProtected(EXISTING_PACKAGE_ID);
 	}
 	
 	@Test

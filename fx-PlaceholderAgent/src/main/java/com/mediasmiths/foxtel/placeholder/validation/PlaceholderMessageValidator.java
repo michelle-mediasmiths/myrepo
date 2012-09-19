@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.placeholder.validation;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -198,13 +199,28 @@ public class PlaceholderMessageValidator extends
 		return MessageValidationResult.IS_VALID;
 	}
 
-	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) {
+	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) throws MayamClientException {
 
 		logger.info("Validating a DeleteMaterial " + action);
 		// 24.1.1.2 Master purge requests
-
-		// TODO : FX-28 do we check if the material is marked as protected as with the
-		// other delete requests? its not specified
+		//FX-28 check material is not protected
+		boolean itemProtected = false;
+		
+		try{
+			//protection may be implied by title being protected, lets check the whole tree
+			itemProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
+		}catch (MayamClientException e) {
+			logger.error(
+					String.format(
+							"MayamClientException when querying isTitleOrDescendentsProtected for material %s",
+							action.getMaterial().getMaterialID()), e);
+			throw e;
+		}
+		
+		if(itemProtected){
+			return MessageValidationResult.MATERIAL_IS_PROTECTED;
+		}
+		
 		return MessageValidationResult.IS_VALID;
 	}
 
@@ -307,8 +323,10 @@ public class PlaceholderMessageValidator extends
 				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
 		}
+		
+		// TODO : if this is an update message validate that any licences are valid during the transmission 
 
-		// TODO : validate channels
+		// TODO : FX-31 validate channels
 		return MessageValidationResult.IS_VALID;
 	}
 
