@@ -35,7 +35,6 @@ public class MayamMaterialControllerTest {
 
 	MayamMaterialController controller;
 	TasksClient client;
-	MqClient mqClient;
 	MaterialType material;
 	ProgrammeMaterialType programmeMaterial;
 	AttributeMap map;
@@ -60,8 +59,7 @@ public class MayamMaterialControllerTest {
 	public void setup()
 	{
 		client = mock(TasksClient.class);
-		mqClient = mock(MqClient.class);
-		controller = new MayamMaterialController(client, mqClient);
+		controller = new MayamMaterialController(client);
 		
 		material = mock(MaterialType.class);
 		when(material.getMaterialD()).thenReturn("");

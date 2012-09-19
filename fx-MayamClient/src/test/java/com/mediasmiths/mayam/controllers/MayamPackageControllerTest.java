@@ -37,7 +37,6 @@ public class MayamPackageControllerTest {
 
 	MayamPackageController controller;
 	TasksClient client;
-	MqClient mqClient;
 	PackageType txPackage;
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
@@ -62,8 +61,7 @@ public class MayamPackageControllerTest {
 	public void setup()
 	{
 		client = mock(TasksClient.class);
-		mqClient = mock(MqClient.class);
-		controller = new MayamPackageController(client, mqClient);
+		controller = new MayamPackageController(client);
 		
 		txPackage = mock(PackageType.class);
 		when(txPackage.getClassification()).thenReturn(ClassificationEnumType.PG);
