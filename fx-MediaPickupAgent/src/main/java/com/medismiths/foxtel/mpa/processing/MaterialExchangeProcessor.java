@@ -12,9 +12,11 @@ import java.security.MessageDigest;
 import java.util.List;
 import java.util.Locale;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -34,6 +36,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -49,6 +52,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 	private final PendingImportQueue filesPendingImport;
 
+	private final MediaCheck mediaCheck;
+
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
@@ -59,13 +64,14 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter, Unmarshaller unmarhsaller,
 			MayamClient mayamClient, MatchMaker matchMaker,
-			@Named(FAILURE_PATH) String failurePath,
+			MediaCheck mediaCheck, @Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
 				unmarhsaller, failurePath, archivePath);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
+		this.mediaCheck = mediaCheck;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
 	}
@@ -125,10 +131,9 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 		if (mxfFile != null) {
 			logger.info(String.format("found mxf %s for material", mxfFile));
-			// we have an xml and an mxf, add pending import
-			PendingImport pendingImport = new PendingImport(new File(mxfFile),
-					materialEnvelope);
-			filesPendingImport.add(pendingImport);
+			createPendingImportIfValid(new File(mxfFile), materialEnvelope);
+		} else {
+			logger.debug("No matching media found");
 		}
 	}
 
@@ -160,12 +165,32 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		if (materialEnvelope != null) {
 			logger.info(String.format("found material description %s for mxf",
 					materialEnvelope.getFile().getAbsolutePath()));
+			createPendingImportIfValid(mxf, materialEnvelope);
+		} else {
+			logger.debug("No matching xml file \\ material envelope found");
+		}
+	}
+
+	private void createPendingImportIfValid(File mxf,
+			MaterialEnvelope materialEnvelope) {
+
+		if (mediaCheck.mediaCheck(mxf, materialEnvelope)) {
+
 			// we have an xml and an mxf, add pending import
 			PendingImport pendingImport = new PendingImport(mxf,
 					materialEnvelope);
+
 			filesPendingImport.add(pendingImport);
+		} else {
+			logger.error("Media check failed");
+			moveFileToFailureFolder(mxf);
+			moveFileToFailureFolder(materialEnvelope.getFile());
+			// TODO alert someone about the failure \ item moved to quarrentine
 		}
 	}
+	
+
+	
 
 	/**
 	 * Update any missing metadata for the Item in Viz Ardome with the
@@ -310,76 +335,4 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		// TODO notify someone of the error via email
 
 	}
-
-	private boolean mediaCheck(File mxf, MaterialEnvelope description) {
-		// check mxf matched descriptioin.
-		MaterialType material = Util.getMaterialTypeForMaterial(description
-				.getMessage());
-
-		if (!(material.getMedia() instanceof FileMediaType)) {
-			logger.error("Unknown media type");
-			return false;
-		} else {
-			FileMediaType media = (FileMediaType) material.getMedia();
-			return fileSizeMatches(mxf, media) && checkSumMatches(mxf, media);
-		}
-		// TODO check file format? (could be quite difficult!)
-	}
-
-	protected boolean fileSizeMatches(File mxf, FileMediaType media) {
-
-		long fileSize = mxf.length();
-		long expectedSize = media.getFileSize().longValue();
-
-		if (fileSize == expectedSize) {
-			logger.debug(String.format(
-					"File size of %s is %d expected size is %d",
-					mxf.getAbsolutePath(), fileSize, expectedSize));
-			return true;
-		} else {
-			logger.warn(String.format(
-					"File size of %s is %d expected size is %d",
-					mxf.getAbsolutePath(), fileSize, expectedSize));
-			return false;
-		}
-
-	}
-
-	protected boolean checkSumMatches(File mxf, FileMediaType media) {
-
-		//TODO : FX-29 caluclate checksum
-		
-		BigInteger checksum = media.getChecksum();
-
-		try {
-			if (digest.isEqual(checksum.toString(64).getBytes(),
-					IOUtils.toByteArray(new FileInputStream(mxf)))) {
-				// TODO FX-29 replace naive stupid implementation that reads the
-				// entire file into memory (see java.nio)
-				
-				//also messagedigest and checksum arnt really the same thing are they, this whole method is likely to change
-				logger.debug(String.format("Checksum passes %s",
-						mxf.getAbsolutePath()));
-				return true;
-			} else {
-				logger.warn(String.format("Checksum failure %s",
-						mxf.getAbsolutePath()));
-				return false;
-			}
-
-		} catch (IOException e) {
-			logger.error(
-					String.format(
-							"IOException calculating media checksum for %s, sanity check fails",
-							mxf.getAbsolutePath()), e);
-			return false;
-		}
-	}
-
-	@Named(MEDIA_DIGEST_ALGORITHM)
-	private final MessageDigest digest = DigestUtils.getDigest("md5"); // for
-																		// validating
-																		// file
-																		// checksums
-
 }

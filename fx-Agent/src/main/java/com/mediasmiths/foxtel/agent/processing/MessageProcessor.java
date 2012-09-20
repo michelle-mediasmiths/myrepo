@@ -42,6 +42,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
 	private final String failurePath;
+	
 	private final String archivePath;
 
 	@Inject
@@ -121,7 +122,9 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	protected abstract String getIDFromMessage(MessageEnvelope<T> envelope);
 
-	protected void validateThenProcessFile(String filePath) {
+	protected final void validateThenProcessFile(String filePath) {
+		 
+		logger.debug("Asking for validation of "+filePath);
 		MessageValidationResult result = messageValidator
 				.validateFile(filePath);
 
@@ -135,13 +138,13 @@ public abstract class MessageProcessor<T> implements Runnable {
 				}
 			} catch (MessageProcessingFailedException e) {
 				logger.error(String.format("Error processing %s", filePath), e);
-				moveMessageToFailureFolder(filePath);
+				moveFileToFailureFolder(new File(filePath));
 			}
 		} else {
 			logger.warn(String.format("Message at %s did not validate",
 					filePath));
 			messageValidationFailed(filePath, result);
-			moveMessageToFailureFolder(filePath);
+			moveFileToFailureFolder(new File(filePath));
 		}
 
 	}
@@ -163,17 +166,17 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * @param messagePath
 	 * @param messageID
 	 */
-	private void moveMessageToFailureFolder(String messagePath) {
+	protected void moveFileToFailureFolder(File file) {
 		logger.info(String
-				.format("Message %s is invalid, sending to failure folder",
-						messagePath));
+				.format("File %s is invalid, sending to failure folder",
+						file.getAbsolutePath()));
 		logger.debug(String.format("Failure folder is: %s ", failurePath));
 
 		try {
-			moveMessageToFolder(messagePath, failurePath);
+			moveMessageToFolder(file, failurePath);
 		} catch (IOException e) {
 			logger.error(String.format(
-					"IOException moving invalid message %s to %s", messagePath,
+					"IOException moving invalid file %s to %s", file.getAbsolutePath(),
 					failurePath), e);
 		}
 
@@ -191,7 +194,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
-			moveMessageToFolder(messagePath, archivePath);
+			moveMessageToFolder(new File(messagePath), archivePath);
 		} catch (IOException e) {
 			logger.error(String.format(
 					"IOException moving message %s to archive %s", messagePath,
@@ -200,15 +203,15 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	private void moveMessageToFolder(String messagePath,
+	private void moveMessageToFolder(File file,
 			String destinationFolderPath) throws IOException {
 		final String destination = destinationFolderPath
-				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(messagePath);
+				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(file.getAbsolutePath());
 
-		logger.trace(String.format("Moving file from %s to %s", messagePath,
+		logger.trace(String.format("Moving file from %s to %s", file.getAbsolutePath(),
 				destination));
 
-		FileUtils.moveFile(new File(messagePath), new File(destination));
+		FileUtils.moveFile(file, new File(destination));
 	}
 
 	private void writeReceipt(String filePath, String messageID) {
@@ -256,4 +259,9 @@ public abstract class MessageProcessor<T> implements Runnable {
 	public FilesPendingProcessingQueue getFilePathsPending() {
 		return filePathsPending;
 	}
+	
+	public String getFailurePath() {
+		return failurePath;
+	}
+
 }

@@ -35,7 +35,7 @@ public class MediaPickupModule extends AbstractModule {
 	protected static final TypeLiteral<MessageProcessor<Material>> MESSAGEPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<Material>>(){};
 
 	@Provides
-	Unmarshaller provideUnmarshaller() throws JAXBException {
+	public Unmarshaller provideUnmarshaller() throws JAXBException {
 		JAXBContext jc = null;
 		try {
 			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");

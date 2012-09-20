@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
@@ -14,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 
@@ -59,10 +61,13 @@ public class Util {
 	 * 
 	 * @param message
 	 * @param filepath
+	 * @throws JAXBException 
+	 * @throws SAXException 
+	 * @throws FileNotFoundException 
 	 * @throws Exception
 	 */
 	public static void writeMaterialToFile(final Material material,
-			final String filepath) throws Exception {
+			final String filepath) throws JAXBException, SAXException, FileNotFoundException     {
 
 		JAXBContext context = getJAXBContext();
 		Marshaller marshaller = context.createMarshaller();
@@ -83,7 +88,7 @@ public class Util {
 		marshaller.marshal(material, new FileOutputStream(new File(filepath)));
 	}
 
-	public static JAXBContext getJAXBContext() throws Exception {
+	public static JAXBContext getJAXBContext() throws JAXBException   {
 
 		return JAXBContext
 				.newInstance(com.mediasmiths.foxtel.generated.MaterialExchange.Material.class);
