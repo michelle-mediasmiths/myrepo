@@ -4,10 +4,10 @@ import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
@@ -61,11 +61,11 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
-import com.medismiths.foxtel.mpa.MediaPickupAgent;
-import com.medismiths.foxtel.mpa.delivery.Importer;
-import com.medismiths.foxtel.mpa.guice.MediaPickupModule;
-import com.medismiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
-import com.medismiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
+import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
+import com.mediasmiths.foxtel.mpa.delivery.Importer;
+import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
+import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
+import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
 public class ProgrammeMaterialTest {
 
@@ -83,12 +83,12 @@ public class ProgrammeMaterialTest {
 	@Ignore
 	public void testProgrammeMaterialWithMxf() throws Exception {
 
-		String incomingPath = Util.prepareTempFolder("INCOMING");
-		String receiptPath = Util.prepareTempFolder("RECEIPT");
-		String failurePath = Util.prepareTempFolder("FAILURE");
-		String archivePath = Util.prepareTempFolder("ARCHIVE");
-		String ardomeImportPath = Util.prepareTempFolder("ARDOMEIMPORT");
-		String ardomeEmergencyImportPath = Util
+		String incomingPath = TestUtil.prepareTempFolder("INCOMING");
+		String receiptPath = TestUtil.prepareTempFolder("RECEIPT");
+		String failurePath = TestUtil.prepareTempFolder("FAILURE");
+		String archivePath = TestUtil.prepareTempFolder("ARCHIVE");
+		String ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
+		String ardomeEmergencyImportPath = TestUtil
 				.prepareTempFolder("ARDOMEEMERGENCY");
 
 		String messageName = RandomStringUtils.randomAlphabetic(10);
@@ -102,7 +102,7 @@ public class ProgrammeMaterialTest {
 		logger.debug(String.format("Material path %s", materialPath));
 		
 		// write material message
-		Util.writeMaterialToFile(material,materialPath);
+		TestUtil.writeMaterialToFile(material,materialPath);
 		// write 'media' file
 		IOUtils.write(new byte[1000], new FileOutputStream(new File(
 				incomingPath + IOUtils.DIR_SEPARATOR + messageName

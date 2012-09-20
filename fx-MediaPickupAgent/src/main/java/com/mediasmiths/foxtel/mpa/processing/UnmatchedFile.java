@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.processing;
+package com.mediasmiths.foxtel.mpa.processing;
 
 
 public class UnmatchedFile {

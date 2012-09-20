@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.queue;
+package com.mediasmiths.foxtel.mpa.queue;
 
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 

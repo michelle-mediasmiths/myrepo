@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.processing;
+package com.mediasmiths.foxtel.mpa.processing;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 
 /**
  * 

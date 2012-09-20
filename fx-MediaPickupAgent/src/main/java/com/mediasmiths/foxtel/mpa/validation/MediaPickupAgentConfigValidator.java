@@ -1,14 +1,14 @@
-package com.medismiths.foxtel.mpa.validation;
+package com.mediasmiths.foxtel.mpa.validation;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 
 import com.google.inject.Inject;

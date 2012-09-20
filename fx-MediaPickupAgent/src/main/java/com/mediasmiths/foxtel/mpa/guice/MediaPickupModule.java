@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.guice;
+package com.mediasmiths.foxtel.mpa.guice;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,9 +15,9 @@ import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
-import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
-import com.medismiths.foxtel.mpa.queue.MaterialFolderWatcher;
-import com.medismiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
+import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
+import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
+import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
 public class MediaPickupModule extends AbstractModule {
 

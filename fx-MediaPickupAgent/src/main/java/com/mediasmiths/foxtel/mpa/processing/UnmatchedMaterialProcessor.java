@@ -1,9 +1,9 @@
-package com.medismiths.foxtel.mpa.processing;
+package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 
 public class UnmatchedMaterialProcessor implements Runnable {
 

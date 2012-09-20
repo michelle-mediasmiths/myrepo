@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.guice;
+package com.mediasmiths.foxtel.mpa.guice;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa;
+package com.mediasmiths.foxtel.mpa;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;

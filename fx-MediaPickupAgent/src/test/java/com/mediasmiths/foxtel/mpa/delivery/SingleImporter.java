@@ -2,15 +2,15 @@ package com.mediasmiths.foxtel.mpa.delivery;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.medismiths.foxtel.mpa.PendingImport;
-import com.medismiths.foxtel.mpa.delivery.Importer;
-import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.delivery.Importer;
+import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 
 public class SingleImporter extends Importer {
 

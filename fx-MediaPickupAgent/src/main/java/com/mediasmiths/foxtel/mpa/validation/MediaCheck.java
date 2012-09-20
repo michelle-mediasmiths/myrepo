@@ -1,6 +1,6 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,8 +16,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.Util;
 
 public class MediaCheck {
 

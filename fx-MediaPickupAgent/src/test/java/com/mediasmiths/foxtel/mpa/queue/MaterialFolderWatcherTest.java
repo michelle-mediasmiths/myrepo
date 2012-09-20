@@ -15,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.Util;
-import com.medismiths.foxtel.mpa.queue.MaterialFolderWatcher;
+import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 
 public class MaterialFolderWatcherTest {
 
@@ -31,7 +31,7 @@ public class MaterialFolderWatcherTest {
 
 	@Before
 	public void before() throws IOException {
-		watchFolderPath = Util.prepareTempFolder("INCOMING");
+		watchFolderPath = TestUtil.prepareTempFolder("INCOMING");
 
 		xml1 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
 				+ RandomStringUtils.randomAlphabetic(10)

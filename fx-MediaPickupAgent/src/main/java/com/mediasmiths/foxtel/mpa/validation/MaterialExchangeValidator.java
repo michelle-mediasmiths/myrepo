@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.validation;
+package com.mediasmiths.foxtel.mpa.validation;
 
 import javax.xml.bind.Unmarshaller;
 
@@ -17,7 +17,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import com.medismiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.Util;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 

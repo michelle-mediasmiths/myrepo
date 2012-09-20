@@ -1,24 +1,15 @@
-package com.medismiths.foxtel.mpa.processing;
+package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
-import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MoveAction;
 import javax.xml.bind.Unmarshaller;
 
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -30,21 +21,19 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.PendingImport;
-import com.medismiths.foxtel.mpa.Util;
-import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
-import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope; 
+import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
 public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
@@ -242,7 +231,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	 */
 	private void createOrUpdateTitle(Title title) throws MayamClientException,
 			MessageProcessingFailedException {
-
+ 
 		MayamClientErrorCode result;
 
 		if (!mayamClient.titleExists(title.getTitleID())) {

@@ -13,11 +13,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.Util;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.PendingImport;
-import com.medismiths.foxtel.mpa.delivery.Importer;
-import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.delivery.Importer;
+import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 
 public class ImporterTest {
 
@@ -37,20 +37,20 @@ public class ImporterTest {
 	@Before
 	public void before() throws IOException {
 		pendingImports = new PendingImportQueue();
-		incomingPath = Util.prepareTempFolder("INCOMING");
-		archivePath = Util.prepareTempFolder("ARCHIVE");
-		failurePath = Util.prepareTempFolder("FAILURE");
-		ardomeImportPath = Util.prepareTempFolder("ARDOMEIMPORT");
+		incomingPath = TestUtil.prepareTempFolder("INCOMING");
+		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
+		failurePath = TestUtil.prepareTempFolder("FAILURE");
+		ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
 
 		toTest = new Importer(pendingImports, ardomeImportPath, failurePath,
 				archivePath);
 		importerThread = new Thread(toTest);
 		importerThread.start();
 
-		media = Util.getFileOfTypeInFolder("mxf", incomingPath);
-		Util.writeBytesToFile(100, media);
-		materialxml = Util.getFileOfTypeInFolder("xml", incomingPath);
-		Util.writeBytesToFile(100, materialxml);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
+		TestUtil.writeBytesToFile(100, media);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
+		TestUtil.writeBytesToFile(100, materialxml);
 		masterID = "MASTERID";
 
 		envelope = new MaterialEnvelope(materialxml, new Material(), masterID);

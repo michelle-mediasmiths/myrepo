@@ -1,9 +1,9 @@
-package com.medismiths.foxtel.mpa.queue;
+package com.mediasmiths.foxtel.mpa.queue;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.google.inject.Singleton;
-import com.medismiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.PendingImport;
 
 @Singleton
 public class PendingImportQueue  extends LinkedBlockingQueue<PendingImport> {

@@ -19,11 +19,11 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
 public abstract class ValidationTest {
 
@@ -50,16 +50,16 @@ public abstract class ValidationTest {
 	public void beforeClass() throws JAXBException, IOException, SAXException{
 		JAXBContext jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		receiptFolderPath = Util.prepareTempFolder("RECEIPTS");
+		receiptFolderPath = TestUtil.prepareTempFolder("RECEIPTS");
 		validator = new MaterialExchangeValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath), new SchemaValidator("MaterialExchange_V2.0.xsd"));
 		
 	}
 	
 	protected MessageValidationResult validationForMaterial(Material material) throws Exception{
 	
-		String importFolderPath =  Util.prepareTempFolder("INCOMING");
+		String importFolderPath =  TestUtil.prepareTempFolder("INCOMING");
 		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
-		Util.writeMaterialToFile(material,messageXmlPath);		
+		TestUtil.writeMaterialToFile(material,messageXmlPath);		
 		prepareMocks();
 		return validator.validateFile(messageXmlPath);
 	}

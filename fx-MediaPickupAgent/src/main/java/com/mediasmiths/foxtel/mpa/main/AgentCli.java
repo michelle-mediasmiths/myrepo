@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa.main;
+package com.mediasmiths.foxtel.mpa.main;
 
 import javax.xml.bind.JAXBException;
 
@@ -8,8 +8,8 @@ import org.xml.sax.SAXException;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
-import com.medismiths.foxtel.mpa.MediaPickupAgent;
-import com.medismiths.foxtel.mpa.guice.MediaPickupSetup;
+import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
+import com.mediasmiths.foxtel.mpa.guice.MediaPickupSetup;
 
 public final class AgentCli {
 

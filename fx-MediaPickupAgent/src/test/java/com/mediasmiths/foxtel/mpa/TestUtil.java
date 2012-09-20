@@ -20,7 +20,7 @@ import org.xml.sax.SAXException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 
 
-public class Util {
+public class TestUtil {
 
 	
 	public static String prepareTempFolder(String description) throws IOException {
@@ -75,7 +75,7 @@ public class Util {
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 		SchemaFactory factory = SchemaFactory
 				.newInstance("http://www.w3.org/2001/XMLSchema");
-		Schema schema = factory.newSchema(Util.class.getClassLoader()
+		Schema schema = factory.newSchema(TestUtil.class.getClassLoader()
 				.getResource("MaterialExchange_V2.0.xsd"));
 		marshaller.setSchema(schema);
 		

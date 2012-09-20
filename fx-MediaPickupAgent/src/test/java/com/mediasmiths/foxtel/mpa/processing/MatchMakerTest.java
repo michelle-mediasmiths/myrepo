@@ -12,9 +12,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.processing.MatchMaker;
-import com.medismiths.foxtel.mpa.processing.UnmatchedFile;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
+import com.mediasmiths.foxtel.mpa.processing.UnmatchedFile;
 
 public class MatchMakerTest {
 	

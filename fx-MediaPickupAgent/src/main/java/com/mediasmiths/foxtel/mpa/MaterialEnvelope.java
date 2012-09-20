@@ -1,4 +1,4 @@
-package com.medismiths.foxtel.mpa;
+package com.mediasmiths.foxtel.mpa;
 
 import java.io.File;
 

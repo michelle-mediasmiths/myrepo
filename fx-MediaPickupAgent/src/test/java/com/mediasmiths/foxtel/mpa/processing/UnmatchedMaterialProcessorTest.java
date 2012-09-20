@@ -18,11 +18,11 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
-import com.mediasmiths.foxtel.mpa.Util;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.processing.MatchMaker;
-import com.medismiths.foxtel.mpa.processing.UnmatchedFile;
-import com.medismiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
+import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
+import com.mediasmiths.foxtel.mpa.processing.UnmatchedFile;
+import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
 
 public class UnmatchedMaterialProcessorTest {
 
@@ -37,9 +37,9 @@ public class UnmatchedMaterialProcessorTest {
 	public void testUnmatchedFilesMoveToApropriateFolder() throws IOException, InterruptedException{
 		
 		//prepare folders and write unmatched xml file
-		String incomingFolderPath = Util.prepareTempFolder("INCOMING");		
-		String emergencyFolderPath = Util.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
-		String failedMessagesPath = Util.prepareTempFolder("FAILED");
+		String incomingFolderPath = TestUtil.prepareTempFolder("INCOMING");		
+		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
+		String failedMessagesPath = TestUtil.prepareTempFolder("FAILED");
 		
 		String unmatchedXMlFileName = RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml";
 		String unmatchedXMLPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName;

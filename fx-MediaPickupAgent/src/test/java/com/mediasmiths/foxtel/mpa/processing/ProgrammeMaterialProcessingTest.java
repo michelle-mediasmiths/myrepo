@@ -34,17 +34,17 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
-import com.mediasmiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.medismiths.foxtel.mpa.MaterialEnvelope;
-import com.medismiths.foxtel.mpa.PendingImport;
-import com.medismiths.foxtel.mpa.guice.MediaPickupModule;
-import com.medismiths.foxtel.mpa.processing.MatchMaker;
-import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
-import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
-import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
+import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
+import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
+import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
 public class ProgrammeMaterialProcessingTest {
 
@@ -81,12 +81,12 @@ public class ProgrammeMaterialProcessingTest {
 		matchMaker = mock(MatchMaker.class);
 		mediaCheck = mock(MediaCheck.class);
 
-		incomingPath = Util.prepareTempFolder("INCOMING");
-		archivePath = Util.prepareTempFolder("ARCHIVE");
-		failurePath = Util.prepareTempFolder("FAILURE");
+		incomingPath = TestUtil.prepareTempFolder("INCOMING");
+		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
+		failurePath = TestUtil.prepareTempFolder("FAILURE");
 
-		media = Util.getFileOfTypeInFolder("mxf", incomingPath);
-		materialxml = Util.getFileOfTypeInFolder("xml", incomingPath);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller,
@@ -122,7 +122,7 @@ public class ProgrammeMaterialProcessingTest {
 				MATERIAL_ID);
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		Util.writeMaterialToFile(material, materialXMLPath);
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
 		// prepare mocks
 		when(validator.validateFile(materialXMLPath)).thenReturn(
@@ -136,8 +136,10 @@ public class ProgrammeMaterialProcessingTest {
 
 		// check message gets moved to failure folder
 		assertFalse(materialxml.exists());
-		assertTrue(Util.getPathToThisFileIfItWasInThisFolder(materialxml,
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
 				new File(failurePath)).exists());
+		
+		//TODO : verfiy alerts sent
 
 	}
 	
@@ -166,12 +168,12 @@ public class ProgrammeMaterialProcessingTest {
 			throws InterruptedException, FileNotFoundException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException {
 		// prepare files
-		Util.writeBytesToFile(100, media);
+		TestUtil.writeBytesToFile(100, media);
 		material = ProgrammeMaterialTest.getMaterialNoPackages(TITLE_ID,
 				MATERIAL_ID);
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		Util.writeMaterialToFile(material, materialXMLPath);
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
 		// prepare mocks
 		when(validator.validateFile(materialXMLPath)).thenReturn(
@@ -232,9 +234,9 @@ public class ProgrammeMaterialProcessingTest {
 		// check message and material gets moved to failure folder
 		assertFalse(materialxml.exists());
 		assertFalse(media.exists());
-		assertTrue(Util.getPathToThisFileIfItWasInThisFolder(materialxml,
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
 				new File(failurePath)).exists());
-		assertTrue(Util.getPathToThisFileIfItWasInThisFolder(media,
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(media,
 				new File(failurePath)).exists());
 
 	}
@@ -256,12 +258,12 @@ public class ProgrammeMaterialProcessingTest {
 			InterruptedException {
 
 		// prepare files
-		Util.writeBytesToFile(100, media);
+		TestUtil.writeBytesToFile(100, media);
 		material = ProgrammeMaterialTest.getMaterialNoPackages(TITLE_ID,
 				MATERIAL_ID);
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		Util.writeMaterialToFile(material, materialXMLPath);
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
 		// prepare mocks
 		when(validator.validateFile(materialXMLPath)).thenReturn(

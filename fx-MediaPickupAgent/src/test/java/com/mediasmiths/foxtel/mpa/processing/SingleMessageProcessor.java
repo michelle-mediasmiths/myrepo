@@ -13,10 +13,10 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
-import com.medismiths.foxtel.mpa.processing.MatchMaker;
-import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
-import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
-import com.medismiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
+import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
+import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
 public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
