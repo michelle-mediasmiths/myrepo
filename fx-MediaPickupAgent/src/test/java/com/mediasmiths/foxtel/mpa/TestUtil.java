@@ -15,11 +15,12 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Ignore;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 
-
+@Ignore //this is not a test class but maven thinks it is from the name
 public class TestUtil {
 
 	
