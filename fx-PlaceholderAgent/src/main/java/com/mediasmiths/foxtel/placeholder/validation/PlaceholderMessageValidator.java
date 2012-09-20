@@ -164,6 +164,8 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
+		//TODO FX-34 validation of intended broadcast date with respect to existing licences for title
+		
 		// TODO validate consumer advice?
 		logger.warn("No validation of consumer advice has taken place");
 
@@ -323,7 +325,7 @@ public class PlaceholderMessageValidator extends
 			}
 		}
 		
-		// TODO : if this is an update message validate that any licences are valid during the transmission 
+		// TODO : FX-34 if this is an update message validate that any licences are valid during the transmission 
 
 		// TODO : FX-31 validate channels
 		return MessageValidationResult.IS_VALID;

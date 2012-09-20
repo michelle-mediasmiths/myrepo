@@ -28,11 +28,11 @@ public class MediaPickupModule extends AbstractModule {
 	protected void configure() {
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
-		bind(messageProcessorLiteral).to(MaterialExchangeProcessor.class);
+		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
 	}
 
-	protected final static TypeLiteral<MessageProcessor<Material>> messageProcessorLiteral =  new TypeLiteral<MessageProcessor<Material>>(){};
+	protected static final TypeLiteral<MessageProcessor<Material>> MESSAGEPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<Material>>(){};
 
 	@Provides
 	Unmarshaller provideUnmarshaller() throws JAXBException {

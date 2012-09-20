@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 
-public class Util {
+public final class Util {
 
 	private Util(){
 		//hide utility class constructor

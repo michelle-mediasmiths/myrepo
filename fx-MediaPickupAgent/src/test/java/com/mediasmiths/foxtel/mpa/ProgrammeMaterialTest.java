@@ -186,7 +186,7 @@ public class ProgrammeMaterialTest {
 		protected void configure() {
 			//we dont call super.configure as we want to be trying to bind the same thing twice
 			bind(MayamClient.class).toInstance(mc);
-			bind(messageProcessorLiteral).to(SingleMessageProcessor.class);
+			bind(MESSAGEPROCESSOR_LITERAL).to(SingleMessageProcessor.class);
 			bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
 			bind(DirectoryWatchingQueuer.class).to(MaterialFolderExistingFilesOnly.class);
 			

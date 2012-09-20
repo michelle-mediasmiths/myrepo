@@ -10,7 +10,6 @@ import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOU
 import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 import static com.medismiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
-import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -19,8 +18,6 @@ import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 
 public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
-	private static Logger logger = Logger
-			.getLogger(MediaPickupAgentConfigValidator.class);
 
 	@Inject
 	public MediaPickupAgentConfigValidator(
@@ -92,7 +89,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
 	private boolean isValidLong(String value) {
 		try {
-			Long l = Long.parseLong(value);
+			Long l = Long.parseLong(value); //sonar complains about this, is there a better way to test this?
 			return true;
 		} catch (NumberFormatException nfe) {
 			return false;

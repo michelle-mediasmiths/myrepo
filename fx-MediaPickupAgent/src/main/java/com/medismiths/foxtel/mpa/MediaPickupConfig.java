@@ -1,7 +1,11 @@
 package com.medismiths.foxtel.mpa;
 
-public class MediaPickupConfig {
+public final class MediaPickupConfig {
 
+	private MediaPickupConfig(){
+		//hide utility class constructor
+	}
+	
 	public static final String ARDOME_IMPORT_FOLDER = "media.path.ardomeimportfolder";
 	public static final String ARDOME_EMERGENCY_IMPORT_FOLDER = "media.path.ardomeemergencyimportfolder";
 	public static final String MEDIA_DIGEST_ALGORITHM = "media.digest.algorithm";

@@ -15,12 +15,12 @@ import com.google.inject.name.Named;
 import com.medismiths.foxtel.mpa.PendingImport;
 import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
 
-
 public class Importer implements Runnable {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
 
-	protected final PendingImportQueue pendingImports;
+	private final PendingImportQueue pendingImports;
+
 	private boolean stopRequested = false;
 	private final String targetFolder;
 	private final String quarrentineFolder;
@@ -82,16 +82,16 @@ public class Importer implements Runnable {
 			logger.error(String.format("Error moving file from %s to %s",
 					src.getAbsolutePath(), dst.getAbsolutePath()));
 			onDeliveryFailure(pi);
-			
-			//TODO allow a configurable number of retries
-			
+
+			// TODO allow a configurable number of retries
+
 			return;
 		}
 
 		src = pi.getMaterialEnvelope().getFile();
 		dst = new File(archiveFolder, pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
-		
+
 		logger.debug(String.format("Attempting to move from %s to %s",
 				src.getAbsolutePath(), dst.getAbsolutePath()));
 
@@ -145,6 +145,10 @@ public class Importer implements Runnable {
 			// TODO send out notification emails
 		}
 
+	}
+
+	protected PendingImportQueue getPendingImports() {
+		return pendingImports;
 	}
 
 	public void stop() {

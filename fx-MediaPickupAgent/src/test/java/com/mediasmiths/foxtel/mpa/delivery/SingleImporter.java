@@ -29,7 +29,7 @@ public class SingleImporter extends Importer {
 		logger.debug("Importer start");
 
 		try {
-			PendingImport pi = pendingImports.take();
+			PendingImport pi = getPendingImports().take();
 			logger.info("Picked up an import");
 			deliver(pi);
 			logger.trace("Finished with import");

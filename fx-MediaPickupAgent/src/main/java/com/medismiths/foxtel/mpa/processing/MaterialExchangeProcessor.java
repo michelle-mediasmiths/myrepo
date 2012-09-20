@@ -354,7 +354,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		try {
 			if (digest.isEqual(checksum.toString(64).getBytes(),
 					IOUtils.toByteArray(new FileInputStream(mxf)))) {
-				// TODO : replace naive stupid implementation that reads the
+				// TODO FX-29 replace naive stupid implementation that reads the
 				// entire file into memory (see java.nio)
 				
 				//also messagedigest and checksum arnt really the same thing are they, this whole method is likely to change

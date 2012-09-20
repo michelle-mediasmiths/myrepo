@@ -1,11 +1,9 @@
 package com.medismiths.foxtel.mpa.processing;
 
-import org.apache.log4j.Logger;
 
 public class UnmatchedFile {
-	
-	private final static Logger logger = Logger.getLogger(UnmatchedFile.class);
-	
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -17,18 +15,22 @@ public class UnmatchedFile {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		UnmatchedFile other = (UnmatchedFile) obj;
 		if (filePath == null) {
-			if (other.filePath != null)
-				return false;
-		} else if (!filePath.equals(other.filePath))
+			if (other.filePath != null){
+				return false;}
+		} else if (!filePath.equals(other.filePath)) {
 			return false;
+		}
 		return true;
 	}
 

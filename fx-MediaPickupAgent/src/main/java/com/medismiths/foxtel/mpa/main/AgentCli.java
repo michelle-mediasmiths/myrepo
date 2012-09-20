@@ -11,7 +11,7 @@ import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.medismiths.foxtel.mpa.MediaPickupAgent;
 import com.medismiths.foxtel.mpa.guice.MediaPickupSetup;
 
-public class AgentCli {
+public final class AgentCli {
 
 	private static Logger logger = Logger.getLogger(AgentCli.class);
 	
