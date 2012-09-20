@@ -1,9 +1,17 @@
 package com.mediasmiths.foxtel.mpa;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,11 +32,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.TypeLiteral;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
@@ -43,12 +48,11 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.mpa.delivery.DoNothingImporter;
-import com.mediasmiths.foxtel.mpa.delivery.SingleImporter;
 import com.mediasmiths.foxtel.mpa.processing.DoNothingUnmatchedMaterial;
 import com.mediasmiths.foxtel.mpa.processing.SingleMessageProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderExistingFilesOnly;
@@ -60,9 +64,7 @@ import com.mediasmiths.std.io.PropertyFile;
 import com.medismiths.foxtel.mpa.MediaPickupAgent;
 import com.medismiths.foxtel.mpa.delivery.Importer;
 import com.medismiths.foxtel.mpa.guice.MediaPickupModule;
-import com.medismiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.medismiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
-import com.medismiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.medismiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
 public class ProgrammeMaterialTest {
@@ -139,16 +141,16 @@ public class ProgrammeMaterialTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 
 		Properties overridenProperties = new Properties();
-		overridenProperties.put("agent.path.message", messagePath);
-		overridenProperties.put("agent.path.receipt", receiptPath);
-		overridenProperties.put("agent.path.failure", failurePath);
-		overridenProperties.put("agent.path.archive", archivePath);
-		overridenProperties.put("media.path.ardomeimportfolder",
+		overridenProperties.put(MESSAGE_PATH, messagePath);
+		overridenProperties.put(RECEIPT_PATH, receiptPath);
+		overridenProperties.put(FAILURE_PATH, failurePath);
+		overridenProperties.put(ARCHIVE_PATH, archivePath);
+		overridenProperties.put(ARDOME_IMPORT_FOLDER,
 				ardomeImportFolder);
-		overridenProperties.put("media.path.ardomeemergencyimportfolder",
+		overridenProperties.put(ARDOME_EMERGENCY_IMPORT_FOLDER,
 				ardomeEmergencyImportFolder);
-		overridenProperties.put("media.digest.algorithm", digestAlgorithm);
-		overridenProperties.put("media.companion.timeout", companionTimeout);
+		overridenProperties.put(MEDIA_DIGEST_ALGORITHM, digestAlgorithm);
+		overridenProperties.put(MEDIA_COMPANION_TIMEOUT, companionTimeout);
 		propertyFile.merge(overridenProperties);
 
 		// setup guice injector

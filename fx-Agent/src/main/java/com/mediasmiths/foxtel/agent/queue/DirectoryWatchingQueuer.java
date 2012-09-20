@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.agent.queue;
 
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -29,7 +31,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	private static Logger logger = Logger.getLogger(DirectoryWatchingQueuer.class);
 	
 	@Inject
-	public DirectoryWatchingQueuer(FilesPendingProcessingQueue filePathsPendingValidation, @Named("agent.path.message") String path) {
+	public DirectoryWatchingQueuer(FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
 		this.path = path;
 		setFormatCheck(true);

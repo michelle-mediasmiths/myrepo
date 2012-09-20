@@ -1,5 +1,10 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.medismiths.foxtel.mpa.processing.MatchMaker;
@@ -9,10 +14,10 @@ public class DoNothingUnmatchedMaterial extends UnmatchedMaterialProcessor {
 
 	@Inject
 	public DoNothingUnmatchedMaterial(
-			@Named("media.companion.timeout") Long timeout,
-			@Named("media.unmatched.timebetweenpurges") Long sleepTime,
-			@Named("media.path.ardomeemergencyimportfolder") String emergencyImportFolder,
-			@Named("agent.path.failure") String failedMessagesFolder,
+			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
+			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
+			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
+			@Named(FAILURE_PATH) String failedMessagesFolder,
 			MatchMaker matchMaker) {
 		super(timeout, sleepTime, emergencyImportFolder, failedMessagesFolder,
 				matchMaker);

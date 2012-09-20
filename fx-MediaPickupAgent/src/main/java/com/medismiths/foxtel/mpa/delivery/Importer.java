@@ -1,5 +1,9 @@
 package com.medismiths.foxtel.mpa.delivery;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -10,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.medismiths.foxtel.mpa.PendingImport;
 import com.medismiths.foxtel.mpa.queue.PendingImportQueue;
+
 
 public class Importer implements Runnable {
 
@@ -23,9 +28,9 @@ public class Importer implements Runnable {
 
 	@Inject
 	public Importer(PendingImportQueue pendingImports,
-			@Named("media.path.ardomeimportfolder") String targetFolder,
-			@Named("agent.path.failure") String quarrentineFolder,
-			@Named("agent.path.archive") String archiveFolder) {
+			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
+			@Named(FAILURE_PATH) String quarrentineFolder,
+			@Named(ARCHIVE_PATH) String archiveFolder) {
 		this.pendingImports = pendingImports;
 		this.targetFolder = targetFolder;
 		this.quarrentineFolder = quarrentineFolder;

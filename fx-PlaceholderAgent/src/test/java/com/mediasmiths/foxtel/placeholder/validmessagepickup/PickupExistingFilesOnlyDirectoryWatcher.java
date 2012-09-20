@@ -1,4 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 
 import org.apache.log4j.Logger;
 
@@ -14,7 +15,7 @@ public class PickupExistingFilesOnlyDirectoryWatcher extends
 	
 	@Inject
 	public PickupExistingFilesOnlyDirectoryWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation,@Named("agent.path.message") String path) {
+			FilesPendingProcessingQueue filePathsPendingValidation,@Named(MESSAGE_PATH) String path) {
 		super(filePathsPendingValidation, path);
 	} 
 

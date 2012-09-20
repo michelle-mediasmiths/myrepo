@@ -1,11 +1,12 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.verify;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 import javax.xml.bind.JAXBException;
 
 import org.junit.Test;

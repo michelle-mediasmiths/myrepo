@@ -3,7 +3,6 @@ package com.mediasmiths.foxtel.placeholder.validation;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.TitlePaneLayout;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;

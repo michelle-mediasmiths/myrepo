@@ -1,8 +1,8 @@
 package com.medismiths.foxtel.mpa;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 
 public class Util {
 

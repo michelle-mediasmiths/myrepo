@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -26,6 +29,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
+
 /**
  * Processes placeholder messages taken from a queue
  * 
@@ -46,8 +50,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			PlaceholderMessageValidator messageValidator, ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller, MayamClient mayamClient,
-			@Named("agent.path.failure") String failurePath,
-			@Named("agent.path.archive") String archivePath) {
+			@Named(FAILURE_PATH) String failurePath,
+			@Named(ARCHIVE_PATH) String archivePath) {
 		super(filePathsPendingProcessing,messageValidator,receiptWriter,unmarhsaller,failurePath,archivePath);
 		this.mayamClient = mayamClient;
 		logger.debug("Using failure path " + failurePath);

@@ -1,5 +1,9 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -14,9 +18,9 @@ public class SingleImporter extends Importer {
 	
 	@Inject
 	public SingleImporter(PendingImportQueue pendingImports,
-			@Named("media.path.ardomeimportfolder") String targetFolder,
-			@Named("agent.path.failure") String quarrentineFolder,
-			@Named("agent.path.archive") String archiveFolder) {
+			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
+			@Named(FAILURE_PATH) String quarrentineFolder,
+			@Named(ARCHIVE_PATH) String archiveFolder) {
 		super(pendingImports, targetFolder, quarrentineFolder, archiveFolder);
 	}
 

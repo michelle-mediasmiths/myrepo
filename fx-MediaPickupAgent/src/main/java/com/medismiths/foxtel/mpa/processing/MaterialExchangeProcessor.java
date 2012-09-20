@@ -1,5 +1,9 @@
 package com.medismiths.foxtel.mpa.processing;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.medismiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,8 +30,8 @@ import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.mayam.MayamClient;
@@ -55,8 +59,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter, Unmarshaller unmarhsaller,
 			MayamClient mayamClient, MatchMaker matchMaker,
-			@Named("agent.path.failure") String failurePath,
-			@Named("agent.path.archive") String archivePath) {
+			@Named(FAILURE_PATH) String failurePath,
+			@Named(ARCHIVE_PATH) String archivePath) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
 				unmarhsaller, failurePath, archivePath);
 		this.mayamClient = mayamClient;
@@ -372,7 +376,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		}
 	}
 
-	@Named("media.digest.algorithm")
+	@Named(MEDIA_DIGEST_ALGORITHM)
 	private final MessageDigest digest = DigestUtils.getDigest("md5"); // for
 																		// validating
 																		// file

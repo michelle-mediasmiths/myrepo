@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.agent.processing;
 
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -19,6 +22,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+
 
 /**
  * Processes messages taken from a queue
@@ -45,8 +49,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
-			@Named("agent.path.failure") String failurePath,
-			@Named("agent.path.archive") String archivePath) {
+			@Named(FAILURE_PATH) String failurePath,
+			@Named(ARCHIVE_PATH) String archivePath) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller;
 		this.messageValidator = messageValidator;

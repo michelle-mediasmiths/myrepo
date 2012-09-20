@@ -1,5 +1,7 @@
 package com.medismiths.foxtel.mpa.queue;
 
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Locale;
@@ -13,14 +15,13 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 
-
 public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 
 	private static Logger logger = Logger.getLogger(MaterialFolderWatcher.class);
 	
 	@Inject
 	public MaterialFolderWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named("agent.path.message") String path) {
+			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path) {
 		super(filePathsPendingValidation, path);
 	}
 	
