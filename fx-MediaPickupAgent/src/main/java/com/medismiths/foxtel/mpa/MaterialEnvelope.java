@@ -13,6 +13,11 @@ public class MaterialEnvelope extends MessageEnvelope<Material> {
 		super(file, message);		
 	}
 	
+	public MaterialEnvelope(File file, Material message, String masterID) {
+		super(file, message);		
+		setMasterID(masterID);
+	}
+	
 	public MaterialEnvelope(MessageEnvelope<Material> envelope, String masterID) {
 		super(envelope.getFile(), envelope.getMessage());
 		setMasterID(masterID);

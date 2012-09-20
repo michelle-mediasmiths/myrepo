@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -69,6 +70,10 @@ public class Importer implements Runnable {
 	 */
 	protected void deliver(PendingImport pi) {
 
+		if(pi.getMaterialEnvelope().getMasterID() == null || pi.getMaterialEnvelope().getMasterID().equals("null")){
+			logger.error("Missing masterID in PendingImport");
+		}
+		
 		File src = pi.getMediaFile();
 		File dst = new File(targetFolder, pi.getMaterialEnvelope()
 				.getMasterID() + ".mxf");
@@ -80,7 +85,7 @@ public class Importer implements Runnable {
 			FileUtils.moveFile(src, dst);
 		} catch (IOException e) {
 			logger.error(String.format("Error moving file from %s to %s",
-					src.getAbsolutePath(), dst.getAbsolutePath()));
+					src.getAbsolutePath(), dst.getAbsolutePath()),e);
 			onDeliveryFailure(pi);
 
 			// TODO allow a configurable number of retries
@@ -100,7 +105,7 @@ public class Importer implements Runnable {
 		} catch (IOException e) {
 			logger.error(String
 					.format("Error moving file from %s to %s though move for media succeeded",
-							src.getAbsolutePath(), dst.getAbsolutePath()));
+							src.getAbsolutePath(), dst.getAbsolutePath()),e);
 			// TODO : notify someone
 			return;
 		}
@@ -118,28 +123,24 @@ public class Importer implements Runnable {
 		try {
 			File src = pi.getMediaFile();
 			File dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
-					.getMasterID() + ".mxf");
+					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "mxf");
 
 			try {
 				FileUtils.moveFile(src, dst);
 			} catch (IOException e) {
 				logger.fatal(String.format("Error moving file from %s to %s",
-						src, dst));
-				// TODO error in error handling code, now what!?
-
+						src, dst),e);
 			}
 
 			src = pi.getMaterialEnvelope().getFile();
 			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
-					.getMasterID() + ".xml");
+					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR +  "xml");
 
 			try {
 				FileUtils.moveFile(src, dst);
 			} catch (IOException e) {
 				logger.fatal(String.format("Error moving file from %s to %s",
-						src, dst));
-				// TODO error in error handling code, now what!?
-
+						src, dst),e);
 			}
 		} finally {
 			// TODO send out notification emails

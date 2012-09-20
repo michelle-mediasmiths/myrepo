@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.mpa;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -38,6 +39,21 @@ public class Util {
 		return path;
 	}
 	
+	public static File getFileOfTypeInFolder(String extension, String folder){
+		return new File(folder + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + extension);
+	}
+	
+	public static File getPathToThisFileIfItWasInThisFolder(File file, File folder){
+		String path = folder.getAbsolutePath();
+		String filename = FilenameUtils.getName(file.getAbsolutePath());
+		
+		return new File(path + IOUtils.DIR_SEPARATOR + filename);
+	}
+	
+	public static void writeBytesToFile(int count, File f) throws FileNotFoundException, IOException{
+		IOUtils.write(new byte[count], new FileOutputStream(f));
+	}
+		
 	/**
 	 * Writes a PlaceholderMessage to an XML file and validates its structure
 	 * 
