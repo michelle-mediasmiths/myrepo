@@ -277,6 +277,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	 */
 	private void updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial)
 			throws MessageProcessingFailedException {
+		logger.trace("updatingProgrammeMaterial");
+		
 		MayamClientErrorCode result = mayamClient
 				.updateMaterial(programmeMaterial);
 
@@ -290,6 +292,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 	private void updatePackages(List<Package> packages)
 			throws MessageProcessingFailedException {
+		logger.trace("updatePackages");
 		for (Package txPackage : packages) {
 			updatePackage(txPackage);
 		}
@@ -303,6 +306,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	 */
 	private void updatePackage(Package txPackage)
 			throws MessageProcessingFailedException {
+		logger.trace("updatePackage");
 		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
 
 		if (result != MayamClientErrorCode.SUCCESS) {
