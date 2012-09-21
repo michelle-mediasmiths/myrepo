@@ -1,7 +1,11 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConstants;
@@ -13,6 +17,8 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
+import au.com.foxtel.cf.mam.pms.ChannelType;
+import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
@@ -26,6 +32,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
+import com.mediasmiths.foxtel.placeholder.validation.guice.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -36,13 +43,15 @@ public class PlaceholderMessageValidator extends
 			.getLogger(PlaceholderMessageValidator.class);
 
 	private final MayamClient mayamClient;
-
+	private final ChannelValidator channelValidator;
+	
 	@Inject
 	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
 			MayamClient mayamClient, ReceiptWriter receiptWriter,
-			SchemaValidator schemaValidator) throws SAXException {
+			SchemaValidator schemaValidator, ChannelValidator channelValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
+		this.channelValidator = channelValidator;
 	} 
 
 	protected MessageValidationResult validateMessage(PlaceholderMessage message) {
@@ -323,11 +332,17 @@ public class PlaceholderMessageValidator extends
 				logger.error("End date before start date");
 				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
+			
+			Channels channels = l.getChannels();
+			for (ChannelType channel: channels.getChannel()) {
+				if (!channelValidator.isValidNameForTag(channel.getChannelTag(), channel.getChannelName())) {
+					logger.error("Channel Name does not match valid Channel Tag");
+					return MessageValidationResult.CHANNEL_NAME_INVALID;	
+				}
+			}
 		}
 		
 		// TODO : FX-34 if this is an update message validate that any licences are valid during the transmission 
-
-		// TODO : FX-31 validate channels
 		return MessageValidationResult.IS_VALID;
 	}
 
