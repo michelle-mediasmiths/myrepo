@@ -39,7 +39,7 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final PlaceholderMessageValidator validator;
 	protected final PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
-	protected final ChannelValidator channelValidator = mock(ChannelValidtor.class);
+	protected final ChannelValidator channelValidator = mock(ChannelValidator.class);
 	
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
