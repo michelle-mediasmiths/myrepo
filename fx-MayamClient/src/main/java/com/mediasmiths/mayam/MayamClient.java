@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam;
 
+import java.util.ArrayList;
+
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
@@ -46,5 +48,6 @@ public interface MayamClient {
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
 	public MayamValidator getValidator();
+	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException;
 	
 }
