@@ -180,7 +180,6 @@ public class PlaceholderMessageValidator extends
 			}
 		}
 		
-		//TODO FX-34 validation of intended broadcast date with respect to existing licences for title
 		MayamValidator mayamValidator = mayamClient.getValidator();
 		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
 		if (!mayamValidator.validateBroadcastDate(targetDate, materialID)) {
@@ -353,9 +352,22 @@ public class PlaceholderMessageValidator extends
 					return MessageValidationResult.CHANNEL_NAME_INVALID;	
 				}
 			}
+			
+			try {
+				if (mayamClient.titleExists(action.getTitleID()))
+				{
+					MayamValidator mayamValidator = mayamClient.getValidator();
+					if (!mayamValidator.validateTitleBroadcastDate(action.getTitleID(), startDate, endDate)) {
+						logger.error("License date for title is not valid for one or more packages");
+						return MessageValidationResult.TITLE_TARGET_DATE_LICENSE_INVALID;
+					}
+				}
+			} catch (MayamClientException e) {
+				logger.error("Exception when validating license periods in Mayam");
+				return MessageValidationResult.MAYAM_CLIENT_ERROR;
+			}
 		}
-		
-		// TODO : FX-34 if this is an update message validate that any licences are valid during the transmission 
+				
 		return MessageValidationResult.IS_VALID;
 	}
 
