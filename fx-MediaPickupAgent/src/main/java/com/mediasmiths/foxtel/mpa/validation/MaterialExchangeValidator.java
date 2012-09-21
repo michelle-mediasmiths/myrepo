@@ -111,7 +111,8 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException {
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
+		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof Material)) {
 			throw new ClassCastException(String.format(

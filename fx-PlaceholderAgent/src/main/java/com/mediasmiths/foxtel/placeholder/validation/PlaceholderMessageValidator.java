@@ -396,7 +396,8 @@ public class PlaceholderMessageValidator extends
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException {
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
+		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof PlaceholderMessage)) {
 			throw new ClassCastException(String.format(

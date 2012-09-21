@@ -79,16 +79,17 @@ public class MediaCheck {
 
 	}
 
+	private static final int WIDTH_OF_MD5_HASH = 32;
+	private static final int HEX_RADIX = 16;
+
 	protected boolean checkSumMatches(File mxf, FileMediaType media) {
 
 		// TODO : FX-29 calculate checksum
 		try {
 
-			final int HEX_RADIX = 16;
 			String expectedMd5 = media.getChecksum().toString(HEX_RADIX);
 			// zero pad until correct length for md5 digest
-			
-			final int WIDTH_OF_MD5_HASH=32;
+
 			while (expectedMd5.length() < WIDTH_OF_MD5_HASH) {
 				expectedMd5 = "0" + expectedMd5;
 			}
