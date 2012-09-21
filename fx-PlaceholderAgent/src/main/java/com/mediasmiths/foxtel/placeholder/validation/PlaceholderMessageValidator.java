@@ -172,7 +172,7 @@ public class PlaceholderMessageValidator extends
 
 		String presentationFormat = action.getPackage().getPresentationFormat().toString();
 		MayamValidator mayamValidator = mayamClient.getValidator();
-		if (!mayamValidator.validatePackageFormat(presentationFormat, materialID)) {
+		if (!mayamValidator.validatePackageFormat(presentationFormat, materialID, channelValidator)) {
 			logger.error("Presentation Format of package does not match that of associated channel");
 			return MessageValidationResult.PACKAGE_INVALID_FORMAT;
 		}
