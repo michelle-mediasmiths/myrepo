@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.Unmarshaller;
@@ -171,13 +172,16 @@ public class PlaceholderMessageValidator extends
 		}
 
 		String presentationFormat = action.getPackage().getPresentationFormat().toString();
-		MayamValidator mayamValidator = mayamClient.getValidator();
-		if (!mayamValidator.validatePackageFormat(presentationFormat, materialID, channelValidator)) {
-			logger.error("Presentation Format of package does not match that of associated channel");
-			return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+		ArrayList<String> channelTags = mayamClient.getChannelLicenseTagsForMaterial(materialID);
+		for (String channelTag: channelTags) {
+			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
+				logger.error("Presentation Format of package does not match that of associated channel");
+				return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+			}
 		}
 		
 		//TODO FX-34 validation of intended broadcast date with respect to existing licences for title
+		MayamValidator mayamValidator = mayamClient.getValidator();
 		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
 		if (!mayamValidator.validateBroadcastDate(targetDate, materialID)) {
 			logger.error("Intended target date of package is not within valid licensed dates");

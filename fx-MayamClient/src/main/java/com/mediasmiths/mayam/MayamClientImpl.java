@@ -3,6 +3,7 @@ package com.mediasmiths.mayam;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -336,5 +337,37 @@ public class MayamClientImpl implements MayamClient {
 	public MayamValidator getValidator()
 	{
 		return validator;
+	}
+	
+	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException 
+	{
+		ArrayList<String> licenseTags = new ArrayList<String>();
+		AttributeMap material = null;
+		try {
+			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.toString()), materialID);
+		} catch (RemoteException e) {
+			licenseTags = null;
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+		if (material != null) {
+			String parentID = "";
+			// TODO: retrieve parentID from material
+			// parentID = material.getAttribute(Attribute.);
+			AttributeMap title = null;
+			
+			try {
+				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.toString()), parentID);
+			} catch (RemoteException e) {
+				licenseTags = null;
+				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+			}
+			
+			if (title != null) {
+				//TODO: Retrieve the channel tag information from the title attributes
+				String channelTag = "";
+				licenseTags.add(channelTag);
+			}
+		}
+		return licenseTags;
 	}
 }
