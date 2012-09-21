@@ -86,17 +86,28 @@ public class MediaCheck {
 		try {
 
 			String expectedMd5 = media.getChecksum().toString(16);
-			String actualMd5 = DigestUtils.md5Hex(new FileInputStream(mxf));
-			return (expectedMd5.equals(actualMd5));
+			// zero pad until correct length for md5 digest
+			while (expectedMd5.length() < 32) {
+				expectedMd5 = "0" + expectedMd5;
+			}
 
-		} catch (FileNotFoundException e) {
-			logger.fatal(
-					"FileNotFoundException calculating md5Hex (this really should not have happened as we are supposed to have checked the file exists already)",
-					e);
-			return false;
+			String actualMd5 = DigestUtils.md5Hex(new FileInputStream(mxf));
+
+			if (expectedMd5.equals(actualMd5)) {
+				logger.debug(String.format(
+						"expected md5 for %s - %s matched actual md5 %s",
+						mxf.getAbsolutePath(), expectedMd5, actualMd5));
+				return true;
+			} else {
+				logger.warn(String.format(
+						"expected md5 for %s - %s did not match actual md5 %s",
+						mxf.getAbsolutePath(), expectedMd5, actualMd5));
+				return false;
+			}
+
 		} catch (IOException e) {
 			logger.error("IOException calculating md5Hex", e);
-			return true;
+			return false;
 		}
 	}
 

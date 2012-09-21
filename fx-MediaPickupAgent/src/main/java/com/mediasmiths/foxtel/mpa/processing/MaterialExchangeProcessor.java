@@ -143,7 +143,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 		if (!FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
 				.equals("mxf")) {
-			logger.warn("a non mxf has arrived!");
+			logger.warn("a non mxf has arrived!"); //this really shouldn't happen if the MaterialFolderWatcher is doing its job right
 			return;
 		}
 
