@@ -37,6 +37,8 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
+
 public abstract class PlaceholderManagerTest {
 	
 	private static Logger logger = Logger.getLogger(PlaceholderManagerTest.class);
@@ -48,6 +50,7 @@ public abstract class PlaceholderManagerTest {
 	protected ReceiptWriter receiptWriter;
     
 	protected PlaceholderMessageValidator validator;
+	protected ChannelValidator channelValidator;
 	
 	public PlaceholderManagerTest() throws JAXBException, SAXException{
 
@@ -59,8 +62,9 @@ public abstract class PlaceholderManagerTest {
 	public void before(){
 		mayamClient = mock(MayamClient.class);
 		receiptWriter = mock(ReceiptWriter.class);
+		channelValidator = mock(ChannelValidator.class);
 		try {
-			validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,receiptWriter, new SchemaValidator("PlaceholderManagement.xsd"));
+			validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,receiptWriter, new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		} catch (SAXException e) {
 			logger.fatal("Exception constructing mesage validator",e);
 		}

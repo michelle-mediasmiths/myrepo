@@ -32,12 +32,15 @@ import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.MayamClient;
 
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
+
 public abstract class PlaceHolderMessageShortTest {
 
 	protected final PlaceholderMessageValidator validator;
 	protected final PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
-			
+	protected final ChannelValidator channelValidator = mock(ChannelValidtor.class);
+	
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 
@@ -61,7 +64,7 @@ public abstract class PlaceHolderMessageShortTest {
 		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
-		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"));
+		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
 				unmarhsaller, mayamClient, "failure path", "receipt path");
 

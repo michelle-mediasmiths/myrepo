@@ -8,13 +8,12 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 
 public class ChannelValidatorImpl implements ChannelValidator {
 
 	final Properties configProperties;
 	final Properties formatProperties;
-	private static Logger logger = Logger.getLogger(PlaceholderMessageValidator.class);
+	private static Logger logger = Logger.getLogger(ChannelValidatorImpl.class);
 	
 	@Inject
 	public ChannelValidatorImpl() throws IOException
