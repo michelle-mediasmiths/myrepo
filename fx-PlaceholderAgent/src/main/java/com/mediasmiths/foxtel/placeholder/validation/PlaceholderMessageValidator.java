@@ -182,7 +182,7 @@ public class PlaceholderMessageValidator extends
 		
 		MayamValidator mayamValidator = mayamClient.getValidator();
 		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
-		if (!mayamValidator.validateBroadcastDate(targetDate, materialID)) {
+		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
 			logger.error("Intended target date of package is not within valid licensed dates");
 			return MessageValidationResult.PACKAGE_TARGET_DATE_LICENSE_INVALID;
 		}
