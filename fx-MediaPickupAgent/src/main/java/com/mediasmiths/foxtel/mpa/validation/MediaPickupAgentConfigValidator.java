@@ -72,7 +72,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
 	private boolean isValidLong(String value) {
 		try {
-			Long l = Long.parseLong(value); //sonar complains about this, is there a better way to test this?
+			Long l = Long.parseLong(value); //sonar complains about this but I dont care, its the handiest way to make this check
 			return true;
 		} catch (NumberFormatException nfe) {
 			return false;

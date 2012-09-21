@@ -1,106 +1,35 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.argThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.management.MXBean;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
 
-import com.mediasmiths.foxtel.agent.MessageEnvelope;
-import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
-import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
-import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
-import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
-import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
+import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class ProgrammeMaterialProcessingTest {
+public class ProgrammeMaterialProcessingTest extends MaterialProcessingTest {
 
-	MaterialExchangeProcessor processor;
-	FilesPendingProcessingQueue filesPendingProcessingQueue;
-	PendingImportQueue pendingImportQueue;
-	MaterialExchangeValidator validator;
-	ReceiptWriter receiptWriter;
-	Unmarshaller unmarshaller;
-	MayamClient mayamClient;
-	MatchMaker matchMaker;
-	String failurePath;
-	String archivePath;
-	String incomingPath;
-	File media;
-	File materialxml;
-	Thread processorThread;
-	MediaCheck mediaCheck;
-	String materialXMLPath;
 
-	final String TITLE_ID = "TITLE_ID";
-	final String MATERIAL_ID = "MATERIAL_ID";
-
-	@Before
-	public void before() throws IOException, JAXBException,
-			DatatypeConfigurationException, SAXException {
-
-		filesPendingProcessingQueue = new FilesPendingProcessingQueue();
-		pendingImportQueue = new PendingImportQueue();
-		validator = mock(MaterialExchangeValidator.class);
-		receiptWriter = mock(ReceiptWriter.class);
-		unmarshaller = new MediaPickupModule().provideUnmarshaller();
-		mayamClient = mock(MayamClient.class);
-		matchMaker = mock(MatchMaker.class);
-		mediaCheck = mock(MediaCheck.class);
-
-		incomingPath = TestUtil.prepareTempFolder("INCOMING");
-		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
-		failurePath = TestUtil.prepareTempFolder("FAILURE");
-
-		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
-		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
-
-		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
-				pendingImportQueue, validator, receiptWriter, unmarshaller,
-				mayamClient, matchMaker, mediaCheck, failurePath, archivePath);
-
-		processorThread = new Thread(processor);
-		processorThread.start();
-
-	}
-
-	@After
-	public void after() {
-		processorThread.interrupt();
-	}
 
 	/**
 	 * Tests that handling of invalid messages
@@ -309,30 +238,6 @@ public class ProgrammeMaterialProcessingTest {
 		assertTrue(pi.getMaterialEnvelope().getFile().equals(materialxml));
 	}
 
-	private ArgumentMatcher<Title> titleIDMatcher = new ArgumentMatcher<Title>() {
-
-		@Override
-		public boolean matches(Object argument) {
-			return ((Title) argument).getTitleID().equals(TITLE_ID);
-		}
-	};
-
-	private ArgumentMatcher<ProgrammeMaterialType> materialIDMatcher = new ArgumentMatcher<ProgrammeMaterialType>() {
-
-		@Override
-		public boolean matches(Object argument) {
-			return ((ProgrammeMaterialType) argument).getMaterialID().equals(
-					MATERIAL_ID);
-		}
-	};
-
-	private ArgumentMatcher<MaterialEnvelope> matchEnvelopeByFile = new ArgumentMatcher<MaterialEnvelope>() {
-
-		@Override
-		public boolean matches(Object argument) {
-			return ((MaterialEnvelope) argument).getFile().equals(materialxml);
-		}
-	};
-	private Material material;
+	
 
 }

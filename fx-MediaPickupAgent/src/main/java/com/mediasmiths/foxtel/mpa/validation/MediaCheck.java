@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.mpa.validation;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.commons.codec.digest.DigestUtils;
@@ -85,9 +84,12 @@ public class MediaCheck {
 		// TODO : FX-29 calculate checksum
 		try {
 
-			String expectedMd5 = media.getChecksum().toString(16);
+			final int HEX_RADIX = 16;
+			String expectedMd5 = media.getChecksum().toString(HEX_RADIX);
 			// zero pad until correct length for md5 digest
-			while (expectedMd5.length() < 32) {
+			
+			final int WIDTH_OF_MD5_HASH=32;
+			while (expectedMd5.length() < WIDTH_OF_MD5_HASH) {
 				expectedMd5 = "0" + expectedMd5;
 			}
 
