@@ -7,7 +7,6 @@ import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
@@ -149,7 +148,6 @@ public class ProgrammeMaterialTest {
 				ardomeImportFolder);
 		overridenProperties.put(ARDOME_EMERGENCY_IMPORT_FOLDER,
 				ardomeEmergencyImportFolder);
-		overridenProperties.put(MEDIA_DIGEST_ALGORITHM, digestAlgorithm);
 		overridenProperties.put(MEDIA_COMPANION_TIMEOUT, companionTimeout);
 		propertyFile.merge(overridenProperties);
 

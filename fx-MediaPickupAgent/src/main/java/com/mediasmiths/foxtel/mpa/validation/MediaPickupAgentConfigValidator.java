@@ -7,7 +7,6 @@ import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_DIGEST_ALGORITHM;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 
@@ -27,7 +26,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(RECEIPT_PATH) String receiptPath,
 			@Named(ARDOME_IMPORT_FOLDER) String importFolder,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
-			@Named(MEDIA_DIGEST_ALGORITHM) String digestAlgorithm,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges)
 			throws ConfigValidationFailureException {
@@ -51,13 +49,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 					emergencyImportFolder);
 		}
 
-		if (isValidDigestAlgorithm(digestAlgorithm)) {
-			configValidationPasses(MEDIA_DIGEST_ALGORITHM, digestAlgorithm);
-		} else {
-			anyFailures = true;
-			configValidationFails(MEDIA_DIGEST_ALGORITHM, digestAlgorithm);
-		}
-
 		if (isValidLong(companionTimeout)) {
 			configValidationPasses(MEDIA_COMPANION_TIMEOUT, companionTimeout);
 		} else {
@@ -77,14 +68,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 		if (anyFailures) {
 			onFailure();
 		}
-	}
-
-	private boolean isValidDigestAlgorithm(String digestAlgorithm) {
-		// TODO Auto-generated method stub
-		// is valid checksum algorithm a better name (digest + checksum are
-		// related but not the same thing are they?)
-		// see FX-29
-		return false;
 	}
 
 	private boolean isValidLong(String value) {
