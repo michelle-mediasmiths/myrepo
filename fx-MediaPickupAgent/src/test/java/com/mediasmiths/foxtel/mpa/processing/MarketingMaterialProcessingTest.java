@@ -93,6 +93,84 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 		testProcessMessageValidMessageAndMedia(false, false, false);
 	}
 
+	public void testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(
+			boolean titleExists) throws DatatypeConfigurationException,
+			FileNotFoundException, IOException, MayamClientException,
+			JAXBException, SAXException, InterruptedException {
+		// prepare files
+		material = MarketingMaterialTest.getMaterial(TITLE_ID);
+
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		// prepare mocks
+		when(validator.validateFile(materialXMLPath)).thenReturn(
+				MessageValidationResult.IS_VALID);
+		when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
+		when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(
+				MayamClientErrorCode.FAILURE);
+		when(mayamClient.createTitle(argThat(titleIDMatcher))).thenReturn(
+				MayamClientErrorCode.FAILURE);
+
+		// add file to queue for processing
+		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
+
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
+				new File(failurePath)).exists());
+
+		// TODO : check any alerts sent
+
+	}
+
+	@Test
+	public void testProcessingFailsWhenErrorQueryingTitleExistance() throws DatatypeConfigurationException, MayamClientException, InterruptedException, FileNotFoundException, JAXBException, SAXException {
+		// prepare files
+		material = MarketingMaterialTest.getMaterial(TITLE_ID);
+
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		// prepare mocks
+		when(validator.validateFile(materialXMLPath)).thenReturn(
+				MessageValidationResult.IS_VALID);
+		when(mayamClient.titleExists(TITLE_ID)).thenThrow(
+				new MayamClientException(MayamClientErrorCode.FAILURE));
+		// add file to queue for processing
+		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
+
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
+				new File(failurePath)).exists());
+
+		// TODO : check any alerts sent
+	}
+
+	@Test
+	public void testProcessFailsOnMayamExceptionUpdatingTitle()
+			throws FileNotFoundException, DatatypeConfigurationException,
+			IOException, MayamClientException, JAXBException, SAXException,
+			InterruptedException {
+		testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(true);
+	}
+
+	@Test
+	public void testProcessFailsOnMayamExceptionCreatingTitle()
+			throws FileNotFoundException, DatatypeConfigurationException,
+			IOException, MayamClientException, JAXBException, SAXException,
+			InterruptedException {
+		testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(false);
+
+	}
+
 	/**
 	 * Test that a valid message is processed correctly
 	 * 
