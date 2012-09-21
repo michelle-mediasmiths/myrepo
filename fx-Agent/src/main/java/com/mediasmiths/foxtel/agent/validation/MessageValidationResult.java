@@ -20,6 +20,11 @@ public enum MessageValidationResult {
 	MATERIAL_DOES_NOT_EXIST,
 	PACKAGE_DOES_NOT_EXIST,
 	MATERIAL_IS_NOT_PLACEHOLDER,
+<<<<<<< HEAD
 	MAYAM_CLIENT_ERROR, MATERIAL_IS_PROTECTED;
+=======
+	MAYAM_CLIENT_ERROR, 
+	CHANNEL_NAME_INVALID;
+>>>>>>> Testing commit - added error code
 
 }
