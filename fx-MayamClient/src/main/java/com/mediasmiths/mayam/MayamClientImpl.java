@@ -33,6 +33,7 @@ import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.listeners.MqClient;
+import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class MayamClientImpl implements MayamClient {
 	final URL url;
@@ -45,6 +46,7 @@ public class MayamClientImpl implements MayamClient {
 	final MayamMaterialController materialController;
 	final MayamPackageController packageController;
 	final MayamTaskController tasksController;	
+	final MayamValidator validator;
 	
 	public MayamClientImpl() throws MalformedURLException, IOException {
 		url = new URL("http://localhost:8084/tasks-ws");
@@ -57,6 +59,7 @@ public class MayamClientImpl implements MayamClient {
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client);
 		packageController = new MayamPackageController(client);
+		validator = new MayamValidator(client);
 	}
 	
 	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException {
@@ -70,6 +73,7 @@ public class MayamClientImpl implements MayamClient {
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client);
 		packageController = new MayamPackageController(client);
+		validator = new MayamValidator(client);
 	}
 	
 	/* (non-Javadoc)
@@ -327,5 +331,10 @@ public class MayamClientImpl implements MayamClient {
 		}
 
 		return materialID;
+	}
+	
+	public MayamValidator getValidator()
+	{
+		return validator;
 	}
 }

@@ -31,6 +31,7 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -169,7 +170,19 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
+		String presentationFormat = action.getPackage().getPresentationFormat().toString();
+		MayamValidator mayamValidator = mayamClient.getValidator();
+		if (!mayamValidator.validatePackageFormat(presentationFormat, materialID)) {
+			logger.error("Presentation Format of package does not match that of associated channel");
+			return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+		}
+		
 		//TODO FX-34 validation of intended broadcast date with respect to existing licences for title
+		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
+		if (!mayamValidator.validateBroadcastDate(targetDate, materialID)) {
+			logger.error("Intended target date of package is not within valid licensed dates");
+			return MessageValidationResult.PACKAGE_TARGET_DATE_LICENSE_INVALID;
+		}
 		
 		// TODO validate consumer advice?
 		logger.warn("No validation of consumer advice has taken place");
