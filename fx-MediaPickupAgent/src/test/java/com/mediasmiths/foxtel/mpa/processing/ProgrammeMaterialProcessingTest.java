@@ -108,8 +108,7 @@ public class ProgrammeMaterialProcessingTest extends MaterialProcessingTest {
 	}
 
 	/**
-	 * Test the handling of media that does not match the description in
-	 * accompanying xml files
+	 * Test the handling of programme material messages
 	 * 
 	 * @throws InterruptedException
 	 * @throws IOException
@@ -219,6 +218,101 @@ public class ProgrammeMaterialProcessingTest extends MaterialProcessingTest {
 
 	}
 	
+	@Test
+	public void testMayamClientFailureOnUpdateTitleResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
+		// prepare files
+		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
+				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
+
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		// prepare mocks
+		when(validator.validateFile(materialXMLPath)).thenReturn(
+				MessageValidationResult.IS_VALID);
+		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
+				.thenReturn(MayamClientErrorCode.FAILURE);
+		
+		//queue file for processing
+		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
+		
+		//check queu is now empty
+		assertTrue(pendingImportQueue.size() == 0);
+		
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
+				materialxml, new File(failurePath)).exists());
+	}
 	
-	//TODO various failure tests
+	@Test
+	public void testMayamClientFailureOnUpdateProgrammeMaterialResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
+		// prepare files
+		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
+				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
+
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		// prepare mocks
+		when(validator.validateFile(materialXMLPath)).thenReturn(
+				MessageValidationResult.IS_VALID);
+		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
+				.thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
+		.thenReturn(MayamClientErrorCode.FAILURE);
+				
+		//queue file for processing
+		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
+		
+		//check queu is now empty
+		assertTrue(pendingImportQueue.size() == 0);
+		
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
+				materialxml, new File(failurePath)).exists());
+	}
+	
+	@Test
+	public void testMayamClientFailureOnUpdatePackageResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
+		// prepare files
+		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
+				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
+
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		// prepare mocks
+		when(validator.validateFile(materialXMLPath)).thenReturn(
+				MessageValidationResult.IS_VALID);
+		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
+				.thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
+		.thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
+				MayamClientErrorCode.FAILURE);
+				
+		//queue file for processing
+		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
+		
+		//check queu is now empty
+		assertTrue(pendingImportQueue.size() == 0);
+		
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
+				materialxml, new File(failurePath)).exists());
+	}
+	
+	
 }
