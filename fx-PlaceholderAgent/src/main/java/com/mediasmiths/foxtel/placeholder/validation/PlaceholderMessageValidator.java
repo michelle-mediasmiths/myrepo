@@ -32,7 +32,11 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+
+import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
+
 import com.mediasmiths.mayam.validation.MayamValidator;
+
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -76,6 +80,7 @@ public class PlaceholderMessageValidator extends
 
 			if (validateActions == MessageValidationResult.IS_VALID) {
 				logger.info("PlaceholderMessage validated");
+				System.out.println ("\n");
 			} else {
 				logger.warn("Message Actions did not validate");
 			}
@@ -167,7 +172,7 @@ public class PlaceholderMessageValidator extends
 		}
 
 		if (!materialExists) {
-			logger.error("No existing material for requested package");
+			logger.error("NO_EXISTING_MATERIAL_FOR_PACKAGE");
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
@@ -194,55 +199,89 @@ public class PlaceholderMessageValidator extends
 
 	private MessageValidationResult validateDeletePackage(DeletePackage action)
 			throws MayamClientException {
-
+		
 		logger.info("Validating a DeletePackage");
-
-		// 24.1.1.3 Version purge requests
-		// check that the parent item in ardome is not flagged as
+		
 		String packageID = action.getPackage().getPresentationID();
-
-		boolean materialForPackageProtected = false;
+		
+		boolean packageProtected = false;
 		try {
-			materialForPackageProtected = mayamClient
-					.isMaterialForPackageProtected(packageID);
-		} catch (MayamClientException e) {
+			packageProtected = mayamClient.isMaterialForPackageProtected(packageID);
+		}
+		catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying isMaterialForPackageProtected for package %s",
 							packageID), e);
 			throw e;
 		}
-
-		if (materialForPackageProtected) {
+		
+		boolean packageExists = false;
+		try {
+			packageExists = mayamClient.packageExists(packageID); //possible presentationID
+		}
+		catch (MayamClientException e) {
+			logger.error(
+					String.format(
+							"MayamClientException when querying packageExists for package %s",
+							packageID), e);
+			throw e;
+		}
+		
+		if (packageProtected) {
+			logger.error("PACKAGES_MATERIAL_IS_PROTECTED");
 			return MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
 		}
-
+		
+		if (!packageExists) {
+			logger.error("PACKAGE_DOES_NOT_EXIST");
+			return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
+		}
+		
 		return MessageValidationResult.IS_VALID;
 	}
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) throws MayamClientException {
-
-		logger.info("Validating a DeleteMaterial " + action);
-		// 24.1.1.2 Master purge requests
-		//FX-28 check material is not protected
-		boolean itemProtected = false;
 		
-		try{
-			//protection may be implied by title being protected, lets check the whole tree
-			itemProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
-		}catch (MayamClientException e) {
+		logger.info("Validationg a DeleteMaterial");
+		
+		String materialID = action.getMaterial().getMaterialID();
+		String titleID = action.getTitleID();
+		boolean materialProtected = false;
+		try {
+			materialProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
+		}
+		catch (MayamClientException e) {
 			logger.error(
 					String.format(
-							"MayamClientException when querying isTitleOrDescendentsProtected for material %s",
-							action.getMaterial().getMaterialID()), e);
+							"MayamClientException when querying isTitleOrDescendentsProtected for title %s",
+							titleID), e);
 			throw e;
 		}
 		
-		if(itemProtected){
-			return MessageValidationResult.MATERIAL_IS_PROTECTED;
+		boolean materialExists = false;
+		try {
+			materialExists = mayamClient.materialExists(materialID);
+		}
+		catch (MayamClientException e) {
+			logger.error(
+					String.format(
+							"MayamClientException when querying materialExists for material %s",
+							materialID), e);
+			throw e;
+		}
+		
+		if (materialProtected) {
+			logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
+			return MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
+		}
+		if (!materialExists) {
+			logger.error("MATERIAL_DOES_NOT_EXIST");
+			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 		}
 		
 		return MessageValidationResult.IS_VALID;
+		
 	}
 
 	private MessageValidationResult validatePurgeTitle(PurgeTitle action)
@@ -266,12 +305,31 @@ public class PlaceholderMessageValidator extends
 							titleID), e);
 			throw e;
 		}
+		
+		boolean titleExists = false;
+		try {
+			titleExists = mayamClient.titleExists(titleID);
+		}
+		catch (MayamClientException e) {
+			logger.error(
+					String.format(
+							"MayamClientException when querying titleExists for title %s",
+							titleID), e);
+			throw e;
+		}
 
 		if (titleProtected) {
+			logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
 			return MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
 		}
 
+		if (!titleExists) {
+			logger.error("NO_EXISTING_TITLE_TO_PURGE");
+			return MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE;
+		}
+
 		return MessageValidationResult.IS_VALID;
+		
 	}
 
 	/**
@@ -310,10 +368,12 @@ public class PlaceholderMessageValidator extends
 
 			if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
 				logger.warn("Required by date is before order created date!");
+				logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
 				return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
 			}
 		} else {
 			logger.warn("Title for material does not exist");
+			logger.error("NO_EXISTING_TITLE_FOR_MATERIAL");
 			return MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
 		}
 
@@ -341,6 +401,7 @@ public class PlaceholderMessageValidator extends
 
 			if (startDate.compare(endDate) == DatatypeConstants.GREATER) {
 				logger.error("End date before start date");
+				logger.error("LICENSE_DATES_NOT_IN_ORDER");
 				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
 			
@@ -366,7 +427,15 @@ public class PlaceholderMessageValidator extends
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 		}
-				
+		
+		String channelTag = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelTag();
+		String channelName = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelName();
+		
+		if ((channelTag.equals("UNKNOWN_CHANNEL_TAG")) || (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
+			logger.error("UNKOWN_CHANNEL");
+			return MessageValidationResult.UNKOWN_CHANNEL;
+		}
+		
 		return MessageValidationResult.IS_VALID;
 	}
 
