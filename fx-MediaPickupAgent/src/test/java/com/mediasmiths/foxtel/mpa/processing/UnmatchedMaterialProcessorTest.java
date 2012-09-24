@@ -84,6 +84,10 @@ public class UnmatchedMaterialProcessorTest {
 	@Test
 	public void testNotificationsFireForUmatchedMaterial(){
 		//TODO implement this test. When unmatched material is discovered then someone needs to be notified
+		//TODO test handling of IOExceptions when moving unmatched material?
 	}
+	
+	
+
 		
 }
