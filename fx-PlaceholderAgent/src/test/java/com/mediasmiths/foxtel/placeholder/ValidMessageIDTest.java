@@ -54,9 +54,6 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 		assertEquals(
 				MessageValidationResult.INVALID_MESSAGE_ID,
 				validator.validateFile(temp.getAbsolutePath()));
-		
-		
-		
 	}
 	
 }

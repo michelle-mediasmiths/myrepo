@@ -48,8 +48,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			@Named("agent.path.archive") String archivePath) {
 		super(filePathsPendingProcessing,messageValidator,receiptWriter,unmarhsaller,failurePath,archivePath);
 		this.mayamClient = mayamClient;
-		logger.debug("Using failure path " + failurePath);
-		logger.debug("Using archivePath path " + archivePath);
+		logger.debug("Using failure path: " + failurePath);
+		logger.debug("Using archivePath path: " + archivePath);
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action)
@@ -112,6 +112,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 		if (result == MayamClientErrorCode.SUCCESS) {
 			logger.info("Action successfully processed");
+			System.out.println("\n");
 		} else {
 			logger.error(String.format(
 					"Failed to process action, result was %s", result));

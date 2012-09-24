@@ -44,8 +44,13 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final static String EXISTING_TITLE = "EXISTING";
 	protected final static String NOT_EXISTING_TITLE = "NOT_EXISTING";
 	protected final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
-	protected final static String EXISTING_MATERIAL_ID = "NEW_MATERIAL";
+	protected final static String EXISTING_MATERIAL_ID = "EXISTING_MATERIAL";
+	protected final static String NOT_EXISTING_MATERIAL = "NOT_EXISTING";
 	protected final static String EXISTING_PACKAGE_ID = "NEW_MATERIAL";
+	protected final static String NOT_EXISTING_PACKAGE = "NOT_EXISTING";
+	
+	protected final static String UNKNOWN_CHANNEL_TAG = "UNKNOWN_CHANNEL_TAG";
+	protected final static String UNKOWN_CHANNEL_NAME = "UNKNOWN_CHANNEL_NAME";
 
 	protected final String receiptFolderPath;
 	
