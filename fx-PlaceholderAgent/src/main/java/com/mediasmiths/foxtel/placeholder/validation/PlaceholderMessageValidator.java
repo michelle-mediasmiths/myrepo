@@ -243,7 +243,6 @@ public class PlaceholderMessageValidator extends
 	}
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) throws MayamClientException {
-<<<<<<< HEAD
 		
 		logger.info("Validationg a DeleteMaterial");
 		
@@ -280,27 +279,6 @@ public class PlaceholderMessageValidator extends
 		if (!materialExists) {
 			logger.error("MATERIAL_DOES_NOT_EXIST");
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
-=======
-
-		logger.info("Validating a DeleteMaterial " + action);
-		// 24.1.1.2 Master purge requests
-		//FX-28 check material is not protected
-		boolean itemProtected = false;
-		
-		try{
-			//protection may be implied by title being protected, lets check the whole tree
-			itemProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
-		}catch (MayamClientException e) {
-			logger.error(
-					String.format(
-							"MayamClientException when querying isTitleOrDescendentsProtected for material %s",
-							action.getMaterial().getMaterialID()), e);
-			throw e;
-		}
-		
-		if(itemProtected){
-			return MessageValidationResult.MATERIAL_IS_PROTECTED;
->>>>>>> aff02e9063d4d6bf6974c90d088b17b99909d043
 		}
 		
 		return MessageValidationResult.IS_VALID;
@@ -450,7 +428,6 @@ public class PlaceholderMessageValidator extends
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 		}
-<<<<<<< HEAD
 		
 		String channelTag = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelTag();
 		String channelName = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelName();
@@ -460,9 +437,6 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.UNKOWN_CHANNEL;
 		}
 		
-=======
-				
->>>>>>> aff02e9063d4d6bf6974c90d088b17b99909d043
 		return MessageValidationResult.IS_VALID;
 	}
 
