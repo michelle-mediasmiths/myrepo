@@ -6,7 +6,6 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.argThat;
 
 import java.math.BigInteger;
 
@@ -27,14 +26,11 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MqClient;
-import com.mediasmiths.mayam.controllers.MayamPackageControllerTest.AttributeMatcher;
 
 public class MayamTitleControllerTest {
 
 	MayamTitleController controller;
 	TasksClient client;
-	MqClient mqClient;
 	Material.Title title;
 	CreateOrUpdateTitle cuTitle;
 	TitleDescriptionType titleDescription;
@@ -60,8 +56,7 @@ public class MayamTitleControllerTest {
 	public void setup()
 	{
 		client = mock(TasksClient.class);
-		mqClient = mock(MqClient.class);
-		controller = new MayamTitleController(client, mqClient);
+		controller = new MayamTitleController(client);
 		
 		title = mock(Material.Title.class);		
 		when(title.getTitleID()).thenReturn("");

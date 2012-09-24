@@ -3,6 +3,7 @@ package com.mediasmiths.mayam;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -30,7 +31,10 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
+import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import com.mediasmiths.mayam.listeners.MqClient;
+import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class MayamClientImpl implements MayamClient {
 	final URL url;
@@ -42,16 +46,21 @@ public class MayamClientImpl implements MayamClient {
 	final MayamTitleController titleController;
 	final MayamMaterialController materialController;
 	final MayamPackageController packageController;
+	final MayamTaskController tasksController;	
+	final MayamValidator validator;
 	
 	public MayamClientImpl() throws MalformedURLException, IOException {
 		url = new URL("http://localhost:8084/tasks-ws");
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
 		client = injector.getInstance(TasksClient.class).setup(url, token); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mqClient = new MqClient(injector);
-		titleController = new MayamTitleController(client, mqClient);
-		materialController = new MayamMaterialController(client, mqClient);
-		packageController = new MayamPackageController(client, mqClient);
+		tasksController = new MayamTaskController(client);
+		mqClient = new MqClient(injector, client, tasksController);
+		mqClient.attachIncomingListners();
+		titleController = new MayamTitleController(client);
+		materialController = new MayamMaterialController(client);
+		packageController = new MayamPackageController(client);
+		validator = new MayamValidator(client);
 	}
 	
 	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException {
@@ -59,10 +68,13 @@ public class MayamClientImpl implements MayamClient {
 		injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
 		client = injector.getInstance(TasksClient.class).setup(url, userToken); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		mqClient = new MqClient(injector);
-		titleController = new MayamTitleController(client, mqClient);
-		materialController = new MayamMaterialController(client, mqClient);
-		packageController = new MayamPackageController(client, mqClient);
+		tasksController = new MayamTaskController(client);
+		mqClient = new MqClient(injector, client, tasksController);
+		mqClient.attachIncomingListners();
+		titleController = new MayamTitleController(client);
+		materialController = new MayamMaterialController(client);
+		packageController = new MayamPackageController(client);
+		validator = new MayamValidator(client);
 	}
 	
 	/* (non-Javadoc)
@@ -321,5 +333,41 @@ public class MayamClientImpl implements MayamClient {
 
 		return materialID;
 	}
-
+	
+	public MayamValidator getValidator()
+	{
+		return validator;
+	}
+	
+	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException 
+	{
+		ArrayList<String> licenseTags = new ArrayList<String>();
+		AttributeMap material = null;
+		try {
+			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.toString()), materialID);
+		} catch (RemoteException e) {
+			licenseTags = null;
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+		if (material != null) {
+			String parentID = "";
+			// TODO: retrieve parentID from material
+			// parentID = material.getAttribute(Attribute.);
+			AttributeMap title = null;
+			
+			try {
+				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.toString()), parentID);
+			} catch (RemoteException e) {
+				licenseTags = null;
+				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+			}
+			
+			if (title != null) {
+				//TODO: Retrieve the channel tag information from the title attributes
+				String channelTag = "";
+				licenseTags.add(channelTag);
+			}
+		}
+		return licenseTags;
+	}
 }

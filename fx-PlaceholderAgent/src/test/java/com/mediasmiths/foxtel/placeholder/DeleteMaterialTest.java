@@ -25,6 +25,7 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 
@@ -38,9 +39,43 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
+		
+		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
+		
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+		
+		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 	}
 	
+	@Test
+	@Category(ValidationTests.class)
+	public void testDeleteMaterialIsProtected() throws IOException, Exception {
+		
+		PlaceholderMessage pm = buildDeleteMaterialRequest(true,PROTECTED_TITLE);
+		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleIsProtected");
+		
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
+		
+		assertEquals(MessageValidationResult.MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
+	}
+	
+
+	@Test
+	@Category(ValidationTests.class)
+	public void testDeleteMaterialProtectedCheckFails() throws IOException, Exception {
+		
+		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
+		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
+		
+		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		
+		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validateFile(temp.getAbsolutePath()));
+		
+		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
+	}
+	
+
 	@Test
 	@Category(ProcessingTests.class)
 	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException{

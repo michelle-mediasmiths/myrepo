@@ -41,7 +41,7 @@ public abstract class MessageValidator<T> {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	protected final boolean againstXSD(String filepath)
+	protected boolean againstXSD(String filepath)
 	{
 		return schemaValidator.isValid(new File(filepath));
 	}
@@ -56,9 +56,9 @@ public abstract class MessageValidator<T> {
 	 * @throws MayamClientException
 	 */
 	@SuppressWarnings("unchecked")
-	public final MessageValidationResult validateFile(String filepath)
+	public MessageValidationResult validateFile(String filepath)
 	 {
-
+		logger.debug("Validating file "+filepath);
 		// first check the xml file conforms to the schema
 		boolean againstXSD = againstXSD(filepath);
 
@@ -74,10 +74,10 @@ public abstract class MessageValidator<T> {
 			
 		} catch (JAXBException e) {
 			logger.fatal("Failed to unmarshall file " + filepath
-					+ " that had validated against schema");
+					+ " that had validated against schema",e);
 			return MessageValidationResult.FAILED_TO_UNMARSHALL;
 		} catch (ClassCastException cce) {
-			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type");
+			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type",cce);
 			return MessageValidationResult.UNEXPECTED_TYPE;
 		} 
 		
@@ -88,7 +88,7 @@ public abstract class MessageValidator<T> {
 	protected abstract MessageValidationResult validateMessage(T message);
 
 
-	protected final Object unmarshallFile(File xml) throws JAXBException {
+	protected Object unmarshallFile(File xml) throws JAXBException {
 		Object unmarshalled = unmarhsaller.unmarshal(xml);
 		logger.debug(String.format("unmarshalled object of type %s",
 				unmarshalled.getClass().toString()));

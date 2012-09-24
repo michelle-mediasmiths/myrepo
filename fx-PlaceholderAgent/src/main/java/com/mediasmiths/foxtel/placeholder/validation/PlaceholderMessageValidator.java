@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.Unmarshaller;
@@ -13,6 +14,8 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
+import au.com.foxtel.cf.mam.pms.ChannelType;
+import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
@@ -26,9 +29,14 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
+
+import com.mediasmiths.mayam.validation.MayamValidator;
+
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -37,13 +45,15 @@ public class PlaceholderMessageValidator extends
 			.getLogger(PlaceholderMessageValidator.class);
 
 	private final MayamClient mayamClient;
-
+	private final ChannelValidator channelValidator;
+	
 	@Inject
 	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
 			MayamClient mayamClient, ReceiptWriter receiptWriter,
-			SchemaValidator schemaValidator) throws SAXException {
+			SchemaValidator schemaValidator, ChannelValidator channelValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
+		this.channelValidator = channelValidator;
 	} 
 
 	protected MessageValidationResult validateMessage(PlaceholderMessage message) {
@@ -166,6 +176,22 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
+		String presentationFormat = action.getPackage().getPresentationFormat().toString();
+		ArrayList<String> channelTags = mayamClient.getChannelLicenseTagsForMaterial(materialID);
+		for (String channelTag: channelTags) {
+			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
+				logger.error("Presentation Format of package does not match that of associated channel");
+				return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+			}
+		}
+		
+		MayamValidator mayamValidator = mayamClient.getValidator();
+		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
+		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
+			logger.error("Intended target date of package is not within valid licensed dates");
+			return MessageValidationResult.PACKAGE_TARGET_DATE_LICENSE_INVALID;
+		}
+		
 		// TODO validate consumer advice?
 		logger.warn("No validation of consumer advice has taken place");
 
@@ -217,6 +243,7 @@ public class PlaceholderMessageValidator extends
 	}
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) throws MayamClientException {
+<<<<<<< HEAD
 		
 		logger.info("Validationg a DeleteMaterial");
 		
@@ -253,6 +280,27 @@ public class PlaceholderMessageValidator extends
 		if (!materialExists) {
 			logger.error("MATERIAL_DOES_NOT_EXIST");
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
+=======
+
+		logger.info("Validating a DeleteMaterial " + action);
+		// 24.1.1.2 Master purge requests
+		//FX-28 check material is not protected
+		boolean itemProtected = false;
+		
+		try{
+			//protection may be implied by title being protected, lets check the whole tree
+			itemProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
+		}catch (MayamClientException e) {
+			logger.error(
+					String.format(
+							"MayamClientException when querying isTitleOrDescendentsProtected for material %s",
+							action.getMaterial().getMaterialID()), e);
+			throw e;
+		}
+		
+		if(itemProtected){
+			return MessageValidationResult.MATERIAL_IS_PROTECTED;
+>>>>>>> aff02e9063d4d6bf6974c90d088b17b99909d043
 		}
 		
 		return MessageValidationResult.IS_VALID;
@@ -379,7 +427,30 @@ public class PlaceholderMessageValidator extends
 				logger.error("LICENSE_DATES_NOT_IN_ORDER");
 				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
+			
+			Channels channels = l.getChannels();
+			for (ChannelType channel: channels.getChannel()) {
+				if (!channelValidator.isValidNameForTag(channel.getChannelTag(), channel.getChannelName())) {
+					logger.error("Channel Name does not match valid Channel Tag");
+					return MessageValidationResult.CHANNEL_NAME_INVALID;	
+				}
+			}
+			
+			try {
+				if (mayamClient.titleExists(action.getTitleID()))
+				{
+					MayamValidator mayamValidator = mayamClient.getValidator();
+					if (!mayamValidator.validateTitleBroadcastDate(action.getTitleID(), startDate, endDate)) {
+						logger.error("License date for title is not valid for one or more packages");
+						return MessageValidationResult.TITLE_TARGET_DATE_LICENSE_INVALID;
+					}
+				}
+			} catch (MayamClientException e) {
+				logger.error("Exception when validating license periods in Mayam");
+				return MessageValidationResult.MAYAM_CLIENT_ERROR;
+			}
 		}
+<<<<<<< HEAD
 		
 		String channelTag = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelTag();
 		String channelName = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelName();
@@ -389,6 +460,9 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.UNKOWN_CHANNEL;
 		}
 		
+=======
+				
+>>>>>>> aff02e9063d4d6bf6974c90d088b17b99909d043
 		return MessageValidationResult.IS_VALID;
 	}
 
@@ -407,7 +481,7 @@ public class PlaceholderMessageValidator extends
 
 	private boolean validateSenderID(String senderID) {
 		logger.debug("Validating sender id"+senderID);
-		// TODO implement validateSenderID
+		// TODO is any validation of this field required?
 		return true;
 	}
 
@@ -429,7 +503,8 @@ public class PlaceholderMessageValidator extends
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException {
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
+		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof PlaceholderMessage)) {
 			throw new ClassCastException(String.format(

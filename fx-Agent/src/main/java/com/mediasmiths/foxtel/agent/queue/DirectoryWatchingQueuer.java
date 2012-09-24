@@ -1,7 +1,10 @@
 package com.mediasmiths.foxtel.agent.queue;
 
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,19 +31,19 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	private static Logger logger = Logger.getLogger(DirectoryWatchingQueuer.class);
 	
 	@Inject
-	public DirectoryWatchingQueuer(FilesPendingProcessingQueue filePathsPendingValidation, @Named("agent.path.message") String path) {
+	public DirectoryWatchingQueuer(FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
 		this.path = path;
 		setFormatCheck(true);
 	}
 
 	@Override
-	public void newFileCheck(String filePath, String fileName) {
-		File file = new File(filePath);
+	public void newFileCheck(Path path) {
+		File file = path.toFile();
 		
-		logger.debug(String.format("A file %s has arrived with path %s", fileName, filePath));
+		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));
 		
-		if (fileName.toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
+		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
 			logger.info("An xml file has arrived");
 			queueFile(file);
 		}
@@ -114,7 +117,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	
 	private Collection<File> listFiles() {
 		logger.debug("Listing files in "+path);
-		Collection<File> existingFiles = FileUtils.listFiles(new File(path), acceptXMLFilesFilter, TrueFileFilter.INSTANCE);
+		Collection<File> existingFiles = FileUtils.listFiles(new File(path), getExistingFilesFilter(), TrueFileFilter.INSTANCE);
 		return existingFiles;
 	}
 

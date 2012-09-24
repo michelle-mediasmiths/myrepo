@@ -37,6 +37,10 @@ public class MayamAttributeController {
 		attributes = attributeMap;
 	}
 	
+	public void copyAttributes(AttributeMap originalAttributes) {
+		attributes.putAll(originalAttributes);
+	}
+	
 	public boolean setAttribute(Attribute attribute, Object value) {
 		boolean isValid = validator.isValidValue(attribute, value);
 		if (isValid) {

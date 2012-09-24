@@ -24,16 +24,12 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MqClient;
-
 
 public class MayamMaterialController {
 	private final TasksClient client;
-	private final MqClient mq;
 	
-	public MayamMaterialController(TasksClient mayamClient, MqClient mqClient) {
+	public MayamMaterialController(TasksClient mayamClient) {
 		client = mayamClient;
-		mq = mqClient;
 	}
 	
 	public MayamClientErrorCode createMaterial(MaterialType material)

@@ -1,4 +1,5 @@
 package com.mediasmiths.foxtel.agent;
+import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,7 +17,7 @@ public class ReceiptWriter {
 	private final String receiptPath;
 	
 	@Inject
-	public ReceiptWriter(@Named("agent.path.receipt") String receiptPath){
+	public ReceiptWriter(@Named(RECEIPT_PATH) String receiptPath){
 		this.receiptPath=receiptPath;
 	}
 	

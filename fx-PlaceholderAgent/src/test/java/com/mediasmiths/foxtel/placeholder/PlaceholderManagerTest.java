@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.placeholder;
-
+import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -34,6 +37,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 
 public abstract class PlaceholderManagerTest {
 	
@@ -46,6 +50,7 @@ public abstract class PlaceholderManagerTest {
 	protected ReceiptWriter receiptWriter;
     
 	protected PlaceholderMessageValidator validator;
+	protected ChannelValidator channelValidator;
 	
 	public PlaceholderManagerTest() throws JAXBException, SAXException{
 
@@ -57,8 +62,9 @@ public abstract class PlaceholderManagerTest {
 	public void before(){
 		mayamClient = mock(MayamClient.class);
 		receiptWriter = mock(ReceiptWriter.class);
+		channelValidator = mock(ChannelValidator.class);
 		try {
-			validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,receiptWriter, new SchemaValidator("PlaceholderManagement.xsd"));
+			validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,receiptWriter, new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		} catch (SAXException e) {
 			logger.fatal("Exception constructing mesage validator",e);
 		}
@@ -88,10 +94,10 @@ public abstract class PlaceholderManagerTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 		
 		Properties overridenProperties = new Properties();
-		overridenProperties.put("agent.path.message", messagePath);
-		overridenProperties.put("agent.path.receipt", receiptPath);
-		overridenProperties.put("agent.path.failure", failurePath);
-		overridenProperties.put("agent.path.archive", archivePath);
+		overridenProperties.put(MESSAGE_PATH, messagePath);
+		overridenProperties.put(RECEIPT_PATH, receiptPath);
+		overridenProperties.put(FAILURE_PATH, failurePath);
+		overridenProperties.put(ARCHIVE_PATH, archivePath);
 		propertyFile.merge(overridenProperties);
 		
 		//setup guice injector

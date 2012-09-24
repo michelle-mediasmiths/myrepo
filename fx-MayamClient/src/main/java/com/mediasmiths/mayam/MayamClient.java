@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam;
 
+import java.util.ArrayList;
+
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
@@ -11,6 +13,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.validation.MayamValidator;
 
 public interface MayamClient {
 
@@ -32,7 +35,7 @@ public interface MayamClient {
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial);
 	public boolean materialExists(String materialID) throws MayamClientException;
 	//returns true if the specified material has not had media\essence ingested
-	public boolean isMaterialPlaceholder(String materialID);
+	public boolean isMaterialPlaceholder(String materialID) throws MayamClientException;
 	
 	/* packages */
 	public MayamClientErrorCode createPackage(PackageType txPackage);
@@ -44,8 +47,7 @@ public interface MayamClient {
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
-
+	public MayamValidator getValidator();
+	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException;
 	
-
-
 }
