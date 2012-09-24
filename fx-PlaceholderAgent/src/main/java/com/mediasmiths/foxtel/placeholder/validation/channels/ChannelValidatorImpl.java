@@ -20,7 +20,7 @@ public class ChannelValidatorImpl implements ChannelValidator {
 	{
 		configProperties = new Properties();
 		try {
-			configProperties.load(new FileInputStream("channelConfig.properties"));
+			configProperties.load(getClass().getClassLoader().getResourceAsStream("channelConfig.properties"));
 		} catch (FileNotFoundException e) {
 			logger.error("Failed to find channelConfig.properties!", e);
 			throw e;
@@ -31,7 +31,7 @@ public class ChannelValidatorImpl implements ChannelValidator {
 		 
 		formatProperties = new Properties();
 		try {
-			formatProperties.load(new FileInputStream("channelFormat.properties"));
+			formatProperties.load(getClass().getClassLoader().getResourceAsStream("channelFormat.properties"));
 		} catch (FileNotFoundException e) {
 			logger.error("Failed to find channelFormat.properties!", e);
 			throw e;

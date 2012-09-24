@@ -302,6 +302,7 @@ public class MayamClientImpl implements MayamClient {
 		}
 		
 		//TODO: set some id relating to material - origin of id TBC
+		//For this placeholder, Viz Ardome will assign a “Master ID” equivalent to be used as an Item identifier and return this ID to the WFE.
 		String materialID = "???";
 		
 		titleAttributes.setAttribute(Attribute.MOB_ID, materialID);

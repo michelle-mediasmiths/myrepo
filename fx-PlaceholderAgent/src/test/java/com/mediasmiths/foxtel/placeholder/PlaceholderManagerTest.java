@@ -38,6 +38,7 @@ import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorImpl;
 
 public abstract class PlaceholderManagerTest {
 	
@@ -132,6 +133,7 @@ public abstract class PlaceholderManagerTest {
 			bind(new TypeLiteral<MessageProcessor<PlaceholderMessage>>(){}).to(SingleMessageProcessor.class);
 			//we dont need to continue to monitor the message folder as we are only picking up a single file for this test
 			bind(DirectoryWatchingQueuer.class).to(PickupExistingFilesOnlyDirectoryWatcher.class);
+			bind(ChannelValidator.class).to(ChannelValidatorImpl.class);
 		}
 	}
 	
