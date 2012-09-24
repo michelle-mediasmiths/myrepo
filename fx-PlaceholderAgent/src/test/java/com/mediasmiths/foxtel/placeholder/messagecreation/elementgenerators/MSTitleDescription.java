@@ -26,7 +26,7 @@ public class MSTitleDescription {
 	public TitleDescriptionType validTitleDescription(
 			TitleDescriptionType titleDescription) {
 
-		String show = getShow();
+		String show = getShowAShowTitle();
 		
 		titleDescription.setEpisodeTitle(getEpisodeTitle());
 		titleDescription.setProgrammeTitle(show);
@@ -59,7 +59,7 @@ public class MSTitleDescription {
 		return UUID.randomUUID().toString();
 	}
 
-	private String getShow() {
+	public String getShowAShowTitle() {
 		return showTitles[random.nextInt(showTitles.length)];
 	}
 

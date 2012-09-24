@@ -37,13 +37,13 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-import com.mediasmiths.foxtel.placeholder.junit.PlaceholderMessageShortTest;
 
 public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
@@ -172,7 +172,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {
 		
 		HelperMethods helper = new HelperMethods();
-		String programTitle = helper.validProgramTitle();
+		String programTitle = new MSTitleDescription().getShowAShowTitle();
 		
 		TitleDescriptionType tdt = new TitleDescriptionType();
 		tdt = buildTitleDescription(tdt, programTitle);

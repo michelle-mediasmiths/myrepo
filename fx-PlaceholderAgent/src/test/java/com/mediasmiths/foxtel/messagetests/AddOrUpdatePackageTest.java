@@ -29,10 +29,10 @@ import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
-import com.mediasmiths.foxtel.placeholder.junit.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.placeholder.HelperMethods;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 
