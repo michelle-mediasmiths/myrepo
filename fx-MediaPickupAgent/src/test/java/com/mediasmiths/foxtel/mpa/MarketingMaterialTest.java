@@ -7,6 +7,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.Ignore;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
@@ -20,6 +21,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Suppli
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 
+@Ignore  //this is not a junit test class but because it has Test in the name maven will run it as such
 public class MarketingMaterialTest {
 
 	public static Material getMaterial(String titleID)
