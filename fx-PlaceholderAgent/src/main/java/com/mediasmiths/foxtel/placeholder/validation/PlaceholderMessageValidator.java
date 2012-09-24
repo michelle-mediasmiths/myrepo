@@ -33,8 +33,6 @@ import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
-
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 
