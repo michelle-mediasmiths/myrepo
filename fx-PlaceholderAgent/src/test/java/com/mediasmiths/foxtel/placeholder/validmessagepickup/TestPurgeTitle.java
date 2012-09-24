@@ -50,6 +50,10 @@ public class TestPurgeTitle extends ValidMessagePickTest {
 
 	@Override
 	protected void mockValidCalls(PlaceholderMessage mesage) throws Exception {
+		
+		PurgeTitle purgeTitle = (PurgeTitle) mesage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		when(mayamClient.titleExists(purgeTitle.getTitleID())).thenReturn(true);
+		
 		when(mayamClient.purgeTitle((PurgeTitle) anyObject())).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 	}
@@ -66,6 +70,10 @@ public class TestPurgeTitle extends ValidMessagePickTest {
 
 	@Override
 	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		
+		PurgeTitle purgeTitle = (PurgeTitle) mesage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		when(mayamClient.titleExists(purgeTitle.getTitleID())).thenReturn(true);
+		
 		when(mayamClient.purgeTitle((PurgeTitle) anyObject())).thenReturn(
 				MayamClientErrorCode.TITLE_UPDATE_FAILED);
 

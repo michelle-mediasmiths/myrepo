@@ -40,6 +40,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
 		
+		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
@@ -56,7 +57,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
 		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
 	}
 	

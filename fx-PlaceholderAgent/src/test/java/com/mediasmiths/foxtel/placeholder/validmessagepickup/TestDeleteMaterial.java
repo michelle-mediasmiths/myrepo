@@ -14,6 +14,7 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class TestDeleteMaterial extends ValidMessagePickTest{
@@ -28,7 +29,7 @@ public class TestDeleteMaterial extends ValidMessagePickTest{
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		DeleteMaterial DeleteMaterial = new DeleteMaterial();
-		DeleteMaterial.setTitleID("Gavin and Stacey");
+		DeleteMaterial.setTitleID(RandomStringUtils.randomAlphanumeric(10));
 
 		Material item = new Material();
 		item.setMaterialID("fgh456");

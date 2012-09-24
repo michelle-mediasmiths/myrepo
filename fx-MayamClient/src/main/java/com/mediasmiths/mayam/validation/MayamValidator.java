@@ -1,5 +1,5 @@
 package com.mediasmiths.mayam.validation;
-
+import com.google.inject.Inject;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -20,6 +20,7 @@ import com.mediasmiths.mayam.MayamClientException;
 public class MayamValidator {
 	private TasksClient client;
 	
+	@Inject
 	public MayamValidator(TasksClient mayamClient) 
 	{
 		client = mayamClient;

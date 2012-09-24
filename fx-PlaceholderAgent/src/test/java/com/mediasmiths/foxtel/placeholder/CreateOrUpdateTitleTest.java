@@ -175,8 +175,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		licenceHolder.setOrganisationName("ORGNAME");
 
 		ChannelType channelType = new ChannelType();
-		channelType.setChannelTag("AAA");
-		channelType.setChannelName("Channel Name");
+		channelType.setChannelTag("108");
+		channelType.setChannelName("Fox8");
 
 		Channels channels = new Channels();
 		channels.getChannel().add(channelType);

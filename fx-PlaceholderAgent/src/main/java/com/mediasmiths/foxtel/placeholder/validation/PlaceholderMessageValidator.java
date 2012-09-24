@@ -43,14 +43,16 @@ public class PlaceholderMessageValidator extends
 			.getLogger(PlaceholderMessageValidator.class);
 
 	private final MayamClient mayamClient;
+	private final MayamValidator mayamValidator;
 	private final ChannelValidator channelValidator;
 	
 	@Inject
 	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
-			MayamClient mayamClient, ReceiptWriter receiptWriter,
+			MayamClient mayamClient, MayamValidator mayamValidator, ReceiptWriter receiptWriter,
 			SchemaValidator schemaValidator, ChannelValidator channelValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
+		this.mayamValidator= mayamValidator;
 		this.channelValidator = channelValidator;
 	} 
 
@@ -183,7 +185,6 @@ public class PlaceholderMessageValidator extends
 			}
 		}
 		
-		MayamValidator mayamValidator = mayamClient.getValidator();
 		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
 		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
 			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");

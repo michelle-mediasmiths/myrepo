@@ -28,17 +28,19 @@ import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class UnmarshallFailureTest {
 
 	protected PlaceholderMessageValidator toTest;
 	protected MayamClient mayamClient = mock(MayamClient.class);
+	protected MayamValidator mayamValidator = mock(MayamValidator.class);
 	protected Unmarshaller unmarshaller = mock(Unmarshaller.class);
 	protected ChannelValidator channelValidator = mock(ChannelValidator.class);	
 	
 	@Before
 	public void beforeTest() throws SAXException{
-		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
+		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,mayamValidator,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
 	}
 	
 	@Test

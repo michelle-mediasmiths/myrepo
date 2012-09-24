@@ -42,6 +42,8 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
 				.thenReturn(false);
+		
+		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 
 		assertEquals(MessageValidationResult.IS_VALID,
 				validator.validateFile(temp.getAbsolutePath()));

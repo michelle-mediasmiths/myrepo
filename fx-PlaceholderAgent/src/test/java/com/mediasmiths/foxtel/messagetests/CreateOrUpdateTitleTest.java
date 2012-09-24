@@ -147,7 +147,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		File temp = createTempXMLFile (message, "createTitleUnknownChannel");
 		
-		assertEquals(MessageValidationResult.UNKOWN_CHANNEL,
+		assertEquals(MessageValidationResult.CHANNEL_NAME_INVALID,
 				validator.validateFile(temp.getAbsolutePath()));
 	}
 	
