@@ -1,0 +1,31 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:WFE="http://thisdiagram/WFE" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/Mule" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Mule">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="WFE" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Mule" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg" bpdm:label="WFE"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="Mule" bpdm:ID="_vy1FMOxBEeGEW4lBUoDdDg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="muleAndWFEPlkVar" partnerLinkType="diag:MuleAndWFE" initializePartnerRole="yes" partnerRole="WFE_for_Mule" bpdm:invokedService="WFE:CanonicServiceForMule" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/WFE/Mule" bpdm:invokedIsDefault="true" bpdm:clientTasks="_vy1FMOxBEeGEW4lBUoDdDg:_y_CigOxBEeGEW4lBUoDdDg" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="wFEStartRequestMsg" messageType="WFE:StartRequest" bpdm:id="_0xjpAOxBEeGEW4lBUoDdDg" bpdm:messageIds=" out:_0xhz0OxBEeGEW4lBUoDdDg">
+                <bpel:from bpdm:toPart="body">
+                    <bpel:literal bpdm:linkedMessageType="WFE:StartRequest" bpdm:linkedPart="body" bpdm:linkedFile="StartRequest.body-_vy1FMOxBEeGEW4lBUoDdDg-0-literal.xml"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="wFEStartResponseMsg" messageType="WFE:StartResponse" bpdm:id="_4A5S0OxBEeGEW4lBUoDdDg" bpdm:messageIds="inc:_4Alw0OxBEeGEW4lBUoDdDg"/>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask operation="Start" partnerLink="muleAndWFEPlkVar" portType="WFE:ForMule" isMyRole="false" enableSharing="false" bpdm:label="Mule" bpdm:ID="_y_CigOxBEeGEW4lBUoDdDg">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="wFEStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="WFE:StartRequest" bpdm:ID="_0xhz0OxBEeGEW4lBUoDdDg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="wFEStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="WFE:StartResponse" bpdm:ID="_4Alw0OxBEeGEW4lBUoDdDg"></bpdm:linkset>
+            </bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>

@@ -1,0 +1,85 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TranscodeService="http://localhost:8080/TranscodeService/" xmlns:WFE="http://thisdiagram/WFE" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:TranscodeData="http://localhost:8080/TranscodeData" xmlns:this="http://thisdiagram/Transcoder" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://www.example.org/TranscodeService/" xmlns:TranscodeService1="http://localhost:8088/TranscodeService/" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcoder">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeService/" bpdm:prefix="TranscodeService" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="WFE" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TempStorageData" bpdm:prefix="TempStorageData" bpdm:comment="contrib=&apos;project:///TempStorageData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TempStorageService/" bpdm:prefix="TempStorageService" bpdm:comment="contrib=&apos;project:///TempStorageService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeData" bpdm:prefix="TranscodeData" bpdm:comment="contrib=&apos;project:///TranscodeData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcoder" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TranscodeService/" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TranscodeService/" bpdm:prefix="TranscodeService1" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="project:///TranscodeService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg" bpdm:label="WFE"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TranscodeData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TempStorageService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TempStorageData.xsd"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="Transcoder" bpdm:ID="_8WIqcOa_EeGVL7Jq3_1E2g">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" partnerLinkType="diag:WFeAndTranscoderForPortTranscodeServiceSOAPPlk" myRole="Transcoder_for_WFE" bpdm:enableSharing="false" bpdm:providedService="TranscodeService1:TranscodeService" bpdm:providedPort="TranscodeServiceSOAP" bpdm:provideSOAPAddress="http://localhost:8088/TranscodeService" bpdm:providedIsDefault="true" bpdm:clientTasks="_8WIqcOa_EeGVL7Jq3_1E2g:_0tyEoPEVEeGiQd0_oA9vGg, _8WIqcOa_EeGVL7Jq3_1E2g:_0SU3sPEVEeGiQd0_oA9vGg, _8WIqcOa_EeGVL7Jq3_1E2g:_1ILhpfEVEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="transcodeService1TranscodeStatusRequestMsg" messageType="TranscodeService1:TranscodeStatusRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="0"/>
+            <bpel:variable name="transcodeService1TranscodeStartRequestMsg" messageType="TranscodeService1:TranscodeStartRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="0"/>
+            <bpel:variable name="transcodeService1TranscodeFinishedResponseMsg" messageType="TranscodeService1:TranscodeFinishedResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="1">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeFinishedResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeFinished"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="transcodeService1TranscodeStatusResponseMsg" messageType="TranscodeService1:TranscodeStatusResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="1">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeStatusResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeStatus"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="transcodeService1TranscodeFinishedRequestMsg" messageType="TranscodeService1:TranscodeFinishedRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="0"/>
+            <bpel:variable name="transcodeService1TranscodeStartResponseMsg" messageType="TranscodeService1:TranscodeStartResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="1">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeStartResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeStart"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="transcodeService1TranscodeStatusRequestMsg" messageType="TranscodeService1:TranscodeStatusRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="0" bpdm:id="_5K9alfEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_5KuxEPEVEeGiQd0_oA9vGg"/>
+            <bpel:variable name="transcodeService1TranscodeStartRequestMsg" messageType="TranscodeService1:TranscodeStartRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="0" bpdm:id="_3kkrkPEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_3kVbAPEVEeGiQd0_oA9vGg"/>
+            <bpel:variable name="transcodeService1TranscodeFinishedResponseMsg" messageType="TranscodeService1:TranscodeFinishedResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="1" bpdm:id="_7y_MwPEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_7yzmkPEVEeGiQd0_oA9vGg">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeFinishedResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeFinished"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="transcodeService1TranscodeStatusResponseMsg" messageType="TranscodeService1:TranscodeStatusResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="1" bpdm:id="_5mmNsPEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_5mbOkPEVEeGiQd0_oA9vGg">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeStatusResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeStatus"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="transcodeService1TranscodeFinishedRequestMsg" messageType="TranscodeService1:TranscodeFinishedRequest" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="0" bpdm:id="_7XI-QPEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_7WznEPEVEeGiQd0_oA9vGg"/>
+            <bpel:variable name="transcodeService1TranscodeStartResponseMsg" messageType="TranscodeService1:TranscodeStartResponse" binding="TranscodeService1:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="1" bpdm:id="_362dkPEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_36sskPEVEeGiQd0_oA9vGg">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TranscodeService1:TranscodeStartResponse" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:opMsgType="1" bpdm:operation="TranscodeStart"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="TranscodeFinished" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService1:TranscodeService" isMyRole="true" enableSharing="false" bpdm:label="TranscodeFinished" bpdm:ID="_1ILhpfEVEeGiQd0_oA9vGg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="transcodeService1TranscodeFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeFinishedRequest" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_7WznEPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="transcodeService1TranscodeFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeFinishedResponse" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_7yzmkPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="TranscodeStart" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService1:TranscodeService" isMyRole="true" enableSharing="false" bpdm:label="TranscodeStart" bpdm:ID="_0SU3sPEVEeGiQd0_oA9vGg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="transcodeService1TranscodeStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeStartRequest" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_3kVbAPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="transcodeService1TranscodeStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeStartResponse" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_36sskPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="TranscodeStatus" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService1:TranscodeService" isMyRole="true" enableSharing="false" bpdm:label="TranscodeStatus" bpdm:ID="_0tyEoPEVEeGiQd0_oA9vGg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="transcodeService1TranscodeStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeStatusRequest" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_5KuxEPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="transcodeService1TranscodeStatusResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService1:TranscodeStatusResponse" bpdm:binding="TranscodeService1:TranscodeServiceSOAP" bpdm:ID="_5mbOkPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>

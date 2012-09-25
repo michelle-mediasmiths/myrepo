@@ -1,0 +1,48 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:WFE="http://thisdiagram/WFE" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FTP="http://localhost:8080/FTP" xmlns:tns="http://www.example.org/FTP" xmlns:this="http://thisdiagram/Drop_Box" xmlns:diag="http://thisdiagram" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Drop_Box">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="WFE" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Drop_Box" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/DropBoxService/" bpdm:prefix="DropBoxService1" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/DropBoxService/" bpdm:prefix="DropBoxService" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg" bpdm:label="WFE"/>
+        <bpdm:namespaceContributor bpdm:url="project:///DropBoxService.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="Drop Box" bpdm:ID="_g-HSAOYSEeGYCvzfuWhYqg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" partnerLinkType="diag:Drop_BoxAndWFEForPortDropBoxServiceSOAPPlk" myRole="Drop_Box_for_WFE" bpdm:enableSharing="false" bpdm:providedService="DropBoxService1:DropBoxService" bpdm:providedPort="DropBoxServiceSOAP" bpdm:provideSOAPAddress="http://localhost:8080/" bpdm:providedIsDefault="true" bpdm:clientTasks="_g-HSAOYSEeGYCvzfuWhYqg:_rImSQeeBEeGEdNzyorFk_Q, _g-HSAOYSEeGYCvzfuWhYqg:_uhqf0OeBEeGEdNzyorFk_Q" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="dropBoxService1ReceiveAssetAndNotifyRequestMsg" messageType="DropBoxService1:ReceiveAssetAndNotifyRequest" binding="DropBoxService1:DropBoxServiceSOAP" operation="ReceiveAssetAndNotify" opMsgType="0" bpdm:id="_sDWDReeBEeGEdNzyorFk_Q" bpdm:messageIds="inc:_sC9owOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="dropBoxService1ReceiveAssetAndNotifyResponseMsg" messageType="DropBoxService1:ReceiveAssetAndNotifyResponse" binding="DropBoxService1:DropBoxServiceSOAP" operation="ReceiveAssetAndNotify" opMsgType="1" bpdm:id="_sZnOMOeBEeGEdNzyorFk_Q" bpdm:messageIds=" out:_sZZLwOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="DropBoxService1:ReceiveAssetAndNotifyResponse" bpdm:linkedPart="parameters" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:opMsgType="1" bpdm:operation="ReceiveAssetAndNotify"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="dropBoxService1ReceiveXmlAndNotifyRequestMsg" messageType="DropBoxService1:ReceiveXmlAndNotifyRequest" binding="DropBoxService1:DropBoxServiceSOAP" operation="ReceiveXmlAndNotify" opMsgType="0" bpdm:id="_vnffcOeBEeGEdNzyorFk_Q" bpdm:messageIds="inc:_vnFPwOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="dropBoxService1ReceiveXmlAndNotifyResponseMsg" messageType="DropBoxService1:ReceiveXmlAndNotifyResponse" binding="DropBoxService1:DropBoxServiceSOAP" operation="ReceiveXmlAndNotify" opMsgType="1" bpdm:id="_v6hwMOeBEeGEdNzyorFk_Q" bpdm:messageIds=" out:_v6TtwOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="DropBoxService1:ReceiveXmlAndNotifyResponse" bpdm:linkedPart="parameters" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:opMsgType="1" bpdm:operation="ReceiveXmlAndNotify"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="ReceiveAssetAndNotify" partnerLink="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" portType="DropBoxService1:DropBoxService" isMyRole="true" enableSharing="false" bpdm:label="ReceiveAssetAndNotify" bpdm:ID="_rImSQeeBEeGEdNzyorFk_Q">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="dropBoxService1ReceiveAssetAndNotifyRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService1:ReceiveAssetAndNotifyRequest" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:ID="_sC9owOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="dropBoxService1ReceiveAssetAndNotifyResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService1:ReceiveAssetAndNotifyResponse" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:ID="_sZZLwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="ReceiveXmlAndNotify" partnerLink="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" portType="DropBoxService1:DropBoxService" isMyRole="true" enableSharing="false" bpdm:label="ReceiveXmlAndNotify" bpdm:ID="_uhqf0OeBEeGEdNzyorFk_Q">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="dropBoxService1ReceiveXmlAndNotifyRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService1:ReceiveXmlAndNotifyRequest" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:ID="_vnFPwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="dropBoxService1ReceiveXmlAndNotifyResponseMsg" bpdm:msgVarScopeId="_g-HSAOYSEeGYCvzfuWhYqg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService1:ReceiveXmlAndNotifyResponse" bpdm:binding="DropBoxService1:DropBoxServiceSOAP" bpdm:ID="_v6TtwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>

@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:TranscodeData="http://localhost:8080/TranscodeData" xmlns:TranscodeService="http://localhost:8080/TranscodeService/" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:QCService="http://localhost:8088/QCService/" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:TranscodeService1="http://localhost:8088/TranscodeService/" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:diag="http://localhost:8080/TranscodeTrial" xmlns:Temp_Storage="http://localhost:8080/TranscodeTrial/Temp_Storage" xmlns:WFE="http://localhost:8080/TranscodeTrial/WFE" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:tns="http://www.example.org/TranscodeService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://localhost:8080/TranscodeTrial">
+    <wsdl:import namespace="http://localhost:8080/TempStorageService/" location="TempStorageService.wsdl"/>
+    <wsdl:import namespace="http://localhost:8088/DropBoxService/" location="DropBoxService.wsdl"/>
+    <wsdl:import namespace="http://localhost:8088/MayamService/" location="MayamService.wsdl"/>
+    <wsdl:import namespace="http://localhost:8088/QCService/" location="QCService.wsdl"/>
+    <wsdl:import namespace="http://localhost:8088/TranscodeService/" location="TranscodeService.wsdl"/>
+    <wsdl:import namespace="http://localhost:8080/TranscodeTrial/WFE" location="TranscodeTrial-WFE.wsdl"/>
+    <pnlk:partnerLinkType name="Drop_BoxAndWFEForPortDropBoxServiceSOAPPlk">
+        <pnlk:role name="Drop_Box_for_WFE" portType="DropBoxService2:DropBoxService"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="MayamAndWFEForPortMayamServiceSOAPPlk">
+        <pnlk:role name="Mayam_for_WFE" portType="MayamService4:MayamService"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="MuleAndWFE">
+        <pnlk:role name="WFE_for_Mule" portType="WFE:ForMule"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="QcAndWFEForPortQCServiceSOAPPlk">
+        <pnlk:role name="QC_for_WFE" portType="QCService:QCService"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFeAndTemp_StorageForPortTempStorageServiceSOAPPlk">
+        <pnlk:role name="Temp_Storage_for_WFE" portType="TempStorageService:TempStorageService"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFeAndTranscoderForPortTranscodeServiceSOAPPlk">
+        <pnlk:role name="Transcoder_for_WFE" portType="TranscodeService1:TranscodeService"/>
+    </pnlk:partnerLinkType>
+</wsdl:definitions>

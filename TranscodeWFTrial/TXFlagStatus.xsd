@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/TXFlagStatus" xmlns:tns="http://localhost:8080/TXFlagStatus" elementFormDefault="qualified">
+
+    <element name="flagStatus" type="boolean"></element>
+
+    <element name="updatedMessage" type="string"></element>
+
+
+</schema>

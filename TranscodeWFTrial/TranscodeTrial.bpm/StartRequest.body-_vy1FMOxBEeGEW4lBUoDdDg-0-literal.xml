@@ -1,0 +1,12 @@
+﻿<bpel:literal xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:WFE="http://thisdiagram/WFE"
+    xmlns:tns="http://localhost:8080/TranscodeData"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:this="http://thisdiagram/Mule"
+    xmlns:diag="http://thisdiagram"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<WFE:StartRequest>
+    <tns:NewElement>Successful</tns:NewElement>
+</WFE:StartRequest>
+</bpel:literal>

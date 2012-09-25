@@ -1,0 +1,373 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:this="http://thisdiagram/WFE" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:QCService="http://localhost:8088/QCService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:Temp_Storage="http://thisdiagram/Temp_Storage" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:diag="http://thisdiagram" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFE">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MuleService/" bpdm:prefix="MuleService" bpdm:comment="contrib=&apos;project:///MuleService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TranscodeServiceSOAP/" bpdm:prefix="TranscodeService3" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/DropBoxService/" bpdm:prefix="DropBoxService2" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TranscodeService/" bpdm:prefix="TranscodeService" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/QCService/" bpdm:prefix="QCService" bpdm:comment="contrib=&apos;project:///QCService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/FTP" bpdm:prefix="FTP" bpdm:comment="contrib=&apos;project:///FTP.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/DropBoxService/" bpdm:prefix="DropBoxService" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeService/" bpdm:prefix="TranscodeService1" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/QCData" bpdm:prefix="QCData" bpdm:comment="contrib=&apos;project:///QCData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MayamService/" bpdm:prefix="MayamService" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MayamService/" bpdm:prefix="MayamService1" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Temp_Storage" bpdm:prefix="Temp_Storage" bpdm:comment="contrib=&apos;partner-pool:///_AEAhUPGrEeGbS7hnVLk4pQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MuleData" bpdm:prefix="MuleData" bpdm:comment="contrib=&apos;project:///MuleData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/segment" bpdm:prefix="MayamService2" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/DropBoxService/" bpdm:prefix="DropBoxService1" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TempStorageData" bpdm:prefix="TempStorageData" bpdm:comment="contrib=&apos;project:///TempStorageData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TXFlagStatus" bpdm:prefix="xsd2" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/MayamService/" bpdm:prefix="MayamService4" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TranscodeService/" bpdm:prefix="TranscodeService2" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_DdXoYOX7EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TempStorageService/" bpdm:prefix="TempStorageService" bpdm:comment="contrib=&apos;project:///TempStorageService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeData" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///TranscodeData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MuleService/" bpdm:prefix="MuleService1" bpdm:comment="contrib=&apos;project:///MuleService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TXFlagStatus" bpdm:prefix="MayamService3" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:portType name="ForMule">
+                <wsdl:operation name="Start" bpdm:source="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg">
+                    <wsdl:input message="this:StartRequest" name="Start"/>
+                    <wsdl:output message="this:StartResponse" name="StartResponse"/>
+                </wsdl:operation>
+            </wsdl:portType>
+            <xs:element name="StartRequest" type="xs:string" bpdm:source="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg"/>
+            <wsdl:message name="StartRequest" bpdm:source="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg">
+                <wsdl:part name="body" element="this:StartRequest"/>
+            </wsdl:message>
+            <xs:element name="StartResponse" type="xs:string" bpdm:source="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg"/>
+            <wsdl:message name="StartResponse" bpdm:source="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg">
+                <wsdl:part name="body" element="this:StartResponse"/>
+            </wsdl:message>
+            <bpel:binding name="CanonicBindingForMule" type="this:ForMule" bpdm:isSynchronized="true"/>
+        </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_vy1FMOxBEeGEW4lBUoDdDg" bpdm:label="Mule"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TranscodeService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_l1RqsOYREeGYCvzfuWhYqg" bpdm:label="Mayam"/>
+        <bpdm:namespaceContributor bpdm:url="project:///MayamService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_g-HSAOYSEeGYCvzfuWhYqg" bpdm:label="Drop Box"/>
+        <bpdm:namespaceContributor bpdm:url="project:///DropBoxService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///MuleService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_8WIqcOa_EeGVL7Jq3_1E2g" bpdm:label="Transcoder"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_FgMbwOX7EeGXAKE-AHTcWg" bpdm:label="QC"/>
+        <bpdm:namespaceContributor bpdm:url="project:///QCService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TranscodeData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///Segment.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TXFlagStatus.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///FTP.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///MuleData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///QCData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TempStorageService.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///TempStorageData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_AEAhUPGrEeGbS7hnVLk4pQ" bpdm:label="Temp Storage"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="WFE" bpdm:ID="_ApyYYOX5EeGXAKE-AHTcWg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="mayamAndWFEForPortMayamServiceSOAPPlkVar" partnerLinkType="diag:MayamAndWFEForPortMayamServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Mayam_for_WFE" bpdm:invokedService="MayamService4:MayamService" bpdm:invokedPort="MayamServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/MayamService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_OR_m0PGnEeGbS7hnVLk4pQ:_obl94ObbEeGVL7Jq3_1E2g, _ApyYYOX5EeGXAKE-AHTcWg:__CjgkOYTEeGYCvzfuWhYqg" bpdm:isManaged="true" bpdm:otherPoolId="_l1RqsOYREeGYCvzfuWhYqg"/>
+            <bpel:partnerLink name="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" partnerLinkType="diag:Drop_BoxAndWFEForPortDropBoxServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Drop_Box_for_WFE" bpdm:invokedService="DropBoxService2:DropBoxService" bpdm:invokedPort="DropBoxServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/DropBoxService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_3iingObeEeGVL7Jq3_1E2g, _ApyYYOX5EeGXAKE-AHTcWg:_inulAObfEeGVL7Jq3_1E2g" bpdm:isManaged="true" bpdm:otherPoolId="_g-HSAOYSEeGYCvzfuWhYqg"/>
+            <bpel:partnerLink name="muleAndWFEPlkVar" partnerLinkType="diag:MuleAndWFE" myRole="WFE_for_Mule" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForMule" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/WFE/Mule" bpdm:providedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_3RvGwOxBEeGEW4lBUoDdDg, _ApyYYOX5EeGXAKE-AHTcWg:_buQeQOwuEeGrK-_zkfiVuA, _Q8eeEPENEeGiQd0_oA9vGg:_ULCZ4OwtEeGrK-_zkfiVuA, _ApyYYOX5EeGXAKE-AHTcWg:_0xafEOxBEeGEW4lBUoDdDg, _OR_m0PGnEeGbS7hnVLk4pQ:_TyXlwOwuEeGrK-_zkfiVuA, _W3RkYPEUEeGiQd0_oA9vGg:_NQRKsOwuEeGrK-_zkfiVuA, _ApyYYOX5EeGXAKE-AHTcWg:_YfWSQOwuEeGrK-_zkfiVuA" bpdm:isManaged="true" bpdm:otherPoolId="_vy1FMOxBEeGEW4lBUoDdDg"/>
+            <bpel:partnerLink name="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" partnerLinkType="diag:WFeAndTranscoderForPortTranscodeServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Transcoder_for_WFE" bpdm:invokedService="TranscodeService2:TranscodeService" bpdm:invokedPort="TranscodeServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/TranscodeService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Q8eeEPENEeGiQd0_oA9vGg:_0sxuIPEMEeGiQd0_oA9vGg, _Q8eeEPENEeGiQd0_oA9vGg:_4i7gUPEMEeGiQd0_oA9vGg, _Q8eeEPENEeGiQd0_oA9vGg:_4ufhcObXEeGVL7Jq3_1E2g" bpdm:isManaged="true" bpdm:otherPoolId="_8WIqcOa_EeGVL7Jq3_1E2g"/>
+            <bpel:partnerLink name="qcAndWFEForPortQCServiceSOAPPlkVar" partnerLinkType="diag:QcAndWFEForPortQCServiceSOAPPlk" initializePartnerRole="yes" partnerRole="QC_for_WFE" bpdm:invokedService="QCService:QCService" bpdm:invokedPort="QCServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/QCService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_W3RkYPEUEeGiQd0_oA9vGg:_rs0P4PEUEeGiQd0_oA9vGg, _W3RkYPEUEeGiQd0_oA9vGg:_W3ZgMPEUEeGiQd0_oA9vGg, _W3RkYPEUEeGiQd0_oA9vGg:_A-4fUPEVEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_FgMbwOX7EeGXAKE-AHTcWg"/>
+            <bpel:partnerLink name="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar" partnerLinkType="diag:WFeAndTemp_StorageForPortTempStorageServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Temp_Storage_for_WFE" bpdm:invokedService="TempStorageService:TempStorageService" bpdm:invokedPort="TempStorageServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8080/" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_x_B1kPGoEeGbS7hnVLk4pQ, _ApyYYOX5EeGXAKE-AHTcWg:_O6OZUOYTEeGYCvzfuWhYqg" bpdm:isManaged="true" bpdm:otherPoolId="_AEAhUPGrEeGbS7hnVLk4pQ"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="mayamService4UpdateTXFlagStatusResponseMsg" messageType="MayamService4:UpdateTXFlagStatusResponse" binding="MayamService4:MayamServiceSOAP" operation="UpdateTXFlagStatus" opMsgType="1" bpdm:id="__RcXYOejEeG4StEJkyBriw" bpdm:messageIds="inc:_nA6rMOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="dropBoxService2ReceiveAssetAndNotifyResponseMsg" messageType="DropBoxService2:ReceiveAssetAndNotifyResponse" binding="DropBoxService2:DropBoxServiceSOAP" operation="ReceiveAssetAndNotify" opMsgType="1" bpdm:id="_FOrx5eekEeG4StEJkyBriw" bpdm:messageIds="inc:_sZZLwOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="dropBoxService2ReceiveXmlAndNotifyResponseMsg" messageType="DropBoxService2:ReceiveXmlAndNotifyResponse" binding="DropBoxService2:DropBoxServiceSOAP" operation="ReceiveXmlAndNotify" opMsgType="1" bpdm:id="_IY65ReekEeG4StEJkyBriw" bpdm:messageIds="inc:_v6TtwOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="dropBoxService2ReceiveAssetAndNotifyRequestMsg" messageType="DropBoxService2:ReceiveAssetAndNotifyRequest" binding="DropBoxService2:DropBoxServiceSOAP" operation="ReceiveAssetAndNotify" opMsgType="0" bpdm:messageIds=" out:_sC9owOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="DropBoxService2:ReceiveAssetAndNotifyRequest" bpdm:linkedPart="parameters" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:opMsgType="0" bpdm:operation="ReceiveAssetAndNotify"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="dropBoxService2ReceiveXmlAndNotifyRequestMsg" messageType="DropBoxService2:ReceiveXmlAndNotifyRequest" binding="DropBoxService2:DropBoxServiceSOAP" operation="ReceiveXmlAndNotify" opMsgType="0" bpdm:messageIds=" out:_vnFPwOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="DropBoxService2:ReceiveXmlAndNotifyRequest" bpdm:linkedPart="parameters" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:opMsgType="0" bpdm:operation="ReceiveXmlAndNotify"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="mayamService4UpdateTXFlagStatusRequestMsg" messageType="MayamService4:UpdateTXFlagStatusRequest" binding="MayamService4:MayamServiceSOAP" operation="UpdateTXFlagStatus" opMsgType="0" bpdm:messageIds=" out:_mSh7MOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="MayamService4:UpdateTXFlagStatusRequest" bpdm:linkedPart="parameters" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:opMsgType="0" bpdm:operation="UpdateTXFlagStatus"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="thisStartRequestMsg" messageType="this:StartRequest" bpdm:id="_0xmsUOxBEeGEW4lBUoDdDg" bpdm:messageIds="inc:_0xhz0OxBEeGEW4lBUoDdDg"/>
+            <bpel:variable name="thisStartResponseMsg" messageType="this:StartResponse" bpdm:id="_4AoNEOxBEeGEW4lBUoDdDg" bpdm:messageIds=" out:_4Alw0OxBEeGEW4lBUoDdDg,_nw5qgO0PEeGyWr7tmiSg7A,_MIKM4O0PEeGyWr7tmiSg7A">
+                <bpel:from bpdm:toPart="body">
+                    <bpel:literal bpdm:linkedMessageType="this:StartResponse" bpdm:linkedPart="body"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tempStorageServiceCheckIfMediaExistsRequestMsg" messageType="TempStorageService:CheckIfMediaExistsRequest" binding="TempStorageService:TempStorageServiceSOAP" operation="CheckIfMediaExists" opMsgType="0" bpdm:id="_balmAPGtEeGbS7hnVLk4pQ" bpdm:messageIds=" out:_badDIPGtEeGbS7hnVLk4pQ">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TempStorageService:CheckIfMediaExistsRequest" bpdm:linkedPart="parameters" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:opMsgType="0" bpdm:operation="CheckIfMediaExists"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tempStorageServiceCheckIfMediaExistsResponseMsg" messageType="TempStorageService:CheckIfMediaExistsResponse" binding="TempStorageService:TempStorageServiceSOAP" operation="CheckIfMediaExists" opMsgType="1" bpdm:id="_cWLrkPGtEeGbS7hnVLk4pQ" bpdm:messageIds="inc:_cV9pIPGtEeGbS7hnVLk4pQ"/>
+            <bpel:variable name="tempStorageServiceSendToTempRequestMsg" messageType="TempStorageService:SendToTempRequest" binding="TempStorageService:TempStorageServiceSOAP" operation="SendToTemp" opMsgType="0" bpdm:id="_kAdPoPGtEeGbS7hnVLk4pQ" bpdm:messageIds=" out:_kAUFsPGtEeGbS7hnVLk4pQ">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="TempStorageService:SendToTempRequest" bpdm:linkedPart="parameters" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:opMsgType="0" bpdm:operation="SendToTemp"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tempStorageServiceSendToTempResponseMsg" messageType="TempStorageService:SendToTempResponse" binding="TempStorageService:TempStorageServiceSOAP" operation="SendToTemp" opMsgType="1" bpdm:id="_k3K1NvGtEeGbS7hnVLk4pQ" bpdm:messageIds="inc:_k23TMPGtEeGbS7hnVLk4pQ"/>
+        </bpel:variables>
+        <bpel:links>
+            <bpel:link name="_3ioHEObeEeGVL7Jq3_1E2g"/>
+            <bpel:link name="_UrXDQOwuEeGrK-_zkfiVuA"/>
+        </bpel:links>
+        <bpel:sequence>
+            <bpdm:messagingtask eventType="start: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="Start" bpdm:ID="_0xafEOxBEeGEW4lBUoDdDg">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartRequest" bpdm:ID="_0xhz0OxBEeGEW4lBUoDdDg"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask operation="CheckIfMediaExists" partnerLink="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar" portType="TempStorageService:TempStorageService" isMyRole="false" enableSharing="false" bpdm:label="Check temp storage" bpdm:ID="_x_B1kPGoEeGbS7hnVLk4pQ">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tempStorageServiceCheckIfMediaExistsRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:CheckIfMediaExistsRequest" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_badDIPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tempStorageServiceCheckIfMediaExistsResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:CheckIfMediaExistsResponse" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_cV9pIPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:gateway bpdm:label="Media stored in temp" bpdm:ID="_4OpZgPGoEeGbS7hnVLk4pQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_BQJPMPGpEeGbS7hnVLk4pQ" bpdm:targetDisplayName="[Media stored in temp - QC Flag Checked]">
+                    <bpel:condition>$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists = true()
+<mapper:mapperLink>
+  <mapper:vertice id="28455960" targetPath="$condition" targetedBy="16862091-arg2"></mapper:vertice>
+  <mapper:vertice id="16862091" dimension="78x24" location="324,84">
+    <mapper:value>=</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="6098662" sourcePath="$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists" targetedBy="16862091-arg0"></mapper:vertice>
+  <mapper:vertice id="19979955" dimension="78x24" location="132,48" targetedBy="16862091-arg1">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink></bpel:condition>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_RovOQPGpEeGbS7hnVLk4pQ" bpdm:targetDisplayName="default"></bpdm:linkset>
+                <bpel:sequence></bpel:sequence>
+                <bpel:sequence>
+                    <bpel:scope bpdm:label="Transcode" bpdm:ID="_Q8eeEPENEeGiQd0_oA9vGg">
+                        <bpel:variables>
+                            <bpel:variable name="thisStartResponseMsg" messageType="this:StartResponse" bpdm:messageIds=" out:_3-WwkO0PEeGyWr7tmiSg7A">
+                                <bpel:from bpdm:toPart="body">
+                                    <bpel:literal bpdm:linkedMessageType="this:StartResponse" bpdm:linkedPart="body"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="transcodeService2TranscodeStatusResponseMsg" messageType="TranscodeService2:TranscodeStatusResponse" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="1" bpdm:id="_5msUVfEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_5mbOkPEVEeGiQd0_oA9vGg"/>
+                            <bpel:variable name="transcodeService2TranscodeFinishedResponseMsg" messageType="TranscodeService2:TranscodeFinishedResponse" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="1" bpdm:id="_7zHvoPEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_7yzmkPEVEeGiQd0_oA9vGg"/>
+                            <bpel:variable name="transcodeService2TranscodeFinishedRequestMsg" messageType="TranscodeService2:TranscodeFinishedRequest" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeFinished" opMsgType="0" bpdm:id="_7W9YEPEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_7WznEPEVEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="TranscodeService2:TranscodeFinishedRequest" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:opMsgType="0" bpdm:operation="TranscodeFinished"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="transcodeService2TranscodeStatusRequestMsg" messageType="TranscodeService2:TranscodeStatusRequest" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeStatus" opMsgType="0" bpdm:id="_5K3T8PEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_5KuxEPEVEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="TranscodeService2:TranscodeStatusRequest" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:opMsgType="0" bpdm:operation="TranscodeStatus"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="transcodeService2TranscodeStartRequestMsg" messageType="TranscodeService2:TranscodeStartRequest" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="0" bpdm:id="_3kdW0PEVEeGiQd0_oA9vGg" bpdm:messageIds=" out:_3kVbAPEVEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="TranscodeService2:TranscodeStartRequest" bpdm:linkedPart="parameters" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:opMsgType="0" bpdm:operation="TranscodeStart"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="transcodeService2TranscodeStartResponseMsg" messageType="TranscodeService2:TranscodeStartResponse" binding="TranscodeService2:TranscodeServiceSOAP" operation="TranscodeStart" opMsgType="1" bpdm:id="_366vAPEVEeGiQd0_oA9vGg" bpdm:messageIds="inc:_36sskPEVEeGiQd0_oA9vGg"/>
+                        </bpel:variables>
+                        <bpel:faultHandlers>
+                            <bpel:catchAll>
+                                <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_WIZ-IPESEeGiQd0_oA9vGg" bpdm:type="error"></bpdm:eventHandler>
+                                <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_ULCZ4OwtEeGrK-_zkfiVuA">
+                                    <bpdm:linkset bpdm:type="assignments">
+                                        <bpel:copy>
+                                            <bpel:from>"Transcode Failed"</bpel:from>
+                                            <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="23660924" targetPath="$thisStartResponseMsg.body" targetedBy="22876900-arg0"></mapper:vertice><mapper:vertice id="22876900" dimension="78x24" location="257,75"><mapper:value>"Transcode Failed"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                        </bpel:copy>
+                                    </bpdm:linkset>
+                                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_3-WwkO0PEeGyWr7tmiSg7A"></bpdm:linkset>
+                                </bpdm:messagingtask>
+                            </bpel:catchAll>
+                        </bpel:faultHandlers>
+                        <bpel:sequence>
+                            <bpdm:messagingtask operation="TranscodeStart" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService2:TranscodeService" isMyRole="false" enableSharing="false" bpdm:label="Invoke Transcode" bpdm:ID="_4ufhcObXEeGVL7Jq3_1E2g">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="transcodeService2TranscodeStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeStartRequest" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_3kVbAPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="transcodeService2TranscodeStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeStartResponse" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_36sskPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask operation="TranscodeStatus" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService2:TranscodeService" isMyRole="false" enableSharing="false" bpdm:label="Receive Status Updates" bpdm:ID="_0sxuIPEMEeGiQd0_oA9vGg">
+                                <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
+                                    <bpel:condition bpdm:loopType="repeatUntil">$transcodeService2TranscodeStatusResponseMsg.parameters/tns:status = "Finished"<mapper:mapperLink><mapper:vertice id="26431704" targetPath="$repeat until" targetedBy="2447692-arg2"></mapper:vertice><mapper:vertice id="2447692" dimension="78x24" location="396,12"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="9590262" sourcePath="$transcodeService2TranscodeStatusResponseMsg.parameters/tns:status" targetedBy="2447692-arg0"></mapper:vertice><mapper:vertice id="11100990" dimension="78x24" location="220,84" targetedBy="2447692-arg1"><mapper:value>"Finished"</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
+                                </bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="transcodeService2TranscodeStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeStatusRequest" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_5KuxEPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="transcodeService2TranscodeStatusResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeStatusResponse" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_5mbOkPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask operation="TranscodeFinished" partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" portType="TranscodeService2:TranscodeService" isMyRole="false" enableSharing="false" bpdm:label="Notify" bpdm:ID="_4i7gUPEMEeGiQd0_oA9vGg">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="transcodeService2TranscodeFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeFinishedRequest" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_7WznEPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="transcodeService2TranscodeFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TranscodeService2:TranscodeFinishedResponse" bpdm:binding="TranscodeService2:TranscodeServiceSOAP" bpdm:ID="_7yzmkPEVEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                        </bpel:sequence>
+                    </bpel:scope>
+                </bpel:sequence>
+            </bpdm:gateway>
+            <bpdm:gateway bpdm:label="QC Flag Checked" bpdm:ID="_giJhAOYNEeGYCvzfuWhYqg" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_ssLCQObbEeGVL7Jq3_1E2g" bpdm:targetDisplayName="default"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_uCGlUObZEeGVL7Jq3_1E2g" bpdm:targetDisplayName="[QC Flag Checked - Quality Control]">
+                    <bpel:condition>$transcodeService2TranscodeResponseMsg.parameters/tns:doQC =true()<mapper:mapperLink><mapper:vertice id="3883187" targetPath="$condition" targetedBy="24172726-arg2"></mapper:vertice><mapper:vertice id="24172726" dimension="78x24" location="307,103"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="24117947" sourcePath="$transcodeService2TranscodeResponseMsg.parameters/tns:doQC" targetedBy="24172726-arg0"></mapper:vertice><mapper:vertice id="31779016" dimension="78x24" location="86,80" targetedBy="24172726-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
+                </bpdm:linkset>
+                <bpel:sequence></bpel:sequence>
+                <bpel:sequence>
+                    <bpel:scope bpdm:label="Quality Control" bpdm:ID="_W3RkYPEUEeGiQd0_oA9vGg">
+                        <bpel:variables>
+                            <bpel:variable name="thisStartResponseMsg" messageType="this:StartResponse" bpdm:messageIds=" out:_uRxWgO0PEeGyWr7tmiSg7A">
+                                <bpel:from bpdm:toPart="body">
+                                    <bpel:literal bpdm:linkedMessageType="this:StartResponse" bpdm:linkedPart="body"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="qCServiceQCStartRequestMsg" messageType="QCService:QCStartRequest" binding="QCService:QCServiceSOAP" operation="QCStart" opMsgType="0" bpdm:messageIds=" out:_J_-BIPEcEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="QCService:QCStartRequest" bpdm:linkedPart="parameters" bpdm:binding="QCService:QCServiceSOAP" bpdm:opMsgType="0" bpdm:operation="QCStart"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="qCServiceQCStartResponseMsg" messageType="QCService:QCStartResponse" binding="QCService:QCServiceSOAP" operation="QCStart" opMsgType="1" bpdm:messageIds="inc:_KdfqoPEcEeGiQd0_oA9vGg"/>
+                            <bpel:variable name="qCServiceQCStatusRequestMsg" messageType="QCService:QCStatusRequest" binding="QCService:QCServiceSOAP" operation="QCStatus" opMsgType="0" bpdm:messageIds=" out:_Mz46QPEcEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="QCService:QCStatusRequest" bpdm:linkedPart="parameters" bpdm:binding="QCService:QCServiceSOAP" bpdm:opMsgType="0" bpdm:operation="QCStatus"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="qCServiceQCStatusResponseMsg" messageType="QCService:QCStatusResponse" binding="QCService:QCServiceSOAP" operation="QCStatus" opMsgType="1" bpdm:messageIds="inc:_Nh4BoPEcEeGiQd0_oA9vGg"/>
+                            <bpel:variable name="qCServiceQCFinishedRequestMsg" messageType="QCService:QCFinishedRequest" binding="QCService:QCServiceSOAP" operation="QCFinished" opMsgType="0" bpdm:messageIds=" out:_OYReIPEcEeGiQd0_oA9vGg">
+                                <bpel:from bpdm:toPart="parameters">
+                                    <bpel:literal bpdm:linkedMessageType="QCService:QCFinishedRequest" bpdm:linkedPart="parameters" bpdm:binding="QCService:QCServiceSOAP" bpdm:opMsgType="0" bpdm:operation="QCFinished"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="qCServiceQCFinishedResponseMsg" messageType="QCService:QCFinishedResponse" binding="QCService:QCServiceSOAP" operation="QCFinished" opMsgType="1" bpdm:messageIds="inc:_PwspoPEcEeGiQd0_oA9vGg"/>
+                        </bpel:variables>
+                        <bpel:faultHandlers>
+                            <bpel:catchAll>
+                                <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_0JZaoPEUEeGiQd0_oA9vGg" bpdm:type="error"></bpdm:eventHandler>
+                                <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_NQRKsOwuEeGrK-_zkfiVuA">
+                                    <bpdm:linkset bpdm:type="assignments">
+                                        <bpel:copy>
+                                            <bpel:from>"QC Failed"</bpel:from>
+                                            <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="24752665" targetPath="$thisStartResponseMsg.body" targetedBy="4183230-arg0"></mapper:vertice><mapper:vertice id="4183230" dimension="78x24" location="275,52"><mapper:value>"QC Failed"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                        </bpel:copy>
+                                    </bpdm:linkset>
+                                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_uRxWgO0PEeGyWr7tmiSg7A"></bpdm:linkset>
+                                </bpdm:messagingtask>
+                            </bpel:catchAll>
+                        </bpel:faultHandlers>
+                        <bpel:sequence>
+                            <bpdm:messagingtask operation="QCStart" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="QCService:QCService" isMyRole="false" enableSharing="false" bpdm:label="Invoke QC" bpdm:ID="_W3ZgMPEUEeGiQd0_oA9vGg">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qCServiceQCStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStartRequest" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_J_-BIPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qCServiceQCStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStartResponse" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_KdfqoPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask operation="QCStatus" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="QCService:QCService" isMyRole="false" enableSharing="false" bpdm:label="QC Status" bpdm:ID="_rs0P4PEUEeGiQd0_oA9vGg">
+                                <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
+                                    <bpel:condition bpdm:loopType="repeatUntil">"Finished" = $qCServiceQCStatusResponseMsg.parameters/QCData:Status<mapper:mapperLink><mapper:vertice id="15372614" targetPath="$repeat until" targetedBy="32833918-arg0"></mapper:vertice><mapper:vertice id="32833918" dimension="78x24" location="360,24"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="23313067" dimension="78x24" location="120,24" targetedBy="32833918-arg1"><mapper:value>"Finished"</mapper:value></mapper:vertice><mapper:vertice id="2120419" sourcePath="$qCServiceQCStatusResponseMsg.parameters/QCData:Status" targetedBy="32833918-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                                </bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qCServiceQCStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStatusRequest" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_Mz46QPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qCServiceQCStatusResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStatusResponse" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_Nh4BoPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask operation="QCFinished" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="QCService:QCService" isMyRole="false" enableSharing="false" bpdm:label="Validate Report" bpdm:ID="_A-4fUPEVEeGiQd0_oA9vGg">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qCServiceQCFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCFinishedRequest" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_OYReIPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qCServiceQCFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCFinishedResponse" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_PwspoPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                        </bpel:sequence>
+                    </bpel:scope>
+                </bpel:sequence>
+            </bpdm:gateway>
+            <bpel:scope bpdm:label="XML Generation" bpdm:ID="_OR_m0PGnEeGbS7hnVLk4pQ">
+                <bpel:variables>
+                    <bpel:variable name="mayamService4SendSegmentMetadataResponseMsg" messageType="MayamService4:SendSegmentMetadataResponse" binding="MayamService4:MayamServiceSOAP" operation="SendSegmentMetadata" opMsgType="1" bpdm:id="_5-SbsOejEeG4StEJkyBriw" bpdm:messageIds="inc:_iigmMOeBEeGEdNzyorFk_Q"/>
+                    <bpel:variable name="mayamService4SendSegmentMetadataRequestMsg" messageType="MayamService4:SendSegmentMetadataRequest" binding="MayamService4:MayamServiceSOAP" operation="SendSegmentMetadata" opMsgType="0" bpdm:id="_5OpugOejEeG4StEJkyBriw" bpdm:messageIds=" out:_h09jsOeBEeGEdNzyorFk_Q">
+                        <bpel:from bpdm:toPart="parameters">
+                            <bpel:literal bpdm:linkedMessageType="MayamService4:SendSegmentMetadataRequest" bpdm:linkedPart="parameters" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:opMsgType="0" bpdm:operation="SendSegmentMetadata"></bpel:literal>
+                        </bpel:from>
+                    </bpel:variable>
+                    <bpel:variable name="thisStartResponseMsg" messageType="this:StartResponse" bpdm:messageIds=" out:_ysl8AO0PEeGyWr7tmiSg7A">
+                        <bpel:from bpdm:toPart="body">
+                            <bpel:literal bpdm:linkedMessageType="this:StartResponse" bpdm:linkedPart="body"></bpel:literal>
+                        </bpel:from>
+                    </bpel:variable>
+                </bpel:variables>
+                <bpel:faultHandlers>
+                    <bpel:catch>
+                        <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_RezhEPGnEeGbS7hnVLk4pQ" bpdm:type="error"></bpdm:eventHandler>
+                        <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_TyXlwOwuEeGrK-_zkfiVuA">
+                            <bpdm:linkset bpdm:type="assignments">
+                                <bpel:copy>
+                                    <bpel:from>"Failed: XML not generated correctly"</bpel:from>
+                                    <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="28979867" targetPath="$thisStartResponseMsg.body" targetedBy="29719135-arg0"></mapper:vertice><mapper:vertice id="29719135" dimension="78x24" location="263,39"><mapper:value>"Failed: XML not generated correctly"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                </bpel:copy>
+                            </bpdm:linkset>
+                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_ysl8AO0PEeGyWr7tmiSg7A"></bpdm:linkset>
+                        </bpdm:messagingtask>
+                    </bpel:catch>
+                </bpel:faultHandlers>
+                <bpel:sequence>
+                    <bpdm:messagingtask operation="SendSegmentMetadata" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="MayamService4:MayamService" isMyRole="false" enableSharing="false" bpdm:label="Generate Segment XML" bpdm:ID="_obl94ObbEeGVL7Jq3_1E2g">
+                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="mayamService4SendSegmentMetadataRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="MayamService4:SendSegmentMetadataRequest" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:ID="_h09jsOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="mayamService4SendSegmentMetadataResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="MayamService4:SendSegmentMetadataResponse" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:ID="_iigmMOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                    </bpdm:messagingtask>
+                    <bpdm:messagingtask bpdm:label="XML Validation" bpdm:ID="_UjahkPGnEeGbS7hnVLk4pQ"></bpdm:messagingtask>
+                </bpel:sequence>
+            </bpel:scope>
+            <bpdm:messagingtask operation="ReceiveAssetAndNotify" partnerLink="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" portType="DropBoxService2:DropBoxService" isMyRole="false" enableSharing="false" bpdm:label="FTP asset to AMY folder" bpdm:ID="_3iingObeEeGVL7Jq3_1E2g">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="dropBoxService2ReceiveAssetAndNotifyRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService2:ReceiveAssetAndNotifyRequest" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:ID="_sC9owOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="dropBoxService2ReceiveAssetAndNotifyResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService2:ReceiveAssetAndNotifyResponse" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:ID="_sZZLwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask operation="ReceiveXmlAndNotify" partnerLink="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" portType="DropBoxService2:DropBoxService" isMyRole="false" enableSharing="false" bpdm:label="FTP xml to AMY folder" bpdm:ID="_inulAObfEeGVL7Jq3_1E2g">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="dropBoxService2ReceiveXmlAndNotifyRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService2:ReceiveXmlAndNotifyRequest" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:ID="_vnFPwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="dropBoxService2ReceiveXmlAndNotifyResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="DropBoxService2:ReceiveXmlAndNotifyResponse" bpdm:binding="DropBoxService2:DropBoxServiceSOAP" bpdm:ID="_v6TtwOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:gateway bpdm:label="Asset recieved?" bpdm:ID="_Gb1QsOYTEeGYCvzfuWhYqg" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_l-GV4OYZEeGYCvzfuWhYqg" bpdm:targetDisplayName="[Asset recieved? - XML reveived?]">
+                    <bpel:condition>true() = $dropBoxService2ReceiveAssetAndNotifyResponseMsg.parameters/FTP:Received<mapper:mapperLink><mapper:vertice id="9568816" targetPath="$condition" targetedBy="5928239-arg1"></mapper:vertice><mapper:vertice id="5928239" dimension="78x24" location="280,54"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="24988811" dimension="78x24" location="132,120" targetedBy="5928239-arg0"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="7871320" sourcePath="$dropBoxService2ReceiveAssetAndNotifyResponseMsg.parameters/FTP:Received" targetedBy="5928239-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_ZWDQwOwuEeGrK-_zkfiVuA" bpdm:targetDisplayName="default"></bpdm:linkset>
+                <bpel:sequence>
+                    <bpdm:gateway bpdm:label="XML reveived?" bpdm:ID="_kUCAwOYZEeGYCvzfuWhYqg" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                        <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_ne_g4OYZEeGYCvzfuWhYqg" bpdm:targetDisplayName="[XML reveived? - Move transient assets and xml to temp storage]">
+                            <bpel:condition>true() = $dropBoxService2ReceiveXmlAndNotifyResponseMsg.parameters/FTP:Received<mapper:mapperLink><mapper:vertice id="18366478" targetPath="$condition" targetedBy="28795476-arg1"></mapper:vertice><mapper:vertice id="28795476" dimension="78x24" location="267,39"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="11622377" dimension="78x24" location="139,108" targetedBy="28795476-arg0"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="7565803" sourcePath="$dropBoxService2ReceiveXmlAndNotifyResponseMsg.parameters/FTP:Received" targetedBy="28795476-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                        </bpdm:linkset>
+                        <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_cZrZ0OwuEeGrK-_zkfiVuA" bpdm:targetDisplayName="default"></bpdm:linkset>
+                        <bpel:sequence>
+                            <bpdm:messagingtask operation="SendToTemp" partnerLink="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar" portType="TempStorageService:TempStorageService" isMyRole="false" enableSharing="false" bpdm:label="Move transient assets and xml to temp storage" bpdm:ID="_O6OZUOYTEeGYCvzfuWhYqg">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tempStorageServiceSendToTempRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:SendToTempRequest" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_kAUFsPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tempStorageServiceSendToTempResponseMsg" bpdm:msgVarScopeId="_ApyYYOX5EeGXAKE-AHTcWg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:SendToTempResponse" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_k23TMPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask operation="UpdateTXFlagStatus" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="MayamService4:MayamService" isMyRole="false" enableSharing="false" bpdm:label="Set TX flag" bpdm:ID="__CjgkOYTEeGYCvzfuWhYqg">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="mayamService4UpdateTXFlagStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="MayamService4:UpdateTXFlagStatusRequest" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:ID="_mSh7MOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="mayamService4UpdateTXFlagStatusResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="MayamService4:UpdateTXFlagStatusResponse" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:ID="_nA6rMOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask bpdm:label="Close TX delivery task" bpdm:ID="_SLQ20OYUEeGYCvzfuWhYqg"></bpdm:messagingtask>
+                            <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="Message_End_Event" bpdm:ID="_3RvGwOxBEeGEW4lBUoDdDg">
+                                <bpdm:linkset bpdm:type="assignments">
+                                    <bpel:copy>
+                                        <bpel:from>"Successful"</bpel:from>
+                                        <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="18541181" targetPath="$thisStartResponseMsg.body" targetedBy="8745605-arg0"></mapper:vertice><mapper:vertice id="8745605" dimension="78x24" location="260,72"><mapper:value>"Successful"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                    </bpel:copy>
+                                </bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_4Alw0OxBEeGEW4lBUoDdDg"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                        </bpel:sequence>
+                        <bpel:sequence>
+                            <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_buQeQOwuEeGrK-_zkfiVuA">
+                                <bpdm:linkset bpdm:type="assignments">
+                                    <bpel:copy>
+                                        <bpel:from>"Failed: XML wasn't Received"</bpel:from>
+                                        <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="28356355" targetPath="$thisStartResponseMsg.body" targetedBy="30131496-arg0"></mapper:vertice><mapper:vertice id="30131496" dimension="78x24" location="223,62"><mapper:value>"Failed: XML wasn't Received"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                    </bpel:copy>
+                                </bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_MIKM4O0PEeGyWr7tmiSg7A"></bpdm:linkset>
+                            </bpdm:messagingtask>
+                        </bpel:sequence>
+                    </bpdm:gateway>
+                </bpel:sequence>
+                <bpel:sequence>
+                    <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_YfWSQOwuEeGrK-_zkfiVuA">
+                        <bpdm:linkset bpdm:type="assignments">
+                            <bpel:copy>
+                                <bpel:from>"Failed: Asset wasn't received"</bpel:from>
+                                <bpel:to>$thisStartResponseMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="6439430" targetPath="$thisStartResponseMsg.body" targetedBy="31615842-arg0"></mapper:vertice><mapper:vertice id="31615842" dimension="78x24" location="215,64"><mapper:value>"Failed: Asset wasn't received"</mapper:value></mapper:vertice></mapper:mapperLink>
+                            </bpel:copy>
+                        </bpdm:linkset>
+                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_nw5qgO0PEeGyWr7tmiSg7A"></bpdm:linkset>
+                    </bpdm:messagingtask>
+                </bpel:sequence>
+            </bpdm:gateway>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>

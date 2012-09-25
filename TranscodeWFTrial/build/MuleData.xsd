@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/MuleData" xmlns:tns="http://localhost:8080/MuleData" elementFormDefault="qualified">
+
+    <element name="startRequest" type="string"></element>
+
+    <element name="completionResponse" type="string"></element>
+
+    <element name="transcodeError" type="tns:Error"></element>
+    
+    <complexType name="Error">
+    	<sequence>
+    		<element name="errorMessage" type="string"></element>
+    		<element name="errorSource" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="qcError" type="tns:Error"></element>
+
+    <element name="xmlError" type="tns:Error"></element>
+
+
+    <element name="ftpAssetError" type="tns:Error"></element>
+
+    <element name="ftpXmlError" type="tns:Error"></element>
+</schema>

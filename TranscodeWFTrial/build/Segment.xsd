@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/segment" xmlns:tns="http://localhost:8080/segment" elementFormDefault="qualified">
+
+    <element name="segmentResponse" type="tns:SegmentResponse"></element>
+    
+    <complexType name="SegmentResponse">
+    	<sequence>
+    		<element name="Metadata" type="boolean"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="segmentRequest" type="tns:SegmentRequest"></element>
+    
+    <complexType name="SegmentRequest">
+    	<sequence>
+    		<element name="NewElement" type="string"></element>
+    	</sequence>
+    </complexType>
+</schema>

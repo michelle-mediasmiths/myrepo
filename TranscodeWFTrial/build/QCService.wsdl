@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://localhost:8088/QCService/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="QCService" targetNamespace="http://localhost:8088/QCService/" xmlns:xsd1="http://localhost:8080/QCData">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://localhost:8088/QCService/">
+      <xsd:element name="QualityControl">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="in" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="QualityControlResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="QCStatus">
+      	<xsd:complexType>
+      		<xsd:sequence>
+      			<xsd:element name="in" type="xsd:string"></xsd:element>
+      		</xsd:sequence>
+      	</xsd:complexType>
+      </xsd:element>
+            <xsd:element name="out" type="xsd:string"></xsd:element>
+            <xsd:element name="QCFinished">
+            	<xsd:complexType>
+            		<xsd:sequence>
+            			<xsd:element name="in" type="xsd:string"></xsd:element>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+            <xsd:element name="out1" type="xsd:string"></xsd:element>
+        </xsd:schema>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    	<xsd:import namespace="http://localhost:8080/QCData"
+    		schemaLocation="QCData.xsd">
+    	</xsd:import>
+    	<xsd:import namespace="http://localhost:8080/QCData"
+    		schemaLocation="QCData.xsd">
+    	</xsd:import></xsd:schema></wsdl:types>
+  <wsdl:message name="QCStartRequest">
+    <wsdl:part element="xsd1:qcStartRequest" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="QCStartResponse">
+    <wsdl:part element="xsd1:qcStartResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="QCStatusRequest">
+  	<wsdl:part name="parameters" element="xsd1:qcStatusRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="QCStatusResponse">
+  	<wsdl:part name="parameters" element="xsd1:qcStatusResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="QCFinishedRequest">
+  	<wsdl:part name="parameters" element="xsd1:qcFinishedRequest"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="QCFinishedResponse">
+  	<wsdl:part name="parameters" element="xsd1:qcFinishedResponse"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="QCService">
+    <wsdl:operation name="QCStart">
+      <wsdl:input message="tns:QCStartRequest"/>
+      <wsdl:output message="tns:QCStartResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="QCStatus">
+    	<wsdl:input message="tns:QCStatusRequest"></wsdl:input>
+    	<wsdl:output message="tns:QCStatusResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QCFinished">
+    	<wsdl:input message="tns:QCFinishedRequest"></wsdl:input>
+    	<wsdl:output message="tns:QCFinishedResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="QCServiceSOAP" type="tns:QCService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="QCStart">
+      <soap:operation soapAction="http://localhost:8088/QCService/QCStart"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QCStatus">
+      <soap:operation soapAction="http://localhost:8088/QCService/QCStatus"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QCFinished">
+      <soap:operation soapAction="http://localhost:8088/QCService/QCFinished"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="QCService">
+    <wsdl:port binding="tns:QCServiceSOAP" name="QCServiceSOAP">
+      <soap:address location="http://localhost:8088/QCService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

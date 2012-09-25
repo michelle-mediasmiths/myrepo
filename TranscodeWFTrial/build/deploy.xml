@@ -1,0 +1,23 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<dd:deploy xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03"><dd:process xmlns:Mayam="http://localhost:8080/TranscodeTrial/Mayam" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:Temp_Storage="http://localhost:8080/TranscodeTrial/Temp_Storage" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:MayamService2="http://localhost:8080/segment" xmlns:diag="http://localhost:8080/TranscodeTrial" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:Transcoder="http://localhost:8080/TranscodeTrial/Transcoder" xmlns:FTP="http://localhost:8080/FTP" xmlns:Drop_Box="http://localhost:8080/TranscodeTrial/Drop_Box" xmlns:QC="http://localhost:8080/TranscodeTrial/QC" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:QCService="http://localhost:8088/QCService/" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:Mule="http://localhost:8080/TranscodeTrial/Mule" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:this="http://localhost:8080/TranscodeTrial/WFE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:WFE" fileName="TranscodeTrial-WFE.bpel">
+  <dd:property name="PATH">TranscodeTrial</dd:property>
+  <dd:property name="SVG">TranscodeTrial.svg</dd:property>
+  <dd:provide partnerLink="muleAndWFEPlkVar">
+    <dd:service name="this:CanonicServiceForMule" port="canonicPort"></dd:service>
+  </dd:provide>
+  <dd:invoke partnerLink="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar">
+    <dd:service name="TempStorageService:TempStorageService" port="TempStorageServiceSOAP"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar">
+    <dd:service name="TranscodeService2:TranscodeService" port="TranscodeServiceSOAP"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar">
+    <dd:service name="QCService:QCService" port="QCServiceSOAP"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar">
+    <dd:service name="MayamService4:MayamService" port="MayamServiceSOAP"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar">
+    <dd:service name="DropBoxService2:DropBoxService" port="DropBoxServiceSOAP"></dd:service>
+  </dd:invoke>
+</dd:process></dd:deploy>

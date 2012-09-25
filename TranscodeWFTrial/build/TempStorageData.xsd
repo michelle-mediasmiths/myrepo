@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.example.org/TempStorageData" xmlns:tns="http://www.example.org/TempStorageData" elementFormDefault="qualified">
+
+    <complexType name="ExistsRequest">
+    	<sequence>
+    		<element name="MediaId" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="ExistsResponse">
+    	<sequence>
+    		<element name="MediaId" type="string"></element>
+    		<element name="Exists" type="boolean"></element>
+    		<element name="Location" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="SendToTempRequest">
+    	<sequence>
+    		<element name="Loaction" type="string"></element>
+    		<element name="MediaName" type="string"></element>
+    		<element name="MediaId" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="SendToTempResponse">
+    	<sequence>
+    		<element name="MediaName" type="string"></element>
+    		<element name="TransferredSuccessfully" type="boolean"></element>
+    	</sequence>
+    </complexType>
+    
+    <element name="existsRequest" type="tns:ExistsRequest"></element>
+
+    <element name="existsResponse" type="tns:ExistsResponse"></element>
+
+    <element name="sendToTempRequest" type="tns:SendToTempRequest"></element>
+
+    <element name="sendToTempResponse" type="tns:SendToTempResponse"></element>
+</schema>

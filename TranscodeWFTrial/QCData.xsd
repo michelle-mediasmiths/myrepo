@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/QCData" xmlns:tns="http://localhost:8080/QCData" elementFormDefault="qualified">
+
+    <complexType name="QCStartRequest">
+    	<sequence>
+    		<element name="DataLocation" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="QCFinishedResponse">
+    	<sequence>
+    		<element name="QCSuccess" type="boolean"></element>
+    		<element name="Location" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="qcStartRequest" type="tns:QCStartRequest"></element>
+
+    <element name="qcFinishedResponse" type="tns:QCFinishedResponse"></element>
+
+    <complexType name="QCStartResponse"></complexType>
+
+    <complexType name="QCFinishedRequest"></complexType>
+
+    <complexType name="QCStatusRequest"></complexType>
+
+    <complexType name="QCStatusResponse">
+    	<sequence>
+    		<element name="Status" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="qcStartResponse" type="tns:QCStartResponse"></element>
+
+    <element name="qcStatusRequest" type="tns:QCStatusRequest"></element>
+
+    <element name="qcStatusResponse" type="tns:QCStatusResponse"></element>
+    
+    <element name="qcFinishedRequest" type="tns:QCFinishedRequest"></element>
+</schema>

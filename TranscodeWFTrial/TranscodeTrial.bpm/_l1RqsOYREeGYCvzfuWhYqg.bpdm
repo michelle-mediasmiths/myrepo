@@ -1,0 +1,48 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:WFE="http://thisdiagram/WFE" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost:8080/MayamService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TXFlagStatus="http://localhost:8080/TXFlagStatus" xmlns:Segment="http://localhost:8080/segment" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/Mayam" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Mayam">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="WFE" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MayamService/" bpdm:prefix="MayamService" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MayamService/" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Mayam" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg" bpdm:label="WFE"/>
+        <bpdm:namespaceContributor bpdm:url="project:///MayamService.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="Mayam" bpdm:ID="_l1RqsOYREeGYCvzfuWhYqg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="mayamAndWFEForPortMayamServiceSOAPPlkVar" partnerLinkType="diag:MayamAndWFEForPortMayamServiceSOAPPlk" myRole="Mayam_for_WFE" bpdm:enableSharing="false" bpdm:providedService="tns:MayamService" bpdm:providedPort="MayamServiceSOAP" bpdm:provideSOAPAddress="http://localhost:8080/" bpdm:providedIsDefault="true" bpdm:clientTasks="_l1RqsOYREeGYCvzfuWhYqg:_lIJywOeBEeGEdNzyorFk_Q, _l1RqsOYREeGYCvzfuWhYqg:_gzgtwOeBEeGEdNzyorFk_Q" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="tnsSendSegmentMetadataRequestMsg" messageType="tns:SendSegmentMetadataRequest" binding="tns:MayamServiceSOAP" operation="SendSegmentMetadata" opMsgType="0" bpdm:id="_h1cE1eeBEeGEdNzyorFk_Q" bpdm:messageIds="inc:_h09jsOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="tnsSendSegmentMetadataResponseMsg" messageType="tns:SendSegmentMetadataResponse" binding="tns:MayamServiceSOAP" operation="SendSegmentMetadata" opMsgType="1" bpdm:id="_iiwd0OeBEeGEdNzyorFk_Q" bpdm:messageIds=" out:_iigmMOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="tns:SendSegmentMetadataResponse" bpdm:linkedPart="parameters" bpdm:binding="tns:MayamServiceSOAP" bpdm:opMsgType="1" bpdm:operation="SendSegmentMetadata"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tnsUpdateTXFlagStatusRequestMsg" messageType="tns:UpdateTXFlagStatusRequest" binding="tns:MayamServiceSOAP" operation="UpdateTXFlagStatus" opMsgType="0" bpdm:id="_mS-nIOeBEeGEdNzyorFk_Q" bpdm:messageIds="inc:_mSh7MOeBEeGEdNzyorFk_Q"/>
+            <bpel:variable name="tnsUpdateTXFlagStatusResponseMsg" messageType="tns:UpdateTXFlagStatusResponse" binding="tns:MayamServiceSOAP" operation="UpdateTXFlagStatus" opMsgType="1" bpdm:id="_nBGRYOeBEeGEdNzyorFk_Q" bpdm:messageIds=" out:_nA6rMOeBEeGEdNzyorFk_Q">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="tns:UpdateTXFlagStatusResponse" bpdm:linkedPart="parameters" bpdm:binding="tns:MayamServiceSOAP" bpdm:opMsgType="1" bpdm:operation="UpdateTXFlagStatus"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="SendSegmentMetadata" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="tns:MayamService" isMyRole="true" enableSharing="false" bpdm:label="SendSegmentMetadata" bpdm:ID="_gzgtwOeBEeGEdNzyorFk_Q">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tnsSendSegmentMetadataRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tns:SendSegmentMetadataRequest" bpdm:binding="tns:MayamServiceSOAP" bpdm:ID="_h09jsOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tnsSendSegmentMetadataResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tns:SendSegmentMetadataResponse" bpdm:binding="tns:MayamServiceSOAP" bpdm:ID="_iigmMOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="UpdateTXFlagStatus" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="tns:MayamService" isMyRole="true" enableSharing="false" bpdm:label="UpdateTXFlagStatus" bpdm:ID="_lIJywOeBEeGEdNzyorFk_Q">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tnsUpdateTXFlagStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tns:UpdateTXFlagStatusRequest" bpdm:binding="tns:MayamServiceSOAP" bpdm:ID="_mSh7MOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tnsUpdateTXFlagStatusResponseMsg" bpdm:msgVarScopeId="_l1RqsOYREeGYCvzfuWhYqg" bpdm:variableIsManaged="true" bpdm:messageType="tns:UpdateTXFlagStatusResponse" bpdm:binding="tns:MayamServiceSOAP" bpdm:ID="_nA6rMOeBEeGEdNzyorFk_Q"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>

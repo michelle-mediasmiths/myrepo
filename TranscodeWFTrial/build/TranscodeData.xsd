@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://localhost:8080/TranscodeData" xmlns:tns="http://localhost:8080/TranscodeData" elementFormDefault="qualified">
+
+    <complexType name="TranscodeStartRequest">
+    	<sequence>
+    		<element name="MediaId" type="string"></element>
+    		<element name="MediaName" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="TranscodeFinishedResponse">
+    	<sequence>
+    		<element name="dataLocation" type="string"></element>
+    		<element name="successful" type="boolean"></element>
+    		<element name="doQC" type="boolean"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="transcodeStartRequest" type="tns:TranscodeStartRequest"></element>
+
+    <element name="transcodeStartResponse"
+    	type="string">
+    </element>
+    
+
+    <complexType name="TranscodeStatusRequest">
+    	<sequence>
+    		<element name="transcodeId" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="TranscodeStatusResponse">
+    	<sequence>
+    		<element name="status" type="string"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="TranscodeFinishedRequest">
+    	<sequence>
+    		<element name="transcodeId" type="string"></element>
+    	</sequence>
+    </complexType>
+
+    <element name="transcodeStatusRequest"
+    	type="tns:TranscodeStatusRequest">
+    </element>
+
+    <element name="transcodeStatusResponse"
+    	type="tns:TranscodeStatusResponse">
+    </element>
+
+    <element name="transcodeFinishedRequest"
+    	type="tns:TranscodeFinishedRequest">
+    </element>
+
+    <element name="transcodeFinishedResponse"
+    	type="tns:TranscodeFinishedResponse">
+    </element>
+
+    <complexType name="TranscodeStartResponse">
+    	<sequence>
+    		<element name="TranscodeId" type="string"></element>
+    	</sequence>
+    </complexType>
+</schema>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://localhost:8088/TranscodeService/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="TranscodeService"
+	targetNamespace="http://localhost:8088/TranscodeService/" xmlns:xsd1="http://localhost:8080/TranscodeData">
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://localhost:8088/TranscodeService/">
+			<xsd:element name="Transcode">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="in" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="TranscodeResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="out" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="in" type="xsd:string"></xsd:element>
+			<xsd:element name="out" type="xsd:string"></xsd:element>
+			<xsd:element name="TranscodeFinished">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="in" type="xsd:string"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+            <xsd:element name="out1" type="xsd:string"></xsd:element>
+        </xsd:schema>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://localhost:8080/TranscodeData"
+				schemaLocation="TranscodeData.xsd">
+			</xsd:import>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="TranscodeStartRequest">
+		<wsdl:part element="xsd1:transcodeStartRequest" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="TranscodeStartResponse">
+		<wsdl:part element="xsd1:transcodeStartResponse" name="parameters" />
+	</wsdl:message>
+	<wsdl:message name="TranscodeStatusRequest">
+		<wsdl:part name="parameters" element="xsd1:transcodeStatusRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TranscodeStatusResponse">
+		<wsdl:part name="parameters" element="xsd1:transcodeStatusResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TranscodeFinishedRequest">
+		<wsdl:part name="parameters" element="xsd1:transcodeFinishedRequest"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="TranscodeFinishedResponse">
+		<wsdl:part name="parameters" element="xsd1:transcodeFinishedResponse"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="TranscodeService">
+		<wsdl:operation name="TranscodeStart">
+			<wsdl:input message="tns:TranscodeStartRequest" />
+			<wsdl:output message="tns:TranscodeStartResponse" />
+		</wsdl:operation>
+		<wsdl:operation name="TranscodeStatus">
+			<wsdl:input message="tns:TranscodeStatusRequest"></wsdl:input>
+			<wsdl:output message="tns:TranscodeStatusResponse"></wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="TranscodeFinished">
+			<wsdl:input message="tns:TranscodeFinishedRequest"></wsdl:input>
+			<wsdl:output message="tns:TranscodeFinishedResponse"></wsdl:output>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="TranscodeServiceSOAP" type="tns:TranscodeService">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="TranscodeStart">
+			<soap:operation
+				soapAction="http://localhost:8088/TranscodeService/TranscodeStart" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="TranscodeStatus">
+			<soap:operation
+				soapAction="http://localhost:8088/TranscodeService/TranscodeStatus" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="TranscodeFinished">
+			<soap:operation soapAction="http://localhost:8088/TranscodeService/TranscodeFinished" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="TranscodeService">
+		<wsdl:port binding="tns:TranscodeServiceSOAP" name="TranscodeServiceSOAP">
+			<soap:address location="http://localhost:8088/TranscodeService" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
