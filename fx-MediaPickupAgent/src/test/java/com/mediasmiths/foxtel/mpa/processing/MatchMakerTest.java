@@ -11,10 +11,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
-import com.mediasmiths.foxtel.mpa.processing.MatchMaker;
-import com.mediasmiths.foxtel.mpa.processing.UnmatchedFile;
+import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
 
 public class MatchMakerTest {
 	

@@ -23,7 +23,6 @@ import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 
 public abstract class ValidationTest {
 

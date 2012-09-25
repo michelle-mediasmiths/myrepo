@@ -2,6 +2,10 @@ package com.mediasmiths.foxtel.mpa.delivery;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +17,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
-import com.mediasmiths.foxtel.mpa.delivery.Importer;
+import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.mayam.AlertInterface;
 
 public class ImporterTest {
 
@@ -33,6 +37,10 @@ public class ImporterTest {
 	private String masterID;
 	private MaterialEnvelope envelope;
 	private PendingImport pendingImport;
+	
+	private int deliveryAttemptsToMake=2;
+	private String alertAddress = "alert@foxtel.com.au";
+	private AlertInterface alert;
 
 	@Before
 	public void before() throws IOException {
@@ -42,8 +50,11 @@ public class ImporterTest {
 		failurePath = TestUtil.prepareTempFolder("FAILURE");
 		ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
 
+		alert=mock(AlertInterface.class);
+		
 		toTest = new Importer(pendingImports, ardomeImportPath, failurePath,
-				archivePath);
+				archivePath,""+deliveryAttemptsToMake,alertAddress,alert);
+		
 		importerThread = new Thread(toTest);
 		importerThread.start();
 
@@ -84,12 +95,6 @@ public class ImporterTest {
 		assertFalse(materialxml.exists());
 	}
 
-	public void testDeliveryRetrying() {
-
-		// TODO allow a configurable number of retries
-
-	}
-
 	@Test
 	public void testDeliveryFailure() throws InterruptedException {
 
@@ -113,7 +118,8 @@ public class ImporterTest {
 		assertFalse(media.exists());
 		assertFalse(materialxml.exists());
 		
-		// TODO : test that apropriate failure notifications\tasks are sent\created
+		// check failure alert sent
+		verify(alert).sendAlert(eq(alertAddress), any(String.class), any(Object.class));
 
 	}
 

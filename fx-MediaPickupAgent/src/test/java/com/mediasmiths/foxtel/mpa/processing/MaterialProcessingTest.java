@@ -17,17 +17,17 @@ import org.xml.sax.SAXException;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
+import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
-
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 
 public abstract class MaterialProcessingTest {
 
@@ -47,6 +47,8 @@ public abstract class MaterialProcessingTest {
 	Thread processorThread;
 	MediaCheck mediaCheck;
 	String materialXMLPath;
+	AlertInterface alert;
+	String alertRecipient = "alert@foxtel.com.au";
 
 	final String TITLE_ID = "TITLE_ID";
 	final String MATERIAL_ID = "MATERIAL_ID";
@@ -68,6 +70,7 @@ public abstract class MaterialProcessingTest {
 		mayamClient = mock(MayamClient.class);
 		matchMaker = mock(MatchMaker.class);
 		mediaCheck = mock(MediaCheck.class);
+		alert = mock(AlertInterface.class);
 
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
@@ -78,7 +81,8 @@ public abstract class MaterialProcessingTest {
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller,
-				mayamClient, matchMaker, mediaCheck, failurePath, archivePath);
+				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,
+				alert, alertRecipient);
 
 		processorThread = new Thread(processor);
 		processorThread.start();
@@ -102,8 +106,9 @@ public abstract class MaterialProcessingTest {
 
 		@Override
 		public boolean matches(Object argument) {
-			return argument != null && ((ProgrammeMaterialType) argument).getMaterialID().equals(
-					MATERIAL_ID);
+			return argument != null
+					&& ((ProgrammeMaterialType) argument).getMaterialID()
+							.equals(MATERIAL_ID);
 		}
 	};
 
@@ -111,7 +116,9 @@ public abstract class MaterialProcessingTest {
 
 		@Override
 		public boolean matches(Object argument) {
-			return argument != null && ((MaterialEnvelope) argument).getFile().equals(materialxml);
+			return argument != null
+					&& ((MaterialEnvelope) argument).getFile().equals(
+							materialxml);
 		}
 	};
 
@@ -119,8 +126,9 @@ public abstract class MaterialProcessingTest {
 
 		@Override
 		public boolean matches(Object argument) {
-			return argument != null && ((Package) argument).getPresentationID()
-					.equals(PACKAGE_ID_1);
+			return argument != null
+					&& ((Package) argument).getPresentationID().equals(
+							PACKAGE_ID_1);
 		}
 	};
 
@@ -128,8 +136,9 @@ public abstract class MaterialProcessingTest {
 
 		@Override
 		public boolean matches(Object argument) {
-			return argument != null && ((Package) argument).getPresentationID()
-					.equals(PACKAGE_ID_2);
+			return argument != null
+					&& ((Package) argument).getPresentationID().equals(
+							PACKAGE_ID_2);
 		}
 	};
 
@@ -137,8 +146,9 @@ public abstract class MaterialProcessingTest {
 
 		@Override
 		public boolean matches(Object argument) {
-			return argument != null && ((Package) argument).getPresentationID()
-					.equals(PACKAGE_ID_3);
+			return argument != null
+					&& ((Package) argument).getPresentationID().equals(
+							PACKAGE_ID_3);
 		}
 	};
 

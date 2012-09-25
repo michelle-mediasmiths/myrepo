@@ -29,7 +29,6 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 
 	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Test

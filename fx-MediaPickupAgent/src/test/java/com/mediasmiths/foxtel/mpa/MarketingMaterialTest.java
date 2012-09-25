@@ -16,8 +16,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 

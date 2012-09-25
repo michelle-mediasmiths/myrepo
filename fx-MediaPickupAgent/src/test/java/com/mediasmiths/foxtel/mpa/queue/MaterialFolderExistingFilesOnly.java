@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 
 public class MaterialFolderExistingFilesOnly extends MaterialFolderWatcher {
 

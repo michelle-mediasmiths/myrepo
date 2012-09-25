@@ -8,9 +8,9 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.foxtel.mpa.delivery.Importer;
 import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
+import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
 public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 

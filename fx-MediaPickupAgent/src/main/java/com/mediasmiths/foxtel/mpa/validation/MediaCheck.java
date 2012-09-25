@@ -84,7 +84,6 @@ public class MediaCheck {
 
 	protected boolean checkSumMatches(File mxf, FileMediaType media) {
 
-		// TODO : FX-29 calculate checksum
 		try {
 
 			String expectedMd5 = media.getChecksum().toString(HEX_RADIX);

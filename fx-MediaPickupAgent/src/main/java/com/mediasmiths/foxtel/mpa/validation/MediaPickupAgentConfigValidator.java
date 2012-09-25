@@ -6,9 +6,9 @@ import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
-
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -16,7 +16,6 @@ import com.mediasmiths.foxtel.agent.validation.ConfigValidationFailureException;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 
 public class MediaPickupAgentConfigValidator extends ConfigValidator {
-
 
 	@Inject
 	public MediaPickupAgentConfigValidator(
@@ -27,7 +26,8 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(ARDOME_IMPORT_FOLDER) String importFolder,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
-			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges)
+			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
+			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount)
 			throws ConfigValidationFailureException {
 		super(messagePath, failurePath, archivePath, receiptPath);
 
@@ -64,6 +64,15 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			configValidationFails(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
 					timeBetweenPurges);
 		}
+		
+		if(isValidInt(deliveryAttemptCount)){
+			configValidationPasses(DELIVERY_ATTEMPT_COUNT,
+					timeBetweenPurges);
+		} else {
+			anyFailures = true;
+			configValidationFails(DELIVERY_ATTEMPT_COUNT,
+					deliveryAttemptCount);
+		}
 
 		if (anyFailures) {
 			onFailure();
@@ -72,13 +81,24 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
 	private boolean isValidLong(String value) {
 		try {
-			Long l = Long.parseLong(value); //NOSONAR 
-			//sonar complains about this but I don't care, there is not really a better way of making this check
+			Long l = Long.parseLong(value); // NOSONAR
+			// sonar complains about this but I don't care, there is not really
+			// a better way of making this check
 			return true;
 		} catch (NumberFormatException nfe) {
 			return false;
 		}
 
+	}
+
+	private boolean isValidInt(String value) {
+		try {
+			int i = Integer.parseInt(value); // NOSONAR
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+
+		}
 	}
 
 }

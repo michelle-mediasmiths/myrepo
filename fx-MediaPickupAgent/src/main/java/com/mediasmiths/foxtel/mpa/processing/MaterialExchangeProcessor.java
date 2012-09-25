@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 
 import java.io.File;
 import java.util.List;
@@ -25,15 +26,16 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope; 
+import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
+import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
+import com.mediasmiths.mayam.AlertInterface;
+import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
@@ -46,21 +48,31 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
+	private final AlertInterface alert;
+	private final String deliveryFailureAlertReceipient;
+
 	@Inject
 	public MaterialExchangeProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
 			MaterialExchangeValidator messageValidator,
-			ReceiptWriter receiptWriter, Unmarshaller unmarhsaller,
-			MayamClient mayamClient, MatchMaker matchMaker,
-			MediaCheck mediaCheck, @Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath) {
+			ReceiptWriter receiptWriter,
+			Unmarshaller unmarhsaller,
+			MayamClient mayamClient,
+			MatchMaker matchMaker,
+			MediaCheck mediaCheck,
+			@Named(FAILURE_PATH) String failurePath,
+			@Named(ARCHIVE_PATH) String archivePath,
+			AlertInterface alert,
+			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
 				unmarhsaller, failurePath, archivePath);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
 		this.mediaCheck = mediaCheck;
+		this.alert = alert;
+		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
 	}
@@ -79,8 +91,9 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
-		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { // NOSONAR
+		// throwing unchecked exception as hint to users of class that this
+		// method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof Material)) {
 			throw new ClassCastException(String.format(
@@ -144,7 +157,10 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 		if (!FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
 				.equals("mxf")) {
-			logger.warn("a non mxf has arrived!"); //this really shouldn't happen if the MaterialFolderWatcher is doing its job right
+			logger.warn("a non mxf has arrived!"); // this really shouldn't
+													// happen if the
+													// MaterialFolderWatcher is
+													// doing its job right
 			return;
 		}
 
@@ -175,12 +191,18 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			logger.error("Media check failed");
 			moveFileToFailureFolder(mxf);
 			moveFileToFailureFolder(materialEnvelope.getFile());
-			// TODO alert someone about the failure \ item moved to quarrentine
+			
+
+			// send out alert that there has been an error
+			StringBuilder sb = new StringBuilder();
+			sb.append(String.format(
+					"Media check of Material %s failed",
+					FilenameUtils.getName(mxf.getAbsolutePath())));
+			alert.sendAlert(deliveryFailureAlertReceipient, "Media Pickup Failure",
+					sb.toString());
+			
 		}
 	}
-	
-
-	
 
 	/**
 	 * Update any missing metadata for the Item in Viz Ardome with the
@@ -232,7 +254,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	 */
 	private void createOrUpdateTitle(Title title) throws MayamClientException,
 			MessageProcessingFailedException {
- 
+
 		MayamClientErrorCode result;
 
 		if (!mayamClient.titleExists(title.getTitleID())) {
@@ -278,7 +300,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	private void updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial)
 			throws MessageProcessingFailedException {
 		logger.trace("updatingProgrammeMaterial");
-		
+
 		MayamClientErrorCode result = mayamClient
 				.updateMaterial(programmeMaterial);
 
@@ -326,7 +348,14 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	protected void messageValidationFailed(String filePath,
 			MessageValidationResult result) {
 
-		// TODO notify someone of the error via email
+		// send out alert that there has been an error validating a material
+		// message
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format(
+				"Validation of Material message %s failed for reason %s",
+				FilenameUtils.getName(filePath), result.toString()));
+		alert.sendAlert(deliveryFailureAlertReceipient, "Media Pickup Failure",
+				sb.toString());
 
 	}
 }

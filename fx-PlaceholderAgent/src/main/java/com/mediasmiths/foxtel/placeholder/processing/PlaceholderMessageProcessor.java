@@ -2,9 +2,11 @@ package com.mediasmiths.foxtel.placeholder.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.placeholder.PlaceholderAgentConfiguration.PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT;
 
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
@@ -25,10 +27,10 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
+import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-
 
 /**
  * Processes placeholder messages taken from a queue
@@ -37,23 +39,33 @@ import com.mediasmiths.mayam.MayamClientException;
  * @see PlaceholderMessageValidator
  * 
  */
-public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage> {
+public class PlaceholderMessageProcessor extends
+		MessageProcessor<PlaceholderMessage> {
 
-	private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
+	private static Logger logger = Logger
+			.getLogger(PlaceholderMessageProcessor.class);
 
 	private final MayamClient mayamClient;
 
-	//TODO create compliance task if placeholder was for such
-	
+	private final AlertInterface alert;
+	private final String failureAlertRecipient;
+
 	@Inject
 	public PlaceholderMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
-			PlaceholderMessageValidator messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, MayamClient mayamClient,
+			PlaceholderMessageValidator messageValidator,
+			ReceiptWriter receiptWriter,
+			Unmarshaller unmarhsaller,
+			MayamClient mayamClient,
 			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath) {
-		super(filePathsPendingProcessing,messageValidator,receiptWriter,unmarhsaller,failurePath,archivePath);
+			@Named(ARCHIVE_PATH) String archivePath,
+			AlertInterface alert,
+			@Named(PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT) String failureAlertRecipient) {
+		super(filePathsPendingProcessing, messageValidator, receiptWriter,
+				unmarhsaller, failurePath, archivePath);
 		this.mayamClient = mayamClient;
+		this.alert = alert;
+		this.failureAlertRecipient = failureAlertRecipient;
 		logger.debug("Using failure path: " + failurePath);
 		logger.debug("Using archivePath path: " + archivePath);
 	}
@@ -76,7 +88,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if material %s exists",
 					action.getMaterial().getMaterialD()), e);
 			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 		}
 	}
 
@@ -101,7 +113,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if package %s exists",
 					action.getPackage().getPresentationID()), e);
 			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 		}
 	}
 
@@ -145,7 +157,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"MayamClientException querying if title %s exists",
 					action.getTitleID()), e);
 			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 		}
 	}
 
@@ -165,7 +177,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 	}
 
-
 	/**
 	 * Processes a PlaceHoldermessage (which is assumed to have already been
 	 * validated)
@@ -176,9 +187,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	@Override
 	public void processMessage(MessageEnvelope<PlaceholderMessage> envelope)
 			throws MessageProcessingFailedException {
-		
+
 		PlaceholderMessage message = envelope.getMessage();
-		
+
 		Object action = message.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
@@ -215,25 +226,30 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 
 	@Override
-	protected String getIDFromMessage(MessageEnvelope<PlaceholderMessage> envelope) {
+	protected String getIDFromMessage(
+			MessageEnvelope<PlaceholderMessage> envelope) {
 		return envelope.getMessage().getMessageID();
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
-		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
-		
-		if(! (unmarshalled instanceof PlaceholderMessage)){
-			throw new ClassCastException(String.format("unmarshalled type %s is not a PlaceholderMessage",
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { // NOSONAR
+		// throwing unchecked exception as hint to users of class that this
+		// method is likely to throw ClassCastException
+
+		if (!(unmarshalled instanceof PlaceholderMessage)) {
+			throw new ClassCastException(String.format(
+					"unmarshalled type %s is not a PlaceholderMessage",
 					unmarshalled.getClass().toString()));
 		}
-		
+
 	}
 
 	@Override
 	protected void processNonMessageFile(String filePath) {
-		logger.error("Placeholder Agent does not expect non message files");	
-		throw new RuntimeException(String.format("Placeholder Agent does not expect non message files %s",filePath));
+		logger.error("Placeholder Agent does not expect non message files");
+		throw new RuntimeException(String.format(
+				"Placeholder Agent does not expect non message files %s",
+				filePath));
 	}
 
 	@Override
@@ -244,9 +260,15 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	@Override
 	protected void messageValidationFailed(String filePath,
 			MessageValidationResult result) {
-	
-		//TODO notify someone of the failure
-		
+
+		// send out alert that there has been an error validating message
+		StringBuilder sb = new StringBuilder();
+		sb.append(String
+				.format("Validation of Placeholder management message %s failed for reason %s",
+						FilenameUtils.getName(filePath), result.toString()));
+		alert.sendAlert(failureAlertRecipient,
+				"Placeholder Message Validation Failure", sb.toString());
+
 	}
 
 }

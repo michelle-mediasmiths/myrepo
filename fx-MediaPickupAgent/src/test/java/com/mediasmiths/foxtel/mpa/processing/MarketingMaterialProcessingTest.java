@@ -122,13 +122,13 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 		assertFalse(materialxml.exists());
 		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
 				new File(failurePath)).exists());
-
-		// TODO : check any alerts sent
-
 	}
 
 	@Test
-	public void testProcessingFailsWhenErrorQueryingTitleExistance() throws DatatypeConfigurationException, MayamClientException, InterruptedException, FileNotFoundException, JAXBException, SAXException {
+	public void testProcessingFailsWhenErrorQueryingTitleExistance()
+			throws DatatypeConfigurationException, MayamClientException,
+			InterruptedException, FileNotFoundException, JAXBException,
+			SAXException {
 		// prepare files
 		material = MarketingMaterialTest.getMaterial(TITLE_ID);
 
@@ -150,8 +150,6 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 		assertFalse(materialxml.exists());
 		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
 				new File(failurePath)).exists());
-
-		// TODO : check any alerts sent
 	}
 
 	@Test

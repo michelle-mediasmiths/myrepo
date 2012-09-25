@@ -15,9 +15,9 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.foxtel.mpa.Util;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 

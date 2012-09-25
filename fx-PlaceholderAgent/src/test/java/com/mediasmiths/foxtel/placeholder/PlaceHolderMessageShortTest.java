@@ -30,6 +30,7 @@ import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
+import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
@@ -54,6 +55,9 @@ public abstract class PlaceHolderMessageShortTest {
 			return true;
 		}
 	};
+	protected final AlertInterface alert = mock(AlertInterface.class);
+	protected final String alertRecipient = "alert@foxtel.com.au";
+	
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 
@@ -84,7 +88,7 @@ public abstract class PlaceHolderMessageShortTest {
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,mayamValidator, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
-				unmarhsaller, mayamClient, "failure path", "receipt path");
+				unmarhsaller, mayamClient, "failure path", "receipt path",alert,alertRecipient);
 
 	}
 

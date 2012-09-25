@@ -52,19 +52,18 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.mpa.delivery.DoNothingImporter;
+import com.mediasmiths.foxtel.mpa.delivery.Importer;
+import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.processing.DoNothingUnmatchedMaterial;
 import com.mediasmiths.foxtel.mpa.processing.SingleMessageProcessor;
+import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderExistingFilesOnly;
+import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
-import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
-import com.mediasmiths.foxtel.mpa.delivery.Importer;
-import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
-import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
-import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 
 public class ProgrammeMaterialTest {
 

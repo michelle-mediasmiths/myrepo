@@ -3,6 +3,8 @@ package com.mediasmiths.foxtel.mpa.delivery;
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.mayam.AlertInterface;
 
 public class Importer implements Runnable {
 
@@ -26,16 +29,27 @@ public class Importer implements Runnable {
 	private final String targetFolder;
 	private final String quarrentineFolder;
 	private final String archiveFolder;
+	private final int deliveryAttemptsToMake;
+
+	private final AlertInterface alert;
+	private final String deliveryFailureAlertReceipient;
 
 	@Inject
-	public Importer(PendingImportQueue pendingImports,
+	public Importer(
+			PendingImportQueue pendingImports,
 			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
 			@Named(FAILURE_PATH) String quarrentineFolder,
-			@Named(ARCHIVE_PATH) String archiveFolder) {
+			@Named(ARCHIVE_PATH) String archiveFolder,
+			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
+			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient,
+			AlertInterface alert) {
 		this.pendingImports = pendingImports;
 		this.targetFolder = targetFolder;
 		this.quarrentineFolder = quarrentineFolder;
 		this.archiveFolder = archiveFolder;
+		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
+		this.alert = alert;
+		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
 	}
 
 	@Override
@@ -46,7 +60,7 @@ public class Importer implements Runnable {
 			try {
 				PendingImport pi = pendingImports.take();
 				logger.info("Picked up an import");
-				deliver(pi);
+				deliver(pi, 1);
 				logger.trace("Finished with import");
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
@@ -68,27 +82,34 @@ public class Importer implements Runnable {
 	 * 
 	 * @param pi
 	 */
-	protected void deliver(PendingImport pi) {
+	protected void deliver(PendingImport pi, int attempt) {
 
-		if(pi.getMaterialEnvelope().getMasterID() == null || pi.getMaterialEnvelope().getMasterID().equals("null")){
+		if (pi.getMaterialEnvelope().getMasterID() == null
+				|| pi.getMaterialEnvelope().getMasterID().equals("null")) {
 			logger.error("Missing masterID in PendingImport");
 		}
-		
+
 		File src = pi.getMediaFile();
 		File dst = new File(targetFolder, pi.getMaterialEnvelope()
 				.getMasterID() + ".mxf");
 
-		logger.debug(String.format("Attempting to move from %s to %s",
-				src.getAbsolutePath(), dst.getAbsolutePath()));
+		logger.debug(String.format(
+				"Attempting to move from %s to %s (attempt %d)",
+				src.getAbsolutePath(), dst.getAbsolutePath(), attempt));
 
 		try {
 			FileUtils.moveFile(src, dst);
 		} catch (IOException e) {
-			logger.error(String.format("Error moving file from %s to %s",
-					src.getAbsolutePath(), dst.getAbsolutePath()),e);
-			onDeliveryFailure(pi);
+			logger.error(String.format(
+					"Error moving file from %s to %s on attempt number %d",
+					src.getAbsolutePath(), dst.getAbsolutePath(), attempt), e);
 
-			// TODO allow a configurable number of retries
+			// allows a configurable number of retries
+			if (attempt == deliveryAttemptsToMake) {
+				onDeliveryFailure(pi);
+			} else {
+				deliver(pi, attempt + 1);
+			}
 
 			return;
 		}
@@ -103,10 +124,19 @@ public class Importer implements Runnable {
 		try {
 			FileUtils.moveFile(src, dst);
 		} catch (IOException e) {
-			logger.error(String
-					.format("Error moving file from %s to %s though move for media succeeded",
-							src.getAbsolutePath(), dst.getAbsolutePath()),e);
-			// TODO : notify someone
+			logger.error(
+					String.format(
+							"Error moving file from %s to %s though move for media succeeded",
+							src.getAbsolutePath(), dst.getAbsolutePath()), e);
+
+			// send out alert that companion xml did not move to archive
+			StringBuilder sb = new StringBuilder();
+			sb.append(String
+					.format("There has been a failure to archive companion xml for material %d though the material successfully moved to the Viz Ardome auto import location",
+							pi.getMaterialEnvelope().getMasterID()));
+			alert.sendAlert(deliveryFailureAlertReceipient,
+					"Media Pickup Companion XML archive failure", sb.toString());
+
 			return;
 		}
 	}
@@ -129,21 +159,31 @@ public class Importer implements Runnable {
 				FileUtils.moveFile(src, dst);
 			} catch (IOException e) {
 				logger.fatal(String.format("Error moving file from %s to %s",
-						src, dst),e);
+						src, dst), e);
 			}
 
 			src = pi.getMaterialEnvelope().getFile();
 			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
-					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR +  "xml");
+					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "xml");
 
 			try {
 				FileUtils.moveFile(src, dst);
 			} catch (IOException e) {
 				logger.fatal(String.format("Error moving file from %s to %s",
-						src, dst),e);
+						src, dst), e);
 			}
 		} finally {
-			// TODO send out notification emails
+
+			// send out alert for failed import
+			StringBuilder sb = new StringBuilder();
+			sb.append(String
+					.format("There has been a failure to deliver material to the Viz Ardome auto import location"));
+			sb.append(String.format(
+					"The material with ID %s has been quarrentined", pi
+							.getMaterialEnvelope().getMasterID()));
+			alert.sendAlert(deliveryFailureAlertReceipient,
+					"Media Pickup Failure", sb.toString());
+
 		}
 
 	}

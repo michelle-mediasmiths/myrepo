@@ -16,7 +16,6 @@ import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 
 public class MaterialFolderWatcherTest {
 

@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
@@ -10,11 +11,13 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.mayam.AlertInterface;
 
 public class UnmatchedMaterialProcessor implements Runnable {
 
@@ -25,6 +28,8 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private final long sleepTime;
 	private boolean stopRequested = false;
 
+	private final AlertInterface alert;
+	private final String deliveryFailureAlertReceipient;
 
 	private static Logger logger = Logger
 			.getLogger(UnmatchedMaterialProcessor.class);
@@ -35,12 +40,15 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(FAILURE_PATH) String failedMessagesFolder,
-			MatchMaker matchMaker) {
+			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient,
+			MatchMaker matchMaker, AlertInterface alert) {
 		this.timeout = timeout;
 		this.matchMaker = matchMaker;
 		this.emergencyImportFolder = emergencyImportFolder;
-		this.failedMessagesFolder=failedMessagesFolder;
-		this.sleepTime=sleepTime.longValue();
+		this.failedMessagesFolder = failedMessagesFolder;
+		this.sleepTime = sleepTime.longValue();
+		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
+		this.alert = alert;
 	}
 
 	@Override
@@ -54,9 +62,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 				process();
 
 			} catch (InterruptedException e) {
-				logger.warn("Interrupted", e);
-				// TODO establish sensible behaviour for these sorts of
-				// interrupts and apropriate sleep times
+				logger.info("Interrupted", e);
 				stopRequested = true;
 			}
 
@@ -71,8 +77,8 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	}
 
 	private void processUnmatchedMXFs() {
-		Collection<UnmatchedFile> unmatchedMXFs = matchMaker.purgeUnmatchedMXFs(timeout
-				.longValue());
+		Collection<UnmatchedFile> unmatchedMXFs = matchMaker
+				.purgeUnmatchedMXFs(timeout.longValue());
 		logger.info(String.format("Found %d unmatched material mxfs",
 				unmatchedMXFs.size()));
 
@@ -90,15 +96,23 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			 */
 
 			try {
-				FileUtils.moveFileToDirectory(new File(mxf.getFilePath()), new File(emergencyImportFolder), false);
+				FileUtils.moveFileToDirectory(new File(mxf.getFilePath()),
+						new File(emergencyImportFolder), false);
 			} catch (IOException e) {
-				logger.fatal("IOException moving umatched mxf to emergency import folder",e);
-			}
-			
-			// TODO : notify someone via email?
-			
-		}
+				logger.fatal(
+						"IOException moving umatched mxf to emergency import folder",
+						e);
 
+				// send out alert that material could not be transferd to
+				// emergency import folder
+				StringBuilder sb = new StringBuilder();
+				sb.append(String
+						.format("There has been a failure to deliver unmatched material %s to the Viz Ardome emergency import folder",
+								FilenameUtils.getName(mxf.getFilePath())));
+				alert.sendAlert(deliveryFailureAlertReceipient,
+						"Media Pickup Failure", sb.toString());
+			}
+		}
 	}
 
 	private void processUnmatchedMessages() {
@@ -110,15 +124,25 @@ public class UnmatchedMaterialProcessor implements Runnable {
 		for (MaterialEnvelope me : unmatchedMessages) {
 			logger.info(String.format("no mxf for %s", me.getFile()
 					.getAbsolutePath()));
-			
-			//move message to failure folder
+
+			// move message to failure folder
 			try {
-				FileUtils.moveFileToDirectory(me.getFile(), new File(failedMessagesFolder), false);
+				FileUtils.moveFileToDirectory(me.getFile(), new File(
+						failedMessagesFolder), false);
 			} catch (IOException e) {
-				logger.fatal("IOException moving umatched xml to the failed messages folder",e);
+				logger.fatal(
+						"IOException moving umatched xml to the failed messages folder",
+						e);
 			}
-			
-			// TODO : notify someone via email?
+
+			// send out alert that no material arrived with this xml file
+			StringBuilder sb = new StringBuilder();
+			sb.append(String
+					.format("There has been been no media received for Material message %s with MasterID %s ",
+							FilenameUtils.getName(me.getFile()
+									.getAbsolutePath()), me.getMasterID()));
+			alert.sendAlert(deliveryFailureAlertReceipient,
+					"Media Pickup Failure", sb.toString());
 		}
 	}
 

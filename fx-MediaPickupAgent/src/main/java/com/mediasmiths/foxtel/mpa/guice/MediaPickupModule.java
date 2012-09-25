@@ -13,11 +13,11 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
+import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientImpl;
 
 public class MediaPickupModule extends AbstractModule {
 
