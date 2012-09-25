@@ -44,6 +44,9 @@ public class TestDeleteMaterial extends ValidMessagePickTest{
 	
 	@Override
 	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+		
+		when(mayamClient.materialExists((String) anyObject())).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected((String) anyObject())).thenReturn(false);
 		when(mayamClient.deleteMaterial((DeleteMaterial) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
 	}
 
@@ -59,6 +62,8 @@ public class TestDeleteMaterial extends ValidMessagePickTest{
 
 	@Override
 	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.materialExists((String) anyObject())).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected((String) anyObject())).thenReturn(false);
 		when(mayamClient.deleteMaterial((DeleteMaterial) anyObject())).thenReturn(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 	}
 

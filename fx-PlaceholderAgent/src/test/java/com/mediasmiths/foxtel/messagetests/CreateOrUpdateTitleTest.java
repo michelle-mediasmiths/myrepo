@@ -90,7 +90,6 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		System.out.println("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID");
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		File temp = createTempXMLFile(message, "validCreateTitle");
-		
 		assertEquals(MessageValidationResult.IS_VALID, 
 				validator.validateFile(temp.getAbsolutePath()));
 	}
@@ -147,7 +146,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		File temp = createTempXMLFile (message, "createTitleUnknownChannel");
 		
-		assertEquals(MessageValidationResult.CHANNEL_NAME_INVALID,
+		assertEquals(MessageValidationResult.UNKOWN_CHANNEL,
 				validator.validateFile(temp.getAbsolutePath()));
 	}
 	

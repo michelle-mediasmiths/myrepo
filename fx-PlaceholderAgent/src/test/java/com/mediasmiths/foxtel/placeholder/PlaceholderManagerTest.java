@@ -66,7 +66,7 @@ public abstract class PlaceholderManagerTest {
 	}
 
 	@Before
-	public void before() {
+	public void before() throws IOException {
 		mayamClient = mock(MayamClient.class);
 		mayamValidator = new MayamValidator(null) {
 			@Override
@@ -85,7 +85,7 @@ public abstract class PlaceholderManagerTest {
 			}
 		};
 		receiptWriter = mock(ReceiptWriter.class);
-		channelValidator = mock(ChannelValidator.class);
+		channelValidator = new ChannelValidatorImpl();
 		try {
 			validator = new PlaceholderMessageValidator(unmarhsaller,
 					mayamClient, mayamValidator, receiptWriter,

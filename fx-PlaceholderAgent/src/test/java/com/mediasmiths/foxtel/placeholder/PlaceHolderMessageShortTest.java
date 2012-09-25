@@ -34,6 +34,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorImpl;
 
 public abstract class PlaceHolderMessageShortTest {
 
@@ -41,8 +42,18 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
 	protected final MayamValidator mayamValidator = mock(MayamValidator.class);
-	protected final ChannelValidator channelValidator = mock(ChannelValidator.class);
-	
+	protected final ChannelValidator channelValidator = new ChannelValidator() {
+		
+		@Override
+		public boolean isValidNameForTag(String channelTag, String channelName) {
+			return true;
+		}
+		
+		@Override
+		public boolean isValidFormatForTag(String channelTag, String channelFormat) {
+			return true;
+		}
+	};
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 

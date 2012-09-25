@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -26,9 +27,12 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.validmessagepickup.ValidMessagePickTest;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeletePackageTest extends PlaceHolderMessageShortTest {
+	
+	private static Logger logger = Logger.getLogger(DeletePackageTest.class);
 	
 	public DeletePackageTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -38,7 +42,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ProcessingTests.class)
 	public void testDeletePackageProcessing() throws MessageProcessingFailedException {
 		
-		System.out.println ("Delete package processing test");
+		logger.info ("Delete package processing test");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
 		MessageEnvelope <PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
@@ -52,7 +56,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testDeletePackageXSDInvalid() throws Exception {
 		
-		System.out.println("FXT 4.1.11.2 - Non XSD compliance");
+		logger.info("FXT 4.1.11.2 - Non XSD compliance");
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		IOUtils.write("InvalidDeletePackage", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
@@ -64,7 +68,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testDeletePackageNotProtected () throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists");
+		logger.info("FXT 4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(message, "validDeletePackageNotProtected");
@@ -79,7 +83,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category (ValidationTests.class) 
 	public void testDeletePackageDoesntExist() throws Exception {
 		
-		System.out.println("FXT 4.1.11.6 - No matching ID");
+		logger.info("FXT 4.1.11.6 - No matching ID");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, NOT_EXISTING_PACKAGE);
 		File temp = createTempXMLFile (message, "deletePackageDoesntExist");
@@ -93,7 +97,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testDeletePackageProtected () throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.11.7 - Package is protected");
+		logger.info("FXT 4.1.11.7 - Package is protected");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(message, "validDeletePackageProtected");

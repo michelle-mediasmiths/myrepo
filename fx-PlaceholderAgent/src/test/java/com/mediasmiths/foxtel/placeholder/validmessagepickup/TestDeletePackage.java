@@ -19,6 +19,8 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class TestDeletePackage extends ValidMessagePickTest {
 
+	protected String PACKAGE_ID="abc123";
+	
 	public TestDeletePackage() throws JAXBException, SAXException {
 		super();
 	}
@@ -45,7 +47,7 @@ public class TestDeletePackage extends ValidMessagePickTest {
 		HelperMethods method = new HelperMethods();
 		String titleId = method.generateTitleID();
 		Package txPackage = new Package();
-		txPackage.setPresentationID("abc123");
+		txPackage.setPresentationID(PACKAGE_ID);
 		deleteTx.setPackage(txPackage);
 		deleteTx.setTitleID(titleId);
 
@@ -54,6 +56,8 @@ public class TestDeletePackage extends ValidMessagePickTest {
 
 	@Override
 	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
+		when(mayamClient.packageExists((String) anyObject())).thenReturn(true);
+		when(mayamClient.isMaterialForPackageProtected((String) anyObject())).thenReturn(new Boolean(false));
 		when(mayamClient.deletePackage((DeletePackage) anyObject()))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 	}
@@ -70,6 +74,8 @@ public class TestDeletePackage extends ValidMessagePickTest {
 
 	@Override
 	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
+		when(mayamClient.packageExists((String) anyObject())).thenReturn(true);
+		when(mayamClient.isMaterialForPackageProtected((String) anyObject())).thenReturn(new Boolean(false));
 		when(mayamClient.deletePackage((DeletePackage) anyObject()))
 				.thenReturn(MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
 

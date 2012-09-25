@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.placeholder;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +40,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialNotProtected");
 		
+		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
@@ -51,6 +53,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialProtected");
 		
+		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
 		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
