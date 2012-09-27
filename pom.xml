@@ -35,6 +35,7 @@
 		<module>fx-Agent</module>
 		<module>fx-PlaceholderAgent</module>
 		<module>fx-MediaPickupAgent</module>
+		<module>fx-MuleClient</module>
 	</modules>
 
 	<properties>
