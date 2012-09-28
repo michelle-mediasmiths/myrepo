@@ -1,5 +1,7 @@
 package com.mediasmiths.mule;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -47,6 +49,10 @@ public class MuleClientImpl implements IMuleClient {
 		}
 	
 	}
+	
+	public MuleClientImpl(MuleClient muleClient) {
+		client = muleClient;
+	}
 
 	/* Example destination end points:
 	 * 	- pop3://user:password@mymail.com
@@ -77,23 +83,23 @@ public class MuleClientImpl implements IMuleClient {
 		}
 	}
 		
-	public MuleMessage[] request(String destination, long port) {
+	public ArrayList<MuleMessage> request(String destination, long timeout) {
 		MuleMessage result = null;
 		try {
-			result = client.request(destination, port);
+			result = client.request(destination, timeout);
 		} catch (MuleException e) {
 			logger.error("Mule Exception caught when requesting message from destination: " + destination);
 		}
-		MuleMessage[] messages;
+		ArrayList<MuleMessage> messages = null;
 		if (result instanceof MuleMessageCollection)
 		{
 		    MuleMessageCollection resultsCollection = (MuleMessageCollection) result;
 		    System.out.println("Number of messages: " + resultsCollection.size());
-		    messages = resultsCollection.getMessagesAsArray();
+		    messages = new ArrayList<MuleMessage>(Arrays.asList(resultsCollection.getMessagesAsArray()));
 		}
-		else {
-			messages = new MuleMessage[1];
-			messages[0] = result;
+		else if (result != null) {
+			messages = new ArrayList<MuleMessage>();
+			messages.add(result);
 		}
 		return messages;
 	}
