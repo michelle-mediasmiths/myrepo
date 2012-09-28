@@ -41,12 +41,12 @@ public class MuleClientImplTest {
 		MuleMessage expectedPayload = mock(MuleMessage.class);
 		when(expectedPayload.getPayload()).thenReturn("Success");
 		try {
-			when(muleClient.send("test", "test", props)).thenReturn(expectedPayload);
+			when(muleClient.send("testDestination", "testPackage", props)).thenReturn(expectedPayload);
 		} catch (MuleException e) {
 			fail("MuleException when mocking send call");
 		}
 		
-		MuleMessage returnMessage = client.send("test", "test", props);
+		MuleMessage returnMessage = client.send("testDestination", "testPackage", props);
 		
 		Object payload = returnMessage.getPayload();
 		assertEquals("Success", payload);
@@ -60,7 +60,7 @@ public class MuleClientImplTest {
 		
 		MuleMessage expectedPayload = null;
 		try {
-			when(muleClient.send("test", "test", props)).thenReturn(expectedPayload);
+			when(muleClient.send("testDestination", "testPackage", props)).thenReturn(expectedPayload);
 		} catch (MuleException e) {
 			fail("MuleException when mocking send call");
 		}
