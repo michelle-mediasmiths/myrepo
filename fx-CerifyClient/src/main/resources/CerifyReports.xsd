@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://www.tek.com/cerify/2007/03/22/reports"
+            xmlns:tns="http://www.tek.com/cerify/2007/03/22/reports"
+            xmlns:templates="http://www.tektronix.com/cerify/templateInfo/2008/06/06"
+            attributeFormDefault="unqualified"
+            elementFormDefault="qualified"
+            xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+    <xsd:import schemaLocation="TemplateInformation.xsd"
+              namespace="http://www.tektronix.com/cerify/templateInfo/2008/06/06"/>
+  <xsd:element name="jobstart">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" name="job">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="jobmediafile">
+                <xsd:complexType>
+                  <xsd:attribute name="name" type="xsd:string" use="required" />
+                  <xsd:attribute name="path" type="xsd:string" use="required" />
+                  <xsd:attribute name="size" type="xsd:long" use="required" />
+                  <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element maxOccurs="1" name="profile" type="tns:profileType"/>
+            </xsd:sequence>
+            <xsd:attribute name="mediaset" type="xsd:string" use="required" />
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="priority" type="tns:priorityType" use="required" />
+            <xsd:attribute name="profile" type="xsd:string" use="required" />
+            <xsd:attribute name="started" type="xsd:dateTime" use="required" />
+            <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+    <unique name="uniqueJobStartName">
+       <selector xpath=".//tns:job" />
+       <field xpath="@name" />
+    </unique>
+  </xsd:element>
+<xsd:element name="jobend">
+<xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" name="job" type="tns:jobType">
+        </xsd:element>
+      </xsd:sequence>
+    </xsd:complexType>
+    <unique name="uniqueJobEndName">
+       <selector xpath=".//tns:job" />
+       <field xpath="@name" />
+    </unique>
+  </xsd:element>
+          <xsd:complexType name="jobType">
+            <xsd:sequence>
+              <xsd:element maxOccurs="unbounded" name="jobmediafile" type="tns:jobmediafileType"/>
+              <xsd:element maxOccurs="1" name="profile" type="tns:profileType"/>
+            </xsd:sequence>
+            <xsd:attribute name="completed" type="xsd:dateTime" use="required" />
+            <xsd:attribute name="mediaset" type="xsd:string" use="required" />
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="priority" type="tns:priorityType" use="required" />
+            <xsd:attribute name="profile" type="xsd:string" use="required" />
+            <xsd:attribute name="result" type="tns:resultType" use="required" />
+            <xsd:attribute name="started" type="xsd:dateTime" use="required" />
+            <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+          </xsd:complexType>
+  <xsd:element name="fileend">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="jobmediafile" maxOccurs="unbounded" type="tns:jobmediafileType"/>
+        <xsd:element maxOccurs="1" name="profile" type="tns:profileType"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="filestart">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element maxOccurs="unbounded" name="jobmediafile">
+          <xsd:complexType>
+            <xsd:attribute name="name" type="xsd:string" use="required" />
+            <xsd:attribute name="path" type="xsd:string" use="required" />
+            <xsd:attribute name="size" type="xsd:long" use="required" />
+            <xsd:attribute name="started" type="xsd:dateTime" use="required" />
+            <xsd:attribute name="lastModified" type="xsd:dateTime" use="required" />
+            <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+            <xsd:attribute name="runNumber" type="xsd:integer" use="required" />
+            <xsd:attribute name="owner" type="xsd:string" use="required" />
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element maxOccurs="1" name="profile" type="tns:profileType"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <!-- Complex type definitions. -->
+  <xsd:complexType name="jobmediafileType">
+        <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="1" name="streaminfo">
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element maxOccurs="unbounded" name="attribute">
+            <xsd:complexType>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="value" type="xsd:string" use="required" />
+              <xsd:attribute name="displayname" type="xsd:string"/>
+              <xsd:attribute name="displayvalue" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:element>
+    <xsd:element maxOccurs="unbounded" minOccurs="0" nillable="true" name="alert">
+      <xsd:complexType>
+        <xsd:attribute name="details" type="xsd:string" use="required" />
+        <xsd:attribute name="level" type="tns:alertLevel" use="required" />
+        <xsd:attribute name="location" type="xsd:string" use="required" />
+        <xsd:attribute name="start" type="xsd:string" use="optional" />
+        <xsd:attribute name="end" type="xsd:string" use="optional" />
+        <xsd:attribute name="channelindex" type="xsd:integer" use="optional" />
+        <xsd:attribute name="channelname" type="xsd:string" use="optional" />
+        <xsd:attribute name="alertid" type="xsd:string" use="required"/>
+        <xsd:attribute name="trackid" type="xsd:string" use="required"/>
+        <xsd:attribute name="title" type="xsd:string" use="required" />
+        <xsd:attribute name="type" type="tns:alertType" use="required" />
+        <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+      </xsd:complexType>
+    </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="name" type="xsd:string" use="required" />
+    <xsd:attribute name="path" type="xsd:string" use="required" />
+    <xsd:attribute name="progress" type="tns:progress" use="required" />
+    <xsd:attribute name="result" type="tns:resultType" use="required" />
+    <xsd:attribute name="size" type="xsd:long" use="required" />
+    <xsd:attribute name="started" type="xsd:dateTime" use="required" />
+    <xsd:attribute name="status" type="tns:fileStatusType" use="required" />
+    <xsd:attribute name="url" type="tns:cerifyUrl" use="required" />
+    <xsd:attribute name="completed" type="xsd:dateTime"/>
+  </xsd:complexType>
+
+  <!-- Simple type definitions. -->
+  <xsd:simpleType name="priorityType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Low" />
+      <xsd:enumeration value="Medium" />
+      <xsd:enumeration value="High" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="fileStatusType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="waiting" />
+      <xsd:enumeration value="processing" />
+      <xsd:enumeration value="paused" />
+      <xsd:enumeration value="complete" />
+      <xsd:enumeration value="aborted" />
+      <xsd:enumeration value="copying" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="alertType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="system" />
+      <xsd:enumeration value="audio" />
+      <xsd:enumeration value="video" />
+      <xsd:enumeration value="container" />
+      <xsd:enumeration value="parameter" />
+      <xsd:enumeration value="container parameter" />
+      <xsd:enumeration value="audio parameter" />
+      <xsd:enumeration value="video parameter" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="alertLevel">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="info" />
+      <xsd:enumeration value="warning" />
+      <xsd:enumeration value="error" />
+      <xsd:enumeration value="fatal" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="resultType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Error" />
+      <xsd:enumeration value="Warning" />
+      <xsd:enumeration value="Success" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="progress">
+     <xsd:restriction base="xsd:integer">
+       <xsd:minInclusive value="0"/>
+       <xsd:maxInclusive value="100"/>
+     </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="cerifyUrl">
+    <xsd:restriction base="xsd:anyURI">
+      <xsd:pattern value="http://(.)*" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="jobStatusType">
+    <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="waiting">
+            </xsd:enumeration>
+            <xsd:enumeration value="processing">
+            </xsd:enumeration>
+            <xsd:enumeration value="complete">
+            </xsd:enumeration>
+            <xsd:enumeration value="stopping">
+            </xsd:enumeration>
+            <xsd:enumeration value="stopped">
+            </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="jobActionType">
+    <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="stop">
+            </xsd:enumeration>
+            <xsd:enumeration value="stopnow">
+            </xsd:enumeration>
+            <xsd:enumeration value="resume">
+            </xsd:enumeration>
+            <xsd:enumeration value="delete">
+            </xsd:enumeration>
+            <xsd:enumeration value="priorityhigh">
+            </xsd:enumeration>
+            <xsd:enumeration value="prioritymedium">
+            </xsd:enumeration>
+            <xsd:enumeration value="prioritylow">
+            </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+    <xsd:complexType name="profileType">
+        <xsd:sequence>
+            <xsd:element ref="templates:templates"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" type="string">
+        </xsd:attribute>
+        <xsd:attribute name="description" type="string">
+        </xsd:attribute>
+    </xsd:complexType>
+
+  <xsd:simpleType name="mediaSetActionType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="delete"></xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+
+
+</xsd:schema>

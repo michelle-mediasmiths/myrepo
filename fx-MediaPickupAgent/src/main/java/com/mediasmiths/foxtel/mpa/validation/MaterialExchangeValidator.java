@@ -15,6 +15,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -85,15 +86,33 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 		// TODO: sanity check start\end\duration
 
-		//TODO validate orignial conform
-		
+		//validate orignial conform
+		MessageValidationResult originalConform = validateOriginalConform(programmeMaterial
+				.getOriginalConform());
+
+		if (originalConform != MessageValidationResult.IS_VALID) {
+			return originalConform;
+		}
+
 		return validatePackages(programmeMaterial.getPresentation());
 
+	}
+
+	private MessageValidationResult validateOriginalConform(
+			SegmentationType originalConform) {
+		if (originalConform != null) {
+			logger.trace("validating original conform");
+			// TODO : what validation is required for this?
+			return MessageValidationResult.IS_VALID;
+		} else {
+			return MessageValidationResult.IS_VALID;
+		}
 	}
 
 	private MessageValidationResult validatePackages(Presentation presentation) {
 		if (presentation != null && presentation.getPackage() != null) {
 
+			logger.trace("validating packages");
 			for (Package pack : presentation.getPackage()) {
 				try {
 					if (!mayamClient.packageExists(pack.getPresentationID())) {
@@ -111,8 +130,9 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
-		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { // NOSONAR
+		// throwing unchecked exception as hint to users of class that this
+		// method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof Material)) {
 			throw new ClassCastException(String.format(

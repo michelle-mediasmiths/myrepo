@@ -35,6 +35,8 @@
 		<module>fx-Agent</module>
 		<module>fx-PlaceholderAgent</module>
 		<module>fx-MediaPickupAgent</module>
+		<module>fx-qcAdapter</module>
+		<module>fx-CerifyClient</module>
 	</modules>
 
 	<properties>

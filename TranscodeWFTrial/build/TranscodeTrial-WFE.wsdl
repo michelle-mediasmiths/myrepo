@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://localhost:8080/TranscodeTrial/WFE" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:Transcoder="http://localhost:8080/TranscodeTrial/Transcoder" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:QCService="http://localhost:8088/QCService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:QC="http://localhost:8080/TranscodeTrial/QC" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:Temp_Storage="http://localhost:8080/TranscodeTrial/Temp_Storage" xmlns:Mule="http://localhost:8080/TranscodeTrial/Mule" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:Drop_Box="http://localhost:8080/TranscodeTrial/Drop_Box" xmlns:diag="http://localhost:8080/TranscodeTrial" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:Mayam="http://localhost:8080/TranscodeTrial/Mayam" targetNamespace="http://localhost:8080/TranscodeTrial/WFE">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://example.com/TranscodeTrial/WFE" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:Transcoder="http://example.com/TranscodeTrial/Transcoder" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:QCService="http://localhost:8088/QCService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:QC="http://example.com/TranscodeTrial/QC" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:Temp_Storage="http://example.com/TranscodeTrial/Temp_Storage" xmlns:for_operation="http://example.com/TranscodeTrial/for_operation" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:Drop_Box="http://example.com/TranscodeTrial/Drop_Box" xmlns:diag="http://example.com/TranscodeTrial" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:Mayam="http://example.com/TranscodeTrial/Mayam" targetNamespace="http://example.com/TranscodeTrial/WFE">
     <wsdl:types>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://localhost:8080/TranscodeTrial/WFE">
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://example.com/TranscodeTrial/WFE">
             <xs:element name="StartRequest" type="xs:string"/>
             <xs:element name="StartResponse" type="xs:string"/>
         </xs:schema>
@@ -18,21 +18,4 @@
             <wsdl:output message="this:StartResponse" name="StartResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:binding name="CanonicBindingForMule" type="this:ForMule">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <wsdl:operation name="Start">
-            <soap:operation style="document" soapAction="http://localhost:8080/TranscodeTrial/WFE/ForMule/Start"/>
-            <wsdl:input name="Start">
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output name="StartResponse">
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-    </wsdl:binding>
-    <wsdl:service name="CanonicServiceForMule">
-        <wsdl:port name="canonicPort" binding="this:CanonicBindingForMule">
-            <soap:address location="http://localhost:8080/ode/processes/TranscodeWFTrial/TranscodeTrial/WFE/Mule"/>
-        </wsdl:port>
-    </wsdl:service>
 </wsdl:definitions>

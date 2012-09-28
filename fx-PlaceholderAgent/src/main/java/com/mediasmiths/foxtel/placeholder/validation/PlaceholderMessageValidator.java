@@ -190,10 +190,22 @@ public class PlaceholderMessageValidator extends
 			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
 		}
 		
-		// TODO validate consumer advice?
-		logger.warn("No validation of consumer advice has taken place");
+		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action.getPackage().getConsumerAdvice());
+		
+		if(consumerAdviceValid != MessageValidationResult.IS_VALID){
+			logger.warn(String.format("Consumer advice \"%s\" fails validation for reason %s", action.getPackage().getConsumerAdvice(), consumerAdviceValid));
+			return consumerAdviceValid;
+		}
 
 		return MessageValidationResult.IS_VALID;
+	}
+
+	private MessageValidationResult validateConsumerAdvice(String consumerAdvice) {
+		
+		//TODO match consumer advice with regex [ADHLNSV,]* ?
+		logger.warn("consumer advice not being validated");
+		return MessageValidationResult.IS_VALID;
+		
 	}
 
 	private MessageValidationResult validateDeletePackage(DeletePackage action)

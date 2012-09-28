@@ -82,14 +82,5 @@ public class UnmatchedMaterialProcessorTest {
 		assertTrue(new File(failedMessagesPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName).exists());
 		assertTrue(new File(emergencyFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists());
 	}
-	
-	@Test
-	public void testNotificationsFireForUmatchedMaterial(){
-		//TODO implement this test. When unmatched material is discovered then someone needs to be notified
-		//TODO test handling of IOExceptions when moving unmatched material?
-	}
-	
-	
-
-		
+			
 }

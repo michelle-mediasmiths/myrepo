@@ -9,6 +9,9 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.IS_AO_AGENT;
+
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -17,6 +20,10 @@ import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 
 public class MediaPickupAgentConfigValidator extends ConfigValidator {
 
+	private static Logger logger = Logger
+			.getLogger(MediaPickupAgentConfigValidator.class);
+
+	
 	@Inject
 	public MediaPickupAgentConfigValidator(
 			@Named(MESSAGE_PATH) String messagePath,
@@ -27,7 +34,8 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
-			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount)
+			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount,
+			@Named(IS_AO_AGENT) Boolean isAOAgent)
 			throws ConfigValidationFailureException {
 		super(messagePath, failurePath, archivePath, receiptPath);
 
@@ -72,6 +80,15 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			anyFailures = true;
 			configValidationFails(DELIVERY_ATTEMPT_COUNT,
 					deliveryAttemptCount);
+		}
+		
+		if(isAOAgent.booleanValue()==true){
+			if(! failurePath.equals(emergencyImportFolder)){
+				anyFailures=true;
+				logger.error("AO agent should quarrentine unmatched content, set emergency import folder to be equal to the quarrentine / failure folder");				
+				configValidationFails(ARDOME_EMERGENCY_IMPORT_FOLDER,
+						emergencyImportFolder);
+			}
 		}
 
 		if (anyFailures) {

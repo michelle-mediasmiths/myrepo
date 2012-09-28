@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>foxtel-parent</artifactId>
+		<version>0.0.4-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>fx-CerifyClient</artifactId>
+	<packaging>jar</packaging>
+
+	<name>fx-CerifyClient</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxrpc-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.mediasmiths.std.guice</groupId>
+			<artifactId>stdlib-guice-common</artifactId>
+			<version>3.0.6</version>
+		</dependency>
+
+		<!-- commons io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+
+
+		<!-- logging -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+	</dependencies>
+
+	<!-- <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports" package="com.tektronix.www.cerify.soap.client" 
+		/> <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports/wsdl" 
+		package="com.tektronix.www.cerify.soap.client" /> <mapping namespace="http://www.tek.com/cerify/2008/05/09/reports/wsdl" 
+		package="com.tektronix.www.cerify.soap.client._20080509" /> <mapping namespace="http://www.tek.com/cerify/2009/12/02/reports/wsdl" 
+		package="com.tektronix.www.cerify.soap.client._20091202" /> <mapping namespace="http://www.tek.com/cerify/2010/05/23/reports/wsdl" 
+		package="com.tektronix.www.cerify.soap.client._20100523" /> <mapping namespace="http://www.tek.com/cerify/2010/12/20/reports/wsdl" 
+		package="com.tektronix.www.cerify.soap.client._20101220" /> -->
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+</project>

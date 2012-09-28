@@ -84,6 +84,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	protected String getIDFromMessage(MessageEnvelope<Material> envelope) {
 		// TODO this is just returning the xmls file name which may not be
 		// unique at all (but lets hope it is for now!)
+		
+		//we cant just pick out a material id as the envelope could contain marketing material
 		String id = FilenameUtils.getBaseName(envelope.getFile()
 				.getAbsolutePath());
 		logger.debug(String.format("getIDFromMessage = %s", id));
