@@ -55,4 +55,10 @@ public class QCRestServiceImpl implements QCRestService {
 
 	}
 
+	@Override
+	public Boolean profileExists(String profileName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

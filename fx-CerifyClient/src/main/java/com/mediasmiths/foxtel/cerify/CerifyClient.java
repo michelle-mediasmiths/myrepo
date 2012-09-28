@@ -108,7 +108,17 @@ public class CerifyClient {
 		log.debug("Resolving uri for "+ filePath);
 
 		// lets assume for now that the paths will be the same on both systems
+		//TODO : find out how to identify the correct paths for files
 		return new URI(new File(filePath).toURI().toString());
+	}
+	
+	/**
+	 * Call to validate configuration
+	 * @return
+	 */
+	public boolean validateConfig(){
+		//TODO : implement
+		return true;
 	}
 
 }
