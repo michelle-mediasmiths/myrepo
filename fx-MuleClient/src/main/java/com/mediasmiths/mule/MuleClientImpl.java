@@ -94,7 +94,6 @@ public class MuleClientImpl implements IMuleClient {
 		if (result instanceof MuleMessageCollection)
 		{
 		    MuleMessageCollection resultsCollection = (MuleMessageCollection) result;
-		    System.out.println("Number of messages: " + resultsCollection.size());
 		    messages = new ArrayList<MuleMessage>(Arrays.asList(resultsCollection.getMessagesAsArray()));
 		}
 		else if (result != null) {
