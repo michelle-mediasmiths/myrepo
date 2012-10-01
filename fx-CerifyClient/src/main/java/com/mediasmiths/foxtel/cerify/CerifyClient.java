@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.cerify;
 
 import java.io.File;
 import java.rmi.RemoteException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -14,11 +16,22 @@ import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.CreateJob;
 import com.tektronix.www.cerify.soap.client.CreateMediaSet;
+import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
+import com.tektronix.www.cerify.soap.client.GetJobStatus;
+import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
+import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
+import com.tektronix.www.cerify.soap.client.GetProfiles;
+import com.tektronix.www.cerify.soap.client.GetProfilesResponse;
+import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
+import com.tektronix.www.cerify.soap.client.JobStatusType;
+import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 import com.tektronix.www.cerify.soap.client.MediaLocationDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaSetNameInUseFault;
 import com.tektronix.www.cerify.soap.client.PriorityType;
 import com.tektronix.www.cerify.soap.client.URLNotAccessibleFault;
 import com.tektronix.www.cerify.soap.client.URLNotInMediaLocationFault;
+import com.tektronix.www.cerify.soap.client._20101220.GetJobResults;
+import com.tektronix.www.cerify.soap.client._20101220.GetMediaFileResults;
 
 import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
 
@@ -50,11 +63,10 @@ public class CerifyClient {
 	public String startQcForFile(String file, String ident, String profileName) throws MalformedURIException,
 			RemoteException {
 		log.trace("QC start request for " + file);
-		String mediaSetName = FilenameUtils.getBaseName(file)
-				+ "_" + ident;
+		String mediaSetName = mediasetName(file, ident);
 		createMediaSet(file, ident, mediaSetName);
 
-		String jobName = mediaSetName + "_" + profileName;
+		String jobName = jobName(profileName, mediaSetName);
 		PriorityType priority = PriorityType.Medium;
 		
 		log.info(String.format("Creating a job %s", jobName));
@@ -65,6 +77,86 @@ public class CerifyClient {
 
 		return jobName;
 
+	}
+
+	/**
+	 * Returns a list of profile names
+	 * @return
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public List<String> listProfiles() throws BaseCeritalkFault, RemoteException{
+		log.trace("listing profiles");
+		GetProfiles request = new GetProfiles();		
+		GetProfilesResponse response = service.getProfiles(request);
+	
+		String[] profileName = response.getProfileName();
+		return Arrays.asList(profileName);		
+	}
+	
+	/**
+	 * Returns the (string) status of a job, one of waiting processing complete stopping stopped
+	 * 
+	 * @see GetJobStatusResponse
+	 * 
+	 * @param jobName
+	 * @return
+	 * @throws JobDoesntExistFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public GetJobStatusResponse getStatus(String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException{
+		log.trace(String.format("Getting status of job %s", jobName));
+		GetJobStatus request= new GetJobStatus(jobName);
+		GetJobStatusResponse jobStatus = service.getJobStatus(request);
+		return jobStatus;
+	}
+	
+	/**
+	 * Returns the results of a job
+	 * @see GetJobResultsResponse
+	 * 
+	 * @param jobName
+	 * @return
+	 * @throws JobDoesntExistFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public GetJobResultsResponse getJobResult(String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException{
+		log.trace(String.format("Getting results of job %s", jobName));
+		GetJobResults request = new GetJobResults(jobName);
+		GetJobResultsResponse jobResults = service.getJobResults(request);
+		return jobResults;		
+	}
+	
+	/**
+	 * Get the status for a given media file run as part of the specified job
+	 * @param filePath
+	 * @param jobName
+	 * @throws MalformedURIException 
+	 * @throws RemoteException 
+	 * @throws BaseCeritalkFault 
+	 * @throws MediaFileNotInJobFault 
+	 * @throws JobDoesntExistFault 
+	 */
+	public GetMediaFileResultsResponse getMediaResult(String filePath, String jobName, int runNumber) throws MalformedURIException, JobDoesntExistFault, MediaFileNotInJobFault, BaseCeritalkFault, RemoteException {
+		log.trace(String.format("Getting results of media %s in job %s",filePath,jobName));
+		
+		URI url = resolveUriForFile(filePath);
+		GetMediaFileResults request = new GetMediaFileResults(jobName, url,0);
+		GetMediaFileResultsResponse mediaFileResults = service.getMediaFileResults(request);
+		return mediaFileResults;	
+	}
+	
+	private String jobName(String profileName, String mediaSetName) {
+		String jobName = mediaSetName + "_" + profileName;
+		return jobName;
+	}
+
+	private String mediasetName(String file, String ident) {
+		String mediaSetName = FilenameUtils.getBaseName(file)
+				+ "_" + ident;
+		return mediaSetName;
 	}
 
 	private void createMediaSet(final String file, final String ident,
@@ -120,5 +212,7 @@ public class CerifyClient {
 		//TODO : implement
 		return true;
 	}
+
+	
 
 }

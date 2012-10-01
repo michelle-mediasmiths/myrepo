@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class QCStartResponse {
 
 	private QCStartStatus status = QCStartStatus.UNSET;
-	private QCIdentifier qcIdentifier;
+	private QCJobIdentifier qcIdentifier;
 	
 	public QCStartResponse(){
 		
@@ -18,10 +18,10 @@ public class QCStartResponse {
 	}
 	
 	@XmlElement(name="identifier")
-	public QCIdentifier getQcIdentifier() {
+	public QCJobIdentifier getQcIdentifier() {
 		return qcIdentifier;
 	}
-	public void setQcIdentifier(QCIdentifier qcIdentifier) {
+	public void setQcIdentifier(QCJobIdentifier qcIdentifier) {
 		this.qcIdentifier = qcIdentifier;
 	}
 	
