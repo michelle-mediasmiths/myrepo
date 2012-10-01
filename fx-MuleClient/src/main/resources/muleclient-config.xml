@@ -13,13 +13,17 @@
 	This config is for Mule Client examples.
 	</description>
 	
-	<model name="echoSample">
-		<service name="MuleClient">
-			<inbound>
-				<http:inbound-endpoint host="localhost" port="80" path="/services" name="serviceEndpoint"/>
-			</inbound>
-			<component class="org.mule.example.echo.DoAnythingImpl"/>
-		</service>
-	</model>
+    <ajax:connector name="Ajax" serverUrl="http://127.0.0.1:8090/Ajax" resourceBase="src/main/app/docroot" logLevel="2" jsonCommented="false" doc:name="Ajax"/>
+    <jms:connector name="JMS" validateConnections="true" doc:name="JMS"/>
+    <flow name="transcode_soap_testFlow1" doc:name="transcode_soap_testFlow1">
+        <jms:inbound-endpoint queue="TestQueue" mimeType="text/plain" encoding="UTF-8" connector-ref="JMS" doc:name="JMS">
+            <jms:transaction action="ALWAYS_BEGIN" timeout="1000"/>
+        </jms:inbound-endpoint>
+        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" path="ode/processes/TranscodeTrial/WFE/WFE-8" mimeType="text/xml" doc:name="HTTP"/>
+        <echo-component doc:name="Echo"/>
+    </flow>
 
 </mule>
+
+
