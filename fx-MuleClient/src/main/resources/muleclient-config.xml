@@ -1,25 +1,25 @@
 
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesource.org/schema/mule..."
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-inst..."
-xmlns:spring="http://www.springframework.org/schema..."
-xmlns:http="http://www.mulesource.org/schema/mule..."
-xsi:schemaLocation="
-http://www.springframework.org/schema... http://www.springframework.org/schema...
-http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...
-http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...">
-
-<description>
-This config is for Mule Client examples.
-</description>
-
-<model name="echoSample">
-<service name="MuleClient">
-<inbound>
-<http:inbound-endpoint host="localhost" port="80" path="/services" name="serviceEndpoint"/>
-</inbound>
-<component class="org.mule.example.echo.DoAnythingImpl"/>
-</service>
-</model>
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-inst..."
+	xmlns:spring="http://www.springframework.org/schema..."
+	xmlns:http="http://www.mulesource.org/schema/mule..."
+	xsi:schemaLocation="
+	http://www.springframework.org/schema... http://www.springframework.org/schema...
+	http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...
+	http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...">
+	
+	<description>
+	This config is for Mule Client examples.
+	</description>
+	
+	<model name="echoSample">
+		<service name="MuleClient">
+			<inbound>
+				<http:inbound-endpoint host="localhost" port="80" path="/services" name="serviceEndpoint"/>
+			</inbound>
+			<component class="org.mule.example.echo.DoAnythingImpl"/>
+		</service>
+	</model>
 
 </mule>
