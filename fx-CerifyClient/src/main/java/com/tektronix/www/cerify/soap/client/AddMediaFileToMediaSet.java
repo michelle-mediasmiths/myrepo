@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class AddMediaFileToMediaSet  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class AddMediaFileToMediaSet  implements java.io.Serializable {
     /* The name of the MediaSet to be added
      *                                     to */
     private java.lang.String mediaSetName;

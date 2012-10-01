@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetProfilesResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetProfilesResponse  implements java.io.Serializable {
     /* A list of all active (non-archived)
      *                                     Profile names */
     private java.lang.String[] profileName;

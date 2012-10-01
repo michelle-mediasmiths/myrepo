@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetJobs  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetJobs  implements java.io.Serializable {
     /* If populated, then all active Jobs
      *                                     created on or after this date
      * will

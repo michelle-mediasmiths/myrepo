@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetSystemStatusResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetSystemStatusResponse  implements java.io.Serializable {
     /* The number of Jobs shown as
      *                                     "Waiting" in the Web UI */
     private java.math.BigInteger totalJobsPending;

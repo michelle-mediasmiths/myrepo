@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.templateInfo._2008._06._06;
 
-public class TemplateType  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class TemplateType  implements java.io.Serializable {
     private com.tektronix.www.cerify.templateInfo._2008._06._06.TestdefinitionType[] testdefinition;
 
     private java.lang.String name;  // attribute

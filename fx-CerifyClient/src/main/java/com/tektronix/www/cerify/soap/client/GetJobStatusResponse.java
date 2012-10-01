@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetJobStatusResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetJobStatusResponse  implements java.io.Serializable {
     private java.lang.String name;  // attribute
 
     private com.tektronix.www.cerify.soap.client.PriorityType priority;  // attribute

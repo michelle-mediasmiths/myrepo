@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class CeriTalk_ServiceLocator extends org.apache.axis.client.Service implements com.tektronix.www.cerify.soap.client.CeriTalk_Service {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class CeriTalk_ServiceLocator extends org.apache.axis.client.Service implements com.tektronix.www.cerify.soap.client.CeriTalk_Service {
 
     public CeriTalk_ServiceLocator() {
     }

@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetMediaFileResultsResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetMediaFileResultsResponse  implements java.io.Serializable {
     private com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponseStreaminfo streaminfo;
 
     private com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponseAlert[] alert;

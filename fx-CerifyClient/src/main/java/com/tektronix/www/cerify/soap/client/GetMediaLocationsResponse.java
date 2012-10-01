@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetMediaLocationsResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetMediaLocationsResponse  implements java.io.Serializable {
     /* Each medialocation will have a
      *                                     unique name and url. */
     private com.tektronix.www.cerify.soap.client.GetMediaLocationsResponseMedialocation[] medialocation;

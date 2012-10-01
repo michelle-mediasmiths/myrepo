@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class CreateJob  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class CreateJob  implements java.io.Serializable {
     /* The name of the Job to be created */
     private java.lang.String jobName;
 

@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client._20100523;
 
-public class GetJobResults  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetJobResults  implements java.io.Serializable {
     private java.lang.String jobName;
 
     public GetJobResults() {

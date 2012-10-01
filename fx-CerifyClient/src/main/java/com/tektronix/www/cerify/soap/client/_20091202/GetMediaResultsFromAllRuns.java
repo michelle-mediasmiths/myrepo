@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client._20091202;
 
-public class GetMediaResultsFromAllRuns  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetMediaResultsFromAllRuns  implements java.io.Serializable {
     /* The name of the Job the media file
      * 	                                    is associated with */
     private java.lang.String jobName;

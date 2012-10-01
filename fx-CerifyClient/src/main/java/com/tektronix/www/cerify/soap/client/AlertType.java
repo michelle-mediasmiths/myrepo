@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class AlertType implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class AlertType implements java.io.Serializable {
     private java.lang.String _value_;
     private static java.util.HashMap _table_ = new java.util.HashMap();
 

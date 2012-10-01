@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public interface CeriTalk_PortType extends java.rmi.Remote {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public interface CeriTalk_PortType extends java.rmi.Remote {
 
     /**
      * Retrieve the test results for a given MediaFile

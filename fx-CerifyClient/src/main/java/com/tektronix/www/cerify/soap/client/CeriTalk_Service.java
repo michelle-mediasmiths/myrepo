@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public interface CeriTalk_Service extends javax.xml.rpc.Service {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public interface CeriTalk_Service extends javax.xml.rpc.Service {
     public java.lang.String getCeriTalkSOAPAddress();
 
     public com.tektronix.www.cerify.soap.client.CeriTalk_PortType getCeriTalkSOAP() throws javax.xml.rpc.ServiceException;

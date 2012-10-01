@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class ProfileDoesntExistFault  extends com.tektronix.www.cerify.soap.client.BaseCeritalkFault  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class ProfileDoesntExistFault  extends com.tektronix.www.cerify.soap.client.BaseCeritalkFault  implements java.io.Serializable {
     public ProfileDoesntExistFault() {
     }
 

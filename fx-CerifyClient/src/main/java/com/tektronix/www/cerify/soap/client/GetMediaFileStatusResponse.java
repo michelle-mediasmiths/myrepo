@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class GetMediaFileStatusResponse  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class GetMediaFileStatusResponse  implements java.io.Serializable {
     private java.lang.String name;  // attribute
 
     private java.lang.String path;  // attribute

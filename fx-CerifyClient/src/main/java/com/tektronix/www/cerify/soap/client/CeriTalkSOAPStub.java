@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.soap.client;
 
-public class CeriTalkSOAPStub extends org.apache.axis.client.Stub implements com.tektronix.www.cerify.soap.client.CeriTalk_PortType {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class CeriTalkSOAPStub extends org.apache.axis.client.Stub implements com.tektronix.www.cerify.soap.client.CeriTalk_PortType {
     private java.util.Vector cachedSerClasses = new java.util.Vector();
     private java.util.Vector cachedSerQNames = new java.util.Vector();
     private java.util.Vector cachedSerFactories = new java.util.Vector();

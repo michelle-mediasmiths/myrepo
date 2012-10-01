@@ -7,7 +7,9 @@
 
 package com.tektronix.www.cerify.templateInfo._2008._06._06;
 
-public class VersionType  implements java.io.Serializable {
+import javax.annotation.Generated;
+
+@Generated(value = {"axis"})public class VersionType  implements java.io.Serializable {
     private int major;  // attribute
 
     private int minor;  // attribute
