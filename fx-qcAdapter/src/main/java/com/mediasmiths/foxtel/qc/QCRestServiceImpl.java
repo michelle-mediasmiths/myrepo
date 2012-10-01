@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.qc.guice;
+package com.mediasmiths.foxtel.qc;
 
 import java.io.File;
 import java.rmi.RemoteException;
@@ -13,13 +13,6 @@ import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
-import com.mediasmiths.foxtel.qc.QCJobIdentifier;
-import com.mediasmiths.foxtel.qc.QCMediaResult;
-import com.mediasmiths.foxtel.qc.QCRestService;
-import com.mediasmiths.foxtel.qc.QCJobResult;
-import com.mediasmiths.foxtel.qc.QCStartResponse;
-import com.mediasmiths.foxtel.qc.QCStartStatus;
-import com.mediasmiths.foxtel.qc.QCJobStatus;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
