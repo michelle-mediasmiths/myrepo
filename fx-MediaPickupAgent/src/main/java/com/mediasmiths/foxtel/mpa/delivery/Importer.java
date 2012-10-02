@@ -132,7 +132,7 @@ public class Importer implements Runnable {
 			// send out alert that companion xml did not move to archive
 			StringBuilder sb = new StringBuilder();
 			sb.append(String
-					.format("There has been a failure to archive companion xml for material %d though the material successfully moved to the Viz Ardome auto import location",
+					.format("There has been a failure to archive companion xml for material %s though the material successfully moved to the Viz Ardome auto import location",
 							pi.getMaterialEnvelope().getMasterID()));
 			alert.sendAlert(deliveryFailureAlertReceipient,
 					"Media Pickup Companion XML archive failure", sb.toString());

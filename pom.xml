@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -36,9 +36,12 @@
 		<module>fx-PlaceholderAgent</module>
 		<module>fx-MediaPickupAgent</module>
 		<module>fx-qcAdapter</module>
+		<module>fx-TcAdapter</module>
 		<module>fx-CerifyClient</module>
+		<module>fx-CarbonCoderClient</module>
 		<module>fx-MuleClient</module>
-	</modules>
+    <module>fx-TcAdapterr</module>
+  </modules>
 
 	<properties>
 		<junit.version>4.10</junit.version>
