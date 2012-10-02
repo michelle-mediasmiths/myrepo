@@ -2,61 +2,63 @@ package com.mediasmiths.foxtel.qc;
 
 import java.util.Calendar;
 
-import org.apache.axis.types.URI;
+import java.net.URI;
 
-import com.mediasmiths.foxtel.qc.QCJobResult.ResultType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+
+@XmlRootElement
 public class QCJobResult {
-
-	public enum ResultType {
-		error,warning,success;
-
-		public static ResultType fromString(String result) {
-			if(result.equals("error")) return error;
-			else if(result.equals("warning")) return warning;
-			else if(result.equals("success")) return success;			
-			else throw new IllegalArgumentException("Specified result was not valid");
-		}
-	}
-
-	private QCJobIdentifier ident;
-	private QCJobResult.ResultType result;
+	private QCJobIdentifier jobIdent;
+	private JobResultType result;
 	private Calendar completed;
 	private URI url;
-	
+
+	@XmlElement
 	public URI getUrl() {
 		return url;
 	}
+
+	@XmlElement
 	public Calendar getCompleted() {
 		return completed;
 	}
+
 	public void setCompleted(Calendar completed) {
 		this.completed = completed;
 	}
+	@XmlElement
 	public QCJobIdentifier getIdent() {
-		return ident;
+		return jobIdent;
 	}
+
 	public void setIdent(QCJobIdentifier ident) {
-		this.ident = ident;
+		this.jobIdent = ident;
 	}
-	
-	public QCJobResult.ResultType getResult() {
+	@XmlElement
+	public JobResultType getResult() {
 		return result;
 	}
-	public void setResult(QCJobResult.ResultType result) {
+
+	public void setResult(JobResultType result) {
 		this.result = result;
 	}
-	
+
 	public void setResult(String result) {
-		this.result = ResultType.fromString(result);
+		this.result = JobResultType.fromString(result);
 	}
+
 	public void setUrl(URI url) {
-		this.url=url;
+		this.url = url;
 	}
-	
+
 	@Override
-	public String toString(){
-		return String.format("Job : {%s} , Result : {%s} , Completed {%s} , URL {%s} ", ident.toString(), result.toString(), completed.toString(), url.toString());
+	public String toString() {
+		return String.format(
+				"Job : {%s} , Result : {%s} , Completed {%s} , URL {%s} ",
+				jobIdent.toString(), result.toString(), completed.toString(),
+				url.toString());
 	}
-	
+
 }

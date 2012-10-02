@@ -27,15 +27,15 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- end test dependencies -->
-		
+
 		<!-- dependencies on other foxtel solution componenets -->
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-CerifyClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
-		
-		
+
+
 		<!-- begin mediasmiths dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
@@ -57,7 +57,74 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-war-plugin</artifactId> -->
+<!-- 				<configuration> -->
+<!-- 					<webResources> -->
+<!-- 						<resource> -->
+<!-- 							this is relative to the pom.xml directory -->
+<!-- 							<directory>target/generated-resources</directory> -->
+<!-- 						</resource> -->
+<!-- 					</webResources> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.axis2</groupId> -->
+<!-- 				<artifactId>axis2-java2wsdl-maven-plugin</artifactId> -->
+<!-- 				<version>1.6.2</version> -->
+<!-- 				<configuration> -->
+<!-- 					<className>com.mediasmiths.foxtel.qc.service.QCRestService</className> -->
+<!-- 					<serviceName>FoxtelQCAdapter</serviceName> -->
+<!-- 				</configuration> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<goals> -->
+<!-- 							<goal>java2wsdl</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
+
+
 		</plugins>
+		<pluginManagement>
+
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.axis2</groupId>
+										<artifactId>
+											axis2-java2wsdl-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.6.2,)
+										</versionRange>
+										<goals>
+											<goal>java2wsdl</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

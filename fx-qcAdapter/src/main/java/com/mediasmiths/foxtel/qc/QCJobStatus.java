@@ -7,29 +7,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class QCJobStatus {
 	
-	public enum StatusType {
-		complete,processing,stopped,stopping,waiting;
-		
-		public static StatusType fromString(String status){
-			if(status.equals("waiting")) return waiting;
-			else if(status.equals("processing")) return processing;
-			else if(status.equals("complete")) return complete;
-			else if(status.equals("stopping")) return stopping;
-			else if(status.equals("stopped")) return stopped;
-			else throw new IllegalArgumentException("Specified status was not valid");
-		}
-		
-	}
-
 	private QCJobIdentifier ident;
 
 	private BigInteger progress;
 
-	private QCJobStatus.StatusType status;
+	private JobStatusType status;
 
+	public QCJobStatus(){
+		
+	}
+	
 	public QCJobStatus(QCJobIdentifier ident, String status, BigInteger progress) {
 		this.ident=ident;
-		this.status = StatusType.fromString(status);
+		this.status = JobStatusType.fromString(status);
 		this.progress=progress;
 	}
 
@@ -39,7 +29,7 @@ public class QCJobStatus {
 	public BigInteger getProgress() {
 		return progress;
 	}	
-	public QCJobStatus.StatusType getStatus() {
+	public JobStatusType getStatus() {
 		return status;
 	}
 	
@@ -51,7 +41,7 @@ public class QCJobStatus {
 		this.progress = progress;
 	}
 
-	public void setStatus(QCJobStatus.StatusType status) {
+	public void setStatus(JobStatusType status) {
 		this.status = status;
 	}
 	

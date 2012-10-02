@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.qc;
+package com.mediasmiths.foxtel.qc.service;
 
 import java.io.File;
 
@@ -11,6 +11,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import com.mediasmiths.foxtel.qc.QCJobIdentifier;
+import com.mediasmiths.foxtel.qc.QCJobResult;
+import com.mediasmiths.foxtel.qc.QCJobStatus;
+import com.mediasmiths.foxtel.qc.QCMediaResult;
+import com.mediasmiths.foxtel.qc.QCStartResponse;
+import com.mediasmiths.foxtel.qc.QCStartStatus;
 
 @Path("/qc")
 public interface QCRestService {
@@ -42,7 +49,7 @@ public interface QCRestService {
 	 * Returns the status of a given qc job
 	 * 
 	 * @param ident
-	 *            and identifier for the job
+	 *            - an identifier for the job
 	 * @return the status of the job
 	 * @throws NotFoundException
 	 *             if the specified job does not exist
@@ -74,18 +81,20 @@ public interface QCRestService {
 	 * This is distinct from jobResult as there may be multiple media files
 	 * processed by a given job (though it makes life simpler if we just process
 	 * one media file per job)
-	 * @throws NotFoundException 
+	 * 
+	 * @throws NotFoundException
 	 * 
 	 */
 	@GET
-	@Path("/job/{identifier}/result")
+	@Path("/job/{jobname}/result/file")
 	@Produces("application/xml")
-	public QCMediaResult mediaResult(@QueryParam("file") String file,
-			@QueryParam("identifier") QCJobIdentifier ident,
-			@QueryParam("run") @DefaultValue("0") Integer runNumber) throws NotFoundException;
+	public QCMediaResult mediaResult(@QueryParam("path") String file,
+			@PathParam("jobname") String jobName,
+			@QueryParam("run") @DefaultValue("0") Integer runNumber)
+			throws NotFoundException;
 
 	/**
-	 * May be used to query if a given profile exists, this may be useful for
+	 * Used to query if a given profile exists, this may be useful for
 	 * clients to validate their configuration on startup
 	 * 
 	 * @param profileName

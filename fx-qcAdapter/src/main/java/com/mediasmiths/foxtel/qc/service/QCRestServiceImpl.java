@@ -1,6 +1,8 @@
-package com.mediasmiths.foxtel.qc;
+package com.mediasmiths.foxtel.qc.service;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.rmi.RemoteException;
 import java.security.Provider.Service;
 import java.util.List;
@@ -13,12 +15,20 @@ import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
+import com.mediasmiths.foxtel.qc.QCJobIdentifier;
+import com.mediasmiths.foxtel.qc.QCJobResult;
+import com.mediasmiths.foxtel.qc.QCJobStatus;
+import com.mediasmiths.foxtel.qc.QCMediaResult;
+import com.mediasmiths.foxtel.qc.QCStartResponse;
+import com.mediasmiths.foxtel.qc.QCStartStatus;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
+import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponseAlert;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
+import com.tektronix.www.cerify.soap.client.ResultType;
 
 public class QCRestServiceImpl implements QCRestService {
 
@@ -41,7 +51,7 @@ public class QCRestServiceImpl implements QCRestService {
 		try {
 			GetJobStatusResponse status = cerifyClient.getStatus(job
 					.getIdentifier());
-			log.debug(String.format("Status of job %s is %s progress is %d ",
+			log.debug(String.format("Status of job %s is %s progress is %f ",
 					job.getIdentifier(), status.getStatus().getValue(), status
 							.getProgress().floatValue()));
 			return new QCJobStatus(job, status.getStatus().getValue(),
@@ -74,7 +84,9 @@ public class QCRestServiceImpl implements QCRestService {
 					profileName);
 			log.info(String.format("Job %s created", jobName));
 			QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
-			res.setQcIdentifier(new QCJobIdentifier(jobName));
+			QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
+			jobIdent.setProfile(profileName);
+			res.setQcIdentifier(jobIdent);
 			return res;
 		} catch (Exception e) {
 			log.error("Error starting qc", e);
@@ -96,9 +108,11 @@ public class QCRestServiceImpl implements QCRestService {
 			QCJobResult qcr = new QCJobResult();
 			qcr.setIdent(new QCJobIdentifier(jobResults.getName(), jobResults
 					.getProfile()));
-			qcr.setResult(jobResults.getResult().getValue());
+			String resultString =  jobResults.getResult().getValue();
+			log.debug("Result is "+resultString);
+			qcr.setResult(resultString);
 			qcr.setCompleted(jobResults.getCompleted());
-			qcr.setUrl(jobResults.getUrl());
+			qcr.setUrl(new java.net.URI(jobResults.getUrl().toString()));
 
 			log.debug("Returning job result: " + qcr.toString());
 			return qcr;
@@ -111,6 +125,9 @@ public class QCRestServiceImpl implements QCRestService {
 		} catch (RemoteException e) {
 			log.error("remote exception querying job result for job " + ident,
 					e);
+			throw new InternalServerErrorException(e);
+		} catch (URISyntaxException e) {
+			log.error("A uri returned by the cerify api is malformed", e);
 			throw new InternalServerErrorException(e);
 		}
 
@@ -139,18 +156,24 @@ public class QCRestServiceImpl implements QCRestService {
 	}
 
 	@Override
-	public QCMediaResult mediaResult(String file, QCJobIdentifier ident,
+	public QCMediaResult mediaResult(String file, String jobName,
 			Integer runNumber) throws NotFoundException {
 
+		QCJobIdentifier ident = new QCJobIdentifier(jobName);
+		
 		log.debug(String.format(
 				"Media result for file %s and job %s requested", file,
 				ident.getIdentifier()));
 
 		try {
-			GetMediaFileResultsResponse mediaResult = cerifyClient.getMediaResult(file, ident.getIdentifier(),
+			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(file, ident.getIdentifier(),
 					runNumber.intValue());
-			//TODO finish this!
-			return null;
+			
+			QCMediaResult mediaResult = new QCMediaResult();
+			mediaResult.setResult(res.getResult().getValue());
+			mediaResult.setUrl(new URI(res.getUrl().toString()));
+			
+			return mediaResult;
 			
 		} catch (JobDoesntExistFault e) {
 			String message = String.format(
@@ -168,6 +191,9 @@ public class QCRestServiceImpl implements QCRestService {
 			throw new InternalServerErrorException(e);
 		} catch (MalformedURIException e) {
 			log.error("The cerify client has produced a malformed uri", e);
+			throw new InternalServerErrorException(e);
+		} catch (URISyntaxException e) {
+			log.error("A uri returned by the cerify api is malformed", e);
 			throw new InternalServerErrorException(e);
 		}
 	}

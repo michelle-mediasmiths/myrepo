@@ -11,6 +11,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
@@ -20,6 +21,9 @@ import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatus;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
+import com.tektronix.www.cerify.soap.client.GetMediaLocations;
+import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponse;
+import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponseMedialocation;
 import com.tektronix.www.cerify.soap.client.GetProfiles;
 import com.tektronix.www.cerify.soap.client.GetProfilesResponse;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
@@ -34,7 +38,9 @@ import com.tektronix.www.cerify.soap.client._20101220.GetJobResults;
 import com.tektronix.www.cerify.soap.client._20101220.GetMediaFileResults;
 
 import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
 
+@Singleton
 public class CerifyClient {
 
 	private final static Logger log = Logger.getLogger(CerifyClient.class);
@@ -42,13 +48,19 @@ public class CerifyClient {
 	private final CeriTalk_PortType service;
 
 	private final String mediaLocationName;
+	private final URI mediaLocationURI;
 
 	@Inject
 	public CerifyClient(CeriTalk_PortType service,
-			@Named(CERIFY_LOCATION_NAME) String locationName) {
+			@Named(CERIFY_LOCATION_NAME) String locationName,
+			@Named(CERIFY_LOCATION_URL) URI locationURI) throws BaseCeritalkFault, RemoteException {
 		this.service = service;
 		this.mediaLocationName = locationName;
+		this.mediaLocationURI = locationURI;
+		
 	}
+
+
 
 	/**
 	 * Starts QC for a given file, using the provided identifier as a basis for
@@ -200,19 +212,11 @@ public class CerifyClient {
 		log.debug("Resolving uri for "+ filePath);
 
 		// lets assume for now that the paths will be the same on both systems
-		//TODO : find out how to identify the correct paths for files
-		return new URI(new File(filePath).toURI().toString());
+		URI resolved = new URI(mediaLocationURI);
+		resolved.appendPath(filePath);
+		log.debug("Resolved uri for "+ filePath + " as "+resolved.toString());
+		
+		return resolved;
 	}
 	
-	/**
-	 * Call to validate configuration
-	 * @return
-	 */
-	public boolean validateConfig(){
-		//TODO : implement
-		return true;
-	}
-
-	
-
 }
