@@ -22,6 +22,12 @@
 		</dependency>
 		<!-- end test dependencies -->
 
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-CarbonCoderClient</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+		</dependency>
+
 		<!-- begin mediasmiths dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
@@ -29,6 +35,7 @@
 			<version>3.0.6</version>
 		</dependency>
 		<!-- end mediasmiths dependencies -->
+
 	</dependencies>
 	<build>
 		<finalName>fx-TcAdapter</finalName>

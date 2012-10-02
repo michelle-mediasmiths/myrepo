@@ -21,7 +21,7 @@ public class BuilderTest
 				"myjob",
 				Arrays.asList(new String[] { "input.mxf" }),
 				Arrays.asList(new String[] { "output.mxf" }),
-				Arrays.asList(new UUID[] { UUID.randomUUID() }));
+				Arrays.asList(new UUID[] { UUID.fromString("cb15d0f4-e61b-42ec-acc2-853f6fb442af") }));
 
 		System.out.println(jobQueueRequest);
 	}
