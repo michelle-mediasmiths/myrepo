@@ -16,6 +16,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
+import com.mediasmiths.mayam.AlertImpl;
+import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 
@@ -30,6 +32,8 @@ public class MediaPickupModule extends AbstractModule {
 		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
 		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
+		
+		bind(AlertInterface.class).to(AlertImpl.class); //should this really be in a MayamClient module that we add to our setup?
 	}
 
 	protected static final TypeLiteral<MessageProcessor<Material>> MESSAGEPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<Material>>(){};

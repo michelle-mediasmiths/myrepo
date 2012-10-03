@@ -11,25 +11,29 @@ import com.mediasmiths.foxtel.mpa.guice.MediaPickupSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
-public final class AgentCli {
+public final class Agent implements Runnable
+{
 
-	private static Logger logger = Logger.getLogger(AgentCli.class);
-	
-	private AgentCli(){
-		//hiding constructor, this class's only purpose is its main method
-	}
-	
+	private static Logger logger = Logger.getLogger(Agent.class);
+
 	/**
 	 * @param args
-	 * @throws JAXBException 
-	 * @throws SAXException 
-	 * @throws InterruptedException 
+	 * @throws JAXBException
+	 * @throws SAXException
+	 * @throws InterruptedException
 	 */
-	public static void main(String[] args) throws JAXBException, SAXException, InterruptedException {
+	public static void main(String[] args) throws JAXBException, SAXException, InterruptedException
+	{
 
+		new Agent().run();
+
+	}
+
+	@Override
+	public void run()
+	{
 		logger.info("Agentcli starting up");
-		
-		
+
 		final Injector injector = GuiceInjectorBootstrap.createInjector(new MediaPickupSetup());
 
 		try
@@ -37,12 +41,16 @@ public final class AgentCli {
 			MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);
 			mpa.run();
 		}
+		catch (InterruptedException e)
+		{
+			logger.info("Interrupted");
+		}
 		finally
 		{
 			// Cleanly shutdown
 			injector.getInstance(ShutdownManager.class).shutdown();
 		}
-				
+
 	}
 
 }

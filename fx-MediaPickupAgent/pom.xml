@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>fx-MediaPickupAgent</artifactId>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>Foxtel Media Pickup Agent</name>
 	<url>http://maven.apache.org</url>
@@ -57,7 +57,7 @@
 		<!-- begin mediasmiths dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
-			<artifactId>stdlib-guice-common</artifactId>
+			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>3.0.6</version>
 		</dependency>
 		<dependency>
