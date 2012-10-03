@@ -28,6 +28,14 @@
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 
+		<!-- commons io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
+		</dependency>
+
+
 		<!-- begin mediasmiths dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>

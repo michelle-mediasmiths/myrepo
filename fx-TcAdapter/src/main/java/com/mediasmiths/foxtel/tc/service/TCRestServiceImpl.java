@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.tc.service;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.GET;
@@ -41,18 +42,27 @@ public class TCRestServiceImpl implements TCRestService
 
 	@Override
 	@PUT
-	@Path("/start/")
+	@Path("/start")
 	public String transcode(
 			@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
 			@QueryParam("output") String ouputPath,
 			@QueryParam("profile") String profileName) throws UnknownHostException, TransformerException, ParserConfigurationException, IOException
 	{
-		return carbonClient.voidJobQueueRequest(
+		return carbonClient.jobQueueRequest(
 				jobName,
 				Arrays.asList(new String[] { inputPath }),
 				Arrays.asList(new String[] { ouputPath }),
 				Arrays.asList(new UUID[] { UUID.randomUUID() }));
+	}
+
+	@Override
+	@GET
+	@Path("/profiles")
+	@Produces("text/plain")
+	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException
+	{
+		return carbonClient.listProfiles();
 	}
 
 }

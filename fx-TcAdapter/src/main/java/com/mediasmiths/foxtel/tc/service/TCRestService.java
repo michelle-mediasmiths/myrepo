@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.tc.service;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -20,8 +21,24 @@ public interface TCRestService
 	public String ping();
 
 	@PUT
-	@Path("/start/")
-	public String transcode(String jobName, String inputPath, String ouputPath, String profileName) throws UnknownHostException, TransformerException, ParserConfigurationException, IOException;
+	@Path("/start")
+	public String transcode(@QueryParam("jobname") String jobName,
+			@QueryParam("input") String inputPath,
+			@QueryParam("output") String ouputPath,
+			@QueryParam("profile") String profileName) throws UnknownHostException, TransformerException, ParserConfigurationException, IOException;
 	
 
+	/**
+	 * Lists available transcode profiles
+	 * @return
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
+	 * @throws IOException 
+	 * @throws UnknownHostException 
+	 */
+	@GET
+	@Path("/profiles")
+	@Produces("text/plain")
+	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException;
+	
 } 

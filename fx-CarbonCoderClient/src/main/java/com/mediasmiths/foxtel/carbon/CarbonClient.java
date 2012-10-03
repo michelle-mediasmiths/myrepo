@@ -10,5 +10,7 @@ import javax.xml.transform.TransformerException;
 
 public interface CarbonClient
 {
-	public String voidJobQueueRequest(String jobName, List<String> sources, List<String> destinations, List<UUID> profiles) throws TransformerException, ParserConfigurationException, UnknownHostException, IOException;
+	public String jobQueueRequest(String jobName, List<String> sources, List<String> destinations, List<UUID> profiles) throws TransformerException, ParserConfigurationException, UnknownHostException, IOException;
+
+	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException;
 }

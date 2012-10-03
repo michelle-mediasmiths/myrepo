@@ -18,6 +18,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.mediasmiths.foxtel.carbon.profile.ProfileType;
+
 public class Builder
 {
 
@@ -47,17 +49,41 @@ public class Builder
 
 		Document doc = docBuilder.newDocument();
 
-		Element rootElement = doc.createElement(ROOT_ELEMENT);
-		rootElement.setAttribute("CarbonAPIVer", API_VERSION);
-		rootElement.setAttribute("TaskType", "JobQueue");
+		Element rootElement = createRootElementForTask("JobQueue", doc);
 		rootElement.setAttribute("JobName", jobName);
-		doc.appendChild(rootElement);
 
 		addSourcesElement(sources, doc, rootElement);
 		addDestinationsElement(destinations,profiles,doc, rootElement);
 
 		return documentToString(doc);
 	}
+	
+	public String getProfileListRequest(ProfileType pt) throws TransformerException{
+		
+		Document doc = docBuilder.newDocument();
+		Element rootElement = createRootElementForTask("ProfileList", doc);
+		
+		Element profileAttributes = doc.createElement("ProfileAttributes");
+		profileAttributes.setAttribute("ProfileType", pt.toString());
+		rootElement.appendChild(profileAttributes);
+		
+		return documentToString(doc);
+	}
+	
+	/**
+	 * Creates a root element for the given task type. Added as child to the supplied document
+	 * @param taskType
+	 * @param doc
+	 * @return
+	 */
+	private Element createRootElementForTask(String taskType, Document doc){
+		Element rootElement = doc.createElement(ROOT_ELEMENT);
+		rootElement.setAttribute("CarbonAPIVer", API_VERSION);
+		rootElement.setAttribute("TaskType", "JobQueue");
+		doc.appendChild(rootElement);
+		return rootElement;
+	}
+	
 
 	private void addDestinationsElement(List<String> destinations, List<UUID> profiles, Document doc, Element rootElement)
 	{
