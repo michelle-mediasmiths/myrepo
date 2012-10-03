@@ -3,25 +3,29 @@ package com.mediasmiths.foxtel.carbon;
 import static com.mediasmiths.foxtel.carbon.CarbonConfig.CARBON_HOST;
 import static com.mediasmiths.foxtel.carbon.CarbonConfig.CARBON_PORT;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.xerces.dom.ElementNSImpl;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.carbon.jaxb.CarbonReply;
+import com.mediasmiths.foxtel.carbon.jaxb.Job;
 import com.mediasmiths.foxtel.carbon.message.Builder;
 import com.mediasmiths.foxtel.carbon.message.Transformer;
 import com.mediasmiths.foxtel.carbon.profile.ProfileType;
@@ -32,6 +36,8 @@ public class CarbonClientImpl implements CarbonClient
 
 	@Inject
 	private Transformer transformer;
+	@Inject
+	private Unmarshaller unmarshaller;
 
 	private final String host;
 	private final int port;
@@ -94,6 +100,37 @@ public class CarbonClientImpl implements CarbonClient
 		sendToCarbon(message);
 
 		return null;
+	}
+
+	@Override
+	public List<Job> listJobs()
+			throws TransformerException,
+			ParserConfigurationException,
+			UnknownHostException,
+			IOException,
+			JAXBException
+	{
+		String message = new Builder().getJobListRequest();
+		String reply = sendToCarbon(message);
+		String replyXML = transformer.getMessageFromData(reply);
+		CarbonReply cr = (CarbonReply) unmarshaller.unmarshal(new ByteArrayInputStream(replyXML.getBytes()));
+
+		log.debug(cr.getSuccess());
+
+		List<Job> jobs = new ArrayList<Job>();
+		
+		for (ElementNSImpl e : cr.getJobList().getJobs())
+		{
+			Job job = new Job();
+
+			job.setName(e.getAttribute("Name"));
+			job.setGuid(UUID.fromString(e.getAttribute("GUID").substring(1,37))); //guids from carbon wrapped with {}
+			jobs.add(job);
+			
+			log.trace(job.toString());
+		}
+
+		return jobs;
 	}
 
 }

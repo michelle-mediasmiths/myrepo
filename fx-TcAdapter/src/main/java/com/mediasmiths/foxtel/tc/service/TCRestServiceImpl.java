@@ -11,6 +11,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
@@ -19,6 +20,7 @@ import org.jboss.resteasy.spi.InjectorFactory;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.carbon.CarbonClient;
+import com.mediasmiths.foxtel.carbon.jaxb.Job;
 
 public class TCRestServiceImpl implements TCRestService
 {
@@ -63,6 +65,16 @@ public class TCRestServiceImpl implements TCRestService
 	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException
 	{
 		return carbonClient.listProfiles();
+	}
+
+	@Override
+	@GET
+	@Path("/job")
+	@Produces("application/xml")
+	public List<Job> listJobs() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException
+	{
+		List<Job> jobs = carbonClient.listJobs();
+		return jobs;
 	}
 
 }

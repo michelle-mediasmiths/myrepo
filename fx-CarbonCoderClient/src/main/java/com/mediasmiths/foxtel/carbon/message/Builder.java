@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -70,6 +69,14 @@ public class Builder
 		return documentToString(doc);
 	}
 	
+	public String getJobListRequest() throws TransformerException
+	{
+		Document doc = docBuilder.newDocument();
+		Element rootElement = createRootElementForTask("JobList", doc);
+		return documentToString(doc);
+	}
+
+	
 	/**
 	 * Creates a root element for the given task type. Added as child to the supplied document
 	 * @param taskType
@@ -79,7 +86,7 @@ public class Builder
 	private Element createRootElementForTask(String taskType, Document doc){
 		Element rootElement = doc.createElement(ROOT_ELEMENT);
 		rootElement.setAttribute("CarbonAPIVer", API_VERSION);
-		rootElement.setAttribute("TaskType", "JobQueue");
+		rootElement.setAttribute("TaskType", taskType);
 		doc.appendChild(rootElement);
 		return rootElement;
 	}
@@ -151,4 +158,5 @@ public class Builder
 		return xmlString;
 	}
 
+	
 }

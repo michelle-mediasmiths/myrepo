@@ -11,7 +11,7 @@ public class TransformerTest
 	public void testTransformer(){
 		
 		assertEquals("CarbonAPIXML1 3 foo", new Transformer().buildMessageForData("foo"));
-		
+		assertEquals("foo", new Transformer().getMessageFromData("CarbonAPIXML1 3 foo"));
 	}
 	
 }

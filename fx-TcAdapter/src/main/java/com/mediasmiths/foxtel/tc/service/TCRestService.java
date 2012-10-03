@@ -9,8 +9,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import com.mediasmiths.foxtel.carbon.jaxb.Job;
 
 @Path("/tc")
 public interface TCRestService
@@ -21,11 +24,26 @@ public interface TCRestService
 	public String ping();
 
 	@PUT
-	@Path("/start")
+	@Path("/job/start")
 	public String transcode(@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
 			@QueryParam("output") String ouputPath,
 			@QueryParam("profile") String profileName) throws UnknownHostException, TransformerException, ParserConfigurationException, IOException;
+	
+	/**
+	 * Lists all transcode jobs
+	 * @return
+	 * @throws ParserConfigurationException 
+	 * @throws TransformerException 
+	 * @throws IOException 
+	 * @throws UnknownHostException 
+	 * @throws JAXBException 
+	 */
+	@GET
+	@Path("/job")
+	@Produces("application/xml")
+	public List<Job> listJobs() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException;
+	
 	
 
 	/**
