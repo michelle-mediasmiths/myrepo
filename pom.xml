@@ -40,7 +40,6 @@
 		<module>fx-CerifyClient</module>
 		<module>fx-CarbonCoderClient</module>
 		<module>fx-MuleClient</module>
-    <module>fx-TcAdapterr</module>
   </modules>
 
 	<properties>
