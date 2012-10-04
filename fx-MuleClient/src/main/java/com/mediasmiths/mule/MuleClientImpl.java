@@ -14,7 +14,7 @@ import org.mule.api.config.ConfigurationBuilder;
 import org.mule.api.context.MuleContextBuilder;
 import org.mule.api.context.MuleContextFactory;
 import org.mule.client.DefaultLocalMuleClient;
-import org.mule.config.builders.AutoConfigurationBuilder;
+import org.mule.config.builders.DefaultsConfigurationBuilder;
 import org.mule.context.DefaultMuleContextBuilder;
 import org.mule.context.DefaultMuleContextFactory;
 
@@ -29,7 +29,7 @@ public class MuleClientImpl implements IMuleClient {
 		MuleContextFactory muleContextFactory = new DefaultMuleContextFactory();
 
 		//create the configuration builder and optionally pass in one or more of these
-		ConfigurationBuilder builder = new AutoConfigurationBuilder("src/main/resources/muleclient-config.xml");
+		ConfigurationBuilder builder = new DefaultsConfigurationBuilder();
 		 
 		//The actual context builder to use
 		MuleContextBuilder contextBuilder = new DefaultMuleContextBuilder();
