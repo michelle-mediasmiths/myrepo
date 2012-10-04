@@ -9,7 +9,7 @@
 	</listener>
 
 	<listener>
-		<listener-class>com.mediasmiths.foxtel.mpa.main.ContextListener</listener-class>
+		<listener-class>com.mediasmiths.foxtel.placeholder.main.ContextListener</listener-class>
 	</listener>
 
 	<servlet>

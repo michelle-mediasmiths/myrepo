@@ -31,7 +31,7 @@ public class PlaceholderAgentMain implements Runnable {
 	}
 	
 	
-//	@Override
+	@Override
 	public void run()
 	{
 		logger.info("Placeholdermangercli starting up");
