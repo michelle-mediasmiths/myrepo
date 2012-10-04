@@ -13,7 +13,7 @@ import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
-public class PlaceholderAgentMain {
+public class PlaceholderAgentMain implements Runnable {
 
 	private static Logger logger = Logger.getLogger(PlaceholderAgentMain.class);
 
@@ -26,10 +26,16 @@ public class PlaceholderAgentMain {
 	 */
 	public static void main(String[] args) throws JAXBException, SAXException,
 			MalformedURLException, InterruptedException {
+		new PlaceholderAgentMain().run();
 
-		logger.info("Placeholdermanger cli starting up");
-		
-		
+	}
+	
+	
+//	@Override
+	public void run()
+	{
+		logger.info("Placeholdermangercli starting up");
+
 		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderAgentSetup());
 
 		try
@@ -37,12 +43,17 @@ public class PlaceholderAgentMain {
 			PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
 			pm.run();
 		}
+		catch (InterruptedException e)
+		{
+			logger.info("Interrupted");
+		}
 		finally
 		{
 			// Cleanly shutdown
 			injector.getInstance(ShutdownManager.class).shutdown();
 		}
-				
+
 	}
+
 
 }
