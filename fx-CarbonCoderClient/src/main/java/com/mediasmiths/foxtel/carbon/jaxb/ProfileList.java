@@ -6,18 +6,18 @@ import javax.xml.bind.annotation.XmlAnyElement;
 
 import org.apache.xerces.dom.ElementNSImpl;
 
-public class JobList
+public class ProfileList
 {
-	private List<ElementNSImpl> jobs;
+	private List<ElementNSImpl> profiles;
 
-	public List<ElementNSImpl> getJobs()
+	public List<ElementNSImpl> getProfiles()
 	{
-		return jobs;
+		return profiles;
 	}
 	@XmlAnyElement(lax = true)
-	public void setJobs(List<ElementNSImpl> jobs)
+	public void setProfiles(List<ElementNSImpl> profiles)
 	{
-		this.jobs = jobs;
+		this.profiles = profiles;
 
 	}
 }

@@ -14,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import com.mediasmiths.foxtel.carbon.jaxb.Job;
+import com.mediasmiths.foxtel.carbon.jaxb.Profile;
 
 @Path("/tc")
 public interface TCRestService
@@ -53,10 +54,11 @@ public interface TCRestService
 	 * @throws TransformerException 
 	 * @throws IOException 
 	 * @throws UnknownHostException 
+	 * @throws JAXBException 
 	 */
 	@GET
 	@Path("/profiles")
-	@Produces("text/plain")
-	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException;
+	@Produces("application/xml")
+	public List<Profile> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException;
 	
 } 

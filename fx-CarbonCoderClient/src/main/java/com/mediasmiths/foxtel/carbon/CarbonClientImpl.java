@@ -26,6 +26,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.carbon.jaxb.CarbonReply;
 import com.mediasmiths.foxtel.carbon.jaxb.Job;
+import com.mediasmiths.foxtel.carbon.jaxb.Profile;
 import com.mediasmiths.foxtel.carbon.message.Builder;
 import com.mediasmiths.foxtel.carbon.message.Transformer;
 import com.mediasmiths.foxtel.carbon.profile.ProfileType;
@@ -89,17 +90,25 @@ public class CarbonClientImpl implements CarbonClient
 	}
 
 	@Override
-	public List<String> listProfiles()
+	public List<Profile> listProfiles()
 			throws TransformerException,
 			ParserConfigurationException,
 			UnknownHostException,
-			IOException
+			IOException, JAXBException
 	{
 
-		String message = new Builder().getProfileListRequest(ProfileType.Connection);
-		sendToCarbon(message);
+		String message = new Builder().getProfileListRequest(ProfileType.Filter_Video);
+		String reply = sendToCarbon(message);
+		String replyXML = transformer.getMessageFromData(reply);
+		CarbonReply cr = (CarbonReply) unmarshaller.unmarshal(new ByteArrayInputStream(replyXML.getBytes()));
+		
+		List<Profile> profiles = new ArrayList<Profile>();
 
-		return null;
+		for (ElementNSImpl e : cr.getProfileList().getProfiles()){
+			profiles.add(new Profile(e));
+		}
+		
+		return profiles;
 	}
 
 	@Override

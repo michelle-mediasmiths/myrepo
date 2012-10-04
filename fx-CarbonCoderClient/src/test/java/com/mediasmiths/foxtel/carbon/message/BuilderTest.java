@@ -47,7 +47,7 @@ public class BuilderTest
 	}
 	
 	@Test
-	public void foo() throws UnknownHostException, TransformerException, ParserConfigurationException, IOException, JAXBException{
+	public void listjobs() throws UnknownHostException, TransformerException, ParserConfigurationException, IOException, JAXBException{
 
 		final Injector injector = GuiceInjectorBootstrap.createInjector(new GuiceSetup()
 		{
@@ -71,6 +71,33 @@ public class BuilderTest
 		CarbonClient carbonclient = injector.getInstance(CarbonClient.class);
 		
 		carbonclient.listJobs();
+	}
+	
+	@Test
+	public void listprofiles() throws UnknownHostException, TransformerException, ParserConfigurationException, IOException, JAXBException{
+
+		final Injector injector = GuiceInjectorBootstrap.createInjector(new GuiceSetup()
+		{
+			
+			@Override
+			public void registerModules(List<Module> modules, PropertyFile config)
+			{
+				modules.add(new CarbonClientModule());
+				
+			}
+			
+			@Override
+			public void injectorCreated(Injector injector)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		
+		CarbonClient carbonclient = injector.getInstance(CarbonClient.class);
+		
+		carbonclient.listProfiles();
 	}
 
 }

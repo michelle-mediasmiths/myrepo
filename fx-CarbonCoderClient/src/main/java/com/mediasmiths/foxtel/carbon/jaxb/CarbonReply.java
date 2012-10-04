@@ -12,35 +12,47 @@ public class CarbonReply
 	private String error;
 
 	private JobList jobList;
+	private ProfileList profileList;
 
-	@XmlAttribute(name = "Error")
+	public ProfileList getProfileList()
+	{
+		return profileList;
+	}
+
+	@XmlElement(name = "ProfileList")
+	public void setProfileList(ProfileList profileList)
+	{
+		this.profileList = profileList;
+	}
+
 	public String getError()
 	{
 		return error;
 	}
 
-	@XmlAttribute(name = "Success")
 	public String getSuccess()
 	{
 		return success;
 	}
 
-	@XmlElement(name = "JobList")
 	public JobList getJobList()
 	{
 		return jobList;
 	}
 
+	@XmlElement(name = "JobList")
 	public void setJobList(JobList jobList)
 	{
 		this.jobList = jobList;
 	}
 
+	@XmlAttribute(name = "Success")
 	public void setSuccess(String success)
 	{
 		this.success = success;
 	}
 
+	@XmlAttribute(name = "Error")
 	public void setError(String error)
 	{
 		this.error = error;

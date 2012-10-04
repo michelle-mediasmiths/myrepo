@@ -12,20 +12,21 @@ public class Job
 	private String name;
 	private UUID guid;
 	
-	@XmlAttribute(name = "Name")
 	public String getName()
 	{
 		return name;
 	}
+	
+	@XmlAttribute(name = "Name")
 	public void setName(String name)
 	{
 		this.name = name;
 	}
-	@XmlAttribute(name = "GUID")
 	public UUID getGuid()
 	{
 		return guid;
 	}
+	@XmlAttribute(name = "GUID")
 	public void setGuid(UUID guid)
 	{
 		this.guid = guid;

@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.carbon.CarbonClient;
 import com.mediasmiths.foxtel.carbon.jaxb.Job;
+import com.mediasmiths.foxtel.carbon.jaxb.Profile;
 
 public class TCRestServiceImpl implements TCRestService
 {
@@ -62,7 +63,7 @@ public class TCRestServiceImpl implements TCRestService
 	@GET
 	@Path("/profiles")
 	@Produces("text/plain")
-	public List<String> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException
+	public List<Profile> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException
 	{
 		return carbonClient.listProfiles();
 	}

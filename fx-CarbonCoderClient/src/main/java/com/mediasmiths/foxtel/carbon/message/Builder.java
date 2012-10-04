@@ -147,7 +147,7 @@ public class Builder
 		TransformerFactory transfac = TransformerFactory.newInstance();
 		Transformer trans = transfac.newTransformer();
 		trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-		trans.setOutputProperty(OutputKeys.INDENT, "yes");
+		trans.setOutputProperty(OutputKeys.INDENT, "no");
 
 		// create string from xml tree
 		StringWriter sw = new StringWriter();
