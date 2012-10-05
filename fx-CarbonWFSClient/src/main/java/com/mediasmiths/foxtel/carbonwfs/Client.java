@@ -3,7 +3,11 @@ package com.mediasmiths.foxtel.carbonwfs;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.util.UUID;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
@@ -29,16 +33,10 @@ import com.rhozet.rhozet_services_iwfcjmservices.IWfcJmServices;
 
 public class Client
 {
-	private final IWfcJmServices service;
-
+	@Inject private IWfcJmServices service;
+	@Inject private Unmarshaller unmarshaller;
+	
 	private final static Logger log = Logger.getLogger(Client.class);
-
-	@Inject
-	public Client(IWfcJmServices service)
-	{
-		this.service = service;
-
-	}
 
 	public JobStatus jobStatus(UUID jobid){
 		log.info("Requesting status of job "+jobid.toString());
@@ -134,5 +132,20 @@ public class Client
 		}
 		emt.setText(text);
 	}
+
+	/**
+	 * Creates the supplied profile, returns its id
+	 * @param profileXML
+	 * @return
+	 * @throws JAXBException 
+	 */
+	public UUID createProfile(String profileXML) throws JAXBException
+	{
+		StringReader reader = new StringReader(profileXML);
+		Preset preset = (Preset) unmarshaller.unmarshal(reader);
+		String storePreset = service.storePreset(preset);
+		return UUID.fromString(storePreset);
+	}
+	
 
 }

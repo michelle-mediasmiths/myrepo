@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.UUID;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -48,4 +50,15 @@ public interface TCRestService
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
 	public JobStatus jobStatus(@PathParam("id") UUID jobid);
+	
+	/**
+	 * Creates the profile described by profileXML
+	 * @param profileXML
+	 * @return the id of the created profile
+	 */
+	@PUT
+	@Path("/profile/create")
+	@Consumes("application/x-www-form-urlencoded")
+	public UUID createProfile(@FormParam("profile") String profileXML);
+	
 } 
