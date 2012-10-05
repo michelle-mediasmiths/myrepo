@@ -246,7 +246,7 @@ public class MayamPackageControllerTest {
 	@Test
 	public void deletePackage() 
 	{
-		MayamClientErrorCode returnCode = controller.deletePackage(anyString());
+		MayamClientErrorCode returnCode = controller.deletePackage("Package ID");
 		assertEquals(MayamClientErrorCode.NOT_IMPLEMENTED, returnCode);
 	}
 }
