@@ -10,7 +10,6 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.listeners.MqClient;
 
 public class MayamPackageController {
 	private final TasksClient client;

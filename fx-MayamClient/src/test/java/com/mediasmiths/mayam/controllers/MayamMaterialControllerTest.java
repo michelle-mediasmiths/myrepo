@@ -261,7 +261,7 @@ public class MayamMaterialControllerTest {
 	@Test
 	public void deleteMaterial() 
 	{
-		MayamClientErrorCode returnCode = controller.deleteMaterial(anyString());
+		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
 		assertEquals(returnCode, MayamClientErrorCode.NOT_IMPLEMENTED);
 	}
 }

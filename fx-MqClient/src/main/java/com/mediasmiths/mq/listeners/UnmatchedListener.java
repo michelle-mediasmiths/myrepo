@@ -1,4 +1,4 @@
-package com.mediasmiths.mayam.listeners;
+package com.mediasmiths.mq.listeners;
 
 import java.util.Calendar;
 

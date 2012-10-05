@@ -39,7 +39,6 @@ import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mayam.listeners.MqClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 
@@ -52,8 +51,6 @@ public class MayamClientImpl implements MayamClient
 	@Inject
 	Provider<AttributeMessageBuilder> attributeMessageBuilder;
 	@Inject
-	MqClient mqClient;
-	@Inject
 	MayamTitleController titleController;
 	@Inject
 	MayamMaterialController materialController;
@@ -65,10 +62,9 @@ public class MayamClientImpl implements MayamClient
 	MayamValidator validator;
 
 	@Inject
-	public MayamClientImpl(MqClient mqClient) throws MalformedURLException, IOException
+	public MayamClientImpl() throws MalformedURLException, IOException
 	{
-		this.mqClient = mqClient;
-		mqClient.attachIncomingListners();
+
 	}
 
 	
@@ -91,7 +87,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void shutdown()
 	{
-		mqClient.dispose();
+
 	}
 
 	/*
