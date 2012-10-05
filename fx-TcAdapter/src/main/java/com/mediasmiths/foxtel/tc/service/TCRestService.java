@@ -55,10 +55,11 @@ public interface TCRestService
 	 * Creates the profile described by profileXML
 	 * @param profileXML
 	 * @return the id of the created profile
+	 * @throws JAXBException 
 	 */
 	@PUT
 	@Path("/profile/create")
 	@Consumes("application/x-www-form-urlencoded")
-	public UUID createProfile(@FormParam("profile") String profileXML);
+	public UUID createProfile(@FormParam("profile") String profileXML) throws JAXBException;
 	
 } 

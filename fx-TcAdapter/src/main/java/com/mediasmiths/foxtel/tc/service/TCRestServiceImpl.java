@@ -69,7 +69,7 @@ public class TCRestServiceImpl implements TCRestService
 	@PUT
 	@Path("/profile/create")
 	@Consumes("application/x-www-form-urlencoded")
-	public UUID createProfile(@FormParam("profile") String profileXML)
+	public UUID createProfile(@FormParam("profile") String profileXML) throws JAXBException
 	{
 		return wfsClient.createProfile(profileXML);
 	}
