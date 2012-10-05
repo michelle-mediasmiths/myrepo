@@ -11,6 +11,7 @@ import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AspectRatio;
@@ -28,6 +29,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 public class MayamMaterialController {
 	private final TasksClient client;
 	
+	@Inject
 	public MayamMaterialController(TasksClient mayamClient) {
 		client = mayamClient;
 	}

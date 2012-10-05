@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -14,6 +15,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 public class MayamTaskController {
 	private final TasksClient client;
 	
+	@Inject
 	public MayamTaskController(TasksClient mayamClient) {
 		client = mayamClient;
 	}

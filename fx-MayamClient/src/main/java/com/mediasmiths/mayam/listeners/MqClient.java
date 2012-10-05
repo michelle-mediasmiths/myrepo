@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.listeners;
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
@@ -21,9 +22,10 @@ public class MqClient {
 	private TasksClient client;
 	private MayamTaskController taskController;
 	
-	public MqClient(Injector injector, TasksClient mayamClient, MayamTaskController mayamTaskController) 
+	@Inject
+	public MqClient(Mq mq, TasksClient mayamClient, MayamTaskController mayamTaskController) 
 	{
-		mq = injector.getInstance(Mq.class);
+		this.mq=mq;
 		listeners = new ArrayList<Detachable>();
 		mq.listen(ListenIntensity.NORMAL);
 		client = mayamClient;

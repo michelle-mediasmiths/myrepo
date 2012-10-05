@@ -56,6 +56,7 @@ public class Client
 	private final static String transcodeTargetFilexp = transcodeTargetxp + "/Filename";
 	private final static String transcodeTargetTitlexp = transcodeTargetxp + "/Title";
 	private final static String transcodePresetxp = transcodeTargetxp + "/PresetGuid";
+	private final static String workFlowTasksNamexp = "/WorkflowTasksSet/WorkflowTasks[@name]";
 
 	public String buildWorkFlowForSimpleTranscode(String outputFile, String jobTitle, UUID presetUid)
 			throws JDOMException,
@@ -63,13 +64,16 @@ public class Client
 	{
 		SAXBuilder parser = new SAXBuilder();
 		Document doc = parser.build(getClass().getClassLoader().getResourceAsStream("TranscodeWFtemplate.xml"));
-
+		
 		// set the target folder
 		setSingleElementText(transcodeTargetPathxp, doc, FilenameUtils.getFullPath(outputFile));
 
 		// set the target filename
 		setSingleElementText(transcodeTargetFilexp, doc, FilenameUtils.getName(outputFile));
 
+		//set the template name
+		setSingleElementText(workFlowTasksNamexp, doc, jobTitle);
+		
 		// set the jobs title
 		setSingleElementText(transcodeTargetTitlexp, doc, jobTitle);
 
@@ -93,7 +97,7 @@ public class Client
 		XPathExpression<Element> xpath = XPathFactory.instance().compile(xpathStr, Filters.element());
 		Element emt = xpath.evaluateFirst(doc);
 		if(emt == null){
-			System.out.println("xpath " + xpathStr + " failed");
+			log.error("xpath " + xpathStr + " failed");
 		}
 		emt.setText(text);
 	}
