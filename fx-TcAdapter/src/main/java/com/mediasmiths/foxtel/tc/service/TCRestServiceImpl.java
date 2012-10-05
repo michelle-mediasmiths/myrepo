@@ -9,31 +9,26 @@ import java.util.UUID;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.jboss.resteasy.spi.InjectorFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.mediasmiths.foxtel.carbon.CarbonClient;
-import com.mediasmiths.foxtel.carbon.jaxb.Job;
-import com.mediasmiths.foxtel.carbon.jaxb.Profile;
+import com.mediasmiths.foxtel.carbonwfs.Client;
+import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 
 public class TCRestServiceImpl implements TCRestService
 {
 
-	private final CarbonClient carbonClient;
-
-	@Inject
-	public TCRestServiceImpl(CarbonClient carbonClient)
-	{
-		this.carbonClient = carbonClient;
-	}
-
+	@Inject private Client wfsClient;
+	
 	@Override
 	@GET
 	@Path("/ping")
@@ -46,36 +41,24 @@ public class TCRestServiceImpl implements TCRestService
 	@Override
 	@PUT
 	@Path("/start")
-	public String transcode(
+	public UUID transcode(
 			@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
 			@QueryParam("output") String ouputPath,
-			@QueryParam("profile") String profileName) throws UnknownHostException, TransformerException, ParserConfigurationException, IOException
+			@QueryParam("profile") UUID profileID) throws WfsClientException
 	{
-		return carbonClient.jobQueueRequest(
-				jobName,
-				Arrays.asList(new String[] { inputPath }),
-				Arrays.asList(new String[] { ouputPath }),
-				Arrays.asList(new UUID[] { UUID.randomUUID() }));
+		return wfsClient.transcode(inputPath, ouputPath, profileID, jobName);
 	}
 
 	@Override
 	@GET
-	@Path("/profiles")
-	@Produces("text/plain")
-	public List<Profile> listProfiles() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException
-	{
-		return carbonClient.listProfiles();
-	}
-
-	@Override
-	@GET
-	@Path("/job")
+	@Path("/job/{id}/status")
 	@Produces("application/xml")
-	public List<Job> listJobs() throws TransformerException, ParserConfigurationException, UnknownHostException, IOException, JAXBException
+	public JobStatus jobStatus(@PathParam("id") UUID jobid)
 	{
-		List<Job> jobs = carbonClient.listJobs();
-		return jobs;
+		return wfsClient.jobStatus(jobid);
 	}
+
+
 
 }

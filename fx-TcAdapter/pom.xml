@@ -24,7 +24,7 @@
 
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-CarbonCoderClient</artifactId>
+			<artifactId>fx-CarbonWFSClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 
@@ -40,7 +40,13 @@
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
-			<version>3.0.6</version>
+			<version>${stdlib.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mediasmiths.std.dexter</groupId>
+			<artifactId>dexter-common</artifactId>
+			<version>${stdlib.version}</version>
 		</dependency>
 		<!-- end mediasmiths dependencies -->
 

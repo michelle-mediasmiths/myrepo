@@ -15,15 +15,18 @@ public class QCAdapterSetup  extends AbstractRESTGuiceSetup {
 
 	private final static Logger log = Logger.getLogger(QCAdapterSetup.class);
 	
-	public void injectorCreated(Injector injector) {
-	}
-
 	@Override
 	public void addModules(List<Module> modules, PropertyFile config)
 	{
 		log.info("Adding modules");
 		modules.add(new QCAdapterModule());
 		modules.add(new CerifyModule());
+	}
+
+	@Override
+	public void injectorWasCreated(Injector arg0)
+	{
+		
 	}
 
 }

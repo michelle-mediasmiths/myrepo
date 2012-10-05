@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-common</artifactId>
-			<version>3.0.6</version>
+			<version>${stdlib.version}</version>
 		</dependency>
 
 		<!-- commons -->

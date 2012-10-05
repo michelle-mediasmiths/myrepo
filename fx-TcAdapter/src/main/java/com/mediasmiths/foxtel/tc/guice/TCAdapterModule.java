@@ -3,7 +3,7 @@ package com.mediasmiths.foxtel.tc.guice;
 import com.google.inject.AbstractModule;
 import com.mediasmiths.foxtel.tc.service.TCRestService;
 import com.mediasmiths.foxtel.tc.service.TCRestServiceImpl;
-import com.mediasmiths.std.guice.web.rest.RestResourceRegistry;
+import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 
 public class TCAdapterModule extends AbstractModule{
 
