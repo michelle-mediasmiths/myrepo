@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.List;
 import java.util.UUID;
 
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
@@ -13,6 +15,7 @@ import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.datacontract.schemas._2004._07.rhozet.Preset;
@@ -33,16 +36,26 @@ import com.rhozet.rhozet_services_iwfcjmservices.IWfcJmServices;
 
 public class Client
 {
-	@Inject private IWfcJmServices service;
-	@Inject private Unmarshaller unmarshaller;
-	
+	@Inject
+	private IWfcJmServices service;
+	@Inject
+	private Unmarshaller unmarshaller;
+
 	private final static Logger log = Logger.getLogger(Client.class);
 
-	public JobStatus jobStatus(UUID jobid){
-		log.info("Requesting status of job "+jobid.toString());
-		return this.service.getJob(jobid.toString(), new Boolean(false)).getStatus();
+	public Job getJob(UUID jobid)
+	{
+		log.info("Requesting status of job " + jobid.toString());
+		Job job = service.getJob(jobid.toString(), new Boolean(false));
+		return job;
 	}
-	
+
+	public JobStatus jobStatus(UUID jobid)
+	{
+		Job job = getJob(jobid);
+		return job.getStatus();
+	}
+
 	public UUID savePreset(Preset preset)
 	{
 		log.info("Saving a preset");
@@ -134,18 +147,27 @@ public class Client
 	}
 
 	/**
-	 * Creates the supplied profile, returns its id
-	 * @param profileXML
+	 * Creates the supplied preset, returns its id
+	 * 
+	 * @param presetXML
 	 * @return
-	 * @throws JAXBException 
+	 * @throws JAXBException
 	 */
-	public UUID createProfile(String profileXML) throws JAXBException
+	public UUID createPreset(String presetXML) throws JAXBException
 	{
-		StringReader reader = new StringReader(profileXML);
-		Preset preset = (Preset) unmarshaller.unmarshal(reader);
+		log.info("Trying to create preset from xml: " + presetXML);
+		StringReader reader = new StringReader(presetXML);
+		JAXBElement<Preset> element = (JAXBElement<Preset>) unmarshaller.unmarshal(reader);
+		Preset preset = element.getValue();
 		String storePreset = service.storePreset(preset);
 		return UUID.fromString(storePreset);
 	}
+
+	public ArrayOfPreset listPresets()
+	{
+		return service.getPresetList(Long.valueOf(0l));
+	}
+	
 	
 
 }

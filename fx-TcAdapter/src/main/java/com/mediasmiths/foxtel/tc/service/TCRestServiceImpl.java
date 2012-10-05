@@ -21,6 +21,9 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.apache.log4j.Logger;
+import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
+import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.datacontract.schemas._2004._07.rhozet.Preset;
 import org.jboss.resteasy.spi.InjectorFactory;
@@ -33,6 +36,8 @@ import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 public class TCRestServiceImpl implements TCRestService
 {
 
+	private static final Logger log = Logger.getLogger(TCRestServiceImpl.class);
+	
 	@Inject private Client wfsClient;
 	
 	@Override
@@ -51,27 +56,46 @@ public class TCRestServiceImpl implements TCRestService
 			@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
 			@QueryParam("output") String ouputPath,
-			@QueryParam("profile") UUID profileID) throws WfsClientException
+			@QueryParam("preset") UUID presetID) throws WfsClientException
 	{
-		return wfsClient.transcode(inputPath, ouputPath, profileID, jobName);
+		return wfsClient.transcode(inputPath, ouputPath, presetID, jobName);
 	}
 
 	@Override
 	@GET
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
-	public JobStatus jobStatus(@PathParam("id") UUID jobid)
+	public JobStatus jobStatus(@PathParam("id") String jobid)
 	{
-		return wfsClient.jobStatus(jobid);
+		log.trace(String.format("jobid %s",jobid));
+		return wfsClient.jobStatus(UUID.fromString(jobid));
 	}
 
 	@Override
 	@PUT
-	@Path("/profile/create")
+	@Path("/preset/create")
 	@Consumes("application/x-www-form-urlencoded")
-	public UUID createProfile(@FormParam("profile") String profileXML) throws JAXBException
+	public UUID createPreset(@FormParam("preset") String presetXML) throws JAXBException
 	{
-		return wfsClient.createProfile(profileXML);
+		return wfsClient.createPreset(presetXML);
+	}
+
+	@Override
+	@GET
+	@Path("/preset")
+	@Produces("application/xml")
+	public ArrayOfPreset listPresets()
+	{
+		return wfsClient.listPresets();
+	}
+
+	@Override
+	@Path("/job/{id}")
+	@Produces("application/xml")
+	public Job job(@PathParam("id") String jobid)
+	{
+		log.trace(String.format("jobid %s",jobid));
+		return wfsClient.getJob(UUID.fromString(jobid));
 	}
 	
 

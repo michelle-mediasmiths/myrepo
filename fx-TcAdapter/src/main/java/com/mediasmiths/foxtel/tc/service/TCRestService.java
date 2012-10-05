@@ -17,7 +17,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
+import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
+import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
+import org.datacontract.schemas._2004._07.rhozet.Preset;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 
@@ -35,7 +38,7 @@ public interface TCRestService
 	public UUID transcode(@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
 			@QueryParam("output") String ouputPath,
-			@QueryParam("profile") UUID profileName) throws WfsClientException;
+			@QueryParam("preset") UUID presetName) throws WfsClientException;
 	
 	/**
 	 * Lists all transcode jobs
@@ -49,17 +52,30 @@ public interface TCRestService
 	@GET
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
-	public JobStatus jobStatus(@PathParam("id") UUID jobid);
+	public JobStatus jobStatus(@PathParam("id") String jobid);
 	
 	/**
-	 * Creates the profile described by profileXML
-	 * @param profileXML
-	 * @return the id of the created profile
+	 * Gets a specific transcode job
+	 */
+	@GET
+	@Path("/job/{id}")
+	@Produces("application/xml")
+	public Job job(@PathParam("id") String jobid);
+	
+	/**
+	 * Creates the preset described by presetXML
+	 * @param presetXML
+	 * @return the id of the created preset
 	 * @throws JAXBException 
 	 */
 	@PUT
-	@Path("/profile/create")
+	@Path("/preset/create")
 	@Consumes("application/x-www-form-urlencoded")
-	public UUID createProfile(@FormParam("profile") String profileXML) throws JAXBException;
+	public UUID createPreset(@FormParam("preset") String presetXML) throws JAXBException;
+	
+	@GET
+	@Path("/preset")
+	@Produces("application/xml")
+	public ArrayOfPreset listPresets();
 	
 } 
