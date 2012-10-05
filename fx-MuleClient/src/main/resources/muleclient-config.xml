@@ -1,29 +1,92 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesource.org/schema/mule..."
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-inst..."
-	xmlns:spring="http://www.springframework.org/schema..."
-	xmlns:http="http://www.mulesource.org/schema/mule..."
-	xsi:schemaLocation="
-	http://www.springframework.org/schema... http://www.springframework.org/schema...
-	http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...
-	http://www.mulesource.org/schema/mule... http://www.mulesource.org/schema/mule...">
-	
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+        xmlns:file="http://www.mulesoft.org/schema/mule/file"
+        xsi:schemaLocation="
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+        http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+        
 	<description>
 	This config is for Mule Client examples.
 	</description>
 	
-    <ajax:connector name="Ajax" serverUrl="http://127.0.0.1:8090/Ajax" resourceBase="src/main/app/docroot" logLevel="2" jsonCommented="false" doc:name="Ajax"/>
-    <jms:connector name="JMS" validateConnections="true" doc:name="JMS"/>
-    <flow name="transcode_soap_testFlow1" doc:name="transcode_soap_testFlow1">
-        <jms:inbound-endpoint queue="TestQueue" mimeType="text/plain" encoding="UTF-8" connector-ref="JMS" doc:name="JMS">
-            <jms:transaction action="ALWAYS_BEGIN" timeout="1000"/>
-        </jms:inbound-endpoint>
-        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
-        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" path="ode/processes/TranscodeTrial/WFE/WFE-8" mimeType="text/xml" doc:name="HTTP"/>
-        <echo-component doc:name="Echo"/>
-    </flow>
+<!--	
+	<stdio:connector name="SystemStreamConnector"
+        promptMessageCode="3"
+        resourceBundle="messages.hello-example-messages"
+        messageDelayTime="1000"/>
+        
+    <custom-transformer name="HttpRequestToNameString" class="org.mule.example.myhelloapp.HttpRequestToNameString"/>    
+      <custom-transformer name="StringToNameString" class="org.mule.example.myhelloapp.StringToNameString"/>
+    <custom-transformer name="NameStringToChatString" class="org.mule.example.myhelloapp.NameStringToChatString"/>
+    <custom-transformer name="ChatStringToString" class="org.mule.example.myhelloapp.ChatStringToString"/>
+    <custom-transformer name="ExceptionToString" class="org.mule.example.myhelloapp.ExceptionToString"/>  
+        <model name="myHelloApp">
+        <service name="GreeterUMO">
+    <inbound>
+        <inbound-endpoint address="http://localhost:8888" transformer-refs="HttpRequestToNameString" exchange-pattern="request-response">
+            <not-filter>
+                <wildcard-filter pattern="/favicon.ico"/>   
+            </not-filter>
+            <component class="org.mule.example.myhelloapp.Greeter"/>
+        </inbound-endpoint>
+    </inbound>
+    <outbound>
+    <filtering-router>
+        <vm:outbound-endpoint path="chitchatter" exchange-pattern="request-response"/>
+        <payload-type-filter expectedType="org.mule.example.myhelloapp.NameString"/>
+    </filtering-router>
+    <filtering-router>
+        <vm:outbound-endpoint path="userErrorHandler" exchange-pattern="request-response"/>
+        <payload-type-filter expectedType="java.lang.Exception"/>
+    </filtering-router>
+</outbound>
+    </service>
+    <service name="UserErrorHandler">
+    <inbound>
+        <vm:inbound-endpoint path="userErrorHandler" responseTransformer-refs="ExceptionToString" exchange-pattern="request-response"/>
+    </inbound>
+</service>
+<flow name="ChitChat">
+    <vm:inbound-endpoint path="chitchatter" transformer-refs="NameStringToChatString" 
+        responseTransformer-refs="ChatStringToString" exchange-pattern="request-response"/>
+    <component class="org.mule.example.myhelloapp.ChitChatter"/>
+</flow>
+        </model>-->
+        
+        
+	
+ <!--   <ajax:connector name="Ajax" serverUrl="http://127.0.0.1:8090/Ajax" resourceBase="src/main/app/docroot" logLevel="2" jsonCommented="false" doc:name="Ajax"/> -->
+   <!--  <jms:activemq-connector name="Active_MQ" specification="1.1" brokerURL="tcp://localhost:61616" /> -->
 
+
+    <model>
+	<!--   <flow name="transcode_soap_testFlow1" doc:name="transcode_soap_testFlow1">
+	    
+	        <jms:inbound-endpoint queue="TestQueue" mimeType="text/plain" encoding="UTF-8" connector-ref="Active_MQ" />
+	        <jms:outbound-endpoint queue="TestQueue" mimeType="text/plain" encoding="UTF-8" connector-ref="Active_MQ"/>
+	        <mulexml:object-to-xml-transformer doc:name="Object to XML"/>
+	        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="/Users/davidgault/Repo/Foxtel/muletest.xsl" doc:name="XML to SOAP"/>
+	        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" path="ode/processes/TranscodeTrial/WFE/WFE-8" mimeType="text/xml" doc:name="HTTP"/>
+	        <echo-component doc:name="Echo"/>
+	    </flow>-->
+	            <service name="MyService"> 
+            <inbound>
+                	            <request-reply storePrefix="mainFlow">
+             <jms:inbound-endpoint queue="my.queue"/>
+             </request-reply>     
+	   
+            </inbound>
+            <component class="com.mediasmiths.mule.MuleClientImpl" />
+            <outbound>
+            <pass-through-router>
+             <jms:outbound-endpoint queue="my.queue"/>
+             </pass-through-router>
+            </outbound>
+        </service>
+	</model>
 </mule>
 
 
