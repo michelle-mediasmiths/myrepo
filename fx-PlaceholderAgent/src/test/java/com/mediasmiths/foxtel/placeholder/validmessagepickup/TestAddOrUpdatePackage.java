@@ -30,7 +30,8 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		//message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		message.setMessageID("TestAddOrUpdatePackage_"+RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		AddOrUpdatePackage addTxPackage = generateAddOrUpdatePackage();

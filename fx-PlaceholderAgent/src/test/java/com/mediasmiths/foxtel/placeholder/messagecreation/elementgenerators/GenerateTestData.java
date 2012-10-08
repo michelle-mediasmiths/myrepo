@@ -24,7 +24,7 @@ public class GenerateTestData {
 	private final int CREATE_MATERIALS_TO_GENERATE = 20;
 	private final int CREATE_PACKAGES_TO_GENERATE = 20;
 	
-	private final String DESTINATION="/tmp";
+	private final String DESTINATION="/tmp/foxtelTestData";
 	
 	@Test
 	public void generateTestData() throws IOException, Exception{
@@ -65,10 +65,11 @@ public class GenerateTestData {
 	
 	private void writePlaceHolderMessage(PlaceholderMessage message) throws Exception, IOException {
 
-		String path = DESTINATION + IOUtils.DIR_SEPARATOR + message.getMessageID() + ".xml";
+		String path = DESTINATION + IOUtils.DIR_SEPARATOR+message.getMessageID() + ".xml";
 		
 		FileWriter writer = new FileWriter();
 		logger.debug("writing placeholdermesage to "+path);
+		logger.trace("Message is: "+message);
 		writer.writeObjectToFile(message, path);
 	}
 	
