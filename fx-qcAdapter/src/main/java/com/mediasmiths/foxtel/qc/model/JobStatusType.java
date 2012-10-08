@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.qc;
+package com.mediasmiths.foxtel.qc.model;
 
 public enum JobStatusType {
 	complete, processing, stopped, stopping, waiting;

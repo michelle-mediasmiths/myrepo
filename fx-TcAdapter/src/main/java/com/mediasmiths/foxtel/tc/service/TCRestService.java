@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.tc.service;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -12,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -62,15 +64,15 @@ public interface TCRestService
 	public Job job(@PathParam("id") String jobid);
 	
 	/**
-	 * Creates the preset described by presetXML
-	 * @param presetXML
+	 * Creates the preset described by presetElement
+	 * @param presetElement
 	 * @return the id of the created preset
 	 * @throws JAXBException 
 	 */
 	@PUT
 	@Path("/preset/create")
 	@Consumes("application/xml")
-	public UUID createPreset(@FormParam("preset") Preset presetXML) throws JAXBException;
+	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException;
 	
 	@GET
 	@Path("/preset")

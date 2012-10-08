@@ -10,12 +10,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import com.mediasmiths.foxtel.qc.QCJobIdentifier;
-import com.mediasmiths.foxtel.qc.QCJobResult;
-import com.mediasmiths.foxtel.qc.QCJobStatus;
-import com.mediasmiths.foxtel.qc.QCMediaResult;
-import com.mediasmiths.foxtel.qc.QCStartResponse;
-import com.mediasmiths.foxtel.qc.QCStartStatus;
+import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
+import com.mediasmiths.foxtel.qc.model.QCJobResult;
+import com.mediasmiths.foxtel.qc.model.QCJobStatus;
+import com.mediasmiths.foxtel.qc.model.QCMediaResult;
+import com.mediasmiths.foxtel.qc.model.QCStartRequest;
+import com.mediasmiths.foxtel.qc.model.QCStartResponse;
+import com.mediasmiths.foxtel.qc.model.QCStartStatus;
 
 @Path("/qc")
 public interface QCRestService {
@@ -39,9 +40,7 @@ public interface QCRestService {
 	@PUT
 	@Path("/start")
 	@Produces("application/xml")
-	public QCStartResponse start(@QueryParam("file") String file,
-			@QueryParam("ident") String ident,
-			@QueryParam("profile") String profileName);
+	public QCStartResponse start(QCStartRequest req);
 
 	/**
 	 * Returns the status of a given qc job

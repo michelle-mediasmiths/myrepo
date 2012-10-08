@@ -13,12 +13,13 @@ import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
-import com.mediasmiths.foxtel.qc.QCJobIdentifier;
-import com.mediasmiths.foxtel.qc.QCJobResult;
-import com.mediasmiths.foxtel.qc.QCJobStatus;
-import com.mediasmiths.foxtel.qc.QCMediaResult;
-import com.mediasmiths.foxtel.qc.QCStartResponse;
-import com.mediasmiths.foxtel.qc.QCStartStatus;
+import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
+import com.mediasmiths.foxtel.qc.model.QCJobResult;
+import com.mediasmiths.foxtel.qc.model.QCJobStatus;
+import com.mediasmiths.foxtel.qc.model.QCMediaResult;
+import com.mediasmiths.foxtel.qc.model.QCStartRequest;
+import com.mediasmiths.foxtel.qc.model.QCStartResponse;
+import com.mediasmiths.foxtel.qc.model.QCStartStatus;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
@@ -70,17 +71,17 @@ public class QCRestServiceImpl implements QCRestService {
 	}
 
 	@Override
-	public QCStartResponse start(String file, String ident, String profileName) {
+	public QCStartResponse start(QCStartRequest request) {
 
-		log.debug(String.format("Start requested for file  %s", file));
+		log.debug(String.format("Start requested for file  %s", request.getFile()));
 
 		try {
-			String jobName = cerifyClient.startQcForFile(file, ident,
-					profileName);
+			String jobName = cerifyClient.startQcForFile(request.getFile(), request.getIdent(),
+					request.getProfileName());
 			log.info(String.format("Job %s created", jobName));
 			QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
 			QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
-			jobIdent.setProfile(profileName);
+			jobIdent.setProfile(request.getProfileName());
 			res.setQcIdentifier(jobIdent);
 			return res;
 		} catch (Exception e) {

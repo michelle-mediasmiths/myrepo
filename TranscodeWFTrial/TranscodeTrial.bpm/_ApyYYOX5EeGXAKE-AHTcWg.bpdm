@@ -1,19 +1,20 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:this="http://thisdiagram/WFE" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:QCService="http://localhost:8088/QCService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:Temp_Storage="http://thisdiagram/Temp_Storage" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:diag="http://thisdiagram" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFE">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TranscodeService3="http://localhost:8088/TranscodeServiceSOAP/" xmlns:MuleService="http://www.example.org/MuleService/" xmlns:this="http://thisdiagram/WFE" xmlns:DropBoxService2="http://localhost:8088/DropBoxService/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TranscodeService="http://www.example.org/TranscodeService/" xmlns:invokeqc="http://example.com/qc/invokeqc.rest" xmlns:QCService="http://localhost:8088/QCService/" xmlns:FTP="http://localhost:8080/FTP" xmlns:QC="http://thisdiagram/QC" xmlns:DropBoxService="http://www.example.org/DropBoxService/" xmlns:TranscodeService1="http://localhost:8080/TranscodeService/" xmlns:QCData="http://localhost:8080/QCData" xmlns:MayamService="http://www.example.org/MayamService/" xmlns:MayamService1="http://localhost:8080/MayamService/" xmlns:MuleData="http://localhost:8080/MuleData" xmlns:MayamService2="http://localhost:8080/segment" xmlns:DropBoxService1="http://localhost:8080/DropBoxService/" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:TempStorageData="http://www.example.org/TempStorageData" xmlns:xsd2="http://localhost:8088/TXFlagStatus" xmlns:MayamService4="http://localhost:8088/MayamService/" xmlns:schema1="__project:///qc/schema1.xsd" xmlns:TranscodeService2="http://localhost:8088/TranscodeService/" xmlns:diag="http://thisdiagram" xmlns:tns="http://localhost:8080/TranscodeData" xmlns:TempStorageService="http://localhost:8080/TempStorageService/" xmlns:MuleService1="http://localhost:8080/MuleService/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:MayamService3="http://localhost:8080/TXFlagStatus" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFE">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MuleService/" bpdm:prefix="MuleService" bpdm:comment="contrib=&apos;project:///MuleService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TranscodeServiceSOAP/" bpdm:prefix="TranscodeService3" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MuleService/" bpdm:prefix="MuleService" bpdm:comment="contrib=&apos;project:///MuleService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/DropBoxService/" bpdm:prefix="DropBoxService2" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TranscodeService/" bpdm:prefix="TranscodeService" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qc/invokeqc.rest" bpdm:prefix="invokeqc" bpdm:comment="contrib=&apos;project:///qc/invokeqc.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/QCService/" bpdm:prefix="QCService" bpdm:comment="contrib=&apos;project:///QCService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/FTP" bpdm:prefix="FTP" bpdm:comment="contrib=&apos;project:///FTP.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/QC" bpdm:prefix="QC" bpdm:comment="contrib=&apos;partner-pool:///_FgMbwOX7EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/DropBoxService/" bpdm:prefix="DropBoxService" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeService/" bpdm:prefix="TranscodeService1" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/QCData" bpdm:prefix="QCData" bpdm:comment="contrib=&apos;project:///QCData.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/MayamService/" bpdm:prefix="MayamService" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MayamService/" bpdm:prefix="MayamService1" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Temp_Storage" bpdm:prefix="Temp_Storage" bpdm:comment="contrib=&apos;partner-pool:///_AEAhUPGrEeGbS7hnVLk4pQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MuleData" bpdm:prefix="MuleData" bpdm:comment="contrib=&apos;project:///MuleData.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/segment" bpdm:prefix="MayamService2" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/DropBoxService/" bpdm:prefix="DropBoxService1" bpdm:comment="contrib=&apos;project:///DropBoxService.wsdl"></bpdm:namespaceDefinition>
@@ -21,10 +22,11 @@
         <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/TempStorageData" bpdm:prefix="TempStorageData" bpdm:comment="contrib=&apos;project:///TempStorageData.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TXFlagStatus" bpdm:prefix="xsd2" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/MayamService/" bpdm:prefix="MayamService4" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="__project:///qc/schema1.xsd" bpdm:prefix="schema1" bpdm:comment="contrib=&apos;project:///qc/schema1.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/TranscodeService/" bpdm:prefix="TranscodeService2" bpdm:comment="contrib=&apos;project:///TranscodeService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_DdXoYOX7EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TempStorageService/" bpdm:prefix="TempStorageService" bpdm:comment="contrib=&apos;project:///TempStorageService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TranscodeData" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///TranscodeData.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TempStorageService/" bpdm:prefix="TempStorageService" bpdm:comment="contrib=&apos;project:///TempStorageService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/MuleService/" bpdm:prefix="MuleService1" bpdm:comment="contrib=&apos;project:///MuleService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/TXFlagStatus" bpdm:prefix="MayamService3" bpdm:comment="contrib=&apos;project:///MayamService.wsdl"></bpdm:namespaceDefinition>
@@ -64,6 +66,8 @@
         <bpdm:namespaceContributor bpdm:url="project:///TempStorageService.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///TempStorageData.xsd"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_AEAhUPGrEeGbS7hnVLk4pQ" bpdm:label="Temp Storage"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qc/invokeqc.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qc/schema1.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="WFE" bpdm:ID="_ApyYYOX5EeGXAKE-AHTcWg">
         <bpel:partnerLinks>
@@ -71,8 +75,9 @@
             <bpel:partnerLink name="drop_BoxAndWFEForPortDropBoxServiceSOAPPlkVar" partnerLinkType="diag:Drop_BoxAndWFEForPortDropBoxServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Drop_Box_for_WFE" bpdm:invokedService="DropBoxService2:DropBoxService" bpdm:invokedPort="DropBoxServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/DropBoxService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_3iingObeEeGVL7Jq3_1E2g, _ApyYYOX5EeGXAKE-AHTcWg:_inulAObfEeGVL7Jq3_1E2g" bpdm:isManaged="true" bpdm:otherPoolId="_g-HSAOYSEeGYCvzfuWhYqg"/>
             <bpel:partnerLink name="muleAndWFEPlkVar" partnerLinkType="diag:MuleAndWFE" myRole="WFE_for_Mule" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForMule" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/WFE/Mule" bpdm:providedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_3RvGwOxBEeGEW4lBUoDdDg, _ApyYYOX5EeGXAKE-AHTcWg:_buQeQOwuEeGrK-_zkfiVuA, _Q8eeEPENEeGiQd0_oA9vGg:_ULCZ4OwtEeGrK-_zkfiVuA, _ApyYYOX5EeGXAKE-AHTcWg:_0xafEOxBEeGEW4lBUoDdDg, _OR_m0PGnEeGbS7hnVLk4pQ:_TyXlwOwuEeGrK-_zkfiVuA, _W3RkYPEUEeGiQd0_oA9vGg:_NQRKsOwuEeGrK-_zkfiVuA, _ApyYYOX5EeGXAKE-AHTcWg:_YfWSQOwuEeGrK-_zkfiVuA" bpdm:isManaged="true" bpdm:otherPoolId="_vy1FMOxBEeGEW4lBUoDdDg"/>
             <bpel:partnerLink name="wFeAndTranscoderForPortTranscodeServiceSOAPPlkVar" partnerLinkType="diag:WFeAndTranscoderForPortTranscodeServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Transcoder_for_WFE" bpdm:invokedService="TranscodeService2:TranscodeService" bpdm:invokedPort="TranscodeServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/TranscodeService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Q8eeEPENEeGiQd0_oA9vGg:_0sxuIPEMEeGiQd0_oA9vGg, _Q8eeEPENEeGiQd0_oA9vGg:_4i7gUPEMEeGiQd0_oA9vGg, _Q8eeEPENEeGiQd0_oA9vGg:_4ufhcObXEeGVL7Jq3_1E2g" bpdm:isManaged="true" bpdm:otherPoolId="_8WIqcOa_EeGVL7Jq3_1E2g"/>
-            <bpel:partnerLink name="qcAndWFEForPortQCServiceSOAPPlkVar" partnerLinkType="diag:QcAndWFEForPortQCServiceSOAPPlk" initializePartnerRole="yes" partnerRole="QC_for_WFE" bpdm:invokedService="QCService:QCService" bpdm:invokedPort="QCServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/QCService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_W3RkYPEUEeGiQd0_oA9vGg:_rs0P4PEUEeGiQd0_oA9vGg, _W3RkYPEUEeGiQd0_oA9vGg:_W3ZgMPEUEeGiQd0_oA9vGg, _W3RkYPEUEeGiQd0_oA9vGg:_A-4fUPEVEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_FgMbwOX7EeGXAKE-AHTcWg"/>
+            <bpel:partnerLink name="qcAndWFEForPortQCServiceSOAPPlkVar" partnerLinkType="diag:QcAndWFEForPortQCServiceSOAPPlk" initializePartnerRole="yes" partnerRole="QC_for_WFE" bpdm:invokedService="QCService:QCService" bpdm:invokedPort="QCServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8088/QCService" bpdm:invokedIsDefault="true" bpdm:clientTasks="_W3RkYPEUEeGiQd0_oA9vGg:_rs0P4PEUEeGiQd0_oA9vGg, _W3RkYPEUEeGiQd0_oA9vGg:_A-4fUPEVEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_FgMbwOX7EeGXAKE-AHTcWg"/>
             <bpel:partnerLink name="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar" partnerLinkType="diag:WFeAndTemp_StorageForPortTempStorageServiceSOAPPlk" initializePartnerRole="yes" partnerRole="Temp_Storage_for_WFE" bpdm:invokedService="TempStorageService:TempStorageService" bpdm:invokedPort="TempStorageServiceSOAP" bpdm:invokedSOAPAddress="http://localhost:8080/" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ApyYYOX5EeGXAKE-AHTcWg:_x_B1kPGoEeGbS7hnVLk4pQ, _ApyYYOX5EeGXAKE-AHTcWg:_O6OZUOYTEeGYCvzfuWhYqg" bpdm:isManaged="true" bpdm:otherPoolId="_AEAhUPGrEeGbS7hnVLk4pQ"/>
+            <bpel:partnerLink name="qcAndWFEForPortTypeRestInterfacePlkVar" partnerLinkType="diag:QcAndWFEForPortTypeRestInterfacePlk" initializePartnerRole="yes" partnerRole="QC_for_WFE" bpdm:invokedService="QC:QcAndWFEForPortTypeRestInterfacePlkService" bpdm:invokedPort="QC_for_WFEPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/QC/WFE/QcAndWFEForPortTypeRestInterfacePlk" bpdm:invokedIsDefault="true" bpdm:clientTasks="_W3RkYPEUEeGiQd0_oA9vGg:_gdtKUBFZEeK_QODnHKXoeA" bpdm:isManaged="true" bpdm:otherPoolId="_FgMbwOX7EeGXAKE-AHTcWg"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="mayamService4UpdateTXFlagStatusResponseMsg" messageType="MayamService4:UpdateTXFlagStatusResponse" binding="MayamService4:MayamServiceSOAP" operation="UpdateTXFlagStatus" opMsgType="1" bpdm:id="__RcXYOejEeG4StEJkyBriw" bpdm:messageIds="inc:_nA6rMOeBEeGEdNzyorFk_Q"/>
@@ -112,10 +117,6 @@
             </bpel:variable>
             <bpel:variable name="tempStorageServiceSendToTempResponseMsg" messageType="TempStorageService:SendToTempResponse" binding="TempStorageService:TempStorageServiceSOAP" operation="SendToTemp" opMsgType="1" bpdm:id="_k3K1NvGtEeGbS7hnVLk4pQ" bpdm:messageIds="inc:_k23TMPGtEeGbS7hnVLk4pQ"/>
         </bpel:variables>
-        <bpel:links>
-            <bpel:link name="_3ioHEObeEeGVL7Jq3_1E2g"/>
-            <bpel:link name="_UrXDQOwuEeGrK-_zkfiVuA"/>
-        </bpel:links>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="Start" bpdm:ID="_0xafEOxBEeGEW4lBUoDdDg">
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartRequest" bpdm:ID="_0xhz0OxBEeGEW4lBUoDdDg"></bpdm:linkset>
@@ -126,17 +127,7 @@
             </bpdm:messagingtask>
             <bpdm:gateway bpdm:label="Media stored in temp" bpdm:ID="_4OpZgPGoEeGbS7hnVLk4pQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                 <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_BQJPMPGpEeGbS7hnVLk4pQ" bpdm:targetDisplayName="[Media stored in temp - QC Flag Checked]">
-                    <bpel:condition>$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists = true()
-<mapper:mapperLink>
-  <mapper:vertice id="28455960" targetPath="$condition" targetedBy="16862091-arg2"></mapper:vertice>
-  <mapper:vertice id="16862091" dimension="78x24" location="324,84">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="6098662" sourcePath="$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists" targetedBy="16862091-arg0"></mapper:vertice>
-  <mapper:vertice id="19979955" dimension="78x24" location="132,48" targetedBy="16862091-arg1">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition>$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists = true()<mapper:mapperLink><mapper:vertice id="28455960" targetPath="$condition" targetedBy="16862091-arg2"></mapper:vertice><mapper:vertice id="16862091" dimension="78x24" location="324,84"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="6098662" sourcePath="$tempStorageServiceCheckIfMediaExistsResponseMsg.parameters/TempStorageData:Exists" targetedBy="16862091-arg0"></mapper:vertice><mapper:vertice id="19979955" dimension="78x24" location="132,48" targetedBy="16862091-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_RovOQPGpEeGbS7hnVLk4pQ" bpdm:targetDisplayName="default"></bpdm:linkset>
                 <bpel:sequence></bpel:sequence>
@@ -215,12 +206,6 @@
                                     <bpel:literal bpdm:linkedMessageType="this:StartResponse" bpdm:linkedPart="body"></bpel:literal>
                                 </bpel:from>
                             </bpel:variable>
-                            <bpel:variable name="qCServiceQCStartRequestMsg" messageType="QCService:QCStartRequest" binding="QCService:QCServiceSOAP" operation="QCStart" opMsgType="0" bpdm:messageIds=" out:_J_-BIPEcEeGiQd0_oA9vGg">
-                                <bpel:from bpdm:toPart="parameters">
-                                    <bpel:literal bpdm:linkedMessageType="QCService:QCStartRequest" bpdm:linkedPart="parameters" bpdm:binding="QCService:QCServiceSOAP" bpdm:opMsgType="0" bpdm:operation="QCStart"></bpel:literal>
-                                </bpel:from>
-                            </bpel:variable>
-                            <bpel:variable name="qCServiceQCStartResponseMsg" messageType="QCService:QCStartResponse" binding="QCService:QCServiceSOAP" operation="QCStart" opMsgType="1" bpdm:messageIds="inc:_KdfqoPEcEeGiQd0_oA9vGg"/>
                             <bpel:variable name="qCServiceQCStatusRequestMsg" messageType="QCService:QCStatusRequest" binding="QCService:QCServiceSOAP" operation="QCStatus" opMsgType="0" bpdm:messageIds=" out:_Mz46QPEcEeGiQd0_oA9vGg">
                                 <bpel:from bpdm:toPart="parameters">
                                     <bpel:literal bpdm:linkedMessageType="QCService:QCStatusRequest" bpdm:linkedPart="parameters" bpdm:binding="QCService:QCServiceSOAP" bpdm:opMsgType="0" bpdm:operation="QCStatus"></bpel:literal>
@@ -233,6 +218,21 @@
                                 </bpel:from>
                             </bpel:variable>
                             <bpel:variable name="qCServiceQCFinishedResponseMsg" messageType="QCService:QCFinishedResponse" binding="QCService:QCServiceSOAP" operation="QCFinished" opMsgType="1" bpdm:messageIds="inc:_PwspoPEcEeGiQd0_oA9vGg"/>
+                            <bpel:variable name="invokeqcQCStartMsg" messageType="invokeqc:qc_start_input" binding="invokeqc:restBinding" operation="qc_start" opMsgType="0" bpdm:id="_lc5oMBFZEeK_QODnHKXoeA" bpdm:messageIds=" out:_lcupEBFZEeK_QODnHKXoeA">
+                                <bpel:from bpdm:toPart="body">
+                                    <bpel:literal bpdm:linkedMessageType="invokeqc:qc_start_input" bpdm:linkedPart="body" bpdm:binding="invokeqc:restBinding" bpdm:opMsgType="0" bpdm:operation="qc_start"></bpel:literal>
+                                </bpel:from>
+                                <bpel:from bpdm:toPart="file">
+                                    <bpel:literal bpdm:linkedMessageType="invokeqc:qc_start_input" bpdm:linkedPart="file" bpdm:binding="invokeqc:restBinding" bpdm:opMsgType="0" bpdm:operation="qc_start"></bpel:literal>
+                                </bpel:from>
+                                <bpel:from bpdm:toPart="ident">
+                                    <bpel:literal bpdm:linkedMessageType="invokeqc:qc_start_input" bpdm:linkedPart="ident" bpdm:binding="invokeqc:restBinding" bpdm:opMsgType="0" bpdm:operation="qc_start"></bpel:literal>
+                                </bpel:from>
+                                <bpel:from bpdm:toPart="profile">
+                                    <bpel:literal bpdm:linkedMessageType="invokeqc:qc_start_input" bpdm:linkedPart="profile" bpdm:binding="invokeqc:restBinding" bpdm:opMsgType="0" bpdm:operation="qc_start"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="qCServiceQCStartResponseMsg" messageType="QCService:QCStartResponse" binding="QCService:QCServiceSOAP" operation="qc_start" opMsgType="1" bpdm:id="_mqdngBFZEeK_QODnHKXoeA" bpdm:messageIds="inc:_mqEl8BFZEeK_QODnHKXoeA"/>
                         </bpel:variables>
                         <bpel:faultHandlers>
                             <bpel:catchAll>
@@ -249,9 +249,9 @@
                             </bpel:catchAll>
                         </bpel:faultHandlers>
                         <bpel:sequence>
-                            <bpdm:messagingtask operation="QCStart" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="QCService:QCService" isMyRole="false" enableSharing="false" bpdm:label="Invoke QC" bpdm:ID="_W3ZgMPEUEeGiQd0_oA9vGg">
-                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qCServiceQCStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStartRequest" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_J_-BIPEcEeGiQd0_oA9vGg"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qCServiceQCStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStartResponse" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_KdfqoPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                            <bpdm:messagingtask operation="qc_start" partnerLink="qcAndWFEForPortTypeRestInterfacePlkVar" portType="invokeqc:restInterface" isMyRole="false" enableSharing="false" bpdm:label="qc_start" bpdm:ID="_gdtKUBFZEeK_QODnHKXoeA">
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="invokeqcQCStartMsg" bpdm:variableIsManaged="true" bpdm:messageType="invokeqc:qc_start_input" bpdm:binding="invokeqc:restBinding" bpdm:ID="_lcupEBFZEeK_QODnHKXoeA"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qCServiceQCStartResponseMsg" bpdm:msgVarScopeId="_W3RkYPEUEeGiQd0_oA9vGg" bpdm:variableIsManaged="true" bpdm:messageType="QCService:QCStartResponse" bpdm:binding="QCService:QCServiceSOAP" bpdm:ID="_mqEl8BFZEeK_QODnHKXoeA"></bpdm:linkset>
                             </bpdm:messagingtask>
                             <bpdm:messagingtask operation="QCStatus" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="QCService:QCService" isMyRole="false" enableSharing="false" bpdm:label="QC Status" bpdm:ID="_rs0P4PEUEeGiQd0_oA9vGg">
                                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
@@ -283,7 +283,7 @@
                     </bpel:variable>
                 </bpel:variables>
                 <bpel:faultHandlers>
-                    <bpel:catch>
+                    <bpel:catchAll>
                         <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_RezhEPGnEeGbS7hnVLk4pQ" bpdm:type="error"></bpdm:eventHandler>
                         <bpdm:messagingtask eventType="end: message" operation="Start" partnerLink="muleAndWFEPlkVar" portType="this:ForMule" isMyRole="true" enableSharing="false" bpdm:label="error" bpdm:ID="_TyXlwOwuEeGrK-_zkfiVuA">
                             <bpdm:linkset bpdm:type="assignments">
@@ -294,7 +294,7 @@
                             </bpdm:linkset>
                             <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:StartResponse" bpdm:ID="_ysl8AO0PEeGyWr7tmiSg7A"></bpdm:linkset>
                         </bpdm:messagingtask>
-                    </bpel:catch>
+                    </bpel:catchAll>
                 </bpel:faultHandlers>
                 <bpel:sequence>
                     <bpdm:messagingtask operation="SendSegmentMetadata" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="MayamService4:MayamService" isMyRole="false" enableSharing="false" bpdm:label="Generate Segment XML" bpdm:ID="_obl94ObbEeGVL7Jq3_1E2g">
@@ -326,7 +326,7 @@
                         <bpel:sequence>
                             <bpdm:messagingtask operation="SendToTemp" partnerLink="wFeAndTemp_StorageForPortTempStorageServiceSOAPPlkVar" portType="TempStorageService:TempStorageService" isMyRole="false" enableSharing="false" bpdm:label="Move transient assets and xml to temp storage" bpdm:ID="_O6OZUOYTEeGYCvzfuWhYqg">
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tempStorageServiceSendToTempRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:SendToTempRequest" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_kAUFsPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tempStorageServiceSendToTempResponseMsg" bpdm:msgVarScopeId="_ApyYYOX5EeGXAKE-AHTcWg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:SendToTempResponse" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_k23TMPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tempStorageServiceSendToTempResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="TempStorageService:SendToTempResponse" bpdm:binding="TempStorageService:TempStorageServiceSOAP" bpdm:ID="_k23TMPGtEeGbS7hnVLk4pQ"></bpdm:linkset>
                             </bpdm:messagingtask>
                             <bpdm:messagingtask operation="UpdateTXFlagStatus" partnerLink="mayamAndWFEForPortMayamServiceSOAPPlkVar" portType="MayamService4:MayamService" isMyRole="false" enableSharing="false" bpdm:label="Set TX flag" bpdm:ID="__CjgkOYTEeGYCvzfuWhYqg">
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="mayamService4UpdateTXFlagStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="MayamService4:UpdateTXFlagStatusRequest" bpdm:binding="MayamService4:MayamServiceSOAP" bpdm:ID="_mSh7MOeBEeGEdNzyorFk_Q"></bpdm:linkset>

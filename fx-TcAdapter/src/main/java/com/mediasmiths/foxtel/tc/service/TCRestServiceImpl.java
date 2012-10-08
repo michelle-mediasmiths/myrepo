@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.tc.service;
 
+import java.io.StringReader;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -10,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
@@ -26,9 +28,10 @@ public class TCRestServiceImpl implements TCRestService
 {
 
 	private static final Logger log = Logger.getLogger(TCRestServiceImpl.class);
-	
-	@Inject private WfsClient wfsClient;
-	
+
+	@Inject
+	private WfsClient wfsClient;
+
 	@Override
 	@GET
 	@Path("/ping")
@@ -51,21 +54,31 @@ public class TCRestServiceImpl implements TCRestService
 	}
 
 	@Override
+	@Path("/job/{id}")
+	@Produces("application/xml")
+	public Job job(@PathParam("id") String jobid)
+	{
+		log.trace(String.format("jobid %s", jobid));
+		return wfsClient.getJob(UUID.fromString(jobid));
+	}
+
+	@Override
 	@GET
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
 	public JobStatus jobStatus(@PathParam("id") String jobid)
 	{
-		log.trace(String.format("jobid %s",jobid));
+		log.trace(String.format("jobid %s", jobid));
 		return wfsClient.jobStatus(UUID.fromString(jobid));
 	}
 
 	@PUT
 	@Path("/preset/create")
 	@Consumes("application/xml")
-	public UUID createPreset(@FormParam("preset") Preset presetXML) throws JAXBException
+	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException
 	{
-		return wfsClient.createPreset(presetXML);
+		Preset preset = presetElement.getValue();
+		return wfsClient.createPreset(preset);
 	}
 
 	@Override
@@ -76,16 +89,5 @@ public class TCRestServiceImpl implements TCRestService
 	{
 		return wfsClient.listPresets();
 	}
-
-	@Override
-	@Path("/job/{id}")
-	@Produces("application/xml")
-	public Job job(@PathParam("id") String jobid)
-	{
-		log.trace(String.format("jobid %s",jobid));
-		return wfsClient.getJob(UUID.fromString(jobid));
-	}
-	
-
 
 }

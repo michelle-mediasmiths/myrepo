@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.qc;
+package com.mediasmiths.foxtel.qc.model;
 
 import java.net.URI;
 import java.util.Calendar;
