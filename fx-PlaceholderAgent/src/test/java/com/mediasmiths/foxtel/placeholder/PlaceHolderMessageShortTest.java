@@ -29,13 +29,11 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
-
-import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
-import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorImpl;
 
 public abstract class PlaceHolderMessageShortTest {
 

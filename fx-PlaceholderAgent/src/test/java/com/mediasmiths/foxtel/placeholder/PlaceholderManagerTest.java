@@ -32,6 +32,8 @@ import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentModule;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
+import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorImpl;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.PickupExistingFilesOnlyDirectoryWatcher;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.SingleMessageProcessor;
@@ -44,8 +46,6 @@ import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
-import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
-import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorImpl;
 
 public abstract class PlaceholderManagerTest {
 

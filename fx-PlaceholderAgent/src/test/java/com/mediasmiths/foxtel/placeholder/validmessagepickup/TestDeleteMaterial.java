@@ -14,7 +14,6 @@ import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class TestDeleteMaterial extends ValidMessagePickTest{

@@ -10,10 +10,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Random;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
-
-import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -27,12 +26,12 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mediasmiths.foxtel.agent.MessageEnvelope;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
-import com.mediasmiths.foxtel.agent.MessageEnvelope;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 

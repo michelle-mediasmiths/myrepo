@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.messagetests;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.verify;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -27,7 +26,6 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
-import com.mediasmiths.foxtel.placeholder.validmessagepickup.ValidMessagePickTest;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeletePackageTest extends PlaceHolderMessageShortTest {

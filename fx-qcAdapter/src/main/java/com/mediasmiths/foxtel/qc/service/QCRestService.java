@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.qc.service;
 
-import java.io.File;
-
 import javassist.NotFoundException;
 
 import javax.ws.rs.DefaultValue;

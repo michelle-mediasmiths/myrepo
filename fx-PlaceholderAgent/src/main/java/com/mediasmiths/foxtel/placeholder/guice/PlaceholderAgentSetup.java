@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorModule;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 

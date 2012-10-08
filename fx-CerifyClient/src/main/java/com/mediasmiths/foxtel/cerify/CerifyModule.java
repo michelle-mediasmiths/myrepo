@@ -1,5 +1,9 @@
 package com.mediasmiths.foxtel.cerify;
 
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERITALK_SERVER;
+
 import java.rmi.RemoteException;
 
 import javax.xml.rpc.ServiceException;
@@ -17,10 +21,6 @@ import com.tektronix.www.cerify.soap.client.CeriTalk_ServiceLocator;
 import com.tektronix.www.cerify.soap.client.GetMediaLocations;
 import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponseMedialocation;
-
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERITALK_SERVER;
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
 
 public class CerifyModule extends AbstractModule {
 

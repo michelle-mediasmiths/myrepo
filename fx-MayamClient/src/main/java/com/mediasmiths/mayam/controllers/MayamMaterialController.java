@@ -20,9 +20,6 @@ import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 

@@ -1,8 +1,5 @@
 package com.mediasmiths.mayam;
 
-import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_AUTH_TOKEN;
-import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_ENDPOINT;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,8 +1,8 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
 import static org.mockito.Matchers.anyObject;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.xml.bind.JAXBException;

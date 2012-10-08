@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.cerify;
 
-import java.io.File;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
+import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
+
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
@@ -21,13 +23,9 @@ import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatus;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
-import com.tektronix.www.cerify.soap.client.GetMediaLocations;
-import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponse;
-import com.tektronix.www.cerify.soap.client.GetMediaLocationsResponseMedialocation;
 import com.tektronix.www.cerify.soap.client.GetProfiles;
 import com.tektronix.www.cerify.soap.client.GetProfilesResponse;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
-import com.tektronix.www.cerify.soap.client.JobStatusType;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 import com.tektronix.www.cerify.soap.client.MediaLocationDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaSetNameInUseFault;
@@ -36,9 +34,6 @@ import com.tektronix.www.cerify.soap.client.URLNotAccessibleFault;
 import com.tektronix.www.cerify.soap.client.URLNotInMediaLocationFault;
 import com.tektronix.www.cerify.soap.client._20101220.GetJobResults;
 import com.tektronix.www.cerify.soap.client._20101220.GetMediaFileResults;
-
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
 
 @Singleton
 public class CerifyClient {

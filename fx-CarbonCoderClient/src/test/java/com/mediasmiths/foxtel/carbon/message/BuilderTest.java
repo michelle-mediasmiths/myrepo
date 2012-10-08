@@ -40,7 +40,7 @@ public class BuilderTest
 				Arrays.asList(new UUID[] { UUID.fromString("cb15d0f4-e61b-42ec-acc2-853f6fb442af") }));
 
 		assertEquals(
-				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<cnpsXML CarbonAPIVer=\"1.2\" JobName=\"myjob\" TaskType=\"JobQueue\">\n<Sources>\n<Module_0 Filename=\"input.mxf\"/>\n</Sources>\n<Destinations>\n<Module_0 DestinationName=\"output.mxf\" PresetGUID=\"cb15d0f4-e61b-42ec-acc2-853f6fb442af\"/>\n</Destinations>\n</cnpsXML>\n",
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?><cnpsXML CarbonAPIVer=\"1.2\" JobName=\"myjob\" TaskType=\"JobQueue\"><Sources><Module_0 Filename=\"input.mxf\"/></Sources><Destinations><Module_0 DestinationName=\"output.mxf\" PresetGUID=\"cb15d0f4-e61b-42ec-acc2-853f6fb442af\"/></Destinations></cnpsXML>",
 				jobQueueRequest);
 
 		log.info(jobQueueRequest);

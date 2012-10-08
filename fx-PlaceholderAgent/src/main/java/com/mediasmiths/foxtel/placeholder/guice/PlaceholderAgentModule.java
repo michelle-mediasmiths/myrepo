@@ -11,15 +11,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
-import com.mayam.wf.attributes.server.AttributeMapMapper;
-import com.mayam.wf.attributes.server.JacksonAttributeMapMapperImpl;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
-import com.mediasmiths.mayam.AlertImpl;
-import com.mediasmiths.mayam.AlertInterface;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class PlaceholderAgentModule extends AbstractModule {

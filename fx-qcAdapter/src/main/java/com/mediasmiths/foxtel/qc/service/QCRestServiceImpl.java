@@ -1,10 +1,8 @@
 package com.mediasmiths.foxtel.qc.service;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.rmi.RemoteException;
-import java.security.Provider.Service;
 import java.util.List;
 
 import javassist.NotFoundException;
@@ -21,14 +19,11 @@ import com.mediasmiths.foxtel.qc.QCJobStatus;
 import com.mediasmiths.foxtel.qc.QCMediaResult;
 import com.mediasmiths.foxtel.qc.QCStartResponse;
 import com.mediasmiths.foxtel.qc.QCStartStatus;
-import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
-import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponseAlert;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
-import com.tektronix.www.cerify.soap.client.ResultType;
 
 public class QCRestServiceImpl implements QCRestService {
 

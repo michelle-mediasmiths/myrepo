@@ -1,6 +1,6 @@
 package com.mediasmiths.foxtel.carbonwfs.guice;
 
-import java.net.URL;
+import static com.mediasmiths.foxtel.carbonwfs.WfsClientConfig.WFS_ENDPOINT;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,10 +15,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-
 import com.rhozet.rhozet_services_iwfcjmservices.IWfcJmServices;
-
-import static com.mediasmiths.foxtel.carbonwfs.WfsClientConfig.WFS_ENDPOINT;;
 
 public class WfsClientModule extends AbstractModule
 {

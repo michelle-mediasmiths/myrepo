@@ -1,5 +1,4 @@
 package com.mediasmiths.mayam.validation;
-import com.google.inject.Inject;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;

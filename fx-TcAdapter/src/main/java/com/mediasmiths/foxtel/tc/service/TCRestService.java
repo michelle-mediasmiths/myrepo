@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.tc.service;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -70,8 +69,8 @@ public interface TCRestService
 	 */
 	@PUT
 	@Path("/preset/create")
-	@Consumes("application/x-www-form-urlencoded")
-	public UUID createPreset(@FormParam("preset") String presetXML) throws JAXBException;
+	@Consumes("application/xml")
+	public UUID createPreset(@FormParam("preset") Preset presetXML) throws JAXBException;
 	
 	@GET
 	@Path("/preset")
