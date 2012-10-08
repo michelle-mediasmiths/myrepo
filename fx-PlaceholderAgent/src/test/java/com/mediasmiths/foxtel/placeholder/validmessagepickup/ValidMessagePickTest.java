@@ -40,7 +40,7 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 	protected abstract String getFileName();
 	
 	protected String getFilePath() throws IOException{
-		return "/tmp" + IOUtils.DIR_SEPARATOR + getFileName();
+		return "/tmp/foxtelTestData" + IOUtils.DIR_SEPARATOR + getFileName();
 	}
 	
 		
@@ -55,7 +55,7 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String filePath = getFilePath();
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
-		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn("/tmp/"+RandomStringUtils.randomAlphabetic(30));
+		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn("/tmp/foxtelTestData/"+RandomStringUtils.randomAlphabetic(30));
 		mockValidCalls(message);
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));

@@ -33,7 +33,8 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 			throws DatatypeConfigurationException {
 
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		// message.setMessageID(RandomStringUtils.randomAlphabetic(6));
+		message.setMessageID("TestCreateOrUpdateTitle_"+ RandomStringUtils.randomAlphabetic(6));
 		message.setSenderID(RandomStringUtils.randomAlphabetic(6));
 
 		HelperMethods method = new HelperMethods();
@@ -41,8 +42,8 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 
 		MSTitleDescription msTitleDescription = new MSTitleDescription();
 		TitleDescriptionType titleDescription = new TitleDescriptionType();
-		titleDescription = msTitleDescription.validTitleDescription(
-				titleDescription);
+		titleDescription = msTitleDescription
+				.validTitleDescription(titleDescription);
 
 		MSRights msRights = new MSRights();
 		RightsType rights = new RightsType();
@@ -70,7 +71,8 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 	}
 
 	@Override
-	protected void verifyValidCalls(PlaceholderMessage message) throws MayamClientException {
+	protected void verifyValidCalls(PlaceholderMessage message)
+			throws MayamClientException {
 		verifyCalls(message);
 	}
 
@@ -87,13 +89,15 @@ public class TestCreateOrUpdateTitle extends ValidMessagePickTest {
 				.thenReturn(result);
 	}
 
-	private void verifyCalls(PlaceholderMessage message) throws MayamClientException {
+	private void verifyCalls(PlaceholderMessage message)
+			throws MayamClientException {
 		CreateOrUpdateTitle createTitle = (CreateOrUpdateTitle) message
 				.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0);
 
-		verify(mayamClient, atLeastOnce()).titleExists(createTitle.getTitleID());
+		verify(mayamClient, atLeastOnce())
+				.titleExists(createTitle.getTitleID());
 		verify(mayamClient).createTitle((CreateOrUpdateTitle) anyObject());
 	}
 

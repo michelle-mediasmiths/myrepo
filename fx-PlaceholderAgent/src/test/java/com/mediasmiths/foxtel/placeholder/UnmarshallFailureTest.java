@@ -39,7 +39,7 @@ public class UnmarshallFailureTest {
 	
 	@Before
 	public void beforeTest() throws SAXException{
-		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,mayamValidator,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
+		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,mayamValidator,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp/foxtelTestData"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
 	}
 	
 	@Test
