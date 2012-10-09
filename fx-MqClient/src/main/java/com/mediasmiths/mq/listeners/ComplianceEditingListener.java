@@ -21,7 +21,6 @@ public class ComplianceEditingListener {
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
-					//TODO: IMPLEMENT
 					//On compliance editing completion create segmentation tasks
 					if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 					{
@@ -40,10 +39,7 @@ public class ComplianceEditingListener {
 								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
 								AttributeMap newTask = client.getTask(taskID);
 								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
-								
-								//TODO: Initiate workflow
-								
+								client.updateTask(newTask);			
 							}
 						}	
 					}
