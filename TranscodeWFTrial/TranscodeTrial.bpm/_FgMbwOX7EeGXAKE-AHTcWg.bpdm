@@ -1,29 +1,34 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:QCData="http://localhost:8080/QCData" xmlns:WFE="http://thisdiagram/WFE" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://localhost:8088/QCService/" xmlns:this="http://thisdiagram/QC" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/QC">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:QCData="http://localhost:8080/QCData" xmlns:WFE="http://thisdiagram/WFE" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:schema1="__project:///qc/schema1.xsd" xmlns:invokeqc="http://example.com/qc/invokeqc.rest" xmlns:tns="http://localhost:8088/QCService/" xmlns:this="http://thisdiagram/QC" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/QC">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8080/QCData" bpdm:prefix="QCData" bpdm:comment="contrib=&apos;project:///QCData.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFE" bpdm:prefix="WFE" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="__project:///qc/schema1.xsd" bpdm:prefix="schema1" bpdm:comment="contrib=&apos;project:///qc/schema1.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qc/invokeqc.rest" bpdm:prefix="invokeqc" bpdm:comment="contrib=&apos;project:///qc/invokeqc.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://localhost:8088/QCService/" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///QCService.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/QC" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
-        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:service name="QcAndWFEForPortTypeRestInterfacePlkService">
+                <wsdl:port name="QC_for_WFEPort" binding="invokeqc:restBinding">
+                    <address location="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/QC/WFE/QcAndWFEForPortTypeRestInterfacePlk"/>
+                </wsdl:port>
+            </wsdl:service>
+        </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_ApyYYOX5EeGXAKE-AHTcWg" bpdm:label="WFE"/>
         <bpdm:namespaceContributor bpdm:url="project:///QCService.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///QCData.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qc/invokeqc.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qc/schema1.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="QC" bpdm:ID="_FgMbwOX7EeGXAKE-AHTcWg">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="qcAndWFEForPortQCServiceSOAPPlkVar" partnerLinkType="diag:QcAndWFEForPortQCServiceSOAPPlk" myRole="QC_for_WFE" bpdm:enableSharing="false" bpdm:providedService="tns:QCService" bpdm:providedPort="QCServiceSOAP" bpdm:provideSOAPAddress="http://localhost:8088/QCService" bpdm:providedIsDefault="true" bpdm:clientTasks="_FgMbwOX7EeGXAKE-AHTcWg:_H6jMwfEcEeGiQd0_oA9vGg, _FgMbwOX7EeGXAKE-AHTcWg:_HVAPsfEcEeGiQd0_oA9vGg, _FgMbwOX7EeGXAKE-AHTcWg:_G0gKsPEcEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+            <bpel:partnerLink name="qcAndWFEForPortQCServiceSOAPPlkVar" partnerLinkType="diag:QcAndWFEForPortQCServiceSOAPPlk" myRole="QC_for_WFE" bpdm:enableSharing="false" bpdm:providedService="tns:QCService" bpdm:providedPort="QCServiceSOAP" bpdm:provideSOAPAddress="http://localhost:8088/QCService" bpdm:providedIsDefault="true" bpdm:clientTasks="_FgMbwOX7EeGXAKE-AHTcWg:_H6jMwfEcEeGiQd0_oA9vGg, _FgMbwOX7EeGXAKE-AHTcWg:_HVAPsfEcEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
+            <bpel:partnerLink name="qcAndWFEForPortTypeRestInterfacePlkVar" partnerLinkType="diag:QcAndWFEForPortTypeRestInterfacePlk" myRole="QC_for_WFE" bpdm:enableSharing="false" bpdm:providedService="this:QcAndWFEForPortTypeRestInterfacePlkService" bpdm:providedPort="QC_for_WFEPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/QC/WFE/QcAndWFEForPortTypeRestInterfacePlk" bpdm:providedIsDefault="true" bpdm:clientTasks="_FgMbwOX7EeGXAKE-AHTcWg:_G0gKsPEcEeGiQd0_oA9vGg" bpdm:isManaged="true" bpdm:otherPoolId="_ApyYYOX5EeGXAKE-AHTcWg"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="tnsQCStartRequestMsg" messageType="tns:QCStartRequest" binding="tns:QCServiceSOAP" operation="QCStart" opMsgType="0" bpdm:id="_KAFV4PEcEeGiQd0_oA9vGg" bpdm:messageIds="inc:_J_-BIPEcEeGiQd0_oA9vGg"/>
-            <bpel:variable name="tnsQCStartResponseMsg" messageType="tns:QCStartResponse" binding="tns:QCServiceSOAP" operation="QCStart" opMsgType="1" bpdm:id="_Kdo0kPEcEeGiQd0_oA9vGg" bpdm:messageIds=" out:_KdfqoPEcEeGiQd0_oA9vGg">
-                <bpel:from bpdm:toPart="parameters">
-                    <bpel:literal bpdm:linkedMessageType="tns:QCStartResponse" bpdm:linkedPart="parameters" bpdm:binding="tns:QCServiceSOAP" bpdm:opMsgType="1" bpdm:operation="QCStart"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="tnsQCStatusRequestMsg" messageType="tns:QCStatusRequest" binding="tns:QCServiceSOAP" operation="QCStatus" opMsgType="0" bpdm:id="_M0CEMPEcEeGiQd0_oA9vGg" bpdm:messageIds="inc:_Mz46QPEcEeGiQd0_oA9vGg"/>
             <bpel:variable name="tnsQCStatusResponseMsg" messageType="tns:QCStatusResponse" binding="tns:QCServiceSOAP" operation="QCStatus" opMsgType="1" bpdm:id="_NiByoPEcEeGiQd0_oA9vGg" bpdm:messageIds=" out:_Nh4BoPEcEeGiQd0_oA9vGg">
                 <bpel:from bpdm:toPart="parameters">
@@ -36,12 +41,18 @@
                     <bpel:literal bpdm:linkedMessageType="tns:QCFinishedResponse" bpdm:linkedPart="parameters" bpdm:binding="tns:QCServiceSOAP" bpdm:opMsgType="1" bpdm:operation="QCFinished"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="invokeqcQCStartMsg" messageType="invokeqc:qc_start_input" binding="invokeqc:restBinding" operation="qc_start" opMsgType="0" bpdm:id="_ldBkABFZEeK_QODnHKXoeA" bpdm:messageIds="inc:_lcupEBFZEeK_QODnHKXoeA"/>
+            <bpel:variable name="tnsQCStartResponseMsg" messageType="tns:QCStartResponse" binding="tns:QCServiceSOAP" operation="qc_start" opMsgType="1" bpdm:id="_mqRaQBFZEeK_QODnHKXoeA" bpdm:messageIds=" out:_mqEl8BFZEeK_QODnHKXoeA">
+                <bpel:from bpdm:toPart="parameters">
+                    <bpel:literal bpdm:linkedMessageType="tns:QCStartResponse" bpdm:linkedPart="parameters" bpdm:binding="tns:QCServiceSOAP" bpdm:opMsgType="1" bpdm:operation="qc_start"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="QCStart" partnerLink="qcAndWFEForPortQCServiceSOAPPlkVar" portType="tns:QCService" isMyRole="true" enableSharing="false" bpdm:label="QCStart" bpdm:ID="_G0gKsPEcEeGiQd0_oA9vGg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tnsQCStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tns:QCStartRequest" bpdm:binding="tns:QCServiceSOAP" bpdm:ID="_J_-BIPEcEeGiQd0_oA9vGg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tnsQCStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tns:QCStartResponse" bpdm:binding="tns:QCServiceSOAP" bpdm:ID="_KdfqoPEcEeGiQd0_oA9vGg"></bpdm:linkset>
+                <bpdm:messagingtask operation="qc_start" partnerLink="qcAndWFEForPortTypeRestInterfacePlkVar" portType="invokeqc:restInterface" isMyRole="true" enableSharing="false" bpdm:label="QCStart" bpdm:ID="_G0gKsPEcEeGiQd0_oA9vGg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="invokeqcQCStartMsg" bpdm:variableIsManaged="true" bpdm:messageType="invokeqc:qc_start_input" bpdm:binding="invokeqc:restBinding" bpdm:ID="_lcupEBFZEeK_QODnHKXoeA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tnsQCStartResponseMsg" bpdm:msgVarScopeId="_FgMbwOX7EeGXAKE-AHTcWg" bpdm:variableIsManaged="true" bpdm:messageType="tns:QCStartResponse" bpdm:binding="tns:QCServiceSOAP" bpdm:ID="_mqEl8BFZEeK_QODnHKXoeA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>

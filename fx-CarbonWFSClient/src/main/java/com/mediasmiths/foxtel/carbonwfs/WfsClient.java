@@ -149,10 +149,7 @@ public class WfsClient
 	 */
 	public UUID createPreset(Preset preset) throws JAXBException
 	{
-		log.info("Trying to create preset from xml: " + preset);
-//		StringReader reader = new StringReader(presetXML);
-//		JAXBElement<Preset> element = (JAXBElement<Preset>) unmarshaller.unmarshal(reader);
-//		Preset preset = element.getValue();
+
 		String storePreset = service.storePreset(preset);
 		return UUID.fromString(storePreset);
 	}

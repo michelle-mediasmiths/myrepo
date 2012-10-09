@@ -269,11 +269,31 @@
       <eventHandlers xmi:type="bpmn:Activity" xmi:id="_WIZ-IfESEeGiQd0_oA9vGg" iD="_WIZ-IPESEeGiQd0_oA9vGg" outgoingEdges="_aMuIIfESEeGiQd0_oA9vGg" activityType="EventIntermediateError"/>
     </vertices>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_W3RkYfEUEeGiQd0_oA9vGg" iD="_W3RkYPEUEeGiQd0_oA9vGg" outgoingEdges="_obq2YebbEeGVL7Jq3_1E2g" incomingEdges="_uCGlUebZEeGVL7Jq3_1E2g" name="Quality Control">
-      <vertices xmi:type="bpmn:Activity" xmi:id="_W3ZgMfEUEeGiQd0_oA9vGg" iD="_W3ZgMPEUEeGiQd0_oA9vGg" outgoingEdges="_rs3TMfEUEeGiQd0_oA9vGg" name="Invoke QC">
-        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_J_-BIfEcEeGiQd0_oA9vGg"/>
-        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_KdfqofEcEeGiQd0_oA9vGg"/>
-      </vertices>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_rs0P4fEUEeGiQd0_oA9vGg" iD="_rs0P4PEUEeGiQd0_oA9vGg" outgoingEdges="_A-7iofEVEeGiQd0_oA9vGg" incomingEdges="_rs3TMfEUEeGiQd0_oA9vGg" name="QC Status" activityType="Task" looping="true">
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_lc5oMRFZEeK_QODnHKXoeA" iD="_lc5oMBFZEeK_QODnHKXoeA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lc5oMhFZEeK_QODnHKXoeA" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lc5oMxFZEeK_QODnHKXoeA" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lc9SkhFZEeK_QODnHKXoeA" key="defaultDeclarationName" value="invokeqcQCStartMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldAV4RFZEeK_QODnHKXoeA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qc/invokeqc.rest}qc_start_input"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_lc-gsBFZEeK_QODnHKXoeA" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lc_HwBFZEeK_QODnHKXoeA" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldAV4BFZEeK_QODnHKXoeA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_mqdngRFZEeK_QODnHKXoeA" iD="_mqdngBFZEeK_QODnHKXoeA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mqdnghFZEeK_QODnHKXoeA" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqdngxFZEeK_QODnHKXoeA" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqhR4xFZEeK_QODnHKXoeA" key="defaultDeclarationName" value="qCServiceQCStartResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqljURFZEeK_QODnHKXoeA" key="douri2" value="builtin:///diagram?wsdlmessage={http://localhost:8088/QCService/}QCStartResponse"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_mqjHEBFZEeK_QODnHKXoeA" direction="From">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mqkVMBFZEeK_QODnHKXoeA" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqljUBFZEeK_QODnHKXoeA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_rs0P4fEUEeGiQd0_oA9vGg" iD="_rs0P4PEUEeGiQd0_oA9vGg" outgoingEdges="_A-7iofEVEeGiQd0_oA9vGg" incomingEdges="_hwQ-YRFZEeK_QODnHKXoeA" name="QC Status" activityType="Task" looping="true">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bdnOoPEaEeGiQd0_oA9vGg" source="forEachSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bdnOofEaEeGiQd0_oA9vGg" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
         </eAnnotations>
@@ -284,9 +304,16 @@
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_OYReIfEcEeGiQd0_oA9vGg"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_PwspofEcEeGiQd0_oA9vGg"/>
       </vertices>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_rs3TMfEUEeGiQd0_oA9vGg" iD="_rs3TMPEUEeGiQd0_oA9vGg"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_gdvmlxFZEeK_QODnHKXoeA" iD="_gdtKUBFZEeK_QODnHKXoeA" associations="_lc-gsBFZEeK_QODnHKXoeA _mqjHEBFZEeK_QODnHKXoeA" outgoingEdges="_hwQ-YRFZEeK_QODnHKXoeA" name="qc_start" activityType="Task">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gdvmmBFZEeK_QODnHKXoeA" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gdvmmRFZEeK_QODnHKXoeA" key="douri" value="project:///qc/invokeqc.wsdl?invokerequestresponsewithbinding={http://example.com/qc/invokeqc.rest}restBinding/qc_start"/>
+        </eAnnotations>
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_lcupERFZEeK_QODnHKXoeA"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_mqEl8RFZEeK_QODnHKXoeA"/>
+      </vertices>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_1EhmIfEUEeGiQd0_oA9vGg" iD="_1EhmIPEUEeGiQd0_oA9vGg"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_A-7iofEVEeGiQd0_oA9vGg" iD="_A-7ioPEVEeGiQd0_oA9vGg"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_hwQ-YRFZEeK_QODnHKXoeA" iD="_hwQ-YBFZEeK_QODnHKXoeA"/>
       <eventHandlers xmi:type="bpmn:Activity" xmi:id="_0JZaofEUEeGiQd0_oA9vGg" iD="_0JZaoPEUEeGiQd0_oA9vGg" outgoingEdges="_1EhmIfEUEeGiQd0_oA9vGg" activityType="EventIntermediateError"/>
     </vertices>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_OR_m0fGnEeGbS7hnVLk4pQ" iD="_OR_m0PGnEeGbS7hnVLk4pQ" outgoingEdges="_WdHOIfGnEeGbS7hnVLk4pQ" incomingEdges="_obq2YebbEeGVL7Jq3_1E2g _ssLCQebbEeGVL7Jq3_1E2g" name="XML Generation">
@@ -351,30 +378,6 @@
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_aHgScOYFEeGXAKE-AHTcWg" source="executablepool">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_aHgSceYFEeGXAKE-AHTcWg" key="poolIsExecutable" value="false"/>
     </eAnnotations>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_KAFV4fEcEeGiQd0_oA9vGg" iD="_KAFV4PEcEeGiQd0_oA9vGg">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_KAFV4vEcEeGiQd0_oA9vGg" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KAFV4_EcEeGiQd0_oA9vGg" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KAGkCPEcEeGiQd0_oA9vGg" key="defaultDeclarationName" value="tnsQCStartRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KAHyIfEcEeGiQd0_oA9vGg" key="douri2" value="builtin:///diagram?wsdlmessage={http://localhost:8088/QCService/}QCStartRequest"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_KAHLEPEcEeGiQd0_oA9vGg" direction="From">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_KAHLEfEcEeGiQd0_oA9vGg" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KAHyIPEcEeGiQd0_oA9vGg" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_Kdo0kfEcEeGiQd0_oA9vGg" iD="_Kdo0kPEcEeGiQd0_oA9vGg">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Kdo0kvEcEeGiQd0_oA9vGg" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Kdo0k_EcEeGiQd0_oA9vGg" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KdqpwvEcEeGiQd0_oA9vGg" key="defaultDeclarationName" value="tnsQCStartResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Kdse8PEcEeGiQd0_oA9vGg" key="douri2" value="builtin:///diagram?wsdlmessage={http://localhost:8088/QCService/}QCStartResponse"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_KdrQ0PEcEeGiQd0_oA9vGg" direction="To">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Kdr34PEcEeGiQd0_oA9vGg" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Kdr34fEcEeGiQd0_oA9vGg" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_M0CEMfEcEeGiQd0_oA9vGg" iD="_M0CEMPEcEeGiQd0_oA9vGg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_M0CEMvEcEeGiQd0_oA9vGg" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_M0CEM_EcEeGiQd0_oA9vGg" key="isBpelDeclaration" value="true"/>
@@ -423,12 +426,36 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_G0h_6PEcEeGiQd0_oA9vGg" iD="_G0gKsPEcEeGiQd0_oA9vGg" associations="_KAHLEPEcEeGiQd0_oA9vGg _KdrQ0PEcEeGiQd0_oA9vGg" name="QCStart" activityType="Task">
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_ldBkARFZEeK_QODnHKXoeA" iD="_ldBkABFZEeK_QODnHKXoeA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ldBkAhFZEeK_QODnHKXoeA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldBkAxFZEeK_QODnHKXoeA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldEnUhFZEeK_QODnHKXoeA" key="defaultDeclarationName" value="invokeqcQCStartMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldIRsRFZEeK_QODnHKXoeA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qc/invokeqc.rest}qc_start_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_ldF1cBFZEeK_QODnHKXoeA" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ldHDkBFZEeK_QODnHKXoeA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ldIRsBFZEeK_QODnHKXoeA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_mqRaQRFZEeK_QODnHKXoeA" iD="_mqRaQBFZEeK_QODnHKXoeA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mqRaQhFZEeK_QODnHKXoeA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqRaQxFZEeK_QODnHKXoeA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqXg6BFZEeK_QODnHKXoeA" key="defaultDeclarationName" value="tnsQCStartResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqdAcBFZEeK_QODnHKXoeA" key="douri2" value="builtin:///diagram?wsdlmessage={http://localhost:8088/QCService/}QCStartResponse"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_mqZWEBFZEeK_QODnHKXoeA" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mqbLQBFZEeK_QODnHKXoeA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqcZYBFZEeK_QODnHKXoeA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_G0h_6PEcEeGiQd0_oA9vGg" iD="_G0gKsPEcEeGiQd0_oA9vGg" associations="_ldF1cBFZEeK_QODnHKXoeA _mqZWEBFZEeK_QODnHKXoeA" name="QCStart" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_G0h_6fEcEeGiQd0_oA9vGg" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_G0h_6vEcEeGiQd0_oA9vGg" key="douri" value="project:///QCService.wsdl?wsdloperationbound={http://localhost:8088/QCService/}QCService/QCServiceSOAP/QCStart"/>
       </eAnnotations>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_J_-BIfEcEeGiQd0_oA9vGg"/>
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_KdfqofEcEeGiQd0_oA9vGg"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_lcupERFZEeK_QODnHKXoeA"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_mqEl8RFZEeK_QODnHKXoeA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_HVCE6PEcEeGiQd0_oA9vGg" iD="_HVAPsfEcEeGiQd0_oA9vGg" associations="_M0EgcPEcEeGiQd0_oA9vGg _NiE18PEcEeGiQd0_oA9vGg" name="QCStatus" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HVCE6fEcEeGiQd0_oA9vGg" source="attachedDataobject">
@@ -847,16 +874,6 @@
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7y2p4fEVEeGiQd0_oA9vGg" key="douri" value="project:///TranscodeService.wsdl?messageForBoundOperation={http://localhost:8088/TranscodeService/}TranscodeService/TranscodeServiceSOAP/TranscodeFinished/output/TranscodeFinishedResponse"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_J_-BIfEcEeGiQd0_oA9vGg" iD="_J_-BIPEcEeGiQd0_oA9vGg" source="_W3ZgMfEUEeGiQd0_oA9vGg" target="_G0h_6PEcEeGiQd0_oA9vGg">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_J__2UPEcEeGiQd0_oA9vGg" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_J__2UfEcEeGiQd0_oA9vGg" key="douri" value="project:///QCService.wsdl?messageForBoundOperation={http://localhost:8088/QCService/}QCService/QCServiceSOAP/QCStart/input/QCStartRequest"/>
-    </eAnnotations>
-  </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_KdfqofEcEeGiQd0_oA9vGg" iD="_KdfqoPEcEeGiQd0_oA9vGg" source="_G0h_6PEcEeGiQd0_oA9vGg" target="_W3ZgMfEUEeGiQd0_oA9vGg">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Kdit8PEcEeGiQd0_oA9vGg" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Kdit8fEcEeGiQd0_oA9vGg" key="douri" value="project:///QCService.wsdl?messageForBoundOperation={http://localhost:8088/QCService/}QCService/QCServiceSOAP/QCStart/output/QCStartResponse"/>
-    </eAnnotations>
-  </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_Mz46QfEcEeGiQd0_oA9vGg" iD="_Mz46QPEcEeGiQd0_oA9vGg" source="_rs0P4fEUEeGiQd0_oA9vGg" target="_HVCE6PEcEeGiQd0_oA9vGg">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Mz7WgPEcEeGiQd0_oA9vGg" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Mz7WgfEcEeGiQd0_oA9vGg" key="douri" value="project:///QCService.wsdl?messageForBoundOperation={http://localhost:8088/QCService/}QCService/QCServiceSOAP/QCStatus/input/QCStatusRequest"/>
@@ -895,6 +912,16 @@
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_k23TMfGtEeGbS7hnVLk4pQ" iD="_k23TMPGtEeGbS7hnVLk4pQ" source="_iz0dafGtEeGbS7hnVLk4pQ" target="_O6OZUeYTEeGYCvzfuWhYqg">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_k26WgPGtEeGbS7hnVLk4pQ" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k26WgfGtEeGbS7hnVLk4pQ" key="douri" value="project:///TempStorageService.wsdl?messageForBoundOperation={http://localhost:8080/TempStorageService/}TempStorageService/TempStorageServiceSOAP/SendToTemp/output/SendToTempResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_lcupERFZEeK_QODnHKXoeA" iD="_lcupEBFZEeK_QODnHKXoeA" source="_gdvmlxFZEeK_QODnHKXoeA" target="_G0h_6PEcEeGiQd0_oA9vGg">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lcy6gBFZEeK_QODnHKXoeA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lcy6gRFZEeK_QODnHKXoeA" key="douri" value="project:///qc/invokeqc.wsdl?messageForOperationWithBinding={http://example.com/qc/invokeqc.rest}restBinding/qc_start/input/qc_startRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mqEl8RFZEeK_QODnHKXoeA" iD="_mqEl8BFZEeK_QODnHKXoeA" source="_G0h_6PEcEeGiQd0_oA9vGg" target="_gdvmlxFZEeK_QODnHKXoeA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mqIQUBFZEeK_QODnHKXoeA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mqIQURFZEeK_QODnHKXoeA" key="douri" value="project:///QCService.wsdl?messageForBoundOperation={http://localhost:8088/QCService/}QCService/QCServiceSOAP/QCStart/output/QCStartResponse"/>
     </eAnnotations>
   </messages>
 </bpmn:BpmnDiagram>
