@@ -1,11 +1,15 @@
 package com.mediasmiths.mq;
 import java.util.ArrayList;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
 import com.mayam.wf.mq.Mq.Listener;
+import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
@@ -13,7 +17,12 @@ import com.mayam.wf.mq.common.Queues;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.controllers.MayamTitleController;
+import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mq.listeners.AssetDeletionListener;
 import com.mediasmiths.mq.listeners.AssetPurgeListener;
 import com.mediasmiths.mq.listeners.EmergencyIngestListener;
@@ -22,18 +31,23 @@ import com.mediasmiths.mq.listeners.TemporaryContentListener;
 import com.mediasmiths.mq.listeners.UnmatchedListener;
 
 public class MqClient {
-	private final Mq mq;
 	private ArrayList<Detachable> listeners;
-	private TasksClient client;
-	private MayamTaskController taskController;
 	
-	public MqClient(Injector injector, TasksClient mayamClient, MayamTaskController mayamTaskController) 
+	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
+	@Inject
+	TasksClient client;
+	
+	@Inject
+	MayamTaskController taskController;
+	
+	@Inject 
+	Mq mq;
+	
+	@Inject
+	public MqClient() 
 	{
-		mq = injector.getInstance(Mq.class);
 		listeners = new ArrayList<Detachable>();
 		mq.listen(ListenIntensity.NORMAL);
-		client = mayamClient;
-		taskController = mayamTaskController;
 	}
 		
 	public void dispose()
