@@ -17,7 +17,9 @@ public class ComplianceLoggingListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
-				
+					//On compliance logging completion create compliance editing taks
+
+
 				}
 			}
 		};

@@ -17,7 +17,7 @@ public class ImportFailureListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
-				
+					// On import failure update ingest failure worklist
 				}
 			}
 		};

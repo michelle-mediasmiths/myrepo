@@ -17,6 +17,14 @@ public class InitiateQcListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
+					//Once the import successfully completes, Viz Ardome shall send a notification to the WFE. The WFE will then perform the following tasks:
+					//• If the second, optional, companion XML file containing Blackspot metadata is present, WFE shall upload and attach the file 
+					//  to the Item placeholder in Viz Ardome.
+					//• The WFE shall initiate a QC flow for the Item in Viz Ardome
+					//o 3rd party Auto QC (if the media or workflow has been flagged as requiring Auto QC) o File format verification
+					//• The WFE shall send an e-mail notification to a user group to be defined that the media has been imported
+					//
+					//On content acquisition initiate qc workflows if required
 				
 				}
 			}

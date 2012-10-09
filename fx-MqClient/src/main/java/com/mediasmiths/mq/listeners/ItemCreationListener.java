@@ -17,7 +17,9 @@ public class ItemCreationListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
-				
+				    //If the Item was created and the Master message had the Compile flag set, 
+					//the WFE will add the Item to the Compliance Logging WorklistIf the Item 
+					//was created and the Master message had the Compile flag set, the WFE will add the Item to the Compliance Logging Worklist
 				}
 			}
 		};

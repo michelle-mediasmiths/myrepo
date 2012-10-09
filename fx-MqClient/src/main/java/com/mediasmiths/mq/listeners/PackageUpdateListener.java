@@ -17,6 +17,7 @@ public class PackageUpdateListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
+					//After a TX-package has been updated in Viz Ardome, the WFE shall determine if the TX- package should be added to the Segmentation Worklist
 				
 				}
 			}
