@@ -57,7 +57,7 @@ public abstract class ValidationTest {
 	protected MessageValidationResult validationForMaterial(Material material) throws Exception{
 	
 		String importFolderPath =  TestUtil.prepareTempFolder("INCOMING");
-		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
+		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR +"MessageValidationResult"+ RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
 		TestUtil.writeMaterialToFile(material,messageXmlPath);		
 		prepareMocks();
 		return validator.validateFile(messageXmlPath);

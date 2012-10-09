@@ -39,12 +39,12 @@ public class UnmatchedMaterialProcessorTest {
 		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
 		String failedMessagesPath = TestUtil.prepareTempFolder("FAILED");
 		
-		String unmatchedXMlFileName = RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml";
+		String unmatchedXMlFileName = "UnmatchedProcesserTest"+RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml";
 		String unmatchedXMLPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName;
 		logger.debug("Using "+unmatchedXMLPath);		
 		IOUtils.write(RandomStringUtils.random(20), new FileOutputStream(new File(unmatchedXMLPath)));
 		
-		String unmatchedMXFFileName = RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "mxf";
+		String unmatchedMXFFileName = "UnmatchedProcesserTest"+RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "mxf";
 		String unmatchedMXFPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName;
 		logger.debug("Using "+unmatchedMXFPath);		
 		IOUtils.write(RandomStringUtils.random(20), new FileOutputStream(new File(unmatchedMXFPath)));

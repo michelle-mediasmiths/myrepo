@@ -33,21 +33,21 @@ public class MaterialFolderWatcherTest {
 		watchFolderPath = TestUtil.prepareTempFolder("INCOMING");
 
 		xml1 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
-				+ RandomStringUtils.randomAlphabetic(10)
+				+ "XmlFile1"+RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "xml");
 		xml2 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
-				+ RandomStringUtils.randomAlphabetic(10)
+				+ "XmlFile2"+ RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "xml");
 
 		mxf1 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
-				+ RandomStringUtils.randomAlphabetic(10)
+				+ "mxfFile2"+ RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
 		mxf2 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
-				+ RandomStringUtils.randomAlphabetic(10)
+				+ "mxfFile2"+ RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
 		
 		fileWeAreNotInterestedIn = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
-				+ RandomStringUtils.randomAlphabetic(10)
+				+"IntermediateZipfile"+ RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "zip");
 	}
 

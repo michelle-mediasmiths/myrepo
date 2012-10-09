@@ -67,6 +67,14 @@ public class ImporterTest {
 		envelope = new MaterialEnvelope(materialxml, new Material(), masterID);
 		pendingImport = new PendingImport(media, envelope);
 
+		//Check if can write
+			//Change from read only
+
+		if (!new File(ardomeImportPath).canWrite()){
+			new File(ardomeImportPath).setWritable(true);
+		}
+
+		
 	}
 
 	@After

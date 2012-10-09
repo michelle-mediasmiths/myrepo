@@ -26,8 +26,9 @@ public class TestUtil {
 	
 	public static String prepareTempFolder(String description) throws IOException {
 		//create a random folder		
-		String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
-				
+		//String path = FileUtils.getTempDirectoryPath() + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + IOUtils.DIR_SEPARATOR + description;
+		String path="/tmp/mediaTestData/"+IOUtils.DIR_SEPARATOR  + description;
+		
 		path = path.replace("//", "/"); //on some systems  FileUtils.getTempDirectoryPath() returns a trailing slash and on some it does not
 		
 		File dir = new File(path);
@@ -43,7 +44,7 @@ public class TestUtil {
 	}
 	
 	public static File getFileOfTypeInFolder(String extension, String folder){
-		return new File(folder + IOUtils.DIR_SEPARATOR + RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + extension);
+		return new File(folder + IOUtils.DIR_SEPARATOR + "CreateFileInfolder"+RandomStringUtils.randomAlphabetic(6) + FilenameUtils.EXTENSION_SEPARATOR + extension);
 	}
 	
 	public static File getPathToThisFileIfItWasInThisFolder(File file, File folder){
