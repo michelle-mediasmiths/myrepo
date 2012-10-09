@@ -27,10 +27,16 @@ public class MaterialFolderWatcherTest {
 	private File mxf2;
 	private File fileWeAreNotInterestedIn;
 	private String watchFolderPath;
+	private String watchFolderPathChanged;
+	private File xml1Backup;
+	private File xml2Backup;
+	private File mxf1Backup;
+	private File mxf2Backup;
 
 	@Before
 	public void before() throws IOException {
 		watchFolderPath = TestUtil.prepareTempFolder("INCOMING");
+		watchFolderPathChanged = TestUtil.prepareTempFolder("incomingBackup");
 
 		xml1 = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
 				+ "XmlFile1"+RandomStringUtils.randomAlphabetic(10)
@@ -49,6 +55,35 @@ public class MaterialFolderWatcherTest {
 		fileWeAreNotInterestedIn = new File(watchFolderPath + IOUtils.DIR_SEPARATOR
 				+"IntermediateZipfile"+ RandomStringUtils.randomAlphabetic(10)
 				+ FilenameUtils.EXTENSION_SEPARATOR + "zip");
+		
+		createInputFiles(watchFolderPathChanged);
+	}
+	
+	public void createInputFiles(String folderName){
+		
+		//These are used to test the agents, will do nothing now but need to be run the AgentTest in src/main/resources
+		xml1Backup = new File(folderName + IOUtils.DIR_SEPARATOR
+				+ "XmlFile1"+ FilenameUtils.EXTENSION_SEPARATOR + "xml");
+		xml2Backup = new File(folderName + IOUtils.DIR_SEPARATOR
+				+ "XmlFile2"+ FilenameUtils.EXTENSION_SEPARATOR + "xml");
+		mxf1Backup = new File(folderName + IOUtils.DIR_SEPARATOR
+				+ "mxfFile1"+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
+		mxf2Backup = new File(folderName + IOUtils.DIR_SEPARATOR
+				+ "mxfFile2"+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
+		
+		try {
+			writeRandomFile(xml1Backup);
+			writeRandomFile(xml2Backup);
+			writeRandomFile(mxf1Backup);
+			writeRandomFile(mxf2Backup);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	private void writeRandomFile(File f) throws FileNotFoundException,
@@ -68,6 +103,7 @@ public class MaterialFolderWatcherTest {
 		writeRandomFile(xml2);
 		writeRandomFile(mxf1);
 		writeRandomFile(mxf2);
+
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
