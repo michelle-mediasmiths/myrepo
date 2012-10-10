@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
-			<version>${stdlib.version}</version>
+			<version>${stdlib.version}</version>			
 		</dependency>
 
 		<!-- begin test dependencies -->

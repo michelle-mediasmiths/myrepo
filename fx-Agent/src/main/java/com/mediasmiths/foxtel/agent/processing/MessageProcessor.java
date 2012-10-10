@@ -238,6 +238,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
 				stop();
+			} catch (Exception e){
+				logger.fatal("Uncaught exception almost killed MessageProcessor thread, this is very bad",e);
 			}
 		}
 
