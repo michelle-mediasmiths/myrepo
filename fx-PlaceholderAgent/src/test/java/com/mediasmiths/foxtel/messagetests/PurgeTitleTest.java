@@ -11,6 +11,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -57,7 +58,9 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	public void testPurgeTitleXSDInvalid() throws Exception {
 		
 		System.out.println("FXT 4.1.3.2 - Non XSD compliance");
-		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		IOUtils.write("InvalidPurgeTitle", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		

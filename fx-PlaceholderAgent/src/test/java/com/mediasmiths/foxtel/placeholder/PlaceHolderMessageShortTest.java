@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -94,7 +95,8 @@ public abstract class PlaceHolderMessageShortTest {
 			throws IOException, Exception {
 		// marshall and write to file
 		FileWriter writer = new FileWriter();
-		File temp = File.createTempFile(description, ".xml");
+		File temp = new File("/tmp/placeHolderTestData/"+description+"__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		writer.writeObjectToFile(pm, temp.getAbsolutePath());
 		return temp;
 	}

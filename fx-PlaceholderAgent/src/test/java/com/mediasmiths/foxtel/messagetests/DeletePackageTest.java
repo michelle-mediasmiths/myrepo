@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -55,7 +56,9 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageXSDInvalid() throws Exception {
 		
 		logger.info("FXT 4.1.11.2 - Non XSD compliance");
-		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+		
 		IOUtils.write("InvalidDeletePackage", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		

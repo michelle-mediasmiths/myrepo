@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -57,7 +58,9 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	public void testDeleteMaterialXSDInvalid() throws Exception {
 		
 		System.out.println("FXT 4.1.7.2 - Non XSD compliance");
-		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+	//	File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		IOUtils.write("InvalidDeleteMaterial", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		

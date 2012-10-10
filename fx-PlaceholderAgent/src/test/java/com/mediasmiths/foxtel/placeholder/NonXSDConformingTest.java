@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -29,7 +30,9 @@ public class NonXSDConformingTest extends PlaceHolderMessageShortTest{
 	public void testNonXSDConformingFileFails() throws Exception{
 		
 		
-		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		IOUtils.write(loremIpsum, new FileOutputStream(temp));		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		

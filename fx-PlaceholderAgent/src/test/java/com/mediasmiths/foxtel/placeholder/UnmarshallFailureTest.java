@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -39,7 +40,7 @@ public class UnmarshallFailureTest {
 	
 	@Before
 	public void beforeTest() throws SAXException{
-		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,mayamValidator,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp/foxtelTestData"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
+		toTest = new PlaceholderMessageValidator(unmarshaller, mayamClient,mayamValidator,new ReceiptWriterThatAlwaysReturnsUniqueFiles("/tmp/placeHolderTestData"), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator); 
 	}
 	
 	@Test
@@ -60,6 +61,8 @@ public class UnmarshallFailureTest {
 		
 		PlaceholderMessage pm = createMessage();		
 		File temp = writeFile("UnexpectedTypeAfterMarshalling",pm);
+		
+		
 				
 		when(unmarshaller.unmarshal(temp)).thenReturn(new String("not a placeholder message"));
 		
@@ -76,7 +79,9 @@ public class UnmarshallFailureTest {
 
 	private File writeFile(String description, PlaceholderMessage pm) throws IOException, Exception {
 		FileWriter writer = new FileWriter();
-		File temp = File.createTempFile(description, ".xml");
+		//File temp = File.createTempFile(description, ".xml");
+		File temp = new File("/tmp/placeHolderTestData/"+"description"+"__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		writer.writeObjectToFile(pm, temp.getAbsolutePath());
 		return temp;
 	}
