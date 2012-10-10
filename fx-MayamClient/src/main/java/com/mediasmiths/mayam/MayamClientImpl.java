@@ -253,7 +253,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException
 	{
-		boolean isProtected = false;
+		Boolean isProtected = false;
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 
 		if (titleAttributes != null)
@@ -262,7 +262,7 @@ public class MayamClientImpl implements MayamClient
 			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
 			// isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
 
-			if (!isProtected)
+			if (isProtected)
 			{
 				try
 				{
