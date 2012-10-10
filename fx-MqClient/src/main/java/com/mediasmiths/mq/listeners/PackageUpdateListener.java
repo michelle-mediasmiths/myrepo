@@ -27,7 +27,7 @@ public class PackageUpdateListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					AttributeMap messageAttributes = msg.getSubject();
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					
 					//TODO: Need to confirm check for already existing asset
@@ -41,7 +41,7 @@ public class PackageUpdateListener
 							
 							AttributeMap filterEqualities = client.createAttributeMap();
 							filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION.toString());
-							filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+							filterEqualities.setAttribute(Attribute.ASSET_GUID, assetID);
 							FilterCriteria criteria = new FilterCriteria();
 							criteria.setFilterEqualities(filterEqualities);
 							FilterResult existingTasks = client.getTasks(criteria, 10, 0);
@@ -53,14 +53,14 @@ public class PackageUpdateListener
 								//Retrieve the tx-tasks and preview tasks associated with the asset
 								filterEqualities.clear();
 								filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.TX_DELIVERY.toString());
-								filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+								filterEqualities.setAttribute(Attribute.ASSET_GUID, assetID);
 								criteria.setFilterEqualities(filterEqualities);
 								FilterResult txTasks = client.getTasks(criteria, 10, 0);
 								boolean txReady = false;
 								
 								filterEqualities.clear();
 								filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-								filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+								filterEqualities.setAttribute(Attribute.ASSET_GUID, assetID);
 								criteria.setFilterEqualities(filterEqualities);
 								FilterResult previewTasks = client.getTasks(criteria, 10, 0);
 								
@@ -121,7 +121,7 @@ public class PackageUpdateListener
 							boolean requiresSegTask = false;
 							AttributeMap filterEqualities = client.createAttributeMap();
 							filterEqualities.setAttribute(Attribute.ASSET_TYPE, MayamTaskListType.PREVIEW.toString());
-							filterEqualities.setAttribute(Attribute.ASSET_ID, parentId);
+							filterEqualities.setAttribute(Attribute.ASSET_GUID, parentId);
 							FilterCriteria criteria = new FilterCriteria();
 							criteria.setFilterEqualities(filterEqualities);
 							FilterResult previewTasks = client.getTasks(criteria, 10, 0);

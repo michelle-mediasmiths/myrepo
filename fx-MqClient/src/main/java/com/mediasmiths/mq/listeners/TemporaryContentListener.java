@@ -30,7 +30,7 @@ public class TemporaryContentListener
 
 					// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
 					
 					if (assetType.equals("ITEM")) 
 					{
@@ -38,7 +38,7 @@ public class TemporaryContentListener
 						
 						AttributeMap filterEqualities = client.createAttributeMap();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+						filterEqualities.setAttribute(Attribute.ASSET_GUID, assetID);
 						FilterCriteria criteria = new FilterCriteria();
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult existingTasks = client.getTasks(criteria, 10, 0);
@@ -63,7 +63,7 @@ public class TemporaryContentListener
 					{
 						AttributeMap filterEqualities = client.createAttributeMap();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+						filterEqualities.setAttribute(Attribute.ASSET_GUID, assetID);
 						FilterCriteria criteria = new FilterCriteria();
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult existingTasks = client.getTasks(criteria, 10, 0);

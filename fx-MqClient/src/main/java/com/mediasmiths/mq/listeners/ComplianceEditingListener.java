@@ -32,7 +32,7 @@ public class ComplianceEditingListener {
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							client.updateTask(messageAttributes);
 								
-							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = client.getTask(taskID);
