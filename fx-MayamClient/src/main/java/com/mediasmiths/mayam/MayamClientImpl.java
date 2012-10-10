@@ -2,6 +2,7 @@ package com.mediasmiths.mayam;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -432,5 +433,12 @@ public class MayamClientImpl implements MayamClient
 			}
 		}
 		return licenseTags;
+	}
+
+
+	@Override
+	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
+	{
+		// TODO implement me!, see declaration in interface		
 	}
 }

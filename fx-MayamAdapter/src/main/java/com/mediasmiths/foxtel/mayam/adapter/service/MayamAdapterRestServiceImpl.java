@@ -8,12 +8,18 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCResponse;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
 {
+	
+	@Inject private MayamClient mayamClient;
+	@Named("qc.material.location") private URI materialQCLocation;
 
 	@GET
 	@Path("/ping")
@@ -21,18 +27,18 @@ public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
 	public String ping()
 	{
 		return "ping";
-	}
+	} 
 
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("text/plain")
-	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req)
+	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException
 	{
 		final String materialID = req.getMaterialID();
-
+		final URI destination = materialQCLocation.resolve(req.getMaterialID()+".mxf");
 		
-		
-		return new MaterialTransferForQCResponse();
+		mayamClient.transferMaterialToLocation(materialID, destination);
+		return new MaterialTransferForQCResponse(destination);
 	}
 
 }

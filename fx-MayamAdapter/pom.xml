@@ -57,6 +57,34 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>schemagen</id>
+						<goals>
+							<goal>schemagen</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformSchemas>
+						<transformSchema>
+							<uri>http://ns.mediasmiths.com/foxtel/mayam/adapter</uri>
+							<toPrefix>fxma</toPrefix>
+							<toFile>mayamAdapter.xsd</toFile>
+						</transformSchema>
+					</transformSchemas>
+					<includes>
+						<include>com/mediasmiths/foxtel/mayam/adapter/model/*</include>
+					</includes>
+					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 </project>

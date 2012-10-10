@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/mayam")
 public interface MayamAdapterRestService
@@ -23,10 +24,11 @@ public interface MayamAdapterRestService
 	 * 
 	 * @param req
 	 * @return
+	 * @throws MayamClientException 
 	 */
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("text/plain")
-	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req);
-	
+	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException;
+	 
 }
