@@ -5,6 +5,7 @@
 .settings
 .classpath
 target
+build
 
 # Compiled source #
 ###################

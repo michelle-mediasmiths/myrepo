@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:schema1="__project:///schema1.xsd" xmlns:qcFinished="http://example.com/qcFinished.rest" xmlns:qcResult="http://example.com/qcResult.rest" xmlns:qcStart="http://example.com/qcStart.rest" xmlns:qcStatus="http://example.com/qcStatus.rest" xmlns:diag="http://thisdiagram" xmlns:qcAdapter="http://thisdiagram/qcAdapter" xmlns:qcFlow="http://thisdiagram/qcFlow" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcStart1="www.mediasmithsforge.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_Qrb7cBIJEeKHz44cn0AvJQ" bpdm:displayName="diag">
+  <pnlk:partnerLinkType name="qcAdapterAndQcFlow" bpdm:poolOneId="_dwJ5gBIKEeKHz44cn0AvJQ" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="qcAdapter" bpdm:poolTwoId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="qcFlow">
+    <pnlk:role name="qcAdapter_for_qcFlow" portType="qcAdapter:ForqcFlow" bpdm:thisPoolId="_dwJ5gBIKEeKHz44cn0AvJQ">
+      <wsdl:portType name="ForqcFlow">
+        <wsdl:operation name="qcFinished" bpdm:canid="_-dQ9wRKrEeKycOW_JoqNgw._nKbpEBKuEeKycOW_JoqNgw." bpdm:dataobjectPointer="project:///qcFinished.wsdl?wsdloperationbound={http://example.com/qcFinished.rest}restService/httpPort/qcFinished">
+          <wsdl:input message="qcFinished:qcFinishedRequest" name="qcFinished" bpdm:canid="_3CaOYBKuEeKycOW_JoqNgw" bpdm:senderId="_nKbpEBKuEeKycOW_JoqNgw" bpdm:receiverId="_-dQ9wRKrEeKycOW_JoqNgw" bpdm:senderName="check status" bpdm:receiverName="qcFinished" bpdm:receiverPoolId="_dwJ5gBIKEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcFinished.wsdl?messageForBoundOperation={http://example.com/qcFinished.rest}restService/httpPort/qcFinished/input/qcFinishedRequest"></wsdl:input>
+          <wsdl:output message="qcFinished:qcFinishedResponse" name="qcFinishedResponse" bpdm:canid="_4Rc0YBKuEeKycOW_JoqNgw" bpdm:senderId="_-dQ9wRKrEeKycOW_JoqNgw" bpdm:receiverId="_nKbpEBKuEeKycOW_JoqNgw" bpdm:senderName="qcFinished" bpdm:receiverName="check status" bpdm:receiverPoolId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcFinished.wsdl?messageForBoundOperation={http://example.com/qcFinished.rest}restService/httpPort/qcFinished/output/qcFinishedResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="qcResult" bpdm:canid="_Pc1k4BIKEeKHz44cn0AvJQ._XLckcRIMEeKHz44cn0AvJQ." bpdm:dataobjectPointer="project:///qcResult.wsdl?wsdloperationbound={http://example.com/qcResult.rest}restService/httpPort/qcResult">
+          <wsdl:input message="qcResult:qcResultRequest" name="qcResult" bpdm:canid="_YMntkBIMEeKHz44cn0AvJQ" bpdm:senderId="_Pc1k4BIKEeKHz44cn0AvJQ" bpdm:receiverId="_XLckcRIMEeKHz44cn0AvJQ" bpdm:senderName="Check Result" bpdm:receiverName="qcResult" bpdm:receiverPoolId="_dwJ5gBIKEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcResult.wsdl?messageForBoundOperation={http://example.com/qcResult.rest}restService/httpPort/qcResult/input/qcResultRequest"></wsdl:input>
+          <wsdl:output message="qcResult:qcResultResponse" name="qcResultResponse" bpdm:canid="_YotMoBIMEeKHz44cn0AvJQ" bpdm:senderId="_XLckcRIMEeKHz44cn0AvJQ" bpdm:receiverId="_Pc1k4BIKEeKHz44cn0AvJQ" bpdm:senderName="qcResult" bpdm:receiverName="Check Result" bpdm:receiverPoolId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcResult.wsdl?messageForBoundOperation={http://example.com/qcResult.rest}restService/httpPort/qcResult/output/qcResultResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="qcStart" bpdm:canid="_JR8v8BIKEeKHz44cn0AvJQ._kEgXARILEeKHz44cn0AvJQ." bpdm:dataobjectPointer="project:///qcStart.wsdl?wsdloperationbound={http://example.com/qcStart.rest}restService/httpPort/qcStart">
+          <wsdl:input message="qcStart:qcStartRequest" name="qcStart" bpdm:canid="_m1f38BILEeKHz44cn0AvJQ" bpdm:senderId="_JR8v8BIKEeKHz44cn0AvJQ" bpdm:receiverId="_kEgXARILEeKHz44cn0AvJQ" bpdm:senderName="start qc" bpdm:receiverName="qcStart" bpdm:receiverPoolId="_dwJ5gBIKEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcStart.wsdl?messageForBoundOperation={http://example.com/qcStart.rest}restService/httpPort/qcStart/input/qcStartRequest"></wsdl:input>
+          <wsdl:output message="qcStart:qcStartResponse" name="qcStartResponse" bpdm:canid="_pmweoBILEeKHz44cn0AvJQ" bpdm:senderId="_kEgXARILEeKHz44cn0AvJQ" bpdm:receiverId="_JR8v8BIKEeKHz44cn0AvJQ" bpdm:senderName="qcStart" bpdm:receiverName="start qc" bpdm:receiverPoolId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:dataobjectPointer="project:///qcStart.wsdl?messageForBoundOperation={http://example.com/qcStart.rest}restService/httpPort/qcStart/output/qcStartResponse"></wsdl:output>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="qcAdapterAndQcFlowForHttpPortPlk0" bpdm:canPlkId="_dwJ5gBIKEeKHz44cn0AvJQ-_W5KB8BIJEeKHz44cn0AvJQ">
+    <pnlk:role name="qcAdapter_for_qcFlow" portType="qcFinished:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="qcAdapterAndQcFlowForHttpPortPlk1" bpdm:canPlkId="_dwJ5gBIKEeKHz44cn0AvJQ-_W5KB8BIJEeKHz44cn0AvJQ">
+    <pnlk:role name="qcAdapter_for_qcFlow" portType="qcResult:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="qcAdapterAndQcFlowForHttpPortPlk2" bpdm:canPlkId="_dwJ5gBIKEeKHz44cn0AvJQ-_W5KB8BIJEeKHz44cn0AvJQ">
+    <pnlk:role name="qcAdapter_for_qcFlow" portType="qcStart:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="qcFlowAndSomeone_else" bpdm:poolOneId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="qcFlow" bpdm:poolTwoId="_QrpW0BIJEeKHz44cn0AvJQ" bpdm:poolTwoIsExecutable="false" bpdm:poolTwoName="someone else">
+    <pnlk:role name="qcFlow_for_someone_else" portType="qcFlow:Forsomeone_else" bpdm:thisPoolId="_W5KB8BIJEeKHz44cn0AvJQ">
+      <wsdl:portType name="Forsomeone_else">
+        <wsdl:operation name="receive_start_message" bpdm:canid="_Qrp94BIJEeKHz44cn0AvJQ._ZJIggBIJEeKHz44cn0AvJQ.">
+          <wsdl:input message="qcFlow:receive_start_messageRequest" name="receive_start_message" bpdm:canid="_dLFTABIJEeKHz44cn0AvJQ" bpdm:senderId="_Qrp94BIJEeKHz44cn0AvJQ" bpdm:receiverId="_ZJIggBIJEeKHz44cn0AvJQ" bpdm:senderName="start qc flow" bpdm:receiverName="receive start message" bpdm:receiverPoolId="_W5KB8BIJEeKHz44cn0AvJQ" bpdm:bodyPartElemName="receive_start_messageRequest" bpdm:bodyPartElemType="xs:string"></wsdl:input>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
+</wsdl:definitions>

@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://localhost:8000/fx-qcAdapter/rest/qc/start" ID="_3KzH4RIKEeKSvfCLoOal5Q">
+  <rest:operation verb="PUT" name="qcStart" ID="_3K0WABIKEeKSvfCLoOal5Q">
+    <rest:input type="project:///schema1.xsd?xsdelement={www.mediasmithsforge.com}qcStartRequest" name="body" headerDirection="request" contentType="application/xml" ID="_3K09EBIKEeKSvfCLoOal5Q"/>
+    <rest:output type="project:///schema1.xsd?xsdelement={www.mediasmithsforge.com}qcStartResponse" name="response" headerDirection="request" contentType="application/xml" ID="_3K09ERIKEeKSvfCLoOal5Q"/>
+  </rest:operation>
+</rest:descriptor>

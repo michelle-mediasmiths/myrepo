@@ -1,0 +1,8 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL=" http://localhost:8000/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path=${filepath}" ID="_TPkkwBIMEeKSvfCLoOal5Q">
+  <rest:operation verb="GET" name="qcResult" ID="_TPkkwxIMEeKSvfCLoOal5Q">
+    <rest:output type="project:///schema1.xsd?xsdtype={www.mediasmithsforge.com}qcMediaResult" name="response" headerDirection="request" contentType="application/xml" ID="_TPkkxBIMEeKSvfCLoOal5Q"/>
+  </rest:operation>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_TPkkwRIMEeKSvfCLoOal5Q"/>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="filepath" headerDirection="request" contentType="text/xml" ID="_TPkkwhIMEeKSvfCLoOal5Q"/>
+</rest:descriptor>

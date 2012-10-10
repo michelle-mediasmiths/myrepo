@@ -57,6 +57,12 @@ public interface QCRestService {
 	public QCJobStatus jobStatus(@PathParam("identifier") QCJobIdentifier ident)
 			throws NotFoundException;
 
+	@GET
+	@Path("/job/{identifier}/finished")
+	@Produces("text/plain")
+	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident)
+			throws NotFoundException;
+	
 	/**
 	 * Returns the result of a given job
 	 * 
