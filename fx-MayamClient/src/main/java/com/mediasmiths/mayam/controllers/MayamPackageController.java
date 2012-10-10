@@ -32,7 +32,7 @@ public class MayamPackageController {
 
 			//TODO: Confirm Asset Type with Mayam
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.PACK);	
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, txPackage.getPresentationID());
 			
 			//TODO: Asset Parent ID to be added by Mayam shortly
 			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());

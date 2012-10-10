@@ -43,7 +43,7 @@ public class MayamMaterialController {
 		if (material != null) 
 		{
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, material.getMaterialD());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());

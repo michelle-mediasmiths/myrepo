@@ -45,7 +45,7 @@ public class MayamTaskController {
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 			
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, taskList.toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, taskList.toString());
 			attributes.copyAttributes(assetAttributes);
 			
 			try {

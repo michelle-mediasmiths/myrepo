@@ -79,7 +79,7 @@ public class MayamValidator {
 		}
 		for (AttributeMap material: materials) 
 		{
-			String materialID = material.getAttribute(Attribute.ASSET_ID);
+			String materialID = material.getAttribute(Attribute.ASSET_GUID);
 			
 			List<AttributeMap> packages = null;
 			try {

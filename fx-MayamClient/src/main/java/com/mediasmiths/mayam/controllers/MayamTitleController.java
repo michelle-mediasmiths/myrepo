@@ -34,7 +34,7 @@ public class MayamTitleController {
 		if (title != null)
 		{
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, title.getTitleID());
 			
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
