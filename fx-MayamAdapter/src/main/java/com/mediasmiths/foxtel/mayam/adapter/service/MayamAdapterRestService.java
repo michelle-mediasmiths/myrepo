@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCRequest;
+import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCResponse;
 
 @Path("/mayam")
 public interface MayamAdapterRestService
@@ -17,9 +18,15 @@ public interface MayamAdapterRestService
 	@Produces("text/plain")
 	public String ping();
 	
+	/**
+	 * called to transfer material to the configured location for qc of material arriving from partners
+	 * 
+	 * @param req
+	 * @return
+	 */
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("text/plain")
-	public Boolean transferMaterialForQC(MaterialTransferForQCRequest req);
+	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req);
 	
 }

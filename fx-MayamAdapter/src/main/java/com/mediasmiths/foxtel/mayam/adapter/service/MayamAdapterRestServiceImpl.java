@@ -9,6 +9,8 @@ import javax.ws.rs.Produces;
 
 
 import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCRequest;
+import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.mayam.MayamClient;
 
 public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
 {
@@ -24,12 +26,13 @@ public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("text/plain")
-	public Boolean transferMaterialForQC(MaterialTransferForQCRequest req)
+	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req)
 	{
 		final String materialID = req.getMaterialID();
-		final URI destinaion = req.getDestination();
+
 		
-		return Boolean.TRUE;
+		
+		return new MaterialTransferForQCResponse();
 	}
 
 }
