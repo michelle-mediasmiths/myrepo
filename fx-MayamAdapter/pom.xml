@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>foxtel-parent</artifactId>
+		<version>0.0.4-SNAPSHOT</version>
+	</parent>
+	<artifactId>fx-MayamAdapter</artifactId>
+	<packaging>war</packaging>
+	<name>Mayam adapter</name>
+	<description>exposes mayam client methods via jax-rs</description>
+	<dependencies>
+		<!-- begin test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- end test dependencies -->
+
+		<!-- foxtel solution dependencies -->
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-MayamClient</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+		</dependency>
+		<!--end foxtel solution dependencies -->
+		
+		<!-- begin mediasmiths dependencies -->
+		<dependency>
+			<groupId>com.mediasmiths.std.guice</groupId>
+			<artifactId>stdlib-guice-webapp</artifactId>
+			<version>${stdlib.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mediasmiths.std.dexter</groupId>
+			<artifactId>dexter-common</artifactId>
+			<version>${stdlib.version}</version>
+		</dependency>
+		<!-- end mediasmiths dependencies -->
+	</dependencies>
+	<build>
+		<finalName>fx-MayamAdapter</finalName>
+	</build>
+</project>
