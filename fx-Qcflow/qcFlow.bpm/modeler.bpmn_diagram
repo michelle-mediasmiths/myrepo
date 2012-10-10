@@ -278,6 +278,15 @@
         <element xmi:type="bpmn:DataObject" href="modeler.bpmn#_4RposRKuEeKycOW_JoqNgw"/>
         <layoutConstraint xmi:type="notation:Bounds" xmi:id="_4RssBxKuEeKycOW_JoqNgw" x="-1" y="-1"/>
       </children>
+      <children xmi:type="notation:Node" xmi:id="_QZ6x-BLrEeKycOW_JoqNgw" type="2001">
+        <children xmi:type="notation:Node" xmi:id="_QZ6x-RLrEeKycOW_JoqNgw" type="4001"/>
+        <styles xmi:type="notation:FontStyle" xmi:id="_QZ6x-hLrEeKycOW_JoqNgw" fontName="Arial"/>
+        <styles xmi:type="notation:DescriptionStyle" xmi:id="_QZ6x-xLrEeKycOW_JoqNgw"/>
+        <styles xmi:type="notation:FillStyle" xmi:id="_QZ6x_BLrEeKycOW_JoqNgw"/>
+        <styles xmi:type="notation:LineStyle" xmi:id="_QZ6x_RLrEeKycOW_JoqNgw" lineColor="0"/>
+        <element xmi:type="bpmn:Activity" href="modeler.bpmn#_QZ7ZABLrEeKycOW_JoqNgw"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_QZ6x_hLrEeKycOW_JoqNgw" x="203" y="77"/>
+      </children>
       <styles xmi:type="notation:DrawerStyle" xmi:id="_dwLHqBIKEeKHz44cn0AvJQ"/>
       <styles xmi:type="notation:SortingStyle" xmi:id="_dwLHqRIKEeKHz44cn0AvJQ"/>
       <styles xmi:type="notation:FilteringStyle" xmi:id="_dwLHqhIKEeKHz44cn0AvJQ"/>
