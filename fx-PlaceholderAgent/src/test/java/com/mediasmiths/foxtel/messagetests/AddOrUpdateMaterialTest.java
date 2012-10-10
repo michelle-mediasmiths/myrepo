@@ -15,6 +15,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -67,6 +68,8 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 		
 		System.out.println("FXT 4.1.5.2 - Non XSD compliance");
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
+		//File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+
 		IOUtils.write("InvalidAddMaterial", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		

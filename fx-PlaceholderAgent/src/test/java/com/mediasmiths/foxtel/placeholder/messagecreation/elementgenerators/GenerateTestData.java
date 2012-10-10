@@ -24,7 +24,7 @@ public class GenerateTestData {
 	private final int CREATE_MATERIALS_TO_GENERATE = 20;
 	private final int CREATE_PACKAGES_TO_GENERATE = 20;
 	
-	private final String DESTINATION="/tmp/foxtelTestData";
+	private final String DESTINATION="/tmp/placeHolderTestData";
 	
 	@Test
 	public void generateTestData() throws IOException, Exception{
