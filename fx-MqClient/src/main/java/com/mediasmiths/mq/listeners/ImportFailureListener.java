@@ -22,25 +22,22 @@ public class ImportFailureListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					// On import failure update ingest failure worklist
-					if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
+					AttributeMap messageAttributes = msg.getSubject();
+					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
+					if (taskListID.equals(MayamTaskListType.INGEST)) 
 					{
-						AttributeMap messageAttributes = msg.getSubject();
-						String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-						if (taskListID.equals(MayamTaskListType.INGEST)) 
+						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
+						if (taskState == TaskState.ERROR) 
 						{
-							TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-							if (taskState == TaskState.ERROR) 
-							{
-								messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-								client.updateTask(messageAttributes);
+							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							client.updateTask(messageAttributes);
 								
-								String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-								String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST_FAILURE);
-								AttributeMap newTask = client.getTask(taskID);
-								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
-							}
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST_FAILURE);
+							AttributeMap newTask = client.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							client.updateTask(newTask);
 						}	
 					}
 				}

@@ -22,26 +22,22 @@ public class ComplianceLoggingListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//On compliance logging completion create compliance editing task
-					if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
+					AttributeMap messageAttributes = msg.getSubject();
+					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
+					if (taskListID.equals(MayamTaskListType.COMPLIANCE_LOGGING)) 
 					{
-						AttributeMap messageAttributes = msg.getSubject();
-						String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-						if (taskListID.equals(MayamTaskListType.COMPLIANCE_LOGGING)) 
+						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
+						if (taskState == TaskState.FINISHED) 
 						{
-							TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-							if (taskState == TaskState.FINISHED) 
-							{
-								messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-								client.updateTask(messageAttributes);
+							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							client.updateTask(messageAttributes);
 								
-								String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-								String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_EDIT);
-								AttributeMap newTask = client.getTask(taskID);
-								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
-								
-							}
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_EDIT);
+							AttributeMap newTask = client.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							client.updateTask(newTask);
 						}	
 					}
 

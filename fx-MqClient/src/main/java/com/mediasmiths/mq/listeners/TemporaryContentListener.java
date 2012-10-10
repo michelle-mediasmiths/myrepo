@@ -28,7 +28,7 @@ public class TemporaryContentListener
 				{
 					AttributeMap messageAttributes = msg.getSubject();
 
-					// - Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
+					// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 					

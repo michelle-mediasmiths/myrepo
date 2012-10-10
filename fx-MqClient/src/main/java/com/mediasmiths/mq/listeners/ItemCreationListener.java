@@ -24,27 +24,24 @@ public class ItemCreationListener
 				{
 				    //If the Item was created and the Master message had the Compile flag set, 
 					//the WFE will add the Item to the Compliance Logging Worklist
-					if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
-					{
-						AttributeMap messageAttributes = msg.getSubject();
-						String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					AttributeMap messageAttributes = msg.getSubject();
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 						
-						//TODO: IMPLEMENT - Need to confirm check for already existing asset
-						if (assetID == null || assetID.equals(""))
-						{			
-							client.createAsset(messageAttributes);
-							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							String parentID = "";
-							//TODO: Parent ID not yet implemented
-							//parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
-							
-							if (assetType.equals(AssetType.ITEM) && (parentID != null || parentID.equals(""))) 
-							{
-								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_LOGGING);
-								AttributeMap newTask = client.getTask(taskID);
-								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
-							}
+					//TODO: Need to confirm check for already existing asset
+					if (assetID == null || assetID.equals(""))
+					{			
+						client.createAsset(messageAttributes);
+						String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+						String parentID = "";
+						//TODO: Parent ID not yet implemented
+						//parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+						
+						if (assetType.equals(AssetType.ITEM) && (parentID != null || parentID.equals(""))) 
+						{
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_LOGGING);
+							AttributeMap newTask = client.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							client.updateTask(newTask);
 						}
 					}
 				}
