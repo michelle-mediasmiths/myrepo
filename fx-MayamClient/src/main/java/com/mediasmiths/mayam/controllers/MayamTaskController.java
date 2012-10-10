@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -12,11 +13,13 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 
+import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
+
 public class MayamTaskController {
 	private final TasksClient client;
 	
 	@Inject
-	public MayamTaskController(TasksClient mayamClient) {
+	public MayamTaskController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
 		client = mayamClient;
 	}
 	

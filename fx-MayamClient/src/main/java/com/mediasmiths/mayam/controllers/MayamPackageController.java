@@ -3,6 +3,7 @@ package com.mediasmiths.mayam.controllers;
 import au.com.foxtel.cf.mam.pms.PackageType;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -11,11 +12,13 @@ import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
+import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
+
 public class MayamPackageController {
 	private final TasksClient client;
 
 	@Inject
-	public MayamPackageController(TasksClient mayamClient) {
+	public MayamPackageController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
 		client = mayamClient;
 	}
 	
