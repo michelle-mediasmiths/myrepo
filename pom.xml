@@ -41,7 +41,7 @@
 		<module>fx-CarbonCoderClient</module>
 		<module>fx-MuleClient</module>
 		<module>fx-CarbonWFSClient</module>
-    	<module>fx-MayamAdapter</module>
+    	<module>fx-WFAdapter</module>
   </modules>
 
 	<properties>

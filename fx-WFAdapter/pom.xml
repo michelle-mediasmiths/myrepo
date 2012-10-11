@@ -8,10 +8,10 @@
 		<artifactId>foxtel-parent</artifactId>
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>fx-MayamAdapter</artifactId>
+	<artifactId>fx-WFAdapter</artifactId>
 	<packaging>war</packaging>
-	<name>Mayam adapter</name>
-	<description>exposes mayam client methods via jax-rs</description>
+	<name>Workflow adapter</name>
+	<description>provides webservices to be called by intalio workflows (including mayam functionality)</description>
 	<dependencies>
 		<!-- begin test dependencies -->
 		<dependency>

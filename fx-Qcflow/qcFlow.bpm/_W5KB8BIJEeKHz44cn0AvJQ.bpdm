@@ -2,13 +2,13 @@
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qcFlow" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="__project:///schema1.xsd" bpdm:prefix="schema1" bpdm:comment="contrib=&apos;project:///schema1.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcStatus.rest" bpdm:prefix="qcStatus" bpdm:comment="contrib=&apos;project:///qcStatus.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcResult.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcStatus.rest" bpdm:prefix="qcStatus" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStatus.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcStart.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcFinished.rest" bpdm:prefix="qcFinished" bpdm:comment="contrib=&apos;project:///qcFinished.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="www.mediasmithsforge.com" bpdm:prefix="qcStart1" bpdm:comment="contrib=&apos;project:///qcStart.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcFinished.rest" bpdm:prefix="qcFinished" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcFinished.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="www.mediasmithsforge.com" bpdm:prefix="qcStart1" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_QrpW0BIJEeKHz44cn0AvJQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qcAdapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;partner-pool:///_dwJ5gBIKEeKHz44cn0AvJQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
@@ -25,12 +25,12 @@
             <bpel:binding name="CanonicBindingForsomeone_else" type="this:Forsomeone_else" bpdm:isSynchronized="true"/>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_QrpW0BIJEeKHz44cn0AvJQ" bpdm:label="someone else"/>
-        <bpdm:namespaceContributor bpdm:url="project:///qcStart.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcStart.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///schema1.xsd"/>
-        <bpdm:namespaceContributor bpdm:url="project:///qcStatus.wsdl"/>
-        <bpdm:namespaceContributor bpdm:url="project:///qcResult.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcStatus.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcResult.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_dwJ5gBIKEeKHz44cn0AvJQ" bpdm:label="qcAdapter"/>
-        <bpdm:namespaceContributor bpdm:url="project:///qcFinished.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcFinished.wsdl"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="qcFlow" bpdm:ID="_W5KB8BIJEeKHz44cn0AvJQ">
         <bpel:partnerLinks>
