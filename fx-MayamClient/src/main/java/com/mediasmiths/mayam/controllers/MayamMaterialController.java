@@ -23,15 +23,19 @@ import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamMaterialController {
-	private final TasksClient client;
+	
+	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
+	@Inject
+	TasksClient client;
 	
 	@Inject
-	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
-		client = mayamClient;
+	public MayamMaterialController() {
+		
 	}
 	
 	public MayamClientErrorCode createMaterial(MaterialType material)
