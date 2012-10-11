@@ -256,7 +256,7 @@ public class MayamClientImpl implements MayamClient
 		Boolean isProtected = false;
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 
-		if (titleAttributes != null)
+		if (titleAttributes != null && titleAttributes.containsAttribute(Attribute.APP_FLAG))
 		{
 			// TODO: Are we checking accessRestriction or purgeProtection?
 			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
@@ -318,7 +318,7 @@ public class MayamClientImpl implements MayamClient
 		boolean isPlaceholder = true;
 		AttributeMap materialAttributes = materialController.getMaterial(materialID);
 
-		if (materialAttributes != null)
+		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.SOURCE_IDS))
 		{
 			IdSet sourceIds = materialAttributes.getAttribute(Attribute.SOURCE_IDS);
 			if (sourceIds != null)
