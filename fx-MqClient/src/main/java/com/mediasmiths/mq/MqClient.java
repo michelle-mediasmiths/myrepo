@@ -21,7 +21,9 @@ import com.mediasmiths.mq.listeners.AssetPurgeListener;
 import com.mediasmiths.mq.listeners.ComplianceEditingListener;
 import com.mediasmiths.mq.listeners.ComplianceLoggingListener;
 import com.mediasmiths.mq.listeners.EmergencyIngestListener;
+import com.mediasmiths.mq.listeners.FixAndStitchListener;
 import com.mediasmiths.mq.listeners.ImportFailureListener;
+import com.mediasmiths.mq.listeners.IngestCompleteListener;
 import com.mediasmiths.mq.listeners.InitiateQcListener;
 import com.mediasmiths.mq.listeners.ItemCreationListener;
 import com.mediasmiths.mq.listeners.PackageUpdateListener;
@@ -90,6 +92,8 @@ public class MqClient {
 		attachListener(Queues.MAM_INCOMING, PackageUpdateListener.getInstance(client, taskController));
 		attachListener(Queues.MAM_INCOMING, PreviewTaskListener.getInstance(client, taskController));
 		attachListener(Queues.MAM_INCOMING, QcCompleteListener.getInstance(client, taskController));
+		attachListener(Queues.MAM_INCOMING, IngestCompleteListener.getInstance(client, taskController));
+		attachListener(Queues.MAM_INCOMING, FixAndStitchListener.getInstance(client, taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
