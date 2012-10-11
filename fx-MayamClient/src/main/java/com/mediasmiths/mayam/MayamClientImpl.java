@@ -73,7 +73,7 @@ public class MayamClientImpl implements MayamClient
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		tasksController = new MayamTaskController(client);
 		titleController = new MayamTitleController(client);
-		materialController = new MayamMaterialController();
+		materialController = new MayamMaterialController(client);
 		packageController = new MayamPackageController(client);
 		validator = new MayamValidator(client);
 	}
