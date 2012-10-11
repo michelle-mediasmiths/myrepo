@@ -45,7 +45,7 @@
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
 	<build>
-		<finalName>fx-MayamAdapter</finalName>
+		<finalName>fx-WFAdapter</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -73,13 +73,12 @@
 				<configuration>
 					<transformSchemas>
 						<transformSchema>
-							<uri>http://ns.mediasmiths.com/foxtel/mayam/adapter</uri>
-							<toPrefix>fxma</toPrefix>
-							<toFile>mayamAdapter.xsd</toFile>
+							<uri>http://ns.mediasmiths.com/foxtel/wf/adapter</uri>
+							<toFile>wfAdapter.xsd</toFile>
 						</transformSchema>
 					</transformSchemas>
 					<includes>
-						<include>com/mediasmiths/foxtel/mayam/adapter/model/*</include>
+						<include>com/mediasmiths/foxtel/wf/adapter/model/*</include>
 					</includes>
 					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
 				</configuration>

@@ -1,6 +1,9 @@
 #!/bin/bash --
 
-qcAdapterEndpoint="http://localhost:8000/fx-qcAdapter/rest/qc"
+qcAdapterEndpoint="http://localhost:8080/fx-qcAdapter/rest/qc"
+
+#media location being used
+location=foxtel
 
 function getProfileForMaterial(){
 	local mID
@@ -11,20 +14,17 @@ function getProfileForMaterial(){
 }
 
 function transferToMediaLocation(){
-   local mID loc
+   local mID
    mID=$1
-   loc=$2
    
    #TODO make request to mayam\ardome api to transfer file to media location and return the filename in media location
-   echo "foo.mxf"
+   echo "${mID}.mxf"
 }
 
 #id of material to be qc'd
 materialID=$1
-#media location being used
-location=$2
-#an identifier for this job
-ident=$3
+ident=$2
+
 
 ##############################################
 #pick a qc profile to use					 #
@@ -35,7 +35,7 @@ echo "using profile $qcProfile "
 ##############################################
 #move media to location available to cerify  #
 ##############################################
-pathInMediaLocation=$(transferToMediaLocation $materialID $location)
+pathInMediaLocation=$(transferToMediaLocation $materialID)
 echo "media path in MediaLocation is $pathInMediaLocation "
 
 ##############################################

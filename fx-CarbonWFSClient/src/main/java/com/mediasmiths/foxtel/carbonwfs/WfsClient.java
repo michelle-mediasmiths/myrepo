@@ -66,7 +66,7 @@ public class WfsClient
 
 		String workFlow = buildWorkFlowForSimpleTranscode(inputFile, jobTitle, preset);
 
-		log.info(String.format("sending workflow xml %s", workFlow));
+		log.info(String.format("sending workflow xml %s for inputfile %s and outputfile %s", workFlow,inputFile, outputFile));
 
 		Job j = service.queueJobByWorkflow(workFlow, inputFile, outputFile);
 
@@ -84,6 +84,8 @@ public class WfsClient
 
 	public String buildWorkFlowForSimpleTranscode(String outputFile, String jobTitle, UUID presetUid) throws WfsClientException
 	{
+		log.info(String.format("building workflow for outputFile %s jobTitle %s preset %s", outputFile, jobTitle, presetUid.toString()));
+		
 		SAXBuilder parser = new SAXBuilder();
 		InputStream templateInputStream = getClass().getClassLoader().getResourceAsStream("TranscodeWFtemplate.xml");
 		Document doc;
@@ -108,14 +110,15 @@ public class WfsClient
 		// set the target filename
 		setSingleElementText(transcodeTargetFilexp, doc, FilenameUtils.getName(outputFile));
 
-		// set the template name
-		setSingleElementText(workFlowTasksNamexp, doc, jobTitle);
-
 		// set the jobs title
 		setSingleElementText(transcodeTargetTitlexp, doc, jobTitle);
 
 		// set the transcode preset
 		setSingleElementText(transcodePresetxp, doc, String.format("{%s}", presetUid.toString()));
+		
+		// set the template name
+//		setSingleElementText(workFlowTasksNamexp, doc, jobTitle);
+
 
 		return new XMLOutputter().outputString(doc);
 	}

@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.mayam.adapter.model;
+package com.mediasmiths.foxtel.wf.adapter.model;
 
 import java.net.URI;
 

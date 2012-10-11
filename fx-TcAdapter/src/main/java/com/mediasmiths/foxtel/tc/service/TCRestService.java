@@ -41,19 +41,19 @@ public interface TCRestService
 			@QueryParam("output") String ouputPath,
 			@QueryParam("preset") UUID presetName) throws WfsClientException;
 	
-	/**
-	 * Lists all transcode jobs
-	 * @return
-	 * @throws ParserConfigurationException 
-	 * @throws TransformerException 
-	 * @throws IOException 
-	 * @throws UnknownHostException 
-	 * @throws JAXBException 
-	 */
+
 	@GET
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
 	public JobStatus jobStatus(@PathParam("id") String jobid);
+
+
+
+	@GET
+	@Path("/job/{id}/finished")
+	@Produces("text/plain")
+	public Boolean jobFinished(@PathParam("id") String jobid);
+
 	
 	/**
 	 * Gets a specific transcode job

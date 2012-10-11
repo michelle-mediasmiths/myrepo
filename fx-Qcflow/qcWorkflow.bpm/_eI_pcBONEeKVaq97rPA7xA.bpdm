@@ -1,0 +1,52 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:workflow="http://thisdiagram/workflow" xmlns:materialTransferForQC="http://example.com/wfAdapter/materialTransferForQC.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:getProfileForQC="http://example.com/wfAdapter/getProfileForQC.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/wfAdapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/wfAdapter">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="workflow" bpdm:comment="contrib=&apos;partner-pool:///_iIftQBN_EeKVaq97rPA7xA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/materialTransferForQC.rest" bpdm:prefix="materialTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/materialTransferForQC.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/getProfileForQC.rest" bpdm:prefix="getProfileForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/getProfileForQC.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_iIftQBN_EeKVaq97rPA7xA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/wfAdapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_iIftQBN_EeKVaq97rPA7xA" bpdm:label="workflow"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/getProfileForQC.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/materialTransferForQC.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="wfAdapter" bpdm:ID="_eI_pcBONEeKVaq97rPA7xA">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="workflowAndWfAdapterForHttpPortPlk1Var" partnerLinkType="diag:workflowAndWfAdapterForHttpPortPlk1" myRole="wfAdapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="materialTransferForQC:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com/fx-wfAdapter/rest/wf/qc/transferforqc" bpdm:providedIsDefault="true" bpdm:clientTasks="_eI_pcBONEeKVaq97rPA7xA:_Sbl8QROPEeKVaq97rPA7xA" bpdm:isManaged="true" bpdm:otherPoolId="_iIftQBN_EeKVaq97rPA7xA"/>
+            <bpel:partnerLink name="workflowAndWfAdapterForHttpPortPlk0Var" partnerLinkType="diag:workflowAndWfAdapterForHttpPortPlk0" myRole="wfAdapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="getProfileForQC:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com/fx-wfAdapter/rest/qf/qc/profile?materialID={materialid}&amp;isForTX={isForTX}" bpdm:providedIsDefault="true" bpdm:clientTasks="_eI_pcBONEeKVaq97rPA7xA:_60YaYBOOEeKVaq97rPA7xA" bpdm:isManaged="true" bpdm:otherPoolId="_iIftQBN_EeKVaq97rPA7xA"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="getProfileForQCGetProfileForQCRequestMsg" messageType="getProfileForQC:getProfileForQC_input" binding="getProfileForQC:restBinding" operation="getProfileForQC" opMsgType="0" bpdm:id="_9VV7RROOEeKVaq97rPA7xA" bpdm:messageIds="inc:_9VDnYBOOEeKVaq97rPA7xA"/>
+            <bpel:variable name="getProfileForQCGetProfileForQCResponseMsg" messageType="getProfileForQC:getProfileForQC_output" binding="getProfileForQC:restBinding" operation="getProfileForQC" opMsgType="1" bpdm:id="_-R5DEBOOEeKVaq97rPA7xA" bpdm:messageIds=" out:_-RuD8BOOEeKVaq97rPA7xA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="getProfileForQC:getProfileForQC_output" bpdm:linkedPart="response" bpdm:binding="getProfileForQC:restBinding" bpdm:opMsgType="1" bpdm:operation="getProfileForQC"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="materialTransferForQCMaterialTransferForQCRequestMsg" messageType="materialTransferForQC:materialTransferForQC_input" binding="materialTransferForQC:restBinding" operation="materialTransferForQC" opMsgType="0" bpdm:id="_UnJ04BOPEeKVaq97rPA7xA" bpdm:messageIds="inc:_UmvlMBOPEeKVaq97rPA7xA"/>
+            <bpel:variable name="materialTransferForQCMaterialTransferForQCResponseMsg" messageType="materialTransferForQC:materialTransferForQC_output" binding="materialTransferForQC:restBinding" operation="materialTransferForQC" opMsgType="1" bpdm:id="_VLROkBOPEeKVaq97rPA7xA" bpdm:messageIds=" out:_VLGPcBOPEeKVaq97rPA7xA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="materialTransferForQC:materialTransferForQC_output" bpdm:linkedPart="response" bpdm:binding="materialTransferForQC:restBinding" bpdm:opMsgType="1" bpdm:operation="materialTransferForQC"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="getProfileForQC" partnerLink="workflowAndWfAdapterForHttpPortPlk0Var" portType="getProfileForQC:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getProfileForQC" bpdm:ID="_60YaYBOOEeKVaq97rPA7xA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getProfileForQCGetProfileForQCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_input" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="_9VDnYBOOEeKVaq97rPA7xA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getProfileForQCGetProfileForQCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_output" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="_-RuD8BOOEeKVaq97rPA7xA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="materialTransferForQC" partnerLink="workflowAndWfAdapterForHttpPortPlk1Var" portType="materialTransferForQC:restInterface" isMyRole="true" enableSharing="false" bpdm:label="materialTransferForQC" bpdm:ID="_Sbl8QROPEeKVaq97rPA7xA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="materialTransferForQCMaterialTransferForQCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForQC:materialTransferForQC_input" bpdm:binding="materialTransferForQC:restBinding" bpdm:ID="_UmvlMBOPEeKVaq97rPA7xA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="materialTransferForQCMaterialTransferForQCResponseMsg" bpdm:msgVarScopeId="_eI_pcBONEeKVaq97rPA7xA" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForQC:materialTransferForQC_output" bpdm:binding="materialTransferForQC:restBinding" bpdm:ID="_VLGPcBOPEeKVaq97rPA7xA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>

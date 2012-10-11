@@ -43,7 +43,7 @@ public class TCRestServiceImpl implements TCRestService
 
 	@Override
 	@PUT
-	@Path("/start")
+	@Path("/job/start")
 	public UUID transcode(
 			@QueryParam("jobname") String jobName,
 			@QueryParam("input") String inputPath,
@@ -88,6 +88,17 @@ public class TCRestServiceImpl implements TCRestService
 	public ArrayOfPreset listPresets()
 	{
 		return wfsClient.listPresets();
+	}
+
+	@Override
+	@GET
+	@Path("/job/{id}/finished")
+	@Produces("text/plain")
+	public Boolean jobFinished(@PathParam("id") String jobid)
+	{
+		JobStatus status = jobStatus(jobid);
+		
+		return status == status.COMPLETED || status == status.COMPLETED || status == status.FATAL; 
 	}
 
 }

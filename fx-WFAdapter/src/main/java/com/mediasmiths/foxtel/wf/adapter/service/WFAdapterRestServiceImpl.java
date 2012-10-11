@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.mayam.adapter.service;
+package com.mediasmiths.foxtel.wf.adapter.service;
 
 import java.net.URI;
 
@@ -6,16 +6,17 @@ import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCRequest;
-import com.mediasmiths.foxtel.mayam.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
+public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
 	
 	@Inject private MayamClient mayamClient;
@@ -39,6 +40,16 @@ public class MayamAdapterRestServiceImpl implements MayamAdapterRestService
 		
 		mayamClient.transferMaterialToLocation(materialID, destination);
 		return new MaterialTransferForQCResponse(destination);
+	}
+
+	@Override
+	@GET
+	@Path("/qc/profile")
+	@Produces("text/plain")
+	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery)
+	{
+		// TODO implement
+		return "FoxtelK2";
 	}
 
 }

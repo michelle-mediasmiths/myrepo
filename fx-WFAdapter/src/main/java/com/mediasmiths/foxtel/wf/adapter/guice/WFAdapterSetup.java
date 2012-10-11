@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.mayam.adapter.guice;
+package com.mediasmiths.foxtel.wf.adapter.guice;
 
 import java.util.List;
 
@@ -8,13 +8,13 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
-public class MayamAdapterSetup extends AbstractRESTGuiceSetup
+public class WFAdapterSetup extends AbstractRESTGuiceSetup
 {
 
 	@Override
 	public void addModules(List<Module> modules, PropertyFile props)
 	{
-		modules.add(new MayamAdapterModule());
+		modules.add(new WFAdapterModule());
 		modules.add(new MayamClientModule());
 
 	}
