@@ -7,7 +7,6 @@ import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.jaxws.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -32,17 +31,12 @@ public class ItemCreationListener
 					{			
 						client.createAsset(messageAttributes);
 						String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-						String parentID = "";
-						//TODO: Parent ID not yet implemented
-						//parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
-						
-						if (assetType.equals(AssetType.ITEM) && (parentID != null || parentID.equals(""))) 
-						{
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_LOGGING);
-							AttributeMap newTask = client.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							client.updateTask(newTask);
-						}
+
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST);
+						AttributeMap newTask = client.getTask(taskID);
+						newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+						client.updateTask(newTask);
+
 					}
 				}
 			}
