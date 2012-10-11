@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/qc/adapter" targetNamespace="http://ns.mediasmiths.com/foxtel/qc/adapter" version="1.0">
+
+  <xs:element name="qcJobResult" type="tns:qcJobResult"/>
+
+  <xs:element name="qcJobStatus" type="tns:qcJobStatus"/>
+
+  <xs:element name="qcMediaResult" type="tns:qcMediaResult"/>
+
+  <xs:element name="qcStartRequest" type="tns:qcStartRequest"/>
+
+  <xs:element name="qcStartResponse" type="tns:qcStartResponse"/>
+
+  <xs:complexType name="qcMediaResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="result" type="tns:jobResultType"/>
+      <xs:element minOccurs="0" name="url" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="qcJobStatus">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ident" type="tns:qcJobIdentifier"/>
+      <xs:element minOccurs="0" name="progress" type="xs:integer"/>
+      <xs:element minOccurs="0" name="status" type="tns:jobStatusType"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="qcJobIdentifier">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="jobname" type="xs:string"/>
+      <xs:element minOccurs="0" name="profile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="qcJobResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="completed" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ident" type="tns:qcJobIdentifier"/>
+      <xs:element minOccurs="0" name="result" type="tns:jobResultType"/>
+      <xs:element minOccurs="0" name="url" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="qcStartRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="file" type="xs:string"/>
+      <xs:element minOccurs="0" name="ident" type="xs:string"/>
+      <xs:element minOccurs="0" name="profile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="qcStartResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="identifier" type="tns:qcJobIdentifier"/>
+      <xs:element minOccurs="0" name="status" type="tns:qcStartStatus"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="jobStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="complete"/>
+      <xs:enumeration value="processing"/>
+      <xs:enumeration value="stopped"/>
+      <xs:enumeration value="stopping"/>
+      <xs:enumeration value="waiting"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="jobResultType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="error"/>
+      <xs:enumeration value="warning"/>
+      <xs:enumeration value="success"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="qcStartStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="STARTED"/>
+      <xs:enumeration value="ERROR"/>
+      <xs:enumeration value="UNSET"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

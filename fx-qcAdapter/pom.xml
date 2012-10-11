@@ -80,7 +80,6 @@
 					<transformSchemas>
 						<transformSchema>
 							<uri>http://ns.mediasmiths.com/foxtel/qc/adapter</uri>
-							<toPrefix>fxqc</toPrefix>
 							<toFile>qcAdapter.xsd</toFile>
 						</transformSchema>
 					</transformSchemas>
