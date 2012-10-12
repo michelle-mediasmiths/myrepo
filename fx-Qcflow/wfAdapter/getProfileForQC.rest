@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com/fx-wfAdapter/rest/qf/qc/profile?materialID={materialid}&amp;isForTX={isForTX}" ID="_1TRiQBOOEeKts9lH2jPCqg">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/qc/profile?materialID={materialid}&amp;isForTX={isForTX}" ID="_1TRiQBOOEeKts9lH2jPCqg">
   <rest:operation verb="GET" name="getProfileForQC" ID="_1TRiQxOOEeKts9lH2jPCqg">
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="text/plain" ID="_1TRiRBOOEeKts9lH2jPCqg"/>
   </rest:operation>

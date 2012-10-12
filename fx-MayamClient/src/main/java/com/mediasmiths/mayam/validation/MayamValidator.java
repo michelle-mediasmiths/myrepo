@@ -8,6 +8,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -16,12 +17,13 @@ import com.mayam.wf.ws.client.TasksClient.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class MayamValidator {
 	private TasksClient client;
 	
 	@Inject
-	public MayamValidator(TasksClient mayamClient) 
+	public MayamValidator(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient mayamClient) 
 	{
 		client = mayamClient;
 	}
@@ -31,7 +33,7 @@ public class MayamValidator {
 		boolean isValid = true;
 		AttributeMap material = null;
 		try {
-			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.toString()), materialID);
+			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
 		} catch (RemoteException e) {
 			isValid = false;
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
@@ -43,7 +45,7 @@ public class MayamValidator {
 			AttributeMap title = null;
 			
 			try {
-				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.toString()), parentID);
+				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
 			} catch (RemoteException e) {
 				isValid = false;
 				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
@@ -72,7 +74,7 @@ public class MayamValidator {
 
 		List<AttributeMap> materials = null;
 		try {
-			materials = client.getAssetChildren(AssetType.valueOf(MayamAssetType.TITLE.toString()), titleID, AssetType.valueOf(MayamAssetType.MATERIAL.toString()));
+			materials = client.getAssetChildren(AssetType.valueOf(MayamAssetType.TITLE.getText()), titleID, AssetType.valueOf(MayamAssetType.MATERIAL.getText()));
 		} catch (RemoteException e) {
 			isValid = false;
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
@@ -83,7 +85,7 @@ public class MayamValidator {
 			
 			List<AttributeMap> packages = null;
 			try {
-				packages = client.getAssetChildren(AssetType.valueOf(MayamAssetType.MATERIAL.toString()), materialID, AssetType.valueOf(MayamAssetType.PACKAGE.toString()));
+				packages = client.getAssetChildren(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID, AssetType.valueOf(MayamAssetType.PACKAGE.getText()));
 			} catch (RemoteException e) {
 				isValid = false;
 				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);

@@ -44,7 +44,7 @@ public class MayamAttributeController {
 	public boolean setAttribute(Attribute attribute, Object value) {
 		boolean isValid = validator.isValidValue(attribute, value);
 		if (isValid) {
-			attributes.setAttributeFromString(attribute, value.toString());
+			attributes.setAttribute(attribute, value);
 		}
 		return isValid;
 	}
