@@ -101,7 +101,7 @@ public class happyPathDataGenerator
 	 		LicenseHolder.setAttribute("organisationID", organisationID);
 	 		LicenseHolder.setAttribute("organisationName", organisationName);
 	 		License.appendChild(LicenseHolder);
-	 		Element LicensePeriod = doc.createElement("LicenseHolder");
+	 		Element LicensePeriod = doc.createElement("LicensePeriod");
 	 		LicensePeriod.setAttribute("startDate", startDate);
 	 		LicensePeriod.setAttribute("endDate", endDate);
 	 		License.appendChild(LicensePeriod);
