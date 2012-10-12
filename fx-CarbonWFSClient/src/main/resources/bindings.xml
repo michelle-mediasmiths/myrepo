@@ -11,7 +11,7 @@
     <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema/xs:complexType[@name='Module']/xs:sequence/xs:element[@name='Scheme']">
         <jaxb:class name="ModuleSchemeElement"/>
     </jaxws:bindings>   
-     <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema/xs:complexType[@name='Fetcher']/xs:sequence/xs:element[@name='Status']">
+    <jaxws:bindings node="wsdl:definitions/wsdl:types/xs:schema/xs:complexType[@name='Fetcher']/xs:sequence/xs:element[@name='Status']">
         <jaxb:class name="FetcherStatusElement"/>
     </jaxws:bindings>   
 </jaxws:bindings>

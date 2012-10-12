@@ -63,16 +63,16 @@ public interface TCRestService
 	@Produces("application/xml")
 	public Job job(@PathParam("id") String jobid);
 	
-	/**
-	 * Creates the preset described by presetElement
-	 * @param presetElement
-	 * @return the id of the created preset
-	 * @throws JAXBException 
-	 */
-	@PUT
-	@Path("/preset/create")
-	@Consumes("application/xml")
-	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException;
+//	/**
+//	 * Creates the preset described by presetElement
+//	 * @param presetElement
+//	 * @return the id of the created preset
+//	 * @throws JAXBException 
+//	 */
+//	@PUT
+//	@Path("/preset/create")
+//	@Consumes("application/xml")
+//	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException;
 	
 	@GET
 	@Path("/preset")

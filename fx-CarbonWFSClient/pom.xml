@@ -98,11 +98,12 @@
 						<configuration>
 							<sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
 							<wsdlOptions>
+							<!-- updating the wfs wsdl? make sure you are using the output of x.x.x.x:8731/Rhozet.JobManager.JMServices/?singleWsdl -->
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/resources/Rhozet.JobManager.JMServices.wsdl</wsdl>
-									<!-- bindingFiles>
+									<bindingFiles>
 										<bindingFile>${basedir}/src/main/resources/bindings.xml</bindingFile>
-									</bindingFiles-->
+									</bindingFiles>
 								</wsdlOption>
 							</wsdlOptions>
 						</configuration>
