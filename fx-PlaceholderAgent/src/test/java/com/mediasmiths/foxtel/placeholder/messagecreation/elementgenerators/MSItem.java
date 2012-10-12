@@ -47,7 +47,7 @@ public class MSItem {
 		item.setRequiredBy(requiredBy);
 		item.setRequiredFormat(formats[new Random(System.currentTimeMillis()).nextInt(formats.length)]);
 		item.setSource(source);
-		item.setMaterialD(RandomStringUtils.randomAlphanumeric(6));
+		item.setMaterialID(RandomStringUtils.randomAlphanumeric(6));
 		
 		return item;
 	}

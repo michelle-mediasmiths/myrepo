@@ -145,7 +145,7 @@ public abstract class PlaceHolderMessageShortTest {
 		s.setAggregation(aggregation);
 
 		MaterialType m = new MaterialType();
-		m.setMaterialD(materialID);
+		m.setMaterialID(materialID);
 		m.setSource(s);
 		m.setRequiredBy(requiredBy);
 		return m;

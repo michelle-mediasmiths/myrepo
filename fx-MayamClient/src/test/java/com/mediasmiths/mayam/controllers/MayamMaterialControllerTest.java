@@ -60,7 +60,7 @@ public class MayamMaterialControllerTest {
 		controller = new MayamMaterialController(client);
 		
 		material = mock(MaterialType.class);
-		when(material.getMaterialD()).thenReturn("");
+		when(material.getMaterialID()).thenReturn("");
 		when(material.getQualityCheckTask()).thenReturn(QualityCheckEnumType.AUTOMATIC_ON_INGEST);
 		when(material.getRequiredBy()).thenReturn(mock(XMLGregorianCalendar.class));
 		when(material.getRequiredFormat()).thenReturn("");

@@ -188,7 +188,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 		//s.setLibrary(library);
 		
 		MaterialType m = new MaterialType();
-		m.setMaterialD(materialID);
+		m.setMaterialID(materialID);
 		m.setRequiredFormat("SD");
 		QualityCheckEnumType qualityCheck = null;
 		qualityCheck = qualityCheck.fromValue("AutomaticOnIngest");

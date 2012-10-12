@@ -75,7 +75,7 @@ public class PlaceholderMessageProcessor extends
 		try {
 			MayamClientErrorCode result;
 
-			if (mayamClient.materialExists(action.getMaterial().getMaterialD())) {
+			if (mayamClient.materialExists(action.getMaterial().getMaterialID())) {
 				result = mayamClient.updateMaterial(action.getMaterial());
 			} else {
 				result = mayamClient.createMaterial(action.getMaterial());
@@ -86,7 +86,7 @@ public class PlaceholderMessageProcessor extends
 		} catch (MayamClientException e) {
 			logger.error(String.format(
 					"MayamClientException querying if material %s exists",
-					action.getMaterial().getMaterialD()), e);
+					action.getMaterial().getMaterialID()), e);
 			throw new MessageProcessingFailedException(
 					MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 		}
