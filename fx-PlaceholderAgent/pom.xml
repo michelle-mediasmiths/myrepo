@@ -42,6 +42,12 @@
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>${stdlib.version}</version>			
+			<exclusions>
+				<exclusion>
+					<artifactId>jaxb-impl</artifactId>
+					<groupId>com.sun.xml.bind</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- begin test dependencies -->
@@ -60,7 +66,7 @@
 		<!-- end test dependencies -->
 
 		<!-- logging -->
-		<dependency>
+		<dependency> 
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
