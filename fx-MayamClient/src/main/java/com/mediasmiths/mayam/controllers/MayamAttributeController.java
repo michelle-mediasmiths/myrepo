@@ -46,6 +46,7 @@ public class MayamAttributeController {
 		if (isValid) {
 			attributes.setAttribute(attribute, value);
 		}
+
 		return isValid;
 	}
 	
