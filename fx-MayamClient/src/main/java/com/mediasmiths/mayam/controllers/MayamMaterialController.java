@@ -43,7 +43,7 @@ public class MayamMaterialController {
 		if (material != null) 
 		{
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialD());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialID());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
@@ -254,7 +254,7 @@ public class MayamMaterialController {
 			MayamAttributeController attributes = null;
 			
 			try {
-				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialD());
+				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
