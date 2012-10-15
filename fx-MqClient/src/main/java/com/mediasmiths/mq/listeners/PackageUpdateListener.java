@@ -34,7 +34,7 @@ public class PackageUpdateListener
 					if (assetID == null || assetID.equals(""))
 					{			
 						// If the message is for an existing package
-						if (assetType.equals(AssetType.PACK))
+						if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 						{
 							//Update metadata for asset
 							client.updateAsset(messageAttributes);
@@ -104,7 +104,7 @@ public class PackageUpdateListener
 					}
 					else {
 						// If the message is for a package which doesnt exist
-						if (assetType.equals(AssetType.PACK))
+						if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 						{	
 							//Create new Tx-Package + associate with parent (setting Parent ID should be handled automatically)
 							client.createAsset(messageAttributes);

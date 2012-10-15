@@ -13,7 +13,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -81,7 +81,7 @@ public class MayamValidator {
 		}
 		for (AttributeMap material: materials) 
 		{
-			String materialID = material.getAttribute(Attribute.ASSET_GUID);
+			String materialID = material.getAttribute(Attribute.ASSET_ID);
 			
 			List<AttributeMap> packages = null;
 			try {

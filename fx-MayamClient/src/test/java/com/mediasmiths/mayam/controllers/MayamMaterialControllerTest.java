@@ -23,10 +23,10 @@ import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.type.AspectRatio;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class MayamMaterialControllerTest {
@@ -60,7 +60,7 @@ public class MayamMaterialControllerTest {
 		controller = new MayamMaterialController(client);
 		
 		material = mock(MaterialType.class);
-		when(material.getMaterialID()).thenReturn("");
+		when(material.getMaterialD()).thenReturn("");
 		when(material.getQualityCheckTask()).thenReturn(QualityCheckEnumType.AUTOMATIC_ON_INGEST);
 		when(material.getRequiredBy()).thenReturn(mock(XMLGregorianCalendar.class));
 		when(material.getRequiredFormat()).thenReturn("");
@@ -93,7 +93,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterial() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(map);
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(client.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
@@ -124,7 +124,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterialFailed() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(map);
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
@@ -155,7 +155,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterialException() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(map);
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(client.updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
@@ -192,7 +192,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsTrue() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(new AttributeMap());
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -204,7 +204,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsFalse() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(null);
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -216,7 +216,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsException() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenThrow(mock(RemoteException.class));
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -228,7 +228,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialValid() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(new AttributeMap());
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -240,7 +240,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialInValid() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenReturn(null);
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -252,7 +252,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialException() 
 	{
 		try {
-			when(client.getAsset(eq(AssetType.ITEM), anyString())).thenThrow(mock(RemoteException.class));
+			when(client.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}

@@ -15,7 +15,8 @@ import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.mayam.MayamAssetType;
 
 class PlaceHolderCreator implements Runnable {
 
@@ -54,7 +55,7 @@ class PlaceHolderCreator implements Runnable {
 	public void createTitle(String titleID, String name, String owner,
 			Boolean restricted, List<String> channels) {
 
-		AttributeMap title = getAsset(AssetType.SER, titleID);
+		AttributeMap title = getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 
 		if (title == null) {
 
@@ -63,17 +64,16 @@ class PlaceHolderCreator implements Runnable {
 			AttributeMap assetAttr = client.createAttributeMap();
 
 			assetAttr.setAttribute(Attribute.ASSIGNED_USER, owner);
-			assetAttr.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
+			assetAttr.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 			assetAttr.setAttribute(Attribute.SERIES_TITLE, name);
-			assetAttr.setAttribute(Attribute.ASSET_GUID, titleID);
+			assetAttr.setAttribute(Attribute.ASSET_ID, titleID);
 
 			AttributeMap result = null;
 			try {
 				result = client.createAsset(assetAttr);
 				logger.info("Created sub program with id " + titleID);
 			} catch (RemoteException e) {
-				logger.error("RemoteException when creating asset\n\t"
-						+ StringUtils.join(e.getRemoteMessages(), "\t\n"), e);
+				logger.error("RemoteException when creating asset\n\t"+ e);
 			}
 
 			if(result != null){
@@ -93,8 +93,7 @@ class PlaceHolderCreator implements Runnable {
 				try {
 					client.updateAsset(assetAttr);
 				} catch (RemoteException e) {
-					logger.error("RemoteException when updating asset\n\t"
-							+ StringUtils.join(e.getRemoteMessages(), "\t\n"), e);
+					logger.error("RemoteException when updating asset\n\t" + e);
 				}
 				
 			}
@@ -112,18 +111,18 @@ class PlaceHolderCreator implements Runnable {
 		logger.trace(String.format("createMaster(%s,%s,%s,%s)", masterId,
 				titleId, name, owner));
 
-		AttributeMap title = getAsset(AssetType.SER, titleId);
+		AttributeMap title = getAsset(MayamAssetType.TITLE.getAssetType(), titleId);
 
 		if (title != null) {
 
-			AttributeMap thismaster = getAsset(AssetType.ITEM, masterId);
+			AttributeMap thismaster = getAsset(MayamAssetType.MATERIAL.getAssetType(), masterId);
 
 			if (thismaster == null) {
 
 				logger.info("Master does not already exist");
 
 				final AttributeMap assetAttr = client.createAttributeMap();
-				assetAttr.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
+				assetAttr.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 				assetAttr.setAttribute(Attribute.ASSET_TITLE, name);
 				assetAttr.setAttribute(Attribute.ASSIGNED_USER, owner);
 
@@ -133,7 +132,7 @@ class PlaceHolderCreator implements Runnable {
 			
 
 				// how do we specify what subprogram an item should be in?
-				assetAttr.setAttribute(Attribute.ASSET_GUID, masterId);
+				assetAttr.setAttribute(Attribute.ASSET_ID, masterId);
 
 				AttributeMap result = null;
 				try {
@@ -143,9 +142,7 @@ class PlaceHolderCreator implements Runnable {
 
 					logger.info("Created item with id " + masterId);
 				} catch (RemoteException e) {
-					logger.error("RemoteException when creating asset\n\t"
-							+ StringUtils.join(e.getRemoteMessages(), "\t\n"),
-							e);
+					logger.error("RemoteException when creating asset\n\t" + e);
 				}
 
 				if (result == null) {
@@ -169,7 +166,6 @@ class PlaceHolderCreator implements Runnable {
 							+ taskId);
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 				}
 			} else {
 				logger.info("Master already exists");
@@ -207,8 +203,7 @@ class PlaceHolderCreator implements Runnable {
 						"RemoteException when getting asset "
 								+ titleID
 								+ "\n\t"
-								+ StringUtils.join(e1.getRemoteMessages(),
-										"\t\n"), e1);
+								+ e1);
 			}
 			return title;
 		} else {

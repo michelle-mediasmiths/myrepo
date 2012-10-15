@@ -8,11 +8,11 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -33,8 +33,8 @@ public class MayamTitleController {
 		
 		if (title != null)
 		{
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, title.getTitleID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
 			
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
@@ -83,7 +83,6 @@ public class MayamTitleController {
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
-				e.printRemoteMessages(System.err);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
@@ -120,7 +119,7 @@ public class MayamTitleController {
 				//	channel.getChannelName();
 				//	channel.getChannelTag();
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.SER);
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
@@ -151,7 +150,6 @@ public class MayamTitleController {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -175,7 +173,7 @@ public class MayamTitleController {
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.getAsset(AssetType.SER, title.getTitleID());
+					assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -232,7 +230,6 @@ public class MayamTitleController {
 						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
-						e.printRemoteMessages(System.err);
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 					}
 				}
@@ -261,7 +258,7 @@ public class MayamTitleController {
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.getAsset(AssetType.SER, title.getTitleID());
+					assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -314,7 +311,6 @@ public class MayamTitleController {
 						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
-						e.printRemoteMessages(System.err);
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 					}
 				}
@@ -341,7 +337,7 @@ public class MayamTitleController {
 	public boolean titleExists(String titleID) {
 		boolean titleFound = false;
 		try {
-			AttributeMap assetAttributes = client.getAsset(AssetType.SER, titleID);
+			AttributeMap assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (assetAttributes != null) {
 				titleFound = true;
 			}
@@ -355,7 +351,7 @@ public class MayamTitleController {
 	public AttributeMap getTitle(String titleID) {
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(AssetType.SER, titleID);
+			assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
 			//TODO: Error Handling
 			e1.printStackTrace();

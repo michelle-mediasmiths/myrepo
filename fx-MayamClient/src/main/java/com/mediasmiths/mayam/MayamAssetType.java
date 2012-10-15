@@ -1,9 +1,11 @@
 package com.mediasmiths.mayam;
 
+import com.mayam.wf.attributes.shared.type.AssetType;
+
 public enum MayamAssetType {
-	TITLE("SER"),
+	TITLE("EPISODE"),
 	MATERIAL("ITEM"),
-	PACKAGE("PACK");
+	PACKAGE("PACKAGE");
 	
 	  private String text;
 
@@ -15,6 +17,10 @@ public enum MayamAssetType {
 	    return this.text;
 	  }
 
+	  public AssetType getAssetType() {
+		  return AssetType.valueOf(this.text);
+	  }
+	  
 	  public static MayamAssetType fromString(String text) {
 	    if (text != null) {
 	      for (MayamAssetType b : MayamAssetType.values()) {

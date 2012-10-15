@@ -7,7 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -45,7 +45,7 @@ public class MayamTaskController {
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 			
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, taskList.toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, taskList.toString());
 			attributes.copyAttributes(assetAttributes);
 			
 			try {
