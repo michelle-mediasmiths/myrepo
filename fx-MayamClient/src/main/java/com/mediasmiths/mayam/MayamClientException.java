@@ -9,6 +9,11 @@ public class MayamClientException extends Exception{
 		return errorcode;
 	}
 
+	public MayamClientException(MayamClientErrorCode errorcode, Exception cause){
+		super(errorcode.toString(),cause);
+		this.errorcode=errorcode;
+	}
+	
 	public MayamClientException(MayamClientErrorCode errorcode){
 		super(errorcode.toString());
 		this.errorcode=errorcode;

@@ -30,7 +30,7 @@ public interface WFAdapterRestService
 	 */
 	@PUT
 	@Path("/qc/transferforqc")
-	@Produces("text/plain")
+	@Produces("application/xml")
 	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException;
 	
 	/**

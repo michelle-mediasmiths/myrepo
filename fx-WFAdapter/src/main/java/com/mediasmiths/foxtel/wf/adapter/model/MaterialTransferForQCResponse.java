@@ -10,15 +10,15 @@ import com.sun.xml.txw2.annotation.XmlElement;
 public class MaterialTransferForQCResponse
 {
 
-	private URI destination;
+	private String destination;
 	
 	@XmlElement
-	public URI getDestination()
+	public String getDestination()
 	{
 		return destination;
 	}
 
-	public void setDestination(URI destination)
+	public void setDestination(String destination)
 	{
 		this.destination = destination;
 	}
@@ -27,7 +27,7 @@ public class MaterialTransferForQCResponse
 		
 	}
 	
-	public MaterialTransferForQCResponse(URI destination)
+	public MaterialTransferForQCResponse(String destination)
 	{
 		this.destination=destination;
 	}

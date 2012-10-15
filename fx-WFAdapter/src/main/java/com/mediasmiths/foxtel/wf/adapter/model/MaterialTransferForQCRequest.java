@@ -21,6 +21,9 @@ public class MaterialTransferForQCRequest
 		this.materialID = materialID;
 	}
 	
-	
+	@Override
+	public String toString(){
+		return String.format("materialID { %s } ", materialID);
+	}
 	
 }

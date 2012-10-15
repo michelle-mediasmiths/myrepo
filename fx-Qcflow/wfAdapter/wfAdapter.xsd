@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
 

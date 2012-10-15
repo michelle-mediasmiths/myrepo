@@ -227,6 +227,8 @@ public class QCRestServiceImpl implements QCRestService
 	@Produces("text/plain")
 	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident) throws NotFoundException
 	{
+		log.debug(String.format("Finished request for job %s",ident.getIdentifier()));
+		
 		QCJobStatus jobStatus = jobStatus(ident);
 
 		return jobStatus.getStatus() == JobStatusType.complete || jobStatus.getStatus() == JobStatusType.stopping;

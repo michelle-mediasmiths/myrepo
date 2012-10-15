@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.apache.log4j.Logger;
+
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -19,8 +21,10 @@ import com.mediasmiths.mayam.MayamClientException;
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
 	
+	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
+	
 	@Inject private MayamClient mayamClient;
-	@Named("qc.material.location") private URI materialQCLocation;
+	@Inject @Named("qc.material.location") private URI materialQCLocation;
 
 	@GET
 	@Path("/ping")
@@ -32,14 +36,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@PUT
 	@Path("/material/transferforqc")
-	@Produces("text/plain")
+	@Produces("application/xml")
 	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException
 	{
+		log.info("Received MaterialTransferForQCRequest "+req.toString());
 		final String materialID = req.getMaterialID();
-		final URI destination = materialQCLocation.resolve(req.getMaterialID()+".mxf");
+		final String filename = req.getMaterialID()+".mxf";
+		final URI destination = materialQCLocation.resolve(filename);
 		
 		mayamClient.transferMaterialToLocation(materialID, destination);
-		return new MaterialTransferForQCResponse(destination);
+		return new MaterialTransferForQCResponse(filename);
 	}
 
 	@Override

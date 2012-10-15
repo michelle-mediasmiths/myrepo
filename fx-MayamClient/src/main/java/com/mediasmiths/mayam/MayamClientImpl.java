@@ -1,11 +1,17 @@
 package com.mediasmiths.mayam;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
@@ -43,6 +49,9 @@ import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class MayamClientImpl implements MayamClient
 {
+	
+	private final static Logger log = Logger.getLogger(MayamClientImpl.class);
+	
 	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
 	TasksClient client;
@@ -439,6 +448,16 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
 	{
-		// TODO implement me!, see declaration in interface		
+		// TODO implement me!, see declaration in interface	
+		try
+		{
+			log.info(String.format("Transferring material %s to location %s", materialID, location.toString()));
+			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(location));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
+		}
 	}
 }

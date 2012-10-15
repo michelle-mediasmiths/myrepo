@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://localhost:8000/fx-qcAdapter/rest/qc/start" ID="_3KzH4RIKEeKSvfCLoOal5Q">
-  <rest:operation verb="PUT" name="qcStart" ID="_3K0WABIKEeKSvfCLoOal5Q">
-    <rest:input type="project:///qcAdapterRest/qcAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/qc/adapter}qcStartRequest" name="body" headerDirection="request" contentType="application/xml" ID="_3K09EBIKEeKSvfCLoOal5Q"/>
-    <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/qc/adapter}qcStartResponse" name="response" headerDirection="request" contentType="application/xml" ID="_3K09ERIKEeKSvfCLoOal5Q"/>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/start" ID="_MG3IYBa8EeKqpuzjrTcpXg">
+  <rest:operation verb="PUT" name="qcStart" ID="_MG3IYRa8EeKqpuzjrTcpXg">
+    <rest:input type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcStartRequest" name="body" headerDirection="request" contentType="application/xml" ID="_MG3IYha8EeKqpuzjrTcpXg"/>
+    <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcStartResponse" name="response" headerDirection="request" contentType="application/xml" ID="_MG3IYxa8EeKqpuzjrTcpXg"/>
   </rest:operation>
 </rest:descriptor>

@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL=" http://localhost:8000/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path=${filepath}" ID="_TPkkwBIMEeKSvfCLoOal5Q">
-  <rest:operation verb="GET" name="qcResult" ID="_TPkkwxIMEeKSvfCLoOal5Q">
-    <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/qc/adapter}qcMediaResult" name="response" headerDirection="request" contentType="application/xml" ID="_TPkkxBIMEeKSvfCLoOal5Q"/>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" ID="_yUA3kBbKEeKoOf_lVyekrA">
+  <rest:operation verb="GET" name="qcResult" ID="_yUA3kxbKEeKoOf_lVyekrA">
+    <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcMediaResult" name="response" headerDirection="request" contentType="application/xml" ID="_yUA3lBbKEeKoOf_lVyekrA"/>
   </rest:operation>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_TPkkwRIMEeKSvfCLoOal5Q"/>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="filepath" headerDirection="request" contentType="text/xml" ID="_TPkkwhIMEeKSvfCLoOal5Q"/>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_yUA3kRbKEeKoOf_lVyekrA"/>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="path" headerDirection="request" contentType="text/xml" ID="_yUA3khbKEeKoOf_lVyekrA"/>
 </rest:descriptor>
