@@ -177,17 +177,22 @@ public class PlaceholderMessageValidator extends
 
 		String presentationFormat = action.getPackage().getPresentationFormat().toString();
 		ArrayList<String> channelTags = mayamClient.getChannelLicenseTagsForMaterial(materialID);
+		
 		for (String channelTag: channelTags) {
-			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
-				logger.error("Presentation Format of package does not match that of associated channel");
-				return MessageValidationResult.PACKAGE_INVALID_FORMAT;
-			}
+			
+			//TODO readd this check once we have aversion of mayam that will persist things!
+			
+//			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
+//				logger.error("Presentation Format of package does not match that of associated channel");
+//				return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+//			}
 		}
 		
-		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
-		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
-			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
-		}
+		//TODO readd once mayam persists things		
+//		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
+//		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
+//			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
+//		}
 		
 		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action.getPackage().getConsumerAdvice());
 		

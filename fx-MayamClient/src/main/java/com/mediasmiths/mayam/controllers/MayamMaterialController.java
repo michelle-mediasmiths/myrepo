@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
@@ -268,7 +270,7 @@ public class MayamMaterialController {
 				attributes = new MayamAttributeController(assetAttributes);
 				
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy().toGregorianCalendar().getTime());
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 				
 				Source source = material.getSource();
@@ -277,15 +279,16 @@ public class MayamMaterialController {
 					if (aggregation != null) {
 						Aggregator aggregator = aggregation.getAggregator();
 						Order order = aggregation.getOrder();
+						
 						if (aggregator != null) {
 							// TODO: Approval attributes are not ideal for aggregator values
-							attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_VAL, aggregator.getAggregatorID());
 							attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 						}
 						if (order != null) {
 							// TODO: Task operation attributes are not ideal for aggregator values
-							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
-							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated().toGregorianCalendar().getTime());
+							attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_VAL, order.getOrderReference());
 						}
 					}
 
