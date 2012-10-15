@@ -50,8 +50,8 @@ public class HappyPathDataGeneratorTest
 	private static void CreateTitleXml(String messageID, String senderID, String fileName)
 	{
 		// Valid CreateTitle
-		String titleID = "NEW_TITLE";
-		String programmeTitle = "PROGRAMMETITLE";
+		String titleID = "testTitle";
+		String programmeTitle = "testProgrammeTitle";
 
 		// LicenseData
 		String organisationID = "ORGID";
@@ -108,7 +108,7 @@ public class HappyPathDataGeneratorTest
 			LicenseHolder.setAttribute("organisationName", organisationName);
 			License.appendChild(LicenseHolder);
 			Element LicensePeriod = doc.createElement("LicensePeriod");
-			LicensePeriod.setAttribute("astartDate", startDate);
+			LicensePeriod.setAttribute("startDate", startDate);
 			LicensePeriod.setAttribute("endDate", endDate);
 			License.appendChild(LicensePeriod);
 			Element Channels = doc.createElement("Channels");
@@ -143,8 +143,8 @@ public class HappyPathDataGeneratorTest
 	{
 		// Valid CreateTitle
 
-		String titleID = "EXISTING";
-		String materialID = "NEW_MATERIAL";
+		String titleID = "testTitle";
+		String materialID = "testNew_Material";
 		String requiredBy = "2000-02-10T00:00:01.000Z";
 		String requiredFormat = "SD";
 		String qualityCheckTask;
@@ -251,9 +251,9 @@ public class HappyPathDataGeneratorTest
 	{
 		// Valid CreateTitle
 
-		String titleID = "EXISTING_TITLE";
-		String presentationID = "NEW_PACKAGE";
-		String materialID = "EXISTING_MATERIAL";
+		String titleID = "testTitle";
+		String presentationID = "testNew_Package";
+		String materialID = "testNew_Material";
 		String presentationFormat = "HD";
 		String classification = "G";
 		String consumerAdvice = "L";
