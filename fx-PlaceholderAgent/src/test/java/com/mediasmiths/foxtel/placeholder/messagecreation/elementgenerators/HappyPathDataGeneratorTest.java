@@ -49,10 +49,22 @@ public class HappyPathDataGeneratorTest
 
 	private static void CreateTitleXml(String messageID, String senderID, String fileName)
 	{
-		// Valid CreateTitle
+		// CreateOrUpdateTitle
 		String titleID = "testTitle";
+		String purgeProtect="true";
+		String restrictAccess="true";
+		
+		//TitleDescription
 		String programmeTitle = "testProgrammeTitle";
-
+		String productionNumber="132213";
+		String episodeTitle="testerEpisode";
+		String seriesNumber="2";
+		String episodeNumber="12";
+		String yearOfProduction="1992";
+		String countryOfProduction="Ireland";
+		String style="Country";
+		String show="Magicians";
+		
 		// LicenseData
 		String organisationID = "ORGID";
 		String organisationName = "ORGNAME";
@@ -60,7 +72,7 @@ public class HappyPathDataGeneratorTest
 		String endDate = "2000-02-01T00:00:01.000Z";
 		String channelTag = "108";
 		String channelName = "Fox8";
-
+		
 		try
 		{
 
@@ -86,9 +98,13 @@ public class HappyPathDataGeneratorTest
 			Element actions = doc.createElement("Actions");
 			rootElement.appendChild(actions);
 
+			//CreateOrUpdateTitle
 			Element createOrUpdateTitle = doc.createElement("CreateOrUpdateTitle");
 			createOrUpdateTitle.setAttribute("titleID", titleID);
+			createOrUpdateTitle.setAttribute("purgeProtect", purgeProtect);
+			createOrUpdateTitle.setAttribute("restrictAccess", restrictAccess);
 			actions.appendChild(createOrUpdateTitle);
+			
 
 			// Title Description Section
 			Element TitleDescription = doc.createElement("TitleDescription");
@@ -96,7 +112,32 @@ public class HappyPathDataGeneratorTest
 			Element ProgrammeTitle = doc.createElement("ProgrammeTitle");
 			ProgrammeTitle.appendChild(doc.createTextNode(programmeTitle));
 			TitleDescription.appendChild(ProgrammeTitle);
-
+			Element ProductionNumber = doc.createElement("ProductionNumber");
+			ProductionNumber.appendChild(doc.createTextNode(productionNumber));
+			TitleDescription.appendChild(ProductionNumber);
+			Element EpisodeTitle = doc.createElement("EpisodeTitle");
+			EpisodeTitle.appendChild(doc.createTextNode(episodeTitle));
+			TitleDescription.appendChild(EpisodeTitle);
+			Element SeriesNumber = doc.createElement("SeriesNumber");
+			SeriesNumber.appendChild(doc.createTextNode(seriesNumber));
+			TitleDescription.appendChild(SeriesNumber);
+			Element EpisodeNumber = doc.createElement("EpisodeNumber");
+			EpisodeNumber.appendChild(doc.createTextNode(episodeNumber));
+			TitleDescription.appendChild(EpisodeNumber);
+			Element YearOfProduction = doc.createElement("YearOfProduction");
+			YearOfProduction.appendChild(doc.createTextNode(yearOfProduction));
+			TitleDescription.appendChild(YearOfProduction);
+			Element CountryOfProduction = doc.createElement("CountryOfProduction");
+			CountryOfProduction.appendChild(doc.createTextNode(countryOfProduction));
+			TitleDescription.appendChild(CountryOfProduction);
+			Element Style = doc.createElement("Style");
+			Style.appendChild(doc.createTextNode(style));
+			TitleDescription.appendChild(Style);
+			Element Show = doc.createElement("Show");
+			Show.appendChild(doc.createTextNode(show));
+			TitleDescription.appendChild(Show);
+			
+			//Beginning rights section
 			Element Rights = doc.createElement("Rights");
 			createOrUpdateTitle.appendChild(Rights);
 			Element License = doc.createElement("License");
@@ -138,7 +179,6 @@ public class HappyPathDataGeneratorTest
 			tfe.printStackTrace();
 		}
 	}
-
 	private static void CreateMaterialXml(String messageID, String senderID, String fileName, boolean QA)
 	{
 		// Valid CreateTitle
