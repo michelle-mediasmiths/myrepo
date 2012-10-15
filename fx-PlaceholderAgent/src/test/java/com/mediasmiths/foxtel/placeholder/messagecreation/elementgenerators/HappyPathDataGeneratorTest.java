@@ -298,6 +298,8 @@ public class HappyPathDataGeneratorTest
 		String classification = "G";
 		String consumerAdvice = "L";
 		String numberOfSegments = "1";
+		String targetDate="2011-05-15T00:00:00+10:00";
+		String notes="Testing Notes";
 
 		try
 		{
@@ -351,6 +353,14 @@ public class HappyPathDataGeneratorTest
 			Element NumberOfSegments = doc.createElement("NumberOfSegments");
 			NumberOfSegments.appendChild(doc.createTextNode(numberOfSegments));
 			Package.appendChild(NumberOfSegments);
+			
+			Element targetdate = doc.createElement("Targetdate");
+			targetdate.appendChild(doc.createTextNode(targetDate));
+			Package.appendChild(targetdate);
+			
+			Element Notes = doc.createElement("notes");
+			Notes.appendChild(doc.createTextNode(notes));
+			Package.appendChild(Notes);
 
 			// write the content into xml file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
