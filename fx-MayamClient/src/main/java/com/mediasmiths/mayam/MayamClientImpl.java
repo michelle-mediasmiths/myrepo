@@ -27,7 +27,7 @@ import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -266,7 +266,7 @@ public class MayamClientImpl implements MayamClient
 			{
 				try
 				{
-					List<AttributeMap> materials = client.getAssetChildren(AssetType.SER, titleID, AssetType.ITEM);
+					List<AttributeMap> materials = client.getAssetChildren(MayamAssetType.TITLE.getAssetType(), titleID, MayamAssetType.MATERIAL.getAssetType());
 					for (int i = 0; i < materials.size(); i++)
 					{
 						AttributeMap materialAttributes = materials.get(i);
@@ -280,7 +280,7 @@ public class MayamClientImpl implements MayamClient
 						}
 					}
 
-					List<AttributeMap> packages = client.getAssetChildren(AssetType.SER, titleID, AssetType.PACK);
+					List<AttributeMap> packages = client.getAssetChildren(MayamAssetType.TITLE.getAssetType(), titleID, MayamAssetType.PACKAGE.getAssetType());
 					for (int i = 0; i < packages.size(); i++)
 					{
 						AttributeMap packageAttributes = packages.get(i);

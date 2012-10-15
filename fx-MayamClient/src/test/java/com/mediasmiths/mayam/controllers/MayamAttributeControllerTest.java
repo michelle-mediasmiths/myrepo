@@ -48,11 +48,11 @@ public class MayamAttributeControllerTest {
 	{
 		controller = new MayamAttributeController(client, validator);
 		Date dateObject = new Date();
-		when(validator.isValidValue(eq(Attribute.ASSET_GUID), anyObject())).thenReturn(false);
-		boolean valid = controller.setAttribute(Attribute.ASSET_GUID, dateObject);
+		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(false);
+		boolean valid = controller.setAttribute(Attribute.ASSET_ID, dateObject);
 		assertFalse(valid);
 		AttributeMap emptyAttributes = controller.getAttributes();
-		String assetID = emptyAttributes.getAttribute(Attribute.ASSET_GUID);
+		String assetID = emptyAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals(null, assetID);
 	}
 	
@@ -60,47 +60,47 @@ public class MayamAttributeControllerTest {
 	public void testSetAndGetValidAttributeCreate() 
 	{
 		controller = new MayamAttributeController(client, validator);
-		when(validator.isValidValue(eq(Attribute.ASSET_GUID), anyObject())).thenReturn(true);
-		boolean valid = controller.setAttribute(Attribute.ASSET_GUID, "12345");
-		when(map.getAttribute(eq(Attribute.ASSET_GUID))).thenReturn("12345");
+		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
+		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "12345");
+		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("12345");
 		assertTrue(valid);
 		AttributeMap newAttributes = controller.getAttributes();
-		String assetID = newAttributes.getAttribute(Attribute.ASSET_GUID);
+		String assetID = newAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
 	}
 	
 	@Test
 	public void testSetAttributeUpdateValid() 
 	{
-		map.setAttribute(Attribute.ASSET_GUID, "12345");
-		when(map.getAttribute(eq(Attribute.ASSET_GUID))).thenReturn("12345");
+		map.setAttribute(Attribute.ASSET_ID, "12345");
+		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("12345");
 		controller = new MayamAttributeController(map, validator);
 		AttributeMap existingAttributes = controller.getAttributes();
-		String assetID = existingAttributes.getAttribute(Attribute.ASSET_GUID);
+		String assetID = existingAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
-		when(validator.isValidValue(eq(Attribute.ASSET_GUID), anyObject())).thenReturn(true);
-		boolean valid = controller.setAttribute(Attribute.ASSET_GUID, "67890");
-		when(map.getAttribute(eq(Attribute.ASSET_GUID))).thenReturn("67890");
+		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
+		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "67890");
+		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("67890");
 		assertTrue(valid);
 		AttributeMap updatedAttributes = controller.getAttributes();
-		assetID = updatedAttributes.getAttribute(Attribute.ASSET_GUID);
+		assetID = updatedAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("67890", assetID);
 	}
 	
 	@Test
 	public void testSetAttributeUpdateInValid() 
 	{
-		map.setAttribute(Attribute.ASSET_GUID, "12345");
-		when(map.getAttribute(eq(Attribute.ASSET_GUID))).thenReturn("12345");
+		map.setAttribute(Attribute.ASSET_ID, "12345");
+		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("12345");
 		controller = new MayamAttributeController(map, validator);
 		AttributeMap existingAttributes = controller.getAttributes();
-		String assetID = existingAttributes.getAttribute(Attribute.ASSET_GUID);
+		String assetID = existingAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
-		when(validator.isValidValue(eq(Attribute.ASSET_GUID), anyObject())).thenReturn(false);
-		boolean valid = controller.setAttribute(Attribute.ASSET_GUID, "67890");
+		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(false);
+		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "67890");
 		assertFalse(valid);
 		AttributeMap updatedAttributes = controller.getAttributes();
-		assetID = updatedAttributes.getAttribute(Attribute.ASSET_GUID);
+		assetID = updatedAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
 	}
 }

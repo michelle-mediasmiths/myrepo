@@ -25,9 +25,11 @@ import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.mq.common.Queues;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.FilterResult;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.mayam.MayamAssetType;
 
 /**
  * Hello world!
@@ -81,11 +83,10 @@ public class ExampleApp {
 			// data to it
 			result = client.createAsset(assetAttributes);
 			final Long assetId = result.getAttribute(Attribute.ASSET_ID);
-			final String assetGuid = result.getAttribute(Attribute.ASSET_GUID);
+			final String assetGuid = result.getAttribute(Attribute.ASSET_ID);
 			System.out.println("Created asset with id " + assetId + " and guid " + assetGuid);
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			e.printRemoteMessages(System.err);
 		}
 
 	}
@@ -115,7 +116,6 @@ public class ExampleApp {
 			System.out.println("Created task with id " + taskId.longValue());
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			e.printRemoteMessages(System.err);
 		}
 
 	}
@@ -131,13 +131,12 @@ public class ExampleApp {
 			System.out.println("Got asset id " + assetId + " for task "
 					+ taskId);
 			task.setAttribute(Attribute.SERIES_TITLE, "aaaaa");
-			task.setAttribute(Attribute.MEDST_HR, MediaStatus.A);
+			task.setAttribute(Attribute.MEDST_HR, MediaStatus.ACTIVE);
 			client.updateTask(task);
 			System.out.println("updated task");
 
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			e.printRemoteMessages(System.err);
 		}
 
 	}
@@ -206,7 +205,6 @@ public class ExampleApp {
 		} catch (RemoteException e) {
 
 			e.printStackTrace();
-			e.printRemoteMessages(System.err);
 		}
 	}
 
@@ -219,17 +217,16 @@ public class ExampleApp {
 		String assetId = "12345678";
 		
 		try {
-			List<AttributeMap> assetChildren = client.getAssetChildren(AssetType.SER, assetId, AssetType.ITEM);
+			List<AttributeMap> assetChildren = client.getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetId, AssetType.ITEM);
 			
 			System.out.println(String.format("Found %s children",""+assetChildren.size()));
 			
 			for(AttributeMap child : assetChildren){
-				System.out.println(String.format("\t Child: Title %s GUID %s", child.getAttribute(Attribute.ASSET_TITLE), child.getAttribute(Attribute.ASSET_GUID)));
+				System.out.println(String.format("\t Child: Title %s GUID %s", child.getAttribute(Attribute.ASSET_TITLE), child.getAttribute(Attribute.ASSET_ID)));
 			}
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			e.printRemoteMessages(System.err);
 		}
 		
 	}

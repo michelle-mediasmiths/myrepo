@@ -6,10 +6,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -31,8 +31,8 @@ public class MayamPackageController {
 		if (txPackage != null) {
 
 			//TODO: Confirm Asset Type with Mayam
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.PACK);	
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, txPackage.getPresentationID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());	
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 			
 			//TODO: Asset Parent ID to be added by Mayam shortly
 			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
@@ -58,7 +58,6 @@ public class MayamPackageController {
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
-				e.printRemoteMessages(System.err);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
@@ -77,7 +76,7 @@ public class MayamPackageController {
 			AttributeMap assetAttributes = null;
 			MayamAttributeController attributes = null;
 			try {
-				assetAttributes = client.getAsset(AssetType.PACK, txPackage.getPresentationID());
+				assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			} catch (RemoteException e1) {
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				e1.printStackTrace();
@@ -110,7 +109,6 @@ public class MayamPackageController {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -132,7 +130,7 @@ public class MayamPackageController {
 			AttributeMap assetAttributes = null;
 			MayamAttributeController attributes = null;
 			try {
-				assetAttributes = client.getAsset(AssetType.PACK, txPackage.getPresentationID());
+				assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			} catch (RemoteException e1) {
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				e1.printStackTrace();
@@ -165,7 +163,6 @@ public class MayamPackageController {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -188,7 +185,7 @@ public class MayamPackageController {
 	public boolean packageExists(String presentationID) {
 		boolean packageFound = false;
 		try {
-			AttributeMap assetAttributes = client.getAsset(AssetType.PACK, presentationID);
+			AttributeMap assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 			if (assetAttributes != null) {
 				packageFound = true;
 			}
@@ -202,7 +199,7 @@ public class MayamPackageController {
 	public AttributeMap getPackage(String presentationID) {
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(AssetType.PACK, presentationID);
+			assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 		} catch (RemoteException e1) {
 			//TODO: Error Handling
 			e1.printStackTrace();
