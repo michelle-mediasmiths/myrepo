@@ -1,7 +1,5 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
@@ -18,12 +16,12 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AspectRatio;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.TasksClient.RemoteException;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -44,8 +42,8 @@ public class MayamMaterialController {
 		
 		if (material != null) 
 		{
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, AssetType.ITEM);
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_GUID, material.getMaterialID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialID());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
@@ -106,7 +104,6 @@ public class MayamMaterialController {
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
-				e.printRemoteMessages(System.err);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
@@ -161,7 +158,6 @@ public class MayamMaterialController {
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
-				e.printRemoteMessages(System.err);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
@@ -182,7 +178,7 @@ public class MayamMaterialController {
 			AttributeMap assetAttributes = null;
 			
 			try {
-				assetAttributes = client.getAsset(AssetType.ITEM, material.getMaterialID());
+				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -236,7 +232,6 @@ public class MayamMaterialController {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -259,7 +254,7 @@ public class MayamMaterialController {
 			MayamAttributeController attributes = null;
 			
 			try {
-				assetAttributes = client.getAsset(AssetType.ITEM, material.getMaterialID());
+				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -270,7 +265,9 @@ public class MayamMaterialController {
 				attributes = new MayamAttributeController(assetAttributes);
 				
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy().toGregorianCalendar().getTime());
+				if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null) {
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy().toGregorianCalendar().getTime());
+				}
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 				
 				Source source = material.getSource();
@@ -329,7 +326,6 @@ public class MayamMaterialController {
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
-					e.printRemoteMessages(System.err);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -346,7 +342,7 @@ public class MayamMaterialController {
 	public boolean materialExists(String materialID) {
 		boolean materialFound = false;
 		try {
-			AttributeMap assetAttributes = client.getAsset(AssetType.ITEM, materialID);
+			AttributeMap assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 			if (assetAttributes != null) {
 				materialFound = true;
 			}
@@ -360,7 +356,7 @@ public class MayamMaterialController {
 	public AttributeMap getMaterial(String materialID) {
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(AssetType.ITEM, materialID);
+			assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 		} catch (RemoteException e1) {
 			//TODO: Error Handling
 			e1.printStackTrace();
