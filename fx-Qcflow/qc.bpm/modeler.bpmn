@@ -337,11 +337,12 @@
           </eAnnotations>
         </associations>
       </artifacts>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_hbmUgRbAEeKS2Pnh8vvKNg" iD="_hbmUgBbAEeKS2Pnh8vvKNg" associations="_nZEjExbBEeKS2Pnh8vvKNg _nzAtEBbBEeKS2Pnh8vvKNg" name="Poll until qc finished">
+      <vertices xmi:type="bpmn:Activity" xmi:id="_hbmUgRbAEeKS2Pnh8vvKNg" iD="_hbmUgBbAEeKS2Pnh8vvKNg" associations="_nZEjExbBEeKS2Pnh8vvKNg _nzAtEBbBEeKS2Pnh8vvKNg" incomingEdges="_KtoNIRbTEeKY9cl7mHXLFw" name="Poll until qc finished">
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_nY6yERbBEeKS2Pnh8vvKNg"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_nywOYRbBEeKS2Pnh8vvKNg"/>
       </vertices>
-      <eventHandlers xmi:type="bpmn:Activity" xmi:id="_h1RYwRbAEeKS2Pnh8vvKNg" iD="_h1RYwBbAEeKS2Pnh8vvKNg" activityType="EventIntermediateTimer"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_HchowRbTEeKY9cl7mHXLFw" iD="_HchowBbTEeKY9cl7mHXLFw" outgoingEdges="_KtoNIRbTEeKY9cl7mHXLFw" name="wait 10 seconds" activityType="EventIntermediateTimer"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_KtoNIRbTEeKY9cl7mHXLFw" iD="_KtoNIBbTEeKY9cl7mHXLFw"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_jQ4PkRbKEeKY9cl7mHXLFw" iD="_jQ4PkBbKEeKY9cl7mHXLFw" associations="_3Ls_QBbKEeKY9cl7mHXLFw _3ja7sBbKEeKY9cl7mHXLFw" incomingEdges="_36_uMRbKEeKY9cl7mHXLFw" name="get results">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_3LPsQRbKEeKY9cl7mHXLFw"/>

@@ -143,29 +143,18 @@
                     </bpel:variable>
                     <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_ny-34BbBEeKS2Pnh8vvKNg" bpdm:messageIds="inc:_nywOYBbBEeKS2Pnh8vvKNg"/>
                 </bpel:variables>
-                <bpel:eventHandlers>
-                    <bpel:onAlarm bpdm:interrupt="true">
-                        <bpel:repeatEvery>"PT10S"
-<mapper:mapperLink>
-  <mapper:vertice id="22990540" targetPath="$repeatEvery" targetedBy="16165770-arg0"></mapper:vertice>
-  <mapper:vertice id="16165770" dimension="241x49" location="360,36">
-    <mapper:value>"PT10S"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:repeatEvery>
-                        <bpdm:eventHandler bpdm:label="Timer_Intermediate_Event" bpdm:ID="_h1RYwBbAEeKS2Pnh8vvKNg" bpdm:type="timer">
-                            <bpdm:linkset bpdm:type="timer">
-                                <bpel:repeatEvery>"PT10S"
-<mapper:mapperLink>
-  <mapper:vertice id="22990540" targetPath="$repeatEvery" targetedBy="16165770-arg0"></mapper:vertice>
-  <mapper:vertice id="16165770" dimension="241x49" location="360,36">
-    <mapper:value>"PT10S"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:repeatEvery>
-                            </bpdm:linkset>
-                        </bpdm:eventHandler>
-                    </bpel:onAlarm>
-                </bpel:eventHandlers>
                 <bpel:sequence>
+                    <bpdm:messagingtask eventType="intermediate: timer" bpdm:label="wait 10 seconds" bpdm:ID="_HchowBbTEeKY9cl7mHXLFw">
+                        <bpdm:linkset bpdm:type="timer">
+                            <bpel:for>"PT10S"
+<mapper:mapperLink>
+  <mapper:vertice id="4318491" targetPath="$duration" targetedBy="21421012-arg0"></mapper:vertice>
+  <mapper:vertice id="21421012" dimension="121x37" location="444,36">
+    <mapper:value>"PT10S"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink></bpel:for>
+                        </bpdm:linkset>
+                    </bpdm:messagingtask>
                     <bpdm:messagingtask operation="qcFinished" partnerLink="qcAndQCADAPTERForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Poll until qc finished" bpdm:ID="_hbmUgBbAEeKS2Pnh8vvKNg">
                         <bpdm:linkset bpdm:type="assignments">
                             <bpel:copy>
