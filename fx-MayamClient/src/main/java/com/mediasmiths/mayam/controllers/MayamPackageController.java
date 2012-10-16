@@ -1,6 +1,17 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.log4j.Logger;
+
+import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -17,6 +28,8 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamPackageController {
 	private final TasksClient client;
 
+	private final Logger log = Logger.getLogger(MayamPackageController.class);
+	
 	@Inject
 	public MayamPackageController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
 		client = mayamClient;
@@ -196,7 +209,7 @@ public class MayamPackageController {
 		return packageFound;
 	}
 	
-	public AttributeMap getPackage(String presentationID) {
+	public AttributeMap getPackageAttributes(String presentationID) {
 		AttributeMap assetAttributes = null;
 		try {
 			assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
@@ -205,6 +218,36 @@ public class MayamPackageController {
 			e1.printStackTrace();
 		}
 		return assetAttributes;
+	}
+	
+	public PackageType getPackage(String packageID){
+		
+		PackageType pt = new PackageType();
+		AttributeMap attributes = getPackageAttributes(packageID);
+
+		pt.setPresentationID((String)attributes.getAttribute(Attribute.ASSET_ID));		
+		pt.setClassification(ClassificationEnumType.valueOf((String) attributes.getAttribute(Attribute.AUX_VAL)));
+		pt.setConsumerAdvice((String) attributes.getAttribute(Attribute.COMPLIANCE_NOTES));
+		pt.setPresentationFormat(PresentationFormatType.valueOf((String) attributes.getAttribute(Attribute.CONT_FMT)));
+
+		//TODO: Asset Parent ID to be added by Mayam shortly
+		//TODO: fetch segment information
+		//TODO : pt.setNotes ?
+	
+		try
+		{
+			GregorianCalendar c = new GregorianCalendar();
+			c.setTime((Date) attributes.getAttribute(Attribute.TX_NEXT));
+			XMLGregorianCalendar targetDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+			pt.setTargetDate(targetDate);
+			
+		}
+		catch (DatatypeConfigurationException e)
+		{
+			log.error("Error setting target date on package type",e);
+		}
+		
+		return pt;		
 	}
 	
 }

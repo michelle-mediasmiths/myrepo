@@ -221,7 +221,7 @@ public class MayamPackageControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackage(eq(anyString()));
+		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
 		assertTrue(attributes != null);
 	}
 	
@@ -233,7 +233,7 @@ public class MayamPackageControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackage(eq(anyString()));
+		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
 		assertEquals(null, attributes);
 	}
 	
@@ -241,7 +241,7 @@ public class MayamPackageControllerTest {
 	public void testGetPackageException() throws Exception
 	{
 		when(client.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
-		AttributeMap attributes = controller.getPackage(eq(anyString()));
+		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
 		assertEquals(null, attributes);
 	}
 	

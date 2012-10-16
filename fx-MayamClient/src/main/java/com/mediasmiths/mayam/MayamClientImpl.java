@@ -251,7 +251,7 @@ public class MayamClientImpl implements MayamClient
 		// TODO implement
 		// will need to fetch the material for the given package and check its protected status flag
 		boolean isProtected = true;
-		AttributeMap packageAttributes = packageController.getPackage(packageID);
+		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
 		if (packageAttributes != null)
 		{
 			// TODO: need to make use of parent ID attribute once Mayam add it
@@ -444,6 +444,11 @@ public class MayamClientImpl implements MayamClient
 		return licenseTags;
 	}
 
+	@Override
+	public PackageType getPackage(String packageID) throws MayamClientException
+	{
+		return packageController.getPackage(packageID);		
+	}
 
 	@Override
 	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
