@@ -68,5 +68,5 @@ public interface MayamClient {
 	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException;
 
 	PackageType getPackage(String packageID) throws MayamClientException;
-	
+	MaterialType getMaterial(String materialID) throws MayamClientException;
 }

@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
@@ -8,6 +9,7 @@ import au.com.foxtel.cf.mam.pms.Compile;
 import au.com.foxtel.cf.mam.pms.Library;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
+import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
 import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
@@ -21,6 +23,7 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
@@ -28,10 +31,12 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamMaterialController {
 	private final TasksClient client;
+	private final DateUtil dateUtil;
 	
 	@Inject
-	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
+	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient, DateUtil dateUtil) {
 		client = mayamClient;
+		this.dateUtil=dateUtil;
 	}
 	
 	public MayamClientErrorCode createMaterial(MaterialType material)
@@ -353,7 +358,7 @@ public class MayamMaterialController {
 		return materialFound;
 	}
 	
-	public AttributeMap getMaterial(String materialID) {
+	public AttributeMap getMaterialAttributes(String materialID) {
 		AttributeMap assetAttributes = null;
 		try {
 			assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
@@ -363,7 +368,47 @@ public class MayamMaterialController {
 		}
 		return assetAttributes;
 	}
+	
+	public MaterialType getMaterial(String materialID){
+		AttributeMap attributes = getMaterialAttributes(materialID);
+		MaterialType material = new MaterialType();
+		
 
+		material.setMaterialID((String)attributes.getAttribute(Attribute.ASSET_ID));
+		material.setQualityCheckTask(QualityCheckEnumType.valueOf((String)attributes.getAttribute(Attribute.QC_NOTES)));
+		material.setRequiredBy(dateUtil.fromDate((Date) attributes.getAttribute(Attribute.TX_NEXT)));
+		material.setRequiredFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
+		
+		Source source = new Source();
+		material.setSource(source);
+		Aggregation aggregation = new Aggregation();
+		source.setAggregation(aggregation);
+		Aggregator aggregator = new Aggregator();
+		aggregation.setAggregator(aggregator);
+		Order order = new Order();
+		aggregation.setOrder(order);
+		
+		// TODO: Approval attributes are not ideal for aggregator values
+		aggregator.setAggregatorID(""+attributes.getAttribute(Attribute.APP_ID));
+		aggregator.setAggregatorName((String) attributes.getAttribute(Attribute.APP_SRC));
+		
+		// TODO: Task operation attributes are not ideal for aggregator values
+		order.setOrderCreated(dateUtil.fromDate((Date) attributes.getAttribute(Attribute.OP_DATE)));
+		order.setOrderReference("" + attributes.getAttribute(Attribute.OP_ID));
+		
+		Compile compile = new Compile();
+		source.setCompile(compile);
+		//TODO: Asset Parent ID to be added by Mayam shortly
+		//compile.setParentMaterialID(...)
+		
+		//TODO : handle source tape info
+		//Library library = new Library();
+		//source.setLibrary(library);
+		
+		return material;
+		
+	}
+	
 	public MayamClientErrorCode deleteMaterial(String materialID) {
 		// TODO Find out how to delete assets in Mayam
 		return MayamClientErrorCode.NOT_IMPLEMENTED;

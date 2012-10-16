@@ -9,6 +9,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.junit.Before;
@@ -26,6 +27,7 @@ import com.mayam.wf.attributes.shared.type.AspectRatio;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
@@ -54,10 +56,10 @@ public class MayamMaterialControllerTest {
 	 }
 	 
 	@Before
-	public void setup()
+	public void setup() throws DatatypeConfigurationException
 	{
 		client = mock(TasksClient.class);
-		controller = new MayamMaterialController(client);
+		controller = new MayamMaterialController(client, new DateUtil());
 		
 		material = mock(MaterialType.class);
 		when(material.getMaterialID()).thenReturn("");
@@ -232,7 +234,7 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterial(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
 		assertTrue(attributes != null);
 	}
 	
@@ -244,7 +246,7 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterial(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
 		assertEquals(attributes, null);
 	}
 	
@@ -256,7 +258,7 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterial(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
 		assertEquals(attributes, null);
 	}
 	

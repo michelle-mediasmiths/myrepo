@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -75,14 +77,14 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	
-	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException {
+	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException, DatatypeConfigurationException {
 		URL url = tasksURL;
 		Injector injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
 		client = injector.getInstance(TasksClient.class).setup(url, userToken); //throws ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
 		tasksController = new MayamTaskController(client);
 		titleController = new MayamTitleController(client);
-		materialController = new MayamMaterialController(client);
+		materialController = new MayamMaterialController(client, new DateUtil());
 		packageController = new MayamPackageController(client);
 		validator = new MayamValidator(client);
 	}
@@ -325,7 +327,7 @@ public class MayamClientImpl implements MayamClient
 	public boolean isMaterialPlaceholder(String materialID)
 	{
 		boolean isPlaceholder = true;
-		AttributeMap materialAttributes = materialController.getMaterial(materialID);
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 
 		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.SOURCE_IDS))
 		{
@@ -378,7 +380,7 @@ public class MayamClientImpl implements MayamClient
 			throw new MayamClientException(returnCode);
 		}
 
-		AttributeMap materialAttributes = materialController.getMaterial(materialID);
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 
 		if (materialAttributes == null)
 		{
@@ -464,5 +466,12 @@ public class MayamClientImpl implements MayamClient
 			e.printStackTrace();
 			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
 		}
+	}
+
+
+	@Override
+	public MaterialType getMaterial(String materialID) throws MayamClientException
+	{
+		return materialController.getMaterial(materialID);
 	}
 }
