@@ -29,7 +29,11 @@ public class JobBuilder
 	 */
 
 	@Inject
-	private MayamClient mayamClient;
+	public JobBuilder(MayamClient mayamClient){
+		this.mayamClient=mayamClient;
+	}
+	
+	private final MayamClient mayamClient;
 
 	public enum TxProfile
 	{
