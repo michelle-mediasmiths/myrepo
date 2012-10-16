@@ -1,15 +1,13 @@
 package com.mediasmiths.foxtel.tc.model;
 
-import java.util.UUID;
 
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class TCStartRequest
 {
-	@XmlElement(name="JobName")
+	@XmlElement(name="jobName")
 	public String getJobName()
 	{
 		return jobName;
@@ -19,35 +17,17 @@ public class TCStartRequest
 		this.jobName = jobName;
 	}
 	
-	public String getInput()
-	{
-		return input;
-	}
-	public void setInput(String input)
-	{
-		this.input = input;
-	}
+	String jobName;	
+	String pcpXml;
 	
-	public String getOutput()
+	@XmlElement(name="jobXml")
+	public String getPcpXml()
 	{
-		return output;
+		return pcpXml;
 	}
-	public void setOutput(String output)
+	public void setPcpXml(String pcpXml)
 	{
-		this.output = output;
+		this.pcpXml = pcpXml;
 	}
-	
-	public UUID getPreset()
-	{
-		return preset;
-	}
-	public void setPresent(UUID preset)
-	{
-		this.preset = preset;
-	}
-	String jobName;
-	String input;
-	String output;
-	UUID preset;
 
 }

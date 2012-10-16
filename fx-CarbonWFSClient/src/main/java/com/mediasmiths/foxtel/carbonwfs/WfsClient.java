@@ -50,23 +50,49 @@ public class WfsClient
 		return job.getStatus();
 	}
 
-	public UUID savePreset(Preset preset)
+	/**
+	 * Transcodes a file using the supplied preset/pcp file
+	 * 
+	 * @param pcpxml - pcp xml describing job
+	 * @return
+	 * @throws WfsClientException
+	 */
+	public UUID transcode(String pcpxml) throws WfsClientException
 	{
-		log.info("Saving a preset");
-
-		String id = service.storePreset(preset);
-
-		log.info(String.format("preset %s created"));
-
-		return UUID.fromString(id);
+		if (log.isTraceEnabled())
+		{
+			log.trace(String.format("queuing job by xml %s", pcpxml));
+		}
+		else
+		{
+			log.info(String.format("queuing job by xml"));
+		}
+		
+		Job j = service.queueJobXML(pcpxml);
+		log.info(String.format("job %s created", j.getGuid()));
+		return UUID.fromString(j.getGuid());
 	}
 
+	/************************************************************
+	 * methods beyond this point not currently used for foxtel
+	 ************************************************************/
+
+	/**
+	 * Performs a transcode using a prexisting preset
+	 * 
+	 * @param inputFile
+	 * @param outputFile
+	 * @param preset
+	 * @param jobTitle
+	 * @return
+	 * @throws WfsClientException
+	 */
 	public UUID transcode(String inputFile, String outputFile, UUID preset, String jobTitle) throws WfsClientException
 	{
 
 		String workFlow = buildWorkFlowForSimpleTranscode(inputFile, jobTitle, preset);
 
-		log.info(String.format("sending workflow xml %s for inputfile %s and outputfile %s", workFlow,inputFile, outputFile));
+		log.info(String.format("sending workflow xml %s for inputfile %s and outputfile %s", workFlow, inputFile, outputFile));
 
 		Job j = service.queueJobByWorkflow(workFlow, inputFile, outputFile);
 
@@ -84,8 +110,12 @@ public class WfsClient
 
 	public String buildWorkFlowForSimpleTranscode(String outputFile, String jobTitle, UUID presetUid) throws WfsClientException
 	{
-		log.info(String.format("building workflow for outputFile %s jobTitle %s preset %s", outputFile, jobTitle, presetUid.toString()));
-		
+		log.info(String.format(
+				"building workflow for outputFile %s jobTitle %s preset %s",
+				outputFile,
+				jobTitle,
+				presetUid.toString()));
+
 		SAXBuilder parser = new SAXBuilder();
 		InputStream templateInputStream = getClass().getClassLoader().getResourceAsStream("TranscodeWFtemplate.xml");
 		Document doc;
@@ -115,10 +145,9 @@ public class WfsClient
 
 		// set the transcode preset
 		setSingleElementText(transcodePresetxp, doc, String.format("{%s}", presetUid.toString()));
-		
-		// set the template name
-//		setSingleElementText(workFlowTasksNamexp, doc, jobTitle);
 
+		// set the template name
+		// setSingleElementText(workFlowTasksNamexp, doc, jobTitle);
 
 		return new XMLOutputter().outputString(doc);
 	}
@@ -153,15 +182,18 @@ public class WfsClient
 	public UUID createPreset(Preset preset) throws JAXBException
 	{
 
-		String storePreset = service.storePreset(preset);
-		return UUID.fromString(storePreset);
+		log.info("Saving a preset");
+
+		String id = service.storePreset(preset);
+
+		log.info(String.format("preset %s created"));
+
+		return UUID.fromString(id);
 	}
 
 	public ArrayOfPreset listPresets()
 	{
 		return service.getPresetList(Long.valueOf(0l));
 	}
-	
-	
 
 }

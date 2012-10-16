@@ -1,16 +1,14 @@
 package com.mediasmiths.foxtel.tc.service;
 
-import java.io.StringReader;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 
@@ -23,7 +21,10 @@ import org.datacontract.schemas._2004._07.rhozet.Preset;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.tc.JobBuilder;
+import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class TCRestServiceImpl implements TCRestService
 {
@@ -32,6 +33,8 @@ public class TCRestServiceImpl implements TCRestService
 
 	@Inject
 	private WfsClient wfsClient;
+	@Inject
+	private JobBuilder jobBuilder;
 
 	@Override
 	@GET
@@ -41,17 +44,15 @@ public class TCRestServiceImpl implements TCRestService
 	{
 		return "ping";
 	}
-	
-	@Override
-	public UUID transcode(TCStartRequest startRequest) throws WfsClientException
-	{
-		
-		String inputPath=startRequest.getInput();
-		String outputPath=startRequest.getOutput();
-		UUID presetID= startRequest.getPreset();
-		String jobName= startRequest.getJobName();
 
-		return wfsClient.transcode(inputPath, outputPath, presetID, jobName);
+	@Override
+	@PUT
+	@Path("/job/start/{TCstartRequest}")
+	@Produces("text/plain")
+	public UUID transcode(@PathParam("TCstartRequest") TCStartRequest startRequest) throws WfsClientException
+	{
+		String jobXml = startRequest.getPcpXml();
+		return wfsClient.transcode(jobXml);
 	}
 
 	@Override
@@ -73,13 +74,15 @@ public class TCRestServiceImpl implements TCRestService
 		return wfsClient.jobStatus(UUID.fromString(jobid));
 	}
 
-	@PUT
-	@Path("/preset/create")
-	@Consumes("application/xml")
-	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException
+	@Override
+	@GET
+	@Path("/job/{id}/finished")
+	@Produces("text/plain")
+	public Boolean jobFinished(@PathParam("id") String jobid)
 	{
-		Preset preset = presetElement.getValue();
-		return wfsClient.createPreset(preset);
+		JobStatus status = jobStatus(jobid);
+
+		return status == status.COMPLETED || status == status.COMPLETED || status == status.FATAL;
 	}
 
 	@Override
@@ -92,14 +95,12 @@ public class TCRestServiceImpl implements TCRestService
 	}
 
 	@Override
-	@GET
-	@Path("/job/{id}/finished")
-	@Produces("text/plain")
-	public Boolean jobFinished(@PathParam("id") String jobid)
+	@POST
+	@Path("/job/build/")
+	@Produces("application/xml")
+	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException
 	{
-		JobStatus status = jobStatus(jobid);
-		
-		return status == status.COMPLETED || status == status.COMPLETED || status == status.FATAL; 
+		String job = jobBuilder.buildJobForTranscode(buildJobXMLRequest.getPackageID());
+		return job;
 	}
-
 }

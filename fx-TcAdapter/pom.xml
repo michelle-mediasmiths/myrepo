@@ -22,11 +22,18 @@
 		</dependency>
 		<!-- end test dependencies -->
 
+		<!-- foxtel solution dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-CarbonWFSClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-MayamClient</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+		</dependency>
+		<!-- end foxtel solution dependencies -->
 
 		<!-- commons io -->
 		<dependency>

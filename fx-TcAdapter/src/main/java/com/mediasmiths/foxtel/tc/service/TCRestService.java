@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -24,7 +25,9 @@ import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.datacontract.schemas._2004._07.rhozet.Preset;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
+import com.mediasmiths.mayam.MayamClientException;
 
 
 @Path("/tc")
@@ -35,9 +38,16 @@ public interface TCRestService
 	@Produces("text/plain")
 	public String ping();
 
+	
+	@POST
+	@Path("/job/build/")
+	@Produces("application/xml")
+	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException;
+	
 	@PUT
-	@Path("/job/start/{TCstartRequest}")
-	public UUID transcode(@PathParam("TCstartRequest") TCStartRequest startRequest) throws WfsClientException;
+	@Path("/job/start/")
+	@Produces("text/plain")
+	public UUID transcode(TCStartRequest startRequest) throws WfsClientException;
 	
 
 	@GET
@@ -60,18 +70,7 @@ public interface TCRestService
 	@Path("/job/{id}")
 	@Produces("application/xml")
 	public Job job(@PathParam("id") String jobid);
-	
-//	/**
-//	 * Creates the preset described by presetElement
-//	 * @param presetElement
-//	 * @return the id of the created preset
-//	 * @throws JAXBException 
-//	 */
-//	@PUT
-//	@Path("/preset/create")
-//	@Consumes("application/xml")
-//	public UUID createPreset(JAXBElement<Preset> presetElement) throws JAXBException;
-	
+
 	@GET
 	@Path("/preset")
 	@Produces("application/xml")
