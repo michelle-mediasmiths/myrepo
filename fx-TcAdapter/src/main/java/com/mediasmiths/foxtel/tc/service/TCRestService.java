@@ -24,6 +24,7 @@ import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.datacontract.schemas._2004._07.rhozet.Preset;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 
 
 @Path("/tc")
@@ -35,11 +36,8 @@ public interface TCRestService
 	public String ping();
 
 	@PUT
-	@Path("/job/start")
-	public UUID transcode(@QueryParam("jobname") String jobName,
-			@QueryParam("input") String inputPath,
-			@QueryParam("output") String ouputPath,
-			@QueryParam("preset") UUID presetName) throws WfsClientException;
+	@Path("/job/start/{TCstartRequest}")
+	public UUID transcode(@PathParam("TCstartRequest") TCStartRequest startRequest) throws WfsClientException;
 	
 
 	@GET

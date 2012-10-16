@@ -23,6 +23,7 @@ import org.datacontract.schemas._2004._07.rhozet.Preset;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 
 public class TCRestServiceImpl implements TCRestService
 {
@@ -40,17 +41,17 @@ public class TCRestServiceImpl implements TCRestService
 	{
 		return "ping";
 	}
-
+	
 	@Override
-	@PUT
-	@Path("/job/start")
-	public UUID transcode(
-			@QueryParam("jobname") String jobName,
-			@QueryParam("input") String inputPath,
-			@QueryParam("output") String ouputPath,
-			@QueryParam("preset") UUID presetID) throws WfsClientException
+	public UUID transcode(TCStartRequest startRequest) throws WfsClientException
 	{
-		return wfsClient.transcode(inputPath, ouputPath, presetID, jobName);
+		
+		String inputPath=startRequest.getInput();
+		String outputPath=startRequest.getOutput();
+		UUID presetID= startRequest.getPreset();
+		String jobName= startRequest.getJobName();
+
+		return wfsClient.transcode(inputPath, outputPath, presetID, jobName);
 	}
 
 	@Override
