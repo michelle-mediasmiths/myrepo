@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 import com.mediasmiths.foxtel.tc.JobBuilder;
+import com.mediasmiths.foxtel.tc.JobBuilderException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClientException;
@@ -98,9 +99,9 @@ public class TCRestServiceImpl implements TCRestService
 	@POST
 	@Path("/job/build/")
 	@Produces("application/xml")
-	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException
+	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException
 	{
-		String job = jobBuilder.buildJobForTranscode(buildJobXMLRequest.getPackageID());
+		String job = jobBuilder.buildJobForTxPackageTranscode(buildJobXMLRequest.getPackageID(), buildJobXMLRequest.getInputFile(), buildJobXMLRequest.getOutputFolder());
 		return job;
 	}
 }

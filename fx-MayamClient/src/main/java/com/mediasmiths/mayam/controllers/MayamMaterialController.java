@@ -369,7 +369,7 @@ public class MayamMaterialController {
 		return assetAttributes;
 	}
 	
-	public MaterialType getMaterial(String materialID){
+	public MaterialType getMaterial(String materialID){ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
 		AttributeMap attributes = getMaterialAttributes(materialID);
 		MaterialType material = new MaterialType();
 		
