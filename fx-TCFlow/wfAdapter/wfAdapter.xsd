@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
+
+  <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
+
+  <xs:element name="materialTransferForQCRequest" type="tns:materialTransferForQCRequest"/>
+
+  <xs:element name="materialTransferForQCResponse" type="tns:materialTransferForQCResponse"/>
+
+  <xs:complexType name="invokeIntalioQCFlow">
+    <xs:sequence>
+      <xs:element name="materialID" type="xs:string"/>
+      <xs:element name="forTXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForQCRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="materialID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForQCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

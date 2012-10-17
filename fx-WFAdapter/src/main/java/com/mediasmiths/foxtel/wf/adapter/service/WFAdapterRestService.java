@@ -33,6 +33,13 @@ public interface WFAdapterRestService
 	@Produces("application/xml")
 	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException;
 	
+	
+	@PUT
+	@Path("/tc/transferfortc")
+	@Produces("application/xml")
+	public String transferMaterialForTC(String materialID) throws MayamClientException;
+	
+	
 	/**
 	 * called to lookup the name of the qc profile that should be used for a given material 
 	 * 

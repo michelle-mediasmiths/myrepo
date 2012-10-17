@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/tc/transferfortc" ID="_CRLWYBhhEeKyaOfR4cyoLQ">
+  <rest:operation verb="GET" name="wfTranferForTC" ID="_CRLWZBhhEeKyaOfR4cyoLQ">
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="application/xml" ID="_CRLWZRhhEeKyaOfR4cyoLQ"/>
+  </rest:operation>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="materialid" headerDirection="request" contentType="text/xml" ID="_TS380BhhEeKyaOfR4cyoLQ"/>
+</rest:descriptor>
