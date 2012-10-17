@@ -22,9 +22,13 @@ public class JobBuilder
 
 	/**
 	 * 
-	 * Source | Options |Profile video audio dolbyEe downres | SD Stereo No n/a MAM-SD-12ST_GXF-SD-12ST SD Stereo + Descrete Surround Yes n/a MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE HD Stereo No No
-	 * MAM-HD-12ST_GXF-HD-12ST HD Stereo + Descrete Surround Yes No MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE HD Stereo No Yes MAM-HD-12ST_GXF-SD-12ST HD Stereo + Descrete Surround Yes Yes
-	 * MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
+	 * video audio dolbyEe downres profile 
+	 * SD Stereo No n/a MAM-SD-12ST_GXF-SD-12ST 
+	 * SD Stereo + Descrete Surround Yes n/a MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE 
+	 * HD Stereo No No  MAM-HD-12ST_GXF-HD-12ST 
+	 * HD Stereo + Descrete Surround Yes No MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE 
+	 * HD Stereo No Yes MAM-HD-12ST_GXF-SD-12ST 
+	 * HD Stereo + Descrete Surround Yes Yes MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
 	 * 
 	 */
 
@@ -105,12 +109,11 @@ public class JobBuilder
 		return pcp;
 	}
 
-	private String uncPathFor(String outputFolder)
+	private String uncPathFor(String path)
 	{
-		// assume output folder is of the form f:\path\to\file, we will produce \\localhost\f$\path\to\file
-		// i sincerely doubt this the right way to build these paths but this ought to do for the mean time
-		// might fall over once there are multiple carbon nodes
-		return "\\\\localhost\\" + outputFolder.substring(0, 1) + "$" + outputFolder.substring(2);
+		//assumes the path refers to a windows mapped drive pointing to \\foxtel\foxtel otherwise this has no chance of working
+		//TODO make this configurable etc
+		return "\\\\foxtel\\foxtel" + path.substring(2);
 	}
 
 	private String loadProfileForPackage(String packageID, TxProfile profile) throws JobBuilderException
