@@ -76,5 +76,11 @@ public interface TCRestService
 	@Path("/preset")
 	@Produces("application/xml")
 	public ArrayOfPreset listPresets();
+
+	@GET
+	@Path("/job/{id}/success")
+	@Produces("application/xml")
+	public Boolean jobSuccessful(String jobid);
+	
 	
 } 

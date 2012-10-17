@@ -104,4 +104,15 @@ public class TCRestServiceImpl implements TCRestService
 		String job = jobBuilder.buildJobForTxPackageTranscode(buildJobXMLRequest.getPackageID(), buildJobXMLRequest.getInputFile(), buildJobXMLRequest.getOutputFolder());
 		return job;
 	}
+	
+	@Override
+	@GET
+	@Path("/job/{id}/success")
+	@Produces("text/plain")
+	public Boolean jobSuccessful(@PathParam("id") String jobid)
+	{
+		JobStatus status = jobStatus(jobid);
+		return status == status.COMPLETED;
+	}
+	
 }
