@@ -33,6 +33,7 @@ import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 
@@ -76,6 +77,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -89,6 +91,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(EXISTING_MATERIAL)).thenReturn(new Boolean(true));
 		
 		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -118,6 +121,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(new Boolean(false));
 		
 		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 		}
 	
 	public PlaceholderMessage buildAddPackage (String packageID, String materialID, String titleID) throws DatatypeConfigurationException {

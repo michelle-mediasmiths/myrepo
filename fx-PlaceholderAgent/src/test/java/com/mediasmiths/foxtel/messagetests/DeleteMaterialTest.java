@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
@@ -65,6 +66,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -79,6 +81,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		
 		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -93,6 +96,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.MATERIAL_DOES_NOT_EXIST, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -107,6 +111,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 		
 		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	private PlaceholderMessage buildDeleteMaterial (boolean materialProtected, String titleID) {

@@ -14,6 +14,8 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.Actions;
@@ -38,8 +40,8 @@ import com.mediasmiths.mayam.validation.MayamValidator;
 
 public abstract class PlaceHolderMessageShortTest {
 
-	protected final PlaceholderMessageValidator validator;
-	protected final PlaceholderMessageProcessor processor;
+	protected PlaceholderMessageValidator validator;
+	protected PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
 	protected final MayamValidator mayamValidator = mock(MayamValidator.class);
 	protected final ChannelValidator channelValidator = new ChannelValidator() {
@@ -72,15 +74,18 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final static String UNKNOWN_CHANNEL_TAG = "UNKNOWN_CHANNEL_TAG";
 	protected final static String UNKOWN_CHANNEL_NAME = "UNKNOWN_CHANNEL_NAME";
 
-	protected final String receiptFolderPath;
+	protected String receiptFolderPath;
 	
 	protected final static GregorianCalendar JAN1st = new GregorianCalendar(
 			2000, 1, 1, 0, 0, 1);
 	protected final static GregorianCalendar JAN10th = new GregorianCalendar(
 			2000, 1, 10, 0, 0, 1);
 
-	public PlaceHolderMessageShortTest() throws JAXBException, SAXException, IOException {
-
+	public PlaceHolderMessageShortTest() {
+	}
+	
+	@Before
+	public void before() throws IOException, JAXBException, SAXException{
 		receiptFolderPath = Util.prepareTempFolder("RECEIPTS");
 		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
@@ -89,6 +94,11 @@ public abstract class PlaceHolderMessageShortTest {
 		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
 				unmarhsaller, mayamClient, "failure path", "receipt path",alert,alertRecipient);
 
+	}
+	
+	@After
+	public void after(){
+		Util.deleteFiles(receiptFolderPath);
 	}
 
 	protected File createTempXMLFile(PlaceholderMessage pm, String description)

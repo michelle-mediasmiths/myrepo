@@ -41,6 +41,7 @@ import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.HelperMethods;
 import com.mediasmiths.foxtel.placeholder.messagecreation.elementgenerators.MSTitleDescription;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -83,6 +84,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -94,6 +96,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile(message, "validCreateTitle");
 		assertEquals(MessageValidationResult.IS_VALID, 
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test(expected = MessageProcessingFailedException.class)
@@ -130,6 +133,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -150,6 +154,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		assertEquals(MessageValidationResult.UNKOWN_CHANNEL,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	/*@Test
