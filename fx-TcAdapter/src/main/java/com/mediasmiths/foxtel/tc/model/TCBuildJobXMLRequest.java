@@ -10,7 +10,7 @@ public class TCBuildJobXMLRequest
 	String inputFile;
 	String outputFolder;
 	
-	@XmlElement(name = "inputFile")
+	@XmlElement(name = "inputFile", required = true)
 	public String getInputFile()
 	{
 		return inputFile;
@@ -21,7 +21,7 @@ public class TCBuildJobXMLRequest
 		this.inputFile = inputFile;
 	}
 
-	@XmlElement(name = "outputFolder")
+	@XmlElement(name = "outputFolder", required = true)
 	public String getOutputFolder()
 	{
 		return outputFolder;
@@ -33,7 +33,7 @@ public class TCBuildJobXMLRequest
 	}
 
 	
-	@XmlElement(name="packageID")
+	@XmlElement(name="packageID", required = true)
 	public String getPackageID()
 	{
 		return packageID;
