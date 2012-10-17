@@ -22,6 +22,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -46,6 +47,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 
 		assertEquals(MessageValidationResult.IS_VALID,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -59,6 +61,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 
 		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -120,6 +123,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 		// try to call validation, expect a mayam client error
 		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	private PlaceholderMessage buildDeleteTitleRequest(boolean b, String titleID) {

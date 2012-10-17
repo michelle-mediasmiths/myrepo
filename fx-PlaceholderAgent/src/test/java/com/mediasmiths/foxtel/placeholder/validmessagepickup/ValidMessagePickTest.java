@@ -55,11 +55,13 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String filePath = getFilePath();
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
-		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn("/tmp/placeHolderTestData/"+RandomStringUtils.randomAlphabetic(30));
+		String receiptPath = "/tmp/placeHolderTestData/"+RandomStringUtils.randomAlphabetic(30);
+		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn(receiptPath);
 		mockValidCalls(message);
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));
 		
+		Util.deleteFiles(filePath,receiptPath);
 	}
 	
 	@Test
@@ -94,6 +96,8 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		logger.info("Looking for "+messageFile.getAbsolutePath());
 		assertFalse(messageFile.exists());
 		
+		Util.deleteFiles(messagePath,receiptPath,failurePath,archivePath);
+		
 	}
 	
 	
@@ -127,6 +131,8 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		File archiveFile = new File(archivePath + IOUtils.DIR_SEPARATOR + getFileName());
 		logger.info("Looking for "+archiveFile.getAbsolutePath());
 		assertTrue(archiveFile.exists());
+		
+		Util.deleteFiles(messagePath,receiptPath,failurePath,archivePath);
 	}
 	
 	

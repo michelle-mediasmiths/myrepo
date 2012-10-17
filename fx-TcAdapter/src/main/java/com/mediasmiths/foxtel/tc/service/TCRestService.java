@@ -80,7 +80,7 @@ public interface TCRestService
 	@GET
 	@Path("/job/{id}/success")
 	@Produces("application/xml")
-	public Boolean jobSuccessful(String jobid);
+	public Boolean jobSuccessful(@PathParam("id") String jobid);
 	
 	
 } 

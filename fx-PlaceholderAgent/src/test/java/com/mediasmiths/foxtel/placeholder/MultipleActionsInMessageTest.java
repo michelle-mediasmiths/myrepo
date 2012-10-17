@@ -15,6 +15,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 
 public class MultipleActionsInMessageTest extends PlaceHolderMessageShortTest{
 
@@ -37,6 +38,7 @@ public class MultipleActionsInMessageTest extends PlaceHolderMessageShortTest{
 		
 		//test that the correct validation result is returned
 		assertEquals(MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS,validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 }

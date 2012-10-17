@@ -17,6 +17,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 
 public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 
@@ -54,6 +55,7 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 		assertEquals(
 				MessageValidationResult.INVALID_MESSAGE_ID,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 }

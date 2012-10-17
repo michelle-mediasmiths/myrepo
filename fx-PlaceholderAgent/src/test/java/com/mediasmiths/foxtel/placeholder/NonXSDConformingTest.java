@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 
 public class NonXSDConformingTest extends PlaceHolderMessageShortTest{
 	
@@ -30,14 +31,14 @@ public class NonXSDConformingTest extends PlaceHolderMessageShortTest{
 	public void testNonXSDConformingFileFails() throws Exception{
 		
 		
-		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
-		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 
 		IOUtils.write(loremIpsum, new FileOutputStream(temp));		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 }

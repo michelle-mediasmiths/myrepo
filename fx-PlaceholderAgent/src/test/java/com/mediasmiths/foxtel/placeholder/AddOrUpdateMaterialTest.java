@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -43,6 +44,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -125,6 +127,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		assertEquals(
 				MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -141,6 +144,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		assertEquals(
 				MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -157,6 +161,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		assertEquals(
 				MessageValidationResult.MAYAM_CLIENT_ERROR,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 }

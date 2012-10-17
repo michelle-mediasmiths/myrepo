@@ -67,7 +67,8 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 		assertTrue(failFile.exists());
 		logger.info("Looking for " + messageFile.getAbsolutePath());
 		assertFalse(messageFile.exists());
-
+		
+		Util.deleteFiles(messagePath,receiptPath,failurePath,archivePath);
 	}
 
 	@Test
@@ -107,6 +108,8 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 		assertTrue(failFile.exists());
 		logger.info("Looking for " + messageFile.getAbsolutePath());
 		assertFalse(messageFile.exists());
+		
+		Util.deleteFiles(messagePath,receiptPath,failurePath,archivePath);
 	}
 
 }

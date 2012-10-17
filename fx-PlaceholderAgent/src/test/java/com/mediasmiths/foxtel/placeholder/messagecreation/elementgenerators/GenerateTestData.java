@@ -11,6 +11,7 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdateMaterial;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdatePackage;
@@ -20,9 +21,9 @@ public class GenerateTestData {
 	
 	private static Logger logger = Logger.getLogger(GenerateTestData.class);
 
-	private final int CREATE_TITLES_TO_GENERATE = 20;
-	private final int CREATE_MATERIALS_TO_GENERATE = 20;
-	private final int CREATE_PACKAGES_TO_GENERATE = 20;
+	private final int CREATE_TITLES_TO_GENERATE = 10;
+	private final int CREATE_MATERIALS_TO_GENERATE = 10;
+	private final int CREATE_PACKAGES_TO_GENERATE = 10;
 	
 	private final String DESTINATION="/tmp/placeHolderTestData";
 	
@@ -71,6 +72,8 @@ public class GenerateTestData {
 		logger.debug("writing placeholdermesage to "+path);
 		logger.trace("Message is: "+message);
 		writer.writeObjectToFile(message, path);
+		
+		Util.deleteFiles(path);
 	}
 	
 }

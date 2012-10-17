@@ -26,6 +26,7 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class PurgeTitleTest extends PlaceHolderMessageShortTest{
@@ -79,6 +80,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
@@ -93,6 +95,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 		when(mayamClient.titleExists(NOT_EXISTING_TITLE)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE, validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
@@ -107,6 +110,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 		
 		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
 				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	private PlaceholderMessage buildPurgeTitle(boolean b, String titleID) {
