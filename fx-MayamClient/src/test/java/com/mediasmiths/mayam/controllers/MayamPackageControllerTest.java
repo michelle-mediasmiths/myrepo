@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigInteger;
 
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.junit.Before;
@@ -28,6 +29,7 @@ import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
@@ -56,10 +58,10 @@ public class MayamPackageControllerTest {
 	 }
 	 
 	@Before
-	public void setup()
+	public void setup() throws DatatypeConfigurationException
 	{
 		client = mock(TasksClient.class);
-		controller = new MayamPackageController(client);
+		controller = new MayamPackageController(client, new DateUtil());
 		
 		txPackage = mock(PackageType.class);
 		when(txPackage.getClassification()).thenReturn(ClassificationEnumType.PG);

@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TCStartRequest
 {
-	@XmlElement(name="jobName")
+	@XmlElement(name="jobName", required = true)
 	public String getJobName()
 	{
 		return jobName;
@@ -20,7 +20,7 @@ public class TCStartRequest
 	String jobName;	
 	String pcpXml;
 	
-	@XmlElement(name="jobXml")
+	@XmlElement(name="jobXml", required = true)
 	public String getPcpXml()
 	{
 		return pcpXml;

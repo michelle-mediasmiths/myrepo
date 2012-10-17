@@ -21,9 +21,9 @@ public class TCAdapterSetup extends AbstractRESTGuiceSetup
 	public void addModules(List<Module> modules, PropertyFile config)
 	{
 		log.info("Adding modules");
+		modules.add(new MayamClientModule());
 		modules.add(new TCAdapterModule());
 		modules.add(new WfsClientModule());
-		modules.add(new MayamClientModule());
 
 	}
 

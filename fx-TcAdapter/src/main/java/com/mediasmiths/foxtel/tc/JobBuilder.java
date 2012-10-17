@@ -29,10 +29,11 @@ public class JobBuilder
 	 */
 
 	@Inject
-	public JobBuilder(MayamClient mayamClient){
-		this.mayamClient=mayamClient;
+	public JobBuilder(MayamClient mayamClient)
+	{
+		this.mayamClient = mayamClient;
 	}
-	
+
 	private final MayamClient mayamClient;
 
 	public enum TxProfile
@@ -58,25 +59,58 @@ public class JobBuilder
 	}
 
 	private final static String INPUT_FILE_PATH_PH = "INPUT_FILE_PATH";
+	private final static String FULL_UNC_INPUT_PATH_PH = "FULL_UNC_INPUT_PATH"; // TODO get unc paths properly
 	private final static String OUTPUT_FOLDER_PATH_PH = "OUTPUT_FOLDER_PATH";
+	private final static String FULL_UNC_OUTPUT_PATH_PH = "FULL_UNC_OUTPUT_PATH_PH";
 
-	public String buildJobForTxPackageTranscode(String packageID, String inputfile, String outputFolder) throws MayamClientException, JobBuilderException
+	public String buildJobForTxPackageTranscode(String packageID, String inputfile, String outputFolder)
+			throws MayamClientException,
+			JobBuilderException
 	{
 
-		log.info(String.format("Building job for tx package transcode packageId %s inputfile %s outputfolder %s", packageID, inputfile, outputFolder));
+		log.info(String.format(
+				"Building job for tx package transcode packageId %s inputfile %s outputfolder %s",
+				packageID,
+				inputfile,
+				outputFolder));
 		// fetch package and material information to determine profile
 		PackageType pack = mayamClient.getPackage(packageID);
 		MaterialType material = mayamClient.getMaterial(pack.getMaterialID());
-		
-		TxProfile profile = pickTxProfile(pack, material);
-		log.debug(String.format("Selected profile %s for packageId %s", profile.toString(), packageID));
+
+		TxProfile profile;
+
+		try
+		{
+			profile = pickTxProfile(pack, material);
+			log.debug(String.format("Selected profile %s for packageId %s", profile.toString(), packageID));
+		}
+		catch (Exception e)
+		{
+			// TODO: make this a severe and throw jobbuilderexception once we can persist stuff through mayam
+			log.info("exception picking profile for package " + packageID, e);
+			profile = TxProfile.MAM_HD_12ST_GXF_HD_12ST;
+		}
 
 		String pcp = loadProfileForPackage(packageID, profile);
-		
-		pcp.replace(INPUT_FILE_PATH_PH, inputfile);
-		pcp.replace(OUTPUT_FOLDER_PATH_PH, outputFolder);
-		
+
+		pcp = pcp.replace(INPUT_FILE_PATH_PH, inputfile);
+		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, outputFolder);
+
+		String uncInputPath = uncPathFor(inputfile);
+		String uncOutputPath = uncPathFor(outputFolder);
+
+		pcp = pcp.replace(FULL_UNC_INPUT_PATH_PH, uncInputPath);
+		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);
+
 		return pcp;
+	}
+
+	private String uncPathFor(String outputFolder)
+	{
+		// assume output folder is of the form f:\path\to\file, we will produce \\localhost\f$\path\to\file
+		// i sincerely doubt this the right way to build these paths but this ought to do for the mean time
+		// might fall over once there are multiple carbon nodes
+		return "\\\\localhost\\" + outputFolder.substring(0, 1) + "$" + outputFolder.substring(2);
 	}
 
 	private String loadProfileForPackage(String packageID, TxProfile profile) throws JobBuilderException
@@ -90,7 +124,7 @@ public class JobBuilder
 		{
 			String message = String.format("Error fetching profile %s for package %s", profile, packageID);
 			log.error(message, e);
-			throw new JobBuilderException(message,e);
+			throw new JobBuilderException(message, e);
 		}
 		return pcp;
 	}
