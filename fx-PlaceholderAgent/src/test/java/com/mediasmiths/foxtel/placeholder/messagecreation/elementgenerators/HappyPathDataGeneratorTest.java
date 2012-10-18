@@ -41,6 +41,9 @@ public class HappyPathDataGeneratorTest
 		senderID = randomValue;
 		fileName = "noQA";
 		qualityAssurance = false;
+		
+		new File("/tmp/placeHolderTestData/happyPath/").mkdirs();
+		
 		CreateTitleXml(messageID, senderID, fileName);
 		CreateMaterialXml(messageID, senderID, fileName, qualityAssurance);
 		CreatePackageXml(senderID, fileName);
