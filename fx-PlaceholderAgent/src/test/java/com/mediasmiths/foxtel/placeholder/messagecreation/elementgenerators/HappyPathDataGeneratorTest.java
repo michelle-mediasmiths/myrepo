@@ -24,6 +24,8 @@ public class HappyPathDataGeneratorTest
 	public void happyPathDataGeneratorTest()
 	{
 
+		new File("/tmp/placeHolderTestData/happyPath/").mkdirs();
+		
 		String randomValue = RandomStringUtils.randomAlphabetic(6);
 		// Creaitng QA present Test
 		// Identify ID's and fileName
@@ -41,9 +43,7 @@ public class HappyPathDataGeneratorTest
 		senderID = randomValue;
 		fileName = "noQA";
 		qualityAssurance = false;
-		
-		new File("/tmp/placeHolderTestData/happyPath/").mkdirs();
-		
+	
 		CreateTitleXml(messageID, senderID, fileName);
 		CreateMaterialXml(messageID, senderID, fileName, qualityAssurance);
 		CreatePackageXml(senderID, fileName);
