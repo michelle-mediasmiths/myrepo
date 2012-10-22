@@ -146,7 +146,13 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode purgeTitle(PurgeTitle title)
 	{
-		return titleController.purgeTitle(title);
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		try {
+			returnCode =  titleController.purgeTitle(title);
+		} catch (MayamClientException e) {
+			returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
+		}
+		return returnCode;
 	}
 
 	/*
@@ -192,7 +198,13 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
-		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		try {
+			returnCode = materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+		} catch (MayamClientException e) {
+			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+		}
+		return returnCode;
 	}
 
 	/*
@@ -236,7 +248,13 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		try {
+			returnCode = packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+		} catch (MayamClientException e) {
+			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+		}
+		return returnCode;
 	}
 
 	/**
