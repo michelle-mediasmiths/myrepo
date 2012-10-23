@@ -55,7 +55,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="property: ${task.property.value.dataObject}">
+								<tr th:each="property: ${task.property.value.dataObject}" th:if="${property.value.value != null and not property.value.value.equals('')}" >
 									<td th:text="${property.name.value}">Name</td>
 									<td th:text="${property.value.value}">Value</td>
 								</tr>
@@ -78,8 +78,8 @@
 	<script>
 			$(document).ready(function() { 
 				$(".tasksTable").tablesorter( {
-					sortList: [[2,0], [1,0]],
-					headers: {6: { sorter: false} }
+					sortList: [[0,0]],
+					headers: {2: { sorter: false} }
 				});
 			} 
 		);
