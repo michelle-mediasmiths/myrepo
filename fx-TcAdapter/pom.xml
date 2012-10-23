@@ -55,6 +55,12 @@
 			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>${stdlib.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.std.guice</groupId>
+			<artifactId>stdlib-guice-thymeleaf</artifactId>
+			<version>${stdlib.version}</version>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>com.mediasmiths.std.dexter</groupId>

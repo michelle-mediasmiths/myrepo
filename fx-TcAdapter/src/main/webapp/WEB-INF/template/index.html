@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<title>Mediasmiths Transcode Adapter</title>
+		<link th:substituteby="includes :: htmlhead" />
+	</head>
+    <body th:with="page='home'">
+    	<span th:substituteby="includes :: navbar" />
+
+        <div class="container">
+        
+            <div class="hero-unit">
+                <h1><img style="/*height: 1.5em; width: 1.5em*/" th:src="@{/img/logo.png}" /></h1>
+                <p>Transcode adapter</p>
+                <p><a class="btn btn-primary btn-large" th:href="@{/jobs.html}">List Jobs &raquo;</a>
+                   <a class="btn btn-primary btn-large"  th:href="@{/build.html}">Build Job &raquo;</a>
+                   <a class="btn btn-primary btn-large"  th:href="@{/start.html}">Start Job &raquo;</a>
+               </p>
+            </div>
+ 
+ 			<div th:fragment="info">
+			<h1>Status<a th:href="@{/}"><i class="icon-refresh" /></a></h1>
+				
+ 			<dl class="dl-horizontal" th:fragment="properties">
+ 					<dt>Active Jobs</dt><dd th:text="${dashboard.activeJobCount}">Active Jobs</dd>
+					<dt>Completed Jobs</dt><dd th:text="${dashboard.completedJobCount}">Completed Jobs</dd>
+					<dt>Failed Jobs</dt><dd th:text="${dashboard.failedJobCount}">Failed Jobs</dd>
+					<dt>Paused Jobs</dt><dd th:text="${dashboard.pausedJobCount}">Paused Jobs</dd>
+					<dt>Queued Jobs</dt><dd th:text="${dashboard.queuedJobCount}">Queued Jobs</dd>
+					<dt>Total Jobs</dt><dd th:text="${dashboard.totalJobCount}">Total Jobs</dd>
+					<dt>Transcode Started</dt><dd th:text="${dashboard.transcodeStartedTaskCount}">Transcode Started</dd>
+					
+				</dl>
+			</div>
+			
+            <footer th:substituteby="includes :: footer" />
+        </div> <!-- /container -->
+
+		<span th:substituteby="includes :: htmlfoot" />
+    </body>
+</html>

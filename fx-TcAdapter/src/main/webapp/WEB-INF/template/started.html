@@ -1,0 +1,23 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<title>Job Started</title>
+		<link th:substituteby="includes :: htmlhead" />
+	</head>
+    <body>
+    	<span th:substituteby="includes :: navbar" />
+
+        <div class="container tablesorter">
+			<h1>Started Job</h1>
+
+        	<a th:href="@{'/job/' + ${jobid}}" th:text="${jobid}">jobid</a>
+
+            <footer th:substituteby="includes :: footer" />
+        </div> <!-- /container -->
+
+		<span th:substituteby="includes :: htmlfoot" />
+    </body>
+</html>

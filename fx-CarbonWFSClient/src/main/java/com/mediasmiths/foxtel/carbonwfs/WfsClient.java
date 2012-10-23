@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.carbonwfs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.List;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBElement;
@@ -13,6 +14,7 @@ import org.apache.commons.codec.EncoderException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
+import org.datacontract.schemas._2004._07.rhozet.Dashboard;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 import org.datacontract.schemas._2004._07.rhozet.Preset;
@@ -26,6 +28,7 @@ import org.jdom2.xpath.XPathExpression;
 import org.jdom2.xpath.XPathFactory;
 
 import com.google.inject.Inject;
+import com.microsoft.schemas._2003._10.serialization.arrays.ArrayOfguid;
 import com.rhozet.rhozet_services_iwfcjmservices.IWfcJmServices;
 
 public class WfsClient
@@ -40,7 +43,7 @@ public class WfsClient
 	public Job getJob(UUID jobid)
 	{
 		log.info("Requesting status of job " + jobid.toString());
-		Job job = service.getJob(jobid.toString(), new Boolean(false));
+		Job job = service.getJob(jobid.toString(), new Boolean(true));
 		return job;
 	}
 
@@ -69,6 +72,7 @@ public class WfsClient
 		}
 		
 		Job j = service.queueJobXML(pcpxml);
+		
 		log.info(String.format("job %s created", j.getGuid()));
 		return UUID.fromString(j.getGuid());
 	}
@@ -194,6 +198,36 @@ public class WfsClient
 	public ArrayOfPreset listPresets()
 	{
 		return service.getPresetList(Long.valueOf(0l));
+	}
+
+	/**
+	 * updates the priority of a job
+	 * @param jobid
+	 * @param priority
+	 */
+	public void updatejobPriority(UUID jobid, Integer priority) {
+		
+		log.info(String.format("updating the priority of job %s to %n", jobid, priority));
+		
+		if(priority.intValue() < 1 || priority.intValue() > 10){
+			log.warn("Priority is outside of the expected range");
+		}
+		
+		ArrayOfguid jobGUids = new ArrayOfguid();
+		jobGUids.getGuid().add(jobid.toString());
+		service.updateJobPriority(jobGUids, priority);
+	}
+
+	public List<Job> listJobs() {
+		log.info("listing jobs");
+		
+		return service.getJobPage(0, 1000, Long.valueOf(0l)).getJob();
+	}
+
+	public Dashboard getDashBoard() {
+		log.info("getting jobs dashboard");
+		return service.getJobDashboard();
+			
 	}
 
 }

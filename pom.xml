@@ -50,7 +50,7 @@
 		<commons-io.version>2.4</commons-io.version>
 		<filewatcher.version>0.2</filewatcher.version>
 		<worklists.version>0.9.9.9</worklists.version>
-		<stdlib.version>3.0.10</stdlib.version>
+		<stdlib.version>3.1.5</stdlib.version>
 	</properties>
 
 	<build>

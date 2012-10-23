@@ -1,0 +1,56 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <title>Transcode Jobs Listing</title>
+        <link th:substituteby="includes :: htmlhead" />
+    </head>
+    <body th:with="page='instances'">
+    	<span th:substituteby="includes :: navbar" />
+
+        <div class="container tablesorter">
+        	<h1>Job listing<a th:href="@{jobs.html}"><i class="icon-refresh" /></a></h1>
+			<p>Jobs</p>
+			
+			<table id="jobsTable" class="table table-striped tablesorter">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Status</th>
+						<th>Priority</th>
+						<th>Started</th>
+						<th>Last Updated</th>
+						<th>Details</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="job: ${jobs}">
+						<td th:text="${job.name.value}">Name</td>
+						<td th:text="${job.status}">Status</td>
+						<td th:text="${job.priority}">Priority</td>
+						<td th:text="${#dates.format(jobDates.get(job.started), 'dd/MMM/yyyy HH:mm, z')}">Started</td>
+						<td th:text="${#dates.format(jobDates.get(job.lastUpdate), 'dd/MMM/yyyy HH:mm, z')}">Last Updated</td>	
+						<td><a th:href="@{'job/'+${job.guid}}"><i class="icon-info-sign"></i> Details</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+            <footer th:substituteby="includes :: footer" />
+        </div> <!-- /container -->
+
+		<span th:substituteby="includes :: htmlfoot" />
+		
+		<script type="text/javascript" th:src="@{/js/jquery.tablesorter.min.js}"></script> 
+        <script>
+			$(document).ready(function() { 
+				$("#jobsTable").tablesorter( {
+					sortList: [[2,0], [1,0]],
+					headers: {6: { sorter: false} }
+				});
+			} 
+		);
+        </script>
+    </body>
+</html>

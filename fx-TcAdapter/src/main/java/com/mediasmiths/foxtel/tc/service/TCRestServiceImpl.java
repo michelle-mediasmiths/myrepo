@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.tc.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -53,7 +54,16 @@ public class TCRestServiceImpl implements TCRestService
 	public UUID transcode(@PathParam("TCstartRequest") TCStartRequest startRequest) throws WfsClientException
 	{
 		String jobXml = startRequest.getPcpXml();
-		return wfsClient.transcode(jobXml);
+		log.trace("trying to create job from xml " + jobXml);
+		UUID jobid =  wfsClient.transcode(jobXml);
+		
+		//dont yet know how to set the priority as part of the jobXML
+		wfsClient.updatejobPriority(jobid, startRequest.getPriority());
+		
+		
+		
+		return jobid;
+		
 	}
 
 	@Override
@@ -113,6 +123,15 @@ public class TCRestServiceImpl implements TCRestService
 	{
 		JobStatus status = jobStatus(jobid);
 		return status == status.COMPLETED;
+	}
+
+	@Override
+	@POST
+	@Path("/jobs/")
+	@Produces("application/xml")
+	public List<Job> listJobs() {
+		log.debug("listing jobs");		
+		return wfsClient.listJobs();	
 	}
 	
 }

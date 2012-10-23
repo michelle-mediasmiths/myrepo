@@ -4,34 +4,23 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<description>Foxtel Transcode Adapter</description>
 	<display-name>fx-TcAdapter</display-name>
+
+	<!-- REST services -->
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
+	<filter>
+        <filter-name>resteasy</filter-name>
+        <filter-class>com.mediasmiths.std.guice.web.rest.resteasy.ResteasyDispatcher</filter-class>
+    </filter>
 
-	<servlet>
-		<servlet-name>Resteasy</servlet-name>
-		<servlet-class>com.mediasmiths.std.guice.web.rest.resteasy.GuiceRestEasyDispatcher</servlet-class>
-	</servlet>
-
-	<context-param>
-		<param-name>resteasy.scan</param-name>
-		<param-value>false</param-value>
-	</context-param>
-
-	<context-param>
-		<param-name>resteasy.servlet.mapping.prefix</param-name>
-		<param-value>/rest</param-value>
-	</context-param>
-
-	<servlet-mapping>
-		<servlet-name>Resteasy</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-
-	
-
+    <filter-mapping>
+        <filter-name>resteasy</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 	<!-- Generic Config -->
-
+	
 	<session-config>
 		<!-- Default to 5 minute session timeouts -->
 		<session-timeout>5</session-timeout>
@@ -45,5 +34,6 @@
 		<extension>xsd</extension>
 		<mime-type>text/xml</mime-type>
 	</mime-mapping>
+
 
 </web-app>

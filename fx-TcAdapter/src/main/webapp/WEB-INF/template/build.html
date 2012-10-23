@@ -1,0 +1,45 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<title>Job Building</title>
+		<link th:substituteby="includes :: htmlhead" />
+		<link th:fragment="htmlhead" rel="stylesheet" th:href="@{/css/chosen.css}" />
+	</head>
+    <body th:with="page='build'">
+    	<span th:substituteby="includes :: navbar" />
+
+        <div class="container tablesorter">
+        	<h1>Build Job</h1>
+			<p>Provide the required data to preview pcp xml</p>
+			
+			<form method="POST" action="build.html" class="form-horizontal" autocomplete="on">
+				<label>PackageID</label>
+				<input type="text" name="packageID" value="" placeholder="ID of TX-Version\Package to create" /><br />
+				
+				<label>Input File</label>
+				<input type="text" name="inputFile" value="" placeholder="Windows style path to material" /><br />
+				
+				<label>Output Folder</label>
+				<input type="text" name="outputFolder" value="" placeholder="Windows style path to desired output folder" /><br />
+				
+				<button type="submit" class="btn">Build</button>
+			</form>
+
+            <footer th:substituteby="includes :: footer" />
+        </div> <!-- /container -->
+
+		<span th:substituteby="includes :: htmlfoot" />
+
+		<script type="text/javascript" th:src="@{/js/chosen.jquery.min.js}"></script> 
+        <script>
+			$(document).ready(function() { 
+				$(".chzn-select").chosen();
+			} 
+		);
+		</script>		
+
+    </body>
+</html>

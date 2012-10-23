@@ -1,0 +1,88 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+<title>Job Information</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container tablesorter">
+		<div th:fragment="info">
+			<h1>Job Information <a th:href="@{'/job/' + ${job.guid}}"><i class="icon-refresh" /></a></h1>
+
+			<dl class="dl-horizontal" th:fragment="properties">
+				<dt>Name</dt>
+				<dd th:text="${job.name.value}">name</dd>
+				<dt>Guid</dt>
+				<dd th:text="${job.guid}">guid</dd>
+				<dt>Started</dt>
+				<dd th:text="${#dates.format(started, 'dd/MMM/yyyy HH:mm, z')}">started</dd>
+				<dt>Last Updated</dt>
+				<dd th:text="${#dates.format(updated, 'dd/MMM/yyyy HH:mm, z')}">updated</dd>
+				<dt>Priority</dt>
+				<dd th:text="${job.priority}">priority</dd>
+				<dt>Status</dt>
+				<dd th:text="${job.status}">status</dd>
+				<dt>Type</dt>
+				<dd th:text="${job.type}">type</dd>
+
+			</dl>
+
+			<h2>Tasks</h2>
+
+			<dd th:each="task: ${job.task.value.task}">
+
+				<dl class="dl-horizontal" th:fragment="properties">
+					<dt>Type</dt>
+					<dd th:text="${task.taskType}">type</dd>
+					<dt>Status</dt>
+					<dd th:text="${task.taskStatus}">status</dd>
+					<dt>Progress</dt>
+					<dd th:text="${task.progress}">progress</dd>
+					<dt>Properties</dt>
+					<dd>
+						<table class="table table-striped tablesorter tasksTable">
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="property: ${task.property.value.dataObject}">
+									<td th:text="${property.name.value}">Name</td>
+									<td th:text="${property.value.value}">Value</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+
+			</dd>
+		</div>
+
+		<footer th:substituteby="includes :: footer" />
+	</div>
+	<!-- /container -->
+
+	<span th:substituteby="includes :: htmlfoot" />
+
+	<script type="text/javascript"
+		th:src="@{/js/jquery.tablesorter.min.js}"></script>
+	<script>
+			$(document).ready(function() { 
+				$(".tasksTable").tablesorter( {
+					sortList: [[2,0], [1,0]],
+					headers: {6: { sorter: false} }
+				});
+			} 
+		);
+        </script>
+</body>
+</html>

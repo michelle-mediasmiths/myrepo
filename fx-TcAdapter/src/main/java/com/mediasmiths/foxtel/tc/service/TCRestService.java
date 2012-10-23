@@ -64,6 +64,12 @@ public interface TCRestService
 	public Boolean jobFinished(@PathParam("id") String jobid);
 
 	
+	@POST
+	@Path("/jobs/")
+	@Produces("application/xml")
+	public List<Job> listJobs();
+	
+	
 	/**
 	 * Gets a specific transcode job
 	 */
