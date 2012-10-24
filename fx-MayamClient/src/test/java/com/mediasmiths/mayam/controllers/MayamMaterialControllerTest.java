@@ -31,7 +31,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamMaterialControllerTest {
 
@@ -272,22 +271,14 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		try {
-			controller.deleteMaterial("materialID");
-			fail();
-		} catch (MayamClientException e) {
-			assert(true);
-		}
+		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
+		assertEquals(returnCode, MayamClientErrorCode.MATERIAL_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deleteMaterialSuccess() 
 	{
-		try {
-			MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
-			assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
-		} catch (MayamClientException e) {
-			fail();
-		}
+		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
+		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

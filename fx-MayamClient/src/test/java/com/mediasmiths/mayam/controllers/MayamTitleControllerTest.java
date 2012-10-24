@@ -29,7 +29,6 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
-import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamTitleControllerTest {
 
@@ -318,33 +317,21 @@ public class MayamTitleControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		try {
-			controller.purgeTitle(mock(PurgeTitle.class));
-			fail();
-		} catch (MayamClientException e) {
-			assert(true);
-		}
+		MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
+		assertEquals(returnCode, MayamClientErrorCode.TITLE_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deleteTitleNull() 
 	{
-		try {
-			MayamClientErrorCode returnCode = controller.purgeTitle(null);
-			assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
-		} catch (MayamClientException e) {
-			fail();
-		}
+		MayamClientErrorCode returnCode = controller.purgeTitle(null);
+		assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
 	}
 	
 	@Test
 	public void deletePackageSuccess() 
 	{
-		try {
-			MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
-			assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
-		} catch (MayamClientException e) {
-			fail();
-		}
+		MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
+		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }
