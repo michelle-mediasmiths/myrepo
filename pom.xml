@@ -42,7 +42,8 @@
 		<module>fx-MuleClient</module>
 		<module>fx-CarbonWFSClient</module>
     	<module>fx-WFAdapter</module>
-  </modules>
+    	<module>fx-MqClient</module>
+	</modules>
 
 	<properties>
 		<junit.version>4.10</junit.version>
