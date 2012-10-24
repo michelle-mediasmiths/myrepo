@@ -24,7 +24,7 @@ public class ItemCreationListener
 				    //If the Item was created and the Master message had the Compile flag set, 
 					//the WFE will add the Item to the Compliance Logging Worklist
 					AttributeMap messageAttributes = msg.getSubject();
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 						
 					//TODO: Need to confirm check for already existing asset
 					if (assetID == null || assetID.equals(""))

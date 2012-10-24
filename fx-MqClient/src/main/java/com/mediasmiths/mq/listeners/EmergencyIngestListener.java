@@ -26,7 +26,7 @@ public class EmergencyIngestListener
 					// If not then create placeholder for it
 					// How do we check if the content already exists if we dont have an ID for it?
 					
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 					
 					if (assetID == null || assetID.equals(""))
 					{			

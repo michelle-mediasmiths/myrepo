@@ -31,7 +31,7 @@ public class SegmentationCompleteListener
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							client.updateTask(messageAttributes);
 							
-							String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.TX_DELIVERY);
 							AttributeMap newTask = client.getTask(taskID);

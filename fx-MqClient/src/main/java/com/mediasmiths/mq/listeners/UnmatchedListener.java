@@ -36,7 +36,7 @@ public class UnmatchedListener
 					
 	//						Add to purge candidate list with expiry date of 30 days
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							String assetID = messageAttributes.getAttribute(Attribute.ASSET_GUID);
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
 							
 							AttributeMap newTask = client.getTask(taskID);
