@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -171,7 +172,7 @@ public class MaterialFolderWatcherTest {
 		toTest.setContinueWatching(false);
 
 		// check results
-		assertTrue(queue.size() == 4);
+		assertEquals(4,queue.size());
 		assertTrue(queue.contains(xml1.getAbsolutePath()));
 		assertTrue(queue.contains(xml2.getAbsolutePath()));
 		assertTrue(queue.contains(mxf1.getAbsolutePath()));

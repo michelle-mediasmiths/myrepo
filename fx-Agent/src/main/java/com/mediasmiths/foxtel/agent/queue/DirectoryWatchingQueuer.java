@@ -5,6 +5,7 @@ import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.WatchEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +39,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	}
 
 	@Override
-	public void newFileCheck(Path path) {
+	public void onFileArrival(Path path) {
 		File file = path.toFile();
 		
 		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));

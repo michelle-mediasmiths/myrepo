@@ -26,9 +26,9 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 	}
 	
 	@Override
-	public void newFileCheck(Path path) {
+	public void onFileArrival(Path path) {
 		File file = path.toFile();
-		
+		 
 		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));
 		
 		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
