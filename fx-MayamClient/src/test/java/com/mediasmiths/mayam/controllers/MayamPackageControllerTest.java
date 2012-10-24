@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -32,6 +33,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamPackageControllerTest {
 
@@ -248,9 +250,29 @@ public class MayamPackageControllerTest {
 	}
 	
 	@Test
-	public void deletePackage() 
+	public void deletePackageFail() 
 	{
-		MayamClientErrorCode returnCode = controller.deletePackage("Package ID");
-		assertEquals(MayamClientErrorCode.NOT_IMPLEMENTED, returnCode);
+		try {
+			doThrow(mock(RemoteException.class)).when(client).deleteAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString());
+		} catch (RemoteException e) {
+			fail();
+		}
+		try {
+			controller.deletePackage("packageID");
+			fail();
+		} catch (MayamClientException e) {
+			assert(true);
+		}
+	}
+	
+	@Test
+	public void deletePackageSuccess() 
+	{
+		try {
+			MayamClientErrorCode returnCode = controller.deletePackage("packageID");
+			assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		} catch (MayamClientException e) {
+			fail();
+		}
 	}
 }

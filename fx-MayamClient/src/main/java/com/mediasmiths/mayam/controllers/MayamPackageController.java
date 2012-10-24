@@ -23,6 +23,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -226,11 +227,24 @@ public class MayamPackageController
 		}
 		return returnCode;
 	}
+<<<<<<< HEAD
 
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		// TODO: How to delete an asset from Mayam?
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
+=======
+	
+	public MayamClientErrorCode deletePackage(String presentationID) throws MayamClientException
+	{
+		try {
+			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+		} catch (RemoteException e) {
+			log.error("Error deleting package : "+ presentationID);
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_DELETE_FAILED);
+		}
+		return MayamClientErrorCode.SUCCESS;
+>>>>>>> Adding asset and task deletion along with updated may am lib code
 	}
 
 	public boolean packageExists(String presentationID)

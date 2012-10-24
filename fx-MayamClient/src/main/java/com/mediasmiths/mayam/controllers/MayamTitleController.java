@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
+import org.apache.log4j.Logger;
+
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
@@ -14,11 +16,13 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTitleController {
 	private final TasksClient client;
+	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 	
 	@Inject
 	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
@@ -328,10 +332,21 @@ public class MayamTitleController {
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode purgeTitle(PurgeTitle title)
+	public MayamClientErrorCode purgeTitle(PurgeTitle title) throws MayamClientException
 	{
-		//TODO: How to delete an asset in Mayam?
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		if (title == null) {
+			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
+		}
+		else {
+			try {
+				client.deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+			} catch (RemoteException e) {
+				log.error("Error deleting title : "+ title.getTitleID());
+				throw new MayamClientException(MayamClientErrorCode.TITLE_DELETE_FAILED);
+			}
+		}
+		return returnCode;
 	}
 
 	public boolean titleExists(String titleID) {

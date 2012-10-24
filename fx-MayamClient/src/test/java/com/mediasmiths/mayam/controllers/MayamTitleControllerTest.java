@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,6 +29,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamTitleControllerTest {
 
@@ -309,9 +311,40 @@ public class MayamTitleControllerTest {
 	}
 	
 	@Test
-	public void deleteTitle() 
+	public void deleteTitleFail() 
 	{
-		MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
-		assertEquals(MayamClientErrorCode.NOT_IMPLEMENTED, returnCode);
+		try {
+			doThrow(mock(RemoteException.class)).when(client).deleteAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString());
+		} catch (RemoteException e) {
+			fail();
+		}
+		try {
+			controller.purgeTitle(mock(PurgeTitle.class));
+			fail();
+		} catch (MayamClientException e) {
+			assert(true);
+		}
+	}
+	
+	@Test
+	public void deleteTitleNull() 
+	{
+		try {
+			MayamClientErrorCode returnCode = controller.purgeTitle(null);
+			assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
+		} catch (MayamClientException e) {
+			fail();
+		}
+	}
+	
+	@Test
+	public void deletePackageSuccess() 
+	{
+		try {
+			MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
+			assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		} catch (MayamClientException e) {
+			fail();
+		}
 	}
 }

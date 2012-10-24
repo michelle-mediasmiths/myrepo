@@ -11,8 +11,6 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -46,8 +44,6 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.validation.MayamValidator;
-
-
 
 public class MayamClientImpl implements MayamClient
 {
@@ -144,15 +140,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#purgeTitle(au.com.foxtel.cf.mam.pms.PurgeTitle)
 	 */
 	@Override
-	public MayamClientErrorCode purgeTitle(PurgeTitle title)
+	public MayamClientErrorCode purgeTitle(PurgeTitle title) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
-			returnCode =  titleController.purgeTitle(title);
-		} catch (MayamClientException e) {
-			returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
-		}
-		return returnCode;
+		return titleController.purgeTitle(title);
 	}
 
 	/*
@@ -196,15 +186,9 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
-			returnCode = materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
-		} catch (MayamClientException e) {
-			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
-		}
-		return returnCode;
+		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
 	}
 
 	/*
@@ -246,15 +230,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#purgePackage()
 	 */
 	@Override
-	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
+	public MayamClientErrorCode deletePackage(DeletePackage deletePackage) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
-			returnCode = packageController.deletePackage(deletePackage.getPackage().getPresentationID());
-		} catch (MayamClientException e) {
-			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
-		}
-		return returnCode;
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
 	}
 
 	/**

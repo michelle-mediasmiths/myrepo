@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -36,9 +37,15 @@ public class MayamMaterialController
 
 	private final TasksClient client;
 	private final DateUtil dateUtil;
+<<<<<<< HEAD
 
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 
+=======
+	
+	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
+	
+>>>>>>> Adding asset and task deletion along with updated may am lib code
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil)
 	{
@@ -508,10 +515,22 @@ public class MayamMaterialController
 		return material;
 
 	}
+<<<<<<< HEAD
 
 	public MayamClientErrorCode deleteMaterial(String materialID)
 	{
 		// TODO Find out how to delete assets in Mayam
 		return MayamClientErrorCode.NOT_IMPLEMENTED;
+=======
+	
+	public MayamClientErrorCode deleteMaterial(String materialID) throws MayamClientException {
+		try {
+			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+		} catch (RemoteException e) {
+			log.error("Error deleting material : "+ materialID);
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_DELETE_FAILED);
+		}
+		return MayamClientErrorCode.SUCCESS;
+>>>>>>> Adding asset and task deletion along with updated may am lib code
 	}
 }

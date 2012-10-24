@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -17,6 +19,7 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTaskController {
 	private final TasksClient client;
+	private final Logger log = Logger.getLogger(MayamPackageController.class);
 	
 	@Inject
 	public MayamTaskController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
@@ -61,10 +64,15 @@ public class MayamTaskController {
 		return taskID;
 	}
 	
-	public MayamClientErrorCode deleteTask(long taskID )
+	public MayamClientErrorCode deleteTask(long taskID ) throws MayamClientException
 	{
-
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		try {
+			client.deleteTask(taskID);
+		} catch (RemoteException e) {
+			log.error("Error deleting task : "+ taskID);
+			throw new MayamClientException(MayamClientErrorCode.TASK_DELETE_FAILED);
+		}
+		return MayamClientErrorCode.SUCCESS;
 	}
 
 }
