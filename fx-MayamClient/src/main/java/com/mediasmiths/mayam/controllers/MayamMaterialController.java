@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -508,10 +509,15 @@ public class MayamMaterialController
 		return material;
 
 	}
-
-	public MayamClientErrorCode deleteMaterial(String materialID)
-	{
-		// TODO Find out how to delete assets in Mayam
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+	
+	public MayamClientErrorCode deleteMaterial(String materialID) {
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		try {
+			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+		} catch (RemoteException e) {
+			log.error("Error deleting material : "+ materialID);
+			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+		}
+		return returnCode;
 	}
 }

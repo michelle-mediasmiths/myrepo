@@ -17,7 +17,6 @@ import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 
-
 public class MayamClientModule extends AbstractModule
 {
 

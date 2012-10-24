@@ -3,10 +3,6 @@ package com.mediasmiths.mayam.controllers;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
@@ -23,6 +19,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -229,8 +226,14 @@ public class MayamPackageController
 
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
-		// TODO: How to delete an asset from Mayam?
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
+		try {
+			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+		} catch (RemoteException e) {
+			log.error("Error deleting package : "+ presentationID);
+			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+		}
+		return returnCode;
 	}
 
 	public boolean packageExists(String presentationID)

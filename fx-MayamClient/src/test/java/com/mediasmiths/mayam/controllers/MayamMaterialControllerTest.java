@@ -8,6 +8,7 @@ import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doThrow;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -30,6 +31,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamMaterialControllerTest {
 
@@ -263,9 +265,29 @@ public class MayamMaterialControllerTest {
 	}
 	
 	@Test
-	public void deleteMaterial() 
+	public void deleteMaterialFail() 
 	{
-		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
-		assertEquals(returnCode, MayamClientErrorCode.NOT_IMPLEMENTED);
+		try {
+			doThrow(mock(RemoteException.class)).when(client).deleteAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString());
+		} catch (RemoteException e) {
+			fail();
+		}
+		try {
+			controller.deleteMaterial("materialID");
+			fail();
+		} catch (MayamClientException e) {
+			assert(true);
+		}
+	}
+	
+	@Test
+	public void deleteMaterialSuccess() 
+	{
+		try {
+			MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
+			assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
+		} catch (MayamClientException e) {
+			fail();
+		}
 	}
 }
