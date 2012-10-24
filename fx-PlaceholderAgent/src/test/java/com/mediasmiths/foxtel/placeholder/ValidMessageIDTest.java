@@ -28,12 +28,12 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 	}
 	
 	/**
-	 * confirms that a message with a reused message id is not considered valid 
+	 * confirms that a message with a reused message id does not fail validation because of it
 	 * @throws IOException
 	 * @throws Exception
 	 */
 	@Test
-	public void testFileForWhichReceiptExistsFailsValidation() throws IOException, Exception{
+	public void testFileForWhichReceiptExistsStillValidates() throws IOException, Exception{
 		
 		
 		PurgeTitle pt = new PurgeTitle();
@@ -53,7 +53,7 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 		FileUtils.copyFile(temp, new File(receiptFolderPath + IOUtils.DIR_SEPARATOR +EXISTING_MESSAGE_ID + ".txt"));
 		
 		assertEquals(
-				MessageValidationResult.INVALID_MESSAGE_ID,
+				MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE,
 				validator.validateFile(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}

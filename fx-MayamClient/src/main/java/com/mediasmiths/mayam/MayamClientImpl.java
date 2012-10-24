@@ -179,7 +179,14 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
-		return materialController.updateMaterial(material);
+		try{
+			return materialController.updateMaterial(material);	
+		}
+		catch(NullPointerException npe){
+			log.error("npe when updating material",npe);
+			return MayamClientErrorCode.FAILURE;
+		}
+		
 	}
 
 	@Override

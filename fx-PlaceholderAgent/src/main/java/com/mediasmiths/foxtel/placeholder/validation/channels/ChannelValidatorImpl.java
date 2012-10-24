@@ -17,6 +17,8 @@ public class ChannelValidatorImpl implements ChannelValidator {
 	@Inject
 	public ChannelValidatorImpl() throws IOException
 	{
+		
+		
 		configProperties = new Properties();
 		try {
 			configProperties.load(getClass().getClassLoader().getResourceAsStream("channelConfig.properties"));

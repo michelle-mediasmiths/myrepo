@@ -44,7 +44,6 @@ public class WfsClient
 	{
 		log.info("Requesting status of job " + jobid.toString());
 		Job job = service.getJob(jobid.toString(), new Boolean(true));
-		
 		return job;
 	}
 

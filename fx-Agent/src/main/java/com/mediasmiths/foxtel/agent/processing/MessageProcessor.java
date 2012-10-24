@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.agent.processing;
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 
+import java.beans.DesignMode;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -23,7 +24,6 @@ import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 
-
 /**
  * Processes messages taken from a queue
  * 
@@ -42,15 +42,14 @@ public abstract class MessageProcessor<T> implements Runnable {
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
 	private final String failurePath;
-	
+
 	private final String archivePath;
 
 	@Inject
 	public MessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller,
-			@Named(FAILURE_PATH) String failurePath,
+			Unmarshaller unmarhsaller, @Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller;
@@ -82,8 +81,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 			@SuppressWarnings("unchecked")
 			T message = (T) unmarshalled;
-			MessageEnvelope<T> envelope = new MessageEnvelope<T>(new File(filePath),
-					message);
+			MessageEnvelope<T> envelope = new MessageEnvelope<T>(new File(
+					filePath), message);
 			try {
 				processMessage(envelope);
 			} catch (MessageProcessingFailedException e) {
@@ -123,8 +122,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 	protected abstract String getIDFromMessage(MessageEnvelope<T> envelope);
 
 	protected final void validateThenProcessFile(String filePath) {
-		 
-		logger.debug("Asking for validation of "+filePath);
+
+		logger.debug("Asking for validation of " + filePath);
 		MessageValidationResult result = messageValidator
 				.validateFile(filePath);
 
@@ -150,7 +149,9 @@ public abstract class MessageProcessor<T> implements Runnable {
 	}
 
 	/**
-	 * informs MessageProcesors of a message validation failure, does not move messages to the failure folder
+	 * informs MessageProcesors of a message validation failure, does not move
+	 * messages to the failure folder
+	 * 
 	 * @param filePath
 	 * @param result
 	 */
@@ -167,19 +168,18 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * @param messageID
 	 */
 	protected void moveFileToFailureFolder(File file) {
-		logger.info(String
-				.format("File %s is invalid, sending to failure folder",
-						file.getAbsolutePath()));
+		logger.info(String.format(
+				"File %s is invalid, sending to failure folder",
+				file.getAbsolutePath()));
 		logger.debug(String.format("Failure folder is: %s ", failurePath));
 
 		try {
-			moveMessageToFolder(file, failurePath);
+			moveMessageToFolder(file, failurePath,true);
 		} catch (IOException e) {
 			logger.error(String.format(
-					"IOException moving invalid file %s to %s", file.getAbsolutePath(),
-					failurePath), e);
+					"IOException moving invalid file %s to %s",
+					file.getAbsolutePath(), failurePath), e);
 		}
-
 	}
 
 	/**
@@ -194,24 +194,64 @@ public abstract class MessageProcessor<T> implements Runnable {
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
-			moveMessageToFolder(new File(messagePath), archivePath);
+			moveMessageToFolder(new File(messagePath), archivePath, true);
 		} catch (IOException e) {
-			logger.error(String.format(
+
+			logger.warn(String.format(
 					"IOException moving message %s to archive %s", messagePath,
 					archivePath), e);
 		}
 
 	}
 
-	private void moveMessageToFolder(File file,
-			String destinationFolderPath) throws IOException {
-		final String destination = destinationFolderPath
-				+ IOUtils.DIR_SEPARATOR + FilenameUtils.getName(file.getAbsolutePath());
+	private void moveMessageToFolder(File file, String destinationFolderPath)
+			throws IOException {
+		moveMessageToFolder(file, destinationFolderPath, false);
+	}
 
-		logger.trace(String.format("Moving file from %s to %s", file.getAbsolutePath(),
-				destination));
+	private synchronized void moveMessageToFolder(File file,
+			String destinationFolderPath, boolean ensureUniqueFirst)
+			throws IOException {
+		final String destination = getDestinationPathForMessageMove(file,
+				destinationFolderPath, ensureUniqueFirst);
+
+		logger.trace(String.format("Moving file from %s to %s",
+				file.getAbsolutePath(), destination));
 
 		FileUtils.moveFile(file, new File(destination));
+	}
+
+	private String getDestinationPathForMessageMove(File file,
+			String destinationFolderPath, boolean ensureUnique) {
+		
+		StringBuilder sb = new StringBuilder(destinationFolderPath);
+		sb.append(IOUtils.DIR_SEPARATOR);
+		sb.append(FilenameUtils.getName(file.getAbsolutePath()));
+		
+		String destination = sb.toString();
+		
+		if(ensureUnique){
+			File dest = new File(destination);
+			
+			int i=1;
+			
+			while(dest.exists()){
+				logger.warn(String.format("Destination file %s already exists",	destination));
+				
+				sb = new StringBuilder(destinationFolderPath);
+				sb.append(IOUtils.DIR_SEPARATOR);
+				sb.append(FilenameUtils.getBaseName(file.getAbsolutePath()));
+				sb.append("_");
+				sb.append(i);
+				sb.append(FilenameUtils.EXTENSION_SEPARATOR);
+				sb.append(FilenameUtils.getExtension(file.getAbsolutePath()));
+				destination = sb.toString();
+				dest = new File(destination);		
+				i++;
+			}
+		}
+		logger.trace("returning destination"+destination);
+		return destination;
 	}
 
 	private void writeReceipt(String filePath, String messageID) {
@@ -238,8 +278,10 @@ public abstract class MessageProcessor<T> implements Runnable {
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
 				stop();
-			} catch (Exception e){
-				logger.fatal("Uncaught exception almost killed MessageProcessor thread, this is very bad",e);
+			} catch (Exception e) {
+				logger.fatal(
+						"Uncaught exception almost killed MessageProcessor thread, this is very bad",
+						e);
 			}
 		}
 
@@ -261,7 +303,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	public FilesPendingProcessingQueue getFilePathsPending() {
 		return filePathsPending;
 	}
-	
+
 	public String getFailurePath() {
 		return failurePath;
 	}

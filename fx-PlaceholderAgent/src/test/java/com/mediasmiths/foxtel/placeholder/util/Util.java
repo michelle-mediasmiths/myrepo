@@ -30,7 +30,7 @@ public class Util {
 
 	public static void deleteFiles(String... paths) {
 		String env = System.getenv("FOXTEL_UNIT_TEST_TEMPFILES");
-		if (!(env != null && !env.toLowerCase(Locale.getDefault()).equals("keep"))) {
+		if (!(env != null && env.toLowerCase(Locale.getDefault()).equals("keep"))) {
 			for (String path : paths) {
 				FileUtils.deleteQuietly(new File(path));
 			}

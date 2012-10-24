@@ -474,9 +474,8 @@ public class PlaceholderMessageValidator extends
 	}
 
 	private boolean validateMesageID(String messageID) {
-		// check there is not already a receipt for this file, otherwise this is
-		// considered a duplicate
-
+		// check if there is already a receipt for this file and warn if it exists
+		
 		File receiptFile = new File(getReceiptWriter().receiptPathForMessageID(
 				messageID));
 		boolean exists = receiptFile.exists();
@@ -486,7 +485,7 @@ public class PlaceholderMessageValidator extends
 					"A recipt file already exists for message %s", messageID));
 		}
 
-		return (!exists);
+		return true;
 
 	}
 
