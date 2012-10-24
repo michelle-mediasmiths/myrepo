@@ -510,13 +510,14 @@ public class MayamMaterialController
 
 	}
 	
-	public MayamClientErrorCode deleteMaterial(String materialID) throws MayamClientException {
+	public MayamClientErrorCode deleteMaterial(String materialID) {
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try {
 			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 		} catch (RemoteException e) {
 			log.error("Error deleting material : "+ materialID);
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_DELETE_FAILED);
+			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 		}
-		return MayamClientErrorCode.SUCCESS;
+		return returnCode;
 	}
 }

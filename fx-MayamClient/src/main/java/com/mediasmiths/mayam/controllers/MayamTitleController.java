@@ -332,7 +332,7 @@ public class MayamTitleController {
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode purgeTitle(PurgeTitle title) throws MayamClientException
+	public MayamClientErrorCode purgeTitle(PurgeTitle title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		if (title == null) {
@@ -343,7 +343,7 @@ public class MayamTitleController {
 				client.deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ title.getTitleID());
-				throw new MayamClientException(MayamClientErrorCode.TITLE_DELETE_FAILED);
+				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
 			}
 		}
 		return returnCode;

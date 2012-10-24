@@ -3,10 +3,6 @@ package com.mediasmiths.mayam.controllers;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
@@ -228,15 +224,16 @@ public class MayamPackageController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode deletePackage(String presentationID) throws MayamClientException
+	public MayamClientErrorCode deletePackage(String presentationID)
 	{
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try {
 			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 		} catch (RemoteException e) {
 			log.error("Error deleting package : "+ presentationID);
-			throw new MayamClientException(MayamClientErrorCode.PACKAGE_DELETE_FAILED);
+			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
 		}
-		return MayamClientErrorCode.SUCCESS;
+		return returnCode;
 	}
 
 	public boolean packageExists(String presentationID)

@@ -140,7 +140,7 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#purgeTitle(au.com.foxtel.cf.mam.pms.PurgeTitle)
 	 */
 	@Override
-	public MayamClientErrorCode purgeTitle(PurgeTitle title) throws MayamClientException
+	public MayamClientErrorCode purgeTitle(PurgeTitle title)
 	{
 		return titleController.purgeTitle(title);
 	}
@@ -186,7 +186,7 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) throws MayamClientException
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
 		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
 	}
@@ -230,7 +230,7 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#purgePackage()
 	 */
 	@Override
-	public MayamClientErrorCode deletePackage(DeletePackage deletePackage) throws MayamClientException
+	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
 		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
 	}

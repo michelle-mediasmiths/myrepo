@@ -66,13 +66,14 @@ public class MayamTaskController {
 	
 	public MayamClientErrorCode deleteTask(long taskID ) throws MayamClientException
 	{
+		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try {
 			client.deleteTask(taskID);
 		} catch (RemoteException e) {
 			log.error("Error deleting task : "+ taskID);
-			throw new MayamClientException(MayamClientErrorCode.TASK_DELETE_FAILED);
+			returnCode = MayamClientErrorCode.TASK_DELETE_FAILED;
 		}
-		return MayamClientErrorCode.SUCCESS;
+		return returnCode;
 	}
 
 }
