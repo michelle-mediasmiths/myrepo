@@ -37,15 +37,9 @@ public class MayamMaterialController
 
 	private final TasksClient client;
 	private final DateUtil dateUtil;
-<<<<<<< HEAD
 
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 
-=======
-	
-	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
-	
->>>>>>> Adding asset and task deletion along with updated may am lib code
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil)
 	{
@@ -515,13 +509,6 @@ public class MayamMaterialController
 		return material;
 
 	}
-<<<<<<< HEAD
-
-	public MayamClientErrorCode deleteMaterial(String materialID)
-	{
-		// TODO Find out how to delete assets in Mayam
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-=======
 	
 	public MayamClientErrorCode deleteMaterial(String materialID) throws MayamClientException {
 		try {
@@ -531,6 +518,5 @@ public class MayamMaterialController
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_DELETE_FAILED);
 		}
 		return MayamClientErrorCode.SUCCESS;
->>>>>>> Adding asset and task deletion along with updated may am lib code
 	}
 }

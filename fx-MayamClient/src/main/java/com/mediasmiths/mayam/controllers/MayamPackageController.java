@@ -227,14 +227,7 @@ public class MayamPackageController
 		}
 		return returnCode;
 	}
-<<<<<<< HEAD
 
-	public MayamClientErrorCode deletePackage(String presentationID)
-	{
-		// TODO: How to delete an asset from Mayam?
-		return MayamClientErrorCode.NOT_IMPLEMENTED;
-=======
-	
 	public MayamClientErrorCode deletePackage(String presentationID) throws MayamClientException
 	{
 		try {
@@ -244,7 +237,6 @@ public class MayamPackageController
 			throw new MayamClientException(MayamClientErrorCode.PACKAGE_DELETE_FAILED);
 		}
 		return MayamClientErrorCode.SUCCESS;
->>>>>>> Adding asset and task deletion along with updated may am lib code
 	}
 
 	public boolean packageExists(String presentationID)
