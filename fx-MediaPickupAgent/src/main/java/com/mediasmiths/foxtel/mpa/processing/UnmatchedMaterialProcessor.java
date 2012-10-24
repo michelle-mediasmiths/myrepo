@@ -12,6 +12,7 @@ import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -96,8 +97,36 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			 */
 
 			try {
-				FileUtils.moveFileToDirectory(new File(mxf.getFilePath()),
-						new File(emergencyImportFolder), false);
+
+				StringBuilder sb = new StringBuilder(emergencyImportFolder);
+				sb.append(IOUtils.DIR_SEPARATOR);
+				sb.append(FilenameUtils.getName(mxf.getFilePath()));
+
+				String destination = sb.toString();
+
+				File dest = new File(destination);
+
+				int i = 1;
+
+				while (dest.exists()) {
+					logger.warn(String.format(
+							"Destination file %s already exists", destination));
+
+					sb = new StringBuilder(emergencyImportFolder);
+					sb.append(IOUtils.DIR_SEPARATOR);
+					sb.append(FilenameUtils.getBaseName(mxf.getFilePath()));
+					sb.append("_");
+					sb.append(i);
+					sb.append(FilenameUtils.EXTENSION_SEPARATOR);
+					sb.append(FilenameUtils.getExtension(mxf.getFilePath()));
+					destination = sb.toString();
+					dest = new File(destination);
+					i++;
+				}
+
+				logger.info(String.format("Trying to move file %s to %s",
+						mxf.getFilePath(), destination));
+				FileUtils.moveFile(new File(mxf.getFilePath()), dest);
 			} catch (IOException e) {
 				logger.fatal(
 						"IOException moving umatched mxf to emergency import folder",
