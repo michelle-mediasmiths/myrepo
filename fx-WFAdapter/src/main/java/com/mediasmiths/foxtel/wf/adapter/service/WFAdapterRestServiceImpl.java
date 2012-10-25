@@ -57,20 +57,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService {
 	}
 
 	@Override
-	@PUT
-	@Path("/material/transferfortc")
-	@Produces("application/xml")
-	public String transferMaterialForTC(String materialID)
-			throws MayamClientException {
-		log.info("Received MaterialTransferForQCRequest " + materialID);
-		final String filename = materialID + ".mxf";
-		final URI destination = materialTCLocation.resolve(filename);
-
-		mayamClient.transferMaterialToLocation(materialID, destination);
-		return filename;
-	}
-
-	@Override
 	@GET
 	@Path("/qc/profile")
 	@Produces("text/plain")
