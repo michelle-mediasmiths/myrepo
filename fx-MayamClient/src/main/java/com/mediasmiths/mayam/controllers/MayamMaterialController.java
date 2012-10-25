@@ -345,8 +345,7 @@ public class MayamMaterialController
 					Compile compile = source.getCompile();
 					if (compile != null)
 					{
-						// TODO: Asset Parent ID to be added by Mayam shortly
-						// attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 					}
 
 					Library library = source.getLibrary();
@@ -499,7 +498,7 @@ public class MayamMaterialController
 		Compile compile = new Compile();
 		source.setCompile(compile);
 		// TODO: Asset Parent ID to be added by Mayam shortly
-		// compile.setParentMaterialID(...)
+		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.ASSET_PARENT_ID));
 
 		// TODO : handle source tape info
 		// Library library = new Library();
