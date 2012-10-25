@@ -9,6 +9,8 @@ import javax.ws.rs.QueryParam;
 
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -37,7 +39,7 @@ public interface WFAdapterRestService
 	@PUT
 	@Path("/tc/transferfortc")
 	@Produces("application/xml")
-	public String transferMaterialForTC(String materialID) throws MayamClientException;
+	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest materialID) throws MayamClientException;
 	
 	
 	/**

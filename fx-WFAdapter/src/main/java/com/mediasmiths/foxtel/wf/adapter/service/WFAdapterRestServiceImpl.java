@@ -15,6 +15,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -49,19 +51,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		mayamClient.transferMaterialToLocation(materialID, destination);
 		return new MaterialTransferForQCResponse(filename);
 	}
-	
-	@PUT
-	@Path("/material/transferfortc")
-	@Produces("application/xml")
-	public String transferMaterialForTC(String materialID) throws MayamClientException
-	{
-		log.info("Received MaterialTransferForQCRequest "+materialID);
-		final String filename = materialID+".mxf";
-		final URI destination = materialTCLocation.resolve(filename);
-		
-		mayamClient.transferMaterialToLocation(materialID, destination);
-		return filename;
-	}
 
 	@Override
 	@GET
@@ -71,6 +60,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		// TODO implement
 		return "FoxtelK2";
+	}
+
+	@Override
+	@PUT
+	@Path("/tc/transferfortc")
+	@Produces("application/xml")
+	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest req) throws MayamClientException
+	{
+		log.info("Received MaterialTransferForTCRequest "+req.toString());
+		final String packageID = req.getPackageID();
+		final String filename = packageID+".mxf";
+		final URI destination = materialTCLocation.resolve(filename);
+		
+		mayamClient.transferMaterialToLocation(packageID, destination);
+		return new MaterialTransferForTCResponse(filename);
 	}
 
 }
