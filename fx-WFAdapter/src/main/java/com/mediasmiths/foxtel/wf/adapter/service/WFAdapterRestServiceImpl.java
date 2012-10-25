@@ -12,17 +12,21 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 
-public class WFAdapterRestServiceImpl implements WFAdapterRestService {
+public class WFAdapterRestServiceImpl implements WFAdapterRestService
+{
 
-	private final static Logger log = Logger
-			.getLogger(WFAdapterRestServiceImpl.class);
+	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
 
 	@Inject
 	private MayamClient mayamClient;
@@ -37,7 +41,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService {
 	@GET
 	@Path("/ping")
 	@Produces("text/plain")
-	public String ping() {
+	public String ping()
+	{
 		return "ping";
 	}
 
@@ -45,8 +50,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService {
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("application/xml")
-	public MaterialTransferForQCResponse transferMaterialForQC(
-			MaterialTransferForQCRequest req) throws MayamClientException {
+	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException
+	{
 		log.info("Received MaterialTransferForQCRequest " + req.toString());
 		final String materialID = req.getMaterialID();
 		final String filename = req.getMaterialID() + ".mxf";
@@ -60,34 +65,43 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService {
 	@GET
 	@Path("/qc/profile")
 	@Produces("text/plain")
-	public String getProfileForQc(@QueryParam("materialID") String materialID,
-			@QueryParam("isForTX") boolean isForTXDelivery) {
+	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery)
+	{
 		// TODO implement
 		return "FoxtelK2";
 	}
 
 	@Override
 	@PUT
-	@Path("/qc/autoQc")
-	public void notifyAutoQCFailure(@QueryParam("id") String materialID,
-			@QueryParam("isForTX") boolean isForTXDelivery) {
-
-		if (isForTXDelivery) {
-			// id is a package id
-
-		} else {
-			// id is an item id
-
+	@Path("/qc/autoQcFailed")
+	public void notifyAutoQCFailed(@QueryParam("id") String id, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException
+	{
+		try
+		{
+			if (isForTXDelivery)
+			{
+				// id is a package id
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, id);
+			}
+			else
+			{
+				// id is an item id
+				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, id);
+			}
 		}
-
+		catch (MayamClientException e)
+		{
+			log.error("Failed to fail task!",e);
+			throw e;
+		}
 	}
 
 	@Override
 	@PUT
 	@Path("/tc/transferfortc")
 	@Produces("application/xml")
-	public MaterialTransferForTCResponse transferMaterialForTC(
-			MaterialTransferForTCRequest req) throws MayamClientException {
+	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest req) throws MayamClientException
+	{
 		log.info("Received MaterialTransferForTCRequest " + req.toString());
 		final String packageID = req.getPackageID();
 		final String filename = packageID + ".mxf";

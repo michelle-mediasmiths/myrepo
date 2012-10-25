@@ -71,4 +71,6 @@ public interface MayamClient {
 	MaterialType getMaterial(String materialID) throws MayamClientException;
 	
 	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException;
+	public void saveTask(AttributeMap task) throws MayamClientException;
+	public void failTaskForAsset(MayamTaskListType txDelivery, String id) throws MayamClientException;
 }

@@ -30,6 +30,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.IdSet;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
@@ -45,11 +46,10 @@ import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
-public class MayamClientImpl implements MayamClient
-{
-	
+public class MayamClientImpl implements MayamClient {
+
 	private final static Logger log = Logger.getLogger(MayamClientImpl.class);
-	
+
 	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
 	TasksClient client;
@@ -67,149 +67,159 @@ public class MayamClientImpl implements MayamClient
 	MayamValidator validator;
 
 	@Inject
-	public MayamClientImpl() throws MalformedURLException, IOException
-	{
+	public MayamClientImpl() throws MalformedURLException, IOException {
 
 	}
 
-	
-	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken) throws MalformedURLException, IOException, DatatypeConfigurationException {
+	public MayamClientImpl(URL tasksURL, String mqModuleName, String userToken)
+			throws MalformedURLException, IOException,
+			DatatypeConfigurationException {
 		URL url = tasksURL;
-		Injector injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
-		client = injector.getInstance(TasksClient.class).setup(url, userToken); //throws ioexception
-		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
+		Injector injector = Guice.createInjector(new AttributesModule(),
+				new MqModule(mqModuleName));
+		client = injector.getInstance(TasksClient.class).setup(url, userToken); // throws
+																				// ioexception
+		attributeMessageBuilder = injector
+				.getProvider(AttributeMessageBuilder.class);
 		tasksController = new MayamTaskController(client);
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, new DateUtil());
 		packageController = new MayamPackageController(client, new DateUtil());
 		validator = new MayamValidator(client);
 	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see com.mediasmiths.mayam.MayamClient#shutdown()
 	 */
 	@Override
-	public void shutdown()
-	{
+	public void shutdown() {
 
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#createTitle(au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#createTitle(au.com.foxtel.cf.mam.pms
+	 * .CreateOrUpdateTitle)
 	 */
 	@Override
-	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title)
-	{
+	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title) {
 		return titleController.createTitle(title);
 	}
 
 	@Override
-	public MayamClientErrorCode createTitle(Title title)
-	{
+	public MayamClientErrorCode createTitle(Title title) {
 		return titleController.createTitle(title);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Detail)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel.
+	 * generated.MediaExchange.Programme.Detail)
 	 */
 	@Override
-	public MayamClientErrorCode updateTitle(Material.Title title)
-	{
+	public MayamClientErrorCode updateTitle(Material.Title title) {
 		return titleController.updateTitle(title);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#updateTitle(au.com.foxtel.cf.mam.pms
+	 * .CreateOrUpdateTitle)
 	 */
 	@Override
-	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title)
-	{
+	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title) {
 		return titleController.updateTitle(title);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#purgeTitle(au.com.foxtel.cf.mam.pms.PurgeTitle)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#purgeTitle(au.com.foxtel.cf.mam.pms
+	 * .PurgeTitle)
 	 */
 	@Override
-	public MayamClientErrorCode purgeTitle(PurgeTitle title)
-	{
+	public MayamClientErrorCode purgeTitle(PurgeTitle title) {
 		return titleController.purgeTitle(title);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(au.com.foxtel.cf.mam.pms.MaterialType)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#createMaterial(au.com.foxtel.cf.mam
+	 * .pms.MaterialType)
 	 */
 	@Override
-	public MayamClientErrorCode createMaterial(MaterialType material)
-	{
+	public MayamClientErrorCode createMaterial(MaterialType material) {
 		return materialController.createMaterial(material);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel.generated.MediaExchange.Programme.Media)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel
+	 * .generated.MediaExchange.Programme.Media)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
-	{
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material) {
 		return materialController.updateMaterial(material);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(au.com.foxtel.cf.mam.pms.MaterialType)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#updateMaterial(au.com.foxtel.cf.mam
+	 * .pms.MaterialType)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(MaterialType material)
-	{
-		try{
-			return materialController.updateMaterial(material);	
-		}
-		catch(NullPointerException npe){
-			log.error("npe when updating material",npe);
+	public MayamClientErrorCode updateMaterial(MaterialType material) {
+		try {
+			return materialController.updateMaterial(material);
+		} catch (NullPointerException npe) {
+			log.error("npe when updating material", npe);
 			return MayamClientErrorCode.FAILURE;
 		}
-		
+
 	}
 
 	@Override
-	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
-	{
-		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial) {
+		return materialController.deleteMaterial(deleteMaterial.getMaterial()
+				.getMaterialID());
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#createPackage(au.com.foxtel.cf.mam.pms.PackageType)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#createPackage(au.com.foxtel.cf.mam.
+	 * pms.PackageType)
 	 */
 	@Override
-	public MayamClientErrorCode createPackage(PackageType txPackage)
-	{
+	public MayamClientErrorCode createPackage(PackageType txPackage) {
 		return packageController.createPackage(txPackage);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mediasmiths.mayam.MayamClient#updatePackage(au.com.foxtel.cf.mam.pms.PackageType)
+	 * @see
+	 * com.mediasmiths.mayam.MayamClient#updatePackage(au.com.foxtel.cf.mam.
+	 * pms.PackageType)
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage(PackageType txPackage)
-	{
+	public MayamClientErrorCode updatePackage(PackageType txPackage) {
 		return packageController.updatePackage(txPackage);
 	}
 
@@ -219,8 +229,8 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
-	{
+	public MayamClientErrorCode updatePackage(
+			ProgrammeMaterialType.Presentation.Package txPackage) {
 		return packageController.updatePackage(txPackage);
 	}
 
@@ -230,87 +240,84 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#purgePackage()
 	 */
 	@Override
-	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
-	{
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+	public MayamClientErrorCode deletePackage(DeletePackage deletePackage) {
+		return packageController.deletePackage(deletePackage.getPackage()
+				.getPresentationID());
 	}
 
 	/**
 	 * Returns true if a title with the specified ID exists, otherwise false
 	 */
 	@Override
-	public boolean titleExists(String titleID)
-	{
+	public boolean titleExists(String titleID) {
 		return titleController.titleExists(titleID);
 	}
 
 	@Override
-	public boolean materialExists(String materialID) throws MayamClientException
-	{
+	public boolean materialExists(String materialID)
+			throws MayamClientException {
 		return materialController.materialExists(materialID);
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID)
-	{
+	public boolean isMaterialForPackageProtected(String packageID) {
 		// TODO implement
-		// will need to fetch the material for the given package and check its protected status flag
+		// will need to fetch the material for the given package and check its
+		// protected status flag
 		boolean isProtected = true;
-		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
-		if (packageAttributes != null)
-		{
+		AttributeMap packageAttributes = packageController
+				.getPackageAttributes(packageID);
+		if (packageAttributes != null) {
 			// TODO: need to make use of parent ID attribute once Mayam add it
 		}
 		return isProtected;
 	}
 
 	@Override
-	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException
-	{
+	public boolean isTitleOrDescendentsProtected(String titleID)
+			throws MayamClientException {
 		Boolean isProtected = false;
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 
-		if (titleAttributes != null && titleAttributes.containsAttribute(Attribute.APP_FLAG))
-		{
+		if (titleAttributes != null
+				&& titleAttributes.containsAttribute(Attribute.APP_FLAG)) {
 			// TODO: Are we checking accessRestriction or purgeProtection?
 			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
 			// isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
 
-			if (isProtected)
-			{
-				try
-				{
-					List<AttributeMap> materials = client.getAssetChildren(MayamAssetType.TITLE.getAssetType(), titleID, MayamAssetType.MATERIAL.getAssetType());
-					for (int i = 0; i < materials.size(); i++)
-					{
+			if (isProtected) {
+				try {
+					List<AttributeMap> materials = client.getAssetChildren(
+							MayamAssetType.TITLE.getAssetType(), titleID,
+							MayamAssetType.MATERIAL.getAssetType());
+					for (int i = 0; i < materials.size(); i++) {
 						AttributeMap materialAttributes = materials.get(i);
 
-						// TODO: Are we checking accessRestriction or purgeProtection?
+						// TODO: Are we checking accessRestriction or
+						// purgeProtection?
 						// materialAttributes.getAttribute(Attribute.AUX_FLAG);
-						if (materialAttributes.getAttribute(Attribute.APP_FLAG))
-						{
+						if (materialAttributes.getAttribute(Attribute.APP_FLAG)) {
 							isProtected = true;
 							break;
 						}
 					}
 
-					List<AttributeMap> packages = client.getAssetChildren(MayamAssetType.TITLE.getAssetType(), titleID, MayamAssetType.PACKAGE.getAssetType());
-					for (int i = 0; i < packages.size(); i++)
-					{
+					List<AttributeMap> packages = client.getAssetChildren(
+							MayamAssetType.TITLE.getAssetType(), titleID,
+							MayamAssetType.PACKAGE.getAssetType());
+					for (int i = 0; i < packages.size(); i++) {
 						AttributeMap packageAttributes = packages.get(i);
 
-						// TODO: Are we checking accessRestriction or purgeProtection?
+						// TODO: Are we checking accessRestriction or
+						// purgeProtection?
 						// packageAttributes.getAttribute(Attribute.AUX_FLAG);
-						if (packageAttributes.getAttribute(Attribute.APP_FLAG))
-						{
+						if (packageAttributes.getAttribute(Attribute.APP_FLAG)) {
 							isProtected = true;
 							break;
 						}
 					}
 
-				}
-				catch (RemoteException e)
-				{
+				} catch (RemoteException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -321,27 +328,26 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean packageExists(String presentationID) throws MayamClientException
-	{
+	public boolean packageExists(String presentationID)
+			throws MayamClientException {
 		return packageController.packageExists(presentationID);
 	}
 
 	@Override
-	public boolean isMaterialPlaceholder(String materialID)
-	{
+	public boolean isMaterialPlaceholder(String materialID) {
 		boolean isPlaceholder = true;
-		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		AttributeMap materialAttributes = materialController
+				.getMaterialAttributes(materialID);
 
-		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.SOURCE_IDS))
-		{
-			IdSet sourceIds = materialAttributes.getAttribute(Attribute.SOURCE_IDS);
-			if (sourceIds != null)
-			{
+		if (materialAttributes != null
+				&& materialAttributes.containsAttribute(Attribute.SOURCE_IDS)) {
+			IdSet sourceIds = materialAttributes
+					.getAttribute(Attribute.SOURCE_IDS);
+			if (sourceIds != null) {
 				isPlaceholder = false;
-			}
-			else
-			{
-				// TODO: Need to check segment data once implemented in order to determind if placeholder
+			} else {
+				// TODO: Need to check segment data once implemented in order to
+				// determind if placeholder
 			}
 		}
 		return isPlaceholder;
@@ -353,95 +359,92 @@ public class MayamClientImpl implements MayamClient
 	 * @return the master ID of the created item
 	 */
 	@Override
-	public String createMaterial(String titleID, MarketingMaterialType material) throws MayamClientException
-	{
+	public String createMaterial(String titleID, MarketingMaterialType material)
+			throws MayamClientException {
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 
-		if (titleAttributes == null)
-		{
-			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+		if (titleAttributes == null) {
+			throw new MayamClientException(
+					MayamClientErrorCode.TITLE_FIND_FAILED);
 		}
 
 		// TODO: set some id relating to material - origin of id TBC
-		// For this placeholder, Viz Ardome will assign a “Master ID” equivalent to be used as an Item identifier and return this ID to the WFE.
+		// For this placeholder, Viz Ardome will assign a “Master ID” equivalent
+		// to be used as an Item identifier and return this ID to the WFE.
 		String materialID = "???";
 
 		titleAttributes.setAttribute(Attribute.MOB_ID, materialID);
-		try
-		{
+		try {
 			client.updateAsset(titleAttributes);
-		}
-		catch (RemoteException e)
-		{
-			throw new MayamClientException(MayamClientErrorCode.TITLE_UPDATE_FAILED);
+		} catch (RemoteException e) {
+			throw new MayamClientException(
+					MayamClientErrorCode.TITLE_UPDATE_FAILED);
 		}
 
-		// TODO: need to generate an id for the material? or can we trust the one that Mayam will create?
-		MayamClientErrorCode returnCode = materialController.createMaterial(material);
-		if (returnCode != MayamClientErrorCode.SUCCESS)
-		{
+		// TODO: need to generate an id for the material? or can we trust the
+		// one that Mayam will create?
+		MayamClientErrorCode returnCode = materialController
+				.createMaterial(material);
+		if (returnCode != MayamClientErrorCode.SUCCESS) {
 			throw new MayamClientException(returnCode);
 		}
 
-		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		AttributeMap materialAttributes = materialController
+				.getMaterialAttributes(materialID);
 
-		if (materialAttributes == null)
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		if (materialAttributes == null) {
+			throw new MayamClientException(
+					MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
 
 		// TODO: Set parent ID once implemented
 		// materialAttributes.setAttribute(Attribute., titleID);
-		try
-		{
+		try {
 			client.updateAsset(materialAttributes);
-		}
-		catch (RemoteException e)
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+		} catch (RemoteException e) {
+			throw new MayamClientException(
+					MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 		}
 
 		return materialID;
 	}
 
-	public MayamValidator getValidator()
-	{
+	public MayamValidator getValidator() {
 		return validator;
 	}
 
-	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException
-	{
+	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID)
+			throws MayamClientException {
 		ArrayList<String> licenseTags = new ArrayList<String>();
 		AttributeMap material = null;
-		try
-		{
-			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
-		}
-		catch (RemoteException e)
-		{
+		try {
+			material = client.getAsset(
+					AssetType.valueOf(MayamAssetType.MATERIAL.getText()),
+					materialID);
+		} catch (RemoteException e) {
 			licenseTags = null;
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+			throw new MayamClientException(
+					MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
-		if (material != null)
-		{
+		if (material != null) {
 			String parentID = "";
 			// TODO: retrieve parentID from material
 			// parentID = material.getAttribute(Attribute.);
 			AttributeMap title = null;
 
-			try
-			{
-				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
-			}
-			catch (RemoteException e)
-			{
+			try {
+				title = client.getAsset(
+						AssetType.valueOf(MayamAssetType.TITLE.getText()),
+						parentID);
+			} catch (RemoteException e) {
 				licenseTags = null;
-				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+				throw new MayamClientException(
+						MayamClientErrorCode.TITLE_FIND_FAILED);
 			}
 
-			if (title != null)
-			{
-				// TODO: Retrieve the channel tag information from the title attributes
+			if (title != null) {
+				// TODO: Retrieve the channel tag information from the title
+				// attributes
 				String channelTag = "";
 				licenseTags.add(channelTag);
 			}
@@ -450,37 +453,49 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public PackageType getPackage(String packageID) throws MayamClientException
-	{
-		return packageController.getPackage(packageID);		
+	public PackageType getPackage(String packageID) throws MayamClientException {
+		return packageController.getPackage(packageID);
 	}
 
 	@Override
-	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
-	{
-		// TODO implement me!, see declaration in interface	
-		try
-		{
-			log.info(String.format("Transferring material %s to location %s", materialID, location.toString()));
-			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(location));
-		}
-		catch (IOException e)
-		{
+	public void transferMaterialToLocation(String materialID, URI location)
+			throws MayamClientException {
+		// TODO implement me!, see declaration in interface
+		try {
+			log.info(String.format("Transferring material %s to location %s",
+					materialID, location.toString()));
+			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"),
+					new File(location));
+		} catch (IOException e) {
 			e.printStackTrace();
 			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
 		}
 	}
 
-
 	@Override
-	public MaterialType getMaterial(String materialID) throws MayamClientException
-	{
+	public MaterialType getMaterial(String materialID)
+			throws MayamClientException {
 		return materialController.getMaterial(materialID);
 	}
 
+	@Override
+	public AttributeMap getTaskForAsset(MayamTaskListType type, String id)
+			throws MayamClientException {
+		return tasksController.getTaskForAsset(type, id);
+	}
 
 	@Override
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException {
-		return tasksController.getTaskForAsset(type, id);
+	public void saveTask(AttributeMap task) throws MayamClientException {
+		tasksController.saveTask(task);
+	}
+
+	@Override
+	public void failTaskForAsset(MayamTaskListType type, String id) throws MayamClientException {
+		
+		log.info(String.format("Failing task of type %s for asset %s", type.getText(), id));
+		
+		AttributeMap task = this.getTaskForAsset(type, id);
+		task.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
+		this.saveTask(task);
 	}
 }

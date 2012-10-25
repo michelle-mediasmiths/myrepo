@@ -116,13 +116,23 @@ public class MayamTaskController {
 
 			return result.getMatches().get(0);
 		} catch (RemoteException e) {
-
-			e.printStackTrace();
 			log.error("remote expcetion searching for task", e);
 			throw new MayamClientException(
 					MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 
+	}
+
+	public void saveTask(AttributeMap task) throws MayamClientException {
+		
+		try {
+			client.updateTask(task);
+		} catch (RemoteException e) {
+			log.error("remote expcetion saving task", e);
+			throw new MayamClientException(
+					MayamClientErrorCode.TASK_UPDATE_FAILED);
+		}
+		
 	}
 
 }

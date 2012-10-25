@@ -57,8 +57,8 @@ public interface WFAdapterRestService
 	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
 
 	@PUT
-	@Path("/qc/autoQc")
-	public void notifyAutoQCFailure(@QueryParam("id") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
+	@Path("/qc/autoQcFailed")
+	public void notifyAutoQCFailed(@QueryParam("id") String id, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException;
 	
 }
 
