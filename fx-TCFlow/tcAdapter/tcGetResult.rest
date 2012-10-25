@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/rest/tc/job/{id}/success" ID="_hwE7UBhjEeKyaOfR4cyoLQ">
-  <rest:operation verb="GET" name="tcGetResult" ID="_hwE7VBhjEeKyaOfR4cyoLQ">
-    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_hwE7VRhjEeKyaOfR4cyoLQ"/>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/rest/tc/job/{id}/success" ID="_224c0B6AEeKH_4nYLIunPg">
+  <rest:operation verb="GET" name="tcGetResult" ID="_224c0h6AEeKH_4nYLIunPg">
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="application/xml" ID="_224c0x6AEeKH_4nYLIunPg"/>
   </rest:operation>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="id" headerDirection="request" contentType="text/xml" ID="_jnzR8BhjEeKyaOfR4cyoLQ"/>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="id" headerDirection="request" contentType="text/xml" ID="_224c0R6AEeKH_4nYLIunPg"/>
 </rest:descriptor>
