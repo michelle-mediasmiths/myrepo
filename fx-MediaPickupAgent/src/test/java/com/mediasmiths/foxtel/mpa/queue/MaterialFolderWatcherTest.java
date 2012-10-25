@@ -8,8 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -125,6 +127,8 @@ public class MaterialFolderWatcherTest {
 		// stop the watcher
 		toTest.setContinueWatching(false);
 
+		logger.debug(StringUtils.join(queue.toArray()));
+		
 		// check results
 		assertTrue(queue.size() == 4);
 		assertTrue(queue.contains(xml1.getAbsolutePath()));

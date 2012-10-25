@@ -12,9 +12,6 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
