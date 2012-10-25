@@ -1,15 +1,25 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.License;
+import au.com.foxtel.cf.mam.pms.LicenseHolderType;
+import au.com.foxtel.cf.mam.pms.LicensePeriodType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
+import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.table.MediaRights;
+import com.mayam.wf.attributes.shared.table.MediaRights.MediaRight;
+import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -106,21 +116,36 @@ public class MayamTitleController {
 			TitleDescriptionType titleDescription = title.getTitleDescription();
 			
 			if (titleDescription != null) {				
-				//	TODO: Rights management - Mayam to add a new complex type to allow Rights attributes to be added
-				//	RightsType titleRights = title.getRights();		
-				//	List<License> licenses = titleRights.getLicense();
-				//	License license = licenses.get(0);
-				//	LicenseHolderType holder = license.getLicenseHolder();
-				//	holder.getOrganisationID();
-				//	holder.getOrganisationName();
-				//	LicensePeriodType period = license.getLicensePeriod();
-				//	period.getEndDate();
-				//	period.getStartDate();
-				//	Channels channels = license.getChannels();
-				//	List<ChannelType> channelList = channels.getChannel();
-				//	ChannelType channel = channelList.get(0);
-				//	channel.getChannelName();
-				//	channel.getChannelTag();
+				RightsType titleRights = title.getRights();
+				if (titleRights != null) {
+					List<String> columnNames = new ArrayList<String>();
+					columnNames.add("Organization ID");
+					columnNames.add("Organization Name");
+					columnNames.add("Start Date");
+					columnNames.add("End Date");
+					
+					GenericTable rightsTable = new GenericTable(columnNames);
+
+					List<License> licenses = titleRights.getLicense();
+					for (int i = 0; i < licenses.size(); i++) {
+						License license = licenses.get(i);
+						LicenseHolderType holder = license.getLicenseHolder();
+						rightsTable.setCellValue(i, 0, holder.getOrganisationID());
+						rightsTable.setCellValue(i, 1, holder.getOrganisationName());
+						
+						LicensePeriodType period = license.getLicensePeriod();
+						rightsTable.setCellValue(i, 2, period.getStartDate().toString());
+						rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+					}
+					MediaRights rights = new MediaRights(rightsTable);
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rights);
+				}
+				
+				//Channels channels = license.getChannels();
+				//List<ChannelType> channelList = channels.getChannel();
+				//ChannelType channel = channelList.get(0);
+				//channel.getChannelName();
+				//channel.getChannelTag();
 				
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
@@ -271,16 +296,31 @@ public class MayamTitleController {
 				if (assetAttributes != null) {
 					attributes = new MayamAttributeController(assetAttributes);
 					
-					//	TODO: Rights management - Mayam to add a new complex type to allow Rights attributes to be added
-					//	RightsType titleRights = title.getRights();		
-					//	List<License> licenses = titleRights.getLicense();
-					//	License license = licenses.get(0);
-					//	LicenseHolderType holder = license.getLicenseHolder();
-					//	holder.getOrganisationID();
-					//	holder.getOrganisationName();
-					//	LicensePeriodType period = license.getLicensePeriod();
-					//	period.getEndDate();
-					//	period.getStartDate();
+					RightsType titleRights = title.getRights();
+					if (titleRights != null) {
+						List<String> columnNames = new ArrayList<String>();
+						columnNames.add("Organization ID");
+						columnNames.add("Organization Name");
+						columnNames.add("Start Date");
+						columnNames.add("End Date");
+						
+						GenericTable rightsTable = new GenericTable(columnNames);
+
+						List<License> licenses = titleRights.getLicense();
+						for (int i = 0; i < licenses.size(); i++) {
+							License license = licenses.get(i);
+							LicenseHolderType holder = license.getLicenseHolder();
+							rightsTable.setCellValue(i, 0, holder.getOrganisationID());
+							rightsTable.setCellValue(i, 1, holder.getOrganisationName());
+							
+							LicensePeriodType period = license.getLicensePeriod();
+							rightsTable.setCellValue(i, 2, period.getStartDate().toString());
+							rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+						}
+						MediaRights rights = new MediaRights(rightsTable);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rights);
+					}
+					
 					//	Channels channels = license.getChannels();
 					//	List<ChannelType> channelList = channels.getChannel();
 					//	ChannelType channel = channelList.get(0);
