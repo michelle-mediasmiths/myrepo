@@ -89,8 +89,7 @@ public class MayamMaterialController
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
-					// TODO: Asset Parent ID to be added by Mayam shortly
-					// attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 				}
 
 				Library library = source.getLibrary();
@@ -118,6 +117,7 @@ public class MayamMaterialController
 
 			if (!attributesValid)
 			{
+				log.warn("Material created but one or more attributes was invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 
@@ -127,17 +127,20 @@ public class MayamMaterialController
 				result = client.createAsset(attributes.getAttributes());
 				if (result == null)
 				{
+					log.warn("Mayam failed to create Material");
 					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
 				}
 			}
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
+				log.error("Exception thrown by Mayam while trying to create Material");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
 		else
 		{
+			log.warn("Null material object, unable to create asset");
 			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
@@ -175,6 +178,7 @@ public class MayamMaterialController
 
 			if (!attributesValid)
 			{
+				log.warn("Material created but one or more attributes was invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 
@@ -184,17 +188,20 @@ public class MayamMaterialController
 				result = client.createAsset(attributes.getAttributes());
 				if (result == null)
 				{
+					log.warn("Mayam failed to create Material");
 					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
 				}
 			}
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
+				log.error("Exception thrown by Mayam while trying to create Material");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
 		else
 		{
+			log.warn("Null material object, unable to create asset");
 			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
@@ -217,7 +224,7 @@ public class MayamMaterialController
 			}
 			catch (RemoteException e1)
 			{
-				// TODO Auto-generated catch block
+				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
 				e1.printStackTrace();
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
@@ -248,6 +255,7 @@ public class MayamMaterialController
 
 				if (!attributesValid)
 				{
+					log.warn("Material updated but one or more attributes was invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 
@@ -257,22 +265,26 @@ public class MayamMaterialController
 					result = client.updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
+						log.warn("Mayam failed to update Material");
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
 				}
 				catch (RemoteException e)
 				{
 					e.printStackTrace();
+					log.error("Exception thrown by Mayam while trying to update Material");
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
 			else
 			{
+				log.warn("Unable to retrieve asset :" + material.getMaterialID());
 				returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
 			}
 		}
 		else
 		{
+			log.warn("Null material object, unable to update asset");
 			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
@@ -293,7 +305,7 @@ public class MayamMaterialController
 			}
 			catch (RemoteException e1)
 			{
-				// TODO Auto-generated catch block
+				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
 				e1.printStackTrace();
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
@@ -373,6 +385,7 @@ public class MayamMaterialController
 
 				if (!attributesValid)
 				{
+					log.warn("Material updated but one or more attributes was invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 
@@ -382,22 +395,26 @@ public class MayamMaterialController
 					result = client.updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
+						log.warn("Mayam failed to update Material");
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
 				}
 				catch (RemoteException e)
 				{
 					e.printStackTrace();
+					log.error("Exception thrown by Mayam while trying to update Material");
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
 			else
 			{
+				log.warn("Unable to retrieve asset :" + material.getMaterialID());
 				returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
 			}
 		}
 		else
 		{
+			log.warn("Null material object, unable to update asset");
 			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
@@ -416,7 +433,7 @@ public class MayamMaterialController
 		}
 		catch (RemoteException e1)
 		{
-			// TODO Auto-generated catch block
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + materialID);
 			e1.printStackTrace();
 		}
 		return materialFound;
@@ -431,7 +448,7 @@ public class MayamMaterialController
 		}
 		catch (RemoteException e1)
 		{
-			// TODO: Error Handling
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + materialID);
 			e1.printStackTrace();
 		}
 		return assetAttributes;
@@ -458,7 +475,6 @@ public class MayamMaterialController
 
 		if (txNext != null)
 		{
-
 			material.setRequiredBy(dateUtil.fromDate(txNext));
 		}
 		else
@@ -486,7 +502,6 @@ public class MayamMaterialController
 
 		if (orderCreated != null)
 		{
-
 			order.setOrderCreated(dateUtil.fromDate(orderCreated));
 		}
 		else
@@ -497,7 +512,6 @@ public class MayamMaterialController
 
 		Compile compile = new Compile();
 		source.setCompile(compile);
-		// TODO: Asset Parent ID to be added by Mayam shortly
 		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.ASSET_PARENT_ID));
 
 		// TODO : handle source tape info
