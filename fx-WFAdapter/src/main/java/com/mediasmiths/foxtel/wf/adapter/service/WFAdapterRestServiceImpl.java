@@ -78,6 +78,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/qc/autoQcFailed")
 	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException
 	{
+		log.info(String.format("Received notification of Auto QC failure ID %s isTX %b", notification.getAssetId(), notification.isForTXDelivery()));
+		
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -119,6 +121,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/qc/tcFailed")
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
+		log.info(String.format("Received notification of TC failure Paciage ID %s isTX %b", notification.getPackageID(), notification.isTXDelivery()));
+		
 		try
 		{
 			if (notification.isTXDelivery())
