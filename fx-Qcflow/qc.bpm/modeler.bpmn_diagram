@@ -403,7 +403,7 @@
         <styles xmi:type="notation:FillStyle" xmi:id="_HnHGsx6rEeKcytJL6XAZEw"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_HnHGtB6rEeKcytJL6XAZEw" lineColor="0"/>
         <element xmi:type="bpmn:Activity" href="modeler.bpmn#_Hmv6UB6rEeKcytJL6XAZEw"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_HnHGtR6rEeKcytJL6XAZEw" x="1387" y="298" width="63" height="63"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_HnHGtR6rEeKcytJL6XAZEw" x="1451" y="322" width="63" height="63"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_mKZp4B6rEeKcytJL6XAZEw" type="2001">
         <children xmi:type="notation:Node" xmi:id="_mKaQ8B6rEeKcytJL6XAZEw" type="4001"/>
@@ -466,7 +466,7 @@
         <styles xmi:type="notation:FillStyle" xmi:id="_D5v8wx6uEeKcytJL6XAZEw"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_D5v8xB6uEeKcytJL6XAZEw" lineColor="0"/>
         <element xmi:type="bpmn:Activity" href="modeler.bpmn#_D5p2IR6uEeKcytJL6XAZEw"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_D5v8xR6uEeKcytJL6XAZEw" x="1942" y="97" width="104" height="54"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_D5v8xR6uEeKcytJL6XAZEw" x="1975" y="64" width="104" height="54"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_ecNc4B6wEeKcytJL6XAZEw" type="2001">
         <children xmi:type="notation:Node" xmi:id="_ecOD8B6wEeKcytJL6XAZEw" type="4001"/>
@@ -876,7 +876,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_vkkzYh6tEeKcytJL6XAZEw" fontName="Arial"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_vkkzYx6tEeKcytJL6XAZEw" lineColor="0"/>
     <element xmi:type="bpmn:SequenceEdge" href="modeler.bpmn#_vkcQgR6tEeKcytJL6XAZEw"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_vkkzZB6tEeKcytJL6XAZEw" points="[23, -7, -349, 80]$[349, -92, -23, -5]"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_vkkzZB6tEeKcytJL6XAZEw" points="[0, 0, -285, 109]$[0, 16, -285, 125]$[214, 16, -71, 125]$[214, -109, -71, 0]$[285, -109, 0, 0]"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_Fm-TkB6uEeKcytJL6XAZEw" type="3001" source="_kVhhAB6tEeKcytJL6XAZEw" target="_D5v8wB6uEeKcytJL6XAZEw">
     <children xmi:type="notation:Node" xmi:id="_Fm-TlR6uEeKcytJL6XAZEw" type="4012">
@@ -900,7 +900,7 @@
     <styles xmi:type="notation:FontStyle" xmi:id="_IbBvkB6uEeKcytJL6XAZEw" fontName="Arial"/>
     <styles xmi:type="notation:LineStyle" xmi:id="_IbBvkR6uEeKcytJL6XAZEw" lineColor="0"/>
     <element xmi:type="bpmn:SequenceEdge" href="modeler.bpmn#_Ia4loR6uEeKcytJL6XAZEw"/>
-    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_IbBvkh6uEeKcytJL6XAZEw" points="[0, 0, 1230, -179]$[16, 0, 1246, -179]$[16, 44, 1246, -135]$[-1246, 44, -16, -135]$[-1246, 179, -16, 0]$[-1230, 179, 0, 0]"/>
+    <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_IbBvkh6uEeKcytJL6XAZEw" points="[0, 0, 1263, -135]$[16, 0, 1279, -135]$[16, 70, 1279, -65]$[-1279, 70, -16, -65]$[-1279, 135, -16, 0]$[-1263, 135, 0, 0]"/>
   </edges>
   <edges xmi:type="notation:Edge" xmi:id="_fIR4sB6wEeKcytJL6XAZEw" type="3001" source="_kVhhAB6tEeKcytJL6XAZEw" target="_ecNc4B6wEeKcytJL6XAZEw">
     <children xmi:type="notation:Node" xmi:id="_fIR4tR6wEeKcytJL6XAZEw" type="4012">
