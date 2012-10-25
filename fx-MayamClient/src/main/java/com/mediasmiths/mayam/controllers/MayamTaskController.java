@@ -17,7 +17,6 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.std.auth.yubikey.YubicoClient;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -43,15 +42,11 @@ public class MayamTaskController {
 			assetAttributes = client.getAsset(
 					AssetType.valueOf(assetType.toString()), assetID);
 		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID);
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 		}
 
 		if (assetAttributes != null) {
-			// TODO: Generate Task ID
-			// taskID = 0;
-			// attributesValid = attributesValid &&
-			// attributes.setAttribute(Attribute.TASK_ID, taskID);
-
 			attributesValid = attributesValid
 					&& attributes.setAttribute(Attribute.TASK_LIST_ID,
 							taskList.toString());
@@ -67,11 +62,13 @@ public class MayamTaskController {
 			try {
 				client.createTask(attributes.getAttributes());
 			} catch (RemoteException e) {
+				log.error("Exception thrown by Mayam while attempting to create task");
 				throw new MayamClientException(
 						MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
 
 		} else {
+			log.warn("Failed to find asset with ID: " + assetID);
 			throw new MayamClientException(
 					MayamClientErrorCode.ASSET_FIND_FAILED);
 		}

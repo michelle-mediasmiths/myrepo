@@ -18,7 +18,6 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.table.MediaRights;
-import com.mayam.wf.attributes.shared.table.MediaRights.MediaRight;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
@@ -85,6 +84,7 @@ public class MayamTitleController {
 			}*/
 			
 			if (!attributesValid) {
+				log.warn("Title created but one or more attributes were invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 			
@@ -92,14 +92,17 @@ public class MayamTitleController {
 			try {
 				result = client.createAsset(attributes.getAttributes());
 				if (result == null) {
+					log.warn("Mayam failed to create new title asset");
 					returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
+				log.error("Exception thrown by Mayam while attempting to create new title asset");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
 		else {
+			log.warn("Null title object, unable to create asset");
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
 		return returnCode;
@@ -167,6 +170,7 @@ public class MayamTitleController {
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
 				
 				if (!attributesValid) {
+					log.warn("Title created but one or more attributes were invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 				
@@ -174,18 +178,22 @@ public class MayamTitleController {
 				try {
 					result = client.createAsset(attributes.getAttributes());
 					if (result == null) {
+						log.warn("Mayam failed to create new Title asset");
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 					}
 				} catch (RemoteException e) {
 					e.printStackTrace();
+					log.error("Exception thrown by Mayam while creating new Title assset");
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
 			else {
+				log.warn("Null title description, unable to create asset");
 				returnCode = MayamClientErrorCode.TITLE_METADATA_UNAVAILABLE;
 			}
 		}
 		else {
+			log.warn("Null title object, unable to create asset");
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
 		return returnCode;
@@ -288,8 +296,8 @@ public class MayamTitleController {
 				try {
 					assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					log.error("Exception thrown by Mayam while retrieving asset: " + title.getTitleID());
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 				
@@ -343,6 +351,7 @@ public class MayamTitleController {
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
 					
 					if (!attributesValid) {
+						log.warn("Title updated but one or more attributes were invalid");
 						returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 					}
 					
@@ -350,22 +359,27 @@ public class MayamTitleController {
 					try {
 						result = client.updateAsset(attributes.getAttributes());
 						if (result == null) {
+							log.warn("Mayam failed to update title: " + title.getTitleID());
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
 					} catch (RemoteException e) {
 						e.printStackTrace();
+						log.error("Exception thrown by Mayam while updating title: " + title.getTitleID());
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 					}
 				}
 				else {
+					log.warn("Mayam was unable to locate Title: " + title.getTitleID());
 					returnCode = MayamClientErrorCode.TITLE_FIND_FAILED;	
 				}
 			}
 			else {
+				log.warn("Null title description, unable to update asset");
 				returnCode = MayamClientErrorCode.TITLE_METADATA_UNAVAILABLE;
 			}
 		}
 		else {
+			log.warn("Null title object, unable to update asset");
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;	
 		}
 		return returnCode;
@@ -396,7 +410,7 @@ public class MayamTitleController {
 				titleFound = true;
 			}
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID);
 			e1.printStackTrace();
 		}
 		return titleFound;
@@ -407,7 +421,7 @@ public class MayamTitleController {
 		try {
 			assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
-			//TODO: Error Handling
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID);
 			e1.printStackTrace();
 		}
 		return assetAttributes;

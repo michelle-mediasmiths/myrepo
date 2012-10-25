@@ -67,6 +67,7 @@ public class MayamPackageController
 
 			if (!attributesValid)
 			{
+				log.warn("PAckage created but one or more attributes was invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 
@@ -76,17 +77,20 @@ public class MayamPackageController
 				result = client.createAsset(attributes.getAttributes());
 				if (result == null)
 				{
+					log.warn("Mayam failed to create Package");
 					returnCode = MayamClientErrorCode.PACKAGE_CREATION_FAILED;
 				}
 			}
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
+				log.error("Exception thrown by Mayam while attempting to create Package");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
 		else
 		{
+			log.warn("Null package object, unable to create asset");
 			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
 		return returnCode;
@@ -107,6 +111,7 @@ public class MayamPackageController
 			}
 			catch (RemoteException e1)
 			{
+				log.error("Exception thrown by Mayam while attempting to get asset: " + txPackage.getPresentationID());
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				e1.printStackTrace();
 			}
@@ -131,6 +136,7 @@ public class MayamPackageController
 
 				if (!attributesValid)
 				{
+					log.warn("Package updated but one or more attributes was invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 
@@ -140,22 +146,26 @@ public class MayamPackageController
 					result = client.updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
+						log.warn("Mayam failed to update Package");
 						returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED;
 					}
 				}
 				catch (RemoteException e)
 				{
 					e.printStackTrace();
+					log.error("Exception thrown by Mayam while attempting to update asset: " + txPackage.getPresentationID());
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
 			else
 			{
+				log.warn("Mayam was unable to locate Package:" + txPackage.getPresentationID());
 				returnCode = MayamClientErrorCode.PACKAGE_FIND_FAILED;
 			}
 		}
 		else
 		{
+			log.warn("Null package object, unable to update asset");
 			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
 		return returnCode;
@@ -175,6 +185,7 @@ public class MayamPackageController
 			}
 			catch (RemoteException e1)
 			{
+				log.error("Exception thrown by Mayam while attempting to get asset: " + txPackage.getPresentationID());
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				e1.printStackTrace();
 			}
@@ -191,6 +202,7 @@ public class MayamPackageController
 
 				if (!attributesValid)
 				{
+					log.warn("Package updated but one or more attributes were invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
 
@@ -200,22 +212,26 @@ public class MayamPackageController
 					result = client.updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
+						log.warn("Mayam failed to update Package");
 						returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED;
 					}
 				}
 				catch (RemoteException e)
 				{
 					e.printStackTrace();
+					log.error("Exception thrown by Mayam while attempting to update asset: " + txPackage.getPresentationID());
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
 			else
 			{
+				log.warn("Mayam was unable to locate Package: " + txPackage.getPresentationID());
 				returnCode = MayamClientErrorCode.PACKAGE_FIND_FAILED;
 			}
 		}
 		else
 		{
+			log.warn("Null package object, unable to update asset");
 			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
 		return returnCode;
@@ -246,7 +262,7 @@ public class MayamPackageController
 		}
 		catch (RemoteException e1)
 		{
-			// TODO: Error Handling
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID);
 			e1.printStackTrace();
 		}
 		return packageFound;
@@ -261,7 +277,7 @@ public class MayamPackageController
 		}
 		catch (RemoteException e1)
 		{
-			// TODO: Error Handling
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID);
 			e1.printStackTrace();
 		}
 		return assetAttributes;
