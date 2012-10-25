@@ -1,10 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/rest/tc/job/build/" ID="_Flkp4BhiEeKyaOfR4cyoLQ">
-  <rest:operation verb="POST" name="tcBuildJob" ID="_Flkp5hhiEeKyaOfR4cyoLQ">
-    <rest:input type="project:///tcAdapter/tcAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/tc/adapter}tcBuildJobXMLRequest" name="body" headerDirection="request" contentType="application/xml" ID="_Flkp5xhiEeKyaOfR4cyoLQ"/>
-    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="application/xml" ID="_Flkp6BhiEeKyaOfR4cyoLQ"/>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/rest/tc/job/build/" ID="_OmA2gB5_EeKH_4nYLIunPg">
+  <rest:operation verb="POST" name="tcBuildJob" ID="_OmA2gx5_EeKH_4nYLIunPg">
+    <rest:input type="project:///tcAdapter/tcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/tc/adapter}tcBuildJobXMLRequest" name="body" headerDirection="request" contentType="application/xml" ID="_OmA2hB5_EeKH_4nYLIunPg"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="text/xml" ID="_OmA2hR5_EeKH_4nYLIunPg"/>
   </rest:operation>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="dir" headerDirection="request" contentType="text/xml" ID="_Flkp4RhiEeKyaOfR4cyoLQ"/>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="search" headerDirection="request" contentType="text/xml" ID="_Flkp4hhiEeKyaOfR4cyoLQ"/>
-  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="query" headerDirection="request" contentType="text/xml" ID="_Flkp4xhiEeKyaOfR4cyoLQ"/>
 </rest:descriptor>

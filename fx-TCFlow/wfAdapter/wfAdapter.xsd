@@ -7,10 +7,26 @@
 
   <xs:element name="materialTransferForQCResponse" type="tns:materialTransferForQCResponse"/>
 
+  <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
+
+  <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
+
+  <xs:complexType name="materialTransferForTCRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="invokeIntalioQCFlow">
     <xs:sequence>
       <xs:element name="materialID" type="xs:string"/>
       <xs:element name="forTXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForTCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 

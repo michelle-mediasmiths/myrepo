@@ -1,0 +1,35 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TC="http://thisdiagram/TC" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/WFAdapter" xmlns:materialTransferForTC="http://example.com/wfAdapter/materialTransferForTC.rest" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFAdapter">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/TC" bpdm:prefix="TC" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/materialTransferForTC.rest" bpdm:prefix="materialTransferForTC" bpdm:comment="contrib=&apos;project:///wfAdapter/materialTransferForTC.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/materialTransferForTC.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="WFAdapter" bpdm:ID="_3q0QoB5_EeKGPvPCWJ8IKg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlkVar" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk" myRole="WFAdapter_for_TC" bpdm:enableSharing="false" bpdm:providedService="materialTransferForTC:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/tc/transferfortc" bpdm:providedIsDefault="true" bpdm:clientTasks="_3q0QoB5_EeKGPvPCWJ8IKg:_izWnoB6BEeKGPvPCWJ8IKg" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="materialTransferForTCMaterialTransferForTCRequestMsg" messageType="materialTransferForTC:materialTransferForTC_input" binding="materialTransferForTC:restBinding" operation="materialTransferForTC" opMsgType="0" bpdm:id="_jWOrNR6BEeKGPvPCWJ8IKg" bpdm:messageIds="inc:_jV-MgB6BEeKGPvPCWJ8IKg"/>
+            <bpel:variable name="materialTransferForTCMaterialTransferForTCResponseMsg" messageType="materialTransferForTC:materialTransferForTC_output" binding="materialTransferForTC:restBinding" operation="materialTransferForTC" opMsgType="1" bpdm:id="_jj3ekB6BEeKGPvPCWJ8IKg" bpdm:messageIds=" out:_jjtGgB6BEeKGPvPCWJ8IKg">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="materialTransferForTC:materialTransferForTC_output" bpdm:linkedPart="response" bpdm:binding="materialTransferForTC:restBinding" bpdm:opMsgType="1" bpdm:operation="materialTransferForTC"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask operation="materialTransferForTC" partnerLink="wFAdapterAndTCForHttpPortPlkVar" portType="materialTransferForTC:restInterface" isMyRole="true" enableSharing="false" bpdm:label="materialTransferForTC" bpdm:ID="_izWnoB6BEeKGPvPCWJ8IKg">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="materialTransferForTCMaterialTransferForTCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC:materialTransferForTC_input" bpdm:binding="materialTransferForTC:restBinding" bpdm:ID="_jV-MgB6BEeKGPvPCWJ8IKg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="materialTransferForTCMaterialTransferForTCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC:materialTransferForTC_output" bpdm:binding="materialTransferForTC:restBinding" bpdm:ID="_jjtGgB6BEeKGPvPCWJ8IKg"></bpdm:linkset>
+            </bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>
