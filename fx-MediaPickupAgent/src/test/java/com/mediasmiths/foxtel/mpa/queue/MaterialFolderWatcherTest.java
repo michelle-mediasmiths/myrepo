@@ -127,7 +127,7 @@ public class MaterialFolderWatcherTest {
 		// stop the watcher
 		toTest.setContinueWatching(false);
 
-//		logger.debug(StringUtils.join(queue.toArray(), ','));
+		logger.debug(String.format("Queue size %n entries: %s ", queue.size(), StringUtils.join(queue.toArray(), ',')));
 		
 		// check results
 		assertTrue(queue.size() == 4);
