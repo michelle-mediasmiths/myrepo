@@ -40,7 +40,6 @@ import com.mediasmiths.mq.listeners.InitiateQcListener;
 import com.mediasmiths.mq.listeners.ItemCreationListener;
 import com.mediasmiths.mq.listeners.PackageUpdateListener;
 import com.mediasmiths.mq.listeners.PreviewTaskListener;
-import com.mediasmiths.mq.listeners.QCCreateListener;
 import com.mediasmiths.mq.listeners.QcCompleteListener;
 import com.mediasmiths.mq.listeners.SegmentationCompleteListener;
 import com.mediasmiths.mq.listeners.TemporaryContentListener;
