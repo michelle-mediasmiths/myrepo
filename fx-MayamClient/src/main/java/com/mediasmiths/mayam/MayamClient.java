@@ -10,6 +10,7 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -68,4 +69,6 @@ public interface MayamClient {
 
 	PackageType getPackage(String packageID) throws MayamClientException;
 	MaterialType getMaterial(String materialID) throws MayamClientException;
+	
+	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException;
 }

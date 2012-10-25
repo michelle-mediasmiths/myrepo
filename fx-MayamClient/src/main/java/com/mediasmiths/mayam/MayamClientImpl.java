@@ -477,4 +477,10 @@ public class MayamClientImpl implements MayamClient
 	{
 		return materialController.getMaterial(materialID);
 	}
+
+
+	@Override
+	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException {
+		return tasksController.getTaskForAsset(type, id);
+	}
 }
