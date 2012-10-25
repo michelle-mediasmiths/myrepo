@@ -15,10 +15,12 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -74,19 +76,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/qc/autoQcFailed")
-	public void notifyAutoQCFailed(@QueryParam("id") String id, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException
+	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException
 	{
 		try
 		{
-			if (isForTXDelivery)
+			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, id);
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// id is an item id
-				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, id);
+				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
 			}
 		}
 		catch (MayamClientException e)
@@ -95,6 +97,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			throw e;
 		}
 	}
+	
 
 	@Override
 	@PUT
@@ -109,6 +112,32 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		mayamClient.transferMaterialToLocation(packageID, destination);
 		return new MaterialTransferForTCResponse(filename);
+	}
+
+	@Override
+	@PUT
+	@Path("/qc/tcFailed")
+	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
+	{
+		try
+		{
+			if (notification.isTXDelivery())
+			{
+				//transcode was for tx delivery
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getPackageID());
+			}
+			else
+			{
+				//transcode was for extended publishing
+				//TODO do something
+			}
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Failed to fail task!",e);
+			throw e;
+		}
+		
 	}
 
 }

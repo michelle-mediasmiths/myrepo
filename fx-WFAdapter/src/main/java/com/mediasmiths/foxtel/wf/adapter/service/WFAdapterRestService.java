@@ -7,10 +7,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -56,9 +58,15 @@ public interface WFAdapterRestService
 	@Produces("text/plain")
 	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
 
+
 	@PUT
 	@Path("/qc/autoQcFailed")
-	public void notifyAutoQCFailed(@QueryParam("id") String id, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException;
+	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException;
+	
+	@PUT
+	@Path("/qc/tcFailed")
+	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
+	
 	
 }
 
