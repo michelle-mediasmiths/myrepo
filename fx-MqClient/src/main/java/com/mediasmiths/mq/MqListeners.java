@@ -40,6 +40,7 @@ import com.mediasmiths.mq.listeners.InitiateQcListener;
 import com.mediasmiths.mq.listeners.ItemCreationListener;
 import com.mediasmiths.mq.listeners.PackageUpdateListener;
 import com.mediasmiths.mq.listeners.PreviewTaskListener;
+import com.mediasmiths.mq.listeners.QCCreateListener;
 import com.mediasmiths.mq.listeners.QcCompleteListener;
 import com.mediasmiths.mq.listeners.SegmentationCompleteListener;
 import com.mediasmiths.mq.listeners.TemporaryContentListener;
@@ -133,6 +134,7 @@ public class MqListeners implements Runnable {
 		attachListener(Topics.TASK_UPDATE, QcCompleteListener.getInstance(client, taskController));
 		attachListener(Topics.TASK_UPDATE, IngestCompleteListener.getInstance(client, taskController));
 		attachListener(Topics.TASK_UPDATE, FixAndStitchListener.getInstance(client, taskController));
+		attachListener(Topics.TASK_CREATE, QCCreateListener.getInstance(client, taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

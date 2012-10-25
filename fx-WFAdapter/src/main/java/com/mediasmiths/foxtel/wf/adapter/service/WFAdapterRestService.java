@@ -53,5 +53,10 @@ public interface WFAdapterRestService
 	@Path("/qc/profile")
 	@Produces("text/plain")
 	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
+
+	@PUT
+	@Path("/qc/autoQc")
+	public void notifyAutoQCFailure(@QueryParam("id") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
 	
 }
+

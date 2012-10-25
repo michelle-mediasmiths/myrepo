@@ -56,7 +56,7 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 			validateThenProcessFile(filePath);
 		} catch (InterruptedException e) {
 			logger.info("Interruped!", e);
-			stop();
+			return;
 		}
 
 		logger.trace("SingleMessageProcessor.run() exit");

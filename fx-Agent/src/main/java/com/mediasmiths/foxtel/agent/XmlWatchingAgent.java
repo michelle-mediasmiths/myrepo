@@ -16,14 +16,9 @@ import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 
 public abstract class XmlWatchingAgent<T> implements StoppableService {
 
-	private static final long FIVE_SECONDS = 5000L;
-
 	private static Logger logger = Logger.getLogger(XmlWatchingAgent.class);
 
-	private final MessageProcessor<T> messageProcessor;
 	private final Thread messageProcessorThread;
-
-	private final DirectoryWatchingQueuer directoryWatcher;
 	private final Thread directoryWatcherThread;
 	
 	private final List<Thread> threads = new ArrayList<Thread>();
@@ -36,13 +31,12 @@ public abstract class XmlWatchingAgent<T> implements StoppableService {
 		//configvalidator is injected by guice, its constructor can fail. this prevents the application even starting if there is a problem with the config
 		
 		// directory watching
-		this.directoryWatcher = directoryWatcher;
 		this.directoryWatcherThread = new Thread(directoryWatcher);
 		this.directoryWatcherThread.setName("DirectoryWatcher");
 		registerThread(directoryWatcherThread);
 
 		// message validation + processing
-		this.messageProcessor = messageProcessor;
+
 		this.messageProcessorThread = new Thread(messageProcessor);
 		this.messageProcessorThread.setName("MessageProcessor");
 		registerThread(messageProcessorThread);
@@ -78,19 +72,10 @@ public abstract class XmlWatchingAgent<T> implements StoppableService {
 
 	@Override
 	public void shutdown() {
-		// ask workers to stop nicely
-		messageProcessor.stop();
-		directoryWatcher.setContinueWatching(false);
-
-		// wait for a while
-		try {
-			Thread.sleep(FIVE_SECONDS);
-		} catch (InterruptedException e) {
-			logger.info("Interrupted during shutdown", e);
-		}
-
-		// interrupt workers who may be blocked on a queue or some other wait
-		// operation
+		
+		logger.info("shutting down");
+		
+		// interrupt worker threads
 		messageProcessorThread.interrupt();
 		directoryWatcherThread.interrupt();
 	}

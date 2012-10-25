@@ -27,8 +27,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private final String emergencyImportFolder;
 	private final String failedMessagesFolder;
 	private final long sleepTime;
-	private boolean stopRequested = false;
-
+	
 	private final AlertInterface alert;
 	private final String deliveryFailureAlertReceipient;
 
@@ -54,7 +53,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 	@Override
 	public void run() {
-		while (!stopRequested) {
+		while (!Thread.interrupted()) {
 
 			try {
 				logger.trace("going to sleep");
@@ -64,7 +63,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 			} catch (InterruptedException e) {
 				logger.info("Interrupted", e);
-				stopRequested = true;
+				return;
 			}
 
 		}
@@ -174,9 +173,4 @@ public class UnmatchedMaterialProcessor implements Runnable {
 					"Media Pickup Failure", sb.toString());
 		}
 	}
-
-	public void stop() {
-		stopRequested = true;
-	}
-
 }

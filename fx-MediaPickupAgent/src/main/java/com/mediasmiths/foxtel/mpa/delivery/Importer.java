@@ -25,7 +25,6 @@ public class Importer implements Runnable {
 
 	private final PendingImportQueue pendingImports;
 
-	private boolean stopRequested = false;
 	private final String targetFolder;
 	private final String quarrentineFolder;
 	private final String archiveFolder;
@@ -56,7 +55,7 @@ public class Importer implements Runnable {
 	public void run() {
 		logger.debug("Importer start");
 
-		while (!stopRequested) {
+		while (!Thread.interrupted()) {
 			try {
 				PendingImport pi = pendingImports.take();
 				logger.info("Picked up an import");
@@ -64,7 +63,7 @@ public class Importer implements Runnable {
 				logger.trace("Finished with import");
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
-				stop();
+				return;
 			}
 		}
 
@@ -190,9 +189,5 @@ public class Importer implements Runnable {
 
 	protected PendingImportQueue getPendingImports() {
 		return pendingImports;
-	}
-
-	public void stop() {
-		stopRequested = true;
 	}
 }

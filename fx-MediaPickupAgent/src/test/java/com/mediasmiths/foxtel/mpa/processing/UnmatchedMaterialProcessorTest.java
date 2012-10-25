@@ -71,7 +71,7 @@ public class UnmatchedMaterialProcessorTest {
 		//wait a while for processing to take place
 		Thread.sleep(500l);
 		//stop the unmatched material processor
-		toTest.stop();
+		unmatcherThread.interrupt();
 		
 		//check results		
 		verify(mm, atLeastOnce()).purgeUnmatchedMessages(timeout);

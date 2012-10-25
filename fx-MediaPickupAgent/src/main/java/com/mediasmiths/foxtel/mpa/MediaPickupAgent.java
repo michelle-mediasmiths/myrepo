@@ -14,8 +14,8 @@ import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
 public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 
-	private final Importer importer;
-	private final UnmatchedMaterialProcessor unmatchedMaterialProcessor;	
+	private final Thread importerThread;
+	private final Thread unmatchedThread;	
 	
 	@Inject
 	public MediaPickupAgent(ConfigValidator configValidator,DirectoryWatchingQueuer directoryWatcher,
@@ -23,13 +23,11 @@ public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 			ShutdownManager shutdownManager, Importer importer, UnmatchedMaterialProcessor unmatchedMaterialProcessor) throws JAXBException {
 		super(configValidator,directoryWatcher, messageProcessor, shutdownManager);
 		
-		this.importer=importer;
-		Thread importerThread = new Thread(importer);
+		importerThread = new Thread(importer);
 		importerThread.setName("Importer");
 		registerThread(importerThread);
 		
-		this.unmatchedMaterialProcessor=unmatchedMaterialProcessor;
-		Thread unmatchedThread = new Thread(unmatchedMaterialProcessor);
+		unmatchedThread = new Thread(unmatchedMaterialProcessor);
 		unmatchedThread.setName("Unmatched Material");
 		registerThread(unmatchedThread);
 		
@@ -38,8 +36,8 @@ public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 	@Override
 	public void shutdown() {
 		super.shutdown();
-		importer.stop();
-		unmatchedMaterialProcessor.stop();
+		importerThread.interrupt();
+		unmatchedThread.interrupt();
 	}
 
 }

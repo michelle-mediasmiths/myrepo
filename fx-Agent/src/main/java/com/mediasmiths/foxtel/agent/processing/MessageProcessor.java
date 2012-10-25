@@ -3,7 +3,6 @@ package com.mediasmiths.foxtel.agent.processing;
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 
-import java.beans.DesignMode;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -36,8 +35,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
 	private final FilesPendingProcessingQueue filePathsPending;
-	private boolean stopRequested = false;
-
+	
 	private final Unmarshaller unmarhsaller;
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
@@ -204,11 +202,6 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	private void moveMessageToFolder(File file, String destinationFolderPath)
-			throws IOException {
-		moveMessageToFolder(file, destinationFolderPath, false);
-	}
-
 	private synchronized void moveMessageToFolder(File file,
 			String destinationFolderPath, boolean ensureUniqueFirst)
 			throws IOException {
@@ -265,7 +258,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	@Override
 	public void run() {
 
-		while (!stopRequested) {
+		while (!Thread.interrupted()) {
 			try {
 				String filePath = getFilePathsPending().take();
 
@@ -277,7 +270,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
-				stop();
+				return;
 			} catch (Exception e) {
 				logger.fatal(
 						"Uncaught exception almost killed MessageProcessor thread, this is very bad",
@@ -294,10 +287,6 @@ public abstract class MessageProcessor<T> implements Runnable {
 	protected boolean isMessage(String filePath) {
 		return FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
 				.equals("xml");
-	}
-
-	public void stop() {
-		stopRequested = true;
 	}
 
 	public FilesPendingProcessingQueue getFilePathsPending() {

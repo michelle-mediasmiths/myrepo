@@ -53,7 +53,7 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			validateThenProcessFile(filePath);
 		} catch (InterruptedException e) {
 			logger.info("Interruped!", e);
-			stop();
+			return;
 		}
 
 		logger.trace("SingleMessageProcessor.run() exit");

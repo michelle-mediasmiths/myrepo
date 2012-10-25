@@ -42,7 +42,7 @@ public class SingleImporter extends Importer {
 			logger.trace("Finished with import");
 		} catch (InterruptedException e) {
 			logger.info("Interruped!", e);
-			stop();
+			return;
 		}
 
 		logger.debug("Importer stop");
