@@ -8,15 +8,15 @@
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_aEQ6kBbAEeKS2Pnh8vvKNg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_aEQ6kBbAEeKS2Pnh8vvKNg" bpdm:label="qc"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_aEQ6kBbAEeKS2Pnh8vvKNg" bpdm:label="qc"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="caller" bpdm:ID="_8G69FBa_EeKS2Pnh8vvKNg">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="qcAndCallerPlkVar" partnerLinkType="diag:qcAndCaller" initializePartnerRole="yes" partnerRole="qc_for_caller" bpdm:invokedService="qc:CanonicServiceForcaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Pool/caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_8G69FBa_EeKS2Pnh8vvKNg:_8G69Fha_EeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_aEQ6kBbAEeKS2Pnh8vvKNg"/>
+            <bpel:partnerLink name="qcAndCallerPlkVar" partnerLinkType="diag:qcAndCaller" initializePartnerRole="yes" partnerRole="qc_for_caller" bpdm:invokedService="qc:CanonicServiceForcaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc_workflow/caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_8G69FBa_EeKS2Pnh8vvKNg:_8G69Fha_EeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_aEQ6kBbAEeKS2Pnh8vvKNg"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="poolEventStartMessageRequest" messageType="qc:EventStartMessageRequest" bpdm:id="_4HalIBbAEeKS2Pnh8vvKNg" bpdm:messageIds=" out:_4HYI4BbAEeKS2Pnh8vvKNg">
+            <bpel:variable name="qc_workflowEventStartMessageRequest" messageType="qc:EventStartMessageRequest" bpdm:id="_4HalIBbAEeKS2Pnh8vvKNg" bpdm:messageIds=" out:_4HYI4BbAEeKS2Pnh8vvKNg">
                 <bpel:from bpdm:toPart="body">
                     <bpel:literal bpdm:linkedMessageType="qc:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
@@ -24,7 +24,7 @@
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask operation="EventStartMessage" partnerLink="qcAndCallerPlkVar" portType="qc:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="begin qc workflow" bpdm:ID="_8G69Fha_EeKS2Pnh8vvKNg">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="poolEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="qc:EventStartMessageRequest" bpdm:ID="_4HYI4BbAEeKS2Pnh8vvKNg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qc_workflowEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="qc:EventStartMessageRequest" bpdm:ID="_4HYI4BbAEeKS2Pnh8vvKNg"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

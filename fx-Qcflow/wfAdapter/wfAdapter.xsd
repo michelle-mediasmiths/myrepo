@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
+  <xs:element name="autoQCFailureNotification" type="tns:autoQCFailureNotification"/>
+
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
 
   <xs:element name="materialTransferForQCRequest" type="tns:materialTransferForQCRequest"/>
 
   <xs:element name="materialTransferForQCResponse" type="tns:materialTransferForQCResponse"/>
+
+  <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
+
+  <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
+
+  <xs:element name="tcFailureNotification" type="tns:tcFailureNotification"/>
+
+  <xs:complexType name="tcFailureNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="materialID" type="xs:string"/>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element name="TXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="materialTransferForQCResponse">
     <xs:sequence>
@@ -20,9 +36,28 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="materialTransferForTCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="materialTransferForQCRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="materialID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCFailureNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="assetId" type="xs:string"/>
+      <xs:element name="forTXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForTCRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>
