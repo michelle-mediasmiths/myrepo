@@ -51,8 +51,7 @@ public class MayamPackageController
 					&& attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 
-			// TODO: Asset Parent ID to be added by Mayam shortly
-			// attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 			// TODO: Any need to store number of segments?
 			// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
@@ -116,8 +115,7 @@ public class MayamPackageController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				// TODO: Asset Parent ID to be added by Mayam shortly
-				// attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 				// TODO: Any need to store number of segments?
 				// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
@@ -298,7 +296,8 @@ public class MayamPackageController
 			log.error(String.format("package %s has null presentationFormat", packageID));
 		}
 
-		// TODO: Asset Parent ID to be added by Mayam shortly
+		pt.setMaterialID(""+attributes.getAttribute(Attribute.ASSET_PARENT_ID));
+
 		// TODO: fetch segment information
 		// TODO : pt.setNotes ?
 
