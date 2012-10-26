@@ -24,12 +24,6 @@
             <bpel:partnerLink name="qc_adapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="diag:qc_adapterAndWorkflowForHttpPortPlk2" myRole="qc_adapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="qcStart:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/start" bpdm:providedIsDefault="true" bpdm:clientTasks="_U-qPMB9yEeKCKo-8QnTuIA:_jv_gEB9zEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_SmKt0B9yEeKCKo-8QnTuIA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_8chrRR9zEeKCKo-8QnTuIA" bpdm:messageIds="inc:_8cX6QB9zEeKCKo-8QnTuIA"/>
-            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_8wcFwB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_8wS70B9zEeKCKo-8QnTuIA">
-                <bpel:from bpdm:toPart="response">
-                    <bpel:literal bpdm:linkedMessageType="qcStart:qcStart_output" bpdm:linkedPart="response" bpdm:binding="qcStart:restBinding" bpdm:opMsgType="1" bpdm:operation="qcStart"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_9NeABR9zEeKCKo-8QnTuIA" bpdm:messageIds="inc:_9NUPAB9zEeKCKo-8QnTuIA"/>
             <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_9ho5MB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_9hfIMB9zEeKCKo-8QnTuIA">
                 <bpel:from bpdm:toPart="response">
@@ -42,6 +36,12 @@
                     <bpel:literal bpdm:linkedMessageType="qcResult:qcResult_output" bpdm:linkedPart="response" bpdm:binding="qcResult:restBinding" bpdm:opMsgType="1" bpdm:operation="qcResult"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_8chrRR9zEeKCKo-8QnTuIA" bpdm:messageIds="inc:_8cX6QB9zEeKCKo-8QnTuIA"/>
+            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_8wcFwB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_8wS70B9zEeKCKo-8QnTuIA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="qcStart:qcStart_output" bpdm:linkedPart="response" bpdm:binding="qcStart:restBinding" bpdm:opMsgType="1" bpdm:operation="qcStart"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
@@ -51,15 +51,15 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="qcStart" partnerLink="qc_adapterAndWorkflowForHttpPortPlk2Var" portType="qcStart:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcStart" bpdm:ID="_jv_gEB9zEeKCKo-8QnTuIA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_8cX6QB9zEeKCKo-8QnTuIA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_8wS70B9zEeKCKo-8QnTuIA"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
                 <bpdm:messagingtask operation="qcFinished" partnerLink="qc_adapterAndWorkflowForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcFinished" bpdm:ID="_lOQN0B9zEeKCKo-8QnTuIA">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcFinishedQcFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_input" bpdm:binding="qcFinished:restBinding" bpdm:ID="_9NUPAB9zEeKCKo-8QnTuIA"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcFinishedQcFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_output" bpdm:binding="qcFinished:restBinding" bpdm:ID="_9hfIMB9zEeKCKo-8QnTuIA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcStart" partnerLink="qc_adapterAndWorkflowForHttpPortPlk2Var" portType="qcStart:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcStart" bpdm:ID="_jv_gEB9zEeKCKo-8QnTuIA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_8cX6QB9zEeKCKo-8QnTuIA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_8wS70B9zEeKCKo-8QnTuIA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
