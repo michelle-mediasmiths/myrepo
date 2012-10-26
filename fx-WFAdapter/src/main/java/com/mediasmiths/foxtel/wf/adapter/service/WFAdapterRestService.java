@@ -66,7 +66,7 @@ public interface WFAdapterRestService
 	
 	@PUT
 	@Path("/qc/autoQcError")
-	public void notifyAutoQCError(AutoQCErrorNotification notification);
+	public void notifyAutoQCError(AutoQCErrorNotification notification) throws MayamClientException;
 	
 	
 	@PUT

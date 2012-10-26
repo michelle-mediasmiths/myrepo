@@ -61,7 +61,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		if (req.isForTXDelivery())
 		{
 			// TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
-			
+
 			destination = materialQCLocation.resolve(filename);
 			mayamClient.transferMaterialToLocation(id, destination);
 		}
@@ -180,13 +180,33 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/qc/autoQcError")
-	public void notifyAutoQCError(AutoQCErrorNotification notification)
+	public void notifyAutoQCError(AutoQCErrorNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
 				"Received notification of Auto QC Error ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-		// TODO: handle
+
+		//TODO: add entry to general error task list as investigation is required
+		
+		try
+		{
+			if (notification.isForTXDelivery())
+			{
+				// auto qc was for tx delivery
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+			}
+			else
+			{
+				// auto qc was for qc task
+				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+			}
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Failed to fail task!", e);
+			throw e;
+		}
 	}
 
 }
