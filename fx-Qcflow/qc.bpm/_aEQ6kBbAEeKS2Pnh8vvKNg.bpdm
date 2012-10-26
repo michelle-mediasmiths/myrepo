@@ -1,12 +1,12 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qcResult="http://example.com/qcAdapterRest/qcResult.rest" xmlns:this="http://thisdiagram/qc" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:getProfileForQC="http://example.com/wfAdapter/getProfileForQC.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FADAPTER="http://thisdiagram/FADAPTER" xmlns:diag="http://thisdiagram" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:materialTransferForQC="http://example.com/wfAdapter/materialTransferForQC.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQcFailed="http://example.com/wfAdapter/autoQcFailed.rest" xmlns:qcFinished="http://example.com/qcAdapterRest/qcFinished.rest" xmlns:qcStart="http://example.com/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/qc">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qcResult="http://example.com/qcAdapterRest/qcResult.rest" xmlns:this="http://thisdiagram/qc" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:getProfileForQC="http://example.com/wfAdapter/getProfileForQC.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diag="http://thisdiagram" xmlns:QCADAPTER="http://thisdiagram/QCADAPTER" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:materialTransferForQC="http://example.com/wfAdapter/materialTransferForQC.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQcFailed="http://example.com/wfAdapter/autoQcFailed.rest" xmlns:qcFinished="http://example.com/qcAdapterRest/qcFinished.rest" xmlns:qcStart="http://example.com/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/qc">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qc" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/getProfileForQC.rest" bpdm:prefix="getProfileForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/getProfileForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/FADAPTER" bpdm:prefix="FADAPTER" bpdm:comment="contrib=&apos;partner-pool:///__Ird4Ba_EeKS2Pnh8vvKNg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_BFDD8BbAEeKS2Pnh8vvKNg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/QCADAPTER" bpdm:prefix="QCADAPTER" bpdm:comment="contrib=&apos;partner-pool:///_BFDD8BbAEeKS2Pnh8vvKNg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/materialTransferForQC.rest" bpdm:prefix="materialTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/materialTransferForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
@@ -26,6 +26,7 @@
             </wsdl:message>
             <bpel:binding name="CanonicBindingForcaller" type="this:Forcaller" bpdm:isSynchronized="true"/>
         </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_8G69FBa_EeKS2Pnh8vvKNg" bpdm:label="caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/getProfileForQC.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/materialTransferForQC.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
@@ -36,17 +37,16 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQcFailed.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_BFDD8BbAEeKS2Pnh8vvKNg" bpdm:label="QCADAPTER"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///__Ird4Ba_EeKS2Pnh8vvKNg" bpdm:label="FADAPTER"/>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_8G69FBa_EeKS2Pnh8vvKNg" bpdm:label="caller"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="qc" bpdm:ID="_aEQ6kBbAEeKS2Pnh8vvKNg">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="qcAndQCADAPTERForHttpPortPlk2Var" partnerLinkType="diag:qcAndQCADAPTERForHttpPortPlk2" initializePartnerRole="yes" partnerRole="QCADAPTER_for_qc" bpdm:invokedService="qcStart:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/start" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_gUb4IBbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_BFDD8BbAEeKS2Pnh8vvKNg"/>
-            <bpel:partnerLink name="qcAndQCADAPTERForHttpPortPlk0Var" partnerLinkType="diag:qcAndQCADAPTERForHttpPortPlk0" initializePartnerRole="yes" partnerRole="QCADAPTER_for_qc" bpdm:invokedService="qcFinished:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" bpdm:invokedIsDefault="true" bpdm:clientTasks="_hbltcBbAEeKS2Pnh8vvKNg:_JWANQB6yEeKcytJL6XAZEw" bpdm:isManaged="true" bpdm:otherPoolId="_BFDD8BbAEeKS2Pnh8vvKNg"/>
             <bpel:partnerLink name="qcAndQCADAPTERForHttpPortPlk1Var" partnerLinkType="diag:qcAndQCADAPTERForHttpPortPlk1" initializePartnerRole="yes" partnerRole="QCADAPTER_for_qc" bpdm:invokedService="qcResult:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_jQ4PkBbKEeKY9cl7mHXLFw" bpdm:isManaged="true" bpdm:otherPoolId="_BFDD8BbAEeKS2Pnh8vvKNg"/>
-            <bpel:partnerLink name="qcAndCallerPlkVar" partnerLinkType="diag:qcAndCaller" myRole="qc_for_caller" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForcaller" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc_workflow/caller" bpdm:providedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_cLDA4BbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_8G69FBa_EeKS2Pnh8vvKNg"/>
+            <bpel:partnerLink name="qcAndCallerPlkVar" partnerLinkType="diag:qcAndCaller" myRole="qc_for_caller" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForcaller" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc/caller" bpdm:providedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_cLDA4BbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_8G69FBa_EeKS2Pnh8vvKNg"/>
             <bpel:partnerLink name="qcAndFADAPTERForHttpPortPlk1Var" partnerLinkType="diag:qcAndFADAPTERForHttpPortPlk1" initializePartnerRole="yes" partnerRole="FADAPTER_for_qc" bpdm:invokedService="getProfileForQC:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/qc/profile?materialID={materialid}&amp;isForTX={isForTX}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_cs5JsBbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="__Ird4Ba_EeKS2Pnh8vvKNg"/>
             <bpel:partnerLink name="qcAndFADAPTERForHttpPortPlk2Var" partnerLinkType="diag:qcAndFADAPTERForHttpPortPlk2" initializePartnerRole="yes" partnerRole="FADAPTER_for_qc" bpdm:invokedService="materialTransferForQC:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/qc/transferforqc" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_eCWgwBbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="__Ird4Ba_EeKS2Pnh8vvKNg"/>
             <bpel:partnerLink name="qcAndFADAPTERForHttpPortPlk0Var" partnerLinkType="diag:qcAndFADAPTERForHttpPortPlk0" initializePartnerRole="yes" partnerRole="FADAPTER_for_qc" bpdm:invokedService="autoQcFailed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/qc/autoQcFailed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_mKS8MB6rEeKcytJL6XAZEw" bpdm:isManaged="true" bpdm:otherPoolId="__Ird4Ba_EeKS2Pnh8vvKNg"/>
+            <bpel:partnerLink name="qcAndQCADAPTERForHttpPortPlk0Var" partnerLinkType="diag:qcAndQCADAPTERForHttpPortPlk0" initializePartnerRole="yes" partnerRole="QCADAPTER_for_qc" bpdm:invokedService="qcFinished:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_6TsdsB9LEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_BFDD8BbAEeKS2Pnh8vvKNg"/>
+            <bpel:partnerLink name="qcAndQCADAPTERForHttpPortPlk2Var" partnerLinkType="diag:qcAndQCADAPTERForHttpPortPlk2" initializePartnerRole="yes" partnerRole="QCADAPTER_for_qc" bpdm:invokedService="qcStart:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/start" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aEQ6kBbAEeKS2Pnh8vvKNg:_gUb4IBbAEeKS2Pnh8vvKNg" bpdm:isManaged="true" bpdm:otherPoolId="_BFDD8BbAEeKS2Pnh8vvKNg"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="autoQCErrorCount" type="xs:integer">
@@ -87,12 +87,21 @@
                 </bpel:from>
             </bpel:variable>
             <bpel:variable name="getProfileForQCGetProfileForQCResponseMsg" messageType="getProfileForQC:getProfileForQC_output" binding="getProfileForQC:restBinding" operation="getProfileForQC" opMsgType="1" bpdm:id="_4y5LFRbAEeKS2Pnh8vvKNg" bpdm:messageIds="inc:_4yrIoBbAEeKS2Pnh8vvKNg"/>
-            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_hbk7lR6xEeKcytJL6XAZEw" bpdm:messageIds="inc:_hbQygB6xEeKcytJL6XAZEw"/>
             <bpel:variable name="materialTransferForQCMaterialTransferForQCResponseMsg" messageType="materialTransferForQC:materialTransferForQC_output" binding="materialTransferForQC:restBinding" operation="materialTransferForQC" opMsgType="1" bpdm:id="_5YZE1RbAEeKS2Pnh8vvKNg" bpdm:messageIds="inc:_5YLCYBbAEeKS2Pnh8vvKNg"/>
             <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="1" bpdm:id="_qYNRph6sEeKcytJL6XAZEw" bpdm:messageIds="inc:_qX4hgB6sEeKcytJL6XAZEw"/>
             <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output" binding="qcResult:restBinding" operation="qcResult" opMsgType="1" bpdm:id="_3jOudRbKEeKY9cl7mHXLFw" bpdm:messageIds="inc:_3iypkBbKEeKY9cl7mHXLFw"/>
+            <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_9ZXOIB9LEeKCKo-8QnTuIA" bpdm:messageIds=" out:_9ZLn8B9LEeKCKo-8QnTuIA">
+                <bpel:from bpdm:toPart="jobname">
+                    <bpel:literal bpdm:linkedMessageType="qcFinished:qcFinished_input" bpdm:linkedPart="jobname" bpdm:binding="qcFinished:restBinding" bpdm:opMsgType="0" bpdm:operation="qcFinished"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_-RrWMB9LEeKCKo-8QnTuIA" bpdm:messageIds="inc:_-RTiwB9LEeKCKo-8QnTuIA"/>
+            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_2WX3EB9MEeKCKo-8QnTuIA" bpdm:messageIds="inc:_2V_ckB9MEeKCKo-8QnTuIA"/>
         </bpel:variables>
         <bpel:eventHandlers>
+            <bpel:onEvent>
+                <bpdm:gotoLabel operationName="check_if_finished" bpdm:label="check if finished - entering the loop" bpdm:ID="_6TsdsB9LEeKCKo-8QnTuIA-receiving"/>
+            </bpel:onEvent>
             <bpel:onEvent>
                 <bpdm:gotoLabel operationName="Start_QC" bpdm:label="Start QC - entering the loop" bpdm:ID="_gUb4IBbAEeKS2Pnh8vvKNg-receiving"/>
                 <bpdm:gotoLabel operationName="Start_QC" bpdm:label="Start QC - replying" bpdm:ID="_gUb4IBbAEeKS2Pnh8vvKNg-replying" type="reply"/>
@@ -112,134 +121,8 @@
                         </bpel:copy>
                     </bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_mVtBkBbBEeKS2Pnh8vvKNg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_hbQygB6xEeKcytJL6XAZEw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_2V_ckB9MEeKCKo-8QnTuIA"></bpdm:linkset>
                 </bpdm:messagingtask>
-                <bpel:scope bpdm:label="SubProcess" bpdm:ID="_hbltcBbAEeKS2Pnh8vvKNg">
-                    <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                        <bpel:condition bpdm:loopType="repeatUntil">xs:boolean($qcFinishedQcFinishedResponseMsg.response/text())<mapper:mapperLink><mapper:vertice id="33076960" targetPath="$repeat until" targetedBy="15076665-arg1"></mapper:vertice><mapper:vertice id="15076665" dimension="78x24" location="225,58"><mapper:value>xs:boolean()</mapper:value></mapper:vertice><mapper:vertice id="3652725" sourcePath="$qcFinishedQcFinishedResponseMsg.response/text()" targetedBy="15076665-arg0"></mapper:vertice></mapper:mapperLink></bpel:condition>
-                    </bpdm:linkset>
-                    <bpel:variables>
-                        <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_P8bHpR6yEeKcytJL6XAZEw" bpdm:messageIds="inc:_P8HloB6yEeKcytJL6XAZEw"/>
-                        <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_PenxUB6yEeKcytJL6XAZEw" bpdm:messageIds=" out:_PecyMB6yEeKcytJL6XAZEw">
-                            <bpel:from bpdm:toPart="jobname">
-                                <bpel:literal bpdm:linkedMessageType="qcFinished:qcFinished_input" bpdm:linkedPart="jobname" bpdm:binding="qcFinished:restBinding" bpdm:opMsgType="0" bpdm:operation="qcFinished"></bpel:literal>
-                            </bpel:from>
-                        </bpel:variable>
-                    </bpel:variables>
-                    <bpel:sequence>
-                        <bpdm:messagingtask eventType="intermediate: timer" bpdm:label="wait 10 seconds" bpdm:ID="_HchowBbTEeKY9cl7mHXLFw">
-                            <bpdm:linkset bpdm:type="timer">
-                                <bpel:for>"PT10S"<mapper:mapperLink><mapper:vertice id="4318491" targetPath="$duration" targetedBy="21421012-arg0"></mapper:vertice><mapper:vertice id="21421012" dimension="121x37" location="444,36"><mapper:value>"PT10S"</mapper:value></mapper:vertice></mapper:mapperLink></bpel:for>
-                            </bpdm:linkset>
-                        </bpdm:messagingtask>
-                        <bpdm:messagingtask operation="qcFinished" partnerLink="qcAndQCADAPTERForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="false" enableSharing="false" bpdm:label="poll while not finished" bpdm:ID="_JWANQB6yEeKcytJL6XAZEw">
-                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qcFinishedQcFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_input" bpdm:binding="qcFinished:restBinding" bpdm:ID="_PecyMB6yEeKcytJL6XAZEw"></bpdm:linkset>
-                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qcFinishedQcFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_output" bpdm:binding="qcFinished:restBinding" bpdm:ID="_P8HloB6yEeKcytJL6XAZEw"></bpdm:linkset>
-                        </bpdm:messagingtask>
-                    </bpel:sequence>
-                </bpel:scope>
-                <bpdm:messagingtask operation="qcResult" partnerLink="qcAndQCADAPTERForHttpPortPlk1Var" portType="qcResult:restInterface" isMyRole="false" enableSharing="false" bpdm:label="get results" bpdm:ID="_jQ4PkBbKEeKY9cl7mHXLFw">
-                    <bpdm:linkset bpdm:type="assignments">
-                        <bpel:copy>
-                            <bpel:from>$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()</bpel:from>
-                            <bpel:to>$qcResultQcResultRequestMsg.jobname/text()</bpel:to><mapper:mapperLink><mapper:vertice id="8093281" targetPath="$qcResultQcResultRequestMsg.jobname/text()" targetedBy="18133845-arg0"></mapper:vertice><mapper:vertice id="18133845" sourcePath="$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()"></mapper:vertice></mapper:mapperLink>
-                        </bpel:copy>
-                        <bpel:copy>
-                            <bpel:from>$materialTransferForQCMaterialTransferForQCResponseMsg.response/tns:destination/text()</bpel:from>
-                            <bpel:to>$qcResultQcResultRequestMsg.path/text()</bpel:to><mapper:mapperLink><mapper:vertice id="18929963" targetPath="$qcResultQcResultRequestMsg.path/text()" targetedBy="26112976-arg0"></mapper:vertice><mapper:vertice id="26112976" sourcePath="$materialTransferForQCMaterialTransferForQCResponseMsg.response/tns:destination/text()"></mapper:vertice></mapper:mapperLink>
-                        </bpel:copy>
-                    </bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qcResultQcResultRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_input" bpdm:binding="qcResult:restBinding" bpdm:ID="_3LPsQBbKEeKY9cl7mHXLFw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="qcResultQcResultResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_output" bpdm:binding="qcResult:restBinding" bpdm:ID="_3iypkBbKEeKY9cl7mHXLFw"></bpdm:linkset>
-                </bpdm:messagingtask>
-                <bpdm:gateway bpdm:label="pass\fail\error" bpdm:ID="_HmvTQB6rEeKcytJL6XAZEw" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
-                    <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_sDbn4B6tEeKcytJL6XAZEw" bpdm:targetDisplayName="[pass\fail\error - notify passed]">
-                        <bpel:condition>compare("success", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
-<mapper:mapperLink>
-  <mapper:vertice id="29708080" targetPath="$condition" targetedBy="31349839-arg2"></mapper:vertice>
-  <mapper:vertice id="31349839" dimension="78x24" location="420,84">
-    <mapper:value>compare()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="20366858" dimension="78x24" location="236,144" targetedBy="31349839-arg0">
-    <mapper:value>"success"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="21744220" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="31349839-arg1"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
-                    </bpdm:linkset>
-                    <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_te5gUB6tEeKcytJL6XAZEw" bpdm:targetDisplayName="[pass\fail\error - notifiyFailure]">
-                        <bpel:condition>compare("warning", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
-<mapper:mapperLink>
-  <mapper:vertice id="23162285" targetPath="$condition" targetedBy="10575847-arg2"></mapper:vertice>
-  <mapper:vertice id="10575847" dimension="78x24" location="336,24">
-    <mapper:value>compare()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="23804924" dimension="78x24" location="152,84" targetedBy="10575847-arg0">
-    <mapper:value>"warning"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="5705567" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="10575847-arg1"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
-                    </bpdm:linkset>
-                    <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_vkcQgB6tEeKcytJL6XAZEw" bpdm:targetDisplayName="default"></bpdm:linkset>
-                    <bpel:sequence>
-                        <bpdm:messagingtask bpdm:label="notify passed" bpdm:ID="_2ScEcB6rEeKcytJL6XAZEw"></bpdm:messagingtask>
-                    </bpel:sequence>
-                    <bpel:sequence>
-                        <bpdm:messagingtask operation="autoQcFailed" partnerLink="qcAndFADAPTERForHttpPortPlk0Var" portType="autoQcFailed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notifiyFailure" bpdm:ID="_mKS8MB6rEeKcytJL6XAZEw">
-                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQcFailedAutoQcFailedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_input" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_pi0-QB6rEeKcytJL6XAZEw"></bpdm:linkset>
-                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="autoQcFailedAutoQcFailedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_output" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_qX4hgB6sEeKcytJL6XAZEw"></bpdm:linkset>
-                        </bpdm:messagingtask>
-                        <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_HrlsIB6tEeKcytJL6XAZEw"></bpdm:messagingtask>
-                    </bpel:sequence>
-                    <bpel:sequence>
-                        <bpdm:gateway bpdm:label="error" bpdm:ID="_kVd2oB6tEeKcytJL6XAZEw" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
-                            <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_Fm2-0B6uEeKcytJL6XAZEw" bpdm:targetDisplayName="[error - increment error count]">
-                                <bpel:condition>$autoQcFailedAutoQcFailedRequestMsg.body/tns:forTXDelivery &lt; xs:integer("3")
-<mapper:mapperLink>
-  <mapper:vertice id="25506278" targetPath="$condition" targetedBy="10451732-arg2"></mapper:vertice>
-  <mapper:vertice id="10451732" dimension="78x24" location="372,48">
-    <mapper:value>&lt;</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="18594867" sourcePath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:forTXDelivery" targetedBy="10451732-arg0"></mapper:vertice>
-  <mapper:vertice id="32640896" dimension="78x24" location="264,84" targetedBy="10451732-arg1">
-    <mapper:value>xs:integer()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="1914286" dimension="109x25" location="120,120" targetedBy="32640896-arg0">
-    <mapper:value>"3"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
-                            </bpdm:linkset>
-                            <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_fIIuwB6wEeKcytJL6XAZEw" bpdm:targetDisplayName="default"></bpdm:linkset>
-                            <bpel:sequence>
-                                <bpdm:messagingtask bpdm:label="increment error count" bpdm:ID="_D5p2IB6uEeKcytJL6XAZEw">
-                                    <bpdm:linkset bpdm:type="assignments">
-                                        <bpel:copy>
-                                            <bpel:from>$autoQCErrorCount + xs:integer("1")</bpel:from>
-                                            <bpel:to>$autoQCErrorCount</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="19495014" targetPath="$autoQCErrorCount" targetedBy="7973231-arg2"></mapper:vertice>
-  <mapper:vertice id="7973231" dimension="78x24" location="384,72">
-    <mapper:value>+</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="3192671" sourcePath="$autoQCErrorCount" targetedBy="7973231-arg0"></mapper:vertice>
-  <mapper:vertice id="602273" dimension="78x24" location="300,108" targetedBy="7973231-arg1">
-    <mapper:value>xs:integer()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="9361626" dimension="85x25" location="180,144" targetedBy="602273-arg0">
-    <mapper:value>"1"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
-                                        </bpel:copy>
-                                    </bpdm:linkset>
-                                </bpdm:messagingtask>
-                                <bpdm:goto operationName="Start_QC" bpdm:label="Start QC - sending to the loop" bpdm:ID="_gUb4IBbAEeKS2Pnh8vvKNg-sending"/>
-                            </bpel:sequence>
-                            <bpel:sequence>
-                                <bpdm:messagingtask bpdm:label="notify persisten error" bpdm:ID="_ecHWQB6wEeKcytJL6XAZEw"></bpdm:messagingtask>
-                                <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_k40T8B6wEeKcytJL6XAZEw"></bpdm:messagingtask>
-                            </bpel:sequence>
-                        </bpdm:gateway>
-                    </bpel:sequence>
-                </bpdm:gateway>
             </bpel:onEvent>
         </bpel:eventHandlers>
         <bpel:sequence>
@@ -269,8 +152,10 @@
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="materialTransferForQCMaterialTransferForQCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForQC:materialTransferForQC_input" bpdm:binding="materialTransferForQC:restBinding" bpdm:ID="_5EobUBbAEeKS2Pnh8vvKNg"></bpdm:linkset>
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="materialTransferForQCMaterialTransferForQCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForQC:materialTransferForQC_output" bpdm:binding="materialTransferForQC:restBinding" bpdm:ID="_5YLCYBbAEeKS2Pnh8vvKNg"></bpdm:linkset>
+                <bpel:sequence>
+                    <bpdm:goto operationName="Start_QC" bpdm:label="Start QC - sending to the loop" bpdm:ID="_gUb4IBbAEeKS2Pnh8vvKNg-sending"/>
+                </bpel:sequence>
             </bpdm:messagingtask>
-            <bpdm:goto operationName="Start_QC" bpdm:label="Start QC - sending to the loop" bpdm:ID="_gUb4IBbAEeKS2Pnh8vvKNg-sending"/>
         </bpel:sequence>
     </bpel:scope>
 </bpel:process>
