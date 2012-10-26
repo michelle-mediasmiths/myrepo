@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
+  <xs:element name="autoQCErrorNotification" type="tns:autoQCErrorNotification"/>
+
   <xs:element name="autoQCFailureNotification" type="tns:autoQCFailureNotification"/>
+
+  <xs:element name="autoQCPassNotification" type="tns:autoQCPassNotification"/>
 
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
 
@@ -23,10 +27,25 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType abstract="true" name="autoQCNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="assetId" type="xs:string"/>
+      <xs:element name="forTXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="materialTransferForQCResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCErrorNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="invokeIntalioQCFlow">
@@ -49,15 +68,24 @@
   </xs:complexType>
 
   <xs:complexType name="autoQCFailureNotification">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="assetId" type="xs:string"/>
-      <xs:element name="forTXDelivery" type="xs:boolean"/>
-    </xs:sequence>
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="materialTransferForTCRequest">
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCPassNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 </xs:schema>

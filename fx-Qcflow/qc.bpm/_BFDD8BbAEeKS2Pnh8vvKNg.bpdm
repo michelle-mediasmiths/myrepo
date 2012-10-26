@@ -53,7 +53,7 @@
             <bpel:sequence>
                 <bpdm:messagingtask operation="qcStart" partnerLink="qcAndQCADAPTERForHttpPortPlk2Var" portType="qcStart:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcStart" bpdm:ID="_kAxxkBbBEeKS2Pnh8vvKNg">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_mVtBkBbBEeKS2Pnh8vvKNg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:msgVarScopeId="_BFDD8BbAEeKS2Pnh8vvKNg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_2V_ckB9MEeKCKo-8QnTuIA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_2V_ckB9MEeKCKo-8QnTuIA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
