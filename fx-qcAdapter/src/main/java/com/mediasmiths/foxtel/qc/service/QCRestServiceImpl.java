@@ -82,13 +82,13 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCStartResponse start(QCStartRequest request)
+	public QCStartResponse start(QCStartRequest request) throws MalformedURIException, RemoteException
 	{
 
 		log.debug(String.format("Start requested for file  %s", request.getFile()));
 
-		try
-		{
+//		try
+//		{
 			String jobName = cerifyClient.startQcForFile(request.getFile(), request.getIdent(), request.getProfileName());
 			log.info(String.format("Job %s created", jobName));
 			QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
@@ -96,12 +96,12 @@ public class QCRestServiceImpl implements QCRestService
 			jobIdent.setProfile(request.getProfileName());
 			res.setQcIdentifier(jobIdent);
 			return res;
-		}
-		catch (Exception e)
-		{
-			log.error("Error starting qc", e);
-			return new QCStartResponse(QCStartStatus.ERROR);
-		}
+//		}
+//		catch (Exception e)
+//		{
+//			log.error("Error starting qc", e);
+//			return new QCStartResponse(QCStartStatus.ERROR);
+//		}
 
 	}
 

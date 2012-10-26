@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.qc.service;
 
+import java.rmi.RemoteException;
+
 import javassist.NotFoundException;
 
 import javax.ws.rs.DefaultValue;
@@ -9,6 +11,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+
+import org.apache.axis.types.URI.MalformedURIException;
 
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;
@@ -36,11 +40,13 @@ public interface QCRestService {
 	 * @param profileName
 	 *            - the qc profile to check file against
 	 * @return
+	 * @throws RemoteException 
+	 * @throws MalformedURIException 
 	 */
 	@PUT
 	@Path("/start")
 	@Produces("application/xml")
-	public QCStartResponse start(QCStartRequest req);
+	public QCStartResponse start(QCStartRequest req) throws MalformedURIException, RemoteException;
 
 	/**
 	 * Returns the status of a given qc job
