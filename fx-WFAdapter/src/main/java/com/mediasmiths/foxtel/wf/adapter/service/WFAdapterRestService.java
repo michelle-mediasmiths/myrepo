@@ -7,9 +7,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
@@ -35,13 +37,7 @@ public interface WFAdapterRestService
 	@PUT
 	@Path("/qc/transferforqc")
 	@Produces("application/xml")
-	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException;
-	
-	
-	@PUT
-	@Path("/tc/transferfortc")
-	@Produces("application/xml")
-	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest materialID) throws MayamClientException;
+	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException;
 	
 	
 	/**
@@ -56,7 +52,7 @@ public interface WFAdapterRestService
 	@GET
 	@Path("/qc/profile")
 	@Produces("text/plain")
-	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
+	public String getProfileForQc(@QueryParam("assetID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
 
 
 	@PUT
@@ -64,9 +60,23 @@ public interface WFAdapterRestService
 	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException;
 	
 	@PUT
-	@Path("/qc/tcFailed")
-	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
+	@Path("/qc/autoQcPassed")
+	public void notifyAutoQCPassed(AutoQCPassNotification notification);
 	
+	@PUT
+	@Path("/qc/autoQcError")
+	public void notifyAutoQCError(AutoQCErrorNotification notification);
+	
+	
+	@PUT
+	@Path("/tc/tcFailed")
+	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
+		
+	@PUT
+	@Path("/tc/transferfortc")
+	@Produces("application/xml")
+	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest materialID) throws MayamClientException;
+
 	
 }
 

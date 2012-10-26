@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
+  <xs:element name="assetTransferForQCRequest" type="tns:assetTransferForQCRequest"/>
+
+  <xs:element name="assetTransferForQCResponse" type="tns:assetTransferForQCResponse"/>
+
   <xs:element name="autoQCErrorNotification" type="tns:autoQCErrorNotification"/>
 
   <xs:element name="autoQCFailureNotification" type="tns:autoQCFailureNotification"/>
@@ -8,10 +12,6 @@
   <xs:element name="autoQCPassNotification" type="tns:autoQCPassNotification"/>
 
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
-
-  <xs:element name="materialTransferForQCRequest" type="tns:materialTransferForQCRequest"/>
-
-  <xs:element name="materialTransferForQCResponse" type="tns:materialTransferForQCResponse"/>
 
   <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
 
@@ -27,32 +27,41 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType abstract="true" name="autoQCNotification">
+  <xs:complexType abstract="true" name="autoQCRequest">
     <xs:sequence>
-      <xs:element minOccurs="0" name="assetId" type="xs:string"/>
+      <xs:element name="assetId" type="xs:string"/>
       <xs:element name="forTXDelivery" type="xs:boolean"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="materialTransferForQCResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="autoQCErrorNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCNotification">
+      <xs:extension base="tns:autoQCRequest">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="invokeIntalioQCFlow">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="assetTransferForQCResponse">
     <xs:sequence>
-      <xs:element name="materialID" type="xs:string"/>
-      <xs:element name="forTXDelivery" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assetTransferForQCRequest">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="materialTransferForTCResponse">
@@ -61,15 +70,9 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="materialTransferForQCRequest">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="materialID" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-
   <xs:complexType name="autoQCFailureNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCNotification">
+      <xs:extension base="tns:autoQCRequest">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
@@ -83,7 +86,7 @@
 
   <xs:complexType name="autoQCPassNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCNotification">
+      <xs:extension base="tns:autoQCRequest">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>

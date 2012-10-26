@@ -12,9 +12,11 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
@@ -49,15 +51,23 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@PUT
 	@Path("/material/transferforqc")
 	@Produces("application/xml")
-	public MaterialTransferForQCResponse transferMaterialForQC(MaterialTransferForQCRequest req) throws MayamClientException
+	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException
 	{
-		log.info("Received MaterialTransferForQCRequest " + req.toString());
-		final String materialID = req.getMaterialID();
-		final String filename = req.getMaterialID() + ".mxf";
-		final URI destination = materialQCLocation.resolve(filename);
+		log.info("Received AssetTransferForQCRequest " + req.toString());
+		final String id = req.getAssetId();
+		final String filename = req.getAssetId() + ".mxf";
+		final URI destination;
+		if (req.isForTXDelivery())
+		{
+			//TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
+		}
+		else
+		{
+			destination = materialQCLocation.resolve(filename);
+			mayamClient.transferMaterialToLocation(id, destination);
+		}
 
-		mayamClient.transferMaterialToLocation(materialID, destination);
-		return new MaterialTransferForQCResponse(filename);
+		return new AssetTransferForQCResponse(filename);
 	}
 
 	@Override
@@ -75,8 +85,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/qc/autoQcFailed")
 	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException
 	{
-		log.info(String.format("Received notification of Auto QC failure ID %s isTX %b", notification.getAssetId(), notification.isForTXDelivery()));
-		
+		log.info(String.format(
+				"Received notification of Auto QC failure ID %s isTX %b",
+				notification.getAssetId(),
+				notification.isForTXDelivery()));
+
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -92,11 +105,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		catch (MayamClientException e)
 		{
-			log.error("Failed to fail task!",e);
+			log.error("Failed to fail task!", e);
 			throw e;
 		}
 	}
-	
 
 	@Override
 	@PUT
@@ -118,27 +130,54 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/qc/tcFailed")
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
-		log.info(String.format("Received notification of TC failure Paciage ID %s isTX %b", notification.getPackageID(), notification.isTXDelivery()));
-		
+		log.info(String.format(
+				"Received notification of TC failure Paciage ID %s isTX %b",
+				notification.getPackageID(),
+				notification.isTXDelivery()));
+
 		try
 		{
 			if (notification.isTXDelivery())
 			{
-				//transcode was for tx delivery
+				// transcode was for tx delivery
 				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getPackageID());
 			}
 			else
 			{
-				//transcode was for extended publishing
-				//TODO do something
+				// transcode was for extended publishing
+				// TODO do something
 			}
 		}
 		catch (MayamClientException e)
 		{
-			log.error("Failed to fail task!",e);
+			log.error("Failed to fail task!", e);
 			throw e;
 		}
-		
+
+	}
+
+	@Override
+	@PUT
+	@Path("/qc/autoQcPassed")
+	public void notifyAutoQCPassed(AutoQCPassNotification notification)
+	{
+		log.info(String.format(
+				"Received notification of Auto QC Pass ID %s isTX %b",
+				notification.getAssetId(),
+				notification.isForTXDelivery()));
+		// TODO: handle
+	}
+
+	@Override
+	@PUT
+	@Path("/qc/autoQcError")
+	public void notifyAutoQCError(AutoQCErrorNotification notification)
+	{
+		log.info(String.format(
+				"Received notification of Auto QC Error ID %s isTX %b",
+				notification.getAssetId(),
+				notification.isForTXDelivery()));
+		// TODO: handle
 	}
 
 }

@@ -1,0 +1,67 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:workflow="http://thisdiagram/workflow" xmlns:tns="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://example.com/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcFinished="http://example.com/qcAdapterRest/qcFinished.rest" xmlns:qcStart="http://example.com/qcAdapterRest/qcStart.rest" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/qcAdapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/qcAdapter">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="workflow" bpdm:comment="contrib=&apos;partner-pool:///_OwqXgB9UEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcFinished.rest" bpdm:prefix="qcFinished" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcFinished.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_OwqXgB9UEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qcAdapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_OwqXgB9UEeKCKo-8QnTuIA" bpdm:label="workflow"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcStart.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcFinished.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///qcAdapterRest/qcResult.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="qcAdapter" bpdm:ID="_QGgwIB9UEeKCKo-8QnTuIA">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="qcAdapterAndWorkflowForHttpPortPlk0Var" partnerLinkType="diag:qcAdapterAndWorkflowForHttpPortPlk0" myRole="qcAdapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="qcFinished:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" bpdm:providedIsDefault="true" bpdm:clientTasks="_QGgwIB9UEeKCKo-8QnTuIA:_b0eWoR9VEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_OwqXgB9UEeKCKo-8QnTuIA"/>
+            <bpel:partnerLink name="qcAdapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="diag:qcAdapterAndWorkflowForHttpPortPlk1" myRole="qcAdapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="qcResult:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" bpdm:providedIsDefault="true" bpdm:clientTasks="_QGgwIB9UEeKCKo-8QnTuIA:_dGf_MR9VEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_OwqXgB9UEeKCKo-8QnTuIA"/>
+            <bpel:partnerLink name="qcAdapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="diag:qcAdapterAndWorkflowForHttpPortPlk2" myRole="qcAdapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="qcStart:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-qcAdapter/rest/qc/start" bpdm:providedIsDefault="true" bpdm:clientTasks="_QGgwIB9UEeKCKo-8QnTuIA:_auJAsB9VEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_OwqXgB9UEeKCKo-8QnTuIA"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_ljvRQB9VEeKCKo-8QnTuIA" bpdm:messageIds="inc:_ljc9YB9VEeKCKo-8QnTuIA"/>
+            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_l26E4B9VEeKCKo-8QnTuIA" bpdm:messageIds=" out:_l2vs0B9VEeKCKo-8QnTuIA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="qcStart:qcStart_output" bpdm:linkedPart="response" bpdm:binding="qcStart:restBinding" bpdm:opMsgType="1" bpdm:operation="qcStart"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_mULPtR9VEeKCKo-8QnTuIA" bpdm:messageIds="inc:_mT2fkB9VEeKCKo-8QnTuIA"/>
+            <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_mmbdUB9VEeKCKo-8QnTuIA" bpdm:messageIds=" out:_mmQeMB9VEeKCKo-8QnTuIA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="qcFinished:qcFinished_output" bpdm:linkedPart="response" bpdm:binding="qcFinished:restBinding" bpdm:opMsgType="1" bpdm:operation="qcFinished"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input" binding="qcResult:restBinding" operation="qcResult" opMsgType="0" bpdm:id="_m9NloB9VEeKCKo-8QnTuIA" bpdm:messageIds="inc:_m83AUB9VEeKCKo-8QnTuIA"/>
+            <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output" binding="qcResult:restBinding" operation="qcResult" opMsgType="1" bpdm:id="_nUSB0B9VEeKCKo-8QnTuIA" bpdm:messageIds=" out:_nUEmcB9VEeKCKo-8QnTuIA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="qcResult:qcResult_output" bpdm:linkedPart="response" bpdm:binding="qcResult:restBinding" bpdm:opMsgType="1" bpdm:operation="qcResult"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcFinished" partnerLink="qcAdapterAndWorkflowForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcFinished" bpdm:ID="_b0eWoR9VEeKCKo-8QnTuIA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcFinishedQcFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_input" bpdm:binding="qcFinished:restBinding" bpdm:ID="_mT2fkB9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcFinishedQcFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_output" bpdm:binding="qcFinished:restBinding" bpdm:ID="_mmQeMB9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcResult" partnerLink="qcAdapterAndWorkflowForHttpPortPlk1Var" portType="qcResult:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcResult" bpdm:ID="_dGf_MR9VEeKCKo-8QnTuIA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcResultQcResultRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_input" bpdm:binding="qcResult:restBinding" bpdm:ID="_m83AUB9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcResultQcResultResponseMsg" bpdm:msgVarScopeId="_QGgwIB9UEeKCKo-8QnTuIA" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_output" bpdm:binding="qcResult:restBinding" bpdm:ID="_nUEmcB9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcStart" partnerLink="qcAdapterAndWorkflowForHttpPortPlk2Var" portType="qcStart:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcStart" bpdm:ID="_auJAsB9VEeKCKo-8QnTuIA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_ljc9YB9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_l2vs0B9VEeKCKo-8QnTuIA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>
