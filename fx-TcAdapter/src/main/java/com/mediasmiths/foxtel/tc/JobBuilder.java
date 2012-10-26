@@ -78,14 +78,19 @@ public class JobBuilder
 				inputfile,
 				outputFolder));
 		// fetch package and material information to determine profile
-		PackageType pack = mayamClient.getPackage(packageID);
-		MaterialType material = mayamClient.getMaterial(pack.getMaterialID());
+	
+		//TODO Put these back in
+		//PackageType pack = mayamClient.getPackage(packageID);
+		//MaterialType material = mayamClient.getMaterial(pack.getMaterialID());
 
 		TxProfile profile;
-
+		//TODO Remove this line
+		profile = TxProfile.MAM_HD_12ST_GXF_HD_12ST;
+		
 		try
 		{
-			profile = pickTxProfile(pack, material);
+			//TODO uncomment line below
+			//profile = pickTxProfile(pack, material);
 			log.debug(String.format("Selected profile %s for packageId %s", profile.toString(), packageID));
 		}
 		catch (Exception e)
