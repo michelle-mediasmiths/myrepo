@@ -11,6 +11,8 @@
 
   <xs:element name="autoQCPassNotification" type="tns:autoQCPassNotification"/>
 
+  <xs:element name="getQCProfileResponse" type="tns:getQCProfileResponse"/>
+
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
 
   <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
@@ -48,6 +50,12 @@
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="getQCProfileResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="profile" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="assetTransferForQCResponse">

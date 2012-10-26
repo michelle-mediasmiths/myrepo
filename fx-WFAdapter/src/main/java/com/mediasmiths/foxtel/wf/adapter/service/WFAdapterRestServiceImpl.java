@@ -17,6 +17,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
@@ -59,7 +60,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		final URI destination;
 		if (req.isForTXDelivery())
 		{
-			//TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
+			// TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
+			
+			destination = materialQCLocation.resolve(filename);
+			mayamClient.transferMaterialToLocation(id, destination);
 		}
 		else
 		{
@@ -73,11 +77,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@GET
 	@Path("/qc/profile")
-	@Produces("text/plain")
-	public String getProfileForQc(@QueryParam("materialID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery)
+	@Produces("application/xml")
+	public GetQCProfileResponse getProfileForQc(
+			@QueryParam("materialID") String materialID,
+			@QueryParam("isForTX") boolean isForTXDelivery)
 	{
 		// TODO implement
-		return "FoxtelK2";
+		GetQCProfileResponse resp = new GetQCProfileResponse();
+		resp.setProfile("FoxtelK2");
+
+		return resp;
 	}
 
 	@Override

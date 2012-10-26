@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/qc/autoQcError" ID="_YHfIwB6rEeKHiaCwzLaVjQ">
+  <rest:operation verb="PUT" name="autoQcError" ID="_YHfIwR6rEeKHiaCwzLaVjQ">
+    <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}autoQCErrorNotification" name="body" headerDirection="request" contentType="application/xml" ID="_YHfIwh6rEeKHiaCwzLaVjQ"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/xml" ID="_YHfIwx6rEeKHiaCwzLaVjQ"/>
+  </rest:operation>
+</rest:descriptor>

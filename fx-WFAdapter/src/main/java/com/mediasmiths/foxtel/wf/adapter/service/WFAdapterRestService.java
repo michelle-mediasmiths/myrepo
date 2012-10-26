@@ -12,6 +12,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
@@ -51,8 +52,8 @@ public interface WFAdapterRestService
 	 */
 	@GET
 	@Path("/qc/profile")
-	@Produces("text/plain")
-	public String getProfileForQc(@QueryParam("assetID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
+	@Produces("application/xml")
+	public GetQCProfileResponse getProfileForQc(@QueryParam("assetID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
 
 
 	@PUT

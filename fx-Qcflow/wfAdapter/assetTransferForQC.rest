@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/qc/transferforqc" ID="_KI-l0BOPEeKts9lH2jPCqg">
+  <rest:operation verb="PUT" name="assetTransferForQC" ID="_KI-l0ROPEeKts9lH2jPCqg">
+    <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}assetTransferForQCRequest" name="body" headerDirection="request" contentType="application/xml" ID="_KI-l0hOPEeKts9lH2jPCqg"/>
+    <rest:output type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}assetTransferForQCResponse" name="response" headerDirection="request" contentType="application/xml" ID="_KI-l0xOPEeKts9lH2jPCqg"/>
+  </rest:operation>
+</rest:descriptor>
