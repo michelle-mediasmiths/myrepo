@@ -2,6 +2,6 @@
 <rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/tc/transferfortc" ID="_baK68B5-EeKH_4nYLIunPg">
   <rest:operation verb="PUT" name="materialTransferForTC" ID="_baK69h5-EeKH_4nYLIunPg">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}materialTransferForTCRequest" name="body" headerDirection="request" contentType="application/xml" ID="_baK69x5-EeKH_4nYLIunPg"/>
-    <rest:output type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}materialTransferForTCResponse" name="response" headerDirection="request" contentType="text/xml" ID="_baK6-B5-EeKH_4nYLIunPg"/>
+    <rest:output type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}materialTransferForTCResponse" name="response" headerDirection="request" contentType="application/xml" ID="_baK6-B5-EeKH_4nYLIunPg"/>
   </rest:operation>
 </rest:descriptor>

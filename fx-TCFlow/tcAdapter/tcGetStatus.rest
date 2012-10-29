@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/rest/tc/job/{id}/finished" ID="_n13UsB6AEeKH_4nYLIunPg">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/tc/job/{id}/finished" ID="_n13UsB6AEeKH_4nYLIunPg">
   <rest:operation verb="GET" name="tcGetStatus" ID="_n13Ush6AEeKH_4nYLIunPg">
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_n13Usx6AEeKH_4nYLIunPg"/>
   </rest:operation>
