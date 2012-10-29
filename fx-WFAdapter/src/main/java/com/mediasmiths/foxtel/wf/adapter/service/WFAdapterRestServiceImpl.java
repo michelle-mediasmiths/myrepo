@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -138,7 +139,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/qc/tcFailed")
-	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
+	public String notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
 				"Received notification of TC failure Paciage ID %s isTX %b",
@@ -163,6 +164,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.error("Failed to fail task!", e);
 			throw e;
 		}
+		return "Remove this later";
 
 	}
 
@@ -227,5 +229,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	@PUT
+	@Path("/tc/tcFailedTotal")
+	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

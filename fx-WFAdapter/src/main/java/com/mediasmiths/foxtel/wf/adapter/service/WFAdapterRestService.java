@@ -16,6 +16,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -72,11 +73,13 @@ public interface WFAdapterRestService
 	/**
 	 * indates an error transcoding
 	 * @param notification
+	 * @return 
 	 * @throws MayamClientException
 	 */
 	@PUT
 	@Path("/tc/tcFailed")
-	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
+	@Produces("application/xml")
+	public String notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
 	
 	/**
 	 * indicates there have been multiple errors transcoding and the workflow has given up
@@ -85,7 +88,19 @@ public interface WFAdapterRestService
 	 */
 	@PUT
 	@Path("/tc/tcFailedTotal")
+	@Produces("application/xml")
 	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException;
+	
+	
+	/**
+	 * indates an error transcoding
+	 * @param notification
+	 * @throws MayamClientException
+	 */
+	@PUT
+	@Path("/tc/tcPassed")
+	@Produces("application/xml")
+	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
 	
 	@PUT
 	@Path("/tc/transferfortc")

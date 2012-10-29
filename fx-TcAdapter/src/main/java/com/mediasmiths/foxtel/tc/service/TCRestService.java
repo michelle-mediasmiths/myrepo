@@ -42,7 +42,8 @@ public interface TCRestService
 	
 	@POST
 	@Path("/job/build/")
-	@Produces("application/xml")
+	@Consumes("application/xml")
+	@Produces("text/plain")
 	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException;
 	
 	@PUT
@@ -85,7 +86,7 @@ public interface TCRestService
 
 	@GET
 	@Path("/job/{id}/success")
-	@Produces("application/xml")
+	@Produces("text/plain")
 	public Boolean jobSuccessful(@PathParam("id") String jobid);
 	
 	
