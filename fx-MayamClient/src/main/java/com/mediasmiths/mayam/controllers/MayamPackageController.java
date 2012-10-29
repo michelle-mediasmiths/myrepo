@@ -20,6 +20,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -273,7 +274,7 @@ public class MayamPackageController extends MayamController
 		return packageFound;
 	}
 
-	public AttributeMap getPackageAttributes(String presentationID)
+	public AttributeMap getPackageAttributes(String presentationID) throws MayamClientException
 	{
 		AttributeMap assetAttributes = null;
 		try
@@ -282,8 +283,8 @@ public class MayamPackageController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID,e1);
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED,e1);
 		}
 		return assetAttributes;
 	}
@@ -292,8 +293,9 @@ public class MayamPackageController extends MayamController
 	 * returns the package as represented in material exchange
 	 * @param packageID
 	 * @return
+	 * @throws RemoteException 
 	 */
-	public ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID)
+	public ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID) throws MayamClientException
 	{
 		ProgrammeMaterialType.Presentation.Package p = new ProgrammeMaterialType.Presentation.Package();
 		AttributeMap pack = getPackageAttributes(packageID);
@@ -305,7 +307,7 @@ public class MayamPackageController extends MayamController
 		return p;
 	}
 
-	public PackageType getPackage(String packageID)
+	public PackageType getPackage(String packageID) throws MayamClientException
 	{
 
 		PackageType pt = new PackageType();

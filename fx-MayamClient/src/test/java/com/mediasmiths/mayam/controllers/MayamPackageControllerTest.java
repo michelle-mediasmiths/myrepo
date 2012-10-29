@@ -33,6 +33,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamPackageControllerTest {
 
@@ -217,7 +218,7 @@ public class MayamPackageControllerTest {
 	}
 	
 	@Test
-	public void testGetPackageValid() 
+	public void testGetPackageValid() throws MayamClientException 
 	{
 		try {
 			when(client.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
@@ -229,7 +230,7 @@ public class MayamPackageControllerTest {
 	}
 	
 	@Test
-	public void testGetPackageInValid() 
+	public void testGetPackageInValid() throws MayamClientException 
 	{
 		try {
 			when(client.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
@@ -240,12 +241,11 @@ public class MayamPackageControllerTest {
 		assertEquals(null, attributes);
 	}
 	
-	@Test
+	@Test(expected = MayamClientException.class)
 	public void testGetPackageException() throws Exception
 	{
 		when(client.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
-		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
-		assertEquals(null, attributes);
+		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));		
 	}
 	
 	@Test

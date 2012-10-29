@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -147,9 +148,14 @@ public class MayamMaterialController extends MayamController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode createMaterial(MarketingMaterialType material)
+	/**
+	 * Creates a material, returns the id of the created material
+	 * @param material
+	 * @return
+	 * @throws MayamClientException 
+	 */
+	public String createMaterial(MarketingMaterialType material) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
@@ -179,8 +185,8 @@ public class MayamMaterialController extends MayamController
 
 			if (!attributesValid)
 			{
-				log.warn("Material created but one or more attributes was invalid");
-				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				log.error("Invalid attributes on material create request");
+				throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
 			}
 
 			AttributeMap result;
@@ -190,22 +196,24 @@ public class MayamMaterialController extends MayamController
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
-					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
+					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 				}
 			}
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
 				log.error("Exception thrown by Mayam while trying to create Material");
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
+			
+			String materialID = result.getAttribute(Attribute.ASSET_ID);
+			return materialID;
 		}
 		else
 		{
 			log.warn("Null material object, unable to create asset");
-			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
-		}
-		return returnCode;
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
+		}	
 	}
 
 	// Material - Updating a media asset in Mayam
@@ -456,7 +464,7 @@ public class MayamMaterialController extends MayamController
 		return assetAttributes;
 	}
 
-	public MaterialType getMaterial(String materialID)
+	public MaterialType getPHMaterialType(String materialID)
 	{ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
 		AttributeMap attributes = getMaterialAttributes(materialID);
 		MaterialType material = new MaterialType();
@@ -522,6 +530,19 @@ public class MayamMaterialController extends MayamController
 
 		return material;
 
+	}
+	
+	public com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType getMaterialType(String materialID){
+		AttributeMap attributes = getMaterialAttributes(materialID);
+		
+		//TODO get field to check for marketing material / programme material
+		boolean isProgrammeMaterial = true;
+//		if(isProgrammeMaterial){
+//			return getProgrammeMaterial(materialID);
+//		}
+//		
+		
+		return getProgrammeMaterial(materialID);
 	}
 
 	/**
