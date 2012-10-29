@@ -16,17 +16,19 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamPackageController
+public class MayamPackageController extends MayamController
 {
 	private final TasksClient client;
 
-	private final Logger log = Logger.getLogger(MayamPackageController.class);
+	protected final static Logger log = Logger.getLogger(MayamPackageController.class);
 
 	private final DateUtil dateUtil;
 
@@ -120,7 +122,8 @@ public class MayamPackageController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				attributesValid = attributesValid
+						&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 				// TODO: Any need to store number of segments?
 				// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
@@ -240,10 +243,13 @@ public class MayamPackageController
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
+		try
+		{
 			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-		} catch (RemoteException e) {
-			log.error("Error deleting package : "+ presentationID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting package : " + presentationID);
 			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
 		}
 		return returnCode;
@@ -268,7 +274,7 @@ public class MayamPackageController
 		return packageFound;
 	}
 
-	public AttributeMap getPackageAttributes(String presentationID)
+	public AttributeMap getPackageAttributes(String presentationID) throws MayamClientException
 	{
 		AttributeMap assetAttributes = null;
 		try
@@ -277,13 +283,31 @@ public class MayamPackageController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID,e1);
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED,e1);
 		}
 		return assetAttributes;
 	}
 
-	public PackageType getPackage(String packageID)
+	/**
+	 * returns the package as represented in material exchange
+	 * @param packageID
+	 * @return
+	 * @throws RemoteException 
+	 */
+	public ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID) throws MayamClientException
+	{
+		ProgrammeMaterialType.Presentation.Package p = new ProgrammeMaterialType.Presentation.Package();
+		AttributeMap pack = getPackageAttributes(packageID);
+		
+		p.setPresentationID(packageID);
+		//TODO segmentation;
+		//p.setSegmentation(value);
+
+		return p;
+	}
+
+	public PackageType getPackage(String packageID) throws MayamClientException
 	{
 
 		PackageType pt = new PackageType();
@@ -312,7 +336,7 @@ public class MayamPackageController
 			log.error(String.format("package %s has null presentationFormat", packageID));
 		}
 
-		pt.setMaterialID(""+attributes.getAttribute(Attribute.ASSET_PARENT_ID));
+		pt.setMaterialID("" + attributes.getAttribute(Attribute.ASSET_PARENT_ID));
 
 		// TODO: fetch segment information
 		// TODO : pt.setNotes ?

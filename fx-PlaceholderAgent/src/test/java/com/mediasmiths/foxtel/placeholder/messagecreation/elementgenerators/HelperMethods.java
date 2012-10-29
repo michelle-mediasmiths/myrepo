@@ -75,6 +75,7 @@ public class HelperMethods {
 				output.write("\n");
 				output.write(strLine);
 			}
+			br.close();
 		}
 		output.write("</Actions>");
 		output.write("\n</PlaceholderMessage>");

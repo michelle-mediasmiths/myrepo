@@ -116,7 +116,7 @@
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_7w2RAR9zEeKCKo-8QnTuIA"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8BbqsR9zEeKCKo-8QnTuIA"/>
     </vertices>
-    <vertices xmi:type="bpmn:SubProcess" xmi:id="_uQLWwR9yEeKCKo-8QnTuIA" iD="_uQLWwB9yEeKCKo-8QnTuIA" outgoingEdges="_U4an0R9zEeKCKo-8QnTuIA" incomingEdges="_Q2RBAR9zEeKCKo-8QnTuIA" activityType="SubProcess" looping="true">
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_uQLWwR9yEeKCKo-8QnTuIA" iD="_uQLWwB9yEeKCKo-8QnTuIA" outgoingEdges="_U4an0R9zEeKCKo-8QnTuIA" incomingEdges="_Q2RBAR9zEeKCKo-8QnTuIA" name="perform qc until 3 errors" activityType="SubProcess" looping="true">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_o4UvAB93EeKCKo-8QnTuIA" source="forEachSource">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o4UvAR93EeKCKo-8QnTuIA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
       </eAnnotations>
@@ -220,7 +220,7 @@
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8cX6QR9zEeKCKo-8QnTuIA"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8wS70R9zEeKCKo-8QnTuIA"/>
       </vertices>
-      <vertices xmi:type="bpmn:SubProcess" xmi:id="_yPCZAR9yEeKCKo-8QnTuIA" iD="_yPCZAB9yEeKCKo-8QnTuIA" outgoingEdges="_RzwkAR9zEeKCKo-8QnTuIA" incomingEdges="_oRaYoR96EeKCKo-8QnTuIA" activityType="SubProcess" looping="true">
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_yPCZAR9yEeKCKo-8QnTuIA" iD="_yPCZAB9yEeKCKo-8QnTuIA" outgoingEdges="_RzwkAR9zEeKCKo-8QnTuIA" incomingEdges="_oRaYoR96EeKCKo-8QnTuIA" name="poll every 10 seconds" activityType="SubProcess" looping="true">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GUBU0B90EeKCKo-8QnTuIA" source="forEachSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GUBU0R90EeKCKo-8QnTuIA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
         </eAnnotations>

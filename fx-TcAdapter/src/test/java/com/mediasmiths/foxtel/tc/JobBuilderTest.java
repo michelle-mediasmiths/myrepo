@@ -1,16 +1,17 @@
 package com.mediasmiths.foxtel.tc;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.tc.service.PathResolver;
 import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
@@ -44,7 +45,7 @@ public class JobBuilderTest
 	}
 	
 	@Test
-	public void testBuildJobForTxPackageTranscode() throws MayamClientException, JobBuilderException{
+	public void testBuildJobForTxPackageTranscode() throws MayamClientException, JobBuilderException, RemoteException{
 	
 		PackageType pt = buildPackage(PresentationFormatType.HD);
 		pt.setMaterialID(MATERIALID);

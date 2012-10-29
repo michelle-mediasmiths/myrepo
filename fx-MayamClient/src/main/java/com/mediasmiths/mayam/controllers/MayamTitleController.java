@@ -28,7 +28,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamTitleController {
+public class MayamTitleController extends MayamController{
 	private final TasksClient client;
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 	

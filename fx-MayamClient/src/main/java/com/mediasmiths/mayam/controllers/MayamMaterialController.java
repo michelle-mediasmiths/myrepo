@@ -28,10 +28,11 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamMaterialController
+public class MayamMaterialController extends MayamController
 {
 
 	private final TasksClient client;
@@ -89,7 +90,8 @@ public class MayamMaterialController
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					attributesValid = attributesValid
+							&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 				}
 
 				Library library = source.getLibrary();
@@ -146,9 +148,14 @@ public class MayamMaterialController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode createMaterial(MarketingMaterialType material)
+	/**
+	 * Creates a material, returns the id of the created material
+	 * @param material
+	 * @return
+	 * @throws MayamClientException 
+	 */
+	public String createMaterial(MarketingMaterialType material) throws MayamClientException
 	{
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
@@ -178,8 +185,8 @@ public class MayamMaterialController
 
 			if (!attributesValid)
 			{
-				log.warn("Material created but one or more attributes was invalid");
-				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				log.error("Invalid attributes on material create request");
+				throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
 			}
 
 			AttributeMap result;
@@ -189,22 +196,24 @@ public class MayamMaterialController
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
-					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
+					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 				}
 			}
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
 				log.error("Exception thrown by Mayam while trying to create Material");
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
+			
+			String materialID = result.getAttribute(Attribute.ASSET_ID);
+			return materialID;
 		}
 		else
 		{
 			log.warn("Null material object, unable to create asset");
-			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
-		}
-		return returnCode;
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
+		}	
 	}
 
 	// Material - Updating a media asset in Mayam
@@ -357,7 +366,8 @@ public class MayamMaterialController
 					Compile compile = source.getCompile();
 					if (compile != null)
 					{
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+						attributesValid = attributesValid
+								&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 					}
 
 					Library library = source.getLibrary();
@@ -454,7 +464,7 @@ public class MayamMaterialController
 		return assetAttributes;
 	}
 
-	public MaterialType getMaterial(String materialID)
+	public MaterialType getPHMaterialType(String materialID)
 	{ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
 		AttributeMap attributes = getMaterialAttributes(materialID);
 		MaterialType material = new MaterialType();
@@ -522,12 +532,88 @@ public class MayamMaterialController
 
 	}
 	
-	public MayamClientErrorCode deleteMaterial(String materialID) {
+	public com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType getMaterialType(String materialID){
+		AttributeMap attributes = getMaterialAttributes(materialID);
+		
+		//TODO get field to check for marketing material / programme material
+		boolean isProgrammeMaterial = true;
+//		if(isProgrammeMaterial){
+//			return getProgrammeMaterial(materialID);
+//		}
+//		
+		
+		return getProgrammeMaterial(materialID);
+	}
+
+	/**
+	 * Returns the ProgrammeMaterialType representation of a material, does not include media type or packages
+	 * @param materialID
+	 * @return
+	 */
+	public ProgrammeMaterialType getProgrammeMaterial(String materialID)
+	{
+
+		AttributeMap attributes = getMaterialAttributes(materialID);
+
+		ProgrammeMaterialType pmt = new ProgrammeMaterialType();
+
+		if (checkAttributeValid(attributes, Attribute.AUX_FLAG, materialID, "Adult only", Boolean.class))
+		{
+			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.AUX_FLAG));
+		}
+
+		if (checkAttributeValid(attributes, Attribute.ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
+		{
+			pmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.ASPECT_RATIO)).toString());
+		}
+
+		// TODO audio tracks
+		// pmt.setAudioTracks(value);
+
+		if (checkAttributeValid(attributes, Attribute.ASSET_DURATION, materialID, "Asset duration", Integer.class))
+		{
+			Integer durationInMillis = (Integer) attributes.getAttribute(Attribute.ASSET_DURATION);
+			pmt.setDuration(toTimecodeString(durationInMillis));
+		}
+
+		// TODO start and end timecodes
+		/*
+		 * 
+		 * if(checkAttributeValid(attributes, Attribute.???, materialID, "First Frame Timecode", Integer.class)){ Integer firstFrameTCinMillis = (Integer)attributes.getAttribute(Attribute.???);
+		 * pmt.setFirstFrameTimecode(toTimecodeString(firstFrameTCinMillis)); }
+		 * 
+		 * if(checkAttributeValid(attributes, Attribute.???, materialID, "Last Frame Timecode", Integer.class)){ Integer firstFrameTCinMillis = (Integer)attributes.getAttribute(Attribute.???);
+		 * pmt.setLastFrameTimecode(toTimecodeString(firstFrameTCinMillis)); }
+		 */
+
+		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
+		{
+			pmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
+		}
+
+		if (!attributes.getAttribute(Attribute.ASSET_ID).equals(materialID))
+		{
+			log.error("unexpected asset id for material " + materialID);
+		}
+
+		pmt.setMaterialID(materialID);
+
+		//TODO segmentation types
+		//pmt.setOriginalConform(value);
+		
+		return pmt;
+	}
+
+	public MayamClientErrorCode deleteMaterial(String materialID)
+	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
+		try
+		{
 			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
-		} catch (RemoteException e) {
-			log.error("Error deleting material : "+ materialID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting material : " + materialID);
 			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 		}
 		return returnCode;

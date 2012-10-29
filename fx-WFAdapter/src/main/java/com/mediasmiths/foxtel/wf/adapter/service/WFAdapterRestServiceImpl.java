@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
 import java.net.URI;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -12,11 +13,13 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
@@ -181,11 +184,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (notification.isForTXDelivery())
 		{
-			//update tasks status as required, next stage will be kicked off by intalio
+			// update tasks status as required, next stage will be kicked off by intalio
 		}
 		else
 		{
-			//update tasks status as required, next stage will be kicked off by intalio
+			// update tasks status as required, next stage will be kicked off by intalio
 		}
 	}
 
@@ -227,7 +230,24 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	@GET
+	@Path("/tx/companionXMLforTXPackage")
+	@Produces("application/xml")
+	public ProgrammeMaterialType getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID) throws MayamClientException
+	{
+		String materialID = mayamClient.getMaterialIDofPackageID(packageID);
+		ProgrammeMaterialType materialType = mayamClient.getProgrammeMaterialType(materialID);
 		
+		Package p = mayamClient.getPresentationPackage(packageID);
+		
+		List<Package> packages = materialType.getPresentation().getPackage();
+		packages.add(p);
+		
+		return materialType;
 	}
 	
 	@Override

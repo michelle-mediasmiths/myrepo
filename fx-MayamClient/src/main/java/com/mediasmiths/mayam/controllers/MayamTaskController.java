@@ -20,7 +20,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamTaskController {
+public class MayamTaskController extends MayamController{
 	private final TasksClient client;
 	private final Logger log = Logger.getLogger(MayamPackageController.class);
 

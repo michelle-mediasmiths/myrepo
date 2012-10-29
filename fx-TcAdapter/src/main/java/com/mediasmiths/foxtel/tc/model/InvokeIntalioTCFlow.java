@@ -1,8 +1,7 @@
 package com.mediasmiths.foxtel.tc.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
-
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class InvokeIntalioTCFlow
