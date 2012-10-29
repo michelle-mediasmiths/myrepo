@@ -22,11 +22,11 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamPackageController
+public class MayamPackageController extends MayamController
 {
 	private final TasksClient client;
 
-	private final Logger log = Logger.getLogger(MayamPackageController.class);
+	protected final static Logger log = Logger.getLogger(MayamPackageController.class);
 
 	private final DateUtil dateUtil;
 

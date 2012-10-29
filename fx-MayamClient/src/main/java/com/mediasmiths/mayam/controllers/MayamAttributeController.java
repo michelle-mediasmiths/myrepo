@@ -6,7 +6,7 @@ import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.BasicAttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
 
-public class MayamAttributeController {
+public class MayamAttributeController extends MayamController{
 	private final AttributeValidator validator;
 	private final TasksClient client;
 	private AttributeMap attributes;

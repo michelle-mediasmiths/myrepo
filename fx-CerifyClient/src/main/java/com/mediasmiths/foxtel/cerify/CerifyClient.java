@@ -210,7 +210,7 @@ public class CerifyClient
 		}
 		catch (MediaSetNameInUseFault e)
 		{
-			log.warn("Media set name already in use", e);
+			log.info("Media set name already in use", e);
 			return createMediaSet(file, ident, mediaSetName, mediaSetNameSuffix + 1);
 		}
 		catch (URLNotInMediaLocationFault e)

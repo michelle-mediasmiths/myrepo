@@ -31,7 +31,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamMaterialController
+public class MayamMaterialController extends MayamController
 {
 
 	private final TasksClient client;
@@ -89,7 +89,8 @@ public class MayamMaterialController
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					attributesValid = attributesValid
+							&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 				}
 
 				Library library = source.getLibrary();
@@ -357,7 +358,8 @@ public class MayamMaterialController
 					Compile compile = source.getCompile();
 					if (compile != null)
 					{
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+						attributesValid = attributesValid
+								&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 					}
 
 					Library library = source.getLibrary();
@@ -521,13 +523,76 @@ public class MayamMaterialController
 		return material;
 
 	}
-	
-	public MayamClientErrorCode deleteMaterial(String materialID) {
+
+	/**
+	 * Returns the ProgrammeMaterialType representation of a material, does not include media type or packages
+	 * @param materialID
+	 * @return
+	 */
+	public ProgrammeMaterialType getProgrammeMaterial(String materialID)
+	{
+
+		AttributeMap attributes = getMaterialAttributes(materialID);
+
+		ProgrammeMaterialType pmt = new ProgrammeMaterialType();
+
+		if (checkAttributeValid(attributes, Attribute.AUX_FLAG, materialID, "Adult only", Boolean.class))
+		{
+			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.AUX_FLAG));
+		}
+
+		if (checkAttributeValid(attributes, Attribute.ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
+		{
+			pmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.ASPECT_RATIO)).toString());
+		}
+
+		// TODO audio tracks
+		// pmt.setAudioTracks(value);
+
+		if (checkAttributeValid(attributes, Attribute.ASSET_DURATION, materialID, "Asset duration", Integer.class))
+		{
+			Integer durationInMillis = (Integer) attributes.getAttribute(Attribute.ASSET_DURATION);
+			pmt.setDuration(toTimecodeString(durationInMillis));
+		}
+
+		// TODO start and end timecodes
+		/*
+		 * 
+		 * if(checkAttributeValid(attributes, Attribute.???, materialID, "First Frame Timecode", Integer.class)){ Integer firstFrameTCinMillis = (Integer)attributes.getAttribute(Attribute.???);
+		 * pmt.setFirstFrameTimecode(toTimecodeString(firstFrameTCinMillis)); }
+		 * 
+		 * if(checkAttributeValid(attributes, Attribute.???, materialID, "Last Frame Timecode", Integer.class)){ Integer firstFrameTCinMillis = (Integer)attributes.getAttribute(Attribute.???);
+		 * pmt.setLastFrameTimecode(toTimecodeString(firstFrameTCinMillis)); }
+		 */
+
+		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
+		{
+			pmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
+		}
+
+		if (!attributes.getAttribute(Attribute.ASSET_ID).equals(materialID))
+		{
+			log.error("unexpected asset id for material " + materialID);
+		}
+
+		pmt.setMaterialID(materialID);
+
+		//TODO segmentation types
+		//pmt.setOriginalConform(value);
+		
+		return pmt;
+	}
+
+	public MayamClientErrorCode deleteMaterial(String materialID)
+	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
+		try
+		{
 			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
-		} catch (RemoteException e) {
-			log.error("Error deleting material : "+ materialID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting material : " + materialID);
 			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 		}
 		return returnCode;
