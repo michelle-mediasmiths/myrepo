@@ -59,13 +59,14 @@ public class QcProfileSelector
 
 	private String getProfileForMaterial(String materialID) throws MayamClientException
 	{
-		MaterialType material = mayamClient.getMaterial(materialID);
-		return getProfileForMaterial(material);
+//		MaterialType material = mayamClient.getMaterial(materialID);
+		return getProfileForMaterial(new MaterialType());
 	}
 
 	private String getProfileForMaterial(MaterialType material)
 	{
-		boolean isMaterialSD = (material.getRequiredFormat().equals("SD"));
+//		boolean isMaterialSD = (material.getRequiredFormat().equals("SD"));
+		boolean isMaterialSD = (true);
 		boolean isDolbyE = (false); // TODO replace once we can store retrieve audio track information in mayam
 
 		final String profile;
@@ -97,13 +98,14 @@ public class QcProfileSelector
 
 	private String getProfileForPackage(String packageID) throws MayamClientException
 	{
-		PackageType pack = mayamClient.getPackage(packageID);
-		return getProfileForPackage(pack);
+//		PackageType pack = mayamClient.getPackage(packageID);
+		return getProfileForPackage(new PackageType());
 	}
 
 	private String getProfileForPackage(PackageType pack)
 	{
-		boolean isPackageSD = (pack.getPresentationFormat() == PresentationFormatType.SD);
+//		boolean isPackageSD = (pack.getPresentationFormat() == PresentationFormatType.SD);
+		boolean isPackageSD = true;
 		boolean isDolbyE = (false); // TODO replace once we can store retrieve audio track information in mayam
 
 		final String profile;

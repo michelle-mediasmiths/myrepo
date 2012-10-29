@@ -190,7 +190,7 @@ public class CerifyClient
 			RemoteException
 	{
 
-		log.info(String.format("Creating a mediaset %s", mediaSetName));
+		log.info(String.format("Creating a mediaset %s", resolveMediaSetName(mediaSetName, mediaSetNameSuffix)));
 
 		URI media = resolveUriForFile(file);
 
@@ -238,7 +238,13 @@ public class CerifyClient
 			log.error("Error creating mediaset", e);
 			throw e;
 		}
+		
+		return resolveMediaSetName(mediaSetName, mediaSetNameSuffix);
+		
+	}
 
+	private String resolveMediaSetName(String mediaSetName, int mediaSetNameSuffix)
+	{
 		if (mediaSetNameSuffix == 0)
 		{
 			return mediaSetName; //the specified mediaset name was available
