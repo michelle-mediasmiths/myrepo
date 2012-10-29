@@ -172,7 +172,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	
 	public ClassificationEnumType buildClassification (String v) {
 		ClassificationEnumType classification = null;
-		classification = classification.fromValue(v);
+		classification = ClassificationEnumType.fromValue(v);
 		return classification;
 	}
 

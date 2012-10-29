@@ -177,7 +177,6 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {
 		
-		HelperMethods helper = new HelperMethods();
 		String programTitle = new MSTitleDescription().getShowAShowTitle();
 		
 		TitleDescriptionType tdt = new TitleDescriptionType();
@@ -229,11 +228,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		licenseHolder.setOrganisationName("Foxtel ManagementPty Ltd");
 		license.setLicenseHolder(licenseHolder);
 		
-		HelperMethods method = new HelperMethods();
-		//XMLGregorianCalendar xmlCal = method.giveValidDate();
 		XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(JAN1st);
 		licensePeriod.setStartDate(startDate);
-		//xmlCal = method.giveValidDate();
 		XMLGregorianCalendar endDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(JAN10th);
 		licensePeriod.setEndDate(endDate);
 		license.setLicensePeriod(licensePeriod);

@@ -3,21 +3,17 @@ package com.mediasmiths.foxtel.tc.service;
 import java.util.List;
 import java.util.UUID;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
-import org.datacontract.schemas._2004._07.rhozet.Preset;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
@@ -93,7 +89,7 @@ public class TCRestServiceImpl implements TCRestService
 	{
 		JobStatus status = jobStatus(jobid);
 
-		return status == status.COMPLETED || status == status.COMPLETED || status == status.FATAL;
+		return status == JobStatus.COMPLETED || status == JobStatus.COMPLETED || status == JobStatus.FATAL;
 	}
 
 	@Override
@@ -122,7 +118,7 @@ public class TCRestServiceImpl implements TCRestService
 	public Boolean jobSuccessful(@PathParam("id") String jobid)
 	{
 		JobStatus status = jobStatus(jobid);
-		return status == status.COMPLETED;
+		return status == JobStatus.COMPLETED;
 	}
 
 	@Override

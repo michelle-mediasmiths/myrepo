@@ -4,15 +4,12 @@ import java.io.IOException;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.log4j.Logger;
-import org.apache.xmlbeans.impl.common.IOUtil;
 
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.tc.service.PathResolver;
 import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;

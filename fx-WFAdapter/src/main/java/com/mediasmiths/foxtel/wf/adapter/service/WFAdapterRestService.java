@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -8,12 +7,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;

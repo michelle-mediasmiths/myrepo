@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.qc.model;
 
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 

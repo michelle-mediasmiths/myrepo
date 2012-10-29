@@ -2,14 +2,13 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 
 import org.apache.log4j.Logger;
 
+import au.com.foxtel.cf.mam.pms.MaterialType;
+import au.com.foxtel.cf.mam.pms.PackageType;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-
-import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.PackageType;
-import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 public class QcProfileSelector
 {

@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
 
 public class PathResolverTest

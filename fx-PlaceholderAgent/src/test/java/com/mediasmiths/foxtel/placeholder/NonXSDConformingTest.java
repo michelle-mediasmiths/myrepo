@@ -9,7 +9,6 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;

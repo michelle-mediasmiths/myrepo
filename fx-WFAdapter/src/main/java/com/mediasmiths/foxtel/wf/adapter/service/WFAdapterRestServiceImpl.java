@@ -13,14 +13,13 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
