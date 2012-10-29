@@ -11,6 +11,8 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
+import com.mediasmiths.foxtel.tc.service.PathResolver;
+import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -20,18 +22,24 @@ public class JobBuilderTest
 	private static String PACKAGEID = "packageid";
 	private static String MATERIALID = "materialid";
 	private static String INPUTFILE = "f:\\tcinput\\packageid.mxf";
+	private static String INPUTFILE_UNC = "\\\\foxtel\\foxtel\\tcinput\\packageid.mxf";
     private static String OUTPUTFOLDER = "f:\\tcoutput\\packageid\\";
+    private static String OUTPUTFOLDER_UNC = "\\\\foxtel\\foxtel\\tcoutput\\packageid\\";
+    
 
 	private JobBuilder toTest;
 	private MayamClient mayamClient;
+	private PathResolver pathResolver;
 	
 	private final static Logger log = Logger.getLogger(JobBuilderTest.class);
 	
 	@Before
 	public void before(){
 		
-		mayamClient = mock(MayamClient.class);
-		toTest = new JobBuilder(mayamClient);
+		mayamClient = mock(MayamClient.class);		
+		pathResolver = mock(PathResolver.class);
+		
+		toTest = new JobBuilder(mayamClient,pathResolver);
 		
 	}
 	
@@ -44,6 +52,8 @@ public class JobBuilderTest
 		
 		when(mayamClient.getPackage(PACKAGEID)).thenReturn(pt);
 		when(mayamClient.getMaterial(MATERIALID)).thenReturn(mt);
+		when(pathResolver.uncPath(PathType.WIN, INPUTFILE)).thenReturn(INPUTFILE_UNC);
+		when(pathResolver.uncPath(PathType.WIN, OUTPUTFOLDER)).thenReturn(OUTPUTFOLDER_UNC);
 		
 		String pcp = toTest.buildJobForTxPackageTranscode(PACKAGEID, INPUTFILE, OUTPUTFOLDER);
 		log.debug(pcp);

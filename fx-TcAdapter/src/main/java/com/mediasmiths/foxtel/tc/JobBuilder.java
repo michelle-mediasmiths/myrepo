@@ -11,7 +11,10 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mediasmiths.foxtel.tc.service.PathResolver;
+import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -31,14 +34,15 @@ public class JobBuilder
 	 * HD 		Stereo + Descrete Surround 	Yes 	Yes 	MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
 	 * 
 	 */
+	
+	private MayamClient mayamClient;
+	private PathResolver pathResolver;
 
 	@Inject
-	public JobBuilder(MayamClient mayamClient)
-	{
-		this.mayamClient = mayamClient;
+	public JobBuilder(MayamClient mayamClient, PathResolver pathResolver){
+		this.mayamClient=mayamClient;
+		this.pathResolver=pathResolver;
 	}
-
-	private final MayamClient mayamClient;
 
 	public enum TxProfile
 	{
@@ -102,23 +106,18 @@ public class JobBuilder
 
 		String pcp = loadProfileForPackage(packageID, profile);
 
+		//assuming for now that the path is a WINDOWS path, this may not be correct!
+		
 		pcp = pcp.replace(INPUT_FILE_PATH_PH, inputfile);
 		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, outputFolder);
 
-		String uncInputPath = uncPathFor(inputfile);
-		String uncOutputPath = uncPathFor(outputFolder);
+		String uncInputPath = pathResolver.uncPath(PathType.WIN, inputfile);
+		String uncOutputPath = pathResolver.uncPath(PathType.WIN, outputFolder);
 
 		pcp = pcp.replace(FULL_UNC_INPUT_PATH_PH, uncInputPath);
 		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);
 
 		return pcp;
-	}
-
-	private String uncPathFor(String path)
-	{
-		//assumes the path refers to a windows mapped drive pointing to \\foxtel\foxtel otherwise this has no chance of working
-		//TODO make this configurable etc
-		return "\\\\foxtel\\foxtel" + path.substring(2);
 	}
 
 	private String loadProfileForPackage(String packageID, TxProfile profile) throws JobBuilderException
