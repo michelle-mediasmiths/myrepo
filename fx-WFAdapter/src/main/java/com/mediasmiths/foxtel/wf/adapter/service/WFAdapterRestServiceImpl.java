@@ -10,6 +10,10 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.log4j.Logger;
 
+import au.com.foxtel.cf.mam.pms.MaterialType;
+import au.com.foxtel.cf.mam.pms.PackageType;
+import au.com.foxtel.cf.mam.pms.PresentationFormatType;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -38,6 +42,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("tc.material.location")
 	private URI materialTCLocation;
+	@Inject
+	private QcProfileSelector qcProfileSelector;
 
 	@Override
 	@GET
@@ -79,15 +85,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/qc/profile")
 	@Produces("application/xml")
 	public GetQCProfileResponse getProfileForQc(
-			@QueryParam("materialID") String materialID,
-			@QueryParam("isForTX") boolean isForTXDelivery)
+			@QueryParam("assetID") String assetID,
+			@QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException
 	{
-		// TODO implement
 		GetQCProfileResponse resp = new GetQCProfileResponse();
-		resp.setProfile("FoxtelK2");
-
+		String profile = qcProfileSelector.getProfileFor(assetID, isForTXDelivery);
+		resp.setProfile(profile);
 		return resp;
 	}
+	
 
 	@Override
 	@PUT

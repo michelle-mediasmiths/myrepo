@@ -49,11 +49,12 @@ public interface WFAdapterRestService
 	 * @param materialID
 	 * @param isForTXDelivery
 	 * @return
+	 * @throws MayamClientException 
 	 */
 	@GET
 	@Path("/qc/profile")
 	@Produces("application/xml")
-	public GetQCProfileResponse getProfileForQc(@QueryParam("assetID") String materialID, @QueryParam("isForTX") boolean isForTXDelivery);
+	public GetQCProfileResponse getProfileForQc(@QueryParam("assetID") String assetID, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException;
 
 
 	@PUT

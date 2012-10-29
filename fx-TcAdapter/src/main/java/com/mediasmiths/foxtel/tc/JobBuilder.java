@@ -22,13 +22,13 @@ public class JobBuilder
 
 	/**
 	 * 
-	 * video audio dolbyEe downres profile 
-	 * SD Stereo No n/a MAM-SD-12ST_GXF-SD-12ST 
-	 * SD Stereo + Descrete Surround Yes n/a MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE 
-	 * HD Stereo No No  MAM-HD-12ST_GXF-HD-12ST 
-	 * HD Stereo + Descrete Surround Yes No MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE 
-	 * HD Stereo No Yes MAM-HD-12ST_GXF-SD-12ST 
-	 * HD Stereo + Descrete Surround Yes Yes MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
+	 * video 	audio 						dolbyEe	downres profile 
+	 * SD 		Stereo 						No 		n/a 	MAM-SD-12ST_GXF-SD-12ST 
+	 * SD 		Stereo + Descrete Surround 	Yes 	n/a 	MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE 
+	 * HD 		Stereo 						No		No  	MAM-HD-12ST_GXF-HD-12ST 
+	 * HD 		Stereo + Descrete Surround 	Yes 	No 		MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE 
+	 * HD 		Stereo 						No 		Yes 	MAM-HD-12ST_GXF-SD-12ST 
+	 * HD 		Stereo + Descrete Surround 	Yes 	Yes 	MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
 	 * 
 	 */
 
