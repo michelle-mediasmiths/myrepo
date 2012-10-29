@@ -27,7 +27,7 @@ public abstract class MayamController
 	{
 		if (o == null)
 		{
-			log.warn(String.format("%s attribute of material %s is null", description, assetID));
+			log.warn(String.format("%s attribute of asset %s is null", description, assetID));
 		}
 		return o != null;
 	}

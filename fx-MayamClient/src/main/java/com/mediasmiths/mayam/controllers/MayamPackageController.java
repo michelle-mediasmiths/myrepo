@@ -16,6 +16,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -120,7 +121,8 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				attributesValid = attributesValid
+						&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 				// TODO: Any need to store number of segments?
 				// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
@@ -240,10 +242,13 @@ public class MayamPackageController extends MayamController
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
+		try
+		{
 			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-		} catch (RemoteException e) {
-			log.error("Error deleting package : "+ presentationID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting package : " + presentationID);
 			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
 		}
 		return returnCode;
@@ -283,6 +288,23 @@ public class MayamPackageController extends MayamController
 		return assetAttributes;
 	}
 
+	/**
+	 * returns the package as represented in material exchange
+	 * @param packageID
+	 * @return
+	 */
+	public ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID)
+	{
+		ProgrammeMaterialType.Presentation.Package p = new ProgrammeMaterialType.Presentation.Package();
+		AttributeMap pack = getPackageAttributes(packageID);
+		
+		p.setPresentationID(packageID);
+		//TODO segmentation;
+		//p.setSegmentation(value);
+
+		return p;
+	}
+
 	public PackageType getPackage(String packageID)
 	{
 
@@ -312,7 +334,7 @@ public class MayamPackageController extends MayamController
 			log.error(String.format("package %s has null presentationFormat", packageID));
 		}
 
-		pt.setMaterialID(""+attributes.getAttribute(Attribute.ASSET_PARENT_ID));
+		pt.setMaterialID("" + attributes.getAttribute(Attribute.ASSET_PARENT_ID));
 
 		// TODO: fetch segment information
 		// TODO : pt.setNotes ?
