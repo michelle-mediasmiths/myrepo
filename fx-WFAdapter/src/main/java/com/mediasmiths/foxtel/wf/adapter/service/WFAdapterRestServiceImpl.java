@@ -10,10 +10,6 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.log4j.Logger;
 
-import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.PackageType;
-import au.com.foxtel.cf.mam.pms.PresentationFormatType;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -93,7 +89,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		resp.setProfile(profile);
 		return resp;
 	}
-	
 
 	@Override
 	@PUT
@@ -181,6 +176,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 		// TODO: handle
+
+		if (notification.isForTXDelivery())
+		{
+			//update tasks status as required, next stage will be kicked off by intalio
+		}
+		else
+		{
+			//update tasks status as required, next stage will be kicked off by intalio
+		}
 	}
 
 	@Override
@@ -193,8 +197,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 
-		//TODO: add entry to general error task list as investigation is required
-		
+		// TODO: add entry to general error task list as investigation is required
+
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -213,6 +217,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.error("Failed to fail task!", e);
 			throw e;
 		}
+	}
+
+	@Override
+	@PUT
+	@Path("/tc/tcFailedTotal")
+	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 }

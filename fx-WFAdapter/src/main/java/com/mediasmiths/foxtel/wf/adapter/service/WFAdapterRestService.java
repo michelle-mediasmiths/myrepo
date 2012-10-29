@@ -69,11 +69,24 @@ public interface WFAdapterRestService
 	@Path("/qc/autoQcError")
 	public void notifyAutoQCError(AutoQCErrorNotification notification) throws MayamClientException;
 	
-	
+	/**
+	 * indates an error transcoding
+	 * @param notification
+	 * @throws MayamClientException
+	 */
 	@PUT
 	@Path("/tc/tcFailed")
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
-		
+	
+	/**
+	 * indicates there have been multiple errors transcoding and the workflow has given up
+	 * @param notification
+	 * @throws MayamClientException
+	 */
+	@PUT
+	@Path("/tc/tcFailedTotal")
+	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException;
+	
 	@PUT
 	@Path("/tc/transferfortc")
 	@Produces("application/xml")
