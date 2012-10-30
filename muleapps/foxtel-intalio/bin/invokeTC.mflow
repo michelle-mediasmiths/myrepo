@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="a flow">
+    <global-element type="http://www.mulesoft.org/schema/mule/cxf/configuration" name="CXF Configuration" entity-id="CXF Configuration#1">
+        <properties>
+            <property value="CXF_Configuration" name="name"/>
+            <property name="configurationLocation"/>
+            <property value="true" name="enableMuleSoapHeaders"/>
+            <property value="true" name="initializeStaticBusInstance"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="1" name="auxiliary;index"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="invokeTC" entity-id="49152de4-9a8f-4e04-b783-19aca8b57779">
+        <properties>
+            <property value="" name="processingStrategy2"/>
+            <property value="true" name="auxiliary;erased;processingStrategy2"/>
+            <property value="2" name="auxiliary;index"/>
+            <property name="updated"/>
+        </properties>
+        <description></description>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#1">
+                <properties>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="" name="port"/>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="" name="host"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="httpLabel"/>
+                    <property value="http://localhost:9085/tc" name="address"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="path"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="" name="user"/>
+                    <property value="" name="responseTimeout"/>
+                    <property value="" name="mimeType"/>
+                    <property value="" name="connector-ref"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="XSLT#1">
+                <properties>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="" name="returnClass"/>
+                    <property value="/Users/bmcleod/MuleStudio/workspace/foxtel-intalio/src/main/resources/invokeTC.xsl" name="xsl-file"/>
+                    <property value="false" name="ignoreBadInput"/>
+                    <property value="5" name="maxActiveTransformers"/>
+                    <property value="2" name="maxIdleTransformers"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="transformerFactoryClass"/>
+                    <property value="" name="xslt-text"/>
+                    <property value="UTF-8" name="outputEncoding"/>
+                    <property value="" name="uriResolver"/>
+                    <property value="" name="mimeType"/>
+                    <property value="4" name="auxiliary;index"/>
+                    <property name="updated"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/xslt-text;4067996">
+                        <property value="" name="xslt-text"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#2">
+                <properties>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="" name="port"/>
+                    <property value="" name="host"/>
+                    <property value="false" name="followRedirects"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="httpLabel"/>
+                    <property value="http://localhost:8080/ode/processes/fx-Tcflow/tc/workflow/caller" name="address"/>
+                    <property value="" name="path"/>
+                    <property value="UTF-8" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="POST" name="method"/>
+                    <property value="" name="user"/>
+                    <property value="" name="responseTimeout"/>
+                    <property value="text/xml" name="mimeType"/>
+                    <property value="" name="connector-ref"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
