@@ -141,38 +141,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@Override
 	@PUT
-	@Path("/qc/tcFailed")
-	public String notifyTCFailed(TCFailureNotification notification) throws MayamClientException
-	{
-		log.info(String.format(
-				"Received notification of TC failure Paciage ID %s isTX %b",
-				notification.getPackageID(),
-				notification.isTXDelivery()));
-
-		try
-		{
-			if (notification.isTXDelivery())
-			{
-				// transcode was for tx delivery
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getPackageID());
-			}
-			else
-			{
-				// transcode was for extended publishing
-				// TODO do something
-			}
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Failed to fail task!", e);
-			throw e;
-		}
-		return "Remove this later";
-
-	}
-
-	@Override
-	@PUT
 	@Path("/qc/autoQcPassed")
 	public void notifyAutoQCPassed(AutoQCPassNotification notification)
 	{
@@ -230,7 +198,34 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
+		log.info(String.format(
+				"Received notification of TC totalfailure Paciage ID %s ",
+				notification.getPackageID()));
 
+	}
+
+	@Override
+	@PUT
+	@Path("/tc/tcFailed")
+	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
+	{
+		
+		// TODO Auto-generated method stub
+		log.info(String.format(
+				"Received notification of TC failure Paciage ID %s",
+				notification.getPackageID()));
+	}
+	
+	@Override
+	@PUT
+	@Path("/tc/tcPassed")
+	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		log.info(String.format(
+				"Received notification of TC passed Paciage ID %s",
+				notification.getPackageID()));
+		
 	}
 
 	@Override
@@ -250,14 +245,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		return materialType;
 	}
 	
-	@Override
-	@PUT
-	@Path("/tc/tcFailedTotal")
-	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
-	{
-		// TODO Auto-generated method stub
-		
-	}
+
 
 
 }

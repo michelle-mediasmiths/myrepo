@@ -32,7 +32,6 @@ public interface TCRestService
 	
 	@POST
 	@Path("/job/build/")
-	@Consumes("application/xml")
 	@Produces("text/plain")
 	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException;
 	

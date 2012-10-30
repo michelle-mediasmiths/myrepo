@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -41,6 +42,10 @@ public interface WFAdapterRestService
 	@Produces("application/xml")
 	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException;
 	
+	@PUT
+	@Path("/tc/transferfortc")
+	@Produces("application/xml")
+	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest materialID) throws MayamClientException;
 	
 	/**
 	 * called to lookup the name of the qc profile that should be used for a given material 
@@ -76,10 +81,11 @@ public interface WFAdapterRestService
 	 * @return 
 	 * @throws MayamClientException
 	 */
+	
 	@PUT
 	@Path("/tc/tcFailed")
-	@Produces("application/xml")
-	public String notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
+	@Consumes("application/xml")
+	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException;
 	
 	/**
 	 * indicates there have been multiple errors transcoding and the workflow has given up
@@ -88,7 +94,7 @@ public interface WFAdapterRestService
 	 */
 	@PUT
 	@Path("/tc/tcFailedTotal")
-	@Produces("application/xml")
+	@Consumes("application/xml")
 	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException;
 	
 	
@@ -99,15 +105,8 @@ public interface WFAdapterRestService
 	 */
 	@PUT
 	@Path("/tc/tcPassed")
-	@Produces("application/xml")
+	@Consumes("application/xml")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
-	
-	@PUT
-	@Path("/tc/transferfortc")
-	@Produces("application/xml")
-	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest materialID) throws MayamClientException;
-
-	
 	
 	/**
 	 * returns the companion xml to send along with media as part of tx delivery

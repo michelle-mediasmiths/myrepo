@@ -6,19 +6,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TCPassedNotification
 {
-	private String materialID;
 	private String packageID;
-	private boolean isTXDelivery;
 	
-	@XmlElement
-	public String getMaterialID()
-	{
-		return materialID;
-	}
-	public void setMaterialID(String materialID)
-	{
-		this.materialID = materialID;
-	}
 	@XmlElement
 	public String getPackageID()
 	{
@@ -28,13 +17,5 @@ public class TCPassedNotification
 	{
 		this.packageID = packageID;
 	}
-	@XmlElement
-	public boolean isTXDelivery()
-	{
-		return isTXDelivery;
-	}
-	public void setTXDelivery(boolean isTXDelivery)
-	{
-		this.isTXDelivery = isTXDelivery;
-	}
+
 }

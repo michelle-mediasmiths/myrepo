@@ -6,19 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class TCFailureNotification
 {
-	private String materialID;
 	private String packageID;
-	private boolean isTXDelivery;
-	
-	@XmlElement
-	public String getMaterialID()
-	{
-		return materialID;
-	}
-	public void setMaterialID(String materialID)
-	{
-		this.materialID = materialID;
-	}
+	//private String errorMessage;
+
 	@XmlElement
 	public String getPackageID()
 	{
@@ -28,13 +18,16 @@ public class TCFailureNotification
 	{
 		this.packageID = packageID;
 	}
-	@XmlElement
-	public boolean isTXDelivery()
+	
+	/*@XmlElement
+	public String getErrorMessage()
 	{
-		return isTXDelivery;
+		return errorMessage;
 	}
-	public void setTXDelivery(boolean isTXDelivery)
+	public void setErrorMessage(String errorMessage)
 	{
-		this.isTXDelivery = isTXDelivery;
-	}
+		this.errorMessage = errorMessage;
+	}*/
+
+
 }
