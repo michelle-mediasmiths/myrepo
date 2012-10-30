@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.tc.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,10 +11,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
+import org.datacontract.schemas._2004._07.rhozet.DataObject;
 import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
+import org.datacontract.schemas._2004._07.rhozet.Task;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
@@ -128,6 +132,29 @@ public class TCRestServiceImpl implements TCRestService
 	public List<Job> listJobs() {
 		log.debug("listing jobs");		
 		return wfsClient.listJobs();	
+	}
+
+	@Override
+	@GET
+	@Path("/job/{id}/errormessage")
+	public String jobErrorMessage(@PathParam("id") String jobid)
+	{
+		Job job = wfsClient.getJob(UUID.fromString(jobid));
+		
+		StringBuilder sb = new StringBuilder();
+		List<String> errorPropertes = new ArrayList<String>();	
+		
+		for(Task t : job.getTask().getValue().getTask()){
+			for(DataObject property : t.getProperty().getValue().getDataObject()){
+				if(property.getName().getValue().equals("Error")){
+					errorPropertes.add((property.getValue().getValue()));					
+				}
+			}
+		}
+		
+		String errorMessage =  StringUtils.join(errorPropertes, "\r\n");
+		log.debug(String.format("returning errormessage %s for job %s", errorMessage,jobid));
+		return errorMessage;
 	}
 	
 }

@@ -78,6 +78,10 @@ public interface TCRestService
 	@Path("/job/{id}/success")
 	@Produces("text/plain")
 	public Boolean jobSuccessful(@PathParam("id") String jobid);
+
+	@GET
+	@Path("/job/{id}/errormessage")
+	public String jobErrorMessage(@PathParam("id") String jobid);
 	
 	
 } 
