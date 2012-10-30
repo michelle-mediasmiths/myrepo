@@ -1,6 +1,7 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TC="http://thisdiagram/TC" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/Caller" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Caller">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TC="http://thisdiagram/TC" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/Caller" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Caller">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/TC" bpdm:prefix="TC" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="wfAdapter" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
@@ -8,15 +9,16 @@
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Caller" bpdm:ID="_LewckB59EeKGPvPCWJ8IKg">
         <bpel:partnerLinks>
             <bpel:partnerLink name="callerAndTCPlkVar" partnerLinkType="diag:CallerAndTC" initializePartnerRole="yes" partnerRole="TC_for_Caller" bpdm:invokedService="TC:CanonicServiceForCaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/TC/Caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_LewckB59EeKGPvPCWJ8IKg:_LexDoB59EeKGPvPCWJ8IKg" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="tCEventStartMessageRequest" messageType="TC:EventStartMessageRequest" bpdm:id="_7u3U4B5_EeKGPvPCWJ8IKg" bpdm:messageIds=" out:_7u0RkB5_EeKGPvPCWJ8IKg">
+            <bpel:variable name="tCEventStartMessageRequest" messageType="TC:EventStartMessageRequest" bpdm:id="_lH8rECKgEeKHD-pz9CjvUA" bpdm:messageIds=" out:_lH5nwCKgEeKHD-pz9CjvUA">
                 <bpel:from bpdm:toPart="body">
                     <bpel:literal bpdm:linkedMessageType="TC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
@@ -24,7 +26,7 @@
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask operation="EventStartMessage" partnerLink="callerAndTCPlkVar" portType="TC:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Being TC workflow" bpdm:ID="_LexDoB59EeKGPvPCWJ8IKg">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageRequest" bpdm:ID="_7u0RkB5_EeKGPvPCWJ8IKg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageRequest" bpdm:ID="_lH5nwCKgEeKHD-pz9CjvUA"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>
