@@ -60,7 +60,7 @@ public class QCRestServiceImpl implements QCRestService
 					job.getIdentifier(),
 					status.getStatus().getValue(),
 					status.getProgress().floatValue()));
-			return new QCJobStatus(job, status.getStatus().getValue(), status.getProgress());
+			return new QCJobStatus(job, status.getStatus().getValue(), status.getProgress(), status.getAlertcount());
 		}
 		catch (JobDoesntExistFault e)
 		{

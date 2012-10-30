@@ -10,6 +10,8 @@ public class QCJobStatus {
 	private QCJobIdentifier ident;
 
 	private BigInteger progress;
+	
+	private BigInteger alertCount;
 
 	private JobStatusType status;
 
@@ -17,7 +19,7 @@ public class QCJobStatus {
 		
 	}
 	
-	public QCJobStatus(QCJobIdentifier ident, String status, BigInteger progress) {
+	public QCJobStatus(QCJobIdentifier ident, String status, BigInteger progress, BigInteger alertCount) {
 		this.ident=ident;
 		this.status = JobStatusType.fromString(status);
 		this.progress=progress;
