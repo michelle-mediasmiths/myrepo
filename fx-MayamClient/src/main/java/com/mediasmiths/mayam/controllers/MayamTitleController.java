@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.table.MediaRights;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
@@ -140,8 +139,7 @@ public class MayamTitleController extends MayamController{
 						rightsTable.setCellValue(i, 2, period.getStartDate().toString());
 						rightsTable.setCellValue(i, 3, period.getEndDate().toString());
 					}
-					MediaRights rights = new MediaRights(rightsTable);
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rights);
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 				}
 				
 				//Channels channels = license.getChannels();
@@ -325,8 +323,7 @@ public class MayamTitleController extends MayamController{
 							rightsTable.setCellValue(i, 2, period.getStartDate().toString());
 							rightsTable.setCellValue(i, 3, period.getEndDate().toString());
 						}
-						MediaRights rights = new MediaRights(rightsTable);
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rights);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					}
 					
 					//	Channels channels = license.getChannels();
