@@ -16,8 +16,23 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_Q35DmR9xEeKCKo-8QnTuIA" iD="_Q35DmB9xEeKCKo-8QnTuIA" associations="_XVZnoh9zEeKCKo-8QnTuIA" name="invoke" activityType="Task">
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_GXcV1iKhEeKJt7IsuN4hnw" iD="_GXcV1SKhEeKJt7IsuN4hnw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GXcV1yKhEeKJt7IsuN4hnw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXcV2CKhEeKJt7IsuN4hnw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXdj-CKhEeKJt7IsuN4hnw" key="defaultDeclarationName" value="workflowStartResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXeyEiKhEeKJt7IsuN4hnw" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startResponse"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_GXeLACKhEeKJt7IsuN4hnw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GXeyECKhEeKJt7IsuN4hnw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXeyESKhEeKJt7IsuN4hnw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_Q35DmR9xEeKCKo-8QnTuIA" iD="_Q35DmB9xEeKCKo-8QnTuIA" associations="_XVZnoh9zEeKCKo-8QnTuIA _GXeLACKhEeKJt7IsuN4hnw" name="invoke" activityType="Task">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_XVXLYR9zEeKCKo-8QnTuIA"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_GXJa4SKhEeKJt7IsuN4hnw"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_HFGGASKhEeKJt7IsuN4hnw"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_L7Rx0SKhEeKJt7IsuN4hnw"/>
     </vertices>
   </pools>
   <pools xmi:type="bpmn:Pool" xmi:id="_SmKt0R9yEeKCKo-8QnTuIA" iD="_SmKt0B9yEeKCKo-8QnTuIA" name="workflow">
@@ -102,6 +117,18 @@
       <associations xmi:type="bpmn:Association" xmi:id="_B49ewB90EeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B5AiEB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B5C-UB90EeKCKo-8QnTuIA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_L7WDQSKhEeKJt7IsuN4hnw" iD="_L7WDQCKhEeKJt7IsuN4hnw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_L7WDQiKhEeKJt7IsuN4hnw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_L7WDQyKhEeKJt7IsuN4hnw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_L7emKCKhEeKJt7IsuN4hnw" key="defaultDeclarationName" value="thisStartResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_L7qzYSKhEeKJt7IsuN4hnw" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startResponse"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_L7i3kCKhEeKJt7IsuN4hnw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_L7mh8CKhEeKJt7IsuN4hnw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_L7qzYCKhEeKJt7IsuN4hnw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
         </eAnnotations>
       </associations>
     </artifacts>
@@ -216,6 +243,23 @@
           </eAnnotations>
         </associations>
       </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_GXNFQSKhEeKJt7IsuN4hnw" iD="_GXNFQCKhEeKJt7IsuN4hnw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GXNFQiKhEeKJt7IsuN4hnw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXNFQyKhEeKJt7IsuN4hnw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXSk0iKhEeKJt7IsuN4hnw" key="defaultDeclarationName" value="thisStartResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXbuwSKhEeKJt7IsuN4hnw" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startResponse"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_GXUaACKhEeKJt7IsuN4hnw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GXW2QCKhEeKJt7IsuN4hnw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GXbuwCKhEeKJt7IsuN4hnw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+        <associations xmi:type="bpmn:Association" xmi:id="_HFJJUCKhEeKJt7IsuN4hnw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HFLlkCKhEeKJt7IsuN4hnw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HFOB0CKhEeKJt7IsuN4hnw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
       <vertices xmi:type="bpmn:Activity" xmi:id="_v_G9wR9yEeKCKo-8QnTuIA" iD="_v_G9wB9yEeKCKo-8QnTuIA" associations="_8cgdJR9zEeKCKo-8QnTuIA _8wg-QB9zEeKCKo-8QnTuIA" outgoingEdges="_oRaYoR96EeKCKo-8QnTuIA" name="start qc">
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8cX6QR9zEeKCKo-8QnTuIA"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8wS70R9zEeKCKo-8QnTuIA"/>
@@ -264,34 +308,40 @@
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#__RiwkR9zEeKCKo-8QnTuIA"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#__oKg0R9zEeKCKo-8QnTuIA"/>
       </vertices>
-      <vertices xmi:type="bpmn:Activity" xmi:id="__ktZoR9yEeKCKo-8QnTuIA" iD="__ktZoB9yEeKCKo-8QnTuIA" associations="_AV_3MB90EeKCKo-8QnTuIA _AtYccB90EeKCKo-8QnTuIA" outgoingEdges="_UEWtoR9zEeKCKo-8QnTuIA" incomingEdges="_TOvUQR9zEeKCKo-8QnTuIA" name="notifiy fail">
+      <vertices xmi:type="bpmn:Activity" xmi:id="__ktZoR9yEeKCKo-8QnTuIA" iD="__ktZoB9yEeKCKo-8QnTuIA" associations="_AV_3MB90EeKCKo-8QnTuIA _AtYccB90EeKCKo-8QnTuIA" outgoingEdges="_8V_fASKgEeKJt7IsuN4hnw" incomingEdges="_TOvUQR9zEeKCKo-8QnTuIA" name="notifiy fail">
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_AVs8QR90EeKCKo-8QnTuIA"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_As_a4R90EeKCKo-8QnTuIA"/>
       </vertices>
       <vertices xmi:type="bpmn:Activity" xmi:id="_GlYnER9zEeKCKo-8QnTuIA" iD="_GlYnEB9zEeKCKo-8QnTuIA" incomingEdges="_SdxxYR9zEeKCKo-8QnTuIA" name="increment error count"/>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_KQwsoR9zEeKCKo-8QnTuIA" iD="_KQwsoB9zEeKCKo-8QnTuIA" incomingEdges="_TrfhsR9zEeKCKo-8QnTuIA" activityType="EventEndEmpty"/>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_Kt2RQR9zEeKCKo-8QnTuIA" iD="_Kt2RQB9zEeKCKo-8QnTuIA" incomingEdges="_UEWtoR9zEeKCKo-8QnTuIA" activityType="EventEndEmpty"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_0XbtASKgEeKJt7IsuN4hnw" iD="_0XbtACKgEeKJt7IsuN4hnw" associations="_GXUaACKhEeKJt7IsuN4hnw" incomingEdges="_TrfhsR9zEeKCKo-8QnTuIA" name="reply to caller">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_GXJa4SKhEeKJt7IsuN4hnw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_7ltRkSKgEeKJt7IsuN4hnw" iD="_7ltRkCKgEeKJt7IsuN4hnw" associations="_HFJJUCKhEeKJt7IsuN4hnw" incomingEdges="_8V_fASKgEeKJt7IsuN4hnw" name="replay to caller">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_HFGGASKhEeKJt7IsuN4hnw"/>
+      </vertices>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_RzwkAR9zEeKCKo-8QnTuIA" iD="_RzwkAB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SHNEcR9zEeKCKo-8QnTuIA" iD="_SHNEcB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SdxxYR9zEeKCKo-8QnTuIA" iD="_SdxxYB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SzLZoR9zEeKCKo-8QnTuIA" iD="_SzLZoB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_TOvUQR9zEeKCKo-8QnTuIA" iD="_TOvUQB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_TrfhsR9zEeKCKo-8QnTuIA" iD="_TrfhsB9zEeKCKo-8QnTuIA"/>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_UEWtoR9zEeKCKo-8QnTuIA" iD="_UEWtoB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_oRaYoR96EeKCKo-8QnTuIA" iD="_oRaYoB96EeKCKo-8QnTuIA"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_8V_fASKgEeKJt7IsuN4hnw" iD="_8V_fACKgEeKJt7IsuN4hnw"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_MsJxAR9zEeKCKo-8QnTuIA" iD="_MsJxAB9zEeKCKo-8QnTuIA" associations="_BjkdkB90EeKCKo-8QnTuIA _B49ewB90EeKCKo-8QnTuIA" outgoingEdges="_VOvdIR9zEeKCKo-8QnTuIA" incomingEdges="_U4an0R9zEeKCKo-8QnTuIA" name="notify error">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_MsJxAR9zEeKCKo-8QnTuIA" iD="_MsJxAB9zEeKCKo-8QnTuIA" associations="_BjkdkB90EeKCKo-8QnTuIA _B49ewB90EeKCKo-8QnTuIA" outgoingEdges="_Kyu1YSKhEeKJt7IsuN4hnw" incomingEdges="_U4an0R9zEeKCKo-8QnTuIA" name="notify error">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_BjN4QR90EeKCKo-8QnTuIA"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_B4e9oR90EeKCKo-8QnTuIA"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_NqtD8R9zEeKCKo-8QnTuIA" iD="_NqtD8B9zEeKCKo-8QnTuIA" incomingEdges="_VOvdIR9zEeKCKo-8QnTuIA" activityType="EventEndEmpty"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_paBRYR94EeKCKo-8QnTuIA" iD="_paBRYB94EeKCKo-8QnTuIA" outgoingEdges="_qyF3kR94EeKCKo-8QnTuIA" incomingEdges="_qi-dgR94EeKCKo-8QnTuIA" name="set error count to zero"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_JySsESKhEeKJt7IsuN4hnw" iD="_JySsECKhEeKJt7IsuN4hnw" associations="_L7i3kCKhEeKJt7IsuN4hnw" incomingEdges="_Kyu1YSKhEeKJt7IsuN4hnw" name="reply to caller">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_L7Rx0SKhEeKJt7IsuN4hnw"/>
+    </vertices>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_QKBmER9zEeKCKo-8QnTuIA" iD="_QKBmEB9zEeKCKo-8QnTuIA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Q2RBAR9zEeKCKo-8QnTuIA" iD="_Q2RBAB9zEeKCKo-8QnTuIA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_U4an0R9zEeKCKo-8QnTuIA" iD="_U4an0B9zEeKCKo-8QnTuIA"/>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_VOvdIR9zEeKCKo-8QnTuIA" iD="_VOvdIB9zEeKCKo-8QnTuIA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_qi-dgR94EeKCKo-8QnTuIA" iD="_qi-dgB94EeKCKo-8QnTuIA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_qyF3kR94EeKCKo-8QnTuIA" iD="_qyF3kB94EeKCKo-8QnTuIA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Kyu1YSKhEeKJt7IsuN4hnw" iD="_Kyu1YCKhEeKJt7IsuN4hnw"/>
   </pools>
   <pools xmi:type="bpmn:Pool" xmi:id="_U-q2QB9yEeKCKo-8QnTuIA" iD="_U-qPMB9yEeKCKo-8QnTuIA" name="qc adapter">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_E0_yEB90EeKCKo-8QnTuIA" source="executablepool">
@@ -637,4 +687,7 @@
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B4jPER90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/output/autoQcErrorResponse"/>
     </eAnnotations>
   </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_GXJa4SKhEeKJt7IsuN4hnw" iD="_GXJa4CKhEeKJt7IsuN4hnw" source="_0XbtASKgEeKJt7IsuN4hnw" target="_Q35DmR9xEeKCKo-8QnTuIA"/>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_HFGGASKhEeKJt7IsuN4hnw" iD="_HFGGACKhEeKJt7IsuN4hnw" source="_7ltRkSKgEeKJt7IsuN4hnw" target="_Q35DmR9xEeKCKo-8QnTuIA"/>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_L7Rx0SKhEeKJt7IsuN4hnw" iD="_L7Rx0CKhEeKJt7IsuN4hnw" source="_JySsESKhEeKJt7IsuN4hnw" target="_Q35DmR9xEeKCKo-8QnTuIA"/>
 </bpmn:BpmnDiagram>
