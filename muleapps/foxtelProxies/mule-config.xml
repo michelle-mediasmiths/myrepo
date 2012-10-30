@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:http="http://www.mulesoft.org/schema/mule/http"
+      xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+      xmlns:servlet="http://www.mulesoft.org/schema/mule/servlet"
+      xmlns:pattern="http://www.mulesoft.org/schema/mule/pattern"
+      xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+        http://www.mulesoft.org/schema/mule/pattern http://www.mulesoft.org/schema/mule/pattern/3.3/mule-pattern.xsd">
+
+
+    <description>
+    Proxy connections for WFS solution
+    </description>
+
+	<pattern:http-proxy name="http-proxy-tcAdapter">
+    	<http:inbound-endpoint address="http://0.0.0.0:9080/fx-TcAdapter" />
+	    <http:outbound-endpoint address="http://localhost:8080/fx-TcAdapter" />
+	</pattern:http-proxy>
+
+	<pattern:http-proxy name="http-proxy-qcAdapter">
+    	<http:inbound-endpoint address="http://0.0.0.0:9080/fx-qcAdapter" />
+	    <http:outbound-endpoint address="http://localhost:8080/fx-qcAdapter" />
+	</pattern:http-proxy>
+
+	<pattern:http-proxy name="http-proxy-WFAdapter">
+    	<http:inbound-endpoint address="http://0.0.0.0:9080/fx-WFAdapter" />
+	    <http:outbound-endpoint address="http://localhost:8000/fx-WFAdapter" />
+	</pattern:http-proxy>
+	
+	<pattern:http-proxy name="http-proxy-mayam-tasks-ws">
+    	<http:inbound-endpoint address="http://0.0.0.0:9084/" />
+	    <http:outbound-endpoint address="http://localhost:8084/" />
+	</pattern:http-proxy>
+
+	<pattern:http-proxy name="http-proxy-cerify">
+    	<http:inbound-endpoint address="http://0.0.0.0:9082/" />
+	    <http:outbound-endpoint address="http://192.168.2.13:80/" />
+	</pattern:http-proxy>
+
+	<pattern:http-proxy name="http-proxy-carbonwfs">
+    	<http:inbound-endpoint address="http://0.0.0.0:9083/" />
+	    <http:outbound-endpoint address="http://192.168.2.45:8731/" />
+	</pattern:http-proxy>
+	
+
+</mule>

@@ -167,7 +167,7 @@ public class MaterialFolderWatcherTest {
 
 		// wait a longer while to give the watcher a change to pick up the files
 		try {
-			Thread.sleep(20000l); //we need to wait for such a long time as java.nio.file.WatcherService is slooooow
+			Thread.sleep(10000l); //we need to wait for such a long time as java.nio.file.WatcherService is slooooow
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
