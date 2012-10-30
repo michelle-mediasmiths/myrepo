@@ -7,8 +7,8 @@
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_XVYZgR9zEeKCKo-8QnTuIA" iD="_XVYZgB9zEeKCKo-8QnTuIA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVYZgh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVYZgx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVZnoR9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="workflowEventStartMessageRequest"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVaOsB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}EventStartMessageRequest"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVZnoR9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="workflowStartRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVaOsB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startRequest"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_XVZnoh9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVZnox9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -24,8 +24,8 @@
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_XVaOtx9zEeKCKo-8QnTuIA" iD="_XVaOth9zEeKCKo-8QnTuIA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVaOuB9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVaOuR9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVbc0h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="thisEventStartMessageRequest"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVcD4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}EventStartMessageRequest"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVbc0h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="thisStartRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVcD4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startRequest"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_XVbc0x9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVbc1B9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -105,7 +105,7 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_bWc3sR9yEeKCKo-8QnTuIA" iD="_bWc3sB9yEeKCKo-8QnTuIA" associations="_XVbc0x9zEeKCKo-8QnTuIA" outgoingEdges="_qi-dgR94EeKCKo-8QnTuIA" activityType="EventStartMessage">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_bWc3sR9yEeKCKo-8QnTuIA" iD="_bWc3sB9yEeKCKo-8QnTuIA" associations="_XVbc0x9zEeKCKo-8QnTuIA" outgoingEdges="_qi-dgR94EeKCKo-8QnTuIA" name="start" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_XVXLYR9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_l5W1wR9yEeKCKo-8QnTuIA" iD="_l5W1wB9yEeKCKo-8QnTuIA" associations="_6T_Rch9zEeKCKo-8QnTuIA _6lkwsB9zEeKCKo-8QnTuIA" outgoingEdges="_QKBmER9zEeKCKo-8QnTuIA" incomingEdges="_qyF3kR94EeKCKo-8QnTuIA" name="move media to location accessible to cerify">

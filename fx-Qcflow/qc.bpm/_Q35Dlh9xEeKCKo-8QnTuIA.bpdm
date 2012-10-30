@@ -16,15 +16,15 @@
             <bpel:partnerLink name="workflowAndCallerPlkVar" partnerLinkType="diag:workflowAndCaller" initializePartnerRole="yes" partnerRole="workflow_for_caller" bpdm:invokedService="workflow:CanonicServiceForcaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/workflow/caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Q35Dlh9xEeKCKo-8QnTuIA:_Q35DmB9xEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_SmKt0B9yEeKCKo-8QnTuIA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="workflowEventStartMessageRequest" messageType="workflow:EventStartMessageRequest" bpdm:id="_XVYZgB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_XVXLYB9zEeKCKo-8QnTuIA">
+            <bpel:variable name="workflowStartRequestMsg" messageType="workflow:startRequest" bpdm:id="_XVYZgB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_XVXLYB9zEeKCKo-8QnTuIA">
                 <bpel:from bpdm:toPart="body">
-                    <bpel:literal bpdm:linkedMessageType="workflow:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
+                    <bpel:literal bpdm:linkedMessageType="workflow:startRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="EventStartMessage" partnerLink="workflowAndCallerPlkVar" portType="workflow:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="invoke" bpdm:ID="_Q35DmB9xEeKCKo-8QnTuIA">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="workflowEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="workflow:EventStartMessageRequest" bpdm:ID="_XVXLYB9zEeKCKo-8QnTuIA"></bpdm:linkset>
+            <bpdm:messagingtask operation="start" partnerLink="workflowAndCallerPlkVar" portType="workflow:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="invoke" bpdm:ID="_Q35DmB9xEeKCKo-8QnTuIA">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="workflowStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="workflow:startRequest" bpdm:ID="_XVXLYB9zEeKCKo-8QnTuIA"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>
