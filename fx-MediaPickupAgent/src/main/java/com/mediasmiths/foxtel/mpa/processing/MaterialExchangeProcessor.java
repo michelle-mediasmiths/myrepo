@@ -268,6 +268,13 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 				throw new MessageProcessingFailedException(
 						MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,
 						e);
+			} catch(IllegalArgumentException iae){
+				logger.error(
+						"Illegal argument exception in mayam client",
+						iae);
+				throw new MessageProcessingFailedException(
+						MessageProcessingFailureReason.MAYAM_CLIENT_ARGUMENT_EXCEPTION,
+						iae);
 			}
 
 		}

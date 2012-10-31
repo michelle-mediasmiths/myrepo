@@ -42,6 +42,7 @@
 			<artifactId>dexter-common</artifactId>
 			<version>${stdlib.version}</version>
 		</dependency>
+		
 		<dependency>
 			<groupId>com.mediasmiths.forge</groupId>
 			<artifactId>persistence</artifactId>

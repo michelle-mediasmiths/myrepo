@@ -21,12 +21,12 @@
                     <bpel:literal bpdm:linkedMessageType="workflow:startRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="workflowStartResponseMsg" messageType="workflow:startResponse" bpdm:id="_GXcV1SKhEeKJt7IsuN4hnw" bpdm:messageIds="inc:_GXJa4CKhEeKJt7IsuN4hnw"/>
+            <bpel:variable name="workflowStartResponseMsg" messageType="workflow:startResponse" bpdm:id="_GXcV1SKhEeKJt7IsuN4hnw" bpdm:messageIds="inc:_HFGGACKhEeKJt7IsuN4hnw"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask operation="start" partnerLink="workflowAndCallerPlkVar" portType="workflow:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="invoke" bpdm:ID="_Q35DmB9xEeKCKo-8QnTuIA">
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="workflowStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="workflow:startRequest" bpdm:ID="_XVXLYB9zEeKCKo-8QnTuIA"></bpdm:linkset>
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="workflowStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="workflow:startResponse" bpdm:ID="_GXJa4CKhEeKJt7IsuN4hnw"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="workflowStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="workflow:startResponse" bpdm:ID="_HFGGACKhEeKJt7IsuN4hnw"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

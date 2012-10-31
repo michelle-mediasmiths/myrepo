@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <cxf:configuration name="CXF_Configuration" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
     <flow name="invokeAutoQC" doc:name="invokeAutoQC">
         <http:inbound-endpoint exchange-pattern="request-response" address="http://localhost:9085/qc" doc:name="HTTP"/>
-        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="/Users/bmcleod/MuleStudio/workspace/foxtel-intalio/src/main/resources/invokeAutoQC.xsl" outputEncoding="UTF-8" doc:name="XSLT"/>
+        <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="invokeAutoQC.xsl" outputEncoding="UTF-8" doc:name="XSLT"/>
         <http:outbound-endpoint exchange-pattern="request-response" address="http://localhost:8080/ode/processes/fx-Qcflow/qc/workflow/caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
     </flow>
 </mule>

@@ -13,13 +13,16 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Properties;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -30,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -191,6 +195,16 @@ public class ProgrammeMaterialTest {
 			bind(UnmatchedMaterialProcessor.class).to(DoNothingUnmatchedMaterial.class);
 		}
 	
+	}
+	
+	public static void main(String[] args) throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException{
+		
+		List<String> packageids = new ArrayList<String>();
+		packageids.add("package1");
+		packageids.add("package2");
+		packageids.add("package3");
+		Material materialWithPackages = getMaterialWithPackages("titleid", "materialid",packageids);
+		TestUtil.writeMaterialToFile(materialWithPackages,"/tmp/materialxml.xml");
 	}
 	
 	public static Material getMaterialWithPackages(String titleID, String materialID, List<String> packageIds) throws DatatypeConfigurationException {

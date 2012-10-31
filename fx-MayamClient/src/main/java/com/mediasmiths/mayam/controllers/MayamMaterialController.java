@@ -243,8 +243,9 @@ public class MayamMaterialController extends MayamController
 				attributes = new MayamAttributeController(assetAttributes);
 
 				// TODO: Confirm aspect ratio is in the correct notation, otherwise have conversion method
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
+				// TODO: conversion method required
+//				attributesValid = attributesValid
+//						&& attributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
 
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());

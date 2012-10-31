@@ -34,6 +34,8 @@ public class EventService
  */
 	public void saveEvent(String name, String payload)
 	{
+		logger.debug("saving event with name"+name);
+		
 		try
 		{
 			EventEntity event = new EventEntity();

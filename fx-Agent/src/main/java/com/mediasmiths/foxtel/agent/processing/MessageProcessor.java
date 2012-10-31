@@ -1,3 +1,4 @@
+
 package com.mediasmiths.foxtel.agent.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
@@ -96,6 +97,9 @@ public abstract class MessageProcessor<T> implements Runnable {
 				logger.error(String.format(
 						"Message processing failed for %s and reason %s",
 						filePath, e.getReason()), e);
+				
+				eventService.saveEvent("error", message);
+				
 				throw e;
 			}
 
@@ -284,6 +288,8 @@ public abstract class MessageProcessor<T> implements Runnable {
 				logger.fatal(
 						"Uncaught exception almost killed MessageProcessor thread, this is very bad",
 						e);
+				
+				eventService.saveEvent("error", "Uncaught exception almost killed MessageProcessor");
 			}
 		}
 
