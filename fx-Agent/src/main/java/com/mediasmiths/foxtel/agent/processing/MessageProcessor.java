@@ -3,11 +3,14 @@ package com.mediasmiths.foxtel.agent.processing;
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
@@ -22,6 +25,8 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 /**
  * Processes messages taken from a queue
@@ -36,25 +41,30 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	private final FilesPendingProcessingQueue filePathsPending;
 	
-	protected final Unmarshaller unmarhsaller;
+	protected final Unmarshaller unmarhsaller;	
+	protected final Marshaller marshaller;
+
+	
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
 	private final String failurePath;
-
 	private final String archivePath;
-
+	protected final EventService eventService;
+	
 	@Inject
 	public MessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, @Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath) {
+			Unmarshaller unmarhsaller, Marshaller marshaller, @Named(FAILURE_PATH) String failurePath,
+			@Named(ARCHIVE_PATH) String archivePath, EventService eventService) {
 		this.filePathsPending = filePathsPendingProcessing;
-		this.unmarhsaller = unmarhsaller;
+		this.unmarhsaller = unmarhsaller; 
+		this.marshaller = marshaller;
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
 		this.failurePath = failurePath;
 		this.archivePath = archivePath;
+		this.eventService = eventService;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
 	}

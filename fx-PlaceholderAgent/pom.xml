@@ -85,14 +85,6 @@
 			<version>1.7</version>
 		</dependency>
 			
-		<!--  reporting\events service -->
-		<dependency>	
-			<groupId>com.mediasmiths.forge</groupId>
-			<artifactId>persistence</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-			
-			
 		<!--  servlet api -->
 		<dependency>
 			<groupId>javax.servlet</groupId>

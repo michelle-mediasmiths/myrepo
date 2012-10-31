@@ -4,12 +4,12 @@ import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.AlertInterface;
@@ -23,10 +23,9 @@ public class SingleImporter extends Importer {
 			@Named(FAILURE_PATH) String quarrentineFolder,
 			@Named(ARCHIVE_PATH) String archiveFolder,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
-			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient,
-			AlertInterface alert) {
+			EventService event) {
 		super(pendingImports, targetFolder, quarrentineFolder, archiveFolder,
-				deliveryAttemptsToMake, deliveryFailureAlertReceipient, alert);
+				deliveryAttemptsToMake, event);
 	}
 
 	private static Logger logger = Logger.getLogger(SingleImporter.class);

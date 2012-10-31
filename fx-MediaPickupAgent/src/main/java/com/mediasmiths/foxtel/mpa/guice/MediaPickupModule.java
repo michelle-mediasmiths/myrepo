@@ -1,14 +1,21 @@
 package com.mediasmiths.foxtel.mpa.guice;
 
+import java.net.URI;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 
 import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
@@ -18,6 +25,8 @@ import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public class MediaPickupModule extends AbstractModule {
 
@@ -34,8 +43,9 @@ public class MediaPickupModule extends AbstractModule {
 
 	protected static final TypeLiteral<MessageProcessor<Material>> MESSAGEPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<Material>>(){};
 
+	
 	@Provides
-	public Unmarshaller provideUnmarshaller() throws JAXBException {
+	public JAXBContext provideJAXBContext() throws JAXBException{
 		JAXBContext jc = null;
 		try {
 			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");
@@ -43,6 +53,13 @@ public class MediaPickupModule extends AbstractModule {
 			logger.fatal("Could not create jaxb context", e);
 			throw e;
 		}
+		return jc;
+	}
+	
+	
+	@Provides
+	public Unmarshaller provideUnmarshaller(JAXBContext jc) throws JAXBException {
+		
 		Unmarshaller unmarshaller = null;
 		try {
 			unmarshaller = jc.createUnmarshaller();
@@ -53,4 +70,36 @@ public class MediaPickupModule extends AbstractModule {
 		return unmarshaller;
 	}
 
+	@Provides
+	public Marshaller provideMarshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
+		
+		Marshaller marshaller = null;
+		try {
+			marshaller = jc.createMarshaller();
+			
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			SchemaFactory factory = SchemaFactory
+					.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = factory.newSchema(getClass().getClassLoader()
+					.getResource(schemaLocation));
+			marshaller.setSchema(schema);
+			
+		} catch (JAXBException e) {
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+
+	@Provides
+	protected EventAPI getEventService(
+			@Named("service.events.api.endpoint") final URI endpoint,
+			final JAXRSProxyClientFactory clientFactory)
+	{
+		logger.info(String.format("events api endpoint set to %s", endpoint));
+		EventAPI service = clientFactory.createClient(EventAPI.class, endpoint);
+
+		return service;
+	}
+	
 }

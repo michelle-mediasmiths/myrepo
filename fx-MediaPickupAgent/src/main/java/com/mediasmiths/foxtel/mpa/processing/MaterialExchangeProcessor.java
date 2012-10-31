@@ -2,14 +2,16 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -17,6 +19,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
@@ -36,6 +39,7 @@ import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
@@ -48,9 +52,6 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
-	private final AlertInterface alert;
-	private final String deliveryFailureAlertReceipient;
-
 	@Inject
 	public MaterialExchangeProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
@@ -58,21 +59,19 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
+			Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
-			AlertInterface alert,
-			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient) {
+			EventService eventService){
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller, failurePath, archivePath);
+				unmarhsaller,marshaller, failurePath, archivePath,eventService);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
 		this.mediaCheck = mediaCheck;
-		this.alert = alert;
-		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
 	}
@@ -190,19 +189,16 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 			filesPendingImport.add(pendingImport);
 		} else {
-			logger.error("Media check failed");
-			moveFileToFailureFolder(mxf);
-			moveFileToFailureFolder(materialEnvelope.getFile());
-			
-
-			// send out alert that there has been an error
-			StringBuilder sb = new StringBuilder();
-			sb.append(String.format(
+			logger.error(String.format(
 					"Media check of Material %s failed",
 					FilenameUtils.getName(mxf.getAbsolutePath())));
-			alert.sendAlert(deliveryFailureAlertReceipient, "Media Pickup Failure",
-					sb.toString());
 			
+			//TODO move to the emergency import folder instead
+//			moveFileToFailureFolder(mxf);
+			moveFileToFailureFolder(materialEnvelope.getFile());
+			
+			// send out alert that there has been an error
+			eventService.saveEvent("failure", materialEnvelope.getMessage());
 		}
 	}
 
@@ -345,19 +341,39 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	protected boolean shouldArchiveMessages() {
 		return false; // messages will be archived by Importer
 	}
+	
+	@Override
+	protected void moveFileToFailureFolder(File file){
+		
+		String message;
+		try{
+			message = FileUtils.readFileToString(file);
+		}
+		catch(IOException e){
+			logger.warn("IOException reading "+file.getAbsolutePath(),e);
+			message = file.getAbsolutePath();
+		}
+		eventService.saveEvent("error",message);
+		
+		super.moveFileToFailureFolder(file);
+	}
 
 	@Override
 	protected void messageValidationFailed(String filePath,
 			MessageValidationResult result) {
 
-		// send out alert that there has been an error validating a material
-		// message
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format(
+		logger.warn(String.format(
 				"Validation of Material message %s failed for reason %s",
 				FilenameUtils.getName(filePath), result.toString()));
-		alert.sendAlert(deliveryFailureAlertReceipient, "Media Pickup Failure",
-				sb.toString());
-
+		
+		String message;
+		try{
+			message = FileUtils.readFileToString(new File(filePath));
+		}
+		catch(IOException e){
+			logger.warn("IOException reading "+filePath,e);
+			message = filePath;
+		}
+		eventService.saveEvent("failed",message);		
 	}
 }

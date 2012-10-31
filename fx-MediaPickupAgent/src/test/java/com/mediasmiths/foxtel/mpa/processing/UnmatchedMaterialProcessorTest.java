@@ -18,6 +18,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.AlertInterface;
@@ -60,11 +61,10 @@ public class UnmatchedMaterialProcessorTest {
 			thenReturn(Collections.<UnmatchedFile>emptyList());
 		
 		//mock alert interface
-		AlertInterface alert = mock(AlertInterface.class);
-		String alertRecipient = "alert@foxtel.com.au";
+		EventService events = mock(EventService.class);
 				
 		//run object being tested
-		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges, emergencyFolderPath, failedMessagesPath, alertRecipient,mm,alert);
+		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges, emergencyFolderPath, failedMessagesPath, mm,events);
 		Thread unmatcherThread = new Thread(toTest);
 		unmatcherThread.start();
 		

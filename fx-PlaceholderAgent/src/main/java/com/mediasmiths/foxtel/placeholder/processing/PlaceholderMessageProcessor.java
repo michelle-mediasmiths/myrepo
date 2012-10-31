@@ -31,6 +31,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
@@ -41,8 +42,8 @@ import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+
 
 /**
  * Processes placeholder messages taken from a queue
@@ -58,14 +59,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 	private final MayamClient mayamClient;
 
-	private final AlertInterface alert;
-	private final String failureAlertRecipient;
-
-	@Inject
-	private EventAPI events;
-
-	private Marshaller marshaller;
-
 	@Inject
 	public PlaceholderMessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
@@ -76,14 +69,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			MayamClient mayamClient,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
-			AlertInterface alert,
-			@Named(PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT) String failureAlertRecipient)
+			EventService eventService)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, failurePath, archivePath);
+		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, failurePath, archivePath,eventService);
 		this.mayamClient = mayamClient;
-		this.alert = alert;
-		this.failureAlertRecipient = failureAlertRecipient;
-		this.marshaller = marshaller;
 		logger.debug("Using failure path: " + failurePath);
 		logger.debug("Using archivePath path: " + archivePath);
 	}
@@ -232,32 +221,32 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		if (isCreateOrUpdateTitle)
 		{
 			createOrUpdateTitle((CreateOrUpdateTitle) action);
-			saveEvent("CreateOrUpdateTitle", message);
+			eventService.saveEvent("CreateOrUpdateTitle", message);
 		}
 		else if (isPurgeTitle)
 		{
 			purgeTitle((PurgeTitle) action);
-			saveEvent("PurgeTitle", message);
+			eventService.saveEvent("PurgeTitle", message);
 		}
 		else if (isAddOrUpdateMaterial)
 		{
 			addOrUpdateMaterial((AddOrUpdateMaterial) action);
-			saveEvent("AddOrUpdateMaterial", message);
+			eventService.saveEvent("AddOrUpdateMaterial", message);
 		}
 		else if (isDeleteMaterial)
 		{
 			deleteMaterial((DeleteMaterial) action);
-			saveEvent("DeleteMaterial", message);
+			eventService.saveEvent("DeleteMaterial", message);
 		}
 		else if (isAddOrUpdatePackage)
 		{
 			addOrUpdatePackage((AddOrUpdatePackage) action);
-			saveEvent("DeleteMaterial", message);
+			eventService.saveEvent("DeleteMaterial", message);
 		}
 		else if (isDeletePackage)
 		{
 			deletePackage((DeletePackage) action);
-			saveEvent("DeletePackage", message);
+			eventService.saveEvent("DeletePackage", message);
 		}
 		else
 		{
@@ -317,7 +306,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+file.getAbsolutePath(),e);
 			message = file.getAbsolutePath();
 		}
-		saveEvent("error",message);
+		eventService.saveEvent("error",message);
 		
 		super.moveFileToFailureFolder(file);
 	}
@@ -326,6 +315,11 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	protected void messageValidationFailed(String filePath, MessageValidationResult result)
 	{
 
+		logger.warn(String.format(
+				"Validation of Placeholder management message %s failed for reason %s",
+				FilenameUtils.getName(filePath),
+				result.toString()));
+		
 		String message;
 		try{
 			message = FileUtils.readFileToString(new File(filePath));
@@ -334,54 +328,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+filePath,e);
 			message = filePath;
 		}
-		saveEvent("failed",message);
-		
-		// send out alert that there has been an error validating message
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format(
-				"Validation of Placeholder management message %s failed for reason %s",
-				FilenameUtils.getName(filePath),
-				result.toString()));
-		alert.sendAlert(failureAlertRecipient, "Placeholder Message Validation Failure", sb.toString());
-
+		eventService.saveEvent("failed",message);		
 	}
 
-	protected void saveEvent(String name, String payload)
-	{
-		try
-		{
-			EventEntity event = new EventEntity();
-			event.setEventName(name);
-			event.setNamespace("http://www.foxtel.com.au/ip/bms");
-
-			event.setPayload(payload);
-			event.setTime(System.currentTimeMillis());
-			events.saveReport(event);
-		}
-		catch (RuntimeException re)
-		{
-			logger.error("error saving event" + name, re);
-		}
-
-	}
-
-	protected void saveEvent(String name, Object payload)
-	{
-		try
-		{
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			marshaller.marshal(payload, baos);
-			String sPayload = baos.toString("UTF-8");
-			saveEvent(name, sPayload);
-		}
-		catch (JAXBException e)
-		{
-			logger.error("error saving event" + name, e);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			logger.error("error saving event" + name, e);
-		}
-
-	}
 }

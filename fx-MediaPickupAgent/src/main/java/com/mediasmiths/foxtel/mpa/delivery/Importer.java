@@ -4,7 +4,6 @@ import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.AlertInterface;
@@ -30,8 +30,7 @@ public class Importer implements Runnable {
 	private final String archiveFolder;
 	private final int deliveryAttemptsToMake;
 
-	private final AlertInterface alert;
-	private final String deliveryFailureAlertReceipient;
+	private final EventService eventService;
 
 	@Inject
 	public Importer(
@@ -40,15 +39,13 @@ public class Importer implements Runnable {
 			@Named(FAILURE_PATH) String quarrentineFolder,
 			@Named(ARCHIVE_PATH) String archiveFolder,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
-			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient,
-			AlertInterface alert) {
+			EventService eventService) {
 		this.pendingImports = pendingImports;
 		this.targetFolder = targetFolder;
 		this.quarrentineFolder = quarrentineFolder;
 		this.archiveFolder = archiveFolder;
 		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
-		this.alert = alert;
-		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
+		this.eventService=eventService;
 	}
 
 	@Override
@@ -133,8 +130,7 @@ public class Importer implements Runnable {
 			sb.append(String
 					.format("There has been a failure to archive companion xml for material %s though the material successfully moved to the Viz Ardome auto import location",
 							pi.getMaterialEnvelope().getMasterID()));
-			alert.sendAlert(deliveryFailureAlertReceipient,
-					"Media Pickup Companion XML archive failure", sb.toString());
+			eventService.saveEvent("error", sb.toString());
 
 			return;
 		}
@@ -180,8 +176,7 @@ public class Importer implements Runnable {
 			sb.append(String.format(
 					"The material with ID %s has been quarrentined", pi
 							.getMaterialEnvelope().getMasterID()));
-			alert.sendAlert(deliveryFailureAlertReceipient,
-					"Media Pickup Failure", sb.toString());
+			eventService.saveEvent("error", sb.toString());
 
 		}
 

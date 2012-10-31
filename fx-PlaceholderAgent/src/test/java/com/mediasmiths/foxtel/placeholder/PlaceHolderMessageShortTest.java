@@ -28,6 +28,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
@@ -38,6 +39,7 @@ import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public abstract class PlaceHolderMessageShortTest {
 
@@ -92,9 +94,10 @@ public abstract class PlaceHolderMessageShortTest {
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		Marshaller marshaller = jc.createMarshaller();
+		EventService events = mock(EventService.class);
 		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,mayamValidator, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
-				unmarhsaller,marshaller, mayamClient, "failure path", "receipt path",alert,alertRecipient);
+				unmarhsaller,marshaller, mayamClient, "failure path", "receipt path",events);
 
 	}
 	

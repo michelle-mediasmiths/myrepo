@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
@@ -17,6 +16,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.mayam.AlertInterface;
 
@@ -28,8 +28,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private final String failedMessagesFolder;
 	private final long sleepTime;
 	
-	private final AlertInterface alert;
-	private final String deliveryFailureAlertReceipient;
+	private final EventService events;
 
 	private static Logger logger = Logger
 			.getLogger(UnmatchedMaterialProcessor.class);
@@ -40,15 +39,13 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(FAILURE_PATH) String failedMessagesFolder,
-			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient,
-			MatchMaker matchMaker, AlertInterface alert) {
+			MatchMaker matchMaker, EventService events) {
 		this.timeout = timeout;
 		this.matchMaker = matchMaker;
 		this.emergencyImportFolder = emergencyImportFolder;
 		this.failedMessagesFolder = failedMessagesFolder;
 		this.sleepTime = sleepTime.longValue();
-		this.deliveryFailureAlertReceipient = deliveryFailureAlertReceipient;
-		this.alert = alert;
+		this.events = events;
 	}
 
 	@Override
@@ -137,8 +134,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 				sb.append(String
 						.format("There has been a failure to deliver unmatched material %s to the Viz Ardome emergency import folder",
 								FilenameUtils.getName(mxf.getFilePath())));
-				alert.sendAlert(deliveryFailureAlertReceipient,
-						"Media Pickup Failure", sb.toString());
+				events.saveEvent("error",sb.toString());				
 			}
 		}
 	}
@@ -169,8 +165,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 					.format("There has been been no media received for Material message %s with MasterID %s ",
 							FilenameUtils.getName(me.getFile()
 									.getAbsolutePath()), me.getMasterID()));
-			alert.sendAlert(deliveryFailureAlertReceipient,
-					"Media Pickup Failure", sb.toString());
+			events.saveEvent("warning", sb.toString());			
 		}
 	}
 }

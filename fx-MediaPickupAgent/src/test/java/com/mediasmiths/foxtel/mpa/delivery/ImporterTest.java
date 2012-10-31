@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -39,8 +40,7 @@ public class ImporterTest {
 	private PendingImport pendingImport;
 	
 	private int deliveryAttemptsToMake=2;
-	private String alertAddress = "alert@foxtel.com.au";
-	private AlertInterface alert;
+	private EventService event;
 
 	@Before
 	public void before() throws IOException {
@@ -50,10 +50,10 @@ public class ImporterTest {
 		failurePath = TestUtil.prepareTempFolder("FAILURE");
 		ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
 
-		alert=mock(AlertInterface.class);
+		event=mock(EventService.class);
 		
 		toTest = new Importer(pendingImports, ardomeImportPath, failurePath,
-				archivePath,""+deliveryAttemptsToMake,alertAddress,alert);
+				archivePath,""+deliveryAttemptsToMake,event);
 		
 		importerThread = new Thread(toTest);
 		importerThread.start();
@@ -127,7 +127,7 @@ public class ImporterTest {
 		assertFalse(materialxml.exists());
 		
 		// check failure alert sent
-		verify(alert).sendAlert(eq(alertAddress), any(String.class), any(Object.class));
+		verify(event).saveEvent(eq("error"), any(String.class));
 
 	}
 
