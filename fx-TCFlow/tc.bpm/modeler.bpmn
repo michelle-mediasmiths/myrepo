@@ -285,7 +285,7 @@
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_UVsJgSHJEeK7ToHmhWq0hw" iD="_UVsJgCHJEeK7ToHmhWq0hw"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_b1iO4SJ8EeKImsNRp2piVA" iD="_b1iO4CJ8EeKImsNRp2piVA"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_pEa30SHIEeK7ToHmhWq0hw" iD="_pEa30CHIEeK7ToHmhWq0hw" associations="_NFefcCJyEeKnk7bpMIO4Cw _NUXQACJyEeKnk7bpMIO4Cw" outgoingEdges="_WO9_USHJEeK7ToHmhWq0hw" incomingEdges="_vxLDsSHIEeK7ToHmhWq0hw" name="Send Error Message">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_pEa30SHIEeK7ToHmhWq0hw" iD="_pEa30CHIEeK7ToHmhWq0hw" associations="_NFefcCJyEeKnk7bpMIO4Cw _NUXQACJyEeKnk7bpMIO4Cw" outgoingEdges="_WO9_USHJEeK7ToHmhWq0hw" incomingEdges="_vxLDsSHIEeK7ToHmhWq0hw" name="Send Fatal Error Message">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_NE9iESJyEeKnk7bpMIO4Cw"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_NTz2YSJyEeKnk7bpMIO4Cw"/>
     </vertices>

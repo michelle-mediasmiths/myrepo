@@ -25,6 +25,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -195,7 +196,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/tc/tcFailedTotal")
-	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException
+	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		log.info(String.format(
