@@ -132,6 +132,13 @@
         </eAnnotations>
       </associations>
     </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_B9quYCM_EeKQgITLNq70iQ" iD="_B9iykCM_EeKQgITLNq70iQ" name="">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B9quYSM_EeKQgITLNq70iQ" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B9quYiM_EeKQgITLNq70iQ" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B9quYyM_EeKQgITLNq70iQ" key="douri" value="project:///complexvarQC.xsd?xsdtype={http://www.example.org/complexvar}complexvariable"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B9yqMCM_EeKQgITLNq70iQ" key="defaultDeclarationName" value="complexvariable"/>
+      </eAnnotations>
+    </artifacts>
     <vertices xmi:type="bpmn:Activity" xmi:id="_bWc3sR9yEeKCKo-8QnTuIA" iD="_bWc3sB9yEeKCKo-8QnTuIA" associations="_XVbc0x9zEeKCKo-8QnTuIA" outgoingEdges="_qi-dgR94EeKCKo-8QnTuIA" name="start" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_XVXLYR9zEeKCKo-8QnTuIA"/>
     </vertices>

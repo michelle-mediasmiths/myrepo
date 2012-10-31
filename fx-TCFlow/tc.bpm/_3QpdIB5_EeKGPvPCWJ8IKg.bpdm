@@ -103,27 +103,15 @@
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:inputFile</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="11685565" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile" targetedBy="6966380-arg0"></mapper:vertice>
-  <mapper:vertice id="6966380" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:inputFile"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile</bpel:to><mapper:mapperLink><mapper:vertice id="11685565" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile" targetedBy="6966380-arg0"></mapper:vertice><mapper:vertice id="6966380" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:inputFile"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:outputFolder</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="19527995" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder" targetedBy="29720197-arg0"></mapper:vertice>
-  <mapper:vertice id="29720197" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:outputFolder"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder</bpel:to><mapper:mapperLink><mapper:vertice id="19527995" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder" targetedBy="29720197-arg0"></mapper:vertice><mapper:vertice id="29720197" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:outputFolder"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="6852577" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID" targetedBy="25957171-arg0"></mapper:vertice>
-  <mapper:vertice id="25957171" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="6852577" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID" targetedBy="25957171-arg0"></mapper:vertice><mapper:vertice id="25957171" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcBuildJob1TcBuildJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcBuildJob1:tcBuildJob_input" bpdm:binding="tcBuildJob1:restBinding" bpdm:ID="_RBq4MB9REeKBCuRJN5U2jA"></bpdm:linkset>
@@ -133,11 +121,7 @@
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="31437389" targetPath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID" targetedBy="29251389-arg0"></mapper:vertice>
-  <mapper:vertice id="29251389" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="31437389" targetPath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID" targetedBy="29251389-arg0"></mapper:vertice><mapper:vertice id="29251389" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_input" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_HbUB8B9REeKBCuRJN5U2jA"></bpdm:linkset>
@@ -145,14 +129,14 @@
             </bpdm:messagingtask>
             <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ihCDUCHIEeK7ToHmhWq0hw">
                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                    <bpel:condition bpdm:loopType="repeatUntil">$complexvariable/complexvar:errorCount = 3
+                    <bpel:condition bpdm:loopType="repeatUntil">$complexvariable &gt;= 3
 <mapper:mapperLink>
-  <mapper:vertice id="357930" targetPath="$repeat until" targetedBy="12637925-arg0"></mapper:vertice>
-  <mapper:vertice id="12637925" dimension="121x37" location="240,168">
-    <mapper:value>=</mapper:value>
+  <mapper:vertice id="16377922" targetPath="$repeat until" targetedBy="3379514-arg0"></mapper:vertice>
+  <mapper:vertice id="3379514" dimension="121x37" location="240,168">
+    <mapper:value>&gt;=</mapper:value>
   </mapper:vertice>
-  <mapper:vertice id="20658990" sourcePath="$complexvariable/complexvar:errorCount" targetedBy="12637925-arg1"></mapper:vertice>
-  <mapper:vertice id="28089964" dimension="97x37" location="48,168" targetedBy="12637925-arg2">
+  <mapper:vertice id="21680420" sourcePath="$complexvariable" targetedBy="3379514-arg1"></mapper:vertice>
+  <mapper:vertice id="16015652" dimension="97x37" location="60,204" targetedBy="3379514-arg2">
     <mapper:value>3</mapper:value>
   </mapper:vertice>
 </mapper:mapperLink></bpel:condition>
@@ -192,19 +176,11 @@
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:jobName</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="3125154" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:jobName" targetedBy="27828185-arg0"></mapper:vertice>
-  <mapper:vertice id="27828185" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:jobName</bpel:to><mapper:mapperLink><mapper:vertice id="3125154" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:jobName" targetedBy="27828185-arg0"></mapper:vertice><mapper:vertice id="27828185" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$tcBuildJob1TcBuildJobResponseMsg.response/text()</bpel:from>
-                                <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:jobXml</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="23221445" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:jobXml" targetedBy="11934448-arg0"></mapper:vertice>
-  <mapper:vertice id="11934448" sourcePath="$tcBuildJob1TcBuildJobResponseMsg.response/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:jobXml</bpel:to><mapper:mapperLink><mapper:vertice id="23221445" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:jobXml" targetedBy="11934448-arg0"></mapper:vertice><mapper:vertice id="11934448" sourcePath="$tcBuildJob1TcBuildJobResponseMsg.response/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcStartJob1TcStartJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcStartJob1:tcStartJob_input" bpdm:binding="tcStartJob1:restBinding" bpdm:ID="_0MYqwCHIEeK7ToHmhWq0hw"></bpdm:linkset>
@@ -232,11 +208,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$tcStartJob1TcStartJobResponseMsg.response/text()</bpel:from>
-                                        <bpel:to>$tcGetStatus1TcGetStatusRequestMsg.id/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="31041196" targetPath="$tcGetStatus1TcGetStatusRequestMsg.id/text()" targetedBy="12448460-arg0"></mapper:vertice>
-  <mapper:vertice id="12448460" sourcePath="$tcStartJob1TcStartJobResponseMsg.response/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$tcGetStatus1TcGetStatusRequestMsg.id/text()</bpel:to><mapper:mapperLink><mapper:vertice id="31041196" targetPath="$tcGetStatus1TcGetStatusRequestMsg.id/text()" targetedBy="12448460-arg0"></mapper:vertice><mapper:vertice id="12448460" sourcePath="$tcStartJob1TcStartJobResponseMsg.response/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcGetStatus1TcGetStatusRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcGetStatus1:tcGetStatus_input" bpdm:binding="tcGetStatus1:restBinding" bpdm:ID="_2LRZUCHIEeK7ToHmhWq0hw"></bpdm:linkset>
@@ -257,28 +229,14 @@
                     <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_8fvBACHIEeK7ToHmhWq0hw" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_Jy0nsCHJEeK7ToHmhWq0hw" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_KL_VoCHJEeK7ToHmhWq0hw" bpdm:targetDisplayName="[GatewayDataBasedExclusive - Send Error message]">
-                            <bpel:condition>$tcGetResult1TcGetResultResponseMsg.response/text() = false()
-<mapper:mapperLink>
-  <mapper:vertice id="6859544" targetPath="$condition" targetedBy="9354045-arg2"></mapper:vertice>
-  <mapper:vertice id="9354045" dimension="121x25" location="276,636">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="3376107" sourcePath="$tcGetResult1TcGetResultResponseMsg.response/text()" targetedBy="9354045-arg0"></mapper:vertice>
-  <mapper:vertice id="16033611" dimension="73x37" location="120,672" targetedBy="9354045-arg1">
-    <mapper:value>false()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                            <bpel:condition>$tcGetResult1TcGetResultResponseMsg.response/text() = false()<mapper:mapperLink><mapper:vertice id="6859544" targetPath="$condition" targetedBy="9354045-arg2"></mapper:vertice><mapper:vertice id="9354045" dimension="121x25" location="276,636"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="3376107" sourcePath="$tcGetResult1TcGetResultResponseMsg.response/text()" targetedBy="9354045-arg0"></mapper:vertice><mapper:vertice id="16033611" dimension="73x37" location="120,672" targetedBy="9354045-arg1"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpel:sequence>
                             <bpdm:messagingtask operation="tcPassed" partnerLink="wFAdapterAndTCForHttpPortPlk2Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success message" bpdm:ID="_9NgF8CHIEeK7ToHmhWq0hw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="20229324" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID" targetedBy="7188027-arg0"></mapper:vertice>
-  <mapper:vertice id="7188027" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="20229324" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID" targetedBy="7188027-arg0"></mapper:vertice><mapper:vertice id="7188027" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_S1zfUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
@@ -291,11 +249,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="27564353" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID" targetedBy="19921402-arg0"></mapper:vertice>
-  <mapper:vertice id="19921402" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="27564353" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID" targetedBy="19921402-arg0"></mapper:vertice><mapper:vertice id="19921402" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_QNpxUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
@@ -304,18 +258,15 @@
                             <bpdm:messagingtask bpdm:label="Increase Error Count" bpdm:ID="_97l7ACHIEeK7ToHmhWq0hw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
-                                        <bpel:from>$complexvariable/complexvar:errorCount/text() + xs:integer(1)</bpel:from>
-                                        <bpel:to>$complexvariable/complexvar:errorCount</bpel:to>
+                                        <bpel:from>$complexvariable + 1</bpel:from>
+                                        <bpel:to>$complexvariable</bpel:to>
 <mapper:mapperLink>
-  <mapper:vertice id="23303019" targetPath="$complexvariable/complexvar:errorCount" targetedBy="20278306-arg2"></mapper:vertice>
-  <mapper:vertice id="20278306" dimension="37x25" location="360,240">
+  <mapper:vertice id="30343338" targetPath="$complexvariable" targetedBy="16922458-arg2"></mapper:vertice>
+  <mapper:vertice id="16922458" dimension="37x25" location="360,240">
     <mapper:value>+</mapper:value>
   </mapper:vertice>
-  <mapper:vertice id="26059400" sourcePath="$complexvariable/complexvar:errorCount/text()" targetedBy="20278306-arg0"></mapper:vertice>
-  <mapper:vertice id="27900044" dimension="73x25" location="216,336" targetedBy="20278306-arg1">
-    <mapper:value>xs:integer()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="18441677" dimension="37x25" location="132,336" targetedBy="27900044-arg0">
+  <mapper:vertice id="32567670" sourcePath="$complexvariable" targetedBy="16922458-arg0"></mapper:vertice>
+  <mapper:vertice id="20078208" dimension="37x25" location="264,288" targetedBy="16922458-arg1">
     <mapper:value>1</mapper:value>
   </mapper:vertice>
 </mapper:mapperLink>
@@ -326,15 +277,11 @@
                     </bpdm:gateway>
                 </bpel:sequence>
             </bpel:scope>
-            <bpdm:messagingtask operation="tcTotalFailure" partnerLink="wFAdapterAndTCForHttpPortPlk3Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Error Message" bpdm:ID="_pEa30CHIEeK7ToHmhWq0hw">
+            <bpdm:messagingtask operation="tcTotalFailure" partnerLink="wFAdapterAndTCForHttpPortPlk3Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Fatal Error Message" bpdm:ID="_pEa30CHIEeK7ToHmhWq0hw">
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="21760720" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID" targetedBy="692882-arg0"></mapper:vertice>
-  <mapper:vertice id="692882" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="21760720" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID" targetedBy="692882-arg0"></mapper:vertice><mapper:vertice id="692882" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_NE9iECJyEeKnk7bpMIO4Cw"></bpdm:linkset>

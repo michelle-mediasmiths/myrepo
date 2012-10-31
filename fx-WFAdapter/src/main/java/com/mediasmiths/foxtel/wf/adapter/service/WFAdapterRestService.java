@@ -18,6 +18,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -95,7 +96,7 @@ public interface WFAdapterRestService
 	@PUT
 	@Path("/tc/tcFailedTotal")
 	@Consumes("application/xml")
-	public void notifyTCFailedTotal(TCFailureNotification notification) throws MayamClientException;
+	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException;
 	
 	
 	/**
