@@ -27,6 +27,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -58,10 +59,10 @@ public abstract class PlaceholderManagerTest {
 	protected MayamClient mayamClient;
 	protected MayamValidator mayamValidator;
 	protected ReceiptWriter receiptWriter;
-	protected AlertInterface alert;
 	
 	protected PlaceholderMessageValidator validator;
 	protected ChannelValidator channelValidator;
+	protected EventService events;
 
 	public PlaceholderManagerTest() throws JAXBException, SAXException {
 
@@ -88,18 +89,7 @@ public abstract class PlaceholderManagerTest {
 				return true;
 			}
 		};
-		alert = new AlertInterface() {
-			
-			@Override
-			public void sendAlert(String arg0, String arg1, Object arg2) {
-			}
-			
-			@Override
-			public long createAlert(String arg0, MayamAssetType arg1,
-					MayamTaskController arg2) throws MayamClientException {
-				return 0;
-			}
-		};
+		events = new EventService();
 		receiptWriter = mock(ReceiptWriter.class);
 		channelValidator = new ChannelValidatorImpl();
 		try {
@@ -151,7 +141,7 @@ public abstract class PlaceholderManagerTest {
 		// setup guice injector
 		final List<Module> moduleList = Collections
 				.<Module> singletonList(new TestPlaceHolderMangementModule(
-						mayamClient, mayamValidator, alert));
+						mayamClient, mayamValidator, events));
 		Injector injector = GuiceInjectorBootstrap.createInjector(propertyFile,
 				new GuiceSetup() {
 
@@ -174,19 +164,19 @@ public abstract class PlaceholderManagerTest {
 
 		private final MayamClient mc;
 		private final MayamValidator mv;
-		private final AlertInterface alert;
+		private final EventService events;
 
-		public TestPlaceHolderMangementModule(MayamClient mc, MayamValidator mv, AlertInterface alert) {
+		public TestPlaceHolderMangementModule(MayamClient mc, MayamValidator mv, EventService events) {
 			this.mc = mc;
 			this.mv = mv;
-			this.alert=alert;
+			this.events=events;
 		}
 
 		@Override
 		protected void configure() {
 			bind(MayamClient.class).toInstance(mc);
 			bind(MayamValidator.class).toInstance(mv);
-			bind(AlertInterface.class).toInstance(alert);
+			bind(EventService.class).toInstance(events);
 			// we are only testing the processing of a single file
 			bind(new TypeLiteral<MessageProcessor<PlaceholderMessage>>() {
 			}).to(SingleMessageProcessor.class);

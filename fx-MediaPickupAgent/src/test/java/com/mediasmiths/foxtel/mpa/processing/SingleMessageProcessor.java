@@ -2,8 +2,9 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_FAILURE_ALERT_RECIPIENT;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -11,12 +12,14 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
@@ -27,17 +30,17 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
+			Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
-			AlertInterface alert,
-			@Named(DELIVERY_FAILURE_ALERT_RECIPIENT) String deliveryFailureAlertReceipient) {
+			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
+			EventService eventService){
 		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
-				receiptWriter, unmarhsaller, mayamClient, matchMaker,
-				mediaCheck, failurePath, archivePath, alert,
-				deliveryFailureAlertReceipient);
+				receiptWriter, unmarhsaller,marshaller, mayamClient, matchMaker,
+				mediaCheck, failurePath,archivePath,emergencyImportFolder,eventService);
 	}
 
 	protected static Logger logger = Logger

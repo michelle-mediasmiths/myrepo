@@ -5,7 +5,9 @@ import static org.mockito.Mockito.mock;
 import java.io.File;
 import java.io.IOException;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
@@ -15,6 +17,7 @@ import org.mockito.ArgumentMatcher;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -28,6 +31,7 @@ import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public abstract class MaterialProcessingTest {
 
@@ -37,18 +41,19 @@ public abstract class MaterialProcessingTest {
 	MaterialExchangeValidator validator;
 	ReceiptWriter receiptWriter;
 	Unmarshaller unmarshaller;
+	Marshaller marshaller;
 	MayamClient mayamClient;
 	MatchMaker matchMaker;
 	String failurePath;
 	String archivePath;
 	String incomingPath;
+	String emergencyImportPath;
 	File media;
 	File materialxml;
 	Thread processorThread;
 	MediaCheck mediaCheck;
 	String materialXMLPath;
-	AlertInterface alert;
-	String alertRecipient = "alert@foxtel.com.au";
+	EventService eventService;
 
 	final String TITLE_ID = "TITLE_ID";
 	final String MATERIAL_ID = "MATERIAL_ID";
@@ -66,23 +71,25 @@ public abstract class MaterialProcessingTest {
 		pendingImportQueue = new PendingImportQueue();
 		validator = mock(MaterialExchangeValidator.class);
 		receiptWriter = mock(ReceiptWriter.class);
-		unmarshaller = new MediaPickupModule().provideUnmarshaller();
+		JAXBContext jc = new MediaPickupModule().provideJAXBContext();
+		unmarshaller = new MediaPickupModule().provideUnmarshaller(jc);
+		marshaller = new MediaPickupModule().provideMarshaller(jc,"MaterialExchange_V2.0.xsd");
 		mayamClient = mock(MayamClient.class);
 		matchMaker = mock(MatchMaker.class);
 		mediaCheck = mock(MediaCheck.class);
-		alert = mock(AlertInterface.class);
+		eventService = mock(EventService.class);
 
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
 		failurePath = TestUtil.prepareTempFolder("FAILURE");
+		emergencyImportPath = TestUtil.prepareTempFolder("EMERGENCYIMPORT");
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
-				pendingImportQueue, validator, receiptWriter, unmarshaller,
-				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,
-				alert, alertRecipient);
+				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
+				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,emergencyImportPath,eventService);
 
 		processorThread = new Thread(processor);
 		processorThread.start();

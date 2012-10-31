@@ -29,7 +29,6 @@ public class MayamClientModule extends AbstractModule
 		install(new MqModule("fxMayamClient"));
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		
-		bind(AlertInterface.class).to(AlertImpl.class);
 //		bind(AttributeMapMapper.class).to(JacksonAttributeMapMapperImpl.class);
 		
 	}

@@ -63,7 +63,7 @@ public class PlaceholderAgentModule extends AbstractModule {
 	}
 	
 	@Provides
-	Marshaller marshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
+	Marshaller provideMarshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
 		
 		Marshaller marshaller = null;
 		try {

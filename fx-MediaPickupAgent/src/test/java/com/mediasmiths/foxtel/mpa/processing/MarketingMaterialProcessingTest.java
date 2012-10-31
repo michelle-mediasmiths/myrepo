@@ -258,13 +258,13 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			assertTrue(pi.getMediaFile().equals(media));
 			assertTrue(pi.getMaterialEnvelope().getFile().equals(materialxml));
 		} else {
-			// check message and material gets moved to failure folder
+			// check message gets moved to failure folder and media gets moved to viz ardome emergency import folder
 			assertFalse(materialxml.exists());
 			assertFalse(media.exists());
 			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
 					materialxml, new File(failurePath)).exists());
 			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(media,
-					new File(failurePath)).exists());
+					new File(emergencyImportPath)).exists());
 
 		}
 

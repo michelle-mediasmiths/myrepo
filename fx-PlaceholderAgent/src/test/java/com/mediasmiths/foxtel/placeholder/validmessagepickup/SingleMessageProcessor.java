@@ -12,11 +12,13 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 
 /**
@@ -36,11 +38,9 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 			MayamClient mayamClient,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
-			AlertInterface alert,
-			@Named(PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT) String failureAlertRecipient)  {
+			EventService eventService) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller,marshaller, mayamClient, failurePath, archivePath, alert,
-				failureAlertRecipient);
+				unmarhsaller,marshaller, mayamClient, failurePath, archivePath, eventService);
 	}
 
 
