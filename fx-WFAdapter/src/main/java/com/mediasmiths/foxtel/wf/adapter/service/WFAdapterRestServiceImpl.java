@@ -114,7 +114,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of Auto QC failure ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-		saveEvent("AutoQCFailed", notification);
+		saveEvent("AutoQCFailed", notification, "http://www.foxtel.com.au/ip/qc");
 
 		try
 		{
@@ -161,7 +161,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 		// TODO: handle
-		saveEvent("AutoQCPassed", notification);
+		saveEvent("AutoQCPassed", notification, "http://www.foxtel.com.au/ip/qc");
 
 		if (notification.isForTXDelivery())
 		{
@@ -184,7 +184,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.isForTXDelivery()));
 
 		// TODO: add entry to general error task list as investigation is required
-		saveEvent("AutoQCError", notification);
+		saveEvent("AutoQCError", notification, "http://www.foxtel.com.au/ip/qc");
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -215,7 +215,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of TC totalfailure Paciage ID %s ",
 				notification.getPackageID()));
 		
-		saveEvent("TCTotalFailure", notification);
+		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
 
 
 	}
@@ -230,7 +230,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info(String.format(
 				"Received notification of TC failure Paciage ID %s",
 				notification.getPackageID()));
-		saveEvent("TCFailed", notification);
+		saveEvent("failed", notification, "http://www.foxtel.com.au/ip/tc");
 
 	}
 	
@@ -244,7 +244,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of TC passed Paciage ID %s",
 				notification.getPackageID()));
 		
-		saveEvent("TCPassed", notification);
+		saveEvent("Transcoded", notification, "http://www.foxtel.com.au/ip/tc");
 
 		
 	}
@@ -267,13 +267,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 		
 	
-	protected void saveEvent(String name, String payload)
+	protected void saveEvent(String name, String payload, String nameSpace)
 	{
 		try
 		{
 			EventEntity event = new EventEntity();
 			event.setEventName(name);
-			event.setNamespace("http://www.foxtel.com.au/ip/bms");
+			event.setNamespace(nameSpace);
 
 			event.setPayload(payload);
 			event.setTime(System.currentTimeMillis());
@@ -286,14 +286,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	protected void saveEvent(String name, Object payload)
+	protected void saveEvent(String name, Object payload, String nameSpace)
 	{
 		try
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			marshaller.marshal(payload, baos);
 			String sPayload = baos.toString("UTF-8");
-			saveEvent(name, sPayload);
+			saveEvent(name, sPayload, nameSpace);
 		}
 		catch (JAXBException e)
 		{

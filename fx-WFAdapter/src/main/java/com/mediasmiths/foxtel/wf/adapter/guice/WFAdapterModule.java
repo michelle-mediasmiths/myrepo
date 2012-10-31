@@ -45,5 +45,17 @@ public class WFAdapterModule extends AbstractModule
 				}
 		return marshaller;
 		}
-
+	
+	
+	@Provides
+	JAXBContext provideJAXBContext() throws JAXBException{
+		JAXBContext jc = null;
+		try {
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.wf.adapter.model");
+			} catch (JAXBException e) {
+				logger.fatal("Could not create jaxb context", e);
+				throw e;
+			}
+		return jc;
+		}
 }
