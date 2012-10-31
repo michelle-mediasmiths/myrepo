@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -35,10 +36,11 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			MediaCheck mediaCheck,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
+			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService){
 		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
 				receiptWriter, unmarhsaller,marshaller, mayamClient, matchMaker,
-				mediaCheck, failurePath,archivePath,eventService);
+				mediaCheck, failurePath,archivePath,emergencyImportFolder,eventService);
 	}
 
 	protected static Logger logger = Logger

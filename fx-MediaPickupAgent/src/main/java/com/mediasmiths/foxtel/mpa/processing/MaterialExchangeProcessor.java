@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,6 +53,8 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
+	private final String emergencyImportFolder;
+	
 	@Inject
 	public MaterialExchangeProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
@@ -65,6 +68,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			MediaCheck mediaCheck,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
+			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService){
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
 				unmarhsaller,marshaller, failurePath, archivePath,eventService);
@@ -72,8 +76,10 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
 		this.mediaCheck = mediaCheck;
+		this.emergencyImportFolder=emergencyImportFolder;
 		logger.debug("Using failure path " + failurePath);
 		logger.debug("Using archivePath path " + archivePath);
+		logger.debug("Using emergency import folder "+emergencyImportFolder);
 	}
 
 	private static Logger logger = Logger
@@ -195,10 +201,35 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			
 			//TODO move to the emergency import folder instead
 //			moveFileToFailureFolder(mxf);
+			moveFileToEmergencyImportFolder(mxf);
 			moveFileToFailureFolder(materialEnvelope.getFile());
 			
 			// send out alert that there has been an error
 			eventService.saveEvent("failure", materialEnvelope.getMessage());
+		}
+	}
+
+	private void moveFileToEmergencyImportFolder(File mxf)
+	{
+		logger.info(String.format(
+				"File %s has invalid companion xml, moving to emergency import folder",
+				mxf.getAbsolutePath()));
+		logger.debug(String.format("Failure folder is: %s ", emergencyImportFolder));
+
+		try {
+			moveFileToFolder(mxf, emergencyImportFolder,true);
+		} catch (IOException e) {
+			logger.error(String.format(
+					"IOException moving invalid file %s to %s",
+					mxf.getAbsolutePath(), emergencyImportFolder), e);
+			
+			// send out alert that material could not be transferd to
+			// emergency import folder
+			StringBuilder sb = new StringBuilder();
+			sb.append(String
+					.format("There has been a failure to deliver material %s with invalid companion xml to the Viz Ardome emergency import folder",
+							FilenameUtils.getName(mxf.getAbsolutePath())));
+			eventService.saveEvent("error",sb.toString());	
 		}
 	}
 

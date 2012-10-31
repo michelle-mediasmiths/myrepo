@@ -181,7 +181,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		logger.debug(String.format("Failure folder is: %s ", failurePath));
 
 		try {
-			moveMessageToFolder(file, failurePath,true);
+			moveFileToFolder(file, failurePath,true);
 		} catch (IOException e) {
 			logger.error(String.format(
 					"IOException moving invalid file %s to %s",
@@ -201,7 +201,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
-			moveMessageToFolder(new File(messagePath), archivePath, true);
+			moveFileToFolder(new File(messagePath), archivePath, true);
 		} catch (IOException e) {
 
 			logger.warn(String.format(
@@ -211,10 +211,10 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	private synchronized void moveMessageToFolder(File file,
+	protected synchronized void moveFileToFolder(File file,
 			String destinationFolderPath, boolean ensureUniqueFirst)
 			throws IOException {
-		final String destination = getDestinationPathForMessageMove(file,
+		final String destination = getDestinationPathForFileMove(file,
 				destinationFolderPath, ensureUniqueFirst);
 
 		logger.trace(String.format("Moving file from %s to %s",
@@ -223,7 +223,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		FileUtils.moveFile(file, new File(destination));
 	}
 
-	private String getDestinationPathForMessageMove(File file,
+	private String getDestinationPathForFileMove(File file,
 			String destinationFolderPath, boolean ensureUnique) {
 		
 		StringBuilder sb = new StringBuilder(destinationFolderPath);

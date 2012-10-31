@@ -47,6 +47,7 @@ public abstract class MaterialProcessingTest {
 	String failurePath;
 	String archivePath;
 	String incomingPath;
+	String emergencyImportPath;
 	File media;
 	File materialxml;
 	Thread processorThread;
@@ -81,13 +82,14 @@ public abstract class MaterialProcessingTest {
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
 		failurePath = TestUtil.prepareTempFolder("FAILURE");
+		emergencyImportPath = TestUtil.prepareTempFolder("EMERGENCYIMPORT");
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,eventService);
+				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,emergencyImportPath,eventService);
 
 		processorThread = new Thread(processor);
 		processorThread.start();

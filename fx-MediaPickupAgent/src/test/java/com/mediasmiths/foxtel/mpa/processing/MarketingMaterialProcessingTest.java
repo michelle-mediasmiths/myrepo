@@ -264,7 +264,7 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
 					materialxml, new File(failurePath)).exists());
 			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(media,
-					new File(failurePath)).exists());
+					new File(emergencyImportPath)).exists());
 
 		}
 
