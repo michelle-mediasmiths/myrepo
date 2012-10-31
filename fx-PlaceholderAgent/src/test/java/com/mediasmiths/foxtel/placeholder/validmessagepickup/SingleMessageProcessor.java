@@ -4,6 +4,7 @@ import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.placeholder.PlaceholderAgentConfiguration.PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT;
 
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
@@ -31,13 +32,14 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 			PlaceholderMessageValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
+			Marshaller marshaller,
 			MayamClient mayamClient,
 			@Named(FAILURE_PATH) String failurePath,
 			@Named(ARCHIVE_PATH) String archivePath,
 			AlertInterface alert,
 			@Named(PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT) String failureAlertRecipient)  {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller, mayamClient, failurePath, archivePath, alert,
+				unmarhsaller,marshaller, mayamClient, failurePath, archivePath, alert,
 				failureAlertRecipient);
 	}
 

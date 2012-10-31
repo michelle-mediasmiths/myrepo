@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -90,9 +91,10 @@ public abstract class PlaceHolderMessageShortTest {
 		
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
+		Marshaller marshaller = jc.createMarshaller();
 		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,mayamValidator, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
 		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
-				unmarhsaller, mayamClient, "failure path", "receipt path",alert,alertRecipient);
+				unmarhsaller,marshaller, mayamClient, "failure path", "receipt path",alert,alertRecipient);
 
 	}
 	

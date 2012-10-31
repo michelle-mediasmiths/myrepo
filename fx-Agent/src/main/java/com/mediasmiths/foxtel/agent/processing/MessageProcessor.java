@@ -36,7 +36,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	private final FilesPendingProcessingQueue filePathsPending;
 	
-	private final Unmarshaller unmarhsaller;
+	protected final Unmarshaller unmarhsaller;
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
 	private final String failurePath;
@@ -70,7 +70,6 @@ public abstract class MessageProcessor<T> implements Runnable {
 			throws MessageProcessingFailedException {
 
 		try {
-
 			Object unmarshalled = unmarhsaller.unmarshal(new File(filePath));
 			logger.debug(String.format("unmarshalled object of type %s",
 					unmarshalled.getClass().toString()));
