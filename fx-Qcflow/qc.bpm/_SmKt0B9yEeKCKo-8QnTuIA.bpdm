@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qcResult="http://example.com/qcAdapterRest/qcResult.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:getProfileForQC="http://example.com/wfAdapter/getProfileForQC.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:autoQcError="http://example.com/wfAdapter/autoQcError.rest" xmlns:assetTransferForQC="http://example.com/wfAdapter/assetTransferForQC.rest" xmlns:autoQcPassed="http://example.com/wfAdapter/autoQcPassed.rest" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/workflow" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://thisdiagram/caller" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQcFailed="http://example.com/wfAdapter/autoQcFailed.rest" xmlns:qcFinished="http://example.com/qcAdapterRest/qcFinished.rest" xmlns:qcStart="http://example.com/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qcResult="http://example.com/qcAdapterRest/qcResult.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:getProfileForQC="http://example.com/wfAdapter/getProfileForQC.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:autoQcError="http://example.com/wfAdapter/autoQcError.rest" xmlns:assetTransferForQC="http://example.com/wfAdapter/assetTransferForQC.rest" xmlns:autoQcPassed="http://example.com/wfAdapter/autoQcPassed.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/workflow" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQcFailed="http://example.com/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://example.com/qcAdapterRest/qcStart.rest" xmlns:qcFinished="http://example.com/qcAdapterRest/qcFinished.rest" xmlns:wfadpater="http://thisdiagram/wfadpater" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
@@ -7,14 +7,15 @@
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/autoQcError.rest" bpdm:prefix="autoQcError" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcError.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/assetTransferForQC.rest" bpdm:prefix="assetTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/assetTransferForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/autoQcPassed.rest" bpdm:prefix="autoQcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcPassed.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.example.org/complexvar" bpdm:prefix="complexvar" bpdm:comment="contrib=&apos;project:///complexvarQC.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_Q35Dlh9xEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/caller" bpdm:prefix="caller" bpdm:comment="contrib=&apos;partner-pool:///_Q35Dlh9xEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/autoQcFailed.rest" bpdm:prefix="autoQcFailed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcFailed.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcFinished.rest" bpdm:prefix="qcFinished" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcFinished.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/qcAdapterRest/qcFinished.rest" bpdm:prefix="qcFinished" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcFinished.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/wfadpater" bpdm:prefix="wfadpater" bpdm:comment="contrib=&apos;partner-pool:///_Wd6bcB9yEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
             <wsdl:portType name="Forcaller">
@@ -46,6 +47,7 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQcFailed.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQcError.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_U-qPMB9yEeKCKo-8QnTuIA" bpdm:label="qc adapter"/>
+        <bpdm:namespaceContributor bpdm:url="project:///complexvarQC.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="workflow" bpdm:ID="_SmKt0B9yEeKCKo-8QnTuIA">
         <bpel:partnerLinks>
@@ -82,16 +84,12 @@
                 </bpel:from>
             </bpel:variable>
             <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output" binding="autoQcError:restBinding" operation="autoQcError" opMsgType="1" bpdm:id="_B40U1h90EeKCKo-8QnTuIA" bpdm:messageIds="inc:_B4e9oB90EeKCKo-8QnTuIA"/>
-            <bpel:variable name="autoQCErrorCount" type="xs:integer">
-                <bpel:from>
-                    <bpel:literal bpdm:linkedType="xs:integer"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="thisStartResponseMsg" messageType="this:startResponse" bpdm:id="_L7WDQCKhEeKJt7IsuN4hnw" bpdm:messageIds=" out:_L7Rx0CKhEeKJt7IsuN4hnw">
                 <bpel:from bpdm:toPart="body">
                     <bpel:literal bpdm:linkedMessageType="this:startResponse" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="complexvariable" type="complexvar:complexvariable" bpdm:id="_B9iykCM_EeKQgITLNq70iQ"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="start" partnerLink="workflowAndCallerPlkVar" portType="this:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="start" bpdm:ID="_bWc3sB9yEeKCKo-8QnTuIA">
@@ -100,8 +98,17 @@
             <bpdm:messagingtask bpdm:label="set error count to zero" bpdm:ID="_paBRYB94EeKCKo-8QnTuIA">
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
-                        <bpel:from>"missingPrototype"</bpel:from>
-                        <bpel:to>$autoQCErrorCount</bpel:to><mapper:mapperLink><mapper:vertice id="31075019" targetPath="$autoQCErrorCount" targetedBy="1833206-arg0"></mapper:vertice><mapper:vertice id="1833206" dimension="78x24" location="137,723"><mapper:value>xs:integer(0)</mapper:value></mapper:vertice></mapper:mapperLink>
+                        <bpel:from>xs:integer(0)</bpel:from>
+                        <bpel:to>$complexvariable</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="5378762" targetPath="$complexvariable" targetedBy="6191415-arg1"></mapper:vertice>
+  <mapper:vertice id="6191415" dimension="121x25" location="300,60">
+    <mapper:value>xs:integer()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="29459585" dimension="73x37" location="132,36" targetedBy="6191415-arg0">
+    <mapper:value>0</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
@@ -135,7 +142,17 @@
             </bpdm:messagingtask>
             <bpel:scope bpdm:label="perform qc until 3 errors" bpdm:ID="_uQLWwB9yEeKCKo-8QnTuIA">
                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                    <bpel:condition bpdm:loopType="repeatUntil">$autoQCErrorCount = 3<mapper:mapperLink><mapper:vertice id="29991473" targetPath="$repeat until" targetedBy="15122024-arg2"></mapper:vertice><mapper:vertice id="15122024" dimension="78x24" location="156,684"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="27277308" sourcePath="$autoQCErrorCount" targetedBy="15122024-arg0"></mapper:vertice><mapper:vertice id="3310230" dimension="61x25" location="108,756" targetedBy="15122024-arg1"><mapper:value>3</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
+                    <bpel:condition bpdm:loopType="repeatUntil">$complexvariable &gt;= 3
+<mapper:mapperLink>
+  <mapper:vertice id="28915186" targetPath="$repeat until" targetedBy="32415856-arg2"></mapper:vertice>
+  <mapper:vertice id="32415856" dimension="121x37" location="216,156">
+    <mapper:value>&gt;=</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="16320999" sourcePath="$complexvariable" targetedBy="32415856-arg0"></mapper:vertice>
+  <mapper:vertice id="4189375" dimension="61x37" location="96,216" targetedBy="32415856-arg1">
+    <mapper:value>3</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:variables>
                     <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="0" bpdm:id="_AV6XoB90EeKCKo-8QnTuIA" bpdm:messageIds=" out:_AVs8QB90EeKCKo-8QnTuIA">
@@ -248,8 +265,18 @@
                             <bpdm:messagingtask bpdm:label="increment error count" bpdm:ID="_GlYnEB9zEeKCKo-8QnTuIA">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
-                                        <bpel:from>$autoQCErrorCount + xs:integer(1)</bpel:from>
-                                        <bpel:to>$autoQCErrorCount</bpel:to><mapper:mapperLink><mapper:vertice id="2046989" targetPath="$autoQCErrorCount" targetedBy="31435068-arg1"></mapper:vertice><mapper:vertice id="31435068" dimension="78x24" location="180,696"><mapper:value>+</mapper:value></mapper:vertice><mapper:vertice id="13146918" sourcePath="$autoQCErrorCount" targetedBy="31435068-arg0"></mapper:vertice><mapper:vertice id="22286968" dimension="78x24" location="84,744" targetedBy="31435068-arg2"><mapper:value>xs:integer(1)</mapper:value></mapper:vertice></mapper:mapperLink>
+                                        <bpel:from>$complexvariable + 1</bpel:from>
+                                        <bpel:to>$complexvariable</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="14361665" targetPath="$complexvariable" targetedBy="17594838-arg2"></mapper:vertice>
+  <mapper:vertice id="17594838" dimension="49x25" location="216,300">
+    <mapper:value>+</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="18034317" sourcePath="$complexvariable" targetedBy="17594838-arg0"></mapper:vertice>
+  <mapper:vertice id="33162966" dimension="49x25" location="120,348" targetedBy="17594838-arg1">
+    <mapper:value>1</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                             </bpdm:messagingtask>
@@ -273,11 +300,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$qcResultQcResultResponseMsg.response/qcAdapter:result/text()</bpel:from>
-                                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="15569706" targetPath="$thisStartResponseMsg.body/text()" targetedBy="13265928-arg0"></mapper:vertice>
-  <mapper:vertice id="13265928" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to><mapper:mapperLink><mapper:vertice id="15569706" targetPath="$thisStartResponseMsg.body/text()" targetedBy="13265928-arg0"></mapper:vertice><mapper:vertice id="13265928" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:startResponse" bpdm:ID="_GXJa4CKhEeKJt7IsuN4hnw"></bpdm:linkset>
@@ -302,11 +325,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$qcResultQcResultResponseMsg.response/qcAdapter:result/text()</bpel:from>
-                                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="7978223" targetPath="$thisStartResponseMsg.body/text()" targetedBy="5395335-arg0"></mapper:vertice>
-  <mapper:vertice id="5395335" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to><mapper:mapperLink><mapper:vertice id="7978223" targetPath="$thisStartResponseMsg.body/text()" targetedBy="5395335-arg0"></mapper:vertice><mapper:vertice id="5395335" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:startResponse" bpdm:ID="_HFGGACKhEeKJt7IsuN4hnw"></bpdm:linkset>
@@ -333,13 +352,7 @@
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>"error"</bpel:from>
-                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="3097287" targetPath="$thisStartResponseMsg.body/text()" targetedBy="14328009-arg0"></mapper:vertice>
-  <mapper:vertice id="14328009" dimension="78x24" location="479,632">
-    <mapper:value>"error"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$thisStartResponseMsg.body/text()</bpel:to><mapper:mapperLink><mapper:vertice id="3097287" targetPath="$thisStartResponseMsg.body/text()" targetedBy="14328009-arg0"></mapper:vertice><mapper:vertice id="14328009" dimension="78x24" location="479,632"><mapper:value>"error"</mapper:value></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="this:startResponse" bpdm:ID="_L7Rx0CKhEeKJt7IsuN4hnw"></bpdm:linkset>
