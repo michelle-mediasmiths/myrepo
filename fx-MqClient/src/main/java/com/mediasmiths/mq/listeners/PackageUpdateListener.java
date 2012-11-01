@@ -94,9 +94,9 @@ public class PackageUpdateListener
 								if (requiresSegTask) {
 									//Create new segmentation task for this asset
 									long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
-									AttributeMap newTask = client.getTask(taskID);
+									AttributeMap newTask = taskController.getTask(taskID);
 									newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-									client.updateTask(newTask);
+									taskController.saveTask(newTask);
 								}
 							}
 						}
@@ -142,9 +142,9 @@ public class PackageUpdateListener
 							if (requiresSegTask) {
 								//Create new segmentation task for this asset
 								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
-								AttributeMap newTask = client.getTask(taskID);
+								AttributeMap newTask = taskController.getTask(taskID);
 								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
+								taskController.saveTask(newTask);
 							}
 						}
 					}

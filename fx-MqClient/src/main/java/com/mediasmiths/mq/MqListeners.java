@@ -79,7 +79,8 @@ public class MqListeners implements Runnable {
 		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
 		ambp = injector.getProvider(AttributeMessageBuilder.class);
 		mq = injector.getInstance(Mq.class);
-
+		
+		//TODO: Fix the guice injection
 		URL url;
 		try {
 			url = new URL("http://localhost:8084/tasks-ws");
@@ -117,22 +118,22 @@ public class MqListeners implements Runnable {
 	// - QC button clicked, update QC flag - DG: Shouldnt this by Mayam?
 	public void attachIncomingListners() 
 	{
-		attachListener(Topics.ASSET_CREATE, UnmatchedListener.getInstance(client, taskController));
-		attachListener(Topics.ASSET_DELETE, AssetDeletionListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_DELETE, AssetPurgeListener.getInstance(client, taskController));
+		attachListener(Topics.ASSET_CREATE, UnmatchedListener.getInstance(taskController));
+		attachListener(Topics.ASSET_DELETE, AssetDeletionListener.getInstance(taskController));
+		attachListener(Topics.TASK_DELETE, AssetPurgeListener.getInstance(taskController));
 		attachListener(Topics.ASSET_UPDATE, EmergencyIngestListener.getInstance(client, taskController));
 		attachListener(Topics.ASSET_CREATE, TemporaryContentListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, SegmentationCompleteListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceEditingListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceLoggingListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, ImportFailureListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, InitiateQcListener.getInstance(client, taskController));
+		attachListener(Topics.TASK_UPDATE, SegmentationCompleteListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ComplianceEditingListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ComplianceLoggingListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ImportFailureListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, InitiateQcListener.getInstance(taskController));
 		attachListener(Topics.ASSET_CREATE, ItemCreationListener.getInstance(client, taskController));
 		attachListener(Topics.ASSET_UPDATE, PackageUpdateListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, PreviewTaskListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, QcCompleteListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, IngestCompleteListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, FixAndStitchListener.getInstance(client, taskController));
+		attachListener(Topics.TASK_UPDATE, PreviewTaskListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, QcCompleteListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, IngestCompleteListener.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, FixAndStitchListener.getInstance(taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
@@ -157,7 +158,7 @@ public class MqListeners implements Runnable {
 		mq.shutdownProducers();
 	}
 	
-	private void test() {
+/*	private void test() {
 		final AttributeMap task = client.createAttributeMap();
 		task.setAttribute(Attribute.ASSET_TITLE, "Hello");
 
@@ -177,5 +178,5 @@ public class MqListeners implements Runnable {
 			e.printStackTrace();
 			System.out.println("Failure - Message send failed!");
 		}
-	}
+	}*/
 }

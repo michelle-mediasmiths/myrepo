@@ -40,6 +40,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -84,7 +85,7 @@ public class MayamClientImpl implements MayamClient
 		client = injector.getInstance(TasksClient.class).setup(url, userToken); // throws
 																				// ioexception
 		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
-		tasksController = new MayamTaskController(client);
+		tasksController = new MayamTaskController(client, new MayamAccessRightsController());
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, new DateUtil());
 		packageController = new MayamPackageController(client, new DateUtil());

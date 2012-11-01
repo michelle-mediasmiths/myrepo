@@ -1,13 +1,17 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetAccess;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
@@ -17,17 +21,24 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.accessrights.MayamAccessRights;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTaskController extends MayamController{
 	private final TasksClient client;
+	
+	@Inject
+	private final MayamAccessRightsController accessRightsController;
+	
 	private final Logger log = Logger.getLogger(MayamPackageController.class);
 
 	@Inject
 	public MayamTaskController(
-			@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient) {
+			@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController) {
 		client = mayamClient;
+		accessRightsController = rightsController;
 	}
 
 	public long createTask(String assetID, MayamAssetType assetType,
@@ -60,7 +71,8 @@ public class MayamTaskController extends MayamController{
 			attributes.copyAttributes(assetAttributes);
 
 			try {
-				client.createTask(attributes.getAttributes());
+				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
+				client.createTask(newTask);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam while attempting to create task");
 				throw new MayamClientException(
@@ -123,6 +135,7 @@ public class MayamTaskController extends MayamController{
 	public void saveTask(AttributeMap task) throws MayamClientException {
 		
 		try {
+			task = updateAccessRights(task);
 			client.updateTask(task);
 		} catch (RemoteException e) {
 			log.error("remote expcetion saving task", e);
@@ -130,6 +143,34 @@ public class MayamTaskController extends MayamController{
 					MayamClientErrorCode.TASK_UPDATE_FAILED);
 		}
 		
+	}
+	
+	public AttributeMap getTask(long taskId) throws RemoteException
+	{
+		return client.getTask(taskId);
+	}
+	
+	private AttributeMap updateAccessRights(AttributeMap task)
+	{
+		String taskType = task.getAttribute(Attribute.TASK_LIST_ID);
+		String taskState = task.getAttribute(Attribute.TASK_STATE);
+		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
+		
+		ArrayList <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType));
+		
+		AssetAccess accessRights = new AssetAccess();
+		for (int i = 0; i < allRights.size(); i++)
+		{
+			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+			entry.setEntityType(EntityType.GROUP);
+			entry.setEntity(allRights.get(i).getGroupName());
+			entry.setRead(allRights.get(i).getReadAccess());
+			entry.setWrite(allRights.get(i).getWriteAccess());
+			entry.setAdmin(allRights.get(i).getAdminAccess());
+			accessRights.getStandard().add(entry);
+		}
+		task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+		return task;
 	}
 
 }

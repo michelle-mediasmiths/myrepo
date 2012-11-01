@@ -24,7 +24,7 @@ public class MayamAccessRightsController {
 	
 	private Configuration config;
 	private SessionFactory factory;
-	private static Session session;
+	private Session session;
 	private ServiceRegistry serviceRegistry;
 	
 	public MayamAccessRightsController()
@@ -38,7 +38,7 @@ public class MayamAccessRightsController {
 		 session = factory.openSession();
 	}
 	
-	 public static void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin) 
+	 public void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin) 
 	 {
 		 session.beginTransaction();
 		 MayamAccessRights rights = new MayamAccessRights();
@@ -53,7 +53,7 @@ public class MayamAccessRightsController {
 		 session.getTransaction().commit();
 	 }
 	 
-	 public static ArrayList<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType) 
+	 public ArrayList<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType) 
 	 {   
 		  session.beginTransaction();  
 		  Criteria criteria = session.createCriteria(MayamAccessRights.class);
