@@ -7,14 +7,13 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
 public class UnmatchedListener 
 {
-	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
+	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
 		{
@@ -39,12 +38,12 @@ public class UnmatchedListener
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
 							
-							AttributeMap newTask = client.getTask(taskID);
+							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.putAll(messageAttributes);
 							Calendar date = Calendar.getInstance();
 							date.add(Calendar.DAY_OF_MONTH, 30);
 							newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
-							client.updateTask(newTask);
+							taskController.saveTask(newTask);
 					}
 				}
 			}

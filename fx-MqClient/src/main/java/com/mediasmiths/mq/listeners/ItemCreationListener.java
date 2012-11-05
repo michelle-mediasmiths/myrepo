@@ -33,9 +33,9 @@ public class ItemCreationListener
 						String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 
 						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST);
-						AttributeMap newTask = client.getTask(taskID);
+						AttributeMap newTask = taskController.getTask(taskID);
 						newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-						client.updateTask(newTask);
+						taskController.saveTask(newTask);
 
 					}
 				}

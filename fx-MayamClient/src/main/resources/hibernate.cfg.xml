@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-4.0.dtd">
+	<hibernate-configuration xmlns="http://www.hibernate.org/xsd/hibernate-configuration">
+
+    <!-- a SessionFactory instance listed as /jndi/name -->
+    <session-factory name="java:hibernate/SessionFactory">
+
+        <!-- properties -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/FoxtelAccessRights</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password"></property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>
+
+        <!-- mapping files -->
+        <mapping resource="MayamAccessRights.hbm.xml"/>
+
+        <!-- cache settings -->
+        <class-cache class="com.mediasmiths.mayam.accessrights.MayamAccessRights" usage="read-write"/>
+
+    </session-factory>
+
+</hibernate-configuration>

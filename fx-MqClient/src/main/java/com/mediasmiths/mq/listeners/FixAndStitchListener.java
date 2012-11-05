@@ -6,7 +6,6 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -14,7 +13,7 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 
 public class FixAndStitchListener 
 {
-	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
+	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
 		{
@@ -31,7 +30,7 @@ public class FixAndStitchListener
 						if (taskState == TaskState.FINISHED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-							client.updateTask(messageAttributes);
+							taskController.saveTask(messageAttributes);
 								
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
@@ -45,16 +44,16 @@ public class FixAndStitchListener
 							if (assetType.equals(AssetType.ITEM) && (parentID != null || parentID.equals(""))) 
 							{
 								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_LOGGING);
-								AttributeMap newTask = client.getTask(taskID);
+								AttributeMap newTask = taskController.getTask(taskID);
 								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
+								taskController.saveTask(newTask);
 							}
 							else {
 								//If not eligible for compliance then skip straight to segmentation
 								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
-								AttributeMap newTask = client.getTask(taskID);
+								AttributeMap newTask = taskController.getTask(taskID);
 								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-								client.updateTask(newTask);
+								taskController.saveTask(newTask);
 							}
 						}	
 					}

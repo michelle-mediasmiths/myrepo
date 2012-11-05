@@ -50,7 +50,7 @@ public class TemporaryContentListener
 							{
 								AttributeMap task = tasks.get(i);
 								task.setAttribute(Attribute.TASK_STATE, TaskState.C_REMOVED);
-								client.updateTask(task);
+								taskController.saveTask(task);
 							}
 						}
 					}
@@ -67,7 +67,7 @@ public class TemporaryContentListener
 						FilterCriteria criteria = new FilterCriteria();
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult existingTasks = client.getTasks(criteria, 10, 0);
-						
+					
 						if (existingTasks.getTotalMatches() > 0) 
 						{
 							List<AttributeMap> tasks = existingTasks.getMatches();
@@ -85,13 +85,13 @@ public class TemporaryContentListener
 									date.add(Calendar.DAY_OF_MONTH, 7);
 									task.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
 								}
-								client.updateTask(task);
+								taskController.saveTask(task);
 							}
 						}
 						else {
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
 							
-							AttributeMap newTask = client.getTask(taskID);
+							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.putAll(messageAttributes);
 							Calendar date = Calendar.getInstance();
 							if (contentType.equals("Associated")) 
@@ -104,7 +104,7 @@ public class TemporaryContentListener
 								date.add(Calendar.DAY_OF_MONTH, 7);
 								newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
 							}
-							client.updateTask(newTask);
+							taskController.saveTask(newTask);
 						}
 					}	
 				}

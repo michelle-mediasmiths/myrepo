@@ -3,12 +3,11 @@ package com.mediasmiths.mq.listeners;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
 public class InitiateQcListener 
 {
-	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
+	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
 		{

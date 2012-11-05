@@ -111,7 +111,19 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 
+<dependency>
+	<groupId>org.jboss</groupId>
+	<artifactId>jandex</artifactId>
+	<version>1.0.3.Final</version>
+</dependency>
 
+<dependency>
+	<groupId>com.fasterxml</groupId>
+	<artifactId>classmate</artifactId>
+	<version>0.5.4</version>
+</dependency>
+            
+            
 	</dependencies>
 
 	<build>
