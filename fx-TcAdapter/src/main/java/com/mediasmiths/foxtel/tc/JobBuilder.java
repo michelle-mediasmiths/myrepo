@@ -1,4 +1,4 @@
-	package com.mediasmiths.foxtel.tc;
+package com.mediasmiths.foxtel.tc;
 
 import java.io.IOException;
 
@@ -22,24 +22,16 @@ public class JobBuilder
 
 	/**
 	 * 
-	 * video 	audio 						dolbyEe	downres profile 
-	 * SD 		Stereo 						No 		n/a 	MAM-SD-12ST_GXF-SD-12ST 
-	 * SD 		Stereo + Descrete Surround 	Yes 	n/a 	MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE 
-	 * HD 		Stereo 						No		No  	MAM-HD-12ST_GXF-HD-12ST 
-	 * HD 		Stereo + Descrete Surround 	Yes 	No 		MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE 
-	 * HD 		Stereo 						No 		Yes 	MAM-HD-12ST_GXF-SD-12ST 
-	 * HD 		Stereo + Descrete Surround 	Yes 	Yes 	MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
+	 * video audio dolbyEe downres profile SD Stereo No n/a MAM-SD-12ST_GXF-SD-12ST SD Stereo + Descrete Surround Yes n/a MAM-SD-12ST_38SUR_GXF-SD-12ST-34DBE HD Stereo No No MAM-HD-12ST_GXF-HD-12ST HD
+	 * Stereo + Descrete Surround Yes No MAM-HD-12ST_38SUR_GXF-HD-12ST-34DBE HD Stereo No Yes MAM-HD-12ST_GXF-SD-12ST HD Stereo + Descrete Surround Yes Yes MAM-HD-12ST_38SUR_GXF-SD-12ST-34DBE
 	 * 
 	 */
-	
-	private MayamClient mayamClient;
-	private PathResolver pathResolver;
 
 	@Inject
-	public JobBuilder(MayamClient mayamClient, PathResolver pathResolver){
-		this.mayamClient=mayamClient;
-		this.pathResolver=pathResolver;
-	}
+	private MayamClient mayamClient;
+
+	@Inject
+	private PathResolver pathResolver;
 
 	public enum TxProfile
 	{
@@ -79,19 +71,19 @@ public class JobBuilder
 				inputfile,
 				outputFolder));
 		// fetch package and material information to determine profile
-	
-		//TODO Put these back in
-		//PackageType pack = mayamClient.getPackage(packageID);
-		//MaterialType material = mayamClient.getMaterial(pack.getMaterialID());
+
+		// TODO Put these back in
+		// PackageType pack = mayamClient.getPackage(packageID);
+		// MaterialType material = mayamClient.getMaterial(pack.getMaterialID());
 
 		TxProfile profile;
-		//TODO Remove this line
+		// TODO Remove this line
 		profile = TxProfile.MAM_HD_12ST_GXF_HD_12ST;
-		
+
 		try
 		{
-			//TODO uncomment line below
-			//profile = pickTxProfile(pack, material);
+			// TODO uncomment line below
+			// profile = pickTxProfile(pack, material);
 			log.debug(String.format("Selected profile %s for packageId %s", profile.toString(), packageID));
 		}
 		catch (Exception e)
@@ -103,8 +95,8 @@ public class JobBuilder
 
 		String pcp = loadProfileForPackage(packageID, profile);
 
-		//assuming for now that the path is a WINDOWS path, this may not be correct!
-		
+		// assuming for now that the path is a WINDOWS path, this may not be correct!
+
 		pcp = pcp.replace(INPUT_FILE_PATH_PH, inputfile);
 		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, outputFolder);
 
@@ -182,6 +174,16 @@ public class JobBuilder
 			}
 		}
 		return profile;
+	}
+
+	public void setMayamClient(MayamClient mayamClient)
+	{
+		this.mayamClient = mayamClient;
+	}
+
+	public void setPathResolver(PathResolver pathResolver)
+	{
+		this.pathResolver = pathResolver;
 	}
 
 }

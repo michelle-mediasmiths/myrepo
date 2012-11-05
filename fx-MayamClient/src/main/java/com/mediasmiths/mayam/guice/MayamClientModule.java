@@ -25,11 +25,10 @@ public class MayamClientModule extends AbstractModule
 	@Override
 	protected void configure()
 	{
+		install(new SecurityModule());
 		install(new AttributesModule());
 		install(new MqModule("fxMayamClient"));
 		bind(MayamClient.class).to(MayamClientImpl.class);
-		
-//		bind(AttributeMapMapper.class).to(JacksonAttributeMapMapperImpl.class);
 		
 	}
 

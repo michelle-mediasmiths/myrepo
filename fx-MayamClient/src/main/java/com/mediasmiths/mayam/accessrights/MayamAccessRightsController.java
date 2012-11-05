@@ -6,6 +6,8 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.std.guice.database.annotation.Transactional;
+import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,17 +20,20 @@ import org.hibernate.Session;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory; 
 
-public class MayamAccessRightsController {
+public class MayamAccessRightsController extends HibernateDao<MayamAccessRights, Long> {
 
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 	
-	private Configuration config;
-	private SessionFactory factory;
-	private Session session;
-	private ServiceRegistry serviceRegistry;
+	//private Configuration config;
+	//private SessionFactory factory;
+	//private Session session;
+	//private ServiceRegistry serviceRegistry;
 	
 	public MayamAccessRightsController()
 	{
+		super(MayamAccessRights.class);
+	}
+	/*
 		 config = new Configuration();
 		 config.addAnnotatedClass(MayamAccessRights.class);
 		 serviceRegistry = new ServiceRegistryBuilder().configure().buildServiceRegistry();
@@ -36,11 +41,12 @@ public class MayamAccessRightsController {
 		 metadataSources.addAnnotatedClass(MayamAccessRights.class);
 		 factory = metadataSources.buildMetadata().buildSessionFactory();
 		 session = factory.openSession();
-	}
+	}*/
 	
+	@Transactional
 	 public void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin) 
 	 {
-		 session.beginTransaction();
+		 
 		 MayamAccessRights rights = new MayamAccessRights();
 		 rights.setTaskType(taskType.toString());
 		 rights.setAssetType(assetType.toString());
@@ -49,14 +55,14 @@ public class MayamAccessRightsController {
 		 rights.setReadAccess(read);
 		 rights.setWriteAccess(write);
 		 rights.setAdminAccess(admin);
-		 session.save(rights);
-		 session.getTransaction().commit();
+		 
+		 save(rights);
 	 }
-	 
-	 public ArrayList<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType) 
-	 {   
-		  session.beginTransaction();  
-		  Criteria criteria = session.createCriteria(MayamAccessRights.class);
+	
+	@Transactional
+	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType) 
+	 {
+		  Criteria criteria = createCriteria();
 		  if (taskType != null) {
 			  criteria.add(Restrictions.eq("taskType", taskType.toString()));
 		  }
@@ -67,14 +73,6 @@ public class MayamAccessRightsController {
 			  criteria.add(Restrictions.eq("assetType", assetType.toString())); 
 		  }
 
-		  List allRights = criteria.list();
-		  ArrayList <MayamAccessRights> rightsList = new ArrayList <MayamAccessRights> ();
-		  
-		  for (int i = 0; i < allRights.size(); i++) {  
-			  rightsList.add((MayamAccessRights) allRights.get(i));  
-		  }
-		  
-		  return rightsList;
+		  return new ArrayList<MayamAccessRights>(getList(criteria));
 	 }  
-	   
 }

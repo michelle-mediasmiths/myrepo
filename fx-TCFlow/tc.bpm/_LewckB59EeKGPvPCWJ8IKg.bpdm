@@ -10,23 +10,23 @@
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Caller" bpdm:ID="_LewckB59EeKGPvPCWJ8IKg">
         <bpel:partnerLinks>
             <bpel:partnerLink name="callerAndTCPlkVar" partnerLinkType="diag:CallerAndTC" initializePartnerRole="yes" partnerRole="TC_for_Caller" bpdm:invokedService="TC:CanonicServiceForCaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/TC/Caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_LewckB59EeKGPvPCWJ8IKg:_LexDoB59EeKGPvPCWJ8IKg" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="tCEventStartMessageRequest" messageType="TC:EventStartMessageRequest" bpdm:id="_lH8rECKgEeKHD-pz9CjvUA" bpdm:messageIds=" out:_lH5nwCKgEeKHD-pz9CjvUA">
+            <bpel:variable name="tCEventStartMessageRequest" messageType="TC:EventStartMessageRequest" bpdm:id="_2R640Cc3EeKYS8XxoCkLRQ" bpdm:messageIds=" out:_2R2AUCc3EeKYS8XxoCkLRQ">
                 <bpel:from bpdm:toPart="body">
                     <bpel:literal bpdm:linkedMessageType="TC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="EventStartMessage" partnerLink="callerAndTCPlkVar" portType="TC:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Being TC workflow" bpdm:ID="_LexDoB59EeKGPvPCWJ8IKg">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageRequest" bpdm:ID="_lH5nwCKgEeKHD-pz9CjvUA"></bpdm:linkset>
+            <bpdm:messagingtask operation="EventStartMessage" partnerLink="callerAndTCPlkVar" portType="TC:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Begin TC workflow" bpdm:ID="_LexDoB59EeKGPvPCWJ8IKg">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageRequest" bpdm:ID="_2R2AUCc3EeKYS8XxoCkLRQ"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

@@ -7,21 +7,31 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class MaterialTransferForTCRequest
 {
-	private String packageID;
-		
-	@XmlElement
-	public String getPackageID()
+	private String assetID;
+	private boolean isForTX;	
+	
+	@XmlElement(required=true)
+	public boolean isForTX()
 	{
-		return packageID;
+		return isForTX;
 	}
-	public void setPackageID(String packageID)
+	public void setForTX(boolean isForTX)
 	{
-		this.packageID = packageID;
+		this.isForTX = isForTX;
+	}
+	@XmlElement(required=true)
+	public String getAssetID()
+	{
+		return assetID;
+	}
+	public void setAssetID(String assetID)
+	{
+		this.assetID = assetID;
 	}
 	
 	@Override
 	public String toString(){
-		return String.format("packageID { %s } ", packageID);
+		return String.format("assetID { %s } ",assetID);
 	}
 	
 }

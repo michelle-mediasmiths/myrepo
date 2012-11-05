@@ -31,14 +31,15 @@
 		<!-- foxtel solution dependencies -->
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-CarbonWFSClient</artifactId>
+			<artifactId>fx-MayamClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MayamClient</artifactId>
+			<artifactId>fx-CarbonWFSClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
+
 		<!-- end foxtel solution dependencies -->
 
 		<!-- commons io -->
@@ -87,6 +88,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.5</version>
 				<executions>
 					<execution>
 					<id>schemagen</id>

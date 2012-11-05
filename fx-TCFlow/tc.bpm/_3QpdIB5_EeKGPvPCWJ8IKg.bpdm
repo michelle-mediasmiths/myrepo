@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcGetStatus1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetStatus.rest" xmlns:this="http://thisdiagram/TC" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tcBuildJob="http://example.com/tcAdapter/tcBuildJob.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:tcGetResult="http://example.com/tcAdapter/tcGetResult.rest" xmlns:diag="http://thisdiagram" xmlns:tcFailure="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcTotalFailure.rest" xmlns:materialTransferForTC1="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/materialTransferForTC.rest" xmlns:tcBuildJob1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcBuildJob.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcGetResult1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetResult.rest" xmlns:WFAdapter="http://thisdiagram/WFAdapter" xmlns:tcStartJob1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcStartJob.rest" xmlns:materialTransferForTC="http://example.com/wfAdapter/materialTransferForTC.rest" xmlns:tcGetStatus="http://example.com/tcAdapter/tcGetStatus.rest" xmlns:tcPassed="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcPassed.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tcStartJob="http://example.com/tcAdapter/tcStartJob.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/TC">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcGetStatus1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetStatus.rest" xmlns:this="http://thisdiagram/TC" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tcBuildJob="http://example.com/tcAdapter/tcBuildJob.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:tcGetResult="http://example.com/tcAdapter/tcGetResult.rest" xmlns:diag="http://thisdiagram" xmlns:tcFailure="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcTotalFailure.rest" xmlns:materialTransferForTC1="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/materialTransferForTC.rest" xmlns:tcBuildJob1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcBuildJob.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcGetResult1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetResult.rest" xmlns:materialTransferForTC="http://example.com/wfAdapter/materialTransferForTC.rest" xmlns:tcStartJob1="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcStartJob.rest" xmlns:Caller="http://thisdiagram/Caller" xmlns:tcPassed="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcPassed.rest" xmlns:tcGetStatus="http://example.com/tcAdapter/tcGetStatus.rest" xmlns:tcStartJob="http://example.com/tcAdapter/tcStartJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/TC">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetStatus.rest" bpdm:prefix="tcGetStatus1" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetStatus.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/TC" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
@@ -14,13 +14,13 @@
         <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcBuildJob.rest" bpdm:prefix="tcBuildJob1" bpdm:comment="contrib=&apos;project:///tcAdapter/tcBuildJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcGetResult.rest" bpdm:prefix="tcGetResult1" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetResult.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter" bpdm:prefix="WFAdapter" bpdm:comment="contrib=&apos;partner-pool:///_3q0QoB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcStartJob.rest" bpdm:prefix="tcStartJob1" bpdm:comment="contrib=&apos;project:///tcAdapter/tcStartJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/wfAdapter/materialTransferForTC.rest" bpdm:prefix="materialTransferForTC" bpdm:comment="contrib=&apos;project:///wfAdapter/materialTransferForTC.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://example.com/tcAdapter/tcGetStatus.rest" bpdm:prefix="tcGetStatus" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetStatus.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/tcAdapter/tcStartJob.rest" bpdm:prefix="tcStartJob1" bpdm:comment="contrib=&apos;project:///tcAdapter/tcStartJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Caller" bpdm:prefix="Caller" bpdm:comment="contrib=&apos;partner-pool:///_LewckB59EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://foxtel.local.mediasmithsforge.com:8080/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://example.com/tcAdapter/tcGetStatus.rest" bpdm:prefix="tcGetStatus" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetStatus.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://example.com/tcAdapter/tcStartJob.rest" bpdm:prefix="tcStartJob" bpdm:comment="contrib=&apos;project:///tcAdapter/tcStartJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
             <wsdl:portType name="ForCaller">
@@ -34,7 +34,6 @@
             </wsdl:message>
             <bpel:binding name="CanonicBindingForCaller" type="this:ForCaller" bpdm:isSynchronized="true"/>
         </bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_LewckB59EeKGPvPCWJ8IKg" bpdm:label="Caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcBuildJob.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/materialTransferForTC.wsdl"/>
@@ -48,6 +47,7 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcTotalFailure.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcFailure.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///complexvar.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_LewckB59EeKGPvPCWJ8IKg" bpdm:label="Caller"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="TC" bpdm:ID="_3QpdIB5_EeKGPvPCWJ8IKg">
         <bpel:partnerLinks>
@@ -85,11 +85,11 @@
                     <bpel:literal bpdm:linkedType="complexvar:complexvariable" bpdm:linkedFile="complexvariable-_3QpdIB5_EeKGPvPCWJ8IKg-0-literal.xml"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_lICKoCKgEeKHD-pz9CjvUA" bpdm:messageIds="inc:_lH5nwCKgEeKHD-pz9CjvUA"/>
+            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_2SBmhSc3EeKYS8XxoCkLRQ" bpdm:messageIds="inc:_2R2AUCc3EeKYS8XxoCkLRQ"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="callerAndTCPlkVar" portType="this:ForCaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_4xHKUB5_EeKGPvPCWJ8IKg">
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_lH5nwCKgEeKHD-pz9CjvUA"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_2R2AUCc3EeKYS8XxoCkLRQ"></bpdm:linkset>
             </bpdm:messagingtask>
             <bpdm:messagingtask bpdm:label="Set errorCount" bpdm:ID="_PLwbQCHJEeK7ToHmhWq0hw">
                 <bpdm:linkset bpdm:type="assignments">
@@ -99,47 +99,61 @@
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
-            <bpdm:messagingtask operation="tcBuildJob" partnerLink="tCAdapterAndTCForHttpPortPlk0Var" portType="tcBuildJob1:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Build Job" bpdm:ID="_FOm50B9REeKBCuRJN5U2jA">
-                <bpdm:linkset bpdm:type="assignments">
-                    <bpel:copy>
-                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:inputFile</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile</bpel:to><mapper:mapperLink><mapper:vertice id="11685565" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile" targetedBy="6966380-arg0"></mapper:vertice><mapper:vertice id="6966380" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:inputFile"></mapper:vertice></mapper:mapperLink>
-                    </bpel:copy>
-                    <bpel:copy>
-                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:outputFolder</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder</bpel:to><mapper:mapperLink><mapper:vertice id="19527995" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder" targetedBy="29720197-arg0"></mapper:vertice><mapper:vertice id="29720197" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:outputFolder"></mapper:vertice></mapper:mapperLink>
-                    </bpel:copy>
-                    <bpel:copy>
-                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="6852577" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID" targetedBy="25957171-arg0"></mapper:vertice><mapper:vertice id="25957171" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
-                    </bpel:copy>
-                </bpdm:linkset>
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcBuildJob1TcBuildJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcBuildJob1:tcBuildJob_input" bpdm:binding="tcBuildJob1:restBinding" bpdm:ID="_RBq4MB9REeKBCuRJN5U2jA"></bpdm:linkset>
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcBuildJob1TcBuildJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcBuildJob1:tcBuildJob_output" bpdm:binding="tcBuildJob1:restBinding" bpdm:ID="_RQD5gB9REeKBCuRJN5U2jA"></bpdm:linkset>
-            </bpdm:messagingtask>
             <bpdm:messagingtask operation="materialTransferForTC" partnerLink="wFAdapterAndTCForHttpPortPlk0Var" portType="materialTransferForTC1:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Transfer for TC" bpdm:ID="_FUCzcB9REeKBCuRJN5U2jA">
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
-                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="31437389" targetPath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:packageID" targetedBy="29251389-arg0"></mapper:vertice><mapper:vertice id="29251389" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:assetID/text()</bpel:from>
+                        <bpel:to>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:assetID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="3154186" targetPath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:assetID/text()" targetedBy="30738671-arg0"></mapper:vertice>
+  <mapper:vertice id="30738671" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:assetID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:forTX/text()</bpel:from>
+                        <bpel:to>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:forTX/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="21243588" targetPath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:forTX/text()" targetedBy="24028939-arg0"></mapper:vertice>
+  <mapper:vertice id="24028939" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:forTX/text()"></mapper:vertice>
+</mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_input" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_HbUB8B9REeKBCuRJN5U2jA"></bpdm:linkset>
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_output" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_IJJ_YB9REeKBCuRJN5U2jA"></bpdm:linkset>
             </bpdm:messagingtask>
+            <bpdm:messagingtask operation="tcBuildJob" partnerLink="tCAdapterAndTCForHttpPortPlk0Var" portType="tcBuildJob1:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Build Job" bpdm:ID="_FOm50B9REeKBCuRJN5U2jA">
+                <bpdm:linkset bpdm:type="assignments">
+                    <bpel:copy>
+                        <bpel:from>$materialTransferForTC1MaterialTransferForTCResponseMsg.response/wfAdapter:destination/text()</bpel:from>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="15226341" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:inputFile/text()" targetedBy="23993254-arg0"></mapper:vertice>
+  <mapper:vertice id="23993254" sourcePath="$materialTransferForTC1MaterialTransferForTCResponseMsg.response/wfAdapter:destination/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:outputFolder/text()</bpel:from>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="7913201" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:outputFolder/text()" targetedBy="8588561-arg0"></mapper:vertice>
+  <mapper:vertice id="8588561" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:outputFolder/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:assetID/text()</bpel:from>
+                        <bpel:to>$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="17444290" targetPath="$tcBuildJob1TcBuildJobRequestMsg.body/tns:packageID/text()" targetedBy="13537370-arg0"></mapper:vertice>
+  <mapper:vertice id="13537370" sourcePath="$materialTransferForTC1MaterialTransferForTCRequestMsg.body/wfAdapter:assetID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcBuildJob1TcBuildJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcBuildJob1:tcBuildJob_input" bpdm:binding="tcBuildJob1:restBinding" bpdm:ID="_RBq4MB9REeKBCuRJN5U2jA"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcBuildJob1TcBuildJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcBuildJob1:tcBuildJob_output" bpdm:binding="tcBuildJob1:restBinding" bpdm:ID="_RQD5gB9REeKBCuRJN5U2jA"></bpdm:linkset>
+            </bpdm:messagingtask>
             <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ihCDUCHIEeK7ToHmhWq0hw">
                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                    <bpel:condition bpdm:loopType="repeatUntil">$complexvariable &gt;= 3
-<mapper:mapperLink>
-  <mapper:vertice id="16377922" targetPath="$repeat until" targetedBy="3379514-arg0"></mapper:vertice>
-  <mapper:vertice id="3379514" dimension="121x37" location="240,168">
-    <mapper:value>&gt;=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="21680420" sourcePath="$complexvariable" targetedBy="3379514-arg1"></mapper:vertice>
-  <mapper:vertice id="16015652" dimension="97x37" location="60,204" targetedBy="3379514-arg2">
-    <mapper:value>3</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition bpdm:loopType="repeatUntil">$complexvariable&gt;= 3<mapper:mapperLink><mapper:vertice id="16377922" targetPath="$repeat until" targetedBy="3379514-arg0"></mapper:vertice><mapper:vertice id="3379514" dimension="121x37" location="240,168"><mapper:value>&gt;=</mapper:value></mapper:vertice><mapper:vertice id="21680420" sourcePath="$complexvariable" targetedBy="3379514-arg1"></mapper:vertice><mapper:vertice id="16015652" dimension="97x37" location="60,204" targetedBy="3379514-arg2"><mapper:value>3</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:variables>
                     <bpel:variable name="tcStartJob1TcStartJobRequestMsg" messageType="tcStartJob1:tcStartJob_input" binding="tcStartJob1:restBinding" operation="tcStartJob" opMsgType="0" bpdm:id="_0MkQ8CHIEeK7ToHmhWq0hw" bpdm:messageIds=" out:_0MYqwCHIEeK7ToHmhWq0hw">
@@ -173,10 +187,6 @@
                             <bpel:copy>
                                 <bpel:from>"5"</bpel:from>
                                 <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:priority</bpel:to><mapper:mapperLink><mapper:vertice id="13948255" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:priority" targetedBy="18758234-arg0"></mapper:vertice><mapper:vertice id="18758234" dimension="49x25" location="492,132"><mapper:value>"5"</mapper:value></mapper:vertice></mapper:mapperLink>
-                            </bpel:copy>
-                            <bpel:copy>
-                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                <bpel:to>$tcStartJob1TcStartJobRequestMsg.body/tns:jobName</bpel:to><mapper:mapperLink><mapper:vertice id="3125154" targetPath="$tcStartJob1TcStartJobRequestMsg.body/tns:jobName" targetedBy="27828185-arg0"></mapper:vertice><mapper:vertice id="27828185" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$tcBuildJob1TcBuildJobResponseMsg.response/text()</bpel:from>
@@ -235,8 +245,12 @@
                             <bpdm:messagingtask operation="tcPassed" partnerLink="wFAdapterAndTCForHttpPortPlk2Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success message" bpdm:ID="_9NgF8CHIEeK7ToHmhWq0hw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
-                                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="20229324" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID" targetedBy="7188027-arg0"></mapper:vertice><mapper:vertice id="7188027" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
+                                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:assetID/text()</bpel:from>
+                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="5044378" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:packageID/text()" targetedBy="28372427-arg0"></mapper:vertice>
+  <mapper:vertice id="28372427" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:assetID/text()"></mapper:vertice>
+</mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_S1zfUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
@@ -248,8 +262,12 @@
                             <bpdm:messagingtask operation="tcFailure" partnerLink="wFAdapterAndTCForHttpPortPlk1Var" portType="tcFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Error message" bpdm:ID="_-NMBUCHIEeK7ToHmhWq0hw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
-                                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="27564353" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID" targetedBy="19921402-arg0"></mapper:vertice><mapper:vertice id="19921402" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
+                                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:assetID/text()</bpel:from>
+                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="1828766" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:packageID/text()" targetedBy="1926700-arg0"></mapper:vertice>
+  <mapper:vertice id="1926700" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:assetID/text()"></mapper:vertice>
+</mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_QNpxUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
@@ -259,17 +277,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$complexvariable + 1</bpel:from>
-                                        <bpel:to>$complexvariable</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="30343338" targetPath="$complexvariable" targetedBy="16922458-arg2"></mapper:vertice>
-  <mapper:vertice id="16922458" dimension="37x25" location="360,240">
-    <mapper:value>+</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="32567670" sourcePath="$complexvariable" targetedBy="16922458-arg0"></mapper:vertice>
-  <mapper:vertice id="20078208" dimension="37x25" location="264,288" targetedBy="16922458-arg1">
-    <mapper:value>1</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$complexvariable</bpel:to><mapper:mapperLink><mapper:vertice id="30343338" targetPath="$complexvariable" targetedBy="16922458-arg2"></mapper:vertice><mapper:vertice id="16922458" dimension="37x25" location="360,240"><mapper:value>+</mapper:value></mapper:vertice><mapper:vertice id="32567670" sourcePath="$complexvariable" targetedBy="16922458-arg0"></mapper:vertice><mapper:vertice id="20078208" dimension="37x25" location="264,288" targetedBy="16922458-arg1"><mapper:value>1</mapper:value></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                             </bpdm:messagingtask>
@@ -280,8 +288,12 @@
             <bpdm:messagingtask operation="tcTotalFailure" partnerLink="wFAdapterAndTCForHttpPortPlk3Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Fatal Error Message" bpdm:ID="_pEa30CHIEeK7ToHmhWq0hw">
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
-                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                        <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="21760720" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID" targetedBy="692882-arg0"></mapper:vertice><mapper:vertice id="692882" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:assetID/text()</bpel:from>
+                        <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="4459657" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:packageID/text()" targetedBy="29785413-arg0"></mapper:vertice>
+  <mapper:vertice id="29785413" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:assetID/text()"></mapper:vertice>
+</mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_NE9iECJyEeKnk7bpMIO4Cw"></bpdm:linkset>

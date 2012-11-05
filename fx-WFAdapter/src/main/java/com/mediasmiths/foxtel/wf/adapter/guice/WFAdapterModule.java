@@ -30,32 +30,32 @@ public class WFAdapterModule extends AbstractModule
 	}
 	
 
-	@Provides
-	Marshaller provideMarshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
-		Marshaller marshaller = null;
-		try {
-			marshaller = jc.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-			Schema schema = factory.newSchema(getClass().getClassLoader().getResource(schemaLocation));
-			marshaller.setSchema(schema);
-			} catch (JAXBException e) {
-				logger.fatal("Could not create marshaller", e);
-				throw e;
-				}
-		return marshaller;
-		}
-	
-	
-	@Provides
-	JAXBContext provideJAXBContext() throws JAXBException{
-		JAXBContext jc = null;
-		try {
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.wf.adapter.model");
-			} catch (JAXBException e) {
-				logger.fatal("Could not create jaxb context", e);
-				throw e;
-			}
-		return jc;
-		}
+//	@Provides
+//	Marshaller provideMarshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
+//		Marshaller marshaller = null;
+//		try {
+//			marshaller = jc.createMarshaller();
+//			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+//			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+//			Schema schema = factory.newSchema(getClass().getClassLoader().getResource(schemaLocation));
+//			marshaller.setSchema(schema);
+//			} catch (JAXBException e) {
+//				logger.fatal("Could not create marshaller", e);
+//				throw e;
+//				}
+//		return marshaller;
+//		}
+//	
+//	
+//	@Provides
+//	JAXBContext provideJAXBContext() throws JAXBException{
+//		JAXBContext jc = null;
+//		try {
+//			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.wf.adapter.model");
+//			} catch (JAXBException e) {
+//				logger.fatal("Could not create jaxb context", e);
+//				throw e;
+//			}
+//		return jc;
+//		}
 }

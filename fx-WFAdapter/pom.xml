@@ -43,11 +43,11 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 		
-		<dependency>
+		<!-- dependency>
 			<groupId>com.mediasmiths.forge</groupId>
 			<artifactId>persistence</artifactId>
 			<version>1.0-SNAPSHOT</version>
-		</dependency>		
+		</dependency-->		
 		
 		<!-- end mediasmiths dependencies -->
 	</dependencies>

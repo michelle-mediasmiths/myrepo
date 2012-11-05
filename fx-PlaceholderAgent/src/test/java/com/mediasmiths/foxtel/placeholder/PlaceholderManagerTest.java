@@ -89,7 +89,17 @@ public abstract class PlaceholderManagerTest {
 				return true;
 			}
 		};
-		events = new EventService();
+		events = new EventService(){
+			@Override
+			public void saveEvent(String name, String payload){
+				logger.info("saving event "+name);
+			}
+			
+			@Override
+			public void saveEvent(String name, Object payload){
+				logger.info("saving event "+name);
+			}
+		};
 		receiptWriter = mock(ReceiptWriter.class);
 		channelValidator = new ChannelValidatorImpl();
 		try {

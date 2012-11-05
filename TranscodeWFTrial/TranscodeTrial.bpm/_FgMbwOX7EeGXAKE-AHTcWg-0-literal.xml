@@ -1,0 +1,13 @@
+﻿<bpel:literal xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:QCData="http://localhost:8080/QCData"
+    xmlns:WFE="http://thisdiagram/WFE"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:schema1="__project:///qc/schema1.xsd"
+    xmlns:invokeqc="http://example.com/qc/invokeqc.rest"
+    xmlns:tns="http://localhost:8088/QCService/"
+    xmlns:diag="http://thisdiagram"
+    xmlns:this="http://thisdiagram/qc_adapter"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace">
+<error>Unable to find the schema or wsdl message type for the value of this literal null</error>
+</bpel:literal>

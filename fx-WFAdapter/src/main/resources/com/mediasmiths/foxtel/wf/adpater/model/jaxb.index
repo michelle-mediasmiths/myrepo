@@ -1,0 +1,15 @@
+AssetTransferForQCRequest
+AssetTransferForQCResponse
+AutoQCErrorNotification
+AutoQCFailureNotification
+AutoQCPassNotification
+AutoQCRequest
+AutoQCResultNotification
+GetQCProfileResponse
+InvokeIntalioQCFlow
+InvokeIntalioTCFlow
+MaterialTransferForTCRequest
+MaterialTransferForTCResponse
+TCFailureNotification
+TCPassedNotification
+TCTotalFailure

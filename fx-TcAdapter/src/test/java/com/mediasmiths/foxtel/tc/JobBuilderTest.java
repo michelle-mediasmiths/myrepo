@@ -40,7 +40,9 @@ public class JobBuilderTest
 		mayamClient = mock(MayamClient.class);		
 		pathResolver = mock(PathResolver.class);
 		
-		toTest = new JobBuilder(mayamClient,pathResolver);
+		toTest = new JobBuilder();
+		toTest.setMayamClient(mayamClient);
+		toTest.setPathResolver(pathResolver);
 		
 	}
 	

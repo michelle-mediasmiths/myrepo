@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -156,7 +157,7 @@ public class MayamTaskController extends MayamController{
 		String taskState = task.getAttribute(Attribute.TASK_STATE);
 		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
 		
-		ArrayList <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType));
+		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType));
 		
 		AssetAccess accessRights = new AssetAccess();
 		for (int i = 0; i < allRights.size(); i++)

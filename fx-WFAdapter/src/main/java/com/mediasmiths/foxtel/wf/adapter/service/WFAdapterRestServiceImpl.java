@@ -33,18 +33,18 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+//import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
+//import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
 
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
 
-	@Inject
-	private EventAPI events;
-	@Inject
-	private Marshaller marshaller;
+	// @Inject
+	// private EventAPI events;
+	// @Inject
+	// private Marshaller marshaller;
 	@Inject
 	private MayamClient mayamClient;
 	@Inject
@@ -55,6 +55,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private URI materialTCLocation;
 	@Inject
 	private QcProfileSelector qcProfileSelector;
+
+	@Inject
+	@Named("stub.out.mayam")
+	private boolean stubMayam;
 
 	@Override
 	@GET
@@ -78,14 +82,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		if (req.isForTXDelivery())
 		{
 			// TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
-
 			destination = materialQCLocation.resolve(filename);
-			mayamClient.transferMaterialToLocation(id, destination);
+
+			if (!stubMayam)
+				mayamClient.transferMaterialToLocation(id, destination);
 		}
 		else
 		{
 			destination = materialQCLocation.resolve(filename);
-			mayamClient.transferMaterialToLocation(id, destination);
+			if (!stubMayam)
+				mayamClient.transferMaterialToLocation(id, destination);
 		}
 
 		return new AssetTransferForQCResponse(filename);
@@ -121,12 +127,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+				if (!stubMayam)
+					mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// id is an item id
-				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+				if (!stubMayam)
+					mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
 			}
 		}
 		catch (MayamClientException e)
@@ -143,11 +151,31 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest req) throws MayamClientException
 	{
 		log.info("Received MaterialTransferForTCRequest " + req.toString());
-		final String packageID = req.getPackageID();
-		final String filename = packageID + ".mxf";
+		final String assetID = req.getAssetID();
+		final String filename = assetID + ".mxf";
 		final URI destination = materialTCLocation.resolve(filename);
 
-		mayamClient.transferMaterialToLocation(packageID, destination);
+		final String materialID;
+
+		if (req.isForTX())
+		{
+			if (!stubMayam)
+			{
+				materialID = mayamClient.getMaterialIDofPackageID(assetID);
+			}
+			else
+			{
+				materialID = assetID;
+			}
+		}
+		else
+		{
+			materialID = assetID;
+		}
+
+		if (!stubMayam)
+			mayamClient.transferMaterialToLocation(assetID, destination);
+
 		return new MaterialTransferForTCResponse(filename);
 	}
 
@@ -190,12 +218,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+				if (!stubMayam)
+					mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// auto qc was for qc task
-				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+				if (!stubMayam)
+					mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
 			}
 		}
 		catch (MayamClientException e)
@@ -211,12 +241,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
-		log.info(String.format(
-				"Received notification of TC totalfailure Paciage ID %s ",
-				notification.getPackageID()));
-		
-		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
+		log.info(String.format("Received notification of TC totalfailure Paciage ID %s ", notification.getPackageID()));
 
+		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
 
 	}
 
@@ -225,88 +252,90 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcFailed")
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
-		
+
 		// TODO Auto-generated method stub
-		log.info(String.format(
-				"Received notification of TC failure Paciage ID %s",
-				notification.getPackageID()));
+		log.info(String.format("Received notification of TC failure Paciage ID %s", notification.getPackageID()));
 		saveEvent("failed", notification, "http://www.foxtel.com.au/ip/tc");
 
 	}
-	
+
 	@Override
 	@PUT
 	@Path("/tc/tcPassed")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
-		log.info(String.format(
-				"Received notification of TC passed Paciage ID %s",
-				notification.getPackageID()));
-		
+		log.info(String.format("Received notification of TC passed Paciage ID %s", notification.getPackageID()));
+
 		saveEvent("Transcoded", notification, "http://www.foxtel.com.au/ip/tc");
 
-		
 	}
 
 	@Override
 	@GET
 	@Path("/tx/companionXMLforTXPackage")
 	@Produces("application/xml")
-	public ProgrammeMaterialType getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID) throws MayamClientException
+	public ProgrammeMaterialType getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
+			throws MayamClientException
 	{
 		String materialID = mayamClient.getMaterialIDofPackageID(packageID);
 		ProgrammeMaterialType materialType = mayamClient.getProgrammeMaterialType(materialID);
-		
-		Package p = mayamClient.getPresentationPackage(packageID);
-		
+
+		Package p;
+
+		if (!stubMayam)
+		{
+			p = mayamClient.getPresentationPackage(packageID);
+		}
+		else
+		{
+			p = new Package();
+		}
+
 		List<Package> packages = materialType.getPresentation().getPackage();
 		packages.add(p);
-		
+
 		return materialType;
 	}
-		
-	
+
+	// TODO reenable events stuff after events api has been extracted
 	protected void saveEvent(String name, String payload, String nameSpace)
 	{
-		try
-		{
-			EventEntity event = new EventEntity();
-			event.setEventName(name);
-			event.setNamespace(nameSpace);
-
-			event.setPayload(payload);
-			event.setTime(System.currentTimeMillis());
-			events.saveReport(event);
-		}
-		catch (RuntimeException re)
-		{
-			log.error("error saving event" + name, re);
-		}
+		// try
+		// {
+		// EventEntity event = new EventEntity();
+		// event.setEventName(name);
+		// event.setNamespace(nameSpace);
+		//
+		// event.setPayload(payload);
+		// event.setTime(System.currentTimeMillis());
+		// events.saveReport(event);
+		// }
+		// catch (RuntimeException re)
+		// {
+		// log.error("error saving event" + name, re);
+		// }
 
 	}
 
 	protected void saveEvent(String name, Object payload, String nameSpace)
 	{
-		try
-		{
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			marshaller.marshal(payload, baos);
-			String sPayload = baos.toString("UTF-8");
-			saveEvent(name, sPayload, nameSpace);
-		}
-		catch (JAXBException e)
-		{
-			log.error("error saving event" + name, e);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			log.error("error saving event" + name, e);
-		}
+		// try
+		// {
+		// ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		// marshaller.marshal(payload, baos);
+		// String sPayload = baos.toString("UTF-8");
+		// saveEvent(name, sPayload, nameSpace);
+		// }
+		// catch (JAXBException e)
+		// {
+		// log.error("error saving event" + name, e);
+		// }
+		// catch (UnsupportedEncodingException e)
+		// {
+		// log.error("error saving event" + name, e);
+		// }
 
 	}
-	
-
-
 
 }

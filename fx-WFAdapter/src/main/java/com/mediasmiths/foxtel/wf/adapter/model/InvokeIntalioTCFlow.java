@@ -6,40 +6,38 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class InvokeIntalioTCFlow
 {
-	private String inputFile;
+	private String assetID;
 	private String outputFolder;
-	private String packageID;
-
-	@XmlElement(required=true)
-	public String getInputFile()
-	{
-		return inputFile;
-	}
-
-	public void setInputFile(String inputFile)
-	{
-		this.inputFile = inputFile;
-	}
-
-	@XmlElement(required=true)
+	private boolean isForTX;
+	
+	@XmlElement(required = true)
 	public String getOutputFolder()
 	{
 		return outputFolder;
 	}
-
 	public void setOutputFolder(String outputFolder)
 	{
 		this.outputFolder = outputFolder;
 	}
-	
-	@XmlElement(required=true)
-	public String getPackageID()
+
+	@XmlElement(required = true)
+	public String getAssetID()
 	{
-		return packageID;
+		return assetID;
+	}
+	public void setAssetID(String assetID)
+	{
+		this.assetID = assetID;
+	}
+	
+	@XmlElement(required = true)
+	public boolean isForTX()
+	{
+		return isForTX;
+	}
+	public void setForTX(boolean isForTX)
+	{
+		this.isForTX = isForTX;
 	}
 
-	public void setPackageID(String packageID)
-	{
-		this.packageID = packageID;
-	}
 }

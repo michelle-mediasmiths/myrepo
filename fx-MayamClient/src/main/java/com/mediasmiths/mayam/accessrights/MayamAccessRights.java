@@ -3,6 +3,7 @@ package com.mediasmiths.mayam.accessrights;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -11,9 +12,9 @@ import javax.persistence.Table;
 public class MayamAccessRights {
 
 	    @Id  
-	    @GeneratedValue  
+	    @GeneratedValue(strategy = GenerationType.AUTO)
 	    @Column(name = "id") 
-	    private int id;
+	    private long id;
 	    
 	    @Column(name = "taskType")  
 	    private String taskType;  
@@ -36,8 +37,8 @@ public class MayamAccessRights {
 	    @Column(name = "adminAccess") 
 		private boolean adminAccess;
 	    
-	    public int getId() {return id;}  
-	    public void setId(int id) {this.id = id;}  
+	    public long getId() {return id;}  
+	    public void setId(long id) {this.id = id;}  
 	   
 	    public String getTaskType() {return taskType;}  
 	    public void setTaskType(String taskTypeName) {this.taskType = taskTypeName.toString();}  

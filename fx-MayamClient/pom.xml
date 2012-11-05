@@ -106,6 +106,12 @@
 		</dependency>
 		
 		<dependency>
+  <groupId>org.hibernate</groupId>
+  <artifactId>hibernate-validator-annotation-processor</artifactId>
+  <version>4.2.0.Final</version>
+</dependency>
+		
+		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>${stdlib.version}</version>
