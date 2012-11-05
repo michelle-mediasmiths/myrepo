@@ -26,7 +26,7 @@ public class PreviewTaskListener
 					if (taskListID.equals(MayamTaskListType.PREVIEW)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-						if (taskState == TaskState.FINISHED) 
+						if (taskState == TaskState.REJECTED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
@@ -37,7 +37,19 @@ public class PreviewTaskListener
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);
-						}	
+						}
+						else if (taskState == TaskState.FINISHED) 
+						{
+							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							taskController.saveTask(messageAttributes);
+								
+							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
+							AttributeMap newTask = taskController.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							taskController.saveTask(newTask);
+						}
 					}
 				}
 			}
