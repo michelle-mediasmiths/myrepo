@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.listeners;
+package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -10,8 +10,8 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ComplianceEditingHandler {
-	
+public class ImportFailureHandler 
+{
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
@@ -20,22 +20,22 @@ public class ComplianceEditingHandler {
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
-					//On compliance editing completion create segmentation tasks
+					// On import failure update ingest failure worklist
 					AttributeMap messageAttributes = msg.getSubject();
 					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-					if (taskListID.equals(MayamTaskListType.COMPLIANCE_EDIT)) 
+					if (taskListID.equals(MayamTaskListType.INGEST)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-						if (taskState == TaskState.FINISHED) 
+						if (taskState == TaskState.ERROR) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
 								
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST_FAILURE);
 							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);							
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);
 						}	
 					}

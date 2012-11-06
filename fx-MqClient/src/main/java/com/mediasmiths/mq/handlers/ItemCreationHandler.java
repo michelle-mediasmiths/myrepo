@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.listeners;
+package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;

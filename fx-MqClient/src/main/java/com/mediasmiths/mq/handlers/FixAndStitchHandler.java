@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.listeners;
+package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class QcCompleteHandler 
+public class FixAndStitchHandler 
 {
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
@@ -20,23 +20,24 @@ public class QcCompleteHandler
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
-					//On QC completion create preview tasks as required
+					//On compliance logging completion create compliance editing task
 					AttributeMap messageAttributes = msg.getSubject();
 					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-					if (taskListID.equals(MayamTaskListType.QC_VIEW)) 
+					if (taskListID.equals(MayamTaskListType.FIX_STITCH_EDIT)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 						if (taskState == TaskState.FINISHED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
-							
+								
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PREVIEW);
+							
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							taskController.saveTask(newTask);			
+							taskController.saveTask(newTask);
 						}	
 					}
 				}

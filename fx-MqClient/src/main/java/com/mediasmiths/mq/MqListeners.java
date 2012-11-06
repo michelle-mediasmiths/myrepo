@@ -28,22 +28,22 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.listeners.AssetDeletionHandler;
-import com.mediasmiths.mq.listeners.AssetPurgeHandler;
-import com.mediasmiths.mq.listeners.ComplianceEditingHandler;
-import com.mediasmiths.mq.listeners.ComplianceLoggingHandler;
-import com.mediasmiths.mq.listeners.EmergencyIngestHandler;
-import com.mediasmiths.mq.listeners.FixAndStitchHandler;
-import com.mediasmiths.mq.listeners.ImportFailureHandler;
-import com.mediasmiths.mq.listeners.IngestCompleteHandler;
-import com.mediasmiths.mq.listeners.InitiateQcHandler;
-import com.mediasmiths.mq.listeners.ItemCreationHandler;
-import com.mediasmiths.mq.listeners.PackageUpdateHandler;
-import com.mediasmiths.mq.listeners.PreviewTaskHandler;
-import com.mediasmiths.mq.listeners.QcCompleteHandler;
-import com.mediasmiths.mq.listeners.SegmentationCompleteHandler;
-import com.mediasmiths.mq.listeners.TemporaryContentHandler;
-import com.mediasmiths.mq.listeners.UnmatchedHandler;
+import com.mediasmiths.mq.handlers.AssetDeletionHandler;
+import com.mediasmiths.mq.handlers.AssetPurgeHandler;
+import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
+import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.EmergencyIngestHandler;
+import com.mediasmiths.mq.handlers.FixAndStitchHandler;
+import com.mediasmiths.mq.handlers.ImportFailureHandler;
+import com.mediasmiths.mq.handlers.IngestCompleteHandler;
+import com.mediasmiths.mq.handlers.InitiateQcHandler;
+import com.mediasmiths.mq.handlers.ItemCreationHandler;
+import com.mediasmiths.mq.handlers.PackageUpdateHandler;
+import com.mediasmiths.mq.handlers.PreviewTaskHandler;
+import com.mediasmiths.mq.handlers.QcCompleteHandler;
+import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
+import com.mediasmiths.mq.handlers.TemporaryContentHandler;
+import com.mediasmiths.mq.handlers.UnmatchedHandler;
 
 
 public class MqListeners implements Runnable {

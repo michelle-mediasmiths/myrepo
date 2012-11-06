@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.listeners;
+package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;

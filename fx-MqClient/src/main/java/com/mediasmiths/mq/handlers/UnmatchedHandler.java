@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.listeners;
+package com.mediasmiths.mq.handlers;
 
 import java.util.Calendar;
 
