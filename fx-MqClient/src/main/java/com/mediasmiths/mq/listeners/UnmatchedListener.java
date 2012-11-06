@@ -10,6 +10,7 @@ import com.mayam.wf.mq.common.ContentTypes;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class UnmatchedListener 
 {
@@ -29,14 +30,20 @@ public class UnmatchedListener
 					{
 						//TODO : identify origin of unmatched content (emergency ingest\ DART ) 
 						
-	//						TODO: Initiate QC workflow
-					
-	//						Set ACLs for temporary item
-					
-	//						Add to purge candidate list with expiry date of 30 days
+							//Add to purge candidate list with expiry date of 30 days
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
+							
+							MuleWorkflowController mule = new MuleWorkflowController();
+							if (assetType.equals(MayamAssetType.MATERIAL.toString()))
+							{
+								mule.initiateQcWorkflow(assetID, false);
+							} 
+							else if (assetType.equals(MayamAssetType.PACKAGE.toString()))
+							{
+								mule.initiateQcWorkflow(assetID, true);
+							}
 							
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.putAll(messageAttributes);
