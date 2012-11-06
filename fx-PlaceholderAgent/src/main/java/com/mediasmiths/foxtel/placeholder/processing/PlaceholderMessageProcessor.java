@@ -147,7 +147,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		if (result == MayamClientErrorCode.SUCCESS)
 		{
 			logger.info("Action successfully processed");
-			System.out.println("\n");
+			logger.info("\n");
 		}
 		else
 		{

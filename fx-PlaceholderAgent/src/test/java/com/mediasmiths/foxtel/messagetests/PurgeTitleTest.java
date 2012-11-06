@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -30,7 +31,8 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class PurgeTitleTest extends PlaceHolderMessageShortTest{
-	
+	private static Logger logger = Logger.getLogger(PurgeTitleTest.class);
+
 	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
@@ -39,7 +41,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category (ProcessingTests.class)
 	public void testPurgeTitleProcessing() throws MessageProcessingFailedException {
 		
-		System.out.println("Processing test");
+		logger.info("Processing test");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
@@ -58,7 +60,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testPurgeTitleXSDInvalid() throws Exception {
 		
-		System.out.println("FXT 4.1.3.2 - Non XSD compliance");
+		logger.info("Starting FXT 4.1.3.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
@@ -72,7 +74,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteTitleNotProtected() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
+		logger.info("Starting FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleNotProtected");
 		
@@ -87,7 +89,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category (ValidationTests.class)
 	public void testPurgeTitleDoesntExist() throws Exception {
 		
-		System.out.println("FXT 4.1.3.6 - No matching ID exists");
+		logger.info("Starting FXT 4.1.3.6 - No matching ID exists");
 		
 		PlaceholderMessage message = buildPurgeTitle(false, NOT_EXISTING_TITLE);
 		File temp = createTempXMLFile (message, "purgeTitleDoesntExist");
@@ -102,7 +104,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteTitleProtected() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.3.7 - Title is protected");
+		logger.info("Starting FXT 4.1.3.7 - Title is protected");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleProtected");
 		

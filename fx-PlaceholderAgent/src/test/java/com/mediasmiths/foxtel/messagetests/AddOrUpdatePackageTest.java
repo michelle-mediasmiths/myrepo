@@ -16,6 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -44,7 +45,8 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	protected final static String NOT_EXISTING_MATERIAL = "NOT_SXISTING_MATERIAL";
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
-	
+	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest.class);
+
 	public AddOrUpdatePackageTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
@@ -53,7 +55,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ProcessingTests.class)
 	public void testAddPackageProcessing() throws Exception {
 		
-		System.out.println("Add package processing test");
+		logger.info("Add package processing test");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, EXISTING_MATERIAL, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
@@ -69,14 +71,19 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testAddPackageXSDInvalid() throws Exception {
 		
-		System.out.println("FXT 4.1.9.2 - Non XSD compliance");
+		logger.info("Starting FXT 4.1.9.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidAddPackage", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
-		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
+			logger.info("FXT 4.1.9.2 - Non XSD compliance --Passed");
+		else
+			logger.info("FXT 4.1.9.2 - Non XSD compliance --Failed");
+		
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);			
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -84,13 +91,19 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	@Category (ValidationTests.class)
 	public void testAddValidPackage() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists");
+		logger.info("Starting FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, EXISTING_MATERIAL, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validAddPackage");
 		
 		when(mayamClient.materialExists(EXISTING_MATERIAL)).thenReturn(new Boolean(true));
 		
-		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.IS_VALID ==validateFile)
+			logger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Passed");
+		else
+			logger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Failed");
+		
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);			
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
@@ -98,7 +111,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ProcessingTests.class)
 	public void testUpdatePackageProcessing() throws Exception {
 		
-		System.out.println("FXT 4.1.9.6 - Matching ID exists");
+		logger.info("Starting FXT 4.1.9.6 - Matching ID exists");
 		PlaceholderMessage message = buildAddPackage(EXISTING_PACKAGE_ID, EXISTING_MATERIAL, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
@@ -114,13 +127,19 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testAddPackageNoMaterial() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.9.7 - No existing material");
+		logger.info("Starting FXT 4.1.9.7 - No existing material");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, NOT_EXISTING_MATERIAL, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "addPackageNoMaterial");
 		
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(new Boolean(false));
 		
-		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE, validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE ==validateFile)
+			logger.info("FXT 4.1.9.7 - No existing material --Passed");
+		else
+			logger.info("FXT 4.1.9.7 - No existing material --Failed");
+		
+		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
 		}
 	
