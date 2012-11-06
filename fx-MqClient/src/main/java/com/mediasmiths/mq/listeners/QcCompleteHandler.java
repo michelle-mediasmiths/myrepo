@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ImportFailureListener 
+public class QcCompleteHandler 
 {
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
@@ -20,23 +20,23 @@ public class ImportFailureListener
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
-					// On import failure update ingest failure worklist
+					//On QC completion create preview tasks as required
 					AttributeMap messageAttributes = msg.getSubject();
 					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-					if (taskListID.equals(MayamTaskListType.INGEST)) 
+					if (taskListID.equals(MayamTaskListType.QC_VIEW)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-						if (taskState == TaskState.ERROR) 
+						if (taskState == TaskState.FINISHED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
-								
+							
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST_FAILURE);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PREVIEW);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							taskController.saveTask(newTask);
+							taskController.saveTask(newTask);			
 						}	
 					}
 				}

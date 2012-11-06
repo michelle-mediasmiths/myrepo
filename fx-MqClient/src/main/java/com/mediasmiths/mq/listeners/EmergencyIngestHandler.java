@@ -8,7 +8,7 @@ import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class EmergencyIngestListener 
+public class EmergencyIngestHandler 
 {
 	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
 	{

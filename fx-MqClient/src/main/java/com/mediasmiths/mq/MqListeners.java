@@ -28,22 +28,22 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.listeners.AssetDeletionListener;
-import com.mediasmiths.mq.listeners.AssetPurgeListener;
-import com.mediasmiths.mq.listeners.ComplianceEditingListener;
-import com.mediasmiths.mq.listeners.ComplianceLoggingListener;
-import com.mediasmiths.mq.listeners.EmergencyIngestListener;
-import com.mediasmiths.mq.listeners.FixAndStitchListener;
-import com.mediasmiths.mq.listeners.ImportFailureListener;
-import com.mediasmiths.mq.listeners.IngestCompleteListener;
-import com.mediasmiths.mq.listeners.InitiateQcListener;
-import com.mediasmiths.mq.listeners.ItemCreationListener;
-import com.mediasmiths.mq.listeners.PackageUpdateListener;
-import com.mediasmiths.mq.listeners.PreviewTaskListener;
-import com.mediasmiths.mq.listeners.QcCompleteListener;
-import com.mediasmiths.mq.listeners.SegmentationCompleteListener;
-import com.mediasmiths.mq.listeners.TemporaryContentListener;
-import com.mediasmiths.mq.listeners.UnmatchedListener;
+import com.mediasmiths.mq.listeners.AssetDeletionHandler;
+import com.mediasmiths.mq.listeners.AssetPurgeHandler;
+import com.mediasmiths.mq.listeners.ComplianceEditingHandler;
+import com.mediasmiths.mq.listeners.ComplianceLoggingHandler;
+import com.mediasmiths.mq.listeners.EmergencyIngestHandler;
+import com.mediasmiths.mq.listeners.FixAndStitchHandler;
+import com.mediasmiths.mq.listeners.ImportFailureHandler;
+import com.mediasmiths.mq.listeners.IngestCompleteHandler;
+import com.mediasmiths.mq.listeners.InitiateQcHandler;
+import com.mediasmiths.mq.listeners.ItemCreationHandler;
+import com.mediasmiths.mq.listeners.PackageUpdateHandler;
+import com.mediasmiths.mq.listeners.PreviewTaskHandler;
+import com.mediasmiths.mq.listeners.QcCompleteHandler;
+import com.mediasmiths.mq.listeners.SegmentationCompleteHandler;
+import com.mediasmiths.mq.listeners.TemporaryContentHandler;
+import com.mediasmiths.mq.listeners.UnmatchedHandler;
 
 
 public class MqListeners implements Runnable {
@@ -70,6 +70,8 @@ public class MqListeners implements Runnable {
 		while (listening.get()) {
 			mq.listen(ListenIntensity.NORMAL);
 		}
+		
+		shutdown();
 	}
 	
 	@Inject
@@ -103,11 +105,6 @@ public class MqListeners implements Runnable {
 		listening.set(true);
 	}
 	
-	public void setListenIntensity(ListenIntensity intensity)
-	{
-		mq.listen(intensity);
-	}
-	
 	public void attachListener(MqDestination type, Listener listener)
 	{
 		Detachable mqListener = mq.attachListener(type, listener);
@@ -118,22 +115,22 @@ public class MqListeners implements Runnable {
 	// - QC button clicked, update QC flag - DG: Shouldnt this by Mayam?
 	public void attachIncomingListners() 
 	{
-		attachListener(Topics.ASSET_CREATE, UnmatchedListener.getInstance(taskController));
-		attachListener(Topics.ASSET_DELETE, AssetDeletionListener.getInstance(taskController));
-		attachListener(Topics.TASK_DELETE, AssetPurgeListener.getInstance(taskController));
-		attachListener(Topics.ASSET_UPDATE, EmergencyIngestListener.getInstance(client, taskController));
-		attachListener(Topics.ASSET_CREATE, TemporaryContentListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, SegmentationCompleteListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceEditingListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceLoggingListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ImportFailureListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, InitiateQcListener.getInstance(taskController));
-		attachListener(Topics.ASSET_CREATE, ItemCreationListener.getInstance(client, taskController));
-		attachListener(Topics.ASSET_UPDATE, PackageUpdateListener.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, PreviewTaskListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, QcCompleteListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, IngestCompleteListener.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, FixAndStitchListener.getInstance(taskController));
+		attachListener(Topics.ASSET_CREATE, UnmatchedHandler.getInstance(taskController));
+		attachListener(Topics.ASSET_DELETE, AssetDeletionHandler.getInstance(taskController));
+		attachListener(Topics.TASK_DELETE, AssetPurgeHandler.getInstance(taskController));
+		attachListener(Topics.ASSET_UPDATE, EmergencyIngestHandler.getInstance(client, taskController));
+		attachListener(Topics.ASSET_CREATE, TemporaryContentHandler.getInstance(client, taskController));
+		attachListener(Topics.TASK_UPDATE, SegmentationCompleteHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ComplianceEditingHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ComplianceLoggingHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, ImportFailureHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, InitiateQcHandler.getInstance(taskController));
+		attachListener(Topics.ASSET_CREATE, ItemCreationHandler.getInstance(client, taskController));
+		attachListener(Topics.ASSET_UPDATE, PackageUpdateHandler.getInstance(client, taskController));
+		attachListener(Topics.TASK_UPDATE, PreviewTaskHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, QcCompleteHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, IngestCompleteHandler.getInstance(taskController));
+		attachListener(Topics.TASK_UPDATE, FixAndStitchHandler.getInstance(taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

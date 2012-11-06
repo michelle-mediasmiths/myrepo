@@ -10,8 +10,8 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class SegmentationCompleteListener 
-{
+public class ComplianceEditingHandler {
+	
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
@@ -20,27 +20,25 @@ public class SegmentationCompleteListener
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
+					//On compliance editing completion create segmentation tasks
 					AttributeMap messageAttributes = msg.getSubject();
 					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-					if (taskListID.equals(MayamTaskListType.SEGMENTATION)) 
+					if (taskListID.equals(MayamTaskListType.COMPLIANCE_EDIT)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 						if (taskState == TaskState.FINISHED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
-							
+								
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.TX_DELIVERY);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);							
 							taskController.saveTask(newTask);
-							
-							//TODO: Initiate workflow
-							
-						}
-					}	
+						}	
+					}
 				}
 			}
 		};

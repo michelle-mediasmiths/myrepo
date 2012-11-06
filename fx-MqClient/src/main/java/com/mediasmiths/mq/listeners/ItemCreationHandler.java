@@ -12,7 +12,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ItemCreationListener 
+public class ItemCreationHandler 
 {
 	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
 	{

@@ -16,7 +16,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class TemporaryContentListener 
+public class TemporaryContentHandler 
 {
 	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
 	{

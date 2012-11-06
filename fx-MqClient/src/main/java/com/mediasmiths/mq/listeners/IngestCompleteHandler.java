@@ -10,8 +10,8 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class PreviewTaskListener 
-{
+public class IngestCompleteHandler {
+	
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		return new Listener() 
@@ -20,32 +20,21 @@ public class PreviewTaskListener
 			{
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
-					//Listen for preview tasks completion, create editing tasks as appropriate
+					//On compliance editing completion create segmentation tasks
 					AttributeMap messageAttributes = msg.getSubject();
 					String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-					if (taskListID.equals(MayamTaskListType.PREVIEW)) 
+					if (taskListID.equals(MayamTaskListType.INGEST)) 
 					{
 						TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-						if (taskState == TaskState.REJECTED) 
+						if (taskState == TaskState.FINISHED) 
 						{
 							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(messageAttributes);
-								
+							
 							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.FIX_STITCH_EDIT);
-							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							taskController.saveTask(newTask);
-						}
-						else if (taskState == TaskState.FINISHED) 
-						{
-							messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-							taskController.saveTask(messageAttributes);
-								
-							String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-							String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
+							
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.QC_VIEW);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);

@@ -5,7 +5,7 @@ import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class AssetDeletionListener 
+public class AssetPurgeHandler 
 {
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
@@ -16,8 +16,8 @@ public class AssetDeletionListener
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					//TODO: IMPLEMENT
-					// - Deletion has occurred in Viz Ardome, close all related workflow tasks - DG: Mayam or us?
-					// - How to tell if an asset is deleted?
+					// - Purge of temporary assets notification received, remove from other worklist
+					// - How to tell if an asset is ready to be purged? Check the Expiry date?
 				}
 			}
 		};

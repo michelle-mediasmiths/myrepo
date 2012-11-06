@@ -15,7 +15,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class PackageUpdateListener 
+public class PackageUpdateHandler 
 {
 	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
 	{
