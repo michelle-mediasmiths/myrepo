@@ -12,8 +12,6 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.AlertImpl;
-import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 
