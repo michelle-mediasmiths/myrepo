@@ -146,6 +146,7 @@ public class MaterialFolderWatcherTest {
 		
 		logger.trace("testNewFilesAreQueued enter");
 		toTest.setSleepTime(10l);
+		toTest.setNotTouchedPeriod(10l);
 
 		// start watcher
 		Thread watcherThread = new Thread(toTest);
