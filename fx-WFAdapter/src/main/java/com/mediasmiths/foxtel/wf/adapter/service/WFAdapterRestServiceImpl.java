@@ -96,7 +96,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			// for tx delivery we return the location of transcoded package
 			destination = materialQCLocation.resolve(filename);
 
-			String ret = tcoutputlocation + "/" + id + "/" + id + ".mxf";
+			//TODO switch this to mxf onces we are creating such!
+			String ret = tcoutputlocation + "/" + id + "/" + id + ".mov";
 			destinationFile = new File(ret);
 		}
 		else
