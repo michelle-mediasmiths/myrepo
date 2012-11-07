@@ -7,10 +7,17 @@ import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -25,7 +32,9 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
@@ -46,7 +55,16 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
+import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.io.PropertyFile;
+import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
+import com.mediasmiths.stdEvents.events.db.entity.Delivery;
+import com.mediasmiths.stdEvents.events.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.events.db.entity.LogEntity;
+import com.mediasmiths.stdEvents.events.db.entity.PayloadEntity;
+import com.mediasmiths.stdEvents.events.db.entity.QC;
+import com.mediasmiths.stdEvents.events.db.entity.Transcode;
+import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public abstract class PlaceholderManagerTest {
 
@@ -195,6 +213,17 @@ public abstract class PlaceholderManagerTest {
 			bind(DirectoryWatchingQueuer.class).to(
 					PickupExistingFilesOnlyDirectoryWatcher.class);
 			bind(ChannelValidator.class).to(ChannelValidatorImpl.class);
+		}
+		
+		@Override
+		protected EventAPI getEventService(
+				@Named("service.events.api.endpoint") final URI endpoint,
+				final JAXRSProxyClientFactory clientFactory)
+		{
+			logger.info(String.format("events api endpoint set to %s", endpoint));
+			EventAPI service = mock(EventAPI.class);
+
+			return service;
 		}
 	}
 

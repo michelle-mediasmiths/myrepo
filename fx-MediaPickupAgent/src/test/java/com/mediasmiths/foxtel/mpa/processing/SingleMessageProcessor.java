@@ -19,7 +19,6 @@ import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public class SingleMessageProcessor extends MaterialExchangeProcessor {
 

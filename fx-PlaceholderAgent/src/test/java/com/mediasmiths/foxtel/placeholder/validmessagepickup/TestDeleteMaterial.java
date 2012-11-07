@@ -31,7 +31,7 @@ public class TestDeleteMaterial extends ValidMessagePickTest{
 		DeleteMaterial.setTitleID(RandomStringUtils.randomAlphanumeric(10));
 
 		Material item = new Material();
-		item.setMaterialID("fgh456");
+		item.setMaterialD("fgh456");
 		DeleteMaterial.setMaterial(item);
 
 		Actions actions = new Actions();

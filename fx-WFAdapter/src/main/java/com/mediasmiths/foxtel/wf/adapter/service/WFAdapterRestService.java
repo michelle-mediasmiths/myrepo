@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -108,6 +109,21 @@ public interface WFAdapterRestService
 	@Path("/tc/tcPassed")
 	@Consumes("application/xml")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
+	
+	@GET
+	@Path("/tx/transcodeOutputLocation")
+	@Produces("text/plain")
+	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID);
+	
+	@GET
+	@Path("/tx/autoQCRequired")
+	@Produces("text/plain")
+	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID);
+
+	@PUT
+	@Path("/tx/failed")
+	@Consumes("application/xml")
+	public void notifyTXDeliveryFailed(TXDeliveryFailure notification);
 	
 	/**
 	 * returns the companion xml to send along with media as part of tx delivery

@@ -17,6 +17,8 @@
 
   <xs:element name="invokeIntalioTCFlow" type="tns:invokeIntalioTCFlow"/>
 
+  <xs:element name="invokeIntalioTXFlow" type="tns:invokeIntalioTXFlow"/>
+
   <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
 
   <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
@@ -26,6 +28,8 @@
   <xs:element name="tcPassedNotification" type="tns:tcPassedNotification"/>
 
   <xs:element name="tcTotalFailure" type="tns:tcTotalFailure"/>
+
+  <xs:element name="txDeliveryFailure" type="tns:txDeliveryFailure"/>
 
   <xs:complexType name="tcFailureNotification">
     <xs:sequence>
@@ -92,6 +96,12 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="invokeIntalioTXFlow">
+    <xs:sequence>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="materialTransferForTCRequest">
     <xs:sequence>
       <xs:element name="assetID" type="xs:string"/>
@@ -133,5 +143,12 @@
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="txDeliveryFailure">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element minOccurs="0" name="stage" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>

@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -30,6 +31,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -55,7 +57,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private URI materialTCLocation;
 	@Inject
 	private QcProfileSelector qcProfileSelector;
-
+	@Inject
+	@Named("tx.tcoutput.location")
+	private String tcoutputlocation;
+	
 	@Inject
 	@Named("stub.out.mayam")
 	private boolean stubMayam;
@@ -336,6 +341,36 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		// log.error("error saving event" + name, e);
 		// }
 
+	}
+
+	@Override
+	@GET
+	@Path("/tx/autoQCRequired")
+	@Produces("text/plain")
+	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
+	{
+		//TODO implement
+		return true;
+	}
+
+	@Override
+	@PUT
+	@Path("/tx/failed")
+	@Consumes("application/xml")
+	public void notifyTXDeliveryFailed(TXDeliveryFailure notification)
+	{
+		log.fatal(String.format("TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s"));
+		//TODO fire event email people etc
+	}
+
+	@Override
+	@GET
+	@Path("/tx/transcodeOutputLocation")
+	@Produces("text/plain")
+	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID)
+	{
+		// TODO implement
+		return tcoutputlocation;
 	}
 
 }

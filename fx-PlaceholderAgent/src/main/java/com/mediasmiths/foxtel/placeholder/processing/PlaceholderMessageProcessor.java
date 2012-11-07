@@ -42,8 +42,6 @@ import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
-
 
 /**
  * Processes placeholder messages taken from a queue

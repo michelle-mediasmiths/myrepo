@@ -67,7 +67,7 @@
 									<xs:sequence>
 										<xs:element name="Material">
 											<xs:complexType>
-												<xs:attribute name="materialID" type="materialIdType" use="required">
+												<xs:attribute name="materialD" type="materialIdType" use="required">
 													<xs:annotation>
 														<xs:documentation>a unique identifier for the material that will get deleted</xs:documentation>
 													</xs:annotation>

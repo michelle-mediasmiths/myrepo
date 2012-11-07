@@ -1,8 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>fx-MqClient</groupId>
-  <artifactId>fx-MqClient</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fx-MqClient</groupId>
+	<artifactId>fx-MqClient</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>war</packaging>
 	<parent>
@@ -10,12 +11,12 @@
 		<artifactId>foxtel-parent</artifactId>
 		<version>0.0.4-SNAPSHOT</version>
 	</parent>
-	
-  	<properties>
+
+	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
-	 
-  	<dependencies>
+
+	<dependencies>
 
 		<!-- Foxtel Solution Dependencies -->
 		<dependency>
@@ -23,10 +24,17 @@
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
+		
 		<dependency>
-		  <groupId>org.mule.modules</groupId>
-		  <artifactId>mule-module-spring-config</artifactId>
-		  <version>3.2.1</version>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-MuleClient</artifactId>
+			<version>0.0.1-SNAPSHOT</version>			
+		</dependency>
+
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-spring-config</artifactId>
+			<version>3.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -39,12 +47,8 @@
 			<artifactId>wf-mq</artifactId>
 			<version>0.9.9.9.2</version>
 		</dependency>
-		<!--  
-		<dependency>
-			<groupId>com.mayam.wf</groupId>
-			<artifactId>tasks-ws-client</artifactId>
-			<version>${worklists.version}</version>
-		</dependency>-->
+		<!-- <dependency> <groupId>com.mayam.wf</groupId> <artifactId>tasks-ws-client</artifactId> 
+			<version>${worklists.version}</version> </dependency> -->
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
@@ -67,7 +71,7 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.6.6</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -80,15 +84,15 @@
 			<version>1.9.0</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-		
-				<dependency>
+
+		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>${stdlib.version}</version>
@@ -112,9 +116,9 @@
 			<artifactId>fx-MayamClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
-	
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

@@ -143,23 +143,30 @@ public class MaterialFolderWatcherTest {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
 				watchFolderPath);
-		toTest.setSleepTime(100l);
+		
+		logger.trace("testNewFilesAreQueued enter");
+		toTest.setSleepTime(10l);
+		toTest.setNotTouchedPeriod(10l);
 
 		// start watcher
 		Thread watcherThread = new Thread(toTest);
+		logger.trace("testNewFilesAreQueued starting watcher");
 		watcherThread.start();
 
 		// wait a while to give the watcher a chance to start up
 		try {
+			logger.trace("testNewFilesAreQueued sleeping");
 			Thread.sleep(1000l);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		logger.trace("testNewFilesAreQueued woke up");
+		logger.trace("testNewFilesAreQueued queue size is "+queue.size() );
 		// queue should be empty at this point
 		assertTrue(queue.size() == 0);
 
 		// write files
+		logger.trace("testNewFilesAreQueued writing files");
 		writeRandomFile(xml1);
 		writeRandomFile(xml2);
 		writeRandomFile(mxf1);
@@ -167,15 +174,19 @@ public class MaterialFolderWatcherTest {
 
 		// wait a longer while to give the watcher a change to pick up the files
 		try {
+			logger.trace("testNewFilesAreQueued sleeping for longer");
 			Thread.sleep(10000l); //we need to wait for such a long time as java.nio.file.WatcherService is slooooow
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		logger.trace("testNewFilesAreQueued woke up");
 
 		// stop the watcher
+		logger.trace("testNewFilesAreQueued stopping the watcher");
 		toTest.setContinueWatching(false);
 
 		// check results
+		logger.trace("testNewFilesAreQueued queue size is "+queue.size() );
 		assertEquals(4,queue.size());
 		assertTrue(queue.contains(xml1.getAbsolutePath()));
 		assertTrue(queue.contains(xml2.getAbsolutePath()));

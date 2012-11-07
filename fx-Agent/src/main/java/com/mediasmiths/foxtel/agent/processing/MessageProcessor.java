@@ -26,8 +26,6 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
-import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 /**
  * Processes messages taken from a queue
