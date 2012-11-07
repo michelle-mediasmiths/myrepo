@@ -214,32 +214,23 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 	@Test
 	@Category (ValidationTests.class)
 	public void testCreateTitleTitleIdNull() throws IOException, Exception {
-<<<<<<< HEAD:fx-PlaceholderAgent/src/test/java/com/mediasmiths/foxtel/messagetests/CreateOrUpdateTitleTest_FXT_4_1_1.java
 
 		logger.info("TitleID is null");
-
-=======
-		
 		logger.info("TitleID is missing from xml");
 		
->>>>>>> e14f8b48e6f6fcef1016ce2d82b4d5e6208f5891:fx-PlaceholderAgent/src/test/java/com/mediasmiths/foxtel/messagetests/CreateOrUpdateTitleTest.java
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 
 		CreateOrUpdateTitle coup = ((CreateOrUpdateTitle) message.getActions().
 				getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0));		
 		coup.setTitleID(null);
-<<<<<<< HEAD:fx-PlaceholderAgent/src/test/java/com/mediasmiths/foxtel/messagetests/CreateOrUpdateTitleTest_FXT_4_1_1.java
+		File temp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 
-		File temp = createTempXMLFile (message, "createTitleTitleIdNull");
 
 		assertEquals(MessageValidationResult.TITLEID_IS_NULL, validator.validateFile(temp.getAbsolutePath()));
-=======
 		
-		File temp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validateFile(temp.getAbsolutePath()));
->>>>>>> e14f8b48e6f6fcef1016ce2d82b4d5e6208f5891:fx-PlaceholderAgent/src/test/java/com/mediasmiths/foxtel/messagetests/CreateOrUpdateTitleTest.java
 	}
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {
