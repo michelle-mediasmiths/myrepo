@@ -10,8 +10,6 @@ import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributesModule;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
@@ -21,29 +19,14 @@ import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqModule;
-import com.mayam.wf.mq.common.Queues;
 import com.mayam.wf.mq.common.Topics;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.handlers.AssetDeletionHandler;
-import com.mediasmiths.mq.handlers.AssetPurgeHandler;
-import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
-import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
-import com.mediasmiths.mq.handlers.EmergencyIngestHandler;
-import com.mediasmiths.mq.handlers.FixAndStitchHandler;
-import com.mediasmiths.mq.handlers.ImportFailureHandler;
-import com.mediasmiths.mq.handlers.IngestCompleteHandler;
-import com.mediasmiths.mq.handlers.InitiateQcHandler;
-import com.mediasmiths.mq.handlers.ItemCreationHandler;
-import com.mediasmiths.mq.handlers.PackageUpdateHandler;
-import com.mediasmiths.mq.handlers.PreviewTaskHandler;
-import com.mediasmiths.mq.handlers.QcCompleteHandler;
-import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
-import com.mediasmiths.mq.handlers.TemporaryContentHandler;
-import com.mediasmiths.mq.handlers.UnmatchedHandler;
+import com.mediasmiths.mq.listeners.AssetListener;
+import com.mediasmiths.mq.listeners.TaskListener;
 
 
 public class MqListeners implements Runnable {
@@ -111,26 +94,10 @@ public class MqListeners implements Runnable {
 		listeners.add(mqListener);
 	}
 	
-	//TODO: Other expected listeners?
-	// - QC button clicked, update QC flag - DG: Shouldnt this by Mayam?
 	public void attachIncomingListners() 
 	{
-		attachListener(Topics.ASSET_CREATE, UnmatchedHandler.getInstance(taskController));
-		attachListener(Topics.ASSET_DELETE, AssetDeletionHandler.getInstance(taskController));
-		attachListener(Topics.TASK_DELETE, AssetPurgeHandler.getInstance(taskController));
-		attachListener(Topics.ASSET_UPDATE, EmergencyIngestHandler.getInstance(client, taskController));
-		attachListener(Topics.ASSET_CREATE, TemporaryContentHandler.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, SegmentationCompleteHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceEditingHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ComplianceLoggingHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, ImportFailureHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, InitiateQcHandler.getInstance(taskController));
-		attachListener(Topics.ASSET_CREATE, ItemCreationHandler.getInstance(client, taskController));
-		attachListener(Topics.ASSET_UPDATE, PackageUpdateHandler.getInstance(client, taskController));
-		attachListener(Topics.TASK_UPDATE, PreviewTaskHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, QcCompleteHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, IngestCompleteHandler.getInstance(taskController));
-		attachListener(Topics.TASK_UPDATE, FixAndStitchHandler.getInstance(taskController));
+		attachListener(Topics.ASSET_CREATE, TaskListener.getInstance(taskController));
+		attachListener(Topics.ASSET_DELETE, AssetListener.getInstance(client, taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
@@ -154,26 +121,4 @@ public class MqListeners implements Runnable {
 		mq.shutdownConsumers();
 		mq.shutdownProducers();
 	}
-	
-/*	private void test() {
-		final AttributeMap task = client.createAttributeMap();
-		task.setAttribute(Attribute.ASSET_TITLE, "Hello");
-
-		try {
-			mq.attachListener(Topics.ASSET_CREATE, new Listener() 
-			{
-				public void onMessage(MqMessage msg) throws Throwable 
-				{
-					System.out.println("Message recieved");
-				}
-			});
-			
-			mq.send(Topics.ASSET_CREATE, ambp.get().subject(task).build());
-			System.out.println("Success - Message sent!");
-			
-		} catch (MqException e) {
-			e.printStackTrace();
-			System.out.println("Failure - Message send failed!");
-		}
-	}*/
 }
