@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/tc/adapter" version="1.0">
+
+  <xs:element name="tcBuildJobXMLRequest" type="tns:tcBuildJobXMLRequest"/>
+
+  <xs:element name="tcStartRequest" type="tns:tcStartRequest"/>
+
+  <xs:complexType name="tcBuildJobXMLRequest">
+    <xs:sequence>
+      <xs:element name="inputFile" type="xs:string"/>
+      <xs:element name="outputFolder" type="xs:string"/>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcStartRequest">
+    <xs:sequence>
+      <xs:element name="jobName" type="xs:string"/>
+      <xs:element name="jobXml" type="xs:string"/>
+      <xs:element minOccurs="0" name="priority" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

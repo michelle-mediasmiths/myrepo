@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
+
+  <xs:element name="assetTransferForQCRequest" type="tns:assetTransferForQCRequest"/>
+
+  <xs:element name="assetTransferForQCResponse" type="tns:assetTransferForQCResponse"/>
+
+  <xs:element name="autoQCErrorNotification" type="tns:autoQCErrorNotification"/>
+
+  <xs:element name="autoQCFailureNotification" type="tns:autoQCFailureNotification"/>
+
+  <xs:element name="autoQCPassNotification" type="tns:autoQCPassNotification"/>
+
+  <xs:element name="getQCProfileResponse" type="tns:getQCProfileResponse"/>
+
+  <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
+
+  <xs:element name="invokeIntalioTCFlow" type="tns:invokeIntalioTCFlow"/>
+
+  <xs:element name="invokeIntalioTXFlow" type="tns:invokeIntalioTXFlow"/>
+
+  <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
+
+  <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
+
+  <xs:element name="tcFailureNotification" type="tns:tcFailureNotification"/>
+
+  <xs:element name="tcPassedNotification" type="tns:tcPassedNotification"/>
+
+  <xs:element name="tcTotalFailure" type="tns:tcTotalFailure"/>
+
+  <xs:element name="txDeliveryFailure" type="tns:txDeliveryFailure"/>
+
+  <xs:complexType name="tcFailureNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="autoQCRequest">
+    <xs:sequence>
+      <xs:element name="assetId" type="xs:string"/>
+      <xs:element name="forTXDelivery" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCErrorNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="autoQCResultNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="jobName" type="xs:string"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="getQCProfileResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="profile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioQCFlow">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="assetTransferForQCRequest">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="tcPassedNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForTCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioTXFlow">
+    <xs:sequence>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForTCRequest">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element name="forTX" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assetTransferForQCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioTCFlow">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element name="forTX" type="xs:boolean"/>
+      <xs:element name="outputFolder" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcTotalFailure">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCFailureNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCPassNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="txDeliveryFailure">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element minOccurs="0" name="stage" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>

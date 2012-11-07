@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/tx/failed" ID="_aIaWwCgDEeKqjLVbpvrXug">
+  <rest:operation verb="PUT" name="txFailed" ID="_aIaWwSgDEeKqjLVbpvrXug">
+    <rest:input type="project:///dependencies/wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}txDeliveryFailure" name="body" headerDirection="request" contentType="application/xml" ID="_aIaWwigDEeKqjLVbpvrXug"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/xml" ID="_aIaWwygDEeKqjLVbpvrXug"/>
+  </rest:operation>
+</rest:descriptor>

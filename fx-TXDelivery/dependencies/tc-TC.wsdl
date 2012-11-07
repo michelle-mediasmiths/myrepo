@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tc/TC" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcGetResult1="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:materialTransferForTC1="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" xmlns:tcBuildJob="http://example.com/tcAdapter/tcBuildJob.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:tcGetResult="http://example.com/tcAdapter/tcGetResult.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tc" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tc/TCAdapter" xmlns:tcGetStatus1="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tc/WFAdapter" xmlns:materialTransferForTC="http://example.com/wfAdapter/materialTransferForTC.rest" xmlns:tcStartJob1="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" xmlns:tcBuildJob1="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJob.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tc/Caller" xmlns:tcGetStatus="http://example.com/tcAdapter/tcGetStatus.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tcStartJob="http://example.com/tcAdapter/tcStartJob.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tc/TC">
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tc/TC">
+            <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter" schemaLocation="wfAdapter/wfAdapter.xsd"/>
+            <xs:element name="EventStartMessageRequest" type="wfAdapter:invokeIntalioTCFlow"/>
+            <xs:element name="EventStartMessageResponse" type="xs:string"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="EventStartMessageRequest">
+        <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+    </wsdl:message>
+    <wsdl:message name="EventStartMessageResponse">
+        <wsdl:part name="body" element="this:EventStartMessageResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ForCaller">
+        <wsdl:operation name="EventStartMessage">
+            <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+            <wsdl:output message="this:EventStartMessageResponse" name="EventStartMessageResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CanonicBindingForCaller" type="this:ForCaller">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="EventStartMessage">
+            <soap:operation style="document" soapAction="http://ns.mediasmithsforge.com/foxtel/tc/TC/ForCaller/EventStartMessage"/>
+            <wsdl:input name="EventStartMessage">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="EventStartMessageResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CanonicServiceForCaller">
+        <wsdl:port name="canonicPort" binding="this:CanonicBindingForCaller">
+            <soap:address location="http://localhost:8080/ode/processes/fx-flows/tc/TC/Caller"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
