@@ -77,7 +77,6 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validateFile);
 		
 		
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validator);
 		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
