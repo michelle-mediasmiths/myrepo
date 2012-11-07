@@ -95,13 +95,16 @@ public class JobBuilder
 
 		String pcp = loadProfileForPackage(packageID, profile);
 
-		// assuming for now that the path is a WINDOWS path, this may not be correct!
+		// assuming for now that the path is a linux style path
+		
+		String winInputPath = pathResolver.winPath(PathType.NIX, inputfile);
+		String winOutputPath = pathResolver.winPath(PathType.NIX, outputFolder);
 
-		pcp = pcp.replace(INPUT_FILE_PATH_PH, inputfile);
-		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, outputFolder);
+		pcp = pcp.replace(INPUT_FILE_PATH_PH, winInputPath);
+		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, winOutputPath);
 
-		String uncInputPath = pathResolver.uncPath(PathType.WIN, inputfile);
-		String uncOutputPath = pathResolver.uncPath(PathType.WIN, outputFolder);
+		String uncInputPath = pathResolver.uncPath(PathType.NIX, inputfile);
+		String uncOutputPath = pathResolver.uncPath(PathType.NIX, outputFolder);
 
 		pcp = pcp.replace(FULL_UNC_INPUT_PATH_PH, uncInputPath);
 		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);

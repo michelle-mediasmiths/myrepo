@@ -28,6 +28,37 @@ public class PathResolver
 		this.uncPathToStorage=uncPath;
 	}
 	
+	/**
+	 * Transforms a path into a windows path, the format of the path should be specified by the path type argument
+	 * @param pt
+	 * @param path
+	 * @return
+	 */
+	public String winPath(PathType pt, String path){
+		log.debug(String.format("transforming %s path %s to windows Path", pt.toString(), path));
+		String ret;
+		
+		switch (pt)
+		{
+			case NIX:
+				ret =  winPathToStorage + path.substring(nixPathToStorage.length()).replace('/','\\');
+				break;
+			case WIN:
+				ret =  path;
+				break;				
+			case UNC:
+				ret = winPathToStorage + path.substring(uncPathToStorage.length());
+				break;
+			default :
+				log.error("Unknown path type");
+				ret = path;
+				break;
+
+		}
+		log.info(String.format("transfored %s path %s to unc Path %s", pt.toString(), path,ret));	
+		return ret;
+	}
+	
 
 	/**
 	 * Transforms path into a unc path, the format of path should be specified by the path type argument

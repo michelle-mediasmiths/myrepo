@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -33,6 +36,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 //import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
@@ -178,10 +182,24 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		if (!stubMayam)
+		if (!stubMayam){
 			mayamClient.transferMaterialToLocation(assetID, destination);
+		}
+		else{
+			try
+			{
+				log.info(String.format("Transferring material %s to location %s", materialID, destination.toString()));
+				FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(destination));
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+				throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
+			}
+		}
 
-		return new MaterialTransferForTCResponse(filename);
+		File destinationFile = new File(destination);
+		return new MaterialTransferForTCResponse(destinationFile.getAbsolutePath());
 	}
 
 	@Override

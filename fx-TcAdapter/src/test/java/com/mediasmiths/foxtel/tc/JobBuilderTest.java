@@ -23,7 +23,9 @@ public class JobBuilderTest
 	private static String PACKAGEID = "packageid";
 	private static String MATERIALID = "materialid";
 	private static String INPUTFILE = "f:\\tcinput\\packageid.mxf";
+	private static String INPUTFILE_NIX = "/storage/tcinput/packageid.mxf";
 	private static String INPUTFILE_UNC = "\\\\foxtel\\foxtel\\tcinput\\packageid.mxf";
+    private static String OUTPUTFOLDER_NIX = "/storage/tcinput/packageid";
     private static String OUTPUTFOLDER = "f:\\tcoutput\\packageid\\";
     private static String OUTPUTFOLDER_UNC = "\\\\foxtel\\foxtel\\tcoutput\\packageid\\";
     
@@ -55,10 +57,12 @@ public class JobBuilderTest
 		
 		when(mayamClient.getPackage(PACKAGEID)).thenReturn(pt);
 		when(mayamClient.getMaterial(MATERIALID)).thenReturn(mt);
-		when(pathResolver.uncPath(PathType.WIN, INPUTFILE)).thenReturn(INPUTFILE_UNC);
-		when(pathResolver.uncPath(PathType.WIN, OUTPUTFOLDER)).thenReturn(OUTPUTFOLDER_UNC);
+		when(pathResolver.winPath(PathType.NIX, INPUTFILE_NIX)).thenReturn(INPUTFILE);
+		when(pathResolver.winPath(PathType.NIX, OUTPUTFOLDER_NIX)).thenReturn(OUTPUTFOLDER);
+		when(pathResolver.uncPath(PathType.NIX, INPUTFILE_NIX)).thenReturn(INPUTFILE_UNC);
+		when(pathResolver.uncPath(PathType.NIX, OUTPUTFOLDER_NIX)).thenReturn(OUTPUTFOLDER_UNC);
 		
-		String pcp = toTest.buildJobForTxPackageTranscode(PACKAGEID, INPUTFILE, OUTPUTFOLDER);
+		String pcp = toTest.buildJobForTxPackageTranscode(PACKAGEID, INPUTFILE_NIX, OUTPUTFOLDER_NIX);
 		log.debug(pcp);
 	}
 	
