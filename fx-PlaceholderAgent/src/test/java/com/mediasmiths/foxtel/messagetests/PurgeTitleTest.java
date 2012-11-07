@@ -12,6 +12,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -30,7 +31,9 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class PurgeTitleTest extends PlaceHolderMessageShortTest{
-	
+	private static Logger logger = Logger.getLogger(PurgeTitleTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
@@ -39,7 +42,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category (ProcessingTests.class)
 	public void testPurgeTitleProcessing() throws MessageProcessingFailedException {
 		
-		System.out.println("Processing test");
+		logger.info("Processing test");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
@@ -58,12 +61,16 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testPurgeTitleXSDInvalid() throws Exception {
 		
-		System.out.println("FXT 4.1.3.2 - Non XSD compliance");
+		logger.info("Starting FXT 4.1.3.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidPurgeTitle", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
+			resultLogger.info("FXT 4.1.3.2 - Non XSD compliance --Passed");
+		else
+			resultLogger.info("FXT 4.1.3.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 	}
@@ -72,14 +79,28 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteTitleNotProtected() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
+		logger.info("Starting FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
+		logger.info("Starting FXT 4.1.0.7 – Valid PurgeTitle Message ");
+
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleNotProtected");
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.IS_VALID ==validateFile)
+		{
+			resultLogger.info("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists --Passed");
+			resultLogger.info("FXT 4.1.0.7 – Valid PurgeTitle Message --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists --Failed");
+			resultLogger.info("FXT 4.1.0.7 – Valid PurgeTitle Message --Passed");
+		}
+		
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -87,29 +108,46 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	@Category (ValidationTests.class)
 	public void testPurgeTitleDoesntExist() throws Exception {
 		
-		System.out.println("FXT 4.1.3.6 - No matching ID exists");
+		logger.info("Starting FXT 4.1.3.6 - No matching ID exists");
 		
 		PlaceholderMessage message = buildPurgeTitle(false, NOT_EXISTING_TITLE);
 		File temp = createTempXMLFile (message, "purgeTitleDoesntExist");
 		
 		when(mayamClient.titleExists(NOT_EXISTING_TITLE)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE, validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE ==validateFile)
+			resultLogger.info("FXT 4.1.3.6 - No matching ID exists --Passed");
+		else
+			resultLogger.info("FXT 4.1.3.6 - No matching ID exists --Failed");
+		
+		assertEquals(MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeleteTitleProtected() throws IOException, Exception {
-		
-		System.out.println("FXT 4.1.3.7 - Title is protected");
+		logger.info("Starting FXT 4.1.3.7 - Title is protected");
+		logger.info("Starting FXT 4.1.25 – PurgeTitle message for title with protected package(s) ");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
-				validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+		{
+			resultLogger.info("FXT 4.1.3.7 - Title is protected --Passed");
+			resultLogger.info("FXT 4.1.25 – PurgeTitle message for title with protected package(s) --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.1.3.7 - Title is protected --Failed");
+			resultLogger.info("FXT 4.1.25 – PurgeTitle message for title with protected package(s)  --Failed");
+		}
+
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 

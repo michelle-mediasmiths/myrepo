@@ -79,7 +79,7 @@ public class PlaceholderMessageValidator extends
 
 			if (validateActions == MessageValidationResult.IS_VALID) {
 				logger.info("PlaceholderMessage validated");
-				System.out.println ("\n");
+				logger.info ("\n");
 			} else {
 				logger.warn("Message Actions did not validate");
 			}

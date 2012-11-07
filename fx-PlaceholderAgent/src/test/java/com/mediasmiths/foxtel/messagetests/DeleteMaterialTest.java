@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -32,7 +33,10 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
-	
+	private static Logger logger = Logger.getLogger(DeleteMaterialTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
+
 	public DeleteMaterialTest() throws JAXBException, SAXException, IOException {
 		super();
 	}
@@ -41,7 +45,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	@Category(ProcessingTests.class)
 	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException {
 		
-		System.out.println("Delete material processing test");
+		logger.info("Delete material processing test");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
@@ -58,12 +62,16 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteMaterialXSDInvalid() throws Exception {
 		
-		System.out.println("FXT 4.1.7.2 - Non XSD compliance");
+		logger.info("Starting FXT 4.1.7.2 - Non XSD compliance");
 	//	File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidDeleteMaterial", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
+			resultLogger.info("FXT 4.1.7.2 - Non XSD compliance --Passed");
+		else
+			resultLogger.info("FXT 4.1.7.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -73,29 +81,40 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteMaterialNotProtected() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.7.3/4/5 - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists");
+		logger.info("Starting FXT 4.1.7.3/4/5 - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validDeleteMaterialNotProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.IS_VALID, validator.validateFile(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.IS_VALID ==validateFile)
+			resultLogger.info("FXT 4.1.7.3/4/5  - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists --Passed");
+		else
+			resultLogger.info("FXT 4.1.7.3/4/5  - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists --Failed");
+		
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeleteMaterialDoesntExist() throws Exception {
 		
-		System.out.println("FXT 4.1.7.6 - No matching ID");
+		logger.info("Starting FXT 4.1.7.6 - No matching ID");
 		
 		PlaceholderMessage message = buildDeleteMaterial(false, NOT_EXISTING_MATERIAL);
 		File temp = createTempXMLFile (message, "deleteMaterialDoesntExist");
 		
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.MATERIAL_DOES_NOT_EXIST, validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.MATERIAL_DOES_NOT_EXIST ==validateFile)
+			resultLogger.info("FXT 4.1.7.6 - No matching ID --Passed");
+		else
+			resultLogger.info("FXT 4.1.7.6 - No matching ID --Failed");
+		
+		assertEquals(MessageValidationResult.MATERIAL_DOES_NOT_EXIST, validateFile);		
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -103,14 +122,19 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	@Category (ValidationTests.class)
 	public void testDeleteMaterialProtected() throws IOException, Exception {
 		
-		System.out.println("FXT 4.1.7.7 - Material is protected");
+		logger.info("Starting FXT 4.1.7.7 - Material is protected");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validDeleteMaterialProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
-				validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+			resultLogger.info("FXT 4.1.7.7 - Material is protected --Passed");
+		else
+			resultLogger.info("FXT 4.1.7.7 - Material is protected --Failed");
+		
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
