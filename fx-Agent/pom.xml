@@ -54,7 +54,7 @@
 		<!--  reporting\events service -->
 		<dependency>	
 			<groupId>com.mediasmiths</groupId>
-			<artifactId>events</artifactId>
+			<artifactId>Events</artifactId>
 			<version>${events.version}</version>
 			<exclusions>
 				<exclusion>
