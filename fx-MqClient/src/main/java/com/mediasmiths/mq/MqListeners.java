@@ -19,7 +19,6 @@ import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqModule;
-import com.mayam.wf.mq.common.Topics;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -96,8 +95,8 @@ public class MqListeners implements Runnable {
 	
 	public void attachIncomingListners() 
 	{
-		attachListener(MqDestination.of("queue://mediasmiths.tasks"), TaskListener.getInstance(taskController));
-		attachListener(MqDestination.of("queue://mediasmiths.assets"), AssetListener.getInstance(client, taskController));
+		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController));
+		attachListener(MediasmithsDestinations.ASSETS, AssetListener.getInstance(client, taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
