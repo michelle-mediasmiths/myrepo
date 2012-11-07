@@ -96,8 +96,8 @@ public class MqListeners implements Runnable {
 	
 	public void attachIncomingListners() 
 	{
-		attachListener(Topics.ASSET_CREATE, TaskListener.getInstance(taskController));
-		attachListener(Topics.ASSET_DELETE, AssetListener.getInstance(client, taskController));
+		attachListener(MqDestination.of("queue://mediasmiths.tasks"), TaskListener.getInstance(taskController));
+		attachListener(MqDestination.of("queue://mediasmiths.assets"), AssetListener.getInstance(client, taskController));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException
