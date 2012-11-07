@@ -39,18 +39,18 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 
-public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
+public class AddOrUpdatePackageTest_FXT_4_1_9_1 extends PlaceHolderMessageShortTest {
 	
 	protected final static String EXISTING_TITLE = "EXISTING_TITLE";
 	protected final static String EXISTING_MATERIAL = "EXISTING_MATERIAL";
 	protected final static String NOT_EXISTING_MATERIAL = "NOT_SXISTING_MATERIAL";
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
-	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest.class);
+	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest_FXT_4_1_9_1.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 
-	public AddOrUpdatePackageTest() throws JAXBException, SAXException, IOException {
+	public AddOrUpdatePackageTest_FXT_4_1_9_1() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	
@@ -72,7 +72,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testAddPackageXSDInvalid() throws Exception {
+	public void testAddPackageXSDInvalid_FXT_4_1_9_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.9.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -92,7 +92,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category (ValidationTests.class)
-	public void testAddValidPackage() throws IOException, Exception {
+	public void testAddValidPackage_FXT_4_1_9_3_4_5() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, EXISTING_MATERIAL, EXISTING_TITLE);
@@ -112,7 +112,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 	@Test
 	@Category(ProcessingTests.class)
-	public void testUpdatePackageProcessing() throws Exception {
+	public void testUpdatePackageProcessing_FXT_4_1_9_6() throws Exception {
 		
 		logger.info("Starting FXT 4.1.9.6 - Matching ID exists");
 		PlaceholderMessage message = buildAddPackage(EXISTING_PACKAGE_ID, EXISTING_MATERIAL, EXISTING_TITLE);
@@ -136,7 +136,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testAddPackageNoMaterial() throws IOException, Exception {
+	public void testAddPackageNoMaterial_FXT_4_1_9_7() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.9.7 - No existing material");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, NOT_EXISTING_MATERIAL, EXISTING_TITLE);

@@ -41,13 +41,13 @@ import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
+public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTest{
 	
-	private static Logger logger = Logger.getLogger(AddOrUpdateMaterialTest.class);
+	private static Logger logger = Logger.getLogger(AddOrUpdateMaterialTest_FXT_4_1_5.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 
-	public AddOrUpdateMaterialTest() throws JAXBException, SAXException, IOException {
+	public AddOrUpdateMaterialTest_FXT_4_1_5() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	
@@ -70,7 +70,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testAddMaterialXSDInvalid() throws Exception {
+	public void testAddMaterialXSDInvalid_FXT_4_1_5_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.5.2 - Non XSD compliance");
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -90,7 +90,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testAddMaterialValidation() throws Exception {
+	public void testAddMaterialValidation_FXT_4_1_5_3_4_5() throws Exception {
 		
 		logger.info("Starting FXT 4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists");
 		
@@ -132,7 +132,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ProcessingTests.class)
-	public void testUpdateMaterialProcessing() throws Exception {
+	public void testUpdateMaterialProcessing_FXT_4_1_5_6() throws Exception {
 		
 		logger.info("Starting FXT 4.1.5.6 - Matching ID exists");
 		PlaceholderMessage message = buildAddMaterial(EXISTING_TITLE, EXISTING_MATERIAL_ID);
@@ -150,7 +150,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category (ValidationTests.class)
-	public void testAddMaterialTitleDoesntExist() throws Exception {
+	public void testAddMaterialTitleDoesntExist_FXT_4_1_5_7() throws Exception {
 		
 		logger.info("Starting FXT 4.1.5.7 - No existing title");
 		

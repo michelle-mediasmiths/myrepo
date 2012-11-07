@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -20,21 +21,26 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3;
+import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class PurgeTitleTest extends PlaceHolderMessageShortTest {
-
-	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
+public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest {
+	private static Logger logger = Logger.getLogger(PurgeTitleTest_FXT_4_1_24_25_26.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+	
+	public PurgeTitleTest_FXT_4_1_24_25_26() throws JAXBException, SAXException, IOException {
 		super();
 	}
 
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeleteTitleNotProtected() throws IOException, Exception {
+
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(pm,
@@ -45,22 +51,35 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 
-		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.IS_VALID,validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteTitleIsProected() throws IOException, Exception {
+	public void testDeleteTitleIsProected_FXT_4_1_24_25_26() throws IOException, Exception {
+		logger.info("Starting FXT 4.1.24/25/26 ");
+
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteTitleMaterialProtected");
 
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
 				.thenReturn(true);
 
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,
-				validator.validateFile(temp.getAbsolutePath()));
+		
+		
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+		{
+		resultLogger.info("FXT 4.1.24/25/26 --Passed");
+		}
+		else
+		{
+		resultLogger.info("FXT 4.1.24/25/26  --Failed");
+		}
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validateFile);
+
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 

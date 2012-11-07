@@ -30,11 +30,11 @@ import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class PurgeTitleTest extends PlaceHolderMessageShortTest{
-	private static Logger logger = Logger.getLogger(PurgeTitleTest.class);
+public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
+	private static Logger logger = Logger.getLogger(PurgeTitleTest_FXT_4_1_3.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-	public PurgeTitleTest() throws JAXBException, SAXException, IOException {
+	public PurgeTitleTest_FXT_4_1_3() throws JAXBException, SAXException, IOException {
 		super();
 	}
 
@@ -59,7 +59,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testPurgeTitleXSDInvalid() throws Exception {
+	public void testPurgeTitleXSDInvalid_FXT_4_1_3_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.3.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -77,7 +77,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteTitleNotProtected() throws IOException, Exception {
+	public void testDeleteTitleNotProtected_FXT_4_1_3_3_4_5_FXT_4_1_0_7() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
 		logger.info("Starting FXT 4.1.0.7 – Valid PurgeTitle Message ");
@@ -106,7 +106,7 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category (ValidationTests.class)
-	public void testPurgeTitleDoesntExist() throws Exception {
+	public void testPurgeTitleDoesntExist_FXT_4_1_3_6() throws Exception {
 		
 		logger.info("Starting FXT 4.1.3.6 - No matching ID exists");
 		
@@ -127,9 +127,8 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteTitleProtected() throws IOException, Exception {
+	public void testDeleteTitleProtected_FXT_4_1_3_7() throws IOException, Exception {
 		logger.info("Starting FXT 4.1.3.7 - Title is protected");
-		logger.info("Starting FXT 4.1.25 – PurgeTitle message for title with protected package(s) ");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleProtected");
 		
@@ -139,12 +138,10 @@ public class PurgeTitleTest extends PlaceHolderMessageShortTest{
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.3.7 - Title is protected --Passed");
-			resultLogger.info("FXT 4.1.25 – PurgeTitle message for title with protected package(s) --Passed");
 		}
 		else
 		{
 			resultLogger.info("FXT 4.1.3.7 - Title is protected --Failed");
-			resultLogger.info("FXT 4.1.25 – PurgeTitle message for title with protected package(s)  --Failed");
 		}
 
 		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED, validateFile);
