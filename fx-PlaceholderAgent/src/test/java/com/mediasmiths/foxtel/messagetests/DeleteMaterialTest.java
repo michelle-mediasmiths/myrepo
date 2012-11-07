@@ -141,7 +141,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	private PlaceholderMessage buildDeleteMaterial (boolean materialProtected, String titleID) {
 		
 		Material material = new Material();
-		material.setMaterialID(EXISTING_MATERIAL_ID);
+		material.setMaterialD(EXISTING_MATERIAL_ID);
 		
 		DeleteMaterial dm = new DeleteMaterial();
 		dm.setTitleID(titleID);

@@ -198,7 +198,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
-		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialD());
 	}
 
 	/*
