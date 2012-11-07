@@ -29,6 +29,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -46,6 +47,8 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
 	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 
 	public AddOrUpdatePackageTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -79,9 +82,9 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
-			logger.info("FXT 4.1.9.2 - Non XSD compliance --Passed");
+			resultLogger.info("FXT 4.1.9.2 - Non XSD compliance --Passed");
 		else
-			logger.info("FXT 4.1.9.2 - Non XSD compliance --Failed");
+			resultLogger.info("FXT 4.1.9.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);			
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -99,9 +102,9 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
-			logger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Passed");
+			resultLogger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Passed");
 		else
-			logger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Failed");
+			resultLogger.info("FXT 4.1.9.3/4/5 - XSD Compliance/ Valid AddOrUpdatePackage message/ No matching ID exists --Failed");
 		
 		assertEquals(MessageValidationResult.IS_VALID, validateFile);			
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -119,7 +122,15 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(new Boolean (true));
 		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
+		try{
 		processor.processMessage(envelope);
+		}
+		catch (MessageProcessingFailedException e)
+		{
+			resultLogger.info("FXT 4.1.9.6 - Matching ID exists --Passed");
+			throw e;
+		}
+		
 		verify(mayamClient).updatePackage(aoup.getPackage());
 	}
 	
@@ -135,9 +146,9 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE ==validateFile)
-			logger.info("FXT 4.1.9.7 - No existing material --Passed");
+			resultLogger.info("FXT 4.1.9.7 - No existing material --Passed");
 		else
-			logger.info("FXT 4.1.9.7 - No existing material --Failed");
+			resultLogger.info("FXT 4.1.9.7 - No existing material --Failed");
 		
 		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());

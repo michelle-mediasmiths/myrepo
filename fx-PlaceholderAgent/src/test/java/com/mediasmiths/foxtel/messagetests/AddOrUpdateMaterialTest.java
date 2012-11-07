@@ -44,6 +44,8 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 	
 	private static Logger logger = Logger.getLogger(AddOrUpdateMaterialTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 
 	public AddOrUpdateMaterialTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -78,9 +80,9 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
-			logger.info("FXT 4.1.5.2 - Non XSD compliance --Passed");
+			resultLogger.info("FXT 4.1.5.2 - Non XSD compliance --Passed");
 		else
-			logger.info("FXT 4.1.5.2 - Non XSD compliance --Failed");
+			resultLogger.info("FXT 4.1.5.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -99,12 +101,34 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
-			logger.info("FXT  4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists --Passed");
+			resultLogger.info("FXT  4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists --Passed");
 		else
-			logger.info("FXT  4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists --Failed");
+			resultLogger.info("FXT  4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists --Failed");
 		
-		assertEquals(MessageValidationResult.IS_VALID, validateFile);		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);		
+		Util.deleteFiles(temp.getAbsolutePath());
 	}
+	
+	/*@Test
+	@Category(ValidationTests.class)
+	public void testAddMaterialExistingIDValidation() throws Exception {
+		
+		logger.info("Starting FXT 4.1.1.5 - ID already exists ");
+		
+		PlaceholderMessage message = buildAddMaterial(EXISTING_TITLE, EXISTING_MATERIAL_ID);
+		File temp = createTempXMLFile(message, "ExsistingIDvalidAddMaterial");
+		
+		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
+		
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.IS_VALID ==validateFile)
+			resultLogger.info("FXT 4.1.1.5 - ID already exists  --Passed");
+		else
+			resultLogger.info("FXT 4.1.1.5 - ID already exists  --Failed");
+		
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);		
+		Util.deleteFiles(temp.getAbsolutePath());
+	}*/
 	
 	@Test
 	@Category(ProcessingTests.class)
@@ -137,9 +161,9 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest{
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL ==validateFile)
-			logger.info("FXT 4.1.5.7 - No existing title --Passed");
+			resultLogger.info("FXT 4.1.5.7 - No existing title --Passed");
 		else
-			logger.info("FXT 4.1.5.7 - No existing title --Failed");
+			resultLogger.info("FXT 4.1.5.7 - No existing title --Failed");
 		
 		assertEquals(MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());

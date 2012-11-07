@@ -13,6 +13,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -31,6 +32,8 @@ import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest;
+import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
@@ -40,6 +43,8 @@ import com.mediasmiths.mayam.MayamClientException;
 public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 
 	private final static String NEW_TITLE = "NEW_TITLE";
+	private static Logger logger = Logger.getLogger(CreateOrUpdateTitleTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 	public CreateOrUpdateTitleTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -80,6 +85,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	@Test
 	@Category(ProcessingTests.class)
 	public void testValidUpdateTitleProcessing() throws Exception {
+		logger.info("Starting FXT 4.1.1.5 - ID already exists");
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
@@ -93,7 +99,15 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.updateTitle(coup)).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 		// the call we are testing
+		try{
 		processor.processMessage(envelope);
+		}
+		catch (MessageProcessingFailedException e)
+		{
+			resultLogger.info("FXT 4.1.1.5 - ID already exists  --Passed");
+			throw e;
+		}
+		
 		// verfiy update call took place
 		verify(mayamClient).updateTitle(coup);
 

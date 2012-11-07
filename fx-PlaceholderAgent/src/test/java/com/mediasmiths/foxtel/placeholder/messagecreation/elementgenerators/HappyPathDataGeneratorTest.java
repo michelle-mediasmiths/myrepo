@@ -12,13 +12,17 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.mediasmiths.foxtel.messagetests.DeleteMaterialTest;
+
 public class HappyPathDataGeneratorTest
 {
+	private static Logger logger = Logger.getLogger(HappyPathDataGeneratorTest.class);
 
 	@Test
 	public void happyPathDataGeneratorTest()
@@ -170,7 +174,7 @@ public class HappyPathDataGeneratorTest
 
 			transformer.transform(source, result);
 
-			System.out.println("Create Title file saved: CreateTitle" + fileName + ".xml");
+			logger.info("Create Title file saved: CreateTitle" + fileName + ".xml");
 
 		}
 		catch (ParserConfigurationException pce)
@@ -277,7 +281,7 @@ public class HappyPathDataGeneratorTest
 
 			transformer.transform(source, result);
 
-			System.out.println("Create Material file saved: CreateMaterial" + fileName + ".xml");
+			logger.info("Create Material file saved: CreateMaterial" + fileName + ".xml");
 
 		}
 		catch (ParserConfigurationException pce)
@@ -374,7 +378,7 @@ public class HappyPathDataGeneratorTest
 
 			transformer.transform(source, result);
 
-			System.out.println("Create package file saved: CreatePackage" + fileName + ".xml");
+			logger.info("Create package file saved: CreatePackage" + fileName + ".xml");
 
 		}
 		catch (ParserConfigurationException pce)

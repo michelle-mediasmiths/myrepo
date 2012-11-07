@@ -52,6 +52,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	private final static String NEW_TITLE = "NEW_TITLE";
 	private static Logger logger = Logger.getLogger(CreateOrUpdateTitleTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 
 	public CreateOrUpdateTitleTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -86,9 +88,9 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		IOUtils.write("InvalidCreateTitle", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
-			logger.info("FXT 4.1.1.2 - Non XSD compliance --Passed");
+			resultLogger.info("FXT 4.1.1.2 - Non XSD compliance --Passed");
 		else
-			logger.info("FXT 4.1.1.2 - Non XSD compliance --Failed");
+			resultLogger.info("FXT 4.1.1.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		
@@ -100,14 +102,22 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidCreateTitle() throws Exception {
 		
 		logger.info("Starting FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID");
+		logger.info("Starting FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message");
+
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		File temp = createTempXMLFile(message, "validCreateTitle");
 
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
-			logger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Passed");
+		{
+			resultLogger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Passed");
+			resultLogger.info("FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message --Passed");
+		}
 		else
-			logger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Failed");
+		{
+			resultLogger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Failed");
+			resultLogger.info("FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message --Failed");
+		}
 		
 		assertEquals(MessageValidationResult.IS_VALID, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -117,13 +127,23 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	@Category(ProcessingTests.class)
 	public void testValidCreateTitleProcessingFailsOnExistingTitle() throws Exception {
 		
-		logger.info("Starting FXT 4.1.1.5 - ID already exists");
+		logger.info("Starting FXT 4.1.25  - CreateorUpdateTitle error handling");
 		PlaceholderMessage message = buildCreateTitle(EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
+		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenThrow(
+				
 				new MayamClientException(MayamClientErrorCode.FAILURE));
+		try
+		{
 		processor.processMessage(envelope);
+		}
+		catch (MessageProcessingFailedException e)
+		{
+			resultLogger.info("FXT 4.1.25  - CreateOrUpdateTitle error handling --Passed");
+			throw e;
+		}
 	}
 	
 	@Test
@@ -131,6 +151,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testCreateTitleInvalidDates() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.0.4/5 - Invalid license dates");
+		logger.info("Starting FXT 4.1.1.6 - Invalid license dates");
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		
 		List<License> license = ((CreateOrUpdateTitle) message.getActions()
@@ -147,9 +168,16 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER ==validateFile)
-			logger.info("FXT 4.1.0.4/5 - Invalid license dates --Passed");
+		{
+			resultLogger.info("FXT 4.1.0.4/5 - Invalid license dates --Passed");
+			resultLogger.info("FXT 4.1.1.6 - Invalid license dates --Passed");
+		}
 		else
-			logger.info("FXT 4.1.0.4/5 - Invalid license dates --Failed");
+		{
+			resultLogger.info("FXT 4.1.0.4/5 - Invalid license dates --Failed");
+			resultLogger.info("FXT 4.1.1.6 - Invalid license dates --Failed");
+		}
+			
 		
 		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER, validateFile);
 		
@@ -174,15 +202,15 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.UNKOWN_CHANNEL ==validateFile)
-			logger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Passed");
+			resultLogger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Passed");
 		else
-			logger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Failed");
+			resultLogger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Failed");
 		
 		assertEquals(MessageValidationResult.UNKOWN_CHANNEL, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
-	/*@Test
+	@Test
 	@Category (ValidationTests.class)
 	public void testCreateTitleTitleIdNull() throws IOException, Exception {
 		
@@ -198,7 +226,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile (message, "createTitleTitleIdNull");
 		
 		assertEquals(MessageValidationResult.TITLEID_IS_NULL, validator.validateFile(temp.getAbsolutePath()));
-	}*/
+	}
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {
 		

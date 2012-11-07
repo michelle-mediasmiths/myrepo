@@ -33,6 +33,8 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	
 	private static Logger logger = Logger.getLogger(DeletePackageTest.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 	
 	public DeletePackageTest() throws JAXBException, SAXException, IOException {
 		super();
@@ -63,9 +65,9 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		IOUtils.write("InvalidDeletePackage", new FileOutputStream(temp));
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
-			logger.info("FXT 4.1.11.2 - Non XSD compliance --Passed");
+			resultLogger.info("FXT 4.1.11.2 - Non XSD compliance --Passed");
 		else
-			logger.info("FXT 4.1.11.2 - Non XSD compliance --Failed");
+			resultLogger.info("FXT 4.1.11.2 - Non XSD compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -86,9 +88,9 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
-			logger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists--Passed");
+			resultLogger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists--Passed");
 		else
-			logger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists --Failed");
+			resultLogger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists --Failed");
 		
 		assertEquals(MessageValidationResult.IS_VALID, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -107,9 +109,9 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validateFile)
-			logger.info("FXT 4.1.11.6 - No matching ID --Passed");
+			resultLogger.info("FXT 4.1.11.6 - No matching ID --Passed");
 		else
-			logger.info("FXT 4.1.11.6 - No matching ID --Failed");
+			resultLogger.info("FXT 4.1.11.6 - No matching ID --Failed");
 		
 		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -129,9 +131,9 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validateFile)
-			logger.info("FXT 4.1.11.7 - Package is protected --Passed");
+			resultLogger.info("FXT 4.1.11.7 - Package is protected --Passed");
 		else
-			logger.info("FXT 4.1.11.7 - Package is protected --Failed");
+			resultLogger.info("FXT 4.1.11.7 - Package is protected --Failed");
 		
 		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED, validateFile);	
 		Util.deleteFiles(temp.getAbsolutePath());
