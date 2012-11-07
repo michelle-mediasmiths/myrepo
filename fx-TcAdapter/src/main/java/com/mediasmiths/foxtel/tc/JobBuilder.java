@@ -10,8 +10,8 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.tc.service.PathResolver;
-import com.mediasmiths.foxtel.tc.service.PathResolver.PathType;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 

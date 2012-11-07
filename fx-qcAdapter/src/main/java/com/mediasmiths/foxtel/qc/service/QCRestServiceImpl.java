@@ -17,7 +17,10 @@ import org.apache.log4j.Logger;
 import org.jboss.resteasy.spi.InternalServerErrorException;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.foxtel.qc.model.JobStatusType;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;
@@ -38,12 +41,21 @@ public class QCRestServiceImpl implements QCRestService
 	private final static Logger log = Logger.getLogger(QCRestServiceImpl.class);
 
 	private final CerifyClient cerifyClient;
+	private final PathResolver pathResolver;
+	// the (nix) path to the cerify medialocation
+	@Inject
+	@Named("cerify.medialoction.path.nix")
+	private String mediaLocationPath;
+	@Inject
+	@Named("tx.tcoutput.location")
+	private String transcodeoutputLocationPath;
 
 	@Inject
-	public QCRestServiceImpl(CerifyClient cerifyClient)
+	public QCRestServiceImpl(CerifyClient cerifyClient, PathResolver pathResolver)
 	{
 		log.trace("Constructed");
 		this.cerifyClient = cerifyClient;
+		this.pathResolver = pathResolver;
 	}
 
 	@Override
@@ -87,21 +99,23 @@ public class QCRestServiceImpl implements QCRestService
 
 		log.debug(String.format("Start requested for file  %s", request.getFile()));
 
-//		try
-//		{
-			String jobName = cerifyClient.startQcForFile(request.getFile(), request.getIdent(), request.getProfileName());
-			log.info(String.format("Job %s created", jobName));
-			QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
-			QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
-			jobIdent.setProfile(request.getProfileName());
-			res.setQcIdentifier(jobIdent);
-			return res;
-//		}
-//		catch (Exception e)
-//		{
-//			log.error("Error starting qc", e);
-//			return new QCStartResponse(QCStartStatus.ERROR);
-//		}
+		String relativePathToFile = pathResolver.getRelativePath(mediaLocationPath, request.getFile());
+		
+		// try
+		// {
+		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName());
+		log.info(String.format("Job %s created", jobName));
+		QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
+		QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
+		jobIdent.setProfile(request.getProfileName());
+		res.setQcIdentifier(jobIdent);
+		return res;
+		// }
+		// catch (Exception e)
+		// {
+		// log.error("Error starting qc", e);
+		// return new QCStartResponse(QCStartStatus.ERROR);
+		// }
 
 	}
 
@@ -227,8 +241,8 @@ public class QCRestServiceImpl implements QCRestService
 	@Produces("text/plain")
 	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident) throws NotFoundException
 	{
-		log.debug(String.format("Finished request for job %s",ident.getIdentifier()));
-		
+		log.debug(String.format("Finished request for job %s", ident.getIdentifier()));
+
 		QCJobStatus jobStatus = jobStatus(ident);
 
 		return jobStatus.getStatus() == JobStatusType.complete || jobStatus.getStatus() == JobStatusType.stopping;

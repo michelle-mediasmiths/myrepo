@@ -43,6 +43,7 @@
 		<module>fx-CarbonWFSClient</module>
     	<module>fx-WFAdapter</module>
     	<module>fx-MqClient</module>
+    	<module>fx-PathResolver</module>
 	</modules>
 
 	<properties>

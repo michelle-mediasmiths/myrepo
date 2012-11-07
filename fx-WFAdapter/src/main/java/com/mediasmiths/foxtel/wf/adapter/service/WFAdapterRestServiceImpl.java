@@ -64,7 +64,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("tx.tcoutput.location")
 	private String tcoutputlocation;
-	
+
 	@Inject
 	@Named("stub.out.mayam")
 	private boolean stubMayam;
@@ -88,22 +88,46 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		final String id = req.getAssetId();
 		final String filename = req.getAssetId() + ".mxf";
 		final URI destination;
+		File destinationFile;
+
 		if (req.isForTXDelivery())
 		{
-			// TODO work out what to do here, a transfer might not be required if part of tx delivery workflow
+			// for tx delivery we return the location of transcoded package
 			destination = materialQCLocation.resolve(filename);
 
-			if (!stubMayam)
-				mayamClient.transferMaterialToLocation(id, destination);
+			String ret = tcoutputlocation + "/" + id + "/" + id + ".mxf";
+			destinationFile = new File(ret);
 		}
 		else
 		{
 			destination = materialQCLocation.resolve(filename);
 			if (!stubMayam)
+			{
 				mayamClient.transferMaterialToLocation(id, destination);
+			}
+			else
+			{
+				transferAsset(id, destination);
+			}
+
+			destinationFile = new File(destination);
 		}
 
-		return new AssetTransferForQCResponse(filename);
+		return new AssetTransferForQCResponse(destinationFile.getAbsolutePath());
+	}
+
+	private void transferAsset(final String id, final URI destination) throws MayamClientException
+	{
+		try
+		{
+			log.info(String.format("Transferring material %s to location %s", id, destination.toString()));
+			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(destination));
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
+		}
 	}
 
 	@Override
@@ -143,7 +167,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// id is an item id
 				if (!stubMayam)
+				{
 					mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+				}
 			}
 		}
 		catch (MayamClientException e)
@@ -182,20 +208,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		if (!stubMayam){
+		if (!stubMayam)
+		{
 			mayamClient.transferMaterialToLocation(assetID, destination);
 		}
-		else{
-			try
-			{
-				log.info(String.format("Transferring material %s to location %s", materialID, destination.toString()));
-				FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(destination));
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-				throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
-			}
+		else
+		{
+			transferAsset(materialID, destination);
 		}
 
 		File destinationFile = new File(destination);
@@ -367,7 +386,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
 	{
-		//TODO implement
+		// TODO implement
 		return true;
 	}
 
@@ -377,8 +396,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Consumes("application/xml")
 	public void notifyTXDeliveryFailed(TXDeliveryFailure notification)
 	{
-		log.fatal(String.format("TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s"));
-		//TODO fire event email people etc
+		log.fatal(String.format(
+				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
+				notification.getPackageID(),
+				notification.getStage()));
+		// TODO fire event email people etc
 	}
 
 	@Override
@@ -388,7 +410,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID)
 	{
 		// TODO implement
-		return tcoutputlocation;
+
+		String ret = tcoutputlocation + "/" + packageID;
+		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
+
+		return ret;
 	}
 
 }

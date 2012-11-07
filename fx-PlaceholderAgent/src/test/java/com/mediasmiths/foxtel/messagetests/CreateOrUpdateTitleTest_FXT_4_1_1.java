@@ -226,9 +226,6 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		coup.setTitleID(null);
 		File temp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 
-
-		assertEquals(MessageValidationResult.TITLEID_IS_NULL, validator.validateFile(temp.getAbsolutePath()));
-		
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validateFile(temp.getAbsolutePath()));
 	}

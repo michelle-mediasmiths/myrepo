@@ -261,7 +261,7 @@ public class CerifyClient
 
 		log.debug("Resolving uri for " + filePath);
 
-		// lets assume for now that the paths will be the same on both systems
+		// filepath is relative to the media location
 		URI resolved = new URI(mediaLocationURI);
 		resolved.appendPath(filePath);
 		log.debug("Resolved uri for " + filePath + " as " + resolved.toString());
