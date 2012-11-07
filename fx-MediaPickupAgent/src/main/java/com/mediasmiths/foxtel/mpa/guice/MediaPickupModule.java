@@ -26,7 +26,7 @@ import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class MediaPickupModule extends AbstractModule {
 

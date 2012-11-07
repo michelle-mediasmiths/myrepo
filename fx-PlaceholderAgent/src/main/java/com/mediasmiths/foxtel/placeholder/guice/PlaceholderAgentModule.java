@@ -22,7 +22,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class PlaceholderAgentModule extends AbstractModule {
 

@@ -15,17 +15,25 @@
 
   <xs:element name="invokeIntalioQCFlow" type="tns:invokeIntalioQCFlow"/>
 
+  <xs:element name="invokeIntalioTCFlow" type="tns:invokeIntalioTCFlow"/>
+
+  <xs:element name="invokeIntalioTXFlow" type="tns:invokeIntalioTXFlow"/>
+
   <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
 
   <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
 
   <xs:element name="tcFailureNotification" type="tns:tcFailureNotification"/>
 
+  <xs:element name="tcPassedNotification" type="tns:tcPassedNotification"/>
+
+  <xs:element name="tcTotalFailure" type="tns:tcTotalFailure"/>
+
+  <xs:element name="txDeliveryFailure" type="tns:txDeliveryFailure"/>
+
   <xs:complexType name="tcFailureNotification">
     <xs:sequence>
-      <xs:element minOccurs="0" name="materialID" type="xs:string"/>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
-      <xs:element name="TXDelivery" type="xs:boolean"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -38,16 +46,18 @@
 
   <xs:complexType name="autoQCErrorNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCRequest">
+      <xs:extension base="tns:autoQCResultNotification">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="invokeIntalioQCFlow">
+  <xs:complexType abstract="true" name="autoQCResultNotification">
     <xs:complexContent>
       <xs:extension base="tns:autoQCRequest">
-        <xs:sequence/>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="jobName" type="xs:string"/>
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -58,10 +68,12 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="assetTransferForQCResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="destination" type="xs:string"/>
-    </xs:sequence>
+  <xs:complexType name="invokeIntalioQCFlow">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="assetTransferForQCRequest">
@@ -72,31 +84,71 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="tcPassedNotification">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="materialTransferForTCResponse">
     <xs:sequence>
       <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="autoQCFailureNotification">
-    <xs:complexContent>
-      <xs:extension base="tns:autoQCRequest">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
+  <xs:complexType name="invokeIntalioTXFlow">
+    <xs:sequence>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="materialTransferForTCRequest">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element name="forTX" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="assetTransferForQCResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioTCFlow">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element name="forTX" type="xs:boolean"/>
+      <xs:element name="outputFolder" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcTotalFailure">
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="autoQCPassNotification">
+  <xs:complexType name="autoQCFailureNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCRequest">
+      <xs:extension base="tns:autoQCResultNotification">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCPassNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="txDeliveryFailure">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element minOccurs="0" name="stage" type="xs:string"/>
+    </xs:sequence>
   </xs:complexType>
 </xs:schema>

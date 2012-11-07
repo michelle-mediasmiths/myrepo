@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+import com.mediasmiths.stdEvents.events.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 @Singleton
 public class EventService

@@ -39,7 +39,6 @@ import com.mediasmiths.foxtel.placeholder.validmessagepickup.FileWriter;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 public abstract class PlaceHolderMessageShortTest {
 

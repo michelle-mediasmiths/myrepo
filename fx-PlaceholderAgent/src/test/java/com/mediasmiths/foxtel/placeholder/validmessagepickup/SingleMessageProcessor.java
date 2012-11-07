@@ -18,7 +18,6 @@ import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
 
 /**
