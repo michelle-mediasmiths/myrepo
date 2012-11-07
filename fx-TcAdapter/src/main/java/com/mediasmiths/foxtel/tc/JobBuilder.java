@@ -56,9 +56,10 @@ public class JobBuilder
 	}
 
 	private final static String INPUT_FILE_PATH_PH = "INPUT_FILE_PATH";
-	private final static String FULL_UNC_INPUT_PATH_PH = "FULL_UNC_INPUT_PATH"; // TODO get unc paths properly
+	private final static String FULL_UNC_INPUT_PATH_PH = "FULL_UNC_INPUT_PATH";
 	private final static String OUTPUT_FOLDER_PATH_PH = "OUTPUT_FOLDER_PATH";
 	private final static String FULL_UNC_OUTPUT_PATH_PH = "FULL_UNC_OUTPUT_PATH";
+	private final static String OUTPUT_BASENAME_PH = "OUTPUT_BASENAME";
 
 	public String buildJobForTxPackageTranscode(String packageID, String inputfile, String outputFolder)
 			throws MayamClientException,
@@ -108,6 +109,8 @@ public class JobBuilder
 
 		pcp = pcp.replace(FULL_UNC_INPUT_PATH_PH, uncInputPath);
 		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);
+		
+		pcp = pcp.replace(OUTPUT_BASENAME_PH, packageID);
 
 		return pcp;
 	}

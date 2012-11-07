@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_LeSigR59EeKGPvPCWJ8IKg" iD="_LeSigB59EeKGPvPCWJ8IKg">
+  <pools xmi:type="bpmn:Pool" xmi:id="_LewckR59EeKGPvPCWJ8IKg" iD="_LewckB59EeKGPvPCWJ8IKg" name="Caller">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ESRgYB6AEeKGPvPCWJ8IKg" source="executablepool">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ESSHcB6AEeKGPvPCWJ8IKg" key="poolIsExecutable" value="false"/>
+    </eAnnotations>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_2R640Sc3EeKYS8XxoCkLRQ" iD="_2R640Cc3EeKYS8XxoCkLRQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2R7f4Cc3EeKYS8XxoCkLRQ" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2R7f4Sc3EeKYS8XxoCkLRQ" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2R-jMic3EeKYS8XxoCkLRQ" key="defaultDeclarationName" value="tCEventStartMessageRequest"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2SAYYCc3EeKYS8XxoCkLRQ" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/TC}EventStartMessageRequest"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_2R_KQCc3EeKYS8XxoCkLRQ" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2R_xUCc3EeKYS8XxoCkLRQ" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2R_xUSc3EeKYS8XxoCkLRQ" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_UyNLQSf8EeKA0omRhT7Jag" iD="_UyNLQCf8EeKA0omRhT7Jag">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UyNLQif8EeKA0omRhT7Jag" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyNLQyf8EeKA0omRhT7Jag" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyPAcif8EeKA0omRhT7Jag" key="defaultDeclarationName" value="tCEventStartMessageResponse"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyQ1oSf8EeKA0omRhT7Jag" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/TC}EventStartMessageResponse"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_UyPngCf8EeKA0omRhT7Jag" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UyQOkCf8EeKA0omRhT7Jag" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyQ1oCf8EeKA0omRhT7Jag" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_LexDoR59EeKGPvPCWJ8IKg" iD="_LexDoB59EeKGPvPCWJ8IKg" associations="_2R_KQCc3EeKYS8XxoCkLRQ _UyPngCf8EeKA0omRhT7Jag" name="Begin TC workflow" activityType="Task">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_2R2AUSc3EeKYS8XxoCkLRQ"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_UxgAoSf8EeKA0omRhT7Jag"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_Z2-FoSf8EeKA0omRhT7Jag"/>
+    </vertices>
+  </pools>
+  <pools xmi:type="bpmn:Pool" xmi:id="_3QpdIR5_EeKGPvPCWJ8IKg" iD="_3QpdIB5_EeKGPvPCWJ8IKg" name="TC">
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_Hbdy8R9REeKBCuRJN5U2jA" iD="_Hbdy8B9REeKBCuRJN5U2jA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Hbdy8h9REeKBCuRJN5U2jA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Hbdy8x9REeKBCuRJN5U2jA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbgPOB9REeKBCuRJN5U2jA" key="defaultDeclarationName" value="materialTransferForTC1MaterialTransferForTCRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbircR9REeKBCuRJN5U2jA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}materialTransferForTC_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_HbhdUB9REeKBCuRJN5U2jA" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HbiEYB9REeKBCuRJN5U2jA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbircB9REeKBCuRJN5U2jA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_IJaeFh9REeKBCuRJN5U2jA" iD="_IJaeFR9REeKBCuRJN5U2jA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IJaeFx9REeKBCuRJN5U2jA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJaeGB9REeKBCuRJN5U2jA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJc6WB9REeKBCuRJN5U2jA" key="defaultDeclarationName" value="materialTransferForTC1MaterialTransferForTCResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJf9oR9REeKBCuRJN5U2jA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}materialTransferForTC_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_IJeIcB9REeKBCuRJN5U2jA" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IJevgB9REeKBCuRJN5U2jA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJf9oB9REeKBCuRJN5U2jA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_NFOAwCJyEeKnk7bpMIO4Cw" iD="_NFNZsCJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NFOAwSJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFOAwiJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFY_4SJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcTotalFailureTcTotalFailureRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFo3gCJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}tcTotalFailure_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_NFefcCJyEeKnk7bpMIO4Cw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NFjX8CJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFoQcCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_NUKbtiJyEeKnk7bpMIO4Cw" iD="_NUKbtSJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NUKbtyJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUKbuCJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUTloSJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcTotalFailureTcTotalFailureResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUiPICJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}tcTotalFailure_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_NUXQACJyEeKnk7bpMIO4Cw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NUdWoCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUhoECJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_oPqIECKOEeKUApqusUALAQ" iD="_oPnExSKOEeKUApqusUALAQ" name="">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_oPqIESKOEeKUApqusUALAQ" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oPqIEiKOEeKUApqusUALAQ" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oPqIEyKOEeKUApqusUALAQ" key="douri" value="project:///complexvar.xsd?xsdtype={http://www.example.org/complexvar}complexvariable"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_oPvnoCKOEeKUApqusUALAQ" key="defaultDeclarationName" value="complexvariable"/>
+      </eAnnotations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_2SBmhic3EeKYS8XxoCkLRQ" iD="_2SBmhSc3EeKYS8XxoCkLRQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2SBmhyc3EeKYS8XxoCkLRQ" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2SBmiCc3EeKYS8XxoCkLRQ" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2SMloic3EeKYS8XxoCkLRQ" key="defaultDeclarationName" value="thisEventStartMessageRequest"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2SZZ8Sc3EeKYS8XxoCkLRQ" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/TC}EventStartMessageRequest"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_2SQ3ECc3EeKYS8XxoCkLRQ" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2SVIgCc3EeKYS8XxoCkLRQ" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2SZZ8Cc3EeKYS8XxoCkLRQ" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_UxojgSf8EeKA0omRhT7Jag" iD="_UxojgCf8EeKA0omRhT7Jag">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Uxojgif8EeKA0omRhT7Jag" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Uxojgyf8EeKA0omRhT7Jag" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Ux3NAif8EeKA0omRhT7Jag" key="defaultDeclarationName" value="thisEventStartMessageResponse"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyLWECf8EeKA0omRhT7Jag" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/TC}EventStartMessageResponse"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_Ux96sCf8EeKA0omRhT7Jag" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UyEoYCf8EeKA0omRhT7Jag" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_UyKvACf8EeKA0omRhT7Jag" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7aUuYSjqEeKKl72DHT98sw" iD="_7aUuYCjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7aUuYijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7aUuYyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7aa1AijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcBuildJobXMLRequestJobXMLRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7alNESjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}requestJobXML_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7adRQCjqEeKKl72DHT98sw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7aiJwCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7alNECjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7vDoQSjqEeKKl72DHT98sw" iD="_7vDoQCjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7vDoQijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vDoQyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vJu6CjqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcBuildJobXMLRequestJobXMLResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vS40CjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}requestJobXML_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7vMyMCjqEeKKl72DHT98sw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7vP1gCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vSRwCjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_4xHKUR5_EeKGPvPCWJ8IKg" iD="_4xHKUB5_EeKGPvPCWJ8IKg" associations="_2SQ3ECc3EeKYS8XxoCkLRQ" outgoingEdges="_SckrwSHJEeK7ToHmhWq0hw" activityType="EventStartMessage">
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_2R2AUSc3EeKYS8XxoCkLRQ"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_FOm50R9REeKBCuRJN5U2jA" iD="_FOm50B9REeKBCuRJN5U2jA" associations="_7adRQCjqEeKKl72DHT98sw _7vMyMCjqEeKKl72DHT98sw" outgoingEdges="_5XNEMSc2EeKYS8XxoCkLRQ" incomingEdges="_47WOoSc2EeKYS8XxoCkLRQ" name="Build Job">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_7aLkcSjqEeKKl72DHT98sw"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_7u0XsSjqEeKKl72DHT98sw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_FUCzcR9REeKBCuRJN5U2jA" iD="_FUCzcB9REeKBCuRJN5U2jA" associations="_HbhdUB9REeKBCuRJN5U2jA _IJeIcB9REeKBCuRJN5U2jA" outgoingEdges="_47WOoSc2EeKYS8XxoCkLRQ" incomingEdges="_4cehUSc2EeKYS8XxoCkLRQ" name="Transfer for TC">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_HbUB8R9REeKBCuRJN5U2jA"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_IJJ_YR9REeKBCuRJN5U2jA"/>
+    </vertices>
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_ihCDUSHIEeK7ToHmhWq0hw" iD="_ihCDUCHIEeK7ToHmhWq0hw" outgoingEdges="_vxLDsSHIEeK7ToHmhWq0hw" incomingEdges="_5XNEMSc2EeKYS8XxoCkLRQ" documentation="" looping="true">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yWEg8CKaEeKUApqusUALAQ" source="forEachSource">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yWEg8SKaEeKUApqusUALAQ" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
+      </eAnnotations>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_QN0JYSJyEeKnk7bpMIO4Cw" iD="_QN0JYCJyEeKnk7bpMIO4Cw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QN0JYiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QN0JYyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QN6QASJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcFailureTcFailureRequestMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QN_IgSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}tcFailure_input"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_QN8FMCJyEeKnk7bpMIO4Cw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QN9TUCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QN_IgCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_QdHJpSJyEeKnk7bpMIO4Cw" iD="_QdHJpCJyEeKnk7bpMIO4Cw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QdHJpiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdHJpyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdMCIiJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcFailureTcFailureResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdRhsSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}tcFailure_output"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_QdN3UCJyEeKnk7bpMIO4Cw" direction="From">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QdPsgCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdRhsCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_S193YSJyEeKnk7bpMIO4Cw" iD="_S193YCJyEeKnk7bpMIO4Cw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S193YiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S193YyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2Cv4SJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcPassedTcPassedRequestMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2IPcSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}tcPassed_input"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_S2ElECJyEeKnk7bpMIO4Cw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S2GaQCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2IPcCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_TE5rQSJyEeKnk7bpMIO4Cw" iD="_TE5rQCJyEeKnk7bpMIO4Cw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TE5rQiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TE5rQyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TE_K0iJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcPassedTcPassedResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TFHGoCJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}tcPassed_output"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_TFBAACJyEeKnk7bpMIO4Cw" direction="From">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TFDcQCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TFGfkCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_Z3C-ISf8EeKA0omRhT7Jag" iD="_Z3C-ICf8EeKA0omRhT7Jag">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Z3C-Iif8EeKA0omRhT7Jag" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Z3C-Iyf8EeKA0omRhT7Jag" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Z3K58if8EeKA0omRhT7Jag" key="defaultDeclarationName" value="thisEventStartMessageResponse"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Z3Uq8Cf8EeKA0omRhT7Jag" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/TC}EventStartMessageResponse"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_Z3N9QCf8EeKA0omRhT7Jag" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Z3RAkCf8EeKA0omRhT7Jag" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Z3UD4Cf8EeKA0omRhT7Jag" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_8QNNgSjqEeKKl72DHT98sw" iD="_8QNNgCjqEeKKl72DHT98sw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8QNNgijqEeKKl72DHT98sw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QNNgyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QQ34ijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcStartJob1TcStartJobRequestMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QUiQSjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}tcStartJob_input"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_8QSGACjqEeKKl72DHT98sw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8QTUICjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QUiQCjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_8o3lJijqEeKKl72DHT98sw" iD="_8o3lJSjqEeKKl72DHT98sw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8o3lJyjqEeKKl72DHT98sw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8o3lKCjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8o7PiCjqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcStartJob1TcStartJobResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8pAIASjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}tcStartJob_output"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_8o9EsCjqEeKKl72DHT98sw" direction="From">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8o-S0CjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8pAIACjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_ArXxQSjrEeKKl72DHT98sw" iD="_ArXxQCjrEeKKl72DHT98sw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ArXxQijrEeKKl72DHT98sw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArXxQyjrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArcCuCjrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetResult1TcGetResultRequestMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AriJUSjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}tcGetResult_input"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_Ard34CjrEeKKl72DHT98sw" direction="To">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ArftECjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AriJUCjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <artifacts xmi:type="bpmn:DataObject" xmi:id="_BCIEYSjrEeKKl72DHT98sw" iD="_BCIEYCjrEeKKl72DHT98sw">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BCIEYijrEeKKl72DHT98sw" source="attachedDataobject">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCIEYyjrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCM84ijrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetResult1TcGetResultResponseMsg"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCTqkCjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}tcGetResult_output"/>
+        </eAnnotations>
+        <associations xmi:type="bpmn:Association" xmi:id="_BCOyECjrEeKKl72DHT98sw" direction="From">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BCROUCjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCTDgCjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+          </eAnnotations>
+        </associations>
+      </artifacts>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_ihEfkSHIEeK7ToHmhWq0hw" iD="_ihEfkCHIEeK7ToHmhWq0hw" associations="_8QSGACjqEeKKl72DHT98sw _8o9EsCjqEeKKl72DHT98sw" outgoingEdges="_tPuaoSHIEeK7ToHmhWq0hw" name="Start Job">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8QEDkSjqEeKKl72DHT98sw"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8okDICjqEeKKl72DHT98sw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_lHgWUSHIEeK7ToHmhWq0hw" iD="_lHgWUCHIEeK7ToHmhWq0hw" outgoingEdges="_UVsJgSHJEeK7ToHmhWq0hw" incomingEdges="_tPuaoSHIEeK7ToHmhWq0hw" name="Get Status Loop" ncname="" activityType="SubProcess" looping="true">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BnIjMCHKEeK7ToHmhWq0hw" source="forEachSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BnIjMSHKEeK7ToHmhWq0hw" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
+        </eAnnotations>
+        <artifacts xmi:type="bpmn:DataObject" xmi:id="_9La4kSjqEeKKl72DHT98sw" iD="_9La4kCjqEeKKl72DHT98sw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9La4kijqEeKKl72DHT98sw" source="attachedDataobject">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9La4kyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LcGsijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetStatus1TcGetStatusRequestMsg"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LdU0CjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}tcGetStatus_input"/>
+          </eAnnotations>
+          <associations xmi:type="bpmn:Association" xmi:id="_9LcGsyjqEeKKl72DHT98sw" direction="To">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9LctwCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LctwSjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+            </eAnnotations>
+          </associations>
+        </artifacts>
+        <artifacts xmi:type="bpmn:DataObject" xmi:id="_AD6vsSjrEeKKl72DHT98sw" iD="_AD6vsCjrEeKKl72DHT98sw">
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AD6vsijrEeKKl72DHT98sw" source="attachedDataobject">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD6vsyjrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD8k4ijrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetStatus1TcGetStatusResponseMsg"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD-aECjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}tcGetStatus_output"/>
+          </eAnnotations>
+          <associations xmi:type="bpmn:Association" xmi:id="_AD9L8CjrEeKKl72DHT98sw" direction="From">
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AD9zACjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD9zASjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+            </eAnnotations>
+          </associations>
+        </artifacts>
+        <vertices xmi:type="bpmn:Activity" xmi:id="_lHg9YSHIEeK7ToHmhWq0hw" iD="_lHg9YCHIEeK7ToHmhWq0hw" associations="_9LcGsyjqEeKKl72DHT98sw _AD9L8CjrEeKKl72DHT98sw" incomingEdges="_nHScwSHIEeK7ToHmhWq0hw" name="Get Status">
+          <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_9LP5cSjqEeKKl72DHT98sw"/>
+          <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_ADkKYSjrEeKKl72DHT98sw"/>
+        </vertices>
+        <vertices xmi:type="bpmn:Activity" xmi:id="_mkWHwSHIEeK7ToHmhWq0hw" iD="_mkWHwCHIEeK7ToHmhWq0hw" outgoingEdges="_nHScwSHIEeK7ToHmhWq0hw" activityType="EventIntermediateTimer"/>
+        <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_nHScwSHIEeK7ToHmhWq0hw" iD="_nHScwCHIEeK7ToHmhWq0hw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_o7IY8SHIEeK7ToHmhWq0hw" iD="_o7IY8CHIEeK7ToHmhWq0hw" associations="_Ard34CjrEeKKl72DHT98sw _BCOyECjrEeKKl72DHT98sw" outgoingEdges="_E_y9kSHJEeK7ToHmhWq0hw" incomingEdges="_UVsJgSHJEeK7ToHmhWq0hw" name="Get result">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_ArMLESjrEeKKl72DHT98sw"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_BBwQ8SjrEeKKl72DHT98sw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_8fvBASHIEeK7ToHmhWq0hw" iD="_8fvBACHIEeK7ToHmhWq0hw" outgoingEdges="_Jy0nsSHJEeK7ToHmhWq0hw _KL_VoSHJEeK7ToHmhWq0hw" incomingEdges="_E_y9kSHJEeK7ToHmhWq0hw" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_9NgF8SHIEeK7ToHmhWq0hw" iD="_9NgF8CHIEeK7ToHmhWq0hw" associations="_S2ElECJyEeKnk7bpMIO4Cw _TFBAACJyEeKnk7bpMIO4Cw" outgoingEdges="_ZYVo4Sf8EeKA0omRhT7Jag" incomingEdges="_Jy0nsSHJEeK7ToHmhWq0hw" name="Send Success message">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_S1zfUSJyEeKnk7bpMIO4Cw"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_TEjtASJyEeKnk7bpMIO4Cw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_97l7ASHIEeK7ToHmhWq0hw" iD="_97l7ACHIEeK7ToHmhWq0hw" incomingEdges="_Ke31YSHJEeK7ToHmhWq0hw" name="Increase Error Count"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_-NMBUSHIEeK7ToHmhWq0hw" iD="_-NMBUCHIEeK7ToHmhWq0hw" associations="_QN8FMCJyEeKnk7bpMIO4Cw _QdN3UCJyEeKnk7bpMIO4Cw" outgoingEdges="_Ke31YSHJEeK7ToHmhWq0hw" incomingEdges="_KL_VoSHJEeK7ToHmhWq0hw" name="Send Error message">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_QNpxUSJyEeKnk7bpMIO4Cw"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_Qcv9QSJyEeKnk7bpMIO4Cw"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Yr4LgSf8EeKA0omRhT7Jag" iD="_Yr4LgCf8EeKA0omRhT7Jag" associations="_Z3N9QCf8EeKA0omRhT7Jag" incomingEdges="_ZYVo4Sf8EeKA0omRhT7Jag" activityType="EventEndMessage">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_Z2-FoSf8EeKA0omRhT7Jag"/>
+      </vertices>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_tPuaoSHIEeK7ToHmhWq0hw" iD="_tPuaoCHIEeK7ToHmhWq0hw"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_E_y9kSHJEeK7ToHmhWq0hw" iD="_E_y9kCHJEeK7ToHmhWq0hw"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Jy0nsSHJEeK7ToHmhWq0hw" iD="_Jy0nsCHJEeK7ToHmhWq0hw" conditionType="Default" isDefault="true"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_KL_VoSHJEeK7ToHmhWq0hw" iD="_KL_VoCHJEeK7ToHmhWq0hw"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Ke31YSHJEeK7ToHmhWq0hw" iD="_Ke31YCHJEeK7ToHmhWq0hw"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_UVsJgSHJEeK7ToHmhWq0hw" iD="_UVsJgCHJEeK7ToHmhWq0hw"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ZYVo4Sf8EeKA0omRhT7Jag" iD="_ZYVo4Cf8EeKA0omRhT7Jag"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_pEa30SHIEeK7ToHmhWq0hw" iD="_pEa30CHIEeK7ToHmhWq0hw" associations="_NFefcCJyEeKnk7bpMIO4Cw _NUXQACJyEeKnk7bpMIO4Cw" outgoingEdges="_VyGiASf8EeKA0omRhT7Jag" incomingEdges="_vxLDsSHIEeK7ToHmhWq0hw" name="Send Fatal Error Message">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_NE9iESJyEeKnk7bpMIO4Cw"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_NTz2YSJyEeKnk7bpMIO4Cw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_PLwbQSHJEeK7ToHmhWq0hw" iD="_PLwbQCHJEeK7ToHmhWq0hw" outgoingEdges="_4cehUSc2EeKYS8XxoCkLRQ" incomingEdges="_SckrwSHJEeK7ToHmhWq0hw" name="Set errorCount"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_Te37ISf8EeKA0omRhT7Jag" iD="_Te37ICf8EeKA0omRhT7Jag" associations="_Ux96sCf8EeKA0omRhT7Jag" incomingEdges="_VyGiASf8EeKA0omRhT7Jag" activityType="EventEndMessage">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_UxgAoSf8EeKA0omRhT7Jag"/>
+    </vertices>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_vxLDsSHIEeK7ToHmhWq0hw" iD="_vxLDsCHIEeK7ToHmhWq0hw"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SckrwSHJEeK7ToHmhWq0hw" iD="_SckrwCHJEeK7ToHmhWq0hw"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_4cehUSc2EeKYS8XxoCkLRQ" iD="_4cehUCc2EeKYS8XxoCkLRQ"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_47WOoSc2EeKYS8XxoCkLRQ" iD="_47WOoCc2EeKYS8XxoCkLRQ"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_5XNEMSc2EeKYS8XxoCkLRQ" iD="_5XNEMCc2EeKYS8XxoCkLRQ"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_VyGiASf8EeKA0omRhT7Jag" iD="_VyGiACf8EeKA0omRhT7Jag"/>
+  </pools>
+  <pools xmi:type="bpmn:Pool" xmi:id="_3q0QoR5_EeKGPvPCWJ8IKg" iD="_3q0QoB5_EeKGPvPCWJ8IKg" name="WFAdapter">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Ejd-EB6AEeKGPvPCWJ8IKg" source="executablepool">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Ejd-ER6AEeKGPvPCWJ8IKg" key="poolIsExecutable" value="false"/>
+    </eAnnotations>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_Hbj5lh9REeKBCuRJN5U2jA" iD="_Hbj5lR9REeKBCuRJN5U2jA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Hbj5lx9REeKBCuRJN5U2jA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Hbj5mB9REeKBCuRJN5U2jA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HblHuB9REeKBCuRJN5U2jA" key="defaultDeclarationName" value="materialTransferForTC1MaterialTransferForTCRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbmV0R9REeKBCuRJN5U2jA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}materialTransferForTC_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_HbluwB9REeKBCuRJN5U2jA" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HbluwR9REeKBCuRJN5U2jA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbmV0B9REeKBCuRJN5U2jA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_IJVlkR9REeKBCuRJN5U2jA" iD="_IJVlkB9REeKBCuRJN5U2jA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IJVlkh9REeKBCuRJN5U2jA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJVlkx9REeKBCuRJN5U2jA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJXawh9REeKBCuRJN5U2jA" key="defaultDeclarationName" value="materialTransferForTC1MaterialTransferForTCResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJZP8R9REeKBCuRJN5U2jA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}materialTransferForTC_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_IJYB0B9REeKBCuRJN5U2jA" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IJYo4B9REeKBCuRJN5U2jA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJZP8B9REeKBCuRJN5U2jA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_NFrTwSJyEeKnk7bpMIO4Cw" iD="_NFrTwCJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NFrTwiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFrTwyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFuXECJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcTotalFailureTcTotalFailureRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFyBcCJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}tcTotalFailure_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_NFu-ICJyEeKnk7bpMIO4Cw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NFwMQCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFxaYCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_NUCf4SJyEeKnk7bpMIO4Cw" iD="_NUCf4CJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NUCf4iJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUCf4yJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUGKQiJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcTotalFailureTcTotalFailureResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUJ0oSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}tcTotalFailure_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_NUHYYCJyEeKnk7bpMIO4Cw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NUImgCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NUJ0oCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_QOAWpiJyEeKnk7bpMIO4Cw" iD="_QOAWpSJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QOAWpyJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QOAWqCJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QOEBASJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcFailureTcFailureRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QOHrYCJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}tcFailure_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_QOEoECJyEeKnk7bpMIO4Cw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QOF2MCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QOHEUCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_Qc9_sSJyEeKnk7bpMIO4Cw" iD="_Qc9_sCJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Qc9_siJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Qc9_syJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdBqEiJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcFailureTcFailureResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdF7gSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}tcFailure_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_QdC4MCJyEeKnk7bpMIO4Cw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QdEtYCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QdF7gCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_S2JdkSJyEeKnk7bpMIO4Cw" iD="_S2JdkCJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S2JdkiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2JdkyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2NH-CJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcPassedTcPassedRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2RZYSJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}tcPassed_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_S2O9ICJyEeKnk7bpMIO4Cw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S2QLQCJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S2RZYCJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_TEvTMSJyEeKnk7bpMIO4Cw" iD="_TEvTMCJyEeKnk7bpMIO4Cw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TEvTMiJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TEvTMyJyEeKnk7bpMIO4Cw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TEzkoSJyEeKnk7bpMIO4Cw" key="defaultDeclarationName" value="tcPassedTcPassedResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TE4dISJyEeKnk7bpMIO4Cw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}tcPassed_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_TE0ywCJyEeKnk7bpMIO4Cw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TE2n8CJyEeKnk7bpMIO4Cw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TE4dICJyEeKnk7bpMIO4Cw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_E3W3cB9REeKBCuRJN5U2jA" iD="_E3OUkR9REeKBCuRJN5U2jA" associations="_HbluwB9REeKBCuRJN5U2jA _IJYB0B9REeKBCuRJN5U2jA" name="materialTransferForTC" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_E3W3cR9REeKBCuRJN5U2jA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_E3W3ch9REeKBCuRJN5U2jA" key="douri" value="project:///wfAdapter/materialTransferForTC.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}restService/httpPort/materialTransferForTC"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_HbUB8R9REeKBCuRJN5U2jA"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_IJJ_YR9REeKBCuRJN5U2jA"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_MlZRMCJyEeKnk7bpMIO4Cw" iD="_MlPgMCJyEeKnk7bpMIO4Cw" associations="_NFu-ICJyEeKnk7bpMIO4Cw _NUHYYCJyEeKnk7bpMIO4Cw" name="tcTotalFailure" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_MlZRMSJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_MlZRMiJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcTotalFailure.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_NE9iESJyEeKnk7bpMIO4Cw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_NTz2YSJyEeKnk7bpMIO4Cw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_POGY0CJyEeKnk7bpMIO4Cw" iD="_POD8kCJyEeKnk7bpMIO4Cw" associations="_QOEoECJyEeKnk7bpMIO4Cw _QdC4MCJyEeKnk7bpMIO4Cw" name="tcFailure" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_POGY0SJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_POGY0iJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcFailure.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_QNpxUSJyEeKnk7bpMIO4Cw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_Qcv9QSJyEeKnk7bpMIO4Cw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_SVtC8CJyEeKnk7bpMIO4Cw" iD="_SVqmsSJyEeKnk7bpMIO4Cw" associations="_S2O9ICJyEeKnk7bpMIO4Cw _TE0ywCJyEeKnk7bpMIO4Cw" name="tcPassed" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SVtC8SJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SVtC8iJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcPassed.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_S1zfUSJyEeKnk7bpMIO4Cw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_TEjtASJyEeKnk7bpMIO4Cw"/>
+    </vertices>
+  </pools>
+  <pools xmi:type="bpmn:Pool" xmi:id="_0CdI8SjqEeKKl72DHT98sw" iD="_0CdI8CjqEeKKl72DHT98sw" name="TCAdapter">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_E9o3sCjrEeKKl72DHT98sw" source="executablepool">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_E9o3sSjrEeKKl72DHT98sw" key="poolIsExecutable" value="false"/>
+    </eAnnotations>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7al0JijqEeKKl72DHT98sw" iD="_7al0JSjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7al0JyjqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7al0KCjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7anCQijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcBuildJobXMLRequestJobXMLRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7aoQYCjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}requestJobXML_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7anCQyjqEeKKl72DHT98sw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7anpUCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7anpUSjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7u_W0SjqEeKKl72DHT98sw" iD="_7u_W0CjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7u_W0ijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7u_W0yjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vBMAijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcBuildJobXMLRequestJobXMLResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vDBMSjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}requestJobXML_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7vBzECjqEeKKl72DHT98sw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7vCaICjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7vDBMCjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_8QVwYSjqEeKKl72DHT98sw" iD="_8QVwYCjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8QVwYijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QVwYyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QXlkijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcStartJobTcStartJobRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QZawSjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}tcStartJob_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_8QYMoCjqEeKKl72DHT98sw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8QYzsCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QZawCjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_8oxegSjqEeKKl72DHT98sw" iD="_8oxegCjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8oxegijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8oxegyjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8oz6yCjqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcStartJobTcStartJobResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8o2-ESjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}tcStartJob_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_8o1I4CjqEeKKl72DHT98sw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8o1v8CjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8o2-ECjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_9Ld74SjqEeKKl72DHT98sw" iD="_9Ld74CjqEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9Ld74ijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Ld74yjqEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LgYIijqEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetStatusTcGetStatusRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Ll3sSjqEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}tcGetStatus_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_9Lg_MCjqEeKKl72DHT98sw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9LiNUCjqEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Ll3sCjqEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_ADwXoSjrEeKKl72DHT98sw" iD="_ADwXoCjrEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ADwXoijrEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ADwXoyjrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ADza8SjrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetStatusTcGetStatusResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD5hkSjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}tcGetStatus_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_AD0pECjrEeKKl72DHT98sw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AD4TcCjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AD5hkCjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_AriwZijrEeKKl72DHT98sw" iD="_AriwZSjrEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AriwZyjrEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AriwaCjrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArlzuCjrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetResultTcGetResultRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArqFISjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}tcGetResult_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_Arno4CjrEeKKl72DHT98sw" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Aro3ACjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArqFICjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_BB9FQCjrEeKKl72DHT98sw" iD="_BB8eMCjrEeKKl72DHT98sw">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BB9FQSjrEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BB9FQijrEeKKl72DHT98sw" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCCk2CjrEeKKl72DHT98sw" key="defaultDeclarationName" value="tcGetResultTcGetResultResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCHdUCjrEeKKl72DHT98sw" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}tcGetResult_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_BCEaACjrEeKKl72DHT98sw" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BCFoICjrEeKKl72DHT98sw" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BCG2QCjrEeKKl72DHT98sw" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_2xapmCjqEeKKl72DHT98sw" iD="_2xY0YCjqEeKKl72DHT98sw" associations="_7anCQyjqEeKKl72DHT98sw _7vBzECjqEeKKl72DHT98sw" name="requestJobXML" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2xapmSjqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2xapmijqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcBuildJobXML.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_7aLkcSjqEeKKl72DHT98sw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_7u0XsSjqEeKKl72DHT98sw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_3pI7xyjqEeKKl72DHT98sw" iD="_3pGfgSjqEeKKl72DHT98sw" associations="_8QYMoCjqEeKKl72DHT98sw _8o1I4CjqEeKKl72DHT98sw" name="tcStartJob" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3pI7yCjqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3pI7ySjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcStartJob.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8QEDkSjqEeKKl72DHT98sw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8okDICjqEeKKl72DHT98sw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_4lMUUCjqEeKKl72DHT98sw" iD="_4lIC4SjqEeKKl72DHT98sw" associations="_9Lg_MCjqEeKKl72DHT98sw _AD0pECjrEeKKl72DHT98sw" name="tcGetStatus" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4lMUUSjqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4lMUUijqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetStatus.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_9LP5cSjqEeKKl72DHT98sw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_ADkKYSjrEeKKl72DHT98sw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_5bAiCSjqEeKKl72DHT98sw" iD="_5a-s0SjqEeKKl72DHT98sw" associations="_Arno4CjrEeKKl72DHT98sw _BCEaACjrEeKKl72DHT98sw" name="tcGetResult" activityType="Task">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_5bAiCijqEeKKl72DHT98sw" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5bAiCyjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetResult.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult"/>
+      </eAnnotations>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_ArMLESjrEeKKl72DHT98sw"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_BBwQ8SjrEeKKl72DHT98sw"/>
+    </vertices>
+  </pools>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_HbUB8R9REeKBCuRJN5U2jA" iD="_HbUB8B9REeKBCuRJN5U2jA" source="_FUCzcR9REeKBCuRJN5U2jA" target="_E3W3cB9REeKBCuRJN5U2jA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_HbV3IB9REeKBCuRJN5U2jA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HbV3IR9REeKBCuRJN5U2jA" key="douri" value="project:///wfAdapter/materialTransferForTC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}restService/httpPort/materialTransferForTC/input/materialTransferForTCRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_IJJ_YR9REeKBCuRJN5U2jA" iD="_IJJ_YB9REeKBCuRJN5U2jA" source="_E3W3cB9REeKBCuRJN5U2jA" target="_FUCzcR9REeKBCuRJN5U2jA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IJNCsB9REeKBCuRJN5U2jA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IJNCsR9REeKBCuRJN5U2jA" key="douri" value="project:///wfAdapter/materialTransferForTC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}restService/httpPort/materialTransferForTC/output/materialTransferForTCResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_NE9iESJyEeKnk7bpMIO4Cw" iD="_NE9iECJyEeKnk7bpMIO4Cw" source="_pEa30SHIEeK7ToHmhWq0hw" target="_MlZRMCJyEeKnk7bpMIO4Cw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NFBzgCJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NFBzgSJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/input/tcTotalFailureRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_NTz2YSJyEeKnk7bpMIO4Cw" iD="_NTz2YCJyEeKnk7bpMIO4Cw" source="_MlZRMCJyEeKnk7bpMIO4Cw" target="_pEa30SHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NT4H0CJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_NT4H0SJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/output/tcTotalFailureResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_QNpxUSJyEeKnk7bpMIO4Cw" iD="_QNpxUCJyEeKnk7bpMIO4Cw" source="_-NMBUSHIEeK7ToHmhWq0hw" target="_POGY0CJyEeKnk7bpMIO4Cw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QNsNkCJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QNsNkSJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure/input/tcFailureRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_Qcv9QSJyEeKnk7bpMIO4Cw" iD="_Qcv9QCJyEeKnk7bpMIO4Cw" source="_POGY0CJyEeKnk7bpMIO4Cw" target="_-NMBUSHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_QczAkCJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_QczAkSJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure/output/tcFailureResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_S1zfUSJyEeKnk7bpMIO4Cw" iD="_S1zfUCJyEeKnk7bpMIO4Cw" source="_9NgF8SHIEeK7ToHmhWq0hw" target="_SVtC8CJyEeKnk7bpMIO4Cw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_S117kCJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_S117kSJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/input/tcPassedRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_TEjtASJyEeKnk7bpMIO4Cw" iD="_TEjtACJyEeKnk7bpMIO4Cw" source="_SVtC8CJyEeKnk7bpMIO4Cw" target="_9NgF8SHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TEmwUCJyEeKnk7bpMIO4Cw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TEmwUSJyEeKnk7bpMIO4Cw" key="douri" value="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/output/tcPassedResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_2R2AUSc3EeKYS8XxoCkLRQ" iD="_2R2AUCc3EeKYS8XxoCkLRQ" source="_LexDoR59EeKGPvPCWJ8IKg" target="_4xHKUR5_EeKGPvPCWJ8IKg">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Y3Gg0Ci8EeKtcPrB06lUwA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Y3Gg0Si8EeKtcPrB06lUwA" key="douri" value="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioTCFlow"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_UxgAoSf8EeKA0omRhT7Jag" iD="_UxgAoCf8EeKA0omRhT7Jag" source="_Te37ISf8EeKA0omRhT7Jag" target="_LexDoR59EeKGPvPCWJ8IKg"/>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_Z2-FoSf8EeKA0omRhT7Jag" iD="_Z2-FoCf8EeKA0omRhT7Jag" source="_Yr4LgSf8EeKA0omRhT7Jag" target="_LexDoR59EeKGPvPCWJ8IKg"/>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_7aLkcSjqEeKKl72DHT98sw" iD="_7aLkcCjqEeKKl72DHT98sw" source="_FOm50R9REeKBCuRJN5U2jA" target="_2xapmCjqEeKKl72DHT98sw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7aOnwCjqEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7aOnwSjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcBuildJobXML.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML/input/requestJobXMLRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_7u0XsSjqEeKKl72DHT98sw" iD="_7u0XsCjqEeKKl72DHT98sw" source="_2xapmCjqEeKKl72DHT98sw" target="_FOm50R9REeKBCuRJN5U2jA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7u4CECjqEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7u4CESjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcBuildJobXML.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML/output/requestJobXMLResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_8QEDkSjqEeKKl72DHT98sw" iD="_8QEDkCjqEeKKl72DHT98sw" source="_ihEfkSHIEeK7ToHmhWq0hw" target="_3pI7xyjqEeKKl72DHT98sw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8QHG4CjqEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8QHG4SjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcStartJob.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob/input/tcStartJobRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_8okDICjqEeKKl72DHT98sw" iD="_8ojcECjqEeKKl72DHT98sw" source="_3pI7xyjqEeKKl72DHT98sw" target="_ihEfkSHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8ontgCjqEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8ontgSjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcStartJob.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob/output/tcStartJobResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_9LP5cSjqEeKKl72DHT98sw" iD="_9LP5cCjqEeKKl72DHT98sw" source="_lHg9YSHIEeK7ToHmhWq0hw" target="_4lMUUCjqEeKKl72DHT98sw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9LTj0CjqEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9LTj0SjqEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetStatus.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus/input/tcGetStatusRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_ADkKYSjrEeKKl72DHT98sw" iD="_ADkKYCjrEeKKl72DHT98sw" source="_4lMUUCjqEeKKl72DHT98sw" target="_lHg9YSHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ADob0CjrEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ADob0SjrEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetStatus.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus/output/tcGetStatusResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_ArMLESjrEeKKl72DHT98sw" iD="_ArMLECjrEeKKl72DHT98sw" source="_o7IY8SHIEeK7ToHmhWq0hw" target="_5bAiCSjqEeKKl72DHT98sw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ArQcgCjrEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ArQcgSjrEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult/input/tcGetResultRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_BBwQ8SjrEeKKl72DHT98sw" iD="_BBwQ8CjrEeKKl72DHT98sw" source="_5bAiCSjqEeKKl72DHT98sw" target="_o7IY8SHIEeK7ToHmhWq0hw">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BB0iYCjrEeKKl72DHT98sw" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BB0iYSjrEeKKl72DHT98sw" key="douri" value="project:///tcAdapter/tcGetResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult/output/tcGetResultResponse"/>
+    </eAnnotations>
+  </messages>
+</bpmn:BpmnDiagram>

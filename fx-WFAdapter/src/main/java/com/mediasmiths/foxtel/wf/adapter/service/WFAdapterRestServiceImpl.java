@@ -86,7 +86,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info("Received AssetTransferForQCRequest " + req.toString());
 		final String id = req.getAssetId();
-		final String filename = req.getAssetId() + ".mxf";
+		//TODO change this to mxf once we have proper profiles
+		final String filename = req.getAssetId() + ".mov";
 		final URI destination;
 		File destinationFile;
 

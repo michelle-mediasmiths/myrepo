@@ -46,9 +46,6 @@ public class QCRestServiceImpl implements QCRestService
 	@Inject
 	@Named("cerify.medialoction.path.nix")
 	private String mediaLocationPath;
-	@Inject
-	@Named("tx.tcoutput.location")
-	private String transcodeoutputLocationPath;
 
 	@Inject
 	public QCRestServiceImpl(CerifyClient cerifyClient, PathResolver pathResolver)

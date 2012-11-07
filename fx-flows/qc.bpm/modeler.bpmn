@@ -52,7 +52,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6T9cQh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6T9cQx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6T_RcR9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="assetTransferForQCAssetTransferForQCRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UAfkR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/assetTransferForQC.rest}assetTransferForQC_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UAfkR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}assetTransferForQC_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_6T_Rch9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6T_4gB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -64,7 +64,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6li7gh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6li7gx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6lkJqB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="assetTransferForQCAssetTransferForQCResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6ll-0R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/assetTransferForQC.rest}assetTransferForQC_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6ll-0R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}assetTransferForQC_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_6lkwsB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6llXwB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -76,7 +76,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7w-z4h9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7w-z4x9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xApGB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="getProfileForQCGetProfileForQCRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xDFUR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/getProfileForQC.rest}getProfileForQC_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xDFUR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}getProfileForQC_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_7xBQIB9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7xCeQB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -88,7 +88,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8BqUMh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BqUMx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BsJaB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="getProfileForQCGetProfileForQCResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BvMsR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/getProfileForQC.rest}getProfileForQC_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BvMsR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}getProfileForQC_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_8BtXgB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8Bt-kB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -100,7 +100,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BjbToh90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjbTox90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjiBUR90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcErrorAutoQcErrorRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjqkMB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcError.rest}autoQcError_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjqkMB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}autoQcError_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_BjkdkB90EeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Bjng4B90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -112,7 +112,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B40U2B90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B40U2R90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B47Cgh90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcErrorAutoQcErrorResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B5DlYB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcError.rest}autoQcError_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B5DlYB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}autoQcError_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_B49ewB90EeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B5AiEB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -158,7 +158,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8cfPAh9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cfPAx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cgdJB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcStartQcStartRequestMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8chEMh9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcStart.rest}qcStart_input"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8chEMh9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}qcStart_input"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_8cgdJR9zEeKCKo-8QnTuIA" direction="To">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8chEMB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -170,7 +170,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8wfJFx9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wfJGB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wgXOB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcStartQcStartResponseMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wiMYB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcStart.rest}qcStart_output"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wiMYB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}qcStart_output"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_8wg-QB9zEeKCKo-8QnTuIA" direction="From">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8whlUB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -182,7 +182,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-U_owh9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-U_owx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VCFBx9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcResultQcResultRequestMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VFIUR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcResult.rest}qcResult_input"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VFIUR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}qcResult_input"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_-VDTIB9zEeKCKo-8QnTuIA" direction="To">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-VD6MB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -194,7 +194,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-rOXdx9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rOXeB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rRawh9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcResultQcResultResponseMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rYIcB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcResult.rest}qcResult_output"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rYIcB9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}qcResult_output"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_-rSo4B9zEeKCKo-8QnTuIA" direction="From">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-rWTQB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -206,7 +206,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__Rshkh9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__Rshkx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__Rvk4h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcPassedAutoQcPassedRequestMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R25oR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcPassed.rest}autoQcPassed_input"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R25oR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}autoQcPassed_input"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="__Rz2UB9zEeKCKo-8QnTuIA" direction="To">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__R1rgB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -218,7 +218,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__ofQ9x9zEeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__ofQ-B9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oi7Uh9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcPassedAutoQcPassedResponseMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__onMwR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcPassed.rest}autoQcPassed_output"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__onMwR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}autoQcPassed_output"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="__okJcB9zEeKCKo-8QnTuIA" direction="From">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__olXkB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -230,7 +230,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AV6Xoh90EeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AV6Xox90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AV-CCB90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcFailedAutoQcFailedRequestMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWC6gR90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcFailed.rest}autoQcFailed_input"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWC6gR90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}autoQcFailed_input"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_AV_3MB90EeKCKo-8QnTuIA" direction="To">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AWBFUB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -242,7 +242,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtS84h90EeKCKo-8QnTuIA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtS84x90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtXOUR90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcFailedAutoQcFailedResponseMsg"/>
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtcG0R90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcFailed.rest}autoQcFailed_output"/>
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtcG0R90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}autoQcFailed_output"/>
         </eAnnotations>
         <associations xmi:type="bpmn:Association" xmi:id="_AtYccB90EeKCKo-8QnTuIA" direction="From">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtaRoB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -279,7 +279,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9Nbjwh9zEeKCKo-8QnTuIA" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Nbjwx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Ncx6B9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcFinishedQcFinishedRequestMsg"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NdY8h9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcFinished.rest}qcFinished_input"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NdY8h9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}qcFinished_input"/>
           </eAnnotations>
           <associations xmi:type="bpmn:Association" xmi:id="_9Ncx6R9zEeKCKo-8QnTuIA" direction="To">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9NdY8B9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -291,7 +291,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9htKpx9zEeKCKo-8QnTuIA" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9htKqB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hu_0h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcFinishedQcFinishedResponseMsg"/>
-            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hwN8R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcFinished.rest}qcFinished_output"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hwN8R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}qcFinished_output"/>
           </eAnnotations>
           <associations xmi:type="bpmn:Association" xmi:id="_9hvm4B9zEeKCKo-8QnTuIA" direction="From">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9hvm4R9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -328,7 +328,7 @@
       </vertices>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_RzwkAR9zEeKCKo-8QnTuIA" iD="_RzwkAB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SHNEcR9zEeKCKo-8QnTuIA" iD="_SHNEcB9zEeKCKo-8QnTuIA"/>
-      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SdxxYR9zEeKCKo-8QnTuIA" iD="_SdxxYB9zEeKCKo-8QnTuIA"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SdxxYR9zEeKCKo-8QnTuIA" iD="_SdxxYB9zEeKCKo-8QnTuIA" conditionType="Default" isDefault="true"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SzLZoR9zEeKCKo-8QnTuIA" iD="_SzLZoB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_TOvUQR9zEeKCKo-8QnTuIA" iD="_TOvUQB9zEeKCKo-8QnTuIA"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_TrfhsR9zEeKCKo-8QnTuIA" iD="_TrfhsB9zEeKCKo-8QnTuIA"/>
@@ -358,7 +358,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8chrRx9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8chrSB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8ci5YR9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcStartQcStartRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cjgcR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcStart.rest}qcStart_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cjgcR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}qcStart_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_8ci5Yh9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8ci5Yx9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -370,7 +370,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8wcFwh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wcFwx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wdT4h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcStartQcStartResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8weiAR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcStart.rest}qcStart_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8weiAR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}qcStart_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_8wdT4x9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8wd68B9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -382,7 +382,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9NeABx9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NeACB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9Nf1Mh9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcFinishedQcFinishedRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NhqYR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcFinished.rest}qcFinished_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NhqYR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}qcFinished_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_9NgcQB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9NhDUB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -394,7 +394,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9ho5Mh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9ho5Mx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hquYh9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcFinishedQcFinishedResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hsjkR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcFinished.rest}qcFinished_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hsjkR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}qcFinished_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_9hrVcB9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9hr8gB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -406,7 +406,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-VFvZx9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VFvaB9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VHkmB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcResultQcResultRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VNrMR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcResult.rest}qcResult_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-VNrMR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}qcResult_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_-VIysB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-VMdEB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -418,7 +418,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-rIQ0h9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rIQ0x9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rKtGB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="qcResultQcResultResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rNwYR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/qcAdapterRest/qcResult.rest}qcResult_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rNwYR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}qcResult_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_-rL7MB9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-rNJUB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -428,21 +428,21 @@
     </artifacts>
     <vertices xmi:type="bpmn:Activity" xmi:id="_jwB8UB9zEeKCKo-8QnTuIA" iD="_jv_gEB9zEeKCKo-8QnTuIA" associations="_8ci5Yh9zEeKCKo-8QnTuIA _8wdT4x9zEeKCKo-8QnTuIA" name="qcStart" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jwB8UR9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_jwB8Uh9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?wsdloperationbound={http://example.com/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_jwB8Uh9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_8cX6QR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8wS70R9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_lOSDAB9zEeKCKo-8QnTuIA" iD="_lOQN0B9zEeKCKo-8QnTuIA" associations="_9NgcQB9zEeKCKo-8QnTuIA _9hrVcB9zEeKCKo-8QnTuIA" name="qcFinished" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lOSDAR9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lOSDAh9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?wsdloperationbound={http://example.com/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lOSDAh9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_9NUPAR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_9hfIMR9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_mwHCJx9zEeKCKo-8QnTuIA" iD="_mwFM8B9zEeKCKo-8QnTuIA" associations="_-VIysB9zEeKCKo-8QnTuIA _-rL7MB9zEeKCKo-8QnTuIA" name="qcResult" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mwHCKB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mwHCKR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?wsdloperationbound={http://example.com/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mwHCKR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_-U4UAR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_-q94wB9zEeKCKo-8QnTuIA"/>
@@ -456,7 +456,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6UBGph9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UBGpx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UBtuB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="assetTransferForQCAssetTransferForQCRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UCUwh9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/assetTransferForQC.rest}assetTransferForQC_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6UCUwh9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}assetTransferForQC_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_6UBtuR9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6UCUwB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -468,7 +468,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6lfRIh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6lfRIx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6lgfSB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="assetTransferForQCAssetTransferForQCResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6liUcR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/assetTransferForQC.rest}assetTransferForQC_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6liUcR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}assetTransferForQC_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_6lhGUB9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6lhtYB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -480,7 +480,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7xDsYh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xDsYx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xE6iB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="getProfileForQCGetProfileForQCRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xGvsR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/getProfileForQC.rest}getProfileForQC_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7xGvsR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}getProfileForQC_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_7xFhkB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7xGIoB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -492,7 +492,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8Blbsh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8Blbsx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BnQ4h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="getProfileForQCGetProfileForQCResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BptIR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/getProfileForQC.rest}getProfileForQC_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BptIR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}getProfileForQC_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_8Bn38B9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8BofAB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -504,7 +504,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__R3gsh9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R3gsx9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R5V6B9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcPassedAutoQcPassedRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R8ZMR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcPassed.rest}autoQcPassed_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__R8ZMR9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}autoQcPassed_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="__R6kAB9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__R7LEB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -516,7 +516,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__oVf8h9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oVf8x9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oX8OB9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcPassedAutoQcPassedResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oep4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcPassed.rest}autoQcPassed_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oep4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}autoQcPassed_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="__oZKUB9zEeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__oaYcB9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -528,7 +528,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AWDhkh90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWDhkx90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWGk4B90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcFailedAutoQcFailedRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWJoMR90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcFailed.rest}autoQcFailed_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AWJoMR90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}autoQcFailed_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_AWHL8B90EeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AWIaEB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -540,7 +540,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtLBEh90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtLBEx90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtOEaB90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcFailedAutoQcFailedResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtSV0R90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcFailed.rest}autoQcFailed_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtSV0R90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}autoQcFailed_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_AtPSgB90EeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtRHsB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -552,7 +552,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BjrLQh90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjrLQx90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Bju1oh90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcErrorAutoQcErrorRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjzuIB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcError.rest}autoQcError_input"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjzuIB90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}autoQcError_input"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_BjwDwB90EeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Bjx48B90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -564,7 +564,7 @@
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B4qj0h90EeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B4qj0x90EeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B4u1Qh90EeKCKo-8QnTuIA" key="defaultDeclarationName" value="autoQcErrorAutoQcErrorResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B40U0B90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://example.com/wfAdapter/autoQcError.rest}autoQcError_output"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B40U0B90EeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}autoQcError_output"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_B4wqcB90EeKCKo-8QnTuIA" direction="To">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B4x4kB90EeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">
@@ -574,124 +574,123 @@
     </artifacts>
     <vertices xmi:type="bpmn:Activity" xmi:id="_pdGz5R9zEeKCKo-8QnTuIA" iD="_pdE-sB9zEeKCKo-8QnTuIA" associations="_6UBtuR9zEeKCKo-8QnTuIA _6lhGUB9zEeKCKo-8QnTuIA" name="assetTransferForQC" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pdGz5h9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pdGz5x9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?wsdloperationbound={http://example.com/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pdGz5x9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_6T1gcR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_6lWHMR9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_qV1yvx9zEeKCKo-8QnTuIA" iD="_qV0kkB9zEeKCKo-8QnTuIA" associations="_7xFhkB9zEeKCKo-8QnTuIA _8Bn38B9zEeKCKo-8QnTuIA" name="getProfileForQC" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qV1ywB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qV1ywR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?wsdloperationbound={http://example.com/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qV1ywR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_7w2RAR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_8BbqsR9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_r_FoeB9zEeKCKo-8QnTuIA" iD="_r_DzQB9zEeKCKo-8QnTuIA" associations="__R6kAB9zEeKCKo-8QnTuIA __oZKUB9zEeKCKo-8QnTuIA" name="autoQcPassed" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_r_FoeR9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_r_Foeh9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?wsdloperationbound={http://example.com/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_r_Foeh9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#__RiwkR9zEeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#__oKg0R9zEeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_s3FAaB9zEeKCKo-8QnTuIA" iD="_s3DLMR9zEeKCKo-8QnTuIA" associations="_AWHL8B90EeKCKo-8QnTuIA _AtPSgB90EeKCKo-8QnTuIA" name="autoQcFailed" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_s3FAaR9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_s3FAah9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?wsdloperationbound={http://example.com/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_s3FAah9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_AVs8QR90EeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_As_a4R90EeKCKo-8QnTuIA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_tuuaGB9zEeKCKo-8QnTuIA" iD="_tusk4R9zEeKCKo-8QnTuIA" associations="_BjwDwB90EeKCKo-8QnTuIA _B4wqcB90EeKCKo-8QnTuIA" name="autoQcError" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_tuuaGR9zEeKCKo-8QnTuIA" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_tuuaGh9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?wsdloperationbound={http://example.com/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_tuuaGh9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError"/>
       </eAnnotations>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_BjN4QR90EeKCKo-8QnTuIA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_B4e9oR90EeKCKo-8QnTuIA"/>
     </vertices>
   </pools>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_XVXLYR9zEeKCKo-8QnTuIA" iD="_XVXLYB9zEeKCKo-8QnTuIA" source="_Q35DmR9xEeKCKo-8QnTuIA" target="_bWc3sR9yEeKCKo-8QnTuIA">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_sdqlYB90EeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_sdqlYR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"/>
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_sdqlYh90EeKCKo-8QnTuIA" key="douri2" value="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"/>
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AyLFACi4EeKtcPrB06lUwA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AyLFASi4EeKtcPrB06lUwA" key="douri" value="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_6T1gcR9zEeKCKo-8QnTuIA" iD="_6T1gcB9zEeKCKo-8QnTuIA" source="_l5W1wR9yEeKCKo-8QnTuIA" target="_pdGz5R9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6T4jwB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6T4jwR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?messageForBoundOperation={http://example.com/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC/input/assetTransferForQCRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6T4jwR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC/input/assetTransferForQCRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_6lWHMR9zEeKCKo-8QnTuIA" iD="_6lWHMB9zEeKCKo-8QnTuIA" source="_pdGz5R9zEeKCKo-8QnTuIA" target="_l5W1wR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6lZKgB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6lZKgR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?messageForBoundOperation={http://example.com/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC/output/assetTransferForQCResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6lZKgR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC/output/assetTransferForQCResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_7w2RAR9zEeKCKo-8QnTuIA" iD="_7w2RAB9zEeKCKo-8QnTuIA" source="_r_RrIR9yEeKCKo-8QnTuIA" target="_qV1yvx9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7w4tQB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7w4tQR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?messageForBoundOperation={http://example.com/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC/input/getProfileForQCRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7w4tQR9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC/input/getProfileForQCRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_8BbqsR9zEeKCKo-8QnTuIA" iD="_8BbqsB9zEeKCKo-8QnTuIA" source="_qV1yvx9zEeKCKo-8QnTuIA" target="_r_RrIR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8BfVEB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BfVER9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?messageForBoundOperation={http://example.com/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC/output/getProfileForQCResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8BfVER9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/getProfileForQC.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest}restService/httpPort/getProfileForQC/output/getProfileForQCResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_8cX6QR9zEeKCKo-8QnTuIA" iD="_8cX6QB9zEeKCKo-8QnTuIA" source="_v_G9wR9yEeKCKo-8QnTuIA" target="_jwB8UB9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8cZvcB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cZvcR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart/input/qcStartRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8cZvcR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart/input/qcStartRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_8wS70R9zEeKCKo-8QnTuIA" iD="_8wS70B9zEeKCKo-8QnTuIA" source="_jwB8UB9zEeKCKo-8QnTuIA" target="_v_G9wR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8wV_IB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wV_IR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart/output/qcStartResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8wV_IR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcStart.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest}restService/httpPort/qcStart/output/qcStartResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_9NUPAR9zEeKCKo-8QnTuIA" iD="_9NUPAB9zEeKCKo-8QnTuIA" source="_yPDAER9yEeKCKo-8QnTuIA" target="_lOSDAB9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9NWrQB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NWrQR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/input/qcFinishedRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9NWrQR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/input/qcFinishedRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_9hfIMR9zEeKCKo-8QnTuIA" iD="_9hfIMB9zEeKCKo-8QnTuIA" source="_lOSDAB9zEeKCKo-8QnTuIA" target="_yPDAER9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_9hiLgB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hiLgR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/output/qcFinishedResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9hiLgR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/output/qcFinishedResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_-U4UAR9zEeKCKo-8QnTuIA" iD="_-U4UAB9zEeKCKo-8QnTuIA" source="_3KY4sR9yEeKCKo-8QnTuIA" target="_mwHCJx9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-U6JMB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-U6JMR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult/input/qcResultRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-U6JMR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult/input/qcResultRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_-q94wB9zEeKCKo-8QnTuIA" iD="_-q9RsB9zEeKCKo-8QnTuIA" source="_mwHCJx9zEeKCKo-8QnTuIA" target="_3KY4sR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_-rBjIB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rBjIR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?messageForBoundOperation={http://example.com/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult/output/qcResultResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-rBjIR9zEeKCKo-8QnTuIA" key="douri" value="project:///qcAdapterRest/qcResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest}restService/httpPort/qcResult/output/qcResultResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="__RiwkR9zEeKCKo-8QnTuIA" iD="__RiwkB9zEeKCKo-8QnTuIA" source="_-bnDkR9yEeKCKo-8QnTuIA" target="_r_FoeB9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__Rlz4B9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__Rlz4R9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed/input/autoQcPassedRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__Rlz4R9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed/input/autoQcPassedRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="__oKg0R9zEeKCKo-8QnTuIA" iD="__oKg0B9zEeKCKo-8QnTuIA" source="_r_FoeB9zEeKCKo-8QnTuIA" target="_-bnDkR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="__oOLMB9zEeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oOyQB9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed/output/autoQcPassedResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__oOyQB9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest}restService/httpPort/autoQcPassed/output/autoQcPassedResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_AVs8QR90EeKCKo-8QnTuIA" iD="_AVs8QB90EeKCKo-8QnTuIA" source="__ktZoR9yEeKCKo-8QnTuIA" target="_s3FAaB9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AV0RAB90EeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AV0RAR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed/input/autoQcFailedRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AV0RAR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed/input/autoQcFailedRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_As_a4R90EeKCKo-8QnTuIA" iD="_As_a4B90EeKCKo-8QnTuIA" source="_s3FAaB9zEeKCKo-8QnTuIA" target="__ktZoR9yEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtDsUB90EeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtDsUR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed/output/autoQcFailedResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtDsUR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcFailed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest}restService/httpPort/autoQcFailed/output/autoQcFailedResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_BjN4QR90EeKCKo-8QnTuIA" iD="_BjN4QB90EeKCKo-8QnTuIA" source="_MsJxAR9zEeKCKo-8QnTuIA" target="_tuuaGB9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BjRioB90EeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjRioR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/input/autoQcErrorRequest"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BjRioR90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/input/autoQcErrorRequest"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_B4e9oR90EeKCKo-8QnTuIA" iD="_B4e9oB90EeKCKo-8QnTuIA" source="_tuuaGB9zEeKCKo-8QnTuIA" target="_MsJxAR9zEeKCKo-8QnTuIA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_B4jPEB90EeKCKo-8QnTuIA" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B4jPER90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://example.com/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/output/autoQcErrorResponse"/>
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_B4jPER90EeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/output/autoQcErrorResponse"/>
     </eAnnotations>
   </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_GXJa4SKhEeKJt7IsuN4hnw" iD="_GXJa4CKhEeKJt7IsuN4hnw" source="_0XbtASKgEeKJt7IsuN4hnw" target="_Q35DmR9xEeKCKo-8QnTuIA"/>

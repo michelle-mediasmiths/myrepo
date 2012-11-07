@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-TcAdapter/tc/job/build/" ID="_kjrGwCjqEeKDO6twhjz9IQ">
+  <rest:operation verb="POST" name="requestJobXML" ID="_kjrGwSjqEeKDO6twhjz9IQ">
+    <rest:input type="project:///tcAdapter/tcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/tc/adapter}tcBuildJobXMLRequest" name="body" headerDirection="request" contentType="application/xml" ID="_kjrGwijqEeKDO6twhjz9IQ"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="text/plain" ID="_kjrGwyjqEeKDO6twhjz9IQ"/>
+  </rest:operation>
+</rest:descriptor>
