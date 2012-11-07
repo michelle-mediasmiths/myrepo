@@ -214,7 +214,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	@Category (ValidationTests.class)
 	public void testCreateTitleTitleIdNull() throws IOException, Exception {
 		
-		logger.info("TitleID is null");
+		logger.info("TitleID is missing from xml");
 		
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		
@@ -223,9 +223,9 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 				.get(0));		
 		coup.setTitleID(null);
 		
-		File temp = createTempXMLFile (message, "createTitleTitleIdNull");
+		File temp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 		
-		assertEquals(MessageValidationResult.TITLEID_IS_NULL, validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validateFile(temp.getAbsolutePath()));
 	}
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {

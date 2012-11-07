@@ -15,7 +15,8 @@ import org.xml.sax.SAXParseException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-public class FileWriter {
+public class FileWriter
+{
 
 	/**
 	 * Writes a PlaceholderMessage to an XML file and validates its structure
@@ -24,32 +25,38 @@ public class FileWriter {
 	 * @param filepath
 	 * @throws Exception
 	 */
-	public void writeObjectToFile(final PlaceholderMessage message,
-			final String filepath) throws Exception {
+	public void writeObjectToFile(final PlaceholderMessage message, final String filepath) throws Exception
+	{
+		writeObjectToFile(message, filepath, true);
+	}
+
+	public void writeObjectToFile(final PlaceholderMessage message, final String filepath, boolean validate) throws Exception
+	{
 
 		JAXBContext context = getJAXBContext();
 		Marshaller marshaller = context.createMarshaller();
 
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		SchemaFactory factory = SchemaFactory
-				.newInstance("http://www.w3.org/2001/XMLSchema");
-		Schema schema = factory.newSchema(TestAddOrUpdateMaterial.class.getClassLoader()
-				.getResource("PlaceholderManagement.xsd"));
-		marshaller.setSchema(schema);
-		
+		if (validate)
+		{
+			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = factory.newSchema(getClass().getClassLoader().getResource("PlaceholderManagement.xsd"));
+			marshaller.setSchema(schema);
+		}
 		File dir = new File(FilenameUtils.getFullPath(filepath));
-		
-		if(!dir.exists()){
+
+		if (!dir.exists())
+		{
 			dir.mkdirs();
 		}
 
 		marshaller.marshal(message, new FileOutputStream(new File(filepath)));
 	}
 
-	public static JAXBContext getJAXBContext() throws Exception {
+	public static JAXBContext getJAXBContext() throws Exception
+	{
 
-		return JAXBContext
-				.newInstance(au.com.foxtel.cf.mam.pms.PlaceholderMessage.class);
+		return JAXBContext.newInstance(au.com.foxtel.cf.mam.pms.PlaceholderMessage.class);
 	}
 
 	/**
@@ -58,21 +65,25 @@ public class FileWriter {
 	 * @author alisonboal
 	 * 
 	 */
-	static class MyErrorHandler implements ErrorHandler {
+	static class MyErrorHandler implements ErrorHandler
+	{
 		@Override
-		public void warning(SAXParseException exception) throws SAXException {
+		public void warning(SAXParseException exception) throws SAXException
+		{
 			System.out.println("\nWARNING");
 			exception.printStackTrace();
 		}
 
 		@Override
-		public void error(SAXParseException exception) throws SAXException {
+		public void error(SAXParseException exception) throws SAXException
+		{
 			System.out.println("\nERROR");
 			exception.printStackTrace();
 		}
 
 		@Override
-		public void fatalError(SAXParseException exception) throws SAXException {
+		public void fatalError(SAXParseException exception) throws SAXException
+		{
 			System.out.println("\nFATAL ERROR");
 			exception.printStackTrace();
 		}

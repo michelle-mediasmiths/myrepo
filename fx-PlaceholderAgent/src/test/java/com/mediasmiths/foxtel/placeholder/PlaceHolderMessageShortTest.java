@@ -40,27 +40,31 @@ import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
-public abstract class PlaceHolderMessageShortTest {
+public abstract class PlaceHolderMessageShortTest
+{
 
 	protected PlaceholderMessageValidator validator;
 	protected PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
 	protected final MayamValidator mayamValidator = mock(MayamValidator.class);
-	protected final ChannelValidator channelValidator = new ChannelValidator() {
-		
+	protected final ChannelValidator channelValidator = new ChannelValidator()
+	{
+
 		@Override
-		public boolean isValidNameForTag(String channelTag, String channelName) {
+		public boolean isValidNameForTag(String channelTag, String channelName)
+		{
 			return true;
 		}
-		
+
 		@Override
-		public boolean isValidFormatForTag(String channelTag, String channelFormat) {
+		public boolean isValidFormatForTag(String channelTag, String channelFormat)
+		{
 			return true;
 		}
 	};
 	protected final AlertInterface alert = mock(AlertInterface.class);
 	protected final String alertRecipient = "alert@foxtel.com.au";
-	
+
 	protected final static String MESSAGE_ID = "123456asdfg";
 	protected final static String SENDER_ID = "123456asdfg";
 
@@ -72,52 +76,61 @@ public abstract class PlaceHolderMessageShortTest {
 	protected final static String NOT_EXISTING_MATERIAL = "NOT_EXISTING";
 	protected final static String EXISTING_PACKAGE_ID = "NEW_MATERIAL";
 	protected final static String NOT_EXISTING_PACKAGE = "NOT_EXISTING";
-	
+
 	protected final static String UNKNOWN_CHANNEL_TAG = "UNKNOWN_CHANNEL_TAG";
 	protected final static String UNKOWN_CHANNEL_NAME = "UNKNOWN_CHANNEL_NAME";
 
 	protected String receiptFolderPath;
-	
-	protected final static GregorianCalendar JAN1st = new GregorianCalendar(
-			2000, 1, 1, 0, 0, 1);
-	protected final static GregorianCalendar JAN10th = new GregorianCalendar(
-			2000, 1, 10, 0, 0, 1);
 
-	public PlaceHolderMessageShortTest() {
+	protected final static GregorianCalendar JAN1st = new GregorianCalendar(2000, 1, 1, 0, 0, 1);
+	protected final static GregorianCalendar JAN10th = new GregorianCalendar(2000, 1, 10, 0, 0, 1);
+
+	public PlaceHolderMessageShortTest()
+	{
 	}
-	
+
 	@Before
-	public void before() throws IOException, JAXBException, SAXException{
+	public void before() throws IOException, JAXBException, SAXException
+	{
 		receiptFolderPath = Util.prepareTempFolder("RECEIPTS");
-		
+
 		JAXBContext jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		Marshaller marshaller = jc.createMarshaller();
 		EventService events = mock(EventService.class);
-		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient,mayamValidator, new ReceiptWriter(receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
-		processor = new PlaceholderMessageProcessor( new FilesPendingProcessingQueue(), validator, new ReceiptWriter(receiptFolderPath),
-				unmarhsaller,marshaller, mayamClient, "failure path", "receipt path",events);
+		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(
+				receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
+		processor = new PlaceholderMessageProcessor(new FilesPendingProcessingQueue(), validator, new ReceiptWriter(
+				receiptFolderPath), unmarhsaller, marshaller, mayamClient, "failure path", "receipt path", events);
 
 	}
-	
+
 	@After
-	public void after(){
+	public void after()
+	{
 		Util.deleteFiles(receiptFolderPath);
 	}
 
-	protected File createTempXMLFile(PlaceholderMessage pm, String description)
-			throws IOException, Exception {
+	protected File createTempXMLFile(PlaceholderMessage pm, String description) throws IOException, Exception
+	{
+		return createTempXMLFile(pm, description, true);
+	}
+
+	protected File createTempXMLFile(PlaceholderMessage pm, String description, boolean validate) throws IOException, Exception
+	{
 		// marshall and write to file
 		FileWriter writer = new FileWriter();
-		File temp = new File("/tmp/placeHolderTestData/"+description+"__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
+		File temp = new File("/tmp/placeHolderTestData/" + description + "__" + RandomStringUtils.randomAlphabetic(6) + ".xml");
 
-		writer.writeObjectToFile(pm, temp.getAbsolutePath());
+		writer.writeObjectToFile(pm, temp.getAbsolutePath(), validate);
 		return temp;
 	}
 
-	protected static PlaceholderMessage buildAddMaterialRequest(String titleID,
-			GregorianCalendar created, GregorianCalendar required)
-			throws DatatypeConfigurationException {
+	protected static PlaceholderMessage buildAddMaterialRequest(
+			String titleID,
+			GregorianCalendar created,
+			GregorianCalendar required) throws DatatypeConfigurationException
+	{
 		MaterialType m = buildMaterial(NEW_MATERIAL_ID, created, required);
 
 		AddOrUpdateMaterial aum = new AddOrUpdateMaterial();
@@ -125,8 +138,7 @@ public abstract class PlaceHolderMessageShortTest {
 		aum.setMaterial(m);
 
 		Actions actions = new Actions();
-		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(
-				aum);
+		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(aum);
 
 		PlaceholderMessage pm = new PlaceholderMessage();
 		pm.setMessageID(MESSAGE_ID);
@@ -135,19 +147,17 @@ public abstract class PlaceHolderMessageShortTest {
 		return pm;
 	}
 
-	protected static MaterialType buildMaterial(String materialID)
-			throws DatatypeConfigurationException {
+	protected static MaterialType buildMaterial(String materialID) throws DatatypeConfigurationException
+	{
 		return buildMaterial(materialID, JAN1st, JAN10th);
 	}
 
-	private static MaterialType buildMaterial(String materialID,
-			GregorianCalendar created, GregorianCalendar required)
-			throws DatatypeConfigurationException {
+	private static MaterialType buildMaterial(String materialID, GregorianCalendar created, GregorianCalendar required)
+			throws DatatypeConfigurationException
+	{
 		// build request
-		XMLGregorianCalendar orderCreated = DatatypeFactory.newInstance()
-				.newXMLGregorianCalendar(created);
-		XMLGregorianCalendar requiredBy = DatatypeFactory.newInstance()
-				.newXMLGregorianCalendar(required);
+		XMLGregorianCalendar orderCreated = DatatypeFactory.newInstance().newXMLGregorianCalendar(created);
+		XMLGregorianCalendar requiredBy = DatatypeFactory.newInstance().newXMLGregorianCalendar(required);
 
 		Order order = new Order();
 		order.setOrderCreated(orderCreated);
@@ -165,8 +175,8 @@ public abstract class PlaceHolderMessageShortTest {
 		return m;
 	}
 
-	protected PlaceholderMessage buildAddMaterialRequest(String titleID)
-			throws DatatypeConfigurationException {
+	protected PlaceholderMessage buildAddMaterialRequest(String titleID) throws DatatypeConfigurationException
+	{
 		return buildAddMaterialRequest(titleID, JAN1st, JAN10th);
 	}
 
