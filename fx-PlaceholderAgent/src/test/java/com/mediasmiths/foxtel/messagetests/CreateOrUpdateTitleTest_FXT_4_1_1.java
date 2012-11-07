@@ -48,14 +48,14 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
 
-public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
+public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTest {
 	
 	private final static String NEW_TITLE = "NEW_TITLE";
-	private static Logger logger = Logger.getLogger(CreateOrUpdateTitleTest.class);
+	private static Logger logger = Logger.getLogger(CreateOrUpdateTitleTest_FXT_4_1_1.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 
-	public CreateOrUpdateTitleTest() throws JAXBException, SAXException, IOException {
+	public CreateOrUpdateTitleTest_FXT_4_1_1() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	
@@ -79,7 +79,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testCreateTitleXSDInvalid() throws Exception {
+	public void testCreateTitleXSDInvalid_FXT_4_1_1_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.1.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -99,7 +99,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testValidCreateTitle() throws Exception {
+	public void testValidCreateTitle_FXT_4_1_1_3_4() throws Exception {
 		
 		logger.info("Starting FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID");
 		logger.info("Starting FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message");
@@ -148,7 +148,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testCreateTitleInvalidDates() throws IOException, Exception {
+	public void testCreateTitleInvalidDates_FXT_4_1_0_4_5_FXT_4_1_1_6() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.0.4/5 - Invalid license dates");
 		logger.info("Starting FXT 4.1.1.6 - Invalid license dates");
@@ -186,7 +186,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category (ValidationTests.class)
-	public void testCreateTitleUnknownChannel() throws IOException, Exception {
+	public void testCreateTitleUnknownChannel_FXT_4_1_0_6() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel");
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
@@ -210,21 +210,22 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
+	
 	@Test
 	@Category (ValidationTests.class)
 	public void testCreateTitleTitleIdNull() throws IOException, Exception {
-		
+
 		logger.info("TitleID is null");
-		
+
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
-		
+
 		CreateOrUpdateTitle coup = ((CreateOrUpdateTitle) message.getActions().
 				getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
 				.get(0));		
 		coup.setTitleID(null);
-		
+
 		File temp = createTempXMLFile (message, "createTitleTitleIdNull");
-		
+
 		assertEquals(MessageValidationResult.TITLEID_IS_NULL, validator.validateFile(temp.getAbsolutePath()));
 	}
 	

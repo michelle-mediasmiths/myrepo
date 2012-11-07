@@ -18,8 +18,6 @@ import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.mediasmiths.foxtel.messagetests.DeleteMaterialTest;
-
 public class HappyPathDataGeneratorTest
 {
 	private static Logger logger = Logger.getLogger(HappyPathDataGeneratorTest.class);

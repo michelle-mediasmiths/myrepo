@@ -32,7 +32,6 @@ import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest;
 import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;

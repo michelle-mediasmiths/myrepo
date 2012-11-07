@@ -32,12 +32,12 @@ import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
-	private static Logger logger = Logger.getLogger(DeleteMaterialTest.class);
+public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
+	private static Logger logger = Logger.getLogger(DeleteMaterialTest_FXT_4_1_7.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 
-	public DeleteMaterialTest() throws JAXBException, SAXException, IOException {
+	public DeleteMaterialTest_FXT_4_1_7() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	
@@ -60,7 +60,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteMaterialXSDInvalid() throws Exception {
+	public void testDeleteMaterialXSDInvalid_FXT_4_1_7_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.7.2 - Non XSD compliance");
 	//	File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -79,7 +79,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteMaterialNotProtected() throws IOException, Exception {
+	public void testDeleteMaterialNotProtected_FXT_4_1_7_3_4_5() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.7.3/4/5 - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
@@ -99,7 +99,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteMaterialDoesntExist() throws Exception {
+	public void testDeleteMaterialDoesntExist_FXT_4_1_7_6() throws Exception {
 		
 		logger.info("Starting FXT 4.1.7.6 - No matching ID");
 		
@@ -120,7 +120,7 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest{
 	
 	@Test
 	@Category (ValidationTests.class)
-	public void testDeleteMaterialProtected() throws IOException, Exception {
+	public void testDeleteMaterialProtected_FXT_4_1_7_7() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.7.7 - Material is protected");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);

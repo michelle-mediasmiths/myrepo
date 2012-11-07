@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.xml.sax.SAXException;
@@ -22,15 +23,18 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
+public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShortTest {
+	private static Logger logger = Logger.getLogger(DeleteMaterialTest_FXT_4_1_27_28_29.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-	public DeleteMaterialTest() throws JAXBException, SAXException, IOException {
+	public DeleteMaterialTest_FXT_4_1_27_28_29() throws JAXBException, SAXException, IOException {
 		super();
 	}
 
@@ -52,14 +56,28 @@ public class DeleteMaterialTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeleteMaterialIsProtected() throws IOException, Exception {
-		
+	public void testDeleteMaterialIsProtected_FXT_4_1_27_28_29() throws IOException, Exception {
+		logger.info("Starting FXT 4.1.27/28/29 ");
+
 		PlaceholderMessage pm = buildDeleteMaterialRequest(true,PROTECTED_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleIsProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+		
+		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+		{
+		resultLogger.info("FXT 4.1.27/28/29 --Passed");
+		}
+		else
+		{
+		resultLogger.info("FXT 4.1.27/28/29  --Failed");
+		}
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validateFile);
+		
+		
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validator);
 		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}

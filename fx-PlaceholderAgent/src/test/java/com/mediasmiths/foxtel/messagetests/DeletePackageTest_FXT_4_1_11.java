@@ -30,13 +30,13 @@ import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class DeletePackageTest extends PlaceHolderMessageShortTest {
+public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 	
-	private static Logger logger = Logger.getLogger(DeletePackageTest.class);
+	private static Logger logger = Logger.getLogger(DeletePackageTest_FXT_4_1_11.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 	
-	public DeletePackageTest() throws JAXBException, SAXException, IOException {
+	public DeletePackageTest_FXT_4_1_11() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	
@@ -56,7 +56,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeletePackageXSDInvalid() throws Exception {
+	public void testDeletePackageXSDInvalid_FXT_4_1_11_2() throws Exception {
 		
 		logger.info("Starting FXT 4.1.11.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
@@ -76,7 +76,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeletePackageNotProtected () throws IOException, Exception {
+	public void testDeletePackageNotProtected_FXT_4_1_11_3_4_5 () throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists");
 		
@@ -98,7 +98,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	
 	@Test
 	@Category (ValidationTests.class) 
-	public void testDeletePackageDoesntExist() throws Exception {
+	public void testDeletePackageDoesntExist_FXT_4_1_11_6() throws Exception {
 		
 		logger.info("Starting FXT 4.1.11.6 - No matching ID");
 		
@@ -120,7 +120,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 
 	@Test
 	@Category(ValidationTests.class)
-	public void testDeletePackageProtected () throws IOException, Exception {
+	public void testDeletePackageProtected_FXT_4_1_11_7 () throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.11.7 - Package is protected");
 		

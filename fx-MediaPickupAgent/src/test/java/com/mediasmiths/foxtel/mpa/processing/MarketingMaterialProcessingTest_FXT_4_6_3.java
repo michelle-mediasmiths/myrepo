@@ -15,6 +15,7 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
@@ -23,18 +24,25 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.mpa.MarketingMaterialTest;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.foxtel.mpa.validation.MediaCheckTest_FXT_4_6_1;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
-
+public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessingTest {
+	private static Logger logger = Logger.getLogger(MarketingMaterialProcessingTest_FXT_4_6_3.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 	@Test
 	public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid()
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(true, true, true);
+		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
+		logger.info("Starting" +testName);
+
+		
+		testProcessMessageValidMessageAndMedia(true, true, true, testName);
 	}
 
 	@Test
@@ -42,7 +50,9 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(true, true, false);
+
+		
+		testProcessMessageValidMessageAndMedia(true, true, false, null);
 	}
 
 	@Test
@@ -50,7 +60,9 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(true, false, true);
+
+		
+		testProcessMessageValidMessageAndMedia(true, false, true, null);
 	}
 
 	@Test
@@ -58,7 +70,8 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(true, false, false);
+		
+		testProcessMessageValidMessageAndMedia(true, false, false, null);
 	}
 
 	@Test
@@ -66,7 +79,10 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(false, true, true);
+		String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
+		logger.info("Starting" +testName);
+		
+		testProcessMessageValidMessageAndMedia(false, true, true, testName);
 	}
 
 	@Test
@@ -74,7 +90,9 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(false, true, false);
+
+		
+		testProcessMessageValidMessageAndMedia(false, true, false, null);
 	}
 
 	@Test
@@ -82,7 +100,8 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(false, false, true);
+
+		testProcessMessageValidMessageAndMedia(false, false, true, null);
 	}
 
 	@Test
@@ -90,7 +109,7 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 			throws FileNotFoundException, DatatypeConfigurationException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
-		testProcessMessageValidMessageAndMedia(false, false, false);
+		testProcessMessageValidMessageAndMedia(false, false, false, null);
 	}
 
 	public void testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(
@@ -182,7 +201,7 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 	 * 
 	 */
 	public void testProcessMessageValidMessageAndMedia(boolean titleExists,
-			boolean mediaFirst, boolean validMedia)
+			boolean mediaFirst, boolean validMedia, String testName)
 			throws DatatypeConfigurationException, FileNotFoundException,
 			IOException, JAXBException, SAXException, InterruptedException,
 			MayamClientException {
@@ -251,20 +270,48 @@ public class MarketingMaterialProcessingTest extends MaterialProcessingTest {
 		// check the files pending processing queue has been consumed
 		assertTrue(filesPendingProcessingQueue.size() == 0);
 
-		if (validMedia) {
+		if (validMedia) 
+		{
+			PendingImport pi = pendingImportQueue.take();
+			Boolean piMeda=pi.getMediaFile().equals(media);
+			Boolean piMaterial=pi.getMaterialEnvelope().getFile().equals(materialxml);
+
+			if (testName!= null)
+			{
+				if( piMaterial && pendingImportQueue.size() == 1  &&piMeda)
+					resultLogger.info(testName + "--Passed");
+				else
+					resultLogger.info(testName + "--Failed");
+
+			}
+
+			
+			
 			// check there is a pending import on the queue
 			assertTrue(pendingImportQueue.size() == 1);
-			PendingImport pi = pendingImportQueue.take();
-			assertTrue(pi.getMediaFile().equals(media));
-			assertTrue(pi.getMaterialEnvelope().getFile().equals(materialxml));
-		} else {
+			assertTrue(piMeda);
+			assertTrue(piMaterial);
+		}	
+		else 
+		{
 			// check message gets moved to failure folder and media gets moved to viz ardome emergency import folder
+			Boolean intermediateMaterial=TestUtil.getPathToThisFileIfItWasInThisFolder(	materialxml, new File(failurePath)).exists();
+			Boolean intermediateMedia= TestUtil.getPathToThisFileIfItWasInThisFolder(media,new File(emergencyImportPath)).exists();
+			
+
+			if (testName!= null)
+			{
+				if(!materialxml.exists() && !media.exists() && intermediateMaterial  &&intermediateMedia)
+					resultLogger.info(testName + "--Passed");
+				else
+					resultLogger.info(testName + "--Failed");
+
+			}
+			
 			assertFalse(materialxml.exists());
 			assertFalse(media.exists());
-			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
-					materialxml, new File(failurePath)).exists());
-			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(media,
-					new File(emergencyImportPath)).exists());
+			assertTrue(intermediateMaterial);
+			assertTrue(intermediateMedia);
 
 		}
 
