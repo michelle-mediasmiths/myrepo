@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
     <xsl:output method="xml" indent="yes"/>
     <xsl:template match="/">
-       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wor="http://example.com/qc/workflow" xmlns:adap="http://ns.mediasmiths.com/foxtel/wf/adapter">
+       <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wor="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:adap="http://ns.mediasmiths.com/foxtel/wf/adapter">
             <soapenv:Header/>
             <soapenv:Body>
                 <wor:startRequest>
