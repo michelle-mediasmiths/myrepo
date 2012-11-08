@@ -42,7 +42,7 @@ public class MediaCheckTest_FXT_4_6_1 {
 
 	// test for file sizes and + checksums matching - media check should pass
 	@Test
-	public void testValidMedia() throws IOException,
+	public void testValidMedia_FXT_4_6_1_3() throws IOException,
 			DatatypeConfigurationException {
 		String testName="FXT 4.6.1.3  - Media arrives with expected checksum and expected file size";
 		logger.info("Starting" +testName);
@@ -81,7 +81,7 @@ public class MediaCheckTest_FXT_4_6_1 {
 	// test for file sizes not matching but checksums do - media check should
 	// fail
 	@Test
-	public void testInvalidMediaWrongFileSize() throws IOException,
+	public void testInvalidMediaWrongFileSize_FXT_4_6_1_1() throws IOException,
 			DatatypeConfigurationException {
 		String testName="FXT 4.6.1.1  - Media arrives with unexpected file size";
 		logger.info("Starting" +testName);
