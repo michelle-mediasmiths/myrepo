@@ -23,7 +23,6 @@ import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.foxtel.mpa.processing.MarketingMaterialProcessingTest_FXT_4_6_3;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 
 public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
