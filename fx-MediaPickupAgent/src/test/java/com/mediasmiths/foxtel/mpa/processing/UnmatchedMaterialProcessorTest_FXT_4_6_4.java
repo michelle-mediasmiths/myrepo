@@ -19,20 +19,26 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 
-public class UnmatchedMaterialProcessorTest {
+public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 
 	//the time from when an unmatched file is seen until we stop waiting for its partner to arrive
 	protected final static long timeout = 100l;
 	protected final static long timebetweenpurges = 100l;
 	
 	private static Logger logger = Logger
-			.getLogger(UnmatchedMaterialProcessorTest.class);
+			.getLogger(UnmatchedMaterialProcessorTest_FXT_4_6_4.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 
 	@Test
-	public void testUnmatchedFilesMoveToApropriateFolder() throws IOException, InterruptedException{
+	public void testUnmatchedFilesMoveToApropriateFolder_FXT_4_6_4_1() throws IOException, InterruptedException{
+		logger.info( "Starting FXT 4.6.4.1  - Media with no xml is moved to Viz Ardome emergency import folder");
+
 		
 		//prepare folders and write unmatched xml file
 		String incomingFolderPath = TestUtil.prepareTempFolder("INCOMING");		
@@ -76,10 +82,29 @@ public class UnmatchedMaterialProcessorTest {
 		verify(mm, atLeastOnce()).purgeUnmatchedMessages(timeout);
 		verify(mm, atLeastOnce()).purgeUnmatchedMXFs(timeout);
 		
-		assertFalse(new File(unmatchedXMLPath).exists()); //message should have been moved to the failed folder
-		assertFalse(new File(unmatchedMXFPath).exists()); //mxf should have moved to ardome emergencey import folder
-		assertTrue(new File(failedMessagesPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName).exists());
-		assertTrue(new File(emergencyFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists());
+		Boolean xmlExists=new File(unmatchedXMLPath).exists();
+		assertFalse(xmlExists); //message should have been moved to the failed folder
+		
+		Boolean mxfExists=new File(unmatchedMXFPath).exists();
+		assertFalse(mxfExists); //mxf should have moved to ardome emergencey import folder
+		
+		Boolean fileMovedToFailed=new File(failedMessagesPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName).exists();
+		assertTrue(fileMovedToFailed);
+		
+		Boolean fileMovedToEmergency=new File(emergencyFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists();
+		assertTrue(fileMovedToEmergency);
+		
+		
+		if (!mxfExists && !xmlExists && fileMovedToEmergency && fileMovedToFailed)
+		{
+			resultLogger.info("FXT 4.6.4.1  - Media with no xml is moved to Viz Ardome emergency import folder --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.6.4.1  - Media with no xml is moved to Viz Ardome emergency import folder --Failed");
+		}
+		
+		
 	}
 			
 }
