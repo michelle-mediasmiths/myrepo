@@ -8,8 +8,8 @@ http://www.springframework.org/schema/beans http://www.springframework.org/schem
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
     <cxf:configuration name="CXF_Configuration" enableMuleSoapHeaders="true" initializeStaticBusInstance="true" doc:name="CXF Configuration"/>
     <flow name="invokeAutoQC" doc:name="invokeAutoQC">
-        <http:inbound-endpoint exchange-pattern="request-response" address="http://localhost:9085/qc" doc:name="HTTP"/>
+        <http:inbound-endpoint exchange-pattern="one-way" address="http://localhost:9085/qc" doc:name="HTTP"/>
         <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="invokeAutoQC.xsl" outputEncoding="UTF-8" doc:name="XSLT"/>
-        <http:outbound-endpoint exchange-pattern="request-response" address="http://foxtel.local.mediasmithsforge.com:8081/ode/processes/fx-Qcflow/qc/workflow/caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
+        <http:outbound-endpoint exchange-pattern="request-response" address="http://foxtel.local.mediasmithsforge.com:8081/ode/processes/fx-flows/qc/workflow/caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
     </flow>
 </mule>
