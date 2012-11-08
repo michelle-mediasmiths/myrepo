@@ -519,4 +519,11 @@ public class MayamClientImpl implements MayamClient
 	{
 			return packageController.getPackageAttributes(packageID).getAttribute(Attribute.ASSET_PARENT_ID);
 	}
+
+	@Override
+	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
+	{
+		// TODO implement
+		
+	}
 }
