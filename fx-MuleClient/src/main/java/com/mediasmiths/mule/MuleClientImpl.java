@@ -9,12 +9,13 @@ import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.MuleMessageCollection;
-import org.mule.api.client.MuleClient;
+import org.mule.module.client.MuleClient;
 import org.mule.api.config.ConfigurationBuilder;
 import org.mule.api.context.MuleContextBuilder;
 import org.mule.api.context.MuleContextFactory;
 import org.mule.client.DefaultLocalMuleClient;
 import org.mule.config.builders.DefaultsConfigurationBuilder;
+import org.mule.config.spring.SpringXmlConfigurationBuilder;
 import org.mule.context.DefaultMuleContextBuilder;
 import org.mule.context.DefaultMuleContextFactory;
 
@@ -29,10 +30,15 @@ public class MuleClientImpl implements IMuleClient {
 		MuleContextFactory muleContextFactory = new DefaultMuleContextFactory();
 
 		//create the configuration builder and optionally pass in one or more of these
-		ConfigurationBuilder builder = new DefaultsConfigurationBuilder();
+		//ConfigurationBuilder builder = new DefaultsConfigurationBuilder();
 		 
 		//The actual context builder to use
 		MuleContextBuilder contextBuilder = new DefaultMuleContextBuilder();
+		
+
+		//create the configuration builder and optionally pass in one or more of these
+		ConfigurationBuilder builder = 
+		    new SpringXmlConfigurationBuilder("muleclient-config.xml");
 
 		//Create the context
 		MuleContext context;
@@ -41,8 +47,9 @@ public class MuleClientImpl implements IMuleClient {
 			//Start the context
 			context.start();
 			//Create the client with the context
-			client = new DefaultLocalMuleClient(context);
-			
+			client = new MuleClient(context);
+		//	client = new DefaultLocalMuleClient(context);
+		
 		} catch (MuleException e) {
 			logger.error("Mule Exception caught when initiaiting Mule Client", e);
 			throw e;
@@ -67,7 +74,7 @@ public class MuleClientImpl implements IMuleClient {
 	public MuleMessage send(String destination, Object payLoad,  Map<String, Object> properties) {
 		MuleMessage result = null;
 		try {
-			result = client.send(destination, payLoad, properties);
+			result = client.send("http://localhost:9085/qc", "test message", properties);
 		} catch (MuleException e) {
 			logger.error("Mule Exception caught when sending message to destination: " + destination);
 		}

@@ -29,7 +29,7 @@ public class MuleClientImplTest {
 	{
 		props = new HashMap<String, Object>();
 		muleClient = mock(MuleClient.class);
-		client = new MuleClientImpl(muleClient);
+		//client = new MuleClientImpl(muleClient);
 	}
 	
 	@Test

@@ -291,7 +291,7 @@ public class MayamClientImpl implements MayamClient
 			{
 				try
 				{
-					List<AttributeMap> materials = client.getAssetChildren(
+					List<AttributeMap> materials = client.assetApi().getAssetChildren(
 							MayamAssetType.TITLE.getAssetType(),
 							titleID,
 							MayamAssetType.MATERIAL.getAssetType());
@@ -309,7 +309,7 @@ public class MayamClientImpl implements MayamClient
 						}
 					}
 
-					List<AttributeMap> packages = client.getAssetChildren(
+					List<AttributeMap> packages = client.assetApi().getAssetChildren(
 							MayamAssetType.TITLE.getAssetType(),
 							titleID,
 							MayamAssetType.PACKAGE.getAssetType());
@@ -395,7 +395,7 @@ public class MayamClientImpl implements MayamClient
 		// materialAttributes.setAttribute(Attribute., titleID);
 		try
 		{
-			client.updateAsset(materialAttributes);
+			client.assetApi().updateAsset(materialAttributes);
 		}
 		catch (RemoteException e)
 		{
@@ -416,7 +416,7 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap material = null;
 		try
 		{
-			material = client.getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
+			material = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
 		}
 		catch (RemoteException e)
 		{
@@ -432,7 +432,7 @@ public class MayamClientImpl implements MayamClient
 
 			try
 			{
-				title = client.getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
+				title = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
 			}
 			catch (RemoteException e)
 			{

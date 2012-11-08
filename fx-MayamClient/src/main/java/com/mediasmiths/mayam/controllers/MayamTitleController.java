@@ -89,7 +89,7 @@ public class MayamTitleController extends MayamController{
 			
 			AttributeMap result;
 			try {
-				result = client.createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(attributes.getAttributes());
 				if (result == null) {
 					log.warn("Mayam failed to create new title asset");
 					returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
@@ -174,7 +174,7 @@ public class MayamTitleController extends MayamController{
 				
 				AttributeMap result;
 				try {
-					result = client.createAsset(attributes.getAttributes());
+					result = client.assetApi().createAsset(attributes.getAttributes());
 					if (result == null) {
 						log.warn("Mayam failed to create new Title asset");
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
@@ -207,7 +207,7 @@ public class MayamTitleController extends MayamController{
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -258,7 +258,7 @@ public class MayamTitleController extends MayamController{
 					
 					AttributeMap result;
 					try {
-						result = client.updateAsset(attributes.getAttributes());
+						result = client.assetApi().updateAsset(attributes.getAttributes());
 						if (result == null) {
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
@@ -292,7 +292,7 @@ public class MayamTitleController extends MayamController{
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 					log.error("Exception thrown by Mayam while retrieving asset: " + title.getTitleID());
@@ -354,7 +354,7 @@ public class MayamTitleController extends MayamController{
 					
 					AttributeMap result;
 					try {
-						result = client.updateAsset(attributes.getAttributes());
+						result = client.assetApi().updateAsset(attributes.getAttributes());
 						if (result == null) {
 							log.warn("Mayam failed to update title: " + title.getTitleID());
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
@@ -390,7 +390,7 @@ public class MayamTitleController extends MayamController{
 		}
 		else {
 			try {
-				client.deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ title.getTitleID());
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
@@ -402,7 +402,7 @@ public class MayamTitleController extends MayamController{
 	public boolean titleExists(String titleID) {
 		boolean titleFound = false;
 		try {
-			AttributeMap assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (assetAttributes != null) {
 				titleFound = true;
 			}
@@ -416,7 +416,7 @@ public class MayamTitleController extends MayamController{
 	public AttributeMap getTitle(String titleID) {
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
 			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID);
 			e1.printStackTrace();

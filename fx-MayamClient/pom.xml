@@ -39,11 +39,11 @@
 			<artifactId>wf-mq</artifactId>
 			<version>0.9.9.9.2</version>
 		</dependency>
-		<dependency>
+<!--		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>tasks-ws-client</artifactId>
 			<version>0.9.9.9.3</version>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
