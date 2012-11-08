@@ -35,7 +35,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
         @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid_FXT_4_6_2_3()
+        public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid_FXT_4_6_3_2_3()
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
@@ -59,7 +59,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
         }
 
         @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaValid_FXT_4_6_2_3()
+        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaValid_FXT_4_6_3_2_3()
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
@@ -70,7 +70,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
         }
 
         @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaInvalid_FXT_4_6_2()
+        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaInvalid_FXT_4_6_3_2()
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {

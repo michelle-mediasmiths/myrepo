@@ -31,7 +31,7 @@ public class NonXSDConformingTest_FXT_4_1_0_1 extends PlaceHolderMessageShortTes
 	@Test
 	@Category(ValidationTests.class)
 	public void testNonXSDConformingFileFails() throws Exception{
-		logger.info("Starting FXT 4.1.0.2 – Multiple Actions in Message");
+		logger.info("Starting FXT 4.1.0.1  - Non XSD Compliance");
 		
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 
@@ -39,9 +39,9 @@ public class NonXSDConformingTest_FXT_4_1_0_1 extends PlaceHolderMessageShortTes
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
-			resultLogger.info("FXT 4.1.0.2 – Multiple Actions in Message --Passed");
+			resultLogger.info("FXT 4.1.0.1  - Non XSD Compliance --Passed");
 		else
-			resultLogger.info("FXT 4.1.0.2 – Multiple Actions in Message --Failed");
+			resultLogger.info("FXT 4.1.0.1  - Non XSD Compliance --Failed");
 		
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);
 		
