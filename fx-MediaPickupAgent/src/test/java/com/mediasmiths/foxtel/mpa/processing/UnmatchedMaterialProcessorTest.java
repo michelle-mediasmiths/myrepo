@@ -21,7 +21,6 @@ import org.junit.Test;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.mayam.AlertInterface;
 
 public class UnmatchedMaterialProcessorTest {
 

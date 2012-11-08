@@ -12,7 +12,6 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.mayam.AlertInterface;
 
 public class SingleImporter extends Importer {
 

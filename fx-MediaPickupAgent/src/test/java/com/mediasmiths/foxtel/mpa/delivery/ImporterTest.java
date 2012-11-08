@@ -22,7 +22,6 @@ import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.mayam.AlertInterface;
 
 public class ImporterTest {
 

@@ -11,7 +11,6 @@ import java.io.IOException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Before;

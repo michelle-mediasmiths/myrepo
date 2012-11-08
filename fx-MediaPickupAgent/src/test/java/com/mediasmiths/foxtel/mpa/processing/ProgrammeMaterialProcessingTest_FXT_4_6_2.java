@@ -16,6 +16,7 @@ import java.util.Arrays;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
@@ -25,12 +26,15 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
 public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessingTest {
-
+	
+	private static Logger logger = Logger.getLogger(ProgrammeMaterialProcessingTest_FXT_4_6_2.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 	/**
 	 * Tests that handling of invalid messages
 	 * 
@@ -70,19 +74,28 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	}
 
 	@Test
-	public void testValidMessageValidMediaMediaFirst()
+	public void testValidMessageValidMediaMediaFirst_FXT_4_6_2()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
-		testMessageProcesses(true,true);
+		
+		String testName="FXT 4.6.2.2  -  Title /Material/Package metadata is updated in Viz Ardome";
+		logger.info("Starting" +testName);
+		
+		testMessageProcesses(true,true, testName);
 	}
 
 	@Test
-	public void testValidMessageValidMediaMessageFirst()
+	public void testValidMessageValidMediaMessageFirst_FXT_4_6_2()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
-		testMessageProcesses(true,false);
+		
+		String testName="FXT 4.6.2.2  -  Title /Material/Package metadata is updated in Viz Ardome";
+		logger.info("Starting" +testName);
+		
+		
+		testMessageProcesses(true,false, testName);
 	}
 
 	@Test
@@ -90,7 +103,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
-		testMessageProcesses(false, true);
+		testMessageProcesses(false, true, null);
 	}
 
 	@Test
@@ -98,7 +111,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
-		testMessageProcesses(false, false);
+		testMessageProcesses(false, false, null);
 	}
 
 	/**
@@ -112,7 +125,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	 * @throws JAXBException
 	 * @throws MayamClientException
 	 */
-	private void testMessageProcesses(boolean mediaValid, boolean mediaFirst)
+	private void testMessageProcesses(boolean mediaValid, boolean mediaFirst, String testName)
 			throws InterruptedException, FileNotFoundException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
@@ -192,22 +205,57 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		assertTrue(filesPendingProcessingQueue.size() == 0);
 
 		if (mediaValid) {
+			
 			// check there is a pending import on the queue
 			assertTrue(pendingImportQueue.size() == 1);
 			PendingImport pi = pendingImportQueue.take();
-			assertTrue(pi.getMediaFile().equals(media));
-			assertTrue(pi.getMaterialEnvelope().getFile().equals(materialxml));
+			Boolean mediaTest =pi.getMediaFile().equals(media);
+			assertTrue(mediaTest);
+			
+			Boolean materialTest=pi.getMaterialEnvelope().getFile().equals(materialxml);
+			assertTrue(materialTest);
+			
+			if (testName !=null)
+			{
+				if(materialTest && mediaTest)
+				{
+            		resultLogger.info(testName+ "-- Passed");
+				}
+				else 
+				{
+            		resultLogger.info(testName+"-- FAILED");
+				}
+			}
+
 		} else {
 
 			// check there is not pending import on the queue
 			assertTrue(pendingImportQueue.size() == 0);
 			// check message and material gets moved to failure folder
-			assertFalse(materialxml.exists());
-			assertFalse(media.exists());
-			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
-					materialxml, new File(failurePath)).exists());
-			assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(media,
-					new File(emergencyImportPath)).exists());
+			Boolean materialExist= materialxml.exists();
+			assertFalse(materialExist);
+			Boolean mediaExists= media.exists();
+			assertFalse(mediaExists);
+			
+			Boolean failurePathTest=TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml, new File(failurePath)).exists();
+			assertTrue(failurePathTest);
+			
+			Boolean importPathTest=TestUtil.getPathToThisFileIfItWasInThisFolder(media,new File(emergencyImportPath)).exists();
+			assertTrue(importPathTest);
+			
+			if (testName !=null)
+			{
+				if(!materialExist && !mediaExists && failurePathTest && importPathTest)
+				{
+            		resultLogger.info(testName+ "-- Passed");
+				}
+				else 
+				{
+            		resultLogger.info(testName+"-- FAILED");
+				}
+			}
+			
+			
 		}
 
 	}

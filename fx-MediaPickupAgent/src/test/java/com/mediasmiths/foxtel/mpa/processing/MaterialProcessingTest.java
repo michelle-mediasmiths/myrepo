@@ -29,7 +29,6 @@ import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
-import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class MaterialProcessingTest {

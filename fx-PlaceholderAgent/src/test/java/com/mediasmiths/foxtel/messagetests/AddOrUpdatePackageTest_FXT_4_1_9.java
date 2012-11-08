@@ -39,18 +39,18 @@ import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
 
-public class AddOrUpdatePackageTest_FXT_4_1_9_1 extends PlaceHolderMessageShortTest {
+public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTest {
 	
 	protected final static String EXISTING_TITLE = "EXISTING_TITLE";
 	protected final static String EXISTING_MATERIAL = "EXISTING_MATERIAL";
 	protected final static String NOT_EXISTING_MATERIAL = "NOT_SXISTING_MATERIAL";
 	
 	protected final static String NEW_PACKAGE = "NEW_PACKAGE";
-	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest_FXT_4_1_9_1.class);
+	private static Logger logger = Logger.getLogger(AddOrUpdatePackageTest_FXT_4_1_9.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 
-	public AddOrUpdatePackageTest_FXT_4_1_9_1() throws JAXBException, SAXException, IOException {
+	public AddOrUpdatePackageTest_FXT_4_1_9() throws JAXBException, SAXException, IOException {
 		super();
 	}
 	

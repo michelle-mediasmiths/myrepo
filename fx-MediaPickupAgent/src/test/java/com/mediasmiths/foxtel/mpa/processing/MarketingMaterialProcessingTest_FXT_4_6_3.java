@@ -39,7 +39,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-    		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
+    		String testName="FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
     		logger.info("Starting" +testName);
     		
     		testProcessMessageValidMessageAndMedia(true, true, true, testName);
@@ -50,7 +50,12 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-                testProcessMessageValidMessageAndMedia(true, true, false, null);
+        	
+    		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
+    		logger.info("Starting" +testName);
+    		
+        	
+                testProcessMessageValidMessageAndMedia(true, true, false, testName);
         }
 
         @Test
@@ -58,7 +63,10 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-                testProcessMessageValidMessageAndMedia(true, false, true, null);
+    			String testName="FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
+    			logger.info("Starting" +testName);
+    			
+                testProcessMessageValidMessageAndMedia(true, false, true, testName);
         }
 
         @Test
@@ -66,7 +74,10 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-                testProcessMessageValidMessageAndMedia(true, false, false, null);
+        		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
+    			logger.info("Starting" +testName);
+    		
+                testProcessMessageValidMessageAndMedia(true, false, false, testName);
         }
 
         @Test
@@ -85,8 +96,11 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
         public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaInvalid_FXT_4_6_3_1()
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-                testProcessMessageValidMessageAndMedia(false, true, false, null);
+                        MayamClientException {       		
+    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
+    			logger.info("Starting" +testName);
+    			
+                testProcessMessageValidMessageAndMedia(false, true, false, testName);
         }
 
         @Test
@@ -94,7 +108,10 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-                testProcessMessageValidMessageAndMedia(false, false, true, null);
+    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
+    			logger.info("Starting" +testName);
+    		
+                testProcessMessageValidMessageAndMedia(false, false, true, testName);
         }
 
         @Test
@@ -102,7 +119,10 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         throws FileNotFoundException, DatatypeConfigurationException,
                         IOException, JAXBException, SAXException, InterruptedException,
                         MayamClientException {
-                testProcessMessageValidMessageAndMedia(false, false, false, null);
+    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
+    			logger.info("Starting" +testName);
+    		
+                testProcessMessageValidMessageAndMedia(false, false, false, testName);
         }
 
         public void testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(

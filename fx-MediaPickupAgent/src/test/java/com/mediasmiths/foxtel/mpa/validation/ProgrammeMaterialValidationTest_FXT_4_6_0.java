@@ -9,16 +9,21 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 
-public class ProgrammeMaterialValidationTest extends ValidationTest {
+public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
+	
+	private static Logger logger = Logger.getLogger(ProgrammeMaterialValidationTest_FXT_4_6_0.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-	public ProgrammeMaterialValidationTest() throws JAXBException, IOException,
+	public ProgrammeMaterialValidationTest_FXT_4_6_0() throws JAXBException, IOException,
 			SAXException {
 		super();
 	}
@@ -36,9 +41,21 @@ public class ProgrammeMaterialValidationTest extends ValidationTest {
 	}
 	
 	@Test
-	public void testTitleDoesntExist() throws Exception{
+	public void testTitleDoesntExist_FXT_4_6_0_2() throws Exception{
+		logger.info( "Starting FXT 4.6.0.2  - Programme material message references unknown title");
+		
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(NOT_EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER);
-		assertEquals(MessageValidationResult.TITLE_DOES_NOT_EXIST,validationForMaterial(material));
+
+		MessageValidationResult validateFile = validationForMaterial(material);
+		if (MessageValidationResult.TITLE_DOES_NOT_EXIST==validateFile)
+		{
+			resultLogger.info("FXT 4.6.0.2  - Programme material message references unknown title --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.6.0.2  - Programme material message references unknown title --Failed");
+		}
+		assertEquals(MessageValidationResult.TITLE_DOES_NOT_EXIST,validateFile);
 		
 		verify(mayamClient).titleExists(NOT_EXISTING_TITLE);
 	}
@@ -54,10 +71,23 @@ public class ProgrammeMaterialValidationTest extends ValidationTest {
 	}
 	
 	@Test
-	public void testMaterialIsNotPlaceholder() throws Exception{
-		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_NOT_PLACEHOLDER);
-		assertEquals(MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER,validationForMaterial(material));
+	public void testMaterialIsNotPlaceholder_FXT_4_6_0_5() throws Exception{
 		
+		logger.info("Starting FXT 4.6.0.5  - Programme material message references non placeholder item");
+
+		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_NOT_PLACEHOLDER);
+				
+		MessageValidationResult validateFile = validationForMaterial(material);
+		if (MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER==validateFile)
+		{
+			resultLogger.info("FXT 4.6.0.5  - Programme material message references non placeholder item --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.6.0.5  - Programme material message references non placeholder item --Failed");
+		}
+		assertEquals(MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER,validateFile);
+				
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_NOT_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_NOT_PLACEHOLDER);
@@ -83,13 +113,26 @@ public class ProgrammeMaterialValidationTest extends ValidationTest {
 	}
 	
 	@Test
-	public void testPackageDoesntExist() throws Exception{
+	public void testPackageDoesntExist_FXT_4_6_0_4() throws Exception{
+		logger.info("Starting FXT 4.6.0.4  - Programme material message references non existant package(s)");
 		List<String> packageids = new ArrayList<String>();
 		packageids.add(EXISTING_PACKAGE);
 		packageids.add(NOT_EXISTING_PACKAGE);
 		
 		Material material = ProgrammeMaterialTest.getMaterialWithPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER, packageids);
-		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST,validationForMaterial(material));
+		
+		
+		MessageValidationResult validateFile = validationForMaterial(material);
+		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST==validateFile)
+		{
+			resultLogger.info("FXT 4.6.0.4  - Programme material message references non existant package(s) --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.6.0.4  - Programme material message references non existant package(s) --Failed");
+		}
+		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST,validateFile);
+		
 		
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
@@ -117,11 +160,22 @@ public class ProgrammeMaterialValidationTest extends ValidationTest {
 	}
 
 	@Test
-	public void testMaterialDoesntExist() throws Exception {
+	public void testMaterialDoesntExist_FXT_4_6_0_3() throws Exception {
+		logger.info("Starting FXT 4.6.0.3  - Programme material message references unknown material");
 		
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, NOT_EXISTING_MATERIAL);
-		assertEquals(MessageValidationResult.MATERIAL_DOES_NOT_EXIST,validationForMaterial(material));
 		
+		MessageValidationResult validateFile = validationForMaterial(material);
+		if (MessageValidationResult.MATERIAL_DOES_NOT_EXIST==validateFile)
+		{
+			resultLogger.info("FXT 4.6.0.3  - Programme material message references unknown material --Passed");
+		}
+		else
+		{
+			resultLogger.info("FXT 4.6.0.3  - Programme material message references unknown material --Failed");
+		}
+		assertEquals(MessageValidationResult.MATERIAL_DOES_NOT_EXIST,validateFile);
+				
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(NOT_EXISTING_MATERIAL);
 	}

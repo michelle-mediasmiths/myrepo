@@ -17,7 +17,6 @@ import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
-import com.mediasmiths.mayam.AlertInterface;
 import com.mediasmiths.mayam.MayamClient;
 
 public class SingleMessageProcessor extends MaterialExchangeProcessor {
