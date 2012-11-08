@@ -8,15 +8,19 @@ import java.util.Collection;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
+import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 
 public class MatchMakerTest {
 	
 	private MatchMaker toTest;
+	
+	private static Logger logger = Logger.getLogger(MatchMakerTest.class);
 	
 	@Before
 	public void before(){

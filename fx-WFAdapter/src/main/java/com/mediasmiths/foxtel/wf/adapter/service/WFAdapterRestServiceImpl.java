@@ -97,7 +97,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			destination = materialQCLocation.resolve(filename);
 
 			//TODO switch this to mxf onces we are creating such!
-			String ret = tcoutputlocation + "/" + id + "/" + id + ".mov";
+			String ret = tcoutputlocation + id + "/" + id + ".mov";
 			destinationFile = new File(ret);
 		}
 		else
@@ -413,7 +413,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		// TODO implement
 
-		String ret = tcoutputlocation + "/" + packageID;
+		String ret = tcoutputlocation  + packageID;
 		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
 
 		return ret;
