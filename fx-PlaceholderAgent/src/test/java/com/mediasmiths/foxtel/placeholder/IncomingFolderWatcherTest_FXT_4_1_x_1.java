@@ -18,10 +18,13 @@ import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.messagetests.ResultLogger;
 
-public class IncomingFolderWatcherTest {
+public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 
-	private static Logger logger = Logger.getLogger(IncomingFolderWatcherTest.class);
+	private static Logger logger = Logger.getLogger(IncomingFolderWatcherTest_FXT_4_1_x_1.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+
 	
 	private File xml1;
 	private File xml2;
@@ -118,7 +121,8 @@ public class IncomingFolderWatcherTest {
 	}
 
 	@Test
-	public void testNewFilesAreQueued() throws FileNotFoundException, IOException {
+	public void testNewFilesAreQueued_FXT_4_1_x_1() throws FileNotFoundException, IOException {
+		logger.info("Starting FXT_4_1_x_1  The XML file is discovered");
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
 				watchFolderPath);
@@ -165,8 +169,21 @@ public class IncomingFolderWatcherTest {
 		// check results
 		logger.trace("testNewFilesAreQueued queue size is "+queue.size() );
 		assertEquals(2,queue.size());
-		assertTrue(queue.contains(xml1.getAbsolutePath()));
-		assertTrue(queue.contains(xml2.getAbsolutePath()));
+		
+		Boolean xml1Found=queue.contains(xml1.getAbsolutePath());
+		assertTrue(xml1Found);
+		
+		Boolean xml2Found=queue.contains(xml2.getAbsolutePath());
+		assertTrue(xml2Found);
+		
+		if(xml1Found && xml2Found)
+		{
+			resultLogger.info("FXT_4_1_x_1  The XML file is discovered --Passed for 4.1.1-11");
+		}
+		else
+		{
+			resultLogger.info("FXT_4_1_x_1  The XML file is discovered --Failed for 4.1.1-11");
+		}
 
 	}
 

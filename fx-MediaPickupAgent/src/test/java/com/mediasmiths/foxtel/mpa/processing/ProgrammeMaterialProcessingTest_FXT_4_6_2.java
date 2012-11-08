@@ -74,24 +74,24 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	}
 
 	@Test
-	public void testValidMessageValidMediaMediaFirst_FXT_4_6_2()
+	public void testValidMessageValidMediaMediaFirst_FXT_4_6_2_1()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
 		
-		String testName="FXT 4.6.2.2  -  Title /Material/Package metadata is updated in Viz Ardome";
+		String testName="FXT 4.6.2.2_1  -  Title /Material/Package metadata is updated in Viz Ardome /Media matched with placeholder(Part2)";
 		logger.info("Starting" +testName);
 		
 		testMessageProcesses(true,true, testName);
 	}
 
 	@Test
-	public void testValidMessageValidMediaMessageFirst_FXT_4_6_2()
+	public void testValidMessageValidMediaMessageFirst_FXT_4_6_2_1()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
 		
-		String testName="FXT 4.6.2.2  -  Title /Material/Package metadata is updated in Viz Ardome";
+		String testName="FXT 4.6.2.2_1  -  Title /Material/Package metadata is updated in Viz Ardome/Media matched with placeholder(Part2)";
 		logger.info("Starting" +testName);
 		
 		

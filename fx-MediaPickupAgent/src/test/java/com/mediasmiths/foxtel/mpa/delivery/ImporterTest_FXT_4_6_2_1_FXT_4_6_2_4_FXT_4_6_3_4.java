@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,10 +21,14 @@ import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 
-public class ImporterTest {
+public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
+	
+	private static Logger logger = Logger.getLogger(ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4.class);
+	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 	private PendingImportQueue pendingImports;
 	private String incomingPath;
@@ -82,8 +87,9 @@ public class ImporterTest {
 	}
 
 	@Test
-	public void testDelivery() throws IOException, InterruptedException {
+	public void testDelivery_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4() throws IOException, InterruptedException {
 
+		logger.info("Starting FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived");
 		// add pending import to the queue
 		pendingImports.add(pendingImport);
 		// wait for some time to allow processing to take place
@@ -93,13 +99,28 @@ public class ImporterTest {
 		assertTrue(pendingImports.size() == 0);
 
 		// check the files have been delivered to the expected folders
-		assertTrue(new File(ardomeImportPath + IOUtils.DIR_SEPARATOR + masterID
-				+ FilenameUtils.EXTENSION_SEPARATOR + "mxf").exists());
-		assertTrue(new File(archivePath + IOUtils.DIR_SEPARATOR + masterID
-				+ FilenameUtils.EXTENSION_SEPARATOR + "xml").exists());
+		Boolean mxfExists=new File(ardomeImportPath + IOUtils.DIR_SEPARATOR + masterID+ FilenameUtils.EXTENSION_SEPARATOR + "mxf").exists();
+		assertTrue(mxfExists);
+		
+		Boolean xmlExists=new File(archivePath + IOUtils.DIR_SEPARATOR + masterID+ FilenameUtils.EXTENSION_SEPARATOR + "xml").exists();
+		assertTrue(xmlExists);
+		
 		// check the files are no longer in the original folders
-		assertFalse(media.exists());
-		assertFalse(materialxml.exists());
+		Boolean mediaExists= media.exists();
+		assertFalse(mediaExists);
+		
+		Boolean materialExists=materialxml.exists();
+		assertFalse(materialExists);
+		
+		if (mxfExists && xmlExists && !materialExists &&!mediaExists)
+		{
+			resultLogger.info("FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived --Passed");
+		}
+		else
+			resultLogger.info("FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived --Failed");
+
+		
+		
 	}
 
 	@Test
