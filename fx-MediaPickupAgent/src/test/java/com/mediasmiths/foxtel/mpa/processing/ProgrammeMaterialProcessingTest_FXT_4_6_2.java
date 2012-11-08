@@ -29,7 +29,7 @@ import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class ProgrammeMaterialProcessingTest extends MaterialProcessingTest {
+public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessingTest {
 
 	/**
 	 * Tests that handling of invalid messages
