@@ -76,6 +76,8 @@ public interface MayamClient {
 	public void failTaskForAsset(MayamTaskListType txDelivery, String id) throws MayamClientException;
 
 	ProgrammeMaterialType getProgrammeMaterialType(String materialID);
-
 	String getMaterialIDofPackageID(String packageID) throws MayamClientException;
+	
+	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException;
+	
 }
