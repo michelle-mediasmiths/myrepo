@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigInteger;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -30,7 +31,9 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
-public class MayamTitleControllerTest {
+public class MayamTitleControllerTest_FXT_4_2_1 {
+	
+	private static Logger logger = Logger.getLogger(MayamTitleControllerTest_FXT_4_2_1.class);
 
 	MayamTitleController controller;
 	TasksClient client;
@@ -39,7 +42,7 @@ public class MayamTitleControllerTest {
 	TitleDescriptionType titleDescription;
 	AttributeMap map;
 	
-	public MayamTitleControllerTest() {
+	public MayamTitleControllerTest_FXT_4_2_1() {
 		super();
 	}
 	
@@ -93,8 +96,10 @@ public class MayamTitleControllerTest {
 	}
 	
 	@Test
-	public void testCreateTitle() 
+	public void testCreateTitle_FXT_4_2_1() 
 	{
+		
+		logger.info("Starting FXT 4.2.1 Validate Functionality");
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
 			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
@@ -106,6 +111,16 @@ public class MayamTitleControllerTest {
 		assertEquals( MayamClientErrorCode.SUCCESS, returnCode);
 		
 		returnCode = controller.createTitle(cuTitle);
+		
+		if(MayamClientErrorCode.SUCCESS== returnCode)
+		{
+			logger.info(" FXT 4.2.1 Validate Functionality --Passed" );
+		}
+		else
+		{
+			logger.info(" FXT 4.2.1 Validate Functionality --Failed");
+		}
+		
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	

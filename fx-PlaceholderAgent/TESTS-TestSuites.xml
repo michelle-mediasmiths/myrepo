@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" id="0" name="AddOrUpdateMaterialTest_FXT_4_1_5" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.38">
+  <testsuite errors="0" failures="0" id="0" name="AddOrUpdateMaterialTest_FXT_4_1_5" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.341">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -42,7 +42,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -88,7 +88,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -124,18 +124,18 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialXSDInvalid_FXT_4_1_5_2" time="0.044" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialProcessing" time="0.041" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialProcessing" time="0.047" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialXSDInvalid_FXT_4_1_5_2" time="0.045" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialValidation_FXT_4_1_5_3_4_5" time="0.098" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialValidation_FXT_4_1_5_3_4_5" time="0.083" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testUpdateMaterialProcessing_FXT_4_1_5_6" time="0.087" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testUpdateMaterialProcessing_FXT_4_1_5_6" time="0.08" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialTitleDoesntExist_FXT_4_1_5_7" time="0.1" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdateMaterialTest_FXT_4_1_5" name="testAddMaterialTitleDoesntExist_FXT_4_1_5_7" time="0.089" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="1" name="AddOrUpdatePackageTest_FXT_4_1_9" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="1.096">
+  <testsuite errors="0" failures="0" id="1" name="AddOrUpdatePackageTest_FXT_4_1_9" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="1.028">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -177,7 +177,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -223,7 +223,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -259,18 +259,18 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageXSDInvalid_FXT_4_1_9_2" time="0.279" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageProcessing" time="0.285" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddValidPackage_FXT_4_1_9_3_4_5" time="0.239" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageXSDInvalid_FXT_4_1_9_2" time="0.125" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testUpdatePackageProcessing_FXT_4_1_9_6" time="0.088" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddValidPackage_FXT_4_1_9_3_4_5" time="0.166" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageNoMaterial_FXT_4_1_9_7" time="0.149" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testUpdatePackageProcessing_FXT_4_1_9_6" time="0.071" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageProcessing" time="0.073" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.AddOrUpdatePackageTest_FXT_4_1_9" name="testAddPackageNoMaterial_FXT_4_1_9_7" time="0.151" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="2" name="CreateOrUpdateTitleTest_FXT_4_1_1" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="7" time="0.599">
+  <testsuite errors="0" failures="0" id="2" name="CreateOrUpdateTitleTest_FXT_4_1_1" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="7" time="0.578">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -312,7 +312,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -358,7 +358,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -394,22 +394,22 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testValidCreateTitleProcessing" time="0.072" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testValidCreateTitleProcessing" time="0.058" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleXSDInvalid_FXT_4_1_1_2" time="0.062" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleXSDInvalid_FXT_4_1_1_2" time="0.055" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testValidCreateTitle_FXT_4_1_1_3_4" time="0.103" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testValidCreateTitle_FXT_4_1_1_3_4" time="0.107" />
 
       <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testValidCreateTitleProcessingFailsOnExistingTitle" time="0.048" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleInvalidDates_FXT_4_1_0_4_5_FXT_4_1_1_6" time="0.104" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleInvalidDates_FXT_4_1_0_4_5_FXT_4_1_1_6" time="0.105" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleUnknownChannel_FXT_4_1_0_6" time="0.107" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleUnknownChannel_FXT_4_1_0_6" time="0.105" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleTitleIdNull" time="0.1" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.CreateOrUpdateTitleTest_FXT_4_1_1" name="testCreateTitleTitleIdNull" time="0.096" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="3" name="DeleteMaterialTest_FXT_4_1_7" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.474">
+  <testsuite errors="0" failures="0" id="3" name="DeleteMaterialTest_FXT_4_1_7" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.445">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -451,7 +451,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -497,7 +497,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -533,18 +533,18 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialProcessing" time="0.056" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialProcessing" time="0.066" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialXSDInvalid_FXT_4_1_7_2" time="0.076" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialXSDInvalid_FXT_4_1_7_2" time="0.055" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialNotProtected_FXT_4_1_7_3_4_5" time="0.112" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialNotProtected_FXT_4_1_7_3_4_5" time="0.106" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialDoesntExist_FXT_4_1_7_6" time="0.114" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialDoesntExist_FXT_4_1_7_6" time="0.109" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialProtected_FXT_4_1_7_7" time="0.113" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeleteMaterialTest_FXT_4_1_7" name="testDeleteMaterialProtected_FXT_4_1_7_7" time="0.105" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="4" name="DeletePackageTest_FXT_4_1_11" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.49">
+  <testsuite errors="0" failures="0" id="4" name="DeletePackageTest_FXT_4_1_11" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.473">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -586,7 +586,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -632,7 +632,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -668,18 +668,18 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageProcessing" time="0.061" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageProcessing" time="0.062" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageXSDInvalid_FXT_4_1_11_2" time="0.055" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageXSDInvalid_FXT_4_1_11_2" time="0.056" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageNotProtected_FXT_4_1_11_3_4_5" time="0.12" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageNotProtected_FXT_4_1_11_3_4_5" time="0.117" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageDoesntExist_FXT_4_1_11_6" time="0.133" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageDoesntExist_FXT_4_1_11_6" time="0.123" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageProtected_FXT_4_1_11_7" time="0.116" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.DeletePackageTest_FXT_4_1_11" name="testDeletePackageProtected_FXT_4_1_11_7" time="0.111" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="5" name="PurgeTitleTest_FXT_4_1_3" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.376">
+  <testsuite errors="0" failures="0" id="5" name="PurgeTitleTest_FXT_4_1_3" package="com.mediasmiths.foxtel.messagetests" skipped="0" tests="5" time="0.374">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -721,7 +721,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -767,7 +767,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -805,16 +805,16 @@
 
       <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testPurgeTitleProcessing" time="0.049" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testPurgeTitleXSDInvalid_FXT_4_1_3_2" time="0.051" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testPurgeTitleXSDInvalid_FXT_4_1_3_2" time="0.053" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testDeleteTitleNotProtected_FXT_4_1_3_3_4_5_FXT_4_1_0_7" time="0.089" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testDeleteTitleNotProtected_FXT_4_1_3_3_4_5_FXT_4_1_0_7" time="0.104" />
 
-      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testPurgeTitleDoesntExist_FXT_4_1_3_6" time="0.102" />
+      <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testPurgeTitleDoesntExist_FXT_4_1_3_6" time="0.083" />
 
       <testcase classname="com.mediasmiths.foxtel.messagetests.PurgeTitleTest_FXT_4_1_3" name="testDeleteTitleProtected_FXT_4_1_3_7" time="0.082" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="6" name="DeleteMaterialTest_FXT_4_1_27_28_29" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="5" time="0.427">
+  <testsuite errors="0" failures="0" id="6" name="DeleteMaterialTest_FXT_4_1_27_28_29" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="5" time="0.411">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -856,7 +856,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -902,7 +902,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -938,18 +938,18 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProcessing" time="0.061" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProcessing" time="0.054" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialNotProtected" time="0.106" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialNotProtected" time="0.102" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialIsProtected_FXT_4_1_27_28_29" time="0.103" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialIsProtected_FXT_4_1_27_28_29" time="0.106" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProtectedCheckFails" time="0.106" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProtectedCheckFails" time="0.099" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProcessingFails" time="0.05" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.DeleteMaterialTest_FXT_4_1_27_28_29" name="testDeleteMaterialProcessingFails" time="0.046" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="7" name="IncomingFolderWatcherTest_FXT_4_1_x_1" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="3" time="22.118">
+  <testsuite errors="0" failures="0" id="7" name="IncomingFolderWatcherTest_FXT_4_1_x_1" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="3" time="22.119">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -991,7 +991,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -1037,7 +1037,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -1073,14 +1073,14 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.IncomingFolderWatcherTest_FXT_4_1_x_1" name="testExistingFilesAreQueued" time="0.109" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.IncomingFolderWatcherTest_FXT_4_1_x_1" name="testExistingFilesAreQueued" time="0.11" />
 
       <testcase classname="com.mediasmiths.foxtel.placeholder.IncomingFolderWatcherTest_FXT_4_1_x_1" name="testNewFilesAreQueued_FXT_4_1_x_1" time="11.004" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.IncomingFolderWatcherTest_FXT_4_1_x_1" name="testOtherFileTypesAreIgnored" time="11.004" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.IncomingFolderWatcherTest_FXT_4_1_x_1" name="testOtherFileTypesAreIgnored" time="11.003" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="8" name="MultipleActionsInMessageTest_FXT_4_1_0_2" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="1" time="0.085">
+  <testsuite errors="0" failures="0" id="8" name="MultipleActionsInMessageTest_FXT_4_1_0_2" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="1" time="0.088">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -1122,7 +1122,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -1168,7 +1168,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -1204,10 +1204,10 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.MultipleActionsInMessageTest_FXT_4_1_0_2" name="testMultipleActionsInMessage" time="0.083" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.MultipleActionsInMessageTest_FXT_4_1_0_2" name="testMultipleActionsInMessage" time="0.087" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="9" name="NonXSDConformingTest_FXT_4_1_0_1" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="1" time="0.045">
+  <testsuite errors="0" failures="0" id="9" name="NonXSDConformingTest_FXT_4_1_0_1" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="1" time="0.049">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -1249,7 +1249,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -1295,7 +1295,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -1331,10 +1331,10 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.NonXSDConformingTest_FXT_4_1_0_1" name="testNonXSDConformingFileFails" time="0.045" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.NonXSDConformingTest_FXT_4_1_0_1" name="testNonXSDConformingFileFails" time="0.048" />
 
   </testsuite>
-  <testsuite errors="0" failures="0" id="10" name="PurgeTitleTest_FXT_4_1_24_25_26" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="5" time="0.527">
+  <testsuite errors="0" failures="0" id="10" name="PurgeTitleTest_FXT_4_1_24_25_26" package="com.mediasmiths.foxtel.placeholder" skipped="0" tests="5" time="0.524">
       <properties>
           <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
 
@@ -1376,7 +1376,7 @@
 
           <property name="os.arch" value="x86_64" />
 
-          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar" />
+          <property name="surefire.real.class.path" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar" />
 
           <property name="java.io.tmpdir" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/" />
 
@@ -1422,7 +1422,7 @@
 
           <property name="java.home" value="/Library/Java/JavaVirtualMachines/jdk1.7.0_10.jdk/Contents/Home/jre" />
 
-          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter1468275883908479754.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6557740547072999110tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire6864347270454428756tmp" />
+          <property name="sun.java.command" value="/var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefirebooter4220919381725571494.jar /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire3310048455276110477tmp /var/folders/s4/kb5r53l97cz_lmr0bycx0d200000gs/T/surefire5930845854168308418tmp" />
 
           <property name="java.specification.vendor" value="Oracle Corporation" />
 
@@ -1458,15 +1458,15 @@
 
       </properties>
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testPurgeTitleProcessing" time="0.077" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testPurgeTitleProcessing" time="0.075" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testDeleteTitleNotProtected" time="0.13" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testDeleteTitleNotProtected" time="0.129" />
 
       <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testDeleteTitleIsProected_FXT_4_1_24_25_26" time="0.137" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testPurgeTitleProcessingFails" time="0.059" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testPurgeTitleProcessingFails" time="0.058" />
 
-      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testDeleteTitleRequestFail" time="0.119" />
+      <testcase classname="com.mediasmiths.foxtel.placeholder.PurgeTitleTest_FXT_4_1_24_25_26" name="testDeleteTitleRequestFail" time="0.121" />
 
   </testsuite>
 </testsuites>

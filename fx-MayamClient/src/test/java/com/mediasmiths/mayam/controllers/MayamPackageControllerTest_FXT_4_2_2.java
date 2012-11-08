@@ -15,6 +15,7 @@ import java.math.BigInteger;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentMatcher;
@@ -35,7 +36,8 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class MayamPackageControllerTest {
+public class MayamPackageControllerTest_FXT_4_2_2 {
+	private static Logger logger = Logger.getLogger(MayamPackageControllerTest_FXT_4_2_2.class);
 
 	MayamPackageController controller;
 	TasksClient client;
@@ -43,7 +45,7 @@ public class MayamPackageControllerTest {
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
 	
-	public MayamPackageControllerTest() {
+	public MayamPackageControllerTest_FXT_4_2_2() {
 		super();
 	}
 	
@@ -85,6 +87,9 @@ public class MayamPackageControllerTest {
 	@Test
 	public void testCreatePackage() 
 	{
+		
+		logger.info("Starting FXT 4.2.2 Validate Functionality");
+
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
 			when(client.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
@@ -93,6 +98,16 @@ public class MayamPackageControllerTest {
 		}
 
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
+		
+		
+		if(MayamClientErrorCode.SUCCESS== returnCode)
+		{
+			logger.info(" FXT 4.2.2 Validate Functionality --Passed" );
+		}
+		else
+		{
+			logger.info(" FXT 4.2.2 Validate Functionality --Failed");
+		}
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	

@@ -13,13 +13,15 @@ import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.PathResolverTest_FXT_4_4_4;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
-public class JobBuilderTest
+public class JobBuilderTest_FXT_4_4
 {
-	
+	private static Logger logger = Logger.getLogger(JobBuilderTest_FXT_4_4.class);
+
 	private static String PACKAGEID = "packageid";
 	private static String MATERIALID = "materialid";
 	private static String INPUTFILE = "f:\\tcinput\\packageid.mxf";
@@ -34,7 +36,7 @@ public class JobBuilderTest
 	private MayamClient mayamClient;
 	private PathResolver pathResolver;
 	
-	private final static Logger log = Logger.getLogger(JobBuilderTest.class);
+	private final static Logger log = Logger.getLogger(JobBuilderTest_FXT_4_4.class);
 	
 	@Before
 	public void before(){
@@ -50,6 +52,9 @@ public class JobBuilderTest
 	
 	@Test
 	public void testBuildJobForTxPackageTranscode() throws MayamClientException, JobBuilderException, RemoteException{
+		
+		logger.info("Starting FXT 4.4.1/2 – Request Transcode Job/Select Correct Profile");
+
 	
 		PackageType pt = buildPackage(PresentationFormatType.HD);
 		pt.setMaterialID(MATERIALID);

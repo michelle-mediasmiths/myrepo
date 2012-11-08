@@ -2,14 +2,15 @@ package com.mediasmiths.foxtel.pathresolver;
 
 import static org.junit.Assert.assertEquals;
 
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 
-public class PathResolverTest
-{
+public class PathResolverTest_FXT_4_4_4
+{	
+	private static Logger logger = Logger.getLogger(PathResolverTest_FXT_4_4_4.class);
 
 	private final static String NIXPATH = "/storage";
 	private final static String WINPATH = "f:";
@@ -28,7 +29,7 @@ public class PathResolverTest
 	@Test
 	public void testNixToWin()
 	{
-
+		logger.info("Starting FXT 4.4.4 – Manage output file");
 		String input = "/storage/my/important/folder";
 		String output = toTest.winPath(PathType.NIX, input);
 		String expected = WINPATH + "\\my\\important\\folder";
@@ -37,6 +38,14 @@ public class PathResolverTest
 		input = "/storage/my/important/file.txt";
 		output = toTest.winPath(PathType.NIX, input);
 		expected = WINPATH + "\\my\\important\\file.txt";
+		
+		if (expected == output)
+		{
+			logger.info(" FXT 4.4.4 – Manage output file --Passed");
+		}
+		else
+			logger.info(" FXT 4.4.4 – Manage output file --Failed");
+
 		assertEquals(expected, output);
 
 	}
@@ -73,6 +82,8 @@ public class PathResolverTest
 	@Test
 	public void testNixToUNC()
 	{
+		logger.info("Starting FXT 4.4.4 – Manage output file");
+
 
 		String input = "/storage/my/important/folder";
 		String output = toTest.uncPath(PathType.NIX, input);
@@ -82,6 +93,13 @@ public class PathResolverTest
 		input = "/storage/my/important/file.txt";
 		output = toTest.uncPath(PathType.NIX, input);
 		expected = UNCPATH + "\\my\\important\\file.txt";
+		
+		if (expected == output)
+		{
+			logger.info(" FXT 4.4.4 – Manage output file --Passed");
+		}
+		else
+			logger.info(" FXT 4.4.4 – Manage output file --Failed");
 		assertEquals(expected, output);
 
 	}
@@ -120,10 +138,20 @@ public class PathResolverTest
 
 	@Test
 	public void testRelativePath(){
+		
+		logger.info("Starting FXT 4.4.4 – Manage output file");
+
 		String outer = "/my/storage/";
 		String inner = "/my/storage/path/to/resource";
 		String expected = "path/to/resource";
 		String output = toTest.getRelativePath(outer, inner);
+		
+		if (expected == output)
+		{
+			logger.info(" FXT 4.4.4 – Manage output file --Passed");
+		}
+		else
+			logger.info(" FXT 4.4.4 – Manage output file --Failed");
 		assertEquals(expected,output);
 		
 
