@@ -126,7 +126,7 @@ public class MayamMaterialController extends MayamController
 			AttributeMap result;
 			try
 			{
-				result = client.createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(attributes.getAttributes());
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
@@ -182,7 +182,7 @@ public class MayamMaterialController extends MayamController
 			 * AudioTracks audioTracks = material.getAudioTracks(); List<Track> tracks = audioTracks.getTrack(); for (int i = 0; i < tracks.size(); i++) { Track track = tracks.get(i);
 			 * track.getTrackEncoding().toString(); track.getTrackName().toString(); track.getTrackNumber(); }
 			 */
-
+			
 			if (!attributesValid)
 			{
 				log.error("Invalid attributes on material create request");
@@ -192,7 +192,7 @@ public class MayamMaterialController extends MayamController
 			AttributeMap result;
 			try
 			{
-				result = client.createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(attributes.getAttributes());
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
@@ -229,7 +229,7 @@ public class MayamMaterialController extends MayamController
 
 			try
 			{
-				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
+				assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			}
 			catch (RemoteException e1)
 			{
@@ -272,7 +272,7 @@ public class MayamMaterialController extends MayamController
 				AttributeMap result;
 				try
 				{
-					result = client.updateAsset(attributes.getAttributes());
+					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
 						log.warn("Mayam failed to update Material");
@@ -311,7 +311,7 @@ public class MayamMaterialController extends MayamController
 
 			try
 			{
-				assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
+				assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			}
 			catch (RemoteException e1)
 			{
@@ -403,7 +403,7 @@ public class MayamMaterialController extends MayamController
 				AttributeMap result;
 				try
 				{
-					result = client.updateAsset(attributes.getAttributes());
+					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
 						log.warn("Mayam failed to update Material");
@@ -436,7 +436,7 @@ public class MayamMaterialController extends MayamController
 		boolean materialFound = false;
 		try
 		{
-			AttributeMap assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 			if (assetAttributes != null)
 			{
 				materialFound = true;
@@ -455,7 +455,7 @@ public class MayamMaterialController extends MayamController
 		AttributeMap assetAttributes = null;
 		try
 		{
-			assetAttributes = client.getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 		}
 		catch (RemoteException e1)
 		{
@@ -610,7 +610,7 @@ public class MayamMaterialController extends MayamController
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try
 		{
-			client.deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
 		}
 		catch (RemoteException e)
 		{

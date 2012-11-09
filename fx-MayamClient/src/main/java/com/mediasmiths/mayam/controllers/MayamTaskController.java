@@ -50,7 +50,7 @@ public class MayamTaskController extends MayamController{
 
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.getAsset(
+			assetAttributes = client.assetApi().getAsset(
 					AssetType.valueOf(assetType.toString()), assetID);
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID);
@@ -72,7 +72,7 @@ public class MayamTaskController extends MayamController{
 
 			try {
 				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
-				client.createTask(newTask);
+				client.taskApi().createTask(newTask);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam while attempting to create task");
 				throw new MayamClientException(
@@ -91,7 +91,7 @@ public class MayamTaskController extends MayamController{
 			throws MayamClientException {
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try {
-			client.deleteTask(taskID);
+			client.taskApi().deleteTask(taskID);
 		} catch (RemoteException e) {
 			log.error("Error deleting task : " + taskID);
 			returnCode = MayamClientErrorCode.TASK_DELETE_FAILED;
@@ -105,7 +105,7 @@ public class MayamTaskController extends MayamController{
 		log.info(String.format("Searching for task of type %s for asset %s",
 				type.getText(), id));
 
-		final FilterCriteria criteria = client.createFilterCriteria();
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID,
 				type.getText());
 		criteria.getFilterEqualities().setAttribute(Attribute.ASSET_ID, id);
@@ -114,7 +114,7 @@ public class MayamTaskController extends MayamController{
 						SortOrder.Direction.DESC));
 		FilterResult result;
 		try {
-			result = client.getTasks(criteria, 10, 0);
+			result = client.taskApi().getTasks(criteria, 10, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
 			if (result.getTotalMatches() != 1) {
@@ -136,7 +136,7 @@ public class MayamTaskController extends MayamController{
 		
 		try {
 			task = updateAccessRights(task);
-			client.updateTask(task);
+			client.taskApi().updateTask(task);
 		} catch (RemoteException e) {
 			log.error("remote expcetion saving task", e);
 			throw new MayamClientException(
@@ -147,7 +147,7 @@ public class MayamTaskController extends MayamController{
 	
 	public AttributeMap getTask(long taskId) throws RemoteException
 	{
-		return client.getTask(taskId);
+		return client.taskApi().getTask(taskId);
 	}
 	
 	private AttributeMap updateAccessRights(AttributeMap task)

@@ -76,7 +76,7 @@ public class MayamPackageController extends MayamController
 			AttributeMap result;
 			try
 			{
-				result = client.createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(attributes.getAttributes());
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Package");
@@ -109,7 +109,7 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -146,7 +146,7 @@ public class MayamPackageController extends MayamController
 				AttributeMap result;
 				try
 				{
-					result = client.updateAsset(attributes.getAttributes());
+					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
 						log.warn("Mayam failed to update Package");
@@ -184,7 +184,7 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -212,7 +212,7 @@ public class MayamPackageController extends MayamController
 				AttributeMap result;
 				try
 				{
-					result = client.updateAsset(attributes.getAttributes());
+					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
 						log.warn("Mayam failed to update Package");
@@ -245,7 +245,7 @@ public class MayamPackageController extends MayamController
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		try
 		{
-			client.deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 		}
 		catch (RemoteException e)
 		{
@@ -260,7 +260,7 @@ public class MayamPackageController extends MayamController
 		boolean packageFound = false;
 		try
 		{
-			AttributeMap assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 			if (assetAttributes != null)
 			{
 				packageFound = true;
@@ -279,7 +279,7 @@ public class MayamPackageController extends MayamController
 		AttributeMap assetAttributes = null;
 		try
 		{
-			assetAttributes = client.getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 		}
 		catch (RemoteException e1)
 		{

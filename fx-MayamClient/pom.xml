@@ -39,10 +39,10 @@
 			<artifactId>wf-mq</artifactId>
 			<version>0.9.9.9.2</version>
 		</dependency>
-		<dependency>
+ 		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>tasks-ws-client</artifactId>
-			<version>0.9.9.9.3</version>
+			<version>0.9.9.9.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
@@ -134,6 +134,16 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*FXT*.class</include>
+					</includes>
+				</configuration>
+			</plugin>
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

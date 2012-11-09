@@ -26,7 +26,7 @@ public class MuleWorkflowController {
 	
 	public MuleMessage initiateQcWorkflow(String assetID, boolean isTx)
 	{
-		String payload = "<?xml version=1.0><invokeIntalioQCFlow><assetId>";
+		String payload = "<?xml version='1.0'><invokeIntalioQCFlow><assetId>";
 		payload += assetID;
 		payload += "</assetId><forTXDelivery>";
 		payload += isTx;

@@ -3,9 +3,11 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
         xmlns:file="http://www.mulesoft.org/schema/mule/file"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xsi:schemaLocation="
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+        http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.3/mule-http.xsd
         http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
         
 	<description>
@@ -72,7 +74,7 @@
 	        <http:outbound-endpoint exchange-pattern="request-response" host="localhost" port="8080" path="ode/processes/TranscodeTrial/WFE/WFE-8" mimeType="text/xml" doc:name="HTTP"/>
 	        <echo-component doc:name="Echo"/>
 	    </flow>-->
-	            <service name="MyService"> 
+	    <!--        <service name="MyService"> 
             <inbound>
                 	            <request-reply storePrefix="mainFlow">
              <jms:inbound-endpoint queue="my.queue"/>
@@ -85,7 +87,19 @@
              <jms:outbound-endpoint queue="my.queue"/>
              </pass-through-router>
             </outbound>
-        </service>
+        </service>-->
+        
+        
+		<service name="MuleQcService">
+
+			<inbound>
+				<http:inbound-endpoint host="localhost" port="9085" path="/qc" synchronous="true" name="InvokeAutoQC" />
+			</inbound>
+			  
+
+			<component class="com.mediasmiths.mule.MuleClientImpl"/>
+		</service>
+
 	</model>
 </mule>
 
