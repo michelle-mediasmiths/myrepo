@@ -46,6 +46,7 @@
 		<module>fx-MqClient</module>
 		<module>fx-PathResolver</module>
 		<module>fx-MayamClientInterface</module>
+		<module>fx-MayamClientStub</module>
 	</modules>
 
 	<properties>
