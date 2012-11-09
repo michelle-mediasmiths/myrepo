@@ -70,7 +70,7 @@
 					<preparationGoals>install</preparationGoals>
 					<goals>deploy</goals>
 				</configuration>
-			</plugin>
+			</plugin>			
 		</plugins>
 	</build>
 
