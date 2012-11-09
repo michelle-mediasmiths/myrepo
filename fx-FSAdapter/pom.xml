@@ -1,0 +1,126 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>foxtel-parent</artifactId>
+		<version>0.0.4-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>fx-FSAdapter</artifactId>
+	<packaging>war</packaging>
+
+	<name>fx-FSAdapter Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<!-- begin test dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- end test dependencies -->
+		
+		<!-- begin mediasmiths dependencies -->
+		<dependency>
+			<groupId>com.mediasmiths.std.guice</groupId>
+			<artifactId>stdlib-guice-webapp</artifactId>
+			<version>${stdlib.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.mediasmiths.std.dexter</groupId>
+			<artifactId>dexter-common</artifactId>
+			<version>${stdlib.version}</version>
+		</dependency>
+		<!-- end mediasmiths dependencies -->
+	</dependencies>
+
+	<build>
+		<finalName>fx-FSAdapter</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+		
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>schemagen</id>
+						<goals>
+							<goal>schemagen</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformSchemas>
+						<transformSchema>
+							<uri>http://ns.mediasmiths.com/foxtel/fs/adapter</uri>
+							<toFile>FSAdapter.xsd</toFile>
+						</transformSchema>
+					</transformSchemas>
+					<includes>
+						<include>com/mediasmiths/foxtel/fs/model/*</include>
+					</includes>
+					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
+				</configuration>
+			</plugin>
+		</plugins>
+
+
+		<pluginManagement>
+
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.axis2</groupId>
+										<artifactId>
+											axis2-java2wsdl-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.6.2,)
+										</versionRange>
+										<goals>
+											<goal>java2wsdl</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>

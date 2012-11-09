@@ -47,6 +47,7 @@
 		<module>fx-PathResolver</module>
 		<module>fx-MayamClientInterface</module>
 		<module>fx-MayamClientStub</module>
+		<module>fx-FSAdapter</module>
 	</modules>
 
 	<properties>
