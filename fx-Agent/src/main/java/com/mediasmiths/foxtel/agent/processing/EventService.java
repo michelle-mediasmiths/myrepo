@@ -17,65 +17,86 @@ import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 @Singleton
 public class EventService
 {
-	
+
 	private final static Logger logger = Logger.getLogger(EventService.class);
-	
+
 	@Inject
 	protected EventAPI events;
-	@Inject @Named("service.events.namespace") 
+	@Inject
+	@Named("service.events.namespace")
 	protected String eventsNamespace;
 	@Inject
 	protected Marshaller marshaller;
-	 
-/**
- * events notification
- * @param name
- * @param payload
- */
+	@Inject
+	@Named("service.events.enabled")
+	protected boolean enabled;
+
+	/**
+	 * events notification
+	 * 
+	 * @param name
+	 * @param payload
+	 */
 	public void saveEvent(String name, String payload)
 	{
-		logger.debug("saving event with name"+name);
-		
-		try
+		if (enabled)
 		{
-			EventEntity event = new EventEntity();
-			event.setEventName(name);
-			event.setNamespace(eventsNamespace);
 
-			event.setPayload(payload);
-			event.setTime(System.currentTimeMillis());
-			events.saveReport(event);
+			logger.debug("saving event with name" + name);
+
+			try
+			{
+				EventEntity event = new EventEntity();
+				event.setEventName(name);
+				event.setNamespace(eventsNamespace);
+
+				event.setPayload(payload);
+				event.setTime(System.currentTimeMillis());
+				events.saveReport(event);
+			}
+			catch (RuntimeException re)
+			{
+				logger.error("error saving event " + name, re);
+			}
 		}
-		catch (RuntimeException re)
+		else
 		{
-			logger.error("error saving event" + name, re);
+			logger.info("did not save event '" + name + "' as events are disabled");
 		}
 
 	}
 
+	/**
+	 * events notification
+	 * 
+	 * @param name
+	 * @param payload
+	 */
 
-/**
- * events notification
- * @param name
- * @param payload
- */
-	
 	public void saveEvent(String name, Object payload)
 	{
-		try
+		if (enabled)
 		{
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			marshaller.marshal(payload, baos);
-			String sPayload = baos.toString("UTF-8");
-			saveEvent(name, sPayload);
+
+			try
+			{
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				marshaller.marshal(payload, baos);
+				String sPayload = baos.toString("UTF-8");
+				saveEvent(name, sPayload);
+			}
+			catch (JAXBException e)
+			{
+				logger.error("error saving event" + name, e);
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				logger.error("error saving event" + name, e);
+			}
 		}
-		catch (JAXBException e)
+		else
 		{
-			logger.error("error saving event" + name, e);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			logger.error("error saving event" + name, e);
+			logger.info("did not save event '" + name + "' as events are disabled");
 		}
 
 	}

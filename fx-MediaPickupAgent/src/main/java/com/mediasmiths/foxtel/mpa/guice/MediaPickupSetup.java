@@ -5,19 +5,31 @@ import java.util.List;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
-public class MediaPickupSetup implements GuiceSetup {
+public class MediaPickupSetup implements GuiceSetup
+{
 
 	@Override
-	public void registerModules(List<Module> modules, PropertyFile config) {
+	public void registerModules(List<Module> modules, PropertyFile config)
+	{
 		modules.add(new MediaPickupModule());
-		modules.add(new MayamClientModule());
+
+		if (config.getBoolean("stub.out.mayam", false))
+		{
+			modules.add(new MayamClientStubModule());
+		}
+		else
+		{
+			modules.add(new MayamClientModule());
+		}
 	}
 
 	@Override
-	public void injectorCreated(Injector injector) {
+	public void injectorCreated(Injector injector)
+	{
 	}
 
 }

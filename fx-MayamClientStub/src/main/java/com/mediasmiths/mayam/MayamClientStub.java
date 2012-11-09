@@ -14,6 +14,7 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
@@ -33,10 +34,23 @@ import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileFormatEnumType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class MayamClientStub implements MayamClient
@@ -87,7 +101,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
 		{
 			return MayamClientErrorCode.TITLE_CREATION_FAILED;
 		}
@@ -140,7 +154,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.TITLE_FIND_FAILED;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -208,7 +222,7 @@ public class MayamClientStub implements MayamClient
 		{
 			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
 		{
 			return EXISTING_MATERIAL_ID;
 		}
@@ -226,7 +240,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -259,7 +273,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -278,7 +292,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return false;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
 		{
 			return true;
 		}
@@ -315,7 +329,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
-		else if (packageID.equals(EXISTING_PACKAGE_ID))
+		else if (packageID.equals(EXISTING_PACKAGE_ID) || packageID.equals(PROTECTED_PACKAGE_ID))
 		{
 			return MayamClientErrorCode.PACKAGE_CREATION_FAILED;
 		}
@@ -372,7 +386,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.PACKAGE_FIND_FAILED;
 		}
-		else if (packageID.equals(EXISTING_PACKAGE_ID))
+		else if (packageID.equals(EXISTING_PACKAGE_ID) || packageID.equals(PROTECTED_PACKAGE_ID))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -395,7 +409,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return false;
 		}
-		else if (presentationID.equals(EXISTING_PACKAGE_ID))
+		else if (presentationID.equals(EXISTING_PACKAGE_ID) || presentationID.equals(PROTECTED_PACKAGE_ID))
 		{
 			return true;
 		}
@@ -476,7 +490,7 @@ public class MayamClientStub implements MayamClient
 	public PackageType getPackage(String packageID) throws MayamClientException
 	{
 
-		if (packageID.equals(EXISTING_PACKAGE_ID))
+		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
 		{
 			Random randomGenerator = new Random();
 			PackageType pack = new PackageType();
@@ -545,7 +559,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public MaterialType getMaterial(String materialID) throws MayamClientException
 	{
-		if (materialID.equals(EXISTING_MATERIAL_ID))
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
 		{
 
 			MaterialType m = new MaterialType();
@@ -625,19 +639,123 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public ProgrammeMaterialType getProgrammeMaterialType(String materialID)
+	public ProgrammeMaterialType getProgrammeMaterialType(String materialID) throws MayamClientException
 	{
-		// TODO : implement
-		log.warn("unimplementented method in mayam client stub");
-		return null;
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		{
+			Supplier supplier = new Supplier();
+			supplier.setSupplierID(RandomStringUtils.randomAlphabetic(10));
+
+			Details details = new Details();
+			details.setSupplier(supplier);
+			try
+			{
+				details.setDateOfDelivery(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+			}
+			catch (DatatypeConfigurationException e)
+			{
+				log.error("error in mayam client stub", e);
+			}
+			details.setDeliveryVersion(new BigInteger("1"));
+
+			FileMediaType fmt = new FileMediaType();
+			fmt.setFilename("myfile.mxf");
+			fmt.setFormat(FileFormatEnumType.MXF_OP_1_A_IMX_D_10_50);
+
+			Track t = new Track();
+			t.setTrackName(AudioTrackEnumType.CENTER);
+			t.setTrackEncoding(AudioEncodingEnumType.PCM);
+			t.setTrackNumber(1);
+
+			AudioTracks at = new AudioTracks();
+			at.getTrack().add(t);
+
+			Segment sg = new Segment();
+			sg.setSegmentNumber(1);
+			sg.setSegmentTitle("Segment title");
+			sg.setSOM("00:00:00:00");
+			sg.setEOM("00:00:00:00");
+
+			SegmentationType st = new SegmentationType();
+			st.getSegment().add(sg);
+
+			ProgrammeMaterialType pmaterial = new ProgrammeMaterialType();
+			pmaterial.setMaterialID(materialID);
+			pmaterial.setFormat("HD");
+			pmaterial.setAspectRatio("16F16");
+			pmaterial.setFirstFrameTimecode("00:00:00:00");
+			pmaterial.setLastFrameTimecode("00:00:00:00");
+			pmaterial.setDuration("00:00:00:00");
+			pmaterial.setMedia(fmt);
+			pmaterial.setAudioTracks(at);
+			pmaterial.setOriginalConform(st);
+
+			Title title = new Title();
+			title.setTitleID(EXISTING_TITLE_ID);
+
+			title.setProgrammeMaterial(pmaterial);
+
+			Material material = new Material();
+			material.setDetails(details);
+			material.setTitle(title);
+			Presentation presentation = new Presentation();
+
+			String[] packageIds = new String[] { EXISTING_PACKAGE_ID };
+
+			for (String packageID : packageIds)
+			{
+				Package p = getPresentationPackage(packageID);
+				presentation.getPackage().add(p);
+
+			}
+
+			material.getTitle().setProgrammeMaterial(pmaterial);
+			material.getTitle().getProgrammeMaterial().setOriginalConform(null); // clear existing segments
+			material.getTitle().getProgrammeMaterial().setPresentation(presentation);
+
+			return pmaterial;
+
+		}
+		else if (materialID.equals(ERROR_MATERIAL_ID))
+		{
+			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+		}
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
 	}
-	
+
 	@Override
 	public Package getPresentationPackage(String packageID) throws MayamClientException
 	{
-		// TODO : implement
-		log.warn("unimplementented method in mayam client stub");
-		return null;
+
+		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
+		{
+			Package p = new Package();
+			Segment s = new Segment();
+			s.setSegmentNumber(1);
+			s.setSegmentTitle("Segment title");
+			s.setSOM("00:00:00:00");
+			s.setEOM("00:00:00:00");
+
+			Segmentation seg = new Segmentation();
+			seg.getSegment().add(s);
+
+			p.setPresentationID(packageID);
+			p.setSegmentation(seg);
+			return p;
+
+		}
+		else if (packageID.equals(ERROR_PACKAGE_ID))
+		{
+			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+		}
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+
 	}
 
 	@Override

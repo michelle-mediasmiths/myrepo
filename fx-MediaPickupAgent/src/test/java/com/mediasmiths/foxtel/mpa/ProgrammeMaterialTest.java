@@ -286,7 +286,7 @@ public class ProgrammeMaterialTest {
 		Material material = new Material();
 		material.setDetails(details);
 		material.setTitle(title);
-
+				
 		return material;
 	}
 }

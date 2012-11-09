@@ -14,6 +14,8 @@ import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.validation.MayamValidator;
+import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 
 public class MayamClientModule extends AbstractModule
 {
@@ -27,6 +29,7 @@ public class MayamClientModule extends AbstractModule
 		install(new AttributesModule());
 		install(new MqModule("fxMayamClient"));
 		bind(MayamClient.class).to(MayamClientImpl.class);
+		bind(MayamValidator.class).to(MayamValidatorImpl.class);
 		
 	}
 

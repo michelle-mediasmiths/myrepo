@@ -65,10 +65,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("tx.tcoutput.location")
 	private String tcoutputlocation;
 
-	@Inject
-	@Named("stub.out.mayam")
-	private boolean stubMayam;
-
 	@Override
 	@GET
 	@Path("/ping")
@@ -86,7 +82,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info("Received AssetTransferForQCRequest " + req.toString());
 		final String id = req.getAssetId();
-		//TODO change this to mxf once we have proper profiles
+		// TODO change this to mxf once we have proper profiles
 		final String filename = req.getAssetId() + ".mov";
 		final URI destination;
 		File destinationFile;
@@ -96,21 +92,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			// for tx delivery we return the location of transcoded package
 			destination = materialQCLocation.resolve(filename);
 
-			//TODO switch this to mxf onces we are creating such!
+			// TODO switch this to mxf onces we are creating such!
 			String ret = tcoutputlocation + id + "/" + id + ".mov";
 			destinationFile = new File(ret);
 		}
 		else
 		{
 			destination = materialQCLocation.resolve(filename);
-			if (!stubMayam)
-			{
-				mayamClient.transferMaterialToLocation(id, destination);
-			}
-			else
-			{
-				transferAsset(id, destination);
-			}
+			mayamClient.transferMaterialToLocation(id, destination);
 
 			destinationFile = new File(destination);
 		}
@@ -162,16 +151,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				if (!stubMayam)
-					mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// id is an item id
-				if (!stubMayam)
-				{
-					mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
-				}
+
+				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+
 			}
 		}
 		catch (MayamClientException e)
@@ -196,28 +184,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (req.isForTX())
 		{
-			if (!stubMayam)
-			{
-				materialID = mayamClient.getMaterialIDofPackageID(assetID);
-			}
-			else
-			{
-				materialID = assetID;
-			}
+
+			materialID = mayamClient.getMaterialIDofPackageID(assetID);
+
 		}
 		else
 		{
 			materialID = assetID;
 		}
 
-		if (!stubMayam)
-		{
-			mayamClient.transferMaterialToLocation(assetID, destination);
-		}
-		else
-		{
-			transferAsset(materialID, destination);
-		}
+		mayamClient.transferMaterialToLocation(assetID, destination);
 
 		File destinationFile = new File(destination);
 		return new MaterialTransferForTCResponse(destinationFile.getAbsolutePath());
@@ -262,14 +238,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				if (!stubMayam)
-					mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+
+				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// auto qc was for qc task
-				if (!stubMayam)
-					mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+
+				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
 			}
 		}
 		catch (MayamClientException e)
@@ -327,14 +303,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		Package p;
 
-		if (!stubMayam)
-		{
-			p = mayamClient.getPresentationPackage(packageID);
-		}
-		else
-		{
-			p = new Package();
-		}
+		p = mayamClient.getPresentationPackage(packageID);
 
 		List<Package> packages = materialType.getPresentation().getPackage();
 		packages.add(p);
@@ -413,7 +382,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		// TODO implement
 
-		String ret = tcoutputlocation  + packageID;
+		String ret = tcoutputlocation + packageID;
 		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
 
 		return ret;

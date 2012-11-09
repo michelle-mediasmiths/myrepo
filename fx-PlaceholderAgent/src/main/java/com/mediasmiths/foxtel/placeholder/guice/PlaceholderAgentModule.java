@@ -20,6 +20,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
+import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientStub;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -31,11 +33,12 @@ public class PlaceholderAgentModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new MayamClientModule());
+		
 		bind(PLACEHOLDERPROCESSOR_LITERAL).to(PlaceholderMessageProcessor.class);
 		
 	}
 	protected static final TypeLiteral<MessageProcessor<PlaceholderMessage>> PLACEHOLDERPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<PlaceholderMessage>>(){};
+	
 	
 	@Provides
 	JAXBContext provideJAXBContext() throws JAXBException{

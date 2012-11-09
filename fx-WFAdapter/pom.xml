@@ -28,6 +28,11 @@
 			<artifactId>fx-MayamClient</artifactId>
 			<version>0.0.4-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-MayamClientStub</artifactId>
+			<version>0.0.4-SNAPSHOT</version>
+		</dependency>
 		<!--end foxtel solution dependencies -->
 
 		<!-- begin mediasmiths dependencies -->
