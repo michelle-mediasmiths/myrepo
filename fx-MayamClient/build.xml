@@ -1,0 +1,10 @@
+<project default="junithtml">
+	<target name="junithtml">
+                <junitreport>
+                        <fileset dir="./">
+                                <include name="**/TEST-*.xml" />
+                        </fileset>
+                        <report todir="test-report" />
+                </junitreport>
+	</target>
+</project>

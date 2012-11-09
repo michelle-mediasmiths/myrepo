@@ -11,7 +11,8 @@ build
 ###################
 test-reports
 test-report
-
+bin
+TESTS-TestSuites.xml
 
 # Compiled source #
 ###################

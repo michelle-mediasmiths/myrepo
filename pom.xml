@@ -71,7 +71,16 @@
 					<preparationGoals>install</preparationGoals>
 					<goals>deploy</goals>
 				</configuration>
-			</plugin>			
+			</plugin>	
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>**/*FXT*.class</include>
+					</includes>
+				</configuration>
+			</plugin>		
 		</plugins>
 	</build>
 
