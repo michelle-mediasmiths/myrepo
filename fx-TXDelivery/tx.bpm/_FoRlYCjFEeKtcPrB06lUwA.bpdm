@@ -1,10 +1,11 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:workflow="http://thisdiagram/workflow" xmlns:tc-TC="http://ns.mediasmithsforge.com/foxtel/tc/TC" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/intalio_processes" xmlns:diag="http://thisdiagram" xmlns:qc-workflow="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/intalio_processes">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:workflow="http://thisdiagram/workflow" xmlns:tc-TC="http://ns.mediasmithsforge.com/foxtel/tc/TC" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/tx-delivery/dependencies/wfAdapter/getDeliveryLocation.rest" xmlns:this="http://thisdiagram/intalio_processes" xmlns:diag="http://thisdiagram" xmlns:qc-workflow="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/intalio_processes">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="workflow" bpdm:comment="contrib=&apos;partner-pool:///_bCxNgCjEEeKtcPrB06lUwA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tc/TC" bpdm:prefix="tc-TC" bpdm:comment="contrib=&apos;project:///dependencies/tc-TC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///dependencies/wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tx-delivery/dependencies/wfAdapter/getDeliveryLocation.rest" bpdm:prefix="getDeliveryLocation" bpdm:comment="contrib=&apos;project:///dependencies/wfAdapter/getDeliveryLocation.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/intalio_processes" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_bCxNgCjEEeKtcPrB06lUwA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qc/workflow" bpdm:prefix="qc-workflow" bpdm:comment="contrib=&apos;project:///dependencies/qc-workflow.wsdl"></bpdm:namespaceDefinition>
@@ -14,11 +15,13 @@
         <bpdm:namespaceContributor bpdm:url="project:///dependencies/tc-TC.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///dependencies/wfAdapter/wfAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///dependencies/qc-workflow.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///dependencies/wfAdapter/getDeliveryLocation.wsdl"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="intalio processes" bpdm:ID="_FoRlYCjFEeKtcPrB06lUwA">
         <bpel:partnerLinks>
             <bpel:partnerLink name="workflowAndIntalio_processesForCanonicPortPlk0Var" partnerLinkType="diag:workflowAndIntalio_processesForCanonicPortPlk0" myRole="intalio_processes_for_workflow" bpdm:enableSharing="false" bpdm:providedService="qc-workflow:CanonicServiceForcaller" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="http://localhost:8080/ode/processes/fx-flows/qc/workflow/caller" bpdm:providedIsDefault="true" bpdm:clientTasks="_FoRlYCjFEeKtcPrB06lUwA:_j4bKISjFEeKtcPrB06lUwA" bpdm:isManaged="true" bpdm:otherPoolId="_bCxNgCjEEeKtcPrB06lUwA"/>
             <bpel:partnerLink name="workflowAndIntalio_processesForCanonicPortPlk1Var" partnerLinkType="diag:workflowAndIntalio_processesForCanonicPortPlk1" myRole="intalio_processes_for_workflow" bpdm:enableSharing="false" bpdm:providedService="tc-TC:CanonicServiceForCaller" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="http://localhost:8080/ode/processes/fx-flows/tc/TC/Caller" bpdm:providedIsDefault="true" bpdm:clientTasks="_FoRlYCjFEeKtcPrB06lUwA:_W8hUYSjFEeKtcPrB06lUwA" bpdm:isManaged="true" bpdm:otherPoolId="_bCxNgCjEEeKtcPrB06lUwA"/>
+            <bpel:partnerLink name="workflowAndIntalio_processesForHttpPortPlkVar" partnerLinkType="diag:workflowAndIntalio_processesForHttpPortPlk" myRole="intalio_processes_for_workflow" bpdm:enableSharing="false" bpdm:providedService="getDeliveryLocation:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_FoRlYCjFEeKtcPrB06lUwA:_Fqq0USqBEeKw-vMBW_TpZw" bpdm:isManaged="true" bpdm:otherPoolId="_bCxNgCjEEeKtcPrB06lUwA"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="tc-TCEventStartMessage" messageType="tc-TC:EventStartMessageRequest" binding="tc-TC:CanonicBindingForCaller" operation="EventStartMessage" opMsgType="0" bpdm:id="_Y7lCFSjFEeKtcPrB06lUwA" bpdm:messageIds="inc:_Y7SHICjFEeKtcPrB06lUwA"/>
@@ -33,18 +36,30 @@
                     <bpel:literal bpdm:linkedMessageType="qc-workflow:startResponse" bpdm:linkedPart="body" bpdm:binding="qc-workflow:CanonicBindingForcaller" bpdm:opMsgType="1" bpdm:operation="start"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="getDeliveryLocationGetDeliveryLocationRequestMsg" messageType="getDeliveryLocation:getDeliveryLocation_input" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="0" bpdm:id="_GTXMACqBEeKw-vMBW_TpZw" bpdm:messageIds="inc:_GSr2kCqBEeKw-vMBW_TpZw"/>
+            <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="1" bpdm:id="_GnQYYCqBEeKw-vMBW_TpZw" bpdm:messageIds=" out:_GnAgwCqBEeKw-vMBW_TpZw">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="getDeliveryLocation:getDeliveryLocation_output" bpdm:linkedPart="response" bpdm:binding="getDeliveryLocation:restBinding" bpdm:opMsgType="1" bpdm:operation="getDeliveryLocation"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
         </bpel:variables>
         <bpel:flow>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="start" partnerLink="workflowAndIntalio_processesForCanonicPortPlk0Var" portType="qc-workflow:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="qc workflow" bpdm:ID="_j4bKISjFEeKtcPrB06lUwA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qc-workflowStartMsg" bpdm:variableIsManaged="true" bpdm:messageType="qc-workflow:startRequest" bpdm:binding="qc-workflow:CanonicBindingForcaller" bpdm:ID="_las1MCjFEeKtcPrB06lUwA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qc-workflowStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qc-workflow:startResponse" bpdm:binding="qc-workflow:CanonicBindingForcaller" bpdm:ID="_lsNb8CjFEeKtcPrB06lUwA"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
             <bpel:sequence>
                 <bpdm:messagingtask operation="EventStartMessage" partnerLink="workflowAndIntalio_processesForCanonicPortPlk1Var" portType="tc-TC:ForCaller" isMyRole="true" enableSharing="false" bpdm:label="tc workflow" bpdm:ID="_W8hUYSjFEeKtcPrB06lUwA">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tc-TCEventStartMessage" bpdm:variableIsManaged="true" bpdm:messageType="tc-TC:EventStartMessageRequest" bpdm:binding="tc-TC:CanonicBindingForCaller" bpdm:ID="_Y7SHICjFEeKtcPrB06lUwA"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tc-TCEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="tc-TC:EventStartMessageResponse" bpdm:binding="tc-TC:CanonicBindingForCaller" bpdm:ID="_ZLE2oCjFEeKtcPrB06lUwA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="getDeliveryLocation" partnerLink="workflowAndIntalio_processesForHttpPortPlkVar" portType="getDeliveryLocation:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getDeliveryLocation" bpdm:ID="_Fqq0USqBEeKw-vMBW_TpZw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_input" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_GSr2kCqBEeKw-vMBW_TpZw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationResponseMsg" bpdm:msgVarScopeId="_FoRlYCjFEeKtcPrB06lUwA" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_output" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_GnAgwCqBEeKw-vMBW_TpZw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="start" partnerLink="workflowAndIntalio_processesForCanonicPortPlk0Var" portType="qc-workflow:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="qc workflow" bpdm:ID="_j4bKISjFEeKtcPrB06lUwA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qc-workflowStartMsg" bpdm:variableIsManaged="true" bpdm:messageType="qc-workflow:startRequest" bpdm:binding="qc-workflow:CanonicBindingForcaller" bpdm:ID="_las1MCjFEeKtcPrB06lUwA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qc-workflowStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qc-workflow:startResponse" bpdm:binding="qc-workflow:CanonicBindingForcaller" bpdm:ID="_lsNb8CjFEeKtcPrB06lUwA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>

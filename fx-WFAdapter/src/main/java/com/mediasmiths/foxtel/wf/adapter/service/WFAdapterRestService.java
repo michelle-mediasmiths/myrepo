@@ -6,6 +6,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -114,6 +115,23 @@ public interface WFAdapterRestService
 	@Path("/tx/transcodeOutputLocation")
 	@Produces("text/plain")
 	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID);
+	
+	@GET
+	@Path("/tx/deliveryLocation")
+	@Produces("text/plain")
+	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID);
+	
+	/**
+	 * ought to be a put really due to the change in state but intalio wont do a put without sending a request body
+	 * @param packageID
+	 * @return
+	 * @throws MayamClientException 
+	 * @throws JAXBException 
+	 */
+	@GET
+	@Path("/tx/delivery/writeSegmentXML")
+	@Produces("text/plain")
+	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
 	
 	@GET
 	@Path("/tx/autoQCRequired")

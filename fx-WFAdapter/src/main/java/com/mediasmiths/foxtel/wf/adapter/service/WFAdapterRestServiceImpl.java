@@ -64,7 +64,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("tx.tcoutput.location")
 	private String tcoutputlocation;
-
+	@Inject
+	@Named("tx.delivery.location")
+	private String txDeliveryLocation;
+	@Inject
+	private Marshaller marshaller;
+	
 	@Override
 	@GET
 	@Path("/ping")
@@ -358,7 +363,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
 	{
 		// TODO implement
-		return true;
+//		return true;
+		return false; //returning false due to lack of cerify at forge
 	}
 
 	@Override
@@ -386,6 +392,43 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
 
 		return ret;
+	}
+
+	@Override
+	@GET
+	@Path("/tx/deliveryLocation")
+	@Produces("text/plain")
+	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID)
+	{
+		//TODO implement
+		
+		String ret = txDeliveryLocation + packageID;
+		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
+		
+		return ret;
+	}
+
+	@Override
+	@GET
+	@Path("/tx/delivery/writeSegmentXML")
+	@Produces("text/plain")
+	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	{
+		ProgrammeMaterialType segmentInfo = getCompanionXMLForTXPackage(packageID);
+		String deliveryLocation = deliveryLocationForPackage(packageID);
+		
+		File segmentXmlFile = new File(String.format("%s%s.xml", deliveryLocation, packageID));
+		try
+		{
+			marshaller.marshal(segmentInfo, segmentXmlFile);
+			return true;
+		}
+		catch (JAXBException e)
+		{
+			log.error(String.format("Error marshalling companion xml for package %s", packageID));
+			throw e;			
+		}
+		
 	}
 
 }

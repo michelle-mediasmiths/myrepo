@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://foxtel.local.mediasmithsforge.com:8080/fx-FSAdapter/rest/fs/move" ID="_4lTygSp-EeKzs8kIl2qm7w">
+  <rest:operation verb="PUT" name="move" ID="_4lVnsCp-EeKzs8kIl2qm7w">
+    <rest:input type="project:///dependencies/fsAdapter/FSAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/fs/adapter}moveRequest" name="body" headerDirection="request" contentType="application/xml" ID="_4lWOwCp-EeKzs8kIl2qm7w"/>
+    <rest:output type="project:///dependencies/fsAdapter/FSAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/fs/adapter}moveResponse" name="response" headerDirection="request" contentType="application/xml" ID="_4lW10Cp-EeKzs8kIl2qm7w"/>
+  </rest:operation>
+</rest:descriptor>
