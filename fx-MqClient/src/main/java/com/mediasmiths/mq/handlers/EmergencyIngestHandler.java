@@ -30,7 +30,7 @@ public class EmergencyIngestHandler
 		if (assetID == null || assetID.equals(""))
 		{			
 			try {
-				client.createAsset(messageAttributes);
+				client.assetApi().createAsset(messageAttributes);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam will creating new asset from emergency ingest : " + e);
 				e.printStackTrace();

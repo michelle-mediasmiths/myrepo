@@ -42,7 +42,7 @@ public class TemporaryContentHandler
 				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = client.getTasks(criteria, 10, 0);
+				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
 				
 				if (existingTasks.getTotalMatches() > 0) 
 				{
@@ -67,7 +67,7 @@ public class TemporaryContentHandler
 				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = client.getTasks(criteria, 10, 0);
+				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
 			
 				if (existingTasks.getTotalMatches() > 0) 
 				{

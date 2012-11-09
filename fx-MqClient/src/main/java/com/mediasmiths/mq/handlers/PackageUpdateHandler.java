@@ -39,14 +39,14 @@ public class PackageUpdateHandler
 			{
 				try {
 					//Update metadata for asset
-					client.updateAsset(messageAttributes);
+					client.assetApi().updateAsset(messageAttributes);
 					
 					AttributeMap filterEqualities = client.createAttributeMap();
 					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION.toString());
 					filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
-					FilterResult existingTasks = client.getTasks(criteria, 10, 0);
+					FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
 					
 					// Check that no segmentation task already exists
 					if (existingTasks.getTotalMatches() == 0) {
@@ -57,14 +57,14 @@ public class PackageUpdateHandler
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.TX_DELIVERY.toString());
 						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 						criteria.setFilterEqualities(filterEqualities);
-						FilterResult txTasks = client.getTasks(criteria, 10, 0);
+						FilterResult txTasks = client.taskApi().getTasks(criteria, 10, 0);
 						boolean txReady = false;
 						
 						filterEqualities.clear();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
 						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
 						criteria.setFilterEqualities(filterEqualities);
-						FilterResult previewTasks = client.getTasks(criteria, 10, 0);
+						FilterResult previewTasks = client.taskApi().getTasks(criteria, 10, 0);
 						
 						if (txTasks.getTotalMatches() > 0) {
 							//Check that the status is set to ready
@@ -115,7 +115,7 @@ public class PackageUpdateHandler
 				if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 				{	
 					//Create new Tx-Package + associate with parent (setting Parent ID should be handled automatically)
-					client.createAsset(messageAttributes);
+					client.assetApi().createAsset(messageAttributes);
 					long parentId = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
 
 					//If parent asset has a Preview status of Pass then create a new segmentation task
@@ -125,7 +125,7 @@ public class PackageUpdateHandler
 					filterEqualities.setAttribute(Attribute.ASSET_ID, parentId);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
-					FilterResult previewTasks = client.getTasks(criteria, 10, 0);
+					FilterResult previewTasks = client.taskApi().getTasks(criteria, 10, 0);
 					
 					if (previewTasks.getTotalMatches() > 0) {
 						//Check that the status is set to pass
