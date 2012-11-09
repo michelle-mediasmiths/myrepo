@@ -19,15 +19,19 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 
-public class MayamValidator {
+public class MayamValidatorImpl implements MayamValidator {
 	private TasksClient client;
 	
 	@Inject
-	public MayamValidator(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient mayamClient) 
+	public MayamValidatorImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient mayamClient) 
 	{
 		client = mayamClient;
 	}
 		
+	/* (non-Javadoc)
+	 * @see com.mediasmiths.mayam.validation.MayamValidator#validateMaterialBroadcastDate(javax.xml.datatype.XMLGregorianCalendar, java.lang.String)
+	 */
+	@Override
 	public boolean validateMaterialBroadcastDate(XMLGregorianCalendar targetDate, String materialID) throws MayamClientException 
 	{
 		boolean isValid = true;
@@ -68,6 +72,10 @@ public class MayamValidator {
 		return isValid;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.mediasmiths.mayam.validation.MayamValidator#validateTitleBroadcastDate(java.lang.String, javax.xml.datatype.XMLGregorianCalendar, javax.xml.datatype.XMLGregorianCalendar)
+	 */
+	@Override
 	public boolean validateTitleBroadcastDate(String titleID, XMLGregorianCalendar licenseStartDate, XMLGregorianCalendar licenseEndDate) throws MayamClientException 
 	{
 		boolean isValid = true;

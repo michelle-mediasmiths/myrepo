@@ -47,6 +47,7 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.validation.MayamValidator;
+import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 
 public class MayamClientImpl implements MayamClient
 {
@@ -89,7 +90,7 @@ public class MayamClientImpl implements MayamClient
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, new DateUtil());
 		packageController = new MayamPackageController(client, new DateUtil());
-		validator = new MayamValidator(client);
+		validator = new MayamValidatorImpl(client);
 	}
 
 	/*
