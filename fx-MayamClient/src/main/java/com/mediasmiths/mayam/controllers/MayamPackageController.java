@@ -268,8 +268,7 @@ public class MayamPackageController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID,e1);
 		}
 		return packageFound;
 	}

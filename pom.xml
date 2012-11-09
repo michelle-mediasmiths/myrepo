@@ -99,7 +99,11 @@
 		</repository>
 		<repository>
 			<id>Codehaus</id>
+			<name>codehaus</name>
 			<url>http://repository.codehaus.org</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
 		</repository>
 	</repositories>
 </project>

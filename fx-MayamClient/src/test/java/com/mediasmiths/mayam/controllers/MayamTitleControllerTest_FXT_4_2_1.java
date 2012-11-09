@@ -25,6 +25,8 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mayam.wf.ws.client.AssetApi;
+import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -37,10 +39,14 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 
 	MayamTitleController controller;
 	TasksClient client;
+	AssetApi assetApi;
+	TaskApi taskApi;
 	Material.Title title;
 	CreateOrUpdateTitle cuTitle;
 	TitleDescriptionType titleDescription;
 	AttributeMap map;
+	
+	private final static String TITLEID="TITLEID";
 	
 	public MayamTitleControllerTest_FXT_4_2_1() {
 		super();
@@ -62,6 +68,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void setup()
 	{
 		client = mock(TasksClient.class);
+		assetApi = mock(AssetApi.class);
+		taskApi = mock(TaskApi.class);
+		when(client.assetApi()).thenReturn(assetApi);
+		when(client.taskApi()).thenReturn(taskApi);
+		
 		controller = new MayamTitleController(client);
 		
 		title = mock(Material.Title.class);		
@@ -102,7 +113,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 		logger.info("Starting FXT 4.2.1 Validate Functionality");
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -128,8 +139,8 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testUpdateTitle() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -146,7 +157,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	{
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -162,8 +173,8 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testUpdateTitleFailed() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -180,7 +191,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	{
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -196,8 +207,8 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testUpdateTitleException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -256,11 +267,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testTitleExistsTrue() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.titleExists(eq(anyString()));
+		boolean returnCode = controller.titleExists(TITLEID);
 		assertEquals(true, returnCode);
 	}
 	
@@ -268,11 +279,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testTitleExistsFalse() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.titleExists(eq(anyString()));
+		boolean returnCode = controller.titleExists(TITLEID);
 		assertEquals(false, returnCode);
 	}
 	
@@ -280,11 +291,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testTitleExistsException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.titleExists(eq(anyString()));
+		boolean returnCode = controller.titleExists(TITLEID);
 		assertEquals(false, returnCode);
 	}
 	
@@ -292,11 +303,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testGetTitleValid() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getTitle(eq(anyString()));
+		AttributeMap attributes = controller.getTitle(TITLEID);
 		assertTrue(attributes != null);
 	}
 	
@@ -304,11 +315,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testGetTitleInValid() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getTitle(eq(anyString()));
+		AttributeMap attributes = controller.getTitle(TITLEID);
 		assertEquals(null, attributes);
 	}
 	
@@ -316,11 +327,11 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void testGetTitleException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getTitle(eq(anyString()));
+		AttributeMap attributes = controller.getTitle(TITLEID);
 		assertEquals(null, attributes);
 	}
 	
@@ -328,7 +339,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	public void deleteTitleFail() 
 	{
 		try {
-			doThrow(mock(RemoteException.class)).when(client).assetApi().deleteAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString());
+			doThrow(mock(RemoteException.class)).when(assetApi).deleteAsset(eq(MayamAssetType.TITLE.getAssetType()), anyString());
 		} catch (RemoteException e) {
 			fail();
 		}

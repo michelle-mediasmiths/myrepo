@@ -77,7 +77,8 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		logger.info("Starting FXT 4.1.9.2 - Non XSD compliance");
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
-
+		temp.createNewFile();
+		
 		IOUtils.write("InvalidAddPackage", new FileOutputStream(temp));
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());

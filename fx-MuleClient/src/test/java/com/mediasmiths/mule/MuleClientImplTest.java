@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,7 +14,7 @@ import org.junit.Test;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.MuleMessageCollection;
-import org.mule.api.client.MuleClient;
+import org.mule.module.client.MuleClient;
 
 public class MuleClientImplTest {
 	MuleClientImpl client;
@@ -29,7 +30,7 @@ public class MuleClientImplTest {
 	{
 		props = new HashMap<String, Object>();
 		muleClient = mock(MuleClient.class);
-		//client = new MuleClientImpl(muleClient);
+		client = new MuleClientImpl(muleClient);
 	}
 	
 	@Test
@@ -39,12 +40,12 @@ public class MuleClientImplTest {
 		}
 		
 		MuleMessage expectedPayload = mock(MuleMessage.class);
-		when(expectedPayload.getPayload()).thenReturn("Success");
 		try {
 			when(muleClient.send("testDestination", "testPackage", props)).thenReturn(expectedPayload);
 		} catch (MuleException e) {
 			fail("MuleException when mocking send call");
 		}
+		when(expectedPayload.getPayload()).thenReturn("Success");
 		
 		MuleMessage returnMessage = client.send("testDestination", "testPackage", props);
 		

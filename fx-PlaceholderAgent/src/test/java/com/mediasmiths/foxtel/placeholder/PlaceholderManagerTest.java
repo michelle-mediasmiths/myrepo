@@ -91,7 +91,7 @@ public abstract class PlaceholderManagerTest {
 	@Before
 	public void before() throws IOException {
 		mayamClient = mock(MayamClient.class);
-		mayamValidator = new MayamValidator(null) {
+		mayamValidator = new MayamValidator() {
 			@Override
 			public boolean validateMaterialBroadcastDate(
 					XMLGregorianCalendar targetDate, String materialID)

@@ -28,6 +28,8 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mayam.wf.ws.client.AssetApi;
+import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -41,9 +43,13 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 
 	MayamPackageController controller;
 	TasksClient client;
+	AssetApi assetApi;
+	TaskApi taskApi;
 	PackageType txPackage;
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
+	
+	private final static String PACKAGEID="PACKAGEID";
 	
 	public MayamPackageControllerTest_FXT_4_2_2() {
 		super();
@@ -65,6 +71,11 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void setup() throws DatatypeConfigurationException
 	{
 		client = mock(TasksClient.class);
+		assetApi = mock(AssetApi.class);
+		taskApi = mock(TaskApi.class);
+		when(client.assetApi()).thenReturn(assetApi);
+		when(client.taskApi()).thenReturn(taskApi);
+		
 		controller = new MayamPackageController(client, new DateUtil());
 		
 		txPackage = mock(PackageType.class);
@@ -92,7 +103,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -115,8 +126,8 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testUpdatePackage() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -133,7 +144,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	{
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -146,8 +157,8 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testUpdatePackageFailed() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -162,7 +173,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Test
 	public void testCreatePackageException() throws Exception 
 	{
-		when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+		when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		when(client.createAttributeMap()).thenReturn(map);
 		MayamClientErrorCode returnCode = controller.createPackage(txPackage);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
@@ -171,8 +182,8 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Test
 	public void testUpdatePackageException() throws Exception
 	{
-		when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
-		when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
+		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+		when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 		
@@ -204,11 +215,11 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testPackageExistsTrue() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.packageExists(eq(anyString()));
+		boolean returnCode = controller.packageExists(PACKAGEID);
 		assertEquals(true, returnCode);
 	}
 	
@@ -216,19 +227,19 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testPackageExistsFalse() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.packageExists(eq(anyString()));
+		boolean returnCode = controller.packageExists(PACKAGEID);
 		assertEquals(false, returnCode);
 	}
 	
 	@Test
 	public void testPackageExistsException() throws Exception 
 	{
-		when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
-		boolean returnCode = controller.packageExists(eq(anyString()));
+		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+		boolean returnCode = controller.packageExists(PACKAGEID);
 		assertEquals(false, returnCode);
 	}
 	
@@ -236,11 +247,11 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testGetPackageValid() throws MayamClientException 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
+		AttributeMap attributes = controller.getPackageAttributes(PACKAGEID);
 		assertTrue(attributes != null);
 	}
 	
@@ -248,26 +259,26 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testGetPackageInValid() throws MayamClientException 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));
+		AttributeMap attributes = controller.getPackageAttributes(PACKAGEID);
 		assertEquals(null, attributes);
 	}
 	
 	@Test(expected = MayamClientException.class)
 	public void testGetPackageException() throws Exception
 	{
-		when(client.assetApi().getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
-		AttributeMap attributes = controller.getPackageAttributes(eq(anyString()));		
+		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+		AttributeMap attributes = controller.getPackageAttributes(PACKAGEID);		
 	}
 	
 	@Test
 	public void deletePackageFail() 
 	{
 		try {
-			doThrow(mock(RemoteException.class)).when(client).assetApi().deleteAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString());
+			doThrow(mock(RemoteException.class)).when(assetApi).deleteAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString());
 		} catch (RemoteException e) {
 			fail();
 		}
