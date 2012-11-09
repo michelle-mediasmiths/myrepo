@@ -24,13 +24,8 @@
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MuleClient</artifactId>
-			<version>0.0.1-SNAPSHOT</version>			
-		</dependency>
--->
+		<!-- <dependency> <groupId>com.mediasmiths.foxtel</groupId> <artifactId>fx-MuleClient</artifactId> 
+			<version>0.0.1-SNAPSHOT</version> </dependency> -->
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-module-spring-config</artifactId>
@@ -47,8 +42,11 @@
 			<artifactId>wf-mq</artifactId>
 			<version>0.9.9.9.2</version>
 		</dependency>
-		<!-- <dependency> <groupId>com.mayam.wf</groupId> <artifactId>tasks-ws-client</artifactId> 
-			<version>${worklists.version}</version> </dependency> -->
+		<dependency>
+			<groupId>com.mayam.wf</groupId>
+			<artifactId>tasks-ws-client</artifactId>
+			<version>${worklists.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
