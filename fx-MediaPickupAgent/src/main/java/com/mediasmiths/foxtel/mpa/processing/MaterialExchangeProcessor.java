@@ -198,8 +198,6 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 					"Media check of Material %s failed",
 					FilenameUtils.getName(mxf.getAbsolutePath())));
 			
-			//TODO move to the emergency import folder instead
-//			moveFileToFailureFolder(mxf);
 			moveFileToEmergencyImportFolder(mxf);
 			moveFileToFailureFolder(materialEnvelope.getFile());
 			

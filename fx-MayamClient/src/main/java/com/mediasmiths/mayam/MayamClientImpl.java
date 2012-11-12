@@ -462,7 +462,9 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
 	{
-		// TODO implement me!, see declaration in interface
+		// TODO this method is not really required, but rather we ask mayam for the location of high res media and operate on it directly
+		
+		
 		try
 		{
 			log.info(String.format("Transferring material %s to location %s", materialID, location.toString()));

@@ -240,7 +240,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 
-		// TODO: add entry to general error task list as investigation is required
+		// TODO: add entry to general error task list as investigation is required (ditto for equivalent TC failure methods)
 		saveEvent("AutoQCError", notification, "http://www.foxtel.com.au/ip/qc");
 		try
 		{
@@ -269,7 +269,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcFailedTotal")
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
-		// TODO Auto-generated method stub
 		log.info(String.format("Received notification of TC totalfailure Paciage ID %s ", notification.getPackageID()));
 
 		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
@@ -282,7 +281,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
 
-		// TODO Auto-generated method stub
 		log.info(String.format("Received notification of TC failure Paciage ID %s", notification.getPackageID()));
 		saveEvent("failed", notification, "http://www.foxtel.com.au/ip/tc");
 
@@ -293,7 +291,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcPassed")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
-		// TODO Auto-generated method stub
 		log.info(String.format("Received notification of TC passed Paciage ID %s", notification.getPackageID()));
 
 		saveEvent("Transcoded", notification, "http://www.foxtel.com.au/ip/tc");
@@ -390,7 +387,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
 				notification.getPackageID(),
 				notification.getStage()));
-		// TODO fire event email people etc
+		// TODO fire event notification
 	}
 
 	@Override
@@ -399,8 +396,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID)
 	{
-		// TODO implement
-
 		String ret = tcoutputlocation + packageID;
 		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
 
@@ -413,8 +408,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID)
 	{
-		//TODO implement
-		
 		String ret = txDeliveryLocation + packageID;
 		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
 		
