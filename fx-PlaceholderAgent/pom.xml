@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>fx-PlaceholderAgent</artifactId>
 	<packaging>war</packaging>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>Foxtel Placeholder Agent</name>
 
 	<dependencies>
@@ -18,22 +18,22 @@
 		<dependency>
 			<groupId>au.com.foxtel.cf.mam</groupId>
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MayamClient</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MayamClientStub</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-Agent</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Mediasmiths Dependencies -->

@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mediasmiths.foxtel</groupId>
 	<artifactId>fx-MayamClient</artifactId>
-	<version>0.0.4</version>
+	<version>0.0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>fx-MayamClient</name>
@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MayamClientInterface</artifactId>
-			<version>0.0.4</version>			
+			<version>0.0.5-SNAPSHOT</version>			
 		</dependency>
 		
 		<dependency>

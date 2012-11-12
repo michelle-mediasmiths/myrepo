@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>fx-MqClient</groupId>
 	<artifactId>fx-MqClient</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2-SNAPSHOT</version>
 
 	<packaging>war</packaging>
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.4</version>
+		<version>0.0.5-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>au.com.foxtel.cf.mam</groupId>
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MuleClient</artifactId>
-			<version>0.0.1</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mule.modules</groupId>
@@ -114,7 +114,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MayamClient</artifactId>
-			<version>0.0.4</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
