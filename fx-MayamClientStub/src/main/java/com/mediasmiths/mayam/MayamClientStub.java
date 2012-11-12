@@ -643,21 +643,7 @@ public class MayamClientStub implements MayamClient
 	{
 		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
 		{
-			Supplier supplier = new Supplier();
-			supplier.setSupplierID(RandomStringUtils.randomAlphabetic(10));
-
-			Details details = new Details();
-			details.setSupplier(supplier);
-			try
-			{
-				details.setDateOfDelivery(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				log.error("error in mayam client stub", e);
-			}
-			details.setDeliveryVersion(new BigInteger("1"));
-
+		
 			FileMediaType fmt = new FileMediaType();
 			fmt.setFilename("myfile.mxf");
 			fmt.setFormat(FileFormatEnumType.MXF_OP_1_A_IMX_D_10_50);
@@ -689,16 +675,10 @@ public class MayamClientStub implements MayamClient
 			pmaterial.setMedia(fmt);
 			pmaterial.setAudioTracks(at);
 			pmaterial.setOriginalConform(st);
-
-			Title title = new Title();
-			title.setTitleID(EXISTING_TITLE_ID);
-
-			title.setProgrammeMaterial(pmaterial);
-
-			Material material = new Material();
-			material.setDetails(details);
-			material.setTitle(title);
+			pmaterial.setAdditionalProgrammeDetail("foo");
+			
 			Presentation presentation = new Presentation();
+			pmaterial.setPresentation(presentation);
 
 			String[] packageIds = new String[] { EXISTING_PACKAGE_ID };
 
@@ -708,10 +688,6 @@ public class MayamClientStub implements MayamClient
 				presentation.getPackage().add(p);
 
 			}
-
-			material.getTitle().setProgrammeMaterial(pmaterial);
-			material.getTitle().getProgrammeMaterial().setOriginalConform(null); // clear existing segments
-			material.getTitle().getProgrammeMaterial().setPresentation(presentation);
 
 			return pmaterial;
 
@@ -777,6 +753,79 @@ public class MayamClientStub implements MayamClient
 	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
 	{
 		log.info("unimplemented createTxDeliveryFailureTask in mayam client stub");
+	}
+
+	@Override
+	public Title getTitle(String titleID, boolean includePackages) throws MayamClientException
+	{
+		if (titleID.equals(NEW_TITLE_ID))
+		{
+			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+		}
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		{
+			Title t = new Title();
+			t.setTitleID(titleID);
+			
+			return t;
+		}
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+		}
+		
+	
+	}
+
+	@Override
+	public String getTitleOfPackage(String packageID) throws MayamClientException
+	{
+		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
+		{
+			return EXISTING_TITLE_ID;
+
+		}
+		else if (packageID.equals(ERROR_PACKAGE_ID))
+		{
+			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+		}
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED);
+		}
+	}
+
+	@Override
+	public Details getSupplierDetails(String materialID) throws MayamClientException
+	{
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		{
+			Supplier supplier = new Supplier();
+			supplier.setSupplierID(RandomStringUtils.randomAlphabetic(10));
+
+			Details details = new Details();
+			details.setSupplier(supplier);
+			try
+			{
+				details.setDateOfDelivery(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
+			}
+			catch (DatatypeConfigurationException e)
+			{
+				log.error("error in mayam client stub", e);
+			}
+			details.setDeliveryVersion(new BigInteger("1"));
+
+			return details;
+
+		}
+		else if (materialID.equals(ERROR_MATERIAL_ID))
+		{
+			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+		}
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
 	}
 
 }

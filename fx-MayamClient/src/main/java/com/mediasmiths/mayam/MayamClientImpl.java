@@ -37,6 +37,7 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
@@ -526,5 +527,26 @@ public class MayamClientImpl implements MayamClient
 	{
 		// TODO implement
 		
+	}
+
+	@Override
+	public Title getTitle(String titleID, boolean includeVersionInfo) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getTitleOfPackage(String packageID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Details getSupplierDetails(String materialID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

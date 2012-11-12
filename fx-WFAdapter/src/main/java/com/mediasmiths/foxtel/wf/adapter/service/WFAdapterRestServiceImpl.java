@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
 
+import javax.swing.border.TitledBorder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -21,6 +22,9 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -300,7 +304,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/companionXMLforTXPackage")
 	@Produces("application/xml")
-	public ProgrammeMaterialType getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
+	public Material getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
 			throws MayamClientException
 	{
 		String materialID = mayamClient.getMaterialIDofPackageID(packageID);
@@ -312,8 +316,17 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		List<Package> packages = materialType.getPresentation().getPackage();
 		packages.add(p);
+		
+		//doubtless more detail will be required here
+		Material m = new Material();
+		String titleID = mayamClient.getTitleOfPackage(packageID);
+		Title t = mayamClient.getTitle(titleID,false);
+		Details d = mayamClient.getSupplierDetails(materialID);
+		m.setTitle(t);		
+		m.setDetails(d);
+		t.setProgrammeMaterial(materialType);
 
-		return materialType;
+		return m;
 	}
 
 	// TODO reenable events stuff after events api has been extracted
@@ -402,7 +415,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		//TODO implement
 		
-		String ret = txDeliveryLocation + packageID;
+		String ret = txDeliveryLocation + "/" + packageID;
 		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
 		
 		return ret;
@@ -414,7 +427,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
 	{
-		ProgrammeMaterialType segmentInfo = getCompanionXMLForTXPackage(packageID);
+		Material segmentInfo = getCompanionXMLForTXPackage(packageID);
 		String deliveryLocation = deliveryLocationForPackage(packageID);
 		
 		File segmentXmlFile = new File(String.format("%s%s.xml", deliveryLocation, packageID));
