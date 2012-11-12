@@ -16,6 +16,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
+import org.omg.CORBA.OMGVMCID;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
@@ -670,13 +671,14 @@ public class MayamClientStub implements MayamClient
 			pmaterial.setFormat("HD");
 			pmaterial.setAspectRatio("16F16");
 			pmaterial.setFirstFrameTimecode("00:00:00:00");
-			pmaterial.setLastFrameTimecode("00:00:00:00");
-			pmaterial.setDuration("00:00:00:00");
+			pmaterial.setLastFrameTimecode("00:00:01:00");
+			pmaterial.setDuration("00:00:01:00");
 			pmaterial.setMedia(fmt);
 			pmaterial.setAudioTracks(at);
 			pmaterial.setOriginalConform(st);
 			pmaterial.setAdditionalProgrammeDetail("foo");
-			
+			pmaterial.setAdultMaterial(false);
+									
 			Presentation presentation = new Presentation();
 			pmaterial.setPresentation(presentation);
 

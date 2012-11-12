@@ -36,9 +36,9 @@ public class WFAdapterModule extends AbstractModule
 		try {
 			marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-			Schema schema = factory.newSchema(getClass().getClassLoader().getResource(schemaLocation));
-			marshaller.setSchema(schema);
+//			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+//			Schema schema = factory.newSchema(getClass().getClassLoader().getResource(schemaLocation));
+//			marshaller.setSchema(schema);
 			} catch (JAXBException e) {
 				logger.fatal("Could not create marshaller", e);
 				throw e;

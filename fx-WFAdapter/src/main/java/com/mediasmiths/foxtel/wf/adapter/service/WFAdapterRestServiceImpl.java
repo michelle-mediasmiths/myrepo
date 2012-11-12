@@ -415,7 +415,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		//TODO implement
 		
-		String ret = txDeliveryLocation + "/" + packageID;
+		String ret = txDeliveryLocation + packageID;
 		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
 		
 		return ret;
@@ -427,10 +427,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
 	{
+		log.debug(String.format("Writing segment xml for package %s",packageID));
+		
 		Material segmentInfo = getCompanionXMLForTXPackage(packageID);
 		String deliveryLocation = deliveryLocationForPackage(packageID);
 		
-		File segmentXmlFile = new File(String.format("%s%s.xml", deliveryLocation, packageID));
+		File deliveryLocationFile = new File(deliveryLocation);
+		deliveryLocationFile.mkdirs();
+		
+		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
 		try
 		{
 			marshaller.marshal(segmentInfo, segmentXmlFile);
