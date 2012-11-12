@@ -28,7 +28,10 @@ import com.mediasmiths.mayam.MayamClientException;
 public interface WFAdapterRestService
 {
 
-
+   /**
+    * Test method to check if service is online
+    * @return
+    */
 	@GET
 	@Path("/ping")
 	@Produces("text/plain")
@@ -46,6 +49,15 @@ public interface WFAdapterRestService
 	@Produces("application/xml")
 	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException;
 	
+	/**
+	 * Called to transfer material to the the configure location for transcoding and return that location
+	 * 
+	 * If transcoding can be performed direct from the materials current location then that location will be returned with no move taking place
+	 * 
+	 * @param materialID
+	 * @return
+	 * @throws MayamClientException
+	 */
 	@PUT
 	@Path("/tc/transferfortc")
 	@Produces("application/xml")
@@ -54,10 +66,8 @@ public interface WFAdapterRestService
 	/**
 	 * called to lookup the name of the qc profile that should be used for a given material 
 	 * 
-	 * TODO: (if its for txDelivery does that mean we should expect a packageid or just refer to a file or what?)
-	 * 
 	 * @param materialID
-	 * @param isForTXDelivery
+	 * @param isForTXDelivery - indicats that autoqc is being performed as part of tx delivery and different profiles will be selected as apropriate
 	 * @return
 	 * @throws MayamClientException 
 	 */
@@ -67,14 +77,28 @@ public interface WFAdapterRestService
 	public GetQCProfileResponse getProfileForQc(@QueryParam("assetID") String assetID, @QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException;
 
 
+	/**
+	 * Called to notify that autoqc has failed for an asset
+	 * @param notification
+	 * @throws MayamClientException
+	 */
 	@PUT
 	@Path("/qc/autoQcFailed")
 	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException;
 	
+	/**
+	 * called to notify that autoqc has succeeded for an asset
+	 * @param notification
+	 */
 	@PUT
 	@Path("/qc/autoQcPassed")
 	public void notifyAutoQCPassed(AutoQCPassNotification notification);
 	
+	/**
+	 * called to notify about a persistent error performing autoqc that will require investigation
+	 * @param notification
+	 * @throws MayamClientException
+	 */
 	@PUT
 	@Path("/qc/autoQcError")
 	public void notifyAutoQCError(AutoQCErrorNotification notification) throws MayamClientException;
@@ -112,11 +136,21 @@ public interface WFAdapterRestService
 	@Consumes("application/xml")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
 	
+	/**
+	 * Returns the output location for transcode of materials to tx packages
+	 * @param packageID
+	 * @return
+	 */
 	@GET
 	@Path("/tx/transcodeOutputLocation")
 	@Produces("text/plain")
 	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID);
 	
+	/**
+	 * Returns the location that tx packages to be delivered to
+	 * @param packageID
+	 * @return
+	 */
 	@GET
 	@Path("/tx/deliveryLocation")
 	@Produces("text/plain")
@@ -134,11 +168,20 @@ public interface WFAdapterRestService
 	@Produces("text/plain")
 	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
 	
+	/**
+	 * Used to query if autoqc is required for a given package
+	 * @param packageID
+	 * @return
+	 */
 	@GET
 	@Path("/tx/autoQCRequired")
 	@Produces("text/plain")
 	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID);
 
+	/**
+	 * Used to indicate there has been a failure in a tx delivery workflow
+	 * @param notification
+	 */
 	@PUT
 	@Path("/tx/failed")
 	@Consumes("application/xml")

@@ -13,17 +13,32 @@ import com.mediasmiths.foxtel.fs.model.MoveResponse;
 @Path("/fs")
 public interface FSRestService
 {
-	
+	/***
+	 * Simple ping method to test service is up
+	 * @return
+	 */
 	@GET
 	@Path("/ping")
 	@Produces("text/plain")
 	public String ping();
 	
+	/**
+	 * Deletes a specified file
+	 * @param dr
+	 * @return
+	 * @throws FSAdapterException
+	 */
 	@PUT
 	@Path("/delete")
 	@Produces("application/xml")
 	public DeleteResponse deleteFile(DeleteRequest dr) throws FSAdapterException; 
 	
+	/**
+	 * Moves a file or folder to another location
+	 * @param mr
+	 * @return
+	 * @throws FSAdapterException
+	 */
 	@PUT
 	@Path("/move")
 	@Produces("application/xml")

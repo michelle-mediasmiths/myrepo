@@ -21,46 +21,79 @@ import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClientException;
 
-
 @Path("/tc")
 public interface TCRestService
 {
+
+	/**
+	 * Simple ping method to check service is up
+	 * 
+	 * @return
+	 */
 	@GET
 	@Path("/ping")
 	@Produces("text/plain")
 	public String ping();
 
-	
+	/**
+	 * Build the transcode job xml to be used for a package
+	 * 
+	 * @param buildJobXMLRequest
+	 * @return
+	 * @throws MayamClientException
+	 * @throws JobBuilderException
+	 */
 	@POST
 	@Path("/job/build/")
 	@Produces("text/plain")
-	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException;
-	
+	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest)
+			throws MayamClientException,
+			JobBuilderException;
+
+	/**
+	 * Starts a transcode job
+	 * 
+	 * @param startRequest
+	 * @return
+	 * @throws WfsClientException
+	 */
 	@PUT
 	@Path("/job/start/")
 	@Produces("text/plain")
 	public UUID transcode(TCStartRequest startRequest) throws WfsClientException;
-	
 
+	/**
+	 * Fetches the status of a given transcode job
+	 * 
+	 * @param jobid
+	 * @return
+	 */
 	@GET
 	@Path("/job/{id}/status")
 	@Produces("application/xml")
 	public JobStatus jobStatus(@PathParam("id") String jobid);
 
-
-
+	/**
+	 * Returns true if the specified job has finished
+	 * 
+	 * @param jobid
+	 * @return
+	 */
 	@GET
 	@Path("/job/{id}/finished")
 	@Produces("text/plain")
 	public Boolean jobFinished(@PathParam("id") String jobid);
 
-	
+	/**
+	 * Lists transcode jobs
+	 * 
+	 * @return
+	 */
 	@POST
 	@Path("/jobs/")
 	@Produces("application/xml")
 	public List<Job> listJobs();
-	
-	
+
 	/**
 	 * Gets a specific transcode job
 	 */
@@ -69,19 +102,34 @@ public interface TCRestService
 	@Produces("application/xml")
 	public Job job(@PathParam("id") String jobid);
 
-	@GET
-	@Path("/preset")
-	@Produces("application/xml")
-	public ArrayOfPreset listPresets();
-
+	/**
+	 * returns true if the given job has completed successfuly
+	 * 
+	 * @param jobid
+	 * @return
+	 */
 	@GET
 	@Path("/job/{id}/success")
 	@Produces("text/plain")
 	public Boolean jobSuccessful(@PathParam("id") String jobid);
 
+	/**
+	 * Returns any error message associated with the specified job
+	 * @param jobid
+	 * @return
+	 */
 	@GET
 	@Path("/job/{id}/errormessage")
 	public String jobErrorMessage(@PathParam("id") String jobid);
-	
-	
-} 
+
+	/**
+	 * Lists presets
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/preset")
+	@Produces("application/xml")
+	public ArrayOfPreset listPresets();
+
+}
