@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.4</version>
 	</parent>
 
 	<artifactId>fx-CerifyClient</artifactId>
@@ -64,13 +63,7 @@
 		</dependency>
 	</dependencies>
 
-	<!-- <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports" package="com.tektronix.www.cerify.soap.client" 
-		/> <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports/wsdl" 
-		package="com.tektronix.www.cerify.soap.client" /> <mapping namespace="http://www.tek.com/cerify/2008/05/09/reports/wsdl" 
-		package="com.tektronix.www.cerify.soap.client._20080509" /> <mapping namespace="http://www.tek.com/cerify/2009/12/02/reports/wsdl" 
-		package="com.tektronix.www.cerify.soap.client._20091202" /> <mapping namespace="http://www.tek.com/cerify/2010/05/23/reports/wsdl" 
-		package="com.tektronix.www.cerify.soap.client._20100523" /> <mapping namespace="http://www.tek.com/cerify/2010/12/20/reports/wsdl" 
-		package="com.tektronix.www.cerify.soap.client._20101220" /> -->
+	<!-- <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports" package="com.tektronix.www.cerify.soap.client" /> <mapping namespace="http://www.tek.com/cerify/2007/03/22/reports/wsdl" package="com.tektronix.www.cerify.soap.client" /> <mapping namespace="http://www.tek.com/cerify/2008/05/09/reports/wsdl" package="com.tektronix.www.cerify.soap.client._20080509" /> <mapping namespace="http://www.tek.com/cerify/2009/12/02/reports/wsdl" package="com.tektronix.www.cerify.soap.client._20091202" /> <mapping namespace="http://www.tek.com/cerify/2010/05/23/reports/wsdl" package="com.tektronix.www.cerify.soap.client._20100523" /> <mapping namespace="http://www.tek.com/cerify/2010/12/20/reports/wsdl" package="com.tektronix.www.cerify.soap.client._20101220" /> -->
 
 	<build>
 		<plugins>

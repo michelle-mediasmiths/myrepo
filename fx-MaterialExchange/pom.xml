@@ -4,11 +4,11 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.4-SNAPSHOT</version>
+		<version>0.0.4</version>
 	</parent>
 
 	<artifactId>fx-MaterialExchange</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.2</version>
 	<packaging>jar</packaging>
 
 	<name>Foxtel Material Exchange Types</name>
