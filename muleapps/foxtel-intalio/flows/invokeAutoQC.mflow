@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="a flow">
-    <global-element type="http://www.mulesoft.org/schema/mule/cxf/configuration" name="CXF Configuration" entity-id="CXF Configuration#1">
+    <global-element type="http://www.mulesoft.org/schema/mule/cxf/configuration" name="CXF Configuration" entity-id="0b2fec41-4997-4383-a140-3ceb8a0f3877">
         <properties>
             <property value="CXF_Configuration" name="name"/>
             <property name="configurationLocation"/>
             <property value="true" name="enableMuleSoapHeaders"/>
             <property value="true" name="initializeStaticBusInstance"/>
-            <property value="1" name="auxiliary;index"/>
-            <property value="1" name="auxiliary;index"/>
-            <property value="1" name="auxiliary;index"/>
         </properties>
     </global-element>
-    <flow SubFlow="false" name="invokeAutoQC" entity-id="a49415d0-1e0a-484a-9b18-f17cab950dbb">
+    <flow SubFlow="false" name="invokeAutoQC">
         <properties>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
-            <property value="2" name="auxiliary;index"/>
             <property name="bussinessEventsLabel"/>
             <property name="tracking:enable-default-events"/>
-            <property value="2" name="auxiliary;index"/>
-            <property value="2" name="auxiliary;index"/>
-            <property value="2" name="auxiliary;index"/>
         </properties>
-        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
-            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#1">
+        <lane hadOnlyOneElement="false" entity-id="9e191f2e-dd6a-4323-8c8b-166f070c0744">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="06d0028d-acbf-4383-b01b-93fc372b39d5">
                 <properties>
-                    <property value="true" name="auxiliary;erased;contentType"/>
                     <property value="" name="port"/>
-                    <property value="true" name="auxiliary;erased;mimeType"/>
                     <property value="" name="host"/>
                     <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property value="false" name="keep-alive"/>
@@ -39,68 +30,57 @@
                     <property value="" name="transformer-refs"/>
                     <property value="" name="httpLabel"/>
                     <property value="http://localhost:9085/qc" name="address"/>
-                    <property value="true" name="auxiliary;erased;encoding"/>
                     <property value="" name="path"/>
                     <property value="" name="encoding"/>
                     <property value="" name="user"/>
-                    <property value="" name="responseTimeout"/>
+                    <property value="10000" name="responseTimeout"/>
                     <property value="" name="mimeType"/>
                     <property value="" name="connector-ref"/>
-                    <property value="3" name="auxiliary;index"/>
-                    <property name="updated"/>
                 </properties>
                 <description></description>
             </endpoint>
-            <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="XSLT#1">
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/object-to-xml-transformer" name="Object to XML" entity-id="9e9b90a1-53ec-4e3b-baab-093041ef8e7b"/>
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="0323e5e5-b085-4577-9447-7b1f28efda9e">
                 <properties>
                     <property name="returnClass"/>
                     <property name="ignoreBadInput"/>
                     <property name="encoding"/>
                     <property name="uriResolver"/>
                     <property name="transformerFactoryClass"/>
-                    <property value="4" name="auxiliary;index"/>
                     <property name="mimeType"/>
-                    <property value="4" name="auxiliary;index"/>
                     <property value="2" name="maxIdleTransformers"/>
                     <property value="5" name="maxActiveTransformers"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
                     <property value="invokeAutoQC.xsl" name="xsl-file"/>
                     <property value="UTF-8" name="outputEncoding"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
                 </properties>
             </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#2">
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="7b0db75b-4f14-4f35-9aa8-140b57857644">
                 <properties>
-                    <property value="true" name="auxiliary;erased;contentType"/>
-                    <property value="" name="port"/>
-                    <property value="" name="host"/>
-                    <property value="false" name="followRedirects"/>
-                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="false" name="keep-alive"/>
-                    <property value="" name="contentType"/>
-                    <property value="false" name="disableTransportTransformer"/>
-                    <property value="" name="password"/>
+                    <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
-                    <property value="" name="ref"/>
-                    <property value="" name="transformer-refs"/>
-                    <property value="" name="httpLabel"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="httpLabel"/>
+                    <property name="host"/>
+                    <property name="port"/>
+                    <property name="path"/>
+                    <property name="method"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
                     <property value="http://foxtel.local.mediasmithsforge.com:8081/ode/processes/fx-flows/qc/workflow/caller" name="address"/>
-                    <property value="" name="path"/>
                     <property value="UTF-8" name="encoding"/>
-                    <property value="" name="responseTransformer-refs"/>
-                    <property value="POST" name="method"/>
-                    <property value="" name="user"/>
-                    <property value="" name="responseTimeout"/>
+                    <property name="disableTransportTransformer"/>
                     <property value="text/xml" name="mimeType"/>
-                    <property value="" name="connector-ref"/>
-                    <property value="5" name="auxiliary;index"/>
-                    <property name="updated"/>
+                    <property name="responseTimeout"/>
+                    <property name="followRedirects"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="user"/>
+                    <property name="password"/>
+                    <property name="contentType"/>
+                    <property name="keep-alive"/>
                 </properties>
-                <description></description>
             </endpoint>
         </lane>
     </flow>
