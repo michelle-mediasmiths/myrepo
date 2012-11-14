@@ -42,7 +42,7 @@
  		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>tasks-ws-client</artifactId>
-			<version>${worklists.version}</version>
+			<version>0.9.9.9.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
