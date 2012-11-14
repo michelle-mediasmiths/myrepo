@@ -5,6 +5,7 @@ import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
 import com.mediasmiths.mule.MuleClientImpl;
 
@@ -24,14 +25,14 @@ public class MuleWorkflowController {
 		
 	}
 	
-	public MuleMessage initiateQcWorkflow(String assetID, boolean isTx)
+	public void initiateQcWorkflow(String assetID, boolean isTx)
 	{
 		String payload = "<?xml version='1.0'><invokeIntalioQCFlow><assetId>";
 		payload += assetID;
 		payload += "</assetId><forTXDelivery>";
 		payload += isTx;
 		payload += "</forTXDelivery></invokeIntalioQCFlow>";
-		return client.send("http://localhost:9085/qc", payload, null);
+		client.dispatch(MediasmithsDestinations.MULE_QC_DESTINATION, payload, null);
 	}
 	
 	public MuleMessage initiateTxDeliveryWorkflow(long assetID)

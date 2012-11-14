@@ -22,7 +22,6 @@ public class EmergencyIngestHandler
 	
 	public void process(AttributeMap messageAttributes)
 	{	
-		//TODO: IMPLEMENT
 		// Check if asset exists
 		// If not then create placeholder for it
 		// How do we check if the content already exists if we dont have an ID for it?	
