@@ -4,10 +4,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import org.mule.api.MuleMessage;
-
-
-
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -30,10 +26,7 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.listeners.AssetListener;
 import com.mediasmiths.mq.listeners.TaskListener;
-import com.mediasmiths.mule.IMuleClient;
-import com.mediasmiths.mule.MuleClientImpl;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
-
 
 public class MqListeners implements Runnable {
 	private ArrayList<Detachable> listeners;
@@ -56,7 +49,7 @@ public class MqListeners implements Runnable {
 	{	
 		attachIncomingListners();
 		MuleWorkflowController mule = new MuleWorkflowController();
-		MuleMessage result = mule.initiateQcWorkflow("12345", false);
+		mule.initiateQcWorkflow("12345", false);
 		while (listening.get()) {
 			mq.listen(ListenIntensity.NORMAL);
 		}
