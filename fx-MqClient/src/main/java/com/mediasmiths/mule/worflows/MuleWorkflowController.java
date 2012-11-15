@@ -35,6 +35,17 @@ public class MuleWorkflowController {
 		client.dispatch(MediasmithsDestinations.MULE_QC_DESTINATION, payload, null);
 	}
 	
+	public void generateReport(String reportType, String namespace, Object payload)
+	{
+		String request = "<eventEntity>";
+		request += "<time>" + new java.util.Date().toString() + "</time>";
+		request += "<eventName>" + reportType + "</eventName>";
+		request += "<namespace>" + namespace + "</namespace>";
+		request += "<payload>" + payload.toString() + "</payload>";
+		request += "</eventEntity>";
+		client.dispatch(MediasmithsDestinations.MULE_REPORTING_DESTINATION, request, null);
+	}
+	
 	public MuleMessage initiateTxDeliveryWorkflow(long assetID)
 	{
 		String payload = "<?xml version=1.0><invokeIntalioQCFlow><assetId>";
