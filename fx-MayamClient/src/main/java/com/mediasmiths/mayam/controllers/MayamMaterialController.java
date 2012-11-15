@@ -106,9 +106,6 @@ public class MayamMaterialController extends MayamController
 							TapeType tape = tapeList.get(i);
 							if (tape != null)
 							{
-								// TODO: Should we store the tape library ids, the presentation (package) id, or both?
-								// If both are required then we will need a new way of storing the Attribute values
-								tape.getLibraryID();
 								tapeIds.add(tape.getPresentationID());
 							}
 						}
@@ -161,9 +158,6 @@ public class MayamMaterialController extends MayamController
 
 		if (material != null)
 		{
-			// TODO: What all data can we get from this 'Object'
-			// Object additionalMaterial = material.getAdditionalMarketingDetail();
-
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, material.getAspectRatio());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
@@ -383,9 +377,6 @@ public class MayamMaterialController extends MayamController
 								TapeType tape = tapeList.get(i);
 								if (tape != null)
 								{
-									// TODO: Should we store the tape library ids, the presentation (package) id, or both?
-									// If both are required then we will need a new way of storing the Attribute values
-									tape.getLibraryID();
 									tapeIds.add(tape.getPresentationID());
 								}
 							}

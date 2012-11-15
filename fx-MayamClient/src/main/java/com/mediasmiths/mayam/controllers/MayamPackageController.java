@@ -2,6 +2,7 @@ package com.mediasmiths.mayam.controllers;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -13,10 +14,14 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -47,10 +52,7 @@ public class MayamPackageController extends MayamController
 
 		if (txPackage != null)
 		{
-
-			// TODO: Confirm Asset Type with Mayam
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
@@ -58,13 +60,10 @@ public class MayamPackageController extends MayamController
 			// TODO: Any need to store number of segments?
 			// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
 
 			if (!attributesValid)
@@ -198,10 +197,31 @@ public class MayamPackageController extends MayamController
 				attributes = new MayamAttributeController(assetAttributes);
 
 				// TODO: How to map segmentation data?
-				/*
-				 * Segmentation segmentation = txPackage.getSegmentation(); List<Segment> segments = segmentation.getSegment(); for (int j = 0; j< segments.size(); j++) { Segment segment =
-				 * segments.get(j); segment.getDuration(); segment.getEOM(); segment.getSegmentNumber(); segment.getSegmentTitle(); segment.getSOM(); }
-				 */
+/*				Segmentation segmentation = txPackage.getSegmentation(); 
+				List<Segment> segments = segmentation.getSegment(); 
+				for (int j = 0; j< segments.size(); j++) 
+				{ 
+					Segment segment = segments.get(j); 
+					if (segment != null)
+					{
+						segment.getDuration(); 
+						segment.getEOM(); 
+						segment.getSegmentNumber(); 
+						segment.getSegmentTitle(); 
+						segment.getSOM(); 
+					}
+				}
+				 
+				
+				ValueList metadata = new ValueList();
+				metadata.add(new ValueList.Entry("metadata_field", "metadata value"));
+				metadata.add(new ValueList.Entry("metadata_field2", "metadata value2"));
+				
+				SegmentList list = SegmentList.create("my segment list");
+				list.metadataForm("my_agl");
+				list.metadata(metadata);
+				list.build();
+				client.segmentApi().createSegmentList(AssetType.ITEM, assetId, revisionId, list);*/
 
 				if (!attributesValid)
 				{

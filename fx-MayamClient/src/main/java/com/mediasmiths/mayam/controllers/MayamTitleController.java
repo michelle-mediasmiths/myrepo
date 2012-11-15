@@ -142,6 +142,7 @@ public class MayamTitleController extends MayamController{
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 				}
 				
+				//TODO: Channel List
 				//Channels channels = license.getChannels();
 				//List<ChannelType> channelList = channels.getChannel();
 				//ChannelType channel = channelList.get(0);
@@ -278,7 +279,6 @@ public class MayamTitleController extends MayamController{
 		return returnCode;
 	}
 	
-	//TODO: Refactor Asset AttributeMap creation (duplication with create function)
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
