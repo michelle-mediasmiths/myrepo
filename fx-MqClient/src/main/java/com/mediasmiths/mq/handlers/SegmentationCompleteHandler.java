@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class SegmentationCompleteHandler 
 {
@@ -38,7 +39,8 @@ public class SegmentationCompleteHandler
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);
 					
-					//TODO: Initiate workflow	
+					MuleWorkflowController mule = new MuleWorkflowController();
+					mule.initiateTxDeliveryWorkflow(assetID);	
 				}
 			}
 			catch (Exception e) {

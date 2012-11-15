@@ -46,11 +46,15 @@ public class MuleWorkflowController {
 		client.send(MediasmithsDestinations.MULE_REPORTING_DESTINATION, request, null);
 	}
 	
-	public MuleMessage initiateTxDeliveryWorkflow(long assetID)
+	public MuleMessage initiateTxDeliveryWorkflow(String assetID)
 	{
-		String payload = "<?xml version=1.0><invokeIntalioQCFlow><assetId>";
-		//TODO: Implement payload for TxDelivery
-		return client.send("http://localhost:9085/qc", payload, null);
+		String payload = "<?xml version=\"1.0\"?>";
+		payload += "<invokeIntalioTCFlow>";
+		payload += "<inputFile>" + MediasmithsDestinations.TRANSCODE_INPUT_FILE + "</inputFile>";
+		payload += "<outputFolder>" + MediasmithsDestinations.TRANSCODE_OUTPUT_DIR + "</outputFolder>";
+		payload += "<packageID>" + assetID + "</packageID>";
+		payload += "</invokeIntalioTCFlow>";
+		return client.send(MediasmithsDestinations.MULE_TRANSCODE_DESTINATION, payload, null);
 	}
 	
 }
