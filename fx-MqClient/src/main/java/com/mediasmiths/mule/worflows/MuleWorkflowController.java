@@ -35,15 +35,15 @@ public class MuleWorkflowController {
 		client.dispatch(MediasmithsDestinations.MULE_QC_DESTINATION, payload, null);
 	}
 	
-	public void generateReport(String reportType, String namespace, Object payload)
+	public void generateReport(String name, String namespace, String reportType)
 	{
 		String request = "<eventEntity>";
 		request += "<time>" + new java.util.Date().toString() + "</time>";
-		request += "<eventName>" + reportType + "</eventName>";
+		request += "<eventName>" + name + "</eventName>";
 		request += "<namespace>" + namespace + "</namespace>";
-		request += "<payload>" + payload.toString() + "</payload>";
+		request += "<payload>" + reportType + "</payload>";
 		request += "</eventEntity>";
-		client.dispatch(MediasmithsDestinations.MULE_REPORTING_DESTINATION, request, null);
+		client.send(MediasmithsDestinations.MULE_REPORTING_DESTINATION, request, null);
 	}
 	
 	public MuleMessage initiateTxDeliveryWorkflow(long assetID)
