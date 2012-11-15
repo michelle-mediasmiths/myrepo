@@ -551,4 +551,14 @@ public class MayamClientImpl implements MayamClient
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	protected void uploadReport(String id, String handle, String filepath)
+	{
+		try {
+			client.assetApi().importFile(AssetType.ITEM, id, handle, filepath);
+		} catch (RemoteException e) {
+			log.error("EXception thrown by Mayam while attching report: " + id);
+			e.printStackTrace();
+		}
+	}
 }

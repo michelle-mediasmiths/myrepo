@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 
@@ -46,5 +47,4 @@ public abstract class MayamController
 		}
 		return true;
 	}
-
 }

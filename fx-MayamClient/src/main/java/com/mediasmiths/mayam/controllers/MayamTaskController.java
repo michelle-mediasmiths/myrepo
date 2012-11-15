@@ -172,5 +172,4 @@ public class MayamTaskController extends MayamController{
 		task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 		return task;
 	}
-
 }
