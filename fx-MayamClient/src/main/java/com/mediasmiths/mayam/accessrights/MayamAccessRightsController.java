@@ -47,9 +47,11 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.eq("assetType", assetType.toString())); 
 		  }
 		  if (channel != null) {
-			  String channelOwner = MayamChannelGroups.channelGroupOwnerMap.get(channel);
-			  if (channelOwner != null) {
-				  criteria.add(Restrictions.eq("channelOwner", channelOwner)); 
+			  MayamChannelGroupsController channelGroupsController = new MayamChannelGroupsController();
+			  List<MayamChannelGroups> groups = channelGroupsController.retrieve(channel, null);
+			  for (int i = 0; i < groups.size(); i++) 
+			  {
+				  criteria.add(Restrictions.eq("channelOwner", groups.get(i).getChannelOwner()));
 			  }
 		  }
 

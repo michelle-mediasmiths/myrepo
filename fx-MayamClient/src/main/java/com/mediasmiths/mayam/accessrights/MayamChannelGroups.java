@@ -1,42 +1,32 @@
 package com.mediasmiths.mayam.accessrights;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
+@Entity  
+@Table(name = "MayamChannelGroups", schema = "FoxtelAccessRights")  
 public class MayamChannelGroups {
-	public static final Map<String, String> channelGroupOwnerMap = new HashMap<String, String>()
-	{
-		private static final long serialVersionUID = 1L;
-
-		{
-			//General Entertainment
-			put("FOX8", "GE");
-			put("111 HITS", "GE");
-			put("COMEDY", "GE");
-			put("SOHO", "GE");
-			put("ARENA", "GE");
-			
-			//Lifestyle
-			put("LIFESTYLE", "LS");
-			put("FOOD", "LS");
-			put("HOME", "LS");
-			put("YOU", "LS");
-			
-			//On Demand
-			put("ON DEMAND", "OD");
-			
-			//Main Event
-			put("MAIN EVENT", "ME");
-			
-			//Adults Only
-			put("AO", "AO");
-			
-			//Factuals
-			put("CRIME", "FC");
-			put("BIO FACTUALS", "FC");
-			put("A&E", "FC");
-			put("HISTORY", "FC");
-			
-		}
-	};
+    @Id  
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id") 
+    private long id;
+    
+    @Column(name = "channelName")  
+    private String channelName; 
+    
+    @Column(name = "channelOwner")  
+    private String channelOwner; 
+    
+    public long getId() {return id;}  
+    public void setId(long id) {this.id = id;}  
+   
+    public String getChannelName() {return channelName;}  
+    public void setChannelName(String channel) {this.channelName = channel;}  
+    
+    public String getChannelOwner() {return channelOwner;}  
+    public void setChannelOwner(String owner) {this.channelOwner = owner;} 
 }
