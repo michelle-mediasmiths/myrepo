@@ -26,7 +26,6 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
-import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -56,13 +55,11 @@ public class MayamMaterialController extends MayamController
 
 		if (material != null)
 		{
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialID());
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, material.getMaterialID());
+			attributesValid &= attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
+			attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 
 			Source source = material.getSource();
 			if (source != null)
@@ -75,24 +72,21 @@ public class MayamMaterialController extends MayamController
 					if (aggregator != null)
 					{
 						// TODO: Approval attributes are not ideal for aggregator values
-						attributesValid = attributesValid
-								&& attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
-						attributesValid = attributesValid
-								&& attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
+						attributesValid &= attributes.setAttribute(Attribute.APP_ID, aggregator.getAggregatorID());
+						attributesValid &= attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 					}
 					if (order != null)
 					{
 						// TODO: Task operation attributes are not ideal for aggregator values
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
+						attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
+						attributesValid &= attributes.setAttribute(Attribute.OP_ID, order.getOrderReference());
 					}
 				}
 
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
-					attributesValid = attributesValid
-							&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 				}
 
 				Library library = source.getLibrary();
@@ -110,7 +104,7 @@ public class MayamMaterialController extends MayamController
 								tapeIds.add(tape.getPresentationID());
 							}
 						}
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+						attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 					}
 				}
 			}
@@ -160,15 +154,15 @@ public class MayamMaterialController extends MayamController
 		if (material != null)
 		{
 			//TODO: Mayam to advise on new attribute for Aspect Ratios
-			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
+			//attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, material.isAdultMaterial());
 
 			// TODO: Require attributes for timecode
-			// attributesValid = attributesValid && attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
-			// attributesValid = attributesValid && attributes.setAttribute(Attribute., material.getLastFrameTimecode());
+			// attributesValid &= attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
+			// attributesValid &= attributes.setAttribute(Attribute., material.getLastFrameTimecode());
 
 			// TODO: What should Media be set as?
 			// MediaType media = material.getMedia();
@@ -239,10 +233,10 @@ public class MayamMaterialController extends MayamController
 				attributes = new MayamAttributeController(assetAttributes);
 
 				//TODO: Mayam to advise on new attribute for Aspect Ratios
-				//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
+				//attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 
 				// TODO: No appropriate attributes for start and end frame markers
 				// material.getLastFrameTimecode();
@@ -318,16 +312,12 @@ public class MayamMaterialController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
+				attributesValid &= attributes.setAttribute(Attribute.QC_NOTES, material.getQualityCheckTask().toString());
 				if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
 				{
-					attributesValid = attributesValid
-							&& attributes.setAttribute(
-									Attribute.TX_NEXT,
-									material.getRequiredBy().toGregorianCalendar().getTime());
+					attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy().toGregorianCalendar().getTime());
 				}
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 
 				Source source = material.getSource();
 				if (source != null)
@@ -341,28 +331,21 @@ public class MayamMaterialController extends MayamController
 						if (aggregator != null)
 						{
 							// TODO: Approval attributes are not ideal for aggregator values
-							attributesValid = attributesValid
-									&& attributes.setAttribute(Attribute.APP_VAL, aggregator.getAggregatorID());
-							attributesValid = attributesValid
-									&& attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
+							attributesValid &= attributes.setAttribute(Attribute.APP_VAL, aggregator.getAggregatorID());
+							attributesValid &= attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 						}
 						if (order != null)
 						{
 							// TODO: Task operation attributes are not ideal for aggregator values
-							attributesValid = attributesValid
-									&& attributes.setAttribute(
-											Attribute.OP_DATE,
-											order.getOrderCreated().toGregorianCalendar().getTime());
-							attributesValid = attributesValid
-									&& attributes.setAttribute(Attribute.OP_VAL, order.getOrderReference());
+							attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated().toGregorianCalendar().getTime());
+							attributesValid &= attributes.setAttribute(Attribute.OP_VAL, order.getOrderReference());
 						}
 					}
 
 					Compile compile = source.getCompile();
 					if (compile != null)
 					{
-						attributesValid = attributesValid
-								&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+						attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
 					}
 
 					Library library = source.getLibrary();
@@ -380,7 +363,7 @@ public class MayamMaterialController extends MayamController
 									tapeIds.add(tape.getPresentationID());
 								}
 							}
-							attributesValid = attributesValid && attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
+							attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 						}
 					}
 				}

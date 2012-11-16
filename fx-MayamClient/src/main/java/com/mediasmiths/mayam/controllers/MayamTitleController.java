@@ -44,24 +44,24 @@ public class MayamTitleController extends MayamController{
 		
 		if (title != null)
 		{
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
 			
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
+			attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
 			
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
 			
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+			attributesValid &= attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+			attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
 			
 			//TODO: Rights attributes are not the ideal location for distributor values
 			Distributor distributor = title.getDistributor();
 			if (distributor != null) {
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+				attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+				attributesValid &= attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
 			}
 			
 			//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
@@ -149,24 +149,24 @@ public class MayamTitleController extends MayamController{
 				//channel.getChannelName();
 				//channel.getChannelTag();
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
+				attributesValid &= attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
+				attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+				attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
+				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+				attributesValid &= attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+				attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 				
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+				attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+				attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
 				
 				if (!attributesValid) {
 					log.warn("Title created but one or more attributes were invalid");
@@ -218,21 +218,21 @@ public class MayamTitleController extends MayamController{
 				if (assetAttributes != null) {
 					attributes = new MayamAttributeController(assetAttributes);
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
+					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
 					
 					//TODO: Rights attributes are not the ideal location for distributor values
 					Distributor distributor = title.getDistributor();
 					if (distributor != null) {
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+						attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+						attributesValid &= attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
 					}
 					
 					//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
@@ -323,7 +323,7 @@ public class MayamTitleController extends MayamController{
 							rightsTable.setCellValue(i, 2, period.getStartDate().toString());
 							rightsTable.setCellValue(i, 3, period.getEndDate().toString());
 						}
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+						attributesValid &= attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					}
 					
 					//	Channels channels = license.getChannels();
@@ -332,20 +332,20 @@ public class MayamTitleController extends MayamController{
 					//	channel.getChannelName();
 					//	channel.getChannelTag();
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+					attributesValid &=attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
+					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+					attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 					
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
 					
 					if (!attributesValid) {
 						log.warn("Title updated but one or more attributes were invalid");

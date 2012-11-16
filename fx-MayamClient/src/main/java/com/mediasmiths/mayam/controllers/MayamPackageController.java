@@ -1,8 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -14,14 +12,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -52,19 +45,19 @@ public class MayamPackageController extends MayamController
 
 		if (txPackage != null)
 		{
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 			// TODO: Any need to store number of segments?
-			// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
+			// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+			attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+			attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
+			attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
+			attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
 
 			if (!attributesValid)
 			{
@@ -121,20 +114,16 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
 
 				// TODO: Any need to store number of segments?
-				// attributesValid = attributesValid && attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
+				// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-				attributesValid = attributesValid && attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
+				attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+				attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
+				attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
+				attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
 
 				if (!attributesValid)
 				{
@@ -360,7 +349,6 @@ public class MayamPackageController extends MayamController
 		// TODO: fetch segment information
 		// TODO : pt.setNotes ?
 
-		GregorianCalendar c = new GregorianCalendar();
 		Date txNext = (Date) attributes.getAttribute(Attribute.TX_NEXT);
 
 		if (txNext != null)

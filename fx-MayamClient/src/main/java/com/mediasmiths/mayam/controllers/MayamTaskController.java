@@ -41,48 +41,41 @@ public class MayamTaskController extends MayamController{
 		accessRightsController = rightsController;
 	}
 
-	public long createTask(String assetID, MayamAssetType assetType,
-			MayamTaskListType taskList) throws MayamClientException {
+	public long createTask(String assetID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException {
 		long taskID = 0;
-		MayamAttributeController attributes = new MayamAttributeController(
-				client);
+		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.assetApi().getAsset(
-					AssetType.valueOf(assetType.toString()), assetID);
+			assetAttributes = client.assetApi().getAsset(AssetType.valueOf(assetType.toString()), assetID);
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID);
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 		}
 
 		if (assetAttributes != null) {
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.TASK_LIST_ID,
-							taskList.toString());
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.TASK_STATE,
-							TaskState.OPEN);
+			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
+			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 
-			attributesValid = attributesValid
-					&& attributes.setAttribute(Attribute.ASSET_ID,
-							taskList.toString());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, taskList.toString());
 			attributes.copyAttributes(assetAttributes);
 
+			if (!attributesValid)
+			{
+				log.warn("Task created but one or more attributes was invalid");
+			}
 			try {
 				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
 				client.taskApi().createTask(newTask);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam while attempting to create task");
-				throw new MayamClientException(
-						MayamClientErrorCode.MAYAM_EXCEPTION);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
 
 		} else {
 			log.warn("Failed to find asset with ID: " + assetID);
-			throw new MayamClientException(
-					MayamClientErrorCode.ASSET_FIND_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
 		}
 		return taskID;
 	}
@@ -99,19 +92,14 @@ public class MayamTaskController extends MayamController{
 		return returnCode;
 	}
 
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String id)
-			throws MayamClientException {
-
-		log.info(String.format("Searching for task of type %s for asset %s",
-				type.getText(), id));
+	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException 
+	{
+		log.info(String.format("Searching for task of type %s for asset %s", type.getText(), id));
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
-		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID,
-				type.getText());
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
 		criteria.getFilterEqualities().setAttribute(Attribute.ASSET_ID, id);
-		criteria.getSortOrders()
-				.add(new SortOrder(Attribute.TASK_CREATED,
-						SortOrder.Direction.DESC));
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try {
 			result = client.taskApi().getTasks(criteria, 10, 0);
@@ -119,30 +107,26 @@ public class MayamTaskController extends MayamController{
 
 			if (result.getTotalMatches() != 1) {
 				log.error("unexpected number of results for search");
-				throw new MayamClientException(
-						MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
+				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 
 			return result.getMatches().get(0);
 		} catch (RemoteException e) {
 			log.error("remote expcetion searching for task", e);
-			throw new MayamClientException(
-					MayamClientErrorCode.TASK_SEARCH_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 
 	}
 
-	public void saveTask(AttributeMap task) throws MayamClientException {
-		
+	public void saveTask(AttributeMap task) throws MayamClientException 
+	{	
 		try {
 			task = updateAccessRights(task);
 			client.taskApi().updateTask(task);
 		} catch (RemoteException e) {
 			log.error("remote expcetion saving task", e);
-			throw new MayamClientException(
-					MayamClientErrorCode.TASK_UPDATE_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED);
 		}
-		
 	}
 	
 	public AttributeMap getTask(long taskId) throws RemoteException
