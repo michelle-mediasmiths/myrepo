@@ -34,7 +34,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType) 
+	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String channel) 
 	 {
 		  Criteria criteria = createCriteria();
 		  if (taskType != null) {
@@ -45,6 +45,12 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		  }
 		  if (assetType != null) {
 			  criteria.add(Restrictions.eq("assetType", assetType.toString())); 
+		  }
+		  if (channel != null) {
+			  String channelOwner = MayamChannelGroups.channelGroupOwnerMap.get(channel);
+			  if (channelOwner != null) {
+				  criteria.add(Restrictions.eq("channelOwner", channelOwner)); 
+			  }
 		  }
 
 		  return new ArrayList<MayamAccessRights>(getList(criteria));

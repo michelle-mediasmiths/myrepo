@@ -155,8 +155,11 @@ public class MayamTaskController extends MayamController{
 		String taskType = task.getAttribute(Attribute.TASK_LIST_ID);
 		String taskState = task.getAttribute(Attribute.TASK_STATE);
 		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
+		String channel = "";
+		//TODO: Mayam Channel attribute not yet implemented
+		//String channel = task.getAttribute(Attribute.CHANNEL);
 		
-		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType));
+		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType), channel);
 		
 		AssetAccess accessRights = new AssetAccess();
 		for (int i = 0; i < allRights.size(); i++)

@@ -28,6 +28,9 @@ public class MayamAccessRights {
 	    @Column(name = "groupName") 
 		private String groupName;
 	    
+	    @Column(name = "channelOwner") 
+		private String channelOwner;
+	    
 	    @Column(name = "readAccess") 
 		private boolean readAccess;
 	    
@@ -51,6 +54,9 @@ public class MayamAccessRights {
 	    
 	    public String getGroupName() {return groupName;}  
 	    public void setGroupName(String name) {this.groupName = name;} 
+	    
+	    public String getChannelOwner() {return channelOwner;}  
+	    public void setChannelOwner(String ownerGroup) {this.channelOwner = ownerGroup;} 
 
 	    public boolean getReadAccess() {return readAccess;}  
 	    public void setReadAccess(boolean access) {this.readAccess = access;} 
