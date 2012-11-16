@@ -159,7 +159,8 @@ public class MayamMaterialController extends MayamController
 
 		if (material != null)
 		{
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, material.getAspectRatio());
+			//TODO: Mayam to advise on new attribute for Aspect Ratios
+			//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
@@ -553,6 +554,7 @@ public class MayamMaterialController extends MayamController
 			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.AUX_FLAG));
 		}
 
+		//TODO: Update when new Mayam attribute for Aspect Ratio is added
 		if (checkAttributeValid(attributes, Attribute.ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
 		{
 			pmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.ASPECT_RATIO)).toString());
