@@ -26,6 +26,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
+import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -236,10 +237,8 @@ public class MayamMaterialController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				// TODO: Confirm aspect ratio is in the correct notation, otherwise have conversion method
-				// TODO: conversion method required
-//				attributesValid = attributesValid
-//						&& attributes.setAttribute(Attribute.ASPECT_RATIO, AspectRatio.valueOf(material.getAspectRatio()));
+				//TODO: Mayam to advise on new attribute for Aspect Ratios
+				//attributesValid = attributesValid && attributes.setAttribute(Attribute.ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 				attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
