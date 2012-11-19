@@ -19,11 +19,12 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AspectRatio;
-import com.mayam.wf.attributes.shared.type.IdSet;
+import com.mayam.wf.attributes.shared.type.*;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
@@ -167,11 +168,19 @@ public class MayamMaterialController extends MayamController
 			// TODO: What should Media be set as?
 			// MediaType media = material.getMedia();
 
-			// TODO: List of audio data
-			/*
-			 * AudioTracks audioTracks = material.getAudioTracks(); List<Track> tracks = audioTracks.getTrack(); for (int i = 0; i < tracks.size(); i++) { Track track = tracks.get(i);
-			 * track.getTrackEncoding().toString(); track.getTrackName().toString(); track.getTrackNumber(); }
-			 */
+			AudioTracks audioTracks = material.getAudioTracks(); 
+			List<Track> tracks = audioTracks.getTrack(); 
+			AudioTrackList audioTrackList = new AudioTrackList();
+			for (int i = 0; i < tracks.size(); i++) 
+			{ 
+				AudioTrack audioTrack = new AudioTrack();
+				Track track = tracks.get(i);
+				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
+				audioTrack.setName(track.getTrackName().toString()); 
+				audioTrack.setNumber(track.getTrackNumber());
+				audioTrackList.set(i, audioTrack);
+			}
+			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			
 			if (!attributesValid)
 			{
@@ -246,11 +255,22 @@ public class MayamMaterialController extends MayamController
 				/*
 				 * SegmentationType segmentation = material.getOriginalConform(); List<Segment> segments = segmentation.getSegment(); for (int i = 0; i < segments.size(); i++) { Segment segment =
 				 * segments.get(i); segment.getDuration(); segment.getEOM(); segment.getSegmentNumber(); segment.getSegmentTitle(); segment.getSOM(); }
-				 * 
-				 * AudioTracks audioTracks = material.getAudioTracks(); List<Track> tracks = audioTracks.getTrack(); for (int i = 0; i < tracks.size(); i++) { Track track = tracks.get(i);
-				 * track.getTrackEncoding().toString(); track.getTrackName().toString(); track.getTrackNumber(); }
 				 */
-
+				
+				AudioTracks audioTracks = material.getAudioTracks(); 
+				List<Track> tracks = audioTracks.getTrack(); 
+				AudioTrackList audioTrackList = new AudioTrackList();
+				for (int i = 0; i < tracks.size(); i++) 
+				{ 
+					AudioTrack audioTrack = new AudioTrack();
+					Track track = tracks.get(i);
+					audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
+					audioTrack.setName(track.getTrackName().toString()); 
+					audioTrack.setNumber(track.getTrackNumber());
+					audioTrackList.set(i, audioTrack);
+				}
+				attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
+				
 				if (!attributesValid)
 				{
 					log.warn("Material updated but one or more attributes was invalid");
