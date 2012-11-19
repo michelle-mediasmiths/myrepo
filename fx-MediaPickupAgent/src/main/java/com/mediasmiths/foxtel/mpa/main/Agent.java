@@ -10,6 +10,7 @@ import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.mediasmiths.std.guice.serviceregistry.ApplicationContextNameRegistry;
 
 public final class Agent implements Runnable
 {
@@ -34,7 +35,8 @@ public final class Agent implements Runnable
 	{
 		logger.info("Agentcli starting up");
 
-		final Injector injector = GuiceInjectorBootstrap.createInjector(new MediaPickupSetup());
+		ApplicationContextNameRegistry.setContextName("fx-MediaPickupAgent");
+		final Injector injector = GuiceInjectorBootstrap.createInjector();
 
 		try
 		{

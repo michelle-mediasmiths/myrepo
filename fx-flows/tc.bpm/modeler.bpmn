@@ -150,7 +150,7 @@
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_7aLkcSjqEeKKl72DHT98sw"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_7u0XsSjqEeKKl72DHT98sw"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_FUCzcR9REeKBCuRJN5U2jA" iD="_FUCzcB9REeKBCuRJN5U2jA" associations="_HbhdUB9REeKBCuRJN5U2jA _IJeIcB9REeKBCuRJN5U2jA" outgoingEdges="_47WOoSc2EeKYS8XxoCkLRQ" incomingEdges="_4cehUSc2EeKYS8XxoCkLRQ" name="Transfer for TC">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_FUCzcR9REeKBCuRJN5U2jA" iD="_FUCzcB9REeKBCuRJN5U2jA" associations="_HbhdUB9REeKBCuRJN5U2jA _IJeIcB9REeKBCuRJN5U2jA" outgoingEdges="_47WOoSc2EeKYS8XxoCkLRQ" incomingEdges="_4cehUSc2EeKYS8XxoCkLRQ" name="get location of media file">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_HbUB8R9REeKBCuRJN5U2jA"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_IJJ_YR9REeKBCuRJN5U2jA"/>
     </vertices>
@@ -523,7 +523,7 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_E3W3cB9REeKBCuRJN5U2jA" iD="_E3OUkR9REeKBCuRJN5U2jA" associations="_HbluwB9REeKBCuRJN5U2jA _IJYB0B9REeKBCuRJN5U2jA" name="materialTransferForTC" activityType="Task">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_E3W3cB9REeKBCuRJN5U2jA" iD="_E3OUkR9REeKBCuRJN5U2jA" associations="_HbluwB9REeKBCuRJN5U2jA _IJYB0B9REeKBCuRJN5U2jA" name="get location of media file" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_E3W3cR9REeKBCuRJN5U2jA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_E3W3ch9REeKBCuRJN5U2jA" key="douri" value="project:///wfAdapter/materialTransferForTC.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest}restService/httpPort/materialTransferForTC"/>
       </eAnnotations>

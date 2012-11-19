@@ -142,7 +142,7 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_bWc3sR9yEeKCKo-8QnTuIA" iD="_bWc3sB9yEeKCKo-8QnTuIA" associations="_XVbc0x9zEeKCKo-8QnTuIA" outgoingEdges="_qi-dgR94EeKCKo-8QnTuIA" name="start" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_XVXLYR9zEeKCKo-8QnTuIA"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_l5W1wR9yEeKCKo-8QnTuIA" iD="_l5W1wB9yEeKCKo-8QnTuIA" associations="_6T_Rch9zEeKCKo-8QnTuIA _6lkwsB9zEeKCKo-8QnTuIA" outgoingEdges="_QKBmER9zEeKCKo-8QnTuIA" incomingEdges="_qyF3kR94EeKCKo-8QnTuIA" name="move media to location accessible to cerify">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_l5W1wR9yEeKCKo-8QnTuIA" iD="_l5W1wB9yEeKCKo-8QnTuIA" associations="_6T_Rch9zEeKCKo-8QnTuIA _6lkwsB9zEeKCKo-8QnTuIA" outgoingEdges="_QKBmER9zEeKCKo-8QnTuIA" incomingEdges="_qyF3kR94EeKCKo-8QnTuIA" name="get location of media file">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_6T1gcR9zEeKCKo-8QnTuIA"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_6lWHMR9zEeKCKo-8QnTuIA"/>
     </vertices>
@@ -572,7 +572,7 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_pdGz5R9zEeKCKo-8QnTuIA" iD="_pdE-sB9zEeKCKo-8QnTuIA" associations="_6UBtuR9zEeKCKo-8QnTuIA _6lhGUB9zEeKCKo-8QnTuIA" name="assetTransferForQC" activityType="Task">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_pdGz5R9zEeKCKo-8QnTuIA" iD="_pdE-sB9zEeKCKo-8QnTuIA" associations="_6UBtuR9zEeKCKo-8QnTuIA _6lhGUB9zEeKCKo-8QnTuIA" name="get location of media file" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pdGz5h9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pdGz5x9zEeKCKo-8QnTuIA" key="douri" value="project:///wfAdapter/assetTransferForQC.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest}restService/httpPort/assetTransferForQC"/>
       </eAnnotations>

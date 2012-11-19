@@ -15,7 +15,6 @@ public class MediaPickupSetup implements GuiceSetup
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config)
 	{
-		modules.add(new MediaPickupModule());
 
 		if (config.getBoolean("stub.out.mayam", false))
 		{
@@ -25,6 +24,8 @@ public class MediaPickupSetup implements GuiceSetup
 		{
 			modules.add(new MayamClientModule());
 		}
+		
+		modules.add(new MediaPickupModule());
 	}
 
 	@Override

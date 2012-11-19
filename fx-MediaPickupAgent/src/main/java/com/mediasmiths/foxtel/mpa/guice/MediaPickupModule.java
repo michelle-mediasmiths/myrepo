@@ -35,7 +35,6 @@ public class MediaPickupModule extends AbstractModule {
 	
 	@Override
 	protected void configure() {
-		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
 		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);

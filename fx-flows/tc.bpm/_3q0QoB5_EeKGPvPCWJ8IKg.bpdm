@@ -64,15 +64,9 @@
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="transcodeOutputLocation" partnerLink="wFAdapterAndTCForHttpPortPlk0Var" portType="getTranscodeOutputLocation:restInterface" isMyRole="true" enableSharing="false" bpdm:label="transcodeOutputLocation" bpdm:ID="_hZ18ACp_EeKw-vMBW_TpZw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getTranscodeOutputLocationTranscodeOutputLocationRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getTranscodeOutputLocation:transcodeOutputLocation_input" bpdm:binding="getTranscodeOutputLocation:restBinding" bpdm:ID="_iPZD8Cp_EeKw-vMBW_TpZw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getTranscodeOutputLocationTranscodeOutputLocationResponseMsg" bpdm:msgVarScopeId="_3q0QoB5_EeKGPvPCWJ8IKg" bpdm:variableIsManaged="true" bpdm:messageType="getTranscodeOutputLocation:transcodeOutputLocation_output" bpdm:binding="getTranscodeOutputLocation:restBinding" bpdm:ID="_ilXT8Cp_EeKw-vMBW_TpZw"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="tcFailure" partnerLink="wFAdapterAndTCForHttpPortPlk2Var" portType="tcFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcFailure" bpdm:ID="_POD8kCJyEeKnk7bpMIO4Cw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_QNpxUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_Qcv9QCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
+                <bpdm:messagingtask operation="materialTransferForTC" partnerLink="wFAdapterAndTCForHttpPortPlk1Var" portType="materialTransferForTC1:restInterface" isMyRole="true" enableSharing="false" bpdm:label="get location of media file" bpdm:ID="_E3OUkR9REeKBCuRJN5U2jA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_input" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_HbUB8B9REeKBCuRJN5U2jA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_output" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_IJJ_YB9REeKBCuRJN5U2jA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -82,15 +76,21 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
+                <bpdm:messagingtask operation="tcFailure" partnerLink="wFAdapterAndTCForHttpPortPlk2Var" portType="tcFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcFailure" bpdm:ID="_POD8kCJyEeKnk7bpMIO4Cw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_QNpxUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_Qcv9QCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
                 <bpdm:messagingtask operation="tcPassed" partnerLink="wFAdapterAndTCForHttpPortPlk3Var" portType="tcPassed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcPassed" bpdm:ID="_SVqmsSJyEeKnk7bpMIO4Cw">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_S1zfUCJyEeKnk7bpMIO4Cw"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcPassedTcPassedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_output" bpdm:binding="tcPassed:restBinding" bpdm:ID="_TEjtACJyEeKnk7bpMIO4Cw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="materialTransferForTC" partnerLink="wFAdapterAndTCForHttpPortPlk1Var" portType="materialTransferForTC1:restInterface" isMyRole="true" enableSharing="false" bpdm:label="materialTransferForTC" bpdm:ID="_E3OUkR9REeKBCuRJN5U2jA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_input" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_HbUB8B9REeKBCuRJN5U2jA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="materialTransferForTC1MaterialTransferForTCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="materialTransferForTC1:materialTransferForTC_output" bpdm:binding="materialTransferForTC1:restBinding" bpdm:ID="_IJJ_YB9REeKBCuRJN5U2jA"></bpdm:linkset>
+                <bpdm:messagingtask operation="transcodeOutputLocation" partnerLink="wFAdapterAndTCForHttpPortPlk0Var" portType="getTranscodeOutputLocation:restInterface" isMyRole="true" enableSharing="false" bpdm:label="transcodeOutputLocation" bpdm:ID="_hZ18ACp_EeKw-vMBW_TpZw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getTranscodeOutputLocationTranscodeOutputLocationRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getTranscodeOutputLocation:transcodeOutputLocation_input" bpdm:binding="getTranscodeOutputLocation:restBinding" bpdm:ID="_iPZD8Cp_EeKw-vMBW_TpZw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getTranscodeOutputLocationTranscodeOutputLocationResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getTranscodeOutputLocation:transcodeOutputLocation_output" bpdm:binding="getTranscodeOutputLocation:restBinding" bpdm:ID="_ilXT8Cp_EeKw-vMBW_TpZw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
