@@ -10,7 +10,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributesModule;
-import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
@@ -27,7 +26,6 @@ public class MayamClientModule extends AbstractModule
 	{
 		install(new SecurityModule());
 		install(new AttributesModule());
-		install(new MqModule("fxMayamClient"));
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(MayamValidator.class).to(MayamValidatorImpl.class);
 		
