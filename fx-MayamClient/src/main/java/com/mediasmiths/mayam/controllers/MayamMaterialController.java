@@ -259,27 +259,30 @@ public class MayamMaterialController extends MayamController
 					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
 			
 					SegmentationType segmentation = material.getOriginalConform(); 
-					List<SegmentationType.Segment> segments = segmentation.getSegment(); 
-					for (int i = 0; i < segments.size(); i++) 
-					{ 
-						SegmentationType.Segment segment = segments.get(i); 
-						if (segment != null) 
-						{
-							ValueList metadata = new ValueList();
-							metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
-							metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
-							
-							SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-							listBuilder = listBuilder.metadataForm("Material_Segment"); 
-							listBuilder = listBuilder.metadata(metadata);
-							SegmentList list = listBuilder.build();
-							client.segmentApi().updateSegmentList(revisionID, list);
-						}
-						else {
-							log.error("Segment data is null for asset ID: " + assetID);
+					if (segmentation != null)
+					{
+						List<SegmentationType.Segment> segments = segmentation.getSegment(); 
+						for (int i = 0; i < segments.size(); i++) 
+						{ 
+							SegmentationType.Segment segment = segments.get(i); 
+							if (segment != null) 
+							{
+								ValueList metadata = new ValueList();
+								metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
+								metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+								
+								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+								listBuilder = listBuilder.metadataForm("Material_Segment"); 
+								listBuilder = listBuilder.metadata(metadata);
+								SegmentList list = listBuilder.build();
+								client.segmentApi().updateSegmentList(revisionID, list);
+							}
+							else {
+								log.error("Segment data is null for asset ID: " + assetID);
+							}
 						}
 					}
 				}
@@ -290,18 +293,24 @@ public class MayamMaterialController extends MayamController
 				}
 				
 				AudioTracks audioTracks = material.getAudioTracks(); 
-				List<Track> tracks = audioTracks.getTrack(); 
-				AudioTrackList audioTrackList = new AudioTrackList();
-				for (int i = 0; i < tracks.size(); i++) 
-				{ 
-					AudioTrack audioTrack = new AudioTrack();
-					Track track = tracks.get(i);
-					audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
-					audioTrack.setName(track.getTrackName().toString()); 
-					audioTrack.setNumber(track.getTrackNumber());
-					audioTrackList.set(i, audioTrack);
+				if (audioTracks != null)
+				{
+					List<Track> tracks = audioTracks.getTrack(); 
+					if (tracks != null)
+					{
+						AudioTrackList audioTrackList = new AudioTrackList();
+						for (int i = 0; i < tracks.size(); i++) 
+						{ 
+							AudioTrack audioTrack = new AudioTrack();
+							Track track = tracks.get(i);
+							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
+							audioTrack.setName(track.getTrackName().toString()); 
+							audioTrack.setNumber(track.getTrackNumber());
+							audioTrackList.set(i, audioTrack);
+						}
+						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
+					}
 				}
-				attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 				
 				if (!attributesValid)
 				{

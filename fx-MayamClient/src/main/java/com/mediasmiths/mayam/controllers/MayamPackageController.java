@@ -198,27 +198,30 @@ public class MayamPackageController extends MayamController
 					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
 			
 					Segmentation segmentation = txPackage.getSegmentation(); 
-					List<Segment> segments = segmentation.getSegment(); 
-					for (int i = 0; i < segments.size(); i++) 
-					{ 
-						SegmentationType.Segment segment = segments.get(i); 
-						if (segment != null) 
-						{
-							ValueList metadata = new ValueList();
-							metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
-							metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
-							metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
-							
-							SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-							listBuilder = listBuilder.metadataForm("Material_Segment"); 
-							listBuilder = listBuilder.metadata(metadata);
-							SegmentList list = listBuilder.build();
-							client.segmentApi().updateSegmentList(revisionID, list);
-						}
-						else {
-							log.error("Segment data is null for asset ID: " + assetID);
+					if (segmentation != null)
+					{
+						List<Segment> segments = segmentation.getSegment(); 
+						for (int i = 0; i < segments.size(); i++) 
+						{ 
+							SegmentationType.Segment segment = segments.get(i); 
+							if (segment != null) 
+							{
+								ValueList metadata = new ValueList();
+								metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
+								metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
+								metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+								
+								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+								listBuilder = listBuilder.metadataForm("Material_Segment"); 
+								listBuilder = listBuilder.metadata(metadata);
+								SegmentList list = listBuilder.build();
+								client.segmentApi().updateSegmentList(revisionID, list);
+							}
+							else {
+								log.error("Segment data is null for asset ID: " + assetID);
+							}
 						}
 					}
 				}
