@@ -20,19 +20,13 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.mq.AttributeMessageBuilder;
-import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
@@ -58,8 +52,7 @@ public class MayamClientImpl implements MayamClient
 	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
 	TasksClient client;
-	@Inject
-	Provider<AttributeMessageBuilder> attributeMessageBuilder;
+
 	@Inject
 	MayamTitleController titleController;
 	@Inject
@@ -82,11 +75,7 @@ public class MayamClientImpl implements MayamClient
 			IOException,
 			DatatypeConfigurationException
 	{
-		URL url = tasksURL;
-		Injector injector = Guice.createInjector(new AttributesModule(), new MqModule(mqModuleName));
-		client = injector.getInstance(TasksClient.class).setup(url, userToken); // throws
-																				// ioexception
-		attributeMessageBuilder = injector.getProvider(AttributeMessageBuilder.class);
+
 		tasksController = new MayamTaskController(client, new MayamAccessRightsController());
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, new DateUtil());

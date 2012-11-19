@@ -25,6 +25,7 @@ import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.type.AspectRatio;
+import com.mayam.wf.ws.client.AssetApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -36,9 +37,11 @@ public class MayamMaterialControllerTest {
 
 	MayamMaterialController controller;
 	TasksClient client;
+	AssetApi assetApi;
 	MaterialType material;
 	ProgrammeMaterialType programmeMaterial;
 	AttributeMap map;
+	private final static String MATERIALID="MATERIALID";
 	
 	public MayamMaterialControllerTest() {
 		super();
@@ -60,6 +63,8 @@ public class MayamMaterialControllerTest {
 	public void setup() throws DatatypeConfigurationException
 	{
 		client = mock(TasksClient.class);
+		assetApi = mock(AssetApi.class);
+		when(client.assetApi()).thenReturn(assetApi);
 		controller = new MayamMaterialController(client, new DateUtil());
 		
 		material = mock(MaterialType.class);
@@ -83,7 +88,7 @@ public class MayamMaterialControllerTest {
 	{		
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -96,8 +101,8 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterial() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
-			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -114,7 +119,7 @@ public class MayamMaterialControllerTest {
 	{
 		try {
 			when(client.createAttributeMap()).thenReturn(map);
-			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
+			when(assetApi.createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -195,11 +200,11 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsTrue() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.materialExists(eq(anyString()));
+		boolean returnCode = controller.materialExists(MATERIALID);
 		assertEquals(true, returnCode);
 	}
 	
@@ -207,11 +212,11 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsFalse() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.materialExists(eq(anyString()));
+		boolean returnCode = controller.materialExists(MATERIALID);
 		assertEquals(false, returnCode);
 	}
 	
@@ -219,11 +224,11 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
-		boolean returnCode = controller.materialExists(eq(anyString()));
+		boolean returnCode = controller.materialExists(MATERIALID);
 		assertEquals(false, returnCode);
 	}
 	
@@ -235,7 +240,7 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(MATERIALID);
 		assertTrue(attributes != null);
 	}
 	
@@ -247,7 +252,7 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(MATERIALID);
 		assertEquals(attributes, null);
 	}
 	
@@ -255,11 +260,11 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
-		AttributeMap attributes = controller.getMaterialAttributes(eq(anyString()));
+		AttributeMap attributes = controller.getMaterialAttributes(MATERIALID);
 		assertEquals(attributes, null);
 	}
 	
@@ -267,7 +272,7 @@ public class MayamMaterialControllerTest {
 	public void deleteMaterialFail() 
 	{
 		try {
-			doThrow(mock(RemoteException.class)).when(client).assetApi().deleteAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString());
+			doThrow(mock(RemoteException.class)).when(assetApi).deleteAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -278,7 +283,7 @@ public class MayamMaterialControllerTest {
 	@Test
 	public void deleteMaterialSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
+		MayamClientErrorCode returnCode = controller.deleteMaterial(MATERIALID);
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

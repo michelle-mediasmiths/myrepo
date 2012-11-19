@@ -45,14 +45,10 @@
 			<version>0.9.9.9.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.mayam.wf</groupId>
-			<artifactId>wf-exception</artifactId>
-			<version>0.9.9.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>com.mayam.wf</groupId>
-			<artifactId>tasks-ws-client</artifactId>
-			<version>0.9.9.9.5</version>
+		  <groupId>com.mayam.wf</groupId>
+		  <artifactId>tasks-ws-client-with-dependencies</artifactId>
+		  <version>0.9.9.9.6</version>
+		  <classifier>dependencies</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
