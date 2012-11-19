@@ -20,12 +20,14 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.*;
+import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -251,11 +253,41 @@ public class MayamMaterialController extends MayamController
 				// material.getLastFrameTimecode();
 				// material.getFirstFrameTimecode();
 
-				// TODO: How to handle multiple audio tracks and segments?
-				/*
-				 * SegmentationType segmentation = material.getOriginalConform(); List<Segment> segments = segmentation.getSegment(); for (int i = 0; i < segments.size(); i++) { Segment segment =
-				 * segments.get(i); segment.getDuration(); segment.getEOM(); segment.getSegmentNumber(); segment.getSegmentTitle(); segment.getSOM(); }
-				 */
+				String assetID = material.getMaterialID();
+				try {
+					AttributeMap asset = client.assetApi().getAsset(AssetType.ITEM, assetID);
+					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
+			
+					SegmentationType segmentation = material.getOriginalConform(); 
+					List<SegmentationType.Segment> segments = segmentation.getSegment(); 
+					for (int i = 0; i < segments.size(); i++) 
+					{ 
+						SegmentationType.Segment segment = segments.get(i); 
+						if (segment != null) 
+						{
+							ValueList metadata = new ValueList();
+							metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
+							metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+							
+							SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+							listBuilder = listBuilder.metadataForm("Material_Segment"); 
+							listBuilder = listBuilder.metadata(metadata);
+							SegmentList list = listBuilder.build();
+							client.segmentApi().updateSegmentList(revisionID, list);
+						}
+						else {
+							log.error("Segment data is null for asset ID: " + assetID);
+						}
+					}
+				}
+				catch(RemoteException e)
+				{
+					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
+					e.printStackTrace();
+				}
 				
 				AudioTracks audioTracks = material.getAudioTracks(); 
 				List<Track> tracks = audioTracks.getTrack(); 

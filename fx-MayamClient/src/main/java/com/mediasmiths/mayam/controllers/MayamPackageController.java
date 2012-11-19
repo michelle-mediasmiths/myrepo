@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -12,9 +13,16 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.ValueList;
+import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -185,32 +193,41 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				// TODO: How to map segmentation data?
-/*				Segmentation segmentation = txPackage.getSegmentation(); 
-				List<Segment> segments = segmentation.getSegment(); 
-				for (int j = 0; j< segments.size(); j++) 
-				{ 
-					Segment segment = segments.get(j); 
-					if (segment != null)
-					{
-						segment.getDuration(); 
-						segment.getEOM(); 
-						segment.getSegmentNumber(); 
-						segment.getSegmentTitle(); 
-						segment.getSOM(); 
+				String assetID = txPackage.getPresentationID();
+				try {
+					AttributeMap asset = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), assetID);
+					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
+			
+					Segmentation segmentation = txPackage.getSegmentation(); 
+					List<Segment> segments = segmentation.getSegment(); 
+					for (int i = 0; i < segments.size(); i++) 
+					{ 
+						SegmentationType.Segment segment = segments.get(i); 
+						if (segment != null) 
+						{
+							ValueList metadata = new ValueList();
+							metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
+							metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
+							metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+							
+							SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+							listBuilder = listBuilder.metadataForm("Material_Segment"); 
+							listBuilder = listBuilder.metadata(metadata);
+							SegmentList list = listBuilder.build();
+							client.segmentApi().updateSegmentList(revisionID, list);
+						}
+						else {
+							log.error("Segment data is null for asset ID: " + assetID);
+						}
 					}
 				}
-				 
-				
-				ValueList metadata = new ValueList();
-				metadata.add(new ValueList.Entry("metadata_field", "metadata value"));
-				metadata.add(new ValueList.Entry("metadata_field2", "metadata value2"));
-				
-				SegmentList list = SegmentList.create("my segment list");
-				list.metadataForm("my_agl");
-				list.metadata(metadata);
-				list.build();
-				client.segmentApi().createSegmentList(AssetType.ITEM, assetId, revisionId, list);*/
+				catch(RemoteException e)
+				{
+					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
+					e.printStackTrace();
+				}
 
 				if (!attributesValid)
 				{
@@ -309,6 +326,43 @@ public class MayamPackageController extends MayamController
 		AttributeMap pack = getPackageAttributes(packageID);
 		
 		p.setPresentationID(packageID);
+		
+		String assetID = material.getMaterialID();
+		try {
+			AttributeMap asset = client.assetApi().getAsset(AssetType.ITEM, assetID);
+			String revisionID = asset.getAttribute(Attribute.REVISION_ID);
+	
+			SegmentationType segmentation = material.getOriginalConform(); 
+			List<SegmentationType.Segment> segments = segmentation.getSegment(); 
+			for (int i = 0; i < segments.size(); i++) 
+			{ 
+				SegmentationType.Segment segment = segments.get(i); 
+				if (segment != null) 
+				{
+					ValueList metadata = new ValueList();
+					metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
+					metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
+					metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
+					metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
+					metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+					
+					SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+					listBuilder = listBuilder.metadataForm("Material_Segment"); 
+					listBuilder = listBuilder.metadata(metadata);
+					SegmentList list = listBuilder.build();
+					client.segmentApi().updateSegmentList(revisionID, list);
+				}
+				else {
+					log.error("Segment data is null for asset ID: " + assetID);
+				}
+			}
+		}
+		catch(RemoteException e)
+		{
+			log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
+			e.printStackTrace();
+		}
+		
 		//TODO segmentation;
 		//p.setSegmentation(value);
 
