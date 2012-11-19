@@ -12,6 +12,7 @@ import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
 import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.mediasmiths.std.guice.serviceregistry.ApplicationContextNameRegistry;
 
 public class PlaceholderAgentMain implements Runnable {
 
@@ -36,8 +37,10 @@ public class PlaceholderAgentMain implements Runnable {
 	{
 		logger.info("Placeholdermangercli starting up");
 
-		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderAgentSetup());
-
+//		final Injector injector = GuiceInjectorBootstrap.createInjector(new PlaceholderAgentSetup());
+		ApplicationContextNameRegistry.setContextName("fx-PlaceholderAgent");
+		final Injector injector = GuiceInjectorBootstrap.createInjector();
+		
 		try
 		{
 			PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
