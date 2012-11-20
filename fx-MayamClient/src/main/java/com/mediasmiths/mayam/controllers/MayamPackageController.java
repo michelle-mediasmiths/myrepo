@@ -58,7 +58,19 @@ public class MayamPackageController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
 
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
-
+			
+			AttributeMap material;
+			try {
+				material = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
+				if (material != null) {
+					boolean isProtected = material.getAttribute(Attribute.AUX_FLAG);
+					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, isProtected);
+				}
+			} catch (RemoteException e1) {
+				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID());
+				e1.printStackTrace();
+			}
+			
 			// TODO: Any need to store number of segments?
 			// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 

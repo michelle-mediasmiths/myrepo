@@ -374,7 +374,28 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 					
 					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+					
+					boolean isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
+					if (isProtected != title.isPurgeProtect()){
+						attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+						try {
+							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.MATERIAL.getAssetType());
+							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.PACKAGE.getAssetType());
+							for (int i = 0; i < materials.size(); i++) {
+								AttributeMap material = materials.get(i);
+								material.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								client.assetApi().updateAsset(material);
+							}
+							for (int i = 0; i < packages.size(); i++) {
+								AttributeMap packageMap = packages.get(i);
+								packageMap.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								client.assetApi().updateAsset(packageMap);
+							}
+						} catch (RemoteException e) {
+							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID());
+							e.printStackTrace();
+						}
+					}
 					
 					if (!attributesValid) {
 						log.warn("Title updated but one or more attributes were invalid");

@@ -91,6 +91,16 @@ public class MayamMaterialController extends MayamController
 				if (compile != null)
 				{
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					try {
+						AttributeMap title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
+						if (title != null) {
+							boolean isProtected = title.getAttribute(Attribute.AUX_FLAG);
+							attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, isProtected);
+						}
+					} catch (RemoteException e) {
+						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID());
+						e.printStackTrace();
+					}
 				}
 
 				Library library = source.getLibrary();
