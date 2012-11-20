@@ -61,7 +61,7 @@ public class MayamTaskController extends MayamController{
 			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
 			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, taskList.toString());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetID);
 			attributes.copyAttributes(assetAttributes);
 
 			if (!attributesValid)

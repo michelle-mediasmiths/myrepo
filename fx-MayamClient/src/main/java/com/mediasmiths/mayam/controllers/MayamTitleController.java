@@ -20,12 +20,14 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -415,6 +417,26 @@ public class MayamTitleController extends MayamController{
 		if (title == null) {
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
+		else if (isProtected(title.getTitleID())) 
+		{
+			try
+			{
+				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				
+				AttributeMap taskAttributes = client.createAttributeMap();
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+	
+				taskAttributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+				taskAttributes.putAll(assetAttributes);
+				client.taskApi().createTask(taskAttributes);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error creating Purge By BMS task for protected material : " + title.getTitleID());
+				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+			}
+		}
 		else {
 			try {
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
@@ -422,6 +444,7 @@ public class MayamTitleController extends MayamController{
 				log.error("Error deleting title : "+ title.getTitleID());
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
 			}
+
 		}
 		return returnCode;
 	}
@@ -450,4 +473,21 @@ public class MayamTitleController extends MayamController{
 		}
 		return assetAttributes;
 	}
+	
+	public boolean isProtected(String titleID)
+	{
+		boolean isProtected = false;
+		AttributeMap title;
+		try {
+			title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			if (title != null) {
+				isProtected = title.getAttribute(Attribute.AUX_FLAG);
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID);
+			e.printStackTrace();
+		}
+		return isProtected;
+	}
+
 }

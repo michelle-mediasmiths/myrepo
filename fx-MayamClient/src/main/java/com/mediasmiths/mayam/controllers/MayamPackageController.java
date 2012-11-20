@@ -14,6 +14,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.ws.client.TasksClient;
@@ -26,6 +27,7 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -271,14 +273,36 @@ public class MayamPackageController extends MayamController
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try
+		if (isProtected(presentationID)) 
 		{
-			client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			try
+			{
+				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+				
+				AttributeMap taskAttributes = client.createAttributeMap();
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+	
+				taskAttributes.setAttribute(Attribute.ASSET_ID, presentationID);
+				taskAttributes.putAll(assetAttributes);
+				client.taskApi().createTask(taskAttributes);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error creating Purge By BMS task for protected material : " + presentationID);
+				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+			}
 		}
-		catch (RemoteException e)
-		{
-			log.error("Error deleting package : " + presentationID);
-			returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+		else {
+			try
+			{
+				client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error deleting package : " + presentationID);
+				returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+			}
 		}
 		return returnCode;
 	}
@@ -380,6 +404,22 @@ public class MayamPackageController extends MayamController
 		}
 
 		return pt;
+	}
+	
+	public boolean isProtected(String presentationID)
+	{
+		boolean isProtected = false;
+		AttributeMap packageMap;
+		try {
+			packageMap = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			if (packageMap != null) {
+				isProtected = packageMap.getAttribute(Attribute.AUX_FLAG);
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while checking Protected status of Package : " + presentationID);
+			e.printStackTrace();
+		}
+		return isProtected;
 	}
 
 }

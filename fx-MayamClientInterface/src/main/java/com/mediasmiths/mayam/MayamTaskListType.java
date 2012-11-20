@@ -19,7 +19,8 @@ public enum MayamTaskListType {
 	GENERIC_TASK_ERROR("generic task error"),
 	EXTENDED_PUBLISHING("extended publishing"),
 	THIRD_PARTY("third party"),
-	ASSOCIATED_TASKS("associated tasks");
+	ASSOCIATED_TASKS("associated tasks"), 
+	PURGE_BY_BMS("Purge By BMS");
 	
 	  private String text;
 
