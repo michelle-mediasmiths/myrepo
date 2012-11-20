@@ -180,7 +180,7 @@ public class PlaceholderMessageValidator extends
 		
 		for (String channelTag: channelTags) {
 			
-			//TODO readd this check once we have aversion of mayam that will persist things!
+			//TODO read this check once we have aversion of mayam that will persist things!
 			
 //			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
 //				logger.error("Presentation Format of package does not match that of associated channel");
@@ -188,7 +188,7 @@ public class PlaceholderMessageValidator extends
 //			}
 		}
 		
-		//TODO readd once mayam persists things		
+		//TODO read once mayam persists things		
 //		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
 //		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
 //			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
@@ -233,7 +233,7 @@ public class PlaceholderMessageValidator extends
 		
 		boolean packageExists = false;
 		try {
-			packageExists = mayamClient.packageExists(packageID); //possible presentationID
+			packageExists = mayamClient.packageExists(packageID);
 		}
 		catch (MayamClientException e) {
 			logger.error(
