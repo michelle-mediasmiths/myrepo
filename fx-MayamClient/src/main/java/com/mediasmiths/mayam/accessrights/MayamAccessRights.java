@@ -22,8 +22,8 @@ public class MayamAccessRights {
 	    @Column(name = "taskState")  
 	    private String taskState;
 	    
-	    @Column(name = "assetType")  
-	    private String assetType;
+	    @Column(name = "category")  
+	    private String category;
 	    
 	    @Column(name = "groupName") 
 		private String groupName;
@@ -40,6 +40,9 @@ public class MayamAccessRights {
 	    @Column(name = "adminAccess") 
 		private boolean adminAccess;
 	    
+	    @Column(name = "restricted") 
+		private boolean restricted;
+	    
 	    public long getId() {return id;}  
 	    public void setId(long id) {this.id = id;}  
 	   
@@ -49,8 +52,8 @@ public class MayamAccessRights {
 	    public String getTaskState() {return taskState;}  
 	    public void setTaskState(String state) {this.taskState = state;} 
 	    
-	    public String getAssetType() {return assetType;}  
-	    public void setAssetType(String assetTypeName) {this.assetType = assetTypeName;} 
+	    public String getCategory() {return category;}  
+	    public void setCategory(String categoryName) {this.category = categoryName;} 
 	    
 	    public String getGroupName() {return groupName;}  
 	    public void setGroupName(String name) {this.groupName = name;} 
@@ -66,4 +69,7 @@ public class MayamAccessRights {
 	    
 	    public boolean getAdminAccess() {return adminAccess;}  
 	    public void setAdminAccess(boolean access) {this.adminAccess = access;} 
+	    
+	    public boolean getRestricted() {return restricted;}  
+	    public void setRestricted(boolean purgeProtected) {this.restricted = purgeProtected;} 
 }
