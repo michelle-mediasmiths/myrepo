@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import au.com.foxtel.cf.mam.pms.ChannelType;
+import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.LicenseHolderType;
@@ -125,29 +127,41 @@ public class MayamTitleController extends MayamController{
 					columnNames.add("Organization Name");
 					columnNames.add("Start Date");
 					columnNames.add("End Date");
+					columnNames.add("Channel Name");
+					columnNames.add("Channel Tag");
 					
 					GenericTable rightsTable = new GenericTable(columnNames);
 
 					List<License> licenses = titleRights.getLicense();
+					
+					int rowCounter = 0;
 					for (int i = 0; i < licenses.size(); i++) {
 						License license = licenses.get(i);
 						LicenseHolderType holder = license.getLicenseHolder();
-						rightsTable.setCellValue(i, 0, holder.getOrganisationID());
-						rightsTable.setCellValue(i, 1, holder.getOrganisationName());
-						
 						LicensePeriodType period = license.getLicensePeriod();
-						rightsTable.setCellValue(i, 2, period.getStartDate().toString());
-						rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+						
+						Channels channels = license.getChannels();
+						if (channels != null) {
+							List<ChannelType> channelList = channels.getChannel();
+							if (channelList != null) {
+								for (int j = 0; j < channelList.size(); j++)
+								{
+									ChannelType channel = channelList.get(j);
+	
+									rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+									rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+									rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
+									
+									rowCounter ++;
+								}
+							}
+						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 				}
-				
-				//TODO: Channel List
-				//Channels channels = license.getChannels();
-				//List<ChannelType> channelList = channels.getChannel();
-				//ChannelType channel = channelList.get(0);
-				//channel.getChannelName();
-				//channel.getChannelTag();
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
@@ -309,29 +323,42 @@ public class MayamTitleController extends MayamController{
 						columnNames.add("Organization Name");
 						columnNames.add("Start Date");
 						columnNames.add("End Date");
+						columnNames.add("Channel Name");
+						columnNames.add("Channel Tag");
 						
 						GenericTable rightsTable = new GenericTable(columnNames);
 
 						List<License> licenses = titleRights.getLicense();
+						
+						int rowCounter = 0;
 						for (int i = 0; i < licenses.size(); i++) {
 							License license = licenses.get(i);
 							LicenseHolderType holder = license.getLicenseHolder();
-							rightsTable.setCellValue(i, 0, holder.getOrganisationID());
-							rightsTable.setCellValue(i, 1, holder.getOrganisationName());
-							
 							LicensePeriodType period = license.getLicensePeriod();
-							rightsTable.setCellValue(i, 2, period.getStartDate().toString());
-							rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+							
+							Channels channels = license.getChannels();
+							if (channels != null) {
+								List<ChannelType> channelList = channels.getChannel();
+								if (channelList != null) {
+									for (int j = 0; j < channelList.size(); j++)
+									{
+										ChannelType channel = channelList.get(j);
+		
+										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+										rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
+										
+										rowCounter ++;
+									}
+								}
+							}
 						}
-						attributesValid &= attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					}
-					
-					//	Channels channels = license.getChannels();
-					//	List<ChannelType> channelList = channels.getChannel();
-					//	ChannelType channel = channelList.get(0);
-					//	channel.getChannelName();
-					//	channel.getChannelTag();
-					
+
 					attributesValid &=attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
