@@ -60,7 +60,10 @@ public class MayamPackageController extends MayamController
 			// TODO: Any need to store number of segments?
 			// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
+			
+			//TODO : set classification on parent item for items first tx package
 			attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+			
 			attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
 			attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
