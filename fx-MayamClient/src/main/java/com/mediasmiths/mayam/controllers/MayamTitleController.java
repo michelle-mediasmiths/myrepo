@@ -224,7 +224,7 @@ public class MayamTitleController extends MayamController{
 				try {
 					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
+					log.error("Exception thrown by Mayam while retrieving asset attributes for updated title : " + title.getTitleID());
 					e1.printStackTrace();
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}

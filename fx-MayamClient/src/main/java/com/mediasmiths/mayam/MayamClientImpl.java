@@ -25,6 +25,8 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.IdSet;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
@@ -254,14 +256,15 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
 	{
-		// TODO implement
-		// will need to fetch the material for the given package and check its
-		// protected status flag
 		boolean isProtected = true;
 		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
 		if (packageAttributes != null)
 		{
-			// TODO: need to make use of parent ID attribute once Mayam add it
+			String materialID = packageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+			if (materialAttributes != null) {
+				isProtected = materialAttributes.getAttribute(Attribute.AUX_FLAG);
+			}
 		}
 		return isProtected;
 	}
@@ -272,11 +275,9 @@ public class MayamClientImpl implements MayamClient
 		Boolean isProtected = false;
 		AttributeMap titleAttributes = titleController.getTitle(titleID);
 
-		if (titleAttributes != null && titleAttributes.containsAttribute(Attribute.APP_FLAG))
+		if (titleAttributes != null && titleAttributes.containsAttribute(Attribute.AUX_FLAG))
 		{
-			// TODO: Are we checking accessRestriction or purgeProtection?
-			isProtected = titleAttributes.getAttribute(Attribute.APP_FLAG);
-			// isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
+			isProtected = titleAttributes.getAttribute(Attribute.AUX_FLAG);
 
 			if (isProtected)
 			{
@@ -286,14 +287,11 @@ public class MayamClientImpl implements MayamClient
 							MayamAssetType.TITLE.getAssetType(),
 							titleID,
 							MayamAssetType.MATERIAL.getAssetType());
+					
 					for (int i = 0; i < materials.size(); i++)
 					{
 						AttributeMap materialAttributes = materials.get(i);
-
-						// TODO: Are we checking accessRestriction or
-						// purgeProtection?
-						// materialAttributes.getAttribute(Attribute.AUX_FLAG);
-						if (materialAttributes.getAttribute(Attribute.APP_FLAG))
+						if (materialAttributes.getAttribute(Attribute.AUX_FLAG))
 						{
 							isProtected = true;
 							break;
@@ -304,14 +302,11 @@ public class MayamClientImpl implements MayamClient
 							MayamAssetType.TITLE.getAssetType(),
 							titleID,
 							MayamAssetType.PACKAGE.getAssetType());
+					
 					for (int i = 0; i < packages.size(); i++)
 					{
 						AttributeMap packageAttributes = packages.get(i);
-
-						// TODO: Are we checking accessRestriction or
-						// purgeProtection?
-						// packageAttributes.getAttribute(Attribute.AUX_FLAG);
-						if (packageAttributes.getAttribute(Attribute.APP_FLAG))
+						if (packageAttributes.getAttribute(Attribute.AUX_FLAG))
 						{
 							isProtected = true;
 							break;
@@ -321,7 +316,7 @@ public class MayamClientImpl implements MayamClient
 				}
 				catch (RemoteException e)
 				{
-					// TODO Auto-generated catch block
+					log.error("Exception thrown by Mayam while checking protection flag on descendants of title : " + titleID);
 					e.printStackTrace();
 				}
 			}
@@ -382,8 +377,8 @@ public class MayamClientImpl implements MayamClient
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
 
-		// TODO: Set parent ID once implemented
-		// materialAttributes.setAttribute(Attribute., titleID);
+
+		 materialAttributes.setAttribute(Attribute.ASSET_PARENT_ID, titleID);
 		try
 		{
 			client.assetApi().updateAsset(materialAttributes);
@@ -416,9 +411,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		if (material != null)
 		{
-			String parentID = "";
-			// TODO: retrieve parentID from material
-			// parentID = material.getAttribute(Attribute.);
+			String parentID = material.getAttribute(Attribute.ASSET_PARENT_ID);
 			AttributeMap title = null;
 
 			try
@@ -433,10 +426,17 @@ public class MayamClientImpl implements MayamClient
 
 			if (title != null)
 			{
-				// TODO: Retrieve the channel tag information from the title
-				// attributes
-				String channelTag = "";
-				licenseTags.add(channelTag);
+				GenericTable mediaRights = title.getAttribute(Attribute.MEDIA_RIGHTS);
+				if (mediaRights != null) {
+					List<Row> rows = mediaRights.getRows();
+					if (rows != null) {
+						for (int i = 0; i < rows.size(); i++) 
+						{
+							String channelTag = rows.get(i).get(5);
+							licenseTags.add(channelTag);
+						}
+					}
+				}
 			}
 		}
 		return licenseTags;
@@ -510,7 +510,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
 	{
-			return packageController.getPackageAttributes(packageID).getAttribute(Attribute.ASSET_PARENT_ID);
+		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.ASSET_PARENT_ID);
 	}
 
 	@Override
