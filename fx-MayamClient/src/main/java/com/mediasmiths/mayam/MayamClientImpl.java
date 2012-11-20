@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -25,6 +26,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.CommentLog;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.IdSet;
@@ -516,8 +518,18 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
 	{
-		// TODO implement
-		
+		long id = tasksController.createTask(packageID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY_FAILURE);
+		AttributeMap newTask;
+		try {
+			newTask = tasksController.getTask(id);
+			CommentLog comments = newTask.getAttribute(Attribute.COMMENT_LOG);
+			comments.addComment("WFE TxDelivery", new Date(), failureReason);
+			newTask.setAttribute(Attribute.COMMENT_LOG, comments);
+			tasksController.saveTask(newTask);
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while creating Tx Deliver Failure task for package :" + packageID);
+			e.printStackTrace();
+		}
 	}
 
 	@Override
