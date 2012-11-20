@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -13,6 +14,8 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
+import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -58,7 +61,7 @@ public class MayamTaskController extends MayamController{
 			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
 			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, taskList.toString());
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetID);
 			attributes.copyAttributes(assetAttributes);
 
 			if (!attributesValid)
@@ -139,11 +142,23 @@ public class MayamTaskController extends MayamController{
 		String taskType = task.getAttribute(Attribute.TASK_LIST_ID);
 		String taskState = task.getAttribute(Attribute.TASK_STATE);
 		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
-		String channel = "";
-		//TODO: Mayam Channel attribute not yet implemented
-		//String channel = task.getAttribute(Attribute.CHANNEL);
+		boolean purgeProtected = task.getAttribute(Attribute.AUX_FLAG);
 		
-		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType), channel);
+		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
+		
+		ArrayList <String> channelList = new ArrayList <String> ();
+		if (mediaRights != null) {
+			List<Row> rows = mediaRights.getRows();
+			if (rows != null) {
+				for (int i = 0; i < rows.size(); i++)
+				{
+					String channel = rows.get(i).get(5);
+					channelList.add(channel);
+				}
+			}
+		}
+		
+		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType), channelList, purgeProtected);
 		
 		AssetAccess accessRights = new AssetAccess();
 		for (int i = 0; i < allRights.size(); i++)

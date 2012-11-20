@@ -104,6 +104,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 		map = mock(AttributeMap.class);
 		map.injectHelpers(mock(AttributeValidator.class), mock(AttributeDescription.Producer.class));
 		when(map.setAttributeFromString(argThat(new AttributeMatcher()), anyString())).thenReturn(map);
+		when(map.getAttribute(Attribute.AUX_FLAG)).thenReturn(Boolean.FALSE);
 	}
 	
 	@Test

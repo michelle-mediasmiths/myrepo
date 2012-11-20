@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import au.com.foxtel.cf.mam.pms.ChannelType;
+import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.LicenseHolderType;
@@ -18,12 +20,14 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -125,29 +129,41 @@ public class MayamTitleController extends MayamController{
 					columnNames.add("Organization Name");
 					columnNames.add("Start Date");
 					columnNames.add("End Date");
+					columnNames.add("Channel Name");
+					columnNames.add("Channel Tag");
 					
 					GenericTable rightsTable = new GenericTable(columnNames);
 
 					List<License> licenses = titleRights.getLicense();
+					
+					int rowCounter = 0;
 					for (int i = 0; i < licenses.size(); i++) {
 						License license = licenses.get(i);
 						LicenseHolderType holder = license.getLicenseHolder();
-						rightsTable.setCellValue(i, 0, holder.getOrganisationID());
-						rightsTable.setCellValue(i, 1, holder.getOrganisationName());
-						
 						LicensePeriodType period = license.getLicensePeriod();
-						rightsTable.setCellValue(i, 2, period.getStartDate().toString());
-						rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+						
+						Channels channels = license.getChannels();
+						if (channels != null) {
+							List<ChannelType> channelList = channels.getChannel();
+							if (channelList != null) {
+								for (int j = 0; j < channelList.size(); j++)
+								{
+									ChannelType channel = channelList.get(j);
+	
+									rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+									rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+									rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
+									
+									rowCounter ++;
+								}
+							}
+						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 				}
-				
-				//TODO: Channel List
-				//Channels channels = license.getChannels();
-				//List<ChannelType> channelList = channels.getChannel();
-				//ChannelType channel = channelList.get(0);
-				//channel.getChannelName();
-				//channel.getChannelTag();
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
@@ -210,7 +226,7 @@ public class MayamTitleController extends MayamController{
 				try {
 					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
+					log.error("Exception thrown by Mayam while retrieving asset attributes for updated title : " + title.getTitleID());
 					e1.printStackTrace();
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
@@ -309,29 +325,42 @@ public class MayamTitleController extends MayamController{
 						columnNames.add("Organization Name");
 						columnNames.add("Start Date");
 						columnNames.add("End Date");
+						columnNames.add("Channel Name");
+						columnNames.add("Channel Tag");
 						
 						GenericTable rightsTable = new GenericTable(columnNames);
 
 						List<License> licenses = titleRights.getLicense();
+						
+						int rowCounter = 0;
 						for (int i = 0; i < licenses.size(); i++) {
 							License license = licenses.get(i);
 							LicenseHolderType holder = license.getLicenseHolder();
-							rightsTable.setCellValue(i, 0, holder.getOrganisationID());
-							rightsTable.setCellValue(i, 1, holder.getOrganisationName());
-							
 							LicensePeriodType period = license.getLicensePeriod();
-							rightsTable.setCellValue(i, 2, period.getStartDate().toString());
-							rightsTable.setCellValue(i, 3, period.getEndDate().toString());
+							
+							Channels channels = license.getChannels();
+							if (channels != null) {
+								List<ChannelType> channelList = channels.getChannel();
+								if (channelList != null) {
+									for (int j = 0; j < channelList.size(); j++)
+									{
+										ChannelType channel = channelList.get(j);
+		
+										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+										rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
+										
+										rowCounter ++;
+									}
+								}
+							}
 						}
-						attributesValid &= attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					}
-					
-					//	Channels channels = license.getChannels();
-					//	List<ChannelType> channelList = channels.getChannel();
-					//	ChannelType channel = channelList.get(0);
-					//	channel.getChannelName();
-					//	channel.getChannelTag();
-					
+
 					attributesValid &=attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
@@ -345,7 +374,28 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 					
 					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
-					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+					
+					boolean isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
+					if (isProtected != title.isPurgeProtect()){
+						attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+						try {
+							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.MATERIAL.getAssetType());
+							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.PACKAGE.getAssetType());
+							for (int i = 0; i < materials.size(); i++) {
+								AttributeMap material = materials.get(i);
+								material.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								client.assetApi().updateAsset(material);
+							}
+							for (int i = 0; i < packages.size(); i++) {
+								AttributeMap packageMap = packages.get(i);
+								packageMap.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								client.assetApi().updateAsset(packageMap);
+							}
+						} catch (RemoteException e) {
+							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID());
+							e.printStackTrace();
+						}
+					}
 					
 					if (!attributesValid) {
 						log.warn("Title updated but one or more attributes were invalid");
@@ -388,6 +438,26 @@ public class MayamTitleController extends MayamController{
 		if (title == null) {
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
+		else if (isProtected(title.getTitleID())) 
+		{
+			try
+			{
+				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				
+				AttributeMap taskAttributes = client.createAttributeMap();
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+	
+				taskAttributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+				taskAttributes.putAll(assetAttributes);
+				client.taskApi().createTask(taskAttributes);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error creating Purge By BMS task for protected material : " + title.getTitleID());
+				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+			}
+		}
 		else {
 			try {
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
@@ -395,6 +465,7 @@ public class MayamTitleController extends MayamController{
 				log.error("Error deleting title : "+ title.getTitleID());
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
 			}
+
 		}
 		return returnCode;
 	}
@@ -423,4 +494,21 @@ public class MayamTitleController extends MayamController{
 		}
 		return assetAttributes;
 	}
+	
+	public boolean isProtected(String titleID)
+	{
+		boolean isProtected = false;
+		AttributeMap title;
+		try {
+			title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			if (title != null) {
+				isProtected = title.getAttribute(Attribute.AUX_FLAG);
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID);
+			e.printStackTrace();
+		}
+		return isProtected;
+	}
+
 }

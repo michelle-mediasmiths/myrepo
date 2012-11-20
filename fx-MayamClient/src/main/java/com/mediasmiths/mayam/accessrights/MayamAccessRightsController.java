@@ -18,23 +18,24 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	}
 	
 	@Transactional
-	 public void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin) 
+	 public void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin, boolean purgeProtected) 
 	 {
 		 
 		 MayamAccessRights rights = new MayamAccessRights();
 		 rights.setTaskType(taskType.toString());
-		 rights.setAssetType(assetType.toString());
+		 rights.setCategory(assetType.toString());
 		 rights.setTaskState(taskState.toString());
 		 rights.setGroupName(groupName);
 		 rights.setReadAccess(read);
 		 rights.setWriteAccess(write);
 		 rights.setAdminAccess(admin);
+		 rights.setRestricted(purgeProtected);
 		 
 		 save(rights);
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String channel) 
+	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, ArrayList <String> channels, boolean purgeProtected) 
 	 {
 		  Criteria criteria = createCriteria();
 		  if (taskType != null) {
@@ -44,15 +45,22 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.eq("taskState", taskState.toString()));
 		  }
 		  if (assetType != null) {
-			  criteria.add(Restrictions.eq("assetType", assetType.toString())); 
+			  criteria.add(Restrictions.eq("category", assetType.toString())); 
 		  }
-		  if (channel != null) {
+		  if (assetType != null) {
+			  criteria.add(Restrictions.eq("restricted", purgeProtected)); 
+		  }
+		  if (channels != null) {
 			  MayamChannelGroupsController channelGroupsController = new MayamChannelGroupsController();
-			  List<MayamChannelGroups> groups = channelGroupsController.retrieve(channel, null);
-			  for (int i = 0; i < groups.size(); i++) 
+			  for (int i = 0; i < channels.size(); i++)
 			  {
-				  criteria.add(Restrictions.eq("channelOwner", groups.get(i).getChannelOwner()));
+				  List<MayamChannelGroups> groups = channelGroupsController.retrieve(channels.get(i), null);
+				  for (int j = 0; j < groups.size(); j++) 
+				  {
+					  criteria.add(Restrictions.eq("channelOwner", groups.get(j).getChannelOwner()));
+				  }
 			  }
+
 		  }
 
 		  return new ArrayList<MayamAccessRights>(getList(criteria));

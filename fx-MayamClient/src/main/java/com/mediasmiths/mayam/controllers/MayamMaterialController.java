@@ -32,6 +32,7 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -90,6 +91,16 @@ public class MayamMaterialController extends MayamController
 				if (compile != null)
 				{
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, compile.getParentMaterialID());
+					try {
+						AttributeMap title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
+						if (title != null) {
+							boolean isProtected = title.getAttribute(Attribute.AUX_FLAG);
+							attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, isProtected);
+						}
+					} catch (RemoteException e) {
+						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID());
+						e.printStackTrace();
+					}
 				}
 
 				Library library = source.getLibrary();
@@ -161,7 +172,7 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
-			attributesValid = attributesValid && attributes.setAttribute(Attribute.AUX_FLAG, material.isAdultMaterial());
+			attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, material.isAdultMaterial());
 
 			// TODO: Require attributes for timecode
 			// attributesValid &= attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
@@ -593,9 +604,9 @@ public class MayamMaterialController extends MayamController
 
 		ProgrammeMaterialType pmt = new ProgrammeMaterialType();
 
-		if (checkAttributeValid(attributes, Attribute.AUX_FLAG, materialID, "Adult only", Boolean.class))
+		if (checkAttributeValid(attributes, Attribute.APP_FLAG, materialID, "Adult only", Boolean.class))
 		{
-			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.AUX_FLAG));
+			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.APP_FLAG));
 		}
 
 		//TODO: Update when new Mayam attribute for Aspect Ratio is added
@@ -644,15 +655,52 @@ public class MayamMaterialController extends MayamController
 	public MayamClientErrorCode deleteMaterial(String materialID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try
-		{
-			client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+		if (isProtected(materialID)) {
+			try
+			{
+				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+				
+				AttributeMap taskAttributes = client.createAttributeMap();
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+	
+				taskAttributes.setAttribute(Attribute.ASSET_ID, materialID);
+				taskAttributes.putAll(assetAttributes);
+				client.taskApi().createTask(taskAttributes);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error creating Purge By BMS task for protected material : " + materialID);
+				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+			}
 		}
-		catch (RemoteException e)
-		{
-			log.error("Error deleting material : " + materialID);
-			returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+		else {
+			try
+			{
+				client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error deleting material : " + materialID);
+				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+			}
 		}
 		return returnCode;
+	}
+	
+	public boolean isProtected(String materialID)
+	{
+		boolean isProtected = false;
+		AttributeMap material;
+		try {
+			material = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			if (material != null) {
+				isProtected = material.getAttribute(Attribute.AUX_FLAG);
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID);
+			e.printStackTrace();
+		}
+		return isProtected;
 	}
 }
