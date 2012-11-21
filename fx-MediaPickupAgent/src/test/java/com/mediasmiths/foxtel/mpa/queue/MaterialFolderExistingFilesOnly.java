@@ -15,7 +15,7 @@ public class MaterialFolderExistingFilesOnly extends MaterialFolderWatcher {
 	@Inject
 	public MaterialFolderExistingFilesOnly(
 			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH)  String path) {
-		super(filePathsPendingValidation, path);
+		super(filePathsPendingValidation, path,100l, 5l);
 	}
 
 	@Override

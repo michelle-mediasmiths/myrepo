@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIOD;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -21,8 +23,13 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 	
 	@Inject
 	public MaterialFolderWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path) {
+			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path,
+			@Named(MXF_NOT_TOUCHED_PERIOD) Long mxfNotTouchedPeriod,
+			@Named(XML_NOT_TOUCHED_PERIOD) Long xmlNotTouchedPeriod) {
 		super(filePathsPendingValidation, path);
+		
+		setNotTouchedPeriodForFormat("mxf", mxfNotTouchedPeriod);
+		setNotTouchedPeriodForFormat("xml", xmlNotTouchedPeriod);
 	}
 	
 	@Override

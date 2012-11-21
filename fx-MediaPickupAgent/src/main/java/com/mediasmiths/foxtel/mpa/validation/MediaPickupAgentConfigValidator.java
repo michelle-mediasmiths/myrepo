@@ -10,6 +10,8 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUN
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.IS_AO_AGENT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIOD;
 
 import org.apache.log4j.Logger;
 
@@ -35,7 +37,10 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount,
-			@Named(IS_AO_AGENT) Boolean isAOAgent)
+			@Named(IS_AO_AGENT) Boolean isAOAgent,
+			@Named(MXF_NOT_TOUCHED_PERIOD) String mxfNotTouched,
+			@Named(XML_NOT_TOUCHED_PERIOD) String xmlNotTouched
+			)
 			throws ConfigValidationFailureException {
 		super(messagePath, failurePath, archivePath, receiptPath);
 
@@ -73,13 +78,33 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 					timeBetweenPurges);
 		}
 		
-		if(isValidInt(deliveryAttemptCount)){
-			configValidationPasses(DELIVERY_ATTEMPT_COUNT,
+		if (isValidLong(timeBetweenPurges)) {
+			configValidationPasses(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
 					timeBetweenPurges);
 		} else {
 			anyFailures = true;
-			configValidationFails(DELIVERY_ATTEMPT_COUNT,
-					deliveryAttemptCount);
+			configValidationFails(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
+					timeBetweenPurges);
+		}
+		
+		
+		if (isValidLong(xmlNotTouched)) {
+			configValidationPasses(XML_NOT_TOUCHED_PERIOD,
+					xmlNotTouched);
+		} else {
+			anyFailures = true;
+			configValidationFails(XML_NOT_TOUCHED_PERIOD,
+					xmlNotTouched);
+		}
+		
+		
+		if(isValidInt(mxfNotTouched)){
+			configValidationPasses(MXF_NOT_TOUCHED_PERIOD,
+					mxfNotTouched);
+		} else {
+			anyFailures = true;
+			configValidationFails(MXF_NOT_TOUCHED_PERIOD,
+					mxfNotTouched);
 		}
 		
 		if(isAOAgent.booleanValue()==true){

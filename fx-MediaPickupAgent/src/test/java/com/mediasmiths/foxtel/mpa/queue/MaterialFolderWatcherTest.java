@@ -109,7 +109,7 @@ public class MaterialFolderWatcherTest {
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				watchFolderPath);
+				watchFolderPath, 100l, 5l);
 		toTest.setSleepTime(100l);
 
 		// start watcher
@@ -141,7 +141,7 @@ public class MaterialFolderWatcherTest {
 	public void testNewFilesAreQueued() throws FileNotFoundException, IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				watchFolderPath);
+				watchFolderPath,100l, 5l);
 		
 		logger.trace("testNewFilesAreQueued enter");
 		toTest.setSleepTime(10l);
@@ -198,7 +198,7 @@ public class MaterialFolderWatcherTest {
 			IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				watchFolderPath);
+				watchFolderPath,100l,5l);
 		toTest.setSleepTime(100l);
 
 		// start watcher
