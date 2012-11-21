@@ -65,6 +65,9 @@ public class MayamPackageController extends MayamController
 				if (material != null) {
 					boolean isProtected = material.getAttribute(Attribute.AUX_FLAG);
 					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, isProtected);
+					
+					boolean adultOnly = material.getAttribute(Attribute.APP_FLAG);
+					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, adultOnly);
 				}
 			} catch (RemoteException e1) {
 				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID());

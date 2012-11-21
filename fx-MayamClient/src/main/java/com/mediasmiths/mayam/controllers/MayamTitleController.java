@@ -181,7 +181,7 @@ public class MayamTitleController extends MayamController{
 				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
 				attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
 				
-				attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+				attributesValid &= attributes.setAttribute(Attribute.OP_FLAG, title.isRestrictAccess());
 				attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
 				
 				if (!attributesValid) {
