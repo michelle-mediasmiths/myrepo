@@ -48,8 +48,6 @@ public class MqListeners implements Runnable {
 	public void run() 
 	{	
 		attachIncomingListners();
-		MuleWorkflowController mule = new MuleWorkflowController();
-//		mule.initiateQcWorkflow("12345", false);
 		while (listening.get()) {
 			mq.listen(ListenIntensity.NORMAL);
 		}
