@@ -1,15 +1,11 @@
 package com.mediasmiths.mq;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
-import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
@@ -18,7 +14,6 @@ import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
-import com.mayam.wf.mq.MqModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -26,7 +21,6 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.listeners.AssetListener;
 import com.mediasmiths.mq.listeners.TaskListener;
-import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class MqListeners implements Runnable {
 	private ArrayList<Detachable> listeners;
@@ -47,6 +41,7 @@ public class MqListeners implements Runnable {
 	
 	public void run() 
 	{	
+		listeners = new ArrayList<Detachable>();
 		attachIncomingListners();
 		while (listening.get()) {
 			mq.listen(ListenIntensity.NORMAL);
@@ -58,22 +53,7 @@ public class MqListeners implements Runnable {
 	@Inject
 	public MqListeners() 
 	{
-		listeners = new ArrayList<Detachable>();
-
-		injector = Guice.createInjector(new AttributesModule(), new MqModule("fxMayamClient"));
-		ambp = injector.getProvider(AttributeMessageBuilder.class);
-		mq = injector.getInstance(Mq.class);
 		
-		//TODO: Fix the guice injection
-		URL url;
-		try {
-			url = new URL("http://localhost:8084/tasks-ws");
-			client = injector.getInstance(TasksClient.class);
-			client.setup(url, "someuser:somepassword");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 	
