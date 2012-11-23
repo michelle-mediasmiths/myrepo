@@ -51,11 +51,16 @@ public class MayamTitleController extends MayamController{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
 			
-			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-			attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
 			
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle()); 
+			
+			if(title.getSeriesNumber() != null)
+			attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber().intValue());
+			
+			if(title.getEpisodeTitle() != null)
 			attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+			if(title.getEpisodeNumber() != null)
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
 			
 			attributesValid &= attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
@@ -171,10 +176,12 @@ public class MayamTitleController extends MayamController{
 				attributesValid &= attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
 				
 				attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-				attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+				if(titleDescription.getSeriesNumber() != null)
+				attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber().intValue());
 				
 				attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+				if(titleDescription.getEpisodeNumber() != null)
+				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 				
 				attributesValid &= attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
