@@ -1,8 +1,5 @@
 package com.mediasmiths.mayam.accessrights;
 
-import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import java.util.ArrayList;
@@ -18,37 +15,45 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	}
 	
 	@Transactional
-	 public void create(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, String groupName, boolean read, boolean write, boolean admin, boolean purgeProtected) 
+	 public void create(String qcStatus, String qaStatus, boolean qcParallel, String assetType, String groupName, boolean read, boolean write, boolean admin, boolean purgeProtected, boolean adultOnly) 
 	 {
 		 
 		 MayamAccessRights rights = new MayamAccessRights();
-		 rights.setTaskType(taskType.toString());
-		 rights.setCategory(assetType.toString());
-		 rights.setTaskState(taskState.toString());
+		 rights.setQcStatus(qcStatus);
+		 rights.setQaStatus(qaStatus.toString());
+		 rights.setQcParallel(qcParallel);
+		 rights.setContentType(assetType);
 		 rights.setGroupName(groupName);
 		 rights.setReadAccess(read);
 		 rights.setWriteAccess(write);
 		 rights.setAdminAccess(admin);
 		 rights.setRestricted(purgeProtected);
+		 rights.setAdultOnly(adultOnly);
 		 
 		 save(rights);
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(MayamTaskListType taskType, TaskState taskState, MayamAssetType assetType, ArrayList <String> channels, boolean purgeProtected) 
+	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, ArrayList <String> channels, boolean purgeProtected, Boolean adultOnly) 
 	 {
 		  Criteria criteria = createCriteria();
-		  if (taskType != null) {
-			  criteria.add(Restrictions.eq("taskType", taskType.toString()));
+		  if (qcStatus != null) {
+			  criteria.add(Restrictions.eq("qcStatus", qcStatus));
 		  }
-		  if (taskState != null) {
-			  criteria.add(Restrictions.eq("taskState", taskState.toString()));
+		  if (qaStatus != null) {
+			  criteria.add(Restrictions.eq("qaStatus", qaStatus));
+		  }
+		  if (qcParallel != null) {
+			  criteria.add(Restrictions.eq("qcParallel", qcParallel));
 		  }
 		  if (assetType != null) {
-			  criteria.add(Restrictions.eq("category", assetType.toString())); 
+			  criteria.add(Restrictions.eq("contentType", assetType)); 
 		  }
 		  if (assetType != null) {
 			  criteria.add(Restrictions.eq("restricted", purgeProtected)); 
+		  }
+		  if (adultOnly != null) {
+			  criteria.add(Restrictions.eq("adultOnly", adultOnly)); 
 		  }
 		  if (channels != null) {
 			  MayamChannelGroupsController channelGroupsController = new MayamChannelGroupsController();

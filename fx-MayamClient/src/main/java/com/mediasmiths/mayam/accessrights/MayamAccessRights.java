@@ -16,14 +16,17 @@ public class MayamAccessRights {
 	    @Column(name = "id") 
 	    private long id;
 	    
-	    @Column(name = "taskType")  
-	    private String taskType;  
+	    @Column(name = "qcStatus")  
+	    private String qcStatus;  
 	    
-	    @Column(name = "taskState")  
-	    private String taskState;
+	    @Column(name = "qaStatus")  
+	    private String qaStatus;
 	    
-	    @Column(name = "category")  
-	    private String category;
+	    @Column(name = "qcParallel") 
+		private boolean qcParallel;
+	    
+	    @Column(name = "contentType")  
+	    private String contentType;
 	    
 	    @Column(name = "groupName") 
 		private String groupName;
@@ -43,17 +46,23 @@ public class MayamAccessRights {
 	    @Column(name = "restricted") 
 		private boolean restricted;
 	    
+	    @Column(name = "adultOnly") 
+		private boolean adultOnly;
+	    
 	    public long getId() {return id;}  
 	    public void setId(long id) {this.id = id;}  
 	   
-	    public String getTaskType() {return taskType;}  
-	    public void setTaskType(String taskTypeName) {this.taskType = taskTypeName.toString();}  
+	    public String getQcStatus() {return qcStatus;}  
+	    public void setQcStatus(String qcStatusValue) {this.qcStatus = qcStatusValue;}  
 	    
-	    public String getTaskState() {return taskState;}  
-	    public void setTaskState(String state) {this.taskState = state;} 
+	    public String getQaStatus() {return qaStatus;}  
+	    public void setQaStatus(String qaStatusValue) {this.qaStatus = qaStatusValue;} 
 	    
-	    public String getCategory() {return category;}  
-	    public void setCategory(String categoryName) {this.category = categoryName;} 
+	    public boolean getQcParallel() {return qcParallel;}  
+	    public void setQcParallel(boolean qcParallelValue) {this.qcParallel = qcParallelValue;} 
+	    
+	    public String getContentType() {return contentType;}  
+	    public void setContentType(String contentTypeName) {this.contentType = contentTypeName;} 
 	    
 	    public String getGroupName() {return groupName;}  
 	    public void setGroupName(String name) {this.groupName = name;} 
@@ -71,5 +80,8 @@ public class MayamAccessRights {
 	    public void setAdminAccess(boolean access) {this.adminAccess = access;} 
 	    
 	    public boolean getRestricted() {return restricted;}  
-	    public void setRestricted(boolean purgeProtected) {this.restricted = purgeProtected;} 
+	    public void setRestricted(boolean purgeProtected) {this.restricted = purgeProtected;}
+	    
+	    public boolean getAdultOnly() {return adultOnly;}  
+	    public void setAdultOnly(boolean adultOnlyValue) {this.adultOnly = adultOnlyValue;} 
 }
