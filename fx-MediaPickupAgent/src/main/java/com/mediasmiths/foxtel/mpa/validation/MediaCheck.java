@@ -32,31 +32,49 @@ public class MediaCheck {
 		} else {
 			FileMediaType media = (FileMediaType) material.getMedia();
 
-			if (fileSizeMatches(mxf, media)) {
-				logger.debug(String
-						.format("Filesize of media file %s matches Material description %s",
-								mxf.getAbsolutePath(), description.getFile()
-										.getAbsolutePath()));
-				if (checkSumMatches(mxf, media)) {
+			if (media.getFileSize() != null) {
+				if (fileSizeMatches(mxf, media)) {
 					logger.debug(String
-							.format("Checksum of media file %s matches Material description %s",
+							.format("Filesize of media file %s matches Material description %s",
 									mxf.getAbsolutePath(), description
 											.getFile().getAbsolutePath()));
-					return true;
+
+					if (media.getChecksum() != null) {
+						return validateChecksum(mxf, description, media);
+					} else {
+						return true; // no checksum provided to validate against
+					}
 				} else {
 					logger.warn(String
-							.format("Checksum of media file %s did not match Material description %s",
+							.format("Filesize of media file %s did not match Material description %s",
 									mxf.getAbsolutePath(), description
 											.getFile().getAbsolutePath()));
 					return false;
 				}
-			} else {
-				logger.warn(String
-						.format("Filesize of media file %s did not match Material description %s",
-								mxf.getAbsolutePath(), description.getFile()
-										.getAbsolutePath()));
-				return false;
+			} else { //no filesize provided to validate against
+				if (media.getChecksum() != null) {
+					return validateChecksum(mxf, description, media);
+				} else {
+					return true;
+				}
 			}
+		}
+	}
+
+	private boolean validateChecksum(File mxf, MaterialEnvelope description,
+			FileMediaType media) {
+		if (checkSumMatches(mxf, media)) {
+			logger.debug(String
+					.format("Checksum of media file %s matches Material description %s",
+							mxf.getAbsolutePath(), description.getFile()
+									.getAbsolutePath()));
+			return true;
+		} else {
+			logger.warn(String
+					.format("Checksum of media file %s did not match Material description %s",
+							mxf.getAbsolutePath(), description.getFile()
+									.getAbsolutePath()));
+			return false;
 		}
 	}
 
