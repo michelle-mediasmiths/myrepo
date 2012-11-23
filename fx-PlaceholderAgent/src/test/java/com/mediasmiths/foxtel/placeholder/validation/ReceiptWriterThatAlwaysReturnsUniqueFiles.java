@@ -20,18 +20,18 @@ public class ReceiptWriterThatAlwaysReturnsUniqueFiles extends
 
 	@Inject
 	public ReceiptWriterThatAlwaysReturnsUniqueFiles(String receiptPath) {
-		super(receiptPath);
+		super();
 	}
 	
 	@Override
-	public String receiptPathForMessageID(String messageID){
-		String path = FileUtils.getTempDirectoryPath() + RandomStringUtils.randomAlphabetic(20);
+	public String receiptPathForMessageID(String messagePath,String messageID){
+		String path = getReceiptPathForFile(messagePath) + RandomStringUtils.randomAlphabetic(20);
 		
 		if(! new File(path).exists()){
 			return path;
 		}
 		else{
-			return receiptPathForMessageID(messageID);
+			return receiptPathForMessageID(messagePath,messageID);
 		}
 		
 

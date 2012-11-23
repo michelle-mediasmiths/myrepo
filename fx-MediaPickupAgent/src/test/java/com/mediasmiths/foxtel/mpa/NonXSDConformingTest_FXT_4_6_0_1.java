@@ -47,7 +47,7 @@ public class NonXSDConformingTest_FXT_4_6_0_1{
 		MediaPickupModule mpa = new MediaPickupModule();
 		Unmarshaller um = mpa.provideUnmarshaller(mpa.provideJAXBContext());
 		MayamClient mc = mock(MayamClient.class);
-		ReceiptWriter rw = new ReceiptWriter(Util.prepareTempFolder("RECEIPT"));
+		ReceiptWriter rw = new ReceiptWriter();
 		SchemaValidator sv = new SchemaValidator("MaterialExchange_V2.0.xsd");
 		
 		MaterialExchangeValidator validator = new MaterialExchangeValidator(um, mc, rw, sv);

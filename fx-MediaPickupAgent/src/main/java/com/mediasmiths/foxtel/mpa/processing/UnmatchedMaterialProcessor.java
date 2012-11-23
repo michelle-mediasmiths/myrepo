@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
@@ -17,6 +16,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.mayam.AlertInterface;
 
@@ -26,7 +26,6 @@ public class UnmatchedMaterialProcessor implements Runnable
 	private final Long timeout;
 	private final MatchMaker matchMaker;
 	private final String emergencyImportFolder;
-	private final String failedMessagesFolder;
 	private final long sleepTime;
 
 	private final EventService events;
@@ -38,14 +37,12 @@ public class UnmatchedMaterialProcessor implements Runnable
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
-			@Named(FAILURE_PATH) String failedMessagesFolder,
 			MatchMaker matchMaker,
 			EventService events)
 	{
 		this.timeout = timeout;
 		this.matchMaker = matchMaker;
 		this.emergencyImportFolder = emergencyImportFolder;
-		this.failedMessagesFolder = failedMessagesFolder;
 		this.sleepTime = sleepTime.longValue();
 		this.events = events;
 	}
@@ -170,6 +167,7 @@ public class UnmatchedMaterialProcessor implements Runnable
 			// move message to failure folder
 			try
 			{
+				String failedMessagesFolder = MessageProcessor.getFailureFolderForFile(me.getFile());
 				FileUtils.moveFileToDirectory(me.getFile(), new File(failedMessagesFolder), false);
 			}
 			catch (IOException e)

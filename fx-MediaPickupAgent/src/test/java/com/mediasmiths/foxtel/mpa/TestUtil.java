@@ -43,6 +43,23 @@ public class TestUtil {
 		return path;
 	}
 	
+	public static String createSubFolder(String parentPath, String name) throws IOException{
+		
+		String path = parentPath + IOUtils.DIR_SEPARATOR + name;
+		
+		File dir = new File(path);
+		
+		if(dir.exists()){
+			FileUtils.cleanDirectory(dir);
+		}
+		else{
+			dir.mkdirs();
+		}
+		
+		return path;	
+		
+	}
+	
 	public static File getFileOfTypeInFolder(String extension, String folder){
 		return new File(folder + IOUtils.DIR_SEPARATOR + "CreateFileInfolder"+RandomStringUtils.randomAlphabetic(6) + FilenameUtils.EXTENSION_SEPARATOR + extension);
 	}

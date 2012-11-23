@@ -1,9 +1,6 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -139,21 +136,18 @@ public abstract class PlaceholderManagerTest {
 	}
 
 	protected void writeMessageAndRunManager(PlaceholderMessage message,
-			String messagePath, String receiptPath, String failurePath,
-			String archivePath, String messageFileName) throws IOException,
+			String messagePath, String messageFileName) throws IOException,
 			Exception, InterruptedException {
 
 		writePlaceHolderMessage(message, messagePath + IOUtils.DIR_SEPARATOR
 				+ messageFileName);
 
 		// start up a placeholder manager to process the created message
-		runPlaceholderManager(messagePath, receiptPath, failurePath,
-				archivePath);
+		runPlaceholderManager(messagePath);
 
 	}
 
-	protected void runPlaceholderManager(String messagePath,
-			String receiptPath, String failurePath, String archivePath)
+	protected void runPlaceholderManager(String messagePath)
 			throws InterruptedException {
 		// override some properties to use temp folders
 		PropertyFile propertyFile = new PropertyFile();
@@ -161,9 +155,6 @@ public abstract class PlaceholderManagerTest {
 
 		Properties overridenProperties = new Properties();
 		overridenProperties.put(MESSAGE_PATH, messagePath);
-		overridenProperties.put(RECEIPT_PATH, receiptPath);
-		overridenProperties.put(FAILURE_PATH, failurePath);
-		overridenProperties.put(ARCHIVE_PATH, archivePath);
 		propertyFile.merge(overridenProperties);
 
 		// setup guice injector

@@ -81,11 +81,11 @@ public abstract class MessageValidator<T> {
 			return MessageValidationResult.UNEXPECTED_TYPE;
 		} 
 		
-		return validateMessage(message);
+		return validateMessage(filepath, message);
 
 	}
 
-	protected abstract MessageValidationResult validateMessage(T message);
+	protected abstract MessageValidationResult validateMessage(String messagePath, T message);
 
 
 	protected Object unmarshallFile(File xml) throws JAXBException {

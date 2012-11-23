@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import java.io.File;
@@ -65,19 +63,15 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
-			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService){
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller,marshaller, failurePath, archivePath,eventService);
+				unmarhsaller,marshaller,eventService);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
 		this.mediaCheck = mediaCheck;
 		this.emergencyImportFolder=emergencyImportFolder;
-		logger.debug("Using failure path " + failurePath);
-		logger.debug("Using archivePath path " + archivePath);
 		logger.debug("Using emergency import folder "+emergencyImportFolder);
 	}
 

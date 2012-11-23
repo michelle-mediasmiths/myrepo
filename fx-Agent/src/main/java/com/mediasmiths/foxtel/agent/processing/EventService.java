@@ -56,7 +56,7 @@ public class EventService
 			}
 			catch (RuntimeException re)
 			{
-				logger.error("error saving event " + name, re);
+				logger.error(String.format("error saving event %s",name), re);
 			}
 		}
 		else
@@ -72,7 +72,6 @@ public class EventService
 	 * @param name
 	 * @param payload
 	 */
-
 	public void saveEvent(String name, Object payload)
 	{
 		if (enabled)
@@ -87,11 +86,11 @@ public class EventService
 			}
 			catch (JAXBException e)
 			{
-				logger.error("error saving event" + name, e);
+				logger.error(String.format("error saving event %s",name), e);
 			}
 			catch (UnsupportedEncodingException e)
 			{
-				logger.error("error saving event" + name, e);
+				logger.error(String.format("error saving event %s",name), e);
 			}
 		}
 		else

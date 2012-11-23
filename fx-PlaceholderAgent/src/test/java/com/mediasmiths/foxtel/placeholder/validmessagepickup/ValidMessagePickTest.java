@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -21,8 +22,10 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
+import com.mediasmiths.foxtel.placeholder.TestUtil;
 import com.mediasmiths.foxtel.placeholder.categories.MessageCreation;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoFailure;
 import com.mediasmiths.foxtel.placeholder.categories.PickuptoReceipt;
@@ -56,7 +59,7 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
 		String receiptPath = "/tmp/placeHolderTestData/"+RandomStringUtils.randomAlphabetic(30);
-		when(receiptWriter.receiptPathForMessageID(anyString())).thenReturn(receiptPath);
+		when(receiptWriter.receiptPathForMessageID(eq(filePath),anyString())).thenReturn(receiptPath);
 		mockValidCalls(message);
 		//test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));
@@ -77,14 +80,14 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		
 		String messagePath = Util.prepareTempFolder("MESSAGE");
 		String receiptPath = Util.prepareTempFolder("RECEIPT");
-		String failurePath = Util.prepareTempFolder("FAILURE");
-		String archivePath = Util.prepareTempFolder("ARCHIVE");
+		String archivePath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME);
+		String failurePath = TestUtil.createSubFolder(messagePath, MessageProcessor.FAILUREFOLDERNAME);
 			
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockInValidCalls(message);
 		
 		String messageFilePath = messagePath  + IOUtils.DIR_SEPARATOR + getFileName();				
-		writeMessageAndRunManager(message,messagePath,receiptPath,failurePath,archivePath,getFileName());
+		writeMessageAndRunManager(message,messagePath,getFileName());
 
 		verifyInValidCalls(message);
 		
@@ -112,14 +115,14 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 	public final void testValidRequestProcessesToReceipt() throws IOException, Exception{
 		
 		String messagePath = Util.prepareTempFolder("MESSAGE");
-		String receiptPath = Util.prepareTempFolder("RECEIPT");
-		String failurePath = Util.prepareTempFolder("FAILURE");
-		String archivePath = Util.prepareTempFolder("ARCHIVE");
+		String receiptPath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
+		String failurePath = TestUtil.createSubFolder(messagePath, MessageProcessor.FAILUREFOLDERNAME);
+		String archivePath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
 		
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		mockValidCalls(message);
 		
-		writeMessageAndRunManager(message, messagePath, receiptPath, failurePath,archivePath,getFileName());
+		writeMessageAndRunManager(message, messagePath,getFileName());
 
 		verifyValidCalls(message);
 		

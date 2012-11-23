@@ -36,7 +36,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			.getLogger(MaterialExchangeValidator.class);
 
 	@Override
-	protected MessageValidationResult validateMessage(Material message) {
+	protected MessageValidationResult validateMessage(String messagePath, Material message) {
 		logger.trace("validateMessage enter");
 
 		return validateTitle(message.getTitle());

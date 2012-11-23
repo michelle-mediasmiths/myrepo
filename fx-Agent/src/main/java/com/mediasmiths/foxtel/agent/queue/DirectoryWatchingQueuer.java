@@ -61,7 +61,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		queueExistingFiles();
 		
 		try {
-			this.start(path);
+			this.start(path,false);
 		} catch (IOException e) {
 			logger.fatal("Failed to register watch service", e);
 		}

@@ -1,9 +1,6 @@
 package com.mediasmiths.foxtel.agent.validation;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 
 import java.io.File;
 
@@ -17,10 +14,7 @@ public class ConfigValidator {
 	private static Logger logger = Logger.getLogger(ConfigValidator.class);
 
 	@Inject
-	public ConfigValidator(@Named(MESSAGE_PATH) String messagePath,
-			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath,
-			@Named(RECEIPT_PATH) String receiptPath)
+	public ConfigValidator(@Named(MESSAGE_PATH) String messagePath)
 			throws ConfigValidationFailureException {
 
 		boolean anyFailures = false;
@@ -32,7 +26,7 @@ public class ConfigValidator {
 			configValidationFails(MESSAGE_PATH, messagePath);
 		}
 
-		if (haveReadWritePermissions(failurePath)) {
+		/*if (haveReadWritePermissions(failurePath)) {
 			configValidationPasses(FAILURE_PATH, failurePath);
 		} else {
 			anyFailures = true;
@@ -52,7 +46,7 @@ public class ConfigValidator {
 			anyFailures = true;
 			configValidationFails(RECEIPT_PATH, receiptPath);
 		}
-
+*/
 		if (anyFailures) {
 			onFailure();
 		}

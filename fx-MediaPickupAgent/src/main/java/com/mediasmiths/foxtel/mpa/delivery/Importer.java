@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
@@ -27,8 +25,6 @@ public class Importer implements Runnable {
 	private final PendingImportQueue pendingImports;
 
 	private final String targetFolder;
-	private final String quarrentineFolder;
-	private final String archiveFolder;
 	private final int deliveryAttemptsToMake;
 
 	private final EventService eventService;
@@ -37,14 +33,10 @@ public class Importer implements Runnable {
 	public Importer(
 			PendingImportQueue pendingImports,
 			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
-			@Named(FAILURE_PATH) String quarrentineFolder,
-			@Named(ARCHIVE_PATH) String archiveFolder,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			EventService eventService) {
 		this.pendingImports = pendingImports;
 		this.targetFolder = targetFolder;
-		this.quarrentineFolder = quarrentineFolder;
-		this.archiveFolder = archiveFolder;
 		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
 		this.eventService=eventService;
 	}
@@ -112,7 +104,7 @@ public class Importer implements Runnable {
 		}
 
 		src = pi.getMaterialEnvelope().getFile();
-		dst = new File(archiveFolder, pi.getMaterialEnvelope().getMasterID()
+		dst = new File(MessageProcessor.getArchivePathForFile(src.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
 
 		logger.debug(String.format("Attempting to move from %s to %s",
@@ -148,6 +140,7 @@ public class Importer implements Runnable {
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
 			File src = pi.getMediaFile();
+			String quarrentineFolder = MessageProcessor.getFailureFolderForFile(src);
 			File baseDestination = new File(quarrentineFolder, pi.getMaterialEnvelope()
 					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "mxf");
 			File dst = new File(MessageProcessor.getDestinationPathForFileMove(baseDestination, quarrentineFolder, true));			

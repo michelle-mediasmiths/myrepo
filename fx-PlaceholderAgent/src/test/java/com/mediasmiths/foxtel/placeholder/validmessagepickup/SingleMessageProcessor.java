@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.placeholder.PlaceholderAgentConfiguration.PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT;
 
 import javax.xml.bind.Marshaller;
@@ -35,11 +33,9 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath,
 			EventService eventService) {
 		super(filePathsPendingProcessing, messageValidator, receiptWriter,
-				unmarhsaller,marshaller, mayamClient, failurePath, archivePath, eventService);
+				unmarhsaller,marshaller, mayamClient, eventService);
 	}
 
 

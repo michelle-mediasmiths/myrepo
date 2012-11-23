@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.placeholder.PlaceholderAgentConfiguration.PLACEHOLDER_MANAGEMENT_FAILURE_RECEIPIENT;
 
 import java.io.ByteArrayOutputStream;
@@ -65,14 +63,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath,
 			EventService eventService)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, failurePath, archivePath,eventService);
+		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
 		this.mayamClient = mayamClient;
-		logger.debug("Using failure path: " + failurePath);
-		logger.debug("Using archivePath path: " + archivePath);
 	}
 
 	private void addOrUpdateMaterial(AddOrUpdateMaterial action) throws MessageProcessingFailedException

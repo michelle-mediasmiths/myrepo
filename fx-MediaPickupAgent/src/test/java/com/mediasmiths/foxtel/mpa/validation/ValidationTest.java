@@ -50,7 +50,7 @@ public abstract class ValidationTest {
 		JAXBContext jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		receiptFolderPath = TestUtil.prepareTempFolder("RECEIPTS");
-		validator = new MaterialExchangeValidator(unmarhsaller, mayamClient, new ReceiptWriter(receiptFolderPath), new SchemaValidator("MaterialExchange_V2.0.xsd"));
+		validator = new MaterialExchangeValidator(unmarhsaller, mayamClient, new ReceiptWriter(), new SchemaValidator("MaterialExchange_V2.0.xsd"));
 		
 	}
 	

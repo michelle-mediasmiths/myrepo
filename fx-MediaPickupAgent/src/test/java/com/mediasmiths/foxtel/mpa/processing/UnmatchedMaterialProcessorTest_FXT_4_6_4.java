@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
@@ -43,7 +44,7 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		//prepare folders and write unmatched xml file
 		String incomingFolderPath = TestUtil.prepareTempFolder("INCOMING");		
 		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
-		String failedMessagesPath = TestUtil.prepareTempFolder("FAILED");
+		String failedMessagesPath = TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.FAILUREFOLDERNAME); 
 		
 		String unmatchedXMlFileName = "UnmatchedProcesserTest"+RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml";
 		String unmatchedXMLPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName;
@@ -69,7 +70,7 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		EventService events = mock(EventService.class);
 				
 		//run object being tested
-		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges, emergencyFolderPath, failedMessagesPath, mm,events);
+		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges, emergencyFolderPath, mm,events);
 		Thread unmatcherThread = new Thread(toTest);
 		unmatcherThread.start();
 		

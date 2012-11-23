@@ -106,10 +106,8 @@ public abstract class PlaceHolderMessageShortTest
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		Marshaller marshaller = jc.createMarshaller();
 		EventService events = mock(EventService.class);
-		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(
-				receiptFolderPath), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
-		processor = new PlaceholderMessageProcessor(new FilesPendingProcessingQueue(), validator, new ReceiptWriter(
-				receiptFolderPath), unmarhsaller, marshaller, mayamClient, "failure path", "receipt path", events);
+		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
+		processor = new PlaceholderMessageProcessor(new FilesPendingProcessingQueue(), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
 
 	}
 

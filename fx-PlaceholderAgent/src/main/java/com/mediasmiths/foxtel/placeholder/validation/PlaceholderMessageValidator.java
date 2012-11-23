@@ -34,7 +34,6 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
-
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
 
@@ -44,25 +43,27 @@ public class PlaceholderMessageValidator extends
 	private final MayamClient mayamClient;
 	private final MayamValidator mayamValidator;
 	private final ChannelValidator channelValidator;
-	
+
 	@Inject
 	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
-			MayamClient mayamClient, MayamValidator mayamValidator, ReceiptWriter receiptWriter,
-			SchemaValidator schemaValidator, ChannelValidator channelValidator) throws SAXException {
+			MayamClient mayamClient, MayamValidator mayamValidator,
+			ReceiptWriter receiptWriter, SchemaValidator schemaValidator,
+			ChannelValidator channelValidator) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
-		this.mayamValidator= mayamValidator;
+		this.mayamValidator = mayamValidator;
 		this.channelValidator = channelValidator;
-	} 
+	}
 
-	protected MessageValidationResult validateMessage(PlaceholderMessage message) {
+	@Override
+	protected MessageValidationResult validateMessage(String messagePath,PlaceholderMessage message) {
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
 		String senderID = message.getSenderID();
 		Object privateMessageData = message.getPrivateMessageData();
 
-		if (!validateMesageID(messageID)) {
+		if (!validateMesageID(messagePath, messageID)) {
 			return MessageValidationResult.INVALID_MESSAGE_ID;
 		}
 
@@ -79,7 +80,7 @@ public class PlaceholderMessageValidator extends
 
 			if (validateActions == MessageValidationResult.IS_VALID) {
 				logger.info("PlaceholderMessage validated");
-				logger.info ("\n");
+				logger.info("\n");
 			} else {
 				logger.warn("Message Actions did not validate");
 			}
@@ -175,29 +176,39 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
-		String presentationFormat = action.getPackage().getPresentationFormat().toString();
-		ArrayList<String> channelTags = mayamClient.getChannelLicenseTagsForMaterial(materialID);
-		
-		for (String channelTag: channelTags) {
-			
-			//TODO read this check once we have aversion of mayam that will persist things!
-			
-//			if (!channelValidator.isValidFormatForTag(channelTag, presentationFormat)) {
-//				logger.error("Presentation Format of package does not match that of associated channel");
-//				return MessageValidationResult.PACKAGE_INVALID_FORMAT;
-//			}
+		String presentationFormat = action.getPackage().getPresentationFormat()
+				.toString();
+		ArrayList<String> channelTags = mayamClient
+				.getChannelLicenseTagsForMaterial(materialID);
+
+		for (String channelTag : channelTags) {
+
+			// TODO read this check once we have aversion of mayam that will
+			// persist things!
+
+			// if (!channelValidator.isValidFormatForTag(channelTag,
+			// presentationFormat)) {
+			// logger.error("Presentation Format of package does not match that of associated channel");
+			// return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+			// }
 		}
-		
-		//TODO read once mayam persists things		
-//		XMLGregorianCalendar targetDate = action.getPackage().getTargetDate();
-//		if (!mayamValidator.validateMaterialBroadcastDate(targetDate, materialID)) {
-//			logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
-//		}
-		
-		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action.getPackage().getConsumerAdvice());
-		
-		if(consumerAdviceValid != MessageValidationResult.IS_VALID){
-			logger.warn(String.format("Consumer advice \"%s\" fails validation for reason %s", action.getPackage().getConsumerAdvice(), consumerAdviceValid));
+
+		// TODO read once mayam persists things
+		// XMLGregorianCalendar targetDate =
+		// action.getPackage().getTargetDate();
+		// if (!mayamValidator.validateMaterialBroadcastDate(targetDate,
+		// materialID)) {
+		// logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
+		// }
+
+		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action
+				.getPackage().getConsumerAdvice());
+
+		if (consumerAdviceValid != MessageValidationResult.IS_VALID) {
+			logger.warn(String.format(
+					"Consumer advice \"%s\" fails validation for reason %s",
+					action.getPackage().getConsumerAdvice(),
+					consumerAdviceValid));
 			return consumerAdviceValid;
 		}
 
@@ -205,87 +216,86 @@ public class PlaceholderMessageValidator extends
 	}
 
 	private MessageValidationResult validateConsumerAdvice(String consumerAdvice) {
-		
-		//TODO match consumer advice with regex [ADHLNSV,]* ?
+
+		// TODO match consumer advice with regex [ADHLNSV,]* ?
 		logger.warn("consumer advice not being validated");
 		return MessageValidationResult.IS_VALID;
-		
+
 	}
 
 	private MessageValidationResult validateDeletePackage(DeletePackage action)
 			throws MayamClientException {
-		
+
 		logger.info("Validating a DeletePackage");
-		
+
 		String packageID = action.getPackage().getPresentationID();
-		
+
 		boolean packageProtected = false;
 		try {
-			packageProtected = mayamClient.isMaterialForPackageProtected(packageID);
-		}
-		catch (MayamClientException e) {
+			packageProtected = mayamClient
+					.isMaterialForPackageProtected(packageID);
+		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying isMaterialForPackageProtected for package %s",
 							packageID), e);
 			throw e;
 		}
-		
+
 		boolean packageExists = false;
 		try {
 			packageExists = mayamClient.packageExists(packageID);
-		}
-		catch (MayamClientException e) {
+		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying packageExists for package %s",
 							packageID), e);
 			throw e;
 		}
-		
+
 		if (packageProtected) {
 			logger.error("PACKAGES_MATERIAL_IS_PROTECTED");
 			return MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED;
 		}
-		
+
 		if (!packageExists) {
 			logger.error("PACKAGE_DOES_NOT_EXIST");
 			return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 		}
-		
+
 		return MessageValidationResult.IS_VALID;
 	}
 
-	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action) throws MayamClientException {
-		
+	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action)
+			throws MayamClientException {
+
 		logger.info("Validationg a DeleteMaterial");
-		
+
 		String materialID = action.getMaterial().getMaterialD();
 		String titleID = action.getTitleID();
 		boolean materialProtected = false;
 		try {
-			materialProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
-		}
-		catch (MayamClientException e) {
+			materialProtected = mayamClient
+					.isTitleOrDescendentsProtected(titleID);
+		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying isTitleOrDescendentsProtected for title %s",
 							titleID), e);
 			throw e;
 		}
-		
+
 		boolean materialExists = false;
 		try {
 			materialExists = mayamClient.materialExists(materialID);
-		}
-		catch (MayamClientException e) {
+		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying materialExists for material %s",
 							materialID), e);
 			throw e;
 		}
-		
+
 		if (materialProtected) {
 			logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
 			return MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED;
@@ -294,9 +304,9 @@ public class PlaceholderMessageValidator extends
 			logger.error("MATERIAL_DOES_NOT_EXIST");
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 		}
-		
+
 		return MessageValidationResult.IS_VALID;
-		
+
 	}
 
 	private MessageValidationResult validatePurgeTitle(PurgeTitle action)
@@ -320,12 +330,11 @@ public class PlaceholderMessageValidator extends
 							titleID), e);
 			throw e;
 		}
-		
+
 		boolean titleExists = false;
 		try {
 			titleExists = mayamClient.titleExists(titleID);
-		}
-		catch (MayamClientException e) {
+		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
 							"MayamClientException when querying titleExists for title %s",
@@ -344,7 +353,7 @@ public class PlaceholderMessageValidator extends
 		}
 
 		return MessageValidationResult.IS_VALID;
-		
+
 	}
 
 	/**
@@ -419,20 +428,24 @@ public class PlaceholderMessageValidator extends
 				logger.error("LICENSE_DATES_NOT_IN_ORDER");
 				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
 			}
-			
+
 			Channels channels = l.getChannels();
-			for (ChannelType channel: channels.getChannel()) {
-				if (!channelValidator.isValidNameForTag(channel.getChannelTag(), channel.getChannelName())) {
-					logger.error(String.format("Channel Name '%s' does not match valid Channel Tag '%s'", channel.getChannelName(), channel.getChannelTag()));
-					return MessageValidationResult.CHANNEL_NAME_INVALID;	
+			for (ChannelType channel : channels.getChannel()) {
+				if (!channelValidator.isValidNameForTag(
+						channel.getChannelTag(), channel.getChannelName())) {
+					logger.error(String
+							.format("Channel Name '%s' does not match valid Channel Tag '%s'",
+									channel.getChannelName(),
+									channel.getChannelTag()));
+					return MessageValidationResult.CHANNEL_NAME_INVALID;
 				}
 			}
-			
+
 			try {
-				if (mayamClient.titleExists(action.getTitleID()))
-				{
+				if (mayamClient.titleExists(action.getTitleID())) {
 					MayamValidator mayamValidator = mayamClient.getValidator();
-					if (!mayamValidator.validateTitleBroadcastDate(action.getTitleID(), startDate, endDate)) {
+					if (!mayamValidator.validateTitleBroadcastDate(
+							action.getTitleID(), startDate, endDate)) {
 						logger.error("License date for title is not valid for one or more packages");
 						return MessageValidationResult.TITLE_TARGET_DATE_LICENSE_INVALID;
 					}
@@ -442,41 +455,44 @@ public class PlaceholderMessageValidator extends
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 		}
-		
-		String channelTag = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelTag();
-		String channelName = action.getRights().getLicense().get(0).getChannels().getChannel().get(0).getChannelName();
-		
-		if ((channelTag.equals("UNKNOWN_CHANNEL_TAG")) || (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
+
+		String channelTag = action.getRights().getLicense().get(0)
+				.getChannels().getChannel().get(0).getChannelTag();
+		String channelName = action.getRights().getLicense().get(0)
+				.getChannels().getChannel().get(0).getChannelName();
+
+		if ((channelTag.equals("UNKNOWN_CHANNEL_TAG"))
+				|| (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
 			logger.error("UNKOWN_CHANNEL");
 			return MessageValidationResult.UNKOWN_CHANNEL;
 		}
-		
+
 		return MessageValidationResult.IS_VALID;
 	}
 
 	private boolean validatePrivateMessageData(Object privateMessageData) {
 		// private message data can be of any type
-		if(privateMessageData != null){
-		logger.debug("Validating private message data"
-				+ privateMessageData.toString());
-		}
-		else{
+		if (privateMessageData != null) {
+			logger.debug("Validating private message data"
+					+ privateMessageData.toString());
+		} else {
 			logger.debug("privateMessageData is null");
 		}
-		
+
 		return true;
 	}
 
 	private boolean validateSenderID(String senderID) {
-		logger.debug("Validating sender id"+senderID);
+		logger.debug("Validating sender id" + senderID);
 		// TODO is any validation of this field required?
 		return true;
 	}
 
-	private boolean validateMesageID(String messageID) {
-		// check if there is already a receipt for this file and warn if it exists
-		
-		File receiptFile = new File(getReceiptWriter().receiptPathForMessageID(
+	private boolean validateMesageID(String messagePath, String messageID) {
+		// check if there is already a receipt for this file and warn if it
+		// exists
+
+		File receiptFile = new File(getReceiptWriter().receiptPathForMessageID(messagePath,
 				messageID));
 		boolean exists = receiptFile.exists();
 
@@ -490,8 +506,9 @@ public class PlaceholderMessageValidator extends
 	}
 
 	@Override
-	protected void typeCheck(Object unmarshalled) throws ClassCastException { //NOSONAR 
-		//throwing unchecked exception as hint to users of class that this method is likely to throw ClassCastException
+	protected void typeCheck(Object unmarshalled) throws ClassCastException { // NOSONAR
+		// throwing unchecked exception as hint to users of class that this
+		// method is likely to throw ClassCastException
 
 		if (!(unmarshalled instanceof PlaceholderMessage)) {
 			throw new ClassCastException(String.format(

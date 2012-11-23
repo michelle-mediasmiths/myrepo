@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -50,14 +51,14 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	public void before() throws IOException {
 		pendingImports = new PendingImportQueue();
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
-		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
-		failurePath = TestUtil.prepareTempFolder("FAILURE");
+		archivePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
+		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
 		ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
 
 		event=mock(EventService.class);
 		
-		toTest = new Importer(pendingImports, ardomeImportPath, failurePath,
-				archivePath,""+deliveryAttemptsToMake,event);
+		toTest = new Importer(pendingImports, ardomeImportPath,
+				""+deliveryAttemptsToMake,event);
 		
 		importerThread = new Thread(toTest);
 		importerThread.start();

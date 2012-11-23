@@ -18,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -78,8 +79,8 @@ public abstract class MaterialProcessingTest {
 		eventService = mock(EventService.class);
 
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
-		archivePath = TestUtil.prepareTempFolder("ARCHIVE");
-		failurePath = TestUtil.prepareTempFolder("FAILURE");
+		archivePath =	TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
+		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
 		emergencyImportPath = TestUtil.prepareTempFolder("EMERGENCYIMPORT");
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
@@ -87,7 +88,7 @@ public abstract class MaterialProcessingTest {
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, mediaCheck, failurePath, archivePath,emergencyImportPath,eventService);
+				mayamClient, matchMaker, mediaCheck,emergencyImportPath,eventService);
 
 		processorThread = new Thread(processor);
 		processorThread.start();

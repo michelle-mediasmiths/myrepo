@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
@@ -16,11 +14,9 @@ public class DoNothingImporter extends Importer {
 	public DoNothingImporter(
 			PendingImportQueue pendingImports,
 			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
-			@Named(FAILURE_PATH) String quarrentineFolder,
-			@Named(ARCHIVE_PATH) String archiveFolder,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			EventService event) {
-		super(pendingImports, targetFolder, quarrentineFolder, archiveFolder,
+		super(pendingImports, targetFolder,
 				deliveryAttemptsToMake, event);
 	}
 

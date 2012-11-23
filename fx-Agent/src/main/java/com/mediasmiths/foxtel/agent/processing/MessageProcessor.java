@@ -1,8 +1,6 @@
 
 package com.mediasmiths.foxtel.agent.processing;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -44,28 +42,24 @@ public abstract class MessageProcessor<T> implements Runnable {
 	protected final Marshaller marshaller;
 
 	
+	public final static String FAILUREFOLDERNAME="failed";
+	public final static String ARCHIVEFOLDERNAME="completed"; 	
+	
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
-	private final String failurePath;
-	private final String archivePath;
 	protected final EventService eventService;
 	
 	@Inject
 	public MessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, Marshaller marshaller, @Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath, EventService eventService) {
+			Unmarshaller unmarhsaller, Marshaller marshaller, EventService eventService) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarhsaller; 
 		this.marshaller = marshaller;
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
-		this.failurePath = failurePath;
-		this.archivePath = archivePath;
 		this.eventService = eventService;
-		logger.debug("Using failure path " + failurePath);
-		logger.debug("Using archivePath path " + archivePath);
 	}
 
 	/**
@@ -177,9 +171,12 @@ public abstract class MessageProcessor<T> implements Runnable {
 	 * @param messageID
 	 */
 	protected void moveFileToFailureFolder(File file) {
+		
 		logger.info(String.format(
 				"File %s is invalid, sending to failure folder",
 				file.getAbsolutePath()));
+		String failurePath = getFailureFolderForFile(file);
+		
 		logger.debug(String.format("Failure folder is: %s ", failurePath));
 
 		try {
@@ -191,6 +188,16 @@ public abstract class MessageProcessor<T> implements Runnable {
 		}
 	}
 
+	
+	public static String getFailureFolderForFile(File file) {
+		
+		String pathToFile = file.getAbsolutePath();		
+		String failurePath = FilenameUtils.getFullPath(pathToFile) + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;		
+		logger.debug(String.format("returning failure folder %s for file %s ", failurePath,pathToFile));
+		
+		return failurePath;
+	}
+
 	/**
 	 * Moves messages which have been processed, to the archive path
 	 * 
@@ -200,6 +207,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		logger.info(String.format(
 				"Message %s is complete, sending to archive folder",
 				messagePath));
+		String archivePath = getArchivePathForFile(messagePath);
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
@@ -211,6 +219,15 @@ public abstract class MessageProcessor<T> implements Runnable {
 					archivePath), e);
 		}
 
+	}
+
+	public static String getArchivePathForFile(String messagePath) {
+		
+		String pathToFile = messagePath;		
+		String archivePath = FilenameUtils.getFullPath(pathToFile) + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;		
+		logger.debug(String.format("returning archivePath folder %s for file %s ", archivePath,pathToFile));
+		
+		return archivePath;
 	}
 
 	protected synchronized void moveFileToFolder(File file,
@@ -229,7 +246,11 @@ public abstract class MessageProcessor<T> implements Runnable {
 			String destinationFolderPath, boolean ensureUnique) {
 		
 		StringBuilder sb = new StringBuilder(destinationFolderPath);
-		sb.append(IOUtils.DIR_SEPARATOR);
+		
+		//only add slash if required
+		if (destinationFolderPath.charAt(destinationFolderPath.length() - 1) != IOUtils.DIR_SEPARATOR) {
+			sb.append(IOUtils.DIR_SEPARATOR);
+		}
 		sb.append(FilenameUtils.getName(file.getAbsolutePath()));
 		
 		String destination = sb.toString();
@@ -305,9 +326,4 @@ public abstract class MessageProcessor<T> implements Runnable {
 	public FilesPendingProcessingQueue getFilePathsPending() {
 		return filePathsPending;
 	}
-
-	public String getFailurePath() {
-		return failurePath;
-	}
-
 }

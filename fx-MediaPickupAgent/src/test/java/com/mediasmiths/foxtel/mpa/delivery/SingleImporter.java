@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
@@ -16,15 +14,11 @@ import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 public class SingleImporter extends Importer {
 
 	@Inject
-	public SingleImporter(
-			PendingImportQueue pendingImports,
+	public SingleImporter(PendingImportQueue pendingImports,
 			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
-			@Named(FAILURE_PATH) String quarrentineFolder,
-			@Named(ARCHIVE_PATH) String archiveFolder,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			EventService event) {
-		super(pendingImports, targetFolder, quarrentineFolder, archiveFolder,
-				deliveryAttemptsToMake, event);
+		super(pendingImports, targetFolder, deliveryAttemptsToMake, event);
 	}
 
 	private static Logger logger = Logger.getLogger(SingleImporter.class);

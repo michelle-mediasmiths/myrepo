@@ -1,9 +1,6 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import static com.mediasmiths.foxtel.agent.Config.ARCHIVE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.FAILURE_PATH;
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
-import static com.mediasmiths.foxtel.agent.Config.RECEIPT_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
@@ -29,9 +26,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 	@Inject
 	public MediaPickupAgentConfigValidator(
 			@Named(MESSAGE_PATH) String messagePath,
-			@Named(FAILURE_PATH) String failurePath,
-			@Named(ARCHIVE_PATH) String archivePath,
-			@Named(RECEIPT_PATH) String receiptPath,
 			@Named(ARDOME_IMPORT_FOLDER) String importFolder,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
@@ -42,7 +36,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(XML_NOT_TOUCHED_PERIOD) String xmlNotTouched
 			)
 			throws ConfigValidationFailureException {
-		super(messagePath, failurePath, archivePath, receiptPath);
+		super(messagePath);
 
 		boolean anyFailures = false;
 
@@ -106,15 +100,16 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			configValidationFails(MXF_NOT_TOUCHED_PERIOD,
 					mxfNotTouched);
 		}
-		
-		if(isAOAgent.booleanValue()==true){
-			if(! failurePath.equals(emergencyImportFolder)){
-				anyFailures=true;
-				logger.error("AO agent should quarrentine unmatched content, set emergency import folder to be equal to the quarrentine / failure folder");				
-				configValidationFails(ARDOME_EMERGENCY_IMPORT_FOLDER,
-						emergencyImportFolder);
-			}
-		}
+
+		//using relative folder paths for failed,archived,recipts, this check no longer relevant
+//		if(isAOAgent.booleanValue()==true){
+//			if(! failurePath.equals(emergencyImportFolder)){
+//				anyFailures=true;
+//				logger.error("AO agent should quarrentine unmatched content, set emergency import folder to be equal to the quarrentine / failure folder");				
+//				configValidationFails(ARDOME_EMERGENCY_IMPORT_FOLDER,
+//						emergencyImportFolder);
+//			}
+//		}
 
 		if (anyFailures) {
 			onFailure();

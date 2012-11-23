@@ -19,7 +19,9 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
+import com.mediasmiths.foxtel.placeholder.TestUtil;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 import com.mediasmiths.foxtel.placeholder.validmessagepickup.TestAddOrUpdateMaterial;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -41,9 +43,10 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 			InterruptedException {
 		// prepare folders
 		String messagePath = Util.prepareTempFolder("MESSAGE");
-		String receiptPath = Util.prepareTempFolder("RECEIPT");
-		String failurePath = Util.prepareTempFolder("FAILURE");
-		String archivePath = Util.prepareTempFolder("ARCHIVE");
+		String receiptPath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
+		String failurePath = TestUtil.createSubFolder(messagePath, MessageProcessor.FAILUREFOLDERNAME);
+		String archivePath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
+	
 
 		// prepare message
 		String message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur hendrerit consequat enim a vestibulum. Mauris at mauris ac magna auctor hendrerit varius accumsan est. Duis nisl risus, tempor non hendrerit sed, vestibulum non sem. Sed et erat quis urna venenatis tincidunt. Curabitur sit amet mauris felis. Proin sagittis sem id eros ornare sit amet faucibus ipsum molestie. Phasellus laoreet pellentesque odio vel feugiat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sed libero dolor.";
@@ -55,7 +58,7 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 		IOUtils.write(message, new FileOutputStream(new File(messageFilePath)));
 
 		// run manager
-		runPlaceholderManager(messagePath, receiptPath, failurePath,archivePath);
+		runPlaceholderManager(messagePath);
 
 		// after manager has run and processed the single task the request
 		// should now be in the failure folder
@@ -77,10 +80,16 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 
 		// prepare folders
 		String messagePath = Util.prepareTempFolder("MESSAGE");
-		String receiptPath = Util.prepareTempFolder("RECEIPT");
-		String failurePath = Util.prepareTempFolder("FAILURE");
-		String archivePath = Util.prepareTempFolder("ARCHIVE");
-
+		String receiptPath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
+		String failurePath = TestUtil.createSubFolder(messagePath, MessageProcessor.FAILUREFOLDERNAME);
+		String archivePath = TestUtil.createSubFolder(messagePath, MessageProcessor.ARCHIVEFOLDERNAME );
+	
+logger.info("message path "+messagePath);
+logger.info("receiptPath "+receiptPath);
+logger.info("failurePath "+failurePath);
+logger.info("archivePath "+archivePath);
+		
+		String filename = "validMessage.xml";
 		String messageFilePath = messagePath + IOUtils.DIR_SEPARATOR
 				+ "validMessage.xml";
 
@@ -95,8 +104,7 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 						MayamClientErrorCode.MATERIAL_FIND_FAILED));
 
 		// run manager
-		writeMessageAndRunManager(message, messagePath, receiptPath,
-				failurePath,archivePath, messageFilePath);
+		writeMessageAndRunManager(message, messagePath, filename);
 
 		// after manager has run and processed the single task the request
 		// should now be in the failure folder
