@@ -28,6 +28,7 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 			@Named(XML_NOT_TOUCHED_PERIOD) Long xmlNotTouchedPeriod) {
 		super(filePathsPendingValidation, path);
 		
+		logger.info("setting not touched periods mxf:"+mxfNotTouchedPeriod + " xml:"+ xmlNotTouchedPeriod);
 		setNotTouchedPeriodForFormat("mxf", mxfNotTouchedPeriod);
 		setNotTouchedPeriodForFormat("xml", xmlNotTouchedPeriod);
 	}
@@ -39,12 +40,12 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 		logger.debug(String.format("A file %s has arrived",file.getAbsolutePath()));
 		
 		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".xml")) {
-			logger.info("An xml file has arrived");
+			logger.info(String.format("An xml file %s has arrived",file.getAbsolutePath()));
 			queueFile(file);
 		}
 		
 		if (file.getAbsolutePath().toLowerCase(Locale.ENGLISH).endsWith(".mxf")) {
-			logger.info("An mxf file has arrived");
+			logger.info(String.format("A mxf file %s has arrived",file.getAbsolutePath()));
 			queueFile(file);
 		}
 	}
