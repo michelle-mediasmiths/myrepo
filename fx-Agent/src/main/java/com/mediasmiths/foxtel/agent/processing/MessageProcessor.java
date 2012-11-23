@@ -225,7 +225,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 		FileUtils.moveFile(file, new File(destination));
 	}
 
-	private String getDestinationPathForFileMove(File file,
+	public static String getDestinationPathForFileMove(File file,
 			String destinationFolderPath, boolean ensureUnique) {
 		
 		StringBuilder sb = new StringBuilder(destinationFolderPath);
