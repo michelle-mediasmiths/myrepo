@@ -423,7 +423,7 @@ public class PlaceholderMessageValidator extends
 			Channels channels = l.getChannels();
 			for (ChannelType channel: channels.getChannel()) {
 				if (!channelValidator.isValidNameForTag(channel.getChannelTag(), channel.getChannelName())) {
-					logger.error("Channel Name does not match valid Channel Tag");
+					logger.error(String.format("Channel Name '%s' does not match valid Channel Tag '%s'", channel.getChannelName(), channel.getChannelTag()));
 					return MessageValidationResult.CHANNEL_NAME_INVALID;	
 				}
 			}
