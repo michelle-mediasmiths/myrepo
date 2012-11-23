@@ -22,6 +22,10 @@ public class MediaCheck {
 	}
 
 	public boolean mediaCheck(File mxf, MaterialEnvelope description) {
+		return true;
+		//dont validate file size or checksum
+	
+		/*
 		// check mxf matched descriptioin.
 		MaterialType material = Util.getMaterialTypeForMaterial(description
 				.getMessage());
@@ -59,6 +63,7 @@ public class MediaCheck {
 				}
 			}
 		}
+		*/
 	}
 
 	private boolean validateChecksum(File mxf, MaterialEnvelope description,

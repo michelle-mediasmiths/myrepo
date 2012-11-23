@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
@@ -24,6 +25,7 @@ import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.Util;
 
+@Ignore //not checking file size and checksume against details in the materialxml
 public class MediaCheckTest_FXT_4_6_1 {
 	
 	private static Logger logger = Logger.getLogger(MediaCheckTest_FXT_4_6_1.class);
