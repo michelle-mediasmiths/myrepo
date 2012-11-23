@@ -80,7 +80,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 	public void testDeleteTitleNotProtected_FXT_4_1_3_3_4_5_FXT_4_1_0_7() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists");
-		logger.info("Starting FXT 4.1.0.7 – Valid PurgeTitle Message ");
+		logger.info("Starting FXT 4.1.0.7 ��� Valid PurgeTitle Message ");
 
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleNotProtected");
@@ -92,12 +92,12 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists --Passed");
-			resultLogger.info("FXT 4.1.0.7 – Valid PurgeTitle Message --Passed");
+			resultLogger.info("FXT 4.1.0.7 ��� Valid PurgeTitle Message --Passed");
 		}
 		else
 		{
 			resultLogger.info("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists --Failed");
-			resultLogger.info("FXT 4.1.0.7 – Valid PurgeTitle Message --Passed");
+			resultLogger.info("FXT 4.1.0.7 ��� Valid PurgeTitle Message --Passed");
 		}
 		
 		assertEquals(MessageValidationResult.IS_VALID, validateFile);	
@@ -129,10 +129,10 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 	@Category(ValidationTests.class)
 	public void testDeleteTitleProtected_FXT_4_1_3_7() throws IOException, Exception {
 		logger.info("Starting FXT 4.1.3.7 - Title is protected");
-		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
+		PlaceholderMessage message = buildPurgeTitle(false, PROTECTED_TITLE);
 		File temp = createTempXMLFile(message, "validPurgeTitleProtected");
 		
-		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
@@ -157,8 +157,8 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(pt);
 		
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID(MESSAGE_ID);
-		message.setSenderID(SENDER_ID);
+		message.setMessageID(createMessageID());
+		message.setSenderID(createSenderID());
 		message.setActions(actions);
 		
 		return message;

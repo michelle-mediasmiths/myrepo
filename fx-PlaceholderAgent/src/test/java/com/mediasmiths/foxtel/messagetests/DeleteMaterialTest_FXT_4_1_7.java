@@ -123,10 +123,10 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 	public void testDeleteMaterialProtected_FXT_4_1_7_7() throws IOException, Exception {
 		
 		logger.info("Starting FXT 4.1.7.7 - Material is protected");
-		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
+		PlaceholderMessage message = buildDeleteMaterial(true, PROTECTED_TITLE);
 		File temp = createTempXMLFile(message, "validDeleteMaterialProtected");
 		
-		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
@@ -143,6 +143,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		Material material = new Material();
 		material.setMaterialD(EXISTING_MATERIAL_ID);
 		
+		
 		DeleteMaterial dm = new DeleteMaterial();
 		dm.setTitleID(titleID);
 		dm.setMaterial(material);
@@ -151,8 +152,8 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
 		
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID(MESSAGE_ID);
-		message.setSenderID(SENDER_ID);
+		message.setMessageID(createMessageID());
+		message.setSenderID(createSenderID());
 		message.setActions(actions);
 		
 		return message;

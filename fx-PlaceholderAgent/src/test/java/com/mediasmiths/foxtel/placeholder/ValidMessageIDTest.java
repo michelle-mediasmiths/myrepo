@@ -45,7 +45,7 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = new PlaceholderMessage();
 		pm.setMessageID(EXISTING_MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		
 		File temp = createTempXMLFile(pm, "receiptExists");

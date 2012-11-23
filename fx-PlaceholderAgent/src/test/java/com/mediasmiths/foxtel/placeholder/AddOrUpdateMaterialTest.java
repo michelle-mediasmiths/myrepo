@@ -150,11 +150,11 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 	@Test
 	@Category(ValidationTests.class)
 	public void testAddMaterialTitleExistRequestFails() throws Exception {
-		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		PlaceholderMessage pm = buildAddMaterialRequest(ERROR_TITLE_ID);
 		File temp = createTempXMLFile(pm, "addMaterialTitleExistRequestFails");
 
 		// prepare mock mayamClient
-		when(mayamClient.titleExists(EXISTING_TITLE)).thenThrow(
+		when(mayamClient.titleExists(ERROR_TITLE_ID)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
 
 		// try to call validation, expect a mayam client error

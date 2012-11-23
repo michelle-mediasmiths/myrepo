@@ -187,8 +187,8 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 				aum);
 
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 	}

@@ -287,8 +287,8 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		licensePeriod.setEndDate(endDate);
 		license.setLicensePeriod(licensePeriod);
 		
-		channel.setChannelTag("FO8");
-		channel.setChannelName("Fox 8");
+		channel.setChannelTag("FOX");
+		channel.setChannelName("FOX8");
 		Channels channels = new Channels();
 		channels.getChannel().add(channel);
 		license.setChannels(channels);

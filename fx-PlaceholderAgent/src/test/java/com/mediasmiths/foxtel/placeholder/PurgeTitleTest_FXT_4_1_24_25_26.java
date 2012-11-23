@@ -61,10 +61,10 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 	public void testDeleteTitleIsProected_FXT_4_1_24_25_26() throws IOException, Exception {
 		logger.info("Starting FXT 4.1.24/25/26 ");
 
-		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
+		PlaceholderMessage pm = buildDeleteTitleRequest(false, PROTECTED_TITLE);
 		File temp = createTempXMLFile(pm, "validDeleteTitleMaterialProtected");
 
-		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE))
 				.thenReturn(true);
 
 		
@@ -155,8 +155,8 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 				pt);
 
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 

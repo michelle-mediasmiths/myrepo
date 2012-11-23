@@ -51,14 +51,14 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeletePackageIsProected() throws IOException, Exception {
-		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
+		PlaceholderMessage pm = buildDeletePackageRequest(false,PROTECTED_TITLE,PROTECTED_PACKAGE); 
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialProtected");
 		
-		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
-		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(true);
+		when(mayamClient.packageExists(PROTECTED_PACKAGE)).thenReturn(true);
+		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
 		
 		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
-		verify(mayamClient).isMaterialForPackageProtected(EXISTING_PACKAGE_ID);
+		verify(mayamClient).isMaterialForPackageProtected(PROTECTED_PACKAGE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -103,10 +103,10 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeletePackageRequestFail() throws IOException, Exception{
-		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
+		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,ERROR_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageRequestFailure");
 		
-		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		when(mayamClient.isMaterialForPackageProtected(ERROR_PACKAGE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
 		// try to call validation, expect a mayam client error
 		assertEquals(
@@ -130,8 +130,8 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 				dp);
 		
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 	}

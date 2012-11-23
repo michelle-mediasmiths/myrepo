@@ -189,8 +189,8 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 				aup);
 		
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 	}

@@ -149,8 +149,8 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 				dm);
 		
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 		

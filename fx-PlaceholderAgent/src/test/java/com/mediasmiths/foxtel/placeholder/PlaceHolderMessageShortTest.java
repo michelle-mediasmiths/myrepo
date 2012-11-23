@@ -65,17 +65,25 @@ public abstract class PlaceHolderMessageShortTest
 	protected final AlertInterface alert = mock(AlertInterface.class);
 	protected final String alertRecipient = "alert@foxtel.com.au";
 
-	protected final static String MESSAGE_ID = "123456asdfg";
-	protected final static String SENDER_ID = "123456asdfg";
+	protected static String createMessageID() {
+		return RandomStringUtils.randomAlphabetic(10);
+	}
 
-	protected final static String EXISTING_TITLE = "EXISTING";
+	protected static String createSenderID() {
+		return RandomStringUtils.randomAlphabetic(10);
+	}
+
+	protected final static String EXISTING_TITLE = "EXISTING_TITLE";
 	protected final static String PROTECTED_TITLE = "PROTECTED_TITLE";
-	protected final static String NOT_EXISTING_TITLE = "NOT_EXISTING";
+	protected final static String NOT_EXISTING_TITLE = "NEW_TITLE";
+	protected final static String ERROR_TITLE_ID = "ERROR_TITLE";
 	protected final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
 	protected final static String EXISTING_MATERIAL_ID = "EXISTING_MATERIAL";
-	protected final static String NOT_EXISTING_MATERIAL = "NOT_EXISTING";
-	protected final static String EXISTING_PACKAGE_ID = "NEW_MATERIAL";
-	protected final static String NOT_EXISTING_PACKAGE = "NOT_EXISTING";
+	protected final static String NOT_EXISTING_MATERIAL = "NEW_MATERIAL";
+	protected final static String EXISTING_PACKAGE_ID = "EXISTING_PACKAGE";
+	protected final static String NOT_EXISTING_PACKAGE = "NEW_PACKAGE";
+	protected final static String PROTECTED_PACKAGE = "PROTECTED_PACKAGE";
+	protected final static String ERROR_PACKAGE_ID = "ERROR_PACKAGE";
 
 	protected final static String UNKNOWN_CHANNEL_TAG = "UNKNOWN_CHANNEL_TAG";
 	protected final static String UNKOWN_CHANNEL_NAME = "UNKNOWN_CHANNEL_NAME";
@@ -141,8 +149,8 @@ public abstract class PlaceHolderMessageShortTest
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(aum);
 
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 	}

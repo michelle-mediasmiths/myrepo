@@ -75,8 +75,8 @@ public class HappyPathDataGeneratorTest
 		String organisationName = "ORGNAME";
 		String startDate = "2000-02-01T00:00:01.000Z";
 		String endDate = "2000-02-01T00:00:01.000Z";
-		String channelTag = "108";
-		String channelName = "Fox8";
+		String channelTag = "FOX";
+		String channelName = "FOX8";
 		
 		try
 		{

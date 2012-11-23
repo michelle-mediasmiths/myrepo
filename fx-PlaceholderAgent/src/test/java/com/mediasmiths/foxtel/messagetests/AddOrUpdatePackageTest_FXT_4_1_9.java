@@ -168,8 +168,8 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(aoup);
 		
 		PlaceholderMessage message = new PlaceholderMessage();
-		message.setMessageID(MESSAGE_ID);
-		message.setSenderID(SENDER_ID);
+		message.setMessageID(createMessageID());
+		message.setSenderID(createSenderID());
 		message.setActions(actions);
 		
 		return message;

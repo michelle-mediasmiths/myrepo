@@ -191,8 +191,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		licenceHolder.setOrganisationName("ORGNAME");
 
 		ChannelType channelType = new ChannelType();
-		channelType.setChannelTag("108");
-		channelType.setChannelName("Fox8");
+		channelType.setChannelTag("FOX");
+		channelType.setChannelName("FOX8");
 
 		Channels channels = new Channels();
 		channels.getChannel().add(channelType);
@@ -215,8 +215,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 				coup);
 
 		PlaceholderMessage pm = new PlaceholderMessage();
-		pm.setMessageID(MESSAGE_ID);
-		pm.setSenderID(SENDER_ID);
+		pm.setMessageID(createMessageID());
+		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		return pm;
 	}

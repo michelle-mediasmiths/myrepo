@@ -45,8 +45,8 @@ public class MSRights {
 		licensePeriod.setEndDate(endDate);
 		license1.setLicensePeriod(licensePeriod);
 
-		channel1.setChannelTag("108");  //TODO : pick these out of a larger set
-		channel1.setChannelName("Fox8");
+		channel1.setChannelTag("FOX");  //TODO : pick these out of a larger set
+		channel1.setChannelName("FOX8");
 		channels.getChannel().add(channel1);
 		license1.setChannels(channels);
 
