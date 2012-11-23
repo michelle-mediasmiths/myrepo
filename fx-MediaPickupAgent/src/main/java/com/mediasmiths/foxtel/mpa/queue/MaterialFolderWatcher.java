@@ -6,6 +6,7 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIO
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
@@ -23,10 +24,10 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 	
 	@Inject
 	public MaterialFolderWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH) String path,
+			FilesPendingProcessingQueue filePathsPendingValidation, @Named("watchfolder.locations") List<String> paths,
 			@Named(MXF_NOT_TOUCHED_PERIOD) Long mxfNotTouchedPeriod,
 			@Named(XML_NOT_TOUCHED_PERIOD) Long xmlNotTouchedPeriod) {
-		super(filePathsPendingValidation, path);
+		super(filePathsPendingValidation, paths);
 		
 		logger.info("setting not touched periods mxf:"+mxfNotTouchedPeriod + " xml:"+ xmlNotTouchedPeriod);
 		setNotTouchedPeriodForFormat("mxf", mxfNotTouchedPeriod);

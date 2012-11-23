@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
@@ -15,7 +16,8 @@ public class MediaPickupSetup implements GuiceSetup
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config)
 	{
-
+		modules.add(new WatchFolderLocationsModule());
+		
 		if (config.getBoolean("stub.out.mayam", false))
 		{
 			modules.add(new MayamClientStubModule());

@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -94,7 +95,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				watchFolderPath);
+				Collections.<String>singletonList(watchFolderPath));
 		toTest.setSleepTime(100l);
 
 		// start watcher
@@ -125,7 +126,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 		logger.info("Starting FXT_4_1_x_1  The XML file is discovered");
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				watchFolderPath);
+				Collections.<String>singletonList(watchFolderPath));
 		
 		logger.trace("testNewFilesAreQueued enter");
 		toTest.setSleepTime(10l);
@@ -192,7 +193,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 			IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				watchFolderPath);
+				Collections.<String>singletonList(watchFolderPath));
 		toTest.setSleepTime(100l);
 
 		// start watcher

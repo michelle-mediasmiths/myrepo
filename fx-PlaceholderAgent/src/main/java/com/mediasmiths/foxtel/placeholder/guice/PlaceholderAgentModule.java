@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.placeholder.guice;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,6 +17,7 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
@@ -24,6 +27,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientStub;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
+import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class PlaceholderAgentModule extends AbstractModule {
@@ -95,7 +99,5 @@ public class PlaceholderAgentModule extends AbstractModule {
 		EventAPI service = clientFactory.createClient(EventAPI.class, endpoint);
 
 		return service;
-	}
-	
-
+	}	
 }

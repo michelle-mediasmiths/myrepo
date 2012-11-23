@@ -5,6 +5,7 @@ import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -33,6 +34,7 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
@@ -158,9 +160,9 @@ public abstract class PlaceholderManagerTest {
 		propertyFile.merge(overridenProperties);
 
 		// setup guice injector
-		final List<Module> moduleList = Collections
-				.<Module> singletonList(new TestPlaceHolderMangementModule(
-						mayamClient, mayamValidator, events));
+			final List<Module> moduleList = new ArrayList<Module>();
+			moduleList.add(new TestPlaceHolderMangementModule(messagePath,mayamClient, mayamValidator, events));
+
 		Injector injector = GuiceInjectorBootstrap.createInjector(propertyFile,
 				new GuiceSetup() {
 
@@ -184,11 +186,13 @@ public abstract class PlaceholderManagerTest {
 		private final MayamClient mc;
 		private final MayamValidator mv;
 		private final EventService events;
-
-		public TestPlaceHolderMangementModule(MayamClient mc, MayamValidator mv, EventService events) {
+		private final String inputPath;
+		
+		public TestPlaceHolderMangementModule(String inputPath,MayamClient mc, MayamValidator mv, EventService events) {
 			this.mc = mc;
 			this.mv = mv;
 			this.events=events;
+			this.inputPath=inputPath;
 		}
 
 		@Override
@@ -216,6 +220,18 @@ public abstract class PlaceholderManagerTest {
 
 			return service;
 		}
+
+		
+		@Provides
+		@Named("watchfolder.locations")
+		public List<String> provideWatchFolderLocations()
+		{
+			final List<String> locations= new ArrayList<String>(1);
+			locations.add(inputPath);
+			return locations;
+		}
+		
+		
 	}
 
 }

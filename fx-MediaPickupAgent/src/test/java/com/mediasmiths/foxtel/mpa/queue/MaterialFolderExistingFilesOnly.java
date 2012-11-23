@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.mpa.queue;
 
 import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -14,8 +16,8 @@ public class MaterialFolderExistingFilesOnly extends MaterialFolderWatcher {
 	
 	@Inject
 	public MaterialFolderExistingFilesOnly(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named(MESSAGE_PATH)  String path) {
-		super(filePathsPendingValidation, path,100l, 5l);
+			FilesPendingProcessingQueue filePathsPendingValidation, @Named("watchfolder.locations") List<String> paths) {
+		super(filePathsPendingValidation, paths,100l, 5l);
 	}
 
 	@Override
