@@ -53,5 +53,9 @@
 	    <http:outbound-endpoint address="http://10.111.227.21:8731/" />
 	</pattern:http-proxy>
 	
+	<pattern:http-proxy name="http-proxy-intalio">
+    	<http:inbound-endpoint address="http://0.0.0.0:8083/" />
+	    <http:outbound-endpoint address="http://localhost:8081/" />
+	</pattern:http-proxy>
 
 </mule>
