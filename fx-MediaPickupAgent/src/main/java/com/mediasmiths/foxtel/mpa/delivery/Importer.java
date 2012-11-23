@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.AlertInterface;
@@ -147,8 +148,9 @@ public class Importer implements Runnable {
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
 			File src = pi.getMediaFile();
-			File dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
+			File baseDestination = new File(quarrentineFolder, pi.getMaterialEnvelope()
 					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "mxf");
+			File dst = new File(MessageProcessor.getDestinationPathForFileMove(baseDestination, quarrentineFolder, true));			
 
 			try {
 				FileUtils.moveFile(src, dst);
