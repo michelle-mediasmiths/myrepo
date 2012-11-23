@@ -75,7 +75,7 @@ public class MayamClientStub implements MayamClient
 	public final static String ERROR_PACKAGE_ID = "ERROR_PACKAGE";
 	public final static String PROTECTED_PACKAGE_ID = "PROTECTED_PACKAGE";
 
-	private final static String CHANNEL1 = "CH1";
+	private final static String [] CHANNELS = new String[] {"D3F","ARN","BIO","HIT","COM","CIN","FOX","HST","LHO","LST","LSY","FBO","AO","MEV","FKC","FOD","AED","SOH"};
 
 	@Override
 	public void shutdown()
@@ -461,7 +461,7 @@ public class MayamClientStub implements MayamClient
 		if (materialExists(materialID))
 		{
 			ArrayList<String> list = new ArrayList<String>();
-			list.add(CHANNEL1);
+			list.add(CHANNELS[0]);
 			return list;
 		}
 		else
