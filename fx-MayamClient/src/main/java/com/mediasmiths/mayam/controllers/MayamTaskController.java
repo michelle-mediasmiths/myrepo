@@ -16,6 +16,7 @@ import com.mayam.wf.attributes.shared.type.AssetAccess.EntityType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -139,9 +140,8 @@ public class MayamTaskController extends MayamController{
 	
 	private AttributeMap updateAccessRights(AttributeMap task)
 	{
-		String taskType = task.getAttribute(Attribute.TASK_LIST_ID);
-		String taskState = task.getAttribute(Attribute.TASK_STATE);
 		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
+		String assetId = task.getAttribute(Attribute.ASSET_ID);
 		boolean purgeProtected = task.getAttribute(Attribute.AUX_FLAG);
 		
 		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
@@ -158,7 +158,68 @@ public class MayamTaskController extends MayamController{
 			}
 		}
 		
-		List <MayamAccessRights> allRights = accessRightsController.retrieve(MayamTaskListType.fromString(taskType), TaskState.valueOf(taskState), MayamAssetType.valueOf(assetType), channelList, purgeProtected);
+		String contentFormat = task.getAttributeAsString(Attribute.CONT_FMT);
+		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
+		
+		String contentType = null;
+		if (assetType.equals(MayamAssetType.TITLE))
+		{
+			contentType = "Title";
+		}
+		else if (contentFormat.toUpperCase().equals("UNMATCHED")) {
+			contentType = "Unmatched";
+		}
+		else if (contentCategory.toUpperCase().equals("PROGRAMME")) {
+			contentType = "Programme";
+		}
+		else if (contentCategory.toUpperCase().equals("ASSOCIATED")) {
+			contentType = "EPK";
+		}
+		else if (contentCategory.toUpperCase().equals("EDIT CLIPS")) {
+			contentType = "Edit Clip";
+		}
+		else if (contentCategory.toUpperCase().equals("PUBLICITY")) {
+			contentType = "Publicity";
+		}
+		
+		//TODO: Add new adult only attribute once created by Mayam
+		boolean adultOnly = false;
+		//boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+		
+		//TODO: Add new qc parallel attribute once created by Mayam
+		boolean qcParallel = false;
+		//boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+		
+		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
+
+		TaskState qaStatus = null;
+		
+		AttributeMap filterEqualities = client.createAttributeMap();
+		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
+		filterEqualities.setAttribute(Attribute.ASSET_ID, assetId);
+		FilterCriteria criteria = new FilterCriteria();
+		criteria.setFilterEqualities(filterEqualities);
+		FilterResult existingTasks;
+		try {
+			existingTasks = client.taskApi().getTasks(criteria, 10, 0);
+
+			if (existingTasks.getTotalMatches() > 0) 
+			{
+				List<AttributeMap> tasks = existingTasks.getMatches();
+				AttributeMap qaTask = tasks.get(0);
+				qaStatus = task.getAttribute(Attribute.TASK_STATE);
+				
+				if (existingTasks.getTotalMatches() > 0) 
+				{
+					log.warn("More than 1 Preview task found for assset : " + assetId + ". Access Righst will be set based on status of first task : " + qaTask.getAttribute(Attribute.TASK_ID));
+				}
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId);
+			e.printStackTrace();
+		}
+
+		List <MayamAccessRights> allRights = accessRightsController.retrieve(qcStatus.toString(), qaStatus.toString(), qcParallel, contentType, channelList, purgeProtected, adultOnly);
 		
 		AssetAccess accessRights = new AssetAccess();
 		for (int i = 0; i < allRights.size(); i++)
