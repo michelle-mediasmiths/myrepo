@@ -10,4 +10,5 @@ public class MediasmithsDestinations {
 	public static final String TRANSCODE_INPUT_FILE = "f:\tcinput\test.mxf";
 	public static final String TRANSCODE_OUTPUT_DIR = "f:\tcoutput";
 	public static final String MULE_TRANSCODE_DESTINATION = "http://localhost:9085/tc";
+	public static final String MAYAM_TASKS_SERVER = "http://localhost:8084/tasks-ws";
 }
