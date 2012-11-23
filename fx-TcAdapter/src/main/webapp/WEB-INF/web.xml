@@ -12,6 +12,7 @@
 	<filter>
         <filter-name>resteasy</filter-name>
         <filter-class>com.mediasmiths.std.guice.web.rest.resteasy.ResteasyDispatcher</filter-class>
+        <load-on-startup>1</load-on-startup>
     </filter>
 
     <filter-mapping>
