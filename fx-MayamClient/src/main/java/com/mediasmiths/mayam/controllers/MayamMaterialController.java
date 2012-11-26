@@ -173,7 +173,7 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.APP_FLAG, material.isAdultMaterial());
-
+			
 			// TODO: Require attributes for timecode
 			// attributesValid &= attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
 			// attributesValid &= attributes.setAttribute(Attribute., material.getLastFrameTimecode());
