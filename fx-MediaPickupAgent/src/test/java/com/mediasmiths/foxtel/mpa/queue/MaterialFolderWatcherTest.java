@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 
@@ -102,7 +104,7 @@ public class MaterialFolderWatcherTest {
 	public void testExistingFilesAreQueued() throws FileNotFoundException,
 			IOException {
 
-		writeRandomFile(xml1);
+		writeRandomFile(xml1); 
 		writeRandomFile(xml2);
 		writeRandomFile(mxf1);
 		writeRandomFile(mxf2);
@@ -110,7 +112,7 @@ public class MaterialFolderWatcherTest {
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				Collections.<String>singletonList(watchFolderPath), 100l, 5l);
+				new WatchFolders(Collections.<String>singletonList(watchFolderPath)), 100l, 5l);
 		toTest.setSleepTime(100l);
 
 		// start watcher
@@ -142,7 +144,7 @@ public class MaterialFolderWatcherTest {
 	public void testNewFilesAreQueued() throws FileNotFoundException, IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				Collections.<String>singletonList(watchFolderPath),100l, 5l);
+				new WatchFolders(Collections.<String>singletonList(watchFolderPath)),100l, 5l);
 		
 		logger.trace("testNewFilesAreQueued enter");
 		toTest.setSleepTime(10l);
@@ -199,7 +201,7 @@ public class MaterialFolderWatcherTest {
 			IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
-				Collections.<String>singletonList(watchFolderPath),100l,5l);
+				new WatchFolders(Collections.<String>singletonList(watchFolderPath)),100l,5l);
 		toTest.setSleepTime(100l);
 
 		// start watcher

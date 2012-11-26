@@ -17,6 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -43,6 +45,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	private String masterID;
 	private MaterialEnvelope envelope;
 	private PendingImport pendingImport;
+	private WatchFolders watchFolders;
 	
 	private int deliveryAttemptsToMake=2;
 	private EventService event;
@@ -54,10 +57,15 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		archivePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
 		ardomeImportPath = TestUtil.prepareTempFolder("ARDOMEIMPORT");
-
+		WatchFolder wf = new WatchFolder(incomingPath);
+		wf.setDelivery(ardomeImportPath);
+		
+		watchFolders = new WatchFolders();
+		watchFolders.add(wf);
+		
 		event=mock(EventService.class);
 		
-		toTest = new Importer(pendingImports, ardomeImportPath,
+		toTest = new Importer(pendingImports, watchFolders,
 				""+deliveryAttemptsToMake,event);
 		
 		importerThread = new Thread(toTest);

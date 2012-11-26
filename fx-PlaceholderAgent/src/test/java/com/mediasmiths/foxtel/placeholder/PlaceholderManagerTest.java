@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
@@ -34,6 +33,8 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
@@ -156,7 +157,6 @@ public abstract class PlaceholderManagerTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 
 		Properties overridenProperties = new Properties();
-		overridenProperties.put(MESSAGE_PATH, messagePath);
 		propertyFile.merge(overridenProperties);
 
 		// setup guice injector
@@ -224,11 +224,12 @@ public abstract class PlaceholderManagerTest {
 		
 		@Provides
 		@Named("watchfolder.locations")
-		public List<String> provideWatchFolderLocations()
+		public WatchFolders provideWatchFolderLocations()
 		{
+		
 			final List<String> locations= new ArrayList<String>(1);
 			locations.add(inputPath);
-			return locations;
+			return new WatchFolders(locations);
 		}
 		
 		

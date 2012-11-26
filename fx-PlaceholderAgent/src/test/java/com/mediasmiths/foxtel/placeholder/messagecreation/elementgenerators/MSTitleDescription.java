@@ -63,7 +63,7 @@ public class MSTitleDescription {
 		return showTitles[random.nextInt(showTitles.length)];
 	}
 
-	private String getEpisodeTitle() {
+	public String getEpisodeTitle() {
 		return episodeTitles[random.nextInt(episodeTitles.length)];
 	}
 

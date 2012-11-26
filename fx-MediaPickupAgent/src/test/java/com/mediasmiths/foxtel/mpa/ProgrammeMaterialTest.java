@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa;
 
-import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
@@ -140,7 +139,6 @@ public class ProgrammeMaterialTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 
 		Properties overridenProperties = new Properties();
-		overridenProperties.put(MESSAGE_PATH, messagePath);
 		overridenProperties.put(ARDOME_IMPORT_FOLDER,
 				ardomeImportFolder);
 		overridenProperties.put(ARDOME_EMERGENCY_IMPORT_FOLDER,

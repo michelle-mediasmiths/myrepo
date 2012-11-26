@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
@@ -12,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -24,21 +27,22 @@ public class Importer implements Runnable {
 
 	private final PendingImportQueue pendingImports;
 
-	private final String targetFolder;
+	// private final String targetFolder;
+	private final WatchFolders watchFolders; // contains source to destination
+												// mappings for delivery
 	private final int deliveryAttemptsToMake;
 
 	private final EventService eventService;
 
 	@Inject
-	public Importer(
-			PendingImportQueue pendingImports,
-			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
+	public Importer(PendingImportQueue pendingImports,
+			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			EventService eventService) {
 		this.pendingImports = pendingImports;
-		this.targetFolder = targetFolder;
+		this.watchFolders = watchFolders;
 		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
-		this.eventService=eventService;
+		this.eventService = eventService;
 	}
 
 	@Override
@@ -49,7 +53,15 @@ public class Importer implements Runnable {
 			try {
 				PendingImport pi = pendingImports.take();
 				logger.info("Picked up an import");
-				deliver(pi, 1);
+
+				try {
+					deliver(pi, 1);
+				} catch (Exception e) {
+					logger.error(String.format(
+							"Error delivering pending file %s", pi
+									.getMediaFile().getAbsolutePath()), e);
+				}
+
 				logger.trace("Finished with import");
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
@@ -79,6 +91,8 @@ public class Importer implements Runnable {
 		}
 
 		File src = pi.getMediaFile();
+		
+		String targetFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(pi.getMediaFile().getAbsolutePath()));
 		File dst = new File(targetFolder, pi.getMaterialEnvelope()
 				.getMasterID() + ".mxf");
 
@@ -104,7 +118,8 @@ public class Importer implements Runnable {
 		}
 
 		src = pi.getMaterialEnvelope().getFile();
-		dst = new File(MessageProcessor.getArchivePathForFile(src.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
+		dst = new File(MessageProcessor.getArchivePathForFile(src
+				.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
 
 		logger.debug(String.format("Attempting to move from %s to %s",
@@ -140,10 +155,13 @@ public class Importer implements Runnable {
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
 			File src = pi.getMediaFile();
-			String quarrentineFolder = MessageProcessor.getFailureFolderForFile(src);
-			File baseDestination = new File(quarrentineFolder, pi.getMaterialEnvelope()
-					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "mxf");
-			File dst = new File(MessageProcessor.getDestinationPathForFileMove(baseDestination, quarrentineFolder, true));			
+			String quarrentineFolder = MessageProcessor
+					.getFailureFolderForFile(src);
+			File baseDestination = new File(quarrentineFolder, pi
+					.getMaterialEnvelope().getMasterID()
+					+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
+			File dst = new File(MessageProcessor.getDestinationPathForFileMove(
+					baseDestination, quarrentineFolder, true));
 
 			try {
 				FileUtils.moveFile(src, dst);

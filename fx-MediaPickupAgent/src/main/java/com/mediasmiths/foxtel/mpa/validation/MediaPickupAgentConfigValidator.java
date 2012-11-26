@@ -1,10 +1,7 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.IS_AO_AGENT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
@@ -25,27 +22,17 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 	
 	@Inject
 	public MediaPickupAgentConfigValidator(
-			@Named(MESSAGE_PATH) String messagePath,
-			@Named(ARDOME_IMPORT_FOLDER) String importFolder,
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount,
-			@Named(IS_AO_AGENT) Boolean isAOAgent,
 			@Named(MXF_NOT_TOUCHED_PERIOD) String mxfNotTouched,
 			@Named(XML_NOT_TOUCHED_PERIOD) String xmlNotTouched
 			)
 			throws ConfigValidationFailureException {
-		super(messagePath);
+		super();
 
 		boolean anyFailures = false;
-
-		if (haveReadWritePermissions(importFolder)) {
-			configValidationPasses(ARDOME_IMPORT_FOLDER, importFolder);
-		} else {
-			anyFailures = true;
-			configValidationFails(ARDOME_IMPORT_FOLDER, importFolder);
-		}
 
 		if (haveReadWritePermissions(emergencyImportFolder)) {
 			configValidationPasses(ARDOME_EMERGENCY_IMPORT_FOLDER,

@@ -90,8 +90,8 @@ public abstract class PlaceHolderMessageShortTest
 
 	protected String receiptFolderPath;
 
-	protected final static GregorianCalendar JAN1st = new GregorianCalendar(2000, 1, 1, 0, 0, 1);
-	protected final static GregorianCalendar JAN10th = new GregorianCalendar(2000, 1, 10, 0, 0, 1);
+	protected final static GregorianCalendar JAN1st = new GregorianCalendar(2012, 1, 1, 0, 0, 1);
+	protected final static GregorianCalendar JAN10th = new GregorianCalendar(2014, 1, 10, 0, 0, 1);
 
 	public PlaceHolderMessageShortTest()
 	{

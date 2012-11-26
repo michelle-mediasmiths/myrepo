@@ -1,9 +1,12 @@
 package com.mediasmiths.foxtel.agent.queue;
 
-import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.WatchEvent;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.FalseFileFilter;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.apache.log4j.Logger;
@@ -22,11 +26,14 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.FileWatcher.DirectoryWatcher;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 
 public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		Runnable {
 
-	private final List<String> paths;
+	private final WatchFolders watchFolders;
+	private final List<String> sourcePaths;
 	private final FilesPendingProcessingQueue filePathsPendingValidation;
 
 	private static Logger logger = Logger
@@ -35,10 +42,16 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	@Inject
 	public DirectoryWatchingQueuer(
 			FilesPendingProcessingQueue filePathsPendingValidation,
-			@Named("watchfolder.locations") List<String> paths) {
+			@Named("watchfolder.locations") WatchFolders paths) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
-		this.paths = paths;
+		this.watchFolders = paths;
 		setFormatCheck(true);
+		
+		sourcePaths = new ArrayList<String>();
+		for(WatchFolder wf : watchFolders){
+			sourcePaths.add(wf.getSource());
+		}
+		
 	}
 
 	@Override
@@ -65,8 +78,8 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		// for new ones
 		queueExistingFiles();
 
-		try {
-			this.start(paths, false);
+		try {	
+			this.start(sourcePaths, false);
 		} catch (IOException e) {
 			logger.fatal("Failed to register watch service", e);
 		}
@@ -78,7 +91,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	 */
 	protected void queueExistingFiles() {
 
-		for (String path : paths) {
+		for (String path : sourcePaths) {
 			logger.info("Checking for existing files in " + path);
 
 			// first of all look for existing xml files before we start
@@ -90,6 +103,15 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 
 			for (File f : existingFilesList) {
 				logger.info("Queuing existing file: " + f.getAbsolutePath());
+				
+				Path p = FileSystems.getDefault().getPath(f.getAbsolutePath());
+				
+				if (!Files.isDirectory(p, NOFOLLOW_LINKS)) {
+					if (!unfinishedArrivals.contains(p)) {
+						unfinishedArrivals.add(p);
+					}
+				}
+				
 				filePathsPendingValidation.add(f.getAbsolutePath());
 			}
 		}
@@ -132,7 +154,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	private Collection<File> listFiles(String path) {
 		logger.debug("Listing files in " + path);
 		Collection<File> existingFiles = FileUtils.listFiles(new File(path),
-				getExistingFilesFilter(), TrueFileFilter.INSTANCE);
+				getExistingFilesFilter(), FalseFileFilter.INSTANCE); //dont recurse
 		return existingFiles;
 	}
 

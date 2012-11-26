@@ -6,6 +6,8 @@ import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_ENDPOINT;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
@@ -21,6 +23,8 @@ public class MayamClientModule extends AbstractModule
 
 	public final static String SETUP_TASKS_CLIENT = "SETUP_TASKS_CIENT";
 	
+	private final static Logger log = Logger.getLogger(MayamClientModule.class);
+	
 	@Override
 	protected void configure()
 	{
@@ -35,6 +39,9 @@ public class MayamClientModule extends AbstractModule
 	@Named(SETUP_TASKS_CLIENT)
 	public TasksClient getSetupTasksClient(TasksClient tc,@Named(MAYAM_ENDPOINT) String endpoint,
 			@Named(MAYAM_AUTH_TOKEN) String token) throws MalformedURLException{
+		
+		log.info(String.format("Using mayam endpoint %s and auth token %s", endpoint,token));
+		
 		URL url = new URL(endpoint);
 		return tc.setup(url, token);
 	}

@@ -258,7 +258,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		titleDescription.setProgrammeTitle(programTitle);
 		Random randomGenerator = new Random();
 		titleDescription.setProductionNumber(Integer.toString(randomGenerator.nextInt(50)));
-		titleDescription.setEpisodeTitle("EpisodeTitle");
+		titleDescription.setEpisodeTitle(new MSTitleDescription().getEpisodeTitle());
 		titleDescription.setSeriesNumber(new BigInteger(Integer.toString(randomGenerator.nextInt(6))));
 		titleDescription.setEpisodeNumber(new BigInteger(Integer.toString(randomGenerator.nextInt(12))));
 		titleDescription.setYearOfProduction(new BigInteger("2004"));
@@ -278,7 +278,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		ChannelType channel = new ChannelType();
 		
 		licenseHolder.setOrganisationID("FOXTEL");
-		licenseHolder.setOrganisationName("Foxtel ManagementPty Ltd");
+		licenseHolder.setOrganisationName("Foxtel");
 		license.setLicenseHolder(licenseHolder);
 		
 		XMLGregorianCalendar startDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(JAN1st);

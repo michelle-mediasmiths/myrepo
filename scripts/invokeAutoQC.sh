@@ -20,7 +20,7 @@ print_help(){
 
 
 #set default values
-muleurl=http://localhost:9085/qc
+muleurl=http://localhost:8088/qc
 assetID=testAssetID
 isTX=false
 

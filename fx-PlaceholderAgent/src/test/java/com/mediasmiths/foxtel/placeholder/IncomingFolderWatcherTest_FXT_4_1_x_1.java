@@ -17,6 +17,8 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.messagetests.ResultLogger;
@@ -95,7 +97,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				Collections.<String>singletonList(watchFolderPath));
+			new WatchFolders(Collections.<String>singletonList(watchFolderPath)));
 		toTest.setSleepTime(100l);
 
 		// start watcher
@@ -126,7 +128,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 		logger.info("Starting FXT_4_1_x_1  The XML file is discovered");
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				Collections.<String>singletonList(watchFolderPath));
+				new WatchFolders(Collections.<String>singletonList(watchFolderPath)));
 		
 		logger.trace("testNewFilesAreQueued enter");
 		toTest.setSleepTime(10l);
@@ -193,7 +195,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 			IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
-				Collections.<String>singletonList(watchFolderPath));
+				new WatchFolders(Collections.<String>singletonList(watchFolderPath)));
 		toTest.setSleepTime(100l);
 
 		// start watcher

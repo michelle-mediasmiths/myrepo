@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
@@ -7,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
@@ -15,10 +17,10 @@ public class SingleImporter extends Importer {
 
 	@Inject
 	public SingleImporter(PendingImportQueue pendingImports,
-			@Named(ARDOME_IMPORT_FOLDER) String targetFolder,
+			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			EventService event) {
-		super(pendingImports, targetFolder, deliveryAttemptsToMake, event);
+		super(pendingImports, watchFolders, deliveryAttemptsToMake, event);
 	}
 
 	private static Logger logger = Logger.getLogger(SingleImporter.class);

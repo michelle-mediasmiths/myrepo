@@ -11,7 +11,6 @@ public final class MediaPickupConfig {
 	public static final String MEDIA_COMPANION_TIMEOUT = "media.companion.timeout";
 	public static final String UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES = "media.unmatched.timebetweenpurges";
 	public static final String DELIVERY_ATTEMPT_COUNT = "media.delivery.attempt.count";
-	public static final String IS_AO_AGENT = "media.pick.ao";
 	public static final String MXF_NOT_TOUCHED_PERIOD = "media.mxf.not.touched.time";
 	public static final String XML_NOT_TOUCHED_PERIOD = "media.xml.not.touched.time";
 

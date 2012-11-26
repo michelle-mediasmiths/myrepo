@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
-import static com.mediasmiths.foxtel.agent.Config.MESSAGE_PATH;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIOD;
 
@@ -15,6 +14,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 
@@ -24,7 +25,7 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer {
 	
 	@Inject
 	public MaterialFolderWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named("watchfolder.locations") List<String> paths,
+			FilesPendingProcessingQueue filePathsPendingValidation, @Named("watchfolder.locations") WatchFolders paths,
 			@Named(MXF_NOT_TOUCHED_PERIOD) Long mxfNotTouchedPeriod,
 			@Named(XML_NOT_TOUCHED_PERIOD) Long xmlNotTouchedPeriod) {
 		super(filePathsPendingValidation, paths);

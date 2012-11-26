@@ -90,6 +90,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 						"Message processing failed for %s and reason %s",
 						filePath, e.getReason()), e);
 				
+				//TODO send failure reason along with xml
 				eventService.saveEvent("error", message);
 				
 				throw e;
