@@ -55,21 +55,21 @@ public class MayamPackageController extends MayamController
 		if (txPackage != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, txPackage.getPresentationID());
+			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
 
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
 			AttributeMap material;
 			try {
 				material = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
 				if (material != null) {
-					boolean isProtected = material.getAttribute(Attribute.AUX_FLAG);
-					attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, isProtected);
+					boolean isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
+					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
 					
-					boolean adultOnly = material.getAttribute(Attribute.APP_FLAG);
-					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, adultOnly);
+					boolean adultOnly = material.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, adultOnly);
 					
-					material.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					client.assetApi().updateAsset(material);
 				}
 			} catch (RemoteException e1) {
@@ -80,7 +80,7 @@ public class MayamPackageController extends MayamController
 			// TODO: Any need to store number of segments?
 			// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
-			attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+			attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 			attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
 			attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
@@ -141,12 +141,12 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, txPackage.getMaterialID());
+				attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 
 				// TODO: Any need to store number of segments?
 				// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
 
-				attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, txPackage.getClassification().toString());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 				attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
 				attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
@@ -301,7 +301,7 @@ public class MayamPackageController extends MayamController
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
 				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 	
-				taskAttributes.setAttribute(Attribute.ASSET_ID, presentationID);
+				taskAttributes.setAttribute(Attribute.HOUSE_ID, presentationID);
 				taskAttributes.putAll(assetAttributes);
 				client.taskApi().createTask(taskAttributes);
 			}
@@ -382,8 +382,8 @@ public class MayamPackageController extends MayamController
 		PackageType pt = new PackageType();
 		AttributeMap attributes = getPackageAttributes(packageID);
 
-		pt.setPresentationID((String) attributes.getAttribute(Attribute.ASSET_ID));
-		String classfication = (String) attributes.getAttribute(Attribute.AUX_VAL);
+		pt.setPresentationID((String) attributes.getAttribute(Attribute.HOUSE_ID));
+		String classfication = (String) attributes.getAttribute(Attribute.CONT_CLASSIFICATION);
 		if (classfication != null)
 		{
 			pt.setClassification(ClassificationEnumType.valueOf(classfication));
@@ -405,7 +405,7 @@ public class MayamPackageController extends MayamController
 			log.error(String.format("package %s has null presentationFormat", packageID));
 		}
 
-		pt.setMaterialID("" + attributes.getAttribute(Attribute.ASSET_PARENT_ID));
+		pt.setMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
 
 		// TODO: fetch segment information
 		// TODO : pt.setNotes ?
@@ -431,7 +431,7 @@ public class MayamPackageController extends MayamController
 		try {
 			packageMap = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 			if (packageMap != null) {
-				isProtected = packageMap.getAttribute(Attribute.AUX_FLAG);
+				isProtected = packageMap.getAttribute(Attribute.PURGE_PROTECTED);
 			}
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while checking Protected status of Package : " + presentationID);
