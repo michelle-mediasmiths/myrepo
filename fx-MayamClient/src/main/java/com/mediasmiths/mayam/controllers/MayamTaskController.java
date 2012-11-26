@@ -62,7 +62,7 @@ public class MayamTaskController extends MayamController{
 			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.toString());
 			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetID);
+			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, assetID);
 			attributes.copyAttributes(assetAttributes);
 
 			if (!attributesValid)
@@ -102,7 +102,7 @@ public class MayamTaskController extends MayamController{
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
-		criteria.getFilterEqualities().setAttribute(Attribute.ASSET_ID, id);
+		criteria.getFilterEqualities().setAttribute(Attribute.HOUSE_ID, id);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try {
@@ -141,8 +141,8 @@ public class MayamTaskController extends MayamController{
 	private AttributeMap updateAccessRights(AttributeMap task)
 	{
 		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
-		String assetId = task.getAttribute(Attribute.ASSET_ID);
-		boolean purgeProtected = task.getAttribute(Attribute.AUX_FLAG);
+		String assetId = task.getAttribute(Attribute.HOUSE_ID);
+		boolean purgeProtected = task.getAttribute(Attribute.PURGE_PROTECTED);
 		
 		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
 		
@@ -181,22 +181,16 @@ public class MayamTaskController extends MayamController{
 		else if (contentCategory.toUpperCase().equals("PUBLICITY")) {
 			contentType = "Publicity";
 		}
-		
-		//TODO: Add new adult only attribute once created by Mayam
-		boolean adultOnly = false;
-		//boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-		
-		//TODO: Add new qc parallel attribute once created by Mayam
-		boolean qcParallel = false;
-		//boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-		
+
+		boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+		boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
 
 		TaskState qaStatus = null;
 		
 		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-		filterEqualities.setAttribute(Attribute.ASSET_ID, assetId);
+		filterEqualities.setAttribute(Attribute.HOUSE_ID, assetId);
 		FilterCriteria criteria = new FilterCriteria();
 		criteria.setFilterEqualities(filterEqualities);
 		FilterResult existingTasks;
