@@ -1,9 +1,7 @@
 package com.mediasmiths.mayam;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +9,6 @@ import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;

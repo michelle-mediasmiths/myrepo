@@ -1,5 +1,4 @@
 package com.mediasmiths.mayam.validation;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -12,6 +11,8 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
@@ -32,7 +33,7 @@ public class MayamValidatorImpl implements MayamValidator {
 	 * @see com.mediasmiths.mayam.validation.MayamValidator#validateMaterialBroadcastDate(javax.xml.datatype.XMLGregorianCalendar, java.lang.String)
 	 */
 	@Override
-	public boolean validateMaterialBroadcastDate(XMLGregorianCalendar targetDate, String materialID) throws MayamClientException 
+	public boolean validateMaterialBroadcastDate(XMLGregorianCalendar targetDate, String materialID, String channelTag) throws MayamClientException 
 	{
 		boolean isValid = true;
 		AttributeMap material = null;
@@ -43,9 +44,7 @@ public class MayamValidatorImpl implements MayamValidator {
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
 		if (material != null) {
-			String parentID = "";
-			// TODO: retrieve parentID from material
-			// parentID = material.getAttribute(Attribute.);
+			String parentID = material.getAttribute(Attribute.PARENT_HOUSE_ID);
 			AttributeMap title = null;
 			
 			try {
@@ -56,17 +55,28 @@ public class MayamValidatorImpl implements MayamValidator {
 			}
 			
 			if (title != null) {
-				//TODO: Retrieve the channel license date information from the title attributes
-				GregorianCalendar calendar = new GregorianCalendar();
-				XMLGregorianCalendar licenseStartDate = null;
-				XMLGregorianCalendar licenseEndDate = null;
-				try {
-					licenseStartDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-					licenseEndDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-				} catch (DatatypeConfigurationException e) {
-					return false;
+				GenericTable mediaRights = title.getAttribute(Attribute.MEDIA_RIGHTS);
+				if (mediaRights != null) {
+					List<Row> rows = mediaRights.getRows();
+					if (rows != null) {
+						for (int i = 0; i < rows.size(); i++) 
+						{
+							String channel = rows.get(i).get(5);
+							if (channel.equals(channelTag))
+							{
+								XMLGregorianCalendar licenseStartDate = null;
+								XMLGregorianCalendar licenseEndDate = null;
+								try {
+									licenseStartDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(rows.get(i).get(2));
+									licenseEndDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(rows.get(i).get(3));
+								} catch (DatatypeConfigurationException e) {
+									return false;
+								}
+								isValid = (licenseStartDate.compare(targetDate) == DatatypeConstants.LESSER) && (licenseEndDate.compare(targetDate) == DatatypeConstants.GREATER);
+							}
+						}
+					}
 				}
-				isValid = (licenseStartDate.compare(targetDate) == DatatypeConstants.LESSER) && (licenseEndDate.compare(targetDate) == DatatypeConstants.GREATER);
 			}
 		}
 		return isValid;
@@ -89,7 +99,7 @@ public class MayamValidatorImpl implements MayamValidator {
 		}
 		for (AttributeMap material: materials) 
 		{
-			String materialID = material.getAttribute(Attribute.ASSET_ID);
+			String materialID = material.getAttribute(Attribute.HOUSE_ID);
 			
 			List<AttributeMap> packages = null;
 			try {

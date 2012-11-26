@@ -1,6 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -23,12 +23,13 @@ import com.mayam.wf.attributes.shared.type.*;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
-import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -542,27 +543,84 @@ public class MayamMaterialController extends MayamController
 		source.setCompile(compile);
 		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
 
-		// TODO : handle source tape info
-		// Library library = new Library();
-		// source.setLibrary(library);
+		Library library = new Library();
+		IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS);
+		String[] tapeIdsArrays = (String[]) tapeIds.toArray();
+		ArrayList<TapeType> tapeList = new ArrayList<TapeType>();
+		for (int i = 0; i < tapeIdsArrays.length; i++)
+		{
+			TapeType tape = new TapeType();
+			tape.setLibraryID(tapeIdsArrays[i]);
+			tapeList.add(tape);
+		}
+		library.withTape(tapeList);
+		source.setLibrary(library);
 
 		return material;
-
 	}
 	
 	public com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType getMaterialType(String materialID){
 		AttributeMap attributes = getMaterialAttributes(materialID);
 		
-		//TODO get field to check for marketing material / programme material
-		boolean isProgrammeMaterial = true;
-//		if(isProgrammeMaterial){
-//			return getProgrammeMaterial(materialID);
-//		}
-//		
-		
-		return getProgrammeMaterial(materialID);
+		//IF revision ID exists then the asset has associated Segment data making it Programme material rather than Marketing Material
+		String revisionID = attributes.getAttribute(Attribute.REVISION_ID);
+		if (revisionID == null || revisionID.equals(""))
+		{
+			return getMarketingMaterial(materialID);
+		}
+		else {
+			return getProgrammeMaterial(materialID);
+		}
 	}
+	/**
+	 * Returns the MarketingMaterialType representation of a material, does not include media type or packages
+	 * @param materialID
+	 * @return
+	 */
+	public MarketingMaterialType getMarketingMaterial(String materialID)
+	{
+		AttributeMap attributes = getMaterialAttributes(materialID);
+		MarketingMaterialType mmt = new MarketingMaterialType();
 
+		if (checkAttributeValid(attributes, Attribute.CONT_RESTRICTED_MATERIAL, materialID, "Adult only", Boolean.class))
+		{
+			mmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
+		}
+
+		if (checkAttributeValid(attributes, Attribute.CONT_ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
+		{
+			mmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
+		}
+
+		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS); 
+		if (audioTrackList != null) 
+		{
+			AudioTracks audioTracks = new AudioTracks();
+			for (int i = 0; i < audioTrackList.size(); i++)
+			{
+				AudioTrack track = audioTrackList.get(i);
+				Track newTrack = new Track();
+				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(track.getEncoding().toString()));
+				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
+				newTrack.setTrackNumber(track.getNumber());
+				audioTracks.getTrack().add(newTrack);
+			}
+			mmt.setAudioTracks(audioTracks);
+		}
+
+		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
+		{
+			mmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
+		}
+
+		if (!attributes.getAttribute(Attribute.HOUSE_ID).equals(materialID))
+		{
+			log.error("unexpected asset id for material " + materialID);
+		}
+		
+		return mmt;
+	}
+	
 	/**
 	 * Returns the ProgrammeMaterialType representation of a material, does not include media type or packages
 	 * @param materialID
@@ -585,8 +643,21 @@ public class MayamMaterialController extends MayamController
 			pmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
 		}
 
-		// TODO audio tracks
-		// pmt.setAudioTracks(value);
+		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS); 
+		if (audioTrackList != null) 
+		{
+			AudioTracks audioTracks = new AudioTracks();
+			for (int i = 0; i < audioTrackList.size(); i++)
+			{
+				AudioTrack track = audioTrackList.get(i);
+				Track newTrack = new Track();
+				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(track.getEncoding().toString()));
+				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
+				newTrack.setTrackNumber(track.getNumber());
+				audioTracks.getTrack().add(newTrack);
+			}
+			pmt.setAudioTracks(audioTracks);
+		}
 
 		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
 		{
@@ -600,8 +671,26 @@ public class MayamMaterialController extends MayamController
 
 		pmt.setMaterialID(materialID);
 
-		//TODO segmentation types
-		//pmt.setOriginalConform(value);
+		try {
+			String revisionID = attributes.getAttribute(Attribute.REVISION_ID);
+			SegmentList list = client.segmentApi().getSegmentList(revisionID);
+
+			List<Segment> segList = list.getEntries();
+			SegmentationType segmentation = new SegmentationType();
+			for (int i = 0; i < segList.size(); i++)
+			{
+				Segment segment = segList.get(i);
+				SegmentationType.Segment newSegment = new SegmentationType.Segment();
+				newSegment.setDuration(segment.getDuration().toString());
+				newSegment.setSegmentNumber(segment.getNumber());
+				newSegment.setSegmentTitle(segment.getTitle());
+				segmentation.getSegment().add(newSegment);
+			}
+			pmt.setOriginalConform(segmentation);
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while retrieving Segmentation data for Material : " + materialID);
+			e.printStackTrace();
+		}
 		
 		return pmt;
 	}

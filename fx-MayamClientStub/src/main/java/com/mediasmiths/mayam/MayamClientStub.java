@@ -1,9 +1,6 @@
 package com.mediasmiths.mayam;
 
-import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -13,10 +10,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
-import org.omg.CORBA.OMGVMCID;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
@@ -40,7 +35,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileFormatEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -486,7 +480,6 @@ public class MayamClientStub implements MayamClient
 
 		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
 		{
-			Random randomGenerator = new Random();
 			PackageType pack = new PackageType();
 			pack.setMaterialID(EXISTING_MATERIAL_ID);
 			PresentationFormatType format = buildPresentationFormat("SD");

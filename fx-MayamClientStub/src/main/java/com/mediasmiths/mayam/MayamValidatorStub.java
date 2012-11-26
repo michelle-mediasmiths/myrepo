@@ -8,7 +8,7 @@ public class MayamValidatorStub implements MayamValidator
 {
 
 	@Override
-	public boolean validateMaterialBroadcastDate(XMLGregorianCalendar targetDate, String materialID) throws MayamClientException
+	public boolean validateMaterialBroadcastDate(XMLGregorianCalendar targetDate, String materialID, String channelTag) throws MayamClientException
 	{
 		return true;
 	}
