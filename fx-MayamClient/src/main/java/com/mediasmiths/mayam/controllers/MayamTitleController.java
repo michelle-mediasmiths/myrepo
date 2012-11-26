@@ -19,12 +19,18 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AudioTrack;
+import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
+import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -49,7 +55,7 @@ public class MayamTitleController extends MayamController{
 		if (title != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
 			
 			
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle()); 
@@ -62,34 +68,39 @@ public class MayamTitleController extends MayamController{
 			if(title.getEpisodeNumber() != null)
 			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
 			
-			attributesValid &= attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+			attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-			attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+			attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
 			
-			//TODO: Rights attributes are not the ideal location for distributor values
+			//Foxtel and Mayam have agreed that Distributer ID does not need to be stored as Name is suitable enough
 			Distributor distributor = title.getDistributor();
 			if (distributor != null) {
-				attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-				attributesValid &= attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+				//attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+				attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
 			}
 			
-			//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
-/*			MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
-			Object additionalMarketingMaterial = marketingMaterial.getAdditionalMarketingDetail();
-			marketingMaterial.getAspectRatio();
-			marketingMaterial.getDuration();
-			marketingMaterial.getFirstFrameTimecode();
-			marketingMaterial.getFormat();
-			marketingMaterial.getLastFrameTimecode();
+			MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
+			attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
+			
+			//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
+			//marketingMaterial.getDuration();
+			//marketingMaterial.getFirstFrameTimecode();
+			//marketingMaterial.getLastFrameTimecode();
+			
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
 			
 			AudioTracks audioTracks = marketingMaterial.getAudioTracks();
 			List<Track> tracks = audioTracks.getTrack();
+			AudioTrackList audioTrackList = new AudioTrackList();
 			for (int i = 0; i < tracks.size(); i++) {
+				AudioTrack audioTrack = new AudioTrack();
 				Track track = tracks.get(i);
-				track.getTrackNumber();
-				track.getTrackName().toString();
-				track.getTrackEncoding().toString();
-			}*/
+				audioTrack.setNumber(track.getTrackNumber());
+				audioTrack.setName(track.getTrackName().toString());
+				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+				audioTrackList.add(audioTrack);
+			}
+			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			
 			if (!attributesValid) {
 				log.warn("Title created but one or more attributes were invalid");
@@ -172,8 +183,8 @@ public class MayamTitleController extends MayamController{
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 		
-				attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());	
-				attributesValid &= attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+				attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());	
+				attributesValid &= attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
 				
 				attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
 				if(titleDescription.getSeriesNumber() != null)
@@ -183,13 +194,13 @@ public class MayamTitleController extends MayamController{
 				if(titleDescription.getEpisodeNumber() != null)
 				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 				
-				attributesValid &= attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+				attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
 				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-				attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+				attributesValid &= attributes.setAttribute(Attribute.LOCATION, titleDescription.getCountryOfProduction());
 				
-				attributesValid &= attributes.setAttribute(Attribute.OP_FLAG, title.isRestrictAccess());
-				attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+				attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
+				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 				
 				if (!attributesValid) {
 					log.warn("Title created but one or more attributes were invalid");
@@ -247,34 +258,38 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
 					
-					attributesValid &= attributes.setAttribute(Attribute.AUX_ID, title.getProductionNumber());
+					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
-					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, title.getCountryOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
 					
-					//TODO: Rights attributes are not the ideal location for distributor values
 					Distributor distributor = title.getDistributor();
 					if (distributor != null) {
-						attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
-						attributesValid &= attributes.setAttribute(Attribute.RIGHTS_SUMMARY, title.getDistributor().getDistributorName());
+						//attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
+						attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
 					}
 					
-					//TODO: Is marketing material required in Title? Most of these attributes seem more in keeping with Material
-		/*			MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
-					Object additionalMarketingMaterial = marketingMaterial.getAdditionalMarketingDetail();
-					marketingMaterial.getAspectRatio();
-					marketingMaterial.getDuration();
-					marketingMaterial.getFirstFrameTimecode();
-					marketingMaterial.getFormat();
-					marketingMaterial.getLastFrameTimecode();
+					MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
+					attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
+					
+					//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
+					//marketingMaterial.getDuration();
+					//marketingMaterial.getFirstFrameTimecode();
+					//marketingMaterial.getLastFrameTimecode();
+					
+					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
 					
 					AudioTracks audioTracks = marketingMaterial.getAudioTracks();
 					List<Track> tracks = audioTracks.getTrack();
+					AudioTrackList audioTrackList = new AudioTrackList();
 					for (int i = 0; i < tracks.size(); i++) {
+						AudioTrack audioTrack = new AudioTrack();
 						Track track = tracks.get(i);
-						track.getTrackNumber();
-						track.getTrackName().toString();
-						track.getTrackEncoding().toString();
-					}*/
+						audioTrack.setNumber(track.getTrackNumber());
+						audioTrack.setName(track.getTrackName().toString());
+						audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+						audioTrackList.add(audioTrack);
+					}
+					attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 					
 					if (!attributesValid) {
 						returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
@@ -368,34 +383,34 @@ public class MayamTitleController extends MayamController{
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					}
 
-					attributesValid &=attributes.setAttribute(Attribute.AUX_SRC, titleDescription.getShow());
+					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
 					
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
 					
-					attributesValid &= attributes.setAttribute(Attribute.AUX_ID, titleDescription.getProductionNumber());
+					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 					attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
-					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, titleDescription.getCountryOfProduction());
+					attributesValid &= attributes.setAttribute(Attribute.LOCATION, titleDescription.getCountryOfProduction());
 					
-					attributesValid &= attributes.setAttribute(Attribute.APP_FLAG, title.isRestrictAccess());
+					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
 					
 					boolean isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
 					if (isProtected != title.isPurgeProtect()){
-						attributesValid &= attributes.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 						try {
 							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.MATERIAL.getAssetType());
 							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.PACKAGE.getAssetType());
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
-								material.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								material.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 								client.assetApi().updateAsset(material);
 							}
 							for (int i = 0; i < packages.size(); i++) {
 								AttributeMap packageMap = packages.get(i);
-								packageMap.setAttribute(Attribute.AUX_FLAG, title.isPurgeProtect());
+								packageMap.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 								client.assetApi().updateAsset(packageMap);
 							}
 						} catch (RemoteException e) {
@@ -509,7 +524,7 @@ public class MayamTitleController extends MayamController{
 		try {
 			title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (title != null) {
-				isProtected = title.getAttribute(Attribute.AUX_FLAG);
+				isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 			}
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID);
