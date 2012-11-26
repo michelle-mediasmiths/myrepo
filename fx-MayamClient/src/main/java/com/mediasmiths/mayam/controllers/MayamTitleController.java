@@ -470,7 +470,7 @@ public class MayamTitleController extends MayamController{
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
 				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 	
-				taskAttributes.setAttribute(Attribute.ASSET_ID, title.getTitleID());
+				taskAttributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
 				taskAttributes.putAll(assetAttributes);
 				client.taskApi().createTask(taskAttributes);
 			}

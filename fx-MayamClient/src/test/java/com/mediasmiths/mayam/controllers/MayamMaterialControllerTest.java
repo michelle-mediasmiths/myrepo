@@ -29,7 +29,6 @@ import com.mayam.wf.ws.client.AssetApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 
@@ -65,7 +64,7 @@ public class MayamMaterialControllerTest {
 		client = mock(TasksClient.class);
 		assetApi = mock(AssetApi.class);
 		when(client.assetApi()).thenReturn(assetApi);
-		controller = new MayamMaterialController(client, new DateUtil());
+		controller = new MayamMaterialController(client);
 		
 		material = mock(MaterialType.class);
 		when(material.getMaterialID()).thenReturn("");
