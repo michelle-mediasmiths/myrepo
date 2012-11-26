@@ -471,22 +471,15 @@ public class MayamClientStub implements MayamClient
 
 	}
 
-	@Override
-	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
-	{
-		try
-		{
-			log.info(String.format("Transferring material %s to location %s", materialID, location.toString()));
-			// TODO remove hardcoded path!
-			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(location));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
-		}
-	}
 
+	@Override
+	public String pathToMaterial(String materialID) throws MayamClientException
+	{
+		// TODO implement!
+		
+		return "/path/to/file";
+	}
+	
 	@Override
 	public PackageType getPackage(String packageID) throws MayamClientException
 	{

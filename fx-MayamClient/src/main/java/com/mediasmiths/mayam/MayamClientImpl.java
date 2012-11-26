@@ -451,21 +451,11 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException
+	public String pathToMaterial(String materialID) throws MayamClientException
 	{
-		// TODO this method is not really required, but rather we ask mayam for the location of high res media and operate on it directly
+		// TODO implelment!
 		
-		
-		try
-		{
-			log.info(String.format("Transferring material %s to location %s", materialID, location.toString()));
-			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(location));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
-		}
+		return "/path/to/file";
 	}
 
 	@Override

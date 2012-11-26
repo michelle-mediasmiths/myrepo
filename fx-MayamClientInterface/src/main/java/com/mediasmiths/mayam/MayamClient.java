@@ -78,19 +78,11 @@ public interface MayamClient
 	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException;
 
 	/**
-	 * transfers the specified material's media to the requested location
-	 * 
-	 * location will include a filename eg file:///path/to/destination/materialid.mxf
-	 * 
-	 * will only work for compound media (eg mxf op1a) but that is the format that media will be delivered from partners
-	 * 
-	 * should this be blocking or non blocking? it depends on how mayam implement the actual transfer
-	 * 
 	 * @param materialID
 	 * @param location
 	 * @return
 	 */
-	public void transferMaterialToLocation(String materialID, URI location) throws MayamClientException;
+	public String pathToMaterial(String materialID) throws MayamClientException;
 
 	PackageType getPackage(String packageID) throws MayamClientException;
 
