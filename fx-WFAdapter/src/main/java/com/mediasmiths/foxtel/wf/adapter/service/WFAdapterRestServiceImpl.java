@@ -93,22 +93,22 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		final String id = req.getAssetId();
 		// TODO change this to mxf once we have proper profiles
 		final String filename = req.getAssetId() + ".mov";
-		final URI destination;
 		File destinationFile;
 
 		if (req.isForTXDelivery())
 		{
 			// for tx delivery we return the location of transcoded package
-			destination = materialQCLocation.resolve(filename);
+			//TODO locate this using the same logic that will be used to decide transcode output location
+			URI destination = materialQCLocation.resolve(filename);
 
-			// TODO switch this to mxf onces we are creating such!
+			// TODO switch this to gxf once we are creating such!
 			String ret = tcoutputlocation + id + "/" + id + ".mov";
 			destinationFile = new File(ret);
 		}
 		else
 		{
-			destination = materialQCLocation.resolve(filename);
-			mayamClient.transferMaterialToLocation(id, destination);
+//			destination = materialQCLocation.resolve(filename);
+			String destination = mayamClient.pathToMaterial(id);
 
 			destinationFile = new File(destination);
 		}
@@ -202,7 +202,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		mayamClient.transferMaterialToLocation(assetID, destination);
+		
+		//TODO caluclate destination and perform transfer
+//		String path = mayamClient.pathToMaterial(assetID, destination);
 
 		File destinationFile = new File(destination);
 		return new MaterialTransferForTCResponse(destinationFile.getAbsolutePath());

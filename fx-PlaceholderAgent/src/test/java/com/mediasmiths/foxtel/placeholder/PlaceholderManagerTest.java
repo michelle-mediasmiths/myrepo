@@ -59,7 +59,6 @@ import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
 import com.mediasmiths.stdEvents.events.db.entity.Delivery;
-import com.mediasmiths.stdEvents.events.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.LogEntity;
 import com.mediasmiths.stdEvents.events.db.entity.PayloadEntity;
 import com.mediasmiths.stdEvents.events.db.entity.QC;

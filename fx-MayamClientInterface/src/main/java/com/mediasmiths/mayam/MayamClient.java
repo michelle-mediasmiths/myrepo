@@ -80,7 +80,7 @@ public interface MayamClient
 	/**
 	 * @param materialID
 	 * @param location
-	 * @return
+	 * @return 
 	 */
 	public String pathToMaterial(String materialID) throws MayamClientException;
 
