@@ -55,8 +55,8 @@ public class MayamTitleController extends MayamController{
 		if (title != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Episode");
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
-			
 			
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle()); 
 			
@@ -185,7 +185,8 @@ public class MayamTitleController extends MayamController{
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
-		
+				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Episode");
+				
 				attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());	
 				attributesValid &= attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
 				
