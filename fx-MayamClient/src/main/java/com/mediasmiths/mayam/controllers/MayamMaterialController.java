@@ -274,14 +274,14 @@ public class MayamMaterialController extends MayamController
 							if (segment != null) 
 							{
 								ValueList metadata = new ValueList();
-								metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
-								metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+								metadata.add(new ValueList.Entry("DURATION", segment.getDuration())); 
+								metadata.add(new ValueList.Entry("EOM", segment.getEOM())); 
+								metadata.add(new ValueList.Entry("SOM", segment.getSOM())); 
+								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber())); 
+								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
 								
 								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm("Material_Segment"); 
+								listBuilder = listBuilder.metadataForm("Programme"); 
 								listBuilder = listBuilder.metadata(metadata);
 								SegmentList list = listBuilder.build();
 								client.segmentApi().updateSegmentList(revisionID, list);
