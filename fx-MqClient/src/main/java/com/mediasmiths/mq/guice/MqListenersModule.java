@@ -7,7 +7,7 @@ public class MqListenersModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		install(new MayamClientModule());		
+//		install(new MayamClientModule());		
 	}
 
 }

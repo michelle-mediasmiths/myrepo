@@ -2,6 +2,8 @@ package com.mediasmiths.mq;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
@@ -39,22 +41,28 @@ public class MqListeners implements Runnable {
 	Provider<AttributeMessageBuilder> ambp;
 	AtomicBoolean listening = new AtomicBoolean(true);
 	
+	protected final static Logger log = Logger.getLogger(MqListeners.class); 
+	
 	public void run() 
-	{	
+	{
+		log.trace("MqListeners.run() enter");
+		
 		listeners = new ArrayList<Detachable>();
 		attachIncomingListners();
+		
 		while (listening.get()) {
 			mq.listen(ListenIntensity.NORMAL);
 		}
 		
 		shutdown();
+		
+		log.trace("MqListeners.run() return");
 	}
 	
 	@Inject
 	public MqListeners() 
 	{
-		
-
+		log.trace("MqListeners()");
 	}
 	
 	public void stopListening()
@@ -75,6 +83,7 @@ public class MqListeners implements Runnable {
 	
 	public void attachIncomingListners() 
 	{
+		log.info("Attatching listeners");
 		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController));
 		attachListener(MediasmithsDestinations.ASSETS, AssetListener.getInstance(client, taskController));
 	}
@@ -92,6 +101,9 @@ public class MqListeners implements Runnable {
 	}
 
 	public void shutdown() {
+		
+		log.info("Shutting down");
+		
 		listening.set(false);
 		for (int i=0; i < listeners.size(); i++)
 		{

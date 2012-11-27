@@ -39,7 +39,7 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTitleController extends MayamController{
 	private final TasksClient client;
-	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
+	private final static Logger log = Logger.getLogger(MayamTitleController.class);
 	
 	@Inject
 	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
@@ -69,7 +69,9 @@ public class MayamTitleController extends MayamController{
 			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
 			
 			attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
-			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+			
+			if (title.getYearOfProduction() != null)
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR,title.getYearOfProduction().toString());
 			attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
 			
 			//Foxtel and Mayam have agreed that Distributer ID does not need to be stored as Name is suitable enough
@@ -115,8 +117,7 @@ public class MayamTitleController extends MayamController{
 					returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 				}
 			} catch (RemoteException e) {
-				e.printStackTrace();
-				log.error("Exception thrown by Mayam while attempting to create new title asset");
+				log.error("Exception thrown by Mayam while attempting to create new title asset",e);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			}
 		}
@@ -196,7 +197,8 @@ public class MayamTitleController extends MayamController{
 				
 				attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+				if(titleDescription.getYearOfProduction() != null)
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction().toString());
 				attributesValid &= attributes.setAttribute(Attribute.LOCATION, titleDescription.getCountryOfProduction());
 				
 				attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
@@ -215,8 +217,7 @@ public class MayamTitleController extends MayamController{
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 					}
 				} catch (RemoteException e) {
-					e.printStackTrace();
-					log.error("Exception thrown by Mayam while creating new Title assset");
+					log.error("Exception thrown by Mayam while creating new Title assset",e);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -259,7 +260,8 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
-					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction());
+					if( title.getYearOfProduction() != null)
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction().toString());
 					attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
 					
 					Distributor distributor = title.getDistributor();
@@ -302,7 +304,7 @@ public class MayamTitleController extends MayamController{
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
 					} catch (RemoteException e) {
-						e.printStackTrace();
+						log.error("Exception thrown by Mayam while updating Title assset",e);
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 					}
 				}
@@ -392,7 +394,8 @@ public class MayamTitleController extends MayamController{
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 					attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
-					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction());
+					if(titleDescription.getYearOfProduction() != null)
+					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, titleDescription.getYearOfProduction().toString());
 					attributesValid &= attributes.setAttribute(Attribute.LOCATION, titleDescription.getCountryOfProduction());
 					
 					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
@@ -414,8 +417,7 @@ public class MayamTitleController extends MayamController{
 								client.assetApi().updateAsset(packageMap);
 							}
 						} catch (RemoteException e) {
-							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID());
-							e.printStackTrace();
+							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID(),e);
 						}
 					}
 					
@@ -432,8 +434,7 @@ public class MayamTitleController extends MayamController{
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
 					} catch (RemoteException e) {
-						e.printStackTrace();
-						log.error("Exception thrown by Mayam while updating title: " + title.getTitleID());
+						log.error("Exception thrown by Mayam while updating title: " + title.getTitleID(),e);
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 					}
 				}
@@ -484,7 +485,7 @@ public class MayamTitleController extends MayamController{
 			try {
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 			} catch (RemoteException e) {
-				log.error("Error deleting title : "+ title.getTitleID());
+				log.error("Error deleting title : "+ title.getTitleID(),e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
 			}
 
@@ -500,8 +501,7 @@ public class MayamTitleController extends MayamController{
 				titleFound = true;
 			}
 		} catch (RemoteException e1) {
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID,e1);
 		}
 		return titleFound;
 	}
@@ -511,8 +511,7 @@ public class MayamTitleController extends MayamController{
 		try {
 			assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID,e1);
 		}
 		return assetAttributes;
 	}
@@ -527,8 +526,7 @@ public class MayamTitleController extends MayamController{
 				isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 			}
 		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID);
-			e.printStackTrace();
+			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID,e);
 		}
 		return isProtected;
 	}

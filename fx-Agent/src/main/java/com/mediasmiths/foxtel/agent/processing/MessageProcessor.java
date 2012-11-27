@@ -99,12 +99,12 @@ public abstract class MessageProcessor<T> implements Runnable {
 			return getIDFromMessage(envelope);
 
 		} catch (JAXBException e) {
-			logger.fatal("A previously validated file did not unmarshall sucessfully, this is very bad");
+			logger.error("A previously validated file did not unmarshall sucessfully, this is very bad");
 			throw new MessageProcessingFailedException(
 					MessageProcessingFailureReason.UNMARSHALL_FAILED, e);
 		} catch (ClassCastException cce) {
-			logger.fatal(
-					"A prevously validated file did not have an action of one of the expected types",
+			logger.error(
+					"A prevously validated file did not have an action of one of the expected types or a mayam attribute was not of the expected type",
 					cce);
 			throw new MessageProcessingFailedException(
 					MessageProcessingFailureReason.UNKNOWN_ACTION, cce);

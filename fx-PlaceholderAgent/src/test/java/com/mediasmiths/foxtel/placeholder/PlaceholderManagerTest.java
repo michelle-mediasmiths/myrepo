@@ -92,18 +92,18 @@ public abstract class PlaceholderManagerTest {
 		mayamClient = mock(MayamClient.class);
 		mayamValidator = new MayamValidator() {
 			@Override
-			public boolean validateMaterialBroadcastDate(
-					XMLGregorianCalendar targetDate, String materialID)
-					throws MayamClientException {
-				return true;
-			}
-
-			@Override
 			public boolean validateTitleBroadcastDate(String titleID,
 					XMLGregorianCalendar licenseStartDate,
 					XMLGregorianCalendar licenseEndDate)
 					throws MayamClientException {
 				return true;
+			}
+
+			@Override
+			public boolean validateMaterialBroadcastDate(
+					XMLGregorianCalendar targetDate, String materialID,
+					String channelTag) throws MayamClientException {
+					return true;
 			}
 		};
 		events = new EventService(){

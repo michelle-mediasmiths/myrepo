@@ -37,8 +37,7 @@ public class ComplianceEditingHandler {
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);							
 					taskController.saveTask(newTask);
 				} catch (Exception e) {
-					log.error("Exception in the Mayam client while handling Compliance Edit Task Message : " + e);
-					e.printStackTrace();
+					log.error("Exception in the Mayam client while handling Compliance Edit Task Message : " + e,e);
 				}
 			}	
 		}

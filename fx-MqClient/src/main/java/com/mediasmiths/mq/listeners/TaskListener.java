@@ -1,6 +1,9 @@
 package com.mediasmiths.mq.listeners;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
@@ -17,6 +20,8 @@ import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 
 public class TaskListener
 {
+	protected final static Logger log = Logger.getLogger(TaskListener.class);
+	
 	public static Listener getInstance(final MayamTaskController taskController) 
 	{
 		final ComplianceEditingHandler compEditHandler = new ComplianceEditingHandler(taskController);
@@ -33,9 +38,16 @@ public class TaskListener
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{
-				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
+				log.trace("TaskListener onMessage");
+				log.trace("pre msg.getType()");  
+				MqContentType type = msg.getType();
+				log.trace("post msg.getType()");
+				
+				if (type.equals(ContentTypes.ATTRIBUTES)) 
 				{
+					log.trace("pre msg.getSubject()");
 					AttributeMap messageAttributes = msg.getSubject();
+					log.trace("post msg.getSubject()");
 					compEditHandler.process(messageAttributes);
 					comLoggingHandler.process(messageAttributes);
 					fixAndStitchHandler.process(messageAttributes);

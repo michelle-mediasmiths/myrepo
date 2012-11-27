@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.listeners;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
@@ -16,6 +18,8 @@ import com.mediasmiths.mq.handlers.UnmatchedHandler;
 
 public class AssetListener
 {
+	protected final static Logger log = Logger.getLogger(AssetListener.class);
+	
 	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
 	{
 		final AssetDeletionHandler assetDeletionHandler = new AssetDeletionHandler();
@@ -30,6 +34,9 @@ public class AssetListener
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{
+				
+				log.trace("AssetListener onMessage");
+				
 				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
 				{
 					AttributeMap messageAttributes = msg.getSubject();

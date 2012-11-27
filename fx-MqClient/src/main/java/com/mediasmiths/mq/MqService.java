@@ -3,15 +3,30 @@ package com.mediasmiths.mq;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import org.apache.log4j.Logger;
+
+import com.google.inject.Injector;
+import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
+import com.mediasmiths.std.guice.serviceregistry.ApplicationContextNameRegistry;
+
 
 public class MqService  implements ServletContextListener {
 
-	MqListeners listeners = new MqListeners();
-	Thread listenersThread = new Thread(listeners);
+	protected final static Logger log = Logger.getLogger(MqService.class);
+	
+	MqListeners listeners;
+	Thread listenersThread;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce)
 	{
+		log.trace("context initilized enter");
+		ApplicationContextNameRegistry.setContextName("fx-MqClient");
+		final Injector injector = GuiceInjectorBootstrap.createInjector();
+		log.trace("injector created");
+		
+		listeners = injector.getInstance(MqListeners.class);
+		listenersThread = new Thread(listeners);
 		listenersThread.start();
 	}
 	
