@@ -71,21 +71,13 @@ public class MayamPackageController extends MayamController
 					
 					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					client.assetApi().updateAsset(material);
+				
 				}
 			} catch (RemoteException e1) {
 				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID());
 				e1.printStackTrace();
 			}
 			
-			// TODO: Any need to store number of segments?
-			// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
-
-			attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
-			attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-			attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-			attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
-
 			if (!attributesValid)
 			{
 				log.warn("PAckage created but one or more attributes was invalid");
@@ -100,6 +92,22 @@ public class MayamPackageController extends MayamController
 				{
 					log.warn("Mayam failed to create Package");
 					returnCode = MayamClientErrorCode.PACKAGE_CREATION_FAILED;
+				}
+				else {
+					String revisionId = result.getAttribute(Attribute.REVISION_ID);
+					ValueList metadata = new ValueList();
+					metadata.add(new ValueList.Entry("CONT_CLASSIFICATION", txPackage.getClassification().toString())); 
+					metadata.add(new ValueList.Entry("COMPLIANCE_NOTES", txPackage.getConsumerAdvice())); 
+					metadata.add(new ValueList.Entry("ESC_NOTES", txPackage.getNotes())); 
+					metadata.add(new ValueList.Entry("CONT_FMT", txPackage.getPresentationFormat().toString())); 
+					metadata.add(new ValueList.Entry("TX_NEXT", txPackage.getTargetDate().toString())); 
+					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
+								
+					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
+					listBuilder = listBuilder.metadataForm("Version"); 
+					listBuilder = listBuilder.metadata(metadata);
+					SegmentList list = listBuilder.build();
+					client.segmentApi().updateSegmentList(revisionId, list);
 				}
 			}
 			catch (RemoteException e)
@@ -120,8 +128,7 @@ public class MayamPackageController extends MayamController
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		boolean attributesValid = true;
-
+		
 		if (txPackage != null)
 		{
 			AttributeMap assetAttributes = null;
@@ -141,22 +148,30 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
+				try {
+					String revisionID = assetAttributes.getAttribute(Attribute.REVISION_ID);
 
-				// TODO: Any need to store number of segments?
-				// attributesValid &= attributes.setAttribute(Attribute, txPackage.getNumberOfSegments()));
-
-				attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
-				attributesValid &= attributes.setAttribute(Attribute.COMPLIANCE_NOTES, txPackage.getConsumerAdvice());
-				attributesValid &= attributes.setAttribute(Attribute.ESC_NOTES, txPackage.getNotes());
-				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, txPackage.getPresentationFormat().toString());
-				attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, txPackage.getTargetDate());
-
-				if (!attributesValid)
-				{
-					log.warn("Package updated but one or more attributes was invalid");
-					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+					ValueList metadata = new ValueList();
+					metadata.add(new ValueList.Entry("CONT_CLASSIFICATION", txPackage.getClassification().toString())); 
+					metadata.add(new ValueList.Entry("COMPLIANCE_NOTES", txPackage.getConsumerAdvice())); 
+					metadata.add(new ValueList.Entry("ESC_NOTES", txPackage.getNotes())); 
+					metadata.add(new ValueList.Entry("CONT_FMT", txPackage.getPresentationFormat().toString())); 
+					metadata.add(new ValueList.Entry("TX_NEXT", txPackage.getTargetDate().toString())); 
+					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
+								
+					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
+					listBuilder = listBuilder.metadataForm("Version"); 
+					listBuilder = listBuilder.metadata(metadata);
+					SegmentList list = listBuilder.build();
+					client.segmentApi().updateSegmentList(revisionID, list);
 				}
+				catch(RemoteException e)
+				{
+					log.error("Error thrown by Mayam while updating Segmentation data for package ID: " + txPackage.getPresentationID());
+					e.printStackTrace();
+				}
+		
+				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 
 				AttributeMap result;
 				try
@@ -227,14 +242,14 @@ public class MayamPackageController extends MayamController
 							if (segment != null) 
 							{
 								ValueList metadata = new ValueList();
-								metadata.add(new ValueList.Entry("metadata_field", segment.getDuration())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getEOM())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getSOM())); 
-								metadata.add(new ValueList.Entry("metadata_field", "" + segment.getSegmentNumber())); 
-								metadata.add(new ValueList.Entry("metadata_field", segment.getSegmentTitle())); 
+								metadata.add(new ValueList.Entry("DURATION", segment.getDuration())); 
+								metadata.add(new ValueList.Entry("EOM", segment.getEOM())); 
+								metadata.add(new ValueList.Entry("SOM", segment.getSOM())); 
+								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber())); 
+								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
 								
 								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm("Material_Segment"); 
+								listBuilder = listBuilder.metadataForm("Version"); 
 								listBuilder = listBuilder.metadata(metadata);
 								SegmentList list = listBuilder.build();
 								client.segmentApi().updateSegmentList(revisionID, list);
