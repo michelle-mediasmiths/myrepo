@@ -24,8 +24,6 @@ public class UnmatchedHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String contentFormat = messageAttributes.getAttribute(Attribute.CONT_FMT);
-
-		//TODO: Confirm the actual value of the Unmatched field
 		if (contentFormat.equals("Unmatched")) 
 		{
 			try {
@@ -33,7 +31,7 @@ public class UnmatchedHandler
 			
 				//Add to purge candidate list with expiry date of 30 days
 				String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-				String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
 				
 				MuleWorkflowController mule = new MuleWorkflowController();

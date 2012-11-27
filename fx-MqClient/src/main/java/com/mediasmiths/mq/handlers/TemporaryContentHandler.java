@@ -31,7 +31,7 @@ public class TemporaryContentHandler
 	{	
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 		String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		try {			
 			if (assetType.equals("ITEM")) 
 			{
