@@ -29,6 +29,7 @@ import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.ws.client.AssetApi;
+import com.mayam.wf.ws.client.SegmentApi;
 import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
@@ -45,6 +46,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	TasksClient client;
 	AssetApi assetApi;
 	TaskApi taskApi;
+	SegmentApi segmentApi;
 	PackageType txPackage;
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
@@ -73,8 +75,10 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		client = mock(TasksClient.class);
 		assetApi = mock(AssetApi.class);
 		taskApi = mock(TaskApi.class);
+		segmentApi = mock(SegmentApi.class);
 		when(client.assetApi()).thenReturn(assetApi);
 		when(client.taskApi()).thenReturn(taskApi);
+		when(client.segmentApi()).thenReturn(segmentApi);
 		
 		controller = new MayamPackageController(client, new DateUtil());
 		

@@ -82,28 +82,30 @@ public class MayamTitleController extends MayamController{
 			}
 			
 			MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
-			attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
-			
-			//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
-			//marketingMaterial.getDuration();
-			//marketingMaterial.getFirstFrameTimecode();
-			//marketingMaterial.getLastFrameTimecode();
-			
-			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
-			
-			AudioTracks audioTracks = marketingMaterial.getAudioTracks();
-			List<Track> tracks = audioTracks.getTrack();
-			AudioTrackList audioTrackList = new AudioTrackList();
-			for (int i = 0; i < tracks.size(); i++) {
-				AudioTrack audioTrack = new AudioTrack();
-				Track track = tracks.get(i);
-				audioTrack.setNumber(track.getTrackNumber());
-				audioTrack.setName(track.getTrackName().toString());
-				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
-				audioTrackList.add(audioTrack);
+			if (marketingMaterial != null)
+			{
+				attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
+				
+				//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
+				//marketingMaterial.getDuration();
+				//marketingMaterial.getFirstFrameTimecode();
+				//marketingMaterial.getLastFrameTimecode();
+				
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
+				
+				AudioTracks audioTracks = marketingMaterial.getAudioTracks();
+				List<Track> tracks = audioTracks.getTrack();
+				AudioTrackList audioTrackList = new AudioTrackList();
+				for (int i = 0; i < tracks.size(); i++) {
+					AudioTrack audioTrack = new AudioTrack();
+					Track track = tracks.get(i);
+					audioTrack.setNumber(track.getTrackNumber());
+					audioTrack.setName(track.getTrackName().toString());
+					audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+					audioTrackList.add(audioTrack);
+				}
+				attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			}
-			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
-			
 			if (!attributesValid) {
 				log.warn("Title created but one or more attributes were invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
@@ -271,28 +273,30 @@ public class MayamTitleController extends MayamController{
 					}
 					
 					MarketingMaterialType marketingMaterial = title.getMarketingMaterial();
-					attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
-					
-					//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
-					//marketingMaterial.getDuration();
-					//marketingMaterial.getFirstFrameTimecode();
-					//marketingMaterial.getLastFrameTimecode();
-					
-					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
-					
-					AudioTracks audioTracks = marketingMaterial.getAudioTracks();
-					List<Track> tracks = audioTracks.getTrack();
-					AudioTrackList audioTrackList = new AudioTrackList();
-					for (int i = 0; i < tracks.size(); i++) {
-						AudioTrack audioTrack = new AudioTrack();
-						Track track = tracks.get(i);
-						audioTrack.setNumber(track.getTrackNumber());
-						audioTrack.setName(track.getTrackName().toString());
-						audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
-						audioTrackList.add(audioTrack);
+					if (marketingMaterial != null) 
+					{
+						attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(marketingMaterial.getAspectRatio()));
+						
+						//Feedback from Mayam and Foxtel - Duration and timecodes not required - will be detected by Ardome
+						//marketingMaterial.getDuration();
+						//marketingMaterial.getFirstFrameTimecode();
+						//marketingMaterial.getLastFrameTimecode();
+						
+						attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, marketingMaterial.getFormat());
+						
+						AudioTracks audioTracks = marketingMaterial.getAudioTracks();
+						List<Track> tracks = audioTracks.getTrack();
+						AudioTrackList audioTrackList = new AudioTrackList();
+						for (int i = 0; i < tracks.size(); i++) {
+							AudioTrack audioTrack = new AudioTrack();
+							Track track = tracks.get(i);
+							audioTrack.setNumber(track.getTrackNumber());
+							audioTrack.setName(track.getTrackName().toString());
+							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+							audioTrackList.add(audioTrack);
+						}
+						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 					}
-					attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
-					
 					if (!attributesValid) {
 						returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 					}
