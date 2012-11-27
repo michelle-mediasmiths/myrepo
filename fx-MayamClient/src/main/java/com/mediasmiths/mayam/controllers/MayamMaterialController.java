@@ -60,6 +60,7 @@ public class MayamMaterialController extends MayamController
 		if (material != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Programme");
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());
 			attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, material.getQualityCheckTask().toString());
 			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
@@ -169,6 +170,9 @@ public class MayamMaterialController extends MayamController
 
 		if (material != null)
 		{
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Programme");
+
 			attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, material.isAdultMaterial());
