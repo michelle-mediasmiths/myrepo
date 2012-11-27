@@ -31,7 +31,7 @@ public class PreviewTaskHandler
 					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 					taskController.saveTask(messageAttributes);
 						
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.FIX_STITCH_EDIT);
 					AttributeMap newTask = taskController.getTask(taskID);
@@ -43,7 +43,7 @@ public class PreviewTaskHandler
 					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 					taskController.saveTask(messageAttributes);
 						
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
 					AttributeMap newTask = taskController.getTask(taskID);

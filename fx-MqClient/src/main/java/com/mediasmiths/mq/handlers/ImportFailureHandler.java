@@ -31,7 +31,7 @@ public class ImportFailureHandler
 					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 					taskController.saveTask(messageAttributes);
 								
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST_FAILURE);
 					AttributeMap newTask = taskController.getTask(taskID);

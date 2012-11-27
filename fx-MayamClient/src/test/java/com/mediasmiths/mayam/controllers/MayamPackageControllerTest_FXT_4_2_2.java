@@ -130,7 +130,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testUpdatePackage() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
 			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(map);
 		} catch (RemoteException e) {
 			fail();
@@ -161,7 +161,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testUpdatePackageFailed() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
 			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
@@ -186,7 +186,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Test
 	public void testUpdatePackageException() throws Exception
 	{
-		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
+		when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(map);
 		when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
@@ -219,7 +219,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testPackageExistsTrue() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -231,7 +231,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testPackageExistsFalse() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -242,7 +242,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Test
 	public void testPackageExistsException() throws Exception 
 	{
-		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+		when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		boolean returnCode = controller.packageExists(PACKAGEID);
 		assertEquals(false, returnCode);
 	}
@@ -251,7 +251,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testGetPackageValid() throws MayamClientException 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -263,7 +263,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	public void testGetPackageInValid() throws MayamClientException 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -274,7 +274,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Test(expected = MayamClientException.class)
 	public void testGetPackageException() throws Exception
 	{
-		when(assetApi.getAsset(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+		when(assetApi.getAssetBySiteId(eq(MayamAssetType.PACKAGE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		AttributeMap attributes = controller.getPackageAttributes(PACKAGEID);		
 	}
 	

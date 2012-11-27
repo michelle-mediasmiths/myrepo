@@ -32,7 +32,7 @@ public class InitiateQcHandler
 					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
 					taskController.saveTask(messageAttributes);
 							
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
 					MuleWorkflowController mule = new MuleWorkflowController();

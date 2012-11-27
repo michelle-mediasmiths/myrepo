@@ -38,7 +38,7 @@ public class MayamValidatorImpl implements MayamValidator {
 		boolean isValid = true;
 		AttributeMap material = null;
 		try {
-			material = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
+			material = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
 		} catch (RemoteException e) {
 			isValid = false;
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
@@ -48,7 +48,7 @@ public class MayamValidatorImpl implements MayamValidator {
 			AttributeMap title = null;
 			
 			try {
-				title = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
+				title = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
 			} catch (RemoteException e) {
 				isValid = false;
 				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);

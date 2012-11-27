@@ -52,7 +52,7 @@ public class MayamTaskController extends MayamController{
 
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.assetApi().getAsset(AssetType.valueOf(assetType.toString()), assetID);
+			assetAttributes = client.assetApi().getAssetBySiteId(AssetType.valueOf(assetType.toString()), assetID);
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID);
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);

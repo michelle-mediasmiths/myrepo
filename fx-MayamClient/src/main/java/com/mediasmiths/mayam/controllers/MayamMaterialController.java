@@ -95,7 +95,7 @@ public class MayamMaterialController extends MayamController
 				{
 					attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					try {
-						AttributeMap title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
+						AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
 						if (title != null) {
 							boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 							attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
@@ -242,7 +242,7 @@ public class MayamMaterialController extends MayamController
 
 			try
 			{
-				assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
+				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			}
 			catch (RemoteException e1)
 			{
@@ -265,7 +265,7 @@ public class MayamMaterialController extends MayamController
 
 				String assetID = material.getMaterialID();
 				try {
-					AttributeMap asset = client.assetApi().getAsset(AssetType.ITEM, assetID);
+					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, assetID);
 					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
 			
 					SegmentationType segmentation = material.getOriginalConform(); 
@@ -370,7 +370,7 @@ public class MayamMaterialController extends MayamController
 
 			try
 			{
-				assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
+				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 			}
 			catch (RemoteException e1)
 			{
@@ -483,7 +483,7 @@ public class MayamMaterialController extends MayamController
 		boolean materialFound = false;
 		try
 		{
-			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
 			if (assetAttributes != null)
 			{
 				materialFound = true;
@@ -502,7 +502,7 @@ public class MayamMaterialController extends MayamController
 		AttributeMap assetAttributes = null;
 		try
 		{
-			assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
 		}
 		catch (RemoteException e1)
 		{
@@ -705,7 +705,7 @@ public class MayamMaterialController extends MayamController
 		if (isProtected(materialID)) {
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
 				
 				AttributeMap taskAttributes = client.createAttributeMap();
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
@@ -740,7 +740,7 @@ public class MayamMaterialController extends MayamController
 		boolean isProtected = false;
 		AttributeMap material;
 		try {
-			material = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+			material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
 			if (material != null) {
 				isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
 			}

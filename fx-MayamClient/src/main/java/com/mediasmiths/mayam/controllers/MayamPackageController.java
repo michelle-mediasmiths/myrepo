@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
+import com.mayam.wf.attributes.shared.type.ValueList.Entry;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -62,7 +64,7 @@ public class MayamPackageController extends MayamController
 			
 			AttributeMap material;
 			try {
-				material = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
+				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
 				if (material != null) {
 					boolean isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
@@ -136,7 +138,7 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -215,7 +217,7 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -230,7 +232,7 @@ public class MayamPackageController extends MayamController
 
 				String assetID = txPackage.getPresentationID();
 				try {
-					AttributeMap asset = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), assetID);
+					AttributeMap asset = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), assetID);
 					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
 			
 					Segmentation segmentation = txPackage.getSegmentation(); 
@@ -311,7 +313,7 @@ public class MayamPackageController extends MayamController
 		{
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 				
 				AttributeMap taskAttributes = client.createAttributeMap();
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
@@ -346,7 +348,7 @@ public class MayamPackageController extends MayamController
 		boolean packageFound = false;
 		try
 		{
-			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 			if (assetAttributes != null)
 			{
 				packageFound = true;
@@ -364,7 +366,7 @@ public class MayamPackageController extends MayamController
 		AttributeMap assetAttributes = null;
 		try
 		{
-			assetAttributes = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 		}
 		catch (RemoteException e1)
 		{
@@ -384,11 +386,31 @@ public class MayamPackageController extends MayamController
 	{
 		ProgrammeMaterialType.Presentation.Package p = new ProgrammeMaterialType.Presentation.Package();
 		AttributeMap pack = getPackageAttributes(packageID);
-		
-		p.setPresentationID(packageID);
-		//TODO segmentation;
-		//p.setSegmentation(value);
+		if (pack != null)
+		{
+			p.setPresentationID(packageID);
+			
+			
+			String revisionId = pack.getAttribute(Attribute.REVISION_ID);
+			SegmentList segList = client.segmentApi().getSegmentList(revisionId);
+			if (segList != null)
+			{
+				List <Segment> segs = new ArrayList <Segment>();
+				ValueList metaData = segList.getMetadata();
+				Segment seg = new Segment();
+				
+				for (int i = 0; i < metaData.size(); i++)
+				{
+					Entry segment = metaData.get(i);
 
+				}
+				
+				Segmentation newSegmentation = new Segmentation();
+				p.setSegmentation(newSegmentation);
+			}
+			//TODO segmentation;
+			//p.setSegmentation(value);
+		}
 		return p;
 	}
 
@@ -445,7 +467,7 @@ public class MayamPackageController extends MayamController
 		boolean isProtected = false;
 		AttributeMap packageMap;
 		try {
-			packageMap = client.assetApi().getAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
+			packageMap = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
 			if (packageMap != null) {
 				isProtected = packageMap.getAttribute(Attribute.PURGE_PROTECTED);
 			}

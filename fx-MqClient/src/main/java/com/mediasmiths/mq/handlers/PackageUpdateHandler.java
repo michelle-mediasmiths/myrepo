@@ -28,10 +28,9 @@ public class PackageUpdateHandler
 	
 	public void process(AttributeMap messageAttributes)
 	{	
-		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		
-		//TODO: Need to confirm check for already existing asset
 		if (assetID == null || assetID.equals(""))
 		{			
 			// If the message is for an existing package
@@ -43,7 +42,7 @@ public class PackageUpdateHandler
 					
 					AttributeMap filterEqualities = client.createAttributeMap();
 					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION.toString());
-					filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
 					FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
@@ -55,14 +54,14 @@ public class PackageUpdateHandler
 						//Retrieve the tx-tasks and preview tasks associated with the asset
 						filterEqualities.clear();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.TX_DELIVERY.toString());
-						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+						filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult txTasks = client.taskApi().getTasks(criteria, 10, 0);
 						boolean txReady = false;
 						
 						filterEqualities.clear();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-						filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+						filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult previewTasks = client.taskApi().getTasks(criteria, 10, 0);
 						
@@ -72,8 +71,7 @@ public class PackageUpdateHandler
 							for (int i = 0; i < txTasks.getTotalMatches(); i++) {
 								AttributeMap txTask = txTaskList.get(i);
 								TaskState taskState = txTask.getAttribute(Attribute.TASK_STATE);
-								
-								//TODO: Confirm that a task state of Open (rather than Active) equates to tx Ready
+
 								if (taskState.equals(TaskState.OPEN)) {
 									txReady = true;
 								}
@@ -87,7 +85,6 @@ public class PackageUpdateHandler
 								AttributeMap previewTask = previewTaskList.get(i);
 								TaskState taskState = previewTask.getAttribute(Attribute.TASK_STATE);
 								
-								//TODO: Confirm that a task state of Finished equates to preview passed
 								if (taskState.equals(TaskState.FINISHED)) {
 									requiresSegTask = true;
 								}
@@ -122,7 +119,7 @@ public class PackageUpdateHandler
 					boolean requiresSegTask = false;
 					AttributeMap filterEqualities = client.createAttributeMap();
 					filterEqualities.setAttribute(Attribute.ASSET_TYPE, MayamTaskListType.PREVIEW.toString());
-					filterEqualities.setAttribute(Attribute.ASSET_ID, parentId);
+					filterEqualities.setAttribute(Attribute.HOUSE_ID, parentId);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
 					FilterResult previewTasks = client.taskApi().getTasks(criteria, 10, 0);

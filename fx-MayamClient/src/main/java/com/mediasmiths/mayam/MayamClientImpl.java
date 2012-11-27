@@ -401,7 +401,7 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap material = null;
 		try
 		{
-			material = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
+			material = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
 		}
 		catch (RemoteException e)
 		{
@@ -415,7 +415,7 @@ public class MayamClientImpl implements MayamClient
 
 			try
 			{
-				title = client.assetApi().getAsset(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
+				title = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.TITLE.getText()), parentID);
 			}
 			catch (RemoteException e)
 			{

@@ -25,9 +25,8 @@ public class ItemCreationHandler
 	
 	public void process(AttributeMap messageAttributes)
 	{	
-		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 						
-		//TODO: Need to confirm check for already existing asset
 		if (assetID == null || assetID.equals(""))
 		{			
 			String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);

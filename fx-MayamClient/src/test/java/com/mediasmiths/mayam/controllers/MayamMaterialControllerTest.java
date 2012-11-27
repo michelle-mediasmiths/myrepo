@@ -100,7 +100,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterial() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(assetApi.updateAsset(argThat(new AttributeMapMatcher()))).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
@@ -131,7 +131,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterialFailed() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
+			when(client.assetApi().getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(client.assetApi().createAsset(argThat(new AttributeMapMatcher()))).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
@@ -162,7 +162,7 @@ public class MayamMaterialControllerTest {
 	public void testUpdateMaterialException() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
+			when(client.assetApi().getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
 			when(client.assetApi().updateAsset(argThat(new AttributeMapMatcher()))).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
@@ -199,7 +199,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsTrue() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -211,7 +211,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsFalse() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -223,7 +223,7 @@ public class MayamMaterialControllerTest {
 	public void testMaterialExistsException() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -235,7 +235,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialValid() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
+			when(client.assetApi().getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(new AttributeMap());
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -247,7 +247,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialInValid() 
 	{
 		try {
-			when(client.assetApi().getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
+			when(client.assetApi().getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(null);
 		} catch (RemoteException e) {
 			fail();
 		}
@@ -259,7 +259,7 @@ public class MayamMaterialControllerTest {
 	public void testGetMaterialException() 
 	{
 		try {
-			when(assetApi.getAsset(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
+			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));
 		} catch (RemoteException e) {
 			fail();
 		}

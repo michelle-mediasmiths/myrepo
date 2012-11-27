@@ -246,7 +246,7 @@ public class MayamTitleController extends MayamController{
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+					assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					log.error("Exception thrown by Mayam while retrieving asset attributes for updated title : " + title.getTitleID());
 					e1.printStackTrace();
@@ -337,7 +337,7 @@ public class MayamTitleController extends MayamController{
 				MayamAttributeController attributes = null;
 				
 				try {
-					assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+					assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 					log.error("Exception thrown by Mayam while retrieving asset: " + title.getTitleID());
@@ -470,7 +470,7 @@ public class MayamTitleController extends MayamController{
 		{
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				
 				AttributeMap taskAttributes = client.createAttributeMap();
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
@@ -501,7 +501,7 @@ public class MayamTitleController extends MayamController{
 	public boolean titleExists(String titleID) {
 		boolean titleFound = false;
 		try {
-			AttributeMap assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (assetAttributes != null) {
 				titleFound = true;
 			}
@@ -514,7 +514,7 @@ public class MayamTitleController extends MayamController{
 	public AttributeMap getTitle(String titleID) {
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
 			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID,e1);
 		}
@@ -526,7 +526,7 @@ public class MayamTitleController extends MayamController{
 		boolean isProtected = false;
 		AttributeMap title;
 		try {
-			title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), titleID);
+			title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (title != null) {
 				isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 			}
