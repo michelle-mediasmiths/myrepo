@@ -385,15 +385,18 @@ public class PlaceholderMessageValidator extends
 
 		if (titleExists) {
 
-			XMLGregorianCalendar orderCreated = action.getMaterial()
-					.getSource().getAggregation().getOrder().getOrderCreated();
-			XMLGregorianCalendar requiredBy = action.getMaterial()
-					.getRequiredBy();
+			if (action.getMaterial().getSource().getAggregation() != null) {
+				XMLGregorianCalendar orderCreated = action.getMaterial()
+						.getSource().getAggregation().getOrder()
+						.getOrderCreated();
+				XMLGregorianCalendar requiredBy = action.getMaterial()
+						.getRequiredBy();
 
-			if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
-				logger.warn("Required by date is before order created date!");
-				logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
-				return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
+				if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
+					logger.warn("Required by date is before order created date!");
+					logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
+					return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
+				}
 			}
 		} else {
 			logger.warn("Title for material does not exist");
@@ -426,7 +429,7 @@ public class PlaceholderMessageValidator extends
 			if (startDate.compare(endDate) == DatatypeConstants.GREATER) {
 				logger.error("End date before start date");
 				logger.error("LICENSE_DATES_NOT_IN_ORDER");
-				return MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER;
+				//print log message but dont reject based on licence information
 			}
 
 			Channels channels = l.getChannels();
@@ -443,16 +446,19 @@ public class PlaceholderMessageValidator extends
 
 			try {
 				if (mayamClient.titleExists(action.getTitleID())) {
+					
+					
 					MayamValidator mayamValidator = mayamClient.getValidator();
 					if (!mayamValidator.validateTitleBroadcastDate(
 							action.getTitleID(), startDate, endDate)) {
-						logger.error("License date for title is not valid for one or more packages");
+						logger.error("License date for title did not valid for one or more packages");
 						return MessageValidationResult.TITLE_TARGET_DATE_LICENSE_INVALID;
 					}
+					
 				}
 			} catch (MayamClientException e) {
-				logger.error("Exception when validating license periods in Mayam");
-				return MessageValidationResult.MAYAM_CLIENT_ERROR;
+				logger.error("Exception when validating license periods in Mayam",e);
+				//exception is logged but we dont want to reject a placeholder message just because of licence info
 			}
 		}
 

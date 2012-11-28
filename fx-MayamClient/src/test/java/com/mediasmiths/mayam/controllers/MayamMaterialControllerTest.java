@@ -41,6 +41,7 @@ public class MayamMaterialControllerTest {
 	ProgrammeMaterialType programmeMaterial;
 	AttributeMap map;
 	private final static String MATERIALID="MATERIALID";
+	private final static String TITLEID="TITLEID";
 	
 	public MayamMaterialControllerTest() {
 		super();
@@ -92,7 +93,7 @@ public class MayamMaterialControllerTest {
 			fail();
 		}
 
-		MayamClientErrorCode returnCode = controller.createMaterial(material);
+		MayamClientErrorCode returnCode = controller.createMaterial(material,TITLEID);
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	
@@ -123,7 +124,7 @@ public class MayamMaterialControllerTest {
 			fail();
 		}
 
-		MayamClientErrorCode returnCode = controller.createMaterial(material);
+		MayamClientErrorCode returnCode = controller.createMaterial(material,TITLEID);
 		assertEquals(MayamClientErrorCode.MATERIAL_CREATION_FAILED, returnCode);
 	}
 	
@@ -154,7 +155,7 @@ public class MayamMaterialControllerTest {
 			fail();
 		}
 
-		MayamClientErrorCode returnCode = controller.createMaterial(material);
+		MayamClientErrorCode returnCode = controller.createMaterial(material,TITLEID);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 	
@@ -179,7 +180,7 @@ public class MayamMaterialControllerTest {
 	public void testCreateNullMaterial() 
 	{
 		MaterialType material = null;
-		MayamClientErrorCode returnCode = controller.createMaterial(material);
+		MayamClientErrorCode returnCode = controller.createMaterial(material,TITLEID);
 		assertEquals(MayamClientErrorCode.MATERIAL_UNAVAILABLE, returnCode);
 	}
 		

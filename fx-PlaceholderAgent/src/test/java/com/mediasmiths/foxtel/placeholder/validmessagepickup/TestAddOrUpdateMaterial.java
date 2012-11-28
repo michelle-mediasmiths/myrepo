@@ -62,14 +62,14 @@ public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 		when(mayamClient.materialExists(anyString())).thenReturn(
 				new Boolean(false));
 		// return success status on mayamClient material create
-		when(mayamClient.createMaterial((MaterialType) anyObject()))
+		when(mayamClient.createMaterial((MaterialType) anyObject(),anyString()))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 	}
 
 	@Override
 	protected void verifyValidCalls(PlaceholderMessage message) {
 
-		verify(mayamClient).createMaterial((MaterialType) anyObject());
+		verify(mayamClient).createMaterial((MaterialType) anyObject(),anyString());
 
 	}
 
@@ -83,7 +83,7 @@ public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 		when(mayamClient.materialExists(anyString())).thenReturn(
 				new Boolean(false));
 		// return success status on mayamClient material create
-		when(mayamClient.createMaterial((MaterialType) anyObject()))
+		when(mayamClient.createMaterial((MaterialType) anyObject(),anyString()))
 				.thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 
 	}
@@ -91,7 +91,7 @@ public class TestAddOrUpdateMaterial extends ValidMessagePickTest {
 	@Override
 	protected void verifyInValidCalls(PlaceholderMessage message)
 			throws Exception {
-		verify(mayamClient).createMaterial((MaterialType) anyObject());
+		verify(mayamClient).createMaterial((MaterialType) anyObject(),anyString());
 
 	}
 

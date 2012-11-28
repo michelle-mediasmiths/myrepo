@@ -151,9 +151,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#createMaterial(au.com.foxtel.cf.mam .pms.MaterialType)
 	 */
 	@Override
-	public MayamClientErrorCode createMaterial(MaterialType material)
+	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
-		return materialController.createMaterial(material);
+		return materialController.createMaterial(material, titleID);
 	}
 
 	/*
@@ -410,7 +410,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		if (material != null)
 		{
-			String parentID = material.getAttribute(Attribute.ASSET_PARENT_ID);
+			String parentID = material.getAttribute(Attribute.PARENT_HOUSE_ID);
 			AttributeMap title = null;
 
 			try

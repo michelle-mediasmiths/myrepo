@@ -41,6 +41,8 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamMaterialController extends MayamController
 {
 
+	private static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
+
 	private final TasksClient client;
 
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
@@ -51,7 +53,7 @@ public class MayamMaterialController extends MayamController
 		client = mayamClient;
 	}
 
-	public MayamClientErrorCode createMaterial(MaterialType material)
+	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
@@ -59,9 +61,14 @@ public class MayamMaterialController extends MayamController
 
 		if (material != null)
 		{
+
+//			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Programme");
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());
+			
+			if(material.getQualityCheckTask() != null)			
 			attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, material.getQualityCheckTask().toString());
 			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
 
@@ -93,6 +100,8 @@ public class MayamMaterialController extends MayamController
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
+					
+					//is parent_house_id suitable for this, as parent in this context is a material rather than a title
 					attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					try {
 						AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
@@ -101,8 +110,7 @@ public class MayamMaterialController extends MayamController
 							attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
 						}
 					} catch (RemoteException e) {
-						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID());
-						e.printStackTrace();
+						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID(),e);						
 					}
 				}
 
@@ -171,7 +179,7 @@ public class MayamMaterialController extends MayamController
 		if (material != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Programme");
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 
 			attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
@@ -285,7 +293,7 @@ public class MayamMaterialController extends MayamController
 								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
 								
 								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm("Programme"); 
+								listBuilder = listBuilder.metadataForm(PROGRAMME_MATERIAL_AGL_NAME); 
 								listBuilder = listBuilder.metadata(metadata);
 								SegmentList list = listBuilder.build();
 								client.segmentApi().updateSegmentList(revisionID, list);
@@ -298,8 +306,7 @@ public class MayamMaterialController extends MayamController
 				}
 				catch(RemoteException e)
 				{
-					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
-					e.printStackTrace();
+					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID,e);
 				}
 				
 				AudioTracks audioTracks = material.getAudioTracks(); 
@@ -331,6 +338,7 @@ public class MayamMaterialController extends MayamController
 				AttributeMap result;
 				try
 				{
+					log.debug("updating material "+material.getMaterialID());
 					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
@@ -340,8 +348,7 @@ public class MayamMaterialController extends MayamController
 				}
 				catch (RemoteException e)
 				{
-					e.printStackTrace();
-					log.error("Exception thrown by Mayam while trying to update Material");
+					log.error("Exception thrown by Mayam while trying to update Material",e);
 					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 				}
 			}
@@ -383,6 +390,7 @@ public class MayamMaterialController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
+				if(material.getQualityCheckTask() != null)
 				attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, material.getQualityCheckTask().toString());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
 				
@@ -450,6 +458,7 @@ public class MayamMaterialController extends MayamController
 				AttributeMap result;
 				try
 				{
+					log.debug("updating material "+material.getMaterialID());
 					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
@@ -475,6 +484,7 @@ public class MayamMaterialController extends MayamController
 			log.warn("Null material object, unable to update asset");
 			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
+		
 		return returnCode;
 	}
 
@@ -491,9 +501,10 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + materialID);
-			e1.printStackTrace();
+			log.debug("Exception thrown by Mayam while attempting to retrieve asset :" + materialID,e1);			
 		}
+		
+		log.debug("Material found: "+materialFound);
 		return materialFound;
 	}
 

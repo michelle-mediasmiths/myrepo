@@ -41,7 +41,7 @@ public interface MayamClient
 	public boolean titleExists(String titleID) throws MayamClientException;
 
 	/* material */
-	public MayamClientErrorCode createMaterial(MaterialType material);
+	public MayamClientErrorCode createMaterial(MaterialType material, String titleID);
 
 	public String createMaterial(String titleID, MarketingMaterialType material) throws MayamClientException;
 

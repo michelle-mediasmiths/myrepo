@@ -62,9 +62,9 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
-		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.createMaterial(aoum.getMaterial(),EXISTING_TITLE)).thenReturn(MayamClientErrorCode.SUCCESS);
 		processor.processMessage(envelope);
-		verify(mayamClient).createMaterial(aoum.getMaterial());
+		verify(mayamClient).createMaterial(aoum.getMaterial(),EXISTING_TITLE);
 	}
 	
 	@Test

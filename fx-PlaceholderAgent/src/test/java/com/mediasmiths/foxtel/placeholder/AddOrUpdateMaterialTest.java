@@ -57,11 +57,11 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
-		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.createMaterial(aoum.getMaterial(),EXISTING_TITLE)).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
 		processor.processMessage(envelope);
 		//check create material was called
-		verify(mayamClient).createMaterial(aoum.getMaterial());
+		verify(mayamClient).createMaterial(aoum.getMaterial(),EXISTING_TITLE);
 		
 	}
 	
@@ -106,7 +106,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);
-		when(mayamClient.createMaterial(aoum.getMaterial())).thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+		when(mayamClient.createMaterial(aoum.getMaterial(),EXISTING_TITLE)).thenReturn(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 		//the call we are testing
 		processor.processMessage(envelope);
 		

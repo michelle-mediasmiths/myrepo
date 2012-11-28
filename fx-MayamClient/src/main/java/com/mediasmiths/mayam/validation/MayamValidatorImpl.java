@@ -6,6 +6,8 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -22,6 +24,8 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class MayamValidatorImpl implements MayamValidator {
 	private TasksClient client;
+	
+	protected final static Logger log=Logger.getLogger(MayamValidatorImpl.class);
 	
 	@Inject
 	public MayamValidatorImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient mayamClient) 
@@ -40,8 +44,11 @@ public class MayamValidatorImpl implements MayamValidator {
 		try {
 			material = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID);
 		} catch (RemoteException e) {
-			isValid = false;
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+			//TODO material doesnt exist, there for cant be invalid? or do we go with material doesnt exist therefore it *is* invalid
+			//either way a message shouldnt be rejected based on this kind of information as it is managed by bms, still log the information
+			log.info("unable to validate broadcast date for material"+materialID, e);
+			return true;
+			
 		}
 		if (material != null) {
 			String parentID = material.getAttribute(Attribute.PARENT_HOUSE_ID);
@@ -94,8 +101,9 @@ public class MayamValidatorImpl implements MayamValidator {
 		try {
 			materials = client.assetApi().getAssetChildren(AssetType.valueOf(MayamAssetType.TITLE.getText()), titleID, AssetType.valueOf(MayamAssetType.MATERIAL.getText()));
 		} catch (RemoteException e) {
-			isValid = false;
-			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
+			//could not retrieve children, treat title date as valid
+			log.info("No children returned for "+titleID, e);
+			return true;
 		}
 		for (AttributeMap material: materials) 
 		{

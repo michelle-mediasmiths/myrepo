@@ -81,7 +81,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			}
 			else
 			{
-				result = mayamClient.createMaterial(action.getMaterial());
+				result = mayamClient.createMaterial(action.getMaterial(), action.getTitleID());
 			}
 
 			checkResult(result);

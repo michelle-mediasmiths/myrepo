@@ -54,7 +54,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<commons-io.version>2.4</commons-io.version>
 		<filewatcher.version>0.4</filewatcher.version>
-		<worklists.version>0.9.9.9.7</worklists.version>
+		<worklists.version>0.9.9.9.9</worklists.version>
 		<stdlib.version>3.1.5</stdlib.version>
 		<events.version>1.4-SNAPSHOT</events.version>
 	</properties>

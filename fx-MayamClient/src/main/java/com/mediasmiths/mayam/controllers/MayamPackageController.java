@@ -35,6 +35,8 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamPackageController extends MayamController
 {
+	private static final String VERSION_AGL_NAME = "version";
+
 	private final TasksClient client;
 
 	protected final static Logger log = Logger.getLogger(MayamPackageController.class);
@@ -58,7 +60,7 @@ public class MayamPackageController extends MayamController
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Version");
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
 			
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
@@ -107,7 +109,7 @@ public class MayamPackageController extends MayamController
 					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
 								
 					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
-					listBuilder = listBuilder.metadataForm("Version"); 
+					listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
 					listBuilder = listBuilder.metadata(metadata);
 					SegmentList list = listBuilder.build();
 					client.segmentApi().updateSegmentList(revisionId, list);
@@ -163,7 +165,7 @@ public class MayamPackageController extends MayamController
 					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
 								
 					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
-					listBuilder = listBuilder.metadataForm("Version"); 
+					listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
 					listBuilder = listBuilder.metadata(metadata);
 					SegmentList list = listBuilder.build();
 					client.segmentApi().updateSegmentList(revisionID, list);
@@ -252,7 +254,7 @@ public class MayamPackageController extends MayamController
 								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
 								
 								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm("Version"); 
+								listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
 								listBuilder = listBuilder.metadata(metadata);
 								SegmentList list = listBuilder.build();
 								client.segmentApi().updateSegmentList(revisionID, list);
@@ -392,7 +394,16 @@ public class MayamPackageController extends MayamController
 			
 			
 			String revisionId = pack.getAttribute(Attribute.REVISION_ID);
-			SegmentList segList = client.segmentApi().getSegmentList(revisionId);
+			SegmentList segList = null;
+		
+			try {
+				segList = client.segmentApi().getSegmentList(revisionId);
+			} catch (RemoteException e) {
+				log.error("Remote exception", e);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
+			}
+			
+			
 			if (segList != null)
 			{
 				List <Segment> segs = new ArrayList <Segment>();

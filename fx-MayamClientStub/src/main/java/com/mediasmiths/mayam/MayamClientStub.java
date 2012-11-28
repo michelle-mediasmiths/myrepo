@@ -204,7 +204,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode createMaterial(MaterialType material)
+	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
 		return createMaterial(material.getMaterialID());
 	}

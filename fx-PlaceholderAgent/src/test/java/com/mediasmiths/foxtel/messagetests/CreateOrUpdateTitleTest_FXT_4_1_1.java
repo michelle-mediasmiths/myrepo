@@ -100,7 +100,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 	public void testValidCreateTitle_FXT_4_1_1_3_4() throws Exception {
 		
 		logger.info("Starting FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID");
-		logger.info("Starting FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message");
+		logger.info("Starting FXT 4.1.0.3 ��� Valid CreateOrUpdateTitle Message");
 
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		File temp = createTempXMLFile(message, "validCreateTitle");
@@ -109,12 +109,12 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Passed");
-			resultLogger.info("FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message --Passed");
+			resultLogger.info("FXT 4.1.0.3 ��� Valid CreateOrUpdateTitle Message --Passed");
 		}
 		else
 		{
 			resultLogger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Failed");
-			resultLogger.info("FXT 4.1.0.3 – Valid CreateOrUpdateTitle Message --Failed");
+			resultLogger.info("FXT 4.1.0.3 ��� Valid CreateOrUpdateTitle Message --Failed");
 		}
 		
 		assertEquals(MessageValidationResult.IS_VALID, validateFile);
@@ -165,7 +165,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		File temp = createTempXMLFile (message, "createTitleInvalidDates");
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
-		if (MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER ==validateFile)
+		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.0.4/5 - Invalid license dates --Passed");
 			resultLogger.info("FXT 4.1.1.6 - Invalid license dates --Passed");
@@ -177,7 +177,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		}
 			
 		
-		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER, validateFile);
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);
 		
 		Util.deleteFiles(temp.getAbsolutePath());
 	}

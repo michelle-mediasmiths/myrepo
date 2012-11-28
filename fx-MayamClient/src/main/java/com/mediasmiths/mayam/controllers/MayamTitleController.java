@@ -38,6 +38,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTitleController extends MayamController{
+	private static final String TITLE_AGL_NAME = "episode";
 	private final TasksClient client;
 	private final static Logger log = Logger.getLogger(MayamTitleController.class);
 	
@@ -55,7 +56,7 @@ public class MayamTitleController extends MayamController{
 		if (title != null)
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Episode");
+			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, TITLE_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
 			
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle()); 
@@ -185,7 +186,7 @@ public class MayamTitleController extends MayamController{
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
-				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, "Episode");
+				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, TITLE_AGL_NAME);
 				
 				attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());	
 				attributesValid &= attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
@@ -257,10 +258,12 @@ public class MayamTitleController extends MayamController{
 					attributes = new MayamAttributeController(assetAttributes);
 					
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber());
+					if(title.getSeriesNumber() != null)
+					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber().intValue());
 					
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber());
+					if(title.getEpisodeNumber() != null)
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 					if( title.getYearOfProduction() != null)
@@ -392,10 +395,12 @@ public class MayamTitleController extends MayamController{
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, titleDescription.getProgrammeTitle());
-					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber());
+					if(titleDescription.getSeriesNumber() != null)
+					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, titleDescription.getSeriesNumber().intValue());
 					
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
-					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber());
+					if(titleDescription.getEpisodeNumber() != null)
+					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 					attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
@@ -405,7 +410,12 @@ public class MayamTitleController extends MayamController{
 					
 					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
 					
-					boolean isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
+					boolean isProtected =false;
+					
+					if(attributes.getAttributes().getAttribute(Attribute.AUX_FLAG) != null){
+						 isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
+					}
+					
 					if (isProtected != title.isPurgeProtect()){
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 						try {
