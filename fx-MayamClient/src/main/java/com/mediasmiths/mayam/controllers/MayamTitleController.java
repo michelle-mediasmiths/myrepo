@@ -71,6 +71,9 @@ public class MayamTitleController extends MayamController{
 			
 			attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 			
+			String assetTitle = title.getProgrammeTitle() + " - " + title.getSeriesNumber() + " - " + title.getEpisodeNumber() + " - " + title.getEpisodeTitle();
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
+			
 			if (title.getYearOfProduction() != null)
 			attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR,title.getYearOfProduction().toString());
 			attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
@@ -199,6 +202,9 @@ public class MayamTitleController extends MayamController{
 				if(titleDescription.getEpisodeNumber() != null)
 				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 				
+				String assetTitle = titleDescription.getProgrammeTitle() + " - " + titleDescription.getSeriesNumber() + " - " + titleDescription.getEpisodeNumber() + " - " + titleDescription.getEpisodeTitle();
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
+				
 				attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 				attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());
 				if(titleDescription.getYearOfProduction() != null)
@@ -264,6 +270,9 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
 					if(title.getEpisodeNumber() != null)
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
+					
+					String assetTitle = title.getProgrammeTitle() + " - " + title.getSeriesNumber() + " - " + title.getEpisodeNumber() + " - " + title.getEpisodeTitle();
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 					if( title.getYearOfProduction() != null)
@@ -401,6 +410,9 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, titleDescription.getEpisodeTitle());
 					if(titleDescription.getEpisodeNumber() != null)
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
+					
+					String assetTitle = titleDescription.getProgrammeTitle() + " - " + titleDescription.getSeriesNumber() + " - " + titleDescription.getEpisodeNumber() + " - " + titleDescription.getEpisodeTitle();
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
 					attributesValid &= attributes.setAttribute(Attribute.CONT_CATEGORY, titleDescription.getStyle());

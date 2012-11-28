@@ -91,7 +91,7 @@ public class MayamMaterialController extends MayamController
 					}
 					if (order != null)
 					{
-						// TODO: Order Created field not yet added to Mayam AGL spec, listed as requested
+						// Order Created field not required
 						//attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
 						attributesValid &= attributes.setAttribute(Attribute.REQ_REFERENCE, order.getOrderReference());
 					}
