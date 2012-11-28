@@ -98,9 +98,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		if (req.isForTXDelivery())
 		{
 			// for tx delivery we return the location of transcoded package
-			//TODO locate this using the same logic that will be used to decide transcode output location
-			URI destination = materialQCLocation.resolve(filename);
-
+			
 			// TODO switch this to gxf once we are creating such!
 			String ret = tcoutputlocation + id + "/" + id + ".mov";
 			destinationFile = new File(ret);

@@ -176,22 +176,22 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
 
-		String presentationFormat = action.getPackage().getPresentationFormat()
-				.toString();
-		ArrayList<String> channelTags = mayamClient
-				.getChannelLicenseTagsForMaterial(materialID);
-
-		for (String channelTag : channelTags) {
-
-			// TODO read this check once we have aversion of mayam that will
-			// persist things!
-
-			// if (!channelValidator.isValidFormatForTag(channelTag,
-			// presentationFormat)) {
-			// logger.error("Presentation Format of package does not match that of associated channel");
-			// return MessageValidationResult.PACKAGE_INVALID_FORMAT;
-			// }
-		}
+//		String presentationFormat = action.getPackage().getPresentationFormat()
+//				.toString();
+//		ArrayList<String> channelTags = mayamClient
+//				.getChannelLicenseTagsForMaterial(materialID);
+//
+//		for (String channelTag : channelTags) {
+//
+//			// TODO read this check once we have aversion of mayam that will
+//			// persist things!
+//
+//			// if (!channelValidator.isValidFormatForTag(channelTag,
+//			// presentationFormat)) {
+//			// logger.error("Presentation Format of package does not match that of associated channel");
+//			// return MessageValidationResult.PACKAGE_INVALID_FORMAT;
+//			// }
+//		}
 
 		// TODO read once mayam persists things
 		// XMLGregorianCalendar targetDate =
