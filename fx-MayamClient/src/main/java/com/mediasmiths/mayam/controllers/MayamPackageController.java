@@ -68,6 +68,9 @@ public class MayamPackageController extends MayamController
 			try {
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
 				if (material != null) {
+					String assetId = material.getAttribute(Attribute.ASSET_ID);
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+					
 					boolean isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
 					
@@ -177,10 +180,17 @@ public class MayamPackageController extends MayamController
 				}
 		
 				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
-
+			
 				AttributeMap result;
 				try
 				{
+					AttributeMap material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
+					if (material != null) {
+						String assetId = material.getAttributeAsString(Attribute.ASSET_ID);
+						attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+					}
+					
+					
 					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{

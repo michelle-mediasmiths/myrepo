@@ -108,6 +108,9 @@ public class MayamMaterialController extends MayamController
 						if (title != null) {
 							boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 							attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
+							
+							String assetId = title.getAttribute(Attribute.ASSET_ID);
+							attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 						}
 					} catch (RemoteException e) {
 						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID(),e);						
@@ -417,7 +420,6 @@ public class MayamMaterialController extends MayamController
 						}
 						if (order != null)
 						{
-							// TODO: Order Created date still to be added by Mayam
 							//attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated().toGregorianCalendar().getTime());
 							attributesValid &= attributes.setAttribute(Attribute.REQ_REFERENCE, order.getOrderReference());
 						}
@@ -426,6 +428,15 @@ public class MayamMaterialController extends MayamController
 					Compile compile = source.getCompile();
 					if (compile != null)
 					{
+						try {
+							AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
+							if (parentMaterial != null) {
+								String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
+								attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+							}
+						} catch (RemoteException e) {
+							log.error("Exception thrown by Mayam while trying to retrieve parent Material : " + compile.getParentMaterialID(), e);
+						}
 						attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					}
 

@@ -259,7 +259,7 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
 		if (packageAttributes != null)
 		{
-			String materialID = packageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+			String materialID = packageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 			if (materialAttributes != null) {
 				isProtected = materialAttributes.getAttribute(Attribute.AUX_FLAG);
@@ -499,7 +499,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
 	{
-		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.ASSET_PARENT_ID);
+		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.PARENT_HOUSE_ID);
 	}
 
 	@Override
