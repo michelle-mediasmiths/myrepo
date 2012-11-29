@@ -392,7 +392,7 @@ public class MayamMaterialController extends MayamController
 
 				if(material.getQualityCheckTask() != null)
 				attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, material.getQualityCheckTask().toString());
-				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getRequiredFormat());
+				attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
 				
 				// Required By does not need to be stored in AGL
 				//if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
