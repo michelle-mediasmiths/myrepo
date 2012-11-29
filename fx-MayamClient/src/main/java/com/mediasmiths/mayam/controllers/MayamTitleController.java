@@ -428,7 +428,13 @@ public class MayamTitleController extends MayamController{
 						 isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
 					}
 					
-					if (isProtected != title.isPurgeProtect()){
+					boolean titleIsPurgeProtected = false;
+					
+					if(title.isPurgeProtect() != null){
+						titleIsPurgeProtected = title.isPurgeProtect().booleanValue();
+ 					}
+					
+					if (isProtected != titleIsPurgeProtected){
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 						try {
 							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.MATERIAL.getAssetType());

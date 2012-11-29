@@ -262,7 +262,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
-		String materialID = deleteMaterial.getMaterial().getMaterialD();
+		String materialID = deleteMaterial.getMaterial().getMaterialID();
 
 		if (materialID.equals(NEW_MATERIAL_ID))
 		{
