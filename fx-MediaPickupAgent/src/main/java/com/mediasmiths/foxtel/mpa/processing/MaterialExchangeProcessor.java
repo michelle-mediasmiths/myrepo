@@ -342,6 +342,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 	private void updatePackages(List<Package> packages)
 			throws MessageProcessingFailedException {
 		logger.trace("updatePackages");
+		if(packages != null)
 		for (Package txPackage : packages) {
 			updatePackage(txPackage);
 		}

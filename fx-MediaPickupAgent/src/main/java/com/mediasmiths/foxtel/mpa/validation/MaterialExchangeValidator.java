@@ -84,8 +84,6 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		}
 
-		// TODO: sanity check start\end\duration
-
 		//validate orignial conform
 		MessageValidationResult originalConform = validateOriginalConform(programmeMaterial
 				.getOriginalConform());
