@@ -32,6 +32,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamTaskListType;
 
@@ -105,7 +106,7 @@ public class MayamTitleController extends MayamController{
 					Track track = tracks.get(i);
 					audioTrack.setNumber(track.getTrackNumber());
 					audioTrack.setName(track.getTrackName().toString());
-					audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+					audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString())));
 					audioTrackList.add(audioTrack);
 				}
 				attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
@@ -305,7 +306,7 @@ public class MayamTitleController extends MayamController{
 							Track track = tracks.get(i);
 							audioTrack.setNumber(track.getTrackNumber());
 							audioTrack.setName(track.getTrackName().toString());
-							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString()));
+							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString())));
 							audioTrackList.add(audioTrack);
 						}
 						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 

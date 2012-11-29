@@ -32,6 +32,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -200,7 +201,7 @@ public class MayamMaterialController extends MayamController
 			{ 
 				AudioTrack audioTrack = new AudioTrack();
 				Track track = tracks.get(i);
-				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
+				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString()))); 
 				audioTrack.setName(track.getTrackName().toString()); 
 				audioTrack.setNumber(track.getTrackNumber());
 				audioTrackList.set(i, audioTrack);
@@ -323,7 +324,7 @@ public class MayamMaterialController extends MayamController
 						{ 
 							AudioTrack audioTrack = new AudioTrack();
 							Track track = tracks.get(i);
-							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(track.getTrackEncoding().toString())); 
+							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString()))); 
 							audioTrack.setName(track.getTrackName().toString()); 
 							audioTrack.setNumber(track.getTrackNumber());
 							audioTrackList.set(i, audioTrack);
@@ -626,7 +627,7 @@ public class MayamMaterialController extends MayamController
 			{
 				AudioTrack track = audioTrackList.get(i);
 				Track newTrack = new Track();
-				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(track.getEncoding().toString()));
+				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
 				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
 				newTrack.setTrackNumber(track.getNumber());
 				audioTracks.getTrack().add(newTrack);
@@ -677,7 +678,7 @@ public class MayamMaterialController extends MayamController
 			{
 				AudioTrack track = audioTrackList.get(i);
 				Track newTrack = new Track();
-				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(track.getEncoding().toString()));
+				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
 				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
 				newTrack.setTrackNumber(track.getNumber());
 				audioTracks.getTrack().add(newTrack);
