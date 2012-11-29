@@ -109,6 +109,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 			throw new MessageProcessingFailedException(
 					MessageProcessingFailureReason.UNKNOWN_ACTION, cce);
 		}
+		
 
 	}
 
@@ -128,8 +129,14 @@ public abstract class MessageProcessor<T> implements Runnable {
 	protected final void validateThenProcessFile(String filePath) {
 
 		logger.debug("Asking for validation of " + filePath);
-		MessageValidationResult result = messageValidator
-				.validateFile(filePath);
+	
+		MessageValidationResult result;
+		try {
+			result = messageValidator.validateFile(filePath);
+		} catch (Exception e) {
+			logger.error("uncaught exception validating file", e);
+			result = MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
+		}
 
 		if (result == MessageValidationResult.IS_VALID) {
 			logger.info(String.format("Message at %s validates", filePath));
@@ -142,7 +149,11 @@ public abstract class MessageProcessor<T> implements Runnable {
 			} catch (MessageProcessingFailedException e) {
 				logger.error(String.format("Error processing %s", filePath), e);
 				moveFileToFailureFolder(new File(filePath));
+			} catch (Exception e){
+				logger.error(String.format("uncaught exception processing file %s",filePath), e);
+				moveFileToFailureFolder(new File(filePath));
 			}
+			
 		} else {
 			logger.warn(String.format("Message at %s did not validate",
 					filePath));
