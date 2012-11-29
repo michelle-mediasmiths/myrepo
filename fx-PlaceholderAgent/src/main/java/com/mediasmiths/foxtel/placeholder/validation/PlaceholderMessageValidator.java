@@ -433,14 +433,15 @@ public class PlaceholderMessageValidator extends
 			}
 
 			Channels channels = l.getChannels();
-			for (ChannelType channel : channels.getChannel()) {
-				if (!channelValidator.isValidNameForTag(
-						channel.getChannelTag(), channel.getChannelName())) {
-					logger.error(String
-							.format("Channel Name '%s' does not match valid Channel Tag '%s'",
-									channel.getChannelName(),
-									channel.getChannelTag()));
-					return MessageValidationResult.CHANNEL_NAME_INVALID;
+			if (channels != null) {
+				for (ChannelType channel : channels.getChannel()) {
+					if (!channelValidator.isTagValid(
+							channel.getChannelTag())) {
+						logger.error(String
+								.format("Channel tag invalid 's%'",
+										channel.getChannelTag()));
+						return MessageValidationResult.CHANNEL_NAME_INVALID;
+					}
 				}
 			}
 
@@ -466,11 +467,12 @@ public class PlaceholderMessageValidator extends
 				.getChannels().getChannel().get(0).getChannelTag();
 		String channelName = action.getRights().getLicense().get(0)
 				.getChannels().getChannel().get(0).getChannelName();
-
-		if ((channelTag.equals("UNKNOWN_CHANNEL_TAG"))
-				|| (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
-			logger.error("UNKOWN_CHANNEL");
-			return MessageValidationResult.UNKOWN_CHANNEL;
+		if (channelTag != null) {
+			if ((channelTag.equals("UNKNOWN_CHANNEL_TAG"))
+					|| (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
+				logger.error("UNKOWN_CHANNEL");
+				return MessageValidationResult.UNKOWN_CHANNEL;
+			}
 		}
 
 		return MessageValidationResult.IS_VALID;

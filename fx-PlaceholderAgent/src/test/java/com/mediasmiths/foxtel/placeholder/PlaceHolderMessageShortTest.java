@@ -61,6 +61,12 @@ public abstract class PlaceHolderMessageShortTest
 		{
 			return true;
 		}
+
+		@Override
+		public boolean isTagValid(String channelTag)
+		{
+			return true;
+		}
 	};
 	protected final AlertInterface alert = mock(AlertInterface.class);
 	protected final String alertRecipient = "alert@foxtel.com.au";
