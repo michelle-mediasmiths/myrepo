@@ -64,7 +64,7 @@ public class ChannelValidatorImpl implements ChannelValidator {
 	@Override
 	public boolean isTagValid(String channelTag)
 	{
-		return configProperties.contains(channelTag);
+		return configProperties.containsKey(channelTag);
 	}
 
 }

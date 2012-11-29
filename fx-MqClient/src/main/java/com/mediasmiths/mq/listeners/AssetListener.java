@@ -2,7 +2,6 @@ package com.mediasmiths.mq.listeners;
 
 import org.apache.log4j.Logger;
 
-import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
