@@ -165,8 +165,8 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 
 		File temp = createTempXMLFile(pm, "createTitleInvalidDates");
 
-		// test that the generated placeholder message is valid
-		assertEquals(MessageValidationResult.LICENCE_DATES_NOT_IN_ORDER,
+		//dont reject based on licence dates
+		assertEquals(MessageValidationResult.IS_VALID,
 				validator.validateFile(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}

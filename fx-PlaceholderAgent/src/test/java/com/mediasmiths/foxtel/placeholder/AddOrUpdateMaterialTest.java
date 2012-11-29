@@ -139,10 +139,9 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile(pm, "addMaterialTitleDoesntExist");
 		// prepare mock mayamClient
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
-		// test that the generated placeholder message fails validation for the
-		// correct reason
+		//dont fail messages for dates out of order
 		assertEquals(
-				MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER,
+				MessageValidationResult.IS_VALID,
 				validator.validateFile(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
