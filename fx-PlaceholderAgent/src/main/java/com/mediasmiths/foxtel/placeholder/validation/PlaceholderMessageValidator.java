@@ -385,19 +385,19 @@ public class PlaceholderMessageValidator extends
 
 		if (titleExists) {
 
-			if (action.getMaterial().getSource().getAggregation() != null) {
-				XMLGregorianCalendar orderCreated = action.getMaterial()
-						.getSource().getAggregation().getOrder()
-						.getOrderCreated();
-				XMLGregorianCalendar requiredBy = action.getMaterial()
-						.getRequiredBy();
-
-				if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
-					logger.warn("Required by date is before order created date!");
-					logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
-					return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
-				}
-			}
+//			if (action.getMaterial().getSource().getAggregation() != null) {
+//				XMLGregorianCalendar orderCreated = action.getMaterial()
+//						.getSource().getAggregation().getOrder()
+//						.getOrderCreated();
+//				XMLGregorianCalendar requiredBy = action.getMaterial()
+//						.getRequiredBy();
+//
+//				if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
+//					logger.warn("Required by date is before order created date!");
+//					logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
+//					return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
+//				}
+//			}
 		} else {
 			logger.warn("Title for material does not exist");
 			logger.error("NO_EXISTING_TITLE_FOR_MATERIAL");
