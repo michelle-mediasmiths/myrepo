@@ -6,7 +6,7 @@
 		== Version: 1.0
 		== Author: Matthew Bennetts - matthew.bennetts@foxtel.com.au
 		== 
-		== @(#)$Id: PlaceholderManagement_V1.0.xsd 5 2012-09-05 04:51:19Z bennettm $
+		== @(#)$Id: PlaceholderManagement_V1.0.xsd 12 2012-11-29 00:26:15Z bennettm $
 		== 
 	-->
 	<xs:element name="PlaceholderMessage">
@@ -67,7 +67,7 @@
 									<xs:sequence>
 										<xs:element name="Material">
 											<xs:complexType>
-												<xs:attribute name="materialD" type="materialIdType" use="required">
+												<xs:attribute name="materialID" type="materialIdType" use="required">
 													<xs:annotation>
 														<xs:documentation>a unique identifier for the material that will get deleted</xs:documentation>
 													</xs:annotation>

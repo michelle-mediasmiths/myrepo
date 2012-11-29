@@ -271,7 +271,7 @@ public class PlaceholderMessageValidator extends
 
 		logger.info("Validationg a DeleteMaterial");
 
-		String materialID = action.getMaterial().getMaterialD();
+		String materialID = action.getMaterial().getMaterialID();
 		String titleID = action.getTitleID();
 		boolean materialProtected = false;
 		try {

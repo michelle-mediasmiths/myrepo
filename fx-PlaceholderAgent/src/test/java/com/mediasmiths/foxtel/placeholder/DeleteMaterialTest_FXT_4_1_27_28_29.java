@@ -138,7 +138,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	private PlaceholderMessage buildDeleteMaterialRequest(boolean materialProtected, String titleID) throws DatatypeConfigurationException {
 		
 		Material m = new Material();
-		m.setMaterialD(EXISTING_MATERIAL_ID);
+		m.setMaterialID(EXISTING_MATERIAL_ID);
 		
 		DeleteMaterial dm = new DeleteMaterial();
 		dm.setTitleID(titleID);
