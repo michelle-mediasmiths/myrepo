@@ -232,6 +232,8 @@ public class MayamMaterialController extends MayamController
 			}
 			
 			String materialID = result.getAttribute(Attribute.HOUSE_ID);
+			log.info(String.format("house id %s returned when creating marketing material", materialID));
+			
 			return materialID;
 		}
 		else

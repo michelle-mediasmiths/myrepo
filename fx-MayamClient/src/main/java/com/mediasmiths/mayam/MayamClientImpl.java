@@ -369,11 +369,12 @@ public class MayamClientImpl implements MayamClient
 
 		// the id of the created material
 		String materialID = materialController.createMaterial(material);
+				
 		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 
 		if (materialAttributes == null)
 		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 		}
 
 
