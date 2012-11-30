@@ -285,12 +285,20 @@ public class MayamMaterialController extends MayamController
 				String assetID = material.getMaterialID();
 				try {
 					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, assetID);
-					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
+					SegmentListList lists  = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetID);
 			
 					SegmentationType segmentation = material.getOriginalConform(); 
-					if (segmentation != null)
+					if (segmentation != null && lists != null)
 					{
 						List<SegmentationType.Segment> segments = segmentation.getSegment(); 
+						
+						//If current segment list has more segments then remove unnecessary
+						if (lists.size() > segments.size()) {
+							for (int i = segments.size(); i < lists.size(); i++)
+							lists.remove(i);
+						}
+						
+						//Update the existing lists, if new lists then create them
 						for (int i = 0; i < segments.size(); i++) 
 						{ 
 							SegmentationType.Segment segment = segments.get(i); 
@@ -303,16 +311,24 @@ public class MayamMaterialController extends MayamController
 								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber())); 
 								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
 								
-								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm(PROGRAMME_MATERIAL_AGL_NAME); 
-								listBuilder = listBuilder.metadata(metadata);
-								SegmentList list = listBuilder.build();
-								client.segmentApi().updateSegmentList(revisionID, list);
+								SegmentList list = lists.get(i);
+								if (list == null) {
+									SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+									listBuilder = listBuilder.metadataForm(PROGRAMME_MATERIAL_AGL_NAME); 
+									listBuilder = listBuilder.metadata(metadata);
+									list = listBuilder.build();
+									String revisionId = asset.getAttributeAsString(Attribute.REVISION_ID);
+									client.segmentApi().createSegmentList(AssetType.ITEM, assetID, revisionId, list);
+								}
+								else {
+									client.segmentApi().updateSegmentListMetadata(list.getId(), metadata);
+								}
 							}
 							else {
 								log.error("Segment data is null for asset ID: " + assetID);
 							}
 						}
+						
 					}
 				}
 				catch(RemoteException e)
