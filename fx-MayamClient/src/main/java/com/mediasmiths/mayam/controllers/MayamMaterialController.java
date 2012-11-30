@@ -60,6 +60,20 @@ public class MayamMaterialController extends MayamController
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
+		attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+		try {
+			AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), titleID);
+			if (title != null) {
+				boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
+				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
+				
+				String assetId = title.getAttribute(Attribute.ASSET_ID);
+				attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+			}
+		} catch (RemoteException e) {
+			log.error("MayamException while trying to retrieve title : " + titleID,e);						
+		}
+		
 		if (material != null)
 		{
 
@@ -101,18 +115,9 @@ public class MayamMaterialController extends MayamController
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
-					
-					//is parent_house_id suitable for this, as parent in this context is a material rather than a title
-					attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					try {
-						AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
-						if (title != null) {
-							boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
-							attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
-							
-							String assetId = title.getAttribute(Attribute.ASSET_ID);
-							attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-						}
+						AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
+
 					} catch (RemoteException e) {
 						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID(),e);						
 					}
@@ -434,8 +439,8 @@ public class MayamMaterialController extends MayamController
 						try {
 							AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
 							if (parentMaterial != null) {
-								String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
-								attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+								//String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
+								//attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 							}
 						} catch (RemoteException e) {
 							log.error("Exception thrown by Mayam while trying to retrieve parent Material : " + compile.getParentMaterialID(), e);
