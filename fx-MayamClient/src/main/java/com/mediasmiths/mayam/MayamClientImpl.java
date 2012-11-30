@@ -27,6 +27,7 @@ import com.mayam.wf.attributes.shared.type.CommentLog;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.IdSet;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
@@ -426,15 +427,11 @@ public class MayamClientImpl implements MayamClient
 
 			if (title != null)
 			{
-				GenericTable mediaRights = title.getAttribute(Attribute.MEDIA_RIGHTS);
-				if (mediaRights != null) {
-					List<Row> rows = mediaRights.getRows();
-					if (rows != null) {
-						for (int i = 0; i < rows.size(); i++) 
-						{
-							String channelTag = rows.get(i).get(5);
-							licenseTags.add(channelTag);
-						}
+				StringList channels = title.getAttribute(Attribute.CHANNELS);
+				if (channels != null) {
+					for (int i = 0; i < channels.size(); i++) 
+					{
+						licenseTags.add(channels.get(i));
 					}
 				}
 			}

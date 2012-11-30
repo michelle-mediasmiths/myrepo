@@ -22,6 +22,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
@@ -147,6 +148,9 @@ public class MayamTitleController extends MayamController{
 			
 			if (titleDescription != null) {				
 				RightsType titleRights = title.getRights();
+				
+				StringList channelStringList = new StringList();
+				
 				if (titleRights != null) {
 					List<String> columnNames = new ArrayList<String>();
 					columnNames.add("Organization ID");
@@ -154,7 +158,6 @@ public class MayamTitleController extends MayamController{
 					columnNames.add("Start Date");
 					columnNames.add("End Date");
 					columnNames.add("Channel Name");
-					columnNames.add("Channel Tag");
 					
 					GenericTable rightsTable = new GenericTable(columnNames);
 
@@ -179,14 +182,15 @@ public class MayamTitleController extends MayamController{
 									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-									rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
 									
+									channelStringList.add(channel.getChannelTag());
 									rowCounter ++;
 								}
 							}
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -368,10 +372,9 @@ public class MayamTitleController extends MayamController{
 						columnNames.add("Start Date");
 						columnNames.add("End Date");
 						columnNames.add("Channel Name");
-						columnNames.add("Channel Tag");
-						
+							
 						GenericTable rightsTable = new GenericTable(columnNames);
-
+						StringList channelStringList = new StringList();
 						List<License> licenses = titleRights.getLicense();
 						
 						int rowCounter = 0;
@@ -393,7 +396,7 @@ public class MayamTitleController extends MayamController{
 										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-										rightsTable.setCellValue(rowCounter, 5, channel.getChannelTag());
+										channelStringList.add(channel.getChannelTag());
 										
 										rowCounter ++;
 									}
@@ -401,6 +404,7 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
