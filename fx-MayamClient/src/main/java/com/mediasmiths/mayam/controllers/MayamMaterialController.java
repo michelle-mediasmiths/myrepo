@@ -105,7 +105,7 @@ public class MayamMaterialController extends MayamController
 					//is parent_house_id suitable for this, as parent in this context is a material rather than a title
 					attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					try {
-						AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), compile.getParentMaterialID());
+						AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
 						if (title != null) {
 							boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 							attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
