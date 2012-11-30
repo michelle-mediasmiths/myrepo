@@ -194,7 +194,9 @@ public class QCRestServiceImpl implements QCRestService
 
 		try
 		{
-			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(file, ident.getIdentifier(), runNumber.intValue());
+			
+			String relativePathToFile = pathResolver.getRelativePath(mediaLocationPath,file);
+			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(relativePathToFile, ident.getIdentifier(), runNumber.intValue());
 			
 			//TODO: include serialized full report!
 			
