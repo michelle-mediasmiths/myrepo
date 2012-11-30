@@ -204,7 +204,7 @@ public class MayamMaterialController extends MayamController
 				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString()))); 
 				audioTrack.setName(track.getTrackName().toString()); 
 				audioTrack.setNumber(track.getTrackNumber());
-				audioTrackList.set(i, audioTrack);
+				audioTrackList.add(i, audioTrack);
 			}
 			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			
