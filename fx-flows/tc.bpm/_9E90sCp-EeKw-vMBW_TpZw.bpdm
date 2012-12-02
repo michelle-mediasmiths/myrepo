@@ -15,7 +15,7 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="FS Adapter" bpdm:ID="_9E90sCp-EeKw-vMBW_TpZw">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="fS_AdapterAndTCForHttpPortPlkVar" partnerLinkType="diag:FS_AdapterAndTCForHttpPortPlk" myRole="FS_Adapter_for_TC" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_9E90sCp-EeKw-vMBW_TpZw:__uv6YSp-EeKw-vMBW_TpZw" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
+            <bpel:partnerLink name="fS_AdapterAndTCForHttpPortPlkVar" partnerLinkType="diag:FS_AdapterAndTCForHttpPortPlk" myRole="FS_Adapter_for_TC" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_9E90sCp-EeKw-vMBW_TpZw:__uv6YSp-EeKw-vMBW_TpZw" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_CJxLVSp_EeKw-vMBW_TpZw" bpdm:messageIds="inc:_CJHrECp_EeKw-vMBW_TpZw"/>

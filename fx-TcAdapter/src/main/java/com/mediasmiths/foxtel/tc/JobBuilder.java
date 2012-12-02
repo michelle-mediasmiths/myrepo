@@ -96,12 +96,15 @@ public class JobBuilder
 		String winInputPath = pathResolver.winPath(PathType.NIX, inputfile);
 		String winOutputPath = pathResolver.winPath(PathType.NIX, outputFolder);
 
-		pcp = pcp.replace(INPUT_FILE_PATH_PH, winInputPath);
-		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, winOutputPath);
+//		pcp = pcp.replace(INPUT_FILE_PATH_PH, winInputPath);
+//		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, winOutputPath);
 
 		String uncInputPath = pathResolver.uncPath(PathType.NIX, inputfile);
 		String uncOutputPath = pathResolver.uncPath(PathType.NIX, outputFolder);
-
+		
+		pcp = pcp.replace(INPUT_FILE_PATH_PH, uncInputPath);
+		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, uncOutputPath);
+		
 		pcp = pcp.replace(FULL_UNC_INPUT_PATH_PH, uncInputPath);
 		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);
 		

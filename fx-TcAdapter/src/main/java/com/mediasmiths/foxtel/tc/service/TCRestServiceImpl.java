@@ -49,9 +49,9 @@ public class TCRestServiceImpl implements TCRestService
 
 	@Override
 	@PUT
-	@Path("/job/start/{TCstartRequest}")
+	@Path("/job/start")
 	@Produces("text/plain")
-	public UUID transcode(@PathParam("TCstartRequest") TCStartRequest startRequest) throws WfsClientException
+	public UUID transcode(TCStartRequest startRequest) throws WfsClientException
 	{
 		String jobXml = startRequest.getPcpXml();
 		log.trace("trying to create job from xml " + jobXml);

@@ -15,7 +15,7 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="FS Adapter" bpdm:ID="_OAM74CqBEeKw-vMBW_TpZw">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="workflowAndFS_AdapterForHttpPortPlkVar" partnerLinkType="diag:workflowAndFS_AdapterForHttpPortPlk" myRole="FS_Adapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://foxtel.local.mediasmithsforge.com:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_OAM74CqBEeKw-vMBW_TpZw:_Q5rDYCqBEeKw-vMBW_TpZw" bpdm:isManaged="true" bpdm:otherPoolId="_bCxNgCjEEeKtcPrB06lUwA"/>
+            <bpel:partnerLink name="workflowAndFS_AdapterForHttpPortPlkVar" partnerLinkType="diag:workflowAndFS_AdapterForHttpPortPlk" myRole="FS_Adapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_OAM74CqBEeKw-vMBW_TpZw:_Q5rDYCqBEeKw-vMBW_TpZw" bpdm:isManaged="true" bpdm:otherPoolId="_bCxNgCjEEeKtcPrB06lUwA"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input" binding="move:restBinding" operation="move" opMsgType="0" bpdm:id="_SsnApSqBEeKw-vMBW_TpZw" bpdm:messageIds="inc:_SsAjsCqBEeKw-vMBW_TpZw"/>
