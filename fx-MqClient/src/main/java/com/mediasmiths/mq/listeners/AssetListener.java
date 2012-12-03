@@ -83,6 +83,9 @@ public class AssetListener {
 						log.error("exception in unmatched handler", e);
 					}
 				}
+				else{
+					log.trace("Message not of type ATTRIBUTES, ignoring");
+				}
 			}
 
 		};

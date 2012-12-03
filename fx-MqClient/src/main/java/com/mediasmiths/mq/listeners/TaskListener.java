@@ -45,9 +45,7 @@ public class TaskListener {
 		return new Listener() {
 			public void onMessage(MqMessage msg) throws Throwable {
 				log.trace("TaskListener onMessage");
-				log.trace("pre msg.getType()");
 				MqContentType type = msg.getType();
-				log.trace("post msg.getType()");
 
 				if (type.equals(ContentTypes.ATTRIBUTES)) {
 
@@ -101,6 +99,9 @@ public class TaskListener {
 					} catch (Exception e) {
 						log.error("exception in segmentation handler", e);
 					}
+				}
+				else{
+					log.trace("Message not of type ATTRIBUTES, ignoring");
 				}
 			}
 		};
