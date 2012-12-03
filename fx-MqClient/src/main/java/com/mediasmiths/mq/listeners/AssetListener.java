@@ -7,6 +7,7 @@ import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mq.LogUtil;
 import com.mediasmiths.mq.handlers.AssetDeletionHandler;
@@ -21,7 +22,7 @@ public class AssetListener
 {
 	protected final static Logger log = Logger.getLogger(AssetListener.class);
 	
-	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController) 
+	public static Listener getInstance(final TasksClient client, final MayamTaskController taskController, EventService eventService) 
 	{
 		final AssetDeletionHandler assetDeletionHandler = new AssetDeletionHandler();
 		final AssetPurgeHandler assetPurgeHandler = new AssetPurgeHandler();
