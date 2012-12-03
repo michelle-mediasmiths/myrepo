@@ -35,7 +35,7 @@
 	
 	<pattern:http-proxy name="http-proxy-FSAdapter">
     	<http:inbound-endpoint address="http://0.0.0.0:8082/fx-FSAdapter" />
-	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8000/fx-FSAdapter" />
+	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter" />
 	</pattern:http-proxy>
 	
 	<pattern:http-proxy name="http-proxy-mayam-tasks-ws">

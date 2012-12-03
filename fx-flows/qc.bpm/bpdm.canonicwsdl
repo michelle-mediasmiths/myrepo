@@ -63,7 +63,7 @@
     <pnlk:role name="wfadpater_for_workflow" portType="autoQcFailed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk3" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="autoQcPassed:restInterface"></pnlk:role>
+    <pnlk:role name="wfadpater_for_workflow"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk4" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
     <pnlk:role name="wfadpater_for_workflow" portType="getProfileForQC:restInterface"></pnlk:role>
