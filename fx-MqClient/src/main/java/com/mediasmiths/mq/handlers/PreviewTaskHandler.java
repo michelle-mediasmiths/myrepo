@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class PreviewTaskHandler 
+public class PreviewTaskHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
@@ -57,5 +57,11 @@ public class PreviewTaskHandler
 				e.printStackTrace();			
 			}
 		}		
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Preview task";
 	}
 }

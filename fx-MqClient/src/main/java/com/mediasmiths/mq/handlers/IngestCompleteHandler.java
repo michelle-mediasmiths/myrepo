@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class IngestCompleteHandler 
+public class IngestCompleteHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestCompleteHandler.class);
@@ -46,5 +46,11 @@ public class IngestCompleteHandler
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Ingest Complete";		
 	}
 }

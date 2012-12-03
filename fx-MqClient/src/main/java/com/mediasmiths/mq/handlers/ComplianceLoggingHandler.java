@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ComplianceLoggingHandler 
+public class ComplianceLoggingHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(ComplianceLoggingHandler.class);
@@ -45,5 +45,11 @@ public class ComplianceLoggingHandler
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Compliance Logging";
 	}
 }

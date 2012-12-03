@@ -11,7 +11,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class InitiateQcHandler 
+public class InitiateQcHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);
@@ -52,5 +52,11 @@ public class InitiateQcHandler
 				}
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Initiate QC";
 	}
 }

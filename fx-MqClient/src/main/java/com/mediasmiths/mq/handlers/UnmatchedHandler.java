@@ -12,7 +12,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class UnmatchedHandler 
+public class UnmatchedHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(UnmatchedHandler.class);
@@ -57,5 +57,11 @@ public class UnmatchedHandler
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Unmatched";
 	}
 }

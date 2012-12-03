@@ -16,7 +16,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class TemporaryContentHandler 
+public class TemporaryContentHandler  implements Handler
 {
 	MayamTaskController taskController;
 	TasksClient client;
@@ -114,5 +114,11 @@ public class TemporaryContentHandler
 			log.error("Exception in the Mayam client while handling Temporary Content Message : " + e);
 			e.printStackTrace();	
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Temporary Content";
 	}
 }

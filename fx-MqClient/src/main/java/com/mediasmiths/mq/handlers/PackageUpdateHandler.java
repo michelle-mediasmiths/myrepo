@@ -15,7 +15,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class PackageUpdateHandler 
+public class PackageUpdateHandler  implements Handler
 {
 	MayamTaskController taskController;
 	TasksClient client;
@@ -153,5 +153,11 @@ public class PackageUpdateHandler
 				e.printStackTrace();	
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Package Update";
 	}
 }					

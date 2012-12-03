@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ImportFailureHandler 
+public class ImportFailureHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(ImportFailureHandler.class);
@@ -45,6 +45,12 @@ public class ImportFailureHandler
 				}	
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Import Failure";
 	}
 }
 

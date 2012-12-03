@@ -35,7 +35,7 @@ public class TaskListener {
 		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
 		
-		return new Listener() 
+		return new MqClientListener() 
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{
@@ -52,15 +52,15 @@ public class TaskListener {
 						
 						log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
 						
-						compEditHandler.process(messageAttributes);
-						comLoggingHandler.process(messageAttributes);
-						fixAndStitchHandler.process(messageAttributes);
-						importFailHandler.process(messageAttributes);
-						ingestCompleteHandler.process(messageAttributes);
-						initiateQcHandler.process(messageAttributes);
-						previewHandler.process(messageAttributes);
-						qcCompleteHandler.process(messageAttributes);
-						segmentationHandler.process(messageAttributes);
+						passEventToHandler(compEditHandler,messageAttributes);
+						passEventToHandler(comLoggingHandler,messageAttributes);
+						passEventToHandler(fixAndStitchHandler,messageAttributes);
+						passEventToHandler(importFailHandler,messageAttributes);
+						passEventToHandler(ingestCompleteHandler,messageAttributes);
+						passEventToHandler(initiateQcHandler,messageAttributes);
+						passEventToHandler(previewHandler,messageAttributes);
+						passEventToHandler(qcCompleteHandler,messageAttributes);
+						passEventToHandler(segmentationHandler,messageAttributes);
 					}
 				}
 				else {

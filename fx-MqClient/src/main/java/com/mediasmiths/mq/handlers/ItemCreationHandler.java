@@ -11,7 +11,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ItemCreationHandler 
+public class ItemCreationHandler  implements Handler
 {
 	MayamTaskController taskController;
 	TasksClient client;
@@ -54,5 +54,11 @@ public class ItemCreationHandler
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Item creation";
 	}
 }

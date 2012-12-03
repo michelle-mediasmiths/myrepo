@@ -11,7 +11,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class SegmentationCompleteHandler 
+public class SegmentationCompleteHandler  implements Handler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(SegmentationCompleteHandler.class);
@@ -49,5 +49,11 @@ public class SegmentationCompleteHandler
 				e.printStackTrace();
 			}
 		}	
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Segmentation Complete";
 	}
 }

@@ -8,7 +8,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class EmergencyIngestHandler 
+public class EmergencyIngestHandler  implements Handler
 {
 	MayamTaskController taskController;
 	TasksClient client;
@@ -35,5 +35,11 @@ public class EmergencyIngestHandler
 				e.printStackTrace();
 			}
 		}		
+	}
+
+	@Override
+	public String getName()
+	{
+		return "Emergency Ingest";
 	}
 }

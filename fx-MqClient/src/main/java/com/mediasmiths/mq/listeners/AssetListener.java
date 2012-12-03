@@ -14,6 +14,7 @@ import com.mediasmiths.mq.LogUtil;
 import com.mediasmiths.mq.handlers.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.EmergencyIngestHandler;
+import com.mediasmiths.mq.handlers.Handler;
 import com.mediasmiths.mq.handlers.ItemCreationHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
@@ -32,7 +33,7 @@ public class AssetListener {
 		final TemporaryContentHandler temporaryContentHandler = new TemporaryContentHandler(client, taskController);
 		final UnmatchedHandler unmatchedHandler = new UnmatchedHandler(taskController);
 		
-		return new Listener() 
+		return new MqClientListener() 
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{	
@@ -45,21 +46,22 @@ public class AssetListener {
 						AttributeMap messageAttributes = msg.getSubject();
 						
 						log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
-						
-						assetDeletionHandler.process(messageAttributes);
-						assetPurgeHandler.process(messageAttributes);
-						emergencyIngestHandler.process(messageAttributes);
-						itemCreationHandler.process(messageAttributes);
-						packageUpdateHandler.process(messageAttributes);
-						temporaryContentHandler.process(messageAttributes);
-						unmatchedHandler.process(messageAttributes);
+
+						passEventToHandler(assetDeletionHandler, messageAttributes);
+						passEventToHandler(assetPurgeHandler,messageAttributes);
+						passEventToHandler(emergencyIngestHandler,messageAttributes);
+						passEventToHandler(itemCreationHandler,messageAttributes);
+						passEventToHandler(packageUpdateHandler,messageAttributes);
+						passEventToHandler(temporaryContentHandler,messageAttributes);
+						passEventToHandler(unmatchedHandler,messageAttributes);
 					}
 				}
 				else {
 					log.debug(String.format("AssetListener onMessage, null pointer exception caught when reading message type and Mayam origin. Msg: %s", msg.toString()));
 				}
 			}
-
+			
 		};
+		
 	}
 }
