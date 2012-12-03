@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
@@ -30,7 +31,7 @@ public class TemporaryContentHandler
 	public void process(AttributeMap messageAttributes)
 	{	
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
-		String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		try {			
 			if (assetType.equals("ITEM")) 
@@ -90,7 +91,7 @@ public class TemporaryContentHandler
 					}
 				}
 				else {
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
+					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
 					
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.putAll(messageAttributes);

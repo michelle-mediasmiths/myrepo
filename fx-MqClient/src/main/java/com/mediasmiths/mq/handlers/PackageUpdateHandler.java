@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
@@ -29,7 +30,7 @@ public class PackageUpdateHandler
 	public void process(AttributeMap messageAttributes)
 	{	
 		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-		String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		
 		if (assetID == null || assetID.equals(""))
 		{			
@@ -93,7 +94,7 @@ public class PackageUpdateHandler
 						
 						if (requiresSegTask) {
 							//Create new segmentation task for this asset
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
+							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);
@@ -140,7 +141,7 @@ public class PackageUpdateHandler
 					
 					if (requiresSegTask) {
 						//Create new segmentation task for this asset
-						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.SEGMENTATION);
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
 						AttributeMap newTask = taskController.getTask(taskID);
 						newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 						taskController.saveTask(newTask);

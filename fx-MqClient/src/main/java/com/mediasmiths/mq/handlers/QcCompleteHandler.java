@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -32,8 +33,8 @@ public class QcCompleteHandler
 					taskController.saveTask(messageAttributes);
 					
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PREVIEW);
+					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PREVIEW);
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);
