@@ -132,6 +132,11 @@ public class FSRestServiceImpl implements FSRestService
 			File from = new File(mr.getFrom());
 			File to = new File(mr.getTo());
 
+			if(from.equals(to)){
+				log.info(String.format("Move from %s to %s not required, source and destination are equal", from.getAbsolutePath(), to.getAbsolutePath()));
+				return new MoveResponse(true);
+			}
+			
 			if (to.isFile() && to.exists())
 			{
 				log.error(String.format("Target file %s for move already exists", to.getAbsolutePath()));
