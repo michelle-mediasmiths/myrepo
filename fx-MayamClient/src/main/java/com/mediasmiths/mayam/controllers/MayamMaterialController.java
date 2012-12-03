@@ -62,7 +62,7 @@ public class MayamMaterialController extends MayamController
 
 		attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 		try {
-			AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), titleID);
+			AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 			if (title != null) {
 				boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
