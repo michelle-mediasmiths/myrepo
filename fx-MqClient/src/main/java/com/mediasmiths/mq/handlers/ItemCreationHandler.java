@@ -29,7 +29,7 @@ public class ItemCreationHandler
 						
 		if (assetID == null || assetID.equals(""))
 		{			
-			String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 			String parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
 			try {
 				if (assetType.equals(AssetType.ITEM) && (parentID != null)) 
@@ -37,13 +37,13 @@ public class ItemCreationHandler
 					//Skip QC and move straight to compliance	
 					//Compile flag is not stored in Mayam, but Parent Id is taken from compiled object
 					//As such we are using the presence of Parent Id on a Material asset to determined if compile was set
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.COMPLIANCE_LOGGING);
+					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_LOGGING);
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);
 				}
 				else {
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.INGEST);
+					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);

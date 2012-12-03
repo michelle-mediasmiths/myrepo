@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -30,9 +31,9 @@ public class UnmatchedHandler
 				//TODO : identify origin of unmatched content (emergency ingest\ DART ) 
 			
 				//Add to purge candidate list with expiry date of 30 days
-				String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+				AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
+				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
 				
 				MuleWorkflowController mule = new MuleWorkflowController();
 				if (assetType.equals(MayamAssetType.MATERIAL.toString()))
