@@ -19,6 +19,7 @@ public class LogUtil {
 				sb.append(entry.name());
 				sb.append(":");
 				sb.append(map.getAttributeAsString(entry));
+				sb.append(",");
 			}
 		
 		return sb.toString();

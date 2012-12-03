@@ -19,47 +19,88 @@ import com.mediasmiths.mq.handlers.PreviewTaskHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 
-public class TaskListener
-{
+public class TaskListener {
 	protected final static Logger log = Logger.getLogger(TaskListener.class);
-	
-	public static Listener getInstance(final MayamTaskController taskController) 
-	{
-		final ComplianceEditingHandler compEditHandler = new ComplianceEditingHandler(taskController);
-		final ComplianceLoggingHandler comLoggingHandler = new ComplianceLoggingHandler(taskController);
-		final FixAndStitchHandler fixAndStitchHandler = new FixAndStitchHandler(taskController);
-		final ImportFailureHandler importFailHandler = new ImportFailureHandler(taskController);
-		final IngestCompleteHandler ingestCompleteHandler = new IngestCompleteHandler(taskController);
-		final InitiateQcHandler initiateQcHandler = new InitiateQcHandler(taskController);
-		final PreviewTaskHandler previewHandler = new PreviewTaskHandler(taskController);
-		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
-		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
-		
-		return new Listener() 
-		{
-			public void onMessage(MqMessage msg) throws Throwable 
-			{
+
+	public static Listener getInstance(final MayamTaskController taskController) {
+		final ComplianceEditingHandler compEditHandler = new ComplianceEditingHandler(
+				taskController);
+		final ComplianceLoggingHandler comLoggingHandler = new ComplianceLoggingHandler(
+				taskController);
+		final FixAndStitchHandler fixAndStitchHandler = new FixAndStitchHandler(
+				taskController);
+		final ImportFailureHandler importFailHandler = new ImportFailureHandler(
+				taskController);
+		final IngestCompleteHandler ingestCompleteHandler = new IngestCompleteHandler(
+				taskController);
+		final InitiateQcHandler initiateQcHandler = new InitiateQcHandler(
+				taskController);
+		final PreviewTaskHandler previewHandler = new PreviewTaskHandler(
+				taskController);
+		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(
+				taskController);
+		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(
+				taskController);
+
+		return new Listener() {
+			public void onMessage(MqMessage msg) throws Throwable {
 				log.trace("TaskListener onMessage");
-				log.trace("pre msg.getType()");  
+				log.trace("pre msg.getType()");
 				MqContentType type = msg.getType();
 				log.trace("post msg.getType()");
-				
-				if (type.equals(ContentTypes.ATTRIBUTES)) 
-				{
-					
+
+				if (type.equals(ContentTypes.ATTRIBUTES)) {
+
 					AttributeMap messageAttributes = msg.getSubject();
-					
-					log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
-					
-					compEditHandler.process(messageAttributes);
-					comLoggingHandler.process(messageAttributes);
-					fixAndStitchHandler.process(messageAttributes);
-					importFailHandler.process(messageAttributes);
-					ingestCompleteHandler.process(messageAttributes);
-					initiateQcHandler.process(messageAttributes);
-					previewHandler.process(messageAttributes);
-					qcCompleteHandler.process(messageAttributes);
-					segmentationHandler.process(messageAttributes);
+
+					log.trace(String.format("Attributes message: "
+							+ LogUtil.mapToString(messageAttributes)));
+
+					try {
+						compEditHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in compliance editing handler", e);
+					}
+					try {
+						comLoggingHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in compliance logging handler", e);
+					}
+					try {
+						fixAndStitchHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in fix and stitch handler", e);
+					}
+					try {
+						importFailHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in import failure handler", e);
+					}
+					try {
+						ingestCompleteHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in ingest completion handler", e);
+					}
+					try {
+						initiateQcHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in initiate qc handler", e);
+					}
+					try {
+						previewHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in preview handler", e);
+					}
+					try {
+						qcCompleteHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in qc complete handler", e);
+					}
+					try {
+						segmentationHandler.process(messageAttributes);
+					} catch (Exception e) {
+						log.error("exception in segmentation handler", e);
+					}
 				}
 			}
 		};
