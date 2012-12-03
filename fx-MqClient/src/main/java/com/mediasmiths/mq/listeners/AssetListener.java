@@ -3,6 +3,7 @@ package com.mediasmiths.mq.listeners;
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mayam.wf.mq.common.ContentTypes;
@@ -42,49 +43,56 @@ public class AssetListener {
 						"AssetListener onMessage, messagetype %s", msg
 								.getType().toString()));
 
-				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) {
-					AttributeMap messageAttributes = msg.getSubject();
-
-					log.trace(String.format("Attributes message: "
-							+ LogUtil.mapToString(messageAttributes)));
-					try {
-						assetDeletionHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in asset deletion handler", e);
-					}
-					try {
-						assetPurgeHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in asset purge handler", e);
-					}
-					try {
-						emergencyIngestHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in emergency ingest handler", e);
-					}
-					try {
-						itemCreationHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in item creation handler", e);
-					}
-					try {
-						packageUpdateHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in package update handler", e);
-					}
-					try {
-						temporaryContentHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in temporary content handler", e);
-					}
-					try {
-						unmatchedHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in unmatched handler", e);
-					}
+				MqContentType type = msg.getType();
+				if(type==null){
+					log.warn("Message has a null type");
 				}
 				else{
-					log.trace("Message not of type ATTRIBUTES, ignoring");
+					
+					if (type.equals(ContentTypes.ATTRIBUTES)) {
+						AttributeMap messageAttributes = msg.getSubject();
+	
+						log.trace(String.format("Attributes message: "
+								+ LogUtil.mapToString(messageAttributes)));
+						try {
+							assetDeletionHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in asset deletion handler", e);
+						}
+						try {
+							assetPurgeHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in asset purge handler", e);
+						}
+						try {
+							emergencyIngestHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in emergency ingest handler", e);
+						}
+						try {
+							itemCreationHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in item creation handler", e);
+						}
+						try {
+							packageUpdateHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in package update handler", e);
+						}
+						try {
+							temporaryContentHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in temporary content handler", e);
+						}
+						try {
+							unmatchedHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in unmatched handler", e);
+						}
+					}
+					else{
+						log.trace("Message not of type ATTRIBUTES, ignoring");
+					}
 				}
 			}
 

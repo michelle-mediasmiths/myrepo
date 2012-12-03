@@ -46,62 +46,69 @@ public class TaskListener {
 			public void onMessage(MqMessage msg) throws Throwable {
 				log.trace("TaskListener onMessage");
 				MqContentType type = msg.getType();
-
-				if (type.equals(ContentTypes.ATTRIBUTES)) {
-
-					AttributeMap messageAttributes = msg.getSubject();
-
-					log.trace(String.format("Attributes message: "
-							+ LogUtil.mapToString(messageAttributes)));
-
-					try {
-						compEditHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in compliance editing handler", e);
-					}
-					try {
-						comLoggingHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in compliance logging handler", e);
-					}
-					try {
-						fixAndStitchHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in fix and stitch handler", e);
-					}
-					try {
-						importFailHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in import failure handler", e);
-					}
-					try {
-						ingestCompleteHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in ingest completion handler", e);
-					}
-					try {
-						initiateQcHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in initiate qc handler", e);
-					}
-					try {
-						previewHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in preview handler", e);
-					}
-					try {
-						qcCompleteHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in qc complete handler", e);
-					}
-					try {
-						segmentationHandler.process(messageAttributes);
-					} catch (Exception e) {
-						log.error("exception in segmentation handler", e);
-					}
+				
+				if(type==null){
+					log.warn("Message has a null type");
 				}
 				else{
-					log.trace("Message not of type ATTRIBUTES, ignoring");
+					log.debug("Message is of type"+type.toString());
+				
+					if (type.equals(ContentTypes.ATTRIBUTES)) {
+	
+						AttributeMap messageAttributes = msg.getSubject();
+	
+						log.trace(String.format("Attributes message: "
+								+ LogUtil.mapToString(messageAttributes)));
+	
+						try {
+							compEditHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in compliance editing handler", e);
+						}
+						try {
+							comLoggingHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in compliance logging handler", e);
+						}
+						try {
+							fixAndStitchHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in fix and stitch handler", e);
+						}
+						try {
+							importFailHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in import failure handler", e);
+						}
+						try {
+							ingestCompleteHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in ingest completion handler", e);
+						}
+						try {
+							initiateQcHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in initiate qc handler", e);
+						}
+						try {
+							previewHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in preview handler", e);
+						}
+						try {
+							qcCompleteHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in qc complete handler", e);
+						}
+						try {
+							segmentationHandler.process(messageAttributes);
+						} catch (Exception e) {
+							log.error("exception in segmentation handler", e);
+						}
+					}
+					else{
+						log.trace("Message not of type ATTRIBUTES, ignoring");
+					}
 				}
 			}
 		};
