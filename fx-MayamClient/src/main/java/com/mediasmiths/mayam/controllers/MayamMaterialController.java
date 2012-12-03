@@ -289,9 +289,8 @@ public class MayamMaterialController extends MayamController
 				String houseID = material.getMaterialID();
 				try {
 			
-					String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
-					
 					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, houseID);
+					String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
 					SegmentListList lists  = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetID);
 			
 					SegmentationType segmentation = material.getOriginalConform(); 
