@@ -45,6 +45,11 @@
 			<version>0.9.9.9.2</version>
 		</dependency-->
 		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-Agent</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>wf-siteconfig</artifactId>
 			<version>0.9.9.9.2</version>

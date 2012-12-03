@@ -17,6 +17,7 @@ import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -36,6 +37,9 @@ public class MqListeners implements Runnable {
 	
 	@Inject 
 	Mq mq;
+	
+	@Inject
+	EventService eventService;
 	
 	Injector injector;
 	Provider<AttributeMessageBuilder> ambp;
@@ -84,8 +88,8 @@ public class MqListeners implements Runnable {
 	public void attachIncomingListners() 
 	{
 		log.info("Attatching listeners");
-		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController));
-		attachListener(MediasmithsDestinations.ASSETS, AssetListener.getInstance(client, taskController));
+		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController, eventService));
+		attachListener(MediasmithsDestinations.ASSETS, AssetListener.getInstance(client, taskController, eventService));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

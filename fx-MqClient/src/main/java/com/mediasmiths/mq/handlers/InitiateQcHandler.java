@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -33,14 +34,14 @@ public class InitiateQcHandler
 					taskController.saveTask(messageAttributes);
 							
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-					String assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
 					MuleWorkflowController mule = new MuleWorkflowController();
-					if (assetType.equals(MayamAssetType.MATERIAL.toString()))
+					if (assetType.toString().equals(MayamAssetType.MATERIAL.toString()))
 					{
 						mule.initiateQcWorkflow(assetID, false);
 					} 
-					else if (assetType.equals(MayamAssetType.PACKAGE.toString()))
+					else if (assetType.toString().equals(MayamAssetType.PACKAGE.toString()))
 					{
 						mule.initiateQcWorkflow(assetID, true);
 					}

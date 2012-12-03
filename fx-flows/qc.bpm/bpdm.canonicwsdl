@@ -63,7 +63,7 @@
     <pnlk:role name="wfadpater_for_workflow" portType="autoQcFailed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk3" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow"></pnlk:role>
+    <pnlk:role name="wfadpater_for_workflow" portType="autoQcPassed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk4" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
     <pnlk:role name="wfadpater_for_workflow" portType="getProfileForQC:restInterface"></pnlk:role>
@@ -73,7 +73,7 @@
       <wsdl:portType name="Forcaller">
         <wsdl:operation name="start" bpdm:canid="_0XbtACKgEeKJt7IsuN4hnw._7ltRkCKgEeKJt7IsuN4hnw._JySsECKhEeKJt7IsuN4hnw._Q35DmB9xEeKCKo-8QnTuIA._bWc3sB9yEeKCKo-8QnTuIA.">
           <wsdl:input message="workflow:startRequest" name="start" bpdm:canid="_XVXLYB9zEeKCKo-8QnTuIA" bpdm:senderId="_Q35DmB9xEeKCKo-8QnTuIA" bpdm:receiverId="_bWc3sB9yEeKCKo-8QnTuIA" bpdm:senderName="invoke" bpdm:receiverName="start" bpdm:receiverPoolId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow" bpdm:bodyPartElemName="startRequest" bpdm:bodyPartElemType="{http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"></wsdl:input>
-          <wsdl:output message="workflow:startResponse" name="startResponse" bpdm:canid="_L7Rx0CKhEeKJt7IsuN4hnw" bpdm:senderId="_JySsECKhEeKJt7IsuN4hnw" bpdm:receiverId="_Q35DmB9xEeKCKo-8QnTuIA" bpdm:senderName="reply to caller" bpdm:receiverName="invoke" bpdm:receiverPoolId="_Q35Dlh9xEeKCKo-8QnTuIA" bpdm:bodyPartElemName="startResponse" bpdm:bodyPartElemType="xs:string"></wsdl:output>
+          <wsdl:output message="workflow:startResponse" name="startResponse" bpdm:canid="_HFGGACKhEeKJt7IsuN4hnw" bpdm:senderId="_7ltRkCKgEeKJt7IsuN4hnw" bpdm:receiverId="_Q35DmB9xEeKCKo-8QnTuIA" bpdm:senderName="replay to caller" bpdm:receiverName="invoke" bpdm:receiverPoolId="_Q35Dlh9xEeKCKo-8QnTuIA" bpdm:bodyPartElemName="startResponse" bpdm:bodyPartElemType="xs:string"></wsdl:output>
         </wsdl:operation>
       </wsdl:portType>
     </pnlk:role>

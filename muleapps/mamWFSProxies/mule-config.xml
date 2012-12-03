@@ -18,6 +18,34 @@
     Proxy connections for WFS solution
     </description>
 
+	<pattern:http-proxy name="http-proxy-services">
+     	<!-- http client in intalio has the full url in the resource path leading to mule interpreting
+     		request like this:
+     		
+     		20:37:53,333 DEBUG [header] >> "PUT http://mamwkf01.mam.foxtel.com.au:8082/fx-WFAdapter/rest/wf/tc/transferfortc HTTP/1.1[\r][\n]"
+20:37:53,347 DEBUG [header] >> "Accept: application/xml[\r][\n]"
+20:37:53,347 DEBUG [header] >> "User-Agent: Jakarta Commons-HttpClient/3.1[\r][\n]"
+20:37:53,347 DEBUG [header] >> "Host: mamwkf01.mam.foxtel.com.au:8082[\r][\n]"
+20:37:53,347 DEBUG [header] >> "Content-Length: 374[\r][\n]"
+20:37:53,347 DEBUG [header] >> "Content-Type: application/xml; charset=UTF-8[\r][\n]"
+20:37:53,347 DEBUG [header] >> "[\r][\n]"
+20:37:53,348 DEBUG [content] >> "<?xml version="1.0" encoding="UTF-8"?>[\n]"
+20:37:53,348 DEBUG [content] >> "<materialTransferForTCRequest xmlns="http://ns.mediasmiths.com/foxtel/wf/adapter">[\n]"
+20:37:53,348 DEBUG [content] >> "  <wfAdapter:assetID xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter">EXISTING_PACKAGE</wfAdapter:assetID>[\n]"
+20:37:53,348 DEBUG [content] >> "  <wfAdapter:forTX xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter">0</wfAdapter:forTX>[\n]"
+20:37:53,348 DEBUG [content] >> "</materialTransferForTCRequest>"
+20:37:53,352 DEBUG [header] << "HTTP/1.1 404 Not Found[\r][\n]"
+20:37:53,352 DEBUG [header] << "HTTP/1.1 404 Not Found[\r][\n]"
+20:37:53,354 DEBUG [header] << "Content-Type: text/plain[\r][\n]"
+20:37:53,354 DEBUG [header] << "Content-Length: 161[\r][\n]"
+20:37:53,354 DEBUG [header] << "Connection: close[\r][\n]"
+20:37:53,354 DEBUG [header] << "[\r][\n]"
+20:37:53,356 DEBUG [content] << "Cannot bind to address "http://0.0.0.0:8082http://mamwkf01.mam.foxtel.com.au:8082/fx-WFAdapter/rest/wf/tc/transferfortc" No component registered on that endpoint"
+     	-->
+	    <http:inbound-endpoint address="http://0.0.0.0:8082http://mamwkf01.mam.foxtel.com.au:8082/" />
+	    <http:outbound-endpoint address="http://localhost:8080/" />
+	</pattern:http-proxy>
+
 	<pattern:http-proxy name="http-proxy-tcAdapter">
     	<http:inbound-endpoint address="http://0.0.0.0:8082/fx-TcAdapter" />
 	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter" />
