@@ -286,10 +286,12 @@ public class MayamMaterialController extends MayamController
 				// material.getFirstFrameTimecode();
 				// attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
-				String assetID = material.getMaterialID();
+				String houseID = material.getMaterialID();
 				try {
-					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, assetID);
-					SegmentListList lists  = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetID);
+					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, houseID);
+					SegmentListList lists  = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, houseID);
+					
+					String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
 			
 					SegmentationType segmentation = material.getOriginalConform(); 
 					if (segmentation != null && lists != null)
@@ -317,7 +319,7 @@ public class MayamMaterialController extends MayamController
 								
 								SegmentList list = lists.get(i);
 								if (list == null) {
-									SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
+									SegmentListBuilder listBuilder = SegmentList.create("Asset " + houseID + " Segment " + segment.getSegmentNumber());
 									listBuilder = listBuilder.metadataForm(PROGRAMME_MATERIAL_AGL_NAME); 
 									listBuilder = listBuilder.metadata(metadata);
 									list = listBuilder.build();
@@ -329,7 +331,7 @@ public class MayamMaterialController extends MayamController
 								}
 							}
 							else {
-								log.error("Segment data is null for asset ID: " + assetID);
+								log.error("Segment data is null for material ID: " + houseID);
 							}
 						}
 						
@@ -337,7 +339,7 @@ public class MayamMaterialController extends MayamController
 				}
 				catch(RemoteException e)
 				{
-					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID,e);
+					log.error("Error thrown by Mayam while updating Segmentation data for material ID: " + houseID,e);
 				}
 				
 				AudioTracks audioTracks = material.getAudioTracks(); 
