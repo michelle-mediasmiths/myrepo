@@ -43,23 +43,29 @@ public class TaskListener
 				log.trace("pre msg.getType()");  
 				MqContentType type = msg.getType();
 				log.trace("post msg.getType()");
-				
-				if (type.equals(ContentTypes.ATTRIBUTES)) 
+				String origin = msg.PROP_ORIGIN_DESTINATION;
+				if (type != null && origin != null) 
 				{
-					
-					AttributeMap messageAttributes = msg.getSubject();
-					
-					log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
-					
-					compEditHandler.process(messageAttributes);
-					comLoggingHandler.process(messageAttributes);
-					fixAndStitchHandler.process(messageAttributes);
-					importFailHandler.process(messageAttributes);
-					ingestCompleteHandler.process(messageAttributes);
-					initiateQcHandler.process(messageAttributes);
-					previewHandler.process(messageAttributes);
-					qcCompleteHandler.process(messageAttributes);
-					segmentationHandler.process(messageAttributes);
+					if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
+					{
+						
+						AttributeMap messageAttributes = msg.getSubject();
+						
+						log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
+						
+						compEditHandler.process(messageAttributes);
+						comLoggingHandler.process(messageAttributes);
+						fixAndStitchHandler.process(messageAttributes);
+						importFailHandler.process(messageAttributes);
+						ingestCompleteHandler.process(messageAttributes);
+						initiateQcHandler.process(messageAttributes);
+						previewHandler.process(messageAttributes);
+						qcCompleteHandler.process(messageAttributes);
+						segmentationHandler.process(messageAttributes);
+					}
+				}
+				else {
+					log.debug(String.format("TaskListener onMessage, null pointer exception caught when reading message type and Mayam origin. Msg: %s", msg.toString()));
 				}
 			}
 		};

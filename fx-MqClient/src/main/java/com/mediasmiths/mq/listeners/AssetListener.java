@@ -34,23 +34,28 @@ public class AssetListener
 		return new Listener() 
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
-			{
-				
+			{	
 				log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().toString()));
-				
-				if (msg.getType().equals(ContentTypes.ATTRIBUTES)) 
+				String origin = msg.PROP_ORIGIN_DESTINATION;
+				if (msg.getType() != null && origin != null) 
 				{
-					AttributeMap messageAttributes = msg.getSubject();
-					
-					log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
-					
-					assetDeletionHandler.process(messageAttributes);
-					assetPurgeHandler.process(messageAttributes);
-					emergencyIngestHandler.process(messageAttributes);
-					itemCreationHandler.process(messageAttributes);
-					packageUpdateHandler.process(messageAttributes);
-					temporaryContentHandler.process(messageAttributes);
-					unmatchedHandler.process(messageAttributes);
+					if (msg.getType().equals(ContentTypes.ATTRIBUTES) && origin.contains("asset"))
+					{
+						AttributeMap messageAttributes = msg.getSubject();
+						
+						log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
+						
+						assetDeletionHandler.process(messageAttributes);
+						assetPurgeHandler.process(messageAttributes);
+						emergencyIngestHandler.process(messageAttributes);
+						itemCreationHandler.process(messageAttributes);
+						packageUpdateHandler.process(messageAttributes);
+						temporaryContentHandler.process(messageAttributes);
+						unmatchedHandler.process(messageAttributes);
+					}
+				}
+				else {
+					log.debug(String.format("AssetListener onMessage, null pointer exception caught when reading message type and Mayam origin. Msg: %s", msg.toString()));
 				}
 			}
 
