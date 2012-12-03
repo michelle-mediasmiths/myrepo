@@ -37,7 +37,14 @@ public class AssetListener {
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{	
-				log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().toString()));
+				
+				if(msg.getType() == null){
+					log.debug(String.format("AssetListener onMessage, messagetype is null"));
+				}
+				else{
+					log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().toString()));
+				}
+				
 				String origin = msg.PROP_ORIGIN_DESTINATION;
 				if (msg.getType() != null && origin != null) 
 				{
