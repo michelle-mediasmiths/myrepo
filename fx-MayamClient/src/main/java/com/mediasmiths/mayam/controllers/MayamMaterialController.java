@@ -71,7 +71,8 @@ public class MayamMaterialController extends MayamController
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 			}
 		} catch (RemoteException e) {
-			log.error("MayamException while trying to retrieve title : " + titleID,e);						
+			log.error("MayamException while trying to retrieve title : " + titleID,e);
+			return MayamClientErrorCode.TASK_SEARCH_FAILED;
 		}
 		
 		if (material != null)
