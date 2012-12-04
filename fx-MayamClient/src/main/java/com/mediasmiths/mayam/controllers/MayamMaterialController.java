@@ -287,12 +287,29 @@ public class MayamMaterialController extends MayamController
 				// attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
 
 				String houseID = material.getMaterialID();
-				try {
+		
 			
-					AttributeMap asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, houseID);
+					AttributeMap asset;
+					try
+					{
+						asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, houseID);
+					}
+					catch (RemoteException e1)
+					{
+						log.error("Error thrown by Mayam while getting asset data for material ID: " + houseID,e1);
+						return MayamClientErrorCode.MATERIAL_FIND_FAILED;
+					}
 					String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
+					
+					/*********
 					SegmentListList lists  = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetID);
 			
+				
+					
+					FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
+					
+							try {
+					
 					SegmentationType segmentation = material.getOriginalConform(); 
 					if (segmentation != null && lists != null)
 					{
@@ -341,6 +358,9 @@ public class MayamMaterialController extends MayamController
 				{
 					log.error("Error thrown by Mayam while updating Segmentation data for material ID: " + houseID,e);
 				}
+				
+				********/
+					
 				
 				AudioTracks audioTracks = material.getAudioTracks(); 
 				if (audioTracks != null)
