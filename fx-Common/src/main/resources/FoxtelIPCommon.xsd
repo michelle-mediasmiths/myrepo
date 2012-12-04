@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common/001/000" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"  
+           targetNamespace="http://com.mediasmiths.foxtel.ip.common/001/000" 
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+	<xs:complexType name="FilePickupStatistics">
+		<xs:annotation>
+			<xs:documentation>The definition for File Pickup Details.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="filePath" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>The name of the </xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="waitTime" type="xs:long">
+				<xs:annotation>
+					<xs:documentation></xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	
+</xs:schema>
