@@ -38,7 +38,8 @@ public class MqListeners implements Runnable {
 	@Inject 
 	Mq mq;
 	
-	@Inject
+//	@Inject
+	//failed to inject
 	EventService eventService;
 	
 	Injector injector;
