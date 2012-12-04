@@ -213,7 +213,7 @@ public class MayamMaterialController extends MayamController
 				audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString()))); 
 				audioTrack.setName(track.getTrackName().toString()); 
 				audioTrack.setNumber(track.getTrackNumber());
-				audioTrackList.add(i, audioTrack);
+				audioTrackList.add(audioTrack);
 			}
 			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			
@@ -376,7 +376,7 @@ public class MayamMaterialController extends MayamController
 							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString()))); 
 							audioTrack.setName(track.getTrackName().toString()); 
 							audioTrack.setNumber(track.getTrackNumber());
-							audioTrackList.set(i, audioTrack);
+							audioTrackList.add(audioTrack);
 						}
 						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 					}
