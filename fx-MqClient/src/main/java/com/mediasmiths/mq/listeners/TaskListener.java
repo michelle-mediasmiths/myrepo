@@ -39,11 +39,22 @@ public class TaskListener {
 		{
 			public void onMessage(MqMessage msg) throws Throwable 
 			{
-				log.trace("TaskListener onMessage");
+				log.trace("TaskListener onMessage");				
+				log.trace("Message is: " + msg.toString());
+				
 				MqContentType type = msg.getType();
 
+				if(type != null){
+					log.trace("Message type not null "+type.toString());
+					log.debug("Message type is "+type.toString());
+				}
+				
 				log.trace("post msg.getType()");
-				String origin = msg.PROP_ORIGIN_DESTINATION;
+				
+				String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
+				
+				log.trace("origin is:"+origin);
+				
 				if (type != null && origin != null) 
 				{
 					if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
@@ -61,10 +72,12 @@ public class TaskListener {
 						passEventToHandler(previewHandler,messageAttributes);
 						passEventToHandler(qcCompleteHandler,messageAttributes);
 						passEventToHandler(segmentationHandler,messageAttributes);
+					}else{
+						log.debug("Message is not of types ATTRIBUTES, ignoring");
 					}
 				}
 				else {
-					log.debug(String.format("TaskListener onMessage, null pointer exception caught when reading message type and Mayam origin. Msg: %s", msg.toString()));
+					log.debug(String.format("TaskListener onMessage, type or origin was null. Msg: %s", msg.toString()));
 				}
 			}
 		};

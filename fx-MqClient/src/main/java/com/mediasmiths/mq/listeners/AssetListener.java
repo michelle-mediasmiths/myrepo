@@ -45,7 +45,10 @@ public class AssetListener {
 					log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().toString()));
 				}
 				
-				String origin = msg.PROP_ORIGIN_DESTINATION;
+				String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
+				
+				log.trace("origin is:"+origin);
+				
 				if (msg.getType() != null && origin != null) 
 				{
 					if (msg.getType().equals(ContentTypes.ATTRIBUTES) && origin.contains("asset"))
@@ -62,9 +65,12 @@ public class AssetListener {
 						passEventToHandler(temporaryContentHandler,messageAttributes);
 						passEventToHandler(unmatchedHandler,messageAttributes);
 					}
+					else{
+						log.debug("Message is not of types ATTRIBUTES, ignoring");
+					}
 				}
 				else {
-					log.debug(String.format("AssetListener onMessage, null pointer exception caught when reading message type and Mayam origin. Msg: %s", msg.toString()));
+					log.debug(String.format("AssetListener onMessage, type or origin was null. Msg: %s", msg.toString()));
 				}
 			}
 			
