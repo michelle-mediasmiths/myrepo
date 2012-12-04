@@ -177,8 +177,11 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			try {
 				String failedMessagesFolder = MessageProcessor
 						.getFailureFolderForFile(me.getFile());
-				FileUtils.moveFileToDirectory(me.getFile(), new File(
-						failedMessagesFolder), false);
+				
+				File dst = new File(MessageProcessor.getDestinationPathForFileMove(
+						me.getFile(), failedMessagesFolder, true));
+				
+				FileUtils.moveFileToDirectory(me.getFile(),dst, false);
 			} catch (IOException e) {
 				logger.fatal(
 						"IOException moving umatched xml to the failed messages folder",
