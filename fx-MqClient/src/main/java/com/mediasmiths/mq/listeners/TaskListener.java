@@ -41,22 +41,21 @@ public class TaskListener {
 			{
 				log.trace("TaskListener onMessage");				
 				log.trace("Message is: " + msg.toString());
-				
 				MqContentType type = msg.getType();
-
 				if(type != null){
-					log.trace("Message type not null "+type.toString());
-					log.debug("Message type is "+type.toString());
+					log.debug("Message type not null "+type.toString());
 				}
-				
-				log.trace("post msg.getType()");
-				
+				else{
+					log.debug("Message type is null");
+				}
 				String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 				
 				log.trace("origin is:"+origin);
 				
 				if (type != null && origin != null) 
 				{
+					log.trace("Type and origin but not null");
+					
 					if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
 					{			
 						AttributeMap messageAttributes = msg.getSubject();

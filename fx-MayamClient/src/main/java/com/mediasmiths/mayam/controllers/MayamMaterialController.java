@@ -184,13 +184,26 @@ public class MayamMaterialController extends MayamController
 	 * @return
 	 * @throws MayamClientException 
 	 */
-	public String createMaterial(MarketingMaterialType material) throws MayamClientException
+	public String createMaterial(MarketingMaterialType material, String titleID) throws MayamClientException
 	{
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
 		if (material != null)
 		{
+			
+			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			try {
+				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
+				if (title != null) {
+					String assetId = title.getAttribute(Attribute.ASSET_ID);
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+				}
+			} catch (RemoteException e) {
+				log.error("MayamException while trying to retrieve title : " + titleID,e);
+				throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED,e);
+			}
+			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 
@@ -240,10 +253,29 @@ public class MayamMaterialController extends MayamController
 				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
 			}
 			
-			String materialID = result.getAttribute(Attribute.HOUSE_ID);
-			log.info(String.format("house id %s returned when creating marketing material", materialID));
+			String assetID =result.getAttribute(Attribute.ASSET_ID);			
+			log.info(String.format("assetId %s returned when creating marketing material", assetID));
 			
-			return materialID;
+			
+			AttributeMap item;
+			try
+			{
+				item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
+				String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
+				log.info(String.format("item id %s returned after fetching created item", siteID));
+				
+				if(siteID==null){
+					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+				}
+				
+				return siteID;
+			}
+			catch (RemoteException e)
+			{
+				log.error("Exception thrown by Mayam while fetch newly create Material",e);
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+			}		
+
 		}
 		else
 		{
