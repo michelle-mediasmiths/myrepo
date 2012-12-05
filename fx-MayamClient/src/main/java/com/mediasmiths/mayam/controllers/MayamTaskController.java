@@ -52,10 +52,10 @@ public class MayamTaskController extends MayamController{
 
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.assetApi().getAssetBySiteId(AssetType.valueOf(assetType.toString()), assetID);
+			assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), assetID);
 		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID);
-			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
+			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + assetID,e);
+			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
 		}
 
 		if (assetAttributes != null) {
@@ -73,8 +73,8 @@ public class MayamTaskController extends MayamController{
 				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
 				client.taskApi().createTask(newTask);
 			} catch (RemoteException e) {
-				log.error("Exception thrown by Mayam while attempting to create task");
-				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
+				log.error("Exception thrown by Mayam while attempting to create task",e);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
 			}
 
 		} else {
@@ -90,7 +90,7 @@ public class MayamTaskController extends MayamController{
 		try {
 			client.taskApi().deleteTask(taskID);
 		} catch (RemoteException e) {
-			log.error("Error deleting task : " + taskID);
+			log.error("Error deleting task : " + taskID,e);
 			returnCode = MayamClientErrorCode.TASK_DELETE_FAILED;
 		}
 		return returnCode;
@@ -140,9 +140,14 @@ public class MayamTaskController extends MayamController{
 	
 	private AttributeMap updateAccessRights(AttributeMap task)
 	{
-		String assetType = task.getAttribute(Attribute.ASSET_TYPE);
+		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
 		String assetId = task.getAttribute(Attribute.HOUSE_ID);
-		boolean purgeProtected = task.getAttribute(Attribute.PURGE_PROTECTED);
+		
+		boolean purgeProtected = false;
+		
+		if(task.getAttribute(Attribute.PURGE_PROTECTED) != null){
+			purgeProtected = ((Boolean)task.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue();
+		}
 		
 		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
 		
@@ -162,7 +167,7 @@ public class MayamTaskController extends MayamController{
 		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
 		
 		String contentType = null;
-		if (assetType.equals(MayamAssetType.TITLE))
+		if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
 		{
 			contentType = "Title";
 		}
