@@ -121,7 +121,7 @@ public class MaterialFolderWatcherTest {
 
 		// wait a short while, files should be queued almost immediately
 		try {
-			Thread.sleep(100l);
+			Thread.sleep(1000l);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -132,7 +132,7 @@ public class MaterialFolderWatcherTest {
 		logger.debug(String.format("Queue size %d entries: %s ", queue.size(), StringUtils.join(queue.toArray(), ',')));
 		
 		// check results
-		assertTrue(queue.size() == 4);
+		assertTrue(queue.size() >= 4);
 		assertTrue(queue.contains(xml1.getAbsolutePath()));
 		assertTrue(queue.contains(xml2.getAbsolutePath()));
 		assertTrue(queue.contains(mxf1.getAbsolutePath()));
