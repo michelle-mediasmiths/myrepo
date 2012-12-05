@@ -111,7 +111,7 @@ public class TemporaryContentHandler  implements Handler
 			}
 		}
 		catch (Exception e) {
-			log.error("Exception in the Mayam client while handling Temporary Content Message : " + e);
+			log.error("Exception in the Mayam client while handling Temporary Content Message : "+e.getMessage(), e);
 			e.printStackTrace();	
 		}
 	}
