@@ -29,6 +29,7 @@
 	</distributionManagement>
 
 	<modules>
+		<module>fx-Common</module>
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-MaterialExchange</module>
 		<module>fx-MayamClient</module>
