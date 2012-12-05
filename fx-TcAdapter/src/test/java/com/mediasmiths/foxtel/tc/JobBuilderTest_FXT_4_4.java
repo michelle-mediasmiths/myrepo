@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import au.com.foxtel.cf.mam.pms.MaterialType;
@@ -51,6 +52,7 @@ public class JobBuilderTest_FXT_4_4
 	}
 	
 	@Test
+	@Ignore
 	public void testBuildJobForTxPackageTranscode_FXT_4_4_1_2() throws MayamClientException, JobBuilderException, RemoteException{
 		
 		logger.info("Starting FXT 4.4.1/2 – Request Transcode Job/Select Correct Profile");
