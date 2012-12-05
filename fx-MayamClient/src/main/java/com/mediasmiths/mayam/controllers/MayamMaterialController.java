@@ -59,28 +59,27 @@ public class MayamMaterialController extends MayamController
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
-
-		attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
-		try {
-			AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
-			if (title != null) {
-				
-				Boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
-				
-				if(isProtected != null)
-				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected.booleanValue());
-				
-				String assetId = title.getAttribute(Attribute.ASSET_ID);
-				attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-			}
-		} catch (RemoteException e) {
-			log.error("MayamException while trying to retrieve title : " + titleID,e);
-			return MayamClientErrorCode.TASK_SEARCH_FAILED;
-		}
 		
 		if (material != null)
 		{
-
+			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			try {
+				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
+				if (title != null) {
+					
+					Boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
+					
+					if(isProtected != null)
+					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected.booleanValue());
+					
+					String assetId = title.getAttribute(Attribute.ASSET_ID);
+					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+				}
+			} catch (RemoteException e) {
+				log.error("MayamException while trying to retrieve title : " + titleID,e);
+				return MayamClientErrorCode.TASK_SEARCH_FAILED;
+			}
+			
 //			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
