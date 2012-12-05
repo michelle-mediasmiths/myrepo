@@ -45,6 +45,8 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		
 		//prepare folders and write unmatched xml file
 		String incomingFolderPath = TestUtil.prepareTempFolder("INCOMING");		
+		String archivePath =	TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.ARCHIVEFOLDERNAME);
+		String failurePath = TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.FAILUREFOLDERNAME);
 		String deliveryPath =  TestUtil.prepareTempFolder("DELIVERY");
 		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
 		
