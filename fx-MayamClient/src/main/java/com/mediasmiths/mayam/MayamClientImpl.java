@@ -437,7 +437,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
 	{
-		return tasksController.getTaskForAsset(type, id);
+		return tasksController.getTaskForAssetBySiteID(type, id);
 	}
 
 	@Override

@@ -96,13 +96,25 @@ public class MayamTaskController extends MayamController{
 		return returnCode;
 	}
 
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException 
+	public AttributeMap getTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException 
 	{
-		log.info(String.format("Searching for task of type %s for asset %s", type.getText(), id));
+		return getTaskForAssetByID(type, siteid, Attribute.HOUSE_ID);
+
+	}
+	
+	public AttributeMap getTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException 
+	{
+		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID);
+
+	}
+	
+	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute) throws MayamClientException 
+	{
+		log.info(String.format("Searching for task of type %s for asset %s using id attribute %s", type.getText(), id, idattribute.toString()));
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
-		criteria.getFilterEqualities().setAttribute(Attribute.HOUSE_ID, id);
+		criteria.getFilterEqualities().setAttribute(idattribute, id);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try {
@@ -119,6 +131,7 @@ public class MayamTaskController extends MayamController{
 			log.error("remote expcetion searching for task", e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
+
 
 	}
 

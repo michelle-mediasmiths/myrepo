@@ -27,8 +27,10 @@ public class IngestJobHandler implements PropertiesHandler
 		String assetId = messageProperties.get("assetId");
 		String jobStatus = messageProperties.get("jobStatus");
 		
+		log.trace(String.format("assetId %s jobStatus %s", assetId, jobStatus));
+		
 		try {
-			AttributeMap task = taskController.getTaskForAsset(MayamTaskListType.INGEST, assetId);
+			AttributeMap task = taskController.getTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
 			
 			if (task != null)
 			{
