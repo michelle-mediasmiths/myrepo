@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
+import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -32,7 +33,9 @@ import com.mediasmiths.mq.handlers.UnmatchedHandler;
 public class IncomingListener
 {
 	protected final static Logger logger = Logger.getLogger(IncomingListener.class);
-
+	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
+	public static final String ATTRIBUTE_PAIR = "mayam#attribute-pairs";
+	
 	public static Listener getInstance(
 			final TasksClient client,
 			final MayamTaskController taskController,
@@ -81,11 +84,11 @@ public class IncomingListener
 					{
 						logger.trace("Type and origin both not null");
 						
-						if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
+						if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
 						{
 							logger.trace("fetching message subject");
 							AttributeMap messageAttributes = msg.getSubject();
-							
+						
 							try
 							{
 								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
@@ -102,6 +105,24 @@ public class IncomingListener
 							passEventToHandler(packageUpdateHandler, messageAttributes);
 							passEventToHandler(temporaryContentHandler, messageAttributes);
 							passEventToHandler(unmatchedHandler, messageAttributes);
+						}
+						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset"))
+						{
+							logger.trace("fetching message subject");
+							AttributeMapPair messageAttributes = msg.getSubjectPair();
+							AttributeMap beforeAttributes = messageAttributes.getBefore();
+							AttributeMap afterAttributes = messageAttributes.getAfter();
+							try
+							{
+								logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
+								logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+							}
+							catch (Exception e)
+							{
+								logger.error("error logging attributes message");
+							}
+							
+							//TODO:Handlers for asset updates
 						}
 						else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task")) 
 						{
@@ -126,6 +147,24 @@ public class IncomingListener
 							passEventToHandler(previewHandler, messageAttributes);
 							passEventToHandler(qcCompleteHandler, messageAttributes);
 							passEventToHandler(segmentationHandler, messageAttributes);	
+						}
+						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task"))
+						{
+							logger.trace("fetching message subject");
+							AttributeMapPair messageAttributes = msg.getSubjectPair();
+							AttributeMap beforeAttributes = messageAttributes.getBefore();
+							AttributeMap afterAttributes = messageAttributes.getAfter();
+							try
+							{
+								logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
+								logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+							}
+							catch (Exception e)
+							{
+								logger.error("error logging attributes message");
+							}
+							
+							//TODO:Handlers for task updates
 						}
 						else
 						{
