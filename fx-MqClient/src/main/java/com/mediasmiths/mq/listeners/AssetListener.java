@@ -2,6 +2,7 @@ package com.mediasmiths.mq.listeners;
 
 import org.apache.log4j.Logger;
 
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
@@ -66,7 +67,7 @@ public class AssetListener
 //						if (msg.getType().equals(ContentTypes.ATTRIBUTES) && origin.contains("asset"))
 						if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
 						{
-							log.trace("fetching message subject");
+							logger.trace("fetching message subject");
 							AttributeMap messageAttributes = msg.getSubject();
 							
 							try
