@@ -147,15 +147,15 @@ public class IncomingListener
 								logger.error("error logging attributes message");
 							}
 							
-							passEventToHandler(compEditHandler, messageAttributes);
-							passEventToHandler(comLoggingHandler, messageAttributes);
-							passEventToHandler(fixAndStitchHandler, messageAttributes);
-							passEventToHandler(importFailHandler, messageAttributes);
+							//passEventToHandler(compEditHandler, messageAttributes);
+							//passEventToHandler(comLoggingHandler, messageAttributes);
+							//passEventToHandler(fixAndStitchHandler, messageAttributes);
+							//passEventToHandler(importFailHandler, messageAttributes);
 							passEventToHandler(ingestCompleteHandler, messageAttributes);
 							passEventToHandler(initiateQcHandler, messageAttributes);
-							passEventToHandler(previewHandler, messageAttributes);
+							//passEventToHandler(previewHandler, messageAttributes);
 							passEventToHandler(qcCompleteHandler, messageAttributes);
-							passEventToHandler(segmentationHandler, messageAttributes);	
+							//passEventToHandler(segmentationHandler, messageAttributes);	
 						}
 						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task") && changeType.equals("UPDATE"))
 						{

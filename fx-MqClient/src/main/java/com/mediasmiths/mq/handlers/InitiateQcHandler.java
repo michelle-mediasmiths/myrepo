@@ -24,7 +24,7 @@ public class InitiateQcHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.INGEST)) 
+		if (taskListID.equals(MayamTaskListType.QC_VIEW)) 
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.OPEN) 
