@@ -48,7 +48,6 @@ public class MayamTaskController extends MayamController{
 	}
 
 	public long createTask(String assetID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException {
-		long taskID = 0;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
@@ -76,7 +75,17 @@ public class MayamTaskController extends MayamController{
 				
 				log.debug("Creating task :" + LogUtil.mapToString(newTask));
 								
-				client.taskApi().createTask(newTask);
+				AttributeMap task = client.taskApi().createTask(newTask);
+				
+				Long taskID = task.getAttribute(Attribute.TASK_ID);
+				
+				if(taskID == null){
+					log.error("created task had null TASK_ID");
+					throw new MayamClientException(MayamClientErrorCode.FAILURE);
+				}
+				
+				return taskID.longValue();				
+				
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam while attempting to create task",e);
 				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
@@ -86,7 +95,6 @@ public class MayamTaskController extends MayamController{
 			log.warn("Failed to find asset with ID: " + assetID);
 			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
 		}
-		return taskID;
 	}
 
 	public MayamClientErrorCode deleteTask(long taskID)
