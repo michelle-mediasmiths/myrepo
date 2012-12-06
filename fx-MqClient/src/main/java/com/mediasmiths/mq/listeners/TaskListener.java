@@ -6,7 +6,6 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
-import com.mayam.wf.mq.common.ContentTypes;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mq.LogUtil;
@@ -64,7 +63,6 @@ public class TaskListener
 					{
 						logger.trace("Type and origin both not null");
 
-//						if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
 						if (type.type().equals(ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task"))
 						{
 							log.trace("fetching message subject");

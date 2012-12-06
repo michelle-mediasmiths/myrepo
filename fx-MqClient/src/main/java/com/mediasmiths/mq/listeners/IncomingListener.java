@@ -7,7 +7,6 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
-import com.mayam.wf.mq.common.ContentTypes;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -82,7 +81,6 @@ public class IncomingListener
 					{
 						logger.trace("Type and origin both not null");
 						
-//						if (msg.getType().equals(ContentTypes.ATTRIBUTES) && origin.contains("asset"))
 						if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
 						{
 							logger.trace("fetching message subject");
