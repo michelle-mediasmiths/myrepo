@@ -179,72 +179,79 @@ public class MayamTaskController extends MayamController{
 		String contentFormat = task.getAttributeAsString(Attribute.CONT_FMT);
 		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
 		
-		String contentType = null;
-		if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
-		{
-			contentType = "Title";
-		}
-		else if (contentFormat.toUpperCase().equals("UNMATCHED")) {
-			contentType = "Unmatched";
-		}
-		else if (contentCategory.toUpperCase().equals("PROGRAMME")) {
-			contentType = "Programme";
-		}
-		else if (contentCategory.toUpperCase().equals("ASSOCIATED")) {
-			contentType = "EPK";
-		}
-		else if (contentCategory.toUpperCase().equals("EDIT CLIPS")) {
-			contentType = "Edit Clip";
-		}
-		else if (contentCategory.toUpperCase().equals("PUBLICITY")) {
-			contentType = "Publicity";
-		}
-
-		boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-		boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
-
-		TaskState qaStatus = null;
+		log.warn(String.format("content format is %s , category is %s for asset with id %s",contentFormat,contentCategory,assetId));
 		
-		AttributeMap filterEqualities = client.createAttributeMap();
-		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-		filterEqualities.setAttribute(Attribute.HOUSE_ID, assetId);
-		FilterCriteria criteria = new FilterCriteria();
-		criteria.setFilterEqualities(filterEqualities);
-		FilterResult existingTasks;
-		try {
-			existingTasks = client.taskApi().getTasks(criteria, 10, 0);
-
-			if (existingTasks.getTotalMatches() > 0) 
+		if(contentFormat == null || contentCategory == null)
+		{
+			String contentType = null;
+			if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
 			{
-				List<AttributeMap> tasks = existingTasks.getMatches();
-				AttributeMap qaTask = tasks.get(0);
-				qaStatus = task.getAttribute(Attribute.TASK_STATE);
-				
+				contentType = "Title";
+			}
+			else if (contentFormat.toUpperCase().equals("UNMATCHED")) {
+				contentType = "Unmatched";
+			}
+			else if (contentCategory.toUpperCase().equals("PROGRAMME")) {
+				contentType = "Programme";
+			}
+			else if (contentCategory.toUpperCase().equals("ASSOCIATED")) {
+				contentType = "EPK";
+			}
+			else if (contentCategory.toUpperCase().equals("EDIT CLIPS")) {
+				contentType = "Edit Clip";
+			}
+			else if (contentCategory.toUpperCase().equals("PUBLICITY")) {
+				contentType = "Publicity";
+			}
+	
+			boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+			boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+			QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
+	
+			TaskState qaStatus = null;
+			
+			AttributeMap filterEqualities = client.createAttributeMap();
+			filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
+			filterEqualities.setAttribute(Attribute.HOUSE_ID, assetId);
+			FilterCriteria criteria = new FilterCriteria();
+			criteria.setFilterEqualities(filterEqualities);
+			FilterResult existingTasks;
+			try {
+				existingTasks = client.taskApi().getTasks(criteria, 10, 0);
+	
 				if (existingTasks.getTotalMatches() > 0) 
 				{
-					log.warn("More than 1 Preview task found for assset : " + assetId + ". Access Righst will be set based on status of first task : " + qaTask.getAttribute(Attribute.TASK_ID));
+					List<AttributeMap> tasks = existingTasks.getMatches();
+					AttributeMap qaTask = tasks.get(0);
+					qaStatus = task.getAttribute(Attribute.TASK_STATE);
+					
+					if (existingTasks.getTotalMatches() > 0) 
+					{
+						log.warn("More than 1 Preview task found for assset : " + assetId + ". Access Righst will be set based on status of first task : " + qaTask.getAttribute(Attribute.TASK_ID));
+					}
 				}
+			} catch (RemoteException e) {
+				log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId);
+				e.printStackTrace();
 			}
-		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId);
-			e.printStackTrace();
+	
+			List <MayamAccessRights> allRights = accessRightsController.retrieve(qcStatus.toString(), qaStatus.toString(), qcParallel, contentType, channelList, purgeProtected, adultOnly);
+			
+			AssetAccess accessRights = new AssetAccess();
+			for (int i = 0; i < allRights.size(); i++)
+			{
+				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+				entry.setEntityType(EntityType.GROUP);
+				entry.setEntity(allRights.get(i).getGroupName());
+				entry.setRead(allRights.get(i).getReadAccess());
+				entry.setWrite(allRights.get(i).getWriteAccess());
+				entry.setAdmin(allRights.get(i).getAdminAccess());
+				accessRights.getStandard().add(entry);
+			}
+			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 		}
-
-		List <MayamAccessRights> allRights = accessRightsController.retrieve(qcStatus.toString(), qaStatus.toString(), qcParallel, contentType, channelList, purgeProtected, adultOnly);
-		
-		AssetAccess accessRights = new AssetAccess();
-		for (int i = 0; i < allRights.size(); i++)
-		{
-			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-			entry.setEntityType(EntityType.GROUP);
-			entry.setEntity(allRights.get(i).getGroupName());
-			entry.setRead(allRights.get(i).getReadAccess());
-			entry.setWrite(allRights.get(i).getWriteAccess());
-			entry.setAdmin(allRights.get(i).getAdminAccess());
-			accessRights.getStandard().add(entry);
-		}
-		task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+	
 		return task;
+		
 	}
 }

@@ -23,35 +23,36 @@ public class ItemCreationHandler  implements AttributeHandler
 		taskController = controller;
 	}
 	
+	
+	/**
+	 * To only be called in response to changeType CREATE messages
+	 */
 	public void process(AttributeMap messageAttributes)
 	{	
 		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-						
-		if (assetID == null || assetID.equals(""))
-		{			
-			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-			String parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
-			try {
-				if (assetType.equals(AssetType.ITEM) && (parentID != null)) 
-				{
-					//Skip QC and move straight to compliance	
-					//Compile flag is not stored in Mayam, but Parent Id is taken from compiled object
-					//As such we are using the presence of Parent Id on a Material asset to determined if compile was set
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_LOGGING);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
-				}
-				else {
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
-				}
+					
+		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+		String parentID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+		try {
+			if (assetType.equals(AssetType.ITEM) && (parentID != null)) 
+			{
+				//Skip QC and move straight to compliance	
+				//Compile flag is not stored in Mayam, but Parent Id is taken from compiled object
+				//As such we are using the presence of Parent Id on a Material asset to determined if compile was set
+				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_LOGGING);
+				AttributeMap newTask = taskController.getTask(taskID);
+				newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+				taskController.saveTask(newTask);
 			}
-			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Item Creation Message : " + e.getMessage(),e);
+			else {
+				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
+				AttributeMap newTask = taskController.getTask(taskID);
+				newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+				taskController.saveTask(newTask);
 			}
+		}
+		catch (Exception e) {
+			log.error("Exception in the Mayam client while handling Item Creation Message : " + e.getMessage(),e);
 		}
 	}
 
