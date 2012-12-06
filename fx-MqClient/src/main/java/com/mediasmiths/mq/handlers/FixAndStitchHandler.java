@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class FixAndStitchHandler  implements Handler
+public class FixAndStitchHandler  implements AttributeHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(FixAndStitchHandler.class);

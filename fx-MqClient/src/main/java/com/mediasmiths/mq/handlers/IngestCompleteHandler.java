@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class IngestCompleteHandler  implements Handler
+public class IngestCompleteHandler  implements AttributeHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestCompleteHandler.class);
@@ -29,9 +29,9 @@ public class IngestCompleteHandler  implements Handler
 			if (taskState == TaskState.FINISHED) 
 			{
 				try {
-					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 					taskController.saveTask(messageAttributes);
-							
+		
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							

@@ -10,7 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class QcCompleteHandler  implements Handler
+public class QcCompleteHandler  implements AttributeHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(QcCompleteHandler.class);

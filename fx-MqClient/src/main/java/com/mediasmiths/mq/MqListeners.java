@@ -89,8 +89,7 @@ public class MqListeners implements Runnable {
 	public void attachIncomingListners() 
 	{
 		log.info("Attatching listeners");
-		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController, eventService));
-		attachListener(MediasmithsDestinations.ASSETS, IncomingListener.getInstance(client, taskController, eventService));
+		attachListener(MediasmithsDestinations.INCOMING, IncomingListener.getInstance(client, taskController, eventService));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

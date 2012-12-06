@@ -11,7 +11,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class InitiateQcHandler  implements Handler
+public class InitiateQcHandler  implements AttributeHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);

@@ -2,7 +2,7 @@ package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
 
-public class AssetPurgeHandler implements Handler
+public class AssetPurgeHandler implements AttributeHandler
 {
 	public AssetPurgeHandler() 
 	{
