@@ -50,8 +50,7 @@ public class ItemCreationHandler  implements Handler
 				}
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Item Creation Message : " + e);
-				e.printStackTrace();
+				log.error("Exception in the Mayam client while handling Item Creation Message : " + e.getMessage(),e);
 			}
 		}
 	}

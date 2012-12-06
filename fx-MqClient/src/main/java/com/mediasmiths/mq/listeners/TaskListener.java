@@ -20,10 +20,13 @@ import com.mediasmiths.mq.handlers.PreviewTaskHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 
-public class TaskListener {
-	protected final static Logger log = Logger.getLogger(TaskListener.class);
+public class TaskListener
+{
+	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
 	
-	public static Listener getInstance(final MayamTaskController taskController, EventService eventService) 
+	protected final static Logger log = Logger.getLogger(TaskListener.class);
+
+	public static Listener getInstance(final MayamTaskController taskController, EventService eventService)
 	{
 		final ComplianceEditingHandler compEditHandler = new ComplianceEditingHandler(taskController);
 		final ComplianceLoggingHandler comLoggingHandler = new ComplianceLoggingHandler(taskController);
@@ -34,49 +37,65 @@ public class TaskListener {
 		final PreviewTaskHandler previewHandler = new PreviewTaskHandler(taskController);
 		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
-		
-		return new MqClientListener() 
+
+		return new MqClientListener()
 		{
-			public void onMessage(MqMessage msg) throws Throwable 
+			public void onMessage(MqMessage msg) throws Throwable
 			{
-				log.trace("TaskListener onMessage");				
-				log.trace("Message is: " + msg.toString());
-				MqContentType type = msg.getType();
-				if(type != null){
-					log.debug("Message type not null "+type.type());
-				}
-				else{
-					log.debug("Message type is null");
-				}
-				String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
-				
-				log.trace("origin is:"+origin);
-				
-				if (type != null && origin != null) 
+				try
 				{
-					log.trace("Type and origin but not null");
-					
-					if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
-					{			
-						AttributeMap messageAttributes = msg.getSubject();
-						
-						log.trace(String.format("Attributes message: "+LogUtil.mapToString(messageAttributes)));
-						
-						passEventToHandler(compEditHandler,messageAttributes);
-						passEventToHandler(comLoggingHandler,messageAttributes);
-						passEventToHandler(fixAndStitchHandler,messageAttributes);
-						passEventToHandler(importFailHandler,messageAttributes);
-						passEventToHandler(ingestCompleteHandler,messageAttributes);
-						passEventToHandler(initiateQcHandler,messageAttributes);
-						passEventToHandler(previewHandler,messageAttributes);
-						passEventToHandler(qcCompleteHandler,messageAttributes);
-						passEventToHandler(segmentationHandler,messageAttributes);
-					}else{
-						log.debug("Message is not of types ATTRIBUTES, ignoring");
+
+					log.trace("TaskListener onMessage");
+					log.trace("Message is: " + msg.toString());
+					MqContentType type = msg.getType();
+					if (type != null)
+					{
+						log.debug("Message type not null " + type.type());
 					}
+					else
+					{
+						log.debug("Message type is null");
+					}
+					String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
+
+					log.trace("origin is:" + origin);
+
+					if (type != null && origin != null)
+					{
+						log.trace("Type and origin but not null");
+
+//						if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
+						if (type.type().equals(ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task"))
+						{
+							AttributeMap messageAttributes = msg.getSubject();
+
+							log.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+
+							passEventToHandler(compEditHandler, messageAttributes);
+							passEventToHandler(comLoggingHandler, messageAttributes);
+							passEventToHandler(fixAndStitchHandler, messageAttributes);
+							passEventToHandler(importFailHandler, messageAttributes);
+							passEventToHandler(ingestCompleteHandler, messageAttributes);
+							passEventToHandler(initiateQcHandler, messageAttributes);
+							passEventToHandler(previewHandler, messageAttributes);
+							passEventToHandler(qcCompleteHandler, messageAttributes);
+							passEventToHandler(segmentationHandler, messageAttributes);
+						}
+						else
+						{
+							log.debug("Message is not of types ATTRIBUTES, ignoring");
+						}
+					}
+					else
+					{
+						log.debug(String.format("TaskListener onMessage, type or origin was null. Msg: %s", msg.toString()));
+					}
+
 				}
-				else {
-					log.debug(String.format("TaskListener onMessage, type or origin was null. Msg: %s", msg.toString()));
+				catch (Exception e)
+				{
+					log.error("Exception in task listener",e);
+					throw e;
 				}
 			}
 		};
