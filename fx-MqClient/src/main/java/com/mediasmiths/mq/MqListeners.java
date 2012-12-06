@@ -22,7 +22,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.listeners.AssetListener;
+import com.mediasmiths.mq.listeners.IncomingListener;
 import com.mediasmiths.mq.listeners.TaskListener;
 
 public class MqListeners implements Runnable {
@@ -90,7 +90,7 @@ public class MqListeners implements Runnable {
 	{
 		log.info("Attatching listeners");
 		attachListener(MediasmithsDestinations.TASKS, TaskListener.getInstance(taskController, eventService));
-		attachListener(MediasmithsDestinations.ASSETS, AssetListener.getInstance(client, taskController, eventService));
+		attachListener(MediasmithsDestinations.ASSETS, IncomingListener.getInstance(client, taskController, eventService));
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

@@ -14,16 +14,25 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mq.LogUtil;
 import com.mediasmiths.mq.handlers.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.AssetPurgeHandler;
+import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
+import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
 import com.mediasmiths.mq.handlers.EmergencyIngestHandler;
+import com.mediasmiths.mq.handlers.FixAndStitchHandler;
 import com.mediasmiths.mq.handlers.Handler;
+import com.mediasmiths.mq.handlers.ImportFailureHandler;
+import com.mediasmiths.mq.handlers.IngestCompleteHandler;
+import com.mediasmiths.mq.handlers.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.ItemCreationHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
+import com.mediasmiths.mq.handlers.PreviewTaskHandler;
+import com.mediasmiths.mq.handlers.QcCompleteHandler;
+import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.UnmatchedHandler;
 
-public class AssetListener
+public class IncomingListener
 {
-	protected final static Logger logger = Logger.getLogger(AssetListener.class);
+	protected final static Logger logger = Logger.getLogger(IncomingListener.class);
 
 	public static Listener getInstance(
 			final TasksClient client,
@@ -37,7 +46,16 @@ public class AssetListener
 		final PackageUpdateHandler packageUpdateHandler = new PackageUpdateHandler(client, taskController);
 		final TemporaryContentHandler temporaryContentHandler = new TemporaryContentHandler(client, taskController);
 		final UnmatchedHandler unmatchedHandler = new UnmatchedHandler(taskController);
-
+		final ComplianceEditingHandler compEditHandler = new ComplianceEditingHandler(taskController);
+		final ComplianceLoggingHandler comLoggingHandler = new ComplianceLoggingHandler(taskController);
+		final FixAndStitchHandler fixAndStitchHandler = new FixAndStitchHandler(taskController);
+		final ImportFailureHandler importFailHandler = new ImportFailureHandler(taskController);
+		final IngestCompleteHandler ingestCompleteHandler = new IngestCompleteHandler(taskController);
+		final InitiateQcHandler initiateQcHandler = new InitiateQcHandler(taskController);
+		final PreviewTaskHandler previewHandler = new PreviewTaskHandler(taskController);
+		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
+		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
+		
 		return new MqClientListener()
 		{
 			public void onMessage(MqMessage msg) throws Throwable
@@ -87,9 +105,33 @@ public class AssetListener
 							passEventToHandler(temporaryContentHandler, messageAttributes);
 							passEventToHandler(unmatchedHandler, messageAttributes);
 						}
+						else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task")) 
+						{
+							log.trace("fetching message subject");
+							AttributeMap messageAttributes = msg.getSubject();
+
+							try
+							{
+								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+							}
+							catch (Exception e)
+							{
+								logger.error("error logging attributes message");
+							}
+							
+							passEventToHandler(compEditHandler, messageAttributes);
+							passEventToHandler(comLoggingHandler, messageAttributes);
+							passEventToHandler(fixAndStitchHandler, messageAttributes);
+							passEventToHandler(importFailHandler, messageAttributes);
+							passEventToHandler(ingestCompleteHandler, messageAttributes);
+							passEventToHandler(initiateQcHandler, messageAttributes);
+							passEventToHandler(previewHandler, messageAttributes);
+							passEventToHandler(qcCompleteHandler, messageAttributes);
+							passEventToHandler(segmentationHandler, messageAttributes);	
+						}
 						else
 						{
-							logger.debug("Message is not of types ATTRIBUTES or is not an asset message, ignoring");
+							logger.debug("Message is not of types ATTRIBUTES, ignoring");
 						}
 					}
 					else
