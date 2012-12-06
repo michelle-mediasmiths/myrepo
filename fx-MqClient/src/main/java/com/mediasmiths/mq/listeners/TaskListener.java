@@ -24,7 +24,7 @@ public class TaskListener
 {
 	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
 	
-	protected final static Logger log = Logger.getLogger(TaskListener.class);
+	protected final static Logger logger = Logger.getLogger(TaskListener.class);
 
 	public static Listener getInstance(final MayamTaskController taskController, EventService eventService)
 	{
@@ -45,32 +45,40 @@ public class TaskListener
 				try
 				{
 
-					log.trace("TaskListener onMessage");
-					log.trace("Message is: " + msg.toString());
+					logger.trace("TaskListener onMessage");
+					logger.trace("Message is: " + msg.toString());
 					MqContentType type = msg.getType();
 					if (type != null)
 					{
-						log.debug("Message type not null " + type.type());
+						logger.debug("Message type not null " + type.type());
 					}
 					else
 					{
-						log.debug("Message type is null");
+						logger.debug("Message type is null");
 					}
 					String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 
-					log.trace("origin is:" + origin);
+					logger.trace("origin is:" + origin);
 
 					if (type != null && origin != null)
 					{
-						log.trace("Type and origin but not null");
+						logger.trace("Type and origin both not null");
 
 //						if (type.equals(ContentTypes.ATTRIBUTES) && origin.contains("task"))
 						if (type.type().equals(ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task"))
 						{
+							log.trace("fetching message subject");
 							AttributeMap messageAttributes = msg.getSubject();
 
-							log.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-
+							try
+							{
+								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+							}
+							catch (Exception e)
+							{
+								logger.error("error logging attributes message");
+							}
+							
 							passEventToHandler(compEditHandler, messageAttributes);
 							passEventToHandler(comLoggingHandler, messageAttributes);
 							passEventToHandler(fixAndStitchHandler, messageAttributes);
@@ -83,18 +91,18 @@ public class TaskListener
 						}
 						else
 						{
-							log.debug("Message is not of types ATTRIBUTES, ignoring");
+							logger.debug("Message is not of types ATTRIBUTES or is not a task message, ignoring");
 						}
 					}
 					else
 					{
-						log.debug(String.format("TaskListener onMessage, type or origin was null. Msg: %s", msg.toString()));
+						logger.debug(String.format("TaskListener onMessage, type or origin was null. Msg: %s", msg.toString()));
 					}
 
 				}
 				catch (Exception e)
 				{
-					log.error("Exception in task listener",e);
+					logger.error("Exception in task listener",e);
 					throw e;
 				}
 			}

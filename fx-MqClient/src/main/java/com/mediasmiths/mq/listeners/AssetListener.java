@@ -22,7 +22,7 @@ import com.mediasmiths.mq.handlers.UnmatchedHandler;
 
 public class AssetListener
 {
-	protected final static Logger log = Logger.getLogger(AssetListener.class);
+	protected final static Logger logger = Logger.getLogger(AssetListener.class);
 
 	public static Listener getInstance(
 			final TasksClient client,
@@ -44,27 +44,39 @@ public class AssetListener
 				try
 				{
 
-					if (msg.getType() == null)
+					logger.trace("AssetListener onMessage");
+					logger.trace("Message is: " + msg.toString());
+					MqContentType type = msg.getType();
+					if (type != null)
 					{
-						log.debug(String.format("AssetListener onMessage, messagetype is null"));
+						logger.debug("Message type not null " + type.type());
 					}
 					else
 					{
-						log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().type()));
+						logger.debug("Message type is null");
 					}
-
 					String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 
-					log.trace("origin is:" + origin);
+					logger.trace("origin is:" + origin);
 
-					if (msg.getType() != null && origin != null)
+					if (type != null && origin != null)
 					{
+						logger.trace("Type and origin both not null");
+						
 //						if (msg.getType().equals(ContentTypes.ATTRIBUTES) && origin.contains("asset"))
-						if (msg.getType().type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
+						if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset"))
 						{
+							log.trace("fetching message subject");
 							AttributeMap messageAttributes = msg.getSubject();
-
-							log.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+							
+							try
+							{
+								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+							}
+							catch (Exception e)
+							{
+								logger.error("error logging attributes message");
+							}
 
 							passEventToHandler(assetDeletionHandler, messageAttributes);
 							passEventToHandler(assetPurgeHandler, messageAttributes);
@@ -76,17 +88,17 @@ public class AssetListener
 						}
 						else
 						{
-							log.debug("Message is not of types ATTRIBUTES, ignoring");
+							logger.debug("Message is not of types ATTRIBUTES or is not an asset message, ignoring");
 						}
 					}
 					else
 					{
-						log.debug(String.format("AssetListener onMessage, type or origin was null. Msg: %s", msg.toString()));
+						logger.debug(String.format("AssetListener onMessage, type or origin was null. Msg: %s", msg.toString()));
 					}
 				}
 				catch (Exception e)
 				{
-					log.error("Exception in asset listener", e);
+					logger.error("Exception in asset listener", e);
 					throw e;
 				}
 			}
