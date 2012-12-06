@@ -43,7 +43,7 @@ public class TaskListener {
 				log.trace("Message is: " + msg.toString());
 				MqContentType type = msg.getType();
 				if(type != null){
-					log.debug("Message type not null "+type.toString());
+					log.debug("Message type not null "+type.type());
 				}
 				else{
 					log.debug("Message type is null");

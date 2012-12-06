@@ -42,7 +42,7 @@ public class AssetListener {
 					log.debug(String.format("AssetListener onMessage, messagetype is null"));
 				}
 				else{
-					log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().toString()));
+					log.debug(String.format("AssetListener onMessage, messagetype %s", msg.getType().type()));
 				}
 				
 				String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
