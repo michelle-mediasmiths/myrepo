@@ -21,6 +21,8 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mchange.v2.log.LogUtils;
+import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -71,6 +73,9 @@ public class MayamTaskController extends MayamController{
 			}
 			try {
 				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
+				
+				log.debug("Creating task :" + LogUtil.mapToString(newTask));
+								
 				client.taskApi().createTask(newTask);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam while attempting to create task",e);
@@ -181,7 +186,7 @@ public class MayamTaskController extends MayamController{
 		
 		log.warn(String.format("content format is %s , category is %s for asset with id %s",contentFormat,contentCategory,assetId));
 		
-		if(contentFormat == null || contentCategory == null)
+		if(contentFormat != null && contentCategory != null)
 		{
 			String contentType = null;
 			if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
