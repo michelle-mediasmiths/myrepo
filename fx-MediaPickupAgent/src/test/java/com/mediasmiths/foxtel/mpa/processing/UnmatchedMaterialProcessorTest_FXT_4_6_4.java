@@ -22,8 +22,7 @@ import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 
@@ -71,8 +70,8 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		MatchMaker mm = mock(MatchMaker.class);
 		UnmatchedFile um = new UnmatchedFile(timeout+1, unmatchedMXFPath);
 		when(mm.purgeUnmatchedMessages(timeout)).
-			thenReturn(Collections.<MaterialEnvelope>singletonList(new MaterialEnvelope(new File(unmatchedXMLPath), null))).
-			thenReturn(Collections.<MaterialEnvelope>emptyList());
+			thenReturn(Collections.<MediaEnvelope>singletonList(new MediaEnvelope(new File(unmatchedXMLPath), null))).
+			thenReturn(Collections.<MediaEnvelope>emptyList());
 		when(mm.purgeUnmatchedMXFs(timeout)).
 			thenReturn(Collections.<UnmatchedFile>singletonList(um)).
 			thenReturn(Collections.<UnmatchedFile>emptyList());

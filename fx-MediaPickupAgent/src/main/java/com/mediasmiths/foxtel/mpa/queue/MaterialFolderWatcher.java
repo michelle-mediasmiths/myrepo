@@ -5,7 +5,6 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIO
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.io.FilenameUtils;
@@ -14,7 +13,6 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;

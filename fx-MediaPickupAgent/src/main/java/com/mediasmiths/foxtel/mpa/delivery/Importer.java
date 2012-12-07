@@ -1,7 +1,6 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
 import java.io.File;
@@ -13,13 +12,11 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.mayam.AlertInterface;
 
 public class Importer implements Runnable {
 

@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 
 /**
  * 
@@ -35,7 +35,7 @@ public class MatchMaker {
 	// yet processed as they are still awaiting a companion file
 
 	private final Set<UnmatchedFile> mxfs = new HashSet<UnmatchedFile>();
-	private final Map<UnmatchedFile, MaterialEnvelope> xmls = new HashMap<UnmatchedFile, MaterialEnvelope>();
+	private final Map<UnmatchedFile, MediaEnvelope> xmls = new HashMap<UnmatchedFile, MediaEnvelope>();
 
 	@Inject
 	public MatchMaker() {
@@ -49,7 +49,7 @@ public class MatchMaker {
 	 * @return a File object referencing this materials media, or null if it has
 	 *         not been seen yet
 	 */
-	public synchronized String matchXML(MaterialEnvelope envelope) {
+	public synchronized String matchXML(MediaEnvelope envelope) {
 
 		String xmlAbsolutePath = envelope.getFile().getAbsolutePath();
 		String mxfAbsolutePath = swapExtensionFor(xmlAbsolutePath,"mxf");
@@ -83,7 +83,7 @@ public class MatchMaker {
 	 * @return - A MaterialEnvelope containing the material describing this mxf,
 	 *         or null if it has not been seen yet
 	 */
-	public synchronized MaterialEnvelope matchMXF(File mxf) {
+	public synchronized MediaEnvelope matchMXF(File mxf) {
 
 		String mxfAbsolutePath = mxf.getAbsolutePath();
 		String xmlAbsolutePath = swapExtensionFor(mxfAbsolutePath,"xml");
@@ -94,7 +94,7 @@ public class MatchMaker {
 			logger.info(String.format(
 					"found an xml file %s for media file file %s", xmlAbsolutePath, mxfAbsolutePath));
 
-			MaterialEnvelope material = xmls.get(xmlFile);
+			MediaEnvelope material = xmls.get(xmlFile);
 			// remove from list of of as yet unmatched xmls
 			xmls.remove(xmlFile);
 
@@ -125,12 +125,12 @@ public class MatchMaker {
 	 * 
 	 * @return
 	 */
-	public synchronized Collection<MaterialEnvelope> purgeUnmatchedMessages(
+	public synchronized Collection<MediaEnvelope> purgeUnmatchedMessages(
 			long olderThan) {
 
-		Map<UnmatchedFile, MaterialEnvelope> old = new HashMap<UnmatchedFile, MaterialEnvelope>();
+		Map<UnmatchedFile, MediaEnvelope> old = new HashMap<UnmatchedFile, MediaEnvelope>();
 
-		for (Entry<UnmatchedFile, MaterialEnvelope> entry : xmls.entrySet()) {
+		for (Entry<UnmatchedFile, MediaEnvelope> entry : xmls.entrySet()) {
 			long now = System.currentTimeMillis();
 			long then = entry.getKey().getTimeSeen();
 			long age = now - then;
@@ -141,7 +141,7 @@ public class MatchMaker {
 			}
 		}
 
-		for (Entry<UnmatchedFile, MaterialEnvelope> entry : old.entrySet()) {
+		for (Entry<UnmatchedFile, MediaEnvelope> entry : old.entrySet()) {
 			xmls.remove(entry.getKey());
 		}
 

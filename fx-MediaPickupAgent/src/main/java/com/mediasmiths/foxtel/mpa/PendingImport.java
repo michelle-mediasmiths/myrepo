@@ -8,14 +8,14 @@ public class PendingImport {
 		return mediaFile;
 	}
 
-	public MaterialEnvelope getMaterialEnvelope() {
+	public MediaEnvelope getMaterialEnvelope() {
 		return material;
 	}
 
 	private final File mediaFile;
-	private final MaterialEnvelope material;
+	private final MediaEnvelope material;
 	
-	public PendingImport(File mediaFile, MaterialEnvelope material){
+	public PendingImport(File mediaFile, MediaEnvelope material){
 		this.mediaFile = mediaFile;
 		this.material = material;		
 	}

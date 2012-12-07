@@ -24,7 +24,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
@@ -118,12 +118,12 @@ public abstract class MaterialProcessingTest {
 		}
 	};
 
-	protected ArgumentMatcher<MaterialEnvelope> matchEnvelopeByFile = new ArgumentMatcher<MaterialEnvelope>() {
+	protected ArgumentMatcher<MediaEnvelope> matchEnvelopeByFile = new ArgumentMatcher<MediaEnvelope>() {
 
 		@Override
 		public boolean matches(Object argument) {
 			return argument != null
-					&& ((MaterialEnvelope) argument).getFile().equals(
+					&& ((MediaEnvelope) argument).getFile().equals(
 							materialxml);
 		}
 	};

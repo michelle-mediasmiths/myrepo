@@ -16,6 +16,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 public interface MayamClient
@@ -101,5 +102,7 @@ public interface MayamClient
 	String getMaterialIDofPackageID(String packageID) throws MayamClientException;
 
 	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException;
+
+	public void updateMaterial(DetailType details, String materialID);
 
 }

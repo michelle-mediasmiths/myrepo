@@ -1,17 +1,11 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
-import com.mediasmiths.foxtel.mpa.Util;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 
 public class MediaCheck {
 
@@ -21,7 +15,7 @@ public class MediaCheck {
 	public MediaCheck() {
 	}
 
-	public boolean mediaCheck(File mxf, MaterialEnvelope description) {
+	public boolean mediaCheck(File mxf, MediaEnvelope description) {
 		return true;
 		//dont validate file size or checksum
 	
@@ -66,7 +60,9 @@ public class MediaCheck {
 		*/
 	}
 
-	private boolean validateChecksum(File mxf, MaterialEnvelope description,
+	/*
+	
+	private boolean validateChecksum(File mxf, MediaEnvelope description,
 			FileMediaType media) {
 		if (checkSumMatches(mxf, media)) {
 			logger.debug(String
@@ -135,5 +131,5 @@ public class MediaCheck {
 			return false;
 		}
 	}
-
+*/
 }

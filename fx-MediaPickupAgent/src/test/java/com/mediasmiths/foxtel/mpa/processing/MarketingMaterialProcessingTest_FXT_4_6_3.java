@@ -22,7 +22,7 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.mpa.MarketingMaterialTest;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
@@ -244,7 +244,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                         when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(
                                         null);
                         when(matchMaker.matchMXF(media)).thenReturn(
-                                        new MaterialEnvelope(materialxml, material));
+                                        new MediaEnvelope(materialxml, material));
                 }
                 when(mediaCheck.mediaCheck(eq(media), argThat(matchEnvelopeByFile)))
                                 .thenReturn(validMedia);

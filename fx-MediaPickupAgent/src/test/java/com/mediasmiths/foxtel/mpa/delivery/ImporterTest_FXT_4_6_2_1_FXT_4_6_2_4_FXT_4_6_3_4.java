@@ -22,7 +22,7 @@ import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
@@ -43,7 +43,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	private File media;
 	private File materialxml;
 	private String masterID;
-	private MaterialEnvelope envelope;
+	private MediaEnvelope envelope;
 	private PendingImport pendingImport;
 	private WatchFolders watchFolders;
 	
@@ -77,7 +77,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		TestUtil.writeBytesToFile(100, materialxml);
 		masterID = "MASTERID";
 
-		envelope = new MaterialEnvelope(materialxml, new Material(), masterID);
+		envelope = new MediaEnvelope(materialxml, new Material(), masterID);
 		pendingImport = new PendingImport(media, envelope);
 
 		//Check if can write

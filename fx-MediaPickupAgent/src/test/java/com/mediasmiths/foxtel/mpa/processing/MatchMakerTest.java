@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
-import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 
 public class MatchMakerTest {
 	
@@ -50,7 +50,7 @@ public class MatchMakerTest {
 	@Test
 	public void mxfthenxml() throws DatatypeConfigurationException{
 	
-		MaterialEnvelope env = getEnvelope(FOOXML);		
+		MediaEnvelope env = getEnvelope(FOOXML);		
 		assertNull(toTest.matchXML(env));
 		assertEquals(env, toTest.matchMXF(FOOMXF));
 		
@@ -68,7 +68,7 @@ public class MatchMakerTest {
 	@Test
 	public void xmlthenmxf() throws DatatypeConfigurationException{
 		
-		MaterialEnvelope env = getEnvelope(FOOXML);		
+		MediaEnvelope env = getEnvelope(FOOXML);		
 		assertNull(toTest.matchMXF(FOOMXF));
 		assertEquals(FOOMXF.getAbsolutePath(), toTest.matchXML(env));
 		
@@ -87,8 +87,8 @@ public class MatchMakerTest {
 	@Test
 	public void mixedorderarrival() throws DatatypeConfigurationException{
 		
-		MaterialEnvelope fooenv = getEnvelope(FOOXML);
-		MaterialEnvelope barenv = getEnvelope(BARXML);
+		MediaEnvelope fooenv = getEnvelope(FOOXML);
+		MediaEnvelope barenv = getEnvelope(BARXML);
 		
 		assertNull(toTest.matchMXF(FOOMXF));
 		assertNull(toTest.matchXML(barenv));
@@ -108,15 +108,15 @@ public class MatchMakerTest {
 		final long ONE_MILLISECOND = 1l;
 		final long ONE_SECOND = 1000l;
 	
-		MaterialEnvelope env = getEnvelope(FOOXML);
-		MaterialEnvelope barenv = getEnvelope(BARXML);
+		MediaEnvelope<Material> env = getEnvelope(FOOXML);
+		MediaEnvelope<Material> barenv = getEnvelope(BARXML);
 		
 		assertNull(toTest.matchMXF(FOOMXF));
 		assertNull(toTest.matchXML(barenv));
 		
-		Thread.currentThread().sleep(ONE_SECOND);
+		Thread.sleep(ONE_SECOND);
 		
-		Collection<MaterialEnvelope> purgeUnmatchedMessages = toTest.purgeUnmatchedMessages(ONE_MILLISECOND);
+		Collection<MediaEnvelope> purgeUnmatchedMessages = toTest.purgeUnmatchedMessages(ONE_MILLISECOND);
 		assertEquals(1, purgeUnmatchedMessages.size());
 		assertEquals(barenv, purgeUnmatchedMessages.iterator().next());
 		
@@ -128,8 +128,8 @@ public class MatchMakerTest {
 		assertNull(toTest.matchMXF(BARMXF));
 		
 	}
-	private MaterialEnvelope getEnvelope(File forXML) throws DatatypeConfigurationException{
-		return new MaterialEnvelope(forXML, ProgrammeMaterialTest.getMaterialNoPackages("TITLE", "MATERIAL"));
+	private MediaEnvelope<Material> getEnvelope(File forXML) throws DatatypeConfigurationException{
+		return new MediaEnvelope<Material>(forXML, ProgrammeMaterialTest.getMaterialNoPackages("TITLE", "MATERIAL"));
 	}
 
 }

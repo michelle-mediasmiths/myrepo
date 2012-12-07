@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.mpa;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,12 +15,9 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import static org.mockito.Mockito.mock;
-
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
-import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.mayam.MayamClient;

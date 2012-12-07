@@ -23,8 +23,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 

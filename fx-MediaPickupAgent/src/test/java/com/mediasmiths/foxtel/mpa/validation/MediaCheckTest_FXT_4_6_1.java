@@ -19,9 +19,9 @@ import org.junit.Test;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
-import com.mediasmiths.foxtel.mpa.ResultLogger;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.Util;
 
@@ -68,7 +68,7 @@ public class MediaCheckTest_FXT_4_6_1 {
 		media.setChecksum(new BigInteger(expectedMd5sum, 16));
 
 		MediaCheck toTest = new MediaCheck();
-		Boolean intermediate= toTest.mediaCheck(mxf, new MaterialEnvelope(new File(""), material));
+		Boolean intermediate= toTest.mediaCheck(mxf, new MediaEnvelope(new File(""), material));
 		if (testName != null)
 		{
 			if(shouldPass == intermediate)

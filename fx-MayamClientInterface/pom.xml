@@ -36,6 +36,12 @@
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
 			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-Ruzz</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

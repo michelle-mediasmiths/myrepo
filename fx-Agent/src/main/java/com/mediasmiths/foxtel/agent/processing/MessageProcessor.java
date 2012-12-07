@@ -2,10 +2,8 @@
 package com.mediasmiths.foxtel.agent.processing;
 
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 import javax.xml.bind.JAXBException;
@@ -18,7 +16,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;

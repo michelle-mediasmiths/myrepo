@@ -7,7 +7,6 @@ import org.xml.sax.SAXException;
 
 import com.google.inject.Injector;
 import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
-import com.mediasmiths.foxtel.mpa.guice.MediaPickupSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.serviceregistry.ApplicationContextNameRegistry;

@@ -37,6 +37,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -521,5 +522,21 @@ public class MayamClientImpl implements MayamClient
 			log.error("EXception thrown by Mayam while attching report: " + id);
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void updateMaterial(DetailType details, String materialID)
+	{
+		String title = details.getTitle();
+		String som = details.getSOM();
+		String duration = details.getDuration();
+		String format = details.getFormat();
+		
+		if(log.isDebugEnabled()){
+			log.debug(String.format("material {%s} title {%s} som {%s} duration {%s} format {%s}",materialID,title,som,duration,format));
+		}
+		
+		//TODO : perform update
+		log.warn("no attempt made to update material "+materialID);
 	}
 }

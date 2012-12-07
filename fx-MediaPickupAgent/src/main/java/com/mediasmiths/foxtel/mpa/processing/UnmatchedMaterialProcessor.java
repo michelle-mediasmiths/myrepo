@@ -19,8 +19,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.mpa.MaterialEnvelope;
-import com.mediasmiths.mayam.AlertInterface;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 
 public class UnmatchedMaterialProcessor implements Runnable {
 
@@ -158,7 +157,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	}
 
 	private void processUnmatchedMessages() {
-		Collection<MaterialEnvelope> unmatchedMessages = matchMaker
+		Collection<MediaEnvelope> unmatchedMessages = matchMaker
 				.purgeUnmatchedMessages(timeout.longValue());
 
 		if (unmatchedMessages.size() > 0) {
@@ -169,7 +168,7 @@ public class UnmatchedMaterialProcessor implements Runnable {
 					unmatchedMessages.size()));
 		}
 
-		for (MaterialEnvelope me : unmatchedMessages) {
+		for (MediaEnvelope me : unmatchedMessages) {
 			logger.info(String.format("no mxf for %s", me.getFile()
 					.getAbsolutePath()));
 
