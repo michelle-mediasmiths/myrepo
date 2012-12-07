@@ -98,8 +98,8 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer
 	protected boolean queueFile(File file)
 	{
 
-		String path = FilenameUtils.getPath(file.getAbsolutePath());
-		logger.debug("path is" + path);
+		String path = FilenameUtils.getFullPathNoEndSeparator(file.getAbsolutePath());
+		logger.debug("path is " + path);
 
 		if (watchFolders.isRuzz(path))
 		{

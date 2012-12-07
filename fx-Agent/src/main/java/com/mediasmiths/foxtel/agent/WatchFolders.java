@@ -94,10 +94,11 @@ public class WatchFolders extends ArrayList<WatchFolder>
 	public boolean add(WatchFolder watchFolder)
 	{
 		log.debug(String.format(
-				"Adding watchfolder source: %s  delivery %s isAo %b ",
+				"Adding watchfolder source: %s  delivery %s isAo %b isRuzz %b",
 				watchFolder.getSource(),
 				watchFolder.getDelivery(),
-				watchFolder.isAO()));
+				watchFolder.isAO(),
+				watchFolder.isRuzz()));
 		return super.add(watchFolder);
 	}
 
