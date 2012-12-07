@@ -182,6 +182,8 @@ public class IncomingListener
 							if (messageProperties != null)
 							{
 								String jobType = messageProperties.get("jobType");
+								log.debug("jobType is "+jobType);
+								
 								if (jobType.equals("INGEST")) {
 									passEventToHandler(ingestJobHandler, messageProperties);
 								}
@@ -192,7 +194,7 @@ public class IncomingListener
 						}
 						else
 						{
-							logger.debug("Message is not of types ATTRIBUTES, ignoring");
+							logger.debug("Message is not of an expected type, ignoring");
 						}
 					}
 					else
