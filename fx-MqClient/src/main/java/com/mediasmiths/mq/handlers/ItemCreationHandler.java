@@ -46,8 +46,9 @@ public class ItemCreationHandler  implements AttributeHandler
 			}
 			else {
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
+				log.debug(String.format("created task with id %n",taskID));
 				AttributeMap newTask = taskController.getTask(taskID);
-				newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+				newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 				taskController.saveTask(newTask);
 			}
 		}
