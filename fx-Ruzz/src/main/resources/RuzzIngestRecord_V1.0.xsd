@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="http://foxtel.com.au/schemas/MAM/RuzzIngestRecord/001/000" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://foxtel.com.au/schemas/MAM/RuzzIngestRecord/001/000" elementFormDefault="qualified" version="1.0">
+	<!-- 
+		== Project: Content Factory - Media Asset Management
+		== Title: Ruzz Batch Ingest Schema
+		== Version: 1.0
+		== Author: Matthew Bennetts - matthew.bennetts@foxtel.com.au
+		== 
+		== @(#)$Id: RuzzIngestRecord_V1.0.xsd 4 2012-09-04 22:44:12Z bennettm $
+		== 
+	-->
+	<xs:element name="RuzzIngestRecord">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Material">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Details" type="detailType"/>
+							<xs:element name="Segments" type="segmentationType"/>
+							<!-- A simple list describing quality in each portion of the ingest. In practice,
+                            portions of the ingest where the quality is "Good" will be omitted. PositionStart
+                            and PositionEnd are the timecodes.  The OffsetStart/OffsetEnd are zero-based
+                            offsets from the start of the clip. -->
+							<xs:element name="IngestRecords">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="ChannelConditionEvent" type="channelConditionEventType" minOccurs="0" maxOccurs="unbounded">
+											<xs:annotation>
+												<xs:documentation>Channel condition events captured from the Video Tape machine during. </xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="materialID" use="required">
+							<xs:annotation>
+								<xs:documentation>Automation ID</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="32"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="detailType">
+		<xs:sequence>
+			<xs:element name="Title">
+				<xs:annotation>
+					<xs:documentation>Record title as entered during segmentation.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="200"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SOM" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>First frame of vision as captured during segmentation.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Duration" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>Total duration of material.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Format" type="formatType">
+				<xs:annotation>
+					<xs:documentation>The video format. For example SD, HD or 3D.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="segmentationType">
+		<xs:sequence>
+			<xs:element name="Segment" maxOccurs="99">
+				<xs:annotation>
+					<xs:documentation>Information about a segment</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="SegmentTitle" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>The segment title. If there's a descriptive segment title it should be provided here.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="100"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SegmentNumber">
+							<xs:annotation>
+								<xs:documentation>The segment number.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:positiveInteger">
+									<xs:minInclusive value="1"/>
+									<xs:maxInclusive value="99"/>
+									<xs:totalDigits value="2"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="SOM" type="timecodeType">
+							<xs:annotation>
+								<xs:documentation>The Start Of Message timecode for the first frame of  active vision for the segment.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:choice>
+							<xs:annotation>
+								<xs:documentation>You have a choice of providing EOM or the duration.</xs:documentation>
+							</xs:annotation>
+							<xs:element name="EOM" type="timecodeType">
+								<xs:annotation>
+									<xs:documentation>The End Of Message timecode for the last frame of  active vision for the segment.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Duration" type="timecodeType">
+								<xs:annotation>
+									<xs:documentation>The duration, using timecode format, of the segment.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:choice>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="channelConditionEventType">
+		<xs:sequence>
+			<xs:element name="Condition" type="videoQualityType">
+				<xs:annotation>
+					<xs:documentation>The type of condition that occured.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PositionStart" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The absolute tape timecode location where the condition began.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="PositionEnd" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The absolute tape timecode location where the condition ended.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffsetStart" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The relative timecode offset from start of vision where the condition began.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="OffsetEnd" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The relative timecode offset from the start of vision where the condition ended.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="formatType">
+		<xs:annotation>
+			<xs:documentation>This type defines a fixed list of string values for describing the format of the content. For example, SD or HD or 3D.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SD">
+				<xs:annotation>
+					<xs:documentation>Standard Definition</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="HD">
+				<xs:annotation>
+					<xs:documentation>High Definition</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="3D">
+				<xs:annotation>
+					<xs:documentation>3D content</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="timecodeType" final="restriction">
+		<xs:annotation>
+			<xs:documentation>This type defines the format that must be used for timecode values.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]):([0-1][0-9]|[2][0-4])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="videoQualityType">
+		<xs:annotation>
+			<xs:documentation> A simple enum type describing the "channel condition" video quality</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Indeterminable"/>
+			<xs:enumeration value="Doubtful"/>
+			<xs:enumeration value="No Good"/>
+			<xs:enumeration value="Invalid"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

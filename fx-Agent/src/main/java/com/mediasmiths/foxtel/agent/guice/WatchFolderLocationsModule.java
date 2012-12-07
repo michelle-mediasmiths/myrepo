@@ -63,6 +63,17 @@ public class WatchFolderLocationsModule extends AbstractModule {
 				}
 			}
 			
+			//check if this folder is a ruzz ingest watch folder
+			String ruzzIngestFlagName = "watchfolder.locations[" + i + "].ruzz";
+			if(conf.containsKey(ruzzIngestFlagName)){
+				
+				String ruzzflagval = conf.get(ruzzIngestFlagName);
+				logger.trace(String.format("%s=%s", ruzzIngestFlagName, ruzzflagval));
+				if(ruzzflagval.toLowerCase().equals("true")){
+					logger.info(String.format("considering media coming from %s to be ruzz ingest", val));
+					watchFolder.setRuzz(true);
+				}
+			}
 			
 			locations.add(watchFolder);
 		}

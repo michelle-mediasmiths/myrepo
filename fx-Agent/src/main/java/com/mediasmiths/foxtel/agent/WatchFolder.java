@@ -5,7 +5,16 @@ public class WatchFolder {
 	private String source; //location to watch for files in
 	private String delivery; //delivery location (if applicable to current agent)
 	private boolean isAO;
+	private boolean isRuzz;
 	
+	public boolean isRuzz()
+	{
+		return isRuzz;
+	}
+	public void setRuzz(boolean isRuzz)
+	{
+		this.isRuzz = isRuzz;
+	}
 	public boolean isAO() {
 		return isAO;
 	}

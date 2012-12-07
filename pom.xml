@@ -32,6 +32,7 @@
 		<module>fx-Common</module>
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-MaterialExchange</module>
+		<module>fx-Ruzz</module>
 		<module>fx-MayamClient</module>
 		<module>fx-Agent</module>
 		<module>fx-PlaceholderAgent</module>
