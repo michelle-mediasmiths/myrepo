@@ -97,6 +97,11 @@
 			<artifactId>FileWatcher</artifactId>
 			<version>${filewatcher.version}</version>
 		</dependency>
+				<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-Ruzz</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 		
 
 		<!-- end mediasmiths dependencies -->

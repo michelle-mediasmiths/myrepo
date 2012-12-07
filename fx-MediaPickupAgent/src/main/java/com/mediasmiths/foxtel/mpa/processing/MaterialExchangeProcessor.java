@@ -97,7 +97,7 @@ public class MaterialExchangeProcessor extends MessageProcessor<Material> {
 
 		if (!(unmarshalled instanceof Material)) {
 			throw new ClassCastException(String.format(
-					"unmarshalled type %s is not a PlaceholderMessage",
+					"unmarshalled type %s is not a Material Exchange",
 					unmarshalled.getClass().toString()));
 		}
 
