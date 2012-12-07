@@ -46,6 +46,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 public class MayamClientStub implements MayamClient
@@ -814,6 +815,12 @@ public class MayamClientStub implements MayamClient
 		{
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
+	}
+
+	@Override
+	public void updateMaterial(DetailType details, String materialID)
+	{
+		updateMaterial(materialID);
 	}
 
 }
