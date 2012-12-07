@@ -43,6 +43,10 @@ public class MayamMaterialController extends MayamController
 {
 
 	private static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
+	private static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "programme";
+	
+	private static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
+	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "associated";
 
 	private final TasksClient client;
 
@@ -85,6 +89,7 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());
+			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, PROGRAMME_MATERIAL_CONTENT_TYPE);
 			
 			if(material.getQualityCheckTask() != null)			
 			attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, material.getQualityCheckTask().toString());
@@ -205,7 +210,8 @@ public class MayamMaterialController extends MayamController
 			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
-
+			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, ASSOCIATED_MATERIAL_CONTENT_TYPE);
+			
 			attributesValid &= attributes.setAttribute(Attribute.CONT_ASPECT_RATIO, MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 			attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, material.isAdultMaterial());
