@@ -17,8 +17,8 @@ public class MaterialFolderExistingFilesOnly extends MaterialFolderWatcher {
 	
 	@Inject
 	public MaterialFolderExistingFilesOnly(
-			FilesPendingProcessingQueue filePathsPendingValidation, @Named("watchfolder.locations") WatchFolders paths) {
-		super(filePathsPendingValidation, paths,100l, 5l);
+			FilesPendingProcessingQueue filePathsPendingValidation, RuzzFilesPendingProcessingQueue ruzzPathsPendingValidation, @Named("watchfolder.locations") WatchFolders paths) {
+		super(filePathsPendingValidation,ruzzPathsPendingValidation, paths,100l, 5l);
 	}
 
 	@Override

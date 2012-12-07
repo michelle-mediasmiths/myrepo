@@ -34,7 +34,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 
 	private final WatchFolders watchFolders;
 	private final List<String> sourcePaths;
-	private final FilesPendingProcessingQueue filePathsPendingValidation;
+	protected final FilesPendingProcessingQueue filePathsPendingValidation;
 
 	private static Logger logger = Logger
 			.getLogger(DirectoryWatchingQueuer.class);

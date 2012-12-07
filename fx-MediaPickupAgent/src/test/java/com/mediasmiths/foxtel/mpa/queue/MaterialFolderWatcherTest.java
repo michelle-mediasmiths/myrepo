@@ -111,7 +111,8 @@ public class MaterialFolderWatcherTest {
 
 
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
-		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
+		RuzzFilesPendingProcessingQueue ruzzPathsPendingValidation = new RuzzFilesPendingProcessingQueue();
+		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,ruzzPathsPendingValidation,
 				new WatchFolders(Collections.<String>singletonList(watchFolderPath)), 100l, 5l);
 		toTest.setSleepTime(100l);
 
@@ -143,7 +144,8 @@ public class MaterialFolderWatcherTest {
 	@Test
 	public void testNewFilesAreQueued() throws FileNotFoundException, IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
-		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
+		RuzzFilesPendingProcessingQueue ruzzFilesPendingProcessingQueue = new RuzzFilesPendingProcessingQueue();
+		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,ruzzFilesPendingProcessingQueue,
 				new WatchFolders(Collections.<String>singletonList(watchFolderPath)),100l, 5l);
 		
 		logger.trace("testNewFilesAreQueued enter");
@@ -200,7 +202,8 @@ public class MaterialFolderWatcherTest {
 	public void testOtherFileTypesAreIgnored() throws FileNotFoundException,
 			IOException {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
-		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,
+		RuzzFilesPendingProcessingQueue ruzzQueue = new RuzzFilesPendingProcessingQueue();
+		MaterialFolderWatcher toTest = new MaterialFolderWatcher(queue,ruzzQueue,
 				new WatchFolders(Collections.<String>singletonList(watchFolderPath)),100l,5l);
 		toTest.setSleepTime(100l);
 

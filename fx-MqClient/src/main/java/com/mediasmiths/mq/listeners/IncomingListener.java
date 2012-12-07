@@ -95,7 +95,7 @@ public class IncomingListener
 						
 						if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset") && changeType.equals("CREATE"))
 						{
-							logger.trace("fetching message subject");
+							logger.trace("reading message subject");
 							AttributeMap messageAttributes = msg.getSubject();
 						
 							try
@@ -117,7 +117,7 @@ public class IncomingListener
 						}
 						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset") && changeType.equals("UPDATE"))
 						{
-							logger.trace("fetching message subject");
+							logger.trace("reading message subject");
 							AttributeMapPair messageAttributes = msg.getSubjectPair();
 							AttributeMap beforeAttributes = messageAttributes.getBefore();
 							AttributeMap afterAttributes = messageAttributes.getAfter();
@@ -135,7 +135,7 @@ public class IncomingListener
 						}
 						else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task") && changeType.equals("CREATE"))
 						{
-							log.trace("fetching message subject");
+							log.trace("reading message subject");
 							AttributeMap messageAttributes = msg.getSubject();
 
 							try
@@ -159,7 +159,7 @@ public class IncomingListener
 						}
 						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task") && changeType.equals("UPDATE"))
 						{
-							logger.trace("fetching message subject");
+							logger.trace("reading message subject");
 							AttributeMapPair messageAttributes = msg.getSubjectPair();
 							AttributeMap beforeAttributes = messageAttributes.getBefore();
 							AttributeMap afterAttributes = messageAttributes.getAfter();
