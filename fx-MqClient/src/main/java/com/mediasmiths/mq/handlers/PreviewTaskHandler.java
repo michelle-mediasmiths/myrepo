@@ -23,7 +23,7 @@ public class PreviewTaskHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.PREVIEW)) 
+		if (taskListID.equals(MayamTaskListType.PREVIEW.getText())) 
 		{
 			try {
 				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	

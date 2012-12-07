@@ -23,7 +23,7 @@ public class IngestCompleteHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{	
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.INGEST)) 
+		if (taskListID.equals(MayamTaskListType.INGEST.getText())) 
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.FINISHED) 

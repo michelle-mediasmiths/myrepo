@@ -36,11 +36,11 @@ public class UnmatchedHandler  implements AttributeHandler
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
 				
 				MuleWorkflowController mule = new MuleWorkflowController();
-				if (assetType.equals(MayamAssetType.MATERIAL.toString()))
+				if (assetType.equals(MayamAssetType.MATERIAL.getText()))
 				{
 					mule.initiateQcWorkflow(assetID, false);
 				} 
-				else if (assetType.equals(MayamAssetType.PACKAGE.toString()))
+				else if (assetType.equals(MayamAssetType.PACKAGE.getText()))
 				{
 					mule.initiateQcWorkflow(assetID, true);
 				}

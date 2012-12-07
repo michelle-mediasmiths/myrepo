@@ -34,7 +34,7 @@ public class TemporaryContentHandler  implements AttributeHandler
 		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		try {			
-			if (assetType.equals("ITEM")) 
+			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType())) 
 			{
 				//TODO: Check if parent_ID has been updated, add sources to title and remove from any purge lists
 				

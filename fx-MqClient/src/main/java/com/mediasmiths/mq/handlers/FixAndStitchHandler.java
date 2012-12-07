@@ -23,7 +23,7 @@ public class FixAndStitchHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{	
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.FIX_STITCH_EDIT)) 
+		if (taskListID.equals(MayamTaskListType.FIX_STITCH_EDIT.getText())) 
 		{
 			try {
 				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	

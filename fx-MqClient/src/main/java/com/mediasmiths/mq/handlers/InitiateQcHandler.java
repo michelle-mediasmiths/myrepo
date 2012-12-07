@@ -24,7 +24,7 @@ public class InitiateQcHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.QC_VIEW)) 
+		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText())) 
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.OPEN) 
@@ -37,11 +37,11 @@ public class InitiateQcHandler  implements AttributeHandler
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
 					MuleWorkflowController mule = new MuleWorkflowController();
-					if (assetType.toString().equals(MayamAssetType.MATERIAL.toString()))
+					if (assetType.toString().equals(MayamAssetType.MATERIAL.getText()))
 					{
 						mule.initiateQcWorkflow(assetID, false);
 					} 
-					else if (assetType.toString().equals(MayamAssetType.PACKAGE.toString()))
+					else if (assetType.toString().equals(MayamAssetType.PACKAGE.getText()))
 					{
 						mule.initiateQcWorkflow(assetID, true);
 					}

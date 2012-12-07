@@ -23,7 +23,7 @@ public class ComplianceEditingHandler  implements AttributeHandler{
 	public void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.COMPLIANCE_EDIT)) 
+		if (taskListID.equals(MayamTaskListType.COMPLIANCE_EDIT.getText())) 
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.FINISHED) 

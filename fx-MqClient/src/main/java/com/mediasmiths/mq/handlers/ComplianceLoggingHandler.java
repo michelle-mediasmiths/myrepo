@@ -23,7 +23,7 @@ public class ComplianceLoggingHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.COMPLIANCE_LOGGING)) 
+		if (taskListID.equals(MayamTaskListType.COMPLIANCE_LOGGING.getText())) 
 		{
 			try {
 				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
