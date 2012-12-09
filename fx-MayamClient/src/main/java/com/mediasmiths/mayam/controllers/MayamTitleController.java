@@ -164,8 +164,7 @@ public class MayamTitleController extends MayamController{
 					List<License> licenses = titleRights.getLicense();
 					
 					int rowCounter = 0;
-					for (int i = 0; i < licenses.size(); i++) {
-						License license = licenses.get(i);
+					for(License license : licenses){
 						LicenseHolderType holder = license.getLicenseHolder();
 						LicensePeriodType period = license.getLicensePeriod();
 						
@@ -173,10 +172,8 @@ public class MayamTitleController extends MayamController{
 						if (channels != null) {
 							List<ChannelType> channelList = channels.getChannel();
 							if (channelList != null) {
-								for (int j = 0; j < channelList.size(); j++)
+								for(ChannelType channel : channelList)
 								{
-									ChannelType channel = channelList.get(j);
-	
 									rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
 									rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
 									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
@@ -378,8 +375,7 @@ public class MayamTitleController extends MayamController{
 						List<License> licenses = titleRights.getLicense();
 						
 						int rowCounter = 0;
-						for (int i = 0; i < licenses.size(); i++) {
-							License license = licenses.get(i);
+						for(License license : licenses){
 							LicenseHolderType holder = license.getLicenseHolder();
 							LicensePeriodType period = license.getLicensePeriod();
 							
@@ -387,10 +383,8 @@ public class MayamTitleController extends MayamController{
 							if (channels != null) {
 								List<ChannelType> channelList = channels.getChannel();
 								if (channelList != null) {
-									for (int j = 0; j < channelList.size(); j++)
+									for(ChannelType channel : channelList)
 									{
-										ChannelType channel = channelList.get(j);
-		
 										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
 										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
 										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
