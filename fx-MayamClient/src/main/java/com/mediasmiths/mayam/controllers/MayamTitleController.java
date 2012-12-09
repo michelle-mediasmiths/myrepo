@@ -519,7 +519,11 @@ public class MayamTitleController extends MayamController{
 		}
 		else {
 			try {
-				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				//fetch asset by house id to get its assetid
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID);
+				
+				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ title.getTitleID(),e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
