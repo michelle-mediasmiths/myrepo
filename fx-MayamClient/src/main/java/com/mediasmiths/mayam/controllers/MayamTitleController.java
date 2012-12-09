@@ -182,16 +182,15 @@ public class MayamTitleController extends MayamController{
 									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-									
-									channelStringList.add(channel.getChannelTag());
+									String channelTag = channel.getChannelTag();
+									channelStringList.add(channelTag);
 									rowCounter ++;
 								}
 							}
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-//something up with stringlists at the moment
-//					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -397,7 +396,9 @@ public class MayamTitleController extends MayamController{
 										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-										channelStringList.add(channel.getChannelTag());
+										
+										String channelTag = channel.getChannelTag();
+										channelStringList.add(channelTag);
 										
 										rowCounter ++;
 									}
@@ -405,8 +406,7 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-// something up with StringList at the moment						
-//						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
