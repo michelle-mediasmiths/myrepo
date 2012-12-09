@@ -190,7 +190,8 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+//something up with stringlists at the moment
+//					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -404,7 +405,8 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+// something up with StringList at the moment						
+//						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
