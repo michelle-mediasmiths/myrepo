@@ -7,6 +7,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.EventService;
@@ -20,6 +21,7 @@ import com.mediasmiths.foxtel.generated.ruzz.SegmentationType;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
+import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
 import com.mediasmiths.mayam.MayamClient;
 
 public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
@@ -27,10 +29,11 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 
 	protected final static Logger logger = Logger.getLogger(RuzzPickupProcessor.class);
 	
+	@Inject
 	public RuzzPickupProcessor(
 			RuzzFilesPendingProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
-			MessageValidator<RuzzIngestRecord> messageValidator,
+			RuzzValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
