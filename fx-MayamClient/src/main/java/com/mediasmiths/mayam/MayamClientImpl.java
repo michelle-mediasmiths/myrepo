@@ -31,6 +31,7 @@ import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -335,20 +336,25 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isMaterialPlaceholder(String materialID)
 	{
-		boolean isPlaceholder = true;
+		boolean isPlaceholder = false;
 		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 
-		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.SOURCE_IDS))
+		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.MEDST_HR))
 		{
-			IdSet sourceIds = materialAttributes.getAttribute(Attribute.SOURCE_IDS);
-			if (sourceIds != null)
+			MediaStatus mediaStatus = materialAttributes.getAttribute(Attribute.MEDST_HR);
+			if (mediaStatus != null)
 			{
-				isPlaceholder = false;
+				log.info("Media status is " + mediaStatus.toString());
+				if (mediaStatus== MediaStatus.MISSING) 
+				{
+					isPlaceholder = true;
+					
+				}
+				
 			}
 			else
 			{
-				// TODO: Need to check segment data once implemented in order to
-				// determind if placeholder
+				log.warn("Media status is null");
 			}
 		}
 		return isPlaceholder;
