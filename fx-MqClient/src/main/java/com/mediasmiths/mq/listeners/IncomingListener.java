@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
@@ -69,7 +70,6 @@ public class IncomingListener
 			{
 				try
 				{
-
 					logger.trace("AssetListener onMessage");
 					logger.trace("Message is: " + msg.toString());
 					MqContentType type = msg.getType();
@@ -94,16 +94,26 @@ public class IncomingListener
 
 						if ((type.type().equals(IncomingListener.JOB_MESSAGE_TYPE)))
 						{
+
 							logger.trace("fetching job message");
+
 							Map<String, String> messageProperties = msg.getProperties();
+
 							if (messageProperties != null)
 							{
 								String jobType = messageProperties.get("jobType");
 								log.debug("jobType is " + jobType);
 
-								if (jobType.equals("IMPORT"))
+								if (jobType != null)
 								{
-									passEventToHandler(ingestJobHandler, messageProperties);
+									if (jobType.equals("IMPORT"))
+									{
+										passEventToHandler(ingestJobHandler, messageProperties);
+									}
+								}
+								else
+								{
+									logger.error("null jobType received");
 								}
 							}
 							else
@@ -113,9 +123,9 @@ public class IncomingListener
 						}
 						else if (changeType != null)
 						{
-							
+
 							logger.trace("changeType not null");
-							
+
 							if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset")
 									&& changeType.equals("CREATE"))
 							{
