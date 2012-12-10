@@ -233,7 +233,9 @@ public class MayamMaterialController extends MayamController
 				audioTrack.setNumber(track.getTrackNumber());
 				audioTrackList.add(audioTrack);
 			}
-			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
+
+//comment out audio tracks pending fix for list deserialisation			
+//			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList); 
 			
 			if (!attributesValid)
 			{
