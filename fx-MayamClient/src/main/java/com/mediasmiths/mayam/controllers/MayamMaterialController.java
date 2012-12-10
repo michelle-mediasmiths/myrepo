@@ -254,8 +254,8 @@ public class MayamMaterialController extends MayamController
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
-				log.error("Exception thrown by Mayam while trying to create Material");
-				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);
+				log.error("Exception thrown by Mayam while trying to create Material",e);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
 			}
 			
 			String assetID =result.getAttribute(Attribute.ASSET_ID);			
@@ -278,7 +278,7 @@ public class MayamMaterialController extends MayamController
 			catch (RemoteException e)
 			{
 				log.error("Exception thrown by Mayam while fetch newly create Material",e);
-				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED,e);
 			}		
 
 		}
