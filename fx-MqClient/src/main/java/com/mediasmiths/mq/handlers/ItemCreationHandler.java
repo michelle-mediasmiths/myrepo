@@ -37,18 +37,9 @@ public class ItemCreationHandler  implements AttributeHandler
 		log.debug(String.format("assetID %s parentID %s",assetID,parentID));
 		
 		try {
-			if (assetType.equals(AssetType.ITEM) && (parentID != null)) 
+			// Material Ingest and Comp Logging tasks are created by MaterialController due to need to set Required By Date which is not mapped in AGLs
+			if (!assetType.equals(MayamAssetType.MATERIAL.getAssetType())) 
 			{
-				//Skip QC and move straight to compliance	
-				//Compile flag is not stored in Mayam, but Parent Id is taken from compiled object
-				//As such we are using the presence of Parent Id on a Material asset to determined if compile was set
-				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_LOGGING);
-				log.debug("created task with id : "+taskID);
-				AttributeMap newTask = taskController.getTask(taskID);
-				newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-				taskController.saveTask(newTask);
-			}
-			else {
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
 				log.debug("created task with id : "+taskID);
 				AttributeMap newTask = taskController.getTask(taskID);

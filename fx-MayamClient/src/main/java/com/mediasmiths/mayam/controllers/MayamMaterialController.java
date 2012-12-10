@@ -49,13 +49,14 @@ public class MayamMaterialController extends MayamController
 	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "associated";
 
 	private final TasksClient client;
-
+	private final MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 
 	@Inject
-	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient)
+	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
 	{
 		client = mayamClient;
+		taskController = mayamTaskController;
 	}
 
 	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
@@ -63,7 +64,8 @@ public class MayamMaterialController extends MayamController
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
-
+		boolean createCompLoggingTask = false;
+		
 		if (material != null)
 		{
 			// setting parent_house_id is an unsupported operation
@@ -110,9 +112,6 @@ public class MayamMaterialController extends MayamController
 			}
 			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
 
-			// Mayam and Foxtel have agreed that Required by is not required in the AGL
-			// attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy());
-
 			Source source = material.getSource();
 			if (source != null)
 			{
@@ -143,6 +142,8 @@ public class MayamMaterialController extends MayamController
 						AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(
 								MayamAssetType.MATERIAL.getAssetType(),
 								compile.getParentMaterialID());
+						
+						createCompLoggingTask = true;
 
 					}
 					catch (RemoteException e)
@@ -185,6 +186,41 @@ public class MayamMaterialController extends MayamController
 				{
 					log.warn("Mayam failed to create Material");
 					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
+				}
+				else {
+					if (createCompLoggingTask)
+					{
+						try {
+							long taskID = taskController.createTask(material.getMaterialID(), MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING);
+							log.debug("created task with id : "+taskID);
+							AttributeMap newTask = taskController.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
+							{
+								newTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+							}
+							taskController.saveTask(newTask);
+						} 
+						catch (MayamClientException e) {
+							log.error("Exception thrown in Mayam while creating Compliance Logging task for Material : " + material.getMaterialID(), e);
+						}
+					}
+					else {
+						try {
+							long taskID = taskController.createTask(material.getMaterialID(), MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
+							log.debug("created task with id : "+taskID);
+							AttributeMap newTask = taskController.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
+							{
+								newTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+							}
+							taskController.saveTask(newTask);
+						} 
+						catch (MayamClientException e) {
+							log.error("Exception thrown in Mayam while creating Ingest task for Material : " + material.getMaterialID(), e);
+						}
+					}
 				}
 			}
 			catch (RemoteException e)
@@ -303,6 +339,18 @@ public class MayamMaterialController extends MayamController
 				{
 					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
 				}
+				
+				try {
+					long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
+					log.debug("created task with id : "+taskID);
+					AttributeMap newTask = taskController.getTask(taskID);
+					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+					taskController.saveTask(newTask);
+				} 
+				catch (RemoteException e) {
+					log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
+				}
+				
 
 				return siteID;
 			}
@@ -496,12 +544,6 @@ public class MayamMaterialController extends MayamController
 
 				attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
 
-				// Required By does not need to be stored in AGL
-				// if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
-				// {
-				// attributesValid &= attributes.setAttribute(Attribute.TX_NEXT, material.getRequiredBy().toGregorianCalendar().getTime());
-				// }
-
 				Source source = material.getSource();
 				if (source != null)
 				{
@@ -585,6 +627,33 @@ public class MayamMaterialController extends MayamController
 					{
 						log.warn("Mayam failed to update Material");
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
+					}
+					else {
+						try {
+							AttributeMap compLoggingTask = taskController.getTaskForAssetBySiteID(MayamTaskListType.COMPLIANCE_LOGGING, material.getMaterialID());
+							if (compLoggingTask != null) 
+							{
+								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
+								{
+									compLoggingTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+									taskController.saveTask(compLoggingTask);
+								}
+							}
+							
+							AttributeMap ingestTask = taskController.getTaskForAssetBySiteID(MayamTaskListType.INGEST, material.getMaterialID());
+							if (ingestTask != null)
+							{
+								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
+								{
+									ingestTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+									taskController.saveTask(ingestTask);
+								}
+							}
+						}
+						catch(MayamClientException e)
+						{
+							log.error("Exception thrown by Mayam while updating tasks for Material : " + material.getMaterialID(), e);
+						}
 					}
 				}
 				catch (RemoteException e)

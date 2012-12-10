@@ -237,7 +237,7 @@ public class MayamTaskController extends MayamController{
 					List<AttributeMap> tasks = existingTasks.getMatches();
 					AttributeMap qaTask = tasks.get(0);
 					qaStatus = task.getAttribute(Attribute.TASK_STATE);
-					
+						
 					if (existingTasks.getTotalMatches() > 0) 
 					{
 						log.warn("More than 1 Preview task found for assset : " + assetId + ". Access Righst will be set based on status of first task : " + qaTask.getAttribute(Attribute.TASK_ID));
