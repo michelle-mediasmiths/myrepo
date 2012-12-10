@@ -66,7 +66,8 @@ public class MayamMaterialController extends MayamController
 		
 		if (material != null)
 		{
-			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			//setting parent_house_id is an unsupported operation
+//			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 			try {
 				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				if (title != null) {
@@ -196,7 +197,8 @@ public class MayamMaterialController extends MayamController
 		if (material != null)
 		{
 			
-			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			//setting parent_house_id is an unsupported operation
+//			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 			try {
 				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				if (title != null) {
@@ -520,13 +522,15 @@ public class MayamMaterialController extends MayamController
 						try {
 							AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), compile.getParentMaterialID());
 							if (parentMaterial != null) {
-								//String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
-								//attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+//								String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
+//								attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 							}
 						} catch (RemoteException e) {
 							log.error("Exception thrown by Mayam while trying to retrieve parent Material : " + compile.getParentMaterialID(), e);
 						}
-						attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
+						
+						//setting parent_house_id attribute is not supported
+//						attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					}
 
 					Library library = source.getLibrary();
