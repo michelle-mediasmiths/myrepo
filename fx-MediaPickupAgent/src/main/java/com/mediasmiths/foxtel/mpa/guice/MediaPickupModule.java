@@ -34,7 +34,7 @@ public class MediaPickupModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
-		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
+//		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
 	}
 

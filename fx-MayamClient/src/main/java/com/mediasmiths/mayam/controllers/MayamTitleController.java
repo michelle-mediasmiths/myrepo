@@ -164,8 +164,7 @@ public class MayamTitleController extends MayamController{
 					List<License> licenses = titleRights.getLicense();
 					
 					int rowCounter = 0;
-					for (int i = 0; i < licenses.size(); i++) {
-						License license = licenses.get(i);
+					for(License license : licenses){
 						LicenseHolderType holder = license.getLicenseHolder();
 						LicensePeriodType period = license.getLicensePeriod();
 						
@@ -173,24 +172,23 @@ public class MayamTitleController extends MayamController{
 						if (channels != null) {
 							List<ChannelType> channelList = channels.getChannel();
 							if (channelList != null) {
-								for (int j = 0; j < channelList.size(); j++)
+								for(ChannelType channel : channelList)
 								{
-									ChannelType channel = channelList.get(j);
-	
 									rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
 									rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
 									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-									
-									channelStringList.add(channel.getChannelTag());
+									String channelTag = channel.getChannelTag();
+									channelStringList.add(channelTag);
 									rowCounter ++;
 								}
 							}
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+					//comment out pending resolution of FX-306
+//					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -378,8 +376,7 @@ public class MayamTitleController extends MayamController{
 						List<License> licenses = titleRights.getLicense();
 						
 						int rowCounter = 0;
-						for (int i = 0; i < licenses.size(); i++) {
-							License license = licenses.get(i);
+						for(License license : licenses){
 							LicenseHolderType holder = license.getLicenseHolder();
 							LicensePeriodType period = license.getLicensePeriod();
 							
@@ -387,16 +384,16 @@ public class MayamTitleController extends MayamController{
 							if (channels != null) {
 								List<ChannelType> channelList = channels.getChannel();
 								if (channelList != null) {
-									for (int j = 0; j < channelList.size(); j++)
+									for(ChannelType channel : channelList)
 									{
-										ChannelType channel = channelList.get(j);
-		
 										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
 										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
 										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
 										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-										channelStringList.add(channel.getChannelTag());
+										
+										String channelTag = channel.getChannelTag();
+										channelStringList.add(channelTag);
 										
 										rowCounter ++;
 									}
@@ -404,7 +401,8 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+//						comment out pending resolution of FX-306
+//						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
@@ -521,7 +519,11 @@ public class MayamTitleController extends MayamController{
 		}
 		else {
 			try {
-				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				//fetch asset by house id to get its assetid
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID);
+				
+				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ title.getTitleID(),e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
