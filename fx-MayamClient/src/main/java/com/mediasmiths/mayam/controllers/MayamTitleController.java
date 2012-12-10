@@ -187,8 +187,7 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-					//comment out pending resolution of FX-306
-//					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -401,8 +400,7 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
-//						comment out pending resolution of FX-306
-//						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());
