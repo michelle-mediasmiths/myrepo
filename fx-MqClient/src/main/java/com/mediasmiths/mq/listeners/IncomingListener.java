@@ -38,7 +38,8 @@ public class IncomingListener
 	protected final static Logger logger = Logger.getLogger(IncomingListener.class);
 	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
 	public static final String ATTRIBUTE_PAIR = "mayam#attribute-pairs";
-	
+	public static final String JOB_MESSAGE_TYPE = "mayam#job";
+
 	public static Listener getInstance(
 			final TasksClient client,
 			final MayamTaskController taskController,
@@ -61,7 +62,7 @@ public class IncomingListener
 		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
 		final IngestJobHandler ingestJobHandler = new IngestJobHandler(taskController);
-		
+
 		return new MqClientListener()
 		{
 			public void onMessage(MqMessage msg) throws Throwable
@@ -72,7 +73,7 @@ public class IncomingListener
 					logger.trace("AssetListener onMessage");
 					logger.trace("Message is: " + msg.toString());
 					MqContentType type = msg.getType();
-				
+
 					if (type != null)
 					{
 						logger.debug("Message type not null " + type.type());
@@ -83,113 +84,127 @@ public class IncomingListener
 					}
 					String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 					String changeType = msg.getProperties().get("MayamChangeType");
-					
+
 					logger.trace("origin is:" + origin);
 					logger.trace("Change Type is:" + changeType);
-					
-					if (type != null && origin != null && changeType != null)
+
+					if (type != null && origin != null)
 					{
 						logger.trace("Type and origin both not null");
-						
-						
-						
-						if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset") && changeType.equals("CREATE"))
-						{
-							logger.trace("reading message subject");
-							AttributeMap messageAttributes = msg.getSubject();
-						
-							try
-							{
-								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-							}
-							catch (Exception e)
-							{
-								logger.error("error logging attributes message");
-							}
 
-							//passEventToHandler(assetDeletionHandler, messageAttributes);
-							//passEventToHandler(assetPurgeHandler, messageAttributes);
-							//passEventToHandler(emergencyIngestHandler, messageAttributes);
-							passEventToHandler(itemCreationHandler, messageAttributes);
-							//passEventToHandler(packageUpdateHandler, messageAttributes);
-							//passEventToHandler(temporaryContentHandler, messageAttributes);
-							//passEventToHandler(unmatchedHandler, messageAttributes);
-						}
-						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset") && changeType.equals("UPDATE"))
-						{
-							logger.trace("reading message subject");
-							AttributeMapPair messageAttributes = msg.getSubjectPair();
-							AttributeMap beforeAttributes = messageAttributes.getBefore();
-							AttributeMap afterAttributes = messageAttributes.getAfter();
-							try
-							{
-								logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
-								logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
-							}
-							catch (Exception e)
-							{
-								logger.error("error logging attributes message");
-							}
-							
-							//TODO:Handlers for asset updates
-						}
-						else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task") && changeType.equals("CREATE"))
-						{
-							log.trace("reading message subject");
-							AttributeMap messageAttributes = msg.getSubject();
-
-							try
-							{
-								logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-							}
-							catch (Exception e)
-							{
-								logger.error("error logging attributes message");
-							}
-							
-							//passEventToHandler(compEditHandler, messageAttributes);
-							//passEventToHandler(comLoggingHandler, messageAttributes);
-							//passEventToHandler(fixAndStitchHandler, messageAttributes);
-							//passEventToHandler(importFailHandler, messageAttributes);
-							passEventToHandler(ingestCompleteHandler, messageAttributes);
-							passEventToHandler(initiateQcHandler, messageAttributes);
-							//passEventToHandler(previewHandler, messageAttributes);
-							passEventToHandler(qcCompleteHandler, messageAttributes);
-							//passEventToHandler(segmentationHandler, messageAttributes);	
-						}
-						else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task") && changeType.equals("UPDATE"))
-						{
-							logger.trace("reading message subject");
-							AttributeMapPair messageAttributes = msg.getSubjectPair();
-							AttributeMap beforeAttributes = messageAttributes.getBefore();
-							AttributeMap afterAttributes = messageAttributes.getAfter();
-							try
-							{
-								logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
-								logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
-							}
-							catch (Exception e)
-							{
-								logger.error("error logging attributes message");
-							}
-							
-							//TODO:Handlers for task updates
-						}
-						else if (origin.contains("job"))
+						if ((type.type().equals(IncomingListener.JOB_MESSAGE_TYPE)))
 						{
 							logger.trace("fetching job message");
 							Map<String, String> messageProperties = msg.getProperties();
 							if (messageProperties != null)
 							{
 								String jobType = messageProperties.get("jobType");
-								log.debug("jobType is "+jobType);
-								
-								if (jobType.equals("INGEST")) {
+								log.debug("jobType is " + jobType);
+
+								if (jobType.equals("IMPORT"))
+								{
 									passEventToHandler(ingestJobHandler, messageProperties);
 								}
 							}
-							else {
+							else
+							{
 								logger.error("Message properties were null for job message");
+							}
+						}
+						else if (changeType != null)
+						{
+							
+							logger.trace("changeType not null");
+							
+							if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset")
+									&& changeType.equals("CREATE"))
+							{
+								logger.trace("reading message subject");
+								AttributeMap messageAttributes = msg.getSubject();
+
+								try
+								{
+									logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+								}
+								catch (Exception e)
+								{
+									logger.error("error logging attributes message");
+								}
+
+								// passEventToHandler(assetDeletionHandler, messageAttributes);
+								// passEventToHandler(assetPurgeHandler, messageAttributes);
+								// passEventToHandler(emergencyIngestHandler, messageAttributes);
+								passEventToHandler(itemCreationHandler, messageAttributes);
+								// passEventToHandler(packageUpdateHandler, messageAttributes);
+								// passEventToHandler(temporaryContentHandler, messageAttributes);
+								// passEventToHandler(unmatchedHandler, messageAttributes);
+							}
+							else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset")
+									&& changeType.equals("UPDATE"))
+							{
+								logger.trace("reading message subject");
+								AttributeMapPair messageAttributes = msg.getSubjectPair();
+								AttributeMap beforeAttributes = messageAttributes.getBefore();
+								AttributeMap afterAttributes = messageAttributes.getAfter();
+								try
+								{
+									logger.trace(String.format("Attributes message (before): "
+											+ LogUtil.mapToString(beforeAttributes)));
+									logger.trace(String.format("Attributes message (after): "
+											+ LogUtil.mapToString(afterAttributes)));
+								}
+								catch (Exception e)
+								{
+									logger.error("error logging attributes message");
+								}
+
+								// TODO:Handlers for asset updates
+							}
+							else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task")
+									&& changeType.equals("CREATE"))
+							{
+								log.trace("reading message subject");
+								AttributeMap messageAttributes = msg.getSubject();
+
+								try
+								{
+									logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+								}
+								catch (Exception e)
+								{
+									logger.error("error logging attributes message");
+								}
+
+								// passEventToHandler(compEditHandler, messageAttributes);
+								// passEventToHandler(comLoggingHandler, messageAttributes);
+								// passEventToHandler(fixAndStitchHandler, messageAttributes);
+								// passEventToHandler(importFailHandler, messageAttributes);
+								passEventToHandler(ingestCompleteHandler, messageAttributes);
+								passEventToHandler(initiateQcHandler, messageAttributes);
+								// passEventToHandler(previewHandler, messageAttributes);
+								passEventToHandler(qcCompleteHandler, messageAttributes);
+								// passEventToHandler(segmentationHandler, messageAttributes);
+							}
+							else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task")
+									&& changeType.equals("UPDATE"))
+							{
+								logger.trace("reading message subject");
+								AttributeMapPair messageAttributes = msg.getSubjectPair();
+								AttributeMap beforeAttributes = messageAttributes.getBefore();
+								AttributeMap afterAttributes = messageAttributes.getAfter();
+								try
+								{
+									logger.trace(String.format("Attributes message (before): "
+											+ LogUtil.mapToString(beforeAttributes)));
+									logger.trace(String.format("Attributes message (after): "
+											+ LogUtil.mapToString(afterAttributes)));
+								}
+								catch (Exception e)
+								{
+									logger.error("error logging attributes message");
+								}
+
+								// TODO:Handlers for task updates
 							}
 						}
 						else
