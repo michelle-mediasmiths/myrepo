@@ -40,6 +40,7 @@ public class MayamMaterialControllerTest {
 	MaterialType material;
 	ProgrammeMaterialType programmeMaterial;
 	AttributeMap map;
+	MayamTaskController taskController;
 	private final static String MATERIALID="MATERIALID";
 	private final static String TITLEID="TITLEID";
 	
@@ -64,8 +65,9 @@ public class MayamMaterialControllerTest {
 	{
 		client = mock(TasksClient.class);
 		assetApi = mock(AssetApi.class);
+		taskController = mock(MayamTaskController.class);
 		when(client.assetApi()).thenReturn(assetApi);
-		controller = new MayamMaterialController(client);
+		controller = new MayamMaterialController(client, taskController);
 		
 		material = mock(MaterialType.class);
 		when(material.getMaterialID()).thenReturn("");
