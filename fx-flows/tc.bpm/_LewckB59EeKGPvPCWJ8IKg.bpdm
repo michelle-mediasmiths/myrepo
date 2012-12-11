@@ -21,12 +21,10 @@
                     <bpel:literal bpdm:linkedMessageType="TC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="tCEventStartMessageResponse" messageType="TC:EventStartMessageResponse" bpdm:id="_UyNLQCf8EeKA0omRhT7Jag" bpdm:messageIds="inc:_UxgAoCf8EeKA0omRhT7Jag"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask operation="EventStartMessage" partnerLink="callerAndTCPlkVar" portType="TC:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Begin TC workflow" bpdm:ID="_LexDoB59EeKGPvPCWJ8IKg">
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageRequest" bpdm:ID="_2R2AUCc3EeKYS8XxoCkLRQ"></bpdm:linkset>
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tCEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="TC:EventStartMessageResponse" bpdm:ID="_UxgAoCf8EeKA0omRhT7Jag"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>
