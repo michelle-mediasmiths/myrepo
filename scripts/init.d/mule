@@ -1,0 +1,17 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          mule
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: mule standalone
+# Description:       Launches mule
+### END INIT INFO
+
+MULE_HOME=/opt/ipwf/applications/mule-enterprise-standalone-3.3.1
+MULE_USER=sysadmin
+
+# Invoke Mule
+sudo -u $MULE_USER $MULE_HOME/bin/mule $1
+
