@@ -1,18 +1,17 @@
 package com.mediasmiths.mq.handlers;
 
 import java.util.Map;
-
 import org.apache.log4j.Logger;
-
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.Job;
+import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class IngestJobHandler implements PropertiesHandler
+public class IngestJobHandler implements JobHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
@@ -22,29 +21,29 @@ public class IngestJobHandler implements PropertiesHandler
 		taskController = controller;
 	}
 	
-	public void process(Map<String, String> messageProperties)
+	public void process(Job jobMessage)
 	{	
-		String assetId = messageProperties.get("assetId");
-		String jobStatus = messageProperties.get("jobStatus");
+		String assetId = jobMessage.getAssetId();
+		JobStatus jobStatus = jobMessage.getJobStatus();
 		
-		log.trace(String.format("assetId %s jobStatus %s", assetId, jobStatus));
+		log.trace(String.format("assetId %s jobStatus %s", assetId, jobStatus.toString()));
 		
 		try {
 			AttributeMap task = taskController.getTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
 			
 			if (task != null)
 			{
-				if (jobStatus.equals("STARTED"))
+				if (jobStatus.equals(JobStatus.STARTED))
 				{
 					task.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
 					taskController.saveTask(task);
 				}
-				else if (jobStatus.equals("FAILED"))
+				else if (jobStatus.equals(JobStatus.FAILED))
 				{
 					task.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
 					taskController.saveTask(task);	
 				}
-				else if (jobStatus.equals("FINISHED"))
+				else if (jobStatus.equals(JobStatus.FINISHED))
 				{
 					task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 					taskController.saveTask(task);

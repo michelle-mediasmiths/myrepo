@@ -5,9 +5,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mediasmiths.mq.handlers.AttributeHandler;
-import com.mediasmiths.mq.handlers.PropertiesHandler;
+import com.mediasmiths.mq.handlers.JobHandler;
 
 public abstract class MqClientListener implements Listener
 {
@@ -25,11 +26,11 @@ public abstract class MqClientListener implements Listener
 		}
 	}
 	
-	protected void passEventToHandler(PropertiesHandler handler, Map<String, String> messageProperties){
+	protected void passEventToHandler(JobHandler handler, Job jobMessage){
 		
 		try{
 			log.trace(String.format("passing event to handler: %s", handler.getName()));
-			handler.process(messageProperties);
+			handler.process(jobMessage);
 		}
 		catch(Exception e){
 			log.error(String.format("exception in handler: %s", handler.getName()), e);

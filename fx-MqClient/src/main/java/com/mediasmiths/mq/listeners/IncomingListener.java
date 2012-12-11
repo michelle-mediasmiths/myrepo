@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
+import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.Mq.Listener;
@@ -94,21 +95,19 @@ public class IncomingListener
 
 						if ((type.type().equals(IncomingListener.JOB_MESSAGE_TYPE)))
 						{
-
 							logger.trace("fetching job message");
+							Job jobMessage = msg.getJob();
 
-							Map<String, String> messageProperties = msg.getProperties();
-
-							if (messageProperties != null)
+							if (jobMessage != null)
 							{
-								String jobType = messageProperties.get("jobType");
-								log.debug("jobType is " + jobType);
+								JobType jobType = jobMessage.getJobType();
+								log.debug("jobType is " + jobType.name());
 
 								if (jobType != null)
 								{
-									if (jobType.equals("IMPORT"))
+									if (jobType.equals(JobType.IMPORT))
 									{
-										passEventToHandler(ingestJobHandler, messageProperties);
+										passEventToHandler(ingestJobHandler, jobMessage);
 									}
 								}
 								else
