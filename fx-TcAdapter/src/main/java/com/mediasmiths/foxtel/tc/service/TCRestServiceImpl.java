@@ -122,6 +122,9 @@ public class TCRestServiceImpl implements TCRestService
 	public Boolean jobSuccessful(@PathParam("id") String jobid)
 	{
 		JobStatus status = jobStatus(jobid);
+		
+		log.debug(String.format("status of job %s is %s", jobid, status.toString()));
+		
 		return status == JobStatus.COMPLETED;
 	}
 
