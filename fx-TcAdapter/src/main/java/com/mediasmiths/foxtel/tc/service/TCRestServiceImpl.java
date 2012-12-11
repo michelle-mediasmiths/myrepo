@@ -81,8 +81,10 @@ public class TCRestServiceImpl implements TCRestService
 	@Produces("application/xml")
 	public JobStatus jobStatus(@PathParam("id") String jobid)
 	{
-		log.trace(String.format("jobid %s", jobid));
-		return wfsClient.jobStatus(UUID.fromString(jobid));
+		log.debug(String.format("getting status of jobid %s", jobid));
+		JobStatus status = wfsClient.jobStatus(UUID.fromString(jobid));
+		log.debug(String.format("status of job %s is %s", jobid, status.toString()));
+		return status;
 	}
 
 	@Override
