@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,19 +207,21 @@ public class MayamMaterialController extends MayamController
 						}
 					}
 					else {
-						try {
-							long taskID = taskController.createTask(material.getMaterialID(), MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
-							log.debug("created task with id : "+taskID);
-							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+						try
+						{
+							Date requiredBy = null;
+
 							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
 							{
-								newTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+								requiredBy = material.getRequiredBy().toGregorianCalendar().getTime();
 							}
-							taskController.saveTask(newTask);
-						} 
-						catch (MayamClientException e) {
-							log.error("Exception thrown in Mayam while creating Ingest task for Material : " + material.getMaterialID(), e);
+
+							long taskID = taskController.createIngestTaskForMaterial(material.getMaterialID(), requiredBy);
+							log.debug("created task with id : " + taskID);
+						}
+						catch (MayamClientException e)
+						{
+							log.error("Exception thrown in Mayam while creating Ingest task for Material : "+ material.getMaterialID(),e);
 						}
 					}
 				}

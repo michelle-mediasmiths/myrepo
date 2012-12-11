@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -46,6 +47,93 @@ public class MayamTaskController extends MayamController{
 		client = mayamClient;
 		accessRightsController = rightsController;
 	}
+	
+	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	{
+
+		AttributeMap assetAttributes = null;
+		try
+		{
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while attempting to find material with ID: " + materialID, e);
+			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION, e);
+		}
+
+		if (assetAttributes != null)
+		{
+			MayamAttributeController attributes = new MayamAttributeController(client);
+			boolean attributesValid = true;
+			
+			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.INGEST.getText());
+			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE,MayamAssetType.MATERIAL.getAssetType());
+			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, materialID);
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+			if (requiredByDate != null)
+			{
+				attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+			}
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, assetAttributes.getAttribute(Attribute.SERIES_TITLE));
+			attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, assetAttributes.getAttribute(Attribute.SEASON_NUMBER));
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, assetAttributes.getAttribute(Attribute.EPISODE_NUMBER));
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, assetAttributes.getAttribute(Attribute.EPISODE_TITLE));
+			attributesValid &= attributes.setAttribute(Attribute.MEDST_HR, assetAttributes.getAttribute(Attribute.MEDST_HR));
+			attributesValid &= attributes.setAttribute(Attribute.CHANNELS, assetAttributes.getAttribute(Attribute.CHANNELS));
+			attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, assetAttributes.getAttribute(Attribute.AGGREGATOR));
+			attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, assetAttributes.getAttribute(Attribute.QC_REQUIRED));
+			attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, assetAttributes.getAttribute(Attribute.DIST_NAME));
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetAttributes.getAttribute(Attribute.ASSET_TITLE));
+			attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, assetAttributes.getAttribute(Attribute.SERIES_TITLE));
+			attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, assetAttributes.getAttribute(Attribute.SEASON_NUMBER));
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, assetAttributes.getAttribute(Attribute.SEASON_NUMBER));
+			attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, assetAttributes.getAttribute(Attribute.EPISODE_TITLE));
+			attributesValid &= attributes.setAttribute(Attribute.OP_TYPE, assetAttributes.getAttribute(Attribute.OP_TYPE));
+			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, assetAttributes.getAttribute(Attribute.REQ_FMT));
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, assetAttributes.getAttribute(Attribute.CONT_FMT));
+			attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, assetAttributes.getAttribute(Attribute.SOURCE_IDS));
+			attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, assetAttributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
+
+			if (!attributesValid)
+			{
+				log.warn("Task created but one or more attributes was invalid");
+			}
+
+			try
+			{
+				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
+
+				log.debug("Creating task :" + LogUtil.mapToString(newTask));
+
+				AttributeMap task = client.taskApi().createTask(newTask);
+
+				Long taskID = task.getAttribute(Attribute.TASK_ID);
+
+				if (taskID == null)
+				{
+					log.error("created task had null TASK_ID");
+					throw new MayamClientException(MayamClientErrorCode.FAILURE);
+				}
+
+				return taskID.longValue();
+
+			}
+			catch (RemoteException e)
+			{
+				log.error("Exception thrown by Mayam while attempting to create task", e);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION, e);
+			}
+
+		}
+		else
+		{
+			log.warn("Failed to find asset with ID: " + materialID);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
+		}
+		
+	}
 
 	public long createTask(String assetID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException {
 		MayamAttributeController attributes = new MayamAttributeController(client);
@@ -65,7 +153,7 @@ public class MayamTaskController extends MayamController{
 
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, assetID);
 			attributes.copyAttributes(assetAttributes);
-
+		
 			if (!attributesValid)
 			{
 				log.warn("Task created but one or more attributes was invalid");
