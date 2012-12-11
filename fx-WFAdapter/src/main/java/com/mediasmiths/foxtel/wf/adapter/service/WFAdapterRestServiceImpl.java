@@ -202,9 +202,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		
 		//TODO caluclate destination and perform transfer
-//		String path = mayamClient.pathToMaterial(assetID, destination);
-
-		File destinationFile = new File(destination);
+		String path = mayamClient.pathToMaterial(assetID);
+		
+		File destinationFile = new File(path);
 		return new MaterialTransferForTCResponse(destinationFile.getAbsolutePath());
 	}
 
