@@ -105,14 +105,10 @@ public class IncomingListener
 
 								if (jobType != null)
 								{
-									if (jobType.equals(JobType.IMPORT))
+									if (jobType.equals(JobType.INGEST))
 									{
 										passEventToHandler(ingestJobHandler, jobMessage);
 									}
-								}
-								else
-								{
-									logger.error("null jobType received");
 								}
 							}
 							else

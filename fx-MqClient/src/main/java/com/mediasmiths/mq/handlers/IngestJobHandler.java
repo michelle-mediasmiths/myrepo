@@ -1,6 +1,5 @@
 package com.mediasmiths.mq.handlers;
 
-import java.util.Map;
 import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
