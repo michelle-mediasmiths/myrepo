@@ -43,7 +43,7 @@
 20:37:53,356 DEBUG [content] << "Cannot bind to address "http://0.0.0.0:8082http://mamwkf01.mam.foxtel.com.au:8082/fx-WFAdapter/rest/wf/tc/transferfortc" No component registered on that endpoint"
      	-->
 	    <http:inbound-endpoint address="http://0.0.0.0:8082http://mamwkf01.mam.foxtel.com.au:8082/" />
-	    <http:outbound-endpoint address="http://localhost:8080/" />
+	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8080/" />
 	</pattern:http-proxy>
 
 	<pattern:http-proxy name="http-proxy-tcAdapter">

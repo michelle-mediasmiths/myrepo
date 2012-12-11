@@ -472,7 +472,7 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO implement!
 		
-		return "/path/to/file";
+		return "/storage/mam/hires01/mediasmithstemp/input/TestMedia.mxf";
 	}
 	
 	@Override

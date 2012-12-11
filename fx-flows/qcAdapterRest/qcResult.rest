@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8082/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" ID="_yUA3kBbKEeKoOf_lVyekrA">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" ID="_yUA3kBbKEeKoOf_lVyekrA">
   <rest:operation verb="GET" name="qcResult" ID="_yUA3kxbKEeKoOf_lVyekrA">
     <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcMediaResult" name="response" headerDirection="request" contentType="application/xml" ID="_yUA3lBbKEeKoOf_lVyekrA"/>
   </rest:operation>
