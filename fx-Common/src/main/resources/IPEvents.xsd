@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common/001/000" 
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"  
+           targetNamespace=targetNamespace="http://www.example.org/IPEvents/001/000" 
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+
+    <xs:complexType name="IPEvent">
+		<xs:annotation>
+			<xs:documentation>The root type for events about the IP service infrastructure.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="FilePickup">
+		<xs:extension base="IPEvent">
+			<xs:annotation>
+				<xs:documentation>The definition for File Pickup Details.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:sequence>
+				<xs:element name="pickUpKind" type="FilePickUpKinds" />
+				<xs:element name="filePath" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The fully qualified name of the file
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="waitTime" type="xs:long">
+					<xs:annotation>
+						<xs:documentation>The time from file last changed to
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexType>
+	
+	
+	<xs:simpleType name="FilePickUpKinds">
+		<xs:annotation>
+			<xs:documentation>A list of the types of File Pickups with the IP Platform</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Placeholder"/>
+			<xs:enumeration value="Media"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

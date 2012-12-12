@@ -10,4 +10,11 @@
             		<jaxb:package name="com.mediasmiths.foxtel.ip.common" />
         	</jaxb:schemaBindings>
 	</jaxb:bindings>
+	
+	<jaxb:bindings schemaLocation="IPEvents.xsd">
+         <jaxb:schemaBindings>
+            		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events" />
+         </jaxb:schemaBindings>
+	</jaxb:bindings>
+	
 </jaxb:bindings>
