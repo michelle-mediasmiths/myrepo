@@ -31,6 +31,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
@@ -679,7 +680,7 @@ public class MayamMaterialController extends MayamController
 
 		return returnCode;
 	}
-
+	
 	public boolean materialExists(String materialID)
 	{
 		boolean materialFound = false;
@@ -972,5 +973,10 @@ public class MayamMaterialController extends MayamController
 			e.printStackTrace();
 		}
 		return isProtected;
+	}
+
+	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
+	{
+		
 	}
 }

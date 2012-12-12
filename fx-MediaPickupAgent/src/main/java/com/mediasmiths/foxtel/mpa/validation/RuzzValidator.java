@@ -108,7 +108,7 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 
 	private MessageValidationResult validateDetails(DetailType details, String materialID)
 	{
-		// no really much to validate for this types, its just strings
+		// not really much to validate for this types, its just strings
 		return MessageValidationResult.IS_VALID;
 	}
 

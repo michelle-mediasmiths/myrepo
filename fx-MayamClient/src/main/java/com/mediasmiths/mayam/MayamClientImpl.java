@@ -545,7 +545,7 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void updateMaterial(DetailType details, String materialID)
+	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
 	{
 		String title = details.getTitle();
 		String som = details.getSOM();
@@ -565,5 +565,8 @@ public class MayamClientImpl implements MayamClient
 
 		// TODO : perform update
 		log.warn("no attempt made to update material " + materialID);
+		
+		materialController.updateMaterial(details,materialID);
+		
 	}
 }
