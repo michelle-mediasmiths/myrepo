@@ -263,7 +263,9 @@ public class MayamTitleController extends MayamController{
 				}
 				
 				if (assetAttributes != null) {
-					attributes = new MayamAttributeController(assetAttributes);
+					attributes = new MayamAttributeController(client.createAttributeMap());
+					attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+					attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
 					
 					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
 					if(title.getSeriesNumber() != null)
@@ -359,7 +361,9 @@ public class MayamTitleController extends MayamController{
 				}
 				
 				if (assetAttributes != null) {
-					attributes = new MayamAttributeController(assetAttributes);
+					attributes = new MayamAttributeController(client.createAttributeMap());
+					attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+					attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
 					
 					RightsType titleRights = title.getRights();
 					if (titleRights != null) {
