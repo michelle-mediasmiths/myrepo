@@ -12,6 +12,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
@@ -23,6 +24,7 @@ import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 {
@@ -74,7 +76,15 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			logger.warn(String.format("Received null details for material %s", materialID));
 		}
 		else{
-			updateDetails(details,materialID);
+			try
+			{
+				updateDetails(details,materialID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error("Error updating detail infromation for materialID "+materialID,e);
+				throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+			}
 		}
 		
 		IngestRecords ingestRecords = material.getIngestRecords();
@@ -110,7 +120,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 		logger.warn("no attempt made to save channel conditions");
 	}
 
-	private void updateDetails(DetailType details,String materialID)
+	private void updateDetails(DetailType details,String materialID) throws MayamClientException
 	{
 		logger.debug(String.format("updateDetails for material %s",materialID));
 		mayamClient.updateMaterial(details,materialID);
