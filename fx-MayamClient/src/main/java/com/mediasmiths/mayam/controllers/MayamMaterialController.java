@@ -154,7 +154,8 @@ public class MayamMaterialController extends MayamController
 					}
 				}
 
-				Library library = source.getLibrary();
+				/* No longer supported				
+ 				Library library = source.getLibrary();
 				if (library != null)
 				{
 					List<TapeType> tapeList = library.getTape();
@@ -171,7 +172,7 @@ public class MayamMaterialController extends MayamController
 						}
 						attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 					}
-				}
+				}*/
 			}
 
 			if (!attributesValid)
@@ -599,7 +600,9 @@ public class MayamMaterialController extends MayamController
 						// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
 					}
 
-					Library library = source.getLibrary();
+					
+					/* No longer supported					
+ 					Library library = source.getLibrary();
 					if (library != null)
 					{
 						List<TapeType> tapeList = library.getTape();
@@ -616,7 +619,7 @@ public class MayamMaterialController extends MayamController
 							}
 							attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
 						}
-					}
+					}*/
 				}
 
 				if (!attributesValid)
@@ -759,7 +762,7 @@ public class MayamMaterialController extends MayamController
 		source.setCompile(compile);
 		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
 
-		Library library = new Library();
+/*		Library library = new Library();
 		IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS);
 		String[] tapeIdsArrays = (String[]) tapeIds.toArray();
 		ArrayList<TapeType> tapeList = new ArrayList<TapeType>();
@@ -770,7 +773,7 @@ public class MayamMaterialController extends MayamController
 			tapeList.add(tape);
 		}
 		library.withTape(tapeList);
-		source.setLibrary(library);
+		source.setLibrary(library);*/
 
 		return material;
 	}
