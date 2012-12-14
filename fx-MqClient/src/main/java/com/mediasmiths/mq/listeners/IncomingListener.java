@@ -65,7 +65,8 @@ public class IncomingListener
 		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
 		final IngestJobHandler ingestJobHandler = new IngestJobHandler(taskController);
-
+		final IngestJobHandler unmatchedJobHandler = new IngestJobHandler(taskController);
+		
 		return new MqClientListener()
 		{
 			public void onMessage(MqMessage msg) throws Throwable
@@ -106,9 +107,10 @@ public class IncomingListener
 
 								if (jobType != null)
 								{
-									if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT))
+									if (jobType.equals(JobType.INGEST))
 									{
 										passEventToHandler(ingestJobHandler, jobMessage);
+										passEventToHandler(unmatchedJobHandler, jobMessage);
 									}
 								}
 							}
@@ -143,7 +145,6 @@ public class IncomingListener
 								passEventToHandler(itemCreationHandler, messageAttributes);
 								// passEventToHandler(packageUpdateHandler, messageAttributes);
 								// passEventToHandler(temporaryContentHandler, messageAttributes);
-								// passEventToHandler(unmatchedHandler, messageAttributes);
 							}
 							else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset")
 									&& changeType.equals("UPDATE"))
@@ -212,6 +213,7 @@ public class IncomingListener
 										passEventToHandler(ingestCompleteHandler, afterAttributes);
 										passEventToHandler(qcCompleteHandler, afterAttributes);
 										passEventToHandler(previewHandler, afterAttributes);
+										passEventToHandler(unmatchedHandler, afterAttributes);
 									}
 								}
 								catch (Exception e)

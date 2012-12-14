@@ -28,13 +28,12 @@ public class UnmatchedHandler  implements AttributeHandler
 		if (contentFormat.equals("Unmatched")) 
 		{
 			try {
-				//TODO : identify origin of unmatched content (emergency ingest\ DART ) 
-			
 				//Add to purge candidate list with expiry date of 30 days
 				AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
 				
+				//Initiate QC flow
 				MuleWorkflowController mule = new MuleWorkflowController();
 				if (assetType.equals(MayamAssetType.MATERIAL.getText()))
 				{
@@ -50,6 +49,12 @@ public class UnmatchedHandler  implements AttributeHandler
 				Calendar date = Calendar.getInstance();
 				date.add(Calendar.DAY_OF_MONTH, 30);
 				newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+				taskController.saveTask(newTask);
+				
+				//Add to Unmatched worklist
+				long unmatchedTaskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.UNMATCHED_MEDIA);
+				AttributeMap unmatchedTask = taskController.getTask(unmatchedTaskID);
+				unmatchedTask.putAll(messageAttributes);
 				taskController.saveTask(newTask);
 			}
 			catch (Exception e) {
