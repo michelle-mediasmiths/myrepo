@@ -506,7 +506,7 @@ public class MayamTitleController extends MayamController{
 				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
 				
 				AttributeMap taskAttributes = client.createAttributeMap();
-				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.GENERIC_TASK_ERROR);
 				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 	
 				taskAttributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());

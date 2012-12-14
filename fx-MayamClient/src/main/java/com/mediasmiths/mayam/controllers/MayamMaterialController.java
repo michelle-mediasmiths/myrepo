@@ -934,7 +934,7 @@ public class MayamMaterialController extends MayamController
 						materialID);
 
 				AttributeMap taskAttributes = client.createAttributeMap();
-				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.GENERIC_TASK_ERROR);
 				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 
 				taskAttributes.setAttribute(Attribute.HOUSE_ID, materialID);
