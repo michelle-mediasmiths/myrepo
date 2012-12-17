@@ -68,7 +68,7 @@ public class MayamMaterialController extends MayamController
 		boolean attributesValid = true;
 		boolean createCompLoggingTask = false;
 		
-		if (material != null)
+		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
 		{
 			// setting parent_house_id is an unsupported operation
 			// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
@@ -237,7 +237,7 @@ public class MayamMaterialController extends MayamController
 		}
 		else
 		{
-			log.warn("Null material object, unable to create asset");
+			log.warn("Null material object or no house ID, unable to create asset");
 			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
 		return returnCode;
