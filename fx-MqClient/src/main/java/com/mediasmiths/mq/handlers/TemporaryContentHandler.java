@@ -40,7 +40,7 @@ public class TemporaryContentHandler  implements AttributeHandler
 				
 				AttributeMap filterEqualities = client.createAttributeMap();
 				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
 				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
@@ -65,7 +65,7 @@ public class TemporaryContentHandler  implements AttributeHandler
 			{
 				AttributeMap filterEqualities = client.createAttributeMap();
 				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
 				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
