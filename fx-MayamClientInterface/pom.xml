@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.5-SNAPSHOT</version>
+		<version>3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>fx-MayamClientInterface</artifactId>
@@ -29,18 +29,18 @@
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MaterialExchange</artifactId>
-			<version>2.0.3-SNAPSHOT</version>
+			<version>3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>au.com.foxtel.cf.mam</groupId>
 			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
-			<version>1.0.3-SNAPSHOT</version>
+			<version>3.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-Ruzz</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>3.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

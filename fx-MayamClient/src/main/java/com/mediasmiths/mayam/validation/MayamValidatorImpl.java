@@ -99,7 +99,15 @@ public class MayamValidatorImpl implements MayamValidator {
 
 		List<AttributeMap> materials = null;
 		try {
-			materials = client.assetApi().getAssetChildren(AssetType.valueOf(MayamAssetType.TITLE.getText()), titleID, AssetType.valueOf(MayamAssetType.MATERIAL.getText()));
+			AttributeMap title = client.assetApi().getAssetBySiteId(AssetType.valueOf(MayamAssetType.TITLE.getText()), titleID);
+			if (title != null) {
+				String assetID = title.getAttributeAsString(Attribute.ASSET_ID);
+				materials = client.assetApi().getAssetChildren(AssetType.valueOf(MayamAssetType.TITLE.getText()), assetID, AssetType.valueOf(MayamAssetType.MATERIAL.getText()));
+			}
+			else {
+				log.info("Could not find matching title asset for : " + titleID);
+				return true;	
+			}
 		} catch (RemoteException e) {
 			//could not retrieve children, treat title date as valid
 			log.info("No children returned for "+titleID, e);
@@ -107,11 +115,11 @@ public class MayamValidatorImpl implements MayamValidator {
 		}
 		for (AttributeMap material: materials) 
 		{
-			String materialID = material.getAttribute(Attribute.HOUSE_ID);
+			String materialAssetID = material.getAttribute(Attribute.ASSET_ID);
 			
 			List<AttributeMap> packages = null;
 			try {
-				packages = client.assetApi().getAssetChildren(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialID, AssetType.valueOf(MayamAssetType.PACKAGE.getText()));
+				packages = client.assetApi().getAssetChildren(AssetType.valueOf(MayamAssetType.MATERIAL.getText()), materialAssetID, AssetType.valueOf(MayamAssetType.PACKAGE.getText()));
 			} catch (RemoteException e) {
 				isValid = false;
 				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION);

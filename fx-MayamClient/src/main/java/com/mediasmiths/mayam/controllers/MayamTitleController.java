@@ -55,7 +55,7 @@ public class MayamTitleController extends MayamController{
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		
-		if (title != null)
+		if (title != null && (title.getTitleID() != null || title.getTitleID().equals("")))
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, TITLE_AGL_NAME);

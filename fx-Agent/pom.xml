@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
 		<artifactId>foxtel-parent</artifactId>
-		<version>0.0.5-SNAPSHOT</version>
+		<version>3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>fx-Agent</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>3.0-SNAPSHOT</version>
 	<name>Foxtel Abstract Agent</name>
 
 	<dependencies>
@@ -19,6 +19,11 @@
 			<groupId>com.mediasmiths</groupId>
 			<artifactId>FileWatcher</artifactId>
 			<version>${filewatcher.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.foxtel.ip</groupId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.std.guice</groupId>
