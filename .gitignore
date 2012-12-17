@@ -52,3 +52,7 @@ TESTS-TestSuites.xml
 Icon?
 ehthumbs.db
 Thumbs.db
+
+.idea/
+*.iml
+*.iws

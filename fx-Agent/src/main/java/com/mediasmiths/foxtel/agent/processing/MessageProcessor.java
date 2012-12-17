@@ -45,18 +45,21 @@ public abstract class MessageProcessor<T> implements Runnable {
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
 	protected final EventService eventService;
+
+    //private final EventPickUpTimings pickUpEventTimer;
 	
 	@Inject
 	public MessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarhsaller, Marshaller marshaller, EventService eventService) {
+			Unmarshaller unmarshaller, Marshaller marshaller, EventService eventService) {
 		this.filePathsPending = filePathsPendingProcessing;
-		this.unmarhsaller = unmarhsaller; 
+		this.unmarhsaller = unmarshaller;
 		this.marshaller = marshaller;
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
 		this.eventService = eventService;
+       // this.pickUpEventTimer = pickupEventTimer;
 	}
 
 	/**
@@ -70,16 +73,19 @@ public abstract class MessageProcessor<T> implements Runnable {
 			throws MessageProcessingFailedException {
 
 		try {
-			Object unmarshalled = unmarhsaller.unmarshal(new File(filePath));
-			logger.debug(String.format("unmarshalled object of type %s",
-					unmarshalled.getClass().toString()));
+            File fileLoc = new File(filePath);
+			Object unmarshalled = unmarhsaller.unmarshal(fileLoc);
+
+            //pickUpEventTimer.saveEvent(getPickUpTimingDetails(fileLoc));
+
+            if (logger.isDebugEnabled())
+                logger.debug(String.format("unmarshalled object of type %s", unmarshalled.getClass().toString()));
 
 			typeCheck(unmarshalled);
 
 			@SuppressWarnings("unchecked")
 			T message = (T) unmarshalled;
-			MessageEnvelope<T> envelope = new MessageEnvelope<T>(new File(
-					filePath), message);
+			MessageEnvelope<T> envelope = new MessageEnvelope<T>(fileLoc, message);
 			try {
 				processMessage(envelope);
 			} catch (MessageProcessingFailedException e) {
@@ -110,7 +116,21 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	}
 
-	/**
+    /**
+     *
+     * @param fileLoc the file that has just been picked up for processing.
+     * @return  the details about pick up time suitable for the eventing system
+
+    private FilePickUpTimings getPickUpTimingDetails(File fileLoc)
+    {
+        FilePickUpTimings pickUpStats = new FilePickUpTimings();
+        pickUpStats.set();
+        return pickUpStats;
+    }
+
+    */
+
+    /**
 	 * Called to check the type of an unmarshalled object, left up to
 	 * implementing classes as (unmarshalled instanceof T) cannot be checked;
 	 * 
