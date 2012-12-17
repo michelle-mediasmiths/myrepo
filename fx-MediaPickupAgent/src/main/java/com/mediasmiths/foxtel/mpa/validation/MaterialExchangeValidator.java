@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mysql.jdbc.StringUtils;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 
@@ -44,6 +45,13 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 	private MessageValidationResult validateTitle(Title title) {
 
+		final String titleID = title.getTitleID();
+		// reject empty titleIDs
+		if (StringUtils.isNullOrEmpty(titleID))
+		{
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+				
 		if (Util.isProgramme(title)) {
 
 			// title only has to exist already if we are receiving programme
@@ -70,6 +78,11 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 		String materialID = programmeMaterial.getMaterialID();
 
+		//reject empty materialIDs		
+		if(StringUtils.isNullOrEmpty(materialID)){
+			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
+		}
+		
 		try {
 			if (!mayamClient.materialExists(materialID)) {
 				return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
@@ -113,6 +126,14 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			logger.trace("validating packages");
 			for (Package pack : presentation.getPackage()) {
 				try {
+					
+					final String packageId = pack.getPresentationID();
+					
+					//reject empty packageID		
+					if(StringUtils.isNullOrEmpty(packageId)){
+						return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
+					}
+					
 					if (!mayamClient.packageExists(pack.getPresentationID())) {
 						return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 					}
