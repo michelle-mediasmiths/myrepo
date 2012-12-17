@@ -332,37 +332,41 @@ public class MayamMaterialController extends MayamController
 			String assetID = result.getAttribute(Attribute.ASSET_ID);
 			log.info(String.format("assetId %s returned when creating marketing material", assetID));
 
-			AttributeMap item;
-			try
-			{
-				item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
-				String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
-				log.info(String.format("item id %s returned after fetching created item", siteID));
-
-				if (siteID == null)
-				{
-					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
-				}
-				
-				try {
-					long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
-					log.debug("created task with id : "+taskID);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
-				} 
-				catch (RemoteException e) {
-					log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
-				}
-				
-
-				return siteID;
-			}
-			catch (RemoteException e)
-			{
-				log.error("Exception thrown by Mayam while fetch newly create Material", e);
-				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED, e);
-			}
+			String siteID = result.getAttribute(Attribute.ASSET_SITE_ID);
+			log.info(String.format("siteID %s returned when creating marketing material", siteID));
+			
+			return siteID;
+//			AttributeMap item;
+//			try
+//			{
+//				item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
+//				String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
+//				log.info(String.format("item id %s returned after fetching created item", siteID));
+//
+//				if (siteID == null)
+//				{
+//					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+//				}
+//				
+//				try {
+//					long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
+//					log.debug("created task with id : "+taskID);
+//					AttributeMap newTask = taskController.getTask(taskID);
+//					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+//					taskController.saveTask(newTask);
+//				} 
+//				catch (RemoteException e) {
+//					log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
+//				}
+//				
+//
+//				return siteID;
+//			}
+//			catch (RemoteException e)
+//			{
+//				log.error("Exception thrown by Mayam while fetch newly create Material", e);
+//				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED, e);
+//			}
 
 		}
 		else
