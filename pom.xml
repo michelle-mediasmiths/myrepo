@@ -57,8 +57,10 @@
 		<commons-io.version>2.4</commons-io.version>
 		<filewatcher.version>0.4</filewatcher.version>
 		<worklists.version>0.9.9.9.13</worklists.version>
+		<mayam.wf.mq.version>0.9.9.9.4</mayam.wf.mq.version>
 		<stdlib.version>3.1.5</stdlib.version>
 		<events.version>1.4-SNAPSHOT</events.version>
+		<commons.lang.version>2.5</commons.lang.version>
 	</properties>
 
 	<build>

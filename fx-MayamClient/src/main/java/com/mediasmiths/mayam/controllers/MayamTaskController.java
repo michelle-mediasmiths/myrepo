@@ -152,7 +152,7 @@ public class MayamTaskController extends MayamController{
 			log.info("Total matches: " + result.getTotalMatches());
 
 			if (result.getTotalMatches() != 1) {
-				log.error("unexpected number of results for search");
+				log.error("unexpected number of results for search expected 1 got " + result.getTotalMatches());
 				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 
