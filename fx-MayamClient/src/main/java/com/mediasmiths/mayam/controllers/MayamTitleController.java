@@ -227,6 +227,9 @@ public class MayamTitleController extends MayamController{
 					if (result == null) {
 						log.warn("Mayam failed to create new Title asset");
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
+					} else {
+						log.debug("asset id is " + result.getAttributeAsString(Attribute.ASSET_ID));
+						
 					}
 				} catch (RemoteException e) {
 					log.error("Exception thrown by Mayam while creating new Title assset",e);
@@ -249,7 +252,7 @@ public class MayamTitleController extends MayamController{
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
-		
+	
 		if (title != null) {
 				AttributeMap assetAttributes = null;
 				MayamAttributeController attributes = null;
@@ -342,6 +345,7 @@ public class MayamTitleController extends MayamController{
 	
 	public MayamClientErrorCode updateTitle(CreateOrUpdateTitle title)
 	{
+		log.debug("Updating title");
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
 		
@@ -351,9 +355,10 @@ public class MayamTitleController extends MayamController{
 			if (titleDescription != null) {
 				AttributeMap assetAttributes = null;
 				MayamAttributeController attributes = null;
-				
+				log.debug("title ID is " + title.getTitleID());
 				try {
 					assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+					log.debug("getting attributes for updating ...");
 				} catch (RemoteException e1) {
 					e1.printStackTrace();
 					log.error("Exception thrown by Mayam while retrieving asset: " + title.getTitleID());
@@ -428,7 +433,7 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
 					
 					boolean isProtected =false;
-					
+					log.debug("updating protected attribute ...");
 					if(attributes.getAttributes().getAttribute(Attribute.AUX_FLAG) != null){
 						 isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
 					}

@@ -448,6 +448,7 @@ public class PlaceholderMessageValidator extends
 			try {
 				if (mayamClient.titleExists(action.getTitleID())) {
 					
+					logger.debug("title ID is " + action.getTitleID());
 					
 					MayamValidator mayamValidator = mayamClient.getValidator();
 					if (!mayamValidator.validateTitleBroadcastDate(
