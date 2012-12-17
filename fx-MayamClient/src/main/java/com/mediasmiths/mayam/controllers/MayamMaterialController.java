@@ -13,6 +13,7 @@ import au.com.foxtel.cf.mam.pms.Library;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
+
 import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
@@ -152,6 +153,8 @@ public class MayamMaterialController extends MayamController
 					{
 						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID(), e);
 					}
+					
+					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 				}
 
 				/* No longer supported				
