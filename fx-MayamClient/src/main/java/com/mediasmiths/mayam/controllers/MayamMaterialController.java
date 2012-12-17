@@ -950,7 +950,11 @@ public class MayamMaterialController extends MayamController
 		{
 			try
 			{
-				client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), materialID);
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(
+						MayamAssetType.MATERIAL.getAssetType(),
+						materialID);
+				
+				client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
 			}
 			catch (RemoteException e)
 			{
