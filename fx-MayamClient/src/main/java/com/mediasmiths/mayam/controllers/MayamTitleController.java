@@ -366,6 +366,9 @@ public class MayamTitleController extends MayamController{
 				}
 				
 				if (assetAttributes != null) {
+					
+					final String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID); 
+					
 					attributes = new MayamAttributeController(client.createAttributeMap());
 					attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
 					attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
@@ -447,8 +450,8 @@ public class MayamTitleController extends MayamController{
 					if (isProtected != titleIsPurgeProtected){
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 						try {
-							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.MATERIAL.getAssetType());
-							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), title.getTitleID(), MayamAssetType.PACKAGE.getAssetType());
+							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.MATERIAL.getAssetType());
+							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.PACKAGE.getAssetType());
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
