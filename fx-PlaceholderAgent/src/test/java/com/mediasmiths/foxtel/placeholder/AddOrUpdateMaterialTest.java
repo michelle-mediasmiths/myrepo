@@ -129,6 +129,25 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 				validator.validateFile(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
+	
+	@Test
+	@Category(ValidationTests.class)
+	public void testAddMaterialMaterialIDEmpty() throws Exception {
+		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
+		
+		((AddOrUpdateMaterial)pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0)).getMaterial().setMaterialID("");
+		File temp = createTempXMLFile(pm, "addMaterialTitleMaterialIDEmpty");
+
+		// prepare mock mayamClient
+		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
+
+		// test that the generated placeholder message fails validation for the
+		// correct reason
+		assertEquals(
+				MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY,
+				validator.validateFile(temp.getAbsolutePath()));
+		Util.deleteFiles(temp.getAbsolutePath());
+	}
 
 	@Test
 	@Category(ValidationTests.class)

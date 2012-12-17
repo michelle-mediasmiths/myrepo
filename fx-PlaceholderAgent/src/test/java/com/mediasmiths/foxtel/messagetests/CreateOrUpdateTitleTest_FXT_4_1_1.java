@@ -228,6 +228,24 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validateFile(temp.getAbsolutePath()));
 	}
 	
+	@Test
+	@Category (ValidationTests.class)
+	public void testCreateTitleTitleIdEmpty() throws IOException, Exception {
+
+		logger.info("TitleID is empty");
+		
+		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
+
+		CreateOrUpdateTitle coup = ((CreateOrUpdateTitle) message.getActions().
+				getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
+				.get(0));		
+		coup.setTitleID("");
+		File temp = createTempXMLFile (message, "createTitleTitleIdEmpty", false);
+
+		
+		assertEquals(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY, validator.validateFile(temp.getAbsolutePath()));
+	}
+	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {
 		
 		String programTitle = new MSTitleDescription().getShowAShowTitle();

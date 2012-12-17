@@ -33,6 +33,7 @@ import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.validation.MayamValidator;
+import com.mysql.jdbc.StringUtils;
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -155,7 +156,23 @@ public class PlaceholderMessageValidator extends
 			AddOrUpdatePackage action) throws MayamClientException {
 
 		logger.info("Validating an AddOrUpdatePackage");
+		
+		if(action.getPackage() != null){
+			final String packageID = action.getPackage().getPresentationID();
+		
+			//reject empty packageID		
+			if(StringUtils.isNullOrEmpty(packageID)){
+				return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
+			}
+		}
+		
 		String materialID = action.getPackage().getMaterialID();
+		
+		//reject empty materialIDs		
+		if(StringUtils.isNullOrEmpty(materialID)){
+			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
+		}
+		
 		boolean materialExists = false;
 
 		// check that material\item for package exists
@@ -229,6 +246,11 @@ public class PlaceholderMessageValidator extends
 		logger.info("Validating a DeletePackage");
 
 		String packageID = action.getPackage().getPresentationID();
+		
+		//reject empty packageIDs		
+		if(StringUtils.isNullOrEmpty(packageID)){
+			return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
+		}
 
 		boolean packageProtected = false;
 		try {
@@ -272,7 +294,19 @@ public class PlaceholderMessageValidator extends
 		logger.info("Validationg a DeleteMaterial");
 
 		String materialID = action.getMaterial().getMaterialID();
+		
+		//reject empty materialIDs		
+		if(StringUtils.isNullOrEmpty(materialID)){
+			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
+		}
+		
 		String titleID = action.getTitleID();
+		
+		//reject empty titleIDs		
+		if(StringUtils.isNullOrEmpty(titleID)){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+
 		boolean materialProtected = false;
 		try {
 			materialProtected = mayamClient
@@ -320,6 +354,11 @@ public class PlaceholderMessageValidator extends
 		// cause the request to fail
 		String titleID = action.getTitleID();
 
+		//reject empty titleIDs		
+		if(StringUtils.isNullOrEmpty(titleID)){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+		
 		boolean titleProtected = false;
 		try {
 			titleProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
@@ -368,6 +407,15 @@ public class PlaceholderMessageValidator extends
 
 		logger.info("Validating an AddOrUpdateMaterial");
 
+		if(action.getMaterial()!=null){
+			final String materialID = action.getMaterial().getMaterialID();
+			
+			//reject empty materialIDs		
+			if(StringUtils.isNullOrEmpty(materialID)){
+				return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
+			}
+		}
+		
 		// check if title for material exists
 		String titleID = action.getTitleID();
 		boolean titleExists = false;
@@ -419,6 +467,14 @@ public class PlaceholderMessageValidator extends
 			CreateOrUpdateTitle action) {
 		logger.debug("Validating CreateOrUpdateTitle");
 
+
+		final String titleID = action.getTitleID();
+
+		//reject empty titleIDs		
+		if(StringUtils.isNullOrEmpty(titleID)){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+		
 		RightsType rights = action.getRights();
 
 		for (License l : rights.getLicense()) {
