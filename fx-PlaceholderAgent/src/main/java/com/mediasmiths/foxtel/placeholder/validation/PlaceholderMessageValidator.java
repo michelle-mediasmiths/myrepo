@@ -468,7 +468,7 @@ public class PlaceholderMessageValidator extends
 				.getChannels().getChannel().get(0).getChannelTag();
 		String channelName = action.getRights().getLicense().get(0)
 				.getChannels().getChannel().get(0).getChannelName();
-		if (channelTag != null) {
+		if (channelTag != null && channelName != null) {
 			if ((channelTag.equals("UNKNOWN_CHANNEL_TAG"))
 					|| (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
 				logger.error("UNKOWN_CHANNEL");
