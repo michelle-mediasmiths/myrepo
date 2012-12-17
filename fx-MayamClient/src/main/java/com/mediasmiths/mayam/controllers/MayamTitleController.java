@@ -55,7 +55,7 @@ public class MayamTitleController extends MayamController{
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		
-		if (title != null && (title.getTitleID() != null || title.getTitleID().equals("")))
+		if (title != null && title.getTitleID() != null && !title.getTitleID().equals(""))
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, TITLE_AGL_NAME);
@@ -130,7 +130,7 @@ public class MayamTitleController extends MayamController{
 			}
 		}
 		else {
-			log.warn("Null title object, unable to create asset");
+			log.warn("Null title object or no title Id available, unable to create asset");
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
 		return returnCode;
