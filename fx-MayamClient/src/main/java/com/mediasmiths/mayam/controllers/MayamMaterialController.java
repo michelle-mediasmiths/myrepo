@@ -596,8 +596,7 @@ public class MayamMaterialController extends MayamController
 									e);
 						}
 
-						// setting parent_house_id attribute is not supported
-						// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, compile.getParentMaterialID());
+						attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 					}
 
 					
