@@ -955,7 +955,7 @@ public class MayamMaterialController extends MayamController
 			}
 			catch (RemoteException e)
 			{
-				log.error("Error deleting material : " + materialID);
+				log.error("Error deleting material : " + materialID,e);
 				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 			}
 		}
@@ -976,7 +976,7 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID);
+			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID,e);
 			e.printStackTrace();
 		}
 		return isProtected;
