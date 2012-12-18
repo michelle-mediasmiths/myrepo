@@ -38,6 +38,9 @@ import com.mediasmiths.mq.handlers.UnmatchedHandler;
 
 public class IncomingListener
 {
+	private static final String CREATE_CHANGE_TYPE = "create";
+	private static final String UPDATE_CHANGE_TYPE = "update";
+	private static final String MAYAM_CHANGE_TYPE_PROPERTY = "MayamChangeType";
 	protected final static Logger logger = Logger.getLogger(IncomingListener.class);
 	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
 	public static final String ATTRIBUTE_PAIR = "mayam#attribute-pairs";
@@ -66,14 +69,14 @@ public class IncomingListener
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
 		final IngestJobHandler ingestJobHandler = new IngestJobHandler(taskController);
 		final IngestJobHandler unmatchedJobHandler = new IngestJobHandler(taskController);
-		
+
 		return new MqClientListener()
 		{
 			public void onMessage(MqMessage msg) throws Throwable
 			{
 				try
 				{
-					logger.trace("AssetListener onMessage");
+					logger.trace("IncomingListener onMessage");
 					logger.trace("Message is: " + msg.toString());
 					MqContentType type = msg.getType();
 
@@ -85,158 +88,211 @@ public class IncomingListener
 					{
 						logger.debug("Message type is null");
 					}
+					
 					String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
-					String changeType = msg.getProperties().get("MayamChangeType");
+					String changeType = msg.getProperties().get(MAYAM_CHANGE_TYPE_PROPERTY);
 
-					logger.trace("origin is:" + origin);
-					logger.trace("Change Type is:" + changeType);
-
+					logger.trace(String.format("origin is %s changeType is %s ",origin,changeType));
+					
 					if (type != null && origin != null)
 					{
-						logger.trace("Type and origin both not null");
 
-						if ((type.type().equals(IncomingListener.JOB_MESSAGE_TYPE)))
+						if (isJob(type))
 						{
-							logger.trace("fetching job message");
-							Job jobMessage = msg.getJob();
-
-							if (jobMessage != null)
-							{
-								JobType jobType = jobMessage.getJobType();
-								log.debug("jobType is " + jobType.name());
-
-								if (jobType != null)
-								{
-									if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT))
-									{
-										passEventToHandler(ingestJobHandler, jobMessage);
-										passEventToHandler(unmatchedJobHandler, jobMessage);
-									}
-								}
-							}
-							else
-							{
-								logger.error("Message properties were null for job message");
-							}
+							onJobMessage(msg);
 						}
 						else if (changeType != null)
 						{
-
 							logger.trace("changeType not null");
 
-							if (type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("asset")
-									&& changeType.equals("CREATE"))
+							if (isAttributes(type) && isAsset(origin) && isCreate(changeType))
 							{
-								logger.trace("reading message subject");
-								AttributeMap messageAttributes = msg.getSubject();
-
-								try
-								{
-									logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-								}
-								catch (Exception e)
-								{
-									logger.error("error logging attributes message");
-								}
-
-								// passEventToHandler(assetDeletionHandler, messageAttributes);
-								// passEventToHandler(assetPurgeHandler, messageAttributes);
-								// passEventToHandler(emergencyIngestHandler, messageAttributes);
-								passEventToHandler(itemCreationHandler, messageAttributes);
-								// passEventToHandler(packageUpdateHandler, messageAttributes);
-								// passEventToHandler(temporaryContentHandler, messageAttributes);
+								onAssetCreate(msg);
 							}
-							else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("asset")
-									&& changeType.equals("UPDATE"))
+							else if (isAttributePair(type) && isAsset(origin) && isUpdate(changeType))
 							{
-								logger.trace("reading message subject");
-								AttributeMapPair messageAttributes = msg.getSubjectPair();
-								AttributeMap beforeAttributes = messageAttributes.getBefore();
-								AttributeMap afterAttributes = messageAttributes.getAfter();
-								try
-								{
-									logger.trace(String.format("Attributes message (before): "
-											+ LogUtil.mapToString(beforeAttributes)));
-									logger.trace(String.format("Attributes message (after): "
-											+ LogUtil.mapToString(afterAttributes)));
-								}
-								catch (Exception e)
-								{
-									logger.error("error logging attributes message");
-								}
-
-								// TODO:Handlers for asset updates
+								onAssetUpdate(msg);
 							}
-							else if (type.type().equals(TaskListener.ATTRIBUTE_MESSAGE_TYPE) && origin.contains("task")
-									&& changeType.equals("CREATE"))
+							else if (isAttributes(type) && isTask(origin) && isCreate(changeType))
 							{
-								log.trace("reading message subject");
-								AttributeMap messageAttributes = msg.getSubject();
-
-								try
-								{
-									logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-								}
-								catch (Exception e)
-								{
-									logger.error("error logging attributes message");
-								}
-
-								// passEventToHandler(compEditHandler, messageAttributes);
-								// passEventToHandler(comLoggingHandler, messageAttributes);
-								// passEventToHandler(fixAndStitchHandler, messageAttributes);
-								// passEventToHandler(importFailHandler, messageAttributes);
-								
-								passEventToHandler(initiateQcHandler, messageAttributes);
-								 
-								
-								// passEventToHandler(segmentationHandler, messageAttributes);
+								onTaskCreate(msg);
 							}
-							else if (type.type().equals(IncomingListener.ATTRIBUTE_PAIR) && origin.contains("task")
-									&& changeType.equals("UPDATE"))
+							else if (isAttributePair(type) && isTask(origin) && isUpdate(changeType))
 							{
-								logger.trace("reading message subject");
-								AttributeMapPair messageAttributes = msg.getSubjectPair();
-								AttributeMap beforeAttributes = messageAttributes.getBefore();
-								AttributeMap afterAttributes = messageAttributes.getAfter();
-								try
-								{
-									logger.trace(String.format("Attributes message (before): "
-											+ LogUtil.mapToString(beforeAttributes)));
-									logger.trace(String.format("Attributes message (after): "
-											+ LogUtil.mapToString(afterAttributes)));
-									
-									TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
-									TaskState newState = afterAttributes.getAttribute(Attribute.TASK_STATE);
-									
-									if (!initialState.equals(newState)) {
-										passEventToHandler(ingestCompleteHandler, afterAttributes);
-										passEventToHandler(qcCompleteHandler, afterAttributes);
-										passEventToHandler(previewHandler, afterAttributes);
-										passEventToHandler(unmatchedHandler, afterAttributes);
-									}
-								}
-								catch (Exception e)
-								{
-									logger.error("error logging attributes message");
-								}
+								onTaskUpdate(msg);
+							}
+							else{
+								log.warn("could not discern nature of message");
 							}
 						}
 						else
 						{
-							logger.debug("Message is not of an expected type, ignoring");
+							logger.warn("Change type was null, ignoring");
 						}
 					}
 					else
 					{
-						logger.debug(String.format("AssetListener onMessage, type or origin was null. Msg: %s", msg.toString()));
+						logger.debug(String.format("onMessage, type or origin was null. Msg: %s", msg.toString()));
 					}
 				}
 				catch (Exception e)
 				{
-					logger.error("Exception in asset listener", e);
+					logger.error("Exception in incoming listener", e);
 					throw e;
 				}
+			}
+
+			private void onTaskCreate(MqMessage msg)
+			{
+				log.trace("reading message subject");
+				AttributeMap messageAttributes = msg.getSubject();
+
+				try
+				{
+					logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+				}
+				catch (Exception e)
+				{
+					logger.error("error logging attributes message");
+				}
+
+				// passEventToHandler(compEditHandler, messageAttributes);
+				// passEventToHandler(comLoggingHandler, messageAttributes);
+				// passEventToHandler(fixAndStitchHandler, messageAttributes);
+				// passEventToHandler(importFailHandler, messageAttributes);
+
+				passEventToHandler(initiateQcHandler, messageAttributes);
+
+				// passEventToHandler(segmentationHandler, messageAttributes);
+			}
+			
+			private void onTaskUpdate(MqMessage msg)
+			{
+				logger.trace("reading message subject");
+				AttributeMapPair messageAttributes = msg.getSubjectPair();
+				AttributeMap beforeAttributes = messageAttributes.getBefore();
+				AttributeMap afterAttributes = messageAttributes.getAfter();
+				try
+				{
+					logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
+					logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+
+					TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
+					TaskState newState = afterAttributes.getAttribute(Attribute.TASK_STATE);
+
+					if (!initialState.equals(newState))
+					{
+						passEventToHandler(ingestCompleteHandler, afterAttributes);
+						passEventToHandler(qcCompleteHandler, afterAttributes);
+						passEventToHandler(previewHandler, afterAttributes);
+						passEventToHandler(unmatchedHandler, afterAttributes);
+					}
+				}
+				catch (Exception e)
+				{
+					logger.error("error logging attributes message");
+				}
+			}
+
+			private void onJobMessage(MqMessage msg)
+			{
+				logger.trace("fetching job message");
+				Job jobMessage = msg.getJob();
+
+				if (jobMessage != null)
+				{
+					JobType jobType = jobMessage.getJobType();
+					log.debug("jobType is " + jobType.name());
+
+					if (jobType != null)
+					{
+						if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT))
+						{
+							passEventToHandler(ingestJobHandler, jobMessage);
+							passEventToHandler(unmatchedJobHandler, jobMessage);
+						}
+					}
+				}
+				else
+				{
+					logger.error("Message properties were null for job message");
+				}
+			}
+
+			private void onAssetCreate(MqMessage msg)
+			{
+				logger.trace("reading message subject");
+				AttributeMap messageAttributes = msg.getSubject();
+
+				try
+				{
+					logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
+				}
+				catch (Exception e)
+				{
+					logger.error("error logging attributes message");
+				}
+
+				// passEventToHandler(assetDeletionHandler, messageAttributes);
+				// passEventToHandler(assetPurgeHandler, messageAttributes);
+				// passEventToHandler(emergencyIngestHandler, messageAttributes);
+				passEventToHandler(itemCreationHandler, messageAttributes);
+				// passEventToHandler(packageUpdateHandler, messageAttributes);
+				// passEventToHandler(temporaryContentHandler, messageAttributes);
+			}
+			
+			private void onAssetUpdate(MqMessage msg)
+			{
+				logger.trace("reading message subject");
+				AttributeMapPair messageAttributes = msg.getSubjectPair();
+				AttributeMap beforeAttributes = messageAttributes.getBefore();
+				AttributeMap afterAttributes = messageAttributes.getAfter();
+				try
+				{
+					logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
+					logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+				}
+				catch (Exception e)
+				{
+					logger.error("error logging attributes message");
+				}
+
+				// TODO:Handlers for asset updates
+			}
+
+			private boolean isTask(String origin)
+			{
+				return origin.contains("task");
+			}
+
+			private boolean isUpdate(String changeType)
+			{
+				return changeType.equals(UPDATE_CHANGE_TYPE);
+			}
+
+			private boolean isAttributePair(MqContentType type)
+			{
+				return type.type().equals(IncomingListener.ATTRIBUTE_PAIR);
+			}
+
+			private boolean isCreate(String changeType)
+			{
+				return changeType.equals(CREATE_CHANGE_TYPE);
+			}
+
+			private boolean isAsset(String origin)
+			{
+				return origin.contains("asset");
+			}
+
+			private boolean isAttributes(MqContentType type)
+			{
+				return type.type().equals(IncomingListener.ATTRIBUTE_MESSAGE_TYPE);
+			}
+
+			private boolean isJob(MqContentType type)
+			{
+				return type.type().equals(IncomingListener.JOB_MESSAGE_TYPE);
 			}
 
 		};
