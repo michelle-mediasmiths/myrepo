@@ -31,11 +31,7 @@ public class IngestCompleteHandler  implements AttributeHandler
 				try {
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.QC_VIEW);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
+					taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.QC_VIEW);
 				}
 				catch (Exception e) {
 					log.error("Exception in the Mayam client while handling Ingest Complete Task Message : " + e);
