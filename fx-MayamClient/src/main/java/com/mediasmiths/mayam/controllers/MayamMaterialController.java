@@ -46,10 +46,10 @@ public class MayamMaterialController extends MayamController
 {
 
 	private static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
-	private static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "programme";
+	private static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "PG";
 
 	private static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
-	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "associated";
+	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
 
 	private final TasksClient client;
 	private final MayamTaskController taskController;
