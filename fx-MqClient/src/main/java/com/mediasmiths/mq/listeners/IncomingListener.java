@@ -107,7 +107,7 @@ public class IncomingListener
 
 								if (jobType != null)
 								{
-									if (jobType.equals(JobType.INGEST))
+									if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT))
 									{
 										passEventToHandler(ingestJobHandler, jobMessage);
 										passEventToHandler(unmatchedJobHandler, jobMessage);
