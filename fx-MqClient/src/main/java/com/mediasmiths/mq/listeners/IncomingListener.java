@@ -35,6 +35,7 @@ import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.UnmatchedHandler;
+import com.mediasmiths.mq.handlers.UnmatchedJobHandler;
 
 public class IncomingListener
 {
@@ -68,7 +69,7 @@ public class IncomingListener
 		final QcCompleteHandler qcCompleteHandler = new QcCompleteHandler(taskController);
 		final SegmentationCompleteHandler segmentationHandler = new SegmentationCompleteHandler(taskController);
 		final IngestJobHandler ingestJobHandler = new IngestJobHandler(taskController);
-		final IngestJobHandler unmatchedJobHandler = new IngestJobHandler(taskController);
+		final UnmatchedJobHandler unmatchedJobHandler = new UnmatchedJobHandler(taskController);
 
 		return new MqClientListener()
 		{
