@@ -184,7 +184,7 @@ public class IncomingListener
 					logger.trace(String.format("Attributes message (current): " + LogUtil.mapToString(currentAttributes)));
 
 					TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
-					TaskState newState = afterAttributes.getAttribute(Attribute.TASK_STATE);
+					TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 										
 					if (!initialState.equals(newState))
 					{

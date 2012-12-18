@@ -29,9 +29,6 @@ public class IngestCompleteHandler  implements AttributeHandler
 			if (taskState == TaskState.FINISHED) 
 			{
 				try {
-					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-					taskController.saveTask(messageAttributes);
-		
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
