@@ -172,20 +172,26 @@ public class IncomingListener
 				AttributeMapPair messageAttributes = msg.getSubjectPair();
 				AttributeMap beforeAttributes = messageAttributes.getBefore();
 				AttributeMap afterAttributes = messageAttributes.getAfter();
+				
+				//afterAttributes does not contain all of the tasks attributes, so we need to do this to have an attributemap containing them all
+				AttributeMap currentAttributes = beforeAttributes.copy();
+				currentAttributes.putAll(afterAttributes);
+				
 				try
 				{
 					logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
-					logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+					logger.trace(String.format("Attributes message (changed): " + LogUtil.mapToString(afterAttributes)));
+					logger.trace(String.format("Attributes message (current): " + LogUtil.mapToString(currentAttributes)));
 
 					TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
 					TaskState newState = afterAttributes.getAttribute(Attribute.TASK_STATE);
-
+										
 					if (!initialState.equals(newState))
 					{
-						passEventToHandler(ingestCompleteHandler, afterAttributes);
-						passEventToHandler(qcCompleteHandler, afterAttributes);
-						passEventToHandler(previewHandler, afterAttributes);
-						passEventToHandler(unmatchedHandler, afterAttributes);
+						passEventToHandler(ingestCompleteHandler, currentAttributes);
+						passEventToHandler(qcCompleteHandler, currentAttributes);
+						passEventToHandler(previewHandler, currentAttributes);
+						passEventToHandler(unmatchedHandler, currentAttributes);
 					}
 				}
 				catch (Exception e)

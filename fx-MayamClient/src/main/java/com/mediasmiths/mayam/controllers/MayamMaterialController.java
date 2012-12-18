@@ -994,6 +994,8 @@ public class MayamMaterialController extends MayamController
 
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
 	{
-		
+		// TODO : perform update
+		log.warn("no attempt made to update material " + materialID);		
+				
 	}
 }

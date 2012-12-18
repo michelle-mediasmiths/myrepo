@@ -536,7 +536,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		catch (RemoteException e)
 		{
-			log.error("EXception thrown by Mayam while attching report: " + id);
+			log.error("EXception thrown by Mayam while attching report: " + id,e);
 			e.printStackTrace();
 		}
 	}
@@ -560,9 +560,6 @@ public class MayamClientImpl implements MayamClient
 					format));
 		}
 
-		// TODO : perform update
-		log.warn("no attempt made to update material " + materialID);
-		
 		materialController.updateMaterial(details,materialID);
 		
 	}
