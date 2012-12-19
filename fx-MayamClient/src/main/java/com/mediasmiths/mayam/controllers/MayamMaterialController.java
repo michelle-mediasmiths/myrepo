@@ -996,21 +996,21 @@ public class MayamMaterialController extends MayamController
 	{
 		// TODO : perform update
 		log.warn("no attempt made to update material " + materialID);		
-		
-		AttributeMap itemAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
-		String assetID = itemAttributes.getAttribute(Attribute.ASSET_ID);
-		
-		AttributeMap updateMap = client.createAttributeMap();
-		updateMap.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-		updateMap.setAttribute(Attribute.ASSET_ID, assetID);
-		
-		if(details.getTitle() != null){
-			updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
-		}
-		
-		if(details.getFormat() != null){
-			
-		}
+//		
+//		AttributeMap itemAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
+//		String assetID = itemAttributes.getAttribute(Attribute.ASSET_ID);
+//		
+//		AttributeMap updateMap = client.createAttributeMap();
+//		updateMap.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+//		updateMap.setAttribute(Attribute.ASSET_ID, assetID);
+//		
+//		if(details.getTitle() != null){
+//			updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
+//		}
+//		
+//		if(details.getFormat() != null){
+//			
+//		}
 				
 	}
 }
