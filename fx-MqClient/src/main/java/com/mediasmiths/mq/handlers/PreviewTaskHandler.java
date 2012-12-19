@@ -51,7 +51,6 @@ public class PreviewTaskHandler implements AttributeHandler
 			catch (Exception e)
 			{
 				log.error("Exception in the Mayam client while handling Preview Task Message : ",e);
-				e.printStackTrace();
 			}
 		}
 	}
@@ -145,7 +144,7 @@ public class PreviewTaskHandler implements AttributeHandler
 	private void onPreviewFailure(AttributeMap messageAttributes) throws MayamClientException
 	{
 
-		// update the items pewview status to fail
+		// update the items preview status to fail
 		String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
 		AssetType type = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 

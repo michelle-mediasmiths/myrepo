@@ -61,16 +61,16 @@ public class MayamTaskController extends MayamController{
 		
 	}
 
-	public long createTask(String siteID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes) throws MayamClientException {
+	public long createTask(String houseID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes) throws MayamClientException {
 		
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
 		AttributeMap assetAttributes = null;
 		try {
-			assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), siteID);
+			assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), houseID);
 		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + siteID,e);
+			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + houseID,e);
 			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
 		}
 
@@ -80,6 +80,7 @@ public class MayamTaskController extends MayamController{
 			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, assetType.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetID);
+			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, houseID);
 			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
 			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 			attributes.copyAttributes(initialAttributes);
@@ -110,7 +111,7 @@ public class MayamTaskController extends MayamController{
 			}
 
 		} else {
-			log.warn("Failed to find asset with ID: " + siteID);
+			log.warn("Failed to find asset with ID: " + houseID);
 			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
 		}
 	}
