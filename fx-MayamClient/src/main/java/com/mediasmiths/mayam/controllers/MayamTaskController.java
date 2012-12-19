@@ -61,6 +61,14 @@ public class MayamTaskController extends MayamController
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
 
 	}
+	
+	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	{
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING, initialAttributes);
+
+	}
 
 	public long createTask(String houseID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes)
 			throws MayamClientException

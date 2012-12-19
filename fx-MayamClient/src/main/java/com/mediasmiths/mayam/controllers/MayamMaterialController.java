@@ -185,18 +185,15 @@ public class MayamMaterialController extends MayamController
 					{
 						try
 						{
-							long taskID = taskController.createTask(
-									material.getMaterialID(),
-									MayamAssetType.MATERIAL,
-									MayamTaskListType.COMPLIANCE_LOGGING);
-							log.debug("created task with id : " + taskID);
-							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							Date requiredBy = null;
+
 							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
 							{
-								newTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+								requiredBy = material.getRequiredBy().toGregorianCalendar().getTime();
 							}
-							taskController.saveTask(newTask);
+
+							long taskID = taskController.createComplianceLoggingTaskForMaterial(material.getMaterialID(), requiredBy);
+							log.debug("created task with id : " + taskID);
 						}
 						catch (MayamClientException e)
 						{
