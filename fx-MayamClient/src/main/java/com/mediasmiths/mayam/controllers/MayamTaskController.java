@@ -269,8 +269,7 @@ public class MayamTaskController extends MayamController{
 				}
 			}
 		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId);
-			e.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId,e);
 		}
 	
 		List <MayamAccessRights> allRights = accessRightsController.retrieve(qcStatus.toString(), qaStatus.toString(), qcParallel, contentType, channelList, purgeProtected, adultOnly);
