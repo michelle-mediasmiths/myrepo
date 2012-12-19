@@ -45,7 +45,7 @@ public class MayamTaskController extends MayamController
 	@Inject
 	private final MayamAccessRightsController accessRightsController;
 
-	private final Logger log = Logger.getLogger(MayamPackageController.class);
+	private final Logger log = Logger.getLogger(MayamTaskController.class);
 
 	@Inject
 	public MayamTaskController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController)
@@ -210,7 +210,14 @@ public class MayamTaskController extends MayamController
 	{
 		try
 		{
-			task = updateAccessRights(task);
+			try
+			{
+				task = updateAccessRights(task);
+			}
+			catch (Exception e)
+			{
+				log.error("Error updating access rights before task save", e);
+			}
 			client.taskApi().updateTask(task);
 		}
 		catch (RemoteException e)
