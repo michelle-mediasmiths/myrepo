@@ -55,7 +55,11 @@ public class IngestCompleteHandler  implements AttributeHandler
 					String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);
 					if (aggregator != null) 
 					{
-						qcRequired = configProperties.getProperty("aggregators."+aggregator.toLowerCase()+".requiresQC");
+						String property = configProperties.getProperty("aggregators."+aggregator.toLowerCase()+".requiresQC");
+						if (property != null)
+						{
+							qcRequired = property.equals(true);
+						}
 					}
 				}
 				
