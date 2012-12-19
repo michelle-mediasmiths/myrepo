@@ -33,9 +33,10 @@ import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamTaskController extends MayamController{
+public class MayamTaskController extends MayamController
+{
 	private final TasksClient client;
-	
+
 	public TasksClient getTasksClient()
 	{
 		return client;
@@ -43,167 +44,207 @@ public class MayamTaskController extends MayamController{
 
 	@Inject
 	private final MayamAccessRightsController accessRightsController;
-	
+
 	private final Logger log = Logger.getLogger(MayamPackageController.class);
 
 	@Inject
-	public MayamTaskController(
-			@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController) {
+	public MayamTaskController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController)
+	{
 		client = mayamClient;
 		accessRightsController = rightsController;
 	}
-	
+
 	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
-		
+
 	}
 
-	public long createTask(String houseID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes) throws MayamClientException {
-		
+	public long createTask(String houseID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes)
+			throws MayamClientException
+	{
+
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
 		AttributeMap assetAttributes = null;
-		try {
+		try
+		{
 			assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), houseID);
-		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + houseID,e);
-			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while attempting to find asset with ID: " + houseID, e);
+			throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION, e);
 		}
 
-		if (assetAttributes != null) {
-			
+		if (assetAttributes != null)
+		{
+
 			String assetID = assetAttributes.getAttributeAsString(Attribute.ASSET_ID);
-			
+
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, assetType.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_ID, assetID);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, houseID);
 			attributesValid &= attributes.setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
 			attributesValid &= attributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 			attributes.copyAttributes(initialAttributes);
-		
+
 			if (!attributesValid)
 			{
 				log.warn("Task created but one or more attributes was invalid");
 			}
-			try {
-				AttributeMap newTask = updateAccessRights(attributes.getAttributes());
-				
+			try
+			{
+				AttributeMap newTask;
+
+				try
+				{
+					newTask = updateAccessRights(attributes.getAttributes());
+				}
+				catch (Exception e)
+				{
+					log.error("Error setting access rights on new task", e);
+					newTask = attributes.getAttributes();
+				}
+
 				log.debug("Creating task :" + LogUtil.mapToString(newTask));
-								
+
 				AttributeMap task = client.taskApi().createTask(newTask);
-				
+
 				Long taskID = task.getAttribute(Attribute.TASK_ID);
-				
-				if(taskID == null){
+
+				if (taskID == null)
+				{
 					log.error("created task had null TASK_ID");
 					throw new MayamClientException(MayamClientErrorCode.FAILURE);
 				}
-				
-				return taskID.longValue();				
-				
-			} catch (RemoteException e) {
-				log.error("Exception thrown by Mayam while attempting to create task",e);
-				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
+
+				return taskID.longValue();
+
+			}
+			catch (RemoteException e)
+			{
+				log.error("Exception thrown by Mayam while attempting to create task", e);
+				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION, e);
 			}
 
-		} else {
+		}
+		else
+		{
 			log.warn("Failed to find asset with ID: " + houseID);
 			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
 		}
 	}
-	
-	public long createTask(String siteID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException {
+
+	public long createTask(String siteID, MayamAssetType assetType, MayamTaskListType taskList) throws MayamClientException
+	{
 		return createTask(siteID, assetType, taskList, new AttributeMap());
 	}
 
-	public MayamClientErrorCode deleteTask(long taskID)
-			throws MayamClientException {
+	public MayamClientErrorCode deleteTask(long taskID) throws MayamClientException
+	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		try {
+		try
+		{
 			client.taskApi().deleteTask(taskID);
-		} catch (RemoteException e) {
-			log.error("Error deleting task : " + taskID,e);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting task : " + taskID, e);
 			returnCode = MayamClientErrorCode.TASK_DELETE_FAILED;
 		}
 		return returnCode;
 	}
 
-	public AttributeMap getTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException 
+	public AttributeMap getTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException
 	{
 		return getTaskForAssetByID(type, siteid, Attribute.HOUSE_ID);
 
 	}
-	
-	public AttributeMap getTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException 
+
+	public AttributeMap getTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
 	{
 		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID);
 
 	}
-	
-	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute) throws MayamClientException 
+
+	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute)
+			throws MayamClientException
 	{
-		log.info(String.format("Searching for task of type %s for asset %s using id attribute %s", type.getText(), id, idattribute.toString()));
+		log.info(String.format(
+				"Searching for task of type %s for asset %s using id attribute %s",
+				type.getText(),
+				id,
+				idattribute.toString()));
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
 		criteria.getFilterEqualities().setAttribute(idattribute, id);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
-		try {
+		try
+		{
 			result = client.taskApi().getTasks(criteria, 10, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
-			if (result.getTotalMatches() != 1) {
+			if (result.getTotalMatches() != 1)
+			{
 				log.error("unexpected number of results for search expected 1 got " + result.getTotalMatches());
 				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 
 			return result.getMatches().get(0);
-		} catch (RemoteException e) {
+		}
+		catch (RemoteException e)
+		{
 			log.error("remote expcetion searching for task", e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 
-
 	}
 
-	public void saveTask(AttributeMap task) throws MayamClientException 
-	{	
-		try {
+	public void saveTask(AttributeMap task) throws MayamClientException
+	{
+		try
+		{
 			task = updateAccessRights(task);
 			client.taskApi().updateTask(task);
-		} catch (RemoteException e) {
+		}
+		catch (RemoteException e)
+		{
 			log.error("remote expcetion saving task", e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED);
 		}
 	}
-	
+
 	public AttributeMap getTask(long taskId) throws RemoteException
 	{
 		return client.taskApi().getTask(taskId);
 	}
-	
+
 	private AttributeMap updateAccessRights(AttributeMap task)
 	{
 		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
 		String assetId = task.getAttribute(Attribute.HOUSE_ID);
-		
+
 		boolean purgeProtected = false;
-		
-		if(task.getAttribute(Attribute.PURGE_PROTECTED) != null){
-			purgeProtected = ((Boolean)task.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue();
+
+		if (task.getAttribute(Attribute.PURGE_PROTECTED) != null)
+		{
+			purgeProtected = ((Boolean) task.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue();
 		}
-		
+
 		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
-		
-		ArrayList <String> channelList = new ArrayList <String> ();
-		if (mediaRights != null) {
+
+		ArrayList<String> channelList = new ArrayList<String>();
+		if (mediaRights != null)
+		{
 			List<Row> rows = mediaRights.getRows();
-			if (rows != null) {
+			if (rows != null)
+			{
 				for (int i = 0; i < rows.size(); i++)
 				{
 					String channel = rows.get(i).get(5);
@@ -211,69 +252,89 @@ public class MayamTaskController extends MayamController{
 				}
 			}
 		}
-		
+
 		String contentFormat = task.getAttributeAsString(Attribute.CONT_FMT);
 		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
-		
-		log.warn(String.format("content format is %s , category is %s for asset with id %s",contentFormat,contentCategory,assetId));
-		
+
+		log.warn(String.format(
+				"content format is %s , category is %s for asset with id %s",
+				contentFormat,
+				contentCategory,
+				assetId));
 
 		String contentType = null;
 		if (assetType != null && assetType.equals(MayamAssetType.TITLE.getAssetType()))
 		{
 			contentType = "Title";
 		}
-		else if (contentFormat != null && contentFormat.toUpperCase().equals("UNMATCHED")) {
+		else if (contentFormat != null && contentFormat.toUpperCase().equals("UNMATCHED"))
+		{
 			contentType = "Unmatched";
 		}
-		else if (contentCategory != null) 
-		{ 
-			if (contentCategory.toUpperCase().equals("PROGRAMME")) {
+		else if (contentCategory != null)
+		{
+			if (contentCategory.toUpperCase().equals("PROGRAMME"))
+			{
 				contentType = "Programme";
 			}
-			else if (contentCategory.toUpperCase().equals("ASSOCIATED")) {
+			else if (contentCategory.toUpperCase().equals("ASSOCIATED"))
+			{
 				contentType = "EPK";
 			}
-			else if (contentCategory.toUpperCase().equals("EDIT CLIPS")) {
+			else if (contentCategory.toUpperCase().equals("EDIT CLIPS"))
+			{
 				contentType = "Edit Clip";
 			}
-			else if (contentCategory.toUpperCase().equals("PUBLICITY")) {
+			else if (contentCategory.toUpperCase().equals("PUBLICITY"))
+			{
 				contentType = "Publicity";
 			}
 		}
-	
+
 		Boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
 		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
-	
+
 		TaskState qaStatus = null;
-			
+
 		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
 		filterEqualities.setAttribute(Attribute.HOUSE_ID, assetId);
 		FilterCriteria criteria = new FilterCriteria();
 		criteria.setFilterEqualities(filterEqualities);
 		FilterResult existingTasks;
-		try {
+		try
+		{
 			existingTasks = client.taskApi().getTasks(criteria, 10, 0);
-	
-			if (existingTasks.getTotalMatches() > 0) 
+
+			if (existingTasks.getTotalMatches() > 0)
 			{
 				List<AttributeMap> tasks = existingTasks.getMatches();
 				AttributeMap qaTask = tasks.get(0);
 				qaStatus = task.getAttribute(Attribute.TASK_STATE);
-						
-				if (existingTasks.getTotalMatches() > 0) 
+
+				if (existingTasks.getTotalMatches() > 0)
 				{
-					log.warn("More than 1 Preview task found for assset : " + assetId + ". Access Righst will be set based on status of first task : " + qaTask.getAttribute(Attribute.TASK_ID));
+					log.warn("More than 1 Preview task found for assset : " + assetId
+							+ ". Access Righst will be set based on status of first task : "
+							+ qaTask.getAttribute(Attribute.TASK_ID));
 				}
 			}
-		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId,e);
 		}
-	
-		List <MayamAccessRights> allRights = accessRightsController.retrieve(qcStatus.toString(), qaStatus.toString(), qcParallel, contentType, channelList, purgeProtected, adultOnly);
-			
+		catch (RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId, e);
+		}
+
+		List<MayamAccessRights> allRights = accessRightsController.retrieve(
+				qcStatus.toString(),
+				qaStatus.toString(),
+				qcParallel,
+				contentType,
+				channelList,
+				purgeProtected,
+				adultOnly);
+
 		AssetAccess accessRights = new AssetAccess();
 		for (int i = 0; i < allRights.size(); i++)
 		{
