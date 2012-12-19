@@ -28,7 +28,7 @@ public class IngestCompleteHandler  implements AttributeHandler
 		
 		configProperties = new Properties();
 		try {
-			configProperties.load(getClass().getClassLoader().getResourceAsStream("fx-MqClient.properties"));
+			configProperties.load(getClass().getClassLoader().getResourceAsStream("services/fx-MqClient.properties"));
 		} catch (FileNotFoundException e) {
 			log.error("Failed to find fx-MqClient.properties!", e);
 		} catch (IOException e) {
