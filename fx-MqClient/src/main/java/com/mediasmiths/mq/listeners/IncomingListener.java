@@ -192,6 +192,7 @@ public class IncomingListener
 						passEventToHandler(ingestCompleteHandler, currentAttributes);
 						passEventToHandler(qcCompleteHandler, currentAttributes);
 						passEventToHandler(previewHandler, currentAttributes);
+						passEventToHandler(fixAndStitchHandler, messageAttributes);
 						passEventToHandler(unmatchedHandler, currentAttributes);
 					}
 				}
