@@ -68,7 +68,7 @@ public class MayamMaterialController extends MayamController
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		boolean createCompLoggingTask = false;
-		
+
 		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
 		{
 			// setting parent_house_id is an unsupported operation
@@ -145,7 +145,7 @@ public class MayamMaterialController extends MayamController
 						AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(
 								MayamAssetType.MATERIAL.getAssetType(),
 								compile.getParentMaterialID());
-						
+
 						createCompLoggingTask = true;
 
 					}
@@ -153,29 +153,15 @@ public class MayamMaterialController extends MayamController
 					{
 						log.error("MayamException while trying to retrieve title : " + compile.getParentMaterialID(), e);
 					}
-					
+
 					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 				}
 
-				/* No longer supported				
- 				Library library = source.getLibrary();
-				if (library != null)
-				{
-					List<TapeType> tapeList = library.getTape();
-					if (tapeList != null)
-					{
-						IdSet tapeIds = new IdSet();
-						for (int i = 0; i < tapeList.size(); i++)
-						{
-							TapeType tape = tapeList.get(i);
-							if (tape != null)
-							{
-								tapeIds.add(tape.getPresentationID());
-							}
-						}
-						attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
-					}
-				}*/
+				/*
+				 * No longer supported Library library = source.getLibrary(); if (library != null) { List<TapeType> tapeList = library.getTape(); if (tapeList != null) { IdSet tapeIds = new IdSet();
+				 * for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
+				 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
+				 */
 			}
 
 			if (!attributesValid)
@@ -193,12 +179,17 @@ public class MayamMaterialController extends MayamController
 					log.warn("Mayam failed to create Material");
 					returnCode = MayamClientErrorCode.MATERIAL_CREATION_FAILED;
 				}
-				else {
+				else
+				{
 					if (createCompLoggingTask)
 					{
-						try {
-							long taskID = taskController.createTask(material.getMaterialID(), MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING);
-							log.debug("created task with id : "+taskID);
+						try
+						{
+							long taskID = taskController.createTask(
+									material.getMaterialID(),
+									MayamAssetType.MATERIAL,
+									MayamTaskListType.COMPLIANCE_LOGGING);
+							log.debug("created task with id : " + taskID);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
@@ -206,12 +197,15 @@ public class MayamMaterialController extends MayamController
 								newTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
 							}
 							taskController.saveTask(newTask);
-						} 
-						catch (MayamClientException e) {
-							log.error("Exception thrown in Mayam while creating Compliance Logging task for Material : " + material.getMaterialID(), e);
+						}
+						catch (MayamClientException e)
+						{
+							log.error("Exception thrown in Mayam while creating Compliance Logging task for Material : "
+									+ material.getMaterialID(), e);
 						}
 					}
-					else {
+					else
+					{
 						try
 						{
 							Date requiredBy = null;
@@ -226,7 +220,10 @@ public class MayamMaterialController extends MayamController
 						}
 						catch (MayamClientException e)
 						{
-							log.error("Exception thrown in Mayam while creating Ingest task for Material : "+ material.getMaterialID(),e);
+							log.error(
+									"Exception thrown in Mayam while creating Ingest task for Material : "
+											+ material.getMaterialID(),
+									e);
 						}
 					}
 				}
@@ -307,7 +304,7 @@ public class MayamMaterialController extends MayamController
 				audioTrackList.add(audioTrack);
 			}
 
-			 attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
+			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
 
 			if (!attributesValid)
 			{
@@ -337,39 +334,55 @@ public class MayamMaterialController extends MayamController
 
 			String siteID = result.getAttribute(Attribute.ASSET_SITE_ID);
 			log.info(String.format("siteID %s returned when creating marketing material", siteID));
-			
+
+			if (siteID == null)
+			{
+				throw new MayamClientException(MayamClientErrorCode.CREATED_ASSOCIATED_CONTENT_HAS_NULL_SITE_ID);
+			}
+
+			// create ingest task
+			try
+			{
+				long taskID = taskController.createIngestTaskForMaterial(siteID, null);
+				log.debug("created task with id : " + taskID);
+			}
+			catch (Exception e)
+			{
+				log.error("error creating ingest task for asset " + siteID, e);
+			}
+
 			return siteID;
-//			AttributeMap item;
-//			try
-//			{
-//				item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
-//				String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
-//				log.info(String.format("item id %s returned after fetching created item", siteID));
-//
-//				if (siteID == null)
-//				{
-//					throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
-//				}
-//				
-//				try {
-//					long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
-//					log.debug("created task with id : "+taskID);
-//					AttributeMap newTask = taskController.getTask(taskID);
-//					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-//					taskController.saveTask(newTask);
-//				} 
-//				catch (RemoteException e) {
-//					log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
-//				}
-//				
-//
-//				return siteID;
-//			}
-//			catch (RemoteException e)
-//			{
-//				log.error("Exception thrown by Mayam while fetch newly create Material", e);
-//				throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED, e);
-//			}
+			// AttributeMap item;
+			// try
+			// {
+			// item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
+			// String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
+			// log.info(String.format("item id %s returned after fetching created item", siteID));
+			//
+			// if (siteID == null)
+			// {
+			// throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
+			// }
+			//
+			// try {
+			// long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
+			// log.debug("created task with id : "+taskID);
+			// AttributeMap newTask = taskController.getTask(taskID);
+			// newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+			// taskController.saveTask(newTask);
+			// }
+			// catch (RemoteException e) {
+			// log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
+			// }
+			//
+			//
+			// return siteID;
+			// }
+			// catch (RemoteException e)
+			// {
+			// log.error("Exception thrown by Mayam while fetch newly create Material", e);
+			// throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED, e);
+			// }
 
 		}
 		else
@@ -606,26 +619,11 @@ public class MayamMaterialController extends MayamController
 						attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 					}
 
-					
-					/* No longer supported					
- 					Library library = source.getLibrary();
-					if (library != null)
-					{
-						List<TapeType> tapeList = library.getTape();
-						if (tapeList != null)
-						{
-							IdSet tapeIds = new IdSet();
-							for (int i = 0; i < tapeList.size(); i++)
-							{
-								TapeType tape = tapeList.get(i);
-								if (tape != null)
-								{
-									tapeIds.add(tape.getPresentationID());
-								}
-							}
-							attributesValid &= attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds);
-						}
-					}*/
+					/*
+					 * No longer supported Library library = source.getLibrary(); if (library != null) { List<TapeType> tapeList = library.getTape(); if (tapeList != null) { IdSet tapeIds = new
+					 * IdSet(); for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
+					 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
+					 */
 				}
 
 				if (!attributesValid)
@@ -644,31 +642,43 @@ public class MayamMaterialController extends MayamController
 						log.warn("Mayam failed to update Material");
 						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
 					}
-					else {
-						try {
-							AttributeMap compLoggingTask = taskController.getTaskForAssetBySiteID(MayamTaskListType.COMPLIANCE_LOGGING, material.getMaterialID());
-							if (compLoggingTask != null) 
+					else
+					{
+						try
+						{
+							AttributeMap compLoggingTask = taskController.getTaskForAssetBySiteID(
+									MayamTaskListType.COMPLIANCE_LOGGING,
+									material.getMaterialID());
+							if (compLoggingTask != null)
 							{
 								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
 								{
-									compLoggingTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+									compLoggingTask.setAttribute(
+											Attribute.REQ_BY,
+											material.getRequiredBy().toGregorianCalendar().getTime());
 									taskController.saveTask(compLoggingTask);
 								}
 							}
-							
-							AttributeMap ingestTask = taskController.getTaskForAssetBySiteID(MayamTaskListType.INGEST, material.getMaterialID());
+
+							AttributeMap ingestTask = taskController.getTaskForAssetBySiteID(
+									MayamTaskListType.INGEST,
+									material.getMaterialID());
 							if (ingestTask != null)
 							{
 								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
 								{
-									ingestTask.setAttribute(Attribute.REQ_BY, material.getRequiredBy().toGregorianCalendar().getTime());
+									ingestTask.setAttribute(
+											Attribute.REQ_BY,
+											material.getRequiredBy().toGregorianCalendar().getTime());
 									taskController.saveTask(ingestTask);
 								}
 							}
 						}
-						catch(MayamClientException e)
+						catch (MayamClientException e)
 						{
-							log.error("Exception thrown by Mayam while updating tasks for Material : " + material.getMaterialID(), e);
+							log.error(
+									"Exception thrown by Mayam while updating tasks for Material : " + material.getMaterialID(),
+									e);
 						}
 					}
 				}
@@ -693,7 +703,7 @@ public class MayamMaterialController extends MayamController
 
 		return returnCode;
 	}
-	
+
 	public boolean materialExists(String materialID)
 	{
 		boolean materialFound = false;
@@ -768,18 +778,11 @@ public class MayamMaterialController extends MayamController
 		source.setCompile(compile);
 		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
 
-/*		Library library = new Library();
-		IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS);
-		String[] tapeIdsArrays = (String[]) tapeIds.toArray();
-		ArrayList<TapeType> tapeList = new ArrayList<TapeType>();
-		for (int i = 0; i < tapeIdsArrays.length; i++)
-		{
-			TapeType tape = new TapeType();
-			tape.setLibraryID(tapeIdsArrays[i]);
-			tapeList.add(tape);
-		}
-		library.withTape(tapeList);
-		source.setLibrary(library);*/
+		/*
+		 * Library library = new Library(); IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS); String[] tapeIdsArrays = (String[]) tapeIds.toArray(); ArrayList<TapeType> tapeList = new
+		 * ArrayList<TapeType>(); for (int i = 0; i < tapeIdsArrays.length; i++) { TapeType tape = new TapeType(); tape.setLibraryID(tapeIdsArrays[i]); tapeList.add(tape); }
+		 * library.withTape(tapeList); source.setLibrary(library);
+		 */
 
 		return material;
 	}
@@ -960,12 +963,14 @@ public class MayamMaterialController extends MayamController
 				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(
 						MayamAssetType.MATERIAL.getAssetType(),
 						materialID);
-				
-				client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
+
+				client.assetApi().deleteAsset(
+						MayamAssetType.MATERIAL.getAssetType(),
+						assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
 			}
 			catch (RemoteException e)
 			{
-				log.error("Error deleting material : " + materialID,e);
+				log.error("Error deleting material : " + materialID, e);
 				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 			}
 		}
@@ -986,7 +991,7 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID,e);
+			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID, e);
 			e.printStackTrace();
 		}
 		return isProtected;
@@ -995,22 +1000,22 @@ public class MayamMaterialController extends MayamController
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
 	{
 		// TODO : perform update
-		log.warn("no attempt made to update material " + materialID);		
-//		
-//		AttributeMap itemAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
-//		String assetID = itemAttributes.getAttribute(Attribute.ASSET_ID);
-//		
-//		AttributeMap updateMap = client.createAttributeMap();
-//		updateMap.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-//		updateMap.setAttribute(Attribute.ASSET_ID, assetID);
-//		
-//		if(details.getTitle() != null){
-//			updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
-//		}
-//		
-//		if(details.getFormat() != null){
-//			
-//		}
-				
+		log.warn("no attempt made to update material " + materialID);
+		//
+		// AttributeMap itemAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
+		// String assetID = itemAttributes.getAttribute(Attribute.ASSET_ID);
+		//
+		// AttributeMap updateMap = client.createAttributeMap();
+		// updateMap.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+		// updateMap.setAttribute(Attribute.ASSET_ID, assetID);
+		//
+		// if(details.getTitle() != null){
+		// updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
+		// }
+		//
+		// if(details.getFormat() != null){
+		//
+		// }
+
 	}
 }

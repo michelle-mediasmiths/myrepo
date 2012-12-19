@@ -354,11 +354,10 @@ public class MayamClientImpl implements MayamClient
 					isPlaceholder = true;
 					
 				}
-				
 			}
 			else
 			{
-				log.warn("Media status is null");
+				log.error("Media status is null");
 			}
 		}
 		return isPlaceholder;
