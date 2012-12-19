@@ -1,5 +1,9 @@
 package com.mediasmiths.mq.handlers;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
@@ -15,10 +19,11 @@ public class InitiateQcHandler  implements AttributeHandler
 {
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);
-	
+
 	public InitiateQcHandler(MayamTaskController controller) 
 	{
 		taskController = controller;
+		
 	}
 	
 	public void process(AttributeMap messageAttributes)

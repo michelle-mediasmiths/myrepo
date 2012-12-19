@@ -341,9 +341,23 @@ public class MayamTaskController extends MayamController
 			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId, e);
 		}
 
+		
+		String qaStatusString = "";
+		String qcStatusString = "";
+				
+		if (qaStatus != null)
+		{
+			qaStatusString = qaStatus.toString();
+		}
+		
+		if (qcStatus != null)
+		{
+			qcStatusString = qcStatus.toString();
+		}
+		
 		List<MayamAccessRights> allRights = accessRightsController.retrieve(
-				qcStatus.toString(),
-				qaStatus.toString(),
+				qcStatusString,
+				qaStatusString,
 				qcParallel,
 				contentType,
 				channelList,
