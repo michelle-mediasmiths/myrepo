@@ -213,7 +213,7 @@ public class MayamTaskController extends MayamController{
 		
 
 		String contentType = null;
-		if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
+		if (assetType != null && assetType.equals(MayamAssetType.TITLE.getAssetType()))
 		{
 			contentType = "Title";
 		}
@@ -236,8 +236,8 @@ public class MayamTaskController extends MayamController{
 			}
 		}
 	
-		boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-		boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+		Boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
 	
 		TaskState qaStatus = null;
