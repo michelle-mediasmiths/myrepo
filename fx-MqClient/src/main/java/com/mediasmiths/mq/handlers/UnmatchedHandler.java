@@ -25,7 +25,7 @@ public class UnmatchedHandler  implements AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String contentFormat = messageAttributes.getAttribute(Attribute.CONT_FMT);
-		if (contentFormat.equals("Unmatched")) 
+		if (contentFormat != null && contentFormat.equals("Unmatched")) 
 		{
 			try {
 				//Add to purge candidate list with expiry date of 30 days

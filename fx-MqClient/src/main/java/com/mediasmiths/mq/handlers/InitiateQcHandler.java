@@ -37,6 +37,9 @@ public class InitiateQcHandler  implements AttributeHandler
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
 					MuleWorkflowController mule = new MuleWorkflowController();
+					
+					log.info("Initiating qc workflow for asset " + assetID);
+					
 					if (assetType.toString().equals(MayamAssetType.MATERIAL.getText()))
 					{
 						mule.initiateQcWorkflow(assetID, false);
@@ -47,7 +50,7 @@ public class InitiateQcHandler  implements AttributeHandler
 					}
 				}
 				catch (Exception e) {
-					log.error("Exception in the Mayam client while handling Inititae QC Message : " + e);
+					log.error("Exception in the Mayam client while handling Inititae QC Message : ",e);
 					e.printStackTrace();			
 				}
 			}
