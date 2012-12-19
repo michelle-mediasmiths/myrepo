@@ -31,8 +31,7 @@ public class EmergencyIngestHandler  implements AttributeHandler
 			try {
 				client.assetApi().createAsset(messageAttributes);
 			} catch (RemoteException e) {
-				log.error("Exception thrown by Mayam will creating new asset from emergency ingest : " + e);
-				e.printStackTrace();
+				log.error("Exception thrown by Mayam will creating new asset from emergency ingest : ", e);
 			}
 		}		
 	}

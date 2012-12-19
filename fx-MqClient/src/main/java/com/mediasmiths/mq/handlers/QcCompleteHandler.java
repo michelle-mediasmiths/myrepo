@@ -40,8 +40,7 @@ public class QcCompleteHandler  implements AttributeHandler
 					taskController.saveTask(newTask);
 				}
 				catch (Exception e) {
-					log.error("Exception in the Mayam client while handling QC Task Complete Message : " + e);
-					e.printStackTrace();
+					log.error("Exception in the Mayam client while handling QC Task Complete Message : ", e);
 				}
 			}	
 		}

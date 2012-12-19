@@ -62,7 +62,7 @@ public class MuleClientImpl implements IMuleClient {
 			client.dispatch(destination, payLoad, properties);
 
 		} catch (MuleException e) {
-			logger.error("Mule Exception caught when dispatching message to destination: " + destination + " " + e);
+			logger.error("Mule Exception caught when dispatching message to destination: " + destination + " " ,e);
 		}
 	}
 		

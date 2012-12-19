@@ -58,8 +58,7 @@ public class UnmatchedHandler  implements AttributeHandler
 				taskController.saveTask(newTask);
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Unmatched Content Message : " + e);
-				e.printStackTrace();
+				log.error("Exception in the Mayam client while handling Unmatched Content Message : ", e);
 			}
 		}
 	}

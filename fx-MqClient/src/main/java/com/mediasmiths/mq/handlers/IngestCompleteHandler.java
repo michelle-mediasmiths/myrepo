@@ -48,8 +48,7 @@ public class IngestCompleteHandler  implements AttributeHandler
 					}
 					catch (Exception e)
 					{
-						log.error("Exception in the Mayam client while handling Ingest Complete Task Message : " + e);
-						e.printStackTrace();
+						log.error("Exception in the Mayam client while handling Ingest Complete Task Message : ", e);
 					}
 				
 				}

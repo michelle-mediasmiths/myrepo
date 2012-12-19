@@ -42,8 +42,7 @@ public class FixAndStitchHandler  implements AttributeHandler
 				}
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Fix and Stitch Task Message : " + e);
-				e.printStackTrace();			
+				log.error("Exception in the Mayam client while handling Fix and Stitch Task Message : ", e);
 			}
 		}
 	}

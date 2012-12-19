@@ -36,6 +36,11 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamTaskController extends MayamController{
 	private final TasksClient client;
 	
+	public TasksClient getTasksClient()
+	{
+		return client;
+	}
+
 	@Inject
 	private final MayamAccessRightsController accessRightsController;
 	

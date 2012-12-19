@@ -102,8 +102,7 @@ public class PackageUpdateHandler  implements AttributeHandler
 					}
 				}
 				catch (Exception e) {
-					log.error("Exception in the Mayam client while handling Package Message : " + e);
-					e.printStackTrace();
+					log.error("Exception in the Mayam client while handling Package Message : ", e);
 				}
 			}
 		}
@@ -149,8 +148,7 @@ public class PackageUpdateHandler  implements AttributeHandler
 				}
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Package Message : " + e);
-				e.printStackTrace();	
+				log.error("Exception in the Mayam client while handling Package Message : ", e);
 			}
 		}
 	}

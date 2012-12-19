@@ -40,8 +40,7 @@ public class ImportFailureHandler  implements AttributeHandler
 					taskController.saveTask(newTask);
 				}
 				catch (Exception e) {
-					log.error("Exception in the Mayam client while handling Import Failure Task Message : " + e);
-					e.printStackTrace();
+					log.error("Exception in the Mayam client while handling Import Failure Task Message : ", e);
 				}	
 			}
 		}

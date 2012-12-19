@@ -45,8 +45,7 @@ public class SegmentationCompleteHandler  implements AttributeHandler
 				}
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Segmentation Task Complete Message : " + e);
-				e.printStackTrace();
+				log.error("Exception in the Mayam client while handling Segmentation Task Complete Message : ", e);
 			}
 		}	
 	}

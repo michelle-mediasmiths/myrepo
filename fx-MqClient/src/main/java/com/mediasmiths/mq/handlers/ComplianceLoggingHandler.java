@@ -41,8 +41,7 @@ public class ComplianceLoggingHandler  implements AttributeHandler
 				}
 			}
 			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Compliance Logging Task Message : " + e);
-				e.printStackTrace();
+				log.error("Exception in the Mayam client while handling Compliance Logging Task Message : ", e);
 			}
 		}
 	}

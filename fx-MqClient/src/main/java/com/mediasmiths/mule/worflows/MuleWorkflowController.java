@@ -19,8 +19,7 @@ public class MuleWorkflowController {
 		try {
 			client = new MuleClientImpl();
 		} catch (MuleException e) {
-			log.error("Exception while initialising MuleClient : "+ e);
-			e.printStackTrace();
+			log.error("Exception while initialising MuleClient : ", e);
 		}
 		
 	}
