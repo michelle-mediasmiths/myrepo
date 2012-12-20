@@ -55,7 +55,7 @@ public class MuleWorkflowController {
 		payload += "<outputFolder>" + MediasmithsDestinations.TRANSCODE_OUTPUT_DIR + "</outputFolder>";
 		payload += "<packageID>" + assetID + "</packageID>";
 		payload += "</invokeIntalioTCFlow>";
-		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " + MediasmithsDestinations.payload + " Payload: " + payload);
+		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " + MediasmithsDestinations.MULE_TRANSCODE_DESTINATION + " Payload: " + payload);
 		return client.send(MediasmithsDestinations.MULE_TRANSCODE_DESTINATION, payload, null);
 	}
 	
