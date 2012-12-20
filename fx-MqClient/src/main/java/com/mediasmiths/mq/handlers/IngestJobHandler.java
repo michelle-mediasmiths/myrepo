@@ -16,11 +16,6 @@ public class IngestJobHandler extends JobHandler
 	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
 	
-	public IngestJobHandler(MayamTaskController controller) 
-	{
-		taskController = controller;
-	}
-	
 	public void process(Job jobMessage)
 	{	
 		String assetId = jobMessage.getAssetId();
