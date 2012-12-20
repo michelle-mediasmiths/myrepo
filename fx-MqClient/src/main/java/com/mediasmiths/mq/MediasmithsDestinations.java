@@ -6,7 +6,7 @@ public class MediasmithsDestinations {
 	public static final MqDestination TASKS = MqDestination.of("queue://ToWFE");
 	public static final MqDestination ASSETS = MqDestination.of("queue://ToWFE");
 	public static final MqDestination INCOMING = MqDestination.of("queue://ToWFE");
-	public static final String MULE_QC_DESTINATION = "http://localhost:8088/qc";
+	public static final String MULE_QC_DESTINATION = "http://10.111.224.101:8088/qc";
 	public static final String MULE_REPORTING_DESTINATION = "http://localhost:8088/reporting";
 	public static final String TRANSCODE_INPUT_FILE = "f:\tcinput\test.mxf";
 	public static final String TRANSCODE_OUTPUT_DIR = "f:\tcoutput";

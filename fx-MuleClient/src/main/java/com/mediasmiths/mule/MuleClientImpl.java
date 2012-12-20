@@ -47,7 +47,6 @@ public class MuleClientImpl implements IMuleClient {
 	public MuleMessage send(String destination, Object payLoad,  Map<String, Object> properties) {
 		MuleMessage result = null;
 		try {
-//			result = client.send("http://localhost:9085/qc", "test message", properties);
 			result = client.send(destination, payLoad, properties);
 		} catch (MuleException e) {
 			logger.error("Mule Exception caught when sending message to destination: " + destination);
