@@ -120,6 +120,7 @@
       <xs:element name="assetID" type="xs:string"/>
       <xs:element name="forTX" type="xs:boolean"/>
       <xs:element name="outputFolder" type="xs:string"/>
+      <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime"/>
     </xs:sequence>
   </xs:complexType>
 
