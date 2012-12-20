@@ -13,19 +13,14 @@ import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class IngestCompleteHandler  implements AttributeHandler
+public class IngestCompleteHandler  extends AttributeHandler
 {
-	private static final String PREVIEW_STATUS_PASS = "pass";
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestCompleteHandler.class);
 	Properties configProperties;
 	
-	public IngestCompleteHandler(MayamTaskController controller) 
+	public IngestCompleteHandler() 
 	{
-		taskController = controller;
-		
 		configProperties = new Properties();
 		try {
 			configProperties.load(getClass().getClassLoader().getResourceAsStream("services/fx-MqClient.properties"));

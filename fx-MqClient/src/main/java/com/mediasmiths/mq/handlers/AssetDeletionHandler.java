@@ -2,13 +2,8 @@ package com.mediasmiths.mq.handlers;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
 
-public class AssetDeletionHandler implements AttributeHandler 
+public class AssetDeletionHandler extends AttributeHandler 
 {
-	public AssetDeletionHandler() 
-	{
-		
-	}
-	
 	public void process(AttributeMap messageAttributes) 
 	{
 		//TODO: IMPLEMENT

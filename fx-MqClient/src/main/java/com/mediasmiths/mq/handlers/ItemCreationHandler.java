@@ -6,23 +6,12 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ItemCreationHandler  implements AttributeHandler
+public class ItemCreationHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
-	TasksClient client;
 	private final static Logger log = Logger.getLogger(ItemCreationHandler.class);
-	
-	public ItemCreationHandler(TasksClient tasksClient, MayamTaskController controller) 
-	{
-		client = tasksClient;
-		taskController = controller;
-	}
-	
 	
 	/**
 	 * To only be called in response to changeType CREATE messages

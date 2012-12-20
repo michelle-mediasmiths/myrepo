@@ -8,11 +8,11 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.mq.Mq.Detachable;
 import com.mayam.wf.mq.Mq.ListenIntensity;
 import com.mayam.wf.mq.Mq.Listener;
-import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
@@ -23,7 +23,6 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.listeners.IncomingListener;
-import com.mediasmiths.mq.listeners.TaskListener;
 
 public class MqListeners implements Runnable {
 	private ArrayList<Detachable> listeners;
@@ -37,6 +36,9 @@ public class MqListeners implements Runnable {
 	
 	@Inject 
 	Mq mq;
+	
+	@Inject
+	IncomingListener incomingListener;
 	
 //	@Inject
 	//failed to inject
@@ -89,7 +91,7 @@ public class MqListeners implements Runnable {
 	public void attachIncomingListners() 
 	{
 		log.info("Attatching listeners");
-		attachListener(MediasmithsDestinations.INCOMING, IncomingListener.getInstance(client, taskController, eventService));
+		attachListener(MediasmithsDestinations.INCOMING, incomingListener);
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

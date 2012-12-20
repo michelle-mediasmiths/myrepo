@@ -5,7 +5,6 @@ import java.net.URI;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 

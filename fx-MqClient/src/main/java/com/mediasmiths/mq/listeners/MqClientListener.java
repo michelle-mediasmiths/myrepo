@@ -1,7 +1,5 @@
 package com.mediasmiths.mq.listeners;
 
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.AttributeMap;

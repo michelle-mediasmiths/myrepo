@@ -11,9 +11,8 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class PreviewTaskHandler implements AttributeHandler
+public class PreviewTaskHandler extends AttributeHandler
 {
 	private static final String PREVIEW_FAIL = "fail";
 	private static final String STITCH_EDIT_AND_REORDER = "stitchr";
@@ -23,13 +22,7 @@ public class PreviewTaskHandler implements AttributeHandler
 	private static final String PREVIEW_PASSED = "pass";
 	private static final String PREVIEW_NOT_DONE = "pvnd";
 	private static final String FIX_EDIT_REQUIRED = "fix";
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
-
-	public PreviewTaskHandler(MayamTaskController controller)
-	{
-		taskController = controller;
-	}
 
 	public void process(AttributeMap messageAttributes)
 	{

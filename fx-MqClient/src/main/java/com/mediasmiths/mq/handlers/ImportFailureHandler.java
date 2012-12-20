@@ -8,17 +8,10 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ImportFailureHandler  implements AttributeHandler
+public class ImportFailureHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(ImportFailureHandler.class);
-	
-	public ImportFailureHandler(MayamTaskController controller) 
-	{
-		taskController = controller;
-	}
 	
 	public void process(AttributeMap messageAttributes)
 	{	

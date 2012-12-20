@@ -1,23 +1,17 @@
 package com.mediasmiths.mq.handlers;
 
 import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class UnmatchedJobHandler implements JobHandler
+public class UnmatchedJobHandler extends JobHandler
 {
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
-	
-	public UnmatchedJobHandler(MayamTaskController controller) 
-	{
-		taskController = controller;
-	}
 	
 	public void process(Job jobMessage)
 	{	

@@ -8,17 +8,10 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class ComplianceLoggingHandler  implements AttributeHandler
+public class ComplianceLoggingHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(ComplianceLoggingHandler.class);
-	
-	public ComplianceLoggingHandler(MayamTaskController controller) 
-	{
-		taskController = controller;
-	}
 	
 	public void process(AttributeMap messageAttributes)
 	{

@@ -5,20 +5,10 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class EmergencyIngestHandler  implements AttributeHandler
+public class EmergencyIngestHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
-	TasksClient client;
 	private final static Logger log = Logger.getLogger(EmergencyIngestHandler.class);
-	
-	public EmergencyIngestHandler(TasksClient tasksClient, MayamTaskController controller) 
-	{
-		client = tasksClient;
-		taskController = controller;
-	}
 	
 	public void process(AttributeMap messageAttributes)
 	{	
@@ -29,7 +19,7 @@ public class EmergencyIngestHandler  implements AttributeHandler
 		if (assetID == null || assetID.equals(""))
 		{			
 			try {
-				client.assetApi().createAsset(messageAttributes);
+				tasksClient.assetApi().createAsset(messageAttributes);
 			} catch (RemoteException e) {
 				log.error("Exception thrown by Mayam will creating new asset from emergency ingest : ", e);
 			}

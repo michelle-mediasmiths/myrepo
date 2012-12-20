@@ -8,18 +8,11 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class SegmentationCompleteHandler  implements AttributeHandler
+public class SegmentationCompleteHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(SegmentationCompleteHandler.class);
-	
-	public SegmentationCompleteHandler(MayamTaskController controller) 
-	{
-		taskController = controller;
-	}
 	
 	public void process(AttributeMap messageAttributes)
 	{

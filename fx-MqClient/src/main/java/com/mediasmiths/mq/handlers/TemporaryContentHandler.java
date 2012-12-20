@@ -10,23 +10,13 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 
-public class TemporaryContentHandler  implements AttributeHandler
+public class TemporaryContentHandler  extends AttributeHandler
 {
-	MayamTaskController taskController;
-	TasksClient client;
 	private final static Logger log = Logger.getLogger(TemporaryContentHandler.class);
-	
-	public TemporaryContentHandler(TasksClient tasksClient, MayamTaskController controller) 
-	{
-		client = tasksClient;
-		taskController = controller;
-	}
 	
 	public void process(AttributeMap messageAttributes)
 	{	
@@ -38,12 +28,12 @@ public class TemporaryContentHandler  implements AttributeHandler
 			{
 				//TODO: Check if parent_ID has been updated, add sources to title and remove from any purge lists
 				
-				AttributeMap filterEqualities = client.createAttributeMap();
+				AttributeMap filterEqualities = tasksClient.createAttributeMap();
 				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
+				FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
 				
 				if (existingTasks.getTotalMatches() > 0) 
 				{
@@ -63,12 +53,12 @@ public class TemporaryContentHandler  implements AttributeHandler
 			String contentType = messageAttributes.getAttribute(Attribute.CONT_CATEGORY);
 			if (contentType.equals("Associated") || contentType.equals("Edit Clips")) 
 			{
-				AttributeMap filterEqualities = client.createAttributeMap();
+				AttributeMap filterEqualities = tasksClient.createAttributeMap();
 				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = client.taskApi().getTasks(criteria, 10, 0);
+				FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
 			
 				if (existingTasks.getTotalMatches() > 0) 
 				{
