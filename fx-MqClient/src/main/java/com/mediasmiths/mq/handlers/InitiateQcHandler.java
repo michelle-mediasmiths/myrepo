@@ -40,11 +40,11 @@ public class InitiateQcHandler  extends AttributeHandler
 					
 					log.info("Initiating qc workflow for asset " + assetID);
 					
-					if (assetType.toString().equals(MayamAssetType.MATERIAL.getText()))
+					if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 					{
 						mule.initiateQcWorkflow(assetID, false);
 					} 
-					else if (assetType.toString().equals(MayamAssetType.PACKAGE.getText()))
+					else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 					{
 						mule.initiateQcWorkflow(assetID, true);
 					}
