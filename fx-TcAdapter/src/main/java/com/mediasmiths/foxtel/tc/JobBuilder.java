@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.tc;
 
 import java.io.IOException;
+import java.util.Date;
 
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.log4j.Logger;
@@ -13,6 +14,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
+import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -193,6 +196,43 @@ public class JobBuilder
 	public void setPathResolver(PathResolver pathResolver)
 	{
 		this.pathResolver = pathResolver;
+	}
+
+	private final static long ONE_HOUR = 1000 * 3600l;
+	private final static long TWELVE_HOURS = ONE_HOUR * 12;
+	private final static long ONE_DAY = ONE_HOUR * 24;
+	private final static long THREE_DAYS = ONE_DAY * 3;
+	private final static long EIGHT_DAYS = ONE_DAY * 8;
+	
+	
+	public Integer getPriorityForTXJob(TCBuildJobXMLRequest buildJobXMLRequest)
+	{
+		log.debug(String.format("determining prority for job for asset %s tx date is %s",buildJobXMLRequest.getPackageID(),buildJobXMLRequest.getTxDate().toString()));
+	
+		int priority=1;
+		
+		long now = System.currentTimeMillis();
+		long txTime = buildJobXMLRequest.getTxDate().getTime();
+		long difference = txTime - now;
+		
+		if(difference < TWELVE_HOURS){
+			priority=8;
+		}
+		else if(difference < ONE_DAY){
+			priority=7;
+		}
+		else if(difference < THREE_DAYS){
+			priority=6;
+		}		
+		else if(difference < EIGHT_DAYS){
+			priority=4;
+		}	
+		else{
+			priority=2;
+		}
+		
+		log.debug("returning prority "+priority);
+		return Integer.valueOf(priority);
 	}
 
 }

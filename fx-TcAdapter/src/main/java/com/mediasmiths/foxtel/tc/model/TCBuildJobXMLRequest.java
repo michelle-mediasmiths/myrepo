@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.tc.model;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -9,7 +11,19 @@ public class TCBuildJobXMLRequest
 	String packageID;
 	String inputFile;
 	String outputFolder;
+	Date txDate;
 	
+	public Date getTxDate()
+	{
+		return txDate;
+	}
+
+	@XmlElement(name = "txDate", required = true)
+	public void setTxDate(Date txDate)
+	{
+		this.txDate = txDate;
+	}
+
 	@XmlElement(name = "inputFile", required = true)
 	public String getInputFile()
 	{

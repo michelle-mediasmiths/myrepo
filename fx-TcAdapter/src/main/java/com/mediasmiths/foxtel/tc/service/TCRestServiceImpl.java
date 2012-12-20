@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -24,6 +25,7 @@ import com.mediasmiths.foxtel.carbonwfs.WfsClient;
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 import com.mediasmiths.foxtel.tc.JobBuilder;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
+import com.mediasmiths.foxtel.tc.model.TCBuildJobResponse;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClientException;
@@ -56,11 +58,8 @@ public class TCRestServiceImpl implements TCRestService
 		String jobXml = startRequest.getPcpXml();
 		log.trace("trying to create job from xml " + jobXml);
 		UUID jobid =  wfsClient.transcode(jobXml);
-		
-		//dont yet know how to set the priority as part of the jobXML
+
 		wfsClient.updatejobPriority(jobid, startRequest.getPriority());
-		
-		
 		
 		return jobid;
 		
@@ -111,10 +110,17 @@ public class TCRestServiceImpl implements TCRestService
 	@POST
 	@Path("/job/build/")
 	@Produces("application/xml")
-	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException
+	public TCBuildJobResponse buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException
 	{
 		String job = jobBuilder.buildJobForTxPackageTranscode(buildJobXMLRequest.getPackageID(), buildJobXMLRequest.getInputFile(), buildJobXMLRequest.getOutputFolder());
-		return job;
+		
+		Integer prority = jobBuilder.getPriorityForTXJob(buildJobXMLRequest);
+		
+		TCBuildJobResponse resp = new TCBuildJobResponse();
+		resp.setPcpXML(job);
+		resp.setPriority(prority);
+		
+		return resp;
 	}
 	
 	@Override
@@ -160,6 +166,23 @@ public class TCRestServiceImpl implements TCRestService
 		String errorMessage =  StringUtils.join(errorPropertes, "\r\n");
 		log.debug(String.format("returning errormessage %s for job %s", errorMessage,jobid));
 		return errorMessage;
+	}
+
+	@Override
+	@PUT
+	@Path("/job/{id}/priority/update")
+	public void setJobPriority(@PathParam("id") String jobid, @QueryParam("priority") Integer newPriority)
+	{
+		wfsClient.updatejobPriority(UUID.fromString(jobid), newPriority);
+	}
+
+	@Override
+	@POST
+	@Path("/job/priority/")
+	@Produces("text/plain")
+	public Integer getPriorityForJob(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException
+	{
+		return jobBuilder.getPriorityForTXJob(buildJobXMLRequest);		
 	}
 	
 }

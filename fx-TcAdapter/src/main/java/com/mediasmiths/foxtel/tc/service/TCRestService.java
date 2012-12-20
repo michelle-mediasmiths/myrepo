@@ -10,6 +10,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
 import org.datacontract.schemas._2004._07.rhozet.Job;
@@ -17,6 +18,7 @@ import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
+import com.mediasmiths.foxtel.tc.model.TCBuildJobResponse;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClientException;
@@ -45,11 +47,17 @@ public interface TCRestService
 	 */
 	@POST
 	@Path("/job/build/")
-	@Produces("text/plain")
-	public String buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest)
+	@Produces("application/xml")
+	public TCBuildJobResponse buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest)
 			throws MayamClientException,
 			JobBuilderException;
 
+	
+	@POST
+	@Path("/job/priority/")
+	@Produces("text/plain")
+	public Integer getPriorityForJob(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException;
+	
 	/**
 	 * Starts a transcode job
 	 * 
@@ -122,6 +130,11 @@ public interface TCRestService
 	@Path("/job/{id}/errormessage")
 	public String jobErrorMessage(@PathParam("id") String jobid);
 
+	
+	@PUT
+	@Path("/job/{id}/priority/set")
+	public void setJobPriority(@PathParam("id") String jobid, @QueryParam("priority") Integer newPriority);
+	
 	/**
 	 * Lists presets
 	 * 
