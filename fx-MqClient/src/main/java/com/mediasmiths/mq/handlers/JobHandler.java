@@ -20,7 +20,7 @@ public abstract class JobHandler implements Handler
 	@Inject
 	protected MayamMaterialController materialController;
 		
-	public abstract void process(Job jobMessage) ;
+	public abstract void process(Job jobMessage) ; 
 
 	public abstract String getName();
 }

@@ -10,6 +10,7 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.mayam.MayamClient;
@@ -33,6 +34,10 @@ public class JobBuilder
 	@Inject
 	private PathResolver pathResolver;
 
+	@Inject
+	@Named(Config.BUG_FOLDER)
+	private String buglocation;
+	
 	public enum TxProfile
 	{
 		MAM_SD_12ST_GXF_SD_12ST("pcp/quicktime.xml"),
@@ -90,15 +95,16 @@ public class JobBuilder
 		}
 
 		String pcp = loadProfileForPackage(packageID, profile);
+		pcp = setInputAndOutputPaths(packageID, inputfile, outputFolder, pcp);
 
-		// assuming for now that the path is a linux style path
 		
-		String winInputPath = pathResolver.winPath(PathType.NIX, inputfile);
-		String winOutputPath = pathResolver.winPath(PathType.NIX, outputFolder);
+		
+		return pcp;
+	}
 
-//		pcp = pcp.replace(INPUT_FILE_PATH_PH, winInputPath);
-//		pcp = pcp.replace(OUTPUT_FOLDER_PATH_PH, winOutputPath);
-
+	private String setInputAndOutputPaths(String packageID, String inputfile, String outputFolder, String pcp)
+	{
+		// assuming for now that the path is a linux style path	
 		String uncInputPath = pathResolver.uncPath(PathType.NIX, inputfile);
 		String uncOutputPath = pathResolver.uncPath(PathType.NIX, outputFolder);
 		
@@ -109,7 +115,6 @@ public class JobBuilder
 		pcp = pcp.replace(FULL_UNC_OUTPUT_PATH_PH, uncOutputPath);
 		
 		pcp = pcp.replace(OUTPUT_BASENAME_PH, packageID);
-
 		return pcp;
 	}
 
