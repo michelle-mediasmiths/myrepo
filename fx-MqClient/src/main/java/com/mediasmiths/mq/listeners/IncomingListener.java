@@ -162,8 +162,7 @@ public class IncomingListener extends MqClientListener
 			logger.error("error logging attributes message");
 		}
 
-		// passEventToHandler(compEditHandler, messageAttributes);
-		// passEventToHandler(comLoggingHandler, messageAttributes);
+		 
 		// passEventToHandler(fixAndStitchHandler, messageAttributes);
 		// passEventToHandler(importFailHandler, messageAttributes);
 
@@ -196,6 +195,8 @@ public class IncomingListener extends MqClientListener
 			{
 				passEventToHandler(ingestCompleteHandler, currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
+				passEventToHandler(compEditHandler, currentAttributes);
+				passEventToHandler(comLoggingHandler, currentAttributes);
 				passEventToHandler(previewHandler, currentAttributes);
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
