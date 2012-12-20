@@ -77,10 +77,6 @@ public class WfsClient
 		return UUID.fromString(j.getGuid());
 	}
 
-	/************************************************************
-	 * methods beyond this point not currently used for foxtel
-	 ************************************************************/
-
 	/**
 	 * Performs a transcode using a prexisting preset
 	 * 

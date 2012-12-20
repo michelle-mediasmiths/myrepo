@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -9,6 +11,8 @@ public class InvokeIntalioTCFlow
 	private String assetID;
 	private String outputFolder;
 	private boolean isForTX;
+	private Date requiredDate;
+	
 	
 	@XmlElement(required = true)
 	public String getOutputFolder()
@@ -39,5 +43,16 @@ public class InvokeIntalioTCFlow
 	{
 		this.isForTX = isForTX;
 	}
-
+	
+	@XmlElement(required = false)
+	public Date getRequiredDate()
+	{
+		return requiredDate;
+	}
+	
+	public void setRequiredDate(Date requiredDate)
+	{
+		this.requiredDate = requiredDate;
+	}
+	
 }
