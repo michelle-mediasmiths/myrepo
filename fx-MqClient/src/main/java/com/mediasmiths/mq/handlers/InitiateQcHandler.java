@@ -24,8 +24,14 @@ public class InitiateQcHandler  extends AttributeHandler
 			if (taskState == TaskState.OPEN) 
 			{
 				try {
+					
+					try{
 					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
 					taskController.saveTask(messageAttributes);
+					}
+					catch(Exception e){
+						log.error("error updating task state",e);
+					}
 							
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);

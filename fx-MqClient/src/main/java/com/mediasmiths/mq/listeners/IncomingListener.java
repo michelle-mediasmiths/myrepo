@@ -28,7 +28,6 @@ import com.mediasmiths.mq.handlers.ImportFailureHandler;
 import com.mediasmiths.mq.handlers.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.IngestJobHandler;
 import com.mediasmiths.mq.handlers.InitiateQcHandler;
-import com.mediasmiths.mq.handlers.ItemCreationHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.PreviewTaskHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
@@ -62,8 +61,6 @@ public class IncomingListener extends MqClientListener
 	AssetPurgeHandler assetPurgeHandler;
 	@Inject
 	EmergencyIngestHandler emergencyIngestHandler;
-	@Inject
-	ItemCreationHandler itemCreationHandler;
 	@Inject
 	PackageUpdateHandler packageUpdateHandler;
 	@Inject
@@ -101,19 +98,8 @@ public class IncomingListener extends MqClientListener
 			logger.trace("Message is: " + msg.toString());
 			MqContentType type = msg.getType();
 
-			if (type != null)
-			{
-				logger.debug("Message type not null " + type.type());
-			}
-			else
-			{
-				logger.debug("Message type is null");
-			}
-
 			String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 			String changeType = msg.getProperties().get(MAYAM_CHANGE_TYPE_PROPERTY);
-
-			logger.trace(String.format("origin is %s changeType is %s ", origin, changeType));
 
 			if (type != null && origin != null)
 			{
@@ -124,8 +110,6 @@ public class IncomingListener extends MqClientListener
 				}
 				else if (changeType != null)
 				{
-					logger.trace("changeType not null");
-
 					if (isAttributes(type) && isAsset(origin) && isCreate(changeType))
 					{
 						onAssetCreate(msg);
@@ -144,7 +128,7 @@ public class IncomingListener extends MqClientListener
 					}
 					else
 					{
-						log.warn("could not discern nature of message");
+						logger.warn("could not discern nature of message");
 					}
 				}
 				else
@@ -166,7 +150,7 @@ public class IncomingListener extends MqClientListener
 
 	private void onTaskCreate(MqMessage msg)
 	{
-		log.trace("reading message subject");
+		log.trace("onTaskCreate");
 		AttributeMap messageAttributes = msg.getSubject();
 
 		try
@@ -190,7 +174,7 @@ public class IncomingListener extends MqClientListener
 
 	private void onTaskUpdate(MqMessage msg)
 	{
-		logger.trace("reading message subject");
+		logger.trace("onTaskUpdate");
 		AttributeMapPair messageAttributes = msg.getSubjectPair();
 		AttributeMap beforeAttributes = messageAttributes.getBefore();
 		AttributeMap afterAttributes = messageAttributes.getAfter();
@@ -225,7 +209,7 @@ public class IncomingListener extends MqClientListener
 
 	private void onJobMessage(MqMessage msg)
 	{
-		logger.trace("fetching job message");
+		logger.trace("onJobMessage");
 		Job jobMessage = msg.getJob();
 
 		if (jobMessage != null)
@@ -250,7 +234,7 @@ public class IncomingListener extends MqClientListener
 
 	private void onAssetCreate(MqMessage msg)
 	{
-		logger.trace("reading message subject");
+		logger.trace("onAssetCreate");
 		AttributeMap messageAttributes = msg.getSubject();
 
 		try
@@ -265,14 +249,13 @@ public class IncomingListener extends MqClientListener
 		// passEventToHandler(assetDeletionHandler, messageAttributes);
 		// passEventToHandler(assetPurgeHandler, messageAttributes);
 		// passEventToHandler(emergencyIngestHandler, messageAttributes);
-		passEventToHandler(itemCreationHandler, messageAttributes);
 		// passEventToHandler(packageUpdateHandler, messageAttributes);
 		// passEventToHandler(temporaryContentHandler, messageAttributes);
 	}
 
 	private void onAssetUpdate(MqMessage msg)
 	{
-		logger.trace("reading message subject");
+		logger.trace("onAssetUpdate");
 		AttributeMapPair messageAttributes = msg.getSubjectPair();
 		AttributeMap beforeAttributes = messageAttributes.getBefore();
 		AttributeMap afterAttributes = messageAttributes.getAfter();

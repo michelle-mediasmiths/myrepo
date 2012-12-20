@@ -100,7 +100,7 @@
             
             <outbound>
             <pass-through-router>
-             <http:outbound-endpoint host="localhost" port="9085" path="qc" />
+             <http:outbound-endpoint host="localhost" port="8088" path="qc" />
              </pass-through-router>
             </outbound>
 
