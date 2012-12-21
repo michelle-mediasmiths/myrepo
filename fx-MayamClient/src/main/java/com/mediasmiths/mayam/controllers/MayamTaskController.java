@@ -363,19 +363,33 @@ public class MayamTaskController extends MayamController
 				channelList,
 				purgeProtected,
 				adultOnly);
-
-		AssetAccess accessRights = new AssetAccess();
-		for (int i = 0; i < allRights.size(); i++)
-		{
-			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-			entry.setEntityType(EntityType.GROUP);
-			entry.setEntity(allRights.get(i).getGroupName());
-			entry.setRead(allRights.get(i).getReadAccess());
-			entry.setWrite(allRights.get(i).getWriteAccess());
-			entry.setAdmin(allRights.get(i).getAdminAccess());
-			accessRights.getStandard().add(entry);
+		
+		if(allRights == null){
+			log.warn("allrights is null");
 		}
-		task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+		else{
+			log.debug("allrights size: "+allRights.size());
+		}
+		
+		if (allRights != null && allRights.size() > 0)
+		{
+			AssetAccess accessRights = new AssetAccess();
+			for (int i = 0; i < allRights.size(); i++)
+			{
+				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+				entry.setEntityType(EntityType.GROUP);
+				entry.setEntity(allRights.get(i).getGroupName());
+				entry.setRead(allRights.get(i).getReadAccess());
+				entry.setWrite(allRights.get(i).getWriteAccess());
+				entry.setAdmin(allRights.get(i).getAdminAccess());
+				accessRights.getStandard().add(entry);
+			}
+			log.info("Access Rights for " + assetId + " updated to : " + accessRights.toString());
+			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+		}
+		else {
+			log.info("No valid Access Rights found for " + assetId);
+		}
 		return task;
 	}
 }
