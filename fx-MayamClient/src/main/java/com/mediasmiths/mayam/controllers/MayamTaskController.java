@@ -370,7 +370,7 @@ public class MayamTaskController extends MayamController
 		else{
 			log.debug("allrights size: "+allRights.size());
 		}
-		
+
 		if (allRights != null && allRights.size() > 0)
 		{
 			AssetAccess accessRights = new AssetAccess();
@@ -388,7 +388,7 @@ public class MayamTaskController extends MayamController
 			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 		}
 		else {
-			log.info("No valid Access Rights found for " + assetId);
+			log.info("No suitable Access Rights found for task : " + assetId);
 		}
 		return task;
 	}
