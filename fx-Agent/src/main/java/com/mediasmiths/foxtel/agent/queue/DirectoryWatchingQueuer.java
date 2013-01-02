@@ -73,24 +73,27 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 
 	@Override
 	public void run() {
-
-		// first of all look for existing xml files before we start monitoring
-		// for new ones
-		queueExistingFiles();
-
 		try {	
 			this.start(sourcePaths, false);
 		} catch (IOException e) {
 			logger.fatal("Failed to register watch service", e);
 		}
 	}
-	
-	@Override
-	public void restart() throws IOException{
-		queueExistingFiles();
-		super.restart();
+
+	private void clearQueue()
+	{
+		this.filePathsPendingValidation.clear();		
 	}
 
+	@Override
+	protected void postRegistration(){
+		clearQueue();
+		
+		// first of all look for existing xml files before we start monitoring
+				// for new ones
+		queueExistingFiles();
+	}
+	
 	/**
 	 * On startup check for any existing messages that may have arrived when the
 	 * serivce was not running
@@ -116,9 +119,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 					if (!unfinishedArrivals.contains(p)) {
 						unfinishedArrivals.add(p);
 					}
-				}
-				
-				filePathsPendingValidation.add(f.getAbsolutePath());
+				}			
 			}
 		}
 	}

@@ -192,7 +192,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			return MayamClientErrorCode.MATERIAL_CREATION_FAILED;
 		}
@@ -236,7 +236,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -269,7 +269,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -288,7 +288,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return false;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			return true;
 		}
@@ -303,7 +303,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public boolean isMaterialPlaceholder(String materialID) throws MayamClientException
 	{
-		if (materialID.equals(PLACEHOLDER_MATERIAL))
+		if (materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			return true;
 		}
@@ -547,7 +547,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public MaterialType getMaterial(String materialID) throws MayamClientException
 	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 
 			MaterialType m = new MaterialType();
@@ -629,7 +629,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public ProgrammeMaterialType getProgrammeMaterialType(String materialID) throws MayamClientException
 	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 		
 			FileMediaType fmt = new FileMediaType();
@@ -787,7 +787,7 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public Details getSupplierDetails(String materialID) throws MayamClientException
 	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.equals(PLACEHOLDER_MATERIAL))
+		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 		{
 			Supplier supplier = new Supplier();
 			supplier.setSupplierID(RandomStringUtils.randomAlphabetic(10));
