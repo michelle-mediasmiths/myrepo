@@ -43,13 +43,13 @@ public class JobBuilder
 	
 	public enum TxProfile
 	{
-		MAM_SD_12ST_GXF_SD_12ST("pcp/quicktime.xml"),
-		MAM_SD_12ST_38SUR_GXF_SD_12ST_34DBE("pcp/quicktime.xml"),
 		MAM_HD_12ST_GXF_HD_12ST("pcp/quicktime.xml"),
-		MAM_HD_12ST_38SUR_GXF_HD_12ST_34DBE("pcp/quicktime.xml"),
 		MAM_HD_12ST_GXF_SD_12ST("pcp/quicktime.xml"),
-		MAM_HD_12ST_38SUR_GXF_SD_12ST_34DBE("pcp/quicktime.xml");
-
+		MAM_HD_12ST_38SUR_GXF_HD_12ST_34DBE("pcp/quicktime.xml"),
+		MAM_HD_12ST_38SUR_GXF_SD_12ST_34DBE("pcp/quicktime.xml"),
+		MAM_SD_12ST_38SUR_GXF_SD_12ST_34DBE("pcp/quicktime.xml"),
+		MAM_SD_12ST_GXF_SD_12ST("pcp/quicktime.xml");	
+		
 		private String filename;
 
 		TxProfile(String fname)

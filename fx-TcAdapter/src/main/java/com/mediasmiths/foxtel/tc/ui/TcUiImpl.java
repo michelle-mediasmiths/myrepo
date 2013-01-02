@@ -121,6 +121,7 @@ public class TcUiImpl implements TcUi {
 		req.setPackageID(packageID);
 		req.setInputFile(inputFile);
 		req.setOutputFolder(outputFolder);
+		req.setTxDate(new Date());
 		String pcpXML = tcService.buildJobXMLForTranscode(req).getPcpXML();
 		
 		TemplateCall call = templater.template("built");
