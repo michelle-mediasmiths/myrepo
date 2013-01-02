@@ -145,37 +145,57 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	protected final void validateThenProcessFile(String filePath) {
 
-		logger.debug("Asking for validation of " + filePath);
-	
-		MessageValidationResult result;
-		try {
-			result = messageValidator.validateFile(filePath);
-		} catch (Exception e) {
-			logger.error("uncaught exception validating file", e);
-			result = MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
+		if (!new File(filePath).exists())
+		{
+			logger.warn("file path passed for validation does not exist, usually this means it has already been processed :"
+					+ filePath);
 		}
+		else
+		{
 
-		if (result == MessageValidationResult.IS_VALID) {
-			logger.info(String.format("Message at %s validates", filePath));
-			try {
-				String messageID = processFile(filePath);
-				writeReceipt(filePath, messageID);
-				if (shouldArchiveMessages()) {
-					moveMessageToArchiveFolder(filePath);
+			logger.debug("Asking for validation of " + filePath);
+
+			MessageValidationResult result;
+			try
+			{
+				result = messageValidator.validateFile(filePath);
+			}
+			catch (Exception e)
+			{
+				logger.error("uncaught exception validating file", e);
+				result = MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
+			}
+
+			if (result == MessageValidationResult.IS_VALID)
+			{
+				logger.info(String.format("Message at %s validates", filePath));
+				try
+				{
+					String messageID = processFile(filePath);
+					writeReceipt(filePath, messageID);
+					if (shouldArchiveMessages())
+					{
+						moveMessageToArchiveFolder(filePath);
+					}
 				}
-			} catch (MessageProcessingFailedException e) {
-				logger.error(String.format("Error processing %s", filePath), e);
-				moveFileToFailureFolder(new File(filePath));
-			} catch (Exception e){
-				logger.error(String.format("uncaught exception processing file %s",filePath), e);
+				catch (MessageProcessingFailedException e)
+				{
+					logger.error(String.format("Error processing %s", filePath), e);
+					moveFileToFailureFolder(new File(filePath));
+				}
+				catch (Exception e)
+				{
+					logger.error(String.format("uncaught exception processing file %s", filePath), e);
+					moveFileToFailureFolder(new File(filePath));
+				}
+
+			}
+			else
+			{
+				logger.warn(String.format("Message at %s did not validate", filePath));
+				messageValidationFailed(filePath, result);
 				moveFileToFailureFolder(new File(filePath));
 			}
-			
-		} else {
-			logger.warn(String.format("Message at %s did not validate",
-					filePath));
-			messageValidationFailed(filePath, result);
-			moveFileToFailureFolder(new File(filePath));
 		}
 
 	}

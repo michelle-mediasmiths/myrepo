@@ -66,6 +66,8 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 	}
 
 	protected boolean queueFile(File file) {
+		
+		
 		return this.filePathsPendingValidation.add(file.getAbsolutePath());
 	}
 
@@ -81,6 +83,12 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		} catch (IOException e) {
 			logger.fatal("Failed to register watch service", e);
 		}
+	}
+	
+	@Override
+	public void restart() throws IOException{
+		queueExistingFiles();
+		super.restart();
 	}
 
 	/**
