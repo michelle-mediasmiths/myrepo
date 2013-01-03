@@ -85,7 +85,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		this.filePathsPendingValidation.clear();		
 	}
 
-	@Override
+	
 	protected void postRegistration(){
 		clearQueue();
 		

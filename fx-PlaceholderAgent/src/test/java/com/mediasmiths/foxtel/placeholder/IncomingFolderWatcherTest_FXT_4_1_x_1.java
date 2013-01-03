@@ -87,6 +87,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 				new FileOutputStream(f));
 	}
 
+	/*
 	@Test
 	public void testExistingFilesAreQueued() throws FileNotFoundException,
 			IOException {
@@ -121,7 +122,7 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 		assertTrue(queue.contains(xml1.getAbsolutePath()));
 		assertTrue(queue.contains(xml2.getAbsolutePath()));
 
-	}
+	}*/
 
 	@Test
 	public void testNewFilesAreQueued_FXT_4_1_x_1() throws FileNotFoundException, IOException {
