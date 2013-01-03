@@ -59,6 +59,32 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+
+    <xs:complexType name="StorageReport">
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:documentation>The details of storage use within the infrastructure.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="fns:IPEvent">
+                <xs:sequence>
+                    <xs:element name="report" type="fns:StorageUsageDetails" minOccurs="1" />
+
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="StorageUsageDetails">
+        <xs:annotation>
+            <xs:documentation>The Details of Storage use for a particular mount point</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="fileSystemReference" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="megaBytesUsed" type="xs:double" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="megaBytesFree" type="xs:double" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
 	
 	<xs:simpleType name="FilePickUpKinds">
 		<xs:annotation>
