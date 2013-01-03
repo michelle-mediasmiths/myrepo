@@ -99,13 +99,14 @@ public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 		FilesPendingProcessingQueue queue = new FilesPendingProcessingQueue();
 		DirectoryWatchingQueuer toTest = new DirectoryWatchingQueuer(queue,
 			new WatchFolders(Collections.<String>singletonList(watchFolderPath)));
-		toTest.setSleepTime(100l);
+		toTest.setNotTouchedPeriod(10l);
+		toTest.setSleepTime(10l);
 
 		// start watcher
 		Thread watcherThread = new Thread(toTest);
 		watcherThread.start();
 
-		// wait a short while, files should be queued almost immediately
+		// wait a short while
 		try {
 			Thread.sleep(100l);
 		} catch (InterruptedException e) {
