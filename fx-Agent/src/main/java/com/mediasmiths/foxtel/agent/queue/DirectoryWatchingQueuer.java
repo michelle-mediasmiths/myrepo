@@ -31,7 +31,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		Runnable {
 
 	private final WatchFolders watchFolders;
-	private final List<String> sourcePaths;
+	protected final List<String> sourcePaths;
 	protected final FilesPendingProcessingQueue filePathsPendingValidation;
 
 	private static Logger logger = Logger
@@ -133,7 +133,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		}
 	};
 
-	private List<File> sortFilesByDate(Collection<File> existingFiles) {
+	protected List<File> sortFilesByDate(Collection<File> existingFiles) {
 		List<File> existingFilesList = new ArrayList<File>(existingFiles);
 		Collections.sort(existingFilesList, lastModifiedComparator);
 		return existingFilesList;
@@ -158,7 +158,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		}
 	};
 
-	private Collection<File> listFiles(String path) {
+	protected Collection<File> listFiles(String path) {
 		logger.debug("Listing files in " + path);
 		Collection<File> existingFiles = FileUtils.listFiles(new File(path),
 				getExistingFilesFilter(), FalseFileFilter.INSTANCE); //dont recurse
