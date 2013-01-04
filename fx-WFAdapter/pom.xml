@@ -48,7 +48,7 @@
 		
 		<dependency>
 			<groupId>com.mediasmiths</groupId>
-			<artifactId>Events</artifactId>
+			<artifactId>fx-event-entity</artifactId>
 			<version>${events.version}</version>
 		</dependency>		
 		

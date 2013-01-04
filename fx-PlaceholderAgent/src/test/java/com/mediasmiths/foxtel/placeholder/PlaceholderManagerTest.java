@@ -27,6 +27,7 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
@@ -36,10 +37,12 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
+import com.mediasmiths.foxtel.agent.processing.EventPickUpTimings;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentModule;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
@@ -231,6 +234,18 @@ public abstract class PlaceholderManagerTest {
 			return new WatchFolders(locations);
 		}
 		
+		@Provides
+		@Named("agent.events.pickUpTimer")
+		public EventPickUpTimings pickUpEventTimer()
+		{
+			return new EventPickUpTimings();			
+		}
+		
+		@Provides
+		@Named("service.event.pickUpKind")
+		public FilePickUpKinds pickUpKind(){
+			return FilePickUpKinds.PLACEHOLDER;
+		}
 		
 	}
 

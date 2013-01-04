@@ -298,7 +298,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+file.getAbsolutePath(),e);
 			message = file.getAbsolutePath();
 		}
-		eventService.saveEvent("error",message);
+		eventService.saveEvent("failed",message);
 		
 		super.moveFileToFailureFolder(file);
 	}

@@ -16,11 +16,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
+import com.mediasmiths.foxtel.ip.common.events.FilePickup;
 
 /**
  * Processes messages taken from a queue
@@ -46,7 +49,13 @@ public abstract class MessageProcessor<T> implements Runnable {
 	private final ReceiptWriter receiptWriter;
 	protected final EventService eventService;
 
-    //private final EventPickUpTimings pickUpEventTimer;
+	@Inject
+	@Named("agent.events.pickUpTimer")
+	protected EventPickUpTimings pickUpEventTimer;
+
+	@Inject
+	@Named("service.event.pickUpKind")
+	protected FilePickUpKinds pickUpKind;
 	
 	@Inject
 	public MessageProcessor(
@@ -76,7 +85,7 @@ public abstract class MessageProcessor<T> implements Runnable {
             File fileLoc = new File(filePath);
 			Object unmarshalled = unmarhsaller.unmarshal(fileLoc);
 
-            //pickUpEventTimer.saveEvent(getPickUpTimingDetails(fileLoc));
+            pickUpEventTimer.saveEvent(getPickUpTimingDetails(fileLoc));
 
             if (logger.isDebugEnabled())
                 logger.debug(String.format("unmarshalled object of type %s", unmarshalled.getClass().toString()));
@@ -120,15 +129,15 @@ public abstract class MessageProcessor<T> implements Runnable {
      *
      * @param fileLoc the file that has just been picked up for processing.
      * @return  the details about pick up time suitable for the eventing system
-
-    private FilePickUpTimings getPickUpTimingDetails(File fileLoc)
+    */
+    private FilePickup getPickUpTimingDetails(File fileLoc)
     {
-        FilePickUpTimings pickUpStats = new FilePickUpTimings();
-        pickUpStats.set();
+        FilePickup pickUpStats = new FilePickup();
+        pickUpStats.setFilePath(fileLoc.getAbsolutePath());
+        pickUpStats.setWaitTime(System.currentTimeMillis() -  fileLoc.lastModified());
         return pickUpStats;
     }
 
-    */
 
     /**
 	 * Called to check the type of an unmarshalled object, left up to
@@ -374,5 +383,25 @@ public abstract class MessageProcessor<T> implements Runnable {
 
 	public FilesPendingProcessingQueue getFilePathsPending() {
 		return filePathsPending;
+	}
+	
+	public EventPickUpTimings getPickUpEventTimer()
+	{
+		return pickUpEventTimer;
+	}
+
+	public void setPickUpEventTimer(EventPickUpTimings pickUpEventTimer)
+	{
+		this.pickUpEventTimer = pickUpEventTimer;
+	}
+
+	public FilePickUpKinds getPickUpKind()
+	{
+		return pickUpKind;
+	}
+
+	public void setPickUpKind(FilePickUpKinds pickUpKind)
+	{
+		this.pickUpKind = pickUpKind;
 	}
 }
