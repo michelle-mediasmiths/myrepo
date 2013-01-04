@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 
+import com.google.inject.Inject;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
@@ -13,6 +14,9 @@ public class MuleWorkflowController {
 
 	private IMuleClient client;
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
+	
+	@Inject
+	private MediasmithsDestinations destinations;
 	
 	public MuleWorkflowController() 
 	{
@@ -31,8 +35,8 @@ public class MuleWorkflowController {
 		payload += "</assetId><forTXDelivery>";
 		payload += isTx;
 		payload += "</forTXDelivery></invokeIntalioQCFlow>";
-		client.dispatch(MediasmithsDestinations.MULE_QC_DESTINATION, payload, null);
-		log.info("Message sent to Mule to initiate QC workflow. Destination : " + MediasmithsDestinations.MULE_QC_DESTINATION + " Payload: " + payload);
+		client.dispatch(destinations.getMule_qc_destination(), payload, null);
+		log.info("Message sent to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
 	}
 	
 	public void generateReport(String name, String namespace, String reportType)
@@ -43,8 +47,8 @@ public class MuleWorkflowController {
 		request += "<namespace>" + namespace + "</namespace>";
 		request += "<payload>" + reportType + "</payload>";
 		request += "</eventEntity>";
-		client.send(MediasmithsDestinations.MULE_REPORTING_DESTINATION, request, null);
-		log.info("Message sent to Mule to generate report. Destination : " + MediasmithsDestinations.MULE_REPORTING_DESTINATION + " Payload: " + request);
+		client.send(destinations.getMule_reporting_destination(), request, null);
+		log.info("Message sent to Mule to generate report. Destination : " + destinations.getMule_reporting_destination() + " Payload: " + request);
 	}
 	
 	public MuleMessage initiateTxDeliveryWorkflow(String assetID)
@@ -55,8 +59,8 @@ public class MuleWorkflowController {
 		payload += "<outputFolder>" + MediasmithsDestinations.TRANSCODE_OUTPUT_DIR + "</outputFolder>";
 		payload += "<packageID>" + assetID + "</packageID>";
 		payload += "</invokeIntalioTCFlow>";
-		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " + MediasmithsDestinations.MULE_TRANSCODE_DESTINATION + " Payload: " + payload);
-		return client.send(MediasmithsDestinations.MULE_TRANSCODE_DESTINATION, payload, null);
+		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " +  destinations.getMule_tc_destination()  + " Payload: " + payload);
+		return client.send(destinations.getMule_tc_destination(), payload, null);
 	}
 	
 }
