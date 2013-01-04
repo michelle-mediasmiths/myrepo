@@ -75,25 +75,14 @@ public class MayamPackageController extends MayamController
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
 				if (material != null)
 				{
-					String assetId = material.getAttribute(Attribute.ASSET_ID);
-					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-
-					boolean isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
-					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
-
-					boolean adultOnly = material.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, adultOnly);
-
 					if(txPackage.getClassification() != null)
 					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					client.assetApi().updateAsset(material);
-
 				}
 			}
 			catch (RemoteException e1)
 			{
-				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID());
-				e1.printStackTrace();
+				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID(),e1);				
 			}
 
 			if (!attributesValid)
@@ -104,24 +93,25 @@ public class MayamPackageController extends MayamController
 			
 			try
 			{
-					AttributeMap map = client.createAttributeMap();
-
+					attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
+					attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+					
 					if (txPackage.getClassification() != null)
-						map.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+						attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					if (txPackage.getConsumerAdvice() != null)
-						map.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
+						attributesValid &= attributes.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
 					// map.setAttribute(Attribute.?????????, txPackage.getNotes());
 					if (txPackage.getPresentationFormat() != null)
-						map.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
+						attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
 					if (txPackage.getNumberOfSegments() != null)
-						map.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
 					if (txPackage.getTargetDate() != null)
-						map.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
-					map.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
-					map.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
+					
+				
 					
 					final SegmentListBuilder listbuilder = SegmentList.create();
-					listbuilder.attributeMap(map);
+					listbuilder.attributeMap(attributes.getAttributes());
 					SegmentList segmentList = listbuilder.build();
 
 					log.debug("Getting materials asset id");

@@ -86,6 +86,8 @@ public class MayamMaterialController extends MayamController
 
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+					
+					updateMaterialAttributesFromTitle(attributes, title);
 				}
 			}
 			catch (RemoteException e)
@@ -240,6 +242,41 @@ public class MayamMaterialController extends MayamController
 		return returnCode;
 	}
 
+	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title)
+	{
+		//copy metadata from title onto material
+		
+		//AdultContent
+		//TODO which attribute is for this
+		//attributes.copyAttribute(Attribute.??????, title);
+		
+		//ProgrammeTitle
+		attributes.copyAttribute(Attribute.SERIES_TITLE, title);
+		
+		//Show
+		
+		//Series/Season Number
+		attributes.copyAttribute(Attribute.SEASON_NUMBER, title);
+		//Episode Number
+		attributes.copyAttribute(Attribute.EPISODE_NUMBER, title);
+		//Episode Title
+		attributes.copyAttribute(Attribute.EPISODE_TITLE, title);
+		//Production Country
+		attributes.copyAttribute(Attribute.LOCATION, title);
+		//Production Number
+		attributes.copyAttribute(Attribute.PRODUCTION_NUMBER, title);
+		//Production Year
+		attributes.copyAttribute(Attribute.SERIES_YEAR, title);
+		//Style
+		attributes.copyAttribute(Attribute.CONT_CATEGORY, title);
+		//Channels
+		attributes.copyAttribute(Attribute.CHANNELS, title);
+		
+		//Channel Groups
+		//TODO which attribute is for this
+		//attributes.copyAttribute(Attribute.????, title);
+	}
+
 	/**
 	 * Creates a material, returns the id of the created material
 	 * 
@@ -264,6 +301,8 @@ public class MayamMaterialController extends MayamController
 				{
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
+					
+					updateMaterialAttributesFromTitle(attributes, title);
 				}
 			}
 			catch (RemoteException e)
@@ -714,7 +753,8 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.debug("Exception thrown by Mayam while attempting to retrieve asset :" + materialID, e1);
+			log.debug("Exception thrown by Mayam while attempting to retrieve asset :" + materialID +" , assuming it doesnt exist");
+			log.trace(e1);
 		}
 
 		log.debug("Material found: " + materialFound);
