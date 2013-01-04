@@ -41,8 +41,9 @@ public class TemporaryContentHandler  extends AttributeHandler
 					for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
 					{
 						AttributeMap task = tasks.get(i);
-						task.setAttribute(Attribute.TASK_STATE, TaskState.C_REMOVED);
-						taskController.saveTask(task);
+						log.error("TODO update task state for temporary content");
+//						task.setAttribute(Attribute.TASK_STATE, TaskState.???????);
+//						taskController.saveTask(task);
 					}
 				}
 			}

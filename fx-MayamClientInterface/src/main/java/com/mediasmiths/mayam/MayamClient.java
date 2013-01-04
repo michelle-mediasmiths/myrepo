@@ -174,12 +174,20 @@ public interface MayamClient
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
 	/**
-	 * returns true if a package with the given presenetationID exists
+	 * returns true if a package with the given presenetationID exists for the given material
 	 * @param presentationID
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public boolean packageExists(String presentationID) throws MayamClientException;
+	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException;
+
+	/**
+	 * returns true if a package with the given presenetationID exists for the given title
+	 * @param presentationID
+	 * @return
+	 * @throws MayamClientException
+	 */
+	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException;
 
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 

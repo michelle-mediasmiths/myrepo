@@ -14,7 +14,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
@@ -30,6 +32,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.PackageNotFoundException;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -42,12 +45,14 @@ public class MayamPackageController extends MayamController
 	protected final static Logger log = Logger.getLogger(MayamPackageController.class);
 
 	private final DateUtil dateUtil;
+	private final MayamMaterialController materialController;
 
 	@Inject
-	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil)
+	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil, MayamMaterialController materialController)
 	{
 		client = mayamClient;
 		this.dateUtil = dateUtil;
+		this.materialController = materialController;
 	}
 
 	public MayamClientErrorCode createPackage(PackageType txPackage)
@@ -61,62 +66,71 @@ public class MayamPackageController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
-			
+
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
 			AttributeMap material;
-			try {
+			try
+			{
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
-				if (material != null) {
+				if (material != null)
+				{
 					String assetId = material.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-					
+
 					boolean isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected);
-					
+
 					boolean adultOnly = material.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
 					attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, adultOnly);
-					
+
+					if(txPackage.getClassification() != null)
 					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					client.assetApi().updateAsset(material);
-				
+
 				}
-			} catch (RemoteException e1) {
+			}
+			catch (RemoteException e1)
+			{
 				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID());
 				e1.printStackTrace();
 			}
-			
+
 			if (!attributesValid)
 			{
 				log.warn("PAckage created but one or more attributes was invalid");
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
-
-			AttributeMap result;
+			
 			try
 			{
-				result = client.assetApi().createAsset(attributes.getAttributes());
-				if (result == null)
-				{
-					log.warn("Mayam failed to create Package");
-					returnCode = MayamClientErrorCode.PACKAGE_CREATION_FAILED;
-				}
-				else {
-					String revisionId = result.getAttribute(Attribute.REVISION_ID);
-					ValueList metadata = new ValueList();
-					metadata.add(new ValueList.Entry("CONT_CLASSIFICATION", txPackage.getClassification().toString())); 
-					metadata.add(new ValueList.Entry("COMPLIANCE_NOTES", txPackage.getConsumerAdvice())); 
-					metadata.add(new ValueList.Entry("ESC_NOTES", txPackage.getNotes())); 
-					metadata.add(new ValueList.Entry("CONT_FMT", txPackage.getPresentationFormat().toString())); 
-					metadata.add(new ValueList.Entry("TX_NEXT", txPackage.getTargetDate().toString())); 
-					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
-								
-					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
-					listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
-					listBuilder = listBuilder.metadata(metadata);
-					SegmentList list = listBuilder.build();
-					client.segmentApi().updateSegmentList(revisionId, list);
-				}
+					AttributeMap map = client.createAttributeMap();
+
+					if (txPackage.getClassification() != null)
+						map.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+					if (txPackage.getConsumerAdvice() != null)
+						map.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
+					// map.setAttribute(Attribute.?????????, txPackage.getNotes());
+					if (txPackage.getPresentationFormat() != null)
+						map.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
+					if (txPackage.getNumberOfSegments() != null)
+						map.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+					if (txPackage.getTargetDate() != null)
+						map.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
+					map.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
+					map.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+					
+					final SegmentListBuilder listbuilder = SegmentList.create();
+					listbuilder.attributeMap(map);
+					SegmentList segmentList = listbuilder.build();
+
+					log.debug("Getting materials asset id");
+					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
+					log.debug("creating segment for material "+ materialAssetID);
+					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.ITEM, materialAssetID,	segmentList);
+					log.info("Created SegmentList with id :"+newSegmentList.getId());
+			
+					return MayamClientErrorCode.SUCCESS;
 			}
 			catch (RemoteException e)
 			{
@@ -132,18 +146,22 @@ public class MayamPackageController extends MayamController
 		}
 		return returnCode;
 	}
+	
+
 
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		
+
 		if (txPackage != null)
 		{
 			AttributeMap assetAttributes = null;
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAssetBySiteId(
+						MayamAssetType.PACKAGE.getAssetType(),
+						txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -156,41 +174,45 @@ public class MayamPackageController extends MayamController
 			{
 				attributes = new MayamAttributeController(assetAttributes);
 
-				try {
-					String revisionID = assetAttributes.getAttribute(Attribute.REVISION_ID);
+//				try
+//				{
+////					String revisionID = assetAttributes.getAttribute(Attribute.REVISION_ID);
+////
+////					ValueList metadata = new ValueList();
+////					metadata.add(new ValueList.Entry("CONT_CLASSIFICATION", txPackage.getClassification().toString()));
+////					metadata.add(new ValueList.Entry("COMPLIANCE_NOTES", txPackage.getConsumerAdvice()));
+////					metadata.add(new ValueList.Entry("ESC_NOTES", txPackage.getNotes()));
+////					metadata.add(new ValueList.Entry("CONT_FMT", txPackage.getPresentationFormat().toString()));
+////					metadata.add(new ValueList.Entry("TX_NEXT", txPackage.getTargetDate().toString()));
+////					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString()));
+////
+////					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
+////					listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME);
+////					listBuilder = listBuilder.metadata(metadata);
+////					SegmentList list = listBuilder.build();
+////					client.segmentApi().updateSegmentList(revisionID, list);
+//				}
+//				catch (RemoteException e)
+//				{
+//					log.error("Error thrown by Mayam while updating Segmentation data for package ID: "
+//							+ txPackage.getPresentationID());
+//					e.printStackTrace();
+//				}
 
-					ValueList metadata = new ValueList();
-					metadata.add(new ValueList.Entry("CONT_CLASSIFICATION", txPackage.getClassification().toString())); 
-					metadata.add(new ValueList.Entry("COMPLIANCE_NOTES", txPackage.getConsumerAdvice())); 
-					metadata.add(new ValueList.Entry("ESC_NOTES", txPackage.getNotes())); 
-					metadata.add(new ValueList.Entry("CONT_FMT", txPackage.getPresentationFormat().toString())); 
-					metadata.add(new ValueList.Entry("TX_NEXT", txPackage.getTargetDate().toString())); 
-					metadata.add(new ValueList.Entry("NUMBER_SEGMENTS", txPackage.getNumberOfSegments().toString())); 
-								
-					SegmentListBuilder listBuilder = SegmentList.create("Package " + txPackage.getPresentationID());
-					listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
-					listBuilder = listBuilder.metadata(metadata);
-					SegmentList list = listBuilder.build();
-					client.segmentApi().updateSegmentList(revisionID, list);
-				}
-				catch(RemoteException e)
-				{
-					log.error("Error thrown by Mayam while updating Segmentation data for package ID: " + txPackage.getPresentationID());
-					e.printStackTrace();
-				}
-		
 				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
-			
+
 				AttributeMap result;
 				try
 				{
-					AttributeMap material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
-					if (material != null) {
+					AttributeMap material = client.assetApi().getAssetBySiteId(
+							MayamAssetType.MATERIAL.getAssetType(),
+							txPackage.getMaterialID());
+					if (material != null)
+					{
 						String assetId = material.getAttributeAsString(Attribute.ASSET_ID);
 						attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 					}
-					
-					
+
 					result = client.assetApi().updateAsset(attributes.getAttributes());
 					if (result == null)
 					{
@@ -229,7 +251,9 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 			try
 			{
-				assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), txPackage.getPresentationID());
+				assetAttributes = client.assetApi().getAssetBySiteId(
+						MayamAssetType.PACKAGE.getAssetType(),
+						txPackage.getPresentationID());
 			}
 			catch (RemoteException e1)
 			{
@@ -243,43 +267,46 @@ public class MayamPackageController extends MayamController
 				attributes = new MayamAttributeController(assetAttributes);
 
 				String assetID = txPackage.getPresentationID();
-				try {
-					AttributeMap asset = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), assetID);
-					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
-			
-					Segmentation segmentation = txPackage.getSegmentation(); 
-					if (segmentation != null)
-					{
-						List<Segment> segments = segmentation.getSegment(); 
-						for (int i = 0; i < segments.size(); i++) 
-						{ 
-							SegmentationType.Segment segment = segments.get(i); 
-							if (segment != null) 
-							{
-								ValueList metadata = new ValueList();
-								metadata.add(new ValueList.Entry("DURATION", segment.getDuration())); 
-								metadata.add(new ValueList.Entry("EOM", segment.getEOM())); 
-								metadata.add(new ValueList.Entry("SOM", segment.getSOM())); 
-								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber())); 
-								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle())); 
-								
-								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment " + segment.getSegmentNumber());
-								listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME); 
-								listBuilder = listBuilder.metadata(metadata);
-								SegmentList list = listBuilder.build();
-								client.segmentApi().updateSegmentList(revisionID, list);
-							}
-							else {
-								log.error("Segment data is null for asset ID: " + assetID);
-							}
-						}
-					}
-				}
-				catch(RemoteException e)
-				{
-					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
-					e.printStackTrace();
-				}
+//				try
+//				{
+//					AttributeMap asset = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), assetID);
+//					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
+//
+//					Segmentation segmentation = txPackage.getSegmentation();
+//					if (segmentation != null)
+//					{
+//						List<Segment> segments = segmentation.getSegment();
+//						for (int i = 0; i < segments.size(); i++)
+//						{
+//							SegmentationType.Segment segment = segments.get(i);
+//							if (segment != null)
+//							{
+//								ValueList metadata = new ValueList();
+//								metadata.add(new ValueList.Entry("DURATION", segment.getDuration()));
+//								metadata.add(new ValueList.Entry("EOM", segment.getEOM()));
+//								metadata.add(new ValueList.Entry("SOM", segment.getSOM()));
+//								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber()));
+//								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle()));
+//
+//								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment "
+//										+ segment.getSegmentNumber());
+//								listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME);
+//								listBuilder = listBuilder.metadata(metadata);
+//								SegmentList list = listBuilder.build();
+//								client.segmentApi().updateSegmentList(revisionID, list);
+//							}
+//							else
+//							{
+//								log.error("Segment data is null for asset ID: " + assetID);
+//							}
+//						}
+//					}
+//				}
+//				catch (RemoteException e)
+//				{
+//					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
+//					e.printStackTrace();
+//				}
 
 				if (!attributesValid)
 				{
@@ -321,16 +348,18 @@ public class MayamPackageController extends MayamController
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		if (isProtected(presentationID)) 
+		if (isProtected(presentationID))
 		{
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-				
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(
+						MayamAssetType.PACKAGE.getAssetType(),
+						presentationID);
+
 				AttributeMap taskAttributes = client.createAttributeMap();
 				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
 				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-	
+
 				taskAttributes.setAttribute(Attribute.HOUSE_ID, presentationID);
 				taskAttributes.putAll(assetAttributes);
 				client.taskApi().createTask(taskAttributes);
@@ -341,7 +370,8 @@ public class MayamPackageController extends MayamController
 				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
 			}
 		}
-		else {
+		else
+		{
 			try
 			{
 				client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
@@ -355,25 +385,132 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 
-	public boolean packageExists(String presentationID)
+	public boolean packageExists(String presentationID, String ancestorAssetID, AssetType ancestorAssetAssetType)
 	{
+		// ancestorAssetID - an ASSET_ID
+
 		boolean packageFound = false;
-		try
+
+		AttributeMap materialAttributes;
+		if (ancestorAssetAssetType == MayamAssetType.MATERIAL.getAssetType())
 		{
-			AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-			if (assetAttributes != null)
-			{
-				packageFound = true;
-			}
+			return packageExistsForMaterial(presentationID, ancestorAssetID);
 		}
-		catch (RemoteException e1)
+		else if (ancestorAssetAssetType == MayamAssetType.TITLE.getAssetType())
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID,e1);
+			return packageExistsForTitle(presentationID, ancestorAssetID);
 		}
-		return packageFound;
+		else
+		{
+			throw new IllegalArgumentException("Ancestor Type not applicable to this method, should be on of "
+					+ MayamAssetType.MATERIAL.getAssetType().toString() + " or " + MayamAssetType.TITLE.getAssetType().toString());
+		}
+
 	}
 
-	public AttributeMap getPackageAttributes(String presentationID) throws MayamClientException
+	private SegmentList getPackageForMaterial(String presentationID, String materialAssetID) throws PackageNotFoundException
+	{
+		log.debug(String.format("looking for package %s under material with asset id", presentationID, materialAssetID));
+
+		try
+		{
+			final SegmentListList lists = client.segmentApi().getSegmentListsForAsset(
+					MayamAssetType.MATERIAL.getAssetType(),
+					materialAssetID);
+
+			log.debug("found " + lists.size() + " segment lists for asset");
+
+			for (SegmentList segmentList : lists)
+			{
+				if (segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID).equals(presentationID))
+				{
+					return segmentList;
+				}
+			}
+
+			throw new PackageNotFoundException();
+		}
+		catch (RemoteException e)
+		{
+			//TODO clarify which:
+			log.info(
+					"Exception fetching segment lists for material, this may just mean there is no segments or could be an error",
+					e);
+			throw new PackageNotFoundException();
+		}
+
+	}
+	
+	private SegmentList getPackageForTitle(String presentationID, String titleAssetID) throws PackageNotFoundException
+	{
+		log.debug(String.format("looking for package %s under material with asset id", presentationID, titleAssetID));
+
+		try
+		{
+			final List<AttributeMap> maps = client.assetApi().getAssetChildren(
+					MayamAssetType.TITLE.getAssetType(),
+					titleAssetID,
+					AssetType.ITEM);
+
+			log.debug("found " + maps.size() + " items lists for title");
+
+			for (AttributeMap map : maps)
+			{
+					try
+					{
+						SegmentList packageForMaterial = getPackageForMaterial(
+								presentationID,
+								map.getAttributeAsString(Attribute.ASSET_ID));
+						
+						return packageForMaterial; 
+							
+					}
+					catch (PackageNotFoundException e)
+					{
+						//..not doing anything here, with throw a packagenotfound exception if it is not found for any of this titles items
+					}
+			}
+			
+			//not found in any of the items
+			throw new PackageNotFoundException();
+		}
+		catch (RemoteException e){
+			log.info("Exception fetching titles children, this may just mean there is are no children or could be an error", e);
+			throw new PackageNotFoundException();
+		}
+	}
+
+	private boolean packageExistsForMaterial(String presentationID, String materialAssetID)
+	{
+	
+		try
+		{
+			getPackageForMaterial(presentationID,materialAssetID);
+			return true;
+		}
+		catch (PackageNotFoundException e)
+		{
+			return false;
+		}
+	
+	}
+
+	private boolean packageExistsForTitle(String presentationID, String titleAssetID)
+	{
+		try
+		{
+			getPackageForTitle(presentationID, titleAssetID);
+			return true;
+		}
+		catch (PackageNotFoundException e)
+		{
+			return false;
+		}
+	
+
+	}
+	
+	public AttributeMap getPackageAttributes(String presentationID, String materialID) throws MayamClientException
 	{
 		AttributeMap assetAttributes = null;
 		try
@@ -382,117 +519,130 @@ public class MayamPackageController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID,e1);
-			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED,e1);
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + presentationID, e1);
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED, e1);
 		}
 		return assetAttributes;
 	}
 
 	/**
 	 * returns the package as represented in material exchange
+	 * 
 	 * @param packageID
 	 * @return
-	 * @throws RemoteException 
+	 * @throws RemoteException
 	 */
 	public ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID) throws MayamClientException
 	{
 		ProgrammeMaterialType.Presentation.Package p = new ProgrammeMaterialType.Presentation.Package();
-		AttributeMap pack = getPackageAttributes(packageID);
-		if (pack != null)
-		{
-			p.setPresentationID(packageID);
-			
-			
-			String revisionId = pack.getAttribute(Attribute.REVISION_ID);
-			SegmentList segList = null;
-		
-			try {
-				segList = client.segmentApi().getSegmentList(revisionId);
-			} catch (RemoteException e) {
-				log.error("Remote exception", e);
-				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION,e);
-			}
-			
-			
-			if (segList != null)
-			{
-				List <Segment> segs = new ArrayList <Segment>();
-				ValueList metaData = segList.getMetadata();
-				Segment seg = new Segment();
-				
-				for (int i = 0; i < metaData.size(); i++)
-				{
-					Entry segment = metaData.get(i);
-
-				}
-				
-				Segmentation newSegmentation = new Segmentation();
-				p.setSegmentation(newSegmentation);
-			}
-			//TODO segmentation;
-			//p.setSegmentation(value);
-		}
+		log.error("code missing! TODO: finish getPresentationPackage  once we can get package by siteid!!");
 		return p;
+//		AttributeMap pack = getPackageAttributes(packageID);
+//		if (pack != null)
+//		{
+//			
+//		
+//			
+//			p.setPresentationID(packageID);
+//
+//			String revisionId = pack.getAttribute(Attribute.REVISION_ID);
+//			SegmentList segList = null;
+//
+//			try
+//			{
+//				segList = client.segmentApi().getSegmentList(revisionId);
+//			}
+//			catch (RemoteException e)
+//			{
+//				log.error("Remote exception", e);
+//				throw new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION, e);
+//			}
+//
+//			if (segList != null)
+//			{
+//				List<Segment> segs = new ArrayList<Segment>();
+//				ValueList metaData = segList.getMetadata();
+//				Segment seg = new Segment();
+//
+//				for (int i = 0; i < metaData.size(); i++)
+//				{
+//					Entry segment = metaData.get(i);
+//
+//				}
+//
+//				Segmentation newSegmentation = new Segmentation();
+//				p.setSegmentation(newSegmentation);
+//			}
+			// TODO segmentation;
+			// p.setSegmentation(value);
+//		}
+//		return p;
 	}
 
 	public PackageType getPackage(String packageID) throws MayamClientException
 	{
 
+		log.error("code missing! TODO: finish getPackage  once we can get package by siteid!!");
+		
 		PackageType pt = new PackageType();
-		AttributeMap attributes = getPackageAttributes(packageID);
-
-		pt.setPresentationID((String) attributes.getAttribute(Attribute.HOUSE_ID));
-		String classfication = (String) attributes.getAttribute(Attribute.CONT_CLASSIFICATION);
-		if (classfication != null)
-		{
-			pt.setClassification(ClassificationEnumType.valueOf(classfication));
-		}
-		else
-		{
-			log.warn(String.format("package %s has null classification", packageID));
-		}
-		pt.setConsumerAdvice((String) attributes.getAttribute(Attribute.COMPLIANCE_NOTES));
-
-		String presentationFormat = (String) attributes.getAttribute(Attribute.CONT_FMT);
-
-		if (presentationFormat != null)
-		{
-			pt.setPresentationFormat(PresentationFormatType.valueOf(presentationFormat));
-		}
-		else
-		{
-			log.error(String.format("package %s has null presentationFormat", packageID));
-		}
-
-		pt.setMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
-
-		// TODO: fetch segment information
-		// TODO : pt.setNotes ?
-
-		Date txNext = (Date) attributes.getAttribute(Attribute.TX_NEXT);
-
-		if (txNext != null)
-		{
-			pt.setTargetDate(dateUtil.fromDate(txNext));
-		}
-		else
-		{
-			log.error(String.format("package %s has null target tx date", packageID));
-		}
+//		AttributeMap attributes = getPackageAttributes(packageID);
+//
+//		pt.setPresentationID((String) attributes.getAttribute(Attribute.HOUSE_ID));
+//		String classfication = (String) attributes.getAttribute(Attribute.CONT_CLASSIFICATION);
+//		if (classfication != null)
+//		{
+//			pt.setClassification(ClassificationEnumType.valueOf(classfication));
+//		}
+//		else
+//		{
+//			log.warn(String.format("package %s has null classification", packageID));
+//		}
+//		pt.setConsumerAdvice((String) attributes.getAttribute(Attribute.COMPLIANCE_NOTES));
+//
+//		String presentationFormat = (String) attributes.getAttribute(Attribute.CONT_FMT);
+//
+//		if (presentationFormat != null)
+//		{
+//			pt.setPresentationFormat(PresentationFormatType.valueOf(presentationFormat));
+//		}
+//		else
+//		{
+//			log.error(String.format("package %s has null presentationFormat", packageID));
+//		}
+//
+//		pt.setMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
+//
+//		// TODO: fetch segment information
+//		// TODO : pt.setNotes ?
+//
+//		Date txNext = (Date) attributes.getAttribute(Attribute.TX_NEXT);
+//
+//		if (txNext != null)
+//		{
+//			pt.setTargetDate(dateUtil.fromDate(txNext));
+//		}
+//		else
+//		{
+//			log.error(String.format("package %s has null target tx date", packageID));
+//		}
 
 		return pt;
 	}
-	
+
 	public boolean isProtected(String presentationID)
 	{
 		boolean isProtected = false;
 		AttributeMap packageMap;
-		try {
+		try
+		{
 			packageMap = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-			if (packageMap != null) {
+			if (packageMap != null)
+			{
 				isProtected = packageMap.getAttribute(Attribute.PURGE_PROTECTED);
 			}
-		} catch (RemoteException e) {
+		}
+		catch (RemoteException e)
+		{
 			log.error("Exception thrown by Mayam while checking Protected status of Package : " + presentationID);
 			e.printStackTrace();
 		}

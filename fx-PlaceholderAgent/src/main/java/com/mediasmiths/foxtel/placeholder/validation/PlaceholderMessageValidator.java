@@ -266,7 +266,7 @@ public class PlaceholderMessageValidator extends
 
 		boolean packageExists = false;
 		try {
-			packageExists = mayamClient.packageExists(packageID);
+			packageExists = mayamClient.packageExistsForTitle(packageID, action.getTitleID());
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(

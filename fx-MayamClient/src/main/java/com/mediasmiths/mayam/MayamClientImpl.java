@@ -80,7 +80,7 @@ public class MayamClientImpl implements MayamClient
 		tasksController = new MayamTaskController(client, new MayamAccessRightsController());
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, tasksController);
-		packageController = new MayamPackageController(client, new DateUtil());
+		packageController = new MayamPackageController(client, new DateUtil(),materialController);
 		validator = new MayamValidatorImpl(client);
 	}
 
@@ -255,18 +255,22 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
 	{
-		boolean isProtected = true;
-		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
-		if (packageAttributes != null)
-		{
-			String materialID = packageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-			if (materialAttributes != null)
-			{
-				isProtected = materialAttributes.getAttribute(Attribute.AUX_FLAG);
-			}
-		}
-		return isProtected;
+		
+		log.error("TODO isMaterialForPackageProtected");
+//		boolean isProtected = true;
+//		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
+//		if (packageAttributes != null)
+//		{
+//			String materialID = packageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+//			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+//			if (materialAttributes != null)
+//			{
+//				isProtected = materialAttributes.getAttribute(Attribute.AUX_FLAG);
+//			}
+//		}
+//		return isProtected;
+		
+		return false;
 	}
 
 	@Override
@@ -332,11 +336,25 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean packageExists(String presentationID) throws MayamClientException
+	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException
 	{
-		return packageController.packageExists(presentationID);
+		
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		String materialAssetID = materialAttributes.getAttribute(Attribute.ASSET_ID);
+		
+		return packageController.packageExists(presentationID,materialAssetID, MayamAssetType.MATERIAL.getAssetType());
 	}
 
+	@Override
+	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException
+	{
+		
+		AttributeMap titleAttributes = titleController.getTitle(titleID);
+		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
+		
+		return packageController.packageExists(presentationID,titleAssetID, MayamAssetType.TITLE.getAssetType());
+	}
+	
 	@Override
 	public boolean isMaterialPlaceholder(String materialID)
 	{
@@ -483,7 +501,9 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
 	{
-		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.PARENT_HOUSE_ID);
+		log.error("cant get material id of package id? as we need a material id to find the package...");
+		throw new MayamClientException(MayamClientErrorCode.NOT_IMPLEMENTED);
+//		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.PARENT_HOUSE_ID);
 	}
 
 	@Override

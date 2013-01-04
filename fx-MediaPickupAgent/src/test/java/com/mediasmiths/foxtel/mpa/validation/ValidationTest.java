@@ -78,10 +78,10 @@ public abstract class ValidationTest {
 		when(mayamClient.isMaterialPlaceholder(EXISTING_MATERIAL_NOT_PLACEHOLDER)).thenReturn(false);
 		when(mayamClient.isMaterialPlaceholder(IS_PLACEHOLDER_CHECK_FAILS)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
-		when(mayamClient.packageExists(EXISTING_PACKAGE)).thenReturn(true);
-		when(mayamClient.packageExists(EXISTING_PACKAGE2)).thenReturn(true);
-		when(mayamClient.packageExists(NOT_EXISTING_PACKAGE)).thenReturn(false);
-		when(mayamClient.packageExists(EXISTING_PACKAGE_CHECK_FAILS)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		when(mayamClient.packageExistsForMaterial(EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER)).thenReturn(true);
+		when(mayamClient.packageExistsForMaterial(EXISTING_PACKAGE2,EXISTING_MATERIAL_IS_PLACEHOLDER)).thenReturn(true);
+		when(mayamClient.packageExistsForMaterial(NOT_EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER)).thenReturn(false);
+		when(mayamClient.packageExistsForMaterial(EXISTING_PACKAGE_CHECK_FAILS,EXISTING_MATERIAL_IS_PLACEHOLDER)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 	}
 		
 }

@@ -84,7 +84,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile(message, "validDeletePackageNotProtected");
 		
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(new Boolean(false));
-		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
+		when(mayamClient.packageExistsForTitle(EXISTING_PACKAGE_ID, EXISTING_TITLE)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
@@ -105,7 +105,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, NOT_EXISTING_PACKAGE);
 		File temp = createTempXMLFile (message, "deletePackageDoesntExist");
 		
-		when(mayamClient.packageExists(NOT_EXISTING_PACKAGE)).thenReturn(false);
+		when(mayamClient.packageExistsForTitle(NOT_EXISTING_PACKAGE,EXISTING_TITLE)).thenReturn(false);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validateFile)

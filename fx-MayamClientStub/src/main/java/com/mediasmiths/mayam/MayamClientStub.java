@@ -398,8 +398,7 @@ public class MayamClientStub implements MayamClient
 		return MayamClientErrorCode.SUCCESS;
 	}
 
-	@Override
-	public boolean packageExists(String presentationID) throws MayamClientException
+	private boolean packageExists(String presentationID) throws MayamClientException
 	{
 		if (presentationID.equals(NEW_PACKAGE_ID))
 		{
@@ -821,6 +820,26 @@ public class MayamClientStub implements MayamClient
 	public void updateMaterial(DetailType details, String materialID)
 	{
 		updateMaterial(materialID);
+	}
+
+	@Override
+	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException
+	{
+		if(materialExists(materialID)){
+			return packageExists(presentationID);
+		}
+		
+		return false;
+	}
+
+	@Override
+	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException
+	{
+		if(titleExists(titleID)){
+			return packageExists(presentationID);
+		}
+		
+		return false;
 	}
 
 }

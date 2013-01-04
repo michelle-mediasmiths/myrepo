@@ -64,7 +64,7 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
-		when(mayamClient.packageExists(NEW_PACKAGE)).thenReturn(new Boolean(false));
+		when(mayamClient.packageExistsForMaterial(NEW_PACKAGE,EXISTING_MATERIAL)).thenReturn(new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		processor.processMessage(envelope);
 		verify(mayamClient).createPackage(aoup.getPackage());
@@ -121,7 +121,7 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
-		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(new Boolean (true));
+		when(mayamClient.packageExistsForMaterial(EXISTING_PACKAGE_ID, EXISTING_MATERIAL)).thenReturn(new Boolean (true));
 		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		try{
 		processor.processMessage(envelope);
