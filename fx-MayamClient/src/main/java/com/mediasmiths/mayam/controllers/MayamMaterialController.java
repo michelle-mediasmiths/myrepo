@@ -246,6 +246,9 @@ public class MayamMaterialController extends MayamController
 	{
 		//copy metadata from title onto material
 		
+		//Asset Title
+		attributes.copyAttribute(Attribute.ASSET_TITLE, title);
+		
 		//AdultContent
 		//TODO which attribute is for this
 		//attributes.copyAttribute(Attribute.??????, title);
