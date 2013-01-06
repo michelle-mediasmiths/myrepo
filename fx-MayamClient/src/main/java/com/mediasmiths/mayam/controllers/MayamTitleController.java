@@ -551,7 +551,8 @@ public class MayamTitleController extends MayamController{
 				titleFound = true;
 			}
 		} catch (RemoteException e1) {
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID,e1);
+			log.info("Exception thrown by Mayam while attempting to retrieve asset" + titleID+" , assuming it doesnt exist");
+			log.trace(e1);
 		}
 		return titleFound;
 	}

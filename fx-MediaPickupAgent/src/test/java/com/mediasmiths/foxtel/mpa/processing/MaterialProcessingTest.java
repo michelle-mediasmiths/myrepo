@@ -16,7 +16,10 @@ import org.junit.Before;
 import org.mockito.ArgumentMatcher;
 import org.xml.sax.SAXException;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.processing.EventPickUpTimings;
 import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
@@ -24,6 +27,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
@@ -53,6 +57,8 @@ public abstract class MaterialProcessingTest {
 	MediaCheck mediaCheck;
 	String materialXMLPath;
 	EventService eventService;
+	EventPickUpTimings pickUpEventTimer = new EventPickUpTimings();
+	FilePickUpKinds pickUpKind = FilePickUpKinds.MEDIA;
 
 	final String TITLE_ID = "TITLE_ID";
 	final String MATERIAL_ID = "MATERIAL_ID";
@@ -90,6 +96,9 @@ public abstract class MaterialProcessingTest {
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
 				mayamClient, matchMaker, mediaCheck,emergencyImportPath,eventService);
 
+		processor.setPickUpEventTimer(pickUpEventTimer);
+		processor.setPickUpKind(pickUpKind);
+		
 		processorThread = new Thread(processor);
 		processorThread.start();
 

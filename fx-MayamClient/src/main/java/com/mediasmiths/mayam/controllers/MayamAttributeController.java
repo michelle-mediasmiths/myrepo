@@ -54,4 +54,9 @@ public class MayamAttributeController extends MayamController{
 		return attributes;
 	}
 
+	public void copyAttribute(Attribute attribute, AttributeMap source)
+	{
+		setAttribute(attribute,source.getAttribute(attribute));		
+	}
+
 }

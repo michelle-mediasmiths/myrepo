@@ -40,6 +40,9 @@ public class MqListeners implements Runnable {
 	@Inject
 	IncomingListener incomingListener;
 	
+	@Inject
+	private MediasmithsDestinations destinations;
+	
 //	@Inject
 	//failed to inject
 	EventService eventService;
@@ -91,7 +94,7 @@ public class MqListeners implements Runnable {
 	public void attachIncomingListners() 
 	{
 		log.info("Attatching listeners");
-		attachListener(MediasmithsDestinations.INCOMING, incomingListener);
+		attachListener(destinations.getIncoming(), incomingListener);
 	}
 	
 	public MayamClientErrorCode sendMessage(MqDestination destination, MqMessage message) throws MayamClientException

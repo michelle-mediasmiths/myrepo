@@ -104,7 +104,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			MayamClientErrorCode result;
 
-			if (mayamClient.packageExists(action.getPackage().getPresentationID()))
+			if (mayamClient.packageExistsForMaterial(action.getPackage().getPresentationID(), action.getPackage().getMaterialID()))
 			{
 				result = mayamClient.updatePackage(action.getPackage());
 			}
@@ -298,7 +298,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+file.getAbsolutePath(),e);
 			message = file.getAbsolutePath();
 		}
-		eventService.saveEvent("error",message);
+		eventService.saveEvent("failed",message);
 		
 		super.moveFileToFailureFolder(file);
 	}

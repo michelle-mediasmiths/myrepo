@@ -1,15 +1,71 @@
 package com.mediasmiths.mq;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 import com.mayam.wf.mq.MqDestination;
 
-public class MediasmithsDestinations {
-	public static final MqDestination TASKS = MqDestination.of("queue://ToWFE");
-	public static final MqDestination ASSETS = MqDestination.of("queue://ToWFE");
-	public static final MqDestination INCOMING = MqDestination.of("queue://ToWFE");
-	public static final String MULE_QC_DESTINATION = "http://10.111.224.101:8088/qc";
-	public static final String MULE_REPORTING_DESTINATION = "http://localhost:8088/reporting";
+@Singleton
+public class MediasmithsDestinations
+{
+	private final MqDestination tasks;
+	private final MqDestination assets;
+	private final MqDestination incoming;
+	
+	@Inject
+	@Named("mule.qc.dest")
+	private String mule_qc_destination;
+	@Inject
+	@Named("mule.reporting.dest")
+	private String mule_reporting_destination;
+	@Inject
+	@Named("mule.tc.dest")
+	private String mule_tc_destination;
+
 	public static final String TRANSCODE_INPUT_FILE = "f:\tcinput\test.mxf";
 	public static final String TRANSCODE_OUTPUT_DIR = "f:\tcoutput";
-	public static final String MULE_TRANSCODE_DESTINATION = "http://localhost:8088/tc";
-	public static final String MAYAM_TASKS_SERVER = "http://mamwkf02.mam.foxtel.com.au:8084/tasks-ws";
+	
+	@Inject
+	public MediasmithsDestinations(
+			@Named("mq.destination.incoming") String incomingDest,
+			@Named("mq.destination.assets") String assetsDest,
+			@Named("mq.destination.tasks") String tasksDest)
+	{
+		tasks = MqDestination.of(tasksDest);
+		assets = MqDestination.of(assetsDest);
+		incoming = MqDestination.of(incomingDest);
+	}
+	
+	public MqDestination getTasks()
+	{
+		return tasks;
+	}
+
+
+	public MqDestination getAssets()
+	{
+		return assets;
+	}
+
+
+	public MqDestination getIncoming()
+	{
+		return incoming;
+	}
+
+	public String getMule_qc_destination()
+	{
+		return mule_qc_destination;
+	}
+
+	public String getMule_reporting_destination()
+	{
+		return mule_reporting_destination;
+	}
+
+	public String getMule_tc_destination()
+	{
+		return mule_tc_destination;
+	}
+
 }

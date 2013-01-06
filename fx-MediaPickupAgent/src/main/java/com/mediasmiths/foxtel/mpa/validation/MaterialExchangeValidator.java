@@ -105,7 +105,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			return originalConform;
 		}
 
-		return validatePackages(programmeMaterial.getPresentation());
+		return validatePackages(programmeMaterial.getPresentation(),programmeMaterial.getMaterialID());
 
 	}
 
@@ -120,7 +120,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 		}
 	}
 
-	private MessageValidationResult validatePackages(Presentation presentation) {
+	private MessageValidationResult validatePackages(Presentation presentation, String materialID) {
 		if (presentation != null && presentation.getPackage() != null) {
 
 			logger.trace("validating packages");
@@ -134,7 +134,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 						return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 					}
 					
-					if (!mayamClient.packageExists(pack.getPresentationID())) {
+					if (!mayamClient.packageExistsForMaterial(pack.getPresentationID(), materialID)) {
 						return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 					}
 				} catch (MayamClientException e) {
