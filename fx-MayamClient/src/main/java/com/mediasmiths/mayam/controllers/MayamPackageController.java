@@ -480,7 +480,7 @@ public class MayamPackageController extends MayamController
 
 	}
 	
-	private SegmentList getPackageForTitle(String presentationID, String titleAssetID) throws PackageNotFoundException
+	public SegmentList getPackageForTitle(String presentationID, String titleAssetID) throws PackageNotFoundException
 	{
 		log.debug(String.format("looking for package %s under material with asset id", presentationID, titleAssetID));
 

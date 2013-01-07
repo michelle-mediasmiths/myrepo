@@ -57,9 +57,9 @@ public class TestDeletePackage extends ValidMessagePickTest {
 	@Override
 	protected void mockValidCalls(PlaceholderMessage message) throws Exception {
 		when(mayamClient.packageExistsForMaterial((String) anyObject(),(String) anyObject())).thenReturn(true);
-		when(mayamClient.isMaterialForPackageProtected((String) anyObject())).thenReturn(new Boolean(false));
+		when(mayamClient.isMaterialForPackageProtected((String) anyObject(), (String) anyObject())).thenReturn(new Boolean(false));
 		when(mayamClient.deletePackage((DeletePackage) anyObject()))
-				.thenReturn(MayamClientErrorCode.SUCCESS);
+				.thenReturn(MayamClientErrorCode.SUCCESS); 
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class TestDeletePackage extends ValidMessagePickTest {
 	@Override
 	protected void mockInValidCalls(PlaceholderMessage mesage) throws Exception {
 		when(mayamClient.packageExistsForMaterial((String) anyObject(),(String) anyObject())).thenReturn(true);
-		when(mayamClient.isMaterialForPackageProtected((String) anyObject())).thenReturn(new Boolean(false));
+		when(mayamClient.isMaterialForPackageProtected((String) anyObject(),(String) anyObject())).thenReturn(new Boolean(false));
 		when(mayamClient.deletePackage((DeletePackage) anyObject()))
 				.thenReturn(MayamClientErrorCode.PACKAGE_UPDATE_FAILED);
 

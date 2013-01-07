@@ -190,7 +190,7 @@ public interface MayamClient
 	 */
 	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException;
 
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
+	public boolean isMaterialForPackageProtected(String packageID, String titleID) throws MayamClientException;
 
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 

@@ -417,7 +417,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID, String titleAssetID) throws MayamClientException
 	{
 		if (packageID.equals(PROTECTED_PACKAGE_ID))
 		{
