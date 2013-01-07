@@ -89,11 +89,11 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 		if (Util.isProgramme(message)) {
 			// programme material
 			updateTitle(message.getTitle());
-			updateProgrammeMaterial(message.getTitle().getProgrammeMaterial());
+			String materialID = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial());
 			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
 
 				updatePackages(message.getTitle().getProgrammeMaterial()
-						.getPresentation().getPackage());
+						.getPresentation().getPackage(), materialID);
 			}
 			return message.getTitle().getProgrammeMaterial().getMaterialID();
 		} else {
@@ -178,7 +178,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	 * @param programmeMaterial
 	 * @throws MessageProcessingFailedException
 	 */
-	private void updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial)
+	private String updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial)
 			throws MessageProcessingFailedException {
 		logger.trace("updatingProgrammeMaterial");
 
@@ -191,14 +191,16 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			throw new MessageProcessingFailedException(
 					MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
 		}
+		
+		return programmeMaterial.getMaterialID();
 	}
 
-	private void updatePackages(List<Package> packages)
+	private void updatePackages(List<Package> packages, String materialID)
 			throws MessageProcessingFailedException {
 		logger.trace("updatePackages");
 		if(packages != null)
 		for (Package txPackage : packages) {
-			updatePackage(txPackage);
+			updatePackage(txPackage, materialID);
 		}
 	}
 
@@ -206,12 +208,13 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	 * Update tx-package in viz ardome with information from the aggregator
 	 * 
 	 * @param txPackage
+	 * @param materialID 
 	 * @throws MessageProcessingFailedException
 	 */
-	private void updatePackage(Package txPackage)
+	private void updatePackage(Package txPackage, String materialID)
 			throws MessageProcessingFailedException {
 		logger.trace("updatePackage");
-		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
+		MayamClientErrorCode result = mayamClient.updatePackage(txPackage, materialID);
 
 		if (result != MayamClientErrorCode.SUCCESS) {
 			logger.error(String.format("Error updating package %s",

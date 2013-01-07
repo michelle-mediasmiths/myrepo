@@ -15,9 +15,12 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.Segment.SegmentBuilder;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.attributes.shared.type.Timecode;
+import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.attributes.shared.type.ValueList.Entry;
@@ -33,6 +36,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
+import com.mediasmiths.std.types.Framerate;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -167,7 +171,6 @@ public class MayamPackageController extends MayamController
 
 				try
 				{
-
 					attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
 					attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
 
@@ -227,25 +230,25 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
 		if (txPackage != null)
 		{
+			SegmentList segmentList = null;
 			AttributeMap assetAttributes = null;
 			MayamAttributeController attributes = null;
+
 			try
 			{
-				assetAttributes = client.assetApi().getAssetBySiteId(
-						MayamAssetType.PACKAGE.getAssetType(),
-						txPackage.getPresentationID());
+				segmentList = getPackageForMaterial(txPackage.getPresentationID(), materialID);
+				assetAttributes = segmentList.getAttributeMap();
 			}
-			catch (RemoteException e1)
+			catch (MayamClientException e1)
 			{
-				log.error("Exception thrown by Mayam while attempting to get asset: " + txPackage.getPresentationID());
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
-				e1.printStackTrace();
+				log.error("unable to fetch package for update", e1);
+				return e1.getErrorcode();
 			}
 
 			if (assetAttributes != null)
@@ -253,46 +256,52 @@ public class MayamPackageController extends MayamController
 				attributes = new MayamAttributeController(assetAttributes);
 
 				String assetID = txPackage.getPresentationID();
-//				try
-//				{
-//					AttributeMap asset = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), assetID);
-//					String revisionID = asset.getAttribute(Attribute.REVISION_ID);
-//
-//					Segmentation segmentation = txPackage.getSegmentation();
-//					if (segmentation != null)
-//					{
-//						List<Segment> segments = segmentation.getSegment();
-//						for (int i = 0; i < segments.size(); i++)
-//						{
-//							SegmentationType.Segment segment = segments.get(i);
-//							if (segment != null)
-//							{
-//								ValueList metadata = new ValueList();
-//								metadata.add(new ValueList.Entry("DURATION", segment.getDuration()));
-//								metadata.add(new ValueList.Entry("EOM", segment.getEOM()));
-//								metadata.add(new ValueList.Entry("SOM", segment.getSOM()));
-//								metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber()));
-//								metadata.add(new ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle()));
-//
-//								SegmentListBuilder listBuilder = SegmentList.create("Asset " + assetID + " Segment "
-//										+ segment.getSegmentNumber());
-//								listBuilder = listBuilder.metadataForm(VERSION_AGL_NAME);
-//								listBuilder = listBuilder.metadata(metadata);
-//								SegmentList list = listBuilder.build();
-//								client.segmentApi().updateSegmentList(revisionID, list);
-//							}
-//							else
-//							{
-//								log.error("Segment data is null for asset ID: " + assetID);
-//							}
-//						}
-//					}
-//				}
-//				catch (RemoteException e)
-//				{
-//					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
-//					e.printStackTrace();
-//				}
+				try
+				{
+					Segmentation segmentation = txPackage.getSegmentation();
+					List<com.mayam.wf.attributes.shared.type.Segment> mamSegments = segmentList.getEntries();
+					mamSegments.clear();
+					
+					if (segmentation != null)
+					{
+						List<Segment> materialExchangeSegments = segmentation.getSegment();
+						for (SegmentationType.Segment segment : materialExchangeSegments)
+						{
+							if (segment != null)
+							{
+							
+								com.mediasmiths.std.types.Timecode startTime = com.mediasmiths.std.types.Timecode.getInstance( segment.getSOM(), Framerate.HZ_25);
+								com.mediasmiths.std.types.Timecode duration = com.mediasmiths.std.types.Timecode.getInstance( segment.getDuration(), Framerate.HZ_25);
+								//TODO handle EOM if duration is null
+								
+								com.mayam.wf.attributes.shared.type.Segment mamSegment = com.mayam.wf.attributes.shared.type.Segment.create()
+																.in(new Timecode(startTime.getDurationInFrames()))
+																.duration(new Timecode(duration.getDurationInFrames()))
+																.number(segment.getSegmentNumber())
+																.title(segment.getSegmentTitle()).build();
+																
+								mamSegments.add(mamSegment);
+							}
+							else
+							{
+								log.error("Segment data is null for asset ID: " + assetID);
+							}
+						}
+						
+						client.segmentApi().updateSegmentList(segmentList.getId(), segmentList);
+						
+					}
+				}
+				catch (RemoteException e)
+				{
+					log.error("Error thrown by Mayam while updating Segmentation data for asset ID: " + assetID);
+					e.printStackTrace();
+				}
+				catch (InvalidTimecodeException e)
+				{
+					log.error("invalid timecode",e);
+					throw new IllegalArgumentException("invalid timecode",e);
+				}
 
 				if (!attributesValid)
 				{
@@ -333,6 +342,7 @@ public class MayamPackageController extends MayamController
 
 	public MayamClientErrorCode deletePackage(String presentationID)
 	{
+	
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		if (isProtected(presentationID))
 		{
@@ -374,10 +384,6 @@ public class MayamPackageController extends MayamController
 	public boolean packageExists(String presentationID, String ancestorAssetID, AssetType ancestorAssetAssetType)
 	{
 		// ancestorAssetID - an ASSET_ID
-
-		boolean packageFound = false;
-
-		AttributeMap materialAttributes;
 		if (ancestorAssetAssetType == MayamAssetType.MATERIAL.getAssetType())
 		{
 			return packageExistsForMaterial(presentationID, ancestorAssetID);

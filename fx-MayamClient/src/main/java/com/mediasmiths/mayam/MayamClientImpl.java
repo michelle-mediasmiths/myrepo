@@ -221,9 +221,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID)
 	{
-		return packageController.updatePackage(txPackage);
+		return packageController.updatePackage(txPackage, materialID);
 	}
 
 	/*
