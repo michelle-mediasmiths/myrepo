@@ -173,10 +173,11 @@ public class MayamPackageController extends MayamController
 			SegmentList segmentList = null;
 			AttributeMap assetAttributes = null;
 			MayamAttributeController attributes = null;
-
+	
 			try
 			{
-				segmentList = getPackageForMaterial(txPackage.getPresentationID(), txPackage.getMaterialID());
+				String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttribute(Attribute.ASSET_ID);
+				segmentList = getPackageForMaterial(txPackage.getPresentationID(), materialAssetID);
 				assetAttributes = segmentList.getAttributeMap();
 			}
 			catch (MayamClientException e1)
@@ -216,7 +217,7 @@ public class MayamPackageController extends MayamController
 					if (!attributesValid)
 					{
 						log.warn(String.format(
-								"some attriubutes did not validate for update of package %s",
+								"some attributes did not validate for update of package %s",
 								txPackage.getPresentationID()));
 					}
 
@@ -263,7 +264,8 @@ public class MayamPackageController extends MayamController
 
 			try
 			{
-				segmentList = getPackageForMaterial(txPackage.getPresentationID(), materialID);
+				String materialAssetID = materialController.getMaterialAttributes(materialID).getAttribute(Attribute.ASSET_ID);
+				segmentList = getPackageForMaterial(txPackage.getPresentationID(), materialAssetID);
 				assetAttributes = segmentList.getAttributeMap();
 			}
 			catch (MayamClientException e1)
