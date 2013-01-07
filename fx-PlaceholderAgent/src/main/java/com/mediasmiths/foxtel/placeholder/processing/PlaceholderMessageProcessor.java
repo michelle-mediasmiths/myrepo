@@ -233,7 +233,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		else if (isAddOrUpdatePackage)
 		{
 			addOrUpdatePackage((AddOrUpdatePackage) action);
-			eventService.saveEvent("DeleteMaterial", message);
+			eventService.saveEvent("AddOrUpdatePackage", message);
 		}
 		else if (isDeletePackage)
 		{

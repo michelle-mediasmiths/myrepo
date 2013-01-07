@@ -221,6 +221,7 @@ public class MayamPackageController extends MayamController
 								txPackage.getPresentationID()));
 					}
 
+					segmentList.setAttributeMap(attributes.getAttributes());
 					log.info("updating SegmentList with id :" + segmentList.getId());
 					client.segmentApi().updateSegmentList(segmentList.getId(), segmentList);
 					log.debug("updated SegmentList with id :" + segmentList.getId());
