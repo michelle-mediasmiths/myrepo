@@ -200,6 +200,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(previewHandler, currentAttributes);
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
+				passEventToHandler(segmentationHandler, currentAttributes);
 			}
 		}
 		catch (Exception e)
