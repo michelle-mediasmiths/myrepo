@@ -69,6 +69,9 @@ public class MayamPackageController extends MayamController
 		{
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
+			
+			//ASSET_TITLE is a required attribute
+			attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, txPackage.getPresentationID());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
 
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
