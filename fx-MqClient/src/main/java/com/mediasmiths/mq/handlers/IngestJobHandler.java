@@ -13,7 +13,6 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 
 public class IngestJobHandler extends JobHandler
 {
-	MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
 	
 	public void process(Job jobMessage)
