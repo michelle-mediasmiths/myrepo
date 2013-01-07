@@ -142,7 +142,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 		
-		returnCode = controller.updatePackage(updatePackage);
+		returnCode = controller.updatePackage(updatePackage, "materialID");
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	
@@ -173,7 +173,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
 		assertEquals(MayamClientErrorCode.PACKAGE_UPDATE_FAILED, returnCode);
 		
-		returnCode = controller.updatePackage(updatePackage);
+		returnCode = controller.updatePackage(updatePackage, "materialID");
 		assertEquals(MayamClientErrorCode.PACKAGE_UPDATE_FAILED, returnCode);
 	}
 	
@@ -194,7 +194,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		MayamClientErrorCode returnCode = controller.updatePackage(txPackage);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 		
-		returnCode = controller.updatePackage(updatePackage);
+		returnCode = controller.updatePackage(updatePackage, "materialID");
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 
@@ -214,7 +214,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		assertEquals(MayamClientErrorCode.PACKAGE_UNAVAILABLE, returnCode);
 		
 		ProgrammeMaterialType.Presentation.Package updatePackage = null;
-		returnCode = controller.updatePackage(updatePackage);
+		returnCode = controller.updatePackage(updatePackage, "materialID");
 		assertEquals(MayamClientErrorCode.PACKAGE_UNAVAILABLE, returnCode);
 	}
 	
@@ -295,14 +295,14 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		} catch (RemoteException e) {
 			fail();
 		}
-		MayamClientErrorCode returnCode = controller.deletePackage("packageID");
+		MayamClientErrorCode returnCode = controller.deletePackage("packageID", "titleID");
 		assertEquals(returnCode, MayamClientErrorCode.PACKAGE_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deletePackageSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.deletePackage("packageID");
+		MayamClientErrorCode returnCode = controller.deletePackage("packageID", "titleID");
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

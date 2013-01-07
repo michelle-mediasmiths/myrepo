@@ -255,7 +255,7 @@ public class PlaceholderMessageValidator extends
 		boolean packageProtected = false;
 		try {
 			packageProtected = mayamClient
-					.isMaterialForPackageProtected(packageID);
+					.isMaterialForPackageProtected(packageID, action.getTitleID());
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(

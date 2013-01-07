@@ -24,6 +24,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.CommentLog;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
@@ -221,9 +222,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID)
 	{
-		return packageController.updatePackage(txPackage);
+		return packageController.updatePackage(txPackage, materialID);
 	}
 
 	/*
@@ -234,7 +235,15 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+		AttributeMap titleAttributes = titleController.getTitle(deletePackage.getTitleID());
+		
+		if (titleAttributes == null)
+		{
+			return MayamClientErrorCode.TITLE_FIND_FAILED;
+		}
+		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
+				
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID(), titleAssetID);
 	}
 
 	/**
@@ -253,24 +262,24 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID, String titleID) throws MayamClientException
 	{
 		
-		log.error("TODO isMaterialForPackageProtected");
-//		boolean isProtected = true;
-//		AttributeMap packageAttributes = packageController.getPackageAttributes(packageID);
-//		if (packageAttributes != null)
-//		{
-//			String materialID = packageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-//			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-//			if (materialAttributes != null)
-//			{
-//				isProtected = materialAttributes.getAttribute(Attribute.AUX_FLAG);
-//			}
-//		}
-//		return isProtected;
+		boolean isProtected = false;
 		
-		return false;
+		AttributeMap titleAttributes = titleController.getTitle(titleID);
+		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
+		SegmentList segmentList = packageController.getPackageForTitle(packageID, titleAssetID);
+		String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
+		
+		log.debug(String.format("material id %s found for package %s", materialID, packageID));
+		
+		if (materialID != null)
+		{
+			isProtected = materialController.isProtected(materialID);
+		}
+		
+		return isProtected;
 	}
 
 	@Override
@@ -305,29 +314,28 @@ public class MayamClientImpl implements MayamClient
 						}
 					}
 
-					List<AttributeMap> packages = client.assetApi().getAssetChildren(
-							MayamAssetType.TITLE.getAssetType(),
-							titleID,
-							MayamAssetType.PACKAGE.getAssetType());
-
-					for (int i = 0; i < packages.size(); i++)
-					{
-						AttributeMap packageAttributes = packages.get(i);
-						if (packageAttributes != null && packageAttributes.containsAttribute(Attribute.PURGE_PROTECTED))
-						{
-							if (((Boolean) packageAttributes.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue())
-							{
-								isProtected = true;
-								break;
-							}
-						}
-					}
+//					List<AttributeMap> packages = client.assetApi().getAssetChildren(
+//							MayamAssetType.TITLE.getAssetType(),
+//							titleID,
+//							MayamAssetType.PACKAGE.getAssetType());
+//
+//					for (int i = 0; i < packages.size(); i++)
+//					{
+//						AttributeMap packageAttributes = packages.get(i);
+//						if (packageAttributes != null && packageAttributes.containsAttribute(Attribute.PURGE_PROTECTED))
+//						{
+//							if (((Boolean) packageAttributes.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue())
+//							{
+//								isProtected = true;
+//								break;
+//							}
+//						}
+//					}
 
 				}
 				catch (RemoteException e)
 				{
-					log.error("Exception thrown by Mayam while checking protection flag on descendants of title : " + titleID);
-					e.printStackTrace();
+					log.error("Exception thrown by Mayam while checking protection flag on descendants of title : " + titleID,e);
 				}
 			}
 		}

@@ -145,11 +145,11 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 
-		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
+		when(mayamClient.updatePackage(argThat(matchByPackageID1), argThat(matchByMaterialID))).thenReturn(
 				MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updatePackage(argThat(matchByPackageID2))).thenReturn(
+		when(mayamClient.updatePackage(argThat(matchByPackageID2), argThat(matchByMaterialID))).thenReturn(
 				MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updatePackage(argThat(matchByPackageID3))).thenReturn(
+		when(mayamClient.updatePackage(argThat(matchByPackageID3), argThat(matchByMaterialID))).thenReturn(
 				MayamClientErrorCode.SUCCESS);
 
 		if (mediaFirst) {
@@ -184,9 +184,9 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		verify(mayamClient).updateTitle(argThat(titleIDMatcher));
 		verify(mayamClient).updateMaterial(argThat(materialIDMatcher));
 
-		verify(mayamClient).updatePackage(argThat(matchByPackageID1));
-		verify(mayamClient).updatePackage(argThat(matchByPackageID2));
-		verify(mayamClient).updatePackage(argThat(matchByPackageID3));
+		verify(mayamClient).updatePackage(argThat(matchByPackageID1), argThat(matchByMaterialID));
+		verify(mayamClient).updatePackage(argThat(matchByPackageID2), argThat(matchByMaterialID));
+		verify(mayamClient).updatePackage(argThat(matchByPackageID3), argThat(matchByMaterialID));
 
 		InOrder inOrder = inOrder(matchMaker); // check that mxf and xml
 												// processed in same order they
@@ -338,7 +338,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
 		.thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
+		when(mayamClient.updatePackage(argThat(matchByPackageID1), argThat(matchByMaterialID))).thenReturn(
 				MayamClientErrorCode.FAILURE);
 				
 		//queue file for processing

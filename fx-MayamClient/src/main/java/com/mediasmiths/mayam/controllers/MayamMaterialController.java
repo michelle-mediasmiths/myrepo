@@ -1032,7 +1032,6 @@ public class MayamMaterialController extends MayamController
 		catch (RemoteException e)
 		{
 			log.error("Exception thrown by Mayam while checking Protected status of Material : " + materialID, e);
-			e.printStackTrace();
 		}
 		return isProtected;
 	}

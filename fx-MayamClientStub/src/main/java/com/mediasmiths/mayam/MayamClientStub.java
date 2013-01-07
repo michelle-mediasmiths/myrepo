@@ -368,7 +368,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode updatePackage(Package txPackage)
+	public MayamClientErrorCode updatePackage(Package txPackage, String materialID)
 	{
 		return updatePackage(txPackage.getPresentationID());
 	}
@@ -417,7 +417,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID, String titleAssetID) throws MayamClientException
 	{
 		if (packageID.equals(PROTECTED_PACKAGE_ID))
 		{

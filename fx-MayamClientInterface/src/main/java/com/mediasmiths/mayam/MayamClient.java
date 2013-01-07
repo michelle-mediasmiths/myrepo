@@ -162,9 +162,10 @@ public interface MayamClient
 	/**
 	 * updates a tx package using the material exchange ProgrammeMaterialType.Presentation.Package type
 	 * @param txPackage
+	 * @param materialID 
 	 * @return
 	 */
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage);
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID);
 
 	/**
 	 * actions a placeholder management delete package message
@@ -189,7 +190,7 @@ public interface MayamClient
 	 */
 	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException;
 
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
+	public boolean isMaterialForPackageProtected(String packageID, String titleID) throws MayamClientException;
 
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
