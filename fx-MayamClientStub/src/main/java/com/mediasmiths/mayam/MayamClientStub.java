@@ -368,7 +368,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode updatePackage(Package txPackage)
+	public MayamClientErrorCode updatePackage(Package txPackage, String materialID)
 	{
 		return updatePackage(txPackage.getPresentationID());
 	}

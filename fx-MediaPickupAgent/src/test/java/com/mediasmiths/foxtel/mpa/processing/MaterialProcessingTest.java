@@ -137,6 +137,17 @@ public abstract class MaterialProcessingTest {
 		}
 	};
 
+
+	protected ArgumentMatcher<String> matchByMaterialID = new ArgumentMatcher<String>()
+	{
+
+		@Override
+		public boolean matches(Object argument)
+		{
+			return argument != null && ((String) argument).equals(MATERIAL_ID);
+		}
+	};
+	
 	protected ArgumentMatcher<Package> matchByPackageID1 = new ArgumentMatcher<Package>() {
 
 		@Override
