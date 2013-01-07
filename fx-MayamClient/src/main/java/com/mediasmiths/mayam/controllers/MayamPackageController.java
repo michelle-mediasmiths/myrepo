@@ -120,8 +120,9 @@ public class MayamPackageController extends MayamController
 
 					log.debug("Getting materials asset id");
 					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
-					log.debug("creating segment for material "+ materialAssetID);
-					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.ITEM, materialAssetID,	segmentList);
+					String revisionID = findHighestRevision(materialAssetID);
+					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
+					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
 					log.info("Created SegmentList with id :"+newSegmentList.getId());
 			
 					return MayamClientErrorCode.SUCCESS;
@@ -141,6 +142,23 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 	
+
+	private String findHighestRevision(String itemId) throws RemoteException
+	{
+		List<AttributeMap> maps = client.assetApi().getAssetChildren(AssetType.ITEM, itemId, AssetType.REVISION);
+		int maxno = -1;
+		String retId = null;
+		for (AttributeMap map : maps)
+		{
+			Integer no = map.getAttribute(Attribute.REVISION_NUMBER);
+			if (no > maxno)
+			{
+				retId = map.getAttribute(Attribute.ASSET_ID);
+				maxno = no;
+			}
+		}
+		return retId;
+	}
 
 
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
@@ -414,9 +432,21 @@ public class MayamPackageController extends MayamController
 
 			for (SegmentList segmentList : lists)
 			{
-				if (segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID).equals(presentationID))
+				if (segmentList.getAttributeMap() != null)
 				{
-					return segmentList;
+					String segmentHouseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+
+					if (segmentHouseID != null)
+					{
+						if (segmentHouseID.equals(presentationID))
+						{
+							return segmentList;
+						}
+					}
+					else
+					{
+						log.debug("found a segmentList with no house id : " + segmentList.getId());
+					}
 				}
 			}
 
@@ -424,7 +454,7 @@ public class MayamPackageController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			//TODO clarify which:
+			// TODO clarify which:
 			log.info(
 					"Exception fetching segment lists for material, this may just mean there is no segments or could be an error",
 					e);
