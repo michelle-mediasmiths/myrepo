@@ -451,17 +451,11 @@ public class MayamTitleController extends MayamController{
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 						try {
 							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.MATERIAL.getAssetType());
-							List<AttributeMap> packages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.PACKAGE.getAssetType());
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 								client.assetApi().updateAsset(material);
-							}
-							for (int i = 0; i < packages.size(); i++) {
-								AttributeMap packageMap = packages.get(i);
-								packageMap.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
-								client.assetApi().updateAsset(packageMap);
-							}
+							}							
 						} catch (RemoteException e) {
 							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID(),e);
 						}

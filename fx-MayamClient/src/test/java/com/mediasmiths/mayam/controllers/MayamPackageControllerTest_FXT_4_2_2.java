@@ -295,14 +295,14 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		} catch (RemoteException e) {
 			fail();
 		}
-		MayamClientErrorCode returnCode = controller.deletePackage("packageID");
+		MayamClientErrorCode returnCode = controller.deletePackage("packageID", "titleID");
 		assertEquals(returnCode, MayamClientErrorCode.PACKAGE_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deletePackageSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.deletePackage("packageID");
+		MayamClientErrorCode returnCode = controller.deletePackage("packageID", "titleID");
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

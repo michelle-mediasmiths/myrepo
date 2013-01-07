@@ -395,23 +395,7 @@ public class MayamPackageController extends MayamController
 
 		if (packageForTitle != null)
 		{
-			if (isProtected(presentationID))
-			{
-				try
-				{
-					AttributeMap taskAttributes = client.createAttributeMap();
-					taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
-					taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskAttributes.setAttribute(Attribute.HOUSE_ID, presentationID);
-					client.taskApi().createTask(taskAttributes);
-				}
-				catch (RemoteException e)
-				{
-					log.error("Error creating Purge By BMS task for protected material : " + presentationID, e);
-					return MayamClientErrorCode.TASK_UPDATE_FAILED;
-				}
-			}
-			else
+			if ( ! isProtected(packageForTitle,presentationID))
 			{
 				try
 				{
@@ -453,7 +437,7 @@ public class MayamPackageController extends MayamController
 
 	private SegmentList getPackageForMaterial(String presentationID, String materialAssetID) throws PackageNotFoundException
 	{
-		log.debug(String.format("looking for package %s under material with asset id", presentationID, materialAssetID));
+		log.debug(String.format("looking for package %s under material with asset id %s", presentationID, materialAssetID));
 
 		try
 		{
@@ -684,23 +668,18 @@ public class MayamPackageController extends MayamController
 		return pt;
 	}
 
-	public boolean isProtected(String presentationID)
+	public boolean isProtected(SegmentList segmentList, String packageID)
 	{
 		boolean isProtected = false;
-		AttributeMap packageMap;
-		try
+
+		String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
+		log.debug(String.format("material id %s found for package %s", materialID, packageID));
+		
+		if (materialID != null)
 		{
-			packageMap = client.assetApi().getAssetBySiteId(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-			if (packageMap != null)
-			{
-				isProtected = packageMap.getAttribute(Attribute.PURGE_PROTECTED);
-			}
+			isProtected = materialController.isProtected(materialID);
 		}
-		catch (RemoteException e)
-		{
-			log.error("Exception thrown by Mayam while checking Protected status of Package : " + presentationID);
-			e.printStackTrace();
-		}
+
 		return isProtected;
 	}
 
