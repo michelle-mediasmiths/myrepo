@@ -188,32 +188,47 @@ public class MayamPackageController extends MayamController
 
 			if (assetAttributes != null)
 			{
-				attributes = new MayamAttributeController(assetAttributes);
+				attributes = new MayamAttributeController(client.createAttributeMap());
 				boolean attributesValid = true;
 
 				try
 				{
 					attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
-					attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
 
 					if (txPackage.getClassification() != null)
+					{
 						attributesValid &= attributes.setAttribute(
 								Attribute.CONT_CLASSIFICATION,
 								txPackage.getClassification().toString());
+					}
+					
 					if (txPackage.getConsumerAdvice() != null)
+					{
 						attributesValid &= attributes.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
+					}
+					
 					// map.setAttribute(Attribute.?????????, txPackage.getNotes());
 					if (txPackage.getPresentationFormat() != null)
+					{
 						attributesValid &= attributes.setAttribute(
 								Attribute.REQ_FMT,
 								txPackage.getPresentationFormat().toString());
+					}
+					
 					if (txPackage.getNumberOfSegments() != null)
+					{
 						attributesValid &= attributes.setAttribute(
 								Attribute.REQ_NUMBER,
 								txPackage.getNumberOfSegments().intValue());
+					}
+					
 					if (txPackage.getTargetDate() != null)
+					{
 						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
-
+					}
+					
+					attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
+					
 					if (!attributesValid)
 					{
 						log.warn(String.format(
@@ -221,10 +236,14 @@ public class MayamPackageController extends MayamController
 								txPackage.getPresentationID()));
 					}
 
-					segmentList.setAttributeMap(attributes.getAttributes());
-					log.info("updating SegmentList with id :" + segmentList.getId());
-					client.segmentApi().updateSegmentList(segmentList.getId(), segmentList);
-					log.debug("updated SegmentList with id :" + segmentList.getId());
+					segmentList.getAttributeMap().putAll(attributes.getAttributes());
+					log.info("updating SegmentList metadata with id :" + segmentList.getId());
+//					client.segmentApi().updateSegmentList(segmentList.getId(), segmentList);
+					client.assetApi().updateAsset(segmentList.getAttributeMap());
+					log.debug("updated SegmentList metadata with id :" + segmentList.getId());
+					
+
+					returnCode = MayamClientErrorCode.SUCCESS;
 
 				}
 				catch (RemoteException e)
@@ -233,11 +252,8 @@ public class MayamPackageController extends MayamController
 							"Error thrown by Mayam while updating Segmentation data for package ID: "
 									+ txPackage.getPresentationID(),
 							e);
+					returnCode = MayamClientErrorCode.PACKAGE_UPDATE_FAILED; 
 				}
-
-				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
-				returnCode = MayamClientErrorCode.SUCCESS;
-
 			}
 			else
 			{
@@ -364,45 +380,56 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode deletePackage(String presentationID)
+	public MayamClientErrorCode deletePackage(String presentationID, String titleAssetID)
 	{
-	
-		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		if (isProtected(presentationID))
+		SegmentList packageForTitle = null;
+		try
 		{
-			try
+			packageForTitle = getPackageForTitle(presentationID, titleAssetID);
+		}
+		catch (PackageNotFoundException e1)
+		{
+			log.error(String.format("Failed to find package %s for title with id %s", presentationID, titleAssetID));
+			return MayamClientErrorCode.PACKAGE_FIND_FAILED;
+		}
+
+		if (packageForTitle != null)
+		{
+			if (isProtected(presentationID))
 			{
-				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(
-						MayamAssetType.PACKAGE.getAssetType(),
-						presentationID);
-
-				AttributeMap taskAttributes = client.createAttributeMap();
-				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
-				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-
-				taskAttributes.setAttribute(Attribute.HOUSE_ID, presentationID);
-				taskAttributes.putAll(assetAttributes);
-				client.taskApi().createTask(taskAttributes);
+				try
+				{
+					AttributeMap taskAttributes = client.createAttributeMap();
+					taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_BY_BMS);
+					taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+					taskAttributes.setAttribute(Attribute.HOUSE_ID, presentationID);
+					client.taskApi().createTask(taskAttributes);
+				}
+				catch (RemoteException e)
+				{
+					log.error("Error creating Purge By BMS task for protected material : " + presentationID, e);
+					return MayamClientErrorCode.TASK_UPDATE_FAILED;
+				}
 			}
-			catch (RemoteException e)
+			else
 			{
-				log.error("Error creating Purge By BMS task for protected material : " + presentationID);
-				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+				try
+				{
+					client.segmentApi().deleteSegmentList(packageForTitle.getId());
+				}
+				catch (RemoteException e)
+				{
+					log.error("Error deleting package : " + presentationID, e);
+					return MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+				}
 			}
 		}
 		else
 		{
-			try
-			{
-				client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), presentationID);
-			}
-			catch (RemoteException e)
-			{
-				log.error("Error deleting package : " + presentationID);
-				returnCode = MayamClientErrorCode.PACKAGE_DELETE_FAILED;
-			}
+			return MayamClientErrorCode.PACKAGE_FIND_FAILED;
 		}
-		return returnCode;
+
+		return MayamClientErrorCode.SUCCESS;
 	}
 
 	public boolean packageExists(String presentationID, String ancestorAssetID, AssetType ancestorAssetAssetType)

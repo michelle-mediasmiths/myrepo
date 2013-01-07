@@ -234,7 +234,15 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+		AttributeMap titleAttributes = titleController.getTitle(deletePackage.getTitleID());
+		
+		if (titleAttributes == null)
+		{
+			return MayamClientErrorCode.TITLE_FIND_FAILED;
+		}
+		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
+				
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID(), titleAssetID);
 	}
 
 	/**
