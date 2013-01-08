@@ -105,7 +105,7 @@ public class PreviewTaskHandler extends AttributeHandler
 
 			if (passed)
 			{
-				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+				String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 				AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 				createSegmentationTask(assetID, assetType);
 			}
