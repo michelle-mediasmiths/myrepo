@@ -5,7 +5,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 public enum MayamAssetType {
 	TITLE("EPISODE"),
 	MATERIAL("ITEM"),
-	PACKAGE("PACKAGE");
+	PACKAGE("SEGMENT_LIST");
 	
 	  private String text;
 

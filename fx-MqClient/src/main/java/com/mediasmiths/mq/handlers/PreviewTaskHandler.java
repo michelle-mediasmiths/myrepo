@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
@@ -103,7 +105,7 @@ public class PreviewTaskHandler extends AttributeHandler
 
 			if (passed)
 			{
-				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+				String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 				AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 				createSegmentationTask(assetID, assetType);
 			}
@@ -131,7 +133,16 @@ public class PreviewTaskHandler extends AttributeHandler
 
 	private void createSegmentationTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException
 	{
-		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
+		final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
+		System.out.println(String.format("%d segment lists for asset %s", lists.size(), assetID));
+		if (lists != null) 
+		{
+			for (SegmentList segmentList : lists)
+			{
+				String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+				taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+			}
+		}
 	}
 
 	private void onPreviewFailure(AttributeMap messageAttributes) throws MayamClientException

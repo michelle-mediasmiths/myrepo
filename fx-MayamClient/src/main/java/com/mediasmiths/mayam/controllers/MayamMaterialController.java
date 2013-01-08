@@ -1057,4 +1057,15 @@ public class MayamMaterialController extends MayamController
 		// }
 
 	}
+	
+	public List<AttributeMap> getChildren(String assetId, AssetType childAssetType)
+	{
+		try {
+			return client.assetApi().getAssetChildren(MayamAssetType.MATERIAL.getAssetType(), assetId, childAssetType);
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while attempting to retrieve children of asset : " + assetId, e);
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

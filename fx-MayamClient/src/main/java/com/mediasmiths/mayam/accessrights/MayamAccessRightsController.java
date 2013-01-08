@@ -5,12 +5,16 @@ import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.Criteria;
 
 public class MayamAccessRightsController extends HibernateDao<MayamAccessRights, Long> {
 
+	private static final Logger log = Logger.getLogger(MayamAccessRightsController.class);
+	
 	public MayamAccessRightsController()
 	{
 		super(MayamAccessRights.class);
@@ -36,8 +40,43 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, ArrayList <String> channels, boolean purgeProtected, Boolean adultOnly) 
+	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, ArrayList <String> channels, boolean restrictedAccess, Boolean adultOnly) 
 	 {
+		
+		log.debug("Rereiving mayam access rights");
+
+		log.debug("qcStatus is " + qcStatus);
+		log.debug("qaStatus is " + qaStatus);
+
+		if (qcParallel == null)
+		{
+			log.debug("qcParallel is null");
+		}
+		else
+		{
+			log.debug("qcParallel is " + qcParallel.toString());
+		}
+		log.debug("assetType is " + assetType);
+
+		if (channels == null)
+		{
+			log.debug("channels is null");
+		}
+		else
+		{
+			log.debug("channels is " + StringUtils.join(channels.toArray()));
+		}
+		log.debug("restrictedAccess is " + restrictedAccess);
+
+		if (adultOnly == null)
+		{
+			log.debug("adultOnly is null");
+		}
+		else
+		{
+			log.debug("qcParallel is " + adultOnly.toString());
+		}
+		
 		  Criteria criteria = createCriteria();
 		  if (qcStatus != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qcStatus", qcStatus)).add(Restrictions.eq("qcStatus", "*")));
@@ -52,7 +91,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("contentType", assetType)).add(Restrictions.eq("contentType", "*")));
 		  }
 		  if (assetType != null) {
-			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("restricted", purgeProtected)).add(Restrictions.eq("restricted", null)));
+			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("restricted", restrictedAccess)).add(Restrictions.eq("restricted", null)));
 		  }
 		  if (adultOnly != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("adultOnly", adultOnly)).add(Restrictions.eq("adultOnly", null)));
