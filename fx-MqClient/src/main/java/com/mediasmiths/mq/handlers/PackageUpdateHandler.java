@@ -122,8 +122,7 @@ public class PackageUpdateHandler  extends AttributeHandler
 						for (int i = 0; i < previewTasks.getTotalMatches(); i++) {
 							AttributeMap previewTask = previewTaskList.get(i);
 							TaskState taskState = previewTask.getAttribute(Attribute.TASK_STATE);
-							
-							//TODO: Confirm that a task state of Finished equates to preview passed
+						
 							if (taskState.equals(TaskState.FINISHED)) {
 								requiresSegTask = true;
 							}
