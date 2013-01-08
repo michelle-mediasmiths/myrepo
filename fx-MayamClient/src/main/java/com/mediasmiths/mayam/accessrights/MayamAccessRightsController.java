@@ -43,7 +43,39 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, ArrayList <String> channels, boolean restrictedAccess, Boolean adultOnly) 
 	 {
 		
-		log.debug(String.format("retreiving MayamAccessRights. qcStatus '%s' qcParallel '%s' assetType '%s' channels '%s' restrictedAccess '%s' adultOnly '%s'", qaStatus, qcParallel.toString(), assetType.toString(), StringUtils.join(channels.toArray()),restrictedAccess, adultOnly.toString()));
+		log.debug("Rereiving mayam access rights");
+
+		log.debug("qcStatus is " + qcStatus);
+		log.debug("qaStatus is " + qaStatus);
+
+		if (qcParallel == null)
+		{
+			log.debug("qcParallel is null");
+		}
+		else
+		{
+			log.debug("qcParallel is " + qcParallel.toString());
+		}
+		log.debug("assetType is " + assetType);
+
+		if (channels == null)
+		{
+			log.debug("channels is null");
+		}
+		else
+		{
+			log.debug("channels is " + StringUtils.join(channels.toArray()));
+		}
+		log.debug("restrictedAccess is " + restrictedAccess);
+
+		if (adultOnly == null)
+		{
+			log.debug("adultOnly is null");
+		}
+		else
+		{
+			log.debug("qcParallel is " + adultOnly.toString());
+		}
 		
 		  Criteria criteria = createCriteria();
 		  if (qcStatus != null) {
