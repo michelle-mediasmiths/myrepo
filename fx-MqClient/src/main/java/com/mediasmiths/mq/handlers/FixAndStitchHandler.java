@@ -5,6 +5,8 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -28,10 +30,18 @@ public class FixAndStitchHandler  extends AttributeHandler
 					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 							
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
+					final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
+					if (lists != null) 
+					{
+						for (SegmentList segmentList : lists)
+						{
+							String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+							long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+							AttributeMap newTask = taskController.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							taskController.saveTask(newTask);
+						}
+					}
 				}
 			}
 			catch (Exception e) {
