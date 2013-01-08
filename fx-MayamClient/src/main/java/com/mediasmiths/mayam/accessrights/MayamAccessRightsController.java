@@ -13,7 +13,7 @@ import org.hibernate.Criteria;
 
 public class MayamAccessRightsController extends HibernateDao<MayamAccessRights, Long> {
 
-	private static final Logger log = Logger.getLogger(MayamAccessRightsController.class);
+	private static final Logger log = Logger.getLogger(MayamAccessRightsController.class);a
 	
 	public MayamAccessRightsController()
 	{
