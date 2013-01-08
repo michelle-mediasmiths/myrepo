@@ -8,6 +8,8 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
@@ -120,8 +122,7 @@ public class PackageUpdateHandler  extends AttributeHandler
 						for (int i = 0; i < previewTasks.getTotalMatches(); i++) {
 							AttributeMap previewTask = previewTaskList.get(i);
 							TaskState taskState = previewTask.getAttribute(Attribute.TASK_STATE);
-							
-							//TODO: Confirm that a task state of Finished equates to preview passed
+						
 							if (taskState.equals(TaskState.FINISHED)) {
 								requiresSegTask = true;
 							}
@@ -130,10 +131,18 @@ public class PackageUpdateHandler  extends AttributeHandler
 					
 					if (requiresSegTask) {
 						//Create new segmentation task for this asset
-						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
-						AttributeMap newTask = taskController.getTask(taskID);
-						newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-						taskController.saveTask(newTask);
+						SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
+						if (lists != null) 
+						{
+							for (SegmentList segmentList : lists)
+							{
+								String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+								long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+								AttributeMap newTask = taskController.getTask(taskID);
+								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+								taskController.saveTask(newTask);
+							}
+						}
 					}
 				}
 			}

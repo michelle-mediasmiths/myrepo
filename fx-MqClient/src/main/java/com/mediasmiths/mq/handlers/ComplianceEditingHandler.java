@@ -5,10 +5,10 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class ComplianceEditingHandler  extends AttributeHandler{
@@ -20,11 +20,30 @@ public class ComplianceEditingHandler  extends AttributeHandler{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
 		if (taskListID.equals(MayamTaskListType.COMPLIANCE_EDIT.getText())) 
 		{
-			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-			if (taskState == TaskState.FINISHED) 
-			{
-				//need pacakges before we can create segmentation tasks
-			}	
+			try {
+				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
+				if (taskState == TaskState.FINISHED) 
+				{
+					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+							
+					SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
+					if (lists != null) 
+					{
+						for (SegmentList segmentList : lists)
+						{
+							String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+							long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+							AttributeMap newTask = taskController.getTask(taskID);
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							taskController.saveTask(newTask);
+						}
+					}
+				}
+			}
+			catch (Exception e) {
+				log.error("Exception in the Mayam client while handling Fix and Stitch Task Message : ", e);
+			}
 		}
 	}
 	
