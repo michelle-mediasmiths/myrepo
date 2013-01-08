@@ -245,11 +245,11 @@ public class MayamTaskController extends MayamController
 		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
 		String assetId = task.getAttribute(Attribute.HOUSE_ID);
 
-		boolean purgeProtected = false;
+		boolean retrictedAccess = false;
 
-		if (task.getAttribute(Attribute.PURGE_PROTECTED) != null)
+		if (task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS) != null)
 		{
-			purgeProtected = ((Boolean) task.getAttribute(Attribute.PURGE_PROTECTED)).booleanValue();
+			retrictedAccess = ((Boolean) task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS)).booleanValue();
 		}
 
 		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
@@ -361,7 +361,7 @@ public class MayamTaskController extends MayamController
 				qcParallel,
 				contentType,
 				channelList,
-				purgeProtected,
+				retrictedAccess,
 				adultOnly);
 		
 		if(allRights == null){
