@@ -81,7 +81,7 @@ public class MayamClientImpl implements MayamClient
 		tasksController = new MayamTaskController(client, new MayamAccessRightsController());
 		titleController = new MayamTitleController(client);
 		materialController = new MayamMaterialController(client, tasksController);
-		packageController = new MayamPackageController(client, new DateUtil(),materialController);
+		packageController = new MayamPackageController(client, new DateUtil(),materialController, tasksController);
 		validator = new MayamValidatorImpl(client);
 	}
 
