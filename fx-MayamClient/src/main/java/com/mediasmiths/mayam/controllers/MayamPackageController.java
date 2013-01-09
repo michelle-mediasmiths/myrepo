@@ -16,6 +16,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.Segment.SegmentBuilder;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
@@ -25,6 +26,7 @@ import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.attributes.shared.type.ValueList.Entry;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -43,6 +45,8 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamPackageController extends MayamController
 {
+	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
+	private static final String PREVIEW_PASSED = "pass";
 	private static final String VERSION_AGL_NAME = "version";
 
 	private final TasksClient client;
@@ -51,13 +55,15 @@ public class MayamPackageController extends MayamController
 
 	private final DateUtil dateUtil;
 	private final MayamMaterialController materialController;
-
+	private final MayamTaskController taskController;
+	
 	@Inject
-	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil, MayamMaterialController materialController)
+	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil, MayamMaterialController materialController, MayamTaskController taskController)
 	{
 		client = mayamClient;
 		this.dateUtil = dateUtil;
 		this.materialController = materialController;
+		this.taskController = taskController;
 	}
 
 	public MayamClientErrorCode createPackage(PackageType txPackage)
@@ -78,6 +84,7 @@ public class MayamPackageController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
 			AttributeMap material;
+			boolean requiresSegmentationTask = false;
 			try
 			{
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
@@ -86,6 +93,13 @@ public class MayamPackageController extends MayamController
 					if(txPackage.getClassification() != null)
 					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					client.assetApi().updateAsset(material);
+					
+					//Has Material been set to Preview Pass
+					AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PREVIEW, txPackage.getMaterialID());
+					if (task != null && (task.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED) 
+							|| task.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED_BUT_REORDER) )) {
+								requiresSegmentationTask = true;
+					}
 				}
 			}
 			catch (RemoteException e1)
@@ -128,6 +142,12 @@ public class MayamPackageController extends MayamController
 					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
 					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
 					log.info("Created SegmentList with id :"+newSegmentList.getId());
+					
+					if (requiresSegmentationTask) {
+						String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+						long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+						log.info("Segmentation task created with id :"+taskID);
+					}
 			
 					return MayamClientErrorCode.SUCCESS;
 			}

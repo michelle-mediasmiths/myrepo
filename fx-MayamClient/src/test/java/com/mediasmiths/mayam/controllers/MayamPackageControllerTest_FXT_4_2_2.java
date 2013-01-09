@@ -45,6 +45,7 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 
 	MayamPackageController controller;
 	MayamMaterialController materialController;
+	MayamTaskController taskController;
 	TasksClient client;
 	AssetApi assetApi;
 	TaskApi taskApi;
@@ -79,11 +80,12 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 		taskApi = mock(TaskApi.class);
 		segmentApi = mock(SegmentApi.class);
 		materialController=mock(MayamMaterialController.class);
+		taskController=mock(MayamTaskController.class);
 		when(client.assetApi()).thenReturn(assetApi);
 		when(client.taskApi()).thenReturn(taskApi);
 		when(client.segmentApi()).thenReturn(segmentApi);
 		
-		controller = new MayamPackageController(client, new DateUtil(),materialController);
+		controller = new MayamPackageController(client, new DateUtil(),materialController,taskController);
 		
 		txPackage = mock(PackageType.class);
 		when(txPackage.getClassification()).thenReturn(ClassificationEnumType.PG);
