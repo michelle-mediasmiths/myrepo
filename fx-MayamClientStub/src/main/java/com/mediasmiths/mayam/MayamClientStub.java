@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -48,7 +47,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
-
+ 
 public class MayamClientStub implements MayamClient
 {
 
@@ -820,6 +819,13 @@ public class MayamClientStub implements MayamClient
 	public void updateMaterial(DetailType details, String materialID)
 	{
 		updateMaterial(materialID);
+	}
+
+	@Override
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -485,9 +485,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
 	{
-		log.error("cant get material id of package id? as we need a material id to find the package...");
-		throw new MayamClientException(MayamClientErrorCode.NOT_IMPLEMENTED);
-//		return packageController.getPackageAttributes(packageID).getAttribute(Attribute.PARENT_HOUSE_ID);
+		return packageController.getSegmentList(packageID).getAttributeMap().getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 	}
 
 	@Override
