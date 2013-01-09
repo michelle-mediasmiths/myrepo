@@ -22,7 +22,6 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
-import com.mchange.v2.log.LogUtils;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -36,6 +35,9 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamTaskController extends MayamController
 {
 	private final TasksClient client;
+	private static final String PREVIEW_FAIL = "fail";
+	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
+	private static final String PREVIEW_PASSED = "pass";
 
 	public TasksClient getTasksClient()
 	{
@@ -348,11 +350,28 @@ public class MayamTaskController extends MayamController
 		if (qaStatus != null)
 		{
 			qaStatusString = qaStatus.toString();
+			qaStatusString = "Undefined";
+			if (qaStatus.equals(PREVIEW_FAIL)) 
+			{
+				qaStatusString = "Fail";
+			}
+			else if (qaStatus.equals(PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(PREVIEW_PASSED))
+			{
+				qaStatusString = "Pass";
+			}
 		}
 		
 		if (qcStatus != null)
 		{
-			qcStatusString = qcStatus.toString();
+			qcStatusString = "Undefined";
+			if (qcStatus == QcStatus.FAIL) 
+			{
+				qcStatusString = "Fail";
+			}
+			else if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
+			{
+				qcStatusString = "Pass";
+			}
 		}
 		
 		List<MayamAccessRights> allRights = accessRightsController.retrieve(
