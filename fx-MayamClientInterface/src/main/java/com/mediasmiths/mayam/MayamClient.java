@@ -246,6 +246,8 @@ public interface MayamClient
 	 */
 	public void failTaskForAsset(MayamTaskListType taskType, String id) throws MayamClientException;
 
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
+	
 	/**
 	 * returns the ProgrammeMaterial representation of a given material
 	 * @param materialID

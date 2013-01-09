@@ -320,6 +320,16 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+filePath,e);
 			message = filePath;
 		}
+		
+		try
+		{
+			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Placeholder Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+		}
+		catch (MayamClientException e)
+		{
+			logger.error("Failed to create wfe error task",e);
+		}
+		
 		eventService.saveEvent("failed",message);		
 	}
 

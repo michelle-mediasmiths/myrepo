@@ -566,4 +566,10 @@ public class MayamClientImpl implements MayamClient
 		materialController.updateMaterial(details,materialID);
 		
 	}
+
+	@Override
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException
+	{
+		return tasksController.createWFEErrorTaskNoAsset(id, title, message);
+	}
 }
