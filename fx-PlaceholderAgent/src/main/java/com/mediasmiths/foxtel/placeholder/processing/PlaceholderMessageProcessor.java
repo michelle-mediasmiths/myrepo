@@ -104,7 +104,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			MayamClientErrorCode result;
 
-			if (mayamClient.packageExistsForMaterial(action.getPackage().getPresentationID(), action.getPackage().getMaterialID()))
+			if (mayamClient.packageExists(action.getPackage().getPresentationID()))
 			{
 				result = mayamClient.updatePackage(action.getPackage());
 			}

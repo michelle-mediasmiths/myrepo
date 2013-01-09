@@ -70,7 +70,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
-		when(mayamClient.packageExistsForMaterial(NEW_PACKAGE, EXISTING_MATERIAL)).thenReturn(
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenReturn(
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
@@ -89,7 +89,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
-		when(mayamClient.packageExistsForMaterial(EXISTING_PACKAGE_ID, EXISTING_MATERIAL)).thenReturn(
+		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(
 				new Boolean(true));
 		when(mayamClient.updatePackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.SUCCESS);
 		//the call we are testing
@@ -109,7 +109,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
 		
 		//prepare mock mayamClient
-		when(mayamClient.packageExistsForMaterial(NEW_PACKAGE,EXISTING_MATERIAL)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		//the call we are testing
 		processor.processMessage(envelope);
 		
@@ -125,7 +125,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
-		when(mayamClient.packageExistsForMaterial(NEW_PACKAGE,EXISTING_MATERIAL)).thenReturn(
+		when(mayamClient.packageExists(NEW_PACKAGE)).thenReturn(
 				new Boolean(false));
 		when(mayamClient.createPackage(aoup.getPackage())).thenReturn(MayamClientErrorCode.PACKAGE_CREATION_FAILED);
 		//the call we are testing

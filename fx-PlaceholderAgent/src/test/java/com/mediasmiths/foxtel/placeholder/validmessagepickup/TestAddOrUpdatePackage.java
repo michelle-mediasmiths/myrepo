@@ -82,8 +82,8 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 						.getMaterialID())).thenReturn(new Boolean(true));
 		// make mayamclient say the package does not exist
 		when(
-				mayamClient.packageExistsForMaterial(addTxPackage.getPackage()
-						.getPresentationID(),addTxPackage.getPackage().getMaterialID())).thenReturn(new Boolean(false));
+				mayamClient.packageExists(addTxPackage.getPackage()
+						.getPresentationID())).thenReturn(new Boolean(false));
 
 		// make processing pass\fail
 
@@ -103,8 +103,8 @@ public class TestAddOrUpdatePackage extends ValidMessagePickTest {
 		verify(mayamClient).materialExists(
 				addTxPackage.getPackage().getMaterialID());
 		// make mayamclient say the package does not exist
-		verify(mayamClient).packageExistsForMaterial(
-				addTxPackage.getPackage().getPresentationID(),addTxPackage.getPackage().getMaterialID());
+		verify(mayamClient).packageExists(
+				addTxPackage.getPackage().getPresentationID());
 		// return success on createpackge
 		verify(mayamClient).createPackage((PackageType) anyObject());
 

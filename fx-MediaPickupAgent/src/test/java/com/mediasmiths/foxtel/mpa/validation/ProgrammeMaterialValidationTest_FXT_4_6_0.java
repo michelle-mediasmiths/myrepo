@@ -107,8 +107,8 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(EXISTING_PACKAGE2,EXISTING_MATERIAL_IS_PLACEHOLDER);
+		verify(mayamClient).packageExists(EXISTING_PACKAGE);
+		verify(mayamClient).packageExists(EXISTING_PACKAGE2);
 		
 	}
 	
@@ -138,8 +138,8 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(NOT_EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER);
+		verify(mayamClient).packageExists(EXISTING_PACKAGE);
+		verify(mayamClient).packageExists(NOT_EXISTING_PACKAGE);
 	}
 	
 	@Test
@@ -155,8 +155,8 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(EXISTING_PACKAGE,EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExistsForMaterial(EXISTING_PACKAGE_CHECK_FAILS,EXISTING_MATERIAL_IS_PLACEHOLDER);
+		verify(mayamClient).packageExists(EXISTING_PACKAGE);
+		verify(mayamClient).packageExists(EXISTING_PACKAGE_CHECK_FAILS);
 	}
 
 	@Test

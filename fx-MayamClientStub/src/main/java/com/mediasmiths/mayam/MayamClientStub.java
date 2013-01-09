@@ -368,7 +368,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode updatePackage(Package txPackage, String materialID)
+	public MayamClientErrorCode updatePackage(Package txPackage)
 	{
 		return updatePackage(txPackage.getPresentationID());
 	}
@@ -398,7 +398,7 @@ public class MayamClientStub implements MayamClient
 		return MayamClientErrorCode.SUCCESS;
 	}
 
-	private boolean packageExists(String presentationID) throws MayamClientException
+	public boolean packageExists(String presentationID) throws MayamClientException
 	{
 		if (presentationID.equals(NEW_PACKAGE_ID))
 		{
@@ -417,7 +417,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID, String titleAssetID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
 	{
 		if (packageID.equals(PROTECTED_PACKAGE_ID))
 		{
@@ -820,26 +820,6 @@ public class MayamClientStub implements MayamClient
 	public void updateMaterial(DetailType details, String materialID)
 	{
 		updateMaterial(materialID);
-	}
-
-	@Override
-	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException
-	{
-		if(materialExists(materialID)){
-			return packageExists(presentationID);
-		}
-		
-		return false;
-	}
-
-	@Override
-	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException
-	{
-		if(titleExists(titleID)){
-			return packageExists(presentationID);
-		}
-		
-		return false;
 	}
 
 }

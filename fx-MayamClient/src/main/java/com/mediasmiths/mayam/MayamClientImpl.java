@@ -222,10 +222,10 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updatePackage()
 	 */
 	@Override
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID)
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage)
 	{
-		return packageController.updatePackage(txPackage, materialID);
-	}
+		return packageController.updatePackage(txPackage);
+	} 
 
 	/*
 	 * (non-Javadoc)
@@ -235,15 +235,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		AttributeMap titleAttributes = titleController.getTitle(deletePackage.getTitleID());
-		
-		if (titleAttributes == null)
-		{
-			return MayamClientErrorCode.TITLE_FIND_FAILED;
-		}
-		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
-				
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID(), titleAssetID);
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
 	}
 
 	/**
@@ -262,14 +254,12 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID, String titleID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
 	{
 		
 		boolean isProtected = false;
 		
-		AttributeMap titleAttributes = titleController.getTitle(titleID);
-		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
-		SegmentList segmentList = packageController.getPackageForTitle(packageID, titleAssetID);
+		SegmentList segmentList = packageController.getSegmentList(packageID);
 		String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
 		
 		log.debug(String.format("material id %s found for package %s", materialID, packageID));
@@ -344,23 +334,9 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException
+	public boolean packageExists(String presentationID) throws MayamClientException
 	{
-		
-		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-		String materialAssetID = materialAttributes.getAttribute(Attribute.ASSET_ID);
-		
-		return packageController.packageExists(presentationID,materialAssetID, MayamAssetType.MATERIAL.getAssetType());
-	}
-
-	@Override
-	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException
-	{
-		
-		AttributeMap titleAttributes = titleController.getTitle(titleID);
-		String titleAssetID = titleAttributes.getAttribute(Attribute.ASSET_ID);
-		
-		return packageController.packageExists(presentationID,titleAssetID, MayamAssetType.TITLE.getAssetType());
+		return packageController.packageExists(presentationID);
 	}
 	
 	@Override
@@ -454,7 +430,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public PackageType getPackage(String packageID) throws MayamClientException
 	{
-		return packageController.getPackage(packageID);
+		return packageController.getPackageType(packageID);
 	}
 
 	@Override

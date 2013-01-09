@@ -83,8 +83,8 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(message, "validDeletePackageNotProtected");
 		
-		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID,EXISTING_TITLE)).thenReturn(new Boolean(false));
-		when(mayamClient.packageExistsForTitle(EXISTING_PACKAGE_ID, EXISTING_TITLE)).thenReturn(true);
+		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(new Boolean(false));
+		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
@@ -105,7 +105,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, NOT_EXISTING_PACKAGE);
 		File temp = createTempXMLFile (message, "deletePackageDoesntExist");
 		
-		when(mayamClient.packageExistsForTitle(NOT_EXISTING_PACKAGE,EXISTING_TITLE)).thenReturn(false);
+		when(mayamClient.packageExists(NOT_EXISTING_PACKAGE)).thenReturn(false);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validateFile)
@@ -127,7 +127,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, PROTECTED_PACKAGE);
 		File temp = createTempXMLFile(message, "validDeletePackageProtected");
 		
-		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE,EXISTING_TITLE)).thenReturn(true);
+		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validateFile)
