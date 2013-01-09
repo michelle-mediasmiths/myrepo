@@ -165,7 +165,7 @@ public interface MayamClient
 	 * @param materialID 
 	 * @return
 	 */
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage, String materialID);
+	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage);
 
 	/**
 	 * actions a placeholder management delete package message
@@ -174,23 +174,7 @@ public interface MayamClient
 	 */
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
-	/**
-	 * returns true if a package with the given presenetationID exists for the given material
-	 * @param presentationID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException;
-
-	/**
-	 * returns true if a package with the given presenetationID exists for the given title
-	 * @param presentationID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException;
-
-	public boolean isMaterialForPackageProtected(String packageID, String titleID) throws MayamClientException;
+	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
 
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
@@ -262,6 +246,8 @@ public interface MayamClient
 	 */
 	public void failTaskForAsset(MayamTaskListType taskType, String id) throws MayamClientException;
 
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
+	
 	/**
 	 * returns the ProgrammeMaterial representation of a given material
 	 * @param materialID
@@ -294,5 +280,7 @@ public interface MayamClient
 	 * @throws MayamClientException
 	 */
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException;
+
+	boolean packageExists(String presentationID) throws MayamClientException;
 
 }

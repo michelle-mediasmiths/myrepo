@@ -255,7 +255,7 @@ public class PlaceholderMessageValidator extends
 		boolean packageProtected = false;
 		try {
 			packageProtected = mayamClient
-					.isMaterialForPackageProtected(packageID, action.getTitleID());
+					.isMaterialForPackageProtected(packageID);
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
@@ -266,7 +266,7 @@ public class PlaceholderMessageValidator extends
 
 		boolean packageExists = false;
 		try {
-			packageExists = mayamClient.packageExistsForTitle(packageID, action.getTitleID());
+			packageExists = mayamClient.packageExists(packageID);
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(

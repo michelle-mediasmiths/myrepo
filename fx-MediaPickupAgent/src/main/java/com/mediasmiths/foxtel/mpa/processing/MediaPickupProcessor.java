@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientException;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
@@ -82,6 +83,16 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.warn("IOException reading "+filePath,e);
 			message = filePath;
 		}
+		
+		try
+		{
+			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Media Pickup Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+		}
+		catch (MayamClientException e)
+		{
+			logger.error("Failed to create wfe error task",e);
+		}
+		
 		eventService.saveEvent("failed",message);		
 	}
 	

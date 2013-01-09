@@ -20,7 +20,7 @@ public enum MayamTaskListType {
 	EXTENDED_PUBLISHING("extended publishing"),
 	THIRD_PARTY("third party"),
 	ASSOCIATED_TASKS("associated tasks"), 
-	PURGE_BY_BMS("Purge By BMS");
+	PURGE_BY_BMS("Purge By BMS"), WFE_ERROR("wfe_error");
 	
 	  private String text;
 

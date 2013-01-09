@@ -22,7 +22,6 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
-import com.mchange.v2.log.LogUtils;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -36,6 +35,9 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamTaskController extends MayamController
 {
 	private final TasksClient client;
+	private static final String PREVIEW_FAIL = "fail";
+	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
+	private static final String PREVIEW_PASSED = "pass";
 
 	public TasksClient getTasksClient()
 	{
@@ -53,7 +55,8 @@ public class MayamTaskController extends MayamController
 		client = mayamClient;
 		accessRightsController = rightsController;
 	}
-
+	
+	
 	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
 		AttributeMap initialAttributes = client.createAttributeMap();
@@ -68,6 +71,28 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING, initialAttributes);
 
+	}
+	
+	// creates an error task for some situation where there is no underly asset to create the task for
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException{
+		
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.ASSET_SITE_ID, id);
+		initialAttributes.setAttribute(Attribute.ASSET_TITLE, title);
+		initialAttributes.setAttribute(Attribute.ERROR_MSG, message);
+		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		initialAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.getText());
+		AttributeMap createTask;
+		try
+		{
+			createTask = client.taskApi().createTask(initialAttributes);
+		}
+		catch (RemoteException e)
+		{
+			log.error(String.format("failed to create wfe error task ID {%s} Title {%s} message {%s}", id, title,message),e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_CREATE_FAILED,e);
+		}
+		return createTask.getAttribute(Attribute.TASK_ID);
 	}
 
 	public long createTask(String houseID, MayamAssetType assetType, MayamTaskListType taskList, AttributeMap initialAttributes)
@@ -348,11 +373,28 @@ public class MayamTaskController extends MayamController
 		if (qaStatus != null)
 		{
 			qaStatusString = qaStatus.toString();
+			qaStatusString = "Undefined";
+			if (qaStatus.equals(PREVIEW_FAIL)) 
+			{
+				qaStatusString = "Fail";
+			}
+			else if (qaStatus.equals(PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(PREVIEW_PASSED))
+			{
+				qaStatusString = "Pass";
+			}
 		}
 		
 		if (qcStatus != null)
 		{
-			qcStatusString = qcStatus.toString();
+			qcStatusString = "Undefined";
+			if (qcStatus == QcStatus.FAIL) 
+			{
+				qcStatusString = "Fail";
+			}
+			else if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
+			{
+				qcStatusString = "Pass";
+			}
 		}
 		
 		List<MayamAccessRights> allRights = accessRightsController.retrieve(

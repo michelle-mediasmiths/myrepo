@@ -104,7 +104,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			MayamClientErrorCode result;
 
-			if (mayamClient.packageExistsForMaterial(action.getPackage().getPresentationID(), action.getPackage().getMaterialID()))
+			if (mayamClient.packageExists(action.getPackage().getPresentationID()))
 			{
 				result = mayamClient.updatePackage(action.getPackage());
 			}
@@ -320,6 +320,16 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.warn("IOException reading "+filePath,e);
 			message = filePath;
 		}
+		
+		try
+		{
+			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Placeholder Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+		}
+		catch (MayamClientException e)
+		{
+			logger.error("Failed to create wfe error task",e);
+		}
+		
 		eventService.saveEvent("failed",message);		
 	}
 

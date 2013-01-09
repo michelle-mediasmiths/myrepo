@@ -134,7 +134,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 						return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 					}
 					
-					if (!mayamClient.packageExistsForMaterial(pack.getPresentationID(), materialID)) {
+					if (!mayamClient.packageExists(pack.getPresentationID())) {
 						return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 					}
 				} catch (MayamClientException e) {

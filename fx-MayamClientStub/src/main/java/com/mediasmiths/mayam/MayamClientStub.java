@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -48,7 +47,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
-
+ 
 public class MayamClientStub implements MayamClient
 {
 
@@ -368,7 +367,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode updatePackage(Package txPackage, String materialID)
+	public MayamClientErrorCode updatePackage(Package txPackage)
 	{
 		return updatePackage(txPackage.getPresentationID());
 	}
@@ -398,7 +397,7 @@ public class MayamClientStub implements MayamClient
 		return MayamClientErrorCode.SUCCESS;
 	}
 
-	private boolean packageExists(String presentationID) throws MayamClientException
+	public boolean packageExists(String presentationID) throws MayamClientException
 	{
 		if (presentationID.equals(NEW_PACKAGE_ID))
 		{
@@ -417,7 +416,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID, String titleAssetID) throws MayamClientException
+	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
 	{
 		if (packageID.equals(PROTECTED_PACKAGE_ID))
 		{
@@ -823,23 +822,10 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean packageExistsForMaterial(String presentationID, String materialID) throws MayamClientException
+	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException
 	{
-		if(materialExists(materialID)){
-			return packageExists(presentationID);
-		}
-		
-		return false;
-	}
-
-	@Override
-	public boolean packageExistsForTitle(String presentationID, String titleID) throws MayamClientException
-	{
-		if(titleExists(titleID)){
-			return packageExists(presentationID);
-		}
-		
-		return false;
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

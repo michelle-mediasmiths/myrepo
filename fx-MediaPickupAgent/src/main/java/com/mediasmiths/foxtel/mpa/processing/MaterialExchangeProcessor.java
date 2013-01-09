@@ -214,7 +214,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	private void updatePackage(Package txPackage, String materialID)
 			throws MessageProcessingFailedException {
 		logger.trace("updatePackage");
-		MayamClientErrorCode result = mayamClient.updatePackage(txPackage, materialID);
+		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
 
 		if (result != MayamClientErrorCode.SUCCESS) {
 			logger.error(String.format("Error updating package %s",
