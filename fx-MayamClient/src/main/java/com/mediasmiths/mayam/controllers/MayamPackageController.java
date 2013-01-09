@@ -105,6 +105,10 @@ public class MayamPackageController extends MayamController
 			catch (RemoteException e1)
 			{
 				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID(),e1);				
+			} 
+			catch (MayamClientException e2) 
+			{
+				log.error("Exception thrown by Mayam while attempting to retrieve task for asset : " + txPackage.getMaterialID(),e2);	
 			}
 
 			if (!attributesValid)
@@ -156,6 +160,10 @@ public class MayamPackageController extends MayamController
 				e.printStackTrace();
 				log.error("Exception thrown by Mayam while attempting to create Package");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+			} 
+			catch (MayamClientException e2) 
+			{
+				log.error("Exception thrown by Mayam while attempting to retrieve task for asset : " + txPackage.getMaterialID(),e2);	
 			}
 		}
 		else
