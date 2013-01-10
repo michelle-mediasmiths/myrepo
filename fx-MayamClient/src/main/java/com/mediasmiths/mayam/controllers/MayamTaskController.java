@@ -268,7 +268,7 @@ public class MayamTaskController extends MayamController
 	private AttributeMap updateAccessRights(AttributeMap task)
 	{
 		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
-		String assetId = task.getAttribute(Attribute.HOUSE_ID);
+		String houseId = task.getAttribute(Attribute.HOUSE_ID);
 
 		boolean retrictedAccess = false;
 
@@ -300,7 +300,7 @@ public class MayamTaskController extends MayamController
 				"content format is %s , category is %s for asset with id %s",
 				contentFormat,
 				contentCategory,
-				assetId));
+				houseId));
 
 		String contentType = null;
 		if (assetType != null && assetType.equals(MayamAssetType.TITLE.getAssetType()))
@@ -339,7 +339,7 @@ public class MayamTaskController extends MayamController
 
 		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-		filterEqualities.setAttribute(Attribute.HOUSE_ID, assetId);
+		filterEqualities.setAttribute(Attribute.HOUSE_ID, houseId);
 		FilterCriteria criteria = new FilterCriteria();
 		criteria.setFilterEqualities(filterEqualities);
 		FilterResult existingTasks;
@@ -355,7 +355,7 @@ public class MayamTaskController extends MayamController
 
 				if (existingTasks.getTotalMatches() > 0)
 				{
-					log.warn("More than 1 Preview task found for assset : " + assetId
+					log.warn("More than 1 Preview task found for assset : " + houseId
 							+ ". Access Righst will be set based on status of first task : "
 							+ qaTask.getAttribute(Attribute.TASK_ID));
 				}
@@ -363,7 +363,7 @@ public class MayamTaskController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + assetId, e);
+			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + houseId, e);
 		}
 
 		
@@ -413,6 +413,14 @@ public class MayamTaskController extends MayamController
 			log.debug("allrights size: "+allRights.size());
 		}
 
+		AttributeMap underlyingAsset = null;
+		try {
+			underlyingAsset = client.assetApi().getAssetBySiteId(assetType, houseId);
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while retrieving underlying assset found of type " + assetType + " and with Id " + houseId, e);
+			e.printStackTrace();
+		}
+		
 		if (allRights != null && allRights.size() > 0)
 		{
 			AssetAccess accessRights = new AssetAccess();
@@ -426,11 +434,21 @@ public class MayamTaskController extends MayamController
 				entry.setAdmin(allRights.get(i).getAdminAccess());
 				accessRights.getStandard().add(entry);
 			}
-			log.info("Access Rights for " + assetId + " updated to : " + accessRights.toString());
+			log.info("Access Rights for " + houseId + " updated to : " + accessRights.toString());
 			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+			if (underlyingAsset != null)
+			{
+				underlyingAsset.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+				try {
+					client.assetApi().updateAsset(underlyingAsset);
+				} catch (RemoteException e) {
+					log.error("Exception thrown by Mayam while updating access rights on asset : " + houseId, e);
+					e.printStackTrace();
+				}
+			}
 		}
 		else {
-			log.info("No suitable Access Rights found for task : " + assetId);
+			log.info("No suitable Access Rights found for task : " + houseId);
 		}
 		return task;
 	}
