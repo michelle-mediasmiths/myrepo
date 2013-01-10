@@ -39,6 +39,10 @@ import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.SegmentUtil;
+import com.mediasmiths.std.types.Framerate;
+import com.mediasmiths.std.types.SampleCount;
+import com.mediasmiths.std.types.Timecode;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -466,11 +470,6 @@ public class MayamMaterialController extends MayamController
 						MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 
-				// As per Foxtel and Mayam decision, duration and timecodes will be detected in Ardome, no need to store
-				// material.getLastFrameTimecode();
-				// material.getFirstFrameTimecode();
-				// attributesValid &= attributes.setAttribute(Attribute.ASSET_DURATION, material.getDuration());
-
 				String houseID = material.getMaterialID();
 
 				AttributeMap asset;
@@ -485,31 +484,29 @@ public class MayamMaterialController extends MayamController
 				}
 				String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
 
-				/*********
-				 * SegmentListList lists = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetID);
-				 * 
-				 * 
-				 * 
-				 * FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
-				 * 
-				 * try {
-				 * 
-				 * SegmentationType segmentation = material.getOriginalConform(); if (segmentation != null && lists != null) { List<SegmentationType.Segment> segments = segmentation.getSegment();
-				 * 
-				 * //If current segment list has more segments then remove unnecessary if (lists.size() > segments.size()) { for (int i = segments.size(); i < lists.size(); i++) lists.remove(i); }
-				 * 
-				 * //Update the existing lists, if new lists then create them for (int i = 0; i < segments.size(); i++) { SegmentationType.Segment segment = segments.get(i); if (segment != null) {
-				 * ValueList metadata = new ValueList(); metadata.add(new ValueList.Entry("DURATION", segment.getDuration())); metadata.add(new ValueList.Entry("EOM", segment.getEOM()));
-				 * metadata.add(new ValueList.Entry("SOM", segment.getSOM())); metadata.add(new ValueList.Entry("SEGMENT_NUMBER", "" + segment.getSegmentNumber())); metadata.add(new
-				 * ValueList.Entry("SEGMENT_TITLE", segment.getSegmentTitle()));
-				 * 
-				 * SegmentList list = lists.get(i); if (list == null) { SegmentListBuilder listBuilder = SegmentList.create("Asset " + houseID + " Segment " + segment.getSegmentNumber()); listBuilder
-				 * = listBuilder.metadataForm(PROGRAMME_MATERIAL_AGL_NAME); listBuilder = listBuilder.metadata(metadata); list = listBuilder.build(); String revisionId =
-				 * asset.getAttributeAsString(Attribute.REVISION_ID); client.segmentApi().createSegmentList(AssetType.ITEM, assetID, revisionId, list); } else {
-				 * client.segmentApi().updateSegmentListMetadata(list.getId(), metadata); } } else { log.error("Segment data is null for material ID: " + houseID); } }
-				 * 
-				 * } } catch(RemoteException e) { log.error("Error thrown by Mayam while updating Segmentation data for material ID: " + houseID,e); }
-				 ********/
+				
+				  
+				// FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
+
+				if(material.getOriginalConform() != null){
+					
+					log.debug("programme material message contains original conform information");
+					SegmentationType originalConform = material.getOriginalConform();
+					log.debug(String.format("%d segments in original conform",originalConform.getSegment().size()));
+					StringBuilder sb = new StringBuilder();
+					
+					for(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s : originalConform.getSegment()){
+						
+						s = SegmentUtil.fillEomAndDurationOfSegment(s);
+						String segmentAsString = SegmentUtil.segmentToString(s);
+						sb.append(segmentAsString);						
+					}
+					
+					String originalConformInfo = sb.toString();
+					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, originalConformInfo);
+					
+				}
+				
 
 				AudioTracks audioTracks = material.getAudioTracks();
 				if (audioTracks != null)
@@ -567,6 +564,10 @@ public class MayamMaterialController extends MayamController
 		}
 		return returnCode;
 	}
+
+
+
+	
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
