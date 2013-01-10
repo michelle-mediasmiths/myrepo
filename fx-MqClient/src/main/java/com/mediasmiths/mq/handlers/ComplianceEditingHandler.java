@@ -37,7 +37,8 @@ public class ComplianceEditingHandler  extends AttributeHandler{
 							long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							newTask.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
+							newTask.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);	
+							newTask.setAttribute(Attribute.QC_PREVIEW_RESULT, "Pass");
 							taskController.saveTask(newTask);
 						}
 					}
