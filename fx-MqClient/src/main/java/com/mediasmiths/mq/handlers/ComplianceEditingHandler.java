@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -36,6 +37,7 @@ public class ComplianceEditingHandler  extends AttributeHandler{
 							long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							newTask.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
 							taskController.saveTask(newTask);
 						}
 					}
