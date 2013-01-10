@@ -265,7 +265,7 @@ public class MayamTaskController extends MayamController
 		return client.taskApi().getTask(taskId);
 	}
 
-	private AttributeMap updateAccessRights(AttributeMap task)
+	public AttributeMap updateAccessRights(AttributeMap task)
 	{
 		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
 		String houseId = task.getAttribute(Attribute.HOUSE_ID);
