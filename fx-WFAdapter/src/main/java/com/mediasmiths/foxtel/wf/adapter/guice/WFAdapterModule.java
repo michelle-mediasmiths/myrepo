@@ -31,7 +31,8 @@ public class WFAdapterModule extends AbstractModule
 	
 
 	@Provides
-	Marshaller provideMarshaller(JAXBContext jc)
+	@Named("mex.marshaller")
+	Marshaller provideMexMarshaller(@Named("mex.context") JAXBContext jc)
 			throws JAXBException,
 			SAXException
 	{
@@ -50,11 +51,47 @@ public class WFAdapterModule extends AbstractModule
 		return marshaller;
 	}	
 	
+
 	@Provides
-	JAXBContext provideJAXBContext() throws JAXBException{
+	@Named("ruzz.marshaller")
+	Marshaller provideRuzzMarshaller(@Named("ruzz.context") JAXBContext jc)
+			throws JAXBException,
+			SAXException
+	{
+		Marshaller marshaller = null;
+		try
+		{
+			marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+	
+	@Provides
+	@Named("mex.context")
+	JAXBContext provideMEXJAXBContext() throws JAXBException{
 		JAXBContext jc = null;
 		try {
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");			
+			} catch (JAXBException e) {
+				logger.fatal("Could not create jaxb context", e);
+				throw e;
+			}
+		return jc;
+		}
+	
+	@Provides
+	@Named("ruzz.context")
+	JAXBContext provideRuzzJAXBContext() throws JAXBException{
+		JAXBContext jc = null;
+		try {
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.ruzz");			
 			} catch (JAXBException e) {
 				logger.fatal("Could not create jaxb context", e);
 				throw e;

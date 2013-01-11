@@ -169,17 +169,24 @@ public class RuzzProgrammeOutputBuilder
 
 			EncodingType encoding = audioTracks.get(0).getEncoding();
 
-			switch (encoding)
+			if (encoding != null)
 			{
-				case DOLBY_E:
-					ret.setAudioType(AudioListType.DIGITAL);
-					break;
-				case LINEAR:
-					ret.setAudioType(AudioListType.STEREO);
-					break;
-				default:
-					break;
+				switch (encoding)
+				{
+					case DOLBY_E:
+						ret.setAudioType(AudioListType.DIGITAL);
+						break;
+					case LINEAR:
+						ret.setAudioType(AudioListType.STEREO);
+						break;
+					default:
+						break;
 
+				}
+			}
+			else
+			{
+				log.error("null encoding on audio track information!");
 			}
 
 		}

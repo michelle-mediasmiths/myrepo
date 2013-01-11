@@ -579,16 +579,20 @@ public class MayamTitleController extends MayamController{
 		return isProtected;
 	}
 
-	
 	public String getRightsStart(AttributeMap titleAttributes)
 	{
-		//TODO find very first?
+		// TODO find very first?
 		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
-		
-		List<Row> rows = rights.getRows();
-		if(rows.size() > 0 && rows.get(0).size() > 3){
-			return rows.get(0).get(2);
+
+		if (rights != null)
+		{
+			List<Row> rows = rights.getRows();
+			if (rows.size() > 0 && rows.get(0).size() > 3)
+			{
+				return rows.get(0).get(2);
+			}
 		}
+
 		log.warn("could not find licence for title");
 		return "";
 	}
@@ -597,12 +601,15 @@ public class MayamTitleController extends MayamController{
 	{
 		// TODO find very last?
 		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
-		
-		List<Row> rows = rights.getRows();
-		if(rows.size() > 0 && rows.get(0).size() > 3){
-			return rows.get(0).get(3);
+		if (rights != null)
+		{
+			List<Row> rows = rights.getRows();
+			if (rows.size() > 0 && rows.get(0).size() > 3)
+			{
+				return rows.get(0).get(3);
+			}
 		}
-		log.warn("could not find licence for title");		
+		log.warn("could not find licence for title");
 		return "";
 	}
 

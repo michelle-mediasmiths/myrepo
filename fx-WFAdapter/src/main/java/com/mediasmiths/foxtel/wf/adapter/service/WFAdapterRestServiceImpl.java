@@ -73,8 +73,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
-
-	private Marshaller marshaller;
+	@Inject
+	@Named("mex.marshaller")
+	private Marshaller mexMarshaller;
+	@Inject
+	@Named("ruzz.marshaller")
+	private Marshaller ruzzMarshaller;
 	
 	
 	@Override
@@ -433,7 +437,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		RuzzIF ruzzProgramme = mayamClient.getRuzzProgramme(packageID);
 
 		StringWriter sw = new StringWriter();
-		marshaller.marshal(ruzzProgramme, sw);
+		ruzzMarshaller.marshal(ruzzProgramme, sw);
 		return sw.toString();
 
 	}
@@ -445,10 +449,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public String getSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
 	{
 
-		RuzzIF ruzzProgramme = mayamClient.getRuzzProgramme(packageID);
+		Programme programme = mayamClient.getProgramme(packageID);
 
 		StringWriter sw = new StringWriter();
-		marshaller.marshal(ruzzProgramme, sw);
+		mexMarshaller.marshal(programme, sw);
 		return sw.toString();
 
 	}
