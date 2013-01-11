@@ -22,9 +22,6 @@ public class QcCompleteHandler  extends AttributeHandler
 			if (taskState == TaskState.FINISHED) 
 			{
 				try {
-					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-					taskController.saveTask(messageAttributes);
-					
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PREVIEW);

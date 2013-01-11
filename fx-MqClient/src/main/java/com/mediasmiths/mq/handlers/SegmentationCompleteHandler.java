@@ -23,9 +23,6 @@ public class SegmentationCompleteHandler  extends AttributeHandler
 				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 				if (taskState == TaskState.FINISHED) 
 				{
-					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-					taskController.saveTask(messageAttributes);
-					
 					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.TX_DELIVERY);
