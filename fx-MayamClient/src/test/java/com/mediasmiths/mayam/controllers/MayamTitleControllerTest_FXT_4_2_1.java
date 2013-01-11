@@ -32,6 +32,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamTitleControllerTest_FXT_4_2_1 {
 	
@@ -301,7 +302,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	}
 	
 	@Test
-	public void testGetTitleValid() 
+	public void testGetTitleValid() throws MayamClientException 
 	{
 		try {
 			when(assetApi.getAssetBySiteId(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(new AttributeMap());
@@ -313,7 +314,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	}
 	
 	@Test
-	public void testGetTitleInValid() 
+	public void testGetTitleInValid()  throws MayamClientException 
 	{
 		try {
 			when(assetApi.getAssetBySiteId(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenReturn(null);
@@ -325,7 +326,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	}
 	
 	@Test
-	public void testGetTitleException() 
+	public void testGetTitleException()  throws MayamClientException 
 	{
 		try {
 			when(assetApi.getAssetBySiteId(eq(MayamAssetType.TITLE.getAssetType()), anyString())).thenThrow(mock(RemoteException.class));

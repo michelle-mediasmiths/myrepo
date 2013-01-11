@@ -1,20 +1,30 @@
 package com.mediasmiths.mayam.util;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.mayam.wf.attributes.shared.type.Segment;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
 
 public class SegmentUtil
 {
+	private static Logger log = Logger.getLogger(SegmentUtil.class);
+	
 	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
 		return String.format("Number:{%d},Title:{%s},SOM:{%s},EOM:{%s},Duration:{%s}\n",s.getSegmentNumber(),s.getSegmentTitle(), s.getSOM(),s.getEOM(),s.getDuration());
 	}
 	
-	public static com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment stringToSegment(String s) throws IllegalArgumentException
-	{
-		return new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
-	}
+//	public static com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment stringToSegment(String s) throws IllegalArgumentException
+//	{
+//		return new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+//	}
 	
 	/**
 	 * Takes a segment and produces a copy with both eom and duration populated (eom and duration are a choice in the schema, returned object will not be schema compliant, not for marshalling)
@@ -30,12 +40,7 @@ public class SegmentUtil
 		Timecode start =  Timecode.getInstance(som, Framerate.HZ_25); 
 		
 		if(eom == null){
-			Timecode durationTimecode =  Timecode.getInstance(duration, Framerate.HZ_25);
-			long startSamples = start.getSampleCount().getSamples();
-			long durationSamples = durationTimecode.getSampleCount().getSamples();
-			long endSamples = startSamples+durationSamples;
-			Timecode endTimecode = Timecode.getInstance(new SampleCount(endSamples, Framerate.HZ_25));
-			eom = endTimecode.toSMPTEString();
+			eom = calculateEOM(duration, start);
 		}
 		if(duration == null){
 			Timecode end =  Timecode.getInstance(eom, Framerate.HZ_25);
@@ -53,5 +58,54 @@ public class SegmentUtil
 		filled.setSegmentTitle(s.getSegmentTitle());
 		
 		return filled;
+	}
+
+	private static String calculateEOM(String duration, Timecode start)
+	{
+		String eom;
+		Timecode durationTimecode =  Timecode.getInstance(duration, Framerate.HZ_25);
+		long startSamples = start.getSampleCount().getSamples();
+		long durationSamples = durationTimecode.getSampleCount().getSamples();
+		long endSamples = startSamples+durationSamples;
+		Timecode endTimecode = Timecode.getInstance(new SampleCount(endSamples, Framerate.HZ_25));
+		eom = endTimecode.toSMPTEString();
+		return eom;
+	}
+	
+	public static String totalDuration(List<Segment> segments){
+		
+		Timecode total = Timecode.getInstance(new SampleCount(0l, Framerate.HZ_25));
+		
+		for(Segment s : segments){
+			log.trace(String.format("Segment %s duration %s", s.getNumber(), s.getDuration().toSmpte()));
+			total = total.add(new SampleCount(s.getDuration().getTotalFrames(), Framerate.HZ_25));
+		}
+		
+		return total.toSMPTEString();
+		
+	}
+
+	public static Segments convertMayamSegmentListToMediaExchangeSegments(SegmentList segmentList)
+	{
+		Segments ret = new Segments();
+		
+		for(Segment s : segmentList.getEntries()){
+			Programme.Media.Segments.Segment meSeg = new Programme.Media.Segments.Segment();
+			
+			String som = s.getIn().toSmpte();
+			String duration = s.getDuration().toSmpte();
+			Timecode startTC = Timecode.getInstance(som,Framerate.HZ_25);
+			String eom = calculateEOM(duration, startTC);
+			
+			meSeg.setSOM(som);
+			meSeg.setEOM(eom);
+			meSeg.setDuration(duration);
+			meSeg.setNumber(s.getNumber());
+			meSeg.setTitle(s.getTitle());
+			
+			ret.getSegment().add(meSeg);
+		}
+		
+		return ret;
 	}
 }

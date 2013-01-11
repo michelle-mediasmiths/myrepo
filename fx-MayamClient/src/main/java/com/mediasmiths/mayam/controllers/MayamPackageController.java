@@ -18,6 +18,9 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.Segment.SegmentBuilder;
+import com.mayam.wf.attributes.shared.type.AspectRatio;
+import com.mayam.wf.attributes.shared.type.AudioTrack;
+import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -29,12 +32,19 @@ import com.mayam.wf.attributes.shared.type.ValueList.Entry;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
+import com.mediasmiths.foxtel.generated.mediaexchange.ISANType;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -588,4 +598,5 @@ public class MayamPackageController extends MayamController
 			throw new PackageNotFoundException(e);
 		}
 	}
+
 }

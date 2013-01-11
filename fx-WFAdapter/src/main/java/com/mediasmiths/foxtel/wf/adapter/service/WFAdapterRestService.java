@@ -10,6 +10,7 @@ import javax.xml.bind.JAXBException;
 
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -196,6 +197,6 @@ public interface WFAdapterRestService
 	@GET
 	@Path("/tx/companionXMLforTXPackage")
 	@Produces("application/xml")
-	public Material getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID) throws MayamClientException;
+	public Programme getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID) throws MayamClientException;
 }
 

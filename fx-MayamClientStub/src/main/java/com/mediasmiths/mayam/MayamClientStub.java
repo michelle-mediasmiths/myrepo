@@ -45,6 +45,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
  
@@ -624,70 +625,69 @@ public class MayamClientStub implements MayamClient
 		log.info("unimplemented failTaskForAsset in mayam client stub");
 	}
 
-	@Override
-	public ProgrammeMaterialType getProgrammeMaterialType(String materialID) throws MayamClientException
-	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
-		{
-		
-			FileMediaType fmt = new FileMediaType();
-			fmt.setFilename("myfile.mxf");
-			fmt.setFormat(FileFormatEnumType.MXF_OP_1_A_IMX_D_10_50);
-
-			Track t = new Track();
-			t.setTrackName(AudioTrackEnumType.CENTER);
-			t.setTrackEncoding(AudioEncodingEnumType.PCM);
-			t.setTrackNumber(1);
-
-			AudioTracks at = new AudioTracks();
-			at.getTrack().add(t);
-
-			Segment sg = new Segment();
-			sg.setSegmentNumber(1);
-			sg.setSegmentTitle("Segment title");
-			sg.setSOM("00:00:00:00");
-			sg.setEOM("00:00:00:00");
-
-			SegmentationType st = new SegmentationType();
-			st.getSegment().add(sg);
-
-			ProgrammeMaterialType pmaterial = new ProgrammeMaterialType();
-			pmaterial.setMaterialID(materialID);
-			pmaterial.setFormat("HD");
-			pmaterial.setAspectRatio("16F16");
-			pmaterial.setFirstFrameTimecode("00:00:00:00");
-			pmaterial.setLastFrameTimecode("00:00:01:00");
-			pmaterial.setDuration("00:00:01:00");
-			pmaterial.setMedia(fmt);
-			pmaterial.setAudioTracks(at);
-			pmaterial.setOriginalConform(st);
-			pmaterial.setAdditionalProgrammeDetail("foo");
-			pmaterial.setAdultMaterial(false);
-									
-			Presentation presentation = new Presentation();
-			pmaterial.setPresentation(presentation);
-
-			String[] packageIds = new String[] { EXISTING_PACKAGE_ID };
-
-			for (String packageID : packageIds)
-			{
-				Package p = getPresentationPackage(packageID);
-				presentation.getPackage().add(p);
-
-			}
-
-			return pmaterial;
-
-		}
-		else if (materialID.equals(ERROR_MATERIAL_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		}
-	}
+//	public ProgrammeMaterialType getProgrammeType(String materialID) throws MayamClientException
+//	{
+//		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
+//		{
+//		
+//			FileMediaType fmt = new FileMediaType();
+//			fmt.setFilename("myfile.mxf");
+//			fmt.setFormat(FileFormatEnumType.MXF_OP_1_A_IMX_D_10_50);
+//
+//			Track t = new Track();
+//			t.setTrackName(AudioTrackEnumType.CENTER);
+//			t.setTrackEncoding(AudioEncodingEnumType.PCM);
+//			t.setTrackNumber(1);
+//
+//			AudioTracks at = new AudioTracks();
+//			at.getTrack().add(t);
+//
+//			Segment sg = new Segment();
+//			sg.setSegmentNumber(1);
+//			sg.setSegmentTitle("Segment title");
+//			sg.setSOM("00:00:00:00");
+//			sg.setEOM("00:00:00:00");
+//
+//			SegmentationType st = new SegmentationType();
+//			st.getSegment().add(sg);
+//
+//			ProgrammeMaterialType pmaterial = new ProgrammeMaterialType();
+//			pmaterial.setMaterialID(materialID);
+//			pmaterial.setFormat("HD");
+//			pmaterial.setAspectRatio("16F16");
+//			pmaterial.setFirstFrameTimecode("00:00:00:00");
+//			pmaterial.setLastFrameTimecode("00:00:01:00");
+//			pmaterial.setDuration("00:00:01:00");
+//			pmaterial.setMedia(fmt);
+//			pmaterial.setAudioTracks(at);
+//			pmaterial.setOriginalConform(st);
+//			pmaterial.setAdditionalProgrammeDetail("foo");
+//			pmaterial.setAdultMaterial(false);
+//									
+//			Presentation presentation = new Presentation();
+//			pmaterial.setPresentation(presentation);
+//
+//			String[] packageIds = new String[] { EXISTING_PACKAGE_ID };
+//
+//			for (String packageID : packageIds)
+//			{
+//				Package p = getPresentationPackage(packageID);
+//				presentation.getPackage().add(p);
+//
+//			}
+//
+//			return pmaterial;
+//
+//		}
+//		else if (materialID.equals(ERROR_MATERIAL_ID))
+//		{
+//			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+//		}
+//		else
+//		{
+//			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+//		}
+//	}
 
 	@Override
 	public Package getPresentationPackage(String packageID) throws MayamClientException
@@ -826,6 +826,13 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public Programme getProgramme(String packageID) throws MayamClientException
+	{
+		//TODO bulk out stub
+		return new Programme();
 	}
 
 }

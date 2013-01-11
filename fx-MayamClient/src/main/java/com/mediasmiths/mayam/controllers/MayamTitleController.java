@@ -35,6 +35,7 @@ import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -551,12 +552,13 @@ public class MayamTitleController extends MayamController{
 		return titleFound;
 	}
 	
-	public AttributeMap getTitle(String titleID) {
+	public AttributeMap getTitle(String titleID) throws MayamClientException {
 		AttributeMap assetAttributes = null;
 		try {
 			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 		} catch (RemoteException e1) {
 			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + titleID,e1);
+			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
 		}
 		return assetAttributes;
 	}

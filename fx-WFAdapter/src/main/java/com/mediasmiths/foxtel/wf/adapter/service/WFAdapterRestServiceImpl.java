@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -301,29 +302,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/companionXMLforTXPackage")
 	@Produces("application/xml")
-	public Material getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
+	public Programme getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
 			throws MayamClientException
 	{
-		String materialID = mayamClient.getMaterialIDofPackageID(packageID);
-		ProgrammeMaterialType materialType = mayamClient.getProgrammeMaterialType(materialID);
-
-		Package p;
-
-		p = mayamClient.getPresentationPackage(packageID);
-
-		List<Package> packages = materialType.getPresentation().getPackage();
-		packages.add(p);
-		
-		//doubtless more detail will be required here
-		Material m = new Material();
-		String titleID = mayamClient.getTitleOfPackage(packageID);
-		Title t = mayamClient.getTitle(titleID,false);
-		Details d = mayamClient.getSupplierDetails(materialID);
-		m.setTitle(t);		
-		m.setDetails(d);
-		t.setProgrammeMaterial(materialType);
-
-		return m;
+		Programme programme = mayamClient.getProgramme(packageID);
+		return programme;
 	}
 
 	// TODO reenable events stuff after events api has been extracted
@@ -422,7 +405,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.debug(String.format("Writing segment xml for package %s",packageID));
 		
-		Material segmentInfo = getCompanionXMLForTXPackage(packageID);
+		Programme segmentInfo = getCompanionXMLForTXPackage(packageID);
 		String deliveryLocation = deliveryLocationForPackage(packageID);
 		
 		File deliveryLocationFile = new File(deliveryLocation);

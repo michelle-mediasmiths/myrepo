@@ -49,8 +49,8 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamMaterialController extends MayamController
 {
 
-	private static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
-	private static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "PG";
+	public static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
+	public static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "PG";
 
 	private static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
 	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
@@ -832,150 +832,57 @@ public class MayamMaterialController extends MayamController
 		return material;
 	}
 
-	public com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType getMaterialType(String materialID)
-	{
-		AttributeMap attributes = getMaterialAttributes(materialID);
+//	/**
+//	 * Returns the MarketingMaterialType representation of a material, does not include media type or packages
+//	 * 
+//	 * @param materialID
+//	 * @return
+//	 */
+//	public MarketingMaterialType getMarketingMaterial(String materialID)
+//	{
+//		AttributeMap attributes = getMaterialAttributes(materialID);
+//		MarketingMaterialType mmt = new MarketingMaterialType();
+//
+//		if (checkAttributeValid(attributes, Attribute.CONT_RESTRICTED_MATERIAL, materialID, "Adult only", Boolean.class))
+//		{
+//			mmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
+//		}
+//
+//		if (checkAttributeValid(attributes, Attribute.CONT_ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
+//		{
+//			mmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
+//		}
+//
+//		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS);
+//		if (audioTrackList != null)
+//		{
+//			AudioTracks audioTracks = new AudioTracks();
+//			for (int i = 0; i < audioTrackList.size(); i++)
+//			{
+//				AudioTrack track = audioTrackList.get(i);
+//				Track newTrack = new Track();
+//				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
+//				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
+//				newTrack.setTrackNumber(track.getNumber());
+//				audioTracks.getTrack().add(newTrack);
+//			}
+//			mmt.setAudioTracks(audioTracks);
+//		}
+//
+//		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
+//		{
+//			mmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
+//		}
+//
+//		if (!attributes.getAttribute(Attribute.HOUSE_ID).equals(materialID))
+//		{
+//			log.error("unexpected asset id for material " + materialID);
+//		}
+//
+//		return mmt;
+//	}
 
-		// IF revision ID exists then the asset has associated Segment data making it Programme material rather than Marketing Material
-		String revisionID = attributes.getAttribute(Attribute.REVISION_ID);
-		if (revisionID == null || revisionID.equals(""))
-		{
-			return getMarketingMaterial(materialID);
-		}
-		else
-		{
-			return getProgrammeMaterial(materialID);
-		}
-	}
-
-	/**
-	 * Returns the MarketingMaterialType representation of a material, does not include media type or packages
-	 * 
-	 * @param materialID
-	 * @return
-	 */
-	public MarketingMaterialType getMarketingMaterial(String materialID)
-	{
-		AttributeMap attributes = getMaterialAttributes(materialID);
-		MarketingMaterialType mmt = new MarketingMaterialType();
-
-		if (checkAttributeValid(attributes, Attribute.CONT_RESTRICTED_MATERIAL, materialID, "Adult only", Boolean.class))
-		{
-			mmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
-		}
-
-		if (checkAttributeValid(attributes, Attribute.CONT_ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
-		{
-			mmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
-		}
-
-		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS);
-		if (audioTrackList != null)
-		{
-			AudioTracks audioTracks = new AudioTracks();
-			for (int i = 0; i < audioTrackList.size(); i++)
-			{
-				AudioTrack track = audioTrackList.get(i);
-				Track newTrack = new Track();
-				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
-				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
-				newTrack.setTrackNumber(track.getNumber());
-				audioTracks.getTrack().add(newTrack);
-			}
-			mmt.setAudioTracks(audioTracks);
-		}
-
-		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
-		{
-			mmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
-		}
-
-		if (!attributes.getAttribute(Attribute.HOUSE_ID).equals(materialID))
-		{
-			log.error("unexpected asset id for material " + materialID);
-		}
-
-		return mmt;
-	}
-
-	/**
-	 * Returns the ProgrammeMaterialType representation of a material, does not include media type or packages
-	 * 
-	 * @param materialID
-	 * @return
-	 */
-	public ProgrammeMaterialType getProgrammeMaterial(String materialID)
-	{
-
-		AttributeMap attributes = getMaterialAttributes(materialID);
-
-		ProgrammeMaterialType pmt = new ProgrammeMaterialType();
-
-		if (checkAttributeValid(attributes, Attribute.CONT_RESTRICTED_MATERIAL, materialID, "Adult only", Boolean.class))
-		{
-			pmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
-		}
-
-		if (checkAttributeValid(attributes, Attribute.CONT_ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
-		{
-			pmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
-		}
-
-		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS);
-		if (audioTrackList != null)
-		{
-			AudioTracks audioTracks = new AudioTracks();
-			for (int i = 0; i < audioTrackList.size(); i++)
-			{
-				AudioTrack track = audioTrackList.get(i);
-				Track newTrack = new Track();
-				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
-				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
-				newTrack.setTrackNumber(track.getNumber());
-				audioTracks.getTrack().add(newTrack);
-			}
-			pmt.setAudioTracks(audioTracks);
-		}
-
-		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
-		{
-			pmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
-		}
-
-		if (!attributes.getAttribute(Attribute.HOUSE_ID).equals(materialID))
-		{
-			log.error("unexpected asset id for material " + materialID);
-		}
-
-		pmt.setMaterialID(materialID);
-
-		try
-		{
-			String revisionID = attributes.getAttribute(Attribute.REVISION_ID);
-			SegmentList list = client.segmentApi().getSegmentList(revisionID);
-
-			List<Segment> segList = list.getEntries();
-			SegmentationType segmentation = new SegmentationType();
-			for (int i = 0; i < segList.size(); i++)
-			{
-				Segment segment = segList.get(i);
-				SegmentationType.Segment newSegment = new SegmentationType.Segment();
-				newSegment.setDuration(segment.getDuration().toString());
-				newSegment.setSegmentNumber(segment.getNumber());
-				newSegment.setSegmentTitle(segment.getTitle());
-				segmentation.getSegment().add(newSegment);
-			}
-			pmt.setOriginalConform(segmentation);
-		}
-		catch (RemoteException e)
-		{
-			log.error("Exception thrown by Mayam while retrieving Segmentation data for Material : " + materialID);
-			e.printStackTrace();
-		}
-
-		return pmt;
-	}
-
+	
 	public MayamClientErrorCode deleteMaterial(String materialID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;

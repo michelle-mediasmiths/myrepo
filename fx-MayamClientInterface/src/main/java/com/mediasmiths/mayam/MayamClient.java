@@ -16,7 +16,9 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType; 
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.mayam.validation.MayamValidator;
 
 public interface MayamClient
@@ -249,13 +251,15 @@ public interface MayamClient
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
 	
 	/**
-	 * returns the ProgrammeMaterial representation of a given material
-	 * @param materialID
+	 * returns the Programme representation of a given package
+	 * @param Programme getProgramme(String materialID) throws MayamClientException;
 	 * @return
 	 * @throws MayamClientException
 	 */
-	ProgrammeMaterialType getProgrammeMaterialType(String materialID) throws MayamClientException;
+	Programme getProgramme(String packageID) throws MayamClientException;
 
+//	RuzzIF getRuzzProgramme(String packageID) throws MayamClientException;
+	
 	/**
 	 * Returns the material id that a given package is associated with
 	 * @param packageID

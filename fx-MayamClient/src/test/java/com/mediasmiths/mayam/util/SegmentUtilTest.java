@@ -2,7 +2,14 @@ package com.mediasmiths.mayam.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
+
+import com.mayam.wf.attributes.shared.type.Segment;
+import com.mayam.wf.attributes.shared.type.Timecode;
+import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 
 public class SegmentUtilTest
 {
@@ -51,6 +58,38 @@ public class SegmentUtilTest
 			String expected = "00:04:01:18";			
 			String actual = SegmentUtil.fillEomAndDurationOfSegment(s).getEOM();
 			assertEquals(expected, actual);
+		}
+		
+		@Test
+		public void testTotal() throws InvalidTimecodeException{
+			
+			Segment one = new Segment();
+			one.setDuration(new Timecode("00:01:00:05"));
+			one.setNumber(0);
+			
+			Segment two = new Segment();
+			two.setDuration(new Timecode("00:01:01:05"));
+			two.setNumber(1);
+			
+			Segment three = new Segment();
+			three.setDuration(new Timecode("00:01:10:15"));
+			three.setNumber(2);
+			
+			Segment four = new Segment();
+			four.setDuration(new Timecode("01:01:00:05"));
+			four.setNumber(3);
+			
+			List<Segment> list = new ArrayList<Segment>();
+			list.add(one);
+			list.add(two);
+			list.add(three);
+			list.add(four);
+			
+			String expected = "01:04:12:05";
+			String actual = SegmentUtil.totalDuration(list);
+			assertEquals(expected, actual);
+			
+			
 		}
 }
 
