@@ -23,16 +23,7 @@ public class ComplianceLoggingHandler extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.FINISHED) 
 			{
-				try {
-					
-					try{
-						messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-						taskController.saveTask(messageAttributes);								
-					}
-					catch(Exception e){
-						log.error("error updating compliance logging task state to removed",e);
-					}
-								
+				try {					
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					createComplianceEditTask(assetID, assetType);

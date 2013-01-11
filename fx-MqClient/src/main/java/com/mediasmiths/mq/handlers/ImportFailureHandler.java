@@ -21,10 +21,7 @@ public class ImportFailureHandler  extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.ERROR) 
 			{
-				try {
-					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-					taskController.saveTask(messageAttributes);
-								
+				try {		
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST_FAILURE);

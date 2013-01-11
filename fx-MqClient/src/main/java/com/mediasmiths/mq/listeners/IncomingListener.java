@@ -243,6 +243,7 @@ public class IncomingListener extends MqClientListener
 
 		try
 		{
+			passEventToHandler(unmatchedHandler, messageAttributes);
 			logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
 		}
 		catch (Exception e)

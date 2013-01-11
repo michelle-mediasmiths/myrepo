@@ -107,7 +107,7 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());
 			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, PROGRAMME_MATERIAL_CONTENT_TYPE);
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
-			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, "pvnd");
+			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, QcStatus.TBD);
 			
 			if (material.getQualityCheckTask() != null)
 			{
@@ -324,7 +324,7 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, ASSOCIATED_MATERIAL_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, ASSOCIATED_MATERIAL_CONTENT_TYPE);
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
-			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, "pvnd");
+			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, QcStatus.TBD);
 			
 			attributesValid &= attributes.setAttribute(
 					Attribute.CONT_ASPECT_RATIO,

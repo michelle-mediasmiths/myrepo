@@ -18,7 +18,8 @@ public class UnmatchedHandler  extends AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String contentFormat = messageAttributes.getAttribute(Attribute.CONT_FMT);
-		if (contentFormat != null && contentFormat.equals("Unmatched")) 
+		String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
+		if ((contentFormat != null && contentFormat.equals("Unmatched")) || (contentMaterialType != null && contentMaterialType.equals("TM"))) 
 		{
 			try {
 				//Add to purge candidate list with expiry date of 30 days
@@ -44,11 +45,17 @@ public class UnmatchedHandler  extends AttributeHandler
 				newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
 				taskController.saveTask(newTask);
 				
+				//Add to Ingest Worklist
+				long qcTaskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.INGEST);
+				AttributeMap ingestTask = taskController.getTask(qcTaskID);
+				ingestTask.putAll(messageAttributes);
+				taskController.saveTask(ingestTask);
+				
 				//Add to Unmatched worklist
 				long unmatchedTaskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.UNMATCHED_MEDIA);
 				AttributeMap unmatchedTask = taskController.getTask(unmatchedTaskID);
 				unmatchedTask.putAll(messageAttributes);
-				taskController.saveTask(newTask);
+				taskController.saveTask(unmatchedTask);	
 			}
 			catch (Exception e) {
 				log.error("Exception in the Mayam client while handling Unmatched Content Message : ", e);
