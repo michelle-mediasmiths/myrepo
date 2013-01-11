@@ -831,57 +831,6 @@ public class MayamMaterialController extends MayamController
 
 		return material;
 	}
-
-//	/**
-//	 * Returns the MarketingMaterialType representation of a material, does not include media type or packages
-//	 * 
-//	 * @param materialID
-//	 * @return
-//	 */
-//	public MarketingMaterialType getMarketingMaterial(String materialID)
-//	{
-//		AttributeMap attributes = getMaterialAttributes(materialID);
-//		MarketingMaterialType mmt = new MarketingMaterialType();
-//
-//		if (checkAttributeValid(attributes, Attribute.CONT_RESTRICTED_MATERIAL, materialID, "Adult only", Boolean.class))
-//		{
-//			mmt.setAdultMaterial((Boolean) attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL));
-//		}
-//
-//		if (checkAttributeValid(attributes, Attribute.CONT_ASPECT_RATIO, materialID, "Aspect ratio", AspectRatio.class))
-//		{
-//			mmt.setAspectRatio(((AspectRatio) attributes.getAttribute(Attribute.CONT_ASPECT_RATIO)).toString());
-//		}
-//
-//		AudioTrackList audioTrackList = attributes.getAttribute(Attribute.AUDIO_TRACKS);
-//		if (audioTrackList != null)
-//		{
-//			AudioTracks audioTracks = new AudioTracks();
-//			for (int i = 0; i < audioTrackList.size(); i++)
-//			{
-//				AudioTrack track = audioTrackList.get(i);
-//				Track newTrack = new Track();
-//				newTrack.setTrackEncoding(AudioEncodingEnumType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getEncoding().toString())));
-//				newTrack.setTrackName(AudioTrackEnumType.valueOf(track.getName()));
-//				newTrack.setTrackNumber(track.getNumber());
-//				audioTracks.getTrack().add(newTrack);
-//			}
-//			mmt.setAudioTracks(audioTracks);
-//		}
-//
-//		if (checkAttributeValid(attributes, Attribute.CONT_FMT, materialID, "Content format", String.class))
-//		{
-//			mmt.setFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
-//		}
-//
-//		if (!attributes.getAttribute(Attribute.HOUSE_ID).equals(materialID))
-//		{
-//			log.error("unexpected asset id for material " + materialID);
-//		}
-//
-//		return mmt;
-//	}
-
 	
 	public MayamClientErrorCode deleteMaterial(String materialID)
 	{

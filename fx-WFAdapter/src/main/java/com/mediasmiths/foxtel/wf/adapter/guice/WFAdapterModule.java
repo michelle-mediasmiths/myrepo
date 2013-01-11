@@ -31,21 +31,24 @@ public class WFAdapterModule extends AbstractModule
 	
 
 	@Provides
-	Marshaller provideMarshaller(JAXBContext jc, @Named("schema.location") String schemaLocation) throws JAXBException, SAXException {
+	Marshaller provideMarshaller(JAXBContext jc)
+			throws JAXBException,
+			SAXException
+	{
 		Marshaller marshaller = null;
-		try {
+		try
+		{
 			marshaller = jc.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-//			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-//			Schema schema = factory.newSchema(getClass().getClassLoader().getResource(schemaLocation));
-//			marshaller.setSchema(schema);
-			} catch (JAXBException e) {
-				logger.fatal("Could not create marshaller", e);
-				throw e;
-				}
-		return marshaller;
+
 		}
-	
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}	
 	
 	@Provides
 	JAXBContext provideJAXBContext() throws JAXBException{

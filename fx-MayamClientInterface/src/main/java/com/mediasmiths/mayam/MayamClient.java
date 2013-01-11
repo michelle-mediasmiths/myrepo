@@ -258,7 +258,7 @@ public interface MayamClient
 	 */
 	Programme getProgramme(String packageID) throws MayamClientException;
 
-//	RuzzIF getRuzzProgramme(String packageID) throws MayamClientException;
+	RuzzIF getRuzzProgramme(String packageID) throws MayamClientException;
 	
 	/**
 	 * Returns the material id that a given package is associated with
@@ -286,5 +286,9 @@ public interface MayamClient
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException;
 
 	boolean packageExists(String presentationID) throws MayamClientException;
+	
+	public boolean isTitleAO(String titleID) throws MayamClientException;
 
+	public boolean isPackageAO(String packageID) throws MayamClientException;
+	
 }

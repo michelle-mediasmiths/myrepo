@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -158,16 +160,16 @@ public interface WFAdapterRestService
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID);
 	
 	/**
-	 * ought to be a put really due to the change in state but intalio wont do a put without sending a request body
 	 * @param packageID
 	 * @return
 	 * @throws MayamClientException 
 	 * @throws JAXBException 
+	 * @throws IOException 
 	 */
 	@GET
 	@Path("/tx/delivery/writeSegmentXML")
 	@Produces("text/plain")
-	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
+	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, IOException, JAXBException;
 	
 	/**
 	 * Used to query if autoqc is required for a given package
@@ -187,16 +189,15 @@ public interface WFAdapterRestService
 	@Path("/tx/failed")
 	@Consumes("application/xml")
 	public void notifyTXDeliveryFailed(TXDeliveryFailure notification);
-	
-	/**
-	 * returns the companion xml to send along with media as part of tx delivery
-	 * @param packageID
-	 * @return
-	 * @throws MayamClientException 
-	 */
+
 	@GET
-	@Path("/tx/companionXMLforTXPackage")
+	@Path("/tx/delivery/getAOSegmentXML")
 	@Produces("application/xml")
-	public Programme getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID) throws MayamClientException;
+	public String getAOSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
+	
+	@GET
+	@Path("/tx/delivery/getSegmentXML")
+	@Produces("application/xml")
+	public String getSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
 }
 

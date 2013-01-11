@@ -47,6 +47,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.mayam.validation.MayamValidator;
  
 public class MayamClientStub implements MayamClient
@@ -833,6 +834,27 @@ public class MayamClientStub implements MayamClient
 	{
 		//TODO bulk out stub
 		return new Programme();
+	}
+
+	@Override
+	public RuzzIF getRuzzProgramme(String packageID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isTitleAO(String titleID) throws MayamClientException
+	{
+			// TODO Auto-generated method stub
+			return false;
+	}
+
+	@Override
+	public boolean isPackageAO(String packageID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

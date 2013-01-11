@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -54,8 +56,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	// @Inject
 	// private EventAPI events;
-	// @Inject
-	// private Marshaller marshaller;
+
 	@Inject
 	private MayamClient mayamClient;
 	@Inject
@@ -72,8 +73,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
-	@Inject
+
 	private Marshaller marshaller;
+	
 	
 	@Override
 	@GET
@@ -298,17 +300,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	@Override
-	@GET
-	@Path("/tx/companionXMLforTXPackage")
-	@Produces("application/xml")
-	public Programme getCompanionXMLForTXPackage(@QueryParam("packageID") String packageID)
-			throws MayamClientException
-	{
-		Programme programme = mayamClient.getProgramme(packageID);
-		return programme;
-	}
-
 	// TODO reenable events stuff after events api has been extracted
 	protected void saveEvent(String name, String payload, String nameSpace)
 	{
@@ -401,11 +392,18 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/delivery/writeSegmentXML")
 	@Produces("text/plain")
-	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, IOException, JAXBException
 	{
 		log.debug(String.format("Writing segment xml for package %s",packageID));
 		
-		Programme segmentInfo = getCompanionXMLForTXPackage(packageID);
+		String companion;
+		
+		if(mayamClient.isPackageAO(packageID)){
+			companion = getAOSegmentXML(packageID);
+		}
+		else{
+			companion = getSegmentXML(packageID);	
+		}
 		String deliveryLocation = deliveryLocationForPackage(packageID);
 		
 		File deliveryLocationFile = new File(deliveryLocation);
@@ -414,15 +412,45 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
 		try
 		{
-			marshaller.marshal(segmentInfo, segmentXmlFile);
+			FileUtils.writeStringToFile(segmentXmlFile, companion);
 			return true;
 		}
-		catch (JAXBException e)
+		catch (IOException e)
 		{
-			log.error(String.format("Error marshalling companion xml for package %s", packageID));
+			log.error(String.format("Error writing companion xml for package %s", packageID),e);
 			throw e;			
 		}
 		
+	}
+
+	@Override
+	@GET
+	@Path("/tx/delivery/getAOSegmentXML")
+	@Produces("application/xml")
+	public String getAOSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	{
+
+		RuzzIF ruzzProgramme = mayamClient.getRuzzProgramme(packageID);
+
+		StringWriter sw = new StringWriter();
+		marshaller.marshal(ruzzProgramme, sw);
+		return sw.toString();
+
+	}
+
+	@Override
+	@GET
+	@Path("/tx/delivery/getSegmentXML")
+	@Produces("application/xml")
+	public String getSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	{
+
+		RuzzIF ruzzProgramme = mayamClient.getRuzzProgramme(packageID);
+
+		StringWriter sw = new StringWriter();
+		marshaller.marshal(ruzzProgramme, sw);
+		return sw.toString();
+
 	}
 
 }

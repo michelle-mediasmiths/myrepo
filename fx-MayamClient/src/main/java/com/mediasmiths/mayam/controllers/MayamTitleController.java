@@ -22,6 +22,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.GenericTable;
+import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.TasksClient;
@@ -576,6 +577,33 @@ public class MayamTitleController extends MayamController{
 			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID,e);
 		}
 		return isProtected;
+	}
+
+	
+	public String getRightsStart(AttributeMap titleAttributes)
+	{
+		//TODO find very first?
+		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
+		
+		List<Row> rows = rights.getRows();
+		if(rows.size() > 0 && rows.get(0).size() > 3){
+			return rows.get(0).get(2);
+		}
+		log.warn("could not find licence for title");
+		return "";
+	}
+
+	public String getRightsEnd(AttributeMap titleAttributes)
+	{
+		// TODO find very last?
+		GenericTable rights = titleAttributes.getAttribute(Attribute.MEDIA_RIGHTS);
+		
+		List<Row> rows = rights.getRows();
+		if(rows.size() > 0 && rows.get(0).size() > 3){
+			return rows.get(0).get(3);
+		}
+		log.warn("could not find licence for title");		
+		return "";
 	}
 
 }

@@ -4,7 +4,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import com.mediasmiths.mayam.validation.MayamValidator;
 
-public class MayamValidatorStub implements MayamValidator
+public class MayamValidatorStub implements MayamValidator 
 {
 
 	@Override

@@ -51,12 +51,15 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTracks;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
+import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
@@ -477,187 +480,21 @@ public class MayamClientImpl implements MayamClient
 	public Programme getProgramme(String packageID) throws MayamClientException
 	{
 		
-		//fetch the packages information
-		SegmentList segmentList = packageController.getSegmentList(packageID);
-		AttributeMap packageAttributes = segmentList.getAttributeMap();
-		List<Segment> segments = segmentList.getEntries();
-		
-		//find the parent material
-		String materialID = segmentList.getAttributeMap().getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-		if(materialID==null) throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		
-		//get the parent materials attributes
-		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-			
-		//check that the found material is indeed programme material
-		String contentType = materialAttributes.getAttributeAsString(Attribute.CONT_MAT_TYPE);
-		
-		if(!contentType.equals(MayamMaterialController.PROGRAMME_MATERIAL_AGL_NAME))
-		{
-			String error = String.format("CONT_MAT_TYPE for material %s is %s and not %s", materialID, contentType, MayamMaterialController.PROGRAMME_MATERIAL_AGL_NAME); 
-			log.error(error);
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		}
-		
-		//get the title
-		String titleID = materialAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-		AttributeMap title = titleController.getTitle(titleID);
-		
-		Programme ret = new Programme();
-		
-		//programme detail
-		Programme.Detail programmeDetail = getProgrammeDetail(
-				packageID,
-				segmentList,
-				packageAttributes,
-				segments,
-				materialAttributes,
-				title);
-
-		ret.setDetail(programmeDetail);
-		
-		//programme media
-		Programme.Media programmeMedia = getProgrammeMedia(
-				packageID,
-				segmentList,
-				packageAttributes,
-				segments,
-				materialAttributes,
-				title);
-		
-		ret.setMedia(programmeMedia);
-		
-		return ret;
-	}
-
-	private Media getProgrammeMedia(
-			String packageID,
-			SegmentList segmentList,
-			AttributeMap packageAttributes,
-			List<Segment> segments,
-			AttributeMap materialAttributes,
-			AttributeMap title)
-	{
-		Programme.Media programmeMedia = new Programme.Media();
-		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(segmentList);
-		AudioTracks pmat = getProgrammeMediaAudioTracks(materialAttributes,packageID);
-		
-		programmeMedia.setSegments(mexSegments);
-		programmeMedia.setAudioTracks(pmat);
-		
-		programmeMedia.setId(packageID);
-		programmeMedia.setFilename(packageID+".gxf");
-		
-		return programmeMedia;
+		//fetch the packages information		
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		//build the Programme Object
+		return MediaExchangeProgrammeOutputBuilder.buildProgramme(pack);
 	}
 	
-	private Programme.Media.AudioTracks getProgrammeMediaAudioTracks(AttributeMap materialAttributes, String packageID)
+	@Override
+	public RuzzIF getRuzzProgramme(String packageID) throws MayamClientException
 	{
-	    AudioTrackList audioTracks = materialAttributes.getAttribute(Attribute.AUDIO_TRACKS);
-	    if(audioTracks==null){
-	    	log.error("no audio tracks found when processing package "+packageID);
-	    	audioTracks=new AudioTrackList();
-	    }
-		Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
-	    
-		for(AudioTrack track : audioTracks){
-			
-			Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
-			pmat.setNumber(track.getNumber());
-			
-			AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(track.getEncoding());
-			pmat.setType(att);
-			
-			ats.getTrack().add(pmat);
-			
-		}
-		
-		return ats;
-	}
-
-	private AudioTrackType mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(EncodingType encoding)
-	{
-		switch(encoding){
-			case DOLBY_E:
-				return AudioTrackType.DOLBY_E;
-			case LINEAR:
-				return AudioTrackType.STEREO; //no idea if this is right			
-		}
-		
-		log.error("unknown encoding type");
-		
-		return AudioTrackType.STEREO;
-	}
-
-	private Programme.Detail getProgrammeDetail(
-			String packageID,
-			SegmentList segmentList,
-			AttributeMap packageAttributes,
-			List<Segment> segments,
-			AttributeMap materialAttributes,
-			AttributeMap title)
-	{
-		Programme.Detail programmeDetail = new Programme.Detail();
-		
-		programmeDetail.setEXTCLIPUMID("???"); //dont know what this is
-		programmeDetail.setTitle(StringUtils.left(title.getAttributeAsString(Attribute.EPISODE_TITLE), 127));
-		programmeDetail.setEpisodeNumber(StringUtils.left(title.getAttributeAsString(Attribute.EPISODE_NUMBER),32));
-		programmeDetail.setDescription(StringUtils.left(title.getAttributeAsString(Attribute.SERIES_TITLE),127));
-		
-		if (!segments.isEmpty())
-		{
-			programmeDetail.setSOM(segmentList.getEntries().get(0).getIn().toSmpte());
-			programmeDetail.setDuration(SegmentUtil.totalDuration(segments));
-		}
-		else
-		{
-			log.warn("Producing Programme type for empty segment list! package" + packageID);
-		}
+		//fetch the packages information		
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		return RuzzProgrammeOutputBuilder.buildProgramme(pack, titleController);
 				
-		programmeDetail.setSUPPLIER(materialAttributes.getAttributeAsString(Attribute.DIST_NAME));
-		StringList channels = title.getAttribute(Attribute.CHANNELS);
-		
-		if (channels != null && channels.size() > 0)
-		{
-			programmeDetail.setMARKET(channels.get(0));
-		}
-		else
-		{
-			log.warn("Producing Programme type for package with empty channels list! package " + packageID);
-		}
-		
-		Date targetDate = packageAttributes.getAttribute(Attribute.TX_NEXT);
-		
-		if (targetDate != null)
-		{
-			GregorianCalendar c = new GregorianCalendar();
-			c.setTime(targetDate);
-			XMLGregorianCalendar xmlDate;
-			try
-			{
-				xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-				programmeDetail.setDueDate(xmlDate);
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				log.error("error settign target date on programme detail for package "+packageID,e);
-			}			
-		}
-		else
-		{
-			log.warn("Producing Programme type for package with no target date! pacakge " + packageID);
-		}
-		
-		try
-		{
-			programmeDetail.setClassification(ClassificationType.fromValue(((String) packageAttributes.getAttributeAsString(Attribute.CONT_CLASSIFICATION)).toUpperCase()));
-		}
-		catch (Exception e)
-		{
-			log.error("error setting classification on programme detail for package " + packageID,e);
-		}
-		return programmeDetail;
 	}
+	
 
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
@@ -747,4 +584,41 @@ public class MayamClientImpl implements MayamClient
 	{
 		return tasksController.createWFEErrorTaskNoAsset(id, title, message);
 	}
+
+	@Override
+	public boolean isTitleAO(String titleID) throws MayamClientException
+	{
+
+		AttributeMap title = titleController.getTitle(titleID);
+		Boolean adult = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+
+		if (adult != null)
+		{
+			return adult.booleanValue();
+		}
+		else
+		{
+			log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + titleID);
+			throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
+		}
+	}
+
+	@Override
+	public boolean isPackageAO(String packageID) throws MayamClientException
+	{
+		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		
+		Boolean adult = info.getTitleAttributes().getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+
+		if (adult != null)
+		{
+			return adult.booleanValue();
+		}
+		else
+		{
+			log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + info.getTitleID());
+			throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
+		}
+	}
+	
 }

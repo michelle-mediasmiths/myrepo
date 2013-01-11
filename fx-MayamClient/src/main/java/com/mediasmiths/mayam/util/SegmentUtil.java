@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
+import com.mediasmiths.foxtel.generated.ruzz.SegmentListType;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
@@ -107,5 +108,23 @@ public class SegmentUtil
 		}
 		
 		return ret;
+	}
+	
+	public static com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment convertMayamSegmentToRuzzSegment(Segment s){
+		
+		com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment rzSeg = new com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment();
+		
+		String som = s.getIn().toSmpte();
+		String duration = s.getDuration().toSmpte();
+		Timecode startTC = Timecode.getInstance(som,Framerate.HZ_25);
+		String eom = calculateEOM(duration, startTC);
+		
+		rzSeg.setSOM(som);
+		rzSeg.setEOM(eom);
+		rzSeg.setDuration(duration);
+		rzSeg.setNumber(s.getNumber());
+		rzSeg.setTitle(s.getTitle());
+		
+		return rzSeg;
 	}
 }
