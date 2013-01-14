@@ -298,10 +298,12 @@ public class MayamMaterialController extends MayamController
 	 * Creates a material, returns the id of the created material
 	 * 
 	 * @param material
+	 * @param title2 
+	 * @param details 
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public String createMaterial(MarketingMaterialType material, String titleID) throws MayamClientException
+	public String createMaterial(MarketingMaterialType material, String titleID, Details details, Title title) throws MayamClientException
 	{
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
@@ -309,17 +311,15 @@ public class MayamMaterialController extends MayamController
 		if (material != null)
 		{
 
-			// setting parent_house_id is an unsupported operation
-			// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 			try
 			{
-				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
-				if (title != null)
+				AttributeMap titleAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
+				if (titleAttributes != null)
 				{
-					String assetId = title.getAttribute(Attribute.ASSET_ID);
+					String assetId = titleAttributes.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 					
-					updateMaterialAttributesFromTitle(attributes, title);
+					updateMaterialAttributesFromTitle(attributes, titleAttributes);
 				}
 			}
 			catch (RemoteException e)
@@ -361,6 +361,55 @@ public class MayamMaterialController extends MayamController
 
 			attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
 
+			Distributor distributor = title.getDistributor();
+			if (distributor != null) {
+				attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
+			}
+			
+			Supplier supplier = details.getSupplier();
+			if(supplier!= null){
+				attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, supplier.getSupplierID());
+			}
+			
+			if(material.getFormat() != null){
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+			}
+		
+			if(title.getProgrammeTitle() != null){
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
+			}
+			
+			if(title.getSeriesNumber() != null){
+				attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, Integer.valueOf(title.getSeriesNumber().intValue()));
+			}
+			
+			if(title.getEpisodeNumber() != null){
+				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER,Integer.valueOf(title.getEpisodeNumber().intValue()));
+			}
+			
+			if(title.getEpisodeTitle() != null){
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getEpisodeTitle());
+			}
+			
+			if(title.getCountryOfProduction() != null){
+				attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
+			}
+			
+			if(title.getProductionNumber() != null){
+				attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
+			}
+			
+			if(title.getProductionNumber() != null){
+				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getProductionNumber());
+			}
+			
+			if(material.getAspectRatio() != null){
+				String mappedAR = getAspectRatioStringForAspectRatioEnumType(material.getAspectRatio());
+				log.debug(String.format("Using string %s for aspect ration %s", mappedAR, material.getAspectRatio()));
+				attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO,mappedAR);
+				
+			}
+			
 			if (!attributesValid)
 			{
 				log.error("Invalid attributes on material create request");

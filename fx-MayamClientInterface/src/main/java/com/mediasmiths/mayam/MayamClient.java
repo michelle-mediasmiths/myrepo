@@ -107,7 +107,7 @@ public interface MayamClient
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public String createMaterial(String titleID, MarketingMaterialType material) throws MayamClientException;
+	public String createMaterial(String titleID, MarketingMaterialType material, Material.Details details, Material.Title title) throws MayamClientException;
 
 	/**
 	 * update a material using the material exchange ProgrammeMaterialType
