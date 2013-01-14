@@ -9,7 +9,6 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -39,9 +38,6 @@ public class IngestCompleteHandler  extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.FINISHED) 
 			{
-				QcStatus previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_STATUS);
-				boolean qcpass = (previewStatus != null && (previewStatus == QcStatus.PASS || previewStatus == QcStatus.PASS_MANUAL));
-				
 				Boolean qcRequired = (Boolean) messageAttributes.getAttribute(Attribute.QC_REQUIRED);
 				if (!qcRequired)
 				{
@@ -56,9 +52,8 @@ public class IngestCompleteHandler  extends AttributeHandler
 					}
 				}
 				
-				if (!qcpass && qcRequired)
+				if (qcRequired)
 				{
-
 					try
 					{
 						String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
@@ -72,7 +67,6 @@ public class IngestCompleteHandler  extends AttributeHandler
 					{
 						log.error("Exception in the Mayam client while handling Ingest Complete Task Message : ", e);
 					}
-				
 				}
 			}
 		}
