@@ -6,6 +6,11 @@ import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_ENDPOINT;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.AbstractModule;
@@ -46,4 +51,44 @@ public class MayamClientModule extends AbstractModule
 		return tc.setup(url, token);
 	}
 	
+	
+	@Provides
+	@Named("material.exchange.marshaller")
+	public Marshaller provideMaterialExchangeMarhsaller(@Named("material.exchange.context") JAXBContext jc) throws JAXBException{
+		Marshaller marshaller = null;
+		try
+		{
+			marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		}
+		catch (JAXBException e)
+		{
+			log.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+	
+	@Provides
+	@Named("material.exchange.context")
+	JAXBContext provideMEXJAXBContext() throws JAXBException{
+		JAXBContext jc = null;
+		try {
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");			
+			} catch (JAXBException e) {
+				log.fatal("Could not create jaxb context", e);
+				throw e;
+			}
+		return jc;
+		}
+	
+	
+	@Provides
+	@Named("material.exchange.unmarshaller")
+	public Unmarshaller provideMaterialExchangeUnMarhsaller(@Named("material.exchange.context") JAXBContext jc) throws JAXBException{
+	
+		return jc.createUnmarshaller();
+	
+	}
 }

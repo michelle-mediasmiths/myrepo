@@ -18,6 +18,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
@@ -148,12 +149,12 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 
-		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
-				MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updatePackage(argThat(matchByPackageID2))).thenReturn(
-				MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updatePackage(argThat(matchByPackageID3))).thenReturn(
-				MayamClientErrorCode.SUCCESS);
+//		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
+//				MayamClientErrorCode.SUCCESS);
+//		when(mayamClient.updatePackage(argThat(matchByPackageID2))).thenReturn(
+//				MayamClientErrorCode.SUCCESS);
+//		when(mayamClient.updatePackage(argThat(matchByPackageID3))).thenReturn(
+//				MayamClientErrorCode.SUCCESS);
 
 		if (mediaFirst) {
 			when(matchMaker.matchMXF(media)).thenReturn(null);
@@ -187,9 +188,9 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		verify(mayamClient).updateTitle(argThat(titleIDMatcher));
 		verify(mayamClient).updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class));
 
-		verify(mayamClient).updatePackage(argThat(matchByPackageID1));
-		verify(mayamClient).updatePackage(argThat(matchByPackageID2));
-		verify(mayamClient).updatePackage(argThat(matchByPackageID3));
+//		verify(mayamClient).updatePackage(argThat(matchByPackageID1));
+//		verify(mayamClient).updatePackage(argThat(matchByPackageID2));
+//		verify(mayamClient).updatePackage(argThat(matchByPackageID3));
 
 		InOrder inOrder = inOrder(matchMaker); // check that mxf and xml
 												// processed in same order they
@@ -326,6 +327,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	}
 	
 	@Test
+	@Ignore //CR018
 	public void testMayamClientFailureOnUpdatePackageResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
 		// prepare files
 		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,

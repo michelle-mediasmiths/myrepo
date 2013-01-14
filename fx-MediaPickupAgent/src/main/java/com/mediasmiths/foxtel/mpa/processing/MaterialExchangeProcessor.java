@@ -90,11 +90,14 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			// programme material
 			updateTitle(message.getTitle());
 			String materialID = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial(), message.getDetails(), message.getTitle());
-			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
-
-				updatePackages(message.getTitle().getProgrammeMaterial()
-						.getPresentation().getPackage(), materialID);
-			}
+			
+			//package update will be handled by updateProgrammeMaterial (CR018 makes things ugly)
+//			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
+//
+//				updatePackages(message.getTitle().getProgrammeMaterial()
+//						.getPresentation().getPackage(), materialID);
+//			}
+//			
 			return message.getTitle().getProgrammeMaterial().getMaterialID();
 		} else {
 			// marketing material
@@ -194,35 +197,35 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 		
 		return programmeMaterial.getMaterialID();
 	}
-
-	private void updatePackages(List<Package> packages, String materialID)
-			throws MessageProcessingFailedException {
-		logger.trace("updatePackages");
-		if(packages != null)
-		for (Package txPackage : packages) {
-			updatePackage(txPackage, materialID);
-		}
-	}
-
-	/**
-	 * Update tx-package in viz ardome with information from the aggregator
-	 * 
-	 * @param txPackage
-	 * @param materialID 
-	 * @throws MessageProcessingFailedException
-	 */
-	private void updatePackage(Package txPackage, String materialID)
-			throws MessageProcessingFailedException {
-		logger.trace("updatePackage");
-		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
-
-		if (result != MayamClientErrorCode.SUCCESS) {
-			logger.error(String.format("Error updating package %s",
-					txPackage.getPresentationID()));
-			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
-		}
-	}
+//
+//	private void updatePackages(List<Package> packages, String materialID)
+//			throws MessageProcessingFailedException {
+//		logger.trace("updatePackages");
+//		if(packages != null)
+//		for (Package txPackage : packages) {
+//			updatePackage(txPackage, materialID);
+//		}
+//	}
+//
+//	/**
+//	 * Update tx-package in viz ardome with information from the aggregator
+//	 * 
+//	 * @param txPackage
+//	 * @param materialID 
+//	 * @throws MessageProcessingFailedException
+//	 */
+//	private void updatePackage(Package txPackage, String materialID)
+//			throws MessageProcessingFailedException {
+//		logger.trace("updatePackage");
+//		MayamClientErrorCode result = mayamClient.updatePackage(txPackage);
+//
+//		if (result != MayamClientErrorCode.SUCCESS) {
+//			logger.error(String.format("Error updating package %s",
+//					txPackage.getPresentationID()));
+//			throw new MessageProcessingFailedException(
+//					MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+//		}
+//	}
 
 
 }

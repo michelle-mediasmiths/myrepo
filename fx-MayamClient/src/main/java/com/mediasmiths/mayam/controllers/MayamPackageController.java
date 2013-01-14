@@ -1,9 +1,17 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 
@@ -37,6 +45,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
@@ -49,6 +59,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
+import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.types.Framerate;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -67,6 +78,9 @@ public class MayamPackageController extends MayamController
 	private final MayamMaterialController materialController;
 	private final MayamTaskController taskController;
 	
+	@Inject @Named("material.exchange.unmarshaller")
+	private Unmarshaller materialExchangeUnMarshaller;
+	
 	@Inject
 	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil, MayamMaterialController materialController, MayamTaskController taskController)
 	{
@@ -84,6 +98,8 @@ public class MayamPackageController extends MayamController
 
 		if (txPackage != null)
 		{
+			
+			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
 			
@@ -94,6 +110,7 @@ public class MayamPackageController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
 			AttributeMap material;
+			Segmentation segmentation = null; //segmentation information that arrived with the media as part of material exchange
 			boolean requiresSegmentationTask = false;
 			try
 			{
@@ -105,22 +122,25 @@ public class MayamPackageController extends MayamController
 					client.assetApi().updateAsset(material);
 					
 					//Has Material been set to Preview Pass
-					AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PREVIEW, txPackage.getMaterialID());
-					if (task != null && (task.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED) 
-							|| task.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED_BUT_REORDER) )) {
+					if(material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED) 
+							|| material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED_BUT_REORDER)) {
 								requiresSegmentationTask = true;
+					}		
+					
+					
+					segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
+					
+					if(segmentation==null){
+						log.info("no existing segmentation information for this tx package");
 					}
+					
 				}
 			}
 			catch (RemoteException e1)
 			{
 				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID(),e1);				
 			} 
-			catch (MayamClientException e2) 
-			{
-				log.error("Exception thrown by Mayam while attempting to retrieve task for asset : " + txPackage.getMaterialID(),e2);	
-			}
-
+			
 			if (!attributesValid)
 			{
 				log.warn("PAckage created but one or more attributes was invalid");
@@ -143,13 +163,35 @@ public class MayamPackageController extends MayamController
 						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
 					if (txPackage.getTargetDate() != null)
 						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
-					
 				
 					
-					final SegmentListBuilder listbuilder = SegmentList.create();
+					
+					
+					SegmentListBuilder listbuilder = SegmentList.create();
 					listbuilder.attributeMap(attributes.getAttributes());
+	
+					try
+					{
+						if (segmentation != null)
+						{
+	
+							for (Segment s : segmentation.getSegment())
+							{
+	
+								com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
+								listbuilder = listbuilder.segment(converted);
+							}
+	
+						}
+					}
+					catch (InvalidTimecodeException e)
+					{
+						log.error("could not convert segmentation info stored against item", e);
+					}
+						
+					
 					SegmentList segmentList = listbuilder.build();
-
+				
 					log.debug("Getting materials asset id");
 					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
 					String revisionID = findHighestRevision(materialAssetID);
@@ -168,7 +210,7 @@ public class MayamPackageController extends MayamController
 			catch (RemoteException e)
 			{
 				e.printStackTrace();
-				log.error("Exception thrown by Mayam while attempting to create Package");
+				log.error("Exception thrown by Mayam while attempting to create Package",e);
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
 			} 
 			catch (MayamClientException e2) 
@@ -182,6 +224,54 @@ public class MayamPackageController extends MayamController
 			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
 		return returnCode;
+	}
+
+	/**
+	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
+	 * 
+	 * Once preview has passed and bms is issuing tx package create messages then we fetch this segment info from the material
+	 * to populated tx packages being created. (We couldn't just create them when the material comes in for some foxtel operational reason)
+	 * 
+	 * @param txPackage
+	 * @param material
+	 * @return
+	 */
+	private Segmentation findExistingSegmentInfoForTxPackage(PackageType txPackage, AttributeMap material)
+	{
+		Presentation p = null;
+		try
+		{
+			String naturalBreaks = material.getAttribute(Attribute.AUX_VAL);
+			log.debug(String.format("natural breaks is %s", naturalBreaks));
+						
+			final StringReader reader = new StringReader(naturalBreaks);
+			final StreamSource source = new StreamSource(reader);
+			
+			JAXBElement<Presentation> j = (JAXBElement<Presentation>) materialExchangeUnMarshaller.unmarshal(source,Presentation.class);
+			p = j.getValue();
+		}
+		catch (JAXBException je)
+		{
+			log.error("error unmarshalling presentation information from AUX_VAL", je);
+		}
+		catch (Exception e)
+		{
+			log.error("error unmarshalling presentation information from AUX_VAL", e);
+		}
+
+		if (p != null)
+		{
+			List<Package> packages = p.getPackage();
+			for (Package pc : packages)
+			{
+				if (pc.getPresentationID().equals(txPackage.getPresentationID()))
+				{
+					return pc.getSegmentation();
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 

@@ -1,13 +1,23 @@
 package com.mediasmiths.mayam.util;
 
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.ruzz.SegmentListType;
@@ -110,6 +120,27 @@ public class SegmentUtil
 		
 	}
 
+	public static Segment convertMaterialExchangeSegmentToMayamSegment(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment in) throws InvalidTimecodeException{
+		
+		String som = in.getSOM();
+		String eom = in.getEOM();
+		String title = in.getSegmentTitle();
+		String duration= null;
+		int number = in.getSegmentNumber();
+		
+		Timecode start =  Timecode.getInstance(som, Framerate.HZ_25); 
+		
+		if(duration == null){
+			Timecode end =  Timecode.getInstance(eom, Framerate.HZ_25);
+			long durationSamples = (end.getSampleCount().getSamples() - start.getSampleCount().getSamples());
+			Timecode durationTimecode = Timecode.getInstance(new SampleCount(durationSamples, Framerate.HZ_25));
+			duration = durationTimecode.toSMPTEString();
+		}
+		
+		return Segment.create().in(new com.mayam.wf.attributes.shared.type.Timecode(som)).duration(new com.mayam.wf.attributes.shared.type.Timecode(duration)).number(number).title(title).build();
+		
+	}
+	
 	public static Segments convertMayamSegmentListToMediaExchangeSegments(SegmentList segmentList)
 	{
 		Segments ret = new Segments();
@@ -155,4 +186,6 @@ public class SegmentUtil
 		
 		return rzSeg;
 	}
+	
+	
 }

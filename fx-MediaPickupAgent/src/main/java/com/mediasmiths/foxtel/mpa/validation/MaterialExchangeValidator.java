@@ -97,55 +97,9 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			return MessageValidationResult.MAYAM_CLIENT_ERROR;
 		}
 
-		//validate orignial conform
-		MessageValidationResult originalConform = validateOriginalConform(programmeMaterial
-				.getOriginalConform());
-
-		if (originalConform != MessageValidationResult.IS_VALID) {
-			return originalConform;
-		}
-
-		return validatePackages(programmeMaterial.getPresentation(),programmeMaterial.getMaterialID());
-
-	}
-
-	private MessageValidationResult validateOriginalConform(
-			SegmentationType originalConform) {
-		if (originalConform != null) {
-			logger.trace("validating original conform");
-			// TODO : what validation is required for this?
-			return MessageValidationResult.IS_VALID;
-		} else {
-			return MessageValidationResult.IS_VALID;
-		}
-	}
-
-	private MessageValidationResult validatePackages(Presentation presentation, String materialID) {
-		if (presentation != null && presentation.getPackage() != null) {
-
-			logger.trace("validating packages");
-			for (Package pack : presentation.getPackage()) {
-				try {
-					
-					final String packageId = pack.getPresentationID();
-					
-					//reject empty packageID		
-					if(StringUtils.isNullOrEmpty(packageId)){
-						return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
-					}
-					
-					if (!mayamClient.packageExists(pack.getPresentationID())) {
-						return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
-					}
-				} catch (MayamClientException e) {
-					logger.error(
-							"Mayam client error querying if package exists", e);
-					return MessageValidationResult.MAYAM_CLIENT_ERROR;
-				}
-			}
-		}
-
+		//not validating the passed in package information now, CR018
 		return MessageValidationResult.IS_VALID;
+	
 	}
 
 	@Override

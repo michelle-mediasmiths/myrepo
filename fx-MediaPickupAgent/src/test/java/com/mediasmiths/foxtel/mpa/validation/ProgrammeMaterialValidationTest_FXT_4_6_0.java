@@ -10,6 +10,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -94,7 +95,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 	}
 	
 	@Test
-	public void testMaterialWithPackages() throws Exception{
+	public void testMaterialWithPackages() throws Exception{ 
 		
 		List<String> packageids = new ArrayList<String>();
 		packageids.add(EXISTING_PACKAGE);
@@ -107,12 +108,11 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExists(EXISTING_PACKAGE);
-		verify(mayamClient).packageExists(EXISTING_PACKAGE2);
 		
 	}
 	
 	@Test
+	@Ignore //CR018
 	public void testPackageDoesntExist_FXT_4_6_0_4() throws Exception{
 		logger.info("Starting FXT 4.6.0.4  - Programme material message references non existant package(s)");
 		List<String> packageids = new ArrayList<String>();
@@ -138,11 +138,10 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExists(EXISTING_PACKAGE);
-		verify(mayamClient).packageExists(NOT_EXISTING_PACKAGE);
 	}
 	
 	@Test
+	@Ignore //CR018	
 	public void testPackageCheckFails() throws Exception {
 		List<String> packageids = new ArrayList<String>();
 		packageids.add(EXISTING_PACKAGE);

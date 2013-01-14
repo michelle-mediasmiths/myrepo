@@ -1,8 +1,14 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 
@@ -12,6 +18,7 @@ import au.com.foxtel.cf.mam.pms.Compile;
 import au.com.foxtel.cf.mam.pms.Library;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
+import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
 
 import au.com.foxtel.cf.mam.pms.Source;
@@ -36,6 +43,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distribu
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.MayamAspectRatios;
@@ -64,6 +73,9 @@ public class MayamMaterialController extends MayamController
 	private final MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 
+	@Inject @Named("material.exchange.marshaller")
+	private Marshaller materialExchangeMarshaller;
+	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
 	{
@@ -402,14 +414,7 @@ public class MayamMaterialController extends MayamController
 			if(title.getProductionNumber() != null){
 				attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getProductionNumber());
 			}
-			
-			if(material.getAspectRatio() != null){
-				String mappedAR = getAspectRatioStringForAspectRatioEnumType(material.getAspectRatio());
-				log.debug(String.format("Using string %s for aspect ration %s", mappedAR, material.getAspectRatio()));
-				attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO,mappedAR);
-				
-			}
-			
+					
 			if (!attributesValid)
 			{
 				log.error("Invalid attributes on material create request");
@@ -553,19 +558,42 @@ public class MayamMaterialController extends MayamController
 					
 					log.debug("programme material message contains original conform information");
 					SegmentationType originalConform = material.getOriginalConform();
-					log.debug(String.format("%d segments in original conform",originalConform.getSegment().size()));
-					StringBuilder sb = new StringBuilder();
 					
-					for(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s : originalConform.getSegment()){
-						
-						s = SegmentUtil.fillEomAndDurationOfSegment(s);
-						String segmentAsString = SegmentUtil.segmentToString(s);
-						sb.append(segmentAsString);						
+					
+					//take original conform structure, turn it into Presentation/Package structure
+					
+					Presentation p = new Presentation();
+					Presentation.Package pack = new Presentation.Package(); 
+					p.getPackage().add(pack);
+					
+					pack.setPresentationID("");
+					Segmentation packSegmentation = new Segmentation();
+					pack.setSegmentation(packSegmentation);
+					packSegmentation.getSegment().addAll(originalConform.getSegment());
+					
+					try
+					{
+						String presentationString = presentationToString(p);
+						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+					}
+					catch (JAXBException e)
+					{
+						log.error("Error marshalling presentation for material "+material.getMaterialID(), e);
 					}
 					
-					String originalConformInfo = sb.toString();
-					attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, originalConformInfo);
+				}
+				else if(material.getPresentation() != null){
 					
+					Presentation presentation = material.getPresentation();
+					try
+					{
+						String presentationString = presentationToString(presentation);
+						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+					}
+					catch (JAXBException e)
+					{
+						log.error("Error marshalling presentation for material "+material.getMaterialID(), e);
+					}
 				}
 				
 
@@ -603,13 +631,6 @@ public class MayamMaterialController extends MayamController
 					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 				}
 				
-				if(material.getAspectRatio() != null){
-					String mappedAR = getAspectRatioStringForAspectRatioEnumType(material.getAspectRatio());
-					log.debug(String.format("Using string %s for aspect ration %s", mappedAR, material.getAspectRatio()));
-					attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO,mappedAR);
-					
-				}
-
 				if (!attributesValid)
 				{
 					log.warn("Material updated but one or more attributes was invalid");
@@ -649,36 +670,12 @@ public class MayamMaterialController extends MayamController
 
 
 
-	
-
-	private String getAspectRatioStringForAspectRatioEnumType(String ar)
+	private String presentationToString(Presentation p) throws JAXBException
 	{
-		if (ar.equals("16F16"))
-		{
-			return "ff";
-		}
-		else if (ar.equals("12P16"))
-		{
-			return "pb";
-		}
-		else if (ar.equals("12R16"))
-		{
-			return "rz";
-		}
-		else if (ar.equals("16L12"))
-		{
-			return "lb";
-		}
-		else if (ar.equals("16C12"))
-		{
-			return "cc";
-		}
-		else{
-			log.error("Unknown aspect ration string "+ar);
-		}
-		
-		return null;
-
+			JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(new QName("","Presentation"), Presentation.class, p);
+			StringWriter sw = new StringWriter();
+			materialExchangeMarshaller.marshal(j,sw);
+			return sw.toString();
 	}
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
