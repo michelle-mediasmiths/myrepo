@@ -213,7 +213,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public String createMaterial(String titleID, MarketingMaterialType material) throws MayamClientException
+	public String createMaterial(String titleID, MarketingMaterialType material, Material.Details details, Material.Title title) throws MayamClientException
 	{
 
 		if (titleID.equals(NEW_TITLE_ID))
