@@ -27,7 +27,7 @@ public class UnmatchedHandler  extends AttributeHandler
 				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 				long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
 				
-				//Initiate QC flow
+/*				//Initiate QC flow
 				MuleWorkflowController mule = new MuleWorkflowController();
 				if (assetType.equals(MayamAssetType.MATERIAL.getText()))
 				{
@@ -36,7 +36,7 @@ public class UnmatchedHandler  extends AttributeHandler
 				else if (assetType.equals(MayamAssetType.PACKAGE.getText()))
 				{
 					mule.initiateQcWorkflow(assetID, true);
-				}
+				}*/
 				
 				AttributeMap newTask = taskController.getTask(taskID);
 				newTask.putAll(messageAttributes);
