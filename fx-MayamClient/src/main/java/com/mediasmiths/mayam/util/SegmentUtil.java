@@ -1,6 +1,8 @@
 package com.mediasmiths.mayam.util;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -17,15 +19,37 @@ public class SegmentUtil
 {
 	private static Logger log = Logger.getLogger(SegmentUtil.class);
 	
+	private static Pattern stringToSeg = Pattern.compile("Number:\\{([0-9]*)\\},Title:\\{(.*)\\},SOM:\\{(.*)\\},EOM:\\{(.*)\\},Duration:\\{(.*)\\}\n");
+	
 	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
 		return String.format("Number:{%d},Title:{%s},SOM:{%s},EOM:{%s},Duration:{%s}\n",s.getSegmentNumber(),s.getSegmentTitle(), s.getSOM(),s.getEOM(),s.getDuration());
 	}
 	
-//	public static com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment stringToSegment(String s) throws IllegalArgumentException
-//	{
-//		return new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
-//	}
+	public static com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment stringToSegment(String str) throws IllegalArgumentException
+	{
+		com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s =  new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+		
+		Matcher m  = stringToSeg.matcher(str);
+		
+		if(m.matches()){
+			int number = Integer.parseInt(m.group(1));
+			String title = m.group(2);
+			String som = m.group(3);
+			String eom = m.group(4);
+			String duration = m.group(5);
+			
+			s.setSegmentNumber(number);
+			s.setSegmentTitle(title);
+			s.setSOM(som);
+			s.setDuration(duration);
+			return s;
+		}
+		
+		throw new IllegalArgumentException("could not parse supplied string as segment info: "+str);
+	}
+	
+	
 	
 	/**
 	 * Takes a segment and produces a copy with both eom and duration populated (eom and duration are a choice in the schema, returned object will not be schema compliant, not for marshalling)
@@ -89,24 +113,28 @@ public class SegmentUtil
 	public static Segments convertMayamSegmentListToMediaExchangeSegments(SegmentList segmentList)
 	{
 		Segments ret = new Segments();
-		
-		for(Segment s : segmentList.getEntries()){
-			Programme.Media.Segments.Segment meSeg = new Programme.Media.Segments.Segment();
-			
-			String som = s.getIn().toSmpte();
-			String duration = s.getDuration().toSmpte();
-			Timecode startTC = Timecode.getInstance(som,Framerate.HZ_25);
-			String eom = calculateEOM(duration, startTC);
-			
-			meSeg.setSOM(som);
-			meSeg.setEOM(eom);
-			meSeg.setDuration(duration);
-			meSeg.setNumber(s.getNumber());
-			meSeg.setTitle(s.getTitle());
-			
-			ret.getSegment().add(meSeg);
+
+		if (segmentList != null && segmentList.getEntries() != null)
+		{
+			for (Segment s : segmentList.getEntries())
+			{
+				Programme.Media.Segments.Segment meSeg = new Programme.Media.Segments.Segment();
+
+				String som = s.getIn().toSmpte();
+				String duration = s.getDuration().toSmpte();
+				Timecode startTC = Timecode.getInstance(som, Framerate.HZ_25);
+				String eom = calculateEOM(duration, startTC);
+
+				meSeg.setSOM(som);
+				meSeg.setEOM(eom);
+				meSeg.setDuration(duration);
+				meSeg.setNumber(s.getNumber());
+				meSeg.setTitle(s.getTitle());
+
+				ret.getSegment().add(meSeg);
+			}
 		}
-		
+
 		return ret;
 	}
 	

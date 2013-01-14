@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.util;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,44 @@ public class SegmentUtilTest
 			String expected = "Number:{1},Title:{title},SOM:{00:00:00:00},EOM:{00:00:01:00},Duration:{00:00:01:00}\n";
 			String actual = SegmentUtil.segmentToString(s);
 			assertEquals(expected, actual);
+			
+		}
+		
+		@Test
+		public void testStringToSegment(){
+			
+			
+			String str = "Number:{1},Title:{title},SOM:{00:00:00:00},EOM:{00:00:01:00},Duration:{00:00:01:00}\n";
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment expected = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			
+			
+			expected.setSOM("00:00:00:00");
+			expected.setDuration("00:00:01:00");
+			expected.setSegmentNumber(1);
+			expected.setSegmentTitle("title");		
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment actual = SegmentUtil.stringToSegment(str);
+			
+			assertEquals(expected.getSegmentNumber(), actual.getSegmentNumber());
+			assertEquals(expected.getSegmentTitle(), actual.getSegmentTitle());
+			assertEquals(expected.getSOM(), actual.getSOM());			
+			assertEquals(expected.getDuration(), actual.getDuration());
+			
+			
+		}
+		
+		@Test
+		public void testNaturalBreaksStringToSegments(){
+			
+			String str = "Number:{1},Title:{title},SOM:{00:00:00:00},EOM:{00:00:01:00},Duration:{00:00:01:00}\n"
+			+"Number:{2},Title:{title},SOM:{00:00:01:00},EOM:{00:00:10:00},Duration:{00:00:09:00}\n";
+			
+			String[] segs = str.split("\n");
+			
+			
+			assertEquals(SegmentUtil.stringToSegment(segs[0]+"\n").getDuration(),"00:00:01:00");
+			assertEquals(SegmentUtil.stringToSegment(segs[1]+"\n").getSegmentNumber(),2);
 			
 		}
 		

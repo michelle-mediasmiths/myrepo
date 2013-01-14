@@ -31,6 +31,7 @@ import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.CommentLog;
+import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
@@ -436,9 +437,31 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String pathToMaterial(String materialID) throws MayamClientException
 	{
-		// TODO implelment!
-
-		return "/storage/mam/hires01/mediasmithstemp/input/TestMedia.mxf";
+		
+		AttributeMap material = materialController.getMaterialAttributes(materialID);
+		
+		String assetID = material.getAttribute(Attribute.ASSET_ID);
+		
+		FileFormatInfo fileinfo;
+		try
+		{
+			fileinfo = client.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(), assetID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error getting file format info for material "+materialID,e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
+		}
+		
+		
+		List<String> urls = fileinfo.getUrls();
+		
+		for (String url : urls)
+		{
+			log.debug("url: "+url);
+		}
+		
+		return urls.get(0);
 	}
 
 	@Override

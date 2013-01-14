@@ -229,7 +229,7 @@ public class MayamMaterialController extends MayamController
 									"Exception thrown in Mayam while creating Ingest task for Material : "
 											+ material.getMaterialID(),
 									e);
-						}
+						}						
 					}
 				}
 			}

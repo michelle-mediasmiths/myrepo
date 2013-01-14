@@ -104,12 +104,12 @@ public class MediaExchangeProgrammeOutputBuilder
 	{
 		Programme.Detail programmeDetail = new Programme.Detail();
 
-		programmeDetail.setEXTCLIPUMID("???"); // dont know what this is
+		programmeDetail.setEXTCLIPUMID("");
 		programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
 		programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
 		programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
 
-		if (!pack.getSegments().isEmpty())
+		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
 		{
 			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
 			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
