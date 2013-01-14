@@ -114,7 +114,7 @@ public interface MayamClient
 	 * @param material
 	 * @return
 	 */
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material);
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title);
 	/**
 	 * update a material using the placeholder management MaterialType
 	 * @param material

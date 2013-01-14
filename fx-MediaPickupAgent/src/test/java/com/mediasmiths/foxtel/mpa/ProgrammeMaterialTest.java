@@ -5,6 +5,7 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -111,7 +112,7 @@ public class ProgrammeMaterialTest {
 		when(mayamClient.isMaterialPlaceholder(materialID)).thenReturn(true);
 		
 		when(mayamClient.updateTitle((Title) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updateMaterial((ProgrammeMaterialType) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updateMaterial((ProgrammeMaterialType) anyObject(), any(Material.Details.class), any(Material.Title.class))).thenReturn(MayamClientErrorCode.SUCCESS);
 		
 		startMediaPickupAgent(incomingPath, receiptPath, failurePath,
 				archivePath, ardomeImportPath, ardomeEmergencyImportPath,

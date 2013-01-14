@@ -132,7 +132,7 @@ public class MayamClientImpl implements MayamClient
 		return titleController.createTitle(title);
 	}
 
-	/*
+	/* 
 	 * (non-Javadoc)
 	 * 
 	 * @see com.mediasmiths.mayam.MayamClient#updateTitle(com.mediasmiths.foxtel. generated.MediaExchange.Programme.Detail)
@@ -182,9 +182,9 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel .generated.MediaExchange.Programme.Media)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title)
 	{
-		return materialController.updateMaterial(material);
+		return materialController.updateMaterial(material,details,title);
 	}
 
 	/*

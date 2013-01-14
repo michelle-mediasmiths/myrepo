@@ -78,7 +78,7 @@ public class WFAdapterModule extends AbstractModule
 	JAXBContext provideMEXJAXBContext() throws JAXBException{
 		JAXBContext jc = null;
 		try {
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.MaterialExchange");			
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.mediaexchange");			
 			} catch (JAXBException e) {
 				logger.fatal("Could not create jaxb context", e);
 				throw e;

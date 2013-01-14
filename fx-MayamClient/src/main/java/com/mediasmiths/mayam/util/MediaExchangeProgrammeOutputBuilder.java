@@ -74,9 +74,14 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
 			pmat.setNumber(track.getNumber());
-
+			
+			if(track.getEncoding() != null){
 			AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(track.getEncoding());
 			pmat.setType(att);
+			}
+			else{
+				log.warn("null encoding on audio track!");
+			}
 
 			ats.getTrack().add(pmat);
 

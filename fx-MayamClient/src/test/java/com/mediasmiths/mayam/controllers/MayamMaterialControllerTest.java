@@ -28,6 +28,8 @@ import com.mayam.wf.attributes.shared.type.AspectRatio;
 import com.mayam.wf.ws.client.AssetApi;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -112,7 +114,7 @@ public class MayamMaterialControllerTest {
 		MayamClientErrorCode returnCode = controller.updateMaterial(material);
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 		
-		returnCode = controller.updateMaterial(programmeMaterial);
+		returnCode = controller.updateMaterial(programmeMaterial, null, null);
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 	}
 	
@@ -174,7 +176,7 @@ public class MayamMaterialControllerTest {
 		MayamClientErrorCode returnCode = controller.updateMaterial(material);
 		assertEquals(returnCode, MayamClientErrorCode.MAYAM_EXCEPTION);
 		
-		returnCode = controller.updateMaterial(programmeMaterial);
+		returnCode = controller.updateMaterial(programmeMaterial, null, null);
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 
@@ -194,7 +196,9 @@ public class MayamMaterialControllerTest {
 		assertEquals(MayamClientErrorCode.MATERIAL_UNAVAILABLE, returnCode);
 		
 		ProgrammeMaterialType updateMaterial = null;
-		returnCode = controller.updateMaterial(updateMaterial);
+		Details details=null;
+		Material.Title title = null;
+		returnCode = controller.updateMaterial(updateMaterial, details , title);
 		assertEquals(MayamClientErrorCode.MATERIAL_UNAVAILABLE, returnCode);
 	}
 	

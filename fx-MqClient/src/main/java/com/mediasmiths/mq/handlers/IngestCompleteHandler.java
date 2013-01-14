@@ -39,7 +39,7 @@ public class IngestCompleteHandler  extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.FINISHED) 
 			{
-				QcStatus previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
+				QcStatus previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_STATUS);
 				boolean qcpass = (previewStatus != null && (previewStatus == QcStatus.PASS || previewStatus == QcStatus.PASS_MANUAL));
 				
 				Boolean qcRequired = (Boolean) messageAttributes.getAttribute(Attribute.QC_REQUIRED);

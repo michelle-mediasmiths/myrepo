@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -22,6 +23,8 @@ import org.mockito.InOrder;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -142,7 +145,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
+		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 
 		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
@@ -182,7 +185,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		// verfiy mocks
 		verify(validator).validateFile(materialxml.getAbsolutePath());
 		verify(mayamClient).updateTitle(argThat(titleIDMatcher));
-		verify(mayamClient).updateMaterial(argThat(materialIDMatcher));
+		verify(mayamClient).updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class));
 
 		verify(mayamClient).updatePackage(argThat(matchByPackageID1));
 		verify(mayamClient).updatePackage(argThat(matchByPackageID2));
@@ -304,7 +307,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
+		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
 		.thenReturn(MayamClientErrorCode.FAILURE);
 				
 		//queue file for processing
@@ -336,7 +339,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updateMaterial(argThat(materialIDMatcher)))
+		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
 		.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
 				MayamClientErrorCode.FAILURE);

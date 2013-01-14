@@ -28,6 +28,11 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -121,6 +126,10 @@ public class MayamMaterialController extends MayamController
 				}
 
 			}
+			else{
+				attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(false));
+			}
+			
 			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
 
 			Source source = material.getSource();
@@ -256,14 +265,13 @@ public class MayamMaterialController extends MayamController
 		attributes.copyAttribute(Attribute.ASSET_TITLE, title);
 		
 		//AdultContent
-		//TODO which attribute is for this
-		//attributes.copyAttribute(Attribute.??????, title);
+		attributes.copyAttribute(Attribute.CONT_RESTRICTED_MATERIAL, title);
 		
 		//ProgrammeTitle
 		attributes.copyAttribute(Attribute.SERIES_TITLE, title);
 		
 		//Show
-		
+		attributes.copyAttribute(Attribute.SHOW, title);
 		//Series/Season Number
 		attributes.copyAttribute(Attribute.SEASON_NUMBER, title);
 		//Episode Number
@@ -440,7 +448,7 @@ public class MayamMaterialController extends MayamController
 	}
 
 	// Material - Updating a media asset in Mayam
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material)
+	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Details details, Title title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
@@ -531,6 +539,27 @@ public class MayamMaterialController extends MayamController
 						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
 					}
 				}
+				
+				Distributor distributor = title.getDistributor();
+				if (distributor != null) {
+					attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
+				}
+				
+				Supplier supplier = details.getSupplier();
+				if(supplier!= null){
+					attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, supplier.getSupplierID());
+				}
+				
+				if(material.getFormat() != null){
+					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+				}
+				
+				if(material.getAspectRatio() != null){
+					String mappedAR = getAspectRatioStringForAspectRatioEnumType(material.getAspectRatio());
+					log.debug(String.format("Using string %s for aspect ration %s", mappedAR, material.getAspectRatio()));
+					attributesValid &= attributes.setAttribute(Attribute.ASPECT_RATIO,mappedAR);
+					
+				}
 
 				if (!attributesValid)
 				{
@@ -572,6 +601,36 @@ public class MayamMaterialController extends MayamController
 
 
 	
+
+	private String getAspectRatioStringForAspectRatioEnumType(String ar)
+	{
+		if (ar.equals("16F16"))
+		{
+			return "ff";
+		}
+		else if (ar.equals("12P16"))
+		{
+			return "pb";
+		}
+		else if (ar.equals("12R16"))
+		{
+			return "rz";
+		}
+		else if (ar.equals("16L12"))
+		{
+			return "lb";
+		}
+		else if (ar.equals("16C12"))
+		{
+			return "cc";
+		}
+		else{
+			log.error("Unknown aspect ration string "+ar);
+		}
+		
+		return null;
+
+	}
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{

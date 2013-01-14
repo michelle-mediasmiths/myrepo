@@ -46,6 +46,8 @@ public class MayamTitleController extends MayamController{
 	private final TasksClient client;
 	private final static Logger log = Logger.getLogger(MayamTitleController.class);
 	
+	private final static String AO_CHANNEL_TAG = "AO";
+	
 	@Inject
 	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
 		client = mayamClient;
@@ -153,6 +155,8 @@ public class MayamTitleController extends MayamController{
 				
 				StringList channelStringList = new StringList();
 				
+				boolean ao = false;
+				
 				if (titleRights != null) {
 					List<String> columnNames = new ArrayList<String>();
 					columnNames.add("Organization ID");
@@ -182,6 +186,9 @@ public class MayamTitleController extends MayamController{
 									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
 									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
 									String channelTag = channel.getChannelTag();
+									if(AO_CHANNEL_TAG.equals(channelTag)){
+										ao=true;
+									}
 									channelStringList.add(channelTag);
 									rowCounter ++;
 								}
@@ -189,7 +196,12 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
+					
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+					
+					//ao will be true if the ao channel was in the channel list
+					attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, Boolean.valueOf(ao));
+					
 				}
 				
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
@@ -290,7 +302,6 @@ public class MayamTitleController extends MayamController{
 					
 					Distributor distributor = title.getDistributor();
 					if (distributor != null) {
-						//attributesValid &= attributes.setAttribute(Attribute.RIGHTS_CODE, distributor.getDistributorID());
 						attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
 					}
 					
@@ -375,6 +386,7 @@ public class MayamTitleController extends MayamController{
 					attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
 					attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
 					
+					boolean ao = false;
 					RightsType titleRights = title.getRights();
 					if (titleRights != null) {
 						List<String> columnNames = new ArrayList<String>();
@@ -406,6 +418,11 @@ public class MayamTitleController extends MayamController{
 										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
 										
 										String channelTag = channel.getChannelTag();
+										
+										if(AO_CHANNEL_TAG.equals(channelTag)){
+											ao=true;
+										}
+										
 										channelStringList.add(channelTag);
 										
 										rowCounter ++;
@@ -415,6 +432,10 @@ public class MayamTitleController extends MayamController{
 						}
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 						attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
+						
+						//ao will be true if the ao channel was in the channel list
+						attributesValid = attributesValid && attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, Boolean.valueOf(ao));
+						
 					}
 
 					attributesValid &=attributes.setAttribute(Attribute.SHOW, titleDescription.getShow());

@@ -89,7 +89,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 		if (Util.isProgramme(message)) {
 			// programme material
 			updateTitle(message.getTitle());
-			String materialID = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial());
+			String materialID = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial(), message.getDetails(), message.getTitle());
 			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
 
 				updatePackages(message.getTitle().getProgrammeMaterial()
@@ -178,12 +178,12 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	 * @param programmeMaterial
 	 * @throws MessageProcessingFailedException
 	 */
-	private String updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial)
+	private String updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial, Material.Details details, Material.Title title)
 			throws MessageProcessingFailedException {
 		logger.trace("updatingProgrammeMaterial");
 
 		MayamClientErrorCode result = mayamClient
-				.updateMaterial(programmeMaterial);
+				.updateMaterial(programmeMaterial, details,title);
 
 		if (result != MayamClientErrorCode.SUCCESS) {
 			logger.error(String.format("Error updating programme material %s",
