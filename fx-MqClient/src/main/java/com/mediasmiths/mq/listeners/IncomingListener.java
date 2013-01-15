@@ -208,6 +208,9 @@ public class IncomingListener extends MqClientListener
 				
 				taskController.updateAccessRights(currentAttributes);
 			}
+			else{
+				passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
+			}
 		}
 		catch (Exception e)
 		{

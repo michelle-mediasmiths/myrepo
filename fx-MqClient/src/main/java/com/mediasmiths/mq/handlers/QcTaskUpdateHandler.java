@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -18,6 +19,9 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 	private static final String MANUAL_QC_PASS = "pass";
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
 
+	@Inject
+	MuleWorkflowController mule;
+	
 	@Override
 	public String getName()
 	{
@@ -31,21 +35,19 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText()))
 		{
 			// if update was to change substatus for file format verification
-			if (attributeChanged(Attribute.QC_SUBSTATUS1, before, after)
-					&& currentAttributes.containsAttribute(Attribute.QC_SUBSTATUS1))
+			if (after.containsAttribute(Attribute.QC_SUBSTATUS1))
 			{
 				fileFormatVerificationStatusChanged(currentAttributes, after);
 			}
 
 			// autoqc status changed
-			if (attributeChanged(Attribute.QC_SUBSTATUS2, before, after)
-					&& currentAttributes.containsAttribute(Attribute.QC_SUBSTATUS2))
+			if (after.containsAttribute(Attribute.QC_SUBSTATUS2))
 			{
 				autoQcStatusChanged(currentAttributes, after);
 			}
 
 			// qc result set manually
-			if (attributeChanged(Attribute.QC_RESULT, before, after) && currentAttributes.containsAttribute(Attribute.QC_RESULT))
+			if (after.containsAttribute(Attribute.QC_RESULT))
 			{
 				qcResultSetManually(currentAttributes, after);
 			}
@@ -190,8 +192,6 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 
 			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-
-			MuleWorkflowController mule = new MuleWorkflowController();
 
 			log.info("Initiating qc workflow for asset " + assetID);
 			mule.initiateQcWorkflow(assetID, false);

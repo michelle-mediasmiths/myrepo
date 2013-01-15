@@ -35,6 +35,14 @@ public class MuleWorkflowController {
 		payload += "</assetId><forTXDelivery>";
 		payload += isTx;
 		payload += "</forTXDelivery></invokeIntalioQCFlow>";
+		
+		if(client==null){
+			log.error("mule client is null");	
+		}
+		if(destinations.getMule_qc_destination() == null){
+			log.error("qc destination is null");
+		}
+		
 		client.dispatch(destinations.getMule_qc_destination(), payload, null);
 		log.info("Message sent to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
 	}

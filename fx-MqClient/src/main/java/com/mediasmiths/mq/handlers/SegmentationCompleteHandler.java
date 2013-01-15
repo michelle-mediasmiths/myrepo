@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -13,6 +14,9 @@ import com.mediasmiths.mule.worflows.MuleWorkflowController;
 public class SegmentationCompleteHandler  extends AttributeHandler
 {
 	private final static Logger log = Logger.getLogger(SegmentationCompleteHandler.class);
+	
+	@Inject
+	private MuleWorkflowController mule;
 	
 	public void process(AttributeMap messageAttributes)
 	{
@@ -29,8 +33,6 @@ public class SegmentationCompleteHandler  extends AttributeHandler
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);
-					
-					MuleWorkflowController mule = new MuleWorkflowController();
 					mule.initiateTxDeliveryWorkflow(assetID);	
 				}
 			}

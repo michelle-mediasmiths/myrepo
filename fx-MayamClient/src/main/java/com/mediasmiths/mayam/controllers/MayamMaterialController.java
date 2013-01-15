@@ -47,6 +47,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.mayam.FileFormatVerification;
+import com.mediasmiths.mayam.FileFormatVerificationFailureException;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
@@ -75,6 +77,9 @@ public class MayamMaterialController extends MayamController
 
 	@Inject @Named("material.exchange.marshaller")
 	private Marshaller materialExchangeMarshaller;
+	
+	@Inject
+	private FileFormatVerification fileformatVerification;
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
@@ -1038,21 +1043,33 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public void verifyFileMaterialFileFormat(AttributeMap qcTaskAttributes)
+	public void verifyFileMaterialFileFormat(AttributeMap qcTaskAttributes) throws MayamClientException
 	{
 		log.info("Starting File format verification for asset "+ qcTaskAttributes.getAttribute(Attribute.HOUSE_ID));
 		
-		//TODO: actually perform verifiation
-		qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+		FileFormatInfo formatInfo = null;
+		
 		try
 		{
-			taskController.saveTask(qcTaskAttributes);
+			formatInfo = client.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(), (String) qcTaskAttributes.getAttribute(Attribute.ASSET_ID));
 		}
-		catch (MayamClientException e)
+		catch (RemoteException e1)
 		{
-			log.error("Error saving task", e);
+				log.error("error fetching format info",e1);
+				throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e1);
 		}
 		
+		try{
+			fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
+			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+		}
+		catch(FileFormatVerificationFailureException ffve){
+			log.warn("file format verification failed", ffve);
+			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES,ffve.getMessage());
+		}
+
+		taskController.saveTask(qcTaskAttributes);
 	}
 
 	public boolean isFileFormatVerificationRequiredForMaterial(AttributeMap messageAttributes)

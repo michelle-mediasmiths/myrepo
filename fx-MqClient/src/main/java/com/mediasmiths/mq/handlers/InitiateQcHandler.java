@@ -26,17 +26,27 @@ public class InitiateQcHandler  extends AttributeHandler
 			if (taskState == TaskState.OPEN) 
 			{
 				//task just created, lets perform file format verification
-				materialController.verifyFileMaterialFileFormat(messageAttributes);				
+				try
+				{
+					materialController.verifyFileMaterialFileFormat(messageAttributes);
+				}
+				catch (MayamClientException e)
+				{
+					log.error("MayamClient exception while performing file format verification for asset" + messageAttributes.getAttributeAsString(Attribute.ASSET_ID),e);
+					messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+					try
+					{
+						taskController.saveTask(messageAttributes);
+					}
+					catch (MayamClientException e1)
+					{
+						log.error("error setting task to error state", e1);
+					}
+				}				
 			}
 		}
 	}
 	
-	private void channelCondidition(AttributeMap messageAttributes)
-	{
-		log.info("channel condition monitoring not performed");
-	}
-
-
 	@Override
 	public String getName()
 	{
