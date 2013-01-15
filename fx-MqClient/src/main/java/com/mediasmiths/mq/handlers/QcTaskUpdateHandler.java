@@ -17,7 +17,7 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 
 	private static final String MANUAL_QC_PASS = "pass";
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
-	
+
 	@Override
 	public String getName()
 	{
@@ -28,25 +28,45 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
 		String taskListID = currentAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText())) 
+		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText()))
 		{
-			//if update was to change substatus for file format verification
-			if(after.containsAttribute(Attribute.QC_SUBSTATUS1)){
+			// if update was to change substatus for file format verification
+			if (attributeChanged(Attribute.QC_SUBSTATUS1, before, after)
+					&& currentAttributes.containsAttribute(Attribute.QC_SUBSTATUS1))
+			{
 				fileFormatVerificationStatusChanged(currentAttributes, after);
 			}
-			
-			//autoqc status changed
-			if(after.containsAttribute(Attribute.QC_SUBSTATUS2)){
+
+			// autoqc status changed
+			if (attributeChanged(Attribute.QC_SUBSTATUS2, before, after)
+					&& currentAttributes.containsAttribute(Attribute.QC_SUBSTATUS2))
+			{
 				autoQcStatusChanged(currentAttributes, after);
 			}
-			
+
 			// qc result set manually
-			if (after.containsAttribute(Attribute.QC_RESULT))
+			if (attributeChanged(Attribute.QC_RESULT, before, after) && currentAttributes.containsAttribute(Attribute.QC_RESULT))
 			{
 				qcResultSetManually(currentAttributes, after);
 			}
 		}
-		
+
+	}
+
+	private boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after)
+	{
+		boolean inAfter = after.containsAttribute(att);
+		boolean inBefore = before.containsAttribute(att);
+
+		if (inAfter == inBefore)
+		{
+			return before.getAttribute(att).equals(after.getAttribute(att));
+		}
+		else
+		{
+			return true;
+		}
+
 	}
 
 	private void qcResultSetManually(AttributeMap currentAttributes, AttributeMap after)
@@ -94,11 +114,12 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 	private void autoQcStatusChanged(AttributeMap currentAttributes, AttributeMap after)
 	{
 		QcStatus autoQc = after.getAttribute(Attribute.QC_SUBSTATUS2);
-		
-		if(autoQc.equals(QcStatus.PASS) || autoQc.equals(QcStatus.PASS_MANUAL)){
-				
-			//kick off channel condition monitoring once that has been implemented
-			
+
+		if (autoQc.equals(QcStatus.PASS) || autoQc.equals(QcStatus.PASS_MANUAL))
+		{
+
+			// kick off channel condition monitoring once that has been implemented
+
 			try
 			{
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
@@ -107,7 +128,7 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error settign qc task to warning state",e);
+				log.error("error settign qc task to warning state", e);
 			}
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
@@ -119,21 +140,23 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error settign qc task to warning state",e);
+				log.error("error settign qc task to warning state", e);
 			}
 		}
 	}
 
 	private void fileFormatVerificationStatusChanged(AttributeMap currentAttributes, AttributeMap after)
 	{
-		//file format verification status updated				
+		// file format verification status updated
 		QcStatus fileFormat = after.getAttribute(Attribute.QC_SUBSTATUS1);
-		
-		if(fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL)){
+
+		if (fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL))
+		{
 			boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(currentAttributes);
 			boolean isAutoQcRunOrRunning = materialController.isAutoQcRunOrRunningForMaterial(currentAttributes);
-			
-			if(autoQcRequired && !isAutoQcRunOrRunning){
+
+			if (autoQcRequired && !isAutoQcRunOrRunning)
+			{
 				initiateAutoQc(currentAttributes);
 			}
 		}
@@ -146,34 +169,37 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error settign qc task to warning state",e);
+				log.error("error settign qc task to warning state", e);
 			}
-		}
-	}
-	
-	private void initiateAutoQc(AttributeMap messageAttributes)
-	{
-		try {
-			
-			try{
-			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-			taskController.saveTask(messageAttributes);
-			}
-			catch(Exception e){
-				log.error("error updating task state",e);
-			}
-					
-			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-							
-			MuleWorkflowController mule = new MuleWorkflowController();
-			
-			log.info("Initiating qc workflow for asset " + assetID);			
-			mule.initiateQcWorkflow(assetID, false);
-		}
-		catch (Exception e) {
-			log.error("Exception in the Mayam client while handling Inititae QC Message : ",e);
 		}
 	}
 
+	private void initiateAutoQc(AttributeMap messageAttributes)
+	{
+		try
+		{
+
+			try
+			{
+				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+				taskController.saveTask(messageAttributes);
+			}
+			catch (Exception e)
+			{
+				log.error("error updating task state", e);
+			}
+
+			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+
+			MuleWorkflowController mule = new MuleWorkflowController();
+
+			log.info("Initiating qc workflow for asset " + assetID);
+			mule.initiateQcWorkflow(assetID, false);
+		}
+		catch (Exception e)
+		{
+			log.error("Exception in the Mayam client while handling Inititae QC Message : ", e);
+		}
+	}
 
 }

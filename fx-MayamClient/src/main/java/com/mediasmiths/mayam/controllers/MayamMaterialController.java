@@ -574,7 +574,9 @@ public class MayamMaterialController extends MayamController
 					try
 					{
 						String presentationString = presentationToString(p);
-						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+						
+						//TODO: uncomment once FX-595 is fixed
+//						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
 					}
 					catch (JAXBException e)
 					{
@@ -588,7 +590,8 @@ public class MayamMaterialController extends MayamController
 					try
 					{
 						String presentationString = presentationToString(presentation);
-						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+						//TODO: uncomment once FX-595 is fixed
+//						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
 					}
 					catch (JAXBException e)
 					{
