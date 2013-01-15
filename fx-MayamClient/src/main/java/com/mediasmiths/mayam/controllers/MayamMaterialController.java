@@ -1035,35 +1035,71 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public void verifyFileMaterialFileFormat(AttributeMap messageAttributes)
+	public void verifyFileMaterialFileFormat(AttributeMap qcTaskAttributes)
 	{
-		log.info("Starting File format verification for asset "+ messageAttributes.getAttribute(Attribute.HOUSE_ID));
+		log.info("Starting File format verification for asset "+ qcTaskAttributes.getAttribute(Attribute.HOUSE_ID));
 		
-		
-		
+		//TODO: actually perform verifiation
+		qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+		try
+		{
+			taskController.saveTask(qcTaskAttributes);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error saving task", e);
+		}
 		
 	}
 
 	public boolean isFileFormatVerificationRequiredForMaterial(AttributeMap messageAttributes)
 	{
-		return false;
+		return true;
 	}
 
-	public boolean isFileFormatVerificationRunForMaterial(QcStatus fileFormatVerification, AttributeMap messageAttributes)
+	public boolean isFileFormatVerificationRunForMaterial(AttributeMap messageAttributes)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		QcStatus fileFormatVerification = messageAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
+		if(fileFormatVerification == null || fileFormatVerification.equals(QcStatus.TBD)){
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isAutoQcRequiredForMaterial(AttributeMap messageAttributes)
 	{
-		// TODO Auto-generated method stub
-		return true;
+		Boolean autoQcRequired = messageAttributes.getAttribute(Attribute.QC_REQUIRED);
+		
+		if(autoQcRequired != null && autoQcRequired.booleanValue() == true){
+			return true;
+		}
+		
+		return false;
 	}
 
-	public boolean isAutoQcRunForMaterial(QcStatus autoQcResult, AttributeMap messageAttributes)
+	public boolean isAutoQcRunOrRunningForMaterial(AttributeMap messageAttributes)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean run = false;
+		QcStatus autoQcResult = messageAttributes.getAttribute(Attribute.QC_SUBSTATUS2);
+		if(autoQcResult == null || autoQcResult.equals(QcStatus.TBD)){
+			run = false;
+		}
+		else{
+			run = true;
+		}
+		
+		boolean running = false;
+		
+		TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
+		if (taskState == TaskState.ACTIVE) 
+		{
+			running = true;
+		}
+		else{
+			running = false;
+		}
+		
+		return run || running;
 	}
 }

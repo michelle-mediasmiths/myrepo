@@ -643,5 +643,18 @@ public class MayamClientImpl implements MayamClient
 			throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
 		}
 	}
+
+	@Override
+	public void autoQcFailedForMaterial(String materialId) throws MayamClientException
+	{
+		tasksController.autoQcFailedForMaterial(materialId);
+	}
+
+	@Override
+	public void autoQcPassedForMaterial(String materialId) throws MayamClientException
+	{
+		tasksController.autoQcPassedForMaterial(materialId);
+		
+	}
 	
 }

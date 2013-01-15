@@ -858,4 +858,18 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public void autoQcFailedForMaterial(String assetId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void autoQcPassedForMaterial(String assetId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

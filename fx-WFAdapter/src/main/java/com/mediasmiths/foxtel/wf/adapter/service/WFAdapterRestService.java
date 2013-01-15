@@ -92,10 +92,11 @@ public interface WFAdapterRestService
 	/**
 	 * called to notify that autoqc has succeeded for an asset
 	 * @param notification
+	 * @throws MayamClientException 
 	 */
 	@PUT
 	@Path("/qc/autoQcPassed")
-	public void notifyAutoQCPassed(AutoQCPassNotification notification);
+	public void notifyAutoQCPassed(AutoQCPassNotification notification) throws MayamClientException;
 	
 	/**
 	 * called to notify about a persistent error performing autoqc that will require investigation

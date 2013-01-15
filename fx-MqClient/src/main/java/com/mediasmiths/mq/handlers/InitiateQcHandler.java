@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
@@ -24,67 +25,17 @@ public class InitiateQcHandler  extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
 			if (taskState == TaskState.OPEN) 
 			{
-				
-				QcStatus fileFormatVerification = messageAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
-				boolean fileFormatRequired = materialController.isFileFormatVerificationRequiredForMaterial(messageAttributes);
-				boolean fileFormatVerificationRun = materialController.isFileFormatVerificationRunForMaterial(fileFormatVerification,messageAttributes);
-				
-				QcStatus autoQcResult = messageAttributes.getAttribute(Attribute.QC_SUBSTATUS2);
-				boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(messageAttributes);
-				boolean isAutoQcRun = materialController.isAutoQcRunForMaterial(autoQcResult, messageAttributes);
-				QcStatus channelCondidition = messageAttributes.getAttribute(Attribute.QC_SUBSTATUS3);
-				
-				if(fileFormatRequired &&  !fileFormatVerificationRun){
-					materialController.verifyFileMaterialFileFormat(messageAttributes);
-				}
-				else if(autoQcRequired && !isAutoQcRun){
-					initiateAutoQc(messageAttributes);
-				}
-
+				//task just created, lets perform file format verification
+				materialController.verifyFileMaterialFileFormat(messageAttributes);				
 			}
 		}
 	}
-
-
-
+	
 	private void channelCondidition(AttributeMap messageAttributes)
 	{
 		log.info("channel condition monitoring not performed");
 	}
 
-	private void initiateAutoQc(AttributeMap messageAttributes)
-	{
-		try {
-			
-			try{
-			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-			taskController.saveTask(messageAttributes);
-			}
-			catch(Exception e){
-				log.error("error updating task state",e);
-			}
-					
-			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					
-			MuleWorkflowController mule = new MuleWorkflowController();
-			
-			log.info("Initiating qc workflow for asset " + assetID);
-			
-			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
-			{
-				mule.initiateQcWorkflow(assetID, false);
-			} 
-			else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
-			{
-				mule.initiateQcWorkflow(assetID, true);
-			}
-		}
-		catch (Exception e) {
-			log.error("Exception in the Mayam client while handling Inititae QC Message : ",e);
-			e.printStackTrace();			
-		}
-	}
 
 	@Override
 	public String getName()

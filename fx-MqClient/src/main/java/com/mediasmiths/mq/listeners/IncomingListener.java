@@ -30,6 +30,7 @@ import com.mediasmiths.mq.handlers.IngestJobHandler;
 import com.mediasmiths.mq.handlers.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.PreviewTaskHandler;
+import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
@@ -89,6 +90,8 @@ public class IncomingListener extends MqClientListener
 	IngestJobHandler ingestJobHandler;
 	@Inject
 	UnmatchedJobHandler unmatchedJobHandler;
+	@Inject
+	QcTaskUpdateHandler qcTaskUpdateHandler;
 
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -193,7 +196,8 @@ public class IncomingListener extends MqClientListener
 
 			if (!initialState.equals(newState))
 			{
-				passEventToHandler(ingestCompleteHandler, currentAttributes);
+				passEventToHandler(ingestCompleteHandler,currentAttributes);
+				passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
@@ -211,6 +215,8 @@ public class IncomingListener extends MqClientListener
 		}
 	}
 
+
+	
 	private void onJobMessage(MqMessage msg)
 	{
 		logger.trace("onJobMessage");

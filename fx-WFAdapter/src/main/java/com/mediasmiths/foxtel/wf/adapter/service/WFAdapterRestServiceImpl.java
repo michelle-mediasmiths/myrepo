@@ -218,7 +218,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/qc/autoQcPassed")
-	public void notifyAutoQCPassed(AutoQCPassNotification notification)
+	public void notifyAutoQCPassed(AutoQCPassNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
 				"Received notification of Auto QC Pass ID %s isTX %b",
@@ -233,7 +233,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		else
 		{
-			// update tasks status as required, next stage will be kicked off by intalio
+			mayamClient.autoQcPassedForMaterial(notification.getAssetId());
 		}
 	}
 
@@ -260,8 +260,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// auto qc was for qc task
-
-				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+				mayamClient.autoQcFailedForMaterial(notification.getAssetId());
 			}
 		}
 		catch (MayamClientException e)

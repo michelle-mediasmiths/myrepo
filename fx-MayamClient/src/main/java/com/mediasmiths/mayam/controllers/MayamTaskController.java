@@ -465,4 +465,40 @@ public class MayamTaskController extends MayamController
 		}
 		return task;
 	}
+
+
+	public void autoQcFailedForMaterial(String materialId) throws MayamClientException
+	{
+		setAutoQcStatus(QcStatus.FAIL, materialId);
+	}
+
+
+	public void autoQcPassedForMaterial(String materialId) throws MayamClientException
+	{
+		setAutoQcStatus(QcStatus.PASS, materialId);		
+	}
+	
+	private void setAutoQcStatus(QcStatus newStatus, String materialId) throws MayamClientException{
+		AttributeMap qcTask;
+		try
+		{
+			qcTask = getTaskForAssetBySiteID(MayamTaskListType.QC_VIEW, materialId);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error fetching qc task for material "+materialId,e);
+			throw e;
+		}
+		
+		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
+		try
+		{
+			saveTask(qcTask);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error updating qc task for material "+materialId,e);
+			throw e;
+		}		
+	}
 }
