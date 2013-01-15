@@ -1034,4 +1034,36 @@ public class MayamMaterialController extends MayamController
 			return null;
 		}
 	}
+
+	public void verifyFileMaterialFileFormat(AttributeMap messageAttributes)
+	{
+		log.info("Starting File format verification for asset "+ messageAttributes.getAttribute(Attribute.HOUSE_ID));
+		
+		
+		
+		
+	}
+
+	public boolean isFileFormatVerificationRequiredForMaterial(AttributeMap messageAttributes)
+	{
+		return false;
+	}
+
+	public boolean isFileFormatVerificationRunForMaterial(QcStatus fileFormatVerification, AttributeMap messageAttributes)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isAutoQcRequiredForMaterial(AttributeMap messageAttributes)
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public boolean isAutoQcRunForMaterial(QcStatus autoQcResult, AttributeMap messageAttributes)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
