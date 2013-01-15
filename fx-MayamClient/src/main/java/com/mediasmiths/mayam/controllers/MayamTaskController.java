@@ -65,6 +65,19 @@ public class MayamTaskController extends MayamController
 
 	}
 	
+	public long createQCTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	{
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
+		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
+		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
+	}
+	
 	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
 		AttributeMap initialAttributes = client.createAttributeMap();

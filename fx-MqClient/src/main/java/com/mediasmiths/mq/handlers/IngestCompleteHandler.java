@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -57,11 +58,8 @@ public class IngestCompleteHandler  extends AttributeHandler
 					try
 					{
 						String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-						AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-						taskController.createTask(
-								assetID,
-								MayamAssetType.fromString(assetType.toString()),
-								MayamTaskListType.QC_VIEW);
+						Date requiredby = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
+						taskController.createQCTaskForMaterial(assetID,requiredby);
 					}
 					catch (Exception e)
 					{
