@@ -13,11 +13,15 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.notification.Failure;
+import org.mockito.Mockito;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeDescription;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidationException;
 import com.mayam.wf.attributes.shared.AttributeValidator;
+import com.mayam.wf.attributes.shared.AttributeValidationException.FailureType;
 import com.mayam.wf.ws.client.TasksClient;
 
 public class MayamAttributeControllerTest {
@@ -48,7 +52,7 @@ public class MayamAttributeControllerTest {
 	{
 		controller = new MayamAttributeController(client, validator);
 		Date dateObject = new Date();
-		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(false);
+		Mockito.doThrow(new AttributeValidationException(FailureType.PATTERN_MISMATCH,"constraint","value")).when(validator).validate(eq(Attribute.ASSET_ID), anyObject());
 		boolean valid = controller.setAttribute(Attribute.ASSET_ID, dateObject);
 		assertFalse(valid);
 		AttributeMap emptyAttributes = controller.getAttributes();
@@ -60,7 +64,7 @@ public class MayamAttributeControllerTest {
 	public void testSetAndGetValidAttributeCreate() 
 	{
 		controller = new MayamAttributeController(client, validator);
-		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
+//		when(validator.validate(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
 		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "12345");
 		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("12345");
 		assertTrue(valid);
@@ -78,7 +82,7 @@ public class MayamAttributeControllerTest {
 		AttributeMap existingAttributes = controller.getAttributes();
 		String assetID = existingAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
-		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
+//		when(validator.validate(eq(Attribute.ASSET_ID), anyObject())).thenReturn(true);
 		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "67890");
 		when(map.getAttribute(eq(Attribute.ASSET_ID))).thenReturn("67890");
 		assertTrue(valid);
@@ -96,7 +100,8 @@ public class MayamAttributeControllerTest {
 		AttributeMap existingAttributes = controller.getAttributes();
 		String assetID = existingAttributes.getAttribute(Attribute.ASSET_ID);
 		assertEquals("12345", assetID);
-		when(validator.isValidValue(eq(Attribute.ASSET_ID), anyObject())).thenReturn(false);
+		Mockito.doThrow(new AttributeValidationException(FailureType.PATTERN_MISMATCH,"constraint","value")).when(validator).validate(eq(Attribute.ASSET_ID), anyObject());
+//		when(validator.validate(eq(Attribute.ASSET_ID), anyObject())).thenReturn(false);
 		boolean valid = controller.setAttribute(Attribute.ASSET_ID, "67890");
 		assertFalse(valid);
 		AttributeMap updatedAttributes = controller.getAttributes();

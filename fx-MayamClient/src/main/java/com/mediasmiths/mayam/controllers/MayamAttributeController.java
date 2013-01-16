@@ -2,6 +2,7 @@ package com.mediasmiths.mayam.controllers;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.AttributeValidationException;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.BasicAttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
@@ -42,7 +43,23 @@ public class MayamAttributeController extends MayamController{
 	}
 	
 	public boolean setAttribute(Attribute attribute, Object value) {
-		boolean isValid = validator.isValidValue(attribute, value);
+	
+		
+		boolean isValid = false;
+		
+		try{
+			validator.validate(attribute, value);
+			isValid=true;
+		}
+		catch(AttributeValidationException w){
+			log.error(String.format("AttributeValidationException validating value %s for attribute %s", value,attribute.toString(),w));
+			isValid=false;
+		}
+		catch(ClassCastException e){
+			log.error(String.format("ClassCastException validating value %s for attribute %s", value,attribute.toString(),e));
+			isValid=false;
+		}
+		
 		if (isValid) {
 			attributes.setAttribute(attribute, value);
 		}
