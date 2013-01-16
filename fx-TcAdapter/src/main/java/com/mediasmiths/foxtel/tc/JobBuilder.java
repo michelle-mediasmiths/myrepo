@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClient;
@@ -71,7 +72,7 @@ public class JobBuilder
 
 	public String buildJobForTxPackageTranscode(String packageID, String inputfile, String outputFolder)
 			throws MayamClientException,
-			JobBuilderException
+			JobBuilderException, UnknownPathException
 	{
 
 		log.info(String.format(
@@ -105,7 +106,7 @@ public class JobBuilder
 		return pcp;
 	}
 
-	private String setInputAndOutputPaths(String packageID, String inputfile, String outputFolder, String pcp)
+	private String setInputAndOutputPaths(String packageID, String inputfile, String outputFolder, String pcp) throws UnknownPathException
 	{
 		// assuming for now that the path is a linux style path	
 		String uncInputPath = pathResolver.uncPath(PathType.NIX, inputfile);

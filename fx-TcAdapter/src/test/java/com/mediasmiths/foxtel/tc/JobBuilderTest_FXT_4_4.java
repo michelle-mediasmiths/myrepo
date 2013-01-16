@@ -16,6 +16,7 @@ import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -53,7 +54,7 @@ public class JobBuilderTest_FXT_4_4
 	
 	@Test
 	@Ignore
-	public void testBuildJobForTxPackageTranscode_FXT_4_4_1_2() throws MayamClientException, JobBuilderException, RemoteException{
+	public void testBuildJobForTxPackageTranscode_FXT_4_4_1_2() throws MayamClientException, JobBuilderException, RemoteException, UnknownPathException{
 		
 		logger.info("Starting FXT 4.4.1/2 – Request Transcode Job/Select Correct Profile");
 

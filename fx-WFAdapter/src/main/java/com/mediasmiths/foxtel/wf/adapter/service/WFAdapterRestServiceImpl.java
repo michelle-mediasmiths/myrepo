@@ -1,14 +1,9 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.util.List;
 
-import javax.swing.border.TitledBorder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -23,11 +18,6 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -43,7 +33,6 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 //import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
@@ -59,12 +48,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@Inject
 	private MayamClient mayamClient;
-	@Inject
-	@Named("qc.material.location")
-	private URI materialQCLocation;
-	@Inject
-	@Named("tc.material.location")
-	private URI materialTCLocation;
 	@Inject
 	private QcProfileSelector qcProfileSelector;
 	@Inject
@@ -96,43 +79,25 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("application/xml")
 	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException
 	{
+		//doesnt actually do a transfer! just returns location (method needs renamed)
+		
 		log.info("Received AssetTransferForQCRequest " + req.toString());
 		final String id = req.getAssetId();
-		// TODO change this to mxf once we have proper profiles
-		final String filename = req.getAssetId() + ".mov";
 		File destinationFile;
 
 		if (req.isForTXDelivery())
 		{
 			// for tx delivery we return the location of transcoded package
-			
-			// TODO switch this to gxf once we are creating such!
-			String ret = tcoutputlocation + id + "/" + id + ".mov";
+			String ret = tcoutputlocation + id + "/" + id + ".gxf";
 			destinationFile = new File(ret);
 		}
 		else
 		{
-//			destination = materialQCLocation.resolve(filename);
 			String destination = mayamClient.pathToMaterial(id);
-
 			destinationFile = new File(destination);
 		}
 
 		return new AssetTransferForQCResponse(destinationFile.getAbsolutePath());
-	}
-
-	private void transferAsset(final String id, final URI destination) throws MayamClientException
-	{
-		try
-		{
-			log.info(String.format("Transferring material %s to location %s", id, destination.toString()));
-			FileUtils.copyFile(new File("/storage/qcmedialocation/test.mxf"), new File(destination));
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-			throw new MayamClientException(MayamClientErrorCode.FAILURE, e);
-		}
 	}
 
 	@Override
@@ -191,16 +156,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info("Received MaterialTransferForTCRequest " + req.toString());
 		final String assetID = req.getAssetID();
-		final String filename = assetID + ".mxf";
-		final URI destination = materialTCLocation.resolve(filename);
-
-		final String materialID;
-
+		String materialID;
+		
+		//we dont actually need to transfer the media, just get its location
 		if (req.isForTX())
 		{
-
 			materialID = mayamClient.getMaterialIDofPackageID(assetID);
-
 		}
 		else
 		{
@@ -208,11 +169,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 
 		
-		//TODO caluclate destination and perform transfer
-		String path = mayamClient.pathToMaterial(assetID);
+		String path = mayamClient.pathToMaterial(materialID);
 		
-		File destinationFile = new File(path);
-		return new MaterialTransferForTCResponse(destinationFile.getAbsolutePath());
+		return new MaterialTransferForTCResponse(path);
 	}
 
 	@Override
@@ -254,7 +213,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-
 				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
@@ -276,7 +234,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC totalfailure Package ID %s ", notification.getPackageID()));
-
 		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
 
 	}
@@ -298,7 +255,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed Package ID %s", notification.getPackageID()));
-
 		saveEvent("Transcoded", notification, "http://www.foxtel.com.au/ip/tc");
 
 	}
@@ -306,20 +262,20 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	// TODO reenable events stuff after events api has been extracted
 	protected void saveEvent(String name, String payload, String nameSpace)
 	{
-		// try
-		// {
-		// EventEntity event = new EventEntity();
-		// event.setEventName(name);
-		// event.setNamespace(nameSpace);
-		//
-		// event.setPayload(payload);
-		// event.setTime(System.currentTimeMillis());
-		// events.saveReport(event);
-		// }
-		// catch (RuntimeException re)
-		// {
-		// log.error("error saving event" + name, re);
-		// }
+//		 try
+//		 {
+//		 EventEntity event = new EventEntity();
+//		 event.setEventName(name);
+//		 event.setNamespace(nameSpace);
+//		
+//		 event.setPayload(payload);
+//		 event.setTime(System.currentTimeMillis());
+//		 events.saveReport(event);
+//		 }
+//		 catch (RuntimeException re)
+//		 {
+//		 log.error("error saving event" + name, re);
+//		 }
 
 	}
 
@@ -350,8 +306,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
 	{
 		// TODO implement
-//		return true;
-		return false; //returning false due to lack of cerify at forge
+		return true;
+//		return false; //returning false due to lack of cerify at forge
 	}
 
 	@Override

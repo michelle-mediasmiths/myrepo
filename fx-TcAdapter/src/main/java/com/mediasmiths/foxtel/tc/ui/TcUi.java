@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
 import com.mediasmiths.mayam.MayamClientException;
 
@@ -46,7 +47,7 @@ public interface TcUi {
 	public String doBuild(
 			@FormParam("packageID") String packageID,
 			@FormParam("inputFile") String inputFile,
-			@FormParam("outputFolder") String outputFolder) throws MayamClientException, JobBuilderException;
+			@FormParam("outputFolder") String outputFolder) throws MayamClientException, JobBuilderException, UnknownPathException;
 	
 	@GET
 	@Path("/start.html")

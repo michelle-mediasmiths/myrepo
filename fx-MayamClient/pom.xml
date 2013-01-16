@@ -23,12 +23,16 @@
 	<dependencies>
 
 		<!-- Foxtel Solution Dependencies -->
-	 	<dependency>
+		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MayamClientInterface</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-PathResolver</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -42,19 +46,19 @@
 			<scope>test</scope>
 		</dependency>
 
- 		<dependency>
+		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>wf-mq</artifactId>
 			<version>${mayam.wf.mq.version}</version>
 		</dependency>
 
 		<dependency>
-		  <groupId>com.mayam.wf</groupId>
-		  <artifactId>tasks-ws-client-with-dependencies</artifactId>
-		  <version>${worklists.version}</version>
-		  <classifier>dependencies</classifier>
+			<groupId>com.mayam.wf</groupId>
+			<artifactId>tasks-ws-client-with-dependencies</artifactId>
+			<version>${worklists.version}</version>
+			<classifier>dependencies</classifier>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>

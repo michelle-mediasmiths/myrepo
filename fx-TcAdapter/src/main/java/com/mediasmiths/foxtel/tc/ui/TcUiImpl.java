@@ -21,6 +21,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
@@ -107,7 +108,7 @@ public class TcUiImpl implements TcUi {
 	@Produces("text/html")
 	public String doBuild(@FormParam("packageID") String packageID,
 			@FormParam("inputFile") String inputFile,
-			@FormParam("outputFolder") String outputFolder) throws MayamClientException, JobBuilderException {
+			@FormParam("outputFolder") String outputFolder) throws MayamClientException, JobBuilderException, UnknownPathException {
 	
 		if (StringUtils.isEmpty(packageID))
 			throw new IllegalArgumentException("Must provide a package id!");

@@ -53,6 +53,9 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTrack
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -84,6 +87,8 @@ public class MayamClientImpl implements MayamClient
 	MayamTaskController tasksController;
 	@Inject
 	MayamValidator validator;
+	@Inject
+	PathResolver pathResolver;
 
 	@Inject
 	public MayamClientImpl() throws MalformedURLException, IOException
@@ -456,12 +461,23 @@ public class MayamClientImpl implements MayamClient
 		
 		List<String> urls = fileinfo.getUrls();
 		
-		for (String url : urls)
-		{
-			log.debug("url: "+url);
+		if(urls == null || urls.size()==0){
+			log.error("no urls for media found!");
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 		}
 		
-		return urls.get(0);
+		String url = urls.get(0);
+		String nixPath;
+		try
+		{
+			nixPath = pathResolver.nixPath(PathType.FTP, url);
+			return nixPath;
+		}
+		catch (UnknownPathException e)
+		{
+			log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED,e);
+		}
 	}
 
 	@Override

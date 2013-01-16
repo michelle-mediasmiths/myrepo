@@ -17,6 +17,7 @@ import org.datacontract.schemas._2004._07.rhozet.Job;
 import org.datacontract.schemas._2004._07.rhozet.JobStatus;
 
 import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobResponse;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
@@ -44,13 +45,14 @@ public interface TCRestService
 	 * @return
 	 * @throws MayamClientException
 	 * @throws JobBuilderException
+	 * @throws UnknownPathException 
 	 */
 	@POST
 	@Path("/job/build/")
 	@Produces("application/xml")
 	public TCBuildJobResponse buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest)
 			throws MayamClientException,
-			JobBuilderException;
+			JobBuilderException, UnknownPathException;
 
 	
 	@POST
