@@ -544,7 +544,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
 	{
-		long id = tasksController.createTask(packageID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY_FAILURE);
+		long id = tasksController.createTask(packageID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY);
 		AttributeMap newTask;
 		try
 		{

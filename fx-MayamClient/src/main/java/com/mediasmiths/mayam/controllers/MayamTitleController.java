@@ -242,6 +242,7 @@ public class MayamTitleController extends MayamController{
 						log.warn("Mayam failed to create new Title asset");
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 					} else {
+						log.info("Created Title with Title ID:"+title.getTitleID());
 						log.debug("asset id is " + result.getAttributeAsString(Attribute.ASSET_ID));
 						
 					}
@@ -259,6 +260,7 @@ public class MayamTitleController extends MayamController{
 			log.warn("Null title object, unable to create asset");
 			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
 		}
+		
 		return returnCode;
 	}
 
@@ -492,6 +494,7 @@ public class MayamTitleController extends MayamController{
 					AttributeMap result;
 					try {
 						result = client.assetApi().updateAsset(attributes.getAttributes());
+						log.info("Updated Title with TitleID "+title.getTitleID());
 						if (result == null) {
 							log.warn("Mayam failed to update title: " + title.getTitleID());
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;

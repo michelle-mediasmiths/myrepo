@@ -40,6 +40,11 @@ public class IngestCompleteHandler  extends AttributeHandler
 			if (taskState == TaskState.FINISHED) 
 			{
 				Boolean qcRequired = (Boolean) messageAttributes.getAttribute(Attribute.QC_REQUIRED);
+				
+				if(qcRequired==null){
+					qcRequired = new Boolean(true);
+				}
+				
 				if (!qcRequired)
 				{
 					String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);
