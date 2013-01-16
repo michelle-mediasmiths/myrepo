@@ -1,10 +1,5 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -13,13 +8,14 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mysql.jdbc.StringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.Unmarshaller;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 
@@ -47,7 +43,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 
 		final String titleID = title.getTitleID();
 		// reject empty titleIDs
-		if (StringUtils.isNullOrEmpty(titleID))
+		if (StringUtils.isEmpty(titleID))
 		{
 			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
 		}
@@ -79,7 +75,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 		String materialID = programmeMaterial.getMaterialID();
 
 		//reject empty materialIDs		
-		if(StringUtils.isNullOrEmpty(materialID)){
+		if(StringUtils.isEmpty(materialID)){
 			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
 		}
 		
