@@ -264,7 +264,6 @@ public class IncomingListener extends MqClientListener
 		// passEventToHandler(assetPurgeHandler, messageAttributes);
 		// passEventToHandler(emergencyIngestHandler, messageAttributes);
 		// passEventToHandler(packageUpdateHandler, messageAttributes);
-		// passEventToHandler(temporaryContentHandler, messageAttributes);
 	}
 
 	private void onAssetUpdate(MqMessage msg)
@@ -273,10 +272,15 @@ public class IncomingListener extends MqClientListener
 		AttributeMapPair messageAttributes = msg.getSubjectPair();
 		AttributeMap beforeAttributes = messageAttributes.getBefore();
 		AttributeMap afterAttributes = messageAttributes.getAfter();
+		
+		AttributeMap currentAttributes = beforeAttributes.copy();
+		currentAttributes.putAll(afterAttributes);
+		
 		try
 		{
 			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
 			logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 		}
 		catch (Exception e)
 		{
