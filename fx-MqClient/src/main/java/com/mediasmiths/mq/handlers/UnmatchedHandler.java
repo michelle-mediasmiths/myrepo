@@ -42,7 +42,7 @@ public class UnmatchedHandler  extends AttributeHandler
 				newTask.putAll(messageAttributes);
 				Calendar date = Calendar.getInstance();
 				date.add(Calendar.DAY_OF_MONTH, 30);
-				newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+				newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 				taskController.saveTask(newTask);
 				
 				//Add to Ingest Worklist

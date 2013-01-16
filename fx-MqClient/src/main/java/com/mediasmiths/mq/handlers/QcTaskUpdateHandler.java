@@ -55,22 +55,6 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 
 	}
 
-	private boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after)
-	{
-		boolean inAfter = after.containsAttribute(att);
-		boolean inBefore = before.containsAttribute(att);
-
-		if (inAfter == inBefore)
-		{
-			return before.getAttribute(att).equals(after.getAttribute(att));
-		}
-		else
-		{
-			return true;
-		}
-
-	}
-
 	private void qcResultSetManually(AttributeMap currentAttributes, AttributeMap after)
 	{
 		String result = after.getAttribute(Attribute.QC_RESULT);

@@ -14,20 +14,19 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class TemporaryContentHandler  extends AttributeHandler
+public class TemporaryContentHandler extends UpdateAttributeHandler
 {
 	private final static Logger log = Logger.getLogger(TemporaryContentHandler.class);
 	
-	public void process(AttributeMap messageAttributes)
+	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{	
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
-		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 		try {			
-			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType())) 
+			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.PARENT_HOUSE_ID, before, after)) 
 			{
-				//TODO: Check if parent_ID has been updated, add sources to title and remove from any purge lists
-				
+				//Remove from any purge candidate lists
 				AttributeMap filterEqualities = tasksClient.createAttributeMap();
 				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
@@ -41,63 +40,63 @@ public class TemporaryContentHandler  extends AttributeHandler
 					for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
 					{
 						AttributeMap task = tasks.get(i);
-						log.error("TODO update task state for temporary content");
-//						task.setAttribute(Attribute.TASK_STATE, TaskState.???????);
-//						taskController.saveTask(task);
+						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						taskController.saveTask(task);
 					}
 				}
 			}
-			
-			
-			// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
-			// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
-			String contentType = messageAttributes.getAttribute(Attribute.CONT_CATEGORY);
-			if (contentType.equals("Associated") || contentType.equals("Edit Clips")) 
+			else if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
 			{
-				AttributeMap filterEqualities = tasksClient.createAttributeMap();
-				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
-				FilterCriteria criteria = new FilterCriteria();
-				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
-			
-				if (existingTasks.getTotalMatches() > 0) 
+				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
+				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
+				String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
+				if (contentType.equals("Associated") || contentType.equals("Edit Clips")) 
 				{
-					List<AttributeMap> tasks = existingTasks.getMatches();
-					for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
+					AttributeMap filterEqualities = tasksClient.createAttributeMap();
+					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
+					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
+					FilterCriteria criteria = new FilterCriteria();
+					criteria.setFilterEqualities(filterEqualities);
+					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
+				
+					if (existingTasks.getTotalMatches() > 0) 
 					{
-						AttributeMap task = tasks.get(i);
+						List<AttributeMap> tasks = existingTasks.getMatches();
+						for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
+						{
+							AttributeMap task = tasks.get(i);
+							Calendar date = Calendar.getInstance();
+							if (contentType.equals("Associated")) 
+							{
+								date.add(Calendar.DAY_OF_MONTH, 90);
+								task.setAttribute(Attribute.OP_DATE, date.getTime());
+							}
+							else if (contentType.equals("Edit Clips")) 
+							{
+								date.add(Calendar.DAY_OF_MONTH, 7);
+								task.setAttribute(Attribute.OP_DATE, date.getTime());
+							}
+							taskController.saveTask(task);
+						}
+					}
+					else {
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
+						
+						AttributeMap newTask = taskController.getTask(taskID);
+						newTask.putAll(currentAttributes);
 						Calendar date = Calendar.getInstance();
 						if (contentType.equals("Associated")) 
 						{
 							date.add(Calendar.DAY_OF_MONTH, 90);
-							task.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 						}
 						else if (contentType.equals("Edit Clips")) 
 						{
 							date.add(Calendar.DAY_OF_MONTH, 7);
-							task.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 						}
-						taskController.saveTask(task);
+						taskController.saveTask(newTask);
 					}
-				}
-				else {
-					long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
-					
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.putAll(messageAttributes);
-					Calendar date = Calendar.getInstance();
-					if (contentType.equals("Associated")) 
-					{
-						date.add(Calendar.DAY_OF_MONTH, 90);
-						newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
-					}
-					else if (contentType.equals("Edit Clips")) 
-					{
-						date.add(Calendar.DAY_OF_MONTH, 7);
-						newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
-					}
-					taskController.saveTask(newTask);
 				}
 			}
 		}
