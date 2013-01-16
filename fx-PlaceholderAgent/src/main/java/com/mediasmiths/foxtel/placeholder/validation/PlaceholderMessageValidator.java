@@ -1,16 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
@@ -23,7 +12,6 @@ import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -33,7 +21,15 @@ import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.validation.MayamValidator;
-import com.mysql.jdbc.StringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.File;
+import java.util.List;
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -161,15 +157,15 @@ public class PlaceholderMessageValidator extends
 			final String packageID = action.getPackage().getPresentationID();
 		
 			//reject empty packageID		
-			if(StringUtils.isNullOrEmpty(packageID)){
+			if(StringUtils.isEmpty(packageID)){
 				return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 			}
 		}
 		
 		String materialID = action.getPackage().getMaterialID();
 		
-		//reject empty materialIDs		
-		if(StringUtils.isNullOrEmpty(materialID)){
+		//reject empty materialIDs
+		if(StringUtils.isEmpty(materialID)){
 			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
 		}
 		
@@ -248,7 +244,7 @@ public class PlaceholderMessageValidator extends
 		String packageID = action.getPackage().getPresentationID();
 		
 		//reject empty packageIDs		
-		if(StringUtils.isNullOrEmpty(packageID)){
+		if(StringUtils.isEmpty(packageID)){
 			return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 		}
 
@@ -296,14 +292,14 @@ public class PlaceholderMessageValidator extends
 		String materialID = action.getMaterial().getMaterialID();
 		
 		//reject empty materialIDs		
-		if(StringUtils.isNullOrEmpty(materialID)){
+		if(StringUtils.isEmpty(materialID)){
 			return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
 		}
 		
 		String titleID = action.getTitleID();
 		
 		//reject empty titleIDs		
-		if(StringUtils.isNullOrEmpty(titleID)){
+		if(StringUtils.isEmpty(titleID)){
 			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
 		}
 
@@ -355,7 +351,7 @@ public class PlaceholderMessageValidator extends
 		String titleID = action.getTitleID();
 
 		//reject empty titleIDs		
-		if(StringUtils.isNullOrEmpty(titleID)){
+		if(StringUtils.isEmpty(titleID)){
 			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
 		}
 		
@@ -411,7 +407,7 @@ public class PlaceholderMessageValidator extends
 			final String materialID = action.getMaterial().getMaterialID();
 			
 			//reject empty materialIDs		
-			if(StringUtils.isNullOrEmpty(materialID)){
+			if(StringUtils.isEmpty(materialID)){
 				return MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY;
 			}
 		}
@@ -471,7 +467,7 @@ public class PlaceholderMessageValidator extends
 		final String titleID = action.getTitleID();
 
 		//reject empty titleIDs		
-		if(StringUtils.isNullOrEmpty(titleID)){
+		if(StringUtils.isEmpty(titleID)){
 			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
 		}
 		
