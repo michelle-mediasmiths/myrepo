@@ -41,7 +41,6 @@
 		<module>fx-qcAdapter</module>
 		<module>fx-TcAdapter</module>
 		<module>fx-CerifyClient</module>
-		<module>fx-CarbonCoderClient</module>
 		<module>fx-MuleClient</module>
 		<module>fx-CarbonWFSClient</module>
 		<module>fx-WFAdapter</module>
