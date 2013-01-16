@@ -9,6 +9,6 @@ http://www.mulesoft.org/schema/mule/cxf http://www.mulesoft.org/schema/mule/cxf/
     <flow name="invokeTC" doc:name="invokeTC">
         <http:inbound-endpoint exchange-pattern="one-way" address="http://localhost:8088/tc" doc:name="HTTP"/>
         <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="invokeTC.xsl" outputEncoding="UTF-8" doc:name="XSLT"/>
-        <http:outbound-endpoint exchange-pattern="request-response" address="http://localhost:8089/ode/processes/fx-TCFlow/tc/TC/Caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
+        <http:outbound-endpoint exchange-pattern="request-response" address="http://localhost:8083/ode/processes/fx-TCFlow/tc/TC/Caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
     </flow>
 </mule>

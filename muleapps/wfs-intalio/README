@@ -1,0 +1,3 @@
+created from dev flow wfs-intalio
+
+find . -type f -print0 | xargs -0 perl -pi -e 's/foxtel\.local\.mediasmithsforge\.com:8081/localhost:8083/g'
