@@ -69,12 +69,12 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 							if (contentType.equals("Associated")) 
 							{
 								date.add(Calendar.DAY_OF_MONTH, 90);
-								task.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+								task.setAttribute(Attribute.OP_DATE, date.getTime());
 							}
 							else if (contentType.equals("Edit Clips")) 
 							{
 								date.add(Calendar.DAY_OF_MONTH, 7);
-								task.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+								task.setAttribute(Attribute.OP_DATE, date.getTime());
 							}
 							taskController.saveTask(task);
 						}
@@ -88,12 +88,12 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 						if (contentType.equals("Associated")) 
 						{
 							date.add(Calendar.DAY_OF_MONTH, 90);
-							newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 						}
 						else if (contentType.equals("Edit Clips")) 
 						{
 							date.add(Calendar.DAY_OF_MONTH, 7);
-							newTask.setAttribute(Attribute.MEDIA_EXPIRES, date.getTime());
+							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 						}
 						taskController.saveTask(newTask);
 					}
