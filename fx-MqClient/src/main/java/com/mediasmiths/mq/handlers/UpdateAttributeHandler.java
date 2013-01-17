@@ -24,13 +24,17 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 		boolean inAfter = after.containsAttribute(att);
 		boolean inBefore = before.containsAttribute(att);
 
-		if (inAfter == inBefore)
+		if (inAfter != inBefore)
 		{
+			return true;
+		}
+		else if (inAfter && inBefore)
+		{	
 			return before.getAttribute(att).equals(after.getAttribute(att));
 		}
 		else
 		{
-			return true;
+			return false;
 		}
 
 	}
