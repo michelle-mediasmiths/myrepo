@@ -2,7 +2,6 @@ package com.mediasmiths.mayam.controllers;
 
 import java.io.StringWriter;
 import java.util.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
@@ -15,27 +14,19 @@ import org.apache.log4j.Logger;
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
 import au.com.foxtel.cf.mam.pms.Compile;
-import au.com.foxtel.cf.mam.pms.Library;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
-import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
 
 import au.com.foxtel.cf.mam.pms.Source;
-import au.com.foxtel.cf.mam.pms.TapeType;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.*;
-import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -44,7 +35,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.FileFormatVerification;
@@ -56,10 +46,6 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.SegmentUtil;
-import com.mediasmiths.std.types.Framerate;
-import com.mediasmiths.std.types.SampleCount;
-import com.mediasmiths.std.types.Timecode;
-
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamMaterialController extends MayamController
@@ -558,34 +544,19 @@ public class MayamMaterialController extends MayamController
 				
 				  
 				// FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
-
 				if(material.getOriginalConform() != null){
 					
 					log.debug("programme material message contains original conform information");
 					SegmentationType originalConform = material.getOriginalConform();
 					
-					
-					//take original conform structure, turn it into Presentation/Package structure
-					
-					Presentation p = new Presentation();
-					Presentation.Package pack = new Presentation.Package(); 
-					p.getPackage().add(pack);
-					
-					pack.setPresentationID("");
-					Segmentation packSegmentation = new Segmentation();
-					pack.setSegmentation(packSegmentation);
-					packSegmentation.getSegment().addAll(originalConform.getSegment());
-					
 					try
 					{
-						String presentationString = presentationToString(p);
-						
-						//TODO: uncomment once FX-595 is fixed
-//						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+						String presentationString = SegmentUtil.originalConformToHumanString(originalConform);
+						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
 					}
-					catch (JAXBException e)
+					catch (Exception e)
 					{
-						log.error("Error marshalling presentation for material "+material.getMaterialID(), e);
+						log.error("error setting original conform information in SEGMENTATION_NOTES", e);
 					}
 					
 				}
@@ -595,8 +566,7 @@ public class MayamMaterialController extends MayamController
 					try
 					{
 						String presentationString = presentationToString(presentation);
-						//TODO: uncomment once FX-595 is fixed
-//						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_DATA, presentationString);
 					}
 					catch (JAXBException e)
 					{
@@ -675,8 +645,6 @@ public class MayamMaterialController extends MayamController
 		}
 		return returnCode;
 	}
-
-
 
 	private String presentationToString(Presentation p) throws JAXBException
 	{

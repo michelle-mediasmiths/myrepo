@@ -49,6 +49,7 @@
 		<module>fx-MayamClientInterface</module>
 		<module>fx-MayamClientStub</module>
 		<module>fx-FSAdapter</module>
+		<module>fx-Event</module>
 	</modules>
 
 	<properties>

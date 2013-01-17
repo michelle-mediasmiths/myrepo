@@ -6,7 +6,6 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.mq.Mq.Listener;
 import com.mediasmiths.mq.handlers.AttributeHandler;
-import com.mediasmiths.mq.handlers.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 

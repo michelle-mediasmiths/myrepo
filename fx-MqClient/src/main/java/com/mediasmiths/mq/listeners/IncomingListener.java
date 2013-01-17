@@ -14,7 +14,7 @@ import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
@@ -53,9 +53,10 @@ public class IncomingListener extends MqClientListener
 	private TasksClient client;
 	@Inject
 	private MayamTaskController taskController;
-	// @Inject
-	// failed to inject
-	EventService eventService;
+	
+	//needs a marshaller before this will inject
+//	@Inject
+//	EventService eventService;
 	@Inject
 	AssetDeletionHandler assetDeletionHandler;
 	@Inject

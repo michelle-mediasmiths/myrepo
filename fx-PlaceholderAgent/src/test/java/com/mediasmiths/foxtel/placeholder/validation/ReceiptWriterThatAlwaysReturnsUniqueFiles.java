@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.placeholder.validation;
 
 import java.io.File;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.RandomStringUtils;
 
 import com.google.inject.Inject;

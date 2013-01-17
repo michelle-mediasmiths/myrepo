@@ -47,7 +47,6 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		logger.info ("Delete package processing test");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
-		MessageEnvelope <PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), message);
 		
 		DeletePackage dp = (DeletePackage) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

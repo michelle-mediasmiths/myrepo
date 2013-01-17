@@ -177,7 +177,6 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 	
 	public PackageType buildPackage (PackageType pack, String packageID, String materialID) throws DatatypeConfigurationException {
 		
-		Random randomGenerator = new Random();
 		pack.setMaterialID(materialID);
 		PresentationFormatType format = buildPresentationFormat("SD");
 		pack.setPresentationFormat(format);
@@ -197,7 +196,7 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 	public PresentationFormatType buildPresentationFormat (String v) {
 		
 		PresentationFormatType format = null;
-		format = format.fromValue(v);
+		format = PresentationFormatType.fromValue(v);
 		return format;
 	}
 	

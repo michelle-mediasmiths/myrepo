@@ -4,9 +4,9 @@ import java.util.List;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
-import com.mediasmiths.mayam.guice.SecurityModule;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
@@ -17,6 +17,7 @@ public class WFAdapterSetup extends AbstractRESTGuiceSetup
 	public void addModules(List<Module> modules, PropertyFile config)
 	{
 		modules.add(new WFAdapterModule());
+		modules.add(new EventServiceModule());
 		
 		if (config.getBoolean("stub.out.mayam", false))
 		{

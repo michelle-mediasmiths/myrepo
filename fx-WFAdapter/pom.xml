@@ -46,11 +46,12 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 		
-		<dependency>
-			<groupId>com.mediasmiths</groupId>
-			<artifactId>fx-event-entity</artifactId>
-			<version>${events.version}</version>
-		</dependency>		
+		<!--  reporting\events service -->
+		<dependency>	
+			<groupId>com.mediasmiths.foxtel.ip</groupId>
+			<artifactId>eventinterface</artifactId>
+			<version>${project.version}</version>			
+		</dependency>	
 		
 		<!-- end mediasmiths dependencies -->
 	</dependencies>

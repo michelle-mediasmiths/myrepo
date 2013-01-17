@@ -20,8 +20,8 @@ import org.junit.Test;
 
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.EventService;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;

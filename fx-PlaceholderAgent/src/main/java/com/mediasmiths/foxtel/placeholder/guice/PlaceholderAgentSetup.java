@@ -6,10 +6,10 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.agent.guice.EventTimerConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
+import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
-import com.mediasmiths.mayam.guice.SecurityModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
@@ -31,6 +31,7 @@ public class PlaceholderAgentSetup implements GuiceSetup {
 		}
 		
 		modules.add(new EventTimerConfigModule());
+		modules.add(new EventServiceModule());
 	}
 
 	@Override

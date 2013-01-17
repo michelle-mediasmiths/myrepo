@@ -1,26 +1,14 @@
 package com.mediasmiths.mayam.util;
 
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.namespace.QName;
-
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
-import com.mediasmiths.foxtel.generated.ruzz.SegmentListType;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
@@ -29,38 +17,13 @@ public class SegmentUtil
 {
 	private static Logger log = Logger.getLogger(SegmentUtil.class);
 	
-	private static Pattern stringToSeg = Pattern.compile("Number:\\{([0-9]*)\\},Title:\\{(.*)\\},SOM:\\{(.*)\\},EOM:\\{(.*)\\},Duration:\\{(.*)\\}\n");
 	
 	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
-		return String.format("Number:{%d},Title:{%s},SOM:{%s},EOM:{%s},Duration:{%s}\n",s.getSegmentNumber(),s.getSegmentTitle(), s.getSOM(),s.getEOM(),s.getDuration());
+		s = fillEomAndDurationOfSegment(s);		
+		return String.format("%d:\t%s\t%\n",s.getSegmentNumber(),s.getSOM(),s.getEOM());
 	}
-	
-	public static com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment stringToSegment(String str) throws IllegalArgumentException
-	{
-		com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s =  new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
-		
-		Matcher m  = stringToSeg.matcher(str);
-		
-		if(m.matches()){
-			int number = Integer.parseInt(m.group(1));
-			String title = m.group(2);
-			String som = m.group(3);
-			String eom = m.group(4);
-			String duration = m.group(5);
-			
-			s.setSegmentNumber(number);
-			s.setSegmentTitle(title);
-			s.setSOM(som);
-			s.setDuration(duration);
-			return s;
-		}
-		
-		throw new IllegalArgumentException("could not parse supplied string as segment info: "+str);
-	}
-	
-	
-	
+
 	/**
 	 * Takes a segment and produces a copy with both eom and duration populated (eom and duration are a choice in the schema, returned object will not be schema compliant, not for marshalling)
 	 * @param s
@@ -185,6 +148,22 @@ public class SegmentUtil
 		rzSeg.setTitle(s.getTitle());
 		
 		return rzSeg;
+	}
+
+	public static String originalConformToHumanString(SegmentationType originalConform)
+	{
+		List<com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment> segment = originalConform.getSegment();
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("\tSOM\tEOM\n");
+		
+		for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s: segment)
+		{
+			sb.append(segmentToString(s));
+		}
+		
+		return sb.toString();
 	}
 	
 	

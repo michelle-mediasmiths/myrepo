@@ -17,7 +17,7 @@ import com.mayam.wf.mq.MqDestination;
 import com.mayam.wf.mq.MqException;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -42,10 +42,10 @@ public class MqListeners implements Runnable {
 	
 	@Inject
 	private MediasmithsDestinations destinations;
-	
+
+	//need a marshaller before this will inject
 //	@Inject
-	//failed to inject
-	EventService eventService;
+//	EventService eventService;
 	
 	Injector injector;
 	Provider<AttributeMessageBuilder> ambp;

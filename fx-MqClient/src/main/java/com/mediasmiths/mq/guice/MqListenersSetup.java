@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.mq.MqModule;
+import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;

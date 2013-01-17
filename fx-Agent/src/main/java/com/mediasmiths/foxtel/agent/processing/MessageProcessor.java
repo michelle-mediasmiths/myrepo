@@ -47,7 +47,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
-	protected final EventService eventService;
+	protected final com.mediasmiths.foxtel.ip.event.EventService eventService;
 
 	@Inject
 	@Named("agent.events.pickUpTimer")
@@ -61,7 +61,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	public MessageProcessor(
 			FilesPendingProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
-			Unmarshaller unmarshaller, Marshaller marshaller, EventService eventService) {
+			Unmarshaller unmarshaller, Marshaller marshaller, com.mediasmiths.foxtel.ip.event.EventService eventService) {
 		this.filePathsPending = filePathsPendingProcessing;
 		this.unmarhsaller = unmarshaller;
 		this.marshaller = marshaller;
