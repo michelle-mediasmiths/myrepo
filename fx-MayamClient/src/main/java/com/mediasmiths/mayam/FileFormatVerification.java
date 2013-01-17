@@ -3,6 +3,8 @@ package com.mediasmiths.mayam;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -16,6 +18,8 @@ public class FileFormatVerification
 	@Inject @Named("ff.sd.wrapper.mime")
 	private String sdWrapperMime = "video/x-mxf";
 	
+	@Inject @Named("ff.sd.video.aspect")
+	private String sdVideoAspect;
 	@Inject @Named("ff.sd.video.imagex")
 	private int sdVideoX = 720;
 	@Inject @Named("ff.sd.video.imagey")
@@ -24,6 +28,8 @@ public class FileFormatVerification
 	private String sdVideoChroma = "4:2:2";
 	@Inject @Named("ff.sd.video.encoding")
 	private String sdVideoEncoding = "mpeg2";
+	@Inject @Named("ff.sd.video.gopL")
+	private int sdVideoGopL;	
 	@Inject @Named("ff.sd.video.bitrate")
 	private int sdVideoBitrate = 50000000; //50 Mbps (CBR) 
 	@Inject @Named("ff.sd.video.frameratex100")
@@ -45,6 +51,8 @@ public class FileFormatVerification
 	@Inject @Named("ff.hd.wrapper.mime")
 	private String hdWrapperMime;
 	
+	@Inject @Named("ff.hd.video.aspect")
+	private String hdVideoAspect;
 	@Inject @Named("ff.hd.video.imagex")
 	private int hdVideoX;
 	@Inject @Named("ff.hd.video.imagey")
@@ -53,6 +61,8 @@ public class FileFormatVerification
 	private String hdVideoChroma;
 	@Inject @Named("ff.hd.video.encoding")
 	private String hdVideoEncoding;
+	@Inject @Named("ff.hd.video.gopL")
+	private int hdVideoGopL;
 	@Inject @Named("ff.hd.video.bitrate")
 	private int hdVideoBitrate;
 	@Inject @Named("ff.hd.video.frameratex100")
@@ -69,7 +79,7 @@ public class FileFormatVerification
 	@Inject @Named("ff.hd.audio.samplewidth")
 	private int hdSampleWidth;
 	
-	//AR???
+	private final static Logger log = Logger.getLogger(FileFormatVerification.class);
 	
 	public boolean verifyFileFormat(FileFormatInfo fileInfo, AttributeMap materialAttributes) throws FileFormatVerificationFailureException{
 		
@@ -86,6 +96,7 @@ public class FileFormatVerification
 		Integer imageSizeX = fileInfo.getImageSizeX();
 		Integer imageSizeY = fileInfo.getImageSizeY();
 		Integer frameRate100 = fileInfo.getFrameRate100();
+		Integer videoGopL = fileInfo.getVideoGopsize();
 			
 		//TODO: aspect ration + goplength
 		
@@ -117,6 +128,9 @@ public class FileFormatVerification
 			tests.add(new FileFormatTest(hdVideoX, imageSizeX, "Video Image X"));
 			tests.add(new FileFormatTest(hdVideoY, imageSizeY, "Video Image Y"));
 			tests.add(new FileFormatTest(hdVideoFrameRate100, frameRate100, "Framerate"));
+			tests.add(new FileFormatTest(hdVideoGopL, videoGopL, "Gop Size (L)"));
+			//aspect ratio
+			tests.add(new FileFormatTest(hdVideoAspect, videoAspect, "Aspect Ratio"));
 			//audio codec
 			tests.add(new FileFormatTest(hdAudioEncoding, audioEncoding, "Audio Encoding"));
 			tests.add(new FileFormatTest(hdAudioFormat, audioFormat, "Audio Format"));
@@ -125,7 +139,6 @@ public class FileFormatVerification
 			//wrapper
 			tests.add(new FileFormatTest(hdWrapperFormat, wrapperFormat, "Wrapper format"));
 			tests.add(new FileFormatTest(hdWrapperMime, wrapperMime, "Wrapper format mime type"));
-			
 		}
 		else
 		{
@@ -137,6 +150,9 @@ public class FileFormatVerification
 			tests.add(new FileFormatTest(sdVideoX, imageSizeX, "Video Image X"));
 			tests.add(new FileFormatTest(sdVideoY, imageSizeY, "Video Image Y"));
 			tests.add(new FileFormatTest(sdVideoFrameRate100, frameRate100, "Framerate"));
+			tests.add(new FileFormatTest(sdVideoGopL, videoGopL, "Gop Size (L)"));
+			//aspect ratio
+			tests.add(new FileFormatTest(sdVideoAspect, videoAspect, "Aspect Ratio"));
 			//audio codec
 			tests.add(new FileFormatTest(sdAudioEncoding, audioEncoding, "Audio Encoding"));
 			tests.add(new FileFormatTest(sdAudioFormat, audioFormat, "Audio Format"));
@@ -159,7 +175,7 @@ public class FileFormatVerification
 			throw new FileFormatVerificationFailureException(sb.toString());
 		}
 		
-		System.out.println(sb.toString());
+		log.info(sb.toString());
 		
 		return anyFailures;
 	}
