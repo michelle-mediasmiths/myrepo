@@ -13,7 +13,6 @@ import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.notification.Failure;
 import org.mockito.Mockito;
 
 import com.mayam.wf.attributes.shared.Attribute;

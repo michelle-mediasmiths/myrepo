@@ -50,7 +50,7 @@ public class FullProgrammePackageInfo
 		// check that the found material is indeed programme material
 		String contentType = materialAttributes.getAttributeAsString(Attribute.CONT_MAT_TYPE);
 
-		if (!contentType.equals(MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE))
+		if (!MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentType))
 		{
 			String error = String.format(
 					"CONT_MAT_TYPE for material %s is %s and not %s",

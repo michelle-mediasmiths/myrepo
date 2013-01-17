@@ -1,8 +1,6 @@
 package com.mediasmiths.foxtel.tc;
 
 import java.io.IOException;
-import java.util.Date;
-
 import org.apache.cxf.helpers.IOUtils;
 import org.apache.log4j.Logger;
 
@@ -16,7 +14,6 @@ import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
-import com.mediasmiths.foxtel.tc.model.TCStartRequest;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 

@@ -3,9 +3,6 @@ package com.mediasmiths.foxtel.wf.adapter.guice;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 

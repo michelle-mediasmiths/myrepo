@@ -238,7 +238,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		m.setMaterialID(materialID);
 		m.setRequiredFormat("SD");
 		QualityCheckEnumType qualityCheck = null;
-		qualityCheck = qualityCheck.fromValue("AutomaticOnIngest");
+		qualityCheck = QualityCheckEnumType.fromValue("AutomaticOnIngest");
 		m.setQualityCheckTask(qualityCheck);
 		m.setSource(s);
 		m.setRequiredBy(requiredBy);

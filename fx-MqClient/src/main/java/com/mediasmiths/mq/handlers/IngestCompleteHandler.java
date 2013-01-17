@@ -9,9 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class IngestCompleteHandler  extends AttributeHandler
@@ -40,6 +38,11 @@ public class IngestCompleteHandler  extends AttributeHandler
 			if (taskState == TaskState.FINISHED) 
 			{
 				Boolean qcRequired = (Boolean) messageAttributes.getAttribute(Attribute.QC_REQUIRED);
+				
+				if(qcRequired==null){
+					qcRequired = new Boolean(true);
+				}
+				
 				if (!qcRequired)
 				{
 					String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);

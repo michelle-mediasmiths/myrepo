@@ -20,7 +20,6 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.processing.MaterialExchangeProcessor;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
@@ -88,15 +87,4 @@ public class MediaPickupModule extends AbstractModule {
 		return marshaller;
 	}
 
-	@Provides
-	protected EventAPI getEventService(
-			@Named("service.events.api.endpoint") final URI endpoint,
-			final JAXRSProxyClientFactory clientFactory)
-	{
-		logger.info(String.format("events api endpoint set to %s", endpoint));
-		EventAPI service = clientFactory.createClient(EventAPI.class, endpoint);
-
-		return service;
-	}
-	
 }

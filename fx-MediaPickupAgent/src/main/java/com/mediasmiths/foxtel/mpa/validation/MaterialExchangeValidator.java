@@ -1,5 +1,11 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -11,11 +17,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.Unmarshaller;
 
 public class MaterialExchangeValidator extends MessageValidator<Material> {
 

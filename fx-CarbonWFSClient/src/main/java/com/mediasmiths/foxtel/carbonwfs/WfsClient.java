@@ -2,11 +2,9 @@ package com.mediasmiths.foxtel.carbonwfs;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringReader;
 import java.util.List;
 import java.util.UUID;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 

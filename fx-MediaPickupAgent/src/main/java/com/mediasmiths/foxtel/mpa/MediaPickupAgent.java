@@ -4,7 +4,6 @@ import javax.xml.bind.JAXBException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.XmlWatchingAgent;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;

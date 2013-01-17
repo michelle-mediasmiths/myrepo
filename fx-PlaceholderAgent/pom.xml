@@ -9,7 +9,6 @@
 
 	<artifactId>fx-PlaceholderAgent</artifactId>
 	<packaging>war</packaging>
-	<version>3.0-SNAPSHOT</version>
 	<name>Foxtel Placeholder Agent</name>
 
 	<dependencies>

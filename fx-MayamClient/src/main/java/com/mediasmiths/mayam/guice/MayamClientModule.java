@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.ws.client.TasksClient;
@@ -41,6 +42,7 @@ public class MayamClientModule extends AbstractModule
 	}
 
 	@Provides
+	@Singleton
 	@Named(SETUP_TASKS_CLIENT)
 	public TasksClient getSetupTasksClient(TasksClient tc,@Named(MAYAM_ENDPOINT) String endpoint,
 			@Named(MAYAM_AUTH_TOKEN) String token) throws MalformedURLException{

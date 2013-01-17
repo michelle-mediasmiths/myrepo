@@ -11,6 +11,7 @@
 	<servlet>
 		<servlet-name>Resteasy</servlet-name>
 		<servlet-class>com.mediasmiths.std.guice.web.rest.resteasy.ResteasyDispatcher</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<context-param>

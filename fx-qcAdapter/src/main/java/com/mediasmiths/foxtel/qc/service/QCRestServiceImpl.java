@@ -20,7 +20,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
-import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.foxtel.qc.model.JobStatusType;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;

@@ -92,6 +92,12 @@
 			<artifactId>fx-MayamClientStub</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
+			<!--  reporting\events service -->
+		<dependency>	
+			<groupId>com.mediasmiths.foxtel.ip</groupId>
+			<artifactId>eventinterface</artifactId>
+			<version>${project.version}</version>			
+		</dependency>			
 		<dependency>
 			<groupId>com.mediasmiths</groupId>
 			<artifactId>FileWatcher</artifactId>

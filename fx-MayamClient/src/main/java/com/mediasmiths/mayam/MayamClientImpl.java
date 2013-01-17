@@ -5,14 +5,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -27,12 +22,8 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.AudioTrack;
-import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
-import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.CommentLog;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
-import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -45,12 +36,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
-import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media;
-import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTracks;
-import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
@@ -64,7 +50,6 @@ import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
-import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 
@@ -544,7 +529,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
 	{
-		long id = tasksController.createTask(packageID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY_FAILURE);
+		long id = tasksController.createTask(packageID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY);
 		AttributeMap newTask;
 		try
 		{

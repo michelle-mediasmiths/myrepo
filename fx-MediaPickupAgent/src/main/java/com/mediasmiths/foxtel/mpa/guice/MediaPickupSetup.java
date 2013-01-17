@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.agent.guice.EventTimerConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
+import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
@@ -29,7 +30,8 @@ public class MediaPickupSetup implements GuiceSetup
 		}
 		
 		modules.add(new EventTimerConfigModule());
-		modules.add(new MediaPickupModule());		
+		modules.add(new MediaPickupModule());	
+		modules.add(new EventServiceModule());
 	}
 
 	@Override

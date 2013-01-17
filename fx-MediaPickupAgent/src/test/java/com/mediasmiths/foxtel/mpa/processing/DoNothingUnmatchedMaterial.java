@@ -8,7 +8,7 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TI
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.EventService;
+import com.mediasmiths.foxtel.ip.event.EventService;
 
 public class DoNothingUnmatchedMaterial extends UnmatchedMaterialProcessor {
 

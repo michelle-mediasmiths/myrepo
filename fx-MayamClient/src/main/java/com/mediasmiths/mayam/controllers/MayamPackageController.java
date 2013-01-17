@@ -2,15 +2,12 @@ package com.mediasmiths.mayam.controllers;
 
 import java.io.StringReader;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
@@ -24,37 +21,20 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FilterCriteria;
-import com.mayam.wf.attributes.shared.type.Segment.SegmentBuilder;
-import com.mayam.wf.attributes.shared.type.AspectRatio;
-import com.mayam.wf.attributes.shared.type.AudioTrack;
-import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.SegmentList;
-import com.mayam.wf.attributes.shared.type.SegmentListList;
-import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
-import com.mayam.wf.attributes.shared.type.ValueList;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
-import com.mayam.wf.attributes.shared.type.ValueList.Entry;
-import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
-import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
-import com.mediasmiths.foxtel.generated.mediaexchange.ISANType;
-import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -241,7 +221,7 @@ public class MayamPackageController extends MayamController
 		Presentation p = null;
 		try
 		{
-			String naturalBreaks = material.getAttribute(Attribute.AUX_VAL);
+			String naturalBreaks = material.getAttribute(Attribute.SEGMENTATION_DATA);
 			log.debug(String.format("natural breaks is %s", naturalBreaks));
 						
 			final StringReader reader = new StringReader(naturalBreaks);
@@ -252,11 +232,11 @@ public class MayamPackageController extends MayamController
 		}
 		catch (JAXBException je)
 		{
-			log.error("error unmarshalling presentation information from AUX_VAL", je);
+			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", je);
 		}
 		catch (Exception e)
 		{
-			log.error("error unmarshalling presentation information from AUX_VAL", e);
+			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", e);
 		}
 
 		if (p != null)
