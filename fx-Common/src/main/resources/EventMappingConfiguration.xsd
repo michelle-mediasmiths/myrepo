@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events.typeconfig/001/000"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://com.mediasmiths.foxtel.ip.common.events.typeconfig/001/000"
+           xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events.typeconfig/001/000"
+           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+
+    <xs:complexType name="EventMappingTypeConfiguration">
+      <xs:sequence>
+        <xs:element name="mapping" type="fns:NamespaceEventMapping" minOccurs="1" maxOccurs="unbounded">
+            <xs:annotation>
+                <xs:documentation>The collection of data mappings between events and the payload types that are transmitted for those events
+                </xs:documentation>
+            </xs:annotation>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="NamespaceEventMapping">
+        <xs:sequence>
+            <xs:element name="namespace" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="eventName" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="payloadType" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

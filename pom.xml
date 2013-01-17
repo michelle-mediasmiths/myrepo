@@ -30,6 +30,10 @@
 
 	<modules>
 		<module>fx-Common</module>
+		<module>fx-event-core</module>
+		<module>fx-event-report</module>
+		<module>fx-event-entity</module>
+		<module>fx-Event</module>
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-MaterialExchange</module>
 		<module>fx-Ruzz</module>

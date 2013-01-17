@@ -16,5 +16,11 @@
             		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events" />
          </jaxb:schemaBindings>
 	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="EventMappingConfiguration.xsd">
+             <jaxb:schemaBindings>
+                		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events.config" />
+             </jaxb:schemaBindings>
+    	</jaxb:bindings>
 	
 </jaxb:bindings>
