@@ -1033,7 +1033,8 @@ public class MayamMaterialController extends MayamController
 		}
 		catch(FileFormatVerificationFailureException ffve){
 			log.warn("file format verification failed", ffve);
-			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.FAIL);
+			qcTaskAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES,ffve.getMessage());
 		}
 

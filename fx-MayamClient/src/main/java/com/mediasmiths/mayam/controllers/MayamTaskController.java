@@ -74,6 +74,7 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
 		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
+		initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); //reset qc status when creating new task
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
 	}

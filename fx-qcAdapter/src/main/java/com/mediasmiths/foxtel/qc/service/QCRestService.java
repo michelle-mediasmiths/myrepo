@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.axis.types.URI.MalformedURIException;
 
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundException;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
 import com.mediasmiths.foxtel.qc.model.QCJobResult;
 import com.mediasmiths.foxtel.qc.model.QCJobStatus;
@@ -42,11 +43,12 @@ public interface QCRestService {
 	 * @return
 	 * @throws RemoteException 
 	 * @throws MalformedURIException 
+	 * @throws MediaLocationNotFoundException 
 	 */
 	@PUT
 	@Path("/start")
 	@Produces("application/xml")
-	public QCStartResponse start(QCStartRequest req) throws MalformedURIException, RemoteException;
+	public QCStartResponse start(QCStartRequest req) throws MalformedURIException, RemoteException, MediaLocationNotFoundException;
 
 	/**
 	 * Returns the status of a given qc job
@@ -92,6 +94,7 @@ public interface QCRestService {
 	 * one media file per job)
 	 * 
 	 * @throws NotFoundException
+	 * @throws MediaLocationNotFoundException 
 	 * 
 	 */
 	@GET
@@ -100,7 +103,7 @@ public interface QCRestService {
 	public QCMediaResult mediaResult(@QueryParam("path") String file,
 			@PathParam("jobname") String jobName,
 			@QueryParam("run") @DefaultValue("0") Integer runNumber)
-			throws NotFoundException;
+			throws NotFoundException, MediaLocationNotFoundException;
 
 	/**
 	 * Used to query if a given profile exists, this may be useful for

@@ -98,8 +98,6 @@ public class FileFormatVerification
 		Integer frameRate100 = fileInfo.getFrameRate100();
 		Integer videoGopL = fileInfo.getVideoGopsize();
 			
-		//TODO: aspect ration + goplength
-		
 		//aspect ratio
 		String videoAspect = fileInfo.getVideoAspect();
 				
@@ -164,20 +162,22 @@ public class FileFormatVerification
 			
 		}
 		
-		boolean anyFailures = false;		
+		boolean allPass = true;		
 		
 		for (FileFormatTest fileFormatTest : tests)
 		{
-			anyFailures &= !fileFormatTest.check(sb);
+			if(!(fileFormatTest.check(sb))){
+				allPass = false;
+			}
 		}		
 		
-		if(anyFailures){
+		if(! allPass){
 			throw new FileFormatVerificationFailureException(sb.toString());
 		}
 		
 		log.info(sb.toString());
 		
-		return anyFailures;
+		return allPass;
 	}
 	
 	class FileFormatTest
@@ -233,7 +233,7 @@ public class FileFormatVerification
 			return false;			
 		}
 		else{
-			return false; //or should we guess becuase there is no REQ_FMT?
+			return false; //or should we guess because there is no REQ_FMT?
 		}
 	}
 

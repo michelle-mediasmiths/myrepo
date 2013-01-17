@@ -21,7 +21,7 @@ public class SegmentUtil
 	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
 		s = fillEomAndDurationOfSegment(s);		
-		return String.format("%d:\t%s\t%\n",s.getSegmentNumber(),s.getSOM(),s.getEOM());
+		return String.format("%d :\t%s\t%\n",s.getSegmentNumber(),s.getSOM(),s.getEOM());
 	}
 
 	/**

@@ -19,6 +19,9 @@ import org.jboss.resteasy.spi.InternalServerErrorException;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.cerify.CerifyClient;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundException;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.qc.model.JobStatusType;
 import com.mediasmiths.foxtel.qc.model.QCJobIdentifier;
@@ -38,21 +41,13 @@ public class QCRestServiceImpl implements QCRestService
 {
 
 	private final static Logger log = Logger.getLogger(QCRestServiceImpl.class);
-
-	private final CerifyClient cerifyClient;
-	private final PathResolver pathResolver;
-	// the (nix) path to the cerify medialocation
+	
 	@Inject
-	@Named("cerify.medialoction.path.nix")
-	private String mediaLocationPath;
-
+	private CerifyClient cerifyClient;
 	@Inject
-	public QCRestServiceImpl(CerifyClient cerifyClient, PathResolver pathResolver)
-	{
-		log.trace("Constructed");
-		this.cerifyClient = cerifyClient;
-		this.pathResolver = pathResolver;
-	}
+	private PathResolver pathResolver;
+	@Inject
+	private MediaLocationService mediaLocations;
 
 	@Override
 	public QCJobStatus jobStatus(QCJobIdentifier job) throws NotFoundException
@@ -90,28 +85,22 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCStartResponse start(QCStartRequest request) throws MalformedURIException, RemoteException
+	public QCStartResponse start(QCStartRequest request) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
 	{
 
 		log.debug(String.format("Start requested for file  %s", request.getFile()));
 
-		String relativePathToFile = pathResolver.getRelativePath(mediaLocationPath, request.getFile());
+		MediaLocation location = mediaLocations.getLocationForAbsoluteFilePath(request.getFile());
 		
-		// try
-		// {
-		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName());
+		String relativePathToFile = pathResolver.getRelativePath(location.getPath(), request.getFile());
+	
+		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName(),location);
 		log.info(String.format("Job %s created", jobName));
 		QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
 		QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
 		jobIdent.setProfile(request.getProfileName());
 		res.setQcIdentifier(jobIdent);
 		return res;
-		// }
-		// catch (Exception e)
-		// {
-		// log.error("Error starting qc", e);
-		// return new QCStartResponse(QCStartStatus.ERROR);
-		// }
 
 	}
 
@@ -184,7 +173,7 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCMediaResult mediaResult(String file, String jobName, Integer runNumber) throws NotFoundException
+	public QCMediaResult mediaResult(String file, String jobName, Integer runNumber) throws NotFoundException, MediaLocationNotFoundException
 	{
 
 		QCJobIdentifier ident = new QCJobIdentifier(jobName);
@@ -194,8 +183,11 @@ public class QCRestServiceImpl implements QCRestService
 		try
 		{
 			
-			String relativePathToFile = pathResolver.getRelativePath(mediaLocationPath,file);
-			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(relativePathToFile, ident.getIdentifier(), runNumber.intValue());
+			MediaLocation location = mediaLocations.getLocationForAbsoluteFilePath(file);
+			
+			String relativePathToFile = pathResolver.getRelativePath(location.getPath(),file);
+		
+			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(relativePathToFile, ident.getIdentifier(),location, runNumber.intValue());
 			
 			//TODO: include serialized full report!
 			

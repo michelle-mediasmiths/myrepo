@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.cerify;
 
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_NAME;
-import static com.mediasmiths.foxtel.cerify.CerifyClientConfig.CERIFY_LOCATION_URL;
 
 import java.rmi.RemoteException;
 import java.util.Arrays;
@@ -15,6 +13,9 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundException;
+import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.CreateJob;
@@ -41,23 +42,12 @@ public class CerifyClient
 
 	private final static Logger log = Logger.getLogger(CerifyClient.class);
 
-	private final CeriTalk_PortType service;
-
-	private final String mediaLocationName;
-	private final URI mediaLocationURI;
+	@Inject
+	private CeriTalk_PortType service;
 
 	@Inject
-	public CerifyClient(
-			CeriTalk_PortType service,
-			@Named(CERIFY_LOCATION_NAME) String locationName,
-			@Named(CERIFY_LOCATION_URL) URI locationURI) throws BaseCeritalkFault, RemoteException
-	{
-		this.service = service;
-		this.mediaLocationName = locationName;
-		this.mediaLocationURI = locationURI;
-
-	}
-
+	private MediaLocationService mediaLocations;
+	
 	/**
 	 * Starts QC for a given file, using the provided identifier as a basis for the names of the created MediaSet and Job
 	 * 
@@ -66,14 +56,16 @@ public class CerifyClient
 	 * @return
 	 * @throws MalformedURIException
 	 * @throws RemoteException
+	 * @throws MediaLocationNotFoundException 
 	 */
-	public String startQcForFile(String file, String ident, String profileName) throws MalformedURIException, RemoteException
+	public String startQcForFile(String file, String ident, String profileName, MediaLocation location) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
 	{
 		log.trace("QC start request for " + file);
+		
 		String mediaSetName = mediasetName(file, ident);
 
 		// if the media set name specified is already in use then a new media set name may be returned
-		mediaSetName = createMediaSet(file, ident, mediaSetName,0);
+		mediaSetName = createMediaSet(file, ident, mediaSetName,location,0);
 
 		String jobName = jobName(profileName, mediaSetName);
 		PriorityType priority = PriorityType.Medium;
@@ -152,17 +144,18 @@ public class CerifyClient
 	 * @throws BaseCeritalkFault
 	 * @throws MediaFileNotInJobFault
 	 * @throws JobDoesntExistFault
+	 * @throws MediaLocationNotFoundException 
 	 */
-	public GetMediaFileResultsResponse getMediaResult(String filePath, String jobName, int runNumber)
+	public GetMediaFileResultsResponse getMediaResult(String filePath, String jobName, MediaLocation mediaLocation, int runNumber)
 			throws MalformedURIException,
 			JobDoesntExistFault,
 			MediaFileNotInJobFault,
 			BaseCeritalkFault,
-			RemoteException
+			RemoteException, MediaLocationNotFoundException
 	{
 		log.trace(String.format("Getting results of media %s in job %s", filePath, jobName));
 
-		URI url = resolveUriForFile(filePath);
+		URI url = mediaLocation.resolveUriForFile(filePath);
 		GetMediaFileResults request = new GetMediaFileResults(jobName, url, 0);
 		GetMediaFileResultsResponse mediaFileResults = service.getMediaFileResults(request);
 		return mediaFileResults;
@@ -180,7 +173,7 @@ public class CerifyClient
 		return mediaSetName;
 	}
 
-	private String createMediaSet(final String file, final String ident, final String mediaSetName, final int mediaSetNameSuffix)
+	private String createMediaSet(final String file, final String ident, final String mediaSetName, final MediaLocation mediaLocation, final int mediaSetNameSuffix)
 			throws MalformedURIException,
 			URLNotInMediaLocationFault,
 			MediaLocationDoesntExistFault,
@@ -192,16 +185,17 @@ public class CerifyClient
 
 		log.info(String.format("Creating a mediaset %s", resolveMediaSetName(mediaSetName, mediaSetNameSuffix)));
 
-		URI media = resolveUriForFile(file);
+		
+		URI media = mediaLocation.resolveUriForFile(file);
 
 		CreateMediaSet cms;
 		if (mediaSetNameSuffix == 0) // mediaSetNameSuffix > 0 implies the suffix should be used to try and create and unique media set name
 		{
-			cms = new CreateMediaSet(mediaSetName, mediaLocationName, media);
+			cms = new CreateMediaSet(mediaSetName, mediaLocation.getName(), media);
 		}
 		else
 		{
-			cms = new CreateMediaSet(mediaSetName + mediaSetNameSuffix, mediaLocationName, media);
+			cms = new CreateMediaSet(mediaSetName + mediaSetNameSuffix, mediaLocation.getName(), media);
 		}
 		log.debug("Sending CreateMediaSetRequest");
 		try
@@ -211,7 +205,7 @@ public class CerifyClient
 		catch (MediaSetNameInUseFault e)
 		{
 			log.info("Media set name already in use", e);
-			return createMediaSet(file, ident, mediaSetName, mediaSetNameSuffix + 1);
+			return createMediaSet(file, ident, mediaSetName,mediaLocation, mediaSetNameSuffix + 1);
 		}
 		catch (URLNotInMediaLocationFault e)
 		{
@@ -256,17 +250,6 @@ public class CerifyClient
 		}
 	}
 
-	private URI resolveUriForFile(String filePath) throws MalformedURIException
-	{
-
-		log.debug("Resolving uri for " + filePath);
-
-		// filepath is relative to the media location
-		URI resolved = new URI(mediaLocationURI);
-		resolved.appendPath(filePath);
-		log.debug("Resolved uri for " + filePath + " as " + resolved.toString());
-
-		return resolved;
-	}
+	
 
 }

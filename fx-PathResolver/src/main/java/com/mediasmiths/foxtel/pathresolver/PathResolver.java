@@ -157,10 +157,21 @@ public class PathResolver
 	{
 		int widestMatchingPrefix = -1;
 		int index = -1;
-
+		if (log.isTraceEnabled())
+		{
+			log.trace(String.format("Fetching index to use for path %s",path));
+		}
+		
 		for (int i = 0; i < paths.size(); i++)
 		{
 			String candidate = paths.get(i);
+			
+			if (log.isTraceEnabled())
+			{	
+				log.trace(String.format("Candidate %d is {%s}",i,candidate));
+			}
+			
+			
 			if (path.startsWith(candidate))
 			{
 
@@ -168,7 +179,7 @@ public class PathResolver
 				{
 					if (log.isTraceEnabled())
 					{
-						log.trace(String.format(
+						log.debug(String.format(
 								"Picked candidate %s (%d) as better prefix than candidate (%d) for path %s",
 								candidate,
 								i,
