@@ -15,6 +15,9 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 {
 
 	private static final String MANUAL_QC_PASS = "pass";
+	private final static String MANUAL_QC_FAIL_WITH_REINGEST= "reingest";
+	private final static String MANUAL_QC_FAIL_WITH_REORDER = "reorder";
+	
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
 
 	@Inject
@@ -64,13 +67,13 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
 				taskController.saveTask(currentAttributes);
 			}
-			else if (result.equals(MANUAL_QC_FAIL_WITH_REORDER()))
+			else if (result.equals(MANUAL_QC_FAIL_WITH_REORDER))
 			{
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(currentAttributes);
 			}
-			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST()))
+			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
@@ -83,16 +86,6 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 		{
 			log.error("error updating task status", e);
 		}
-	}
-
-	private String MANUAL_QC_FAIL_WITH_REINGEST()
-	{
-		return "reingest";
-	}
-
-	private String MANUAL_QC_FAIL_WITH_REORDER()
-	{
-		return "reorder";
 	}
 
 	private void autoQcStatusChanged(AttributeMap currentAttributes, AttributeMap after)

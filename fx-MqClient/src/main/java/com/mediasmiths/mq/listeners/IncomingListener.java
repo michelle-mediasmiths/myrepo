@@ -195,10 +195,11 @@ public class IncomingListener extends MqClientListener
 			TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
 			TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 
+			passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
+			
 			if (!initialState.equals(newState))
 			{
 				passEventToHandler(ingestCompleteHandler,currentAttributes);
-				passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
@@ -206,11 +207,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
-				
 				taskController.updateAccessRights(currentAttributes);
-			}
-			else{
-				passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
 			}
 		}
 		catch (Exception e)

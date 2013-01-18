@@ -46,6 +46,8 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.SegmentUtil;
+import com.mediasmiths.std.io.PropertyFile;
+
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamMaterialController extends MayamController
@@ -1055,15 +1057,29 @@ public class MayamMaterialController extends MayamController
 		return true;
 	}
 
+	
+
+	@Inject
+	@Named("service.properties")
+	protected PropertyFile serviceProperties;
+	
 	public boolean isAutoQcRequiredForMaterial(AttributeMap messageAttributes)
 	{
 		Boolean autoQcRequired = messageAttributes.getAttribute(Attribute.QC_REQUIRED);
 		
+		
 		if(autoQcRequired != null && autoQcRequired.booleanValue() == true){
-			return true;
+			return true;		
 		}
 		
-		return false;
+			String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);
+			if (aggregator != null) 
+			{
+				boolean aggregatorRequiresAutoQc = serviceProperties.getBoolean("aggregators."+aggregator.toLowerCase()+".requiresQC",false);
+				return aggregatorRequiresAutoQc;
+			}
+		
+			return false;
 	}
 
 	public boolean isAutoQcRunOrRunningForMaterial(AttributeMap messageAttributes)
