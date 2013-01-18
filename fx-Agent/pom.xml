@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel.ip</groupId>
-			<artifactId>common</artifactId>
+			<artifactId>fx-Common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
