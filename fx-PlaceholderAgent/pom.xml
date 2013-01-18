@@ -16,7 +16,7 @@
 		<!-- Foxtel Solution Dependencies -->
 		<dependency>
 			<groupId>au.com.foxtel.cf.mam</groupId>
-			<artifactId>fx-PlaceholderManagmentSchema</artifactId>
+			<artifactId>fx-PlaceholderManagementSchema</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
