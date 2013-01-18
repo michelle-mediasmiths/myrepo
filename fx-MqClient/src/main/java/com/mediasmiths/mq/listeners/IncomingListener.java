@@ -34,6 +34,7 @@ import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
+import com.mediasmiths.mq.handlers.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.UnmatchedJobHandler;
 
@@ -69,6 +70,8 @@ public class IncomingListener extends MqClientListener
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
 	UnmatchedAssetCreateHandler unmatchedHandler;
+	@Inject
+	TitleUpdateHandler titleUpdateHandler;
 	@Inject
 	ComplianceEditingHandler compEditHandler;
 	@Inject
@@ -278,7 +281,7 @@ public class IncomingListener extends MqClientListener
 		{
 			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
 			logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
-			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
+			
 		}
 		catch (Exception e)
 		{
@@ -286,6 +289,8 @@ public class IncomingListener extends MqClientListener
 		}
 
 		// TODO:Handlers for asset updates
+		passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+		passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 	}
 
 	private boolean isTask(String origin)

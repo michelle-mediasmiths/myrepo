@@ -23,6 +23,8 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
+		
+		
 		try {			
 			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.PARENT_HOUSE_ID, before, after)) 
 			{
