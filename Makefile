@@ -10,9 +10,9 @@ notest=false
 MAVEN_PARALLELISM=4
 
 ifneq ($(notest), false)
-	MVN=mvn3 -T$(MAVEN_PARALLELISM) -DskipTests
+	MVN=mvn3 -DskipTests
 else
-	MVN=mvn3 -T$(MAVEN_PARALLELISM)
+	MVN=mvn3
 endif
 
 all: install
