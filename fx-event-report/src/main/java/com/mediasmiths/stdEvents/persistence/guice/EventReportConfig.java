@@ -4,6 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.marshaller.EventMarshaller;
+import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
 import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
@@ -40,5 +41,19 @@ public class EventReportConfig extends AbstractModule
 		storeFormat.put("http://www.foxtel.com.au/ip/system", IPEventDaoImpl.class);
 
 		return storeFormat;
+	}
+
+	@Provides
+	@Named("event.reporter.eventnamemap")
+	Map<String, Class<? extends QueryDao<?>>> createQueryMap()
+	{
+		Map<String, Class<? extends QueryDao<?>>> getDao = new HashMap<String, Class<? extends QueryDao<?>>>();
+		getDao.put("placeholderMessage", PlaceholderMessageDaoImpl.class);
+		getDao.put("contentPickup", ContentPickupDaoImpl.class);
+		getDao.put("transcode", TranscodeDaoImpl.class);
+		getDao.put("qc", QCDaoImpl.class);
+		getDao.put("delivery", DeliveryDaoImpl.class);
+		getDao.put("system", IPEventDaoImpl.class);
+		return getDao;
 	}
 }
