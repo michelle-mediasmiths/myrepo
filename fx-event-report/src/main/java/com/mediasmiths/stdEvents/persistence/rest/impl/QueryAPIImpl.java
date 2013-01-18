@@ -1,5 +1,23 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.mediasmiths.std.guice.database.annotation.Transactional;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
+import com.mediasmiths.stdEvents.events.db.entity.Delivery;
+import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
+import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
+import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
+import org.apache.log4j.Logger;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,40 +26,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mediasmiths.std.guice.database.annotation.Transactional;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
-import com.mediasmiths.stdEvents.events.db.entity.Delivery;
-
-import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
-import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -115,7 +99,7 @@ public class QueryAPIImpl implements QueryAPI
 	}
 
 	@Transactional
-	public EventEntity getById(@PathParam("id") Long id)
+	public EventEntity getById(Long id)
 	{
 		logger.info("Getting event by id...");
 		EventEntity event = eventDao.getById(id);
@@ -123,14 +107,14 @@ public class QueryAPIImpl implements QueryAPI
 	}
 	
 	@Transactional
-	public void deleteById (@PathParam("id")Long id)
+	public void deleteById (Long id)
 	{
 		logger.info("Deleting event: " + id);
 		eventDao.deleteById(id);
 	}
 
 	@Transactional
-	public List<EventEntity> getByNamespace(@PathParam("namespace") String namespace)
+	public List<EventEntity> getByNamespace(String namespace)
 	{
 		logger.info("Getting event by namespace...");
 		List<EventEntity> events = eventDao.findByNamespace(namespace);
@@ -140,7 +124,7 @@ public class QueryAPIImpl implements QueryAPI
 	}
 
 	@Transactional
-	public List<EventEntity> getByEventName(@PathParam("eventname") String eventName)
+	public List<EventEntity> getByEventName(String eventName)
 	{
 		logger.info("Getting event by eventName...");
 		List<EventEntity> events = eventDao.findByEventName(eventName);
