@@ -45,7 +45,7 @@ public class EventReportConfig extends AbstractModule
 
 	@Provides
 	@Named("event.reporter.eventnamemap")
-	Map<String, Class<? extends QueryDao<?>>> createQueryMap()
+	Map<String, Class<? extends QueryDao<?>>> providesNameTypeMapping()
 	{
 		Map<String, Class<? extends QueryDao<?>>> getDao = new HashMap<String, Class<? extends QueryDao<?>>>();
 		getDao.put("placeholderMessage", PlaceholderMessageDaoImpl.class);
