@@ -496,24 +496,6 @@ public class PlaceholderMessageValidator extends
 					}
 				}
 			}
-
-			try {
-				if (mayamClient.titleExists(action.getTitleID())) {
-					
-					logger.debug("title ID is " + action.getTitleID());
-					
-					MayamValidator mayamValidator = mayamClient.getValidator();
-					if (!mayamValidator.validateTitleBroadcastDate(
-							action.getTitleID(), startDate, endDate)) {
-						logger.error("License date for title did not valid for one or more packages");
-						return MessageValidationResult.TITLE_TARGET_DATE_LICENSE_INVALID;
-					}
-					
-				}
-			} catch (MayamClientException e) {
-				logger.error("Exception when validating license periods in Mayam",e);
-				//exception is logged but we dont want to reject a placeholder message just because of licence info
-			}
 		}
 
 		String channelTag = action.getRights().getLicense().get(0)
