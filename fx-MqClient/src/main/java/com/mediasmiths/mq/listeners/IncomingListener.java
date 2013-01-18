@@ -207,6 +207,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
+				passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 				taskController.updateAccessRights(currentAttributes);
 			}
 		}
@@ -278,7 +279,7 @@ public class IncomingListener extends MqClientListener
 		{
 			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
 			logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
-			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
+			
 		}
 		catch (Exception e)
 		{
