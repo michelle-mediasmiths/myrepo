@@ -1,6 +1,7 @@
 package com.mediasmiths.mq.handlers;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -26,11 +27,11 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		
 		
 		try {			
-			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.PARENT_HOUSE_ID, before, after)) 
+			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.ASSET_PEER_ID, before, after)) 
 			{
-				//Remove from any purge candidate lists
+				//Remove from any task lists
 				AttributeMap filterEqualities = tasksClient.createAttributeMap();
-				filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
+				//filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
 				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 				FilterCriteria criteria = new FilterCriteria();
 				criteria.setFilterEqualities(filterEqualities);
@@ -46,6 +47,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 						taskController.saveTask(task);
 					}
 				}
+				
+				// Move media
+				tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_ID).toString(), MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
+				
+				//Create QC task
+				AttributeMap matchedAsset = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
+				taskController.createQCTaskForMaterial(matchedAsset.getAttributeAsString(Attribute.HOUSE_ID), (Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE));
 			}
 			else if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
 			{

@@ -346,7 +346,7 @@ public class MayamTaskController extends MayamController
 			}
 		}
 
-		String contentFormat = task.getAttributeAsString(Attribute.CONT_FMT);
+		String contentFormat = task.getAttributeAsString(Attribute.CONT_MAT_TYPE);
 		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
 
 		log.warn(String.format(
@@ -360,25 +360,28 @@ public class MayamTaskController extends MayamController
 		{
 			contentType = "Title";
 		}
-		else if (contentFormat != null && contentFormat.toUpperCase().equals("UNMATCHED"))
+		else if (contentFormat != null)
 		{
-			contentType = "Unmatched";
-		}
-		else if (contentCategory != null)
-		{
-			if (contentCategory.toUpperCase().equals("PROGRAMME"))
+			if (contentFormat.toUpperCase().equals("PG"))
 			{
 				contentType = "Programme";
 			}
-			else if (contentCategory.toUpperCase().equals("ASSOCIATED"))
+			else if (contentFormat.toUpperCase().equals("PE"))
 			{
 				contentType = "EPK";
 			}
-			else if (contentCategory.toUpperCase().equals("EDIT CLIPS"))
+			else if (contentFormat.toUpperCase().equals("CU"))
 			{
 				contentType = "Edit Clip";
 			}
-			else if (contentCategory.toUpperCase().equals("PUBLICITY"))
+			else if (contentFormat.toUpperCase().equals("TM"))
+			{
+				contentType = "Unmatched";
+			}
+		}
+		else if (contentCategory != null)
+		{
+			if (contentCategory.toUpperCase().equals("PUBLICITY"))
 			{
 				contentType = "Publicity";
 			}

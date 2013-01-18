@@ -210,6 +210,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
+				passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 				taskController.updateAccessRights(currentAttributes);
 			}
 		}
