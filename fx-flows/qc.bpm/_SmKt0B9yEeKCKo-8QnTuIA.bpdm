@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://thisdiagram/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wfadpater="http://thisdiagram/wfadpater" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
@@ -10,9 +10,9 @@
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" bpdm:prefix="assetTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/assetTransferForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/caller" bpdm:prefix="caller" bpdm:comment="contrib=&apos;partner-pool:///_Q35Dlh9xEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/wfadpater" bpdm:prefix="wfadpater" bpdm:comment="contrib=&apos;partner-pool:///_Wd6bcB9yEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" bpdm:prefix="getProfileForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/getProfileForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" bpdm:prefix="autoQcFailed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcFailed.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
@@ -94,13 +94,7 @@
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>false()</bpel:from>
-                        <bpel:to>$qcsuccess</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="12711293" targetPath="$qcsuccess" targetedBy="33235320-arg0"></mapper:vertice>
-  <mapper:vertice id="33235320" dimension="78x24" location="391,230">
-    <mapper:value>false()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$qcsuccess</bpel:to><mapper:mapperLink><mapper:vertice id="12711293" targetPath="$qcsuccess" targetedBy="33235320-arg0"></mapper:vertice><mapper:vertice id="33235320" dimension="78x24" location="391,230"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
@@ -134,21 +128,7 @@
             </bpdm:messagingtask>
             <bpel:scope bpdm:label="perform qc until 3 errors" bpdm:ID="_uQLWwB9yEeKCKo-8QnTuIA">
                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                    <bpel:condition bpdm:loopType="repeatUntil">($complexvariable &gt;= 3) or $qcsuccess
-<mapper:mapperLink>
-  <mapper:vertice id="2050267" targetPath="$repeat until" targetedBy="22938439-arg1"></mapper:vertice>
-  <mapper:vertice id="22938439" dimension="78x24" location="636,180">
-    <mapper:value>or</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="11317200" dimension="121x37" location="216,156" targetedBy="22938439-arg0">
-    <mapper:value>&gt;=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="23302667" sourcePath="$complexvariable" targetedBy="11317200-arg0"></mapper:vertice>
-  <mapper:vertice id="16553722" dimension="61x37" location="120,264" targetedBy="11317200-arg1">
-    <mapper:value>3</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="10105740" sourcePath="$qcsuccess" targetedBy="22938439-arg2"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition bpdm:loopType="repeatUntil">($complexvariable&gt;= 3) or $qcsuccess<mapper:mapperLink><mapper:vertice id="2050267" targetPath="$repeat until" targetedBy="22938439-arg1"></mapper:vertice><mapper:vertice id="22938439" dimension="78x24" location="636,180"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="11317200" dimension="121x37" location="216,156" targetedBy="22938439-arg0"><mapper:value>&gt;=</mapper:value></mapper:vertice><mapper:vertice id="23302667" sourcePath="$complexvariable" targetedBy="11317200-arg0"></mapper:vertice><mapper:vertice id="16553722" dimension="61x37" location="120,264" targetedBy="11317200-arg1"><mapper:value>3</mapper:value></mapper:vertice><mapper:vertice id="10105740" sourcePath="$qcsuccess" targetedBy="22938439-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:variables>
                     <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="0" bpdm:id="_AV6XoB90EeKCKo-8QnTuIA" bpdm:messageIds=" out:_AVs8QB90EeKCKo-8QnTuIA">
@@ -245,10 +225,30 @@
                     <bpdm:gateway bpdm:label="check result" bpdm:ID="_8hzCQB9yEeKCKo-8QnTuIA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_SdxxYB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_SzLZoB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="[check result - notify pass]">
-                            <bpel:condition>compare("success", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())<mapper:mapperLink><mapper:vertice id="11670122" targetPath="$condition" targetedBy="32604730-arg2"></mapper:vertice><mapper:vertice id="32604730" dimension="78x24" location="132,36"><mapper:value>compare()</mapper:value></mapper:vertice><mapper:vertice id="26832153" dimension="78x24" location="40,90" targetedBy="32604730-arg0"><mapper:value>"success"</mapper:value></mapper:vertice><mapper:vertice id="6073931" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="32604730-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                            <bpel:condition>compare("Success", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
+<mapper:mapperLink>
+  <mapper:vertice id="22699721" targetPath="$condition" targetedBy="4689988-arg2"></mapper:vertice>
+  <mapper:vertice id="4689988" dimension="78x24" location="132,36">
+    <mapper:value>compare()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="9068427" dimension="78x24" location="40,90" targetedBy="4689988-arg0">
+    <mapper:value>"Success"</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="12669546" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="4689988-arg1"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_TOvUQB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="[check result - notifiy fail]">
-                            <bpel:condition>compare("warning", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())<mapper:mapperLink><mapper:vertice id="13106771" targetPath="$condition" targetedBy="30480629-arg2"></mapper:vertice><mapper:vertice id="30480629" dimension="78x24" location="132,24"><mapper:value>compare()</mapper:value></mapper:vertice><mapper:vertice id="29465269" dimension="78x24" location="48,84" targetedBy="30480629-arg0"><mapper:value>"warning"</mapper:value></mapper:vertice><mapper:vertice id="14940659" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="30480629-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                            <bpel:condition>compare("Error", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
+<mapper:mapperLink>
+  <mapper:vertice id="20305583" targetPath="$condition" targetedBy="2346408-arg2"></mapper:vertice>
+  <mapper:vertice id="2346408" dimension="78x24" location="132,24">
+    <mapper:value>compare()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="9381481" dimension="78x24" location="48,84" targetedBy="2346408-arg0">
+    <mapper:value>"Error"</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="22856810" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="2346408-arg1"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="increment error count" bpdm:ID="_GlYnEB9zEeKCKo-8QnTuIA">
@@ -279,13 +279,7 @@
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>true()</bpel:from>
-                                        <bpel:to>$qcsuccess</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="3954868" targetPath="$qcsuccess" targetedBy="13952764-arg0"></mapper:vertice>
-  <mapper:vertice id="13952764" dimension="78x24" location="281,89">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$qcsuccess</bpel:to><mapper:mapperLink><mapper:vertice id="3954868" targetPath="$qcsuccess" targetedBy="13952764-arg0"></mapper:vertice><mapper:vertice id="13952764" dimension="78x24" location="281,89"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                             </bpdm:messagingtask>
@@ -312,11 +306,7 @@
             <bpdm:gateway bpdm:label="check for error" bpdm:ID="_7HW5EENXEeKul4UglXqi8g" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                 <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_Dn6k4ENYEeKul4UglXqi8g" bpdm:targetDisplayName="default"></bpdm:linkset>
                 <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_EA8v8ENYEeKul4UglXqi8g" bpdm:targetDisplayName="[check for error - no error]">
-                    <bpel:condition>$qcsuccess
-<mapper:mapperLink>
-  <mapper:vertice id="1406215" targetPath="$condition" targetedBy="22140184-arg0"></mapper:vertice>
-  <mapper:vertice id="22140184" sourcePath="$qcsuccess"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition>$qcsuccess<mapper:mapperLink><mapper:vertice id="1406215" targetPath="$condition" targetedBy="22140184-arg0"></mapper:vertice><mapper:vertice id="22140184" sourcePath="$qcsuccess"></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:sequence>
                     <bpdm:messagingtask operation="autoQcError" partnerLink="wfadpaterAndWorkflowForHttpPortPlk1Var" portType="autoQcError:restInterface" isMyRole="false" enableSharing="false" bpdm:label="notify error" bpdm:ID="_MsJxAB9zEeKCKo-8QnTuIA">

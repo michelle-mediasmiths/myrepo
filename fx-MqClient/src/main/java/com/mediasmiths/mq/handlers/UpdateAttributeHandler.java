@@ -21,8 +21,11 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 
 	protected boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after)
 	{
-		boolean inAfter = after.containsAttribute(att);
-		boolean inBefore = before.containsAttribute(att);
+		Object b = before.getAttribute(att);
+		Object a = after.getAttribute(att);
+		
+		boolean inAfter = a!=null;
+		boolean inBefore = b!=null;
 
 		if (inAfter != inBefore)
 		{

@@ -19,6 +19,7 @@ import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -149,7 +150,15 @@ public class MayamTaskController extends MayamController
 		AttributeMap assetAttributes = null;
 		try
 		{
-			assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), houseID);
+			if (assetType.equals(MayamAssetType.PACKAGE))
+			{
+				SegmentList segment = client.segmentApi().getSegmentListBySiteId(houseID);
+				assetAttributes=segment.getAttributeMap();
+			}
+			else
+			{
+				assetAttributes = client.assetApi().getAssetBySiteId(assetType.getAssetType(), houseID);
+			}
 		}
 		catch (RemoteException e)
 		{

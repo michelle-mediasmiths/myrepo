@@ -192,6 +192,9 @@ public class QCRestServiceImpl implements QCRestService
 			//TODO: include serialized full report!
 			
 			QCMediaResult mediaResult = new QCMediaResult();
+			
+			log.info("returning result of "+res.getResult().getValue());
+			
 			mediaResult.setResult(res.getResult().getValue());
 			mediaResult.setUrl(new URI(res.getUrl().toString()));
 

@@ -308,13 +308,16 @@ public class MayamMaterialController extends MayamController
 					MayamAssetType.TITLE.getAssetType(),
 					(String) title.getAttribute(Attribute.ASSET_ID),
 					MayamAssetType.MATERIAL.getAssetType());
+			log.debug(""+materials.size() +" materials returned for title");
 		}
 		catch (RemoteException e1)
 		{
 			log.error("error getting materials for title " + title.getAttributeAsString(Attribute.ASSET_ID), e1);
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED, e1);
 		}
-
+		
+		
+	
 		for (AttributeMap material : materials)
 		{
 
