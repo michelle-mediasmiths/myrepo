@@ -1,50 +1,28 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.ws.rs.PathParam;
-
-import org.apache.log4j.Logger;
-
+import com.google.inject.Inject;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.marshaller.EventMarshaller;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
-import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
+import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
+import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-
+/**
+ * An implementation of the EventAPI as a rest service that stored incoming events within a (hibernate fronted) database
+ *
+ * Author: Alison Boal.
+ *
+ */
 public class EventAPIImpl implements EventAPI
 {
-	@Inject
-	protected Injector injector;
+
 
 	@Inject
 	protected EventEntityDao eventDao;
-	@Inject
-	protected PlaceholderMessageDaoImpl placeholderMessageDao;
-	@Inject
-	protected ContentPickupDaoImpl contentPickupDao;
-	@Inject
-	protected TranscodeDaoImpl transcodeDao;
-	@Inject
-	protected QCDaoImpl qcDao;
-	@Inject
-	protected DeliveryDaoImpl deliveryDao;
-	@Inject
-	protected QueryAPI queryApi;
 
 	private final EventingDao eventingDao;
 
@@ -55,39 +33,19 @@ public class EventAPIImpl implements EventAPI
 
 	}
 
-	@Inject
-	private Set<EventMarshaller> translateDaoSet;
 
 	private static final transient Logger logger = Logger.getLogger(EventAPIImpl.class);
 
 	public boolean EVENTING_SWITCH = true;
 
-	Map<String, Class<? extends EventMarshaller>> storeFormat = createTranslateMap();
+	EventTypeMapper storageTypeMapper = new EventTypeMapper();
 
-	private Map<String, Class<? extends EventMarshaller>> createTranslateMap()
-	{
-		Map<String, Class<? extends EventMarshaller>> storeFormat = new HashMap<String, Class<? extends EventMarshaller>>();
-		storeFormat.put("http://www.foxtel.com.au/ip/bms", PlaceholderMessageDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/content", ContentPickupDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/tc", TranscodeDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/qc", QCDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/delivery", DeliveryDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/system", IPEventDaoImpl.class);
-
-		logger.info("\t" + storeFormat.toString());
-
-		return storeFormat;
-	}
 
 	/**
 	 * Takes in event details and saves them in the database
-	 * 
-	 * @param <T>
-	 * 
-	 * @param time
-	 * @param namespace
-	 * @param eventName
-	 * @param payload
+	 *
+	 * @param event the details of the namespace/event name and payload
+	 *
 	 */
 	@Transactional
 	public void saveReport(EventEntity event)
@@ -95,52 +53,38 @@ public class EventAPIImpl implements EventAPI
 		if (logger.isTraceEnabled())
 			logger.trace("Saving event...");
 
+			// Save event to the all events table.
 		eventDao.saveOrUpdate(event);
-		Class<? extends EventMarshaller> daoClass = storeFormat.get(event.getNamespace());
 
-		if (daoClass != null)
+			// request a specialised db table handler for this event namespace, and if it exists store the event in that table
+		EventMarshaller dao = storageTypeMapper.get(event.getNamespace());
+
+		if (dao != null)
 		{
-			EventMarshaller dao = injector.getInstance(daoClass);
 			dao.save(event);
 		}
-		logger.info("Saving to Eventing table");
-		EventingEntity eventingEntity = new EventingEntity();
-		logger.info("Created correctly");
 
-		eventingEntity.setEventId(event.id);
-		logger.info("Saveing to Eventing table");
-		eventingDao.save(eventingEntity);
+		    // TRUE if we are recording new events in to a new event tqble.
+		if (EVENTING_SWITCH)
+		{
+			if (logger.isTraceEnabled())
+				logger.info("Saving to Eventing table");
 
-		logger.info("Event saved");
+			EventingEntity eventingEntity = new EventingEntity();
+
+			if (logger.isTraceEnabled())
+				logger.info("Created correctly");
+
+			eventingEntity.setEventId(event.id);
+
+			logger.info("Saving to Eventing table");
+
+			eventingDao.save(eventingEntity);
+
+			logger.info("Event saved");
+		}
 	}
 
-	@Transactional
-	public EventEntity getById(@PathParam("id") Long id)
-	{
-		logger.info("Getting event by id...");
-		EventEntity event = eventDao.getById(id);
-		return event;
-	}
-
-	@Transactional
-	public List<EventEntity> getByNamespace(@PathParam("namespace") String namespace)
-	{
-		logger.info("Getting event by namespace...");
-		List<EventEntity> events = eventDao.findByNamespace(namespace);
-		logger.info("Finished search");
-		eventDao.printXML(events);
-		return events;
-	}
-
-	@Transactional
-	public List<EventEntity> getByEventName(@PathParam("eventname") String eventName)
-	{
-		logger.info("Getting event by eventName...");
-		List<EventEntity> events = eventDao.findByEventName(eventName);
-		logger.info("Finished search");
-		eventDao.printXML(events);
-		return events;
-	}
 
 	@Transactional
 	public void setEventingSwitch(boolean value)

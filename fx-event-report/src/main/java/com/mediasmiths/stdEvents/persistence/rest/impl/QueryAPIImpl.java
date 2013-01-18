@@ -1,47 +1,28 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.name.Named;
+import com.mediasmiths.std.guice.database.annotation.Transactional;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
+import com.mediasmiths.stdEvents.events.db.entity.Delivery;
+import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
+import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
+import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
+import org.apache.log4j.Logger;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.mediasmiths.std.guice.database.annotation.Transactional;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
-import com.mediasmiths.stdEvents.events.db.entity.Delivery;
-
-import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
-import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -54,40 +35,27 @@ public class QueryAPIImpl implements QueryAPI
 	protected PlaceholderMessageDaoImpl placeholderMessageDao;
 	@Inject
 	protected ContentPickupDaoImpl contentPickupDao;
-	@Inject
-	protected TranscodeDaoImpl transcodeDao;
-	@Inject
-	protected QCDaoImpl qcDao;
+
 	@Inject
 	protected DeliveryDaoImpl deliveryDao;
 
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
-	Map<String, Class<? extends QueryDao<?>>> getDao = createQueryMap();
-
-	private Map<String, Class<? extends QueryDao<?>>> createQueryMap()
-	{
-		Map<String, Class<? extends QueryDao<?>>> getDao = new HashMap<String, Class<? extends QueryDao<?>>>();
-		getDao.put("placeholderMessage", PlaceholderMessageDaoImpl.class);
-		getDao.put("contentPickup", ContentPickupDaoImpl.class);
-		getDao.put("transcode", TranscodeDaoImpl.class);
-		getDao.put("qc", QCDaoImpl.class);
-		getDao.put("delivery", DeliveryDaoImpl.class);
-		getDao.put("system", IPEventDaoImpl.class);
-		return getDao;
-	}
+	@Inject
+	@Named("event.reporter.eventnamemap")
+	Map<String, Class<? extends QueryDao<?>>> getDao;
 
 	@Transactional
 	public List<?> getAll(String type)
 	{
-		logger.info("Getting all events of type " + type);
+		if (logger.isTraceEnabled()) logger.trace("Getting all events of type " + type);
 		Class<? extends QueryDao<?>> daoClass = getDao.get(type);
 		if (daoClass != null)
 		{
-			logger.info("Matching dao for type found");
+			if (logger.isTraceEnabled()) logger.trace("Matching dao for type found");
 			QueryDao<?> dao = injector.getInstance(daoClass);
 			List<?> results = dao.getAll();
-			logger.info(results);
+			if (logger.isTraceEnabled()) logger.trace(results);
 			return results;
 		}
 		else
@@ -99,52 +67,43 @@ public class QueryAPIImpl implements QueryAPI
 	@Transactional
 	public List<EventEntity> getEvents(String namespace, String eventName)
 	{
-		logger.info("Finding event...");
+
 		List<EventEntity> events = eventDao.findUnique(namespace, eventName);
-		logger.info("Event found");
 		return events;
 	}
 
 	@Transactional
 	public List<EventEntity> getAllEvents()
 	{
-		logger.info("Getting all events...");
 		List<EventEntity> events = eventDao.getAll();
-		logger.info("Finished search");
 		return events;
 	}
 
 	@Transactional
-	public EventEntity getById(@PathParam("id") Long id)
+	public EventEntity getById(Long id)
 	{
-		logger.info("Getting event by id...");
 		EventEntity event = eventDao.getById(id);
 		return event;
 	}
 	
 	@Transactional
-	public void deleteById (@PathParam("id")Long id)
+	public void deleteById (Long id)
 	{
-		logger.info("Deleting event: " + id);
 		eventDao.deleteById(id);
 	}
 
 	@Transactional
-	public List<EventEntity> getByNamespace(@PathParam("namespace") String namespace)
+	public List<EventEntity> getByNamespace(String namespace)
 	{
-		logger.info("Getting event by namespace...");
 		List<EventEntity> events = eventDao.findByNamespace(namespace);
-		logger.info("Finished search");
 		eventDao.printXML(events);
 		return events;
 	}
 
 	@Transactional
-	public List<EventEntity> getByEventName(@PathParam("eventname") String eventName)
+	public List<EventEntity> getByEventName(String eventName)
 	{
-		logger.info("Getting event by eventName...");
 		List<EventEntity> events = eventDao.findByEventName(eventName);
-		logger.info("Finished search");
 		eventDao.printXML(events);
 		return events;
 	}
@@ -155,7 +114,6 @@ public class QueryAPIImpl implements QueryAPI
 		List<EventEntity> events = eventDao.findUnique(namespace, eventName);
 		List<EventEntity> results = new ArrayList<EventEntity>();
 
-		logger.info("finding media for events...");
 		for (EventEntity event : events)
 		{
 
@@ -194,7 +152,6 @@ public class QueryAPIImpl implements QueryAPI
 
 					requiredByDate = (Date) formatter.parse(requiredBy);
 
-					logger.info(requiredByDate.toString());
 
 					if (requiredByDate.after(new Date()))
 					{
@@ -228,7 +185,6 @@ public class QueryAPIImpl implements QueryAPI
 	@Transactional
 	public List<EventEntity> getOutstanding()
 	{
-		logger.info("Getting titles not delivered...");
 
 		List<EventEntity> created = getDelivered();
 		List<String> titleId = new ArrayList<String>();
@@ -239,7 +195,6 @@ public class QueryAPIImpl implements QueryAPI
 
 		boolean done = false;
 
-		logger.info("Getting titleIDs...");
 		for (EventEntity event : delivered)
 		{
 
@@ -276,7 +231,6 @@ public class QueryAPIImpl implements QueryAPI
 				}
 			}
 		}
-		logger.info("Finished looking for not delivered");
 
 		return notDelivered;
 	}
@@ -287,7 +241,6 @@ public class QueryAPIImpl implements QueryAPI
 		List<EventEntity> events = getEvents("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle");
 		List<EventEntity> purgeProtect = new ArrayList<EventEntity>();
 
-		logger.info("Finding purge protected BMS...");
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
@@ -307,7 +260,6 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		List<EventEntity> events = getEvents("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle");
 
-		logger.info("Getting exporiting titles...");
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
@@ -342,17 +294,14 @@ public class QueryAPIImpl implements QueryAPI
 		{
 			total += 1;
 		}
-		logger.info("Total: " + total);
 		return total;
 	}
 
 	@Transactional
 	public int getLength(List<EventEntity> events)
 	{
-		logger.info("Getting list length...");
-		logger.info("List: " + events);
+
 		int length = events.size();
-		logger.info("Length is: " + length);
 		return length;
 	}
 

@@ -21,10 +21,11 @@ public class PackageUpdateHandler  extends AttributeHandler
 
 	public void process(AttributeMap messageAttributes)
 	{	
-		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		
-		if (assetID == null || assetID.equals(""))
+		if (houseID == null || houseID.equals(""))
 		{			
 			// If the message is for an existing package
 			if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
@@ -35,7 +36,7 @@ public class PackageUpdateHandler  extends AttributeHandler
 					
 					AttributeMap filterEqualities = tasksClient.createAttributeMap();
 					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.SEGMENTATION.toString());
-					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
+					filterEqualities.setAttribute(Attribute.HOUSE_ID, houseID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
 					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
@@ -47,14 +48,14 @@ public class PackageUpdateHandler  extends AttributeHandler
 						//Retrieve the tx-tasks and preview tasks associated with the asset
 						filterEqualities.clear();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.TX_DELIVERY.toString());
-						filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
+						filterEqualities.setAttribute(Attribute.HOUSE_ID, houseID);
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult txTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
 						boolean txReady = false;
 						
 						filterEqualities.clear();
 						filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-						filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
+						filterEqualities.setAttribute(Attribute.HOUSE_ID, houseID);
 						criteria.setFilterEqualities(filterEqualities);
 						FilterResult previewTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
 						
@@ -86,7 +87,7 @@ public class PackageUpdateHandler  extends AttributeHandler
 						
 						if (requiresSegTask) {
 							//Create new segmentation task for this asset
-							long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
+							long taskID = taskController.createTask(houseID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);
@@ -136,8 +137,8 @@ public class PackageUpdateHandler  extends AttributeHandler
 						{
 							for (SegmentList segmentList : lists)
 							{
-								String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
-								long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+								String segHouseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+								long taskID = taskController.createTask(segHouseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
 								AttributeMap newTask = taskController.getTask(taskID);
 								newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 								taskController.saveTask(newTask);

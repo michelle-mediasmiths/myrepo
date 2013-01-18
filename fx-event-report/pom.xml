@@ -8,7 +8,7 @@
                 <version>3.0-SNAPSHOT</version>
 	</parent>
 	
-	<groupId>com.mediasmiths.foxtel.ip</groupId>
+	<groupId>com.mediasmiths.foxtel</groupId>
 	<artifactId>fx-event-reports</artifactId>
 	<packaging>jar</packaging>
 
