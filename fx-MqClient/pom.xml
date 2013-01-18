@@ -29,7 +29,7 @@
 			<!--  reporting\events service -->
 		<!--dependency>	
 			<groupId>com.mediasmiths.foxtel.ip</groupId>
-			<artifactId>eventinterface</artifactId>
+			<artifactId>fx-Event</artifactId>
 			<version>${project.version}</version>			
 		</dependency-->			
 		<dependency>

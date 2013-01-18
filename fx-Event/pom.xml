@@ -10,7 +10,7 @@
 
 	<groupId>com.mediasmiths.foxtel.ip</groupId>
 	
-	<artifactId>eventinterface</artifactId>
+	<artifactId>fx-Event</artifactId>
 	<packaging>jar</packaging>
 	<name>Foxtel IP Event Interface</name>
 
