@@ -96,17 +96,7 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 		{
 
 			// kick off channel condition monitoring once that has been implemented
-
-			try
-			{
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
-				taskController.saveTask(currentAttributes);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error settign qc task to warning state", e);
-			}
+			finishWithPass(currentAttributes);
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
 		{
@@ -117,7 +107,7 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error settign qc task to warning state", e);
+				log.error("error settign qc task to finished state", e);
 			}
 		}
 	}
@@ -136,6 +126,10 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			{
 				initiateAutoQc(currentAttributes);
 			}
+			else{
+				// kick off channel condition monitoring once that has been implemented
+				finishWithPass(currentAttributes);
+			}
 		}
 		else if (fileFormat.equals(QcStatus.FAIL))
 		{
@@ -148,6 +142,20 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			{
 				log.error("error settign qc task to warning state", e);
 			}
+		}
+	}
+
+	private void finishWithPass(AttributeMap currentAttributes)
+	{
+		try
+		{
+			currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+			currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
+			taskController.saveTask(currentAttributes);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error settign qc task to finished state", e);
 		}
 	}
 

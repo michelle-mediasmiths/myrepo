@@ -861,12 +861,25 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + materialID);
-			e1.printStackTrace();
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + materialID,e1);
 		}
 		return assetAttributes;
 	}
 
+	public AttributeMap getMaterialByAssetId(String assetID) throws MayamClientException{
+		
+		try
+		{
+			AttributeMap asset = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
+			return asset;
+		}
+		catch (RemoteException e)
+		{
+			log.debug(String.format("remote expcetion getting material by asset id",e));
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED,e);
+		}
+	}
+	
 	public MaterialType getPHMaterialType(String materialID)
 	{ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
 		AttributeMap attributes = getMaterialAttributes(materialID);
@@ -1072,14 +1085,14 @@ public class MayamMaterialController extends MayamController
 			return true;		
 		}
 		
-			String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);
-			if (aggregator != null) 
-			{
-				boolean aggregatorRequiresAutoQc = serviceProperties.getBoolean("aggregators."+aggregator.toLowerCase()+".requiresQC",false);
-				return aggregatorRequiresAutoQc;
-			}
-		
-			return false;
+		String aggregator = messageAttributes.getAttribute(Attribute.AGGREGATOR);
+		if (aggregator != null) 
+		{
+			boolean aggregatorRequiresAutoQc = serviceProperties.getBoolean("aggregators."+aggregator.toLowerCase()+".requiresQC",false);
+			return aggregatorRequiresAutoQc;
+		}
+	
+		return false;
 	}
 
 	public boolean isAutoQcRunOrRunningForMaterial(AttributeMap messageAttributes)

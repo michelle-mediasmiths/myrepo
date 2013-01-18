@@ -34,7 +34,7 @@ import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.TemporaryContentHandler;
-import com.mediasmiths.mq.handlers.UnmatchedHandler;
+import com.mediasmiths.mq.handlers.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.UnmatchedJobHandler;
 
 @Singleton
@@ -68,7 +68,7 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
-	UnmatchedHandler unmatchedHandler;
+	UnmatchedAssetCreateHandler unmatchedHandler;
 	@Inject
 	ComplianceEditingHandler compEditHandler;
 	@Inject

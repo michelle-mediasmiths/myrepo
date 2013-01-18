@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class MayamTaskController extends MayamController
 	
 	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
+		log.info(String.format("Creating qc ingest task for asset "+materialID));
+		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
@@ -67,6 +70,8 @@ public class MayamTaskController extends MayamController
 	
 	public long createQCTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
+		log.info(String.format("Creating qc task for asset "+materialID));
+		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
 		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
@@ -81,10 +86,35 @@ public class MayamTaskController extends MayamController
 	
 	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
+		
+		log.info(String.format("Creating compliance logging task for asset "+materialID));
+		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING, initialAttributes);
 
+	}
+	
+	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
+		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW);
+	}
+	
+	public long createPurgeCandidateTaskForMaterial(String assetID, int numberOfDays) throws MayamClientException{
+	
+		log.info(String.format("Creating purge candidate task for asset "+assetID));
+		
+		AttributeMap initialAttributes = client.createAttributeMap();
+		
+		Calendar date = Calendar.getInstance();
+		date.add(Calendar.DAY_OF_MONTH, numberOfDays);
+		initialAttributes.setAttribute(Attribute.OP_DATE, date.getTime());
+		
+		return createTask(assetID,MayamAssetType.MATERIAL,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
+	}
+	
+	public long createUnmatchedTaskForMaterial(String assetID) throws MayamClientException{
+		//Add to Unmatched worklist
+		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
 	// creates an error task for some situation where there is no underly asset to create the task for
