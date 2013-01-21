@@ -1,10 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.guice;
 
-import java.util.List;
-
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mediasmiths.foxtel.agent.guice.EventTimerConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorModule;
@@ -12,6 +9,8 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
+
+import java.util.List;
 
 public class PlaceholderAgentSetup implements GuiceSetup {
 
@@ -30,7 +29,6 @@ public class PlaceholderAgentSetup implements GuiceSetup {
 			modules.add(new MayamClientModule());
 		}
 		
-		modules.add(new EventTimerConfigModule());
 		modules.add(new EventServiceModule());
 	}
 

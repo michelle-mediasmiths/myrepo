@@ -17,7 +17,6 @@ import org.mockito.ArgumentMatcher;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.processing.EventPickUpTimings;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -55,7 +54,6 @@ public abstract class MaterialProcessingTest {
 	MediaCheck mediaCheck;
 	String materialXMLPath;
 	EventService eventService;
-	EventPickUpTimings pickUpEventTimer = new EventPickUpTimings();
 	FilePickUpKinds pickUpKind = FilePickUpKinds.MEDIA;
 
 	final String TITLE_ID = "TITLE_ID";
@@ -94,8 +92,6 @@ public abstract class MaterialProcessingTest {
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
 				mayamClient, matchMaker, mediaCheck,emergencyImportPath,eventService);
 
-		processor.setPickUpEventTimer(pickUpEventTimer);
-		processor.setPickUpKind(pickUpKind);
 		
 		processorThread = new Thread(processor);
 		processorThread.start();
