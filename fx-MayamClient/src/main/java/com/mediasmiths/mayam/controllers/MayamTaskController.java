@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -330,19 +331,13 @@ public class MayamTaskController extends MayamController
 			retrictedAccess = ((Boolean) task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS)).booleanValue();
 		}
 
-		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
-
+		StringList channels = task.getAttribute(Attribute.CHANNELS);
 		ArrayList<String> channelList = new ArrayList<String>();
-		if (mediaRights != null)
+		if (channels != null)
 		{
-			List<Row> rows = mediaRights.getRows();
-			if (rows != null)
+			for (int i = 0; i < channels.size(); i++)
 			{
-				for (int i = 0; i < rows.size(); i++)
-				{
-					String channel = rows.get(i).get(5);
-					channelList.add(channel);
-				}
+				channelList.add(channels.get(i));
 			}
 		}
 
