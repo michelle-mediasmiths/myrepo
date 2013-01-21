@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class ComplianceEditingHandler  extends AttributeHandler{
@@ -38,7 +39,7 @@ public class ComplianceEditingHandler  extends AttributeHandler{
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							newTask.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);	
-							newTask.setAttribute(Attribute.QC_PREVIEW_RESULT, "Pass");
+							newTask.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
 							taskController.saveTask(newTask);
 						}
 					}

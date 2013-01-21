@@ -29,6 +29,7 @@ import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
@@ -38,9 +39,6 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamTaskController extends MayamController
 {
 	private final TasksClient client;
-	private static final String PREVIEW_FAIL = "fail";
-	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
-	private static final String PREVIEW_PASSED = "pass";
 
 	public TasksClient getTasksClient()
 	{
@@ -425,11 +423,11 @@ public class MayamTaskController extends MayamController
 		{
 			qaStatusString = qaStatus.toString();
 			qaStatusString = "Undefined";
-			if (qaStatus.equals(PREVIEW_FAIL)) 
+			if (qaStatus.equals(MayamPreviewResults.PREVIEW_FAIL)) 
 			{
 				qaStatusString = "Fail";
 			}
-			else if (qaStatus.equals(PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(PREVIEW_PASSED))
+			else if (qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED))
 			{
 				qaStatusString = "Pass";
 			}
