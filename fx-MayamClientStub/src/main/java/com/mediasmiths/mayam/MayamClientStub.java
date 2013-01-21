@@ -864,4 +864,11 @@ public class MayamClientStub implements MayamClient
 		
 	}
 
+	@Override
+	public void attachFileToMaterial(String materialID, String absolutePath, String serviceHandle) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

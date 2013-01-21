@@ -225,10 +225,30 @@
                     <bpdm:gateway bpdm:label="check result" bpdm:ID="_8hzCQB9yEeKCKo-8QnTuIA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_SdxxYB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_SzLZoB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="[check result - notify pass]">
-                            <bpel:condition>compare("Success", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())<mapper:mapperLink><mapper:vertice id="22699721" targetPath="$condition" targetedBy="4689988-arg2"></mapper:vertice><mapper:vertice id="4689988" dimension="78x24" location="132,36"><mapper:value>compare()</mapper:value></mapper:vertice><mapper:vertice id="9068427" dimension="78x24" location="40,90" targetedBy="4689988-arg0"><mapper:value>"Success"</mapper:value></mapper:vertice><mapper:vertice id="12669546" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="4689988-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                            <bpel:condition>codepoint-equal("Success", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
+<mapper:mapperLink>
+  <mapper:vertice id="20501288" targetPath="$condition" targetedBy="3009304-arg2"></mapper:vertice>
+  <mapper:vertice id="3009304" dimension="105x24" location="317,166">
+    <mapper:value>codepoint-equal()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="13102755" dimension="78x24" location="168,12" targetedBy="3009304-arg0">
+    <mapper:value>"Success"</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="14315682" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="3009304-arg1"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_TOvUQB9zEeKCKo-8QnTuIA" bpdm:targetDisplayName="[check result - notifiy fail]">
-                            <bpel:condition>compare("Error", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())<mapper:mapperLink><mapper:vertice id="20305583" targetPath="$condition" targetedBy="2346408-arg2"></mapper:vertice><mapper:vertice id="2346408" dimension="78x24" location="132,24"><mapper:value>compare()</mapper:value></mapper:vertice><mapper:vertice id="9381481" dimension="78x24" location="48,84" targetedBy="2346408-arg0"><mapper:value>"Error"</mapper:value></mapper:vertice><mapper:vertice id="22856810" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="2346408-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                            <bpel:condition>codepoint-equal("Error", $qcResultQcResultResponseMsg.response/qcAdapter:result/text())
+<mapper:mapperLink>
+  <mapper:vertice id="22528897" targetPath="$condition" targetedBy="31290011-arg2"></mapper:vertice>
+  <mapper:vertice id="31290011" dimension="105x24" location="384,240">
+    <mapper:value>codepoint-equal()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="2849877" dimension="78x24" location="312,36" targetedBy="31290011-arg0">
+    <mapper:value>"Error"</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="8381212" sourcePath="$qcResultQcResultResponseMsg.response/qcAdapter:result/text()" targetedBy="31290011-arg1"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="increment error count" bpdm:ID="_GlYnEB9zEeKCKo-8QnTuIA">
@@ -253,27 +273,15 @@
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$thisStartRequestMsg.body/tns:taskID/text()</bpel:from>
-                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="22207563" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()" targetedBy="6964332-arg0"></mapper:vertice>
-  <mapper:vertice id="6964332" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="22207563" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()" targetedBy="6964332-arg0"></mapper:vertice><mapper:vertice id="6964332" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()</bpel:from>
-                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="931763" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName/text()" targetedBy="33445160-arg0"></mapper:vertice>
-  <mapper:vertice id="33445160" sourcePath="$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName/text()</bpel:to><mapper:mapperLink><mapper:vertice id="931763" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName/text()" targetedBy="33445160-arg0"></mapper:vertice><mapper:vertice id="33445160" sourcePath="$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$thisStartRequestMsg.body/tns:taskID/text()</bpel:from>
-                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="17511607" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()" targetedBy="15144635-arg0"></mapper:vertice>
-  <mapper:vertice id="15144635" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="17511607" targetPath="$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID/text()" targetedBy="15144635-arg0"></mapper:vertice><mapper:vertice id="15144635" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQcPassedAutoQcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcPassed:autoQcPassed_input" bpdm:binding="autoQcPassed:restBinding" bpdm:ID="__RiwkB9zEeKCKo-8QnTuIA"></bpdm:linkset>
@@ -301,27 +309,15 @@
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$thisStartRequestMsg.body/tns:taskID/text()</bpel:from>
-                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="31627157" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()" targetedBy="26901681-arg0"></mapper:vertice>
-  <mapper:vertice id="26901681" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="31627157" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()" targetedBy="26901681-arg0"></mapper:vertice><mapper:vertice id="26901681" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()</bpel:from>
-                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="14685524" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName/text()" targetedBy="8728819-arg0"></mapper:vertice>
-  <mapper:vertice id="8728819" sourcePath="$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName/text()</bpel:to><mapper:mapperLink><mapper:vertice id="14685524" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName/text()" targetedBy="8728819-arg0"></mapper:vertice><mapper:vertice id="8728819" sourcePath="$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>$thisStartRequestMsg.body/tns:taskID/text()</bpel:from>
-                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="20286849" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()" targetedBy="23828777-arg0"></mapper:vertice>
-  <mapper:vertice id="23828777" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="20286849" targetPath="$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID/text()" targetedBy="23828777-arg0"></mapper:vertice><mapper:vertice id="23828777" sourcePath="$thisStartRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQcFailedAutoQcFailedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_input" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_AVs8QB90EeKCKo-8QnTuIA"></bpdm:linkset>
@@ -349,19 +345,11 @@
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()</bpel:from>
-                                <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="21982171" targetPath="$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()" targetedBy="8863523-arg0"></mapper:vertice>
-  <mapper:vertice id="8863523" sourcePath="$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="21982171" targetPath="$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()" targetedBy="8863523-arg0"></mapper:vertice><mapper:vertice id="8863523" sourcePath="$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()</bpel:from>
-                                <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="9602933" targetPath="$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()" targetedBy="14654800-arg0"></mapper:vertice>
-  <mapper:vertice id="14654800" sourcePath="$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="9602933" targetPath="$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID/text()" targetedBy="14654800-arg0"></mapper:vertice><mapper:vertice id="14654800" sourcePath="$assetTransferForQCAssetTransferForQCRequestMsg.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQcErrorAutoQcErrorRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcError:autoQcError_input" bpdm:binding="autoQcError:restBinding" bpdm:ID="_BjN4QB90EeKCKo-8QnTuIA"></bpdm:linkset>

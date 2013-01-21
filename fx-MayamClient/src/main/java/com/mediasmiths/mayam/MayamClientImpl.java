@@ -657,5 +657,21 @@ public class MayamClientImpl implements MayamClient
 		tasksController.autoQcPassedForMaterial(materialId,taskID);
 		
 	}
+
+	@Override
+	public void attachFileToMaterial(String materialID, String absolutePath, String serviceHandle) throws MayamClientException
+	{
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		String assetID = materialAttributes.getAttributeAsString(Attribute.ASSET_ID);
+		try
+		{
+			client.assetApi().importFile(AssetType.ITEM, assetID, serviceHandle, absolutePath);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error attatching file to material "+materialID, e);
+			throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED, e);
+		}		
+	}
 	
 }

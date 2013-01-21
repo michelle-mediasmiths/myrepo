@@ -293,5 +293,7 @@ public interface MayamClient
 	public void autoQcFailedForMaterial(String assetId, long taskID) throws MayamClientException;
 
 	public void autoQcPassedForMaterial(String assetId, long taskID) throws MayamClientException;
+
+	public void attachFileToMaterial(String materialID, String absolutePath, String serviceHandle) throws MayamClientException;
 	
 }

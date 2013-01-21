@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Collection;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,6 +15,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -62,6 +65,17 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ruzz.marshaller")
 	private Marshaller ruzzMarshaller;
+	
+	@Inject
+	@Named("cerify.report.location")
+	private String cerifyReportLocation;
+	@Inject
+	@Named("cerfiy.report.ardomehandle")
+	private String cerifyReportArdomeserviceHandle;
+	@Inject
+	@Named("cerfiy.report.ardomehandle")
+	private boolean attachQcReports;
+	
 	
 	
 	@Override
@@ -138,7 +152,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// id is an item id
 
 				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
-
+				attachQcReports(notification.getAssetId(),notification.getJobName());
+				
 			}
 		}
 		catch (MayamClientException e)
@@ -193,6 +208,46 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			mayamClient.autoQcPassedForMaterial(notification.getAssetId(), notification.getTaskID());
+			attachQcReports(notification.getAssetId(),notification.getJobName());
+			
+		}
+	}
+
+	private void attachQcReports(final String assetID, final String jobName) throws MayamClientException
+	{
+		//find report pdfs
+		IOFileFilter reportPDFAcceptor = new IOFileFilter()
+		{
+			
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return false; //dont look in sub directories
+			}
+			
+			@Override
+			public boolean accept(File file)
+			{
+				String name = FilenameUtils.getName(file.getAbsolutePath());
+				if(name.startsWith(jobName)){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+		};
+		
+		Collection<File> reports = FileUtils.listFiles(new File(cerifyReportLocation),reportPDFAcceptor,reportPDFAcceptor);
+		//attach report(s) to item
+		
+		for (File file : reports)
+		{
+			log.info(String.format("atattching file %s to material", file.getAbsolutePath()));
+			if (attachQcReports)
+			{
+				mayamClient.attachFileToMaterial(assetID, file.getAbsolutePath(), cerifyReportArdomeserviceHandle);
+			}
 		}
 	}
 

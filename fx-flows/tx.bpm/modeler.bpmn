@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmi:id="_aDRTMWO7EeK4seDGkF51Kg" iD="_aDRTMGO7EeK4seDGkF51Kg">
+  <pools xmi:type="bpmn:Pool" xmi:id="_jz6t4WO7EeK4seDGkF51Kg" iD="_jz6t4GO7EeK4seDGkF51Kg" name="Pool"/>
+  <pools xmi:type="bpmn:Pool" xmi:id="_lbuZMWO7EeK4seDGkF51Kg" iD="_lbuZMGO7EeK4seDGkF51Kg" name="transcode"/>
+  <pools xmi:type="bpmn:Pool" xmi:id="_my1WEWO7EeK4seDGkF51Kg" iD="_my1WEGO7EeK4seDGkF51Kg" name="autoqc"/>
+  <pools xmi:type="bpmn:Pool" xmi:id="_nvucIWO7EeK4seDGkF51Kg" iD="_nvucIGO7EeK4seDGkF51Kg" name="delivery"/>
+</bpmn:BpmnDiagram>
