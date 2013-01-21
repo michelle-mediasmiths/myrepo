@@ -16,4 +16,6 @@ public abstract class AutoQCResultNotification extends AutoQCRequest
 	{
 		this.jobName = jobName;
 	}
+	
+	
 }

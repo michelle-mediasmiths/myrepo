@@ -851,14 +851,14 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public void autoQcFailedForMaterial(String assetId) throws MayamClientException
+	public void autoQcFailedForMaterial(String assetId, long taskID) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void autoQcPassedForMaterial(String assetId) throws MayamClientException
+	public void autoQcPassedForMaterial(String assetId, long taskID) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		

@@ -290,8 +290,8 @@ public interface MayamClient
 
 	public boolean isPackageAO(String packageID) throws MayamClientException;
 
-	public void autoQcFailedForMaterial(String assetId) throws MayamClientException;
+	public void autoQcFailedForMaterial(String assetId, long taskID) throws MayamClientException;
 
-	public void autoQcPassedForMaterial(String assetId) throws MayamClientException;
+	public void autoQcPassedForMaterial(String assetId, long taskID) throws MayamClientException;
 	
 }

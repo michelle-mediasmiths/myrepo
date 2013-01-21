@@ -5,5 +5,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class InvokeIntalioQCFlow extends AutoQCRequest
 {
-
+	
 }

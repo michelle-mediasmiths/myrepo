@@ -33,7 +33,7 @@ public class SegmentationCompleteHandler  extends AttributeHandler
 					AttributeMap newTask = taskController.getTask(taskID);
 					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 					taskController.saveTask(newTask);
-					mule.initiateTxDeliveryWorkflow(assetID);	
+					mule.initiateTxDeliveryWorkflow(assetID,taskID);	
 				}
 			}
 			catch (Exception e) {

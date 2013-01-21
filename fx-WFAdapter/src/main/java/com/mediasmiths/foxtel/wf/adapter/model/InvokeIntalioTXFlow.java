@@ -7,6 +7,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class InvokeIntalioTXFlow
 {
 	private String packageID;
+	private long taskID;
+	
+	public long getTaskID()
+	{
+		return taskID;
+	}
+
+	@XmlElement(required = true)
+	public void setTaskID(long taskID)
+	{
+		this.taskID = taskID;
+	}
 
 	@XmlElement(required = true)
 	public String getPackageID()

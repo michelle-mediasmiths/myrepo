@@ -28,5 +28,18 @@ public class TCTotalFailure
 	{
 		this.errorMessage = errorMessage;
 	}*/
+	
+	private long taskID;
+	
+	public long getTaskID()
+	{
+		return taskID;
+	}
+
+	@XmlElement(required = true)
+	public void setTaskID(long taskID)
+	{
+		this.taskID = taskID;
+	}
 
 }

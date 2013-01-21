@@ -510,27 +510,27 @@ public class MayamTaskController extends MayamController
 	}
 
 
-	public void autoQcFailedForMaterial(String materialId) throws MayamClientException
+	public void autoQcFailedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
-		setAutoQcStatus(QcStatus.FAIL, materialId);
+		setAutoQcStatus(QcStatus.FAIL, materialId,taskID);
 	}
 
 
-	public void autoQcPassedForMaterial(String materialId) throws MayamClientException
+	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
-		setAutoQcStatus(QcStatus.PASS, materialId);		
+		setAutoQcStatus(QcStatus.PASS, materialId, taskID);		
 	}
 	
-	private void setAutoQcStatus(QcStatus newStatus, String materialId) throws MayamClientException{
+	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID) throws MayamClientException{
 		AttributeMap qcTask;
 		try
 		{
-			qcTask = getTaskForAssetBySiteID(MayamTaskListType.QC_VIEW, materialId);
+			qcTask = getTask(taskID);
 		}
-		catch (MayamClientException e)
+		catch (RemoteException e)
 		{
-			log.error("Error fetching qc task for material "+materialId,e);
-			throw e;
+			log.error(String.format("Error fetching qc task %d for material %s ",taskID,materialId,e));
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 		
 		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);

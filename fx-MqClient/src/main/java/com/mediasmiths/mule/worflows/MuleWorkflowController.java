@@ -28,13 +28,15 @@ public class MuleWorkflowController {
 		
 	}
 	
-	public void initiateQcWorkflow(String assetID, boolean isTx)
+	public void initiateQcWorkflow(String assetID, boolean isTx, long taskID)
 	{
 		String payload = "<?xml version=\"1.0\"?><invokeIntalioQCFlow><assetId>";
 		payload += assetID;
 		payload += "</assetId><forTXDelivery>";
 		payload += isTx;
-		payload += "</forTXDelivery></invokeIntalioQCFlow>";
+		payload += "</forTXDelivery>";
+		payload += "<taskID>"+taskID+"</taskID>";
+		payload+="</invokeIntalioQCFlow>";
 		
 		if(client==null){
 			log.error("mule client is null");	
@@ -59,13 +61,14 @@ public class MuleWorkflowController {
 		log.info("Message sent to Mule to generate report. Destination : " + destinations.getMule_reporting_destination() + " Payload: " + request);
 	}
 	
-	public MuleMessage initiateTxDeliveryWorkflow(String assetID)
+	public MuleMessage initiateTxDeliveryWorkflow(String assetID, long taskID)
 	{
 		String payload = "<?xml version=\"1.0\"?>";
 		payload += "<invokeIntalioTCFlow>";
 		payload += "<inputFile>" + MediasmithsDestinations.TRANSCODE_INPUT_FILE + "</inputFile>";
 		payload += "<outputFolder>" + MediasmithsDestinations.TRANSCODE_OUTPUT_DIR + "</outputFolder>";
 		payload += "<packageID>" + assetID + "</packageID>";
+		payload += "<taskID>"+taskID+"</taskID>";
 		payload += "</invokeIntalioTCFlow>";
 		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " +  destinations.getMule_tc_destination()  + " Payload: " + payload);
 		return client.send(destinations.getMule_tc_destination(), payload, null);

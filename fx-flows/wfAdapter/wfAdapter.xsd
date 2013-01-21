@@ -34,6 +34,7 @@
   <xs:complexType name="tcFailureNotification">
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -41,6 +42,7 @@
     <xs:sequence>
       <xs:element name="assetId" type="xs:string"/>
       <xs:element name="forTXDelivery" type="xs:boolean"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -87,6 +89,7 @@
   <xs:complexType name="tcPassedNotification">
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -99,6 +102,7 @@
   <xs:complexType name="invokeIntalioTXFlow">
     <xs:sequence>
       <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -121,12 +125,14 @@
       <xs:element name="forTX" type="xs:boolean"/>
       <xs:element name="outputFolder" type="xs:string"/>
       <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="tcTotalFailure">
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -150,6 +156,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="packageID" type="xs:string"/>
       <xs:element minOccurs="0" name="stage" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 </xs:schema>

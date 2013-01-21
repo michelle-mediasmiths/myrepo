@@ -192,7 +192,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		else
 		{
-			mayamClient.autoQcPassedForMaterial(notification.getAssetId());
+			mayamClient.autoQcPassedForMaterial(notification.getAssetId(), notification.getTaskID());
 		}
 	}
 
@@ -218,7 +218,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// auto qc was for qc task
-				mayamClient.autoQcFailedForMaterial(notification.getAssetId());
+				mayamClient.autoQcFailedForMaterial(notification.getAssetId(),notification.getTaskID());
 			}
 		}
 		catch (MayamClientException e)

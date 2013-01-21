@@ -6,6 +6,7 @@ public abstract class AutoQCRequest
 {
 	private String assetId;
 	private boolean isForTXDelivery;
+	private long taskID;
 
 	@XmlElement(required=true)
 	public String getAssetId()
@@ -27,6 +28,18 @@ public abstract class AutoQCRequest
 	public void setForTXDelivery(boolean isForTXDelivery)
 	{
 		this.isForTXDelivery = isForTXDelivery;
+	}
+
+	
+	public long getTaskID()
+	{
+		return taskID;
+	}
+
+	@XmlElement(required = true)
+	public void setTaskID(long taskID)
+	{
+		this.taskID = taskID;
 	}
 
 }

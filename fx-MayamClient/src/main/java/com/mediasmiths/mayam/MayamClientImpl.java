@@ -646,15 +646,15 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void autoQcFailedForMaterial(String materialId) throws MayamClientException
+	public void autoQcFailedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
-		tasksController.autoQcFailedForMaterial(materialId);
+		tasksController.autoQcFailedForMaterial(materialId,taskID);
 	}
 
 	@Override
-	public void autoQcPassedForMaterial(String materialId) throws MayamClientException
+	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
-		tasksController.autoQcPassedForMaterial(materialId);
+		tasksController.autoQcPassedForMaterial(materialId,taskID);
 		
 	}
 	

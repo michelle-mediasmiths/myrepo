@@ -12,8 +12,18 @@ public class InvokeIntalioTCFlow
 	private String outputFolder;
 	private boolean isForTX;
 	private Date requiredDate;
+	private long taskID;
 	
 	
+	public long getTaskID()
+	{
+		return taskID;
+	}
+	@XmlElement(required = true)
+	public void setTaskID(long taskID)
+	{
+		this.taskID = taskID;
+	}
 	@XmlElement(required = true)
 	public String getOutputFolder()
 	{
