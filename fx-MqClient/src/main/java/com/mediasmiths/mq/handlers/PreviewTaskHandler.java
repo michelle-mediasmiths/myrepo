@@ -16,15 +16,15 @@ import com.mediasmiths.mayam.MayamTaskListType;
 
 public class PreviewTaskHandler extends AttributeHandler
 {
-	private static final String PREVIEW_FAIL = "fail";
-	private static final String STITCH_EDIT_AND_REORDER = "stitchr";
-	private static final String STITCH_EDIT_REQUIRED = "stitch";
-	private static final String FIX_EDIT_AND_REORDER = "fixr";
-	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
-	private static final String PREVIEW_PASSED = "pass";
-	private static final String PREVIEW_NOT_DONE = "pvnd";
-	private static final String FIX_EDIT_REQUIRED = "fix";
-	private final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
+	public static final String PREVIEW_FAIL = "fail";
+	public static final String STITCH_EDIT_AND_REORDER = "stitchr";
+	public static final String STITCH_EDIT_REQUIRED = "stitch";
+	public static final String FIX_EDIT_AND_REORDER = "fixr";
+	public static final String PREVIEW_PASSED_BUT_REORDER = "passr";
+	public static final String PREVIEW_PASSED = "pass";
+	public static final String PREVIEW_NOT_DONE = "pvnd";
+	public static final String FIX_EDIT_REQUIRED = "fix";
+	public final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
 
 	public void process(AttributeMap messageAttributes)
 	{

@@ -38,7 +38,7 @@ public class ComplianceEditingHandler  extends AttributeHandler{
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							newTask.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);	
-							newTask.setAttribute(Attribute.QC_PREVIEW_RESULT, "Pass");
+							newTask.setAttribute(Attribute.QC_PREVIEW_RESULT, PreviewTaskHandler.PREVIEW_PASSED);
 							taskController.saveTask(newTask);
 						}
 					}
