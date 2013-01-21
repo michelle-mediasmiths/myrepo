@@ -156,7 +156,7 @@ public class SegmentUtil
 		
 		StringBuilder sb = new StringBuilder();
 		
-		sb.append("\tSOM\tEOM\n");
+		sb.append("\tSOM\t\t\tEOM\n");
 		
 		for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s: segment)
 		{
