@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class UnmatchedJobHandler extends JobHandler
@@ -42,7 +43,7 @@ public class UnmatchedJobHandler extends JobHandler
 				String contentMaterialType = material.getAttribute(Attribute.CONT_MAT_TYPE);
 				
 				//check content type is unmatched 
-				if (contentMaterialType != null && contentMaterialType.equals("TM"))
+				if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
 				{
 					//attempt to set the source as import or ingest
 					material.setAttribute(Attribute.OP_TYPE, jobSubType.toString());

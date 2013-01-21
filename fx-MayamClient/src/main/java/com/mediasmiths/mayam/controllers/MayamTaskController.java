@@ -29,6 +29,7 @@ import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
@@ -355,19 +356,19 @@ public class MayamTaskController extends MayamController
 		}
 		else if (contentFormat != null)
 		{
-			if (contentFormat.toUpperCase().equals("PG"))
+			if (contentFormat.toUpperCase().equals(MayamContentTypes.PROGRAMME))
 			{
 				contentType = "Programme";
 			}
-			else if (contentFormat.toUpperCase().equals("PE"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EPK))
 			{
 				contentType = "EPK";
 			}
-			else if (contentFormat.toUpperCase().equals("CU"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EDIT_CLIPS))
 			{
 				contentType = "Edit Clip";
 			}
-			else if (contentFormat.toUpperCase().equals("TM"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.UNMATCHED))
 			{
 				contentType = "Unmatched";
 			}
