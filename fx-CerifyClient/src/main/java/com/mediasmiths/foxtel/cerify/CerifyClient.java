@@ -246,7 +246,7 @@ public class CerifyClient
 		else
 		{
 			//a suffix was required to generate a unique mediaset name
-			return mediaSetName + mediaSetNameSuffix;
+			return mediaSetName + "_" + mediaSetNameSuffix;
 		}
 	}
 

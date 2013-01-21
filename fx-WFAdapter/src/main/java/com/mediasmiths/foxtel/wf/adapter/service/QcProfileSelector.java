@@ -2,13 +2,13 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 
 import org.apache.log4j.Logger;
 
-import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.PackageType;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.util.AssetProperties;
 
 public class QcProfileSelector
 {
@@ -58,15 +58,15 @@ public class QcProfileSelector
 
 	private String getProfileForMaterial(String materialID) throws MayamClientException
 	{
-//		MaterialType material = mayamClient.getMaterial(materialID);
-		return getProfileForMaterial(new MaterialType());
+		
+		AttributeMap materialAttributes = mayamClient.getMaterialAttributes(materialID);
+		return getProfileForMaterial(materialAttributes);
 	}
 
-	private String getProfileForMaterial(MaterialType material)
+	private String getProfileForMaterial(AttributeMap materialAttributes)
 	{
-//		boolean isMaterialSD = (material.getRequiredFormat().equals("SD"));
-		boolean isMaterialSD = (true);
-		boolean isDolbyE = (false); // TODO replace once we can store retrieve audio track information in mayam
+		boolean isMaterialSD = AssetProperties.isMaterialSD(materialAttributes);
+		boolean isDolbyE = AssetProperties.isMaterialDolbyE(materialAttributes);
 
 		final String profile;
 
@@ -97,15 +97,18 @@ public class QcProfileSelector
 
 	private String getProfileForPackage(String packageID) throws MayamClientException
 	{
-//		PackageType pack = mayamClient.getPackage(packageID);
-		return getProfileForPackage(new PackageType());
+		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+		
+		String materialID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+		AttributeMap materialAttributes = mayamClient.getMaterialAttributes(materialID);
+		
+		return getProfileForPackage(packageAttributes,materialAttributes);
 	}
 
-	private String getProfileForPackage(PackageType pack)
+	private String getProfileForPackage(AttributeMap packageAttributes, AttributeMap materialAttributes)
 	{
-//		boolean isPackageSD = (pack.getPresentationFormat() == PresentationFormatType.SD);
-		boolean isPackageSD = true;
-		boolean isDolbyE = (false); // TODO replace once we can store retrieve audio track information in mayam
+		boolean isPackageSD = AssetProperties.isPackageSD(packageAttributes);
+		boolean isDolbyE = AssetProperties.isMaterialDolbyE(materialAttributes);
 
 		final String profile;
 

@@ -198,6 +198,11 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
+	public AttributeMap getMaterialAttributes(String materialID) throws MayamClientException{
+		return materialController.getMaterialAttributes(materialID);
+	}
+	
+	@Override
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
 		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
@@ -672,6 +677,12 @@ public class MayamClientImpl implements MayamClient
 			log.error("error attatching file to material "+materialID, e);
 			throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED, e);
 		}		
+	}
+
+	@Override
+	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException
+	{
+		return packageController.getSegmentList(packageID).getAttributeMap();
 	}
 	
 }

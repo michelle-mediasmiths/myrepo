@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="mule-config">
+    <global-unknown index="1" description="true" entity-id="global-unknown#1">
+        <content>&lt;description xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot;&gt;
+    Proxy connections for WFS solution
+    &lt;/description&gt;</content>
+    </global-unknown>
+    <global-unknown index="2" unknownName="http-proxy-tcAdapter" description="false" entity-id="global-unknown#2">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-tcAdapter&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8082/fx-TcAdapter&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="5" unknownName="http-proxy-qcAdapter" description="false" entity-id="global-unknown#3">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-qcAdapter&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8082/fx-qcAdapter&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="8" unknownName="http-proxy-WFAdapter" description="false" entity-id="global-unknown#4">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-WFAdapter&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8082/fx-WFAdapter&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8000/fx-WFAdapter&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="11" unknownName="http-proxy-FSAdapter" description="false" entity-id="global-unknown#5">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-FSAdapter&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8082/fx-FSAdapter&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="14" unknownName="http-proxy-mayam-tasks-ws" description="false" entity-id="global-unknown#6">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-mayam-tasks-ws&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8085/tasks-ws&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8084/tasks-ws&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="17" unknownName="http-proxy-cerify" description="false" entity-id="global-unknown#7">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-cerify&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8086/&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://10.111.227.41:80/&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="20" unknownName="http-proxy-carbonwfs" description="false" entity-id="global-unknown#8">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-carbonwfs&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8087/&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://10.111.227.21:8731/&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+    <global-unknown index="23" unknownName="http-proxy-intalio" description="false" entity-id="global-unknown#9">
+        <content>&lt;pattern:http-proxy xmlns:pattern=&quot;http://www.mulesoft.org/schema/mule/pattern&quot; name=&quot;http-proxy-intalio&quot;&gt;
+    	&lt;http:inbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://0.0.0.0:8089/ode&quot;/&gt;
+	    &lt;http:outbound-endpoint xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; address=&quot;http://mamwkf01.mam.foxtel.com.au:8081/ode&quot;/&gt;
+	&lt;/pattern:http-proxy&gt;</content>
+    </global-unknown>
+</mule-configuration>
