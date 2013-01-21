@@ -69,26 +69,6 @@ public class UnmatchedJobHandler extends JobHandler
 				}
 			}
 		}
-
-		try
-		{
-			AttributeMap task = taskController.getTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetId);
-
-			if (task != null)
-			{
-				// Populate the Ingest Type (OP_TYPE) field in the unmatched tasklist
-				task.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
-				taskController.saveTask(task);
-			}
-			else
-			{
-				log.warn("Unable to find Unmatched task for assetId : " + assetId);
-			}
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Mayam exception thrown while retrieving Unmatched task for asset : " + assetId, e);
-		}
 	}
 
 	@Override
