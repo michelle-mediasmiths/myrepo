@@ -9,4 +9,8 @@ public class MayamPreviewResults {
 	public static final String PREVIEW_PASSED = "pass";
 	public static final String PREVIEW_NOT_DONE = "pvnd";
 	public static final String FIX_EDIT_REQUIRED = "fix";
+	
+	public static boolean isPreviewPass(String previewStatus){
+		return previewStatus != null && (previewStatus.equals(PREVIEW_PASSED) || previewStatus.equals(PREVIEW_PASSED_BUT_REORDER)); 
+	}
 }

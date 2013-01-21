@@ -150,8 +150,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// id is an item id
-
-				mayamClient.failTaskForAsset(MayamTaskListType.QC_VIEW, notification.getAssetId());
+				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(),notification.getJobName());
 				
 			}

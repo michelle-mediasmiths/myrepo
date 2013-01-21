@@ -69,21 +69,33 @@ public class MayamTaskController extends MayamController
 
 	}
 	
-	public long createQCTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	public void createQCTaskForMaterial(String materialID, Date requiredByDate, String previewStatus) throws MayamClientException
 	{
-		log.info(String.format("Creating qc task for asset "+materialID));
+		if(!MayamPreviewResults.isPreviewPass(previewStatus)){
 		
-		AttributeMap initialAttributes = client.createAttributeMap();
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
-		initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
-		initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); //reset qc status when creating new task
-		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
+			log.info(String.format("Creating qc task for asset "+materialID));
+		
+			AttributeMap initialAttributes = client.createAttributeMap();
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
+			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
+			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); //reset qc status when creating new task
+			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
+		
+		}
+		else{
+			log.info(String.format("Did not create qc task for asset %s as preview already passed",materialID));
+		}
 	}
+	
+	private boolean isQcPass(QcStatus qcStatus){
+		return qcStatus != null && (qcStatus == QcStatus.PASS || qcStatus != QcStatus.PASS_MANUAL);
+	}
+		
 	
 	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{

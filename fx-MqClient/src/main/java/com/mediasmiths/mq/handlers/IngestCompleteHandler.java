@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamTaskListType;
 
@@ -26,7 +27,9 @@ public class IngestCompleteHandler extends AttributeHandler
 				{
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					Date requiredby = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
-					taskController.createQCTaskForMaterial(assetID, requiredby);
+					String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
+					
+					taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus);
 				}
 				catch (Exception e)
 				{
