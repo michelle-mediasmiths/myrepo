@@ -10,7 +10,6 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
-import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -27,35 +26,7 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		
 		
 		try {			
-			if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.ASSET_PEER_ID, before, after)) 
-			{
-				//Remove from any task lists
-				AttributeMap filterEqualities = tasksClient.createAttributeMap();
-				//filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-				filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
-				FilterCriteria criteria = new FilterCriteria();
-				criteria.setFilterEqualities(filterEqualities);
-				FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
-				
-				if (existingTasks.getTotalMatches() > 0) 
-				{
-					List<AttributeMap> tasks = existingTasks.getMatches();
-					for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
-					{
-						AttributeMap task = tasks.get(i);
-						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-						taskController.saveTask(task);
-					}
-				}
-				
-				// Move media
-				tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_ID).toString(), MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
-				
-				//Create QC task
-				AttributeMap matchedAsset = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
-				taskController.createQCTaskForMaterial(matchedAsset.getAttributeAsString(Attribute.HOUSE_ID), (Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE));
-			}
-			else if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
+			if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
 			{
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
