@@ -10,6 +10,7 @@
 			<soapenv:Body>
 				<wor:EventStartMessageRequest>
 					<adap:packageID><xsl:value-of select="invokeIntalioTXFlow/packageID" /></adap:packageID>
+					<adap:taskID><xsl:value-of select="invokeIntalioTXFlow/taskID"/></adap:taskID>
 				</wor:EventStartMessageRequest>
 			</soapenv:Body>
 		</soapenv:Envelope>

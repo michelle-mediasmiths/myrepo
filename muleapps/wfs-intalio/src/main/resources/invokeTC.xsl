@@ -8,7 +8,8 @@
                 <wor:startRequest>
                         <adap:inputFile><xsl:value-of select="invokeIntalioTCFlow/inputFile"/></adap:inputFile>
                         <adap:outputFolder><xsl:value-of select="invokeIntalioTCFlow/outputFolder"/></adap:outputFolder>
-                        <adap:packageID><xsl:value-of select="invokeIntalioTCFlow/packageID"/></adap:packageID>                        
+                        <adap:packageID><xsl:value-of select="invokeIntalioTCFlow/packageID"/></adap:packageID>
+                        <adap:taskID><xsl:value-of select="invokeIntalioTCFlow/taskID"/></adap:taskID>                        
                 </wor:startRequest>
             </soapenv:Body>
         </soapenv:Envelope>

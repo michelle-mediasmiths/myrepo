@@ -195,7 +195,7 @@ public class CerifyClient
 		}
 		else
 		{
-			cms = new CreateMediaSet(mediaSetName + mediaSetNameSuffix, mediaLocation.getName(), media);
+			cms = new CreateMediaSet(mediaSetName + "_" + mediaSetNameSuffix, mediaLocation.getName(), media);
 		}
 		log.debug("Sending CreateMediaSetRequest");
 		try

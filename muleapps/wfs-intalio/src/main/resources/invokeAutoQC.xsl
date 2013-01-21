@@ -8,6 +8,7 @@
                 <wor:startRequest>
                         <adap:assetId><xsl:value-of select="invokeIntalioQCFlow/assetId"/></adap:assetId>
                         <adap:forTXDelivery><xsl:value-of select="invokeIntalioQCFlow/forTXDelivery"/></adap:forTXDelivery>
+                        <adap:taskID><xsl:value-of select="invokeIntalioQCFlow/taskID"/></adap:taskID>
                 </wor:startRequest>
             </soapenv:Body>
         </soapenv:Envelope>
