@@ -109,7 +109,7 @@ public class PathResolver
 				break;
 
 		}
-		log.info(String.format("transfored %s path %s to unc Path %s", pt.toString(), path, ret));
+		log.info(String.format("transfored %s path %s to win Path %s", pt.toString(), path, ret));
 		return ret;
 	}
 
@@ -279,7 +279,7 @@ public class PathResolver
 				break;
 
 		}
-		log.info(String.format("transfored %s path %s to unc Path %s", pt.toString(), path, ret));
+		log.info(String.format("transfored %s path %s to nix Path %s", pt.toString(), path, ret));
 		return ret;
 	}
 
