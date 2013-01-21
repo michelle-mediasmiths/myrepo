@@ -391,9 +391,9 @@ public class MayamTaskController extends MayamController
 		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
 
-		TaskState qaStatus = null;
+		TaskState qaStatus = task.getAttribute(Attribute.QC_PREVIEW_RESULT);
 
-		AttributeMap filterEqualities = client.createAttributeMap();
+/*		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
 		filterEqualities.setAttribute(Attribute.HOUSE_ID, houseId);
 		FilterCriteria criteria = new FilterCriteria();
@@ -420,7 +420,7 @@ public class MayamTaskController extends MayamController
 		catch (RemoteException e)
 		{
 			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + houseId, e);
-		}
+		}*/
 
 		
 		String qaStatusString = "";
