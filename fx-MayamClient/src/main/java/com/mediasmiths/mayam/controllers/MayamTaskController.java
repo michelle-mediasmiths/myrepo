@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -28,6 +29,8 @@ import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
@@ -37,9 +40,6 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 public class MayamTaskController extends MayamController
 {
 	private final TasksClient client;
-	private static final String PREVIEW_FAIL = "fail";
-	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
-	private static final String PREVIEW_PASSED = "pass";
 
 	public TasksClient getTasksClient()
 	{
@@ -330,19 +330,13 @@ public class MayamTaskController extends MayamController
 			retrictedAccess = ((Boolean) task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS)).booleanValue();
 		}
 
-		GenericTable mediaRights = task.getAttribute(Attribute.MEDIA_RIGHTS);
-
+		StringList channels = task.getAttribute(Attribute.CHANNELS);
 		ArrayList<String> channelList = new ArrayList<String>();
-		if (mediaRights != null)
+		if (channels != null)
 		{
-			List<Row> rows = mediaRights.getRows();
-			if (rows != null)
+			for (int i = 0; i < channels.size(); i++)
 			{
-				for (int i = 0; i < rows.size(); i++)
-				{
-					String channel = rows.get(i).get(5);
-					channelList.add(channel);
-				}
+				channelList.add(channels.get(i));
 			}
 		}
 
@@ -362,19 +356,19 @@ public class MayamTaskController extends MayamController
 		}
 		else if (contentFormat != null)
 		{
-			if (contentFormat.toUpperCase().equals("PG"))
+			if (contentFormat.toUpperCase().equals(MayamContentTypes.PROGRAMME))
 			{
 				contentType = "Programme";
 			}
-			else if (contentFormat.toUpperCase().equals("PE"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EPK))
 			{
 				contentType = "EPK";
 			}
-			else if (contentFormat.toUpperCase().equals("CU"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EDIT_CLIPS))
 			{
 				contentType = "Edit Clip";
 			}
-			else if (contentFormat.toUpperCase().equals("TM"))
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.UNMATCHED))
 			{
 				contentType = "Unmatched";
 			}
@@ -391,9 +385,9 @@ public class MayamTaskController extends MayamController
 		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
 
-		TaskState qaStatus = null;
+		TaskState qaStatus = task.getAttribute(Attribute.QC_PREVIEW_RESULT);
 
-		AttributeMap filterEqualities = client.createAttributeMap();
+/*		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
 		filterEqualities.setAttribute(Attribute.HOUSE_ID, houseId);
 		FilterCriteria criteria = new FilterCriteria();
@@ -420,7 +414,7 @@ public class MayamTaskController extends MayamController
 		catch (RemoteException e)
 		{
 			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + houseId, e);
-		}
+		}*/
 
 		
 		String qaStatusString = "";
@@ -430,11 +424,11 @@ public class MayamTaskController extends MayamController
 		{
 			qaStatusString = qaStatus.toString();
 			qaStatusString = "Undefined";
-			if (qaStatus.equals(PREVIEW_FAIL)) 
+			if (qaStatus.equals(MayamPreviewResults.PREVIEW_FAIL)) 
 			{
 				qaStatusString = "Fail";
 			}
-			else if (qaStatus.equals(PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(PREVIEW_PASSED))
+			else if (qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED))
 			{
 				qaStatusString = "Pass";
 			}

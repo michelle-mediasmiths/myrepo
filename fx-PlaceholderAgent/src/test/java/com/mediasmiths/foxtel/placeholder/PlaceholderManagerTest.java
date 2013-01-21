@@ -27,7 +27,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.EventPickUpTimings;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -214,19 +213,7 @@ public abstract class PlaceholderManagerTest {
 			locations.add(inputPath);
 			return new WatchFolders(locations);
 		}
-		
-		@Provides
-		@Named("agent.events.pickUpTimer")
-		public EventPickUpTimings pickUpEventTimer()
-		{
-			return new EventPickUpTimings();			
-		}
-		
-		@Provides
-		@Named("service.event.pickUpKind")
-		public FilePickUpKinds pickUpKind(){
-			return FilePickUpKinds.PLACEHOLDER;
-		}
+
 		
 	}
 

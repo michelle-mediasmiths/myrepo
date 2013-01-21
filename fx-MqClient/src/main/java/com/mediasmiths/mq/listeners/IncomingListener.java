@@ -14,7 +14,6 @@ import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
@@ -37,6 +36,7 @@ import com.mediasmiths.mq.handlers.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.UnmatchedJobHandler;
+import com.mediasmiths.mq.handlers.UnmatchedTaskUpdateHandler;
 
 @Singleton
 public class IncomingListener extends MqClientListener
@@ -96,6 +96,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedJobHandler unmatchedJobHandler;
 	@Inject
 	QcTaskUpdateHandler qcTaskUpdateHandler;
+	@Inject
+	UnmatchedTaskUpdateHandler unmatchedTaskUpdateHandler;
 
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -199,6 +201,7 @@ public class IncomingListener extends MqClientListener
 			TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 
 			passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(unmatchedTaskUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			
 			if (!initialState.equals(newState))
 			{
@@ -210,7 +213,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
-				passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
+				
 				taskController.updateAccessRights(currentAttributes);
 			}
 		}
@@ -282,6 +285,8 @@ public class IncomingListener extends MqClientListener
 		{
 			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
 			logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
+			
+			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 			
 		}
 		catch (Exception e)

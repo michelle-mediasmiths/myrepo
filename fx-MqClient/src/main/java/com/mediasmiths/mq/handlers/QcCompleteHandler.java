@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class QcCompleteHandler extends AttributeHandler
@@ -25,7 +26,7 @@ public class QcCompleteHandler extends AttributeHandler
 				String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 
 				String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-				if (contentMaterialType != null && contentMaterialType.equals("TM"))
+				if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
 				{
 					unmatched(houseID);
 				}

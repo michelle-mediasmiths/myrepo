@@ -37,6 +37,7 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.util.SegmentUtil;
@@ -46,8 +47,6 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamPackageController extends MayamController
 {
-	private static final String PREVIEW_PASSED_BUT_REORDER = "passr";
-	private static final String PREVIEW_PASSED = "pass";
 	private static final String VERSION_AGL_NAME = "version";
 
 	private final TasksClient client;
@@ -102,8 +101,8 @@ public class MayamPackageController extends MayamController
 					client.assetApi().updateAsset(material);
 					
 					//Has Material been set to Preview Pass
-					if(material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED) 
-							|| material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(PREVIEW_PASSED_BUT_REORDER)) {
+					if(material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(MayamPreviewResults.PREVIEW_PASSED) 
+							|| material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER)) {
 								requiresSegmentationTask = true;
 					}		
 					

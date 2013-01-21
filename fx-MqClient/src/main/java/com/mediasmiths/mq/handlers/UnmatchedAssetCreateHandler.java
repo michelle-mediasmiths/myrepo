@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 
 public class UnmatchedAssetCreateHandler extends AttributeHandler
 {
@@ -13,7 +14,7 @@ public class UnmatchedAssetCreateHandler extends AttributeHandler
 	public void process(AttributeMap messageAttributes)
 	{
 		String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-		if (contentMaterialType != null && contentMaterialType.equals("TM"))
+		if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
 		{
 			try
 			{

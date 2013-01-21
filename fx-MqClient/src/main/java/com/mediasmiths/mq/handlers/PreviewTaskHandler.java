@@ -12,19 +12,13 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 public class PreviewTaskHandler extends AttributeHandler
 {
-	public static final String PREVIEW_FAIL = "fail";
-	public static final String STITCH_EDIT_AND_REORDER = "stitchr";
-	public static final String STITCH_EDIT_REQUIRED = "stitch";
-	public static final String FIX_EDIT_AND_REORDER = "fixr";
-	public static final String PREVIEW_PASSED_BUT_REORDER = "passr";
-	public static final String PREVIEW_PASSED = "pass";
-	public static final String PREVIEW_NOT_DONE = "pvnd";
-	public static final String FIX_EDIT_REQUIRED = "fix";
-	public final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
+
+	private final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
 
 	public void process(AttributeMap messageAttributes)
 	{
@@ -67,38 +61,38 @@ public class PreviewTaskHandler extends AttributeHandler
 			boolean fixeditrequired = false;
 			boolean stitcheditrequired = false;
 
-			if (previewResult.equals(PREVIEW_NOT_DONE))
+			if (previewResult.equals(MayamPreviewResults.PREVIEW_NOT_DONE))
 			{
 				// preview not done, dont create any new tasks
 			}
-			else if (previewResult.equals(PREVIEW_PASSED))
+			else if (previewResult.equals(MayamPreviewResults.PREVIEW_PASSED))
 			{
 				passed = true;
 			}
-			else if (previewResult.equals(PREVIEW_PASSED_BUT_REORDER))
+			else if (previewResult.equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER))
 			{
 				passed = true;
 				reorder = true;
 			}
-			else if (previewResult.equals(FIX_EDIT_REQUIRED))
+			else if (previewResult.equals(MayamPreviewResults.FIX_EDIT_REQUIRED))
 			{
 				fixeditrequired = true;
 			}
-			else if (previewResult.equals(FIX_EDIT_AND_REORDER))
+			else if (previewResult.equals(MayamPreviewResults.FIX_EDIT_AND_REORDER))
 			{
 				fixeditrequired = true;
 				reorder = true;
 			}
-			else if (previewResult.equals(STITCH_EDIT_REQUIRED))
+			else if (previewResult.equals(MayamPreviewResults.STITCH_EDIT_REQUIRED))
 			{
 				stitcheditrequired = true;
 			}
-			else if (previewResult.equals(STITCH_EDIT_AND_REORDER))
+			else if (previewResult.equals(MayamPreviewResults.STITCH_EDIT_AND_REORDER))
 			{
 				stitcheditrequired = true;
 				reorder = true;
 			}
-			else if (previewResult.equals(PREVIEW_FAIL))
+			else if (previewResult.equals(MayamPreviewResults.PREVIEW_FAIL))
 			{
 				// preview failed, dont create any new tasks
 			}
@@ -155,7 +149,7 @@ public class PreviewTaskHandler extends AttributeHandler
 		AttributeMap updateAssetMap = taskController.getTasksClient().createAttributeMap();
 		updateAssetMap.setAttribute(Attribute.ASSET_ID, assetId);
 		updateAssetMap.setAttribute(Attribute.ASSET_TYPE, type);
-		updateAssetMap.setAttribute(Attribute.QC_PREVIEW_RESULT, PREVIEW_FAIL);
+		updateAssetMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_FAIL);
 		try
 		{
 			taskController.getTasksClient().assetApi().updateAsset(updateAssetMap);
