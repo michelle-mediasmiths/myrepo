@@ -21,7 +21,7 @@ public class SegmentUtil
 	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
 		s = fillEomAndDurationOfSegment(s);		
-		return String.format("%s :\t%s\t%s\n",""+s.getSegmentNumber(),s.getSOM(),s.getEOM());
+		return String.format("%d :\t%s\t%s\n",s.getSegmentNumber(),s.getSOM(),s.getEOM());
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SegmentUtil
 			duration = durationTimecode.toSMPTEString();
 		}
 		
-		//filled will hae some, eom and duration populated, should not be written to file as it will no longer be schema conformating (duration and eom are an xs:choice at the same level);
+		//filled will hae some, eom and duration populated, should not be written to file as it will no longer be schema conforming (duration and eom are an xs:choice at the same level);
 		com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment filled = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
 		filled.setDuration(duration);
 		filled.setEOM(eom);
