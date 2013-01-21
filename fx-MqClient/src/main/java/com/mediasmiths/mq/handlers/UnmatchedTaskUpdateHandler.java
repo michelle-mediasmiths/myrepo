@@ -52,7 +52,7 @@ public class UnmatchedTaskUpdateHandler extends UpdateAttributeHandler
 				
 				//Create QC task
 				AttributeMap matchedAsset = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
-				taskController.createQCTaskForMaterial(matchedAsset.getAttributeAsString(Attribute.HOUSE_ID), (Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE));
+				taskController.createQCTaskForMaterial(matchedAsset.getAttributeAsString(Attribute.HOUSE_ID), (Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE),matchedAsset.getAttributeAsString(Attribute.QC_PREVIEW_RESULT));
 			}
 		}
 		catch (Exception e) {
