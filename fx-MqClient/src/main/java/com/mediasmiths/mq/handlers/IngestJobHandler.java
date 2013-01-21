@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
+import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -28,17 +29,34 @@ public class IngestJobHandler extends JobHandler
 			{
 				if (jobStatus.equals(JobStatus.STARTED))
 				{
+					log.info(String.format("Import started for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
 					task.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
 					taskController.saveTask(task);
 				}
 				else if (jobStatus.equals(JobStatus.FAILED))
 				{
+					log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
 					task.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+
+					try
+					{
+						String jobID = jobMessage.getJobId();
+						JobType jobType = jobMessage.getJobType();
+						String ingestNotes = String.format("Job %s of type %s failed", jobID, jobType.toString());
+						task.setAttribute(Attribute.INGEST_NOTES, ingestNotes);
+					}
+					catch (Exception e)
+					{
+						log.error("Error setting failure reason on ingest task", e);
+					}
+					
 					taskController.saveTask(task);	
 				}
 				else if (jobStatus.equals(JobStatus.FINISHED))
 				{
+					log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
 					task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+					task.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
 					taskController.saveTask(task);
 				}
 				else {
