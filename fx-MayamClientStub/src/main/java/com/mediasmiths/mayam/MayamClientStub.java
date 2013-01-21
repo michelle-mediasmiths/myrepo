@@ -871,4 +871,18 @@ public class MayamClientStub implements MayamClient
 		
 	}
 
+	@Override
+	public AttributeMap getMaterialAttributes(String materialID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
