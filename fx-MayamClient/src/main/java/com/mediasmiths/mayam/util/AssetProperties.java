@@ -29,7 +29,7 @@ public class AssetProperties
 
 		for (AudioTrack audioTrack : audioTracks)
 		{
-			if (audioTrack.getEncoding().equals(AudioTrack.EncodingType.DOLBY_E))
+			if (audioTrack.getEncoding() != null && audioTrack.getEncoding().equals(AudioTrack.EncodingType.DOLBY_E))
 			{
 				return true;
 			}

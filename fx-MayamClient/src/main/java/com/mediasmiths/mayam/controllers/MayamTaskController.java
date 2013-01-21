@@ -397,7 +397,7 @@ public class MayamTaskController extends MayamController
 		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
 
-		TaskState qaStatus = task.getAttribute(Attribute.QC_PREVIEW_RESULT);
+		String qaStatus = task.getAttribute(Attribute.QC_PREVIEW_RESULT);
 
 /*		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
