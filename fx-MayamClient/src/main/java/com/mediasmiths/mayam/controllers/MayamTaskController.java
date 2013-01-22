@@ -65,6 +65,7 @@ public class MayamTaskController extends MayamController
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+		initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
 
 	}

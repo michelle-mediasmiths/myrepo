@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -9,6 +11,7 @@ import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class QcTaskUpdateHandler extends UpdateAttributeHandler
@@ -75,11 +78,24 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
+				//user has requested reingest, fail the qc task	
+				log.debug("User requested uningest, failing qc task");
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(currentAttributes);
 
-				// TODO: uningest + create ingest task;
+				if (AssetProperties.isProgramme(currentAttributes) || AssetProperties.isAssociated(currentAttributes))
+				{
+					log.debug("Asset is programme or associated content");
+					// uningest the media
+					log.debug("User requested uningest, uningesting media");
+					materialController.uningest(currentAttributes);
+					// create ingest task
+					log.debug("User requested uningest, creating new ingest task");
+					taskController.createIngestTaskForMaterial(
+							currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
+							(Date) currentAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
+				}
 			}
 		}
 		catch (MayamClientException e)

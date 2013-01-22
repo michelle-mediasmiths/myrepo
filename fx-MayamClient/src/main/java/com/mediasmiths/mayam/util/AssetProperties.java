@@ -4,6 +4,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 
 public class AssetProperties
 {
@@ -49,5 +50,17 @@ public class AssetProperties
 		else{
 			return false;
 		}
+	}
+
+	public static boolean isProgramme(AttributeMap currentAttributes)
+	{
+		String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
+		return (contentType != null && MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentType));
+	}
+
+	public static boolean isAssociated(AttributeMap currentAttributes)
+	{
+		String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
+		return (contentType != null && MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contentType));
 	}
 }

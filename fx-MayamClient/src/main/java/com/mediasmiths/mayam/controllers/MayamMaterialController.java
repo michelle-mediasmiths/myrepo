@@ -56,8 +56,8 @@ public class MayamMaterialController extends MayamController
 	public static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
 	public static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "PG";
 
-	private static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
-	private static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
+	public static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
+	public static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
 
 	private final TasksClient client;
 	private final MayamTaskController taskController;
@@ -1210,5 +1210,21 @@ public class MayamMaterialController extends MayamController
 		}
 
 		return run || running;
+	}
+
+	public void uningest(AttributeMap qcTaskAttributes) throws MayamClientException
+	{
+		AssetType assetType = qcTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
+		String assetID = qcTaskAttributes.getAttribute(Attribute.ASSET_ID);
+		log.info(String.format("Requesting uningest for asset %s (%s)", qcTaskAttributes.getAttributeAsString(Attribute.HOUSE_ID), assetID));
+		try
+		{
+			client.assetApi().deleteAssetMedia(assetType, assetID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Uningest request failed",e);
+			throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED,e);
+		}
 	}
 }
