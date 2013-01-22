@@ -23,7 +23,7 @@ public class MayamAccessRights {
 	    private String qaStatus;
 	    
 	    @Column(name = "qcParallel") 
-		private boolean qcParallel;
+		private Boolean qcParallel;
 	    
 	    @Column(name = "contentType")  
 	    private String contentType;
@@ -35,19 +35,19 @@ public class MayamAccessRights {
 		private String channelOwner;
 	    
 	    @Column(name = "readAccess") 
-		private boolean readAccess;
-	    
-	    @Column(name = "writeAccess") 
-		private boolean writeAccess;
+		private Boolean readAccess;
+	   
+		@Column(name = "writeAccess") 
+		private Boolean writeAccess;
 	    
 	    @Column(name = "adminAccess") 
-		private boolean adminAccess;
+		private Boolean adminAccess;
 	    
 	    @Column(name = "restricted") 
-		private boolean restricted;
+		private Boolean restricted;
 	    
 	    @Column(name = "adultOnly") 
-		private boolean adultOnly;
+		private Boolean adultOnly;
 	    
 	    public long getId() {return id;}  
 	    public void setId(long id) {this.id = id;}  
@@ -58,8 +58,8 @@ public class MayamAccessRights {
 	    public String getQaStatus() {return qaStatus;}  
 	    public void setQaStatus(String qaStatusValue) {this.qaStatus = qaStatusValue;} 
 	    
-	    public boolean getQcParallel() {return qcParallel;}  
-	    public void setQcParallel(boolean qcParallelValue) {this.qcParallel = qcParallelValue;} 
+	    public Boolean getQcParallel() {return qcParallel;}  
+	    public void setQcParallel(Boolean qcParallelValue) {this.qcParallel = qcParallelValue;} 
 	    
 	    public String getContentType() {return contentType;}  
 	    public void setContentType(String contentTypeName) {this.contentType = contentTypeName;} 
@@ -70,18 +70,29 @@ public class MayamAccessRights {
 	    public String getChannelOwner() {return channelOwner;}  
 	    public void setChannelOwner(String ownerGroup) {this.channelOwner = ownerGroup;} 
 
-	    public boolean getReadAccess() {return readAccess;}  
-	    public void setReadAccess(boolean access) {this.readAccess = access;} 
+	    public Boolean getReadAccess() {return readAccess;}  
+	    public void setReadAccess(Boolean access) {this.readAccess = access;} 
 	    
-	    public boolean getWriteAccess() {return writeAccess;}  
-	    public void setWriteAccess(boolean access) {this.writeAccess = access;} 
+	    public Boolean getWriteAccess() {return writeAccess;}  
+	    public void setWriteAccess(Boolean access) {this.writeAccess = access;} 
 	    
-	    public boolean getAdminAccess() {return adminAccess;}  
-	    public void setAdminAccess(boolean access) {this.adminAccess = access;} 
+	    public Boolean getAdminAccess() {return adminAccess;}  
+	    public void setAdminAccess(Boolean access) {this.adminAccess = access;} 
 	    
-	    public boolean getRestricted() {return restricted;}  
-	    public void setRestricted(boolean purgeProtected) {this.restricted = purgeProtected;}
+	    public Boolean getRestricted() {return restricted;}  
+	    public void setRestricted(Boolean purgeProtected) {this.restricted = purgeProtected;}
 	    
-	    public boolean getAdultOnly() {return adultOnly;}  
-	    public void setAdultOnly(boolean adultOnlyValue) {this.adultOnly = adultOnlyValue;} 
+	    public Boolean getAdultOnly() {return adultOnly;}  
+	    public void setAdultOnly(Boolean adultOnlyValue) {this.adultOnly = adultOnlyValue;}
+	    
+	    
+	    @Override
+		public String toString()
+		{
+			return "MayamAccessRights [id=" + id + ", qcStatus=" + qcStatus + ", qaStatus=" + qaStatus + ", qcParallel="
+					+ qcParallel + ", contentType=" + contentType + ", groupName=" + groupName + ", channelOwner=" + channelOwner
+					+ ", readAccess=" + readAccess + ", writeAccess=" + writeAccess + ", adminAccess=" + adminAccess
+					+ ", restricted=" + restricted + ", adultOnly=" + adultOnly + "]";
+		}
+	    
 }

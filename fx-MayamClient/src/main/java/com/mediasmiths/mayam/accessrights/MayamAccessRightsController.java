@@ -78,7 +78,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		}
 		else
 		{
-			log.debug("qcParallel is " + adultOnly.toString());
+			log.debug("adultOnly is " + adultOnly.toString());
 		}
 		
 		  Criteria criteria = createCriteria();
@@ -99,6 +99,9 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		  }
 		  if (adultOnly != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("adultOnly", adultOnly)).add(Restrictions.isNull("adultOnly")));
+		  }
+		  else{
+			  criteria.add(Restrictions.eq("adultOnly", Boolean.FALSE));
 		  }
 		  if (channels != null) {
 			 

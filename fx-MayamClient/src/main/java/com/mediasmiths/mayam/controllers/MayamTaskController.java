@@ -2,7 +2,10 @@ package com.mediasmiths.mayam.controllers;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -474,6 +477,14 @@ public class MayamTaskController extends MayamController
 		}
 		else{
 			log.debug("allrights size: "+allRights.size());
+			
+			StringBuilder sb = new StringBuilder();
+			for (MayamAccessRights mayamAccessRights : allRights)
+			{
+				sb.append(mayamAccessRights.toString());
+				sb.append("\n");
+			}
+			log.debug("Allrights "+sb.toString());
 		}
 
 		AttributeMap underlyingAsset = null;
@@ -486,19 +497,31 @@ public class MayamTaskController extends MayamController
 		
 		if (allRights != null && allRights.size() > 0)
 		{
-			AssetAccess accessRights = new AssetAccess();
+			
+			
+					
+			AssetAccess accessRights = task.getAttribute(Attribute.ASSET_ACCESS);
+			
+			if(accessRights==null){
+				log.warn("Access rights in attribute map was null");
+				accessRights=new AssetAccess();
+			}
+			
 			for (int i = 0; i < allRights.size(); i++)
 			{
-				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-				entry.setEntityType(EntityType.GROUP);
-				entry.setEntity(allRights.get(i).getGroupName());
-				entry.setRead(allRights.get(i).getReadAccess());
-				entry.setWrite(allRights.get(i).getWriteAccess());
-				entry.setAdmin(allRights.get(i).getAdminAccess());
-				accessRights.getStandard().add(entry);
+					AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+					entry.setEntityType(EntityType.GROUP);
+					entry.setEntity(allRights.get(i).getGroupName());
+					entry.setRead(allRights.get(i).getReadAccess());
+					entry.setWrite(allRights.get(i).getWriteAccess());
+					entry.setAdmin(allRights.get(i).getAdminAccess());
+					accessRights.getMedia().add(entry);
+					accessRights.getStandard().add(entry);
 			}
+			
 			log.info("Access Rights for " + houseId + " updated to : " + accessRights.toString());
 			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+			
 			if (underlyingAsset != null)
 			{
 				underlyingAsset.setAttribute(Attribute.ASSET_ACCESS, accessRights);
