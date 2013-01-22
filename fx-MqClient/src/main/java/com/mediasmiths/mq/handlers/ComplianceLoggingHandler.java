@@ -26,7 +26,8 @@ public class ComplianceLoggingHandler extends AttributeHandler
 				try {					
 					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					createComplianceEditTask(assetID, assetType);
+					String notes = messageAttributes.getAttribute(Attribute.COMPLIANCE_NOTES);
+					createComplianceEditTask(assetID, assetType, notes);
 								
 				} catch (Exception e) {
 					log.error("Exception in the Mayam client while handling Compliance logging Task Message : " + e,e);
@@ -35,9 +36,12 @@ public class ComplianceLoggingHandler extends AttributeHandler
 		}
 	}
 
-	private void createComplianceEditTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException
+	private void createComplianceEditTask(String assetID, AssetType assetType, String complianceNotes) throws MayamClientException, RemoteException
 	{
-		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_EDIT);
+		
+		AttributeMap map = tasksClient.createAttributeMap();
+		map.setAttribute(Attribute.COMPLIANCE_NOTES, complianceNotes);
+		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_EDIT,map);
 	}
 
 	@Override
