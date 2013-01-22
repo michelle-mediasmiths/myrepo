@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.accessrights;
 
+import com.google.inject.Inject;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import org.hibernate.Criteria;
 public class MayamAccessRightsController extends HibernateDao<MayamAccessRights, Long> {
 
 	private static final Logger log = Logger.getLogger(MayamAccessRightsController.class);
+	
+	@Inject
+	private MayamChannelGroupsController channelGroupsController;
 	
 	public MayamAccessRightsController()
 	{
@@ -85,22 +89,27 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qaStatus", qaStatus)).add(Restrictions.eq("qaStatus", "*")));
 		  }
 		  if (qcParallel != null) {
-			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qcParallel", qcParallel)).add(Restrictions.eq("qcParallel", null)));
+			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("qcParallel", qcParallel)).add(Restrictions.isNull("qcParallel")));
 		  }
 		  if (assetType != null) {
 			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("contentType", assetType)).add(Restrictions.eq("contentType", "*")));
 		  }
 		  if (assetType != null) {
-			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("restricted", restrictedAccess)).add(Restrictions.eq("restricted", null)));
+			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("restricted", restrictedAccess)).add(Restrictions.isNull("restricted")));
 		  }
 		  if (adultOnly != null) {
-			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("adultOnly", adultOnly)).add(Restrictions.eq("adultOnly", null)));
+			  criteria.add(Restrictions.disjunction().add(Restrictions.eq("adultOnly", adultOnly)).add(Restrictions.isNull("adultOnly")));
 		  }
 		  if (channels != null) {
-			  MayamChannelGroupsController channelGroupsController = new MayamChannelGroupsController();
+			 
 			  for (int i = 0; i < channels.size(); i++)
 			  {
 				  List<MayamChannelGroups> groups = channelGroupsController.retrieve(channels.get(i), null);
+				  
+				  if(groups != null){
+				  log.trace(String.format("%d groups returned for channel %s",groups.size(), channels.get(i)));
+				  }
+				  
 				  Disjunction restrictions = Restrictions.disjunction();
 				  restrictions.add(Restrictions.eq("channelOwner", "*"));
 				  if (groups != null) 

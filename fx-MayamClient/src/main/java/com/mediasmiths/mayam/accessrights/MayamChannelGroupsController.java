@@ -4,11 +4,15 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.Criteria;
 
 public class MayamChannelGroupsController extends HibernateDao<MayamChannelGroups, Long> {
 
+	private final static Logger log = Logger.getLogger(MayamChannelGroupsController.class);
+	
 	public MayamChannelGroupsController()
 	{
 		super(MayamChannelGroups.class);
@@ -24,16 +28,26 @@ public class MayamChannelGroupsController extends HibernateDao<MayamChannelGroup
 	 }
 	
 	@Transactional
-	 public List<MayamChannelGroups> retrieve(String channel, String owner) 
-	 {
-		  Criteria criteria = createCriteria();
-		  if (channel != null) {
-			  criteria.add(Restrictions.eq("channelName", channel));
-		  }
-		  if (owner != null) {
-			  criteria.add(Restrictions.eq("channelOwner", owner));
-		  }
+	public List<MayamChannelGroups> retrieve(String channel, String owner)
+	{
+		log.trace(String.format("MayamChannelGroups.retreive channel {%s} owner {%s}", channel, owner));
 
-		  return new ArrayList<MayamChannelGroups>(getList(criteria));
-	 }  
+		Criteria criteria = createCriteria();
+		if (channel != null)
+		{
+			criteria.add(Restrictions.eq("channelName", channel));
+		}
+		if (owner != null)
+		{
+			criteria.add(Restrictions.eq("channelOwner", owner));
+		}
+
+		List<MayamChannelGroups> list = getList(criteria);
+
+		if (list == null)
+		{
+			log.warn("null list returned on channel group search");
+		}
+		return new ArrayList<MayamChannelGroups>(list);
+	}
 }
