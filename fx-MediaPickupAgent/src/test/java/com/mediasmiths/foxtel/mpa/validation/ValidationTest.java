@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.validation;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
 
 import java.io.IOException;
 
@@ -77,6 +78,9 @@ public abstract class ValidationTest {
 		when(mayamClient.isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER)).thenReturn(true);
 		when(mayamClient.isMaterialPlaceholder(EXISTING_MATERIAL_NOT_PLACEHOLDER)).thenReturn(false);
 		when(mayamClient.isMaterialPlaceholder(IS_PLACEHOLDER_CHECK_FAILS)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		when(mayamClient.materialHasPassedPreview(anyString())).thenReturn(false);
+		when(mayamClient.getLastDeliveryVersionForMaterial(anyString())).thenReturn(-1);
+		
 		
 		when(mayamClient.packageExists(EXISTING_PACKAGE)).thenReturn(true);
 		when(mayamClient.packageExists(EXISTING_PACKAGE2)).thenReturn(true);

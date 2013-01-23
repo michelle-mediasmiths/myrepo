@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
@@ -147,8 +148,10 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
-				.thenReturn(true);
-
+				.thenReturn(false);
+		when(mayamClient.materialHasPassedPreview(anyString())).thenReturn(false);
+		when(mayamClient.getLastDeliveryVersionForMaterial(anyString())).thenReturn(-1);
+		
 //		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
 //				MayamClientErrorCode.SUCCESS);
 //		when(mayamClient.updatePackage(argThat(matchByPackageID2))).thenReturn(

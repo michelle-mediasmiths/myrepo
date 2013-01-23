@@ -38,6 +38,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
+		verify(mayamClient).materialHasPassedPreview(EXISTING_MATERIAL_IS_PLACEHOLDER);
 		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
 	}
 	
