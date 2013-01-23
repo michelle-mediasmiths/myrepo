@@ -134,6 +134,13 @@ public class MayamTaskController extends MayamController
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
+	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
+		
+		AttributeMap initialAttributes = client.createAttributeMap();
+		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
+		
+	}
+	
 	// creates an error task for some situation where there is no underly asset to create the task for
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException{
 		

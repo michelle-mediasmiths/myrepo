@@ -84,7 +84,7 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(currentAttributes);
 
-				if (AssetProperties.isProgramme(currentAttributes) || AssetProperties.isAssociated(currentAttributes))
+				if (AssetProperties.isMaterialProgramme(currentAttributes) || AssetProperties.isMaterialAssociated(currentAttributes))
 				{
 					log.debug("Asset is programme or associated content");
 					// uningest the media

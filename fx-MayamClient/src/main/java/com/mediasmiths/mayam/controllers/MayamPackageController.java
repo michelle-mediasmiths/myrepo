@@ -668,4 +668,18 @@ public class MayamPackageController extends MayamController
 		}
 	}
 
+	public boolean packageHasRequiredNumberOfSegments(String houseID) throws PackageNotFoundException
+	{
+		SegmentList segmentList = getSegmentList(houseID);
+		AttributeMap attributeMap = segmentList.getAttributeMap();
+		Integer requiredNumber = attributeMap.getAttribute(Attribute.REQ_NUMBER);
+		int segmentCount = segmentList.getEntries().size();
+		
+		if(requiredNumber != null && segmentCount ==requiredNumber.intValue() ){
+			return true;
+		}
+		
+		return false;
+	}
+
 }

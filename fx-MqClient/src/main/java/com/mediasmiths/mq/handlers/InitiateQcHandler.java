@@ -11,46 +11,39 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 
-public class InitiateQcHandler extends AttributeHandler
+public class InitiateQcHandler extends TaskCreateHandler
 {
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);
 
-	public void process(AttributeMap messageAttributes)
+	@Override
+	protected void taskCreated(AttributeMap messageAttributes)
 	{
-		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText()))
-		{
-			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
-			if (taskState == TaskState.OPEN)
-			{
-				MediaStatus mediaStatus = messageAttributes.getAttribute(Attribute.MEDST_HR);
+		MediaStatus mediaStatus = messageAttributes.getAttribute(Attribute.MEDST_HR);
 
-				if (mediaStatus.equals(MediaStatus.MISSING))
-				{
-					log.info(String.format(
-							"A qc task was created for an item %s with no media, cancelling",
-							messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
-					cancelTask(messageAttributes);
-				}
-				else
-				{
-					String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
-					if (MayamPreviewResults.isPreviewPass(previewStatus))
-					{
-						log.info(String.format(
-								"A qc task was created for an item %s but it has already passed preview, cancelling",
-								messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
-						cancelTask(messageAttributes);
-					}
-					else
-					{
-						fileformatVerification(messageAttributes);
-					}
-				}
+		if (mediaStatus.equals(MediaStatus.MISSING))
+		{
+			log.info(String.format(
+					"A qc task was created for an item %s with no media, cancelling",
+					messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+			cancelTask(messageAttributes);
+		}
+		else
+		{
+			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
+			if (MayamPreviewResults.isPreviewPass(previewStatus))
+			{
+				log.info(String.format(
+						"A qc task was created for an item %s but it has already passed preview, cancelling",
+						messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+				cancelTask(messageAttributes);
+			}
+			else
+			{
+				fileformatVerification(messageAttributes);
 			}
 		}
 	}
-
+	
 	private void fileformatVerification(AttributeMap messageAttributes)
 	{
 		// task just created, lets perform file format verification
@@ -94,5 +87,13 @@ public class InitiateQcHandler extends AttributeHandler
 	public String getName()
 	{
 		return "Initiate QC";
+	}
+
+	
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.QC_VIEW;
 	}
 }

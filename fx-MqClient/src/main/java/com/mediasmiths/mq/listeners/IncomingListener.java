@@ -27,6 +27,7 @@ import com.mediasmiths.mq.handlers.ImportFailureHandler;
 import com.mediasmiths.mq.handlers.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.IngestJobHandler;
 import com.mediasmiths.mq.handlers.InitiateQcHandler;
+import com.mediasmiths.mq.handlers.InitiateTxHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.PreviewTaskHandler;
 import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
@@ -98,7 +99,9 @@ public class IncomingListener extends MqClientListener
 	QcTaskUpdateHandler qcTaskUpdateHandler;
 	@Inject
 	UnmatchedTaskUpdateHandler unmatchedTaskUpdateHandler;
-
+	@Inject
+	InitiateTxHandler initiateTxHandler;
+	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -170,14 +173,9 @@ public class IncomingListener extends MqClientListener
 		{
 			logger.error("error logging attributes message");
 		}
-
 		 
-		// passEventToHandler(fixAndStitchHandler, messageAttributes);
-		// passEventToHandler(importFailHandler, messageAttributes);
-
 		passEventToHandler(initiateQcHandler, messageAttributes);
-
-		// passEventToHandler(segmentationHandler, messageAttributes);
+		passEventToHandler(initiateTxHandler, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)
@@ -294,7 +292,6 @@ public class IncomingListener extends MqClientListener
 			logger.error("error logging attributes message");
 		}
 
-		// TODO:Handlers for asset updates
 		passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 		passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 	}

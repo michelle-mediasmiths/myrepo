@@ -52,15 +52,21 @@ public class AssetProperties
 		}
 	}
 
-	public static boolean isProgramme(AttributeMap currentAttributes)
+	public static boolean isMaterialProgramme(AttributeMap currentAttributes)
 	{
 		String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
 		return (contentType != null && MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentType));
 	}
 
-	public static boolean isAssociated(AttributeMap currentAttributes)
+	public static boolean isMaterialAssociated(AttributeMap currentAttributes)
 	{
 		String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
 		return (contentType != null && MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contentType));
+	}
+
+	public static boolean isClassificationSet(AttributeMap packageAttributes)
+	{
+		String classification = packageAttributes.getAttribute(Attribute.CONT_CLASSIFICATION);
+		return classification!=null;
 	}
 }
