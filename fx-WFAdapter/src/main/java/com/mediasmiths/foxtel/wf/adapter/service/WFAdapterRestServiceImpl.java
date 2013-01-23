@@ -73,7 +73,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("cerfiy.report.ardomehandle")
 	private String cerifyReportArdomeserviceHandle;
 	@Inject
-	@Named("cerfiy.report.ardomehandle")
+	@Named("cerify.report.attatch")
 	private boolean attachQcReports;
 	
 	
