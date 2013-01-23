@@ -259,7 +259,7 @@ public class JobBuilder
 		                        buildJobXMLRequest.getPackageID(),
 		                        buildJobXMLRequest.getTxDate().toString()));
 
-		int priority = 1;
+		int priority;
 
 		long now = System.currentTimeMillis();
 		long txTime = buildJobXMLRequest.getTxDate().getTime();

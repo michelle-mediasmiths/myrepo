@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.tc.service;
+package com.mediasmiths.foxtel.tc.rest.impl;
 
 import java.util.List;
 import java.util.UUID;

@@ -25,7 +25,7 @@ import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.tc.JobBuilderException;
 import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
 import com.mediasmiths.foxtel.tc.model.TCStartRequest;
-import com.mediasmiths.foxtel.tc.service.TCRestService;
+import com.mediasmiths.foxtel.tc.rest.impl.TCRestService;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.guice.thymeleaf.TemplateCall;
 import com.mediasmiths.std.guice.thymeleaf.Templater;

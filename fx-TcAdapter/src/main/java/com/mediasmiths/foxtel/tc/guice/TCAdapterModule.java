@@ -2,8 +2,8 @@ package com.mediasmiths.foxtel.tc.guice;
 
 
 import com.google.inject.AbstractModule;
-import com.mediasmiths.foxtel.tc.service.TCRestService;
-import com.mediasmiths.foxtel.tc.service.TCRestServiceImpl;
+import com.mediasmiths.foxtel.tc.rest.impl.TCRestService;
+import com.mediasmiths.foxtel.tc.rest.impl.TCRestServiceImpl;
 import com.mediasmiths.foxtel.tc.ui.TcUi;
 import com.mediasmiths.foxtel.tc.ui.TcUiImpl;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
