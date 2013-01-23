@@ -899,4 +899,25 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public long createWFEErrorTaskForPackage(String packageID, String message)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long createWFEErrorTaskForMaterial(String materialID, String message)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long createWFEErrorTaskForTitle(String titleID, String message)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

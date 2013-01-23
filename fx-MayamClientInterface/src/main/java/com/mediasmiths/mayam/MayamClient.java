@@ -10,6 +10,7 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.exception.MayamApiException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -248,6 +249,10 @@ public interface MayamClient
 	public void failTaskForAsset(MayamTaskListType taskType, String id) throws MayamClientException;
 
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
+	
+	public long createWFEErrorTaskForPackage(String packageID, String message);
+	public long createWFEErrorTaskForMaterial(String materialID, String message);
+	public long createWFEErrorTaskForTitle(String titleID, String message);
 	
 	/**
 	 * returns the Programme representation of a given package

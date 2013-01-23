@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -44,10 +45,16 @@ import com.mediasmiths.mayam.MayamTaskListType;
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
 
+	private static final String TC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/tc";
+
+	private static final String QC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/qc";
+	
+	private static final String TX_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/delivery";
+
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
 
-	// @Inject
-	// private EventAPI events;
+	@Inject
+	private EventService events;
 
 	@Inject
 	private MayamClient mayamClient;
@@ -137,19 +144,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of Auto QC failure ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-		saveEvent("AutoQCFailed", notification, "http://www.foxtel.com.au/ip/qc");
-
+		
 		try
 		{
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-
+				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
 				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// id is an item id
+				saveEvent("AutoQCFailed", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(),notification.getJobName());
 				
@@ -197,8 +204,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of Auto QC Pass ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-		// TODO: handle
-		saveEvent("AutoQCPassed", notification, "http://www.foxtel.com.au/ip/qc");
+
+		saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
 
 		if (notification.isForTXDelivery())
 		{
@@ -242,9 +249,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		for (File file : reports)
 		{
-			log.info(String.format("atattching file %s to material", file.getAbsolutePath()));
+			
 			if (attachQcReports)
 			{
+				log.info(String.format("attach file %s to material", file.getAbsolutePath()));
 				mayamClient.attachFileToMaterial(assetID, file.getAbsolutePath(), cerifyReportArdomeserviceHandle);
 			}
 		}
@@ -259,19 +267,18 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of Auto QC Error ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-
-		// TODO: add entry to general error task list as investigation is required (ditto for equivalent TC failure methods)
-		saveEvent("AutoQCError", notification, "http://www.foxtel.com.au/ip/qc");
 		try
 		{
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
 				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
 			}
 			else
 			{
 				// auto qc was for qc task
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);				
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(),notification.getTaskID());
 			}
 		}
@@ -288,7 +295,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC totalfailure Package ID %s ", notification.getPackageID()));
-		saveEvent("persistentfailure", notification, "http://www.foxtel.com.au/ip/tc");
+		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE);
 
 	}
 
@@ -299,7 +306,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 
 		log.info(String.format("Received notification of TC failure Package ID %s", notification.getPackageID()));
-		saveEvent("failed", notification, "http://www.foxtel.com.au/ip/tc");
+		saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE);
 
 	}
 
@@ -309,48 +316,18 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed Package ID %s", notification.getPackageID()));
-		saveEvent("Transcoded", notification, "http://www.foxtel.com.au/ip/tc");
+		saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
 
 	}
 
-	// TODO reenable events stuff after events api has been extracted
 	protected void saveEvent(String name, String payload, String nameSpace)
 	{
-//		 try
-//		 {
-//		 EventEntity event = new EventEntity();
-//		 event.setEventName(name);
-//		 event.setNamespace(nameSpace);
-//		
-//		 event.setPayload(payload);
-//		 event.setTime(System.currentTimeMillis());
-//		 events.saveReport(event);
-//		 }
-//		 catch (RuntimeException re)
-//		 {
-//		 log.error("error saving event" + name, re);
-//		 }
-
+		events.saveEvent(name, payload,nameSpace);
 	}
 
 	protected void saveEvent(String name, Object payload, String nameSpace)
 	{
-		// try
-		// {
-		// ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		// marshaller.marshal(payload, baos);
-		// String sPayload = baos.toString("UTF-8");
-		// saveEvent(name, sPayload, nameSpace);
-		// }
-		// catch (JAXBException e)
-		// {
-		// log.error("error saving event" + name, e);
-		// }
-		// catch (UnsupportedEncodingException e)
-		// {
-		// log.error("error saving event" + name, e);
-		// }
-
+		events.saveEvent(name, payload,nameSpace);
 	}
 
 	@Override
@@ -359,9 +336,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
 	{
-		// TODO implement
+		// TODO implement ( look up from relevant task to see if autoqc is required)
 		return true;
-//		return false; //returning false due to lack of cerify at forge
 	}
 
 	@Override
@@ -374,7 +350,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
 				notification.getPackageID(),
 				notification.getStage()));
-		// TODO fire event notification
+		
+		saveEvent("DeliveryFailed", notification, TX_EVENT_NAMESPACE);
 	}
 
 	@Override

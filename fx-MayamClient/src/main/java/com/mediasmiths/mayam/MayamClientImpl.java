@@ -709,4 +709,35 @@ public class MayamClientImpl implements MayamClient
 		}
 	}
 	
+	private long createWFEErrorTaskForAsset(MayamAssetType type, String siteId, String message)
+	{
+		try
+		{
+			return tasksController.createWFEErorTask(type, siteId, message);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error creating wfe error task for asset with siteid" + siteId);
+			return -1;
+		}
+	}
+
+	@Override
+	public long createWFEErrorTaskForPackage(String packageID, String message)
+	{
+		return createWFEErrorTaskForAsset(MayamAssetType.PACKAGE, packageID,message);
+	}
+
+	@Override
+	public long createWFEErrorTaskForMaterial(String materialID, String message)
+	{
+		return createWFEErrorTaskForAsset(MayamAssetType.MATERIAL, materialID,message);
+	}
+
+	@Override
+	public long createWFEErrorTaskForTitle(String titleID, String message)
+	{
+		return createWFEErrorTaskForAsset(MayamAssetType.TITLE, titleID,message);
+	}
+	
 }

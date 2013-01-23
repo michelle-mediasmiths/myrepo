@@ -26,4 +26,27 @@ public interface EventHandler
 	 */
 	public void saveEvent(String eventName, Object payload);
 
+	
+	/**
+	 * @param eventName
+	 * @param payload
+	 * 
+	 * Perform the required message transmission for an object that has already been serialised by the caller.
+	 * 
+	 * Allows the use of a different namespace than inject from service.events.namespace for services that created events for multiple namesapces
+	 *
+	 */
+	public void saveEvent(String eventName, String payload, String namespace);
+
+	/**
+	 *
+	 * @param eventName
+	 * @param payload
+	 *
+	 * Perform the required message transmission for an object (something that requires serialisation for transmission)
+	 * 
+	 * Allows the use of a different namespace than inject from service.events.namespace for services that created events for multiple namesapces
+	 */
+	public void saveEvent(String eventName, Object payload, String namespace);
+
 }

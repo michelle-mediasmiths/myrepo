@@ -38,9 +38,8 @@ public class EventService implements EventHandler
 	@Named("service.events.enabled")
 	protected boolean enabled;
 
-
 	@Override
-	public void saveEvent(String eventName, String payload)
+	public void saveEvent(String eventName, String payload, String namespace)
 	{
 		if (enabled)
 		{
@@ -51,7 +50,7 @@ public class EventService implements EventHandler
 			{
 				EventEntity event = new EventEntity();
 				event.setEventName(eventName);
-				event.setNamespace(eventsNamespace);
+				event.setNamespace(namespace);
 
 				event.setPayload(payload);
 				event.setTime(System.currentTimeMillis());
@@ -66,17 +65,17 @@ public class EventService implements EventHandler
 		{
 			logger.info("did not save event '" + eventName + "' as events are disabled");
 		}
+	}
+	
 
+	@Override
+	public void saveEvent(String eventName, String payload)
+	{
+		saveEvent(eventName, payload,eventsNamespace);
 	}
 
-	/**
-	 * events notification
-	 *
-	 * @param eventName the eventname of the event to be notified
-	 * @param payload the event specific content for the event
-	 */
 	@Override
-	public void saveEvent(String eventName, Object payload)
+	public void saveEvent(String eventName, Object payload, String namespace)
 	{
 		if (enabled)
 		{
@@ -98,7 +97,18 @@ public class EventService implements EventHandler
 		{
 			logger.info("did not save event '" + eventName + "' as events are disabled");
 		}
-
+	}
+	
+	/**
+	 * events notification
+	 *
+	 * @param eventName the eventname of the event to be notified
+	 * @param payload the event specific content for the event
+	 */
+	@Override
+	public void saveEvent(String eventName, Object payload)
+	{
+		saveEvent(eventName, payload,eventsNamespace);
 	}
 
 	/**

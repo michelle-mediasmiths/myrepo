@@ -319,8 +319,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		{
 			logger.error("Failed to create wfe error task",e);
 		}
-		
-		eventService.saveEvent("failed",message);		
+		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED){
+			eventService.saveEvent("ProtectedPurgeFail",message);
+		}
+		else{
+			eventService.saveEvent("failed",message);
+		}
 	}
 
 }
