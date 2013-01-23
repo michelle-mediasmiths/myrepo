@@ -48,10 +48,32 @@ public class WFAdapterModule extends AbstractModule
 		return marshaller;
 	}	
 	
+	
 
 	@Provides
 	@Named("ruzz.marshaller")
 	Marshaller provideRuzzMarshaller(@Named("ruzz.context") JAXBContext jc)
+			throws JAXBException,
+			SAXException
+	{
+		Marshaller marshaller = null;
+		try
+		{
+			marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+	
+	@Provides
+	@Named("wfe.marshaller")
+	Marshaller provideRuzzMarshaller(@Named("wfe.context") JAXBContext jc)
 			throws JAXBException,
 			SAXException
 	{
@@ -95,4 +117,18 @@ public class WFAdapterModule extends AbstractModule
 			}
 		return jc;
 		}
+		
+		@Provides
+	@Named("wfe.context")
+	JAXBContext provideRuzzJAXBContext() throws JAXBException{
+		JAXBContext jc = null;
+		try {
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.wf.adapter.model");			
+			} catch (JAXBException e) {
+				logger.fatal("Could not create jaxb context", e);
+				throw e;
+			}
+		return jc;
+		}
+}	
 }
