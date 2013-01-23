@@ -11,46 +11,51 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class FixAndStitchHandler  extends AttributeHandler
+public class FixAndStitchHandler  extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(FixAndStitchHandler.class);
 	
-	public void process(AttributeMap messageAttributes)
-	{	
-		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.FIX_STITCH_EDIT.getText())) 
-		{
-			try {
-				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-				if (taskState == TaskState.FINISHED) 
-				{	
-					String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-							
-					final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
-					if (lists != null) 
-					{
-						for (SegmentList segmentList : lists)
-						{
-							String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
-							long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
-							AttributeMap newTask = taskController.getTask(taskID);
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							taskController.saveTask(newTask);
-						}
-					}
-				}
-			}
-			catch (Exception e) {
-				log.error("Exception in the Mayam client while handling Fix and Stitch Task Message : ", e);
-			}
-		}
-	}
-
 	@Override
 	public String getName()
 	{
 		return "Fix and Stitch";
 		
+	}
+
+	@Override
+	protected void stateChanged(AttributeMap messageAttributes)
+	{
+		try{
+			String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+					
+			final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
+			if (lists != null) 
+			{
+				for (SegmentList segmentList : lists)
+				{
+					String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+					long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+					AttributeMap newTask = taskController.getTask(taskID);
+					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+					taskController.saveTask(newTask);
+				}
+			}
+		}
+		catch(Exception e){
+			log.error("error handling fix and stich task finish",e);
+		}
+	}
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.FIX_STITCH_EDIT;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.FINISHED;
 	}
 }

@@ -29,7 +29,8 @@ import com.mediasmiths.mq.handlers.IngestJobHandler;
 import com.mediasmiths.mq.handlers.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.InitiateTxHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
-import com.mediasmiths.mq.handlers.PreviewTaskHandler;
+import com.mediasmiths.mq.handlers.PreviewTaskFailHandler;
+import com.mediasmiths.mq.handlers.PreviewTaskFinishHandler;
 import com.mediasmiths.mq.handlers.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
@@ -71,7 +72,7 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
-	UnmatchedAssetCreateHandler unmatchedHandler;
+	UnmatchedAssetCreateHandler unmatchedAssetCreateHandler;
 	@Inject
 	TitleUpdateHandler titleUpdateHandler;
 	@Inject
@@ -87,7 +88,9 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	InitiateQcHandler initiateQcHandler;
 	@Inject
-	PreviewTaskHandler previewHandler;
+	PreviewTaskFinishHandler previewTaskFinishHandler;
+	@Inject
+	PreviewTaskFailHandler previewTaskFailHandler;
 	@Inject
 	QcCompleteHandler qcCompleteHandler;
 	@Inject
@@ -210,9 +213,10 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
-				passEventToHandler(previewHandler, currentAttributes);
+				passEventToHandler(previewTaskFinishHandler, currentAttributes);
+				passEventToHandler(previewTaskFailHandler, currentAttributes);
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
-				passEventToHandler(unmatchedHandler, currentAttributes);
+				passEventToHandler(unmatchedTaskUpdateHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				
@@ -259,7 +263,7 @@ public class IncomingListener extends MqClientListener
 
 		try
 		{
-			passEventToHandler(unmatchedHandler, messageAttributes);
+			passEventToHandler(unmatchedAssetCreateHandler, messageAttributes);
 			logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
 		}
 		catch (Exception e)
@@ -271,6 +275,7 @@ public class IncomingListener extends MqClientListener
 		// passEventToHandler(assetPurgeHandler, messageAttributes);
 		// passEventToHandler(emergencyIngestHandler, messageAttributes);
 		// passEventToHandler(packageUpdateHandler, messageAttributes);
+		 passEventToHandler(unmatchedAssetCreateHandler, messageAttributes);
 	}
 
 	private void onAssetUpdate(MqMessage msg)

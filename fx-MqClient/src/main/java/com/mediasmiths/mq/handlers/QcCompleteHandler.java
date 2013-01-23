@@ -11,32 +11,27 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class QcCompleteHandler extends AttributeHandler
+public class QcCompleteHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(QcCompleteHandler.class);
 
-	public void process(AttributeMap messageAttributes)
-	{
-		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText()))
-		{
-			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
-			if (taskState == TaskState.FINISHED)
-			{
-				String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 
-				String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-				if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
-				{
-					unmatched(houseID);
-				}
-				else{
-					preview(houseID);
-				}
-			}
+	@Override
+	protected void stateChanged(AttributeMap messageAttributes)
+	{
+		String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
+
+		String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
+		if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
+		{
+			unmatched(houseID);
+		}
+		else
+		{
+			preview(houseID);
 		}
 	}
-
+	
 	private void preview(String houseID)
 	{
 		try
@@ -66,5 +61,18 @@ public class QcCompleteHandler extends AttributeHandler
 	public String getName()
 	{
 		return "QC Complete";
+	}
+
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.QC_VIEW;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.FINISHED;		
 	}
 }

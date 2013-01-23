@@ -13,12 +13,19 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class PurgeCandidateExtendHandler extends UpdateAttributeHandler
+public class PurgeCandidateExtendHandler extends TaskUpdateHandler
 {
 	private final static Logger log = Logger.getLogger(PurgeCandidateExtendHandler.class);
 	
-	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
-	{	
+	@Override
+	public String getName()
+	{
+		return "Purge Candidate Extend";
+	}
+
+	@Override
+	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
+	{
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 		TaskState taskState = currentAttributes.getAttribute(Attribute.TASK_STATE);
@@ -65,13 +72,12 @@ public class PurgeCandidateExtendHandler extends UpdateAttributeHandler
 		}
 		catch (Exception e) {
 			log.error("Exception in the Mayam client while handling Extend Purge Candidate Message : "+e.getMessage(), e);
-			e.printStackTrace();	
 		}
 	}
 
 	@Override
-	public String getName()
+	public MayamTaskListType getTaskType()
 	{
-		return "Purge Candidate Extend";
+		return MayamTaskListType.PURGE_CANDIDATE_LIST;
 	}
 }

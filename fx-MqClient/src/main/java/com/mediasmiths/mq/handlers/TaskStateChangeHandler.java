@@ -7,10 +7,14 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public abstract class TaskCreateHandler extends AttributeHandler
+/**
+ * Handles a state change for a task, takes only the current attributes of the task
+ *
+ */
+public abstract class TaskStateChangeHandler extends AttributeHandler
 {
 	
-	private final static Logger logger = Logger.getLogger(TaskCreateHandler.class);
+	private final static Logger logger = Logger.getLogger(TaskStateChangeHandler.class);
 
 	@Override
 	public final void process(AttributeMap messageAttributes)
@@ -22,7 +26,7 @@ public abstract class TaskCreateHandler extends AttributeHandler
 			if (taskState == getTaskState())
 			{
 				logger.debug(String.format("{%s} Task of the type and state I am interested in", getName()));
-				taskCreated(messageAttributes);
+				stateChanged(messageAttributes);
 			}
 		}
 
@@ -31,13 +35,11 @@ public abstract class TaskCreateHandler extends AttributeHandler
 	/*
 	 * call by process once it is known that the task concerned is of the correct type and in the correct state
 	 */
-	protected abstract void taskCreated(AttributeMap messageAttributes);
+	protected abstract void stateChanged(AttributeMap messageAttributes);
 
 	public abstract MayamTaskListType getTaskType();
 
-	public TaskState getTaskState()
-	{
-		return TaskState.OPEN;
-	}
+	public abstract TaskState getTaskState();
+	
 
 }

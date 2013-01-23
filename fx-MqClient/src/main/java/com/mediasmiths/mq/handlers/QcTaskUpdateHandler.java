@@ -14,18 +14,18 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class QcTaskUpdateHandler extends UpdateAttributeHandler
+public class QcTaskUpdateHandler extends TaskUpdateHandler
 {
 
 	private static final String MANUAL_QC_PASS = "pass";
-	private final static String MANUAL_QC_FAIL_WITH_REINGEST= "reingest";
+	private final static String MANUAL_QC_FAIL_WITH_REINGEST = "reingest";
 	private final static String MANUAL_QC_FAIL_WITH_REORDER = "reorder";
-	
+
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
 
 	@Inject
 	MuleWorkflowController mule;
-	
+
 	@Override
 	public String getName()
 	{
@@ -33,28 +33,24 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 	}
 
 	@Override
-	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
+	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
-		String taskListID = currentAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.QC_VIEW.getText()))
+		// if update was to change substatus for file format verification
+		if (after.containsAttribute(Attribute.QC_SUBSTATUS1))
 		{
-			// if update was to change substatus for file format verification
-			if (after.containsAttribute(Attribute.QC_SUBSTATUS1))
-			{
-				fileFormatVerificationStatusChanged(currentAttributes, after);
-			}
+			fileFormatVerificationStatusChanged(currentAttributes, after);
+		}
 
-			// autoqc status changed
-			if (after.containsAttribute(Attribute.QC_SUBSTATUS2))
-			{
-				autoQcStatusChanged(currentAttributes, after);
-			}
+		// autoqc status changed
+		if (after.containsAttribute(Attribute.QC_SUBSTATUS2))
+		{
+			autoQcStatusChanged(currentAttributes, after);
+		}
 
-			// qc result set manually
-			if (after.containsAttribute(Attribute.QC_RESULT))
-			{
-				qcResultSetManually(currentAttributes, after);
-			}
+		// qc result set manually
+		if (after.containsAttribute(Attribute.QC_RESULT))
+		{
+			qcResultSetManually(currentAttributes, after);
 		}
 
 	}
@@ -78,13 +74,14 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
-				//user has requested reingest, fail the qc task	
+				// user has requested reingest, fail the qc task
 				log.debug("User requested uningest, failing qc task");
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(currentAttributes);
 
-				if (AssetProperties.isMaterialProgramme(currentAttributes) || AssetProperties.isMaterialAssociated(currentAttributes))
+				if (AssetProperties.isMaterialProgramme(currentAttributes)
+						|| AssetProperties.isMaterialAssociated(currentAttributes))
 				{
 					log.debug("Asset is programme or associated content");
 					// uningest the media
@@ -142,7 +139,8 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 			{
 				initiateAutoQc(currentAttributes);
 			}
-			else{
+			else
+			{
 				// kick off channel condition monitoring once that has been implemented
 				finishWithPass(currentAttributes);
 			}
@@ -194,12 +192,18 @@ public class QcTaskUpdateHandler extends UpdateAttributeHandler
 
 			log.info("Initiating qc workflow for asset " + assetID);
 			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
-			mule.initiateQcWorkflow(assetID, false,taskID.longValue());
+			mule.initiateQcWorkflow(assetID, false, taskID.longValue());
 		}
 		catch (Exception e)
 		{
 			log.error("Exception in the Mayam client while handling Inititae QC Message : ", e);
 		}
+	}
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.QC_VIEW;
 	}
 
 }

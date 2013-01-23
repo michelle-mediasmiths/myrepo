@@ -13,7 +13,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
-public class InitiateTxHandler extends TaskCreateHandler
+public class InitiateTxHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(InitiateTxHandler.class);
 
@@ -27,7 +27,7 @@ public class InitiateTxHandler extends TaskCreateHandler
 	}
 
 	@Override
-	protected void taskCreated(AttributeMap messageAttributes)
+	protected void stateChanged(AttributeMap messageAttributes)
 	{
 		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
@@ -38,6 +38,12 @@ public class InitiateTxHandler extends TaskCreateHandler
 	public MayamTaskListType getTaskType()
 	{
 		return MayamTaskListType.TX_DELIVERY;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.OPEN;
 	}
 
 	

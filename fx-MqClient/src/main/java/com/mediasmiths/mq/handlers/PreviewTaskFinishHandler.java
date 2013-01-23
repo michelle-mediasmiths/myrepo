@@ -15,35 +15,24 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class PreviewTaskHandler extends AttributeHandler
+public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 {
 
-	private final static Logger log = Logger.getLogger(PreviewTaskHandler.class);
+	private final static Logger log = Logger.getLogger(PreviewTaskFinishHandler.class);
 
-	public void process(AttributeMap messageAttributes)
+	@Override
+	protected void stateChanged(AttributeMap messageAttributes)
 	{
-		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.PREVIEW.getText()))
+		try
 		{
-			try
-			{
-				TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
-				if (taskState == TaskState.FINISHED_FAILED)
-				{
-					onPreviewFailure(messageAttributes);
-				}
-				else if (taskState == TaskState.FINISHED)
-				{
-					onPreviewFinished(messageAttributes);
-				}
-			}
-			catch (Exception e)
-			{
-				log.error("Exception in the Mayam client while handling Preview Task Message : ",e);
-			}
+			onPreviewFinished(messageAttributes);
+		}
+		catch (Exception e)
+		{
+			log.error("Exception in the Mayam client while handling Preview Task Finish : ", e);
 		}
 	}
-
+	
 	private void onPreviewFinished(AttributeMap messageAttributes) throws MayamClientException, RemoteException
 	{
 		String previewResult = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
@@ -139,35 +128,23 @@ public class PreviewTaskHandler extends AttributeHandler
 		}
 	}
 
-	private void onPreviewFailure(AttributeMap messageAttributes) throws MayamClientException
-	{
-
-		// update the items preview status to fail
-		String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
-		AssetType type = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-
-		AttributeMap updateAssetMap = taskController.getTasksClient().createAttributeMap();
-		updateAssetMap.setAttribute(Attribute.ASSET_ID, assetId);
-		updateAssetMap.setAttribute(Attribute.ASSET_TYPE, type);
-		updateAssetMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_FAIL);
-		try
-		{
-			taskController.getTasksClient().assetApi().updateAsset(updateAssetMap);
-		}
-		catch (RemoteException e)
-		{
-			log.error("Error updating assets preview status", e);
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED, e);
-		}
-		finally
-		{
-			// TODO: An email notification is sent to the relevant channel owner alerting them that the content should be reordered.
-		}
-	}
-
 	@Override
 	public String getName()
 	{
 		return "Preview task";
+	}
+
+
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.PREVIEW;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.FINISHED;
 	}
 }

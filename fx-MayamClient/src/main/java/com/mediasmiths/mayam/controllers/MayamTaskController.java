@@ -125,6 +125,7 @@ public class MayamTaskController extends MayamController
 		Calendar date = Calendar.getInstance();
 		date.add(Calendar.DAY_OF_MONTH, numberOfDays);
 		initialAttributes.setAttribute(Attribute.OP_DATE, date.getTime());
+		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 		
 		return createTask(assetID,MayamAssetType.MATERIAL,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
 	}

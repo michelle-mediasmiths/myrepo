@@ -11,12 +11,12 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 
-public class InitiateQcHandler extends TaskCreateHandler
+public class InitiateQcHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);
 
 	@Override
-	protected void taskCreated(AttributeMap messageAttributes)
+	protected void stateChanged(AttributeMap messageAttributes)
 	{
 		MediaStatus mediaStatus = messageAttributes.getAttribute(Attribute.MEDST_HR);
 
@@ -95,5 +95,11 @@ public class InitiateQcHandler extends TaskCreateHandler
 	public MayamTaskListType getTaskType()
 	{
 		return MayamTaskListType.QC_VIEW;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.OPEN;
 	}
 }

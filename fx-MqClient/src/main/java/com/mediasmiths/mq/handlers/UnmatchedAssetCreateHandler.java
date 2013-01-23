@@ -22,9 +22,6 @@ public class UnmatchedAssetCreateHandler extends AttributeHandler
 				// Add to purge candidate list with expiry date of 30 days
 				String houseId = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 				long purgeTaskId = taskController.createPurgeCandidateTaskForMaterial(houseId, 30);
-				AttributeMap purgeTask = taskController.getTask(purgeTaskId);
-				purgeTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-				taskController.saveTask(purgeTask);
 			}
 			catch (Exception e)
 			{

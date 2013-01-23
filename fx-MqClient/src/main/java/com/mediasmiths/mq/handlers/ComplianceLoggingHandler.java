@@ -11,31 +11,24 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class ComplianceLoggingHandler extends AttributeHandler
+public class ComplianceLoggingHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(ComplianceLoggingHandler.class);
 
-	public void process(AttributeMap messageAttributes)
+	@Override
+	protected void stateChanged(AttributeMap messageAttributes)
 	{
-		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(MayamTaskListType.COMPLIANCE_LOGGING.getText()))
-		{
-			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);	
-			if (taskState == TaskState.FINISHED) 
-			{
-				try {					
-					String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					String notes = messageAttributes.getAttribute(Attribute.COMPLIANCE_NOTES);
-					createComplianceEditTask(assetID, assetType, notes);
-								
-				} catch (Exception e) {
-					log.error("Exception in the Mayam client while handling Compliance logging Task Message : " + e,e);
-				}
-			}	
+		try {					
+			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			String notes = messageAttributes.getAttribute(Attribute.COMPLIANCE_NOTES);
+			createComplianceEditTask(assetID, assetType, notes);
+						
+		} catch (Exception e) {
+			log.error("Exception in the Mayam client while handling Compliance logging Task Message : " + e,e);
 		}
 	}
-
+	
 	private void createComplianceEditTask(String assetID, AssetType assetType, String complianceNotes) throws MayamClientException, RemoteException
 	{
 		
@@ -48,5 +41,17 @@ public class ComplianceLoggingHandler extends AttributeHandler
 	public String getName()
 	{
 		return "Compliance Logging";
+	}
+
+	@Override
+	public MayamTaskListType getTaskType()
+	{
+		return MayamTaskListType.COMPLIANCE_LOGGING;
+	}
+
+	@Override
+	public TaskState getTaskState()
+	{
+		return TaskState.FINISHED;
 	}
 }
