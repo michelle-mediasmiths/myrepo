@@ -93,7 +93,14 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.error("Failed to create wfe error task",e);
 		}
 		
-		eventService.saveEvent("failed",message);		
+		if (result == MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER)
+		{
+			eventService.saveEvent("PlaceholderAlreadyHasMedia", message);
+		}
+		else
+		{
+			eventService.saveEvent("failed", message);
+		}
 	}
 	
 	/**
