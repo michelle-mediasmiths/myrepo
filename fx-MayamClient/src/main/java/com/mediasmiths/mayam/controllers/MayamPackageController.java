@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.StringReader;
 import java.math.BigInteger;
 import java.util.Date;
@@ -10,6 +12,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
@@ -205,6 +209,9 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 
+	
+	
+	
 	/**
 	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
 	 * 
@@ -220,10 +227,9 @@ public class MayamPackageController extends MayamController
 		Presentation p = null;
 		try
 		{
-			String naturalBreaks = material.getAttribute(Attribute.SEGMENTATION_DATA);
-			log.debug(String.format("natural breaks is %s", naturalBreaks));
-						
-			final StringReader reader = new StringReader(naturalBreaks);
+			String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
+
+			final FileReader reader = new FileReader(new File(materialController.segdataFilePathForMaterial(materialId)));
 			final StreamSource source = new StreamSource(reader);
 			
 			JAXBElement<Presentation> j = (JAXBElement<Presentation>) materialExchangeUnMarshaller.unmarshal(source,Presentation.class);
@@ -252,6 +258,7 @@ public class MayamPackageController extends MayamController
 		
 		return null;
 	}
+
 	
 
 	private String findHighestRevision(String itemId) throws RemoteException

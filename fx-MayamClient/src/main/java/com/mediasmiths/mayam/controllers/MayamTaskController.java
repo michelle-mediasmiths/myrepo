@@ -138,6 +138,7 @@ public class MayamTaskController extends MayamController
 	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
 		
 	}

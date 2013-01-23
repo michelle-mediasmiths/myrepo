@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.List;
@@ -9,6 +10,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
@@ -550,6 +553,17 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
+
+	@Inject
+	@Named("segmentation.data.stash.folder")
+	private String segmentationDataStashPath;
+	
+	public String segdataFilePathForMaterial(String materialId)
+	{
+		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
+	}
+	
+	
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
 	{
@@ -614,11 +628,14 @@ public class MayamMaterialController extends MayamController
 					try
 					{
 						String presentationString = presentationToString(presentation);
-						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_DATA, presentationString);
+						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
 					}
 					catch (JAXBException e)
 					{
 						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
+					}
+					catch(Exception e){
+						log.error("error saving presentation infor for material",e);
 					}
 				}
 
