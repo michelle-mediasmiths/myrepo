@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamContentTypes;
@@ -51,11 +52,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 							{
 								date.add(Calendar.DAY_OF_MONTH, 90);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
+								task.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 							}
 							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
 							{
 								date.add(Calendar.DAY_OF_MONTH, 7);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
+								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							}
 							taskController.saveTask(task);
 						}
@@ -70,11 +73,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 						{
 							date.add(Calendar.DAY_OF_MONTH, 90);
 							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 						}
 						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
 						{
 							date.add(Calendar.DAY_OF_MONTH, 7);
 							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 						}
 						taskController.saveTask(newTask);
 					}

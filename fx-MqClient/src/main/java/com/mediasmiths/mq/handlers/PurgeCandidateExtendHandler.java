@@ -49,11 +49,13 @@ public class PurgeCandidateExtendHandler extends UpdateAttributeHandler
 							{
 								date.add(Calendar.DAY_OF_MONTH, 90);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
+								task.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 							}
 							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
 							{
 								date.add(Calendar.DAY_OF_MONTH, 7);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
+								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							}
 							taskController.saveTask(task);
 						}
