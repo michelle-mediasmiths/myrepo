@@ -12,6 +12,7 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.mpa.Util;
@@ -37,10 +38,10 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 	protected MessageValidationResult validateMessage(String messagePath, Material message) {
 		logger.trace("validateMessage enter");
 
-		return validateTitle(message.getTitle());
+		return validateTitle(message.getTitle(), message.getDetails());
 	}
 
-	private MessageValidationResult validateTitle(Title title) {
+	private MessageValidationResult validateTitle(Title title, Details details) {
 
 		final String titleID = title.getTitleID();
 		// reject empty titleIDs
@@ -62,7 +63,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 
-			return validateProgrammeMaterial(title.getProgrammeMaterial());
+			return validateProgrammeMaterial(title.getProgrammeMaterial(),details);
 		} else {
 			// TODO more validation of marketing material?
 			return MessageValidationResult.IS_VALID;
@@ -71,7 +72,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 	}
 
 	private MessageValidationResult validateProgrammeMaterial(
-			ProgrammeMaterialType programmeMaterial) {
+			ProgrammeMaterialType programmeMaterial, Details details) {
 
 		String materialID = programmeMaterial.getMaterialID();
 
@@ -84,9 +85,28 @@ public class MaterialExchangeValidator extends MessageValidator<Material> {
 			if (!mayamClient.materialExists(materialID)) {
 				return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 			}
-
-			if (!mayamClient.isMaterialPlaceholder(materialID)) {
-				return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+			
+			if(mayamClient.materialHasPassedPreview(materialID)){
+				return MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW;
+			}
+			
+			int deliveryVersion = details.getDeliveryVersion().intValue();
+			int itemDeliveryVersion = mayamClient.getLastDeliveryVersionForMaterial(materialID);
+			
+			if (itemDeliveryVersion == -1)
+			{
+				//item has never been updated by a material exchange message, check if it is a placeholder
+				if (!mayamClient.isMaterialPlaceholder(materialID))
+				{
+					return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+				}
+			}
+			else
+			{
+				if (itemDeliveryVersion != (deliveryVersion - 1))
+				{
+					return MessageValidationResult.UNEXPECTED_DELIVERY_VERSION;
+				}
 			}
 
 		} catch (MayamClientException e) {

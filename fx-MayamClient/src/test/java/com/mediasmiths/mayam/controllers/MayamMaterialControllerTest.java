@@ -33,6 +33,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class MayamMaterialControllerTest {
 
@@ -102,7 +103,7 @@ public class MayamMaterialControllerTest {
 	}
 	
 	@Test
-	public void testUpdateMaterial() 
+	public void testUpdateMaterial() throws MayamClientException 
 	{
 		try {
 			when(assetApi.getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
@@ -114,8 +115,7 @@ public class MayamMaterialControllerTest {
 		MayamClientErrorCode returnCode = controller.updateMaterial(material);
 		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
 		
-		returnCode = controller.updateMaterial(programmeMaterial, null, null);
-		assertEquals(MayamClientErrorCode.SUCCESS, returnCode);
+		controller.updateMaterial(programmeMaterial, null, null);		
 	}
 	
 	@Test
@@ -163,8 +163,8 @@ public class MayamMaterialControllerTest {
 		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
 	}
 	
-	@Test
-	public void testUpdateMaterialException() 
+	@Test(expected = MayamClientException.class)
+	public void testUpdateMaterialException() throws MayamClientException 
 	{
 		try {
 			when(client.assetApi().getAssetBySiteId(eq(MayamAssetType.MATERIAL.getAssetType()), anyString())).thenReturn(map);
@@ -176,8 +176,7 @@ public class MayamMaterialControllerTest {
 		MayamClientErrorCode returnCode = controller.updateMaterial(material);
 		assertEquals(returnCode, MayamClientErrorCode.MAYAM_EXCEPTION);
 		
-		returnCode = controller.updateMaterial(programmeMaterial, null, null);
-		assertEquals(MayamClientErrorCode.MAYAM_EXCEPTION, returnCode);
+		controller.updateMaterial(programmeMaterial, null, null);		
 	}
 
 	@Test
@@ -188,8 +187,8 @@ public class MayamMaterialControllerTest {
 		assertEquals(MayamClientErrorCode.MATERIAL_UNAVAILABLE, returnCode);
 	}
 		
-	@Test
-	public void testUpdateNullMaterial() 
+	@Test(expected = MayamClientException.class)
+	public void testUpdateNullMaterial() throws MayamClientException 
 	{
 		MaterialType material = null;
 		MayamClientErrorCode returnCode = controller.updateMaterial(material);
@@ -198,8 +197,7 @@ public class MayamMaterialControllerTest {
 		ProgrammeMaterialType updateMaterial = null;
 		Details details=null;
 		Material.Title title = null;
-		returnCode = controller.updateMaterial(updateMaterial, details , title);
-		assertEquals(MayamClientErrorCode.MATERIAL_UNAVAILABLE, returnCode);
+		controller.updateMaterial(updateMaterial, details , title);
 	}
 	
 	@Test

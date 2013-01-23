@@ -113,7 +113,7 @@ public interface MayamClient
 	 * @param material
 	 * @return
 	 */
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title);
+	public boolean updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title) throws MayamClientException;
 	/**
 	 * update a material using the placeholder management MaterialType
 	 * @param material
@@ -299,5 +299,14 @@ public interface MayamClient
 	public AttributeMap getMaterialAttributes(String materialID) throws MayamClientException;
 
 	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException;
+
+	/**
+	 * 
+	 * @param materialID 
+	 * @return the last delivery version used to update an item, or -1 if it has not been updated by a material exchange message
+	 */
+	public int getLastDeliveryVersionForMaterial(String materialID);
+
+	public boolean materialHasPassedPreview(String materialID);
 	
 }

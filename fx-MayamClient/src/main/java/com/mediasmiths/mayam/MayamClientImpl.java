@@ -48,6 +48,7 @@ import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
@@ -172,7 +173,7 @@ public class MayamClientImpl implements MayamClient
 	 * @see com.mediasmiths.mayam.MayamClient#updateMaterial(com.mediasmiths.foxtel .generated.MediaExchange.Programme.Media)
 	 */
 	@Override
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title)
+	public boolean updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title) throws MayamClientException
 	{
 		return materialController.updateMaterial(material,details,title);
 	}
@@ -338,27 +339,8 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isMaterialPlaceholder(String materialID)
 	{
-		boolean isPlaceholder = false;
 		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-
-		if (materialAttributes != null && materialAttributes.containsAttribute(Attribute.MEDST_HR))
-		{
-			MediaStatus mediaStatus = materialAttributes.getAttribute(Attribute.MEDST_HR);
-			if (mediaStatus != null)
-			{
-				log.info("Media status is " + mediaStatus.toString());
-				if (mediaStatus== MediaStatus.MISSING) 
-				{
-					isPlaceholder = true;
-					
-				}
-			}
-			else
-			{
-				log.error("Media status is null");
-			}
-		}
-		return isPlaceholder;
+		return AssetProperties.isMaterialPlaceholder(materialAttributes);		
 	}
 
 	/**
@@ -683,6 +665,48 @@ public class MayamClientImpl implements MayamClient
 	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException
 	{
 		return packageController.getSegmentList(packageID).getAttributeMap();
+	}
+
+	//TODO: find out what this is and move it somewhere more sensible;
+	public final static Attribute deliveryVersionAttribute = Attribute.REVISION_NUMBER;
+	
+	@Override
+	public int getLastDeliveryVersionForMaterial(String materialID)
+	{
+		try
+		{
+			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+			Integer deliveryVersion = materialAttributes.getAttribute(deliveryVersionAttribute);
+
+			if (deliveryVersion == null)
+			{
+				return -1;
+			}
+			else
+			{
+				return deliveryVersion.intValue();
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error determining delivery version for material", e);
+			return -1;
+		}
+
+	}
+
+	@Override
+	public boolean materialHasPassedPreview(String materialID)
+	{
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		if (materialAttributes != null)
+		{
+			return MayamPreviewResults.isPreviewPass((String) materialAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT));
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 }

@@ -44,7 +44,9 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.io.PropertyFile;
 
@@ -549,10 +551,11 @@ public class MayamMaterialController extends MayamController
 	}
 
 	// Material - Updating a media asset in Mayam
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Details details, Title title)
+	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
+		boolean isPlaceholder = false;
 
 		if (material != null)
 		{
@@ -564,12 +567,13 @@ public class MayamMaterialController extends MayamController
 				assetAttributes = client.assetApi().getAssetBySiteId(
 						MayamAssetType.MATERIAL.getAssetType(),
 						material.getMaterialID());
+				
+				isPlaceholder = AssetProperties.isMaterialPlaceholder(assetAttributes);
 			}
 			catch (RemoteException e1)
 			{
 				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
-				e1.printStackTrace();
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 			}
 
 			if (assetAttributes != null)
@@ -583,19 +587,6 @@ public class MayamMaterialController extends MayamController
 						MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
 				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 
-				String houseID = material.getMaterialID();
-
-				AttributeMap asset;
-				try
-				{
-					asset = client.assetApi().getAssetBySiteId(AssetType.ITEM, houseID);
-				}
-				catch (RemoteException e1)
-				{
-					log.error("Error thrown by Mayam while getting asset data for material ID: " + houseID, e1);
-					return MayamClientErrorCode.MATERIAL_FIND_FAILED;
-				}
-				String assetID = asset.getAttributeAsString(Attribute.ASSET_ID);
 
 				// FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
 				if (material.getOriginalConform() != null)
@@ -619,6 +610,7 @@ public class MayamMaterialController extends MayamController
 				{
 
 					Presentation presentation = material.getPresentation();
+				
 					try
 					{
 						String presentationString = presentationToString(presentation);
@@ -667,6 +659,11 @@ public class MayamMaterialController extends MayamController
 					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
 				}
 
+				if(details.getDeliveryVersion() != null){
+					int deliveryVersion = details.getDeliveryVersion().intValue();
+					attributesValid &= attributes.setAttribute(MayamClientImpl.deliveryVersionAttribute, Integer.valueOf(deliveryVersion));
+				}
+				
 				if (!attributesValid)
 				{
 					log.warn("Material updated but one or more attributes was invalid");
@@ -687,7 +684,7 @@ public class MayamMaterialController extends MayamController
 				catch (RemoteException e)
 				{
 					log.error("Exception thrown by Mayam while trying to update Material", e);
-					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+					throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED,e);
 				}
 			}
 			else
@@ -700,8 +697,13 @@ public class MayamMaterialController extends MayamController
 		{
 			log.warn("Null material object, unable to update asset");
 			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
+		}	
+		
+		if(returnCode!= MayamClientErrorCode.SUCCESS){
+			throw new MayamClientException(returnCode);
 		}
-		return returnCode;
+		
+		return isPlaceholder;
 	}
 
 	private String presentationToString(Presentation p) throws JAXBException

@@ -1,13 +1,18 @@
 package com.mediasmiths.mayam.util;
 
+import org.apache.log4j.Logger;
+
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 
 public class AssetProperties
 {
+	private final static Logger log = Logger.getLogger(AssetProperties.class);
+
 	public static boolean isMaterialSD(AttributeMap map)
 	{
 
@@ -41,13 +46,15 @@ public class AssetProperties
 
 	public static boolean isPackageSD(AttributeMap packageAttributes)
 	{
-		
+
 		String reqFMT = packageAttributes.getAttributeAsString(Attribute.REQ_FMT);
-		
-		if("sd".equals(reqFMT.toLowerCase())){
+
+		if ("sd".equals(reqFMT.toLowerCase()))
+		{
 			return true;
 		}
-		else{
+		else
+		{
 			return false;
 		}
 	}
@@ -64,9 +71,30 @@ public class AssetProperties
 		return (contentType != null && MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contentType));
 	}
 
+	public static boolean isMaterialPlaceholder(AttributeMap materialAttributes)
+	{
+
+		MediaStatus mediaStatus = materialAttributes.getAttribute(Attribute.MEDST_HR);
+		if (mediaStatus != null)
+		{
+			log.debug("Media status is " + mediaStatus.toString());
+			if (mediaStatus == MediaStatus.MISSING)
+			{
+				return true;
+			}
+		}
+		else
+		{
+			log.error("Media status is null");
+		}
+
+		return false;
+
+	}
+
 	public static boolean isClassificationSet(AttributeMap packageAttributes)
 	{
 		String classification = packageAttributes.getAttribute(Attribute.CONT_CLASSIFICATION);
-		return classification!=null;
+		return classification != null;
 	}
 }

@@ -112,7 +112,7 @@ public class ProgrammeMaterialTest {
 		when(mayamClient.isMaterialPlaceholder(materialID)).thenReturn(true);
 		
 		when(mayamClient.updateTitle((Title) anyObject())).thenReturn(MayamClientErrorCode.SUCCESS);
-		when(mayamClient.updateMaterial((ProgrammeMaterialType) anyObject(), any(Material.Details.class), any(Material.Title.class))).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.updateMaterial((ProgrammeMaterialType) anyObject(), any(Material.Details.class), any(Material.Title.class))).thenReturn(true);
 		
 		startMediaPickupAgent(incomingPath, receiptPath, failurePath,
 				archivePath, ardomeImportPath, ardomeEmergencyImportPath,

@@ -63,7 +63,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	}
 
 	@Override
-	protected String updateMamWithMaterialInformation(RuzzIngestRecord message) throws MessageProcessingFailedException
+	protected MamUpdateResult updateMamWithMaterialInformation(RuzzIngestRecord message) throws MessageProcessingFailedException
 	{
 		
 		Material material = message.getMaterial();
@@ -102,7 +102,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			updateSegmentationInfo(segments,materialID);
 		}
 		
-		return materialID;
+		return new MamUpdateResult(materialID,true);
 	}
 
 	private void updateSegmentationInfo(SegmentationType segments, String materialID)

@@ -243,9 +243,10 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public MayamClientErrorCode updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title)
+	public boolean updateMaterial(ProgrammeMaterialType material, Material.Details details, Material.Title title) throws MayamClientException
 	{
-		return updateMaterial(material.getMaterialID());
+		updateMaterial(material.getMaterialID());
+		return isMaterialPlaceholder(material.getMaterialID());
 	}
 
 	@Override
@@ -883,6 +884,19 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getLastDeliveryVersionForMaterial(String materialID)
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean materialHasPassedPreview(String materialID)
+	{
+		return false;
 	}
 
 }

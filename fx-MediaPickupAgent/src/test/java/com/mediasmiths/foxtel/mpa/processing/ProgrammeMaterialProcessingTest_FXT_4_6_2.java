@@ -147,7 +147,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
-				.thenReturn(MayamClientErrorCode.SUCCESS);
+				.thenReturn(true);
 
 //		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
 //				MayamClientErrorCode.SUCCESS);
@@ -295,7 +295,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	}
 	
 	@Test
-	public void testMayamClientFailureOnUpdateProgrammeMaterialResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
+	public void testMayamClientFailureOnUpdateProgrammeMaterialResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException, MayamClientException{
 		// prepare files
 		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
@@ -309,7 +309,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
-		.thenReturn(MayamClientErrorCode.FAILURE);
+		.thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 				
 		//queue file for processing
 		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
@@ -328,7 +328,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	
 	@Test
 	@Ignore //CR018
-	public void testMayamClientFailureOnUpdatePackageResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException{
+	public void testMayamClientFailureOnUpdatePackageResultsInProcessingFailure() throws DatatypeConfigurationException, FileNotFoundException, JAXBException, SAXException, InterruptedException, MayamClientException{
 		// prepare files
 		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
@@ -342,7 +342,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
-		.thenReturn(MayamClientErrorCode.SUCCESS);
+		.thenReturn(true);
 		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
 				MayamClientErrorCode.FAILURE);
 				

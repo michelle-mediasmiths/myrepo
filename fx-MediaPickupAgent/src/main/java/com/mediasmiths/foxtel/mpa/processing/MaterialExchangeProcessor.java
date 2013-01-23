@@ -80,22 +80,15 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	 * @throws MessageProcessingFailedException
 	 */
 	@Override
-	protected String updateMamWithMaterialInformation(Material message)
+	protected MamUpdateResult updateMamWithMaterialInformation(Material message)
 			throws MessageProcessingFailedException {
 
 		if (Util.isProgramme(message)) {
 			// programme material
 			updateTitle(message.getTitle());
-			String materialID = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial(), message.getDetails(), message.getTitle());
-			
-			//package update will be handled by updateProgrammeMaterial (CR018 makes things ugly)
-//			if (message.getTitle().getProgrammeMaterial().getPresentation() != null) {
-//
-//				updatePackages(message.getTitle().getProgrammeMaterial()
-//						.getPresentation().getPackage(), materialID);
-//			}
-//			
-			return message.getTitle().getProgrammeMaterial().getMaterialID();
+			String materialID = message.getTitle().getProgrammeMaterial().getMaterialID();
+			boolean waitForMedia = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial(), message.getDetails(), message.getTitle());
+			return new MamUpdateResult(materialID, waitForMedia);
 		} else {
 			// marketing material
 			try {
@@ -105,7 +98,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 				String masterID = mayamClient.createMaterial(message.getTitle()
 						.getTitleID(), message.getTitle()
 						.getMarketingMaterial(), message.getDetails(), message.getTitle());
-				return masterID;
+				return new MamUpdateResult(masterID, true);
 			} catch (MayamClientException e) {
 				logger.error(
 						"MayamClientException update mam with marketing material information",
@@ -174,25 +167,27 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	/**
 	 * Update any missing metadata for the material\item in viz ardome with the
 	 * aggregator information
+	 *
+	 * returns true if media is still expected for the item
 	 * 
 	 * @param programmeMaterial
 	 * @throws MessageProcessingFailedException
 	 */
-	private String updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial, Material.Details details, Material.Title title)
+	private boolean updateProgrammeMaterial(ProgrammeMaterialType programmeMaterial, Material.Details details, Material.Title title)
 			throws MessageProcessingFailedException {
 		logger.trace("updatingProgrammeMaterial");
 
-		MayamClientErrorCode result = mayamClient
-				.updateMaterial(programmeMaterial, details,title);
-
-		if (result != MayamClientErrorCode.SUCCESS) {
-			logger.error(String.format("Error updating programme material %s",
-					programmeMaterial.getMaterialID()));
-			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+		try
+		{
+			boolean isPlaceholder = mayamClient.updateMaterial(programmeMaterial, details, title);
+			return !isPlaceholder;
+		}
+		catch (MayamClientException e)
+		{
+			logger.error(String.format("Error updating programme material %s", programmeMaterial.getMaterialID()), e);
+			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
 		}
 		
-		return programmeMaterial.getMaterialID();
 	}
 //
 //	private void updatePackages(List<Package> packages, String materialID)

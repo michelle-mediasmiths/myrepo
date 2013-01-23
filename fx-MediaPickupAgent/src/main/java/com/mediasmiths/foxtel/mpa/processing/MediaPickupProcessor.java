@@ -153,20 +153,23 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	protected void processMessage(MessageEnvelope<T> envelope)
 			throws MessageProcessingFailedException {
 
-		String masterID = updateMamWithMaterialInformation(envelope
+		MamUpdateResult result = updateMamWithMaterialInformation(envelope
 				.getMessage());
 
-		// add masterid into a more detailed envelope
-		MediaEnvelope materialEnvelope = new MediaEnvelope<T>(envelope,
-				masterID);
-		// try to get the mxf file for this xml
-		String mxfFile = matchMaker.matchXML(materialEnvelope);
-
-		if (mxfFile != null) {
-			logger.info(String.format("found mxf %s for material", mxfFile));
-			createPendingImportIfValid(new File(mxfFile), materialEnvelope);
-		} else {
-			logger.debug("No matching media found");
+		if(result.isWaitForMedia()){
+		
+			// add masterid into a more detailed envelope
+			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(envelope,
+					result.getMasterID());
+			// try to get the mxf file for this xml
+			String mxfFile = matchMaker.matchXML(materialEnvelope);
+	
+			if (mxfFile != null) {
+				logger.info(String.format("found mxf %s for material", mxfFile));
+				createPendingImportIfValid(new File(mxfFile), materialEnvelope);
+			} else {
+				logger.debug("No matching media found");
+			}
 		}
 	}
 
@@ -176,8 +179,38 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	 * @param message
 	 * @return
 	 */
-	protected abstract String updateMamWithMaterialInformation(T message)throws MessageProcessingFailedException;
-
+	protected abstract MamUpdateResult updateMamWithMaterialInformation(T message)throws MessageProcessingFailedException;
+//
+//	/**
+//	 * Returned when updating mam with information from a media pickup xml. 
+//	 * field MasterID holds the material\siteid of the created or updated asset
+//	 *  
+//	 * field waitformedia indiciates if the media pickup processor should wait for a media file or not
+//	 * 
+//	 * A media file will not be expected if an item already has media attatched
+//	 */
+	  
+	 class MamUpdateResult{
+		private String masterID;
+		private boolean waitForMedia;
+		
+		public MamUpdateResult(String masterID, boolean waitForMedia){
+			this.masterID = masterID;
+			this.waitForMedia = waitForMedia;
+		}
+		
+		public String getMasterID()
+		{
+			return masterID;
+		}
+		
+		public boolean isWaitForMedia()
+		{
+			return waitForMedia;
+		}
+		
+	}
+	
 	private void moveFileToEmergencyImportFolder(File mxf)
 	{
 		logger.info(String.format(
