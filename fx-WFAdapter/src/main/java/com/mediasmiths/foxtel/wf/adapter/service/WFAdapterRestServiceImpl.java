@@ -72,6 +72,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ruzz.marshaller")
 	private Marshaller ruzzMarshaller;
+	@Inject
+	@Named("wfe.marshaller")
+	private Marshaller wfeMarshaller;
 	
 	@Inject
 	@Named("cerify.report.location")
