@@ -41,7 +41,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
 					FilterCriteria criteria = new FilterCriteria();
 					criteria.setFilterEqualities(filterEqualities);
-					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
+					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 50, 0);
 					
 					if (existingTasks.getTotalMatches() > 0) 
 					{
