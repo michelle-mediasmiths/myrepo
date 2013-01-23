@@ -180,7 +180,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 		try
 		{
 			boolean isPlaceholder = mayamClient.updateMaterial(programmeMaterial, details, title);
-			return !isPlaceholder;
+			return isPlaceholder;
 		}
 		catch (MayamClientException e)
 		{
