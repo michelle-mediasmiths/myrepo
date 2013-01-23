@@ -30,6 +30,7 @@ import com.mediasmiths.mq.handlers.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.InitiateTxHandler;
 import com.mediasmiths.mq.handlers.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.PreviewTaskHandler;
+import com.mediasmiths.mq.handlers.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
@@ -101,6 +102,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedTaskUpdateHandler unmatchedTaskUpdateHandler;
 	@Inject
 	InitiateTxHandler initiateTxHandler;
+	@Inject	
+	PurgeCandidateExtendHandler purgeCandidateExtendHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -211,6 +214,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchHandler, currentAttributes);
 				passEventToHandler(unmatchedHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
+				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				
 				taskController.updateAccessRights(currentAttributes);
 			}

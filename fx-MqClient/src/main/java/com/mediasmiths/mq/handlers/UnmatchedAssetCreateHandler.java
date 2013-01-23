@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 
@@ -20,9 +21,12 @@ public class UnmatchedAssetCreateHandler extends AttributeHandler
 			{
 				// Add to purge candidate list with expiry date of 30 days
 				String houseId = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				taskController.createPurgeCandidateTaskForMaterial(houseId, 30);
+				long purgeTaskId = taskController.createPurgeCandidateTaskForMaterial(houseId, 30);
+				AttributeMap purgeTask = taskController.getTask(purgeTaskId);
+				purgeTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+				taskController.saveTask(purgeTask);
 			}
-			catch (MayamClientException e)
+			catch (Exception e)
 			{
 				log.error("Exception creating purge candidate task : ", e);
 			}

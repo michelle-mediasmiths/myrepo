@@ -7,27 +7,24 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 
-public class TemporaryContentHandler extends UpdateAttributeHandler
+public class PurgeCandidateExtendHandler extends UpdateAttributeHandler
 {
-	private final static Logger log = Logger.getLogger(TemporaryContentHandler.class);
+	private final static Logger log = Logger.getLogger(PurgeCandidateExtendHandler.class);
 	
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{	
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
-		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
-		
+		TaskState taskState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 		
 		try {			
-			if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
+			if (attributeChanged(Attribute.TASK_STATE, before, after) && taskState != null && taskState.equals(TaskState.EXTENDED))
 			{
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
@@ -63,31 +60,11 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 							taskController.saveTask(task);
 						}
 					}
-					else {
-						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
-						
-						AttributeMap newTask = taskController.getTask(taskID);
-						newTask.putAll(currentAttributes);
-						Calendar date = Calendar.getInstance();
-						if (contentType.equals(MayamContentTypes.EPK)) 
-						{
-							date.add(Calendar.DAY_OF_MONTH, 90);
-							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-						}
-						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
-						{
-							date.add(Calendar.DAY_OF_MONTH, 7);
-							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-						}
-						taskController.saveTask(newTask);
-					}
 				}
 			}
 		}
 		catch (Exception e) {
-			log.error("Exception in the Mayam client while handling Temporary Content Message : "+e.getMessage(), e);
+			log.error("Exception in the Mayam client while handling Extend Purge Candidate Message : "+e.getMessage(), e);
 			e.printStackTrace();	
 		}
 	}
@@ -95,6 +72,6 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 	@Override
 	public String getName()
 	{
-		return "Temporary Content";
+		return "Purge Candidate Extend";
 	}
 }
