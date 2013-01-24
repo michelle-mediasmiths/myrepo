@@ -1,15 +1,15 @@
-package com.mediasmiths.foxtel.tc.service;
+package com.mediasmiths.foxtel.tc.rest.api;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType
-public class CarbonBugOptions
+public class TCBugOptions
 {
 	@XmlElement
 	public String channel = "AE";
 	@XmlElement
-	public CarbonLocation position = CarbonLocation.BOTTOM_LEFT;
+	public TCLocation position = TCLocation.BOTTOM_LEFT;
 	@XmlElement
 	public double opacity = 80D;
 }

@@ -1,189 +1,74 @@
 package com.mediasmiths.foxtel.tc.rest.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
-import org.datacontract.schemas._2004._07.rhozet.DataObject;
-import org.datacontract.schemas._2004._07.rhozet.Job;
-import org.datacontract.schemas._2004._07.rhozet.JobStatus;
-import org.datacontract.schemas._2004._07.rhozet.Task;
-
 import com.google.inject.Inject;
+import com.mediasmiths.carbon.type.mutable.CarbonProject;
 import com.mediasmiths.foxtel.carbonwfs.WfsClient;
-import com.mediasmiths.foxtel.carbonwfs.WfsClientException;
-import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
-import com.mediasmiths.foxtel.tc.JobBuilder;
-import com.mediasmiths.foxtel.tc.JobBuilderException;
-import com.mediasmiths.foxtel.tc.model.TCBuildJobResponse;
-import com.mediasmiths.foxtel.tc.model.TCBuildJobXMLRequest;
-import com.mediasmiths.foxtel.tc.model.TCStartRequest;
-import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.foxtel.tc.rest.api.TCJobInfo;
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import com.mediasmiths.foxtel.tc.rest.api.TCRestService;
+import com.mediasmiths.foxtel.tc.service.CarbonProjectBuilder;
+import org.apache.log4j.Logger;
+import org.jdom2.output.XMLOutputter;
+
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.UUID;
 
 public class TCRestServiceImpl implements TCRestService
 {
-
 	private static final Logger log = Logger.getLogger(TCRestServiceImpl.class);
 
 	@Inject
-	private WfsClient wfsClient;
+	WfsClient wfsClient;
+
 	@Inject
-	private JobBuilder jobBuilder;
+	CarbonProjectBuilder projectBuilder;
 
 	@Override
-	@GET
-	@Path("/ping")
-	@Produces("text/plain")
 	public String ping()
 	{
-		return "ping";
+		return "OK";
 	}
 
 	@Override
-	@PUT
-	@Path("/job/start")
-	@Produces("text/plain")
-	public UUID transcode(TCStartRequest startRequest) throws WfsClientException
+	public String createJob(final TCJobParameters parameters) throws Exception
 	{
-		String jobXml = startRequest.getPcpXml();
-		log.trace("trying to create job from xml " + jobXml);
-		UUID jobid =  wfsClient.transcode(jobXml);
+		CarbonProject project = projectBuilder.build(parameters);
 
-		wfsClient.updatejobPriority(jobid, startRequest.getPriority());
-		
-		return jobid;
-		
+		final String xml = createPCPXML(project);
+
+		final UUID id = wfsClient.transcode(xml);
+
+		return id.toString();
 	}
 
-	@Override
-	@Path("/job/{id}")
-	@Produces("application/xml")
-	public Job job(@PathParam("id") String jobid)
+	String createPCPXML(CarbonProject project)
 	{
-		log.trace(String.format("jobid %s", jobid));
-		return wfsClient.getJob(UUID.fromString(jobid));
-	}
+		try
+		{
+			StringWriter sw = new StringWriter();
 
-	@Override
-	@GET
-	@Path("/job/{id}/status")
-	@Produces("application/xml")
-	public JobStatus jobStatus(@PathParam("id") String jobid)
-	{
-		log.debug(String.format("getting status of jobid %s", jobid));
-		JobStatus status = wfsClient.jobStatus(UUID.fromString(jobid));
-		log.debug(String.format("status of job %s is %s", jobid, status.toString()));
-		return status;
-	}
+			new XMLOutputter().output(project.getDocument(), sw);
 
-	@Override
-	@GET
-	@Path("/job/{id}/finished")
-	@Produces("text/plain")
-	public Boolean jobFinished(@PathParam("id") String jobid)
-	{
-		JobStatus status = jobStatus(jobid);
-
-		return status == JobStatus.COMPLETED || status == JobStatus.COMPLETED || status == JobStatus.FATAL;
-	}
-
-	@Override
-	@GET
-	@Path("/preset")
-	@Produces("application/xml")
-	public ArrayOfPreset listPresets()
-	{
-		return wfsClient.listPresets();
-	}
-
-	@Override
-	@POST
-	@Path("/job/build/")
-	@Produces("application/xml")
-	public TCBuildJobResponse buildJobXMLForTranscode(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException, UnknownPathException
-	{
-		String job = jobBuilder.buildJobForTxPackageTranscode(buildJobXMLRequest.getPackageID(), buildJobXMLRequest.getInputFile(), buildJobXMLRequest.getOutputFolder());
-		
-		Integer prority = jobBuilder.getPriorityForTXJob(buildJobXMLRequest);
-		
-		TCBuildJobResponse resp = new TCBuildJobResponse();
-		resp.setPcpXML(job);
-		resp.setPriority(prority);
-		
-		return resp;
-	}
-	
-	@Override
-	@GET
-	@Path("/job/{id}/success")
-	@Produces("text/plain")
-	public Boolean jobSuccessful(@PathParam("id") String jobid)
-	{
-		JobStatus status = jobStatus(jobid);
-		
-		log.debug(String.format("status of job %s is %s", jobid, status.toString()));
-		
-		return status == JobStatus.COMPLETED;
-	}
-
-	@Override
-	@POST
-	@Path("/jobs/")
-	@Produces("application/xml")
-	public List<Job> listJobs() {
-		log.debug("listing jobs");		
-		return wfsClient.listJobs();	
-	}
-
-	@Override
-	@GET
-	@Path("/job/{id}/errormessage")
-	public String jobErrorMessage(@PathParam("id") String jobid)
-	{
-		Job job = wfsClient.getJob(UUID.fromString(jobid));
-		
-		StringBuilder sb = new StringBuilder();
-		List<String> errorPropertes = new ArrayList<String>();	
-		
-		for(Task t : job.getTask().getValue().getTask()){
-			for(DataObject property : t.getProperty().getValue().getDataObject()){
-				if(property.getName().getValue().equals("Error")){
-					errorPropertes.add((property.getValue().getValue()));					
-				}
-			}
+			return sw.toString();
 		}
-		
-		String errorMessage =  StringUtils.join(errorPropertes, "\r\n");
-		log.debug(String.format("returning errormessage %s for job %s", errorMessage,jobid));
-		return errorMessage;
+		catch (IOException e)
+		{
+			throw new RuntimeException("Failed to serialise carbon project to pcp xml: " + e.getMessage(), e);
+		}
 	}
 
 	@Override
-	@PUT
-	@Path("/job/{id}/priority/update")
-	public void setJobPriority(@PathParam("id") String jobid, @QueryParam("priority") Integer newPriority)
+	public TCJobInfo queryJob(final String guid) throws Exception
 	{
-		wfsClient.updatejobPriority(UUID.fromString(jobid), newPriority);
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	@POST
-	@Path("/job/priority/")
-	@Produces("text/plain")
-	public Integer getPriorityForJob(TCBuildJobXMLRequest buildJobXMLRequest) throws MayamClientException, JobBuilderException
+	public void setJobPriority(final String jobid, final Integer newPriority) throws Exception
 	{
-		return jobBuilder.getPriorityForTXJob(buildJobXMLRequest);		
+		//To change body of implemented methods use File | Settings | File Templates.
 	}
-	
 }

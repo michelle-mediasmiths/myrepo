@@ -8,8 +8,8 @@
 	</parent>
 	<artifactId>fx-TcAdapter</artifactId>
 	<packaging>war</packaging>
-	<name>fx-TcAdapter Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+	<name>fx-TcAdapter Webapp</name>
+
 	<dependencies>
 		<!-- begin test dependencies -->
 		<dependency>
@@ -27,16 +27,6 @@
 		<!-- end test dependencies -->
 
 		<!-- foxtel solution dependencies -->
-		<dependency>
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MayamClient</artifactId>
-			<version>3.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-MayamClientStub</artifactId>
-			<version>3.0-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-CarbonWFSClient</artifactId>
@@ -68,6 +58,11 @@
 			<groupId>com.mediasmiths.std.guice</groupId>
 			<artifactId>stdlib-guice-thymeleaf</artifactId>
 			<version>${stdlib.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.std.util.carbon</groupId>
+			<artifactId>carbon-client</artifactId>
+			<version>3.2.8-SNAPSHOT</version>
 		</dependency>
 
 

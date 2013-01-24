@@ -23,6 +23,8 @@ all: install
 RSYNC=rsync --progress
 
 
+carbon:
+	$(MVN) clean package -am --projects fx-TcAdapter
 
 
 #

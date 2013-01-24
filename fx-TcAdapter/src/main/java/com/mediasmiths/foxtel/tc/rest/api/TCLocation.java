@@ -1,9 +1,9 @@
-package com.mediasmiths.foxtel.tc.service;
+package com.mediasmiths.foxtel.tc.rest.api;
 
 import javax.xml.bind.annotation.XmlEnum;
 
 @XmlEnum
-public enum CarbonLocation
+public enum TCLocation
 {
 	TOP_LEFT,
 	TOP_RIGHT,
