@@ -12,7 +12,7 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 	@Override
 	public final void process(AttributeMap messageAttributes)
 	{
-		log.warn("process(AttributeMap a) called on an UpdateAttributeHandler");
+		log.error("process(AttributeMap a) called on an UpdateAttributeHandler "+getName());
 		process(messageAttributes, new AttributeMap(), new AttributeMap());
 	}
 

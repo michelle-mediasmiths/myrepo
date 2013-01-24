@@ -113,6 +113,8 @@ public class MayamTaskController extends MayamController
 	}
 	
 	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW);
 	}
 	

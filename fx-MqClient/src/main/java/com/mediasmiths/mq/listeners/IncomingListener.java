@@ -21,7 +21,8 @@ import com.mediasmiths.mq.handlers.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
-import com.mediasmiths.mq.handlers.FixAndStitchHandler;
+import com.mediasmiths.mq.handlers.FixAndStitchFinishHandler;
+import com.mediasmiths.mq.handlers.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ImportFailureHandler;
 import com.mediasmiths.mq.handlers.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.IngestJobHandler;
@@ -77,7 +78,9 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	ComplianceLoggingHandler comLoggingHandler;
 	@Inject
-	FixAndStitchHandler fixAndStitchHandler;
+	FixAndStitchFinishHandler fixAndStitchFinishHandler;
+	@Inject
+	FixAndStitchRevertHandler fixAndStitchRevertHandler;
 	@Inject
 	ImportFailureHandler importFailHandler;
 	@Inject
@@ -167,16 +170,7 @@ public class IncomingListener extends MqClientListener
 	{
 		log.trace("onTaskCreate");
 		AttributeMap messageAttributes = msg.getSubject();
-
-		try
-		{
-			logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
-		}
-		catch (Exception e)
-		{
-			logger.error("error logging attributes message");
-		}
-		 
+ 
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
 	}
@@ -208,8 +202,8 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(comLoggingHandler, currentAttributes);
 				passEventToHandler(previewTaskFinishHandler, currentAttributes);
 				passEventToHandler(previewTaskFailHandler, currentAttributes);
-				passEventToHandler(fixAndStitchHandler, currentAttributes);
-				passEventToHandler(unmatchedTaskUpdateHandler, currentAttributes);
+				passEventToHandler(fixAndStitchFinishHandler, currentAttributes);
+				passEventToHandler(fixAndStitchRevertHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				
@@ -218,7 +212,7 @@ public class IncomingListener extends MqClientListener
 		}
 		catch (Exception e)
 		{
-			logger.error("error logging attributes message");
+			logger.error("error onTaskUpdate");
 		}
 	}
 
@@ -257,11 +251,10 @@ public class IncomingListener extends MqClientListener
 		try
 		{
 			passEventToHandler(unmatchedAssetCreateHandler, messageAttributes);
-			logger.trace(String.format("Attributes message: " + LogUtil.mapToString(messageAttributes)));
 		}
 		catch (Exception e)
 		{
-			logger.error("error logging attributes message");
+			logger.error("error onAssetCreate");
 		}
 
 		// passEventToHandler(assetDeletionHandler, messageAttributes);
@@ -284,14 +277,14 @@ public class IncomingListener extends MqClientListener
 		try
 		{
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 		}
 		catch (Exception e)
 		{
-			logger.error("error logging attributes message");
+			logger.error("error onAssetUpdate");
 		}
-
-		passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
-		passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
+	
 	}
 
 	private boolean isTask(String origin)
