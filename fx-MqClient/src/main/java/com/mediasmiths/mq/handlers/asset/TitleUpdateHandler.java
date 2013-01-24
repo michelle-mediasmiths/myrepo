@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.asset;
 
 import org.apache.log4j.Logger;
 
@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 
 public class TitleUpdateHandler extends UpdateAttributeHandler
 {

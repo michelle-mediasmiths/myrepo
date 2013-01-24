@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.asset;
 
 import java.util.Calendar;
 import java.util.List;
@@ -14,6 +14,7 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 
 public class TemporaryContentHandler extends UpdateAttributeHandler
 {

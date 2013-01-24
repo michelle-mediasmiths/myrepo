@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.ingest;
 
 import java.util.Date;
 
@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class IngestCompleteHandler extends TaskStateChangeHandler
 {

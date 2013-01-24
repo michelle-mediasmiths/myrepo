@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.ingest;
 
 import org.apache.log4j.Logger;
 
@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.JobHandler;
 
 public class IngestJobHandler extends JobHandler
 {

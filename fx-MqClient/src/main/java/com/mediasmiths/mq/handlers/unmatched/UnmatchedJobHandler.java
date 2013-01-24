@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.unmatched;
 
 import org.apache.log4j.Logger;
 
@@ -12,6 +12,8 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.JobHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
 
 public class UnmatchedJobHandler extends JobHandler
 {

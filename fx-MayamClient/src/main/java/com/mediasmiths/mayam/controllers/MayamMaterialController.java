@@ -1231,19 +1231,45 @@ public class MayamMaterialController extends MayamController
 		return run || running;
 	}
 
-	public void uningest(AttributeMap qcTaskAttributes) throws MayamClientException
+	public void uningest(AttributeMap materialAttributes) throws MayamClientException
 	{
-		AssetType assetType = qcTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
-		String assetID = qcTaskAttributes.getAttribute(Attribute.ASSET_ID);
-		log.info(String.format("Requesting uningest for asset %s (%s)", qcTaskAttributes.getAttributeAsString(Attribute.HOUSE_ID), assetID));
+		AssetType assetType = materialAttributes.getAttribute(Attribute.ASSET_TYPE);
+		String assetID = materialAttributes.getAttribute(Attribute.ASSET_ID);
+		String houseID = materialAttributes.getAttributeAsString(Attribute.HOUSE_ID);
+		log.info(String.format("Requesting uningest for asset %s (%s)", houseID, assetID));
 		try
 		{
 			client.assetApi().deleteAssetMedia(assetType, assetID);
 		}
 		catch (RemoteException e)
 		{
-			log.error("Uningest request failed",e);
-			throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED,e);
+			log.error("Uningest request failed", e);
+			throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED, e);
 		}
+
+		try
+		{
+			log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, assetID));
+			List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(assetType, assetID);
+			log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
+			for (SegmentList segmentList : packages)
+			{
+				log.debug(String.format("Deleting segment %s", segmentList.getId()));
+				try
+				{
+					client.segmentApi().deleteSegmentList(segmentList.getId());
+				}
+				catch (RemoteException e)
+				{
+					log.error(String.format("error deleting segment %s", segmentList.getId()), e);
+				}
+			}
+
+		}
+		catch (RemoteException e)
+		{
+			log.error(String.format("error fetching packages for asset %s (%s)", houseID, assetID), e);
+		}
+
 	}
 }

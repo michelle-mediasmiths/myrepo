@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.segmentation;
 
 import org.apache.log4j.Logger;
 
@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class SegmentationCompleteHandler extends TaskStateChangeHandler
 {

@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.qc;
 
 import java.util.Date;
 
@@ -12,6 +12,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class QcTaskUpdateHandler extends TaskUpdateHandler

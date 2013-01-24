@@ -17,29 +17,29 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.handlers.AssetDeletionHandler;
-import com.mediasmiths.mq.handlers.AssetPurgeHandler;
-import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
-import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
-import com.mediasmiths.mq.handlers.FixAndStitchFinishHandler;
-import com.mediasmiths.mq.handlers.FixAndStitchRevertHandler;
-import com.mediasmiths.mq.handlers.ImportFailureHandler;
-import com.mediasmiths.mq.handlers.IngestCompleteHandler;
-import com.mediasmiths.mq.handlers.IngestJobHandler;
-import com.mediasmiths.mq.handlers.InitiateQcHandler;
-import com.mediasmiths.mq.handlers.InitiateTxHandler;
-import com.mediasmiths.mq.handlers.PackageUpdateHandler;
-import com.mediasmiths.mq.handlers.PreviewTaskFailHandler;
-import com.mediasmiths.mq.handlers.PreviewTaskFinishHandler;
-import com.mediasmiths.mq.handlers.PurgeCandidateExtendHandler;
-import com.mediasmiths.mq.handlers.QcTaskUpdateHandler;
-import com.mediasmiths.mq.handlers.QcCompleteHandler;
-import com.mediasmiths.mq.handlers.SegmentationCompleteHandler;
-import com.mediasmiths.mq.handlers.TemporaryContentHandler;
-import com.mediasmiths.mq.handlers.TitleUpdateHandler;
-import com.mediasmiths.mq.handlers.UnmatchedAssetCreateHandler;
-import com.mediasmiths.mq.handlers.UnmatchedJobHandler;
-import com.mediasmiths.mq.handlers.UnmatchedTaskUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.AssetDeletionHandler;
+import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
+import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
+import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
+import com.mediasmiths.mq.handlers.button.UningestButton;
+import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
+import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
+import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
+import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
+import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
+import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
+import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
+import com.mediasmiths.mq.handlers.qc.QcCompleteHandler;
+import com.mediasmiths.mq.handlers.qc.QcTaskUpdateHandler;
+import com.mediasmiths.mq.handlers.segmentation.SegmentationCompleteHandler;
+import com.mediasmiths.mq.handlers.tx.InitiateTxHandler;
+import com.mediasmiths.mq.handlers.unmatched.UnmatchedAssetCreateHandler;
+import com.mediasmiths.mq.handlers.unmatched.UnmatchedJobHandler;
+import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskUpdateHandler;
 
 @Singleton
 public class IncomingListener extends MqClientListener
@@ -82,8 +82,6 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	FixAndStitchRevertHandler fixAndStitchRevertHandler;
 	@Inject
-	ImportFailureHandler importFailHandler;
-	@Inject
 	IngestCompleteHandler ingestCompleteHandler;
 	@Inject
 	InitiateQcHandler initiateQcHandler;
@@ -107,6 +105,8 @@ public class IncomingListener extends MqClientListener
 	InitiateTxHandler initiateTxHandler;
 	@Inject	
 	PurgeCandidateExtendHandler purgeCandidateExtendHandler;
+	@Inject
+	UningestButton uningestButton;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -173,6 +173,7 @@ public class IncomingListener extends MqClientListener
  
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
+		passEventToHandler(uningestButton, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)

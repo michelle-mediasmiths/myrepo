@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.preview;
 
 import org.apache.log4j.Logger;
 
@@ -14,6 +14,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 {

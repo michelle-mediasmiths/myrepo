@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.unmatched;
 
 import java.util.Date;
 import java.util.List;
@@ -13,6 +13,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 
 public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 {

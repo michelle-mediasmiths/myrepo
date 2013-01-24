@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.qc;
 
 import org.apache.log4j.Logger;
 
@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class InitiateQcHandler extends TaskStateChangeHandler
 {

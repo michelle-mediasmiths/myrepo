@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.tx;
 
 import org.apache.log4j.Logger;
 
@@ -11,6 +11,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
 public class InitiateTxHandler extends TaskStateChangeHandler

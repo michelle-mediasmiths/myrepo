@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.unmatched;
 
 import org.apache.log4j.Logger;
 
@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
+import com.mediasmiths.mq.handlers.AttributeHandler;
 
 public class UnmatchedAssetCreateHandler extends AttributeHandler
 {

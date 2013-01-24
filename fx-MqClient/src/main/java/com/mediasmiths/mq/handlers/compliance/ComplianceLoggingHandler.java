@@ -1,4 +1,4 @@
-package com.mediasmiths.mq.handlers;
+package com.mediasmiths.mq.handlers.compliance;
 
 import org.apache.log4j.Logger;
 
@@ -10,6 +10,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class ComplianceLoggingHandler extends TaskStateChangeHandler
 {
