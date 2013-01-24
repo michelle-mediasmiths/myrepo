@@ -33,7 +33,7 @@ public abstract class MqClientListener implements Listener
 	{
 		try
 		{
-			log.trace(String.format("passing event to handler: %s", handler.getName()));
+//			log.trace(String.format("passing event to handler: %s", handler.getName()));
 			handler.process(currentAttributes, beforeAttributes, afterAttributes);
 		}
 		catch (Exception e)

@@ -197,10 +197,6 @@ public class IncomingListener extends MqClientListener
 
 		try
 		{
-			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
-			logger.trace(String.format("Attributes message (changed): " + LogUtil.mapToString(afterAttributes)));
-			logger.trace(String.format("Attributes message (current): " + LogUtil.mapToString(currentAttributes)));
-
 			TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
 			TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 
@@ -290,11 +286,7 @@ public class IncomingListener extends MqClientListener
 		
 		try
 		{
-			logger.trace(String.format("Attributes message (before): " + LogUtil.mapToString(beforeAttributes)));
-			logger.trace(String.format("Attributes message (after): " + LogUtil.mapToString(afterAttributes)));
-			
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
-			
 		}
 		catch (Exception e)
 		{
