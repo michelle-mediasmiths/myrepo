@@ -19,26 +19,32 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 	public abstract void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after);
 	
 
-	protected boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after)
+	protected boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after, AttributeMap current)
 	{
 		Object b = before.getAttribute(att);
-		Object a = after.getAttribute(att);
+		Object c = current.getAttribute(att);
 		
-		boolean inAfter = a!=null;
+		log.trace(String.format("attribute changed test : Before: {%s}, Current:{%s}", b,c));
+		
+		boolean inCurrent = c!=null;
 		boolean inBefore = b!=null;
 
-		if (inAfter != inBefore)
+		boolean ret = false;
+		
+		if (inCurrent != inBefore)
 		{
-			return true;
+			ret = true;
 		}
-		else if (inAfter && inBefore)
+		else if (inCurrent && inBefore)
 		{	
-			return before.getAttribute(att).equals(after.getAttribute(att));
+			ret= ! b.equals(c);
 		}
 		else
 		{
-			return false;
+			ret = false;
 		}
 
+		log.trace("attribute changed test returning "+ret);
+		return ret;
 	}
 }

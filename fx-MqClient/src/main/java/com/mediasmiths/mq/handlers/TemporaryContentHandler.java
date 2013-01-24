@@ -27,7 +27,7 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		
 		
 		try {			
-			if (attributeChanged(Attribute.CONT_CATEGORY, before, after))
+			if (attributeChanged(Attribute.CONT_CATEGORY, before, after,currentAttributes))
 			{
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days

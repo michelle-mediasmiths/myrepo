@@ -33,7 +33,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 			
 			
 			try {			
-				if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.ASSET_PEER_ID, before, after)) 
+				if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.ASSET_PEER_ID, before, after,currentAttributes)) 
 				{
 					//Remove from any task lists
 					AttributeMap filterEqualities = tasksClient.createAttributeMap();

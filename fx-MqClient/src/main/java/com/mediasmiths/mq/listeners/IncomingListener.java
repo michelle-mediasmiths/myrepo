@@ -21,7 +21,6 @@ import com.mediasmiths.mq.handlers.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.ComplianceLoggingHandler;
-import com.mediasmiths.mq.handlers.EmergencyIngestHandler;
 import com.mediasmiths.mq.handlers.FixAndStitchHandler;
 import com.mediasmiths.mq.handlers.ImportFailureHandler;
 import com.mediasmiths.mq.handlers.IngestCompleteHandler;
@@ -65,8 +64,6 @@ public class IncomingListener extends MqClientListener
 	AssetDeletionHandler assetDeletionHandler;
 	@Inject
 	AssetPurgeHandler assetPurgeHandler;
-	@Inject
-	EmergencyIngestHandler emergencyIngestHandler;
 	@Inject
 	PackageUpdateHandler packageUpdateHandler;
 	@Inject

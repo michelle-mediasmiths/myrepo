@@ -25,7 +25,7 @@ public class TitleUpdateHandler extends UpdateAttributeHandler
 
 			for (Attribute a : MayamMaterialController.materialsAttributesInheritedFromTitle)
 			{
-				if (attributeChanged(a, before, after))
+				if (attributeChanged(a, before, after,currentAttributes))
 				{
 					anyChanged = true;
 					break;

@@ -31,7 +31,7 @@ public class PurgeCandidateExtendHandler extends TaskUpdateHandler
 		TaskState taskState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 		
 		try {			
-			if (attributeChanged(Attribute.TASK_STATE, before, after) && taskState != null && taskState.equals(TaskState.EXTENDED))
+			if (attributeChanged(Attribute.TASK_STATE, before, after,currentAttributes) && taskState != null && taskState.equals(TaskState.EXTENDED))
 			{
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days

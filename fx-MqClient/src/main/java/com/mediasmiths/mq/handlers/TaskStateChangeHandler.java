@@ -25,8 +25,9 @@ public abstract class TaskStateChangeHandler extends AttributeHandler
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
 			if (taskState == getTaskState())
 			{
-				logger.debug(String.format("{%s} Task of the type and state I am interested in", getName()));
+				logger.debug(String.format("{%s} Begin", getName()));
 				stateChanged(messageAttributes);
+				logger.debug(String.format("{%s} End", getName()));
 			}
 		}
 
