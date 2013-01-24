@@ -62,7 +62,7 @@
 		<dependency>
 			<groupId>com.mediasmiths.std.util.carbon</groupId>
 			<artifactId>carbon-client</artifactId>
-			<version>3.2.8-SNAPSHOT</version>
+			<version>${stdlib.version}</version>
 		</dependency>
 
 
