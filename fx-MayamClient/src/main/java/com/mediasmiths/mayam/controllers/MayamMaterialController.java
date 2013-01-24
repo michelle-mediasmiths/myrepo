@@ -48,6 +48,7 @@ import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.SegmentUtil;
@@ -286,7 +287,7 @@ public class MayamMaterialController extends MayamController
 	public static Attribute[] materialsAttributesInheritedFromTitle = new Attribute[] { Attribute.ASSET_TITLE,
 			Attribute.CONT_RESTRICTED_MATERIAL, Attribute.SERIES_TITLE, Attribute.SERIES_TITLE, Attribute.SHOW,
 			Attribute.SEASON_NUMBER, Attribute.EPISODE_NUMBER, Attribute.EPISODE_TITLE, Attribute.LOCATION,
-			Attribute.PRODUCTION_NUMBER, Attribute.SERIES_YEAR, Attribute.CONT_CATEGORY, Attribute.CHANNELS };
+			Attribute.PRODUCTION_NUMBER, Attribute.SERIES_YEAR, Attribute.CONT_CATEGORY, Attribute.CHANNELS, Attribute.PURGE_PROTECTED };
 
 	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title)
 	{
@@ -1035,22 +1036,12 @@ public class MayamMaterialController extends MayamController
 		{
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(
-						MayamAssetType.MATERIAL.getAssetType(),
-						materialID);
-
-				AttributeMap taskAttributes = client.createAttributeMap();
-				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.GENERIC_TASK_ERROR);
-				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-
-				taskAttributes.setAttribute(Attribute.HOUSE_ID, materialID);
-				taskAttributes.putAll(assetAttributes);
-				client.taskApi().createTask(taskAttributes);
+				taskController.createPurgeCandidateTask(MayamAssetType.MATERIAL,materialID, 30);
 			}
-			catch (RemoteException e)
+			catch (MayamClientException e)
 			{
-				log.error("Error creating Purge By BMS task for protected material : " + materialID);
-				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+				log.error("error creating purage candidate task",e);
+				returnCode = e.getErrorcode();
 			}
 		}
 		else
@@ -1061,6 +1052,8 @@ public class MayamMaterialController extends MayamController
 						MayamAssetType.MATERIAL.getAssetType(),
 						materialID);
 
+				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID);
+				
 				client.assetApi().deleteAsset(
 						MayamAssetType.MATERIAL.getAssetType(),
 						assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
@@ -1236,17 +1229,37 @@ public class MayamMaterialController extends MayamController
 		AssetType assetType = materialAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = materialAttributes.getAttribute(Attribute.ASSET_ID);
 		String houseID = materialAttributes.getAttributeAsString(Attribute.HOUSE_ID);
-		log.info(String.format("Requesting uningest for asset %s (%s)", houseID, assetID));
-		try
+		
+		String previewStatus = (String) materialAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
+		
+		if (MayamPreviewResults.isPreviewPass(previewStatus))
 		{
-			client.assetApi().deleteAssetMedia(assetType, assetID);
+			log.info("Ignoring uningest request for material, material has passed preview");
 		}
-		catch (RemoteException e)
+		else
 		{
-			log.error("Uningest request failed", e);
-			throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED, e);
-		}
+			log.info(String.format("Requesting uningest for asset %s (%s)", houseID, assetID));
+			try
+			{
+				client.assetApi().deleteAssetMedia(assetType, assetID);
+			}
+			catch (RemoteException e)
+			{
+				log.error("Uningest request failed", e);
+				throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED, e);
+			}
 
+			deleteAssetsPackages(assetType, assetID, houseID);
+			
+			// create ingest task
+			log.debug("creating new ingest task");
+			taskController.createIngestTaskForMaterial(houseID,
+					(Date) materialAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
+		}
+	}
+
+	private void deleteAssetsPackages(AssetType assetType, String assetID, String houseID)
+	{
 		try
 		{
 			log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, assetID));
@@ -1270,6 +1283,11 @@ public class MayamMaterialController extends MayamController
 		{
 			log.error(String.format("error fetching packages for asset %s (%s)", houseID, assetID), e);
 		}
+	}
 
+	public void exportMarkers(AttributeMap messageAttributes)
+	{
+		//TODO export markers
+		log.error("markers not exported!");
 	}
 }

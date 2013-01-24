@@ -153,7 +153,14 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode purgeTitle(PurgeTitle title)
 	{
-		return titleController.purgeTitle(title);
+		if (title == null)
+		{
+			return MayamClientErrorCode.TITLE_UNAVAILABLE;
+		}
+		else
+		{
+			return titleController.purgeTitle(title.getTitleID());
+		}
 	}
 
 	/*

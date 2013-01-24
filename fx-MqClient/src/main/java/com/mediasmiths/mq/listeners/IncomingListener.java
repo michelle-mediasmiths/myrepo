@@ -22,6 +22,8 @@ import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
+import com.mediasmiths.mq.handlers.button.DeleteButton;
+import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
@@ -107,6 +109,10 @@ public class IncomingListener extends MqClientListener
 	PurgeCandidateExtendHandler purgeCandidateExtendHandler;
 	@Inject
 	UningestButton uningestButton;
+	@Inject
+	DeleteButton deleteButton;
+	@Inject
+	ExportMarkersButton exportMarkersButton;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -174,6 +180,8 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
 		passEventToHandler(uningestButton, messageAttributes);
+		passEventToHandler(deleteButton,messageAttributes);
+		passEventToHandler(exportMarkersButton, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)

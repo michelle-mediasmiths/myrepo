@@ -118,9 +118,9 @@ public class MayamTaskController extends MayamController
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW);
 	}
 	
-	public long createPurgeCandidateTaskForMaterial(String assetID, int numberOfDays) throws MayamClientException{
-	
-		log.info(String.format("Creating purge candidate task for asset "+assetID));
+	public long createPurgeCandidateTask(MayamAssetType assetType, String siteID, int numberOfDays) throws MayamClientException{
+		
+		log.info(String.format("Creating purge candidate task for asset "+siteID));
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		
@@ -129,8 +129,9 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.OP_DATE, date.getTime());
 		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 		
-		return createTask(assetID,MayamAssetType.MATERIAL,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
+		return createTask(siteID,assetType,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
 	}
+
 	
 	public long createUnmatchedTaskForMaterial(String assetID) throws MayamClientException{
 		//Add to Unmatched worklist

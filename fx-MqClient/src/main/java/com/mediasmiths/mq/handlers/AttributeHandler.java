@@ -7,6 +7,7 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public abstract class AttributeHandler implements Handler
@@ -23,6 +24,10 @@ public abstract class AttributeHandler implements Handler
 	
 	@Inject
 	protected MayamPackageController packageController;
+	
+	@Inject
+	protected MayamTitleController titlecontroller;
+	
 	
 	public abstract void process(AttributeMap messageAttributes) ;
 

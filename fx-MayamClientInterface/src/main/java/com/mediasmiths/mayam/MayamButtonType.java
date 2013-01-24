@@ -5,7 +5,9 @@ package com.mediasmiths.mayam;
  *
  */
 public enum MayamButtonType {
-	  UNINGEST("w_uningest");
+	  UNINGEST("w_uningest"),
+	  DELETE("w_delete"), 
+	  EXPORT_MARKERS("w_export_markers");
 	
 	  private String text;
 

@@ -345,7 +345,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 		} catch (RemoteException e) {
 			fail();
 		}
-		MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
+		MayamClientErrorCode returnCode = controller.purgeTitle("titleid");
 		assertEquals(returnCode, MayamClientErrorCode.TITLE_DELETE_FAILED);
 	}
 	
@@ -359,7 +359,7 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	@Test
 	public void deletePackageSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.purgeTitle(mock(PurgeTitle.class));
+		MayamClientErrorCode returnCode = controller.purgeTitle("titleid");
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

@@ -53,6 +53,9 @@ public class MayamTitleController extends MayamController{
 		client = mayamClient;
 	}
 	
+	@Inject
+	MayamTaskController taskController;
+	
 	public MayamClientErrorCode createTitle(Material.Title title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
@@ -521,41 +524,31 @@ public class MayamTitleController extends MayamController{
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode purgeTitle(PurgeTitle title)
+	public MayamClientErrorCode purgeTitle(String titleID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		if (title == null) {
-			returnCode = MayamClientErrorCode.TITLE_UNAVAILABLE;
-		}
-		else if (isProtected(title.getTitleID())) 
+		
+		if (isProtected(titleID)) 
 		{
 			try
 			{
-				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
-				
-				AttributeMap taskAttributes = client.createAttributeMap();
-				taskAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.GENERIC_TASK_ERROR);
-				taskAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-	
-				taskAttributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
-				taskAttributes.putAll(assetAttributes);
-				client.taskApi().createTask(taskAttributes);
+				taskController.createPurgeCandidateTask(MayamAssetType.TITLE,titleID, 30);
 			}
-			catch (RemoteException e)
+			catch (MayamClientException e)
 			{
-				log.error("Error creating Purge By BMS task for protected material : " + title.getTitleID());
-				returnCode = MayamClientErrorCode.MATERIAL_DELETE_FAILED;
+				log.error("error creating purage candidate task",e);
+				returnCode = e.getErrorcode();
 			}
 		}
 		else {
 			try {
 				//fetch asset by house id to get its assetid
-				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), title.getTitleID());
+				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID);
 				
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
 			} catch (RemoteException e) {
-				log.error("Error deleting title : "+ title.getTitleID(),e);
+				log.error("Error deleting title : "+ titleID,e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
 			}
 

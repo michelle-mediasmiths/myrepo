@@ -88,11 +88,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					// uningest the media
 					log.debug("User requested uningest, uningesting media");
 					materialController.uningest(currentAttributes);
-					// create ingest task
-					log.debug("User requested uningest, creating new ingest task");
-					taskController.createIngestTaskForMaterial(
-							currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
-							(Date) currentAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
+					
 				}
 			}
 		}
