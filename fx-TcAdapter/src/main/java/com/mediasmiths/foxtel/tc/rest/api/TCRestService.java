@@ -29,12 +29,12 @@ public interface TCRestService
 	@Consumes("application/xml")
 	public String createJob(TCJobParameters parameters) throws Exception;
 
-	@POST
+	@GET
 	@Path("/job/{guid}")
 	@Produces("application/xml")
 	public TCJobInfo queryJob(@PathParam("guid") String guid) throws Exception;
 
 	@PUT
 	@Path("/job/{guid}/priority")
-	public void setJobPriority(@PathParam("guid") String jobid, @QueryParam("priority") Integer newPriority) throws Exception;
+	public void setJobPriority(@PathParam("guid") String guid, @QueryParam("priority") Integer newPriority) throws Exception;
 }
