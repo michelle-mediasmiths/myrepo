@@ -1,7 +1,16 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns2="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcBuildJobXML="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest" xmlns:tcGetResult="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" xmlns:tcGetStatus="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" xmlns:tcStartJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" xmlns:getTranscodeOutputLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getTranscodeOutputLocation.rest" xmlns:materialTransferForTC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:diag="http://thisdiagram" xmlns:caller="http://thisdiagram/caller" xmlns:fs_adapter="http://thisdiagram/fs_adapter" xmlns:transcode="http://thisdiagram/transcode" xmlns:tx_delivery="http://thisdiagram/tx_delivery" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_Of4wwGZGEeKnSJI6HFegew" bpdm:displayName="diag">
+<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns2="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcBuildJobXML="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest" xmlns:tcGetResult="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" xmlns:tcGetStatus="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" xmlns:tcStartJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" xmlns:autoQCRequired="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest" xmlns:getTranscodeOutputLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getTranscodeOutputLocation.rest" xmlns:materialTransferForTC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:diag="http://thisdiagram" xmlns:caller="http://thisdiagram/caller" xmlns:qc="http://thisdiagram/qc" xmlns:transcode="http://thisdiagram/transcode" xmlns:tx_delivery="http://thisdiagram/tx_delivery" xmlns:tx_post_trascode="http://thisdiagram/tx_post_trascode" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_Of4wwGZGEeKnSJI6HFegew" bpdm:displayName="diag">
+  <pnlk:partnerLinkType name="qcAndTx_post_trascode" bpdm:poolOneId="_aEChsGZMEeKnSJI6HFegew" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="qc" bpdm:poolTwoId="_UYoTgGZLEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="tx post trascode">
+    <pnlk:role name="qc_for_tx_post_trascode" portType="qc:Fortx_post_trascode" bpdm:thisPoolId="_aEChsGZMEeKnSJI6HFegew">
+      <wsdl:portType name="Fortx_post_trascode">
+        <wsdl:operation name="EventStartMessage" bpdm:canid="_Na1lgGZMEeKnSJI6HFegew._gzNvcGZMEeKnSJI6HFegew.">
+          <wsdl:input message="qc:EventStartMessageRequest" name="EventStartMessage" bpdm:canid="_h8UskGZMEeKnSJI6HFegew" bpdm:senderId="_Na1lgGZMEeKnSJI6HFegew" bpdm:receiverId="_gzNvcGZMEeKnSJI6HFegew" bpdm:senderName="QC Required" bpdm:receiverName="EventStartMessage" bpdm:receiverPoolId="_aEChsGZMEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow" bpdm:bodyPartElemName="EventStartMessageRequest" bpdm:bodyPartElemType="{http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"></wsdl:input>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="transcodeAndFs_adapter" bpdm:poolOneId="_Nl-wcGZKEeKnSJI6HFegew" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="fs adapter" bpdm:poolTwoId="_w8nDoGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="transcode">
-    <pnlk:role name="fs_adapter_for_transcode" portType="fs_adapter:Fortranscode" bpdm:thisPoolId="_Nl-wcGZKEeKnSJI6HFegew">
+    <pnlk:role name="fs_adapter_for_transcode" portType="{http://thisdiagram/fs_adapter}Fortranscode" bpdm:thisPoolId="_Nl-wcGZKEeKnSJI6HFegew">
       <wsdl:portType name="Fortranscode">
         <wsdl:operation name="delete" bpdm:canid="_LNG0kGZKEeKnSJI6HFegew._QXHbUWZKEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///fsAdapter/delete.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest}restService/httpPort/delete">
           <wsdl:input message="delete:deleteRequest" name="delete" bpdm:canid="_R3YUMGZKEeKnSJI6HFegew" bpdm:senderId="_LNG0kGZKEeKnSJI6HFegew" bpdm:receiverId="_QXHbUWZKEeKnSJI6HFegew" bpdm:senderName="Delete Partial Files" bpdm:receiverName="delete" bpdm:receiverPoolId="_Nl-wcGZKEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///fsAdapter/delete.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest}restService/httpPort/delete/input/deleteRequest"></wsdl:input>
@@ -56,6 +65,15 @@
       </wsdl:portType>
     </pnlk:role>
   </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="transcodeAndTx_post_trascode" bpdm:poolOneId="_UYoTgGZLEeKnSJI6HFegew" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="tx post trascode" bpdm:poolTwoId="_w8nDoGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="transcode">
+    <pnlk:role name="tx_post_trascode_for_transcode" portType="tx_post_trascode:Fortranscode" bpdm:thisPoolId="_UYoTgGZLEeKnSJI6HFegew">
+      <wsdl:portType name="Fortranscode">
+        <wsdl:operation name="EventStartMessage" bpdm:canid="_5uhoYGZKEeKnSJI6HFegew._wPfFoGZLEeKnSJI6HFegew.">
+          <wsdl:input message="tx_post_trascode:EventStartMessageRequest" name="EventStartMessage" bpdm:canid="_yA5_8GZLEeKnSJI6HFegew" bpdm:senderId="_5uhoYGZKEeKnSJI6HFegew" bpdm:receiverId="_wPfFoGZLEeKnSJI6HFegew" bpdm:senderName="Finished Successfuly" bpdm:receiverName="EventStartMessage" bpdm:receiverPoolId="_UYoTgGZLEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioTXFlow" bpdm:bodyPartElemName="EventStartMessageRequest" bpdm:bodyPartElemType="{http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioTXFlow"></wsdl:input>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="transcodeAndWfadapter" bpdm:poolOneId="_kvto8GZGEeKnSJI6HFegew" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="wfadapter" bpdm:poolTwoId="_w8nDoGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="transcode">
     <pnlk:role name="wfadapter_for_transcode" portType="{http://thisdiagram/wfadapter}Fortranscode" bpdm:thisPoolId="_kvto8GZGEeKnSJI6HFegew">
       <wsdl:portType name="Fortranscode">
@@ -71,6 +89,10 @@
           <wsdl:input message="tcPassed:tcPassedRequest" name="tcPassed" bpdm:canid="_pmHP0GZJEeKnSJI6HFegew" bpdm:senderId="_WkZSYGZJEeKnSJI6HFegew" bpdm:receiverId="_oqi_cGZJEeKnSJI6HFegew" bpdm:senderName="Send Success Message" bpdm:receiverName="tcPassed" bpdm:receiverPoolId="_kvto8GZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/input/tcPassedRequest"></wsdl:input>
           <wsdl:output message="tcPassed:tcPassedResponse" name="tcPassedResponse" bpdm:canid="_p5sTIGZJEeKnSJI6HFegew" bpdm:senderId="_oqi_cGZJEeKnSJI6HFegew" bpdm:receiverId="_WkZSYGZJEeKnSJI6HFegew" bpdm:senderName="tcPassed" bpdm:receiverName="Send Success Message" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/output/tcPassedResponse"></wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="tcTotalFailure" bpdm:canid="_5A5tYGZKEeKnSJI6HFegew._biSd0GZLEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///wfAdapter/tcTotalFailure.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure">
+          <wsdl:input message="tcTotalFailure:tcTotalFailureRequest" name="tcTotalFailure" bpdm:canid="_c7AkQGZLEeKnSJI6HFegew" bpdm:senderId="_5A5tYGZKEeKnSJI6HFegew" bpdm:receiverId="_biSd0GZLEeKnSJI6HFegew" bpdm:senderName="Fatal Error" bpdm:receiverName="tcTotalFailure" bpdm:receiverPoolId="_kvto8GZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/input/tcTotalFailureRequest"></wsdl:input>
+          <wsdl:output message="tcTotalFailure:tcTotalFailureResponse" name="tcTotalFailureResponse" bpdm:canid="_dsjV8GZLEeKnSJI6HFegew" bpdm:senderId="_biSd0GZLEeKnSJI6HFegew" bpdm:receiverId="_5A5tYGZKEeKnSJI6HFegew" bpdm:senderName="tcTotalFailure" bpdm:receiverName="Fatal Error" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/output/tcTotalFailureResponse"></wsdl:output>
+        </wsdl:operation>
       </wsdl:portType>
     </pnlk:role>
   </pnlk:partnerLinkType>
@@ -83,6 +105,9 @@
   <pnlk:partnerLinkType name="transcodeAndWfadapterForHttpPortPlk2" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_kvto8GZGEeKnSJI6HFegew">
     <pnlk:role name="wfadapter_for_transcode" portType="tcPassed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="transcodeAndWfadapterForHttpPortPlk3" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_kvto8GZGEeKnSJI6HFegew">
+    <pnlk:role name="wfadapter_for_transcode" portType="tcTotalFailure:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="tx_deliveryAndCaller" bpdm:poolOneId="_Sy2awGZGEeKnSJI6HFegew" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="tx delivery" bpdm:poolTwoId="_Of4wxmZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="false" bpdm:poolTwoName="caller">
     <pnlk:role name="tx_delivery_for_caller" portType="tx_delivery:Forcaller" bpdm:thisPoolId="_Sy2awGZGEeKnSJI6HFegew">
       <wsdl:portType name="Forcaller">
@@ -91,6 +116,19 @@
         </wsdl:operation>
       </wsdl:portType>
     </pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="tx_post_trascodeAndWf_adapter" bpdm:poolOneId="_7qCdYGZLEeKnSJI6HFegew" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="wf adapter" bpdm:poolTwoId="_UYoTgGZLEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="tx post trascode">
+    <pnlk:role name="wf_adapter_for_tx_post_trascode" portType="{http://thisdiagram/wf_adapter}Fortx_post_trascode" bpdm:thisPoolId="_7qCdYGZLEeKnSJI6HFegew">
+      <wsdl:portType name="Fortx_post_trascode">
+        <wsdl:operation name="autoQcRequired" bpdm:canid="_-_mrAGZLEeKnSJI6HFegew._34KuQGZLEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///wfAdapter/autoQCRequired.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest}restService/httpPort/autoQcRequired">
+          <wsdl:input message="autoQCRequired:autoQcRequiredRequest" name="autoQcRequired" bpdm:canid="__qdl4GZLEeKnSJI6HFegew" bpdm:senderId="_34KuQGZLEeKnSJI6HFegew" bpdm:receiverId="_-_mrAGZLEeKnSJI6HFegew" bpdm:senderName="Check if QC Required" bpdm:receiverName="autoQcRequired" bpdm:receiverPoolId="_7qCdYGZLEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/autoQCRequired.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest}restService/httpPort/autoQcRequired/input/autoQcRequiredRequest"></wsdl:input>
+          <wsdl:output message="autoQCRequired:autoQcRequiredResponse" name="autoQcRequiredResponse" bpdm:canid="__6Y4QGZLEeKnSJI6HFegew" bpdm:senderId="_-_mrAGZLEeKnSJI6HFegew" bpdm:receiverId="_34KuQGZLEeKnSJI6HFegew" bpdm:senderName="autoQcRequired" bpdm:receiverName="Check if QC Required" bpdm:receiverPoolId="_UYoTgGZLEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///wfAdapter/autoQCRequired.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest}restService/httpPort/autoQcRequired/output/autoQcRequiredResponse"></wsdl:output>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="tx_post_trascodeAndWf_adapterForHttpPortPlk" bpdm:canPlkId="_UYoTgGZLEeKnSJI6HFegew-_7qCdYGZLEeKnSJI6HFegew">
+    <pnlk:role name="wf_adapter_for_tx_post_trascode" portType="autoQCRequired:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="wfadapterAndTx_delivery" bpdm:poolOneId="_kvto8GZGEeKnSJI6HFegew" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="wfadapter" bpdm:poolTwoId="_Sy2awGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="tx delivery">
     <pnlk:role name="wfadapter_for_tx_delivery" portType="{http://thisdiagram/wfadapter}Fortx_delivery" bpdm:thisPoolId="_kvto8GZGEeKnSJI6HFegew">

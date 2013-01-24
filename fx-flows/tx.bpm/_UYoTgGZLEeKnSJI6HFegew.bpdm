@@ -1,0 +1,118 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qc="http://thisdiagram/qc" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/tx_post_trascode" xmlns:diag="http://thisdiagram" xmlns:autoQCRequired="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/tx_post_trascode">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qc" bpdm:prefix="qc" bpdm:comment="contrib=&apos;partner-pool:///_aEChsGZMEeKnSJI6HFegew"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/tx_post_trascode" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_w8nDoGZGEeKnSJI6HFegew"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequired.rest" bpdm:prefix="autoQCRequired" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequired.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:portType name="Fortranscode">
+                <wsdl:operation name="EventStartMessage" bpdm:source="partner-pool:///_w8nDoGZGEeKnSJI6HFegew">
+                    <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+                </wsdl:operation>
+            </wsdl:portType>
+            <xs:element name="EventStartMessageRequest" type="tns:invokeIntalioTXFlow" bpdm:source="partner-pool:///_w8nDoGZGEeKnSJI6HFegew"/>
+            <wsdl:message name="EventStartMessageRequest" bpdm:source="partner-pool:///_w8nDoGZGEeKnSJI6HFegew">
+                <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+            </wsdl:message>
+            <bpel:binding name="CanonicBindingFortranscode" type="this:Fortranscode" bpdm:isSynchronized="true"/>
+        </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_w8nDoGZGEeKnSJI6HFegew" bpdm:label="transcode"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_7qCdYGZLEeKnSJI6HFegew" bpdm:label="wf adapter"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQCRequired.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_aEChsGZMEeKnSJI6HFegew" bpdm:label="qc"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="tx post trascode" bpdm:ID="_UYoTgGZLEeKnSJI6HFegew">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="transcodeAndTx_post_trascodePlkVar" partnerLinkType="diag:transcodeAndTx_post_trascode" myRole="tx_post_trascode_for_transcode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceFortranscode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/tx_post_trascode/transcode" bpdm:providedIsDefault="true" bpdm:clientTasks="_UYoTgGZLEeKnSJI6HFegew:_wPfFoGZLEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_w8nDoGZGEeKnSJI6HFegew"/>
+            <bpel:partnerLink name="tx_post_trascodeAndWf_adapterForHttpPortPlkVar" partnerLinkType="diag:tx_post_trascodeAndWf_adapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="wf_adapter_for_tx_post_trascode" bpdm:invokedService="autoQCRequired:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?packageID={packageID}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_UYoTgGZLEeKnSJI6HFegew:_34KuQGZLEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_7qCdYGZLEeKnSJI6HFegew"/>
+            <bpel:partnerLink name="qcAndTx_post_trascodePlkVar" partnerLinkType="diag:qcAndTx_post_trascode" initializePartnerRole="yes" partnerRole="qc_for_tx_post_trascode" bpdm:invokedService="qc:CanonicServiceFortx_post_trascode" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc/tx_post_trascode" bpdm:invokedIsDefault="true" bpdm:clientTasks="_UYoTgGZLEeKnSJI6HFegew:_Na1lgGZMEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_aEChsGZMEeKnSJI6HFegew"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_yBUPpWZLEeKnSJI6HFegew" bpdm:messageIds="inc:_yA5_8GZLEeKnSJI6HFegew"/>
+            <bpel:variable name="autoQCRequiredAutoQcRequiredRequestMsg" messageType="autoQCRequired:autoQcRequired_input" binding="autoQCRequired:restBinding" operation="autoQcRequired" opMsgType="0" bpdm:id="__qk6oGZLEeKnSJI6HFegew" bpdm:messageIds=" out:__qdl4GZLEeKnSJI6HFegew">
+                <bpel:from bpdm:toPart="packageID">
+                    <bpel:literal bpdm:linkedMessageType="autoQCRequired:autoQcRequired_input" bpdm:linkedPart="packageID" bpdm:binding="autoQCRequired:restBinding" bpdm:opMsgType="0" bpdm:operation="autoQcRequired"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="autoQCRequiredAutoQcRequiredResponseMsg" messageType="autoQCRequired:autoQcRequired_output" binding="autoQCRequired:restBinding" operation="autoQcRequired" opMsgType="1" bpdm:id="__6lFhWZLEeKnSJI6HFegew" bpdm:messageIds="inc:__6Y4QGZLEeKnSJI6HFegew"/>
+            <bpel:variable name="qcEventStartMessageRequest" messageType="qc:EventStartMessageRequest" bpdm:id="_h8WhwGZMEeKnSJI6HFegew" bpdm:messageIds=" out:_h8UskGZMEeKnSJI6HFegew">
+                <bpel:from bpdm:toPart="body">
+                    <bpel:literal bpdm:linkedMessageType="qc:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndTx_post_trascodePlkVar" portType="this:Fortranscode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_wPfFoGZLEeKnSJI6HFegew">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_yA5_8GZLEeKnSJI6HFegew"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask operation="autoQcRequired" partnerLink="tx_post_trascodeAndWf_adapterForHttpPortPlkVar" portType="autoQCRequired:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if QC Required" bpdm:ID="_34KuQGZLEeKnSJI6HFegew">
+                <bpdm:linkset bpdm:type="assignments">
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                        <bpel:to>$autoQCRequiredAutoQcRequiredRequestMsg.packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="4777419" targetPath="$autoQCRequiredAutoQcRequiredRequestMsg.packageID/text()" targetedBy="25093553-arg0"></mapper:vertice>
+  <mapper:vertice id="25093553" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQCRequiredAutoQcRequiredRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequired:autoQcRequired_input" bpdm:binding="autoQCRequired:restBinding" bpdm:ID="__qdl4GZLEeKnSJI6HFegew"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="autoQCRequiredAutoQcRequiredResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequired:autoQcRequired_output" bpdm:binding="autoQCRequired:restBinding" bpdm:ID="__6Y4QGZLEeKnSJI6HFegew"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_LFk-UGZMEeKnSJI6HFegew" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_PDWbcGZMEeKnSJI6HFegew" bpdm:targetDisplayName="default"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_Q_vPoGZMEeKnSJI6HFegew" bpdm:targetDisplayName="[GatewayDataBasedExclusive - QC Not Required]">
+                    <bpel:condition>not($autoQCRequiredAutoQcRequiredResponseMsg.autoQCRequired/text())
+<mapper:mapperLink>
+  <mapper:vertice id="11205613" targetPath="$condition" targetedBy="2880689-arg1"></mapper:vertice>
+  <mapper:vertice id="2880689" dimension="78x24" location="228,120">
+    <mapper:value>not()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="24453865" sourcePath="$autoQCRequiredAutoQcRequiredResponseMsg.autoQCRequired/text()" targetedBy="2880689-arg0"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
+                </bpdm:linkset>
+                <bpel:sequence>
+                    <bpdm:messagingtask operation="EventStartMessage" partnerLink="qcAndTx_post_trascodePlkVar" portType="qc:Fortx_post_trascode" isMyRole="false" enableSharing="false" bpdm:label="QC Required" bpdm:ID="_Na1lgGZMEeKnSJI6HFegew">
+                        <bpdm:linkset bpdm:type="assignments">
+                            <bpel:copy>
+                                <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                <bpel:to>$qcEventStartMessageRequest.body/tns:assetId/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="9189187" targetPath="$qcEventStartMessageRequest.body/tns:assetId/text()" targetedBy="5471914-arg0"></mapper:vertice>
+  <mapper:vertice id="5471914" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                            </bpel:copy>
+                            <bpel:copy>
+                                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                <bpel:to>$qcEventStartMessageRequest.body/tns:taskID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="6773876" targetPath="$qcEventStartMessageRequest.body/tns:taskID/text()" targetedBy="27755116-arg0"></mapper:vertice>
+  <mapper:vertice id="27755116" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                            </bpel:copy>
+                            <bpel:copy>
+                                <bpel:from>true()</bpel:from>
+                                <bpel:to>$qcEventStartMessageRequest.body/tns:forTXDelivery/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="26938681" targetPath="$qcEventStartMessageRequest.body/tns:forTXDelivery/text()" targetedBy="6647760-arg0"></mapper:vertice>
+  <mapper:vertice id="6647760" dimension="78x24" location="480,84">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                            </bpel:copy>
+                        </bpdm:linkset>
+                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qcEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="qc:EventStartMessageRequest" bpdm:ID="_h8UskGZMEeKnSJI6HFegew"></bpdm:linkset>
+                    </bpdm:messagingtask>
+                </bpel:sequence>
+                <bpel:sequence>
+                    <bpdm:messagingtask bpdm:label="QC Not Required" bpdm:ID="_PnK6MGZMEeKnSJI6HFegew"></bpdm:messagingtask>
+                </bpel:sequence>
+            </bpdm:gateway>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>

@@ -652,6 +652,7 @@
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_kJcdwUqoEeKuD64k8BuiCg"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_kvX1UUqoEeKuD64k8BuiCg"/>
     </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_Q5ZpAWZKEeKnSJI6HFegew" iD="_Q5ZpAGZKEeKnSJI6HFegew"/>
   </pools>
   <pools xmi:type="bpmn:Pool" xmi:id="_9E90sSp-EeKw-vMBW_TpZw" iD="_9E90sCp-EeKw-vMBW_TpZw" name="FS Adapter">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_FVLXYCp_EeKw-vMBW_TpZw" source="executablepool">

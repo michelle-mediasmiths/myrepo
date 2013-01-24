@@ -1,0 +1,38 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:this="http://thisdiagram/qc" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx_post_trascode="http://thisdiagram/tx_post_trascode" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/qc">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qc" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/tx_post_trascode" bpdm:prefix="tx_post_trascode" bpdm:comment="contrib=&apos;partner-pool:///_UYoTgGZLEeKnSJI6HFegew"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_UYoTgGZLEeKnSJI6HFegew"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:portType name="Fortx_post_trascode">
+                <wsdl:operation name="EventStartMessage" bpdm:source="partner-pool:///_UYoTgGZLEeKnSJI6HFegew">
+                    <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+                </wsdl:operation>
+            </wsdl:portType>
+            <xs:element name="EventStartMessageRequest" type="tns:invokeIntalioQCFlow" bpdm:source="partner-pool:///_UYoTgGZLEeKnSJI6HFegew"/>
+            <wsdl:message name="EventStartMessageRequest" bpdm:source="partner-pool:///_UYoTgGZLEeKnSJI6HFegew">
+                <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+            </wsdl:message>
+            <bpel:binding name="CanonicBindingFortx_post_trascode" type="this:Fortx_post_trascode" bpdm:isSynchronized="true"/>
+        </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_UYoTgGZLEeKnSJI6HFegew" bpdm:label="tx post trascode"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="qc" bpdm:ID="_aEChsGZMEeKnSJI6HFegew">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="qcAndTx_post_trascodePlkVar" partnerLinkType="diag:qcAndTx_post_trascode" myRole="qc_for_tx_post_trascode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceFortx_post_trascode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc/tx_post_trascode" bpdm:providedIsDefault="true" bpdm:clientTasks="_aEChsGZMEeKnSJI6HFegew:_gzNvcGZMEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_UYoTgGZLEeKnSJI6HFegew"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_h8coYGZMEeKnSJI6HFegew" bpdm:messageIds="inc:_h8UskGZMEeKnSJI6HFegew"/>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="qcAndTx_post_trascodePlkVar" portType="this:Fortx_post_trascode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_gzNvcGZMEeKnSJI6HFegew">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_h8UskGZMEeKnSJI6HFegew"></bpdm:linkset>
+            </bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>
