@@ -70,21 +70,7 @@ public class WFAdapterModule extends AbstractModule
 		return marshaller;
 	}
 
-	class WfeMarshallerProvider implements Provider<Marshaller>
-	{
-
-		@Inject
-		@Named("wfe.marshaller")
-		private Marshaller wfeMarshaller;
-
-		@Override
-		public Marshaller get()
-		{
-			return wfeMarshaller;
-		}
-
-	}
-
+	
 	@Provides
 	@Named("wfe.marshaller")
 	Marshaller provideWFEMarshaller(@Named("wfe.context") JAXBContext jc) throws JAXBException, SAXException

@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mediasmiths.foxtel</groupId>
@@ -45,14 +46,14 @@
 			<artifactId>dexter-common</artifactId>
 			<version>${stdlib.version}</version>
 		</dependency>
-		
-		<!--  reporting\events service -->
-		<dependency>	
+
+		<!-- reporting\events service -->
+		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-Event</artifactId>
-			<version>${project.version}</version>			
-		</dependency>	
-		
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
 	<build>
@@ -69,6 +70,31 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/com/mediasmiths/foxtel/wf/adapter/model</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/resources/com/mediasmiths/foxtel/wf/adapter/model</directory>
+									<includes>
+										<include>jaxb.index</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>jaxb2-maven-plugin</artifactId>

@@ -8,8 +8,10 @@ AutoQCResultNotification
 GetQCProfileResponse
 InvokeIntalioQCFlow
 InvokeIntalioTCFlow
+InvokeIntalioTXFlow
 MaterialTransferForTCRequest
 MaterialTransferForTCResponse
 TCFailureNotification
 TCPassedNotification
 TCTotalFailure
+TXDeliveryFailure
