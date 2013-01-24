@@ -9,7 +9,6 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.util.AssetProperties;
 
 public class InitiateQcHandler extends TaskStateChangeHandler
 {
@@ -25,7 +24,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 			log.info(String.format(
 					"A qc task was created for an item %s with no media, cancelling",
 					messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
-			cancelTask(messageAttributes);
+			cancelTask(messageAttributes, "No media attatched to item");
 		}
 		else
 		{
@@ -35,7 +34,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 				log.info(String.format(
 						"A qc task was created for an item %s but it has already passed preview, cancelling",
 						messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
-				cancelTask(messageAttributes);
+				cancelTask(messageAttributes, "Item has already passed preview");
 			}
 			else
 			{
@@ -57,7 +56,10 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 					"MayamClient exception while performing file format verification for asset"
 							+ messageAttributes.getAttributeAsString(Attribute.ASSET_ID),
 					e);
+			
+			String errorMessage = "Error performing file format verification";
 			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+			messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
 			try
 			{
 				taskController.saveTask(messageAttributes);
@@ -69,10 +71,11 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 		}
 	}
 
-	private void cancelTask(AttributeMap messageAttributes)
+	private void cancelTask(AttributeMap messageAttributes, String errorMessage)
 	{
 		// a qc task has been created for an item with no media, cancel the task
 		messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
+		messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
 		try
 		{
 			taskController.saveTask(messageAttributes);

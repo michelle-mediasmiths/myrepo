@@ -23,10 +23,45 @@ public class SegmentUtilTest
 			s.setSegmentNumber(1);
 			s.setSegmentTitle("title");		
 			
-			String expected = "1:\t00:00:00:00\t00:00:01:00\t(00:00:01:00)\ttitle\n";
+			String expected = "1_00:00:00:00_00:00:01:00_00:00:01:00_title\n";
 			String actual = SegmentUtil.segmentToString(s);
+			System.out.println(actual);
 			assertEquals(expected, actual);
 			
+		}
+		
+		@Test
+		public void testStringToSegment(){
+			
+			String input = "1_00:00:00:00_00:00:01:00_00:00:01:00_title\n";
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment actual = SegmentUtil.stringToSegment(input);
+			assertEquals("00:00:00:00", actual.getSOM());
+			assertEquals(1, actual.getSegmentNumber());
+			assertEquals("title", actual.getSegmentTitle());
+			assertEquals("00:00:01:00", actual.getEOM());
+			
+		}
+		
+		@Test
+		public void testStringToSegmnetList(){
+							
+			String input = "N____SOM_______DURATION_____EOM_______TITLE\n1_00:00:00:00_00:00:01:00_00:00:01:00_title\n2_00:00:00:00_00:00:01:00_00:00:01:00_title2\n3_00:00:00:00_00:00:01:00_00:00:01:00_title3\n";
+			List<com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment> actual = SegmentUtil.stringToSegmentList(input);
+			
+			assertEquals("00:00:00:00", actual.get(0).getSOM());
+			assertEquals(1, actual.get(0).getSegmentNumber());
+			assertEquals("title", actual.get(0).getSegmentTitle());
+			assertEquals("00:00:01:00", actual.get(0).getEOM());
+			
+			assertEquals("00:00:00:00", actual.get(1).getSOM());
+			assertEquals(2, actual.get(1).getSegmentNumber());
+			assertEquals("title2", actual.get(1).getSegmentTitle());
+			assertEquals("00:00:01:00", actual.get(1).getEOM());
+			
+			assertEquals("00:00:00:00", actual.get(2).getSOM());
+			assertEquals(3, actual.get(2).getSegmentNumber());
+			assertEquals("title3", actual.get(2).getSegmentTitle());
+			assertEquals("00:00:01:00", actual.get(2).getEOM());
 		}
 				
 		@Test

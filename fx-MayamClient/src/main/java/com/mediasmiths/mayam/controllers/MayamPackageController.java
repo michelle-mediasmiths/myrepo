@@ -225,10 +225,10 @@ public class MayamPackageController extends MayamController
 	private Segmentation findExistingSegmentInfoForTxPackage(PackageType txPackage, AttributeMap material)
 	{
 		Presentation p = null;
+		String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
+		
 		try
 		{
-			String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
-
 			final FileReader reader = new FileReader(new File(materialController.segdataFilePathForMaterial(materialId)));
 			final StreamSource source = new StreamSource(reader);
 			
@@ -254,6 +254,32 @@ public class MayamPackageController extends MayamController
 					return pc.getSegmentation();
 				}
 			}
+		}
+		
+		//didnt find anything from presentation information that came with material exchange xml, lets use the natural breaks field
+		String segNotes = material.getAttribute(Attribute.SEGMENTATION_NOTES);
+		
+		if(segNotes != null){
+			try{
+				List<Segment> originalConform = SegmentUtil.stringToSegmentList(segNotes);
+				
+				if(txPackage.getNumberOfSegments() != null && txPackage.getNumberOfSegments().intValue() != originalConform.size()){
+					
+					log.info(String.format("number of required segments for package %s doesnt match the nubmer of segments in the original conform, not prepopulating segmentation info", txPackage.getPresentationID()));
+					return null; // the number of segments did not match the required number, not going to return the original conform segmentation info
+				}
+				
+				Segmentation s = new Segmentation();
+				s.getSegment().addAll(originalConform);
+				return s;
+			}
+			catch(Exception e){
+				log.error("error selecting segmentation info for tx package from natural break fields",e);
+			}
+		
+		}
+		else{
+			log.info("Segmentation notes are null for "+materialId);
 		}
 		
 		return null;
