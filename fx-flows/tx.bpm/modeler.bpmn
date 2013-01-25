@@ -840,9 +840,11 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_gzNvcWZMEeKnSJI6HFegew" iD="_gzNvcGZMEeKnSJI6HFegew" associations="_h8dPc2ZMEeKnSJI6HFegew" activityType="EventStartMessage">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_gzNvcWZMEeKnSJI6HFegew" iD="_gzNvcGZMEeKnSJI6HFegew" associations="_h8dPc2ZMEeKnSJI6HFegew" outgoingEdges="_NGn-IWZOEeKnSJI6HFegew" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_h8UskWZMEeKnSJI6HFegew"/>
     </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_L0g2AWZOEeKnSJI6HFegew" iD="_L0g2AGZOEeKnSJI6HFegew" incomingEdges="_NGn-IWZOEeKnSJI6HFegew" name="initialise variables"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_NGn-IWZOEeKnSJI6HFegew" iD="_NGn-IGZOEeKnSJI6HFegew"/>
   </pools>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_a7JXkWZGEeKnSJI6HFegew" iD="_a7JXkGZGEeKnSJI6HFegew" source="_Of5X0mZGEeKnSJI6HFegew" target="_acBLkWZGEeKnSJI6HFegew">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jwzJoGZGEeKnSJI6HFegew" source="attachedDataobject">

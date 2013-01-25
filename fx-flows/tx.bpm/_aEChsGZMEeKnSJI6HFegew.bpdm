@@ -33,6 +33,7 @@
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="qcAndTx_post_trascodePlkVar" portType="this:Fortx_post_trascode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_gzNvcGZMEeKnSJI6HFegew">
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_h8UskGZMEeKnSJI6HFegew"></bpdm:linkset>
             </bpdm:messagingtask>
+            <bpdm:messagingtask bpdm:label="initialise variables" bpdm:ID="_L0g2AGZOEeKnSJI6HFegew"></bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>
 </bpel:process>
