@@ -32,6 +32,19 @@ public abstract class TaskStateChangeHandler extends AttributeHandler
 		}
 
 	}
+	
+	protected void closeTask(AttributeMap messageAttributes)
+	{
+		try
+		{
+			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			taskController.saveTask(messageAttributes);
+		}
+		catch (Exception e)
+		{
+			logger.error("Exception removing task "+getTaskType(), e);
+		}
+	}
 
 	/*
 	 * call by process once it is known that the task concerned is of the correct type and in the correct state

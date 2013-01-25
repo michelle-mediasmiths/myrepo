@@ -64,7 +64,7 @@ public class MayamTaskController extends MayamController
 	
 	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
-		log.info(String.format("Creating qc ingest task for asset "+materialID));
+		log.info(String.format("Creating ingest task for asset "+materialID));
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
@@ -113,6 +113,9 @@ public class MayamTaskController extends MayamController
 	}
 	
 	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
+		
+		log.info(String.format("Creating preview task for asset "+materialID));
+		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW);
@@ -135,11 +138,13 @@ public class MayamTaskController extends MayamController
 	
 	public long createUnmatchedTaskForMaterial(String assetID) throws MayamClientException{
 		//Add to Unmatched worklist
+		log.info(String.format("Creating unmatched task for asset "+assetID));
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
 	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
 		
+		log.info(String.format("Creating tx delivery task task for package "+presentationID));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);

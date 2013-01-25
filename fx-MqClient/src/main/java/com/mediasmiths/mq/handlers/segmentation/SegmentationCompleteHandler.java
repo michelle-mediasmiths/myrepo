@@ -39,6 +39,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				{
 					log.debug("Creating tx delivery task, assuming qc is required");
 					taskController.createTXDeliveryTaskForPackage(houseID, true);
+					closeTask(messageAttributes);
 				}
 				catch (MayamClientException e)
 				{

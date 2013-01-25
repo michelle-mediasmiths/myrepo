@@ -58,6 +58,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// Move media
 					tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_ID).toString(), MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
 					
+					//close unmatched task
+					closeTask(currentAttributes);
+					
 					//Create QC task
 					AttributeMap matchedAsset = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
 					taskController.createQCTaskForMaterial(matchedAsset.getAttributeAsString(Attribute.HOUSE_ID), (Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE),matchedAsset.getAttributeAsString(Attribute.QC_PREVIEW_RESULT));
@@ -67,6 +70,19 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				log.error("Exception in the Mayam client while handling unmatched task update Message : "+e.getMessage(), e);
 			}
 	
+	}
+	
+	protected void closeTask(AttributeMap messageAttributes)
+	{
+		try
+		{
+			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			taskController.saveTask(messageAttributes);
+		}
+		catch (Exception e)
+		{
+			log.error("Exception removing task "+getTaskType(), e);
+		}
 	}
 
 	@Override

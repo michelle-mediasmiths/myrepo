@@ -105,11 +105,13 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 			{
 				// TODO: An email notification is sent to the channel owner advising the content needs to be reordered. The fault comments entered by the user are included in the message body
 			}
+			
+			closeTask(messageAttributes);
 
 		}
 
 	}
-
+	
 	private void createFixStitchTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException
 	{
 		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.FIX_STITCH_EDIT);

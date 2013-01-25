@@ -32,11 +32,15 @@ public class IngestCompleteHandler extends TaskStateChangeHandler
 			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
 			
 			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus);
+			
+			closeTask(messageAttributes);
 		}
 		catch (Exception e)
 		{
 			log.error("Exception in the Mayam client when creating qc task: ", e);
 		}
+		
+		
 	}
 
 	@Override

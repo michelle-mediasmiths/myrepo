@@ -24,8 +24,6 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 		Object b = before.getAttribute(att);
 		Object c = current.getAttribute(att);
 		
-		log.trace(String.format("attribute changed test : Before: {%s}, Current:{%s}", b,c));
-		
 		boolean inCurrent = c!=null;
 		boolean inBefore = b!=null;
 
@@ -44,7 +42,6 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 			ret = false;
 		}
 
-		log.trace("attribute changed test returning "+ret);
 		return ret;
 	}
 }

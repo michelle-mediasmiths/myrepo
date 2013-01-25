@@ -42,12 +42,15 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 					taskController.saveTask(newTask);
 				}
 			}
+			
+			closeTask(messageAttributes);
 		}
 		catch(Exception e){
 			log.error("error handling fix and stich task finish",e);
 		}
 	}
 
+	
 	@Override
 	public MayamTaskListType getTaskType()
 	{

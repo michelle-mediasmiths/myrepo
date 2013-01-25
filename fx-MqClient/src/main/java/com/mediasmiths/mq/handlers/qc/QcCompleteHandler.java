@@ -31,6 +31,8 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		{
 			preview(houseID);
 		}
+		
+		closeTask(messageAttributes);
 	}
 	
 	private void preview(String houseID)

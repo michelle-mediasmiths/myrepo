@@ -673,9 +673,6 @@ public class MayamClientImpl implements MayamClient
 	{
 		return packageController.getSegmentList(packageID).getAttributeMap();
 	}
-
-	//TODO: find out what this is and move it somewhere more sensible;
-	public final static Attribute deliveryVersionAttribute = Attribute.REVISION_NUMBER;
 	
 	@Override
 	public int getLastDeliveryVersionForMaterial(String materialID)
@@ -683,7 +680,7 @@ public class MayamClientImpl implements MayamClient
 		try
 		{
 			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-			Integer deliveryVersion = materialAttributes.getAttribute(deliveryVersionAttribute);
+			Integer deliveryVersion = materialAttributes.getAttribute(Attribute.VERSION_NUMBER);
 
 			if (deliveryVersion == null)
 			{
