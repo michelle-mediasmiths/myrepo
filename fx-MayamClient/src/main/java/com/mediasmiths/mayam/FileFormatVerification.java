@@ -248,8 +248,7 @@ public class FileFormatVerification
 			{
 				log.debug("hd test format failed");
 			}
-			log.info(sb.toString());
-			return false;
+			throw new FileFormatVerificationFailureException(sb.toString());
 
 		}
 
