@@ -195,9 +195,8 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			AutoMatchInfo ami = getSiteIDForAutomatch(me);
 			
 			if(ami != null){
-				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, ami.fileName);
+				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
 			}
-			
 			
 			if (autoMatched)
 			{
