@@ -24,12 +24,15 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.CommentLog;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
+import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
+import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -742,6 +745,60 @@ public class MayamClientImpl implements MayamClient
 	public long createWFEErrorTaskForTitle(String titleID, String message)
 	{
 		return createWFEErrorTaskForAsset(MayamAssetType.TITLE, titleID,message);
+	}
+
+	@Override
+	public boolean attemptAutoMatch(String siteID, String fileName)
+	{
+
+		log.debug("searching for unmatched tasks for filename " + fileName);
+
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.UNMATCHED_MEDIA.getText());
+		criteria.getFilterEqualities().setAttribute(Attribute.SERIES_TITLE, fileName);
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 10, 0);
+		}
+		catch (RemoteException e1)
+		{
+			log.warn("error searching for unmatched tasks with filename"+fileName);
+			return false;
+		}
+		
+		log.info("Total matches: " + result.getTotalMatches());
+
+		if (result.getTotalMatches() > 1)
+		{
+			log.warn("more than one unmatched task for " + fileName);
+		}
+		else if (result.getTotalMatches() == 1)
+		{
+			AttributeMap unmatchedTask = result.getMatches().get(0);
+
+			// get item we are going to try to automatch to
+			AttributeMap materialAttributes = materialController.getMaterialAttributes(siteID);
+			String assetID = materialAttributes.getAttributeAsString(Attribute.ASSET_ID);
+			//perform match
+			unmatchedTask.setAttribute(Attribute.ASSET_PEER_ID, assetID);
+			try
+			{
+				tasksController.saveTask(unmatchedTask);
+				return true;
+			}
+			catch (MayamClientException e)
+			{
+					log.error("error automatching to asset "+siteID);
+			}
+
+		}
+		else{
+			log.info("no candidates for automatch found");
+		}
+
+		return false;
 	}
 	
 }

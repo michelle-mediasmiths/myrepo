@@ -920,4 +920,11 @@ public class MayamClientStub implements MayamClient
 		return 0;
 	}
 
+	@Override
+	public boolean attemptAutoMatch(String siteID, String fileName)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

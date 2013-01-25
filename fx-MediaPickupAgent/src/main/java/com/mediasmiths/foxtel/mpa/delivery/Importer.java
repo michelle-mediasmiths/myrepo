@@ -153,19 +153,6 @@ public class Importer implements Runnable {
 		MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
 		Object message = materialEnvelope.getMessage();
 		
-		if(message instanceof Material){
-			
-			Material m = (Material) message;
-			
-			if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
-				return m.getTitle().getProgrammeMaterial();
-			}
-			else{
-				return  m.getTitle().getMarketingMaterial();
-			}
-			
-		}
-		
 		return message;
 	}
 
@@ -175,15 +162,15 @@ public class Importer implements Runnable {
 		Object message = materialEnvelope.getMessage();
 		
 		if(message instanceof Material){
-			
-			if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
-				return "ProgrammeContentAvailable";
-			}
-			else{
-				Material m = (Material) message;
-				MarketingMaterialType marketingMaterial = m.getTitle().getMarketingMaterial();
-				return "MarketingContentAvailable";
-			}
+				
+				if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
+					return "ProgrammeContentAvailable";
+				}
+				else{
+					Material m = (Material) message;
+					MarketingMaterialType marketingMaterial = m.getTitle().getMarketingMaterial();
+					return "MarketingContentAvailable";
+				}
 			
 		}
 		else if(message instanceof RuzzIngestRecord){

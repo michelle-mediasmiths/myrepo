@@ -22,6 +22,7 @@ import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
+import com.mediasmiths.mayam.MayamClient;
 
 public class UnmatchedMaterialProcessor implements Runnable {
 
@@ -36,6 +37,9 @@ public class UnmatchedMaterialProcessor implements Runnable {
 	private static Logger logger = Logger
 			.getLogger(UnmatchedMaterialProcessor.class);
 
+	@Inject
+	private MayamClient mayamClient;
+	
 	@Inject
 	public UnmatchedMaterialProcessor(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
@@ -181,6 +185,14 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			logger.info(String.format("no mxf for %s", me.getFile()
 					.getAbsolutePath()));
 
+			boolean autoMatched = false;
+			
+			String siteID = getSiteIDForAutomatch(me);
+			
+			if(siteID != null){
+				autoMatched = mayamClient.attemptAutoMatch(siteID, FilenameUtils.getName(me.getFile().getAbsolutePath()));
+			}
+			
 			// move message to failure folder
 			try {
 				String failedMessagesFolder = MessageProcessor
@@ -204,5 +216,11 @@ public class UnmatchedMaterialProcessor implements Runnable {
 									.getAbsolutePath()), me.getMasterID()));
 			events.saveEvent("warning", sb.toString());
 		}
+	}
+
+	private void String getSiteIDForAutomatch(MediaEnvelope unmatchedMessage)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

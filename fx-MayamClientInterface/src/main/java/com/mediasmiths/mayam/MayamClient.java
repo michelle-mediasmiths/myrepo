@@ -314,4 +314,7 @@ public interface MayamClient
 
 	public boolean materialHasPassedPreview(String materialID);
 	
+	public boolean attemptAutoMatch(String siteID, String fileName);
+
+	
 }

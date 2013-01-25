@@ -101,6 +101,9 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		{
 			eventService.saveEvent("PlaceHolderCannotBeIdentified", message);
 		}
+		else if(result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
+			eventService.saveEvent("OutOfOrder", message);
+		}
 		else
 		{
 			eventService.saveEvent("Failed", message);
