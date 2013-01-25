@@ -679,7 +679,7 @@ public class MayamMaterialController extends MayamController
 
 				if(details.getDeliveryVersion() != null){
 					int deliveryVersion = details.getDeliveryVersion().intValue();
-					attributesValid &= attributes.setAttribute(MayamClientImpl.deliveryVersionAttribute, Integer.valueOf(deliveryVersion));
+					attributesValid &= attributes.setAttribute(Attribute.VERSION_NUMBER, Integer.valueOf(deliveryVersion));
 				}
 				
 				if (!attributesValid)
