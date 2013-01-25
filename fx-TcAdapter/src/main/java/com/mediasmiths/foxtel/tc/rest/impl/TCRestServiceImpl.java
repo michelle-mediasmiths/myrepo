@@ -128,7 +128,7 @@ public class TCRestServiceImpl implements TCRestService
 				return TCJobResult.FAILURE;
 
 			default:
-				throw new RuntimeException("Unknown job status: " + job.getStatus());
+				throw new RuntimeException("Unknown job status: " + status);
 		}
 	}
 
