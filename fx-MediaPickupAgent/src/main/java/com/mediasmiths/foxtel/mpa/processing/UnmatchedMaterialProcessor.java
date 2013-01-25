@@ -20,8 +20,13 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
+import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 
 public class UnmatchedMaterialProcessor implements Runnable {
@@ -187,26 +192,41 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 			boolean autoMatched = false;
 			
-			String siteID = getSiteIDForAutomatch(me);
+			AutoMatchInfo ami = getSiteIDForAutomatch(me);
 			
-			if(siteID != null){
-				autoMatched = mayamClient.attemptAutoMatch(siteID, FilenameUtils.getName(me.getFile().getAbsolutePath()));
+			if(ami != null){
+				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, ami.fileName);
 			}
 			
-			// move message to failure folder
-			try {
-				String failedMessagesFolder = MessageProcessor
-						.getFailureFolderForFile(me.getFile());
-				
-				File dst = new File(MessageProcessor.getDestinationPathForFileMove(
-						me.getFile(), failedMessagesFolder, true));
-				
-				FileUtils.moveFile(me.getFile(),dst);
-			} catch (IOException e) {
-				logger.fatal(
-						"IOException moving umatched xml to the failed messages folder",
-						e);
+			
+			if (autoMatched)
+			{
+				//move to completed folder
+				try{
+					String completedMessagesFolder = MessageProcessor.getArchivePathForFile(me.getFile().getAbsolutePath());
+					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), completedMessagesFolder, true));
+					FileUtils.moveFile(me.getFile(), dst);
+				}
+				catch (IOException e)
+				{
+					logger.error("IOException moving umatched xml to the completed messages folder", e);
+				}
 			}
+			else
+			{
+				// move message to failure folder
+				try
+				{
+					String failedMessagesFolder = MessageProcessor.getFailureFolderForFile(me.getFile());
+					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), failedMessagesFolder, true));
+					FileUtils.moveFile(me.getFile(), dst);
+				}
+				catch (IOException e)
+				{
+					logger.error("IOException moving umatched xml to the failed messages folder", e);
+				}
+			}
+			
 
 			// send out alert that no material arrived with this xml file
 			StringBuilder sb = new StringBuilder();
@@ -218,9 +238,53 @@ public class UnmatchedMaterialProcessor implements Runnable {
 		}
 	}
 
-	private void String getSiteIDForAutomatch(MediaEnvelope unmatchedMessage)
+	class AutoMatchInfo{
+		String siteID;
+		String fileName;
+	}
+	
+	private AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope unmatchedMessage)
 	{
-		// TODO Auto-generated method stub
-		
+		try
+		{
+
+			Object message = unmatchedMessage.getMessage();
+			if (message instanceof Material)
+			{
+
+				if (Util.isProgramme((Material) message))
+				{
+
+					AutoMatchInfo ret = new AutoMatchInfo();
+					ret.siteID = ((Material) message).getTitle().getProgrammeMaterial().getMaterialID();
+					ret.fileName = ((FileMediaType) ((Material) message).getTitle().getProgrammeMaterial().getMedia()).getFilename();
+					logger.debug("attempt to automatch on filename from programme material xml");
+					return ret;
+				}
+				else
+				{
+					logger.debug("cannot automatch marketing material");
+					return null;
+				}
+			}
+			else if (message instanceof RuzzIF)
+			{
+
+				AutoMatchInfo ret = new AutoMatchInfo();
+				ret.siteID = ((RuzzIngestRecord) message).getMaterial().getMaterialID();
+				ret.fileName = unmatchedMessage.getFile().getName();
+
+				return ret;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("error determining automatch info for message " + unmatchedMessage.getFile().getAbsolutePath());
+			return null;
+		}
 	}
 }

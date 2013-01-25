@@ -31,7 +31,6 @@ public class FixAndStitchRevertHandler  extends TaskStateChangeHandler
 		try
 		{
 			taskController.createPreviewTaskForMaterial(houseID);
-			closeTask(messageAttributes);
 		}
 		catch (MayamClientException e)
 		{

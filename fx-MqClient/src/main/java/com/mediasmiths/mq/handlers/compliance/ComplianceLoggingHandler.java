@@ -24,7 +24,6 @@ public class ComplianceLoggingHandler extends TaskStateChangeHandler
 			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 			String notes = messageAttributes.getAttribute(Attribute.COMPLIANCE_NOTES);
 			createComplianceEditTask(assetID, assetType, notes);
-			closeTask(messageAttributes);
 						
 		} catch (Exception e) {
 			log.error("Exception in the Mayam client while handling Compliance logging Task Message : " + e,e);

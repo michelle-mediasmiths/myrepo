@@ -33,7 +33,6 @@ public class IngestCompleteHandler extends TaskStateChangeHandler
 			
 			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus);
 			
-			closeTask(messageAttributes);
 		}
 		catch (Exception e)
 		{

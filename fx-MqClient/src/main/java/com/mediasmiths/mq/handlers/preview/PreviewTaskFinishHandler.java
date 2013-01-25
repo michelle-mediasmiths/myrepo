@@ -106,7 +106,6 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 				// TODO: An email notification is sent to the channel owner advising the content needs to be reordered. The fault comments entered by the user are included in the message body
 			}
 			
-			closeTask(messageAttributes);
 
 		}
 

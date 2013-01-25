@@ -43,7 +43,6 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 				}
 			}
 			
-			closeTask(messageAttributes);
 		}
 		catch(Exception e){
 			log.error("error handling fix and stich task finish",e);

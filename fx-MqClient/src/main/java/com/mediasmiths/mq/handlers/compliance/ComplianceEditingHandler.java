@@ -53,7 +53,6 @@ public class ComplianceEditingHandler  extends TaskStateChangeHandler{
 			}
 		}
 		
-		closeTask(messageAttributes);
 		}
 		catch (Exception e) {
 			log.error("Exception in the Mayam client while handling Fix and Stitch Task Message : ", e);

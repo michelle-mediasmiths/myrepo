@@ -27,7 +27,6 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		try
 		{
 			onPreviewFailure(messageAttributes);
-			closeTask(messageAttributes);
 		}
 		catch (Exception e)
 		{
