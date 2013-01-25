@@ -21,10 +21,12 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
@@ -546,7 +548,24 @@ public class MayamTitleController extends MayamController{
 				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID);
 				
+				//Close all associated tasks
+				FilterCriteria searchCriteria = client.taskApi().createFilterCriteria();
+				AttributeMap filterEqualities = client.createAttributeMap();
+				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
+				searchCriteria.setFilterEqualities(filterEqualities);
+				FilterResult searchResults = client.taskApi().getTasks(searchCriteria, 100, 0);
+				List<AttributeMap> tasks = searchResults.getMatches();
+				
+				for (int i = 0; i < tasks.size(); i++)
+				{
+					AttributeMap task = tasks.get(i);
+					task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+					client.taskApi().updateTask(task);
+				}
+				
+				//Delete the asset
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
+				
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ titleID,e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
