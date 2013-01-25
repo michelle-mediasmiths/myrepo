@@ -27,6 +27,7 @@ import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
@@ -83,6 +84,8 @@ public class IncomingListener extends MqClientListener
 	FixAndStitchFinishHandler fixAndStitchFinishHandler;
 	@Inject
 	FixAndStitchRevertHandler fixAndStitchRevertHandler;
+	@Inject
+	FixAndStitchCancelHandler fixAndStitchCancelHandler;
 	@Inject
 	IngestCompleteHandler ingestCompleteHandler;
 	@Inject
@@ -213,6 +216,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(previewTaskFailHandler, currentAttributes);
 				passEventToHandler(fixAndStitchFinishHandler, currentAttributes);
 				passEventToHandler(fixAndStitchRevertHandler, currentAttributes);
+				passEventToHandler(fixAndStitchCancelHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				
