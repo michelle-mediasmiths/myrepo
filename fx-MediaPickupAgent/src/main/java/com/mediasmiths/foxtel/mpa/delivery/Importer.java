@@ -14,7 +14,11 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 
@@ -59,7 +63,7 @@ public class Importer implements Runnable {
 									.getMediaFile().getAbsolutePath()), e);
 				}
 
-				logger.trace("Finished with import");
+				logger.info("Finished with import");
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
 				return;
@@ -139,6 +143,56 @@ public class Importer implements Runnable {
 
 			return;
 		}
+		
+		eventService.saveEvent(getEventNameForDropSuccessEvent(pi), getPayLoadForDropSuccessEvent(pi));
+		
+	}
+
+	private Object getPayLoadForDropSuccessEvent(PendingImport pi)
+	{
+		MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
+		Object message = materialEnvelope.getMessage();
+		
+		if(message instanceof Material){
+			
+			Material m = (Material) message;
+			
+			if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
+				return m.getTitle().getProgrammeMaterial();
+			}
+			else{
+				return  m.getTitle().getMarketingMaterial();
+			}
+			
+		}
+		
+		return message;
+	}
+
+	private String getEventNameForDropSuccessEvent(PendingImport pi)
+	{
+		MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
+		Object message = materialEnvelope.getMessage();
+		
+		if(message instanceof Material){
+			
+			if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
+				return "ProgrammeContentAvailable";
+			}
+			else{
+				Material m = (Material) message;
+				MarketingMaterialType marketingMaterial = m.getTitle().getMarketingMaterial();
+				return "MarketingContentAvailable";
+			}
+			
+		}
+		else if(message instanceof RuzzIngestRecord){
+			
+			//TODO check this is the right name for ruzz ingest
+			return "ProgrammeContentAvailable";
+		}
+		
+		else return "unknown";
 	}
 
 	/**

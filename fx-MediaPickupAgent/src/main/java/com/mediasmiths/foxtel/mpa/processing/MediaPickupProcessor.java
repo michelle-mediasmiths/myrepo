@@ -97,9 +97,13 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		{
 			eventService.saveEvent("PlaceholderAlreadyHasMedia", message);
 		}
+		else if(result == MessageValidationResult.TITLE_DOES_NOT_EXIST || result == MessageValidationResult.MATERIAL_DOES_NOT_EXIST)
+		{
+			eventService.saveEvent("PlaceHolderCannotBeIdentified", message);
+		}
 		else
 		{
-			eventService.saveEvent("failed", message);
+			eventService.saveEvent("Failed", message);
 		}
 	}
 	

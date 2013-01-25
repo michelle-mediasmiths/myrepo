@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.xml.bind.JAXBElement;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -58,12 +60,12 @@ public class UnmatchedMaterialProcessor implements Runnable {
 				Thread.sleep(sleepTime);
 				logger.trace("woke up");
 				process();
-
 			} catch (InterruptedException e) {
 				logger.info("Interrupted", e);
 				return;
+			} catch (Exception e){
+				logger.fatal("Something went badly wrong in UnmatchedMaterialProcessor.process()",e);
 			}
-
 		}
 	}
 
@@ -140,10 +142,14 @@ public class UnmatchedMaterialProcessor implements Runnable {
 
 				logger.info(String.format("Trying to move file %s to %s", mxf.getFilePath(), destination));
 				FileUtils.moveFile(new File(mxf.getFilePath()), dest);
+				
+				//send event
+				events.saveEvent("UnmatchedContentAvailable", destination);
+				
 			}
 			catch (IOException e)
 			{
-				logger.fatal("IOException moving umatched mxf to emergency import folder", e);
+				logger.error("IOException moving umatched mxf to emergency import folder", e);
 
 				// send out alert that material could not be transferd to
 				// emergency import folder
@@ -152,6 +158,9 @@ public class UnmatchedMaterialProcessor implements Runnable {
 						"There has been a failure to deliver unmatched material %s to the Viz Ardome emergency import folder",
 						FilenameUtils.getName(mxf.getFilePath())));
 				events.saveEvent("error", sb.toString());
+			}
+			catch(Exception e){
+				logger.error("Unhandled exception processing unmatched mxf",e);
 			}
 		}
 	}
