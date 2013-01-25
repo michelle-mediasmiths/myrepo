@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -37,6 +38,7 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
+import com.mediasmiths.mayam.util.Triplet;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -548,9 +550,6 @@ public class MayamTaskController extends MayamController
 		
 		if (allRights != null && allRights.size() > 0)
 		{
-			
-			
-					
 			AssetAccess accessRights = task.getAttribute(Attribute.ASSET_ACCESS);
 			
 			if(accessRights==null){
@@ -558,14 +557,38 @@ public class MayamTaskController extends MayamController
 				accessRights=new AssetAccess();
 			}
 			
+			HashMap<String, Triplet<Boolean, Boolean, Boolean>> groupMap = new HashMap<String, Triplet<Boolean, Boolean, Boolean>>();
+			
 			for (int i = 0; i < allRights.size(); i++)
+			{
+				if (groupMap.containsKey(allRights.get(i).getGroupName()))
+				{
+					Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allRights.get(i).getGroupName());
+					rights.a = rights.a || allRights.get(i).getReadAccess();
+					rights.b = rights.b || allRights.get(i).getWriteAccess();
+					rights.c = rights.c || allRights.get(i).getAdminAccess();
+					groupMap.put(allRights.get(i).getGroupName(), rights);
+				}
+				else {
+					Triplet <Boolean, Boolean, Boolean> rights = new Triplet<Boolean, Boolean, Boolean>(allRights.get(i).getReadAccess(), allRights.get(i).getWriteAccess(), allRights.get(i).getAdminAccess());
+					groupMap.put(allRights.get(i).getGroupName(), rights);
+				}
+			}
+			
+			String[] allKeys = groupMap.keySet().toArray(new String[0]);
+			
+			for (int i = 0; i < allKeys.length; i++)
 			{
 					AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
 					entry.setEntityType(EntityType.GROUP);
-					entry.setEntity(allRights.get(i).getGroupName());
-					entry.setRead(allRights.get(i).getReadAccess());
-					entry.setWrite(allRights.get(i).getWriteAccess());
-					entry.setAdmin(allRights.get(i).getAdminAccess());
+					entry.setEntity(allKeys[i]);
+					
+					Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
+					
+					entry.setRead(rights.a);
+					entry.setWrite(rights.b);
+					entry.setAdmin(rights.c);
+					
 					accessRights.getMedia().add(entry);
 					accessRights.getStandard().add(entry);
 			}
