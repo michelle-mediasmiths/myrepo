@@ -14,7 +14,6 @@ import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -23,6 +22,7 @@ import org.jdom2.input.SAXBuilder;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Singleton
 public class CarbonProjectBuilder
@@ -30,25 +30,18 @@ public class CarbonProjectBuilder
 	private static final Logger log = Logger.getLogger(CarbonProjectBuilder.class);
 
 	/**
-	 * The base folder where all prototype Carbon Projects and Filter XMLs will be loaded from
-	 */
-	@Inject
-	@Named("carbon.pcp.folder")
-	String pcpResourceBasePath;
-
-	/**
-	 * Filepath underneath pcpResourceBasePath to find the prototype timecode display filter XML
+	 * Classpath resource for the prototype timecode display filter XML
 	 */
 	@Inject(optional = true)
 	@Named("carbon.timecode-filter.filename")
-	String timecodeFilterResource = "timecode-filter.xml";
+	String timecodeFilterResource = "pcp/timecode-filter.xml";
 
 	/**
-	 * Filepath underneath pcpResourceBasePath to find the prototype bug filter XML
+	 * Classpath resource for the prototype bug filter XML
 	 */
 	@Inject(optional = true)
 	@Named("carbon.bug-filter.filename")
-	String bugFilterResource = "bug-filter.xml";
+	String bugFilterResource = "pcp/bug-filter.xml";
 
 	/**
 	 * The folder where Carbon bugs are placed. We expect the bugs to be named:
@@ -333,33 +326,30 @@ public class CarbonProjectBuilder
 	 */
 	protected Element loadXML(String name)
 	{
-		final File folder = new File(pcpResourceBasePath);
-		final File pcp = new File(folder, name);
-
 		try
 		{
-			final Document document = new SAXBuilder().build(pcp);
+			final InputStream is = getClass().getClassLoader().getResourceAsStream(name);
 
-			return document.getRootElement();
+			if (is != null)
+			{
+				final Document document = new SAXBuilder().build(is);
+
+				return document.getRootElement();
+			}
+			else
+			{
+				throw new IOException("Cannot find resource " + name);
+			}
 		}
 		catch (JDOMException e)
 		{
-			log.error("Error loading PCP resource " + pcp, e);
-			throw new RuntimeException("Error loading PCP " + pcp, e);
+			log.error("Error loading PCP resource " + name, e);
+			throw new RuntimeException("Error loading PCP " + name, e);
 		}
 		catch (IOException e)
 		{
-			log.error("Error loading PCP resource " + pcp, e);
-			throw new RuntimeException("Error loading PCP " + pcp, e);
+			log.error("Error loading PCP resource " + name, e);
+			throw new RuntimeException("Error loading PCP " + name, e);
 		}
-	}
-
-
-	public static void main(String[] args) throws Exception
-	{
-		JAXBSerialiser ser = JAXBSerialiser.getInstance(TCJobParameters.class);
-		ser.setPrettyOutput(true);
-
-		System.out.println(ser.serialise(new TCJobParameters()));
 	}
 }
