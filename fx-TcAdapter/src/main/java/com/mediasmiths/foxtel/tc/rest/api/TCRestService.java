@@ -29,6 +29,12 @@ public interface TCRestService
 	@Consumes("application/xml")
 	public String createJob(TCJobParameters parameters) throws Exception;
 
+	@POST
+	@Path("/pcpgen")
+	@Produces("application/xml")
+	@Consumes("application/xml")
+	public String createPCPXML(TCJobParameters parameters) throws Exception;
+
 	@GET
 	@Path("/job/{guid}")
 	@Produces("application/xml")
