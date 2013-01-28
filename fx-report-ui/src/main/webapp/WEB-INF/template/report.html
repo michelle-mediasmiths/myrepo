@@ -1,0 +1,174 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>Report</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+	<span th:substituteby="includes :: navbar" />
+	<div class="container">
+		<h1>
+			Report Interface<a th:href="@{/report.html}"><i class="icon-refresh" /></a>
+		</h1>
+		<p>Search for the data you wish to see in the report</p>
+
+		<h3>Search Options</h3>
+		<table id="queryTable" class="table table-striped tablesorter">
+			<tbody>
+				<tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/query/search_namespace/namespace}">
+						<td><label>Select by namespace: </label></td>
+						<td><input name="namespace" id="namespaceText" type="text" class="input-small search-query" placeholder="namespace"/></td>
+						<td><button class="btn-primary" id="submitNamespaceBtn" type="submit">Search</button></td>
+					</form>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/query/search_eventname/eventname}">
+						<td><label>Select by eventName: </label></td>
+						<td><input name="eventname" id="eventnameText" tyoe="text" class="imput-small search-query" placeholder="eventname"/></td>
+						<td><button class="btn-primary" id="submitEventNameBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/query/search_namespace_eventname/namespace/eventname}">
+						<td><label>Namespace: </label></td>
+						<td><input name="namespace" type="text" class="input-small search-query" placeholder="namespace"/></td>
+						<td></td>
+						<td><label>EventName: </label></td>
+						<td><input name="eventname" type="text" class="input-small search-query" placeholder="eventname"/></td>
+						<td><button class="btn-primary" id="submitEventNameBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+
+				<tr>		
+					<form class="form-search" method="GET" th:action="@{/rest/query/search_id/id}">
+						<td><label>By ID (unique): </label></td>
+						<td><input name="id" type="text" class="input-small search-query" placeholder="id"/></td>
+						<!-- <td><select name="id">
+						<option th:each="event: ${events}" 
+								th:text="${event.id}"></option>
+						</select></td> -->
+						<td><button class="btn-primary" id="submitIdBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+				
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/start_date/date/month/year}">
+						<td><label>Start Date: </label></td>
+						<td><input name="date" type="text" class="input-small search-query" placeholder="date"/></td>
+						<td><input name="month" type="text" class="input-small search-query" placeholder="month - 0-11 (JAN=0)"/></td>
+						<td><input name="year" type="text" class="input-small search-query" placeholder="year"/></td>
+						<td><button class="btn-primary" id="saveStartDateBtn" type="submit">Save Start Date</button></td>
+					</form>
+				</tr>
+				
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/end_date/date/month/year}">
+						<td><label>End Date: </label></td>
+						<td><input name="date" type="text" class="input-small search-query" placeholder="date"/></td>
+						<td><input name="month" type="text" class="input-small search-query" placeholder="month - 0-11 (JAN=0)"/></td>
+						<td><input name="year" type="text" class="input-small search-query" placeholder="year"/></td>
+						<td><button class="btn-primary" id="saveStartDateBtn" type="submit">Save End Date</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/order_status_ui}">
+						<td><label>1. Order Status: </label></td>
+						<input type="hidden" name="eventname" value="Delivered"></input>
+						<td><button class="btn-primary" id="rpt1Btn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/order_status_csv}">
+						<td><button class="btn-primary" id="rpt1Btn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/order_status_pdf}">
+						<td><button class="btn-primary" id="rpt1Btn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/late_order_status_ui}">
+						<td><label>1.1 Late Order Status: </label></td>
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/late_order_status_csv}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/late_order_status_pdf}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/acquisition_report_ui}">
+						<td><label>2. Acquisition Report: </label></td>
+						<td><button class="btn-primary" id="rpt2Btn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/acquisition_report_csv}">
+						<td><button class="btn-primary" id="rpt2bBtn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/acquisition_report_pdf}">
+						<td><button class="btn-primary" id="rpt2bBtn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/file_tape_ingest_ui}">
+						<td><label>5. File Tape Ingest: </label></td>
+						<td><button class="btn-primary" id="rpt5Btn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/file_tape_ingest_csv}">
+						<td><button class="btn-primary" id="rpt5Btn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/file_tape_ingest_pdf}">
+						<td><button class="btn-primary" id="rpt5Btn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/auto_qc_ui}">
+						<td><label>10b. Auto QC: </label></td>
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/auto_qc_csv}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/auto_qc_pdf}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/purge_content_ui}">
+						<td><label>16. Purge Content: </label></td>
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">On Screen</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/purge_content_csv}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/purge_content_pdf}">
+						<td><button class="btn-primary" id="rpt10bBtn" type="submit">PDF</button></td>
+					</form>
+				</tr>
+				
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/compliance_edits_ui}">
+						<td><label>20. Compliance Edits: </label></td>
+						<td><button class="btn-primary" id="rpt20bBtn" type="submit">On Screen</button></td>
+					</form>
+				</tr>
+
+			</tbody>
+		</table>
+
+	</div>
+
+
+<body>
+
+</body>
+</html>

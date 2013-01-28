@@ -6,14 +6,18 @@ import com.google.inject.name.Named;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.ContentPickup;
-import com.mediasmiths.stdEvents.events.db.entity.Delivery;
+import com.mediasmiths.stdEvents.events.db.entity.DeliveryDetails;
 import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
 import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
+
 import org.apache.log4j.Logger;
 
 import java.text.DateFormat;
@@ -21,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,15 +40,28 @@ public class QueryAPIImpl implements QueryAPI
 	protected PlaceholderMessageDaoImpl placeholderMessageDao;
 	@Inject
 	protected ContentPickupDaoImpl contentPickupDao;
-
+	@Inject
+	protected TranscodeDaoImpl transcodeDao;
+	@Inject
+	protected QCDaoImpl qcDao;
 	@Inject
 	protected DeliveryDaoImpl deliveryDao;
 
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
-	@Inject
-	@Named("event.reporter.eventnamemap")
-	Map<String, Class<? extends QueryDao<?>>> getDao;
+	Map<String, Class<? extends QueryDao<?>>> getDao = createQueryMap();
+	
+	private Map<String, Class<? extends QueryDao<?>>> createQueryMap()
+	{
+		Map<String, Class<? extends QueryDao<?>>> getDao = new HashMap<String, Class<? extends QueryDao<?>>>();
+		getDao.put("placeholderMessage", PlaceholderMessageDaoImpl.class);
+		getDao.put("contentPickup", ContentPickupDaoImpl.class);
+		getDao.put("transcode", TranscodeDaoImpl.class);
+		getDao.put("qc", QCDaoImpl.class);
+		getDao.put("delivery", DeliveryDaoImpl.class);
+		getDao.put("system", IPEventDaoImpl.class);
+		return getDao;
+	}
 
 	@Transactional
 	public List<?> getAll(String type)
@@ -198,8 +216,8 @@ public class QueryAPIImpl implements QueryAPI
 		for (EventEntity event : delivered)
 		{
 
-			Delivery delivery = deliveryDao.get(event);
-			String titleIDString = delivery.getTitleID();
+			DeliveryDetails delivery = deliveryDao.get(event);
+			String titleIDString = delivery.getMasterId();
 			titleId.add(titleIDString);
 		}
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+	<link th:substituteby="includes :: htmlhead" />
+	<title>BMS</title>
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+       		<h1>BMS Component<a th:href="@{bms.html}"><i class="icon-refresh"/></a></h1>
+       		<p>All the data currently in the http://www.foxtel.com.au/ip/bms namespace</p>
+       		
+       		<table id="bmsTable" class="table table-striped tablesorter">
+       			<thead>
+       				<tr>
+       					<th>Actions</th>
+       					<th>MessageID</th>
+       					<th>SenderID</th>
+       				</tr>
+       			</thead>
+       			<tbody>
+       				<tr th:each="placeholderMessage: ${placeholderMessages}">
+       					<td th:text="${placeholderMessage.actions}">actions</td>
+       					<td th:text="${placeholderMessage.messageID}">messageID</td>
+       					<td th:text="${placeholderMessage.senderID}">senderID</td>	
+       				</tr>
+       			</tbody>
+       		</table>
+       </div>	
+</body>
+</html>

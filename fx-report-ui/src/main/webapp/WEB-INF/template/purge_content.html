@@ -1,0 +1,50 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Purge Content</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+<span th:substituteby="includes :: navbar" />
+	<h1>Purge Content Report</h1>
+
+	<h4>List of Titles</h4>
+	<table id="purgedTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${purged}">
+					<td th:text="${event.id}">id</td>
+					<td th:text="${event.time}">time</td>
+					<td th:text="${event.namespace}">namespaceEx</td>
+					<td th:text="${event.eventName}">eventNameEx</td>
+					<td th:text="${event.payload}">payloadEx</td>
+				</tr>
+				<tr>
+					<td>Amount purged:</td>
+					<td th:text="${amtPurged}"></td>
+				</tr>
+				<tr>
+					<td>Amount expired:</td>
+					<td th:text="${amtExpired}"></td>
+				</tr>
+				<tr>
+					<td>Amount protected:</td>
+					<td th:text="${amtProtected}"></td>
+				</tr>
+		</tbody>
+	</table>
+</body>
+</html>

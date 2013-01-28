@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <parent>
+    <artifactId>foxtel-parent</artifactId>
+    <groupId>com.mediasmiths.foxtel</groupId>
+    <version>3.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.mediasmiths.foxtel</groupId>
+  <artifactId>fx-event-ui</artifactId>
+  <version>3.0-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name>fx-event-ui</name>
+  
+  <url>http://maven.apache.org</url>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>fx-event-core</artifactId>
+		<version>3.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>fx-event-entity</artifactId>
+		<version>3.0-SNAPSHOT</version>
+	</dependency>
+	<dependency>
+		<groupId>com.mediasmiths.foxtel</groupId>
+		<artifactId>fx-event-reports</artifactId>
+		<version>3.0-SNAPSHOT</version>
+	</dependency>
+   	<dependency>
+		<groupId>com.mediasmiths.std.guice</groupId>
+		<artifactId>stdlib-guice-thymeleaf</artifactId>
+		<version>${stdlib.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>com.mediasmiths.std.guice</groupId>
+		<artifactId>stdlib-guice-hibernate</artifactId>
+		<version>${stdlib.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>servlet-api</artifactId>
+		<version>2.5</version>
+	</dependency>
+	<dependency>
+		<groupId>commons-digester</groupId>
+		<artifactId>commons-digester</artifactId>
+		<version>1.5</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jdom</groupId>
+		<artifactId>jdom</artifactId>
+		<version>2.0.2</version>
+	</dependency>
+	<dependency>
+		<groupId>org.jboss.resteasy</groupId>
+		<artifactId>resteasy-atom-provider</artifactId>
+		<version>2.3.4.Final</version>
+	</dependency>
+  </dependencies>
+  
+  <build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<sourceIncludes>
+						<sourceIncludes>*</sourceIncludes>
+					</sourceIncludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

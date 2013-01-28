@@ -1,0 +1,41 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>Event Detail</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+		<h1>
+			Event Detail<a th:href="@{/event.html}"><i class="icon-refresh" /></a>
+		</h1>
+		
+		<p>Details of one event</p>
+		<table id="detailTable" class="table">
+			<td th:each="event: ${events}">
+				<dl class="dl-horizontal" th:fragment="properties">
+			<dt>ID</dt>
+			<dd th:text="${event.id}">id</dd>
+			<dt>Time</dt>
+			<dd th:text="${event.time}">time</dd>
+			<dt>Namespace</dt>
+			<dd th:text="${event.namespace}">namespace</dd>
+			<dt>EventName</dt>
+			<dd th:text="${event.eventName}">eventname</dd>
+			<dt>Payload</dt>
+			<dd th:text="${event.payload}">payload</dd>
+		</dl>
+		</td>
+		</table>
+	</div>
+</body>
+</html>

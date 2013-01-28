@@ -8,44 +8,55 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.marshaller.EventMarshaller;
-import com.mediasmiths.stdEvents.events.db.entity.Delivery;
+import com.mediasmiths.stdEvents.events.db.entity.DeliveryDetails;
 import com.mediasmiths.stdEvents.persistence.db.dao.QueryDao;
 
-public class DeliveryDaoImpl extends HibernateDao<Delivery, Long> implements EventMarshaller, QueryDao<Delivery>
+public class DeliveryDaoImpl extends HibernateDao<DeliveryDetails, Long> implements EventMarshaller, QueryDao<DeliveryDetails>
 {
 	public static final transient Logger logger = Logger.getLogger(DeliveryDaoImpl.class);
 	
 	public DeliveryDaoImpl()
 	{
-		super(Delivery.class);
+		super(DeliveryDetails.class);
 	}
 
 	@Transactional
 	public void save(EventEntity event)
 	{
-		Delivery delivery = get(event);
+		DeliveryDetails delivery = get(event);
 		delivery.event = event;
 		logger.info("Saving delivery");
 		saveOrUpdate(delivery);
 	}
 	
 	@Transactional
-	public Delivery get(EventEntity event)
+	public DeliveryDetails get(EventEntity event)
 	{
 		logger.info("Setting delivery for event");
-		Delivery delivery = new Delivery();
-		String deliveryString = event.getPayload();
-		logger.info(deliveryString);
-		if (deliveryString.contains("TitleID"))
-			delivery.setTitleID(deliveryString.substring(deliveryString.indexOf("TitleID") +8, deliveryString.indexOf("</TitleID")));
+		DeliveryDetails delivery = new DeliveryDetails();
+		String str = event.getPayload();
+		logger.info(str);
+		if (str.contains("MasterID"))
+			delivery.setMasterId(str.substring(str.indexOf("MasterID")+9, str.indexOf("</MasterID")));
+		if (str.contains("Title"))
+			delivery.setTitle(str.substring(str.indexOf("Title")+6, str.indexOf("</Title")));
+		if (str.contains("FileLocation"))
+			delivery.setFileLocation(str.substring(str.indexOf("FileLocation")+13, str.indexOf("</FileLocation")));
+		if (str.contains("Delivered")) {
+			String delivered = str.substring(str.indexOf("Delivered")+10, str.indexOf("</Delivered"));
+			if (delivered.equals("true"))
+				delivery.setDelivered(true);
+			else
+				delivery.setDelivered(false);
+		}
 		return delivery;
 	}
 	
 	@Transactional
-	public List<Delivery> getAll()
+	public List<DeliveryDetails> getAll()
 	{
 		logger.info("Getting all delivery");
-		List<Delivery> delivery = super.getAll();
+		List<DeliveryDetails> delivery = super.getAll();
 		logger.info("Found all delivery");
 		return delivery;
 	}

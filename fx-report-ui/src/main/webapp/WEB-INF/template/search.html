@@ -1,0 +1,39 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Event</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+	<h1>Search Results</h1>
+	<p>The results of your search</p>
+
+	<table id="eventDetailtable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${events}">
+					<td th:text="${event.id}">id</td>
+					<td th:text="${event.time}">time</td>
+					<td th:text="${event.namespace}">namespaceEx</td>
+					<td th:text="${event.eventName}">eventNameEx</td>
+					<td th:text="${event.payload}">payloadEx</td>
+				</tr>
+		</tbody>
+	</table>
+
+</body>
+</html>
