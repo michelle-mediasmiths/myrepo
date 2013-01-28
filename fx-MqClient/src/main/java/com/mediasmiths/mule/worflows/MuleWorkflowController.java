@@ -27,9 +27,9 @@ public class MuleWorkflowController {
 	@Inject
 	private MediasmithsDestinations destinations;
 	
-	@Inject
-	@Named("wfe.marshaller")
-	private Marshaller wfeMarshaller;
+//	@Inject
+//	@Named("wfe.marshaller")
+//	private Marshaller wfeMarshaller;
 	
 	public MuleWorkflowController() 
 	{
@@ -89,18 +89,18 @@ public class MuleWorkflowController {
 		return client.send(destinations.getMule_tc_destination(), payload, null);
 	}
 	
-	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
-	{
-		String payload = getSerialisationOf(ie);
-		client.dispatch(destinations.getMule_qc_destination(), payload, null);
-		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
-	}
+//	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
+//	{
+//		String payload = getSerialisationOf(ie);
+//		client.dispatch(destinations.getMule_qc_destination(), payload, null);
+//		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
+//	}
 	
-	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
-	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		wfeMarshaller.marshal(payload, baos);
-		return baos.toString("UTF-8");
-	}
+//	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
+//	{
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		wfeMarshaller.marshal(payload, baos);
+//		return baos.toString("UTF-8");
+//	}
 	
 }

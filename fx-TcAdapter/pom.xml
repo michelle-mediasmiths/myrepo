@@ -94,32 +94,6 @@
 			</plugin>
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>jaxb2-maven-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>schemagen</id>
-						<goals>
-							<goal>schemagen</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<transformSchemas>
-						<transformSchema>
-							<uri>http://ns.mediasmiths.com/foxtel/tc/adapter</uri>
-							<toFile>tcAdapter.xsd</toFile>
-						</transformSchema>
-					</transformSchemas>
-					<includes>
-						<include>com/mediasmiths/foxtel/tc/rest/api/*</include>
-					</includes>
-					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
-				</configuration>
-			</plugin>
-
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>

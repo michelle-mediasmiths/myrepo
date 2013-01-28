@@ -23,12 +23,20 @@ public class ManualTestSubmitPCP
 		                                                          new BasicSetup(new CoreRestServicesModule()));
 
 		TCRestService svc = injector.getInstance(JAXRSProxyClientFactory.class).createClient(TCRestService.class,
-		                                                                                     URI.create("http://localhost:8080/tcadapter"));
+//			    URI.create("http://127.0.0.1:8080/fx-TcAdapter"));
+		                                                                                     URI.create("http://10.111.224.101:8080/fx-TcAdapter"));
 
 		TCJobParameters params = new TCJobParameters();
-		params.inputFile = "/Volumes/storage-readonly/foxtel/video.mpg";
-		params.outputFolder = "/Users/pwright/";
+		
+		///storage/mam/hires01/hr/hr01/2013/01/26/BM-250113-M2_0125743.mxf
+		
+		params.inputFile = "/storage/mam/hires01/mediasmiths/input/in.mxf";
+		params.outputFolder = "/storage/mam/hires01/mediasmiths/outputtemp";
+//		params.inputFile = "/storage/mam/hires01/tcinput/HD1.mxf";
+//		params.outputFolder = "/storage/mam/hires01/tcoutput";
+		
 		params.bug.channel = "AED";
+		params.timecode=null;
 		params.audioType = TCAudioType.DOLBY_E;
 		params.purpose = TCOutputPurpose.DVD;
 

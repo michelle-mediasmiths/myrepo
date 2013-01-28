@@ -29,8 +29,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 {
 	private final static Logger log = Logger.getLogger(ExportProxyButton.class);
 
-	@Inject
-	private MuleWorkflowController mule;
+//	@Inject
+//	private MuleWorkflowController mule;
 
 	@Override
 	protected void buttonClicked(AttributeMap materialAttributes)
@@ -106,7 +106,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
 
-		mule.initiateExportWorkflow(ie);
+//		mule.initiateExportWorkflow(ie);
 	}
 
 	private long createExportTask(TCJobParameters jobParams, String materialID, AttributeMap materialAttributes)

@@ -296,7 +296,7 @@ public class CarbonProjectBuilder
 
 		CarbonDestination destination = project.getDestinations().get(0);
 
-		destination.getElement().setAttribute("CML_P_Path", filepath); // Set the filename too (so there's no reference to a local path no matter what the template XML says)
+		destination.getModuleData().getElement().setAttribute("CML_P_Path", filepath); // Set the filename too (so there's no reference to a local path no matter what the template XML says)
 		destination.setDestinationUNC(filepath);
 		destination.setDestinationBaseFilename(outputFileBasename);
 	}

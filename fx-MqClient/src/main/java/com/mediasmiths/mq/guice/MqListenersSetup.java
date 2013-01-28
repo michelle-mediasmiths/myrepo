@@ -18,6 +18,7 @@ public class MqListenersSetup implements GuiceSetup {
 		modules.add(new MqListenersModule());	
 		modules.add(new MayamClientModule());
 		modules.add(new AttributesModule());
+//		modules.add(new JaxModule());
 		modules.add(new MqModule("fxMqListners"));
 	}
 
