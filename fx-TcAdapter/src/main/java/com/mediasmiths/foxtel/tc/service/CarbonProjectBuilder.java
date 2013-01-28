@@ -34,14 +34,14 @@ public class CarbonProjectBuilder
 	 */
 	@Inject(optional = true)
 	@Named("carbon.timecode-filter.filename")
-	String timecodeFilterResource = "pcp/timecode-filter.xml";
+	String timecodeFilterResource = "pcp/filter-timecode.xml";
 
 	/**
 	 * Classpath resource for the prototype bug filter XML
 	 */
 	@Inject(optional = true)
 	@Named("carbon.bug-filter.filename")
-	String bugFilterResource = "pcp/bug-filter.xml";
+	String bugFilterResource = "pcp/filter-bug.xml";
 
 	/**
 	 * The folder where Carbon bugs are placed. We expect the bugs to be named:
@@ -110,7 +110,7 @@ public class CarbonProjectBuilder
 	private String getBugFilepath(final TCBugOptions parameters, final TCResolution resolution)
 	{
 		// Bug filepath is "(channel)_(HD/SD)_(BL/BR/TL/TR).tga"
-		final File folder = new File(new File(new File(bugBasePath), parameters.channel) + "bugs");
+		final File folder = new File(new File(new File(bugBasePath), parameters.channel), "bugs");
 
 		final String filename = getBugFilename(parameters, resolution);
 
@@ -118,8 +118,7 @@ public class CarbonProjectBuilder
 
 		if (file.exists())
 		{
-			// TODO Convert to UNC
-			return file.getAbsolutePath();
+			return nixtoUNC(file.getAbsolutePath());
 		}
 		else
 		{
@@ -250,6 +249,8 @@ public class CarbonProjectBuilder
 
 			final CarbonSource realSource = multiSourceData.getSource();
 
+			realSource.getElement().setAttribute("Filename", filepath); // Set the filename too (so there's no reference to a local path no matter what the template XML says)
+
 			// Change the source of the inner input
 			realSource.setFullUNCFilename(filepath);
 		}
@@ -295,6 +296,7 @@ public class CarbonProjectBuilder
 
 		CarbonDestination destination = project.getDestinations().get(0);
 
+		destination.getElement().setAttribute("CML_P_Path", filepath); // Set the filename too (so there's no reference to a local path no matter what the template XML says)
 		destination.setDestinationUNC(filepath);
 		destination.setDestinationBaseFilename(outputFileBasename);
 	}
@@ -314,7 +316,7 @@ public class CarbonProjectBuilder
 
 	protected CarbonProject loadProject(CarbonBaseProfile profile)
 	{
-		final Element xml = loadXML(profile.name() + ".xml");
+		final Element xml = loadXML("pcp/" + profile.name() + ".xml");
 
 		return new CarbonProject(xml.getDocument());
 	}
