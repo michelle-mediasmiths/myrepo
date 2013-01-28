@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000" 
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"  
-           targetNamespace="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-           xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+	xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
 
 
-    <xs:complexType name="IPEvent">
+	<xs:complexType name="IPEvent">
 		<xs:annotation>
-			<xs:documentation>The root type for events about the IP service infrastructure.
+			<xs:documentation>The root type for events about the IP service
+				infrastructure.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
@@ -46,7 +47,8 @@
 	<xs:complexType name="CommFailure">
 		<xs:complexContent>
 			<xs:annotation>
-				<xs:documentation>The details of a component or infrastructure communication failure.
+				<xs:documentation>The details of a component or infrastructure
+					communication failure.
 				</xs:documentation>
 			</xs:annotation>
 			<xs:extension base="fns:IPEvent">
@@ -54,45 +56,100 @@
 					<xs:element name="source" type="xs:string" />
 					<xs:element name="target" type="xs:string" />
 					<xs:element name="failureShortDesc" type="xs:string" />
-					<xs:element name="failureLongDescription" type="xs:string" minOccurs="0"/>
+					<xs:element name="failureLongDescription" type="xs:string"
+						minOccurs="0" />
 				</xs:sequence>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 
-    <xs:complexType name="StorageReport">
-        <xs:complexContent>
-            <xs:annotation>
-                <xs:documentation>The details of storage use within the infrastructure.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:extension base="fns:IPEvent">
-                <xs:sequence>
-                    <xs:element name="report" type="fns:StorageUsageDetails" minOccurs="1" />
+	<xs:complexType name="StorageReport">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The details of storage use within the
+					infrastructure.
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:IPEvent">
+				<xs:sequence>
+					<xs:element name="report" type="fns:StorageUsageDetails"
+						minOccurs="1" />
 
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
-    <xs:complexType name="StorageUsageDetails">
-        <xs:annotation>
-            <xs:documentation>The Details of Storage use for a particular mount point</xs:documentation>
-        </xs:annotation>
-        <xs:sequence>
-            <xs:element name="fileSystemReference" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="megaBytesUsed" type="xs:double" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="megaBytesFree" type="xs:double" minOccurs="1" maxOccurs="1"/>
-        </xs:sequence>
-    </xs:complexType>
-	
-	<xs:simpleType name="FilePickUpKinds">
+	<xs:complexType name="StorageUsageDetails">
 		<xs:annotation>
-			<xs:documentation>A list of the types of File Pickups with the IP Platform</xs:documentation>
+			<xs:documentation>The Details of Storage use for a particular mount
+				point
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="fileSystemReference" type="xs:string"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="megaBytesUsed" type="xs:double"
+				minOccurs="1" maxOccurs="1" />
+			<xs:element name="megaBytesFree" type="xs:double"
+				minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:complexType name="DeliveryDetails">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The definition a delivery (successful or not)
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:IPEvent">
+				<xs:sequence>
+					<xs:element name="masterId" type="xs:string" />
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="fileLocation" type="xs:string" />
+					<xs:element name="delivered" type="xs:boolean" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="PreviewEventDetail">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>A Preview has been performed and this captures the
+					outcome
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:IPEvent">
+				<xs:sequence>
+					<xs:element name="masterId" type="xs:string" />
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="op" type="PreviewStatus" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:simpleType name="PreviewStatus">
+		<xs:annotation>
+			<xs:documentation>A list of the types of Preview events
+			</xs:documentation>
 		</xs:annotation>
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="Placeholder"/>
-			<xs:enumeration value="Media"/>
+			<xs:enumeration value="PreviewFailed" />
+			<xs:enumeration value="PreviewFurtherAnalysis" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="FilePickUpKinds">
+		<xs:annotation>
+			<xs:documentation>A list of the types of File Pickups with the IP
+				Platform
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Placeholder" />
+			<xs:enumeration value="Media" />
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
