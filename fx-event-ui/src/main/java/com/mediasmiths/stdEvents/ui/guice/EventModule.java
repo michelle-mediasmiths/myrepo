@@ -20,6 +20,7 @@ import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.InfrastructureDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.ManualPurgeDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.PreviewEventDetailDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.EventAPIImpl;
@@ -46,6 +47,7 @@ public class EventModule extends AbstractModule
 		marshallerBinding.addBinding().to(DeliveryDaoImpl.class);
 		marshallerBinding.addBinding().to(IPEventDaoImpl.class);	
 		marshallerBinding.addBinding().to(InfrastructureDaoImpl.class);
+		marshallerBinding.addBinding().to(PreviewEventDetailDaoImpl.class);
 
 		RestResourceRegistry.register(EventUI.class);
 		RestResourceRegistry.register(EventAPI.class);

@@ -23,6 +23,7 @@ import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.InfrastructureDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.ManualPurgeDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
+import com.mediasmiths.stdEvents.persistence.db.impl.PreviewEventDetailDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
@@ -55,6 +56,8 @@ public class EventAPIImpl implements EventAPI
 	protected InfrastructureDaoImpl infrastructureDao;
 	@Inject
 	protected ManualPurgeDaoImpl manualPurgeDao;
+	@Inject
+	protected PreviewEventDetailDaoImpl previewDao;
 	@Inject
 	protected QueryAPI queryApi;
 
@@ -89,6 +92,7 @@ public class EventAPIImpl implements EventAPI
 		storeFormat.put("http://www.foxtel.com.au/ip/delivery", DeliveryDaoImpl.class);
 		storeFormat.put("http://www.foxtel.com.au/ip/system", IPEventDaoImpl.class);
 		storeFormat.put("http://www.foxtel.com.au/ip/infrastructure", InfrastructureDaoImpl.class);
+		storeFormat.put("http://www.foxtel.com.au/ip/preview", PreviewEventDetailDaoImpl.class);
 
 		logger.info("\t" + storeFormat.toString());
 

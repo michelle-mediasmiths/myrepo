@@ -12,6 +12,7 @@ import com.mediasmiths.stdEvents.events.db.entity.Infrastructure;
 import com.mediasmiths.stdEvents.events.db.entity.LogEntity;
 import com.mediasmiths.stdEvents.events.db.entity.PayloadEntity;
 import com.mediasmiths.stdEvents.events.db.entity.PlaceholderMessage;
+import com.mediasmiths.stdEvents.events.db.entity.PreviewEventDetail;
 import com.mediasmiths.stdEvents.events.db.entity.QC;
 import com.mediasmiths.stdEvents.events.db.entity.Request;
 import com.mediasmiths.stdEvents.events.db.entity.Transcode;
@@ -37,6 +38,7 @@ public class EventDatabaseModule extends HibernateModule
 		config.addAnnotatedClass(EventingEntity.class);
 		config.addAnnotatedClass(IPEvent.class);
 		config.addAnnotatedClass(Infrastructure.class);
+		config.addAnnotatedClass(PreviewEventDetail.class);
 
 		config.addAnnotatedClass(EventEntity.class);
 		config.addAnnotatedClass(Request.class);
