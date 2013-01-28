@@ -1,0 +1,48 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Auto QC</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+	<h1>Auto QC Report</h1>
+
+	<h4>Titles QC'd</h4>
+	<table id="qcTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${autoQCd}">
+				<td th:text="${event.id}">id</td>
+				<td th:text="${event.time}">time</td>
+				<td th:text="${event.namespace}">namespaceEx</td>
+				<td th:text="${event.eventName}">eventNameEx</td>
+				<td th:text="${event.payload}">payloadEx</td>			
+			</tr>
+		</tbody>
+	</table>
+	<table id="statsTable" class="table table-striped tablesorter">
+		<tr>
+			<td>Total number of titles QCd: </td> 
+			<td th:text="${totalQCd}">totalQCd</td>
+		</tr>
+		<tr>
+			<td>Number of titles failed QC: </td> 	
+			<td th:text="${QCFailed}">QCFailed</td>	
+		</tr>
+	</table>
+</body>
+</html>

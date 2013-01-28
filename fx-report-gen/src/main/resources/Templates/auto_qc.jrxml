@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="totalQCd" class="java.lang.String"/>
+	<parameter name="QCFailed" class="java.lang.String"/>
+	<field name="jobName" class="java.lang.Long"/>
+	<field name="assetId" class="java.lang.String"/>
+	<field name="forTXDelivery" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="7" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="112" height="25"/>
+				<imageExpression><![CDATA["/Users/alisonboal/Documents/PersistenceInterface/sptFiles/foxtelLogo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="76f54521-49b7-4370-9648-0a87ccbd2089" x="0" y="18" width="161" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[JOB NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d6b9821-20ee-49e8-8706-d838fc76b28e" x="214" y="18" width="202" height="20"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[ASSET ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bf907e01-63a6-4dfa-a4b3-aabb08eb8b91" x="466" y="18" width="210" height="20"/>
+				<textElement/>
+				<text><![CDATA[FOR TX DELIVERY]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d7d83f4f-5ca9-4b28-936e-dc9f295b8225" x="0" y="46" width="802" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="308" splitType="Stretch">
+			<textField>
+				<reportElement uuid="805e2855-8c1f-4cc1-8c46-f3cae6e2c92e" x="0" y="5" width="161" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{jobName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a98acef4-cd33-42c0-aacc-63748b4b07eb" x="214" y="5" width="202" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{assetId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="97640d41-b1f8-4819-a24f-1ac3c5cd7257" x="466" y="5" width="210" height="36"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{forTXDelivery}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="293" width="802" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="34" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="227" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7a792076-c22b-4d8f-88a9-514325b7cee7" x="187" y="0" width="117" height="20"/>
+				<textElement/>
+				<text><![CDATA[Total QC'd:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14c70c36-ac8d-429d-a7e4-8c5f70988fe4" x="304" y="0" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{totalQCd}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="045c863a-e453-46a0-9ee0-748e2e7f94f7" x="426" y="0" width="108" height="20"/>
+				<textElement/>
+				<text><![CDATA[No Failed QC:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14c70c36-ac8d-429d-a7e4-8c5f70988fe4" x="534" y="0" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{QCFailed}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

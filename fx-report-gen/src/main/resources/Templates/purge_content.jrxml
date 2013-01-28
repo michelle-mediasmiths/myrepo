@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report4" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="amtPurged" class="java.lang.String"/>
+	<parameter name="amtExpired" class="java.lang.String"/>
+	<parameter name="amtProtected" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="eventName" class="java.lang.String"/>
+	<field name="namespace" class="java.lang.String"/>
+	<field name="payload" class="java.lang.String"/>
+	<field name="time" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="7" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="112" height="25"/>
+				<imageExpression><![CDATA["/Users/alisonboal/Documents/PersistenceInterface/sptFiles/foxtelLogo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="42f261d6-7ca9-4f41-a47b-b20b047b894a" x="0" y="2" width="353" height="20"/>
+				<textElement/>
+				<text><![CDATA[TITLE ID]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="22" width="802" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="308" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1aa1c30f-c16d-47ec-8bb3-eee8e2c50467" x="0" y="1" width="353" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="293" width="802" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="34" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="227" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="426" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="506" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="46" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7a792076-c22b-4d8f-88a9-514325b7cee7" x="61" y="0" width="117" height="20"/>
+				<textElement/>
+				<text><![CDATA[Amount Purged:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14c70c36-ac8d-429d-a7e4-8c5f70988fe4" x="178" y="0" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{amtPurged}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="045c863a-e453-46a0-9ee0-748e2e7f94f7" x="318" y="0" width="108" height="20"/>
+				<textElement/>
+				<text><![CDATA[Amount Expired:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14c70c36-ac8d-429d-a7e4-8c5f70988fe4" x="426" y="0" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{amtExpired}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="41d1840a-c204-4f7a-8a85-41d718f4fb5d" x="548" y="0" width="113" height="20"/>
+				<textElement/>
+				<text><![CDATA[Amount Protected:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14c70c36-ac8d-429d-a7e4-8c5f70988fe4" x="661" y="0" width="52" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{amtProtected}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

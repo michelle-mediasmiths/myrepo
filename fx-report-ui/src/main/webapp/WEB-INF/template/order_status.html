@@ -1,0 +1,121 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Order Status</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+	<h1>Order Status Report</h1>
+
+	<h4>List of Titles Delivered</h4>
+	<table id="deliveredTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${delivered}">
+					<td th:text="${event.id}">id</td>
+					<td th:text="${event.time}">time</td>
+					<td th:text="${event.namespace}">namespaceEx</td>
+					<td th:text="${event.eventName}">eventNameEx</td>
+					<td th:text="${event.payload}">payloadEx</td>
+				</tr>
+				<tr>
+					<td>Quantity:</td>
+					<td th:text="${deliveredQ}"></td>
+				</tr>
+		</tbody>
+	</table>
+
+	<h4>List of titles not yet delivered</h4>
+	<table id="notDeliveredTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${notDelivered}">
+				<td th:text="${event.id}">id</td>
+				<td th:text="${event.time}">time</td>
+				<td th:text="${event.namespace}">namespaceEx</td>
+				<td th:text="${event.eventName}">eventNameEx</td>
+				<td th:text="${event.payload}">payloadEx</td>
+			</tr>
+			<tr>
+				<td>Quantity:</td>
+				<td th:text="${notDeliveredQ}"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<h4>List of titles overdue</h4>
+	<table id="overdueTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${overdue}">
+				<td th:text="${event.id}">id</td>
+				<td th:text="${event.time}">time</td>
+				<td th:text="${event.namespace}">namespaceEx</td>
+				<td th:text="${event.eventName}">eventNameEx</td>
+				<td th:text="${event.payload}">payloadEx</td>
+			</tr>
+			<tr>
+				<td>Quantity:</td>
+				<td th:text="${overdueQ}"></td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<h4>Unmatched content</h4>
+	<table id="outstandingTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="event: ${outstanding}">
+				<td th:text="${event.id}">id</td>
+				<td th:text="${event.time}">time</td>
+				<td th:text="${event.namespace}">namespaceEx</td>
+				<td th:text="${event.eventName}">eventNameEx</td>
+				<td th:text="${event.payload}">payloadEx</td>
+			</tr>
+			<tr>
+				<td>Quantity:</td>
+				<td th:text="${outstandingQ}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+
+</html>

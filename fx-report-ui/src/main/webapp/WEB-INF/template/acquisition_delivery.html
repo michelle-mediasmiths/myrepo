@@ -1,0 +1,73 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Acquisition Delivery</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+	<span th:substituteby="includes :: navbar" />
+	<h1>Acquisition Delivery Report</h1>
+
+	<h4>Titles delivered by Tape</h4>
+	<table id="byTapeTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="tapeEvent: ${tapeEvents}">
+					<td th:text="${tapeEvent.id}">id</td>
+					<td th:text="${tapeEvent.time}">time</td>
+					<td th:text="${tapeEvent.namespace}">namespaceEx</td>
+					<td th:text="${tapeEvent.eventName}">eventNameEx</td>
+					<td th:text="${tapeEvent.payload}">payloadEx</td>
+				</tr>
+				<tr>
+					<td>Quantity:</td>
+					<td th:text="${noByTape}"></td>
+					<td>Percentage: </td>
+					<td th:text="${perByTape}">%</td>
+				</tr>
+		</tbody>
+	</table>
+
+	<h4>Titles delivered by File</h4>
+	<table id="byFileTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Time</th>
+				<th>Namespace</th>
+				<th>EventName</th>
+				<th>Payload</th>
+				</tr>
+		</thead>
+		<tbody>
+			<tr th:each="fileEvent: ${fileEvents}">
+					<td th:text="${fileEvent.id}">id</td>
+					<td th:text="${fileEvent.time}">time</td>
+					<td th:text="${fileEvent.namespace}">namespaceEx</td>
+					<td th:text="${fileEvent.eventName}">eventNameEx</td>
+					<td th:text="${fileEvent.payload}">payloadEx</td>
+				</tr>
+				<tr>
+					<td>Quantity:</td>
+					<td th:text="${noByFile}"></td>
+					<td>Percentage: </td>
+					<td th:text="${perByFile}"></td>
+				</tr>
+		</tbody>
+	</table>
+
+<body>
+
+</body>
+</html>
