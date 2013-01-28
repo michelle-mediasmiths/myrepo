@@ -4,26 +4,26 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.mayam.MayamButtonType;
 
-public class PublicityProxy extends ExportProxyButton
+public class ComplianceProxy extends ExportProxyButton
 {
 
 	@Override
 	public MayamButtonType getButtonType()
 	{
-		return MayamButtonType.PUBLICITY_PROXY;
+		return MayamButtonType.COMPLIANCE_PROXY;
 	}
 
 	@Override
 	public String getName()
 	{
-		return "Publicity Proxy";
+		return "Compliance Proxy";
 	}
 
 	@Override
 	protected String getOutputFolder(AttributeMap materialAttributes)
 	{
 		//TODO: of course this needs to be configurable and the output should include the channel groups name (see folder locations diagram)
-		return "/storage/corp/exports/publicity";
+		return "/storage/corp/exports/compliance";
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class PublicityProxy extends ExportProxyButton
 	@Override
 	protected TCOutputPurpose getPurpose()
 	{
-		return TCOutputPurpose.DVD;
+		return TCOutputPurpose.CAPTIONING;
 	}
 
 }

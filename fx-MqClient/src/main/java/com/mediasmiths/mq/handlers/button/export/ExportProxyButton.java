@@ -275,6 +275,4 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		throw new IllegalArgumentException("unrecognised bug locaiton");
 	}
 
-	protected abstract TCOutputPurpose purpose();
-
 }

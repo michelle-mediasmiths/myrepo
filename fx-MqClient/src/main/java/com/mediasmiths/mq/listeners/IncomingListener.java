@@ -14,7 +14,6 @@ import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.handlers.asset.AssetDeletionHandler;
@@ -25,6 +24,8 @@ import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
+import com.mediasmiths.mq.handlers.button.export.CaptionProxy;
+import com.mediasmiths.mq.handlers.button.export.ComplianceProxy;
 import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
@@ -117,9 +118,13 @@ public class IncomingListener extends MqClientListener
 	DeleteButton deleteButton;
 	@Inject
 	ExportMarkersButton exportMarkersButton;
-//	@Inject
-//	PublicityProxy publicityProxyButton;
-//	
+	@Inject
+	PublicityProxy publicityProxyButton;
+	@Inject
+	CaptionProxy captionProxyButton;
+	@Inject
+	ComplianceProxy complianceProxyButton;
+
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -188,7 +193,9 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(uningestButton, messageAttributes);
 		passEventToHandler(deleteButton,messageAttributes);
 		passEventToHandler(exportMarkersButton, messageAttributes);
-//		passEventToHandler(publicityProxyButton, messageAttributes);
+		passEventToHandler(publicityProxyButton, messageAttributes);
+		passEventToHandler(captionProxyButton, messageAttributes);
+		passEventToHandler(complianceProxyButton,messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)
