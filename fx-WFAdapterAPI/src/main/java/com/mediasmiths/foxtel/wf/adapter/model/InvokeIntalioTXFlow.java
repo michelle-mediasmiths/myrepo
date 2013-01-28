@@ -30,4 +30,18 @@ public class InvokeIntalioTXFlow
 	{
 		this.packageID = packageID;
 	}
+	
+	private String title;
+
+	@XmlElement(required=true)
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
+
 }

@@ -25,6 +25,7 @@ import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
+import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
@@ -116,6 +117,8 @@ public class IncomingListener extends MqClientListener
 	DeleteButton deleteButton;
 	@Inject
 	ExportMarkersButton exportMarkersButton;
+	@Inject
+	PublicityProxy publicityProxyButton;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -185,6 +188,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(uningestButton, messageAttributes);
 		passEventToHandler(deleteButton,messageAttributes);
 		passEventToHandler(exportMarkersButton, messageAttributes);
+		passEventToHandler(publicityProxyButton, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)

@@ -102,6 +102,12 @@ public class MayamPackageController extends MayamController
 				{
 					if(txPackage.getClassification() != null)
 					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+					
+					if (txPackage.getTargetDate() != null)
+					{
+						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+					}
+					
 					client.assetApi().updateAsset(material);
 					
 					//Has Material been set to Preview Pass

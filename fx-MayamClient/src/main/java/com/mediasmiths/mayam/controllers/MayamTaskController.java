@@ -153,6 +153,17 @@ public class MayamTaskController extends MayamController
 		
 	}
 	
+	public long createExportTask(String materialID,AttributeMap exportButtonAttributes) throws MayamClientException
+	{
+			
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.OP_FILENAME,exportButtonAttributes.getAttribute(Attribute.OP_FILENAME));
+		initialAttributes.setAttribute(Attribute.VISUAL_BUG,exportButtonAttributes.getAttribute(Attribute.VISUAL_BUG));
+		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_POSITION,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION));
+		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_COLOR,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR));
+		return createTask(materialID,MayamAssetType.MATERIAL, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
+	}
+	
 
 	public long createWFEErorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
 	{
@@ -648,6 +659,9 @@ public class MayamTaskController extends MayamController
 			throw e;
 		}		
 	}
+
+
+
 
 
 }

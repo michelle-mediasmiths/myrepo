@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -15,6 +16,9 @@ public abstract class AttributeHandler implements Handler
 	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
 	protected TasksClient tasksClient;
+	
+	@Inject
+	protected MayamClientImpl mayamClient;
 	
 	@Inject
 	protected MayamTaskController taskController;

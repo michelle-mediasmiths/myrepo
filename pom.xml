@@ -43,10 +43,12 @@
 		<module>fx-PlaceholderAgent</module>
 		<module>fx-MediaPickupAgent</module>
 		<module>fx-qcAdapter</module>
+		<module>fx-TcAdapterAPI</module>
 		<module>fx-TcAdapter</module>
 		<module>fx-CerifyClient</module>
 		<module>fx-MuleClient</module>
 		<module>fx-CarbonWFSClient</module>
+		<module>fx-WFAdapterAPI</module>
 		<module>fx-WFAdapter</module>
 		<module>fx-MqClient</module>
 		<module>fx-PathResolver</module>

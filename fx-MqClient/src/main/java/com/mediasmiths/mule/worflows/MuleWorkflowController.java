@@ -1,10 +1,19 @@
 package com.mediasmiths.mule.worflows;
 
+import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+
 import org.apache.log4j.Logger;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
@@ -17,6 +26,10 @@ public class MuleWorkflowController {
 	
 	@Inject
 	private MediasmithsDestinations destinations;
+	
+	@Inject
+	@Named("wfe.marshaller")
+	private Marshaller wfeMarshaller;
 	
 	public MuleWorkflowController() 
 	{
@@ -74,6 +87,20 @@ public class MuleWorkflowController {
 		payload += "</invokeIntalioTCFlow>";
 		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " +  destinations.getMule_tc_destination()  + " Payload: " + payload);
 		return client.send(destinations.getMule_tc_destination(), payload, null);
+	}
+	
+	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
+	{
+		String payload = getSerialisationOf(ie);
+		client.dispatch(destinations.getMule_qc_destination(), payload, null);
+		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
+	}
+	
+	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		wfeMarshaller.marshal(payload, baos);
+		return baos.toString("UTF-8");
 	}
 	
 }

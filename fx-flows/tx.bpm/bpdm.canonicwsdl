@@ -25,36 +25,24 @@
   <pnlk:partnerLinkType name="transcodeAndTcadapter" bpdm:poolOneId="_sm2H0GZHEeKnSJI6HFegew" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="tcadapter" bpdm:poolTwoId="_w8nDoGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="transcode">
     <pnlk:role name="tcadapter_for_transcode" portType="tcadapter:Fortranscode" bpdm:thisPoolId="_sm2H0GZHEeKnSJI6HFegew">
       <wsdl:portType name="Fortranscode">
-        <wsdl:operation name="Build_Job" bpdm:canid="_3huhAGZHEeKnSJI6HFegew._52IzoGZHEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///tcAdapter/tcBuildJobXML.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML">
+        <wsdl:operation name="Build_Job" bpdm:canid="_3huhAGZHEeKnSJI6HFegew._52IzoGZHEeKnSJI6HFegew.">
           <wsdl:input message="tcBuildJobXML:requestJobXMLRequest" name="Build_Job" bpdm:canid="_8umOgGZHEeKnSJI6HFegew" bpdm:senderId="_3huhAGZHEeKnSJI6HFegew" bpdm:receiverId="_52IzoGZHEeKnSJI6HFegew" bpdm:senderName="build job" bpdm:receiverName="Build Job" bpdm:receiverPoolId="_sm2H0GZHEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcBuildJobXML.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML/input/requestJobXMLRequest"></wsdl:input>
           <wsdl:output message="tcBuildJobXML:requestJobXMLResponse" name="Build_JobResponse" bpdm:canid="_8_oUIGZHEeKnSJI6HFegew" bpdm:senderId="_52IzoGZHEeKnSJI6HFegew" bpdm:receiverId="_3huhAGZHEeKnSJI6HFegew" bpdm:senderName="Build Job" bpdm:receiverName="build job" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcBuildJobXML.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest}restService/httpPort/requestJobXML/output/requestJobXMLResponse"></wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="Get_Result" bpdm:canid="_9YrQ0GZIEeKnSJI6HFegew._BLrBUGZJEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///tcAdapter/tcGetResult.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult">
+        <wsdl:operation name="Get_Result" bpdm:canid="_9YrQ0GZIEeKnSJI6HFegew._BLrBUGZJEeKnSJI6HFegew.">
           <wsdl:input message="tcGetResult:tcGetResultRequest" name="Get_Result" bpdm:canid="_C6144GZJEeKnSJI6HFegew" bpdm:senderId="_9YrQ0GZIEeKnSJI6HFegew" bpdm:receiverId="_BLrBUGZJEeKnSJI6HFegew" bpdm:senderName="Get Result" bpdm:receiverName="Get Result" bpdm:receiverPoolId="_sm2H0GZHEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcGetResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult/input/tcGetResultRequest"></wsdl:input>
           <wsdl:output message="tcGetResult:tcGetResultResponse" name="Get_ResultResponse" bpdm:canid="_DNE4YGZJEeKnSJI6HFegew" bpdm:senderId="_BLrBUGZJEeKnSJI6HFegew" bpdm:receiverId="_9YrQ0GZIEeKnSJI6HFegew" bpdm:senderName="Get Result" bpdm:receiverName="Get Result" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcGetResult.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest}restService/httpPort/tcGetResult/output/tcGetResultResponse"></wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="Query_If_Job_Is_Finished" bpdm:canid="_mCXRsGZIEeKnSJI6HFegew._uS8AwGZIEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///tcAdapter/tcGetStatus.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus">
+        <wsdl:operation name="Query_If_Job_Is_Finished" bpdm:canid="_mCXRsGZIEeKnSJI6HFegew._uS8AwGZIEeKnSJI6HFegew.">
           <wsdl:input message="tcGetStatus:tcGetStatusRequest" name="Query_If_Job_Is_Finished" bpdm:canid="_vpx34GZIEeKnSJI6HFegew" bpdm:senderId="_mCXRsGZIEeKnSJI6HFegew" bpdm:receiverId="_uS8AwGZIEeKnSJI6HFegew" bpdm:senderName="Query If Job Is Finished" bpdm:receiverName="Query If Job Is Finished" bpdm:receiverPoolId="_sm2H0GZHEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcGetStatus.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus/input/tcGetStatusRequest"></wsdl:input>
           <wsdl:output message="tcGetStatus:tcGetStatusResponse" name="Query_If_Job_Is_FinishedResponse" bpdm:canid="_wCVh0GZIEeKnSJI6HFegew" bpdm:senderId="_uS8AwGZIEeKnSJI6HFegew" bpdm:receiverId="_mCXRsGZIEeKnSJI6HFegew" bpdm:senderName="Query If Job Is Finished" bpdm:receiverName="Query If Job Is Finished" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcGetStatus.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest}restService/httpPort/tcGetStatus/output/tcGetStatusResponse"></wsdl:output>
         </wsdl:operation>
-        <wsdl:operation name="Start_Job" bpdm:canid="_-dagwGZHEeKnSJI6HFegew._E_SSUWZIEeKnSJI6HFegew." bpdm:dataobjectPointer="project:///tcAdapter/tcStartJob.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob">
+        <wsdl:operation name="Start_Job" bpdm:canid="_-dagwGZHEeKnSJI6HFegew._E_SSUWZIEeKnSJI6HFegew.">
           <wsdl:input message="tcStartJob:tcStartJobRequest" name="Start_Job" bpdm:canid="_GRh9UGZIEeKnSJI6HFegew" bpdm:senderId="_-dagwGZHEeKnSJI6HFegew" bpdm:receiverId="_E_SSUWZIEeKnSJI6HFegew" bpdm:senderName="Start Job" bpdm:receiverName="Start Job" bpdm:receiverPoolId="_sm2H0GZHEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcStartJob.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob/input/tcStartJobRequest"></wsdl:input>
           <wsdl:output message="tcStartJob:tcStartJobResponse" name="Start_JobResponse" bpdm:canid="_GiCegGZIEeKnSJI6HFegew" bpdm:senderId="_E_SSUWZIEeKnSJI6HFegew" bpdm:receiverId="_-dagwGZHEeKnSJI6HFegew" bpdm:senderName="Start Job" bpdm:receiverName="Start Job" bpdm:receiverPoolId="_w8nDoGZGEeKnSJI6HFegew" bpdm:dataobjectPointer="project:///tcAdapter/tcStartJob.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest}restService/httpPort/tcStartJob/output/tcStartJobResponse"></wsdl:output>
         </wsdl:operation>
       </wsdl:portType>
     </pnlk:role>
-  </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="transcodeAndTcadapterForHttpPortPlk0" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_sm2H0GZHEeKnSJI6HFegew">
-    <pnlk:role name="tcadapter_for_transcode" portType="tcBuildJobXML:restInterface"></pnlk:role>
-  </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="transcodeAndTcadapterForHttpPortPlk1" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_sm2H0GZHEeKnSJI6HFegew">
-    <pnlk:role name="tcadapter_for_transcode" portType="tcGetResult:restInterface"></pnlk:role>
-  </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="transcodeAndTcadapterForHttpPortPlk2" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_sm2H0GZHEeKnSJI6HFegew">
-    <pnlk:role name="tcadapter_for_transcode" portType="tcGetStatus:restInterface"></pnlk:role>
-  </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="transcodeAndTcadapterForHttpPortPlk3" bpdm:canPlkId="_w8nDoGZGEeKnSJI6HFegew-_sm2H0GZHEeKnSJI6HFegew">
-    <pnlk:role name="tcadapter_for_transcode" portType="tcStartJob:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="transcodeAndTx_delivery" bpdm:poolOneId="_w8nDoGZGEeKnSJI6HFegew" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="transcode" bpdm:poolTwoId="_Sy2awGZGEeKnSJI6HFegew" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="tx delivery">
     <pnlk:role name="transcode_for_tx_delivery" portType="transcode:Fortx_delivery" bpdm:thisPoolId="_w8nDoGZGEeKnSJI6HFegew">

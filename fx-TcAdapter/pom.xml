@@ -32,6 +32,11 @@
 			<artifactId>fx-CarbonWFSClient</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
+			<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TcAdapterAPI</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-PathResolver</artifactId>
@@ -108,7 +113,7 @@
 						</transformSchema>
 					</transformSchemas>
 					<includes>
-						<include>com/mediasmiths/foxtel/tc/model/*</include>
+						<include>com/mediasmiths/foxtel/tc/rest/api/*</include>
 					</includes>
 					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
 				</configuration>

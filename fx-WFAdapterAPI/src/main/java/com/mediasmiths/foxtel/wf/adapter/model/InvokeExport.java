@@ -5,42 +5,36 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+
 @XmlRootElement
-public class InvokeIntalioTCFlow
+public class InvokeExport
 {
 	private String assetID;
-	private String outputFolder;
-	private boolean isForTX;
 	private Date requiredDate;
 	private long taskID;
-	private String title;
-	
-	public String getTitle()
+	private TCJobParameters tcParams;
+		
+	public TCJobParameters getTcParams()
 	{
-		return title;
+		return tcParams;
 	}
-	public void setTitle(String title)
+
+	@XmlElement(required = true)
+	public void setTcParams(TCJobParameters tcParams)
 	{
-		this.title = title;
+		this.tcParams = tcParams;
 	}
+
 	public long getTaskID()
 	{
 		return taskID;
 	}
-	
+
 	@XmlElement(required = true)
 	public void setTaskID(long taskID)
 	{
 		this.taskID = taskID;
-	}
-	@XmlElement(required = true)
-	public String getOutputFolder()
-	{
-		return outputFolder;
-	}
-	public void setOutputFolder(String outputFolder)
-	{
-		this.outputFolder = outputFolder;
 	}
 
 	@XmlElement(required = true)
@@ -53,16 +47,6 @@ public class InvokeIntalioTCFlow
 		this.assetID = assetID;
 	}
 	
-	@XmlElement(required = true)
-	public boolean isForTX()
-	{
-		return isForTX;
-	}
-	public void setForTX(boolean isForTX)
-	{
-		this.isForTX = isForTX;
-	}
-	
 	@XmlElement(required = false)
 	public Date getRequiredDate()
 	{
@@ -73,5 +57,19 @@ public class InvokeIntalioTCFlow
 	{
 		this.requiredDate = requiredDate;
 	}
+	
+	private String title;
+
+	@XmlElement(required=true)
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
+
 	
 }

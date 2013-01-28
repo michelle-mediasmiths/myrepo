@@ -54,6 +54,19 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- transcode -->
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TcAdapterAPI</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-WFAdapterAPI</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
 	<build>

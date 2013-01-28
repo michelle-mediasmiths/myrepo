@@ -1,0 +1,45 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:TC="http://thisdiagram/TC" xmlns:tcGetResult="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/TCAdapter" xmlns:tcGetStatus="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcGeneratePCP="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGeneratePCP.rest" xmlns:tcStartJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tcBuildJobXML="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/TCAdapter">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/TC" bpdm:prefix="TC" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" bpdm:prefix="tcGetResult" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetResult.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" bpdm:prefix="createJob" bpdm:comment="contrib=&apos;project:///tcAdapter/createJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/TCAdapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" bpdm:prefix="tcGetStatus" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGetStatus.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGeneratePCP.rest" bpdm:prefix="tcGeneratePCP" bpdm:comment="contrib=&apos;project:///tcAdapter/tcGeneratePCP.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" bpdm:prefix="tcStartJob" bpdm:comment="contrib=&apos;project:///tcAdapter/tcStartJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest" bpdm:prefix="tcBuildJobXML" bpdm:comment="contrib=&apos;project:///tcAdapter/tcBuildJobXML.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcGetStatus.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcGetResult.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcStartJob.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcBuildJobXML.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcGeneratePCP.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_3QpdIB5_EeKGPvPCWJ8IKg" bpdm:label="TC"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/createJob.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="TCAdapter" bpdm:ID="_0CdI8CjqEeKKl72DHT98sw">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="tcAndTCAdapterForHttpPortPlkVar" partnerLinkType="diag:TcAndTCAdapterForHttpPortPlk" myRole="TCAdapter_for_TC" bpdm:enableSharing="false" bpdm:providedService="createJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/jobs" bpdm:providedIsDefault="true" bpdm:clientTasks="_0CdI8CjqEeKKl72DHT98sw:_ycryAGk1EeKvSNtVA9wxMQ" bpdm:isManaged="true" bpdm:otherPoolId="_3QpdIB5_EeKGPvPCWJ8IKg"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input" binding="createJob:restBinding" operation="createJob" opMsgType="0" bpdm:id="_z0wYNWk1EeKvSNtVA9wxMQ" bpdm:messageIds="inc:_z0ddQGk1EeKvSNtVA9wxMQ"/>
+            <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output" binding="createJob:restBinding" operation="createJob" opMsgType="1" bpdm:id="_0dDuUGk1EeKvSNtVA9wxMQ" bpdm:messageIds=" out:_0c5WQGk1EeKvSNtVA9wxMQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="createJob:createJob_output" bpdm:linkedPart="response" bpdm:binding="createJob:restBinding" bpdm:opMsgType="1" bpdm:operation="createJob"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask operation="createJob" partnerLink="tcAndTCAdapterForHttpPortPlkVar" portType="createJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="createJob" bpdm:ID="_ycryAGk1EeKvSNtVA9wxMQ">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="createJobCreateJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_input" bpdm:binding="createJob:restBinding" bpdm:ID="_z0ddQGk1EeKvSNtVA9wxMQ"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="createJobCreateJobResponseMsg" bpdm:msgVarScopeId="_0CdI8CjqEeKKl72DHT98sw" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_output" bpdm:binding="createJob:restBinding" bpdm:ID="_0c5WQGk1EeKvSNtVA9wxMQ"></bpdm:linkset>
+            </bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>
