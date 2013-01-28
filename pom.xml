@@ -64,7 +64,7 @@
 		<worklists.version>0.9.9.9.25</worklists.version>
 		<mayam.wf.mq.version>0.9.9.9.14</mayam.wf.mq.version>
 		<mayam.wf.siteconfig.version>0.9.9.9.14</mayam.wf.siteconfig.version>
-		<stdlib.version>3.2.8</stdlib.version>
+		<stdlib.version>3.2.9</stdlib.version>
 		<events.version>1.10</events.version>
 		<commons.lang.version>2.5</commons.lang.version>
 	</properties>

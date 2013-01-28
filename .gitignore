@@ -54,6 +54,10 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
+
+# IntelliJ Files #
+##################
 .idea/
+atlassian-ide-plugin.xml
 *.iml
 *.iws

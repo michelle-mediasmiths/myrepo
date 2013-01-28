@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cnpsXML ProjectID.DWD="161428257" CreatedByAppVersion="3.21.1">
+	<Sources/>
+	<Destinations>
+		<Module_0 ModuleGUID="{6E4DA4A1-9B23-483D-BE18-F07C6376A414}" PresetGUID="{6E4DA4A1-9B23-483D-BE18-F07C6376A414}">
+			<ModuleData CML_P_BaseFileName="%s_GXF_HD" CML_P_Path="C:\Users\Administrator\Documents" DestFileUseSource.DWD="1" gxf_video_media_type.DWD="20" gxf_video_standard_compression.DWD="7" aspect_ratio_code.DWD="1" gxf_audio_media_type.DWD="9" audio_tracks.DWD="2" compressed_24.DWD="0" track_numbers_dolbyE="1,2" striped_timecode.DWD="1" gxf_timecode_offset_mode.DWD="0" ancillary_data_track.DWD="0" profile_level.DWD="12" bitrate.DWD="50000" gop.DWD="2" max_ip_distance.DWD="3" max_gop_frames.DWD="12" bitrate_mode.DWD="2" use_closed_gop.DWD="1" use_strict_gop_bitrate.DWD="0" chroma_format.DWD="1" dc_precision.DWD="10" quality_code.DWD="8" use_uncompressed_vbi.DWD="0" d10_bitrate.DWD="0" constructed_stream.DWD="0" Delviery_20_Mode.DWD="0" remove_extension.DWD="0" randomize_name.DWD="1" Server_20_Name_20_or_20_IP="" Login_20_Name="" Login_20_Passwd="" ftp_20_path="" WriteAr.DWD="1" CML_P_ForcedSplitMinutes.DWD="0" CML_P_SourceSegmentSel.DWD="0" CML_P_SourceSegmentStart.DWD="-1" CML_P_SourceSegmentTime.DWD="-1" CML_P_SourceSegmentStartDbl.DBL="0.000000" CML_P_SourceSegmentTimeDbl.DBL="0.000000" CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" FullUNCPath="\\MAMTRC01\C$\Users\Administrator\Documents"/>
+			<Filter_0>
+				<Module_0 ModuleGUID="{97F86658-14A9-4EA6-8FDA-9645B58029AF}" PresetGUID="{97F86658-14A9-4EA6-8FDA-9645B58029AF}">
+					<ModuleData Source_20_Width.DWD="1920" Source_20_Height.DWD="1080" Cropping_20_Dlg.DWD="0" CSI_FLTCROP_BOOL_ScaleAfterCrop.DWD="1" ConstraintAspect.DWD="1" CSI_FLTCROP_FROM_LEFT.DWD="0" Crop_Right1.DWD="1920" CSI_FLTCROP_FROM_RIGHT.DWD="0" CSI_FLTCROP_FROM_TOP.DWD="0" Crop_Bottom1.DWD="1080" CSI_FLTCROP_FROM_BOTTOM.DWD="0" Input_20_Size.BIN="AAAAAAAAAAAAAAAAAAAAAA=="/>
+				</Module_0>
+			</Filter_0>
+			<Filter_1/>
+		</Module_0>
+	</Destinations>
+	<ProjectSettings Stitching.DWD="0">
+		<KernelFlags KP_LetterBoxParam.DWD="0" KP_MethodVideoScaleUp.DWD="0" KP_MethodVideoScaleDown.DWD="0" KP_MethodVideoScaleThreads.DWD="0" KP_MethodVideoScaleOptions.DWD="0" KP_Activelinelength704.DWD="0" KP_TCFrameRateMode.DWD="0" KP_FrameRateMode.DWD="2" KP_SpecialMPEGScaling.DWD="1" KP_SpecialDeinterlacing.DWD="1" KP_SpecialD1toDVScaling.DWD="1" KP_RGB2YUV601.DWD="1" KP_YUV2RGB601.DWD="1" KP_AdjustDurationLimit.DWD="5" KP_AdjustDurationEnabled.DWD="1" KP_RestrictQuality.DWD="0" KP_AnamorphicScalingLimit.DWD="50" KP_AnamorphicScalingLimitEnabled.DWD="1" KP_SpecialVBIScaling.DWD="1" KP_DefaultSTLanguage.DWD="28261" KP_DefaultAudioLanguage.DWD="0" KP_ForceInternalMPEGDecoder.DWD="1" KP_SetChapterAtStitch.DWD="0" KP_UseDropFrame.DWD="1" KP_UseMPEGTimeStamp.DWD="0" KP_MaxMediaCut.DWD="5" KP_UseLegacyMPEG.DWD="0" KP_UseLegacyQT.DWD="0" KP_UseNTSCSafeLetterBox.DWD="0"/>
+	</ProjectSettings>
+</cnpsXML>

@@ -17,12 +17,24 @@ endif
 
 all: install
 
+
+
+#
+# pwright dev machine targets
+#
+pwcarbon: carbon
+	~/Code/tomcat/bin/kill.sh
+	rm -rf ~/Code/tomcat/webapps/tcadapter*
+	rsync fx-TcAdapter/target/fx-TcAdapter.war ~/Code/tomcat/webapps/tcadapter.war
+	~/Code/tomcat/bin/start.sh
 #
 # Targets
 #
 RSYNC=rsync --progress
 
 
+carbon:
+	$(MVN) clean package -am --projects fx-TcAdapter
 
 
 #
