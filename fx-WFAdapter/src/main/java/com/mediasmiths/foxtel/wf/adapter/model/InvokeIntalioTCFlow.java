@@ -13,12 +13,21 @@ public class InvokeIntalioTCFlow
 	private boolean isForTX;
 	private Date requiredDate;
 	private long taskID;
+	private String title;
 	
-	
+	public String getTitle()
+	{
+		return title;
+	}
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 	public long getTaskID()
 	{
 		return taskID;
 	}
+	
 	@XmlElement(required = true)
 	public void setTaskID(long taskID)
 	{

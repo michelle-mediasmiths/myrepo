@@ -1,0 +1,3 @@
+<Module_X ModuleGUID="{D87AFAD8-D7AA-4332-B4AD-01A69C91694A}" PresetGUID="{D87AFAD8-D7AA-4332-B4AD-01A69C91694A}">
+	<ModuleData TimeSource.DWD="0" TextColor.DWD="0" TextPlacement.DWD="4" TextSize.DWD="2" UseDropFrameTimecode.DWD="0" UseBkgColor.DWD="1" BkgColor.DWD="0" MakeBkgTransp.DWD="1"/>
+</Module_X>

@@ -189,7 +189,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 			log.info("Initiating qc workflow for asset " + assetID);
 			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
-			mule.initiateQcWorkflow(assetID, false, taskID.longValue());
+			
+			String assetTitle = messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
+			
+			mule.initiateQcWorkflow(assetID, false, taskID.longValue(),assetTitle);
 		}
 		catch (Exception e)
 		{
