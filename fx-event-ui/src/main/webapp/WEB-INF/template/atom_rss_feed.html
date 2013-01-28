@@ -1,0 +1,28 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>Atom RSS Feed</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+	<h1>Atom RSS Feed<a th:href="@{/atom_rss_feed.html}"><i class="icon-refresh" /></a>
+		</h1>
+		<p>RSS feed of events</p>
+		<table class="table">
+			<tr th:each="feed: ${feeds}">
+				<td th:text="${feed}">feed</td>
+			</tr>
+		</table>
+	</div>
+<body>
+
+</body>
+</html>

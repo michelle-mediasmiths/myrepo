@@ -1,0 +1,34 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+	<link th:substituteby="includes :: htmlhead" />
+	<title>Delivery</title>
+</head>
+
+<body>
+<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+       		<h1>Delivery<a th:href="@{delivery.html}"><i class="icon-refresh"/></a></h1>
+       		<p>All the data currently in the http://www.foxtel.com.au/ip/delivery namespace</p>
+       		
+       		<table id="deliveryTable" class="table table-striped tablesorter">
+       			<thead>
+       				<tr>
+       					<th>TitleID</th>
+
+       				</tr>
+       			</thead>
+       			<tbody>
+       				<tr th:each="delivery: ${deliveries}">
+       					<td th:text="${delivery.titleID}">titleID</td>
+       				</tr>
+       			</tbody>
+       		</table>
+       </div>	
+</body>
+</html>

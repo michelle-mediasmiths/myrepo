@@ -1,0 +1,46 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+	<link th:substituteby="includes :: htmlhead" />
+<title>Content Pickup</title>
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+
+		<h1>System<a th:href="@{component_pickup.html}"><i class="icon-refresh"/></a></h1>
+		<p>All the data currently held in the http://www.foxtel.com.au/ip/system namespace</p>
+
+		<table id="ipeventTypeTable" class="table table-striped tablesorter">
+       			<thead>
+       				<tr>
+       					<th>File Path</th>
+       					<th>Pick Up Kind</th>
+       					<th>Wait Time</th>
+       					<th>Failure Short Desc</th>
+       					<th>Failure Long Desc</th>
+       					<th>Source</th>
+       					<th>Target</th>
+       				</tr>
+       			</thead>
+       			<tbody>
+       				<tr th:each="ipEvent: ${ipEvents}">
+       					<td th:text="${ipEvent.filePath}">filePath</td>
+       					<td th:text="${ipEvent.pickUpKind}">pickupKind</td>
+       					<td th:text="${ipEvent.waitTime}">waitTime</td>
+       					<td th:text="${ipEvent.failureShortDesc}">failureShortDesc</td>
+       					<td th:text="${ipEvent.failureLongDescription}">failureLongDesc</td>
+       					<td th:text="${ipEvent.source}">source</td>
+       					<td th:text="${ipEvent.target}">target</td>
+       				</tr>
+       			</tbody>
+       		</table>
+	</div>
+</body>
+</html>

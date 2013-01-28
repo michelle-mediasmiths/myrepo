@@ -1,0 +1,101 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>Events Listing</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+		<h1>
+			Events Listing<a th:href="@{/events.html}"><i class="icon-refresh" /></a>
+		</h1>
+		<p>All of the events currently in the database</p>
+
+		<table id="eventsTable" class="table table-striped tablesorter">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Time</th>
+					<th>Namespace</th>
+					<th>EventName</th>
+					<th>Payload</th>
+					<th>Content</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="event: ${events}">
+				<form class="form-search" method="GET"> <!--th:action="@{'/rest/ui/search/id' + '?id=' + ${event.id}}"-->
+					<td name="id" th:text="${event.id}">id</td>
+					<td th:text="${event.time}">time</td>
+					<td th:text="${event.namespace}">namespaceEx</td>
+					<td th:text="${event.eventName}">eventNameEx</td>
+					<td th:text="${event.payload}">payloadEx</td>
+					<td th:text="${event.content}">content</td>
+					<td><a class="btn btn-primary" type="submit" th:href="@{'/rest/ui/event/id' + '?id=' + ${event.id}}">Detail</a></td>
+					<td><a class="btn btn-primary" type="submit" th:href="@{'/rest/ui/delete/id' + '?id=' + ${event.id}}">Delete</a></td>					
+				</form>	
+
+				</tr>
+			</tbody>
+		</table>
+
+		<h3>Search Options</h3>
+		<table id="queryTable" class="table table-striped tablesorter">
+			<tbody>
+				<tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/ui/search/namespace}">
+						<td><label>Select by namespace: </label></td>
+						<td><input name="namespace" id="namespaceText" type="text" class="input-small search-query" placeholder="namespace"/></td>
+						<td><button class="btn-primary" id="submitNamespaceBtn" type="submit">Search</button></td>
+					</form>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/ui/search/eventname}">
+						<td><label>Select by eventName: </label></td>
+						<td><input name="eventname" id="eventnameText" tyoe="text" class="imput-small search-query" placeholder="eventname"/></td>
+						<td><button class="btn-primary" id="submitEventNameBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+
+				<tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/ui/search/namespace/eventname}">
+						<td><label>Namespace: </label></td>
+						<td><input name="namespace" type="text" class="input-small search-query" placeholder="namespace"/></td>
+						<td></td>
+						<td><label>EventName: </label></td>
+						<td><input name="eventname" type="text" class="input-small search-query" placeholder="eventname"/></td>
+						<td><button class="btn-primary" id="submitEventNameBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+
+				<!-- <tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/ui/search/namespace/eventname}">
+						<td><label>Select: </label></td>
+						<td><select name="namespace">
+							<option th:each="event: ${events}" 
+								th:text="${event.namespace} +  ' : ' + ${event.eventName}"></option>
+						</select></td>
+						<td><button class="btn-primary" id="submitNamespaceBtn" type="submit">Search</button></td>
+					</form> -->
+				<tr>		
+					<form class="form-search" method="GET" th:action="@{/rest/ui/search/id}">
+						<td><label>By ID (unique): </label></td>
+						<td><select name="id">
+						<option th:each="event: ${events}" 
+								th:text="${event.id}"></option>
+						</select></td>
+						<td><button class="btn-primary" id="submitIdBtn" type="submit">Search</button></td>
+					</form>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>

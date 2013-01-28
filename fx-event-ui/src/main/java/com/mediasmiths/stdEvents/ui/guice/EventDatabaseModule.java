@@ -1,4 +1,4 @@
-package com.mediasmiths.stdEvents.persistence.guice;
+package com.mediasmiths.stdEvents.ui.guice;
 
 import org.hibernate.cfg.Configuration;
 
@@ -16,8 +16,9 @@ import com.mediasmiths.stdEvents.events.db.entity.QC;
 import com.mediasmiths.stdEvents.events.db.entity.Request;
 import com.mediasmiths.stdEvents.events.db.entity.Transcode;
 import com.mediasmiths.stdEvents.events.db.entity.nagios.NagiosReportEntity;
+import com.mediasmiths.stdEvents.events.db.entity.placeholder.ManualPurge;
 
-public class PersistenceDatabaseModule extends HibernateModule
+public class EventDatabaseModule extends HibernateModule
 {
 
 	@Override
@@ -37,6 +38,7 @@ public class PersistenceDatabaseModule extends HibernateModule
 		config.addAnnotatedClass(IPEvent.class);
 		config.addAnnotatedClass(Infrastructure.class);
 
+		config.addAnnotatedClass(EventEntity.class);
 		config.addAnnotatedClass(Request.class);
 	}
 

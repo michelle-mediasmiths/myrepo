@@ -1,0 +1,54 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+	<link th:substituteby="includes :: htmlhead" />
+<title>Content Pickup</title>
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+
+	<div class="container">
+
+		<h1>Content Pickup<a th:href="@{component_pickup.html}"><i class="icon-refresh"/></a></h1>
+		<p>All the data currently held in the http://www.foxtel.com.au/ip/content namespace</p>
+
+		<table id="materialTypeTable" class="table table-striped tablesorter">
+       			<thead>
+       				<tr>
+       					<th>Adult Material</th>
+       					<th>Format</th>
+       					<th>Aspect Ratio</th>
+       					<th>First Frame Timecode</th>
+       					<th>Last Frame Timecode</th>
+       					<th>Duration</th>
+       					<th>Media</th>
+       					<th>Original Conform</th>
+       					<th>Presentation</th>
+       					<th>Additional Program Detail</th>
+       					<th>Material ID</th>
+       				</tr>
+       			</thead>
+       			<tbody>
+       				<tr th:each="materialType: ${materialTypes}">
+       					<td th:text="${materialType.adultMaterial}">adultMaterial</td>
+       					<td th:text="${materialType.format}">format</td>
+       					<td th:text="${materialType.aspectRatio}">aspectRatio</td>
+       					<td th:text="${materialType.firstFrameTimecode}">firstFrameTimecode</td>
+       					<td th:text="${materialType.lastFrameTimecode}">lastFrameTimecode</td>
+       					<td th:text="${materialType.duration}">duration</td>
+       					<td th:text="${materialType.media}">media</td>
+       					<td th:text="${materialType.originalConform}">originalConform</td>
+       					<td th:text="${materialType.presentation}">presentation</td>
+       					<td th:text="${materialType.additionalProgrammeDetail}">additionalProgramDetail</td>
+       					<td th:text="${materialType.materialID}">materialID</td>
+       				</tr>
+       			</tbody>
+       		</table>
+	</div>
+</body>
+</html>
