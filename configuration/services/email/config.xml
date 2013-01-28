@@ -1,0 +1,345 @@
+<FoxtelEmailConfiguration>
+	<!-- QC -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
+		<eventname>AutoQCFailed</eventname>
+		<MailTemplate>
+			<subject>Auto QC Fail in MAM: [TitleField]</subject>
+			<body>AutoQCFailed</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
+		<eventname>CerifyQCError</eventname>
+		<MailTemplate>
+			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
+			<body>CerifyQCError</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
+		<eventname>QCproblemwithTCMedia</eventname>
+		<MailTemplate>
+			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID]
+				[TitleField]
+			</subject>
+			<body>QCproblemwithTCMedia</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+
+
+	<!-- TC -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>FailedInSendtoTX</eventname>
+		<MailTemplate>
+			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]
+			</subject>
+			<body>FailedInSendtoTX</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>PublicityFailure</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField]. Publicity transcode failed in MAM.
+			</subject>
+			<body>PublicityFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>CaptionProxySuccess</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField]. Caption proxy item sent to external
+				location
+			</subject>
+			<body>CaptionProxySuccess</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>CaptionProxyFailure</eventname>
+		<MailTemplate>
+			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode
+				failed in MAM.
+			</subject>
+			<body>CaptionProxyFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>ClassificationProxySuccess</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField]. Classification proxy item sent to
+				external location
+			</subject>
+			<body>ClassificationProxySuccess</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>ClassificationProxyFailure</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField]. Classification proxy transcode
+				failed in MAM.
+			</subject>
+			<body>ClassificationProxyFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>ExportFailure</eventname>
+		<MailTemplate>
+			<subject>[TitleField] [MasterID]. 3rd Party proxy transcode failed in
+				MAM.
+			</subject>
+			<body>ExportFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
+		<eventname>TCFailed</eventname>
+		<MailTemplate>
+			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
+			<body>TCFailed</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+	<!-- BMS -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
+		<eventname>ProtectedPurgeFail</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField] Purge Not Processed</subject>
+			<body>ProtectedPurgeFail</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
+		<eventname>ManualPurge</eventname>
+		<MailTemplate>
+			<subject>[MasterID] [TitleField] Manual Purge Actioned.</subject>
+			<body>ManualPurge</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+
+
+
+
+	<!-- Preview -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
+		<eventname>PreviewFailed</eventname>
+		<MailTemplate>
+			<subject>Pass-Reorder Item in MAM: [MasterID] [TitleField]</subject>
+			<body>PreviewFailed</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
+		<eventname>PreviewFurtherAnalysis</eventname>
+		<MailTemplate>
+			<subject>Preview Fail Item in MAM: [MasterID] [TitleField]</subject>
+			<body>PreviewFurtherAnalysis</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+	<!-- Delivery -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
+		<eventname>DeliveryFailed</eventname>
+		<MailTemplate>
+			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to
+				external location
+			</subject>
+			<body>DeliveryFailed</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
+		<eventname>Delivered</eventname>
+		<MailTemplate>
+			<subject> [MasterID] [TitleField]. Publicity item sent to external
+				location
+			</subject>
+			<body>Delivered</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+	<!-- System -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/system</namespace>
+		<eventname>CommError</eventname>
+		<MailTemplate>
+			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
+			<body>CommError</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+
+
+	<!-- Content -->
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>ContentWithoutMasterID</eventname>
+		<MailTemplate>
+			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<body>ContentWithoutMasterID</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>PlaceHolderCannotBeIdentified</eventname>
+		<MailTemplate>
+			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<body>PlaceHolderCannotBeIdentified</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>PlaceholderAlreadyHasMedia</eventname>
+		<MailTemplate>
+			<subject>Placeholder already has media</subject>
+			<body>PlaceholderAlreadyHasMedia</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>ArdomeImportFailure</eventname>
+		<MailTemplate>
+			<subject>Ardome import has failed</subject>
+			<body>ArdomeImportFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>ProgrammeFileIngestFailure</eventname>
+		<MailTemplate>
+			<subject>Ardome import has failed</subject>
+			<body>ProgrammeFileIngestFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>MediaFileImportFailure</eventname>
+		<MailTemplate>
+			<subject>Ardome import has failed</subject>
+			<body>MediaFileImportFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>EmergencyImportFailure</eventname>
+		<MailTemplate>
+			<subject>Ardome import has failed</subject>
+			<body>EmergencyImportFailure</body>
+			<emailaddresses>
+				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+</FoxtelEmailConfiguration>
