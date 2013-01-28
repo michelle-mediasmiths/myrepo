@@ -28,20 +28,16 @@ public class AssetProperties
 		}
 	}
 
-	public static boolean isMaterialDolbyE(AttributeMap map)
+	public static boolean isMaterialSurround(AttributeMap map)
 	{
 
 		AudioTrackList audioTracks = map.getAttribute(Attribute.AUDIO_TRACKS);
 
-		for (AudioTrack audioTrack : audioTracks)
-		{
-			if (audioTrack.getEncoding() != null && audioTrack.getEncoding().equals(AudioTrack.EncodingType.DOLBY_E))
-			{
-				return true;
-			}
+		if(audioTracks.size() > 2){
+			return true;
 		}
+		
 		return false;
-
 	}
 
 	public static boolean isPackageSD(AttributeMap packageAttributes)

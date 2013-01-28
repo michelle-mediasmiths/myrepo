@@ -9,7 +9,7 @@ public abstract class AutoQCRequest
 	private long taskID;
 	private String title;
 
-	@XmlElement(required=false)
+	@XmlElement(required=true)
 	public String getTitle()
 	{
 		return title;

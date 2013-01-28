@@ -66,13 +66,13 @@ public class QcProfileSelector
 	private String getProfileForMaterial(AttributeMap materialAttributes)
 	{
 		boolean isMaterialSD = AssetProperties.isMaterialSD(materialAttributes);
-		boolean isDolbyE = AssetProperties.isMaterialDolbyE(materialAttributes);
+		boolean isMaterialSurround = AssetProperties.isMaterialSurround(materialAttributes);
 
 		final String profile;
 
 		if (isMaterialSD)
 		{
-			if (isDolbyE)
+			if (isMaterialSurround)
 			{
 				profile = incomingSDSurround;
 			}
@@ -83,7 +83,7 @@ public class QcProfileSelector
 		}
 		else
 		{
-			if (isDolbyE)
+			if (isMaterialSurround)
 			{
 				profile = incomingHDSurround;
 			}
@@ -108,7 +108,7 @@ public class QcProfileSelector
 	private String getProfileForPackage(AttributeMap packageAttributes, AttributeMap materialAttributes)
 	{
 		boolean isPackageSD = AssetProperties.isPackageSD(packageAttributes);
-		boolean isDolbyE = AssetProperties.isMaterialDolbyE(materialAttributes);
+		boolean isDolbyE = AssetProperties.isMaterialSurround(materialAttributes);
 
 		final String profile;
 
