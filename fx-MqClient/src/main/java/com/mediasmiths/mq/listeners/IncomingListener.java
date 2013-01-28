@@ -117,9 +117,9 @@ public class IncomingListener extends MqClientListener
 	DeleteButton deleteButton;
 	@Inject
 	ExportMarkersButton exportMarkersButton;
-	@Inject
-	PublicityProxy publicityProxyButton;
-	
+//	@Inject
+//	PublicityProxy publicityProxyButton;
+//	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -188,7 +188,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(uningestButton, messageAttributes);
 		passEventToHandler(deleteButton,messageAttributes);
 		passEventToHandler(exportMarkersButton, messageAttributes);
-		passEventToHandler(publicityProxyButton, messageAttributes);
+//		passEventToHandler(publicityProxyButton, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)
