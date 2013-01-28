@@ -131,7 +131,7 @@ public class CsvImpl implements CsvAPI
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + name + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String [] header = {"status", "titleID"};
+			final String [] header = {"status", "titleID", "orderRef", "channel"};
 			final CellProcessor[] processors = getTitleProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -166,23 +166,26 @@ public class CsvImpl implements CsvAPI
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			if (payload.contains("titleID"))
-			{
-				if (event.getEventName().equals("CreateOrUpdateTitle"))
-					titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-				else if ((event.getEventName().equals("AddOrUpdateMaterial")) || (event.getEventName().equals("AddOrUpdatePackage")) || (event.getEventName().equals("DeletePackage")) || (event.getEventName().equals("DeleteMaterial")))
-					titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('>', (payload.indexOf("titleID")+9)));
-				else if (event.getEventName().equals("PurgeTitle"))
-					titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('/', (payload.indexOf("titleID")+9)));
-				else
-					titleID = "not available";
+			if (event.getEventName().equals("CreateOrUpdateTitle"))
+				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
+			else if ((event.getEventName().equals("AddOrUpdateMaterial")) || (event.getEventName().equals("AddOrUpdatePackage")) || (event.getEventName().equals("DeletePackage")) || (event.getEventName().equals("DeleteMaterial")))
+				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('>', (payload.indexOf("titleID")+9)));
+			else if (event.getEventName().equals("PurgeTitle"))
+				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('/', (payload.indexOf("titleID")+9)));
+			else
+				titleID = "not available";
 			
-				OrderStatus title = new OrderStatus();
-				title.setTitleID(titleID);
-				title.SetStatus(status);
-				titleList.add(title);
-			}
-		}	
+			OrderStatus title = new OrderStatus();
+			title.setTitleID(titleID);
+			title.SetStatus(status);
+			if (payload.contains("OrderReference"))
+				title.setOrderRef(payload.substring(payload.indexOf("OrderReference")+15, payload.indexOf("</OrderReference")));
+			if (payload.contains("channelName"))
+				title.setChannel(payload.substring(payload.indexOf("channelName")+13, payload.indexOf('"',(payload.indexOf("channelName")+13))));
+			if (payload.contains("aggregatorID"))
+				title.setAggregatorID(payload.substring(payload.indexOf("aggregatorID")+14, payload.indexOf('"',(payload.indexOf("aggregatorID")+14))));
+  			titleList.add(title);
+			}	
 		return titleList;
 	}
 	
@@ -254,7 +257,9 @@ public class CsvImpl implements CsvAPI
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new NotNull(),
-				new NotNull()
+				new NotNull(),
+				new Optional(),
+				new Optional()
 		};
 		return processors;
 	}

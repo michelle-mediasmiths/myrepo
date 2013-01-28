@@ -61,6 +61,10 @@ public class Transcode extends HibernateEventingMessage
 	@XmlElement
     protected String packageID;
 	
+	@Column(name="title")
+	@XmlElement
+	protected String title;
+	
 	@OneToOne
 	@PrimaryKeyJoinColumn
 	public EventEntity event;
@@ -88,5 +92,15 @@ public class Transcode extends HibernateEventingMessage
     public void setPackageID(String value) {
         this.packageID = value;
     }
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 
 }

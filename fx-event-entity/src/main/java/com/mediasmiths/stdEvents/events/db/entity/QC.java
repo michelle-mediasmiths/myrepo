@@ -61,6 +61,10 @@ public class QC extends HibernateEventingMessage
 	@XmlElement
     protected String jobName;
 	
+	@Column(name="title")
+	@XmlElement
+	protected String title;
+	
 	@Column(name="asset_id")
 	@XmlElement
     protected String assetId;
@@ -68,6 +72,10 @@ public class QC extends HibernateEventingMessage
 	@Column(name="for_tx_delivery")
 	@XmlElement
     protected boolean forTXDelivery;
+	
+	@Column(name="qc_status")
+	@XmlElement
+	protected String qcStatus;
 	
 	@OneToOne
 	@PrimaryKeyJoinColumn
@@ -135,5 +143,15 @@ public class QC extends HibernateEventingMessage
     public void setForTXDelivery(boolean value) {
         this.forTXDelivery = value;
     }
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 
 }
