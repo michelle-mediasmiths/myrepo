@@ -6,10 +6,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType
 public class TCBugOptions
 {
-	@XmlElement
-	public String channel = "AE";
-	@XmlElement
-	public TCLocation position = TCLocation.BOTTOM_LEFT;
-	@XmlElement
+	@XmlElement(required = true)
+	public String channel;
+	@XmlElement(required = true)
+	public TCLocation position = TCLocation.BOTTOM_RIGHT;
+	@XmlElement(required = true)
 	public double opacity = 80D;
 }

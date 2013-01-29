@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.tc.rest.api;
 
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -9,7 +8,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "JobInfo")
 public class TCJobInfo
 {
-	@XmlAttribute
+	@XmlElement(required = true)
 	public String id;
 
 	@XmlElement(required = false)
