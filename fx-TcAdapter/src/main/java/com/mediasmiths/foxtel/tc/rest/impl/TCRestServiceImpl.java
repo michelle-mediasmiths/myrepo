@@ -65,7 +65,7 @@ public class TCRestServiceImpl implements TCRestService
 		{
 			StringWriter sw = new StringWriter();
 
-			new XMLOutputter().output(project.getDocument(), sw);
+			new XMLOutputter().output(project.getElement(), sw);
 
 			return sw.toString();
 		}
