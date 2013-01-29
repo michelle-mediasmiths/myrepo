@@ -29,34 +29,36 @@
 	</distributionManagement>
 
 	<modules>
-		<module>fx-Common</module>
-		<module>fx-event-core</module>
-		<module>fx-event-report</module>
-		<module>fx-event-entity</module>
-		<module>fx-event-ui</module>
-		<module>fx-Event</module>
-		<module>fx-PlaceholderManagementSchema</module>
-		<module>fx-MaterialExchange</module>
-		<module>fx-Ruzz</module>
-		<module>fx-MediaExchange</module>
-		<module>fx-MayamClient</module>
 		<module>fx-Agent</module>
-		<module>fx-PlaceholderAgent</module>
-		<module>fx-MediaPickupAgent</module>
-		<module>fx-qcAdapter</module>
-		<module>fx-TcAdapterAPI</module>
-		<module>fx-TcAdapter</module>
-		<module>fx-CerifyClient</module>
-		<module>fx-MuleClient</module>
 		<module>fx-CarbonWFSClient</module>
-		<module>fx-WFAdapterAPI</module>
-		<module>fx-WFAdapter</module>
-		<module>fx-MqClient</module>
-		<module>fx-PathResolver</module>
+		<module>fx-CerifyClient</module>
+		<module>fx-Common</module>
+		<module>fx-Event</module>
+		<module>fx-FSAdapter</module>
+		<module>fx-MaterialExchange</module>
+		<module>fx-MayamClient</module>
 		<module>fx-MayamClientInterface</module>
 		<module>fx-MayamClientStub</module>
-		<module>fx-FSAdapter</module>
+		<module>fx-MediaExchange</module>
+		<module>fx-MediaPickupAgent</module>
+		<module>fx-MqClient</module>
+		<module>fx-MuleClient</module>
+		<module>fx-PathResolver</module>
+		<module>fx-PlaceholderAgent</module>
+		<module>fx-PlaceholderManagementSchema</module>
+		<module>fx-Ruzz</module>
+		<module>fx-TcAdapter</module>
+		<module>fx-TcAdapterAPI</module>
+		<module>fx-WFAdapter</module>
+		<module>fx-WFAdapterAPI</module>
+		<module>fx-event-core</module>
+		<module>fx-event-entity</module>
+		<module>fx-event-report</module>
+		<module>fx-event-ui</module>
 		<module>fx-filepickup-api</module>
+		<module>fx-qcAdapter</module>
+		<module>fx-report-gen</module>
+		<module>fx-report-ui</module>
 	</modules>
 
 	<properties>
