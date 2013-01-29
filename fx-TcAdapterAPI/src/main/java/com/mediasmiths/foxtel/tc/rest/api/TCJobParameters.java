@@ -16,6 +16,12 @@ public class TCJobParameters
 	public TCAudioType audioType;
 
 	/**
+	 * An optional description for the job
+	 */
+	@XmlElement(required = false)
+	public String description;
+
+	/**
 	 * The path to the input file, expressed as a unix filepath
 	 */
 	@XmlElement(required = true)

@@ -16,4 +16,7 @@ public class TCJobInfo
 
 	@XmlElement(required = false)
 	public String errorDetail;
+
+	@XmlElement(required = false)
+	public Integer priority;
 }
