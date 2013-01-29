@@ -64,7 +64,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			if (result.equals(MANUAL_QC_PASS))
 			{
 				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
+				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS_MANUAL);
 				taskController.saveTask(currentAttributes);
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REORDER))
@@ -106,7 +106,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		{
 
 			// kick off channel condition monitoring once that has been implemented
-			finishWithPass(currentAttributes);
+			finishWithPass(currentAttributes, autoQc);
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
 		{
@@ -139,7 +139,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			else
 			{
 				// kick off channel condition monitoring once that has been implemented
-				finishWithPass(currentAttributes);
+				finishWithPass(currentAttributes,fileFormat);
 			}
 		}
 		else if (fileFormat.equals(QcStatus.FAIL))
@@ -156,12 +156,12 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 	}
 
-	private void finishWithPass(AttributeMap currentAttributes)
+	private void finishWithPass(AttributeMap currentAttributes, QcStatus passStatus)
 	{
 		try
 		{
 			currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
+			currentAttributes.setAttribute(Attribute.QC_STATUS, passStatus);
 			taskController.saveTask(currentAttributes);
 		}
 		catch (MayamClientException e)

@@ -98,11 +98,6 @@ public class MayamTaskController extends MayamController
 		}
 	}
 	
-	private boolean isQcPass(QcStatus qcStatus){
-		return qcStatus != null && (qcStatus == QcStatus.PASS || qcStatus != QcStatus.PASS_MANUAL);
-	}
-		
-	
 	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
 		

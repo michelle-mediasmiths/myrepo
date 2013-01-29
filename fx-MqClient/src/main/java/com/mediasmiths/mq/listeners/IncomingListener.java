@@ -35,6 +35,7 @@ import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
+import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
@@ -95,6 +96,8 @@ public class IncomingListener extends MqClientListener
 	IngestCompleteHandler ingestCompleteHandler;
 	@Inject
 	InitiateQcHandler initiateQcHandler;
+	@Inject
+	PreviewTaskCreateHandler previewTaskCreateHandler;
 	@Inject
 	PreviewTaskFinishHandler previewTaskFinishHandler;
 	@Inject
@@ -193,6 +196,7 @@ public class IncomingListener extends MqClientListener
  
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
+		passEventToHandler(previewTaskCreateHandler, messageAttributes);
 		passEventToHandler(uningestButton, messageAttributes);
 		passEventToHandler(deleteButton,messageAttributes);
 		passEventToHandler(exportMarkersButton, messageAttributes);

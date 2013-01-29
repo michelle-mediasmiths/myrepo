@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 
 public class AssetProperties
@@ -93,4 +94,17 @@ public class AssetProperties
 		String classification = packageAttributes.getAttribute(Attribute.CONT_CLASSIFICATION);
 		return classification != null;
 	}
+
+	public static boolean isQCPassed(AttributeMap materialAttributes){
+		
+		QcStatus qcStatus = materialAttributes.getAttribute(Attribute.QC_STATUS);
+		
+		if(qcStatus != null){
+			return qcStatus.equals(QcStatus.PASS) || qcStatus.equals(QcStatus.PASS_MANUAL);
+		}
+		
+		return false;
+		
+	}
+	
 }
