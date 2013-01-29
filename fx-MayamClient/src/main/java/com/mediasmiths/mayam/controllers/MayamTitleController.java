@@ -235,6 +235,10 @@ public class MayamTitleController extends MayamController{
 				attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
 				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 				
+				if (title.isPurgeProtect()) {
+					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
+				}
+				
 				if (!attributesValid) {
 					log.warn("Title created but one or more attributes were invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
@@ -479,11 +483,17 @@ public class MayamTitleController extends MayamController{
 					
 					if (isProtected != titleIsPurgeProtected){
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
+						if (title.isPurgeProtect()) {
+							attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
+						}
 						try {
 							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.MATERIAL.getAssetType());
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
+								if (title.isPurgeProtect()) {
+									material.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
+								}
 								client.assetApi().updateAsset(material);
 							}							
 						} catch (RemoteException e) {

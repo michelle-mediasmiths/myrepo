@@ -103,7 +103,14 @@ public class MayamMaterialController extends MayamController
 					Boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 
 					if (isProtected != null)
+					{
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected.booleanValue());
+						
+						if (isProtected)
+						{
+							attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");
+						}
+					}
 
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
