@@ -6,7 +6,6 @@
 .classpath
 .metadata/
 target
-build
 
 # surefire reports#
 ###################
