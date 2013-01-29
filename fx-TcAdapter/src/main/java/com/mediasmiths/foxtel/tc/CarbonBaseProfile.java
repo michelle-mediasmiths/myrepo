@@ -5,7 +5,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 
 /**
- * Describes the base profiles
+ * Describes the base profiles available to this adapter
  */
 public enum CarbonBaseProfile
 {
@@ -106,6 +106,18 @@ public enum CarbonBaseProfile
 		this.audioType = audio;
 	}
 
+	/**
+	 * Determines whether this profile is suitable for the given output, resolution and audio type
+	 *
+	 * @param purpose
+	 * 		the output purpose
+	 * @param source
+	 * 		the source resolution
+	 * @param audio
+	 * 		the output audio type
+	 *
+	 * @return
+	 */
 	public boolean suitableFor(TCOutputPurpose purpose, TCResolution source, TCAudioType audio)
 	{
 		return matchingPurpose(purpose) && matchingResolution(source) && matchingAudioType(audio);
