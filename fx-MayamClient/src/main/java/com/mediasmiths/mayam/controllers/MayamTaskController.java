@@ -590,18 +590,22 @@ public class MayamTaskController extends MayamController
 			
 			for (int i = 0; i < allKeys.length; i++)
 			{
-					AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-					entry.setEntityType(EntityType.GROUP);
-					entry.setEntity(allKeys[i]);
+				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+				AssetAccess.ControlList.Entry mediaEntry = new AssetAccess.ControlList.Entry();
 					
-					Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
+				entry.setEntityType(EntityType.GROUP);
+				entry.setEntity(allKeys[i]);
 					
-					entry.setRead(rights.a);
-					entry.setWrite(rights.b);
-					entry.setAdmin(rights.c);
+				Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
 					
-					accessRights.getMedia().add(entry);
-					accessRights.getStandard().add(entry);
+				entry.setRead(rights.a);
+				entry.setWrite(rights.b);
+					
+				mediaEntry.setRead(rights.c);
+				mediaEntry.setWrite(rights.c);
+					
+				accessRights.getMedia().add(mediaEntry);
+				accessRights.getStandard().add(entry);
 			}
 			
 			log.info("Access Rights for " + houseId + " updated to : " + accessRights.toString());
