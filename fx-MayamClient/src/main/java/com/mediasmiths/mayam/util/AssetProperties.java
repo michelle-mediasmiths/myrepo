@@ -4,10 +4,12 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 
 public class AssetProperties
@@ -105,6 +107,18 @@ public class AssetProperties
 		
 		return false;
 		
+	}
+	
+	public static boolean isPurgeProtected(AttributeMap titleAttributes){
+		
+		Boolean purgeProtected = titleAttributes.getAttribute(Attribute.PURGE_PROTECTED);
+		
+		if(purgeProtected==null){
+			return false;
+		}
+		else{
+			return purgeProtected.booleanValue();
+		}
 	}
 	
 }

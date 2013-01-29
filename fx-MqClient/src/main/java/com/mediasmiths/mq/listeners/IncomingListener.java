@@ -25,6 +25,7 @@ import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
+import com.mediasmiths.mq.handlers.button.UnprotectButton;
 import com.mediasmiths.mq.handlers.button.export.CaptionProxy;
 import com.mediasmiths.mq.handlers.button.export.ComplianceProxy;
 import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
@@ -130,7 +131,9 @@ public class IncomingListener extends MqClientListener
 	CaptionProxy captionProxyButton;
 	@Inject
 	ComplianceProxy complianceProxyButton;
-
+	@Inject
+	UnprotectButton unprotectButton;
+	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
 		try
@@ -203,6 +206,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(publicityProxyButton, messageAttributes);
 		passEventToHandler(captionProxyButton, messageAttributes);
 		passEventToHandler(complianceProxyButton,messageAttributes);
+		passEventToHandler(unprotectButton, messageAttributes);
 	}
 
 	private void onTaskUpdate(MqMessage msg)
