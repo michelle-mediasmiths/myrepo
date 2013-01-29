@@ -21,6 +21,7 @@ import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.UningestButton;
@@ -78,6 +79,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedAssetCreateHandler unmatchedAssetCreateHandler;
 	@Inject
 	TitleUpdateHandler titleUpdateHandler;
+	@Inject
+	MaterialUpdateHandler materialUpdateHandler;
 	@Inject
 	ComplianceEditingHandler compEditHandler;
 	@Inject
@@ -302,6 +305,7 @@ public class IncomingListener extends MqClientListener
 		{
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);
 		}
 		catch (Exception e)
