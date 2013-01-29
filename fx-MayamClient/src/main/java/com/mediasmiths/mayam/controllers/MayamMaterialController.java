@@ -394,6 +394,12 @@ public class MayamMaterialController extends MayamController
 			attributesValid = attributesValid
 					&& attributes.setAttribute(Attribute.CONT_RESTRICTED_MATERIAL, material.isAdultMaterial());
 
+			if (material.isAdultMaterial())
+			{
+				attributesValid = attributesValid
+						&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
+			}
+			
 			// As per Foxtel and Mayam decision, duration and timecodes will be detected in Ardome, no need to store
 			// attributesValid &= attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
 			// attributesValid &= attributes.setAttribute(Attribute., material.getLastFrameTimecode());
