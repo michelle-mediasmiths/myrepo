@@ -235,7 +235,10 @@ public class MayamTitleController extends MayamController{
 				attributesValid &= attributes.setAttribute(Attribute.CONT_RESTRICTED_ACCESS, title.isRestrictAccess());
 				attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
 				
-				if (title.isPurgeProtect()) {
+				if (ao) {
+					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");		
+				}
+				else if (title.isPurgeProtect()) {
 					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 				}
 				
@@ -491,7 +494,10 @@ public class MayamTitleController extends MayamController{
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
-								if (title.isPurgeProtect()) {
+								if (ao) {
+									material.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
+								}
+								else if (title.isPurgeProtect()) {
 									material.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 								}
 								client.assetApi().updateAsset(material);
@@ -499,6 +505,10 @@ public class MayamTitleController extends MayamController{
 						} catch (RemoteException e) {
 							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID(),e);
 						}
+					}
+					
+					if (ao) {
+						attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
 					}
 					
 					if (!attributesValid) {
