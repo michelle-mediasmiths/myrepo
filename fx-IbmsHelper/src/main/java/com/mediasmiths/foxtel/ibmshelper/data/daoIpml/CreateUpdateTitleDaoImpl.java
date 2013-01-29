@@ -5,6 +5,7 @@ import java.util.List;
 import com.mediasmiths.foxtel.ibmshelper.data.dao.CreateUpdateTitleDao;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetCreateTitleEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetLicenseRightsEntity;
+import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetMaterialEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetTitleInfoEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdateTitleEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdatedTitleEntity;
@@ -105,6 +106,13 @@ public class CreateUpdateTitleDaoImpl extends HibernateDao<String, Long> impleme
 
 	@Override
 	public List<GetUpdatedTitleEntity> getUpdatedTitle()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<GetMaterialEntity> getMaterial(Long versionId)
 	{
 		// TODO Auto-generated method stub
 		return null;

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetCreateTitleEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetLicenseRightsEntity;
+import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetMaterialEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetTitleInfoEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdateTitleEntity;
 import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdatedTitleEntity;
@@ -21,5 +22,7 @@ public interface CreateUpdateTitleDao extends Dao<String, Long>
 	public List<GetLicenseRightsEntity> getLicenseRights(Long versionID);
 
 	public List<GetUpdatedTitleEntity> getUpdatedTitle();
+
+	public List<GetMaterialEntity> getMaterial(Long versionId);
 
 }

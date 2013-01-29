@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.ibmshelper;
+package com.mediasmiths.foxtel.ibmshelper.ibmsfunction;
 
 import com.mediasmiths.foxtel.ibmshelper.data.daoIpml.CreateUpdateTitleDaoImpl;
 
@@ -13,8 +13,18 @@ public class CreateUpdateTitle
 
 	public String GetCreateUpdateTitle()
 	{
+		//create placeholder type
+		
 		// Call all methods
-		// unmarshall
+		
+		//getcreatetitle
+		//getupdatetitle
+		//gettitleinfo(version number^^)
+		//getlicense rights(version number^^)
+		//getupdatedtitle
+		//getmaterial
+		
+		// add ^^ to placeholder
 		// return unmarshalled thing
 
 		return "Test";
