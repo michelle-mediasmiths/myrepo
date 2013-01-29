@@ -88,37 +88,17 @@
 							<uri>http://ns.mediasmiths.com/foxtel/wf/adapter</uri>
 							<toFile>wfAdapter.xsd</toFile>
 						</transformSchema>
+						<transformSchema>
+							<uri>http://ns.mediasmiths.com/foxtel/tc/adapter</uri>
+							<toFile>tcAdapter.xsd</toFile>
+						</transformSchema>
 					</transformSchemas>
 					<includes>
 						<include>com/mediasmiths/foxtel/wf/adapter/model/*</include>
 					</includes>
 					<outputDirectory>${project.build.directory}/schemas</outputDirectory>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.5</version>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/classes/com/mediasmiths/foxtel/wf/adapter/model</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/src/main/resources/com/mediasmiths/foxtel/wf/adapter/model</directory>
-									<includes>
-										<include>jaxb.index</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+			</plugin>			
 		</plugins>
 
 	</build>

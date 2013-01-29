@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobInfo;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import com.mediasmiths.foxtel.tc.rest.api.TCLocation;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCRestService;
 import com.mediasmiths.std.guice.apploader.BasicSetup;
@@ -31,11 +32,12 @@ public class ManualTestSubmitPCP
 		///storage/mam/hires01/hr/hr01/2013/01/26/BM-250113-M2_0125743.mxf
 		
 		params.inputFile = "/storage/mam/hires01/mediasmiths/input/in.mxf";
-		params.outputFolder = "/storage/mam/hires01/mediasmiths/outputtemp";
+		params.outputFolder = "/storage/mam/hires01/mediasmiths/output/ARN_TR";
 //		params.inputFile = "/storage/mam/hires01/tcinput/HD1.mxf";
 //		params.outputFolder = "/storage/mam/hires01/tcoutput";
 		
-		params.bug.channel = "AED";
+		params.bug.channel = "ARN";
+		params.bug.position=TCLocation.TOP_RIGHT;
 		params.timecode=null;
 		params.audioType = TCAudioType.DOLBY_E;
 		params.purpose = TCOutputPurpose.DVD;
