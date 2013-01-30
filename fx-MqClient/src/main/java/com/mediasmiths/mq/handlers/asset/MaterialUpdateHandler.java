@@ -7,9 +7,12 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
+import com.mayam.wf.attributes.shared.type.TaskState;
 
 public class MaterialUpdateHandler extends UpdateAttributeHandler
 {
@@ -84,6 +87,21 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 				catch (RemoteException e)
 				{
 					log.error("Exception thrown by Mayam whille updating archive policy for material : " + materialID, e);
+				}
+			}
+			
+			if (attributeChanged(Attribute.PRESENTATION_FLAG, before, after, currentAttributes))
+			{
+				try {
+					AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
+					if (task != null) 
+					{
+						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						taskController.saveTask(task);
+					}
+				} catch (MayamClientException e) {
+					log.error("Exception thrown while removing Purge Candidate Task for material : " + materialID, e);
+					e.printStackTrace();
 				}
 			}
 		}
