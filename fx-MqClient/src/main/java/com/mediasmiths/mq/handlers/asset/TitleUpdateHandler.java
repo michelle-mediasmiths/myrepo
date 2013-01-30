@@ -40,23 +40,6 @@ public class TitleUpdateHandler extends UpdateAttributeHandler
 				{
 					log.info("title attribute(s) that should inherit to their materials changed");
 					materialController.updateMaterialAttributesFromTitle(currentAttributes);
-					
-					if (attributeChanged(Attribute.PURGE_PROTECTED, before, after,currentAttributes) || attributeChanged(Attribute.CONT_RESTRICTED_MATERIAL, before, after,currentAttributes))
-					{
-						boolean isProtected = currentAttributes.getAttribute(Attribute.PURGE_PROTECTED);
-						boolean isAO = currentAttributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-						
-						if (isAO) {
-							currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
-						}
-						else if (isProtected) {
-							currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
-						}
-						else {
-							currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, "M");
-						}
-						tasksClient.assetApi().updateAsset(currentAttributes);
-					}
 				}
 				catch (Exception e)
 				{
@@ -69,6 +52,6 @@ public class TitleUpdateHandler extends UpdateAttributeHandler
 	@Override
 	public String getName()
 	{
-		return "Temporary Content";
+		return "Title Update";
 	}
 }

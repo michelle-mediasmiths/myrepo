@@ -30,6 +30,8 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		try {			
 			if (attributeChanged(Attribute.CONT_MAT_TYPE, before, after,currentAttributes))
 			{
+				log.debug("CONT_MAT_TYPE changed");
+				
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
 				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);

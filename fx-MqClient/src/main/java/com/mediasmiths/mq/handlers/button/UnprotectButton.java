@@ -20,47 +20,12 @@ public class UnprotectButton extends ButtonClickHandler
 	protected void buttonClicked(AttributeMap messageAttributes)
 	{
 
-		AssetType assetType = (AssetType) messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-
-		AttributeMap titleAttributes;
-
-		if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
+		if (AssetProperties.isPurgeProtected(messageAttributes))
 		{
+			messageAttributes.setAttribute(Attribute.PURGE_PROTECTED, false);
 			try
 			{
-			titleAttributes =  titlecontroller.getTitle(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error handling unprotect request for a TITLE, failed to load title", e);
-				return;
-			}
-		}
-		else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
-		{
-			try
-			{
-				titleAttributes = titlecontroller.getTitle(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error handling unprotec request for an ITEM, failed to load parent title", e);
-				return;
-			}
-		}
-		else
-		{
-			log.error("Unprotect button click on unexpected asset type asset id is "
-					+ messageAttributes.getAttributeAsString(Attribute.ASSET_ID));
-			return;
-		}
-
-		if (AssetProperties.isPurgeProtected(titleAttributes))
-		{
-			titleAttributes.setAttribute(Attribute.PURGE_PROTECTED, false);
-			try
-			{
-				tasksClient.assetApi().updateAsset(titleAttributes);
+				tasksClient.taskApi().updateTask(messageAttributes);
 			}
 			catch (RemoteException e)
 			{
