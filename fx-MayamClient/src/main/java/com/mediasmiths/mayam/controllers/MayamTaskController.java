@@ -156,6 +156,7 @@ public class MayamTaskController extends MayamController
 		log.info(String.format("Creating tx delivery task task for package "+presentationID+" qcrequired: "+requireAutoQC));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
+		initialAttributes.setAttribute(Attribute.QC_REQUIRED, requireAutoQC);
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
 		
 	}
