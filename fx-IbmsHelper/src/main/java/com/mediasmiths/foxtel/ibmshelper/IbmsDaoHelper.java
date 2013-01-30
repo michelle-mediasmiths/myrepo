@@ -1,23 +1,84 @@
 package com.mediasmiths.foxtel.ibmshelper;
 
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdateTitle;
+import java.util.List;
+
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+
+import com.google.inject.Inject;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.AddorUpdateMaterial;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdatePackage;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdateTitleFunction;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CompileMaterial;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgePackage;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgeTitle;
 
 public class IbmsDaoHelper
 {
-	public CreateUpdateTitle createUpdateTitle;
+	public CreateUpdateTitleFunction createUpdateTitleFunction;
+	public CreateUpdatePackage createUpdatePackage;
+	public CompileMaterial compileMaterial;
+	public AddorUpdateMaterial addorUpdateMaterial;
+	public PurgePackage purgePackage;
+	public PurgeTitle purgeTitle;
 
-	public IbmsDaoHelper()
+	@Inject
+	public IbmsDaoHelper(
+			CreateUpdateTitleFunction createUpdateTitleFunction,
+			CreateUpdatePackage createUpdatePackage,
+			AddorUpdateMaterial addorUpdateMaterial,
+			CompileMaterial compileMaterial,
+			PurgePackage purgePackage,
+			PurgeTitle purgeTitle)
 	{
-		this.createUpdateTitle = new CreateUpdateTitle();
+		this.createUpdateTitleFunction = createUpdateTitleFunction;
+		this.createUpdatePackage = createUpdatePackage;
+		this.compileMaterial = compileMaterial;
+		this.addorUpdateMaterial = addorUpdateMaterial;
+		this.purgePackage = purgePackage;
+		this.purgeTitle = purgeTitle;
+
 	}
 
-	public String createUpdateTitle()
+	public List<PlaceholderMessage> createUpdateTitle()
 	{
-		// make calls within createupdateclass
-		// writes titleplaceholder and materialplaceholder xml
-		// Return xml? or save to table and return status
+		List<PlaceholderMessage> placeholderMessage = createUpdateTitleFunction.GetCreateUpdateTitle();
 
-		return "temp";
+		return placeholderMessage;
+	}
+
+	public List<PlaceholderMessage> createUpdatePackage()
+	{
+		List<PlaceholderMessage> placeholderMessage = createUpdatePackage.GetCreateUpdatePackage();
+
+		return placeholderMessage;
+	}
+
+	public List<PlaceholderMessage> getCompileMaterial()
+	{
+		List<PlaceholderMessage> placeholderMessage = compileMaterial.GetCompileMaterial();
+
+		return placeholderMessage;
+	}
+
+	public List<PlaceholderMessage> addorUpdateMaterial()
+	{
+		List<PlaceholderMessage> placeholderMessage = addorUpdateMaterial.GetAddorUpdateMaterial();
+
+		return placeholderMessage;
+	}
+
+	public List<PlaceholderMessage> purgePackage()
+	{
+		List<PlaceholderMessage> placeholderMessage = purgePackage.GetPurgePackage();
+
+		return placeholderMessage;
+	}
+
+	public List<PlaceholderMessage> purgeTitle()
+	{
+		List<PlaceholderMessage> placeholderMessage = purgeTitle.GetPurgeTitle();
+
+		return placeholderMessage;
 	}
 
 	public void updateRequestedStatus(String verionID, String requestID)

@@ -5,9 +5,9 @@ import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-public class PurgeTitle
+public class CompileMaterial
 {
-	public List<PlaceholderMessage> GetPurgeTitle()
+	public List<PlaceholderMessage> GetCompileMaterial()
 	{
 		List<PlaceholderMessage> placeholderMessageList = new ArrayList<PlaceholderMessage>();
 		return placeholderMessageList;
