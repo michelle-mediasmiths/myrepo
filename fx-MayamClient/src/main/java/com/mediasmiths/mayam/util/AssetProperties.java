@@ -36,10 +36,11 @@ public class AssetProperties
 
 		AudioTrackList audioTracks = map.getAttribute(Attribute.AUDIO_TRACKS);
 
-		if(audioTracks.size() > 2){
+		if (audioTracks.size() > 2)
+		{
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -97,28 +98,61 @@ public class AssetProperties
 		return classification != null;
 	}
 
-	public static boolean isQCPassed(AttributeMap materialAttributes){
-		
+	public static boolean isQCPassed(AttributeMap materialAttributes)
+	{
+
 		QcStatus qcStatus = materialAttributes.getAttribute(Attribute.QC_STATUS);
-		
-		if(qcStatus != null){
+
+		if (qcStatus != null)
+		{
 			return qcStatus.equals(QcStatus.PASS) || qcStatus.equals(QcStatus.PASS_MANUAL);
 		}
-		
+
 		return false;
-		
+
 	}
-	
-	public static boolean isPurgeProtected(AttributeMap titleAttributes){
-		
+
+	public static boolean isPurgeProtected(AttributeMap titleAttributes)
+	{
+
 		Boolean purgeProtected = titleAttributes.getAttribute(Attribute.PURGE_PROTECTED);
-		
-		if(purgeProtected==null){
+
+		if (purgeProtected == null)
+		{
 			return false;
 		}
-		else{
+		else
+		{
 			return purgeProtected.booleanValue();
 		}
 	}
-	
+
+	public static boolean isProtected(AttributeMap attributes)
+	{
+		Boolean p = attributes.getAttribute(Attribute.PURGE_PROTECTED);
+
+		if (p == null)
+		{
+			return false;
+		}
+		else
+		{
+			return p.booleanValue();
+		}
+	}
+
+	public static boolean isAO(AttributeMap attributes)
+	{
+		Boolean p = attributes.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+
+		if (p == null)
+		{
+			return false;
+		}
+		else
+		{
+			return p.booleanValue();
+		}
+	}
+
 }
