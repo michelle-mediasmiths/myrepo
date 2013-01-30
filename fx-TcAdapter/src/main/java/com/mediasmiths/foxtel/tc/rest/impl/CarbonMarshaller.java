@@ -2,7 +2,7 @@ package com.mediasmiths.foxtel.tc.rest.impl;
 
 import com.google.inject.Singleton;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobInfo;
-import com.mediasmiths.foxtel.tc.rest.api.TCJobResult;
+import com.mediasmiths.foxtel.tc.rest.api.TCJobProgress;
 import org.apache.commons.lang.StringUtils;
 import org.datacontract.schemas._2004._07.rhozet.DataObject;
 import org.datacontract.schemas._2004._07.rhozet.Job;
@@ -24,7 +24,10 @@ public class CarbonMarshaller
 		TCJobInfo info = new TCJobInfo();
 
 		info.id = job.getGuid();
-		info.result = marshal(job.getStatus());
+
+		info.carbonState = job.getStatus().value();
+		info.state = marshal(job.getStatus());
+
 		info.errorDetail = getErrorMessages(job);
 		info.priority = job.getPriority();
 
@@ -50,7 +53,7 @@ public class CarbonMarshaller
 	}
 
 
-	private TCJobResult marshal(JobStatus status)
+	private TCJobProgress marshal(JobStatus status)
 	{
 		switch (status)
 		{
@@ -59,13 +62,13 @@ public class CarbonMarshaller
 			case ACTIVE:
 			case INACTIVE:
 			case PAUSING:
-				return null; // Job has not completed
+				return TCJobProgress.INCOMPLETE;
 			case FATAL:
-				return TCJobResult.FAILURE;
+				return TCJobProgress.FAILURE;
 			case COMPLETED:
-				return TCJobResult.SUCCESS;
+				return TCJobProgress.SUCCESS;
 			case ABORT:
-				return TCJobResult.FAILURE;
+				return TCJobProgress.FAILURE;
 
 			default:
 				throw new RuntimeException("Unknown job status: " + status);
