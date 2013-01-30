@@ -602,7 +602,10 @@ public class MayamTaskController extends MayamController
 					
 				entry.setEntityType(EntityType.GROUP);
 				entry.setEntity(allKeys[i]);
-					
+				
+				mediaEntry.setEntityType(EntityType.GROUP);
+				mediaEntry.setEntity(allKeys[i]);
+								
 				Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
 					
 				entry.setRead(rights.a);
