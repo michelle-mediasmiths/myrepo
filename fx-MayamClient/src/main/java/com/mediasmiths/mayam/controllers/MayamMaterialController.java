@@ -331,7 +331,7 @@ public class MayamMaterialController extends MayamController
 
 			for (Attribute a : materialsAttributesInheritedFromTitle)
 			{
-				material.setAttribute(a, material.getAttribute(a));
+				material.setAttribute(a, title.getAttribute(a));
 			}
 
 			try
