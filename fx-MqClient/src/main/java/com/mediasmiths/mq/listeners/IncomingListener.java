@@ -15,12 +15,14 @@ import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.handlers.asset.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
@@ -66,6 +68,8 @@ public class IncomingListener extends MqClientListener
 	private TasksClient client;
 	@Inject
 	private MayamTaskController taskController;
+	@Inject
+	private MayamAccessRightsController accessRightsController;
 	
 	//needs a marshaller before this will inject
 //	@Inject
@@ -82,6 +86,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedAssetCreateHandler unmatchedAssetCreateHandler;
 	@Inject
 	TitleUpdateHandler titleUpdateHandler;
+	@Inject
+	AccessUpdateHandler accessUpdateHandler;
 	@Inject
 	MaterialUpdateHandler materialUpdateHandler;
 	@Inject
@@ -246,7 +252,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
 				
-				taskController.updateAccessRights(currentAttributes);
+				accessRightsController.updateAccessRights(currentAttributes);
 			}
 		}
 		catch (Exception e)
@@ -317,7 +323,8 @@ public class IncomingListener extends MqClientListener
 		{
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
-			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);			
+			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);	
+			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);	
 		}
 		catch (Exception e)
 		{

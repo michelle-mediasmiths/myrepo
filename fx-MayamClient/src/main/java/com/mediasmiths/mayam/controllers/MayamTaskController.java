@@ -139,24 +139,11 @@ public class MayamTaskController extends MayamController
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
-	public long createErrorTXDeliveryTaskForPackage(String presentationID, String errorMessage) throws MayamClientException{
+	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
 		
 		log.info(String.format("Creating tx delivery task task for package "+presentationID));
 		AttributeMap initialAttributes = client.createAttributeMap();
-		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.FALSE);
-		initialAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);	
-		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-		
-		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
-		
-	}
-	
-	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
-		
-		log.info(String.format("Creating tx delivery task task for package "+presentationID+" qcrequired: "+requireAutoQC));
-		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
-		initialAttributes.setAttribute(Attribute.QC_REQUIRED, requireAutoQC);
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
 		
 	}
@@ -276,7 +263,7 @@ public class MayamTaskController extends MayamController
 
 				try
 				{
-					newTask = updateAccessRights(attributes.getAttributes());
+					newTask = accessRightsController.updateAccessRights(attributes.getAttributes());
 				}
 				catch (Exception e)
 				{
@@ -386,7 +373,7 @@ public class MayamTaskController extends MayamController
 		{
 			try
 			{
-				task = updateAccessRights(task);
+				task = accessRightsController.updateAccessRights(task);
 			}
 			catch (Exception e)
 			{
@@ -405,240 +392,6 @@ public class MayamTaskController extends MayamController
 	{
 		return client.taskApi().getTask(taskId);
 	}
-
-	public AttributeMap updateAccessRights(AttributeMap task)
-	{
-		AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
-		String houseId = task.getAttribute(Attribute.HOUSE_ID);
-
-		boolean retrictedAccess = false;
-
-		if (task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS) != null)
-		{
-			retrictedAccess = ((Boolean) task.getAttribute(Attribute.CONT_RESTRICTED_ACCESS)).booleanValue();
-		}
-
-		StringList channels = task.getAttribute(Attribute.CHANNELS);
-		ArrayList<String> channelList = new ArrayList<String>();
-		if (channels != null)
-		{
-			for (int i = 0; i < channels.size(); i++)
-			{
-				channelList.add(channels.get(i));
-			}
-		}
-
-		String contentFormat = task.getAttributeAsString(Attribute.CONT_MAT_TYPE);
-		String contentCategory = task.getAttributeAsString(Attribute.CONT_CATEGORY);
-
-		log.warn(String.format(
-				"content format is %s , category is %s for asset with id %s",
-				contentFormat,
-				contentCategory,
-				houseId));
-
-		String contentType = null;
-		if (assetType != null && assetType.equals(MayamAssetType.TITLE.getAssetType()))
-		{
-			contentType = "Title";
-		}
-		else if (contentFormat != null)
-		{
-			if (contentFormat.toUpperCase().equals(MayamContentTypes.PROGRAMME))
-			{
-				contentType = "Programme";
-			}
-			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EPK))
-			{
-				contentType = "EPK";
-			}
-			else if (contentFormat.toUpperCase().equals(MayamContentTypes.EDIT_CLIPS))
-			{
-				contentType = "Edit Clip";
-			}
-			else if (contentFormat.toUpperCase().equals(MayamContentTypes.UNMATCHED))
-			{
-				contentType = "Unmatched";
-			}
-		}
-		else if (contentCategory != null)
-		{
-			if (contentCategory.toUpperCase().equals("PUBLICITY"))
-			{
-				contentType = "Publicity";
-			}
-		}
-
-		Boolean adultOnly = task.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-		Boolean qcParallel = task.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-		QcStatus qcStatus = task.getAttribute(Attribute.QC_STATUS);
-
-		String qaStatus = task.getAttribute(Attribute.QC_PREVIEW_RESULT);
-
-/*		AttributeMap filterEqualities = client.createAttributeMap();
-		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PREVIEW.toString());
-		filterEqualities.setAttribute(Attribute.HOUSE_ID, houseId);
-		FilterCriteria criteria = new FilterCriteria();
-		criteria.setFilterEqualities(filterEqualities);
-		FilterResult existingTasks;
-		try
-		{
-			existingTasks = client.taskApi().getTasks(criteria, 10, 0);
-
-			if (existingTasks.getTotalMatches() > 0)
-			{
-				List<AttributeMap> tasks = existingTasks.getMatches();
-				AttributeMap qaTask = tasks.get(0);
-				qaStatus = task.getAttribute(Attribute.TASK_STATE);
-
-				if (existingTasks.getTotalMatches() > 0)
-				{
-					log.warn("More than 1 Preview task found for assset : " + houseId
-							+ ". Access Righst will be set based on status of first task : "
-							+ qaTask.getAttribute(Attribute.TASK_ID));
-				}
-			}
-		}
-		catch (RemoteException e)
-		{
-			log.error("Exception thrown by Mayam while attempting to retrieve any Preview tasks for asset : " + houseId, e);
-		}*/
-
-		
-		String qaStatusString = "";
-		String qcStatusString = "";
-				
-		if (qaStatus != null)
-		{
-			qaStatusString = qaStatus.toString();
-			qaStatusString = "Undefined";
-			if (qaStatus.equals(MayamPreviewResults.PREVIEW_FAIL)) 
-			{
-				qaStatusString = "Fail";
-			}
-			else if (qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER)|| qaStatus.equals(MayamPreviewResults.PREVIEW_PASSED))
-			{
-				qaStatusString = "Pass";
-			}
-		}
-		
-		if (qcStatus != null)
-		{
-			qcStatusString = "Undefined";
-			if (qcStatus == QcStatus.FAIL) 
-			{
-				qcStatusString = "Fail";
-			}
-			else if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
-			{
-				qcStatusString = "Pass";
-			}
-		}
-		
-		List<MayamAccessRights> allRights = accessRightsController.retrieve(
-				qcStatusString,
-				qaStatusString,
-				qcParallel,
-				contentType,
-				channelList,
-				retrictedAccess,
-				adultOnly);
-		
-		if(allRights == null){
-			log.warn("allrights is null");
-		}
-		else{
-			log.debug("allrights size: "+allRights.size());
-			
-			StringBuilder sb = new StringBuilder();
-			for (MayamAccessRights mayamAccessRights : allRights)
-			{
-				sb.append(mayamAccessRights.toString());
-				sb.append("\n");
-			}
-			log.debug("Allrights "+sb.toString());
-		}
-
-		AttributeMap underlyingAsset = null;
-		try {
-			underlyingAsset = client.assetApi().getAssetBySiteId(assetType, houseId);
-		} catch (RemoteException e) {
-			log.error("Exception thrown by Mayam while retrieving underlying assset found of type " + assetType + " and with Id " + houseId, e);
-			e.printStackTrace();
-		}
-		
-		if (allRights != null && allRights.size() > 0)
-		{
-			AssetAccess accessRights = task.getAttribute(Attribute.ASSET_ACCESS);
-			
-			if(accessRights==null){
-				log.warn("Access rights in attribute map was null");
-				accessRights=new AssetAccess();
-			}
-			
-			HashMap<String, Triplet<Boolean, Boolean, Boolean>> groupMap = new HashMap<String, Triplet<Boolean, Boolean, Boolean>>();
-			
-			for (int i = 0; i < allRights.size(); i++)
-			{
-				if (groupMap.containsKey(allRights.get(i).getGroupName()))
-				{
-					Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allRights.get(i).getGroupName());
-					rights.a = rights.a || allRights.get(i).getReadAccess();
-					rights.b = rights.b || allRights.get(i).getWriteAccess();
-					rights.c = rights.c || allRights.get(i).getAdminAccess();
-					groupMap.put(allRights.get(i).getGroupName(), rights);
-				}
-				else {
-					Triplet <Boolean, Boolean, Boolean> rights = new Triplet<Boolean, Boolean, Boolean>(allRights.get(i).getReadAccess(), allRights.get(i).getWriteAccess(), allRights.get(i).getAdminAccess());
-					groupMap.put(allRights.get(i).getGroupName(), rights);
-				}
-			}
-			
-			String[] allKeys = groupMap.keySet().toArray(new String[0]);
-			
-			for (int i = 0; i < allKeys.length; i++)
-			{
-				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
-				AssetAccess.ControlList.Entry mediaEntry = new AssetAccess.ControlList.Entry();
-					
-				entry.setEntityType(EntityType.GROUP);
-				entry.setEntity(allKeys[i]);
-				
-				mediaEntry.setEntityType(EntityType.GROUP);
-				mediaEntry.setEntity(allKeys[i]);
-								
-				Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
-					
-				entry.setRead(rights.a);
-				entry.setWrite(rights.b);
-					
-				mediaEntry.setRead(rights.c);
-				mediaEntry.setWrite(rights.c);
-					
-				accessRights.getMedia().add(mediaEntry);
-				accessRights.getStandard().add(entry);
-			}
-			
-			log.info("Access Rights for " + houseId + " updated to : " + accessRights.toString());
-			task.setAttribute(Attribute.ASSET_ACCESS, accessRights);
-			
-			if (underlyingAsset != null)
-			{
-				underlyingAsset.setAttribute(Attribute.ASSET_ACCESS, accessRights);
-				try {
-					client.assetApi().updateAsset(underlyingAsset);
-				} catch (RemoteException e) {
-					log.error("Exception thrown by Mayam while updating access rights on asset : " + houseId, e);
-					e.printStackTrace();
-				}
-			}
-		}
-		else {
-			log.info("No suitable Access Rights found for task : " + houseId);
-		}
-		return task;
-	}
-
 
 	public void autoQcFailedForMaterial(String materialId, long taskID) throws MayamClientException
 	{

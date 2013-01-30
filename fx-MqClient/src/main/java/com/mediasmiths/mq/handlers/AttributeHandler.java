@@ -9,6 +9,7 @@ import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public abstract class AttributeHandler implements Handler
@@ -32,6 +33,8 @@ public abstract class AttributeHandler implements Handler
 	@Inject
 	protected MayamTitleController titlecontroller;
 	
+	@Inject
+	protected MayamAccessRightsController accessRightsController;
 	
 	public abstract void process(AttributeMap messageAttributes) ;
 
