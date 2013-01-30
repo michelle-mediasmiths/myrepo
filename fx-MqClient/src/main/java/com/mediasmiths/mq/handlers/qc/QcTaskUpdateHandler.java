@@ -48,7 +48,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			autoQcStatusChanged(currentAttributes, after);
 		}
 
-		// qc result set manually
+		// qc state set manually
 		if (after.containsAttribute(Attribute.QC_RESULT))
 		{
 			qcResultSetManually(currentAttributes, after);

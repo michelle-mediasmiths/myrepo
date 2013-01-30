@@ -11,8 +11,11 @@ public class TCJobInfo
 	@XmlElement(required = true)
 	public String id;
 
-	@XmlElement(required = false)
-	public TCJobResult result;
+	@XmlElement(required = true)
+	public TCJobProgress state;
+
+	@XmlElement(required = true)
+	public String carbonState;
 
 	@XmlElement(required = false)
 	public String errorDetail;

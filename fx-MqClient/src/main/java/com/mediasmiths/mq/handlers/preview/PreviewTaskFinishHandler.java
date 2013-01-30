@@ -44,7 +44,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 		}
 		else
 		{
-			log.info("preview result is " + previewResult);
+			log.info("preview state is " + previewResult);
 
 			boolean passed = false;
 			boolean reorder = false;
