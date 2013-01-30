@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cnpsXML ProjectID.DWD="161428257" CreatedByAppVersion="3.21.1">
 	<Sources>
-		<Module_0 Inpoint.QWD="-1" Outpoint.QWD="-1" Duration.QWD="2430000000" MultiSource.DWD="1">
+		<Module_0 Inpoint.QWD="-1" Outpoint.QWD="-1" MultiSource.DWD="1">
 			<ModuleData>
 				<StreamTypeTable StreamSelector_0.DWD="0" StreamType_0.DWD="0" StreamPtr_0.DWD="0" StreamSelector_1.DWD="2" StreamType_1.DWD="0" StreamPtr_1.DWD="0"/>
 				<SourceModules>
-					<MultiSrcModule_0 MultiSource.DWD="0" Filename="C:\Rhozet\Input\foxtel_12LR-38sur2.mxf" CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" FullUNCFilename="\\MAMTRC01\Rhozet\Input\foxtel_12LR-38sur2.mxf">
+					<MultiSrcModule_0 MultiSource.DWD="0" Filename="input.mxf" CreatorMachine="MEDIASMITHS1" CreatorUser="RhozetAdmin" FullUNCFilename="input.mxf">
 						<ModuleData/>
 					</MultiSrcModule_0>
 				</SourceModules>

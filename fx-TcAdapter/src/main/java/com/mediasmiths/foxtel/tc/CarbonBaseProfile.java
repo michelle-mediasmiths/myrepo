@@ -17,7 +17,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	MAM_HD_12ST_GXF_HD_12ST(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.STEREO),
+	TX_HD_STEREO(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.STEREO, "TX_HD_STEREO.pcp"),
 	/**
 	 * SD GXF (from HD source) with Stereo audio
 	 * <ul>
@@ -26,7 +26,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	MAM_HD_12ST_GXF_SD_12ST(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO),
+	TX_SD_STEREO_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO, "TX_SD_STEREO.pcp"),
 	/**
 	 * SD GXF with Stereo audio
 	 * <ul>
@@ -35,7 +35,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	MAM_SD_12ST_GXF_SD_12ST(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.STEREO),
+	TX_SD_STEREO(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.STEREO, "TX_SD_STEREO.pcp"),
 
 	/**
 	 * HD GXF with Stereo and DolbyE
@@ -46,7 +46,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	MAM_HD_12ST_38SUR_GXF_HD_12ST_34DBE(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.DOLBY_E),
+	TX_HD_DOLBYE(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_HD_DOLBYE.pcp"),
 
 	/**
 	 * SD GXF (from HD source) with Stereo and DolbyE
@@ -57,7 +57,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	MAM_HD_12ST_38SUR_GXF_SD_12ST_34DBE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E),
+	TX_SD_DOLBYE_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE.pcp"),
 
 	/**
 	 * SD GXF with Stereo and DolbyE
@@ -67,7 +67,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	MAM_SD_12ST_38SUR_GXF_SD_12ST_34DBE(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.DOLBY_E),
+	TX_SD_DOLBYE(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE.pcp"),
 
 	/**
 	 * VCD for captioning
@@ -76,7 +76,7 @@ public enum CarbonBaseProfile
 	 * <li>Does not seem to matter whether Stereo/DolbyE</li>
 	 * </ul>
 	 */
-	MAM_MXF_MPG1VCD_TLC(TCOutputPurpose.CAPTIONING, null, null),
+	CAPTIONING(TCOutputPurpose.CAPTIONING, null, null, "VCD_ALL_ALL.pcp"),
 	/**
 	 * Delivery content for DVD (where the source has DolbyE audio)
 	 * <ul>
@@ -85,7 +85,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	MAM_MXF_DVD_DBE_BUG_TLC(TCOutputPurpose.DVD, null, TCAudioType.DOLBY_E),
+	DVD_DOLBYE(TCOutputPurpose.DVD, null, TCAudioType.DOLBY_E, "DVD_ALL_DOLBYE.pcp"),
 	/**
 	 * Delivery content for DVD (where the source has only Stereo audio)
 	 * <ul>
@@ -93,17 +93,19 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	MAM_MXF_DVD_ST_BUG_TLC(TCOutputPurpose.DVD, null, TCAudioType.STEREO);
+	DVD_STEREO(TCOutputPurpose.DVD, null, TCAudioType.STEREO, "DVD_ALL_STEREO.pcp");
 
 	private final TCAudioType audioType;
 	private final TCOutputPurpose purpose;
 	private final TCResolution source;
+	private final String filename;
 
-	CarbonBaseProfile(TCOutputPurpose purpose, TCResolution source, TCAudioType audio)
+	CarbonBaseProfile(TCOutputPurpose purpose, TCResolution source, TCAudioType audio, String filename)
 	{
 		this.purpose = purpose;
 		this.source = source;
 		this.audioType = audio;
+		this.filename = filename;
 	}
 
 	/**
@@ -136,5 +138,10 @@ public enum CarbonBaseProfile
 	private boolean matchingAudioType(TCAudioType audio)
 	{
 		return (this.audioType == null || this.audioType == audio);
+	}
+
+	public String getFilename()
+	{
+		return filename;
 	}
 }
