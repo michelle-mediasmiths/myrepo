@@ -5,11 +5,12 @@ import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
-public class PurgePackage
+public class PurgeTitleFunction
 {
-	public List<PlaceholderMessage> GetPurgePackage()
+	public List<PlaceholderMessage> GetPurgeTitle()
 	{
 		List<PlaceholderMessage> placeholderMessageList = new ArrayList<PlaceholderMessage>();
 		return placeholderMessageList;
 	}
+	// getpurge title (titleID)
 }

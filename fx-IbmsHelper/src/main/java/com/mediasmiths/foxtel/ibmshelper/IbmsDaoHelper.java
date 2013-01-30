@@ -5,37 +5,37 @@ import java.util.List;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.AddorUpdateMaterial;
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdatePackage;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.AddorUpdateMaterialFunction;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdatePackageFunction;
 import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CreateUpdateTitleFunction;
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CompileMaterial;
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgePackage;
-import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgeTitle;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.CompileMaterialFunction;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgePackageFunction;
+import com.mediasmiths.foxtel.ibmshelper.ibmsfunction.PurgeTitleFunction;
 
 public class IbmsDaoHelper
 {
 	public CreateUpdateTitleFunction createUpdateTitleFunction;
-	public CreateUpdatePackage createUpdatePackage;
-	public CompileMaterial compileMaterial;
-	public AddorUpdateMaterial addorUpdateMaterial;
-	public PurgePackage purgePackage;
-	public PurgeTitle purgeTitle;
+	public CreateUpdatePackageFunction createUpdatePackageFunction;
+	public CompileMaterialFunction compileMaterialFunction;
+	public AddorUpdateMaterialFunction addorUpdateMaterialFunction;
+	public PurgePackageFunction purgePackageFunction;
+	public PurgeTitleFunction purgeTitleFunction;
 
 	@Inject
 	public IbmsDaoHelper(
 			CreateUpdateTitleFunction createUpdateTitleFunction,
-			CreateUpdatePackage createUpdatePackage,
-			AddorUpdateMaterial addorUpdateMaterial,
-			CompileMaterial compileMaterial,
-			PurgePackage purgePackage,
-			PurgeTitle purgeTitle)
+			CreateUpdatePackageFunction createUpdatePackageFunction,
+			AddorUpdateMaterialFunction addorUpdateMaterialFunction,
+			CompileMaterialFunction compileMaterialFunction,
+			PurgePackageFunction purgePackageFunction,
+			PurgeTitleFunction purgeTitleFunction)
 	{
 		this.createUpdateTitleFunction = createUpdateTitleFunction;
-		this.createUpdatePackage = createUpdatePackage;
-		this.compileMaterial = compileMaterial;
-		this.addorUpdateMaterial = addorUpdateMaterial;
-		this.purgePackage = purgePackage;
-		this.purgeTitle = purgeTitle;
+		this.createUpdatePackageFunction = createUpdatePackageFunction;
+		this.compileMaterialFunction = compileMaterialFunction;
+		this.addorUpdateMaterialFunction = addorUpdateMaterialFunction;
+		this.purgePackageFunction = purgePackageFunction;
+		this.purgeTitleFunction = purgeTitleFunction;
 
 	}
 
@@ -48,40 +48,44 @@ public class IbmsDaoHelper
 
 	public List<PlaceholderMessage> createUpdatePackage()
 	{
-		List<PlaceholderMessage> placeholderMessage = createUpdatePackage.GetCreateUpdatePackage();
+		List<PlaceholderMessage> placeholderMessage = createUpdatePackageFunction.GetCreateUpdatePackage();
 
 		return placeholderMessage;
 	}
 
 	public List<PlaceholderMessage> getCompileMaterial()
 	{
-		List<PlaceholderMessage> placeholderMessage = compileMaterial.GetCompileMaterial();
+		List<PlaceholderMessage> placeholderMessage = compileMaterialFunction.GetCompileMaterial();
 
 		return placeholderMessage;
 	}
 
 	public List<PlaceholderMessage> addorUpdateMaterial()
 	{
-		List<PlaceholderMessage> placeholderMessage = addorUpdateMaterial.GetAddorUpdateMaterial();
+		List<PlaceholderMessage> placeholderMessage = addorUpdateMaterialFunction.GetAddorUpdateMaterial();
 
 		return placeholderMessage;
 	}
 
 	public List<PlaceholderMessage> purgePackage()
 	{
-		List<PlaceholderMessage> placeholderMessage = purgePackage.GetPurgePackage();
+		List<PlaceholderMessage> placeholderMessage = purgePackageFunction.GetPurgePackage();
 
 		return placeholderMessage;
 	}
 
 	public List<PlaceholderMessage> purgeTitle()
 	{
-		List<PlaceholderMessage> placeholderMessage = purgeTitle.GetPurgeTitle();
+		List<PlaceholderMessage> placeholderMessage = purgeTitleFunction.GetPurgeTitle();
 
 		return placeholderMessage;
 	}
 
-	public void updateRequestedStatus(String verionID, String requestID)
+	public void updateSuccessStatus(String verionID, String requestID)
+	{
+	}
+
+	public void updateFailureStatus(String verionID, String requestID, String comment)
 	{
 	}
 

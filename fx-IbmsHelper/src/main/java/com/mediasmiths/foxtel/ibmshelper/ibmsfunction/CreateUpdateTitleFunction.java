@@ -50,4 +50,7 @@ public class CreateUpdateTitleFunction
 		}
 		return placeholderMessageList;
 	}
+	
+	//GetUpdateTitle
+	//GetUpdatedTitle?
 }
