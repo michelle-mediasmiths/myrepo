@@ -9,8 +9,10 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
@@ -52,6 +54,19 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		if (after.containsAttribute(Attribute.QC_RESULT))
 		{
 			qcResultSetManually(currentAttributes, after);
+		}
+		
+		QcStatus qcStatus = currentAttributes.getAttribute(Attribute.QC_STATUS);
+		if (qcStatus == QcStatus.FAIL) 
+		{
+			String houseID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
+			AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+			try {
+				taskController.createPurgeCandidateTask(MayamAssetType.fromString(assetType.toString()), houseID, 30);
+			} catch (MayamClientException e) {
+				log.error("Exception thrown while creating Purge Candidate test for task : " + houseID, e);
+				e.printStackTrace();
+			}
 		}
 
 	}
