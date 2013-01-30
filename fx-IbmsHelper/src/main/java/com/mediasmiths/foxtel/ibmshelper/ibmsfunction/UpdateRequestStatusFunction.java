@@ -1,6 +1,6 @@
 package com.mediasmiths.foxtel.ibmshelper.ibmsfunction;
 
-public class AddorUpdateMaterial
+public class UpdateRequestStatusFunction
 {
 
 }

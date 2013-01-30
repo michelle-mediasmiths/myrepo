@@ -2,27 +2,24 @@ package com.mediasmiths.foxtel.ibmshelper.data.dao;
 
 import java.util.List;
 
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetCreateTitleEntity;
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetLicenseRightsEntity;
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetMaterialEntity;
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetTitleInfoEntity;
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdateTitleEntity;
-import com.mediasmiths.foxtel.ibmshelper.data.entity.createUpdateTitle.GetUpdatedTitleEntity;
+import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
+import au.com.foxtel.cf.mam.pms.RightsType;
+import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+
 import com.mediasmiths.std.guice.database.dao.Dao;
 
-//TODO Change extend section?
-public interface CreateUpdateTitleDao extends Dao<String, Long>
+public interface CreateUpdateTitleDao extends Dao<CreateOrUpdateTitle, Long>
 {
-	public List<GetCreateTitleEntity> getCreateTitle();
+	public List<CreateOrUpdateTitle> getCreateTitle();
 
-	public List<GetUpdateTitleEntity> getUpdateTitle();
+	public List<CreateOrUpdateTitle> getUpdateTitle();
 
-	public List<GetTitleInfoEntity> getTitleInfo(Long versionID);
+	public List<TitleDescriptionType> getTitleInfo(Long versionID);
 
-	public List<GetLicenseRightsEntity> getLicenseRights(Long versionID);
+	public List<RightsType> getLicenseRights(Long versionID);
 
-	public List<GetUpdatedTitleEntity> getUpdatedTitle();
+	public List<CreateOrUpdateTitle> getUpdatedTitle();
 
-	public List<GetMaterialEntity> getMaterial(Long versionId);
+	public List<CreateOrUpdateTitle> getMaterial(Long versionId);
 
 }

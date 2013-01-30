@@ -289,10 +289,7 @@ public class CarbonProjectBuilder
 	 * @param parameters
 	 * 		the input parameters (purpose, resolution and audioType currently used from these parameters)
 	 *
-	 * @return the first suitable profile (will never return null)
-	 *
-	 * @throws IllegalArgumentException
-	 * 		if no profile could be found
+	 * @return the first suitable profile (or null if none could be found)
 	 */
 	protected CarbonBaseProfile pickProfile(TCJobParameters parameters)
 	{
@@ -304,20 +301,23 @@ public class CarbonProjectBuilder
 			}
 		}
 
-		throw new IllegalArgumentException("No suitable Carbon base project found!");
+		return null;
 	}
 
 	/**
 	 * Load a CarbonProject resource from an XML file in the classpath
 	 *
 	 * @param profile
-	 * 		the profile to load. The resource loaded is <code>pcp/PROFILE_NAME.xml</code>
+	 * 		the profile to load. The resource loaded is <code>pcp/(filename)</code>
 	 *
 	 * @return
 	 */
 	protected CarbonProject loadProject(CarbonBaseProfile profile)
 	{
-		final Element xml = loadXML("pcp/" + profile.name() + ".xml");
+		if (profile == null)
+			throw new IllegalArgumentException("No suitable Carbon base project found!");
+
+		final Element xml = loadXML("pcp/" + profile.getFilename());
 
 		return new CarbonProject(xml);
 	}

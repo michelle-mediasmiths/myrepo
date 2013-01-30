@@ -23,22 +23,22 @@ public class ManualTestSubmitPCP
 		Injector injector = GuiceInjectorBootstrap.createInjector(new PropertyFile(),
 		                                                          new BasicSetup(new CoreRestServicesModule()));
 
+		String endpoint = "http://127.0.0.1:8080/fx-TcAdapter"; // http://10.111.224.101:8080/fx-TcAdapter
 		TCRestService svc = injector.getInstance(JAXRSProxyClientFactory.class).createClient(TCRestService.class,
-//			    URI.create("http://127.0.0.1:8080/fx-TcAdapter"));
-		                                                                                     URI.create("http://10.111.224.101:8080/fx-TcAdapter"));
+		                                                                                     URI.create(endpoint));
 
 		TCJobParameters params = new TCJobParameters();
-		
+
 		///storage/mam/hires01/hr/hr01/2013/01/26/BM-250113-M2_0125743.mxf
-		
+
 		params.inputFile = "/storage/mam/hires01/mediasmiths/input/in.mxf";
 		params.outputFolder = "/storage/mam/hires01/mediasmiths/output/ARN_TR";
 //		params.inputFile = "/storage/mam/hires01/tcinput/HD1.mxf";
 //		params.outputFolder = "/storage/mam/hires01/tcoutput";
-		
+
 		params.bug.channel = "ARN";
-		params.bug.position=TCLocation.TOP_RIGHT;
-		params.timecode=null;
+		params.bug.position = TCLocation.TOP_RIGHT;
+		params.timecode = null;
 		params.audioType = TCAudioType.DOLBY_E;
 		params.purpose = TCOutputPurpose.DVD;
 

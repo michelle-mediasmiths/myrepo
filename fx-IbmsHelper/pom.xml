@@ -62,7 +62,16 @@
 			<artifactId>stdlib-guice-webapp</artifactId>
 			<version>3.2.6</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-MaterialExchange</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>au.com.foxtel.cf.mam</groupId>
+			<artifactId>fx-PlaceholderManagementSchema</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
 
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
