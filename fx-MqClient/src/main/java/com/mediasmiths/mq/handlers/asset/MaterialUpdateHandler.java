@@ -34,6 +34,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			for (Attribute att : ARCHIVE_FLAG_CHANGE_TRIGGERS)
 			{
 				if(attributeChanged(att, before, after, currentAttributes)){
+					log.debug(String.format("Attribute {%s} of MATERIAL {%s} changed", att.toString(),materialID));
 					anyChanged=true;
 					break;
 				}

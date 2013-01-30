@@ -139,9 +139,21 @@ public class MayamTaskController extends MayamController
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
-	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
+	public long createErrorTXDeliveryTaskForPackage(String presentationID, String errorMessage) throws MayamClientException{
 		
 		log.info(String.format("Creating tx delivery task task for package "+presentationID));
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.FALSE);
+		initialAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);	
+		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		
+		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
+		
+	}
+	
+	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
+		
+		log.info(String.format("Creating tx delivery task task for package "+presentationID+" qcrequired: "+requireAutoQC));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);

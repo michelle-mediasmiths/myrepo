@@ -21,7 +21,7 @@ public abstract class ButtonClickHandler extends AttributeHandler
 		if (taskListID.equals(getButtonType().getText()))
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
-			if (taskState == TaskState.OPEN)
+			if (taskState == TaskState.FINISHED)
 			{
 				logger.debug(String.format("{%s} Begin", getName()));
 				buttonClicked(messageAttributes);

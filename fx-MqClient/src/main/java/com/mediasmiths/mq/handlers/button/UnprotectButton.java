@@ -22,10 +22,14 @@ public class UnprotectButton extends ButtonClickHandler
 
 		if (AssetProperties.isPurgeProtected(messageAttributes))
 		{
-			messageAttributes.setAttribute(Attribute.PURGE_PROTECTED, false);
+			log.info("Unprotecting asset "+messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));	
+			AttributeMap updateMap = tasksClient.createAttributeMap();
+			updateMap.setAttribute(Attribute.ASSET_TYPE, messageAttributes.getAttribute(Attribute.ASSET_TYPE));
+			updateMap.setAttribute(Attribute.ASSET_ID, messageAttributes.getAttribute(Attribute.ASSET_ID));
+			updateMap.setAttribute(Attribute.PURGE_PROTECTED, Boolean.FALSE);
 			try
 			{
-				tasksClient.taskApi().updateTask(messageAttributes);
+				tasksClient.assetApi().updateAsset(updateMap);
 			}
 			catch (RemoteException e)
 			{

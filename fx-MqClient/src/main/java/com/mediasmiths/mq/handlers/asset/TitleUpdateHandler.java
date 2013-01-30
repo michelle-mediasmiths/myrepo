@@ -29,6 +29,7 @@ public class TitleUpdateHandler extends UpdateAttributeHandler
 			{
 				if (attributeChanged(a, before, after,currentAttributes))
 				{
+					log.debug(String.format("Attribute {%s} of TITLE {%s} changed", a.toString(),titleID));
 					anyChanged = true;
 					break;
 				}

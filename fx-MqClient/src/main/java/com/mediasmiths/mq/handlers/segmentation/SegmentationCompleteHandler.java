@@ -20,49 +20,32 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 		
 		try{
 			String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+			Boolean qcRequired = (Boolean) messageAttributes.getAttribute(Attribute.QC_REQUIRED);
+			
+			if(qcRequired == null){
+				log.warn("Qc requirement null!");
+				qcRequired = Boolean.FALSE;
+			}
 	
 			// check classification is set, awaiting a means of seeing if the user wishes to override this requirement
 			if (!AssetProperties.isClassificationSet(messageAttributes))
 			{
 				log.info(String.format("Classification not set on package %s reopening segmentation task", houseID));
-				setToWarning(messageAttributes, "Classification not set");
+				taskController.createErrorTXDeliveryTaskForPackage(houseID, "Classification not set");
 			} // check package has required number of segments, awaiting a means of seeing if the user wishes to override this requirement
 			else if (!packageController.packageHasRequiredNumberOfSegments(houseID))
 			{
 				log.info(String.format("Package %s does not have the required number of segments", houseID));
-				setToWarning(messageAttributes, "Number of segments does not match requirements");
+				taskController.createErrorTXDeliveryTaskForPackage(houseID, "Number of segments does not match requirements");
 			}
 			else
 			{
-				// create tx delivery task
-				try
-				{
-					log.debug("Creating tx delivery task, assuming qc is required");
-					taskController.createTXDeliveryTaskForPackage(houseID, true);
-				}
-				catch (MayamClientException e)
-				{
-					log.error("error creating tx delivery task for pacakge " + houseID, e);
-				}
+				log.debug("Creating tx delivery task");
+				taskController.createTXDeliveryTaskForPackage(houseID, qcRequired.booleanValue());
 			}
 		}
 		catch(Exception e){
 			log.error("exception in segmentation complete handler",e);
-		}
-	}
-
-	private void setToWarning(AttributeMap messageAttributes, String errorMessage)
-	{
-
-		messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
-		messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
-		try
-		{
-			taskController.saveTask(messageAttributes);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Error setting segmentation task state to warning with error message " + errorMessage, e);
 		}
 	}
 

@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.mq.AttributeMessageBuilder;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -22,10 +23,14 @@ public class ProtectButton extends ButtonClickHandler
 
 		if (!AssetProperties.isPurgeProtected(messageAttributes))
 		{
-			messageAttributes.setAttribute(Attribute.PURGE_PROTECTED, true);
+			log.info("Protecting asset "+messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+			AttributeMap updateMap = tasksClient.createAttributeMap();
+			updateMap.setAttribute(Attribute.ASSET_TYPE, messageAttributes.getAttribute(Attribute.ASSET_TYPE));
+			updateMap.setAttribute(Attribute.ASSET_ID, messageAttributes.getAttribute(Attribute.ASSET_ID));
+			updateMap.setAttribute(Attribute.PURGE_PROTECTED, Boolean.TRUE);
 			try
 			{
-				tasksClient.taskApi().updateTask(messageAttributes);
+				tasksClient.assetApi().updateAsset(updateMap);
 			}
 			catch (RemoteException e)
 			{

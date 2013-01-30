@@ -658,6 +658,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void attachFileToMaterial(String materialID, String absolutePath, String serviceHandle) throws MayamClientException
 	{
+		log.info(String.format("Attatching file {%s} to material {%s}", absolutePath, materialID));
 		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 		String assetID = materialAttributes.getAttributeAsString(Attribute.ASSET_ID);
 		try

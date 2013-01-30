@@ -10,7 +10,7 @@ public enum MayamButtonType {
 	  EXPORT_MARKERS("w_export_markers"),
 	  PUBLICITY_PROXY("w_publ_proxy"),
 	  CAPTION_PROXY("w_cap_proxy"),
-	  COMPLIANCE_PROXY("w_compl_proxy"), UNPROTECT("w_unprotect"), PROTECTED("w_protect");
+	  COMPLIANCE_PROXY("w_compl_proxy"), UNPROTECT("w_unprotect"), PROTECTED("w_protect"), PREVIEW_STATUS("w_preview_status");
 	  
 	
 	  private String text;
