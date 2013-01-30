@@ -93,11 +93,15 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			if (attributeChanged(Attribute.PRESENTATION_FLAG, before, after, currentAttributes))
 			{
 				try {
-					AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
-					if (task != null) 
+					Boolean presentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
+					if (presentationFlag != null && presentationFlag.equals(Boolean.TRUE))
 					{
-						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-						taskController.saveTask(task);
+						AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
+						if (task != null) 
+						{
+							task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							taskController.saveTask(task);
+						}
 					}
 				} catch (MayamClientException e) {
 					log.error("Exception thrown while removing Purge Candidate Task for material : " + materialID, e);
