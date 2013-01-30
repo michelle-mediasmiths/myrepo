@@ -116,6 +116,14 @@ public class MayamMaterialController extends MayamController
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 
 					updateMaterialAttributesFromTitle(attributes, title);
+					
+					Boolean isAO = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+
+					if (isAO != null && isAO.equals(Boolean.TRUE))
+					{
+						attributesValid = attributesValid
+								&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
+					}
 				}
 			}
 			catch (RemoteException e)
