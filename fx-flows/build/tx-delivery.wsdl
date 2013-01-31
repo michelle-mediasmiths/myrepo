@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery">
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" location="tx-delivery-Transcode.wsdl"/>
+    <pnlk:partnerLinkType name="TranscodeAndCaller">
+        <pnlk:role name="Transcode_for_Caller" portType="Transcode:ForCaller"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="TranscodeAndTCAdapterForHttpPortPlk0">
+        <pnlk:role name="TCAdapter_for_Transcode" portType="createJob:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="TranscodeAndTCAdapterForHttpPortPlk1">
+        <pnlk:role name="TCAdapter_for_Transcode" portType="queryJob:restInterface"/>
+    </pnlk:partnerLinkType>
+</wsdl:definitions>

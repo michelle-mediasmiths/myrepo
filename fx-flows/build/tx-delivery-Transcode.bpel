@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" location="tx-delivery-Transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:partnerLinks>
+    <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="diag:TranscodeAndCaller" myRole="Transcode_for_Caller"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="diag:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="diag:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+  </bpel:partnerLinks>
+  <bpel:variables>
+    <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
+    <bpel:variable name="TranscodeSuccess" type="xs:boolean"/>
+    <bpel:variable name="TranscodeErrorCount" type="xs:integer"/>
+  </bpel:variables>
+  <bpel:sequence>
+    <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
+    <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_pmy4wGuNEeK7FdvgH5F2kQ">
+      <bpel:copy>
+        <bpel:from>false()</bpel:from>
+        <bpel:to>$TranscodeSuccess</bpel:to>
+      </bpel:copy>
+      <bpel:copy>
+        <bpel:from>0</bpel:from>
+        <bpel:to>$TranscodeErrorCount</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:scope bpmn:label="Attempt Transcode three Times" name="Attempt_Transcode_three_Times" bpmn:id="_CaKEsGuOEeK7FdvgH5F2kQ">
+      <bpel:variables>
+        <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input"/>
+        <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output"/>
+        <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
+        <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
+      </bpel:variables>
+      <bpel:repeatUntil bpmn:label="Attempt Transcode three Times" name="Attempt_Transcode_three_Times-1">
+        <bpel:sequence>
+          <bpel:assign name="init-variables-Attempt_Transcode_three_Times" bpmn:id="_CaKEsGuOEeK7FdvgH5F2kQ">
+            <bpel:copy bpmn:label="$createJobCreateJobRequestMsg">
+              <bpel:from>
+                <bpel:literal>
+<tns:TCJob>
+  <tns:purpose></tns:purpose>
+  <tns:resolution></tns:resolution>
+  <tns:audioType></tns:audioType>
+  <tns:inputFile></tns:inputFile>
+  <tns:outputFolder></tns:outputFolder>
+  <tns:outputFileBasename></tns:outputFileBasename>
+  <tns:bug>
+    <tns:channel></tns:channel>
+    <tns:position></tns:position>
+    <tns:opacity></tns:opacity>
+  </tns:bug>
+  <tns:timecode>
+    <tns:location></tns:location>
+    <tns:size></tns:size>
+    <tns:background></tns:background>
+    <tns:foreground></tns:foreground>
+  </tns:timecode>
+  <tns:priority></tns:priority>
+</tns:TCJob></bpel:literal>
+              </bpel:from>
+              <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
+            </bpel:copy>
+            <bpel:copy bpmn:label="$queryJobQueryJobRequestMsg">
+              <bpel:from>
+                <bpel:literal>
+<queryJob:guid_urlType></queryJob:guid_urlType></bpel:literal>
+              </bpel:from>
+              <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+            </bpel:copy>
+          </bpel:assign>
+          <bpel:assign bpmn:label="Create Transcode Job" name="Create_Transcode_Job" bpmn:id="_CaL54GuOEeK7FdvgH5F2kQ">
+            <bpel:copy>
+              <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:tcParams</bpel:from>
+              <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
+            </bpel:copy>
+          </bpel:assign>
+          <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk0Var" portType="createJob:restInterface" operation="createJob" inputVariable="createJobCreateJobRequestMsg" outputVariable="createJobCreateJobResponseMsg" bpmn:label="Create Transcode Job" name="Create_Transcode_Job-1" bpmn:id="_CaL54GuOEeK7FdvgH5F2kQ"></bpel:invoke>
+          <bpel:scope bpmn:label="Poll until job finishes" name="Poll_until_job_finishes" bpmn:id="_a0OKYGuPEeK7FdvgH5F2kQ">
+            <bpel:variables>
+              <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
+              <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
+            </bpel:variables>
+            <bpel:repeatUntil bpmn:label="Poll until job finishes" name="Poll_until_job_finishes-1">
+              <bpel:sequence>
+                <bpel:assign name="init-variables-Poll_until_job_finishes" bpmn:id="_a0OKYGuPEeK7FdvgH5F2kQ">
+                  <bpel:copy bpmn:label="$queryJobQueryJobRequestMsg">
+                    <bpel:from>
+                      <bpel:literal>
+<queryJob:guid_urlType></queryJob:guid_urlType></bpel:literal>
+                    </bpel:from>
+                    <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+                  </bpel:copy>
+                </bpel:assign>
+                <bpel:wait bpmn:label="Timer_Intermediate_Event" name="Timer_Intermediate_Event" bpmn:id="_f8z00GuPEeK7FdvgH5F2kQ">
+                  <bpel:for>"PT10S"</bpel:for>
+                </bpel:wait>
+                <bpel:assign bpmn:label="Query Job Status" name="Query_Job_Status" bpmn:id="_a0QmoGuPEeK7FdvgH5F2kQ">
+                  <bpel:copy>
+                    <bpel:from>$createJobCreateJobResponseMsg.response/text()</bpel:from>
+                    <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+                  </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="Query Job Status" name="Query_Job_Status-1" bpmn:id="_a0QmoGuPEeK7FdvgH5F2kQ"></bpel:invoke>
+              </bpel:sequence>
+              <bpel:condition>$queryJobQueryJobResponseMsg.response/tns:result/text() != "INCOMPLETE"</bpel:condition>
+            </bpel:repeatUntil>
+          </bpel:scope>
+          <bpel:assign bpmn:label="Check Result" name="Check_Result" bpmn:id="_HWzS8GuQEeK7FdvgH5F2kQ">
+            <bpel:copy>
+              <bpel:from>$createJobCreateJobResponseMsg.response/text()</bpel:from>
+              <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+            </bpel:copy>
+          </bpel:assign>
+          <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="Check Result" name="Check_Result-1" bpmn:id="_HWzS8GuQEeK7FdvgH5F2kQ"></bpel:invoke>
+          <bpel:empty>
+            <bpel:links>
+              <bpel:sources>
+                <bpel:source linkName="_HWzS8GuQEeK7FdvgH5F2kQ_to__Q9cdEGuQEeK7FdvgH5F2kQ"/>
+              </bpel:sources>
+            </bpel:links>
+          </bpel:empty>
+        </bpel:sequence>
+        <bpel:condition>($TranscodeSuccess = true()) or ($TranscodeErrorCount&gt;= 3)</bpel:condition>
+      </bpel:repeatUntil>
+    </bpel:scope>
+  </bpel:sequence>
+</bpel:process>
