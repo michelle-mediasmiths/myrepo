@@ -306,6 +306,9 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 					
 				entry.setEntityType(EntityType.GROUP);
 				entry.setEntity(allKeys[i]);
+				
+				mediaEntry.setEntityType(EntityType.GROUP);
+				mediaEntry.setEntity(allKeys[i]);
 					
 				Triplet <Boolean, Boolean, Boolean> rights = groupMap.get(allKeys[i]);
 					
