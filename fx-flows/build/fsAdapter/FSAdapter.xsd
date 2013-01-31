@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/fs/adapter" version="1.0">
+
+  <xs:element name="deleteRequest" type="tns:deleteRequest"/>
+
+  <xs:element name="deleteResponse" type="tns:deleteResponse"/>
+
+  <xs:element name="moveRequest" type="tns:moveRequest"/>
+
+  <xs:element name="moveResponse" type="tns:moveResponse"/>
+
+  <xs:complexType name="moveRequest">
+    <xs:sequence>
+      <xs:element name="from" type="xs:string"/>
+      <xs:element name="to" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deleteResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:fsAdapterResponse">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType abstract="true" name="fsAdapterResponse">
+    <xs:sequence>
+      <xs:element name="successful" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="deleteRequest">
+    <xs:sequence>
+      <xs:element name="path" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="moveResponse">
+    <xs:complexContent>
+      <xs:extension base="tns:fsAdapterResponse">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

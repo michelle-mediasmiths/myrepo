@@ -1,0 +1,8 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<dd:process xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:tx_post_trascode="http://ns.mediasmithsforge.com/foxtel/tx/tx_post_trascode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx/qc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:qc" fileName="tx-qc.bpel">
+  <dd:property name="PATH">tx</dd:property>
+  <dd:property name="SVG">tx.svg</dd:property>
+  <dd:provide partnerLink="qcAndTx_post_trascodePlkVar">
+    <dd:service name="this:CanonicServiceFortx_post_trascode" port="canonicPort"></dd:service>
+  </dd:provide>
+</dd:process>

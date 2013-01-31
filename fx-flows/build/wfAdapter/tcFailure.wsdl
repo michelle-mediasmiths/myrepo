@@ -1,0 +1,42 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter">
+      <xs:include schemaLocation="wfAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:anyType" name="response_tcFailure_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="tcFailure_input">
+    <wsdl:part name="body" element="adapter:tcFailureNotification"/>
+  </wsdl:message>
+  <wsdl:message name="tcFailure_output">
+    <wsdl:part name="response" element="tcFailure:response_tcFailure_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="tcFailure">
+      <wsdl:input message="tcFailure:tcFailure_input"/>
+      <wsdl:output message="tcFailure:tcFailure_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="tcFailure:restInterface">
+    <wsdl:operation name="tcFailure">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="application/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="tcFailure:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailed"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

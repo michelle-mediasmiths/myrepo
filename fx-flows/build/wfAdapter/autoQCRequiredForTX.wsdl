@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="taskID_urlType"/>
+      <xs:element type="xs:boolean" name="autoQcRequiredForTX_autoQcRequiredForTX_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="autoQcRequiredForTX_input">
+    <wsdl:part name="taskID" element="autoQCRequiredForTX:taskID_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="autoQcRequiredForTX_output">
+    <wsdl:part name="autoQcRequiredForTX" element="autoQCRequiredForTX:autoQcRequiredForTX_autoQcRequiredForTX_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="autoQcRequiredForTX">
+      <wsdl:input message="autoQCRequiredForTX:autoQcRequiredForTX_input"/>
+      <wsdl:output message="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="autoQCRequiredForTX:restInterface">
+    <wsdl:operation name="autoQcRequiredForTX">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="autoQcRequiredForTX"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="autoQCRequiredForTX:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

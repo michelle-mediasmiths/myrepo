@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:adapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/fs/adapter">
+      <xs:include schemaLocation="FSAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest"/>
+  </wsdl:types>
+  <wsdl:message name="delete_input">
+    <wsdl:part name="body" element="adapter:deleteRequest"/>
+  </wsdl:message>
+  <wsdl:message name="delete_output">
+    <wsdl:part name="response" element="adapter:deleteResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="delete">
+      <wsdl:input message="delete:delete_input"/>
+      <wsdl:output message="delete:delete_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="delete:restInterface">
+    <wsdl:operation name="delete">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="application/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="delete:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8082/fx-FSAdapter/rest/fs/delete"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

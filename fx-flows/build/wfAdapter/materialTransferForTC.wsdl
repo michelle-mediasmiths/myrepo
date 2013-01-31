@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:materialTransferForTC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter">
+      <xs:include schemaLocation="wfAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest"/>
+  </wsdl:types>
+  <wsdl:message name="materialTransferForTC_input">
+    <wsdl:part name="body" element="adapter:materialTransferForTCRequest"/>
+  </wsdl:message>
+  <wsdl:message name="materialTransferForTC_output">
+    <wsdl:part name="response" element="adapter:materialTransferForTCResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="materialTransferForTC">
+      <wsdl:input message="materialTransferForTC:materialTransferForTC_input"/>
+      <wsdl:output message="materialTransferForTC:materialTransferForTC_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="materialTransferForTC:restInterface">
+    <wsdl:operation name="materialTransferForTC">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="application/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="materialTransferForTC:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/transferfortc"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

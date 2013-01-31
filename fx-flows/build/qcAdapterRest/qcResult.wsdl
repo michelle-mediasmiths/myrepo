@@ -1,0 +1,43 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/qc/adapter">
+      <xs:include schemaLocation="qcAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="jobname_urlType"/>
+      <xs:element type="xs:string" name="path_urlType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="qcResult_input">
+    <wsdl:part name="jobname" element="qcResult:jobname_urlType"/>
+    <wsdl:part name="path" element="qcResult:path_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="qcResult_output">
+    <wsdl:part name="response" element="adapter:qcMediaResult"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="qcResult">
+      <wsdl:input message="qcResult:qcResult_input"/>
+      <wsdl:output message="qcResult:qcResult_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="qcResult:restInterface">
+    <wsdl:operation name="qcResult">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="qcResult:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

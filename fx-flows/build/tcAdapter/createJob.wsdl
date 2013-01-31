@@ -1,0 +1,42 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" xmlns:adapter="http://ns.mediasmiths.com/foxtel/tc/adapter" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/tc/adapter">
+      <xs:include schemaLocation="tcAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="response_createJob_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="createJob_input">
+    <wsdl:part name="body" element="adapter:TCJob"/>
+  </wsdl:message>
+  <wsdl:message name="createJob_output">
+    <wsdl:part name="response" element="createJob:response_createJob_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="createJob">
+      <wsdl:input message="createJob:createJob_input"/>
+      <wsdl:output message="createJob:createJob_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="createJob:restInterface">
+    <wsdl:operation name="createJob">
+      <ode:binding verb="POST"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="text/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="createJob:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/jobs"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

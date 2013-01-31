@@ -174,13 +174,14 @@ public interface WFAdapterRestService
 	
 	/**
 	 * Used to query if autoqc is required for a given package
-	 * @param packageID
+	 * @param taskID
 	 * @return
+	 * @throws MayamClientException 
 	 */
 	@GET
 	@Path("/tx/autoQCRequired")
 	@Produces("text/plain")
-	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID);
+	public Boolean autoQCRequiredForTxTask(@QueryParam("taskID") Long taskID) throws MayamClientException;
 
 	/**
 	 * Used to indicate there has been a failure in a tx delivery workflow

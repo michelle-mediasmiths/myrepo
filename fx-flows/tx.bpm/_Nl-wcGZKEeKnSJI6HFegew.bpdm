@@ -1,21 +1,21 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/fs_adapter" xmlns:transcode="http://thisdiagram/transcode" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/fs_adapter">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx-transcode="http://thisdiagram/tx-transcode" xmlns:this="http://thisdiagram/fs_adapter" xmlns:diag="http://thisdiagram" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/fs_adapter">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/tx-transcode" bpdm:prefix="tx-transcode" bpdm:comment="contrib=&apos;partner-pool:///_w8nDoGZGEeKnSJI6HFegew"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/fs_adapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/transcode" bpdm:prefix="transcode" bpdm:comment="contrib=&apos;partner-pool:///_w8nDoGZGEeKnSJI6HFegew"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_w8nDoGZGEeKnSJI6HFegew"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_w8nDoGZGEeKnSJI6HFegew" bpdm:label="transcode"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_w8nDoGZGEeKnSJI6HFegew" bpdm:label="tx-transcode"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="fs adapter" bpdm:ID="_Nl-wcGZKEeKnSJI6HFegew">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="transcodeAndFs_adapterForHttpPortPlkVar" partnerLinkType="diag:transcodeAndFs_adapterForHttpPortPlk" myRole="fs_adapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8082/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_Nl-wcGZKEeKnSJI6HFegew:_QXHbUWZKEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_w8nDoGZGEeKnSJI6HFegew"/>
+            <bpel:partnerLink name="tx-transcodeAndFs_adapterForHttpPortPlkVar" partnerLinkType="diag:tx-transcodeAndFs_adapterForHttpPortPlk" myRole="fs_adapter_for_tx-transcode" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8082/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_Nl-wcGZKEeKnSJI6HFegew:_QXHbUWZKEeKnSJI6HFegew" bpdm:isManaged="true" bpdm:otherPoolId="_w8nDoGZGEeKnSJI6HFegew"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_R3tEVWZKEeKnSJI6HFegew" bpdm:messageIds="inc:_R3YUMGZKEeKnSJI6HFegew"/>
@@ -26,9 +26,9 @@
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="delete" partnerLink="transcodeAndFs_adapterForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_QXHbUWZKEeKnSJI6HFegew">
+            <bpdm:messagingtask operation="delete" partnerLink="tx-transcodeAndFs_adapterForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_QXHbUWZKEeKnSJI6HFegew">
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_R3YUMGZKEeKnSJI6HFegew"></bpdm:linkset>
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_Nl-wcGZKEeKnSJI6HFegew" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_SLe78GZKEeKnSJI6HFegew"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_SLe78GZKEeKnSJI6HFegew"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

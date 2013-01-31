@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="jobname_urlType"/>
+      <xs:element type="xs:boolean" name="response_qcFinished_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="qcFinished_input">
+    <wsdl:part name="jobname" element="qcFinished:jobname_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="qcFinished_output">
+    <wsdl:part name="response" element="qcFinished:response_qcFinished_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="qcFinished">
+      <wsdl:input message="qcFinished:qcFinished_input"/>
+      <wsdl:output message="qcFinished:qcFinished_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="qcFinished:restInterface">
+    <wsdl:operation name="qcFinished">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="qcFinished:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

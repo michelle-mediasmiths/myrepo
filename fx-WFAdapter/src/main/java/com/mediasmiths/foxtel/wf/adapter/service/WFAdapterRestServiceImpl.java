@@ -340,10 +340,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/autoQCRequired")
 	@Produces("text/plain")
-	public Boolean autoQCRequiredForPackage(@QueryParam("packageID") String packageID)
+	public Boolean autoQCRequiredForTxTask(@QueryParam("taskID") Long taskID) throws MayamClientException
 	{
-		// TODO implement ( look up from relevant task to see if autoqc is required)
-		return true;
+		
+		return Boolean.valueOf(mayamClient.autoQcRequiredForTXTask(taskID));
+		
 	}
 
 	@Override

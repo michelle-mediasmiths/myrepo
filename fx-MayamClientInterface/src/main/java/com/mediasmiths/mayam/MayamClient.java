@@ -316,5 +316,7 @@ public interface MayamClient
 	
 	public boolean attemptAutoMatch(String siteID, String fileName);
 
+	public boolean autoQcRequiredForTXTask(Long taskID) throws MayamClientException;
+
 	
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/tc/adapter" version="1.0">
+
+  <xs:element name="JobInfo" type="tns:tcJobInfo"/>
+
+  <xs:element name="TCJob" type="tns:tcJobParameters"/>
+
+  <xs:complexType name="tcJobInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="result" type="tns:tcJobResult"/>
+      <xs:element minOccurs="0" name="errorDetail" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="tcTimecodeOptions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="location" type="tns:tcLocation"/>
+      <xs:element minOccurs="0" name="size" type="tns:tcTimecodeSize"/>
+      <xs:element minOccurs="0" name="background" type="tns:tcTimecodeColour"/>
+      <xs:element minOccurs="0" name="foreground" type="tns:tcTimecodeColour"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcJobParameters">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="purpose" type="tns:tcOutputPurpose"/>
+      <xs:element minOccurs="0" name="resolution" type="tns:tcResolution"/>
+      <xs:element minOccurs="0" name="audioType" type="tns:tcAudioType"/>
+      <xs:element minOccurs="0" name="inputFile" type="xs:string"/>
+      <xs:element minOccurs="0" name="outputFolder" type="xs:string"/>
+      <xs:element minOccurs="0" name="outputFileBasename" type="xs:string"/>
+      <xs:element minOccurs="0" name="bug" type="tns:tcBugOptions"/>
+      <xs:element minOccurs="0" name="timecode" type="tns:tcTimecodeOptions"/>
+      <xs:element name="priority" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcBugOptions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="channel" type="xs:string"/>
+      <xs:element minOccurs="0" name="position" type="tns:tcLocation"/>
+      <xs:element name="opacity" type="xs:double"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="tcJobResult">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SUCCESS"/>
+      <xs:enumeration value="FAILURE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcTimecodeColour">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="WHITE"/>
+      <xs:enumeration value="BLACK"/>
+      <xs:enumeration value="TRANSPARENT"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcLocation">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TOP_LEFT"/>
+      <xs:enumeration value="TOP_RIGHT"/>
+      <xs:enumeration value="BOTTOM_LEFT"/>
+      <xs:enumeration value="BOTTOM_RIGHT"/>
+      <xs:enumeration value="TOP"/>
+      <xs:enumeration value="BOTTOM"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcTimecodeSize">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="MEDIUM"/>
+      <xs:enumeration value="LARGE"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcAudioType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="STEREO"/>
+      <xs:enumeration value="DOLBY_E"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcOutputPurpose">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TX_HD"/>
+      <xs:enumeration value="TX_SD"/>
+      <xs:enumeration value="DVD"/>
+      <xs:enumeration value="CAPTIONING"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="tcResolution">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HD"/>
+      <xs:enumeration value="SD"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

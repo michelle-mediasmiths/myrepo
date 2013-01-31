@@ -1,24 +1,26 @@
 package com.mediasmiths.foxtel.wf.adapter.model;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 
 @XmlRootElement
 public class InvokeIntalioTXFlow
 {
-	private String packageID;
-	private long taskID;
+	private boolean isAO;
 	
-	public long getTaskID()
-	{
-		return taskID;
-	}
+	private String packageID;
 
-	@XmlElement(required = true)
-	public void setTaskID(long taskID)
-	{
-		this.taskID = taskID;
-	}
+	private Date requiredDate;
+
+	private long taskID;
+
+	private TCJobParameters tcParams;
+
+	private String title;
 
 	@XmlElement(required = true)
 	public String getPackageID()
@@ -26,17 +28,57 @@ public class InvokeIntalioTXFlow
 		return packageID;
 	}
 
+	@XmlElement(required = true)
+	public Date getRequiredDate()
+	{
+		return requiredDate;
+	}
+
+	@XmlElement(required = true)
+	public long getTaskID()
+	{
+		return taskID;
+	}
+	
+	@XmlElement(required = true)
+	public TCJobParameters getTcParams()
+	{
+		return tcParams;
+	}
+	@XmlElement(required = true)
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public boolean isAO()
+	{
+		return isAO;
+	}
+
+	public void setAO(boolean isAO)
+	{
+		this.isAO = isAO;
+	}
+
 	public void setPackageID(String packageID)
 	{
 		this.packageID = packageID;
 	}
-	
-	private String title;
 
-	@XmlElement(required=true)
-	public String getTitle()
+	public void setRequiredDate(Date requiredDate)
 	{
-		return title;
+		this.requiredDate = requiredDate;
+	}
+
+	public void setTaskID(long taskID)
+	{
+		this.taskID = taskID;
+	}
+
+	public void setTcParams(TCJobParameters tcParams)
+	{
+		this.tcParams = tcParams;
 	}
 
 	public void setTitle(String title)

@@ -801,5 +801,30 @@ public class MayamClientImpl implements MayamClient
 
 		return false;
 	}
+
+	@Override
+	public boolean autoQcRequiredForTXTask(Long taskID) throws MayamClientException
+	{
+		AttributeMap task;
+		try
+		{
+			task = tasksController.getTask(taskID.longValue());
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error fetching task with id " + taskID,e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+		}
+		
+		Boolean qcRequired = task.getAttribute(Attribute.QC_REQUIRED);
+		
+		if(qcRequired==null){
+			return false;
+		}
+		else{
+			return qcRequired.booleanValue();
+		}
+		
+	}
 	
 }

@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="packageID_urlType"/>
+      <xs:element type="xs:string" name="response_writeSegmentXML_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="writeSegmentXML_input">
+    <wsdl:part name="packageID" element="writeSegmentXML:packageID_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="writeSegmentXML_output">
+    <wsdl:part name="response" element="writeSegmentXML:response_writeSegmentXML_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="writeSegmentXML">
+      <wsdl:input message="writeSegmentXML:writeSegmentXML_input"/>
+      <wsdl:output message="writeSegmentXML:writeSegmentXML_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="writeSegmentXML:restInterface">
+    <wsdl:operation name="writeSegmentXML">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="writeSegmentXML:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivery/writeSegmentXML?packageID={packageID}"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

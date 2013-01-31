@@ -1,0 +1,31 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:complexvar="http://www.example.org/complexvar" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wfadpater="http://ns.mediasmithsforge.com/foxtel/qc/wfadpater" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qc_adapter="http://ns.mediasmithsforge.com/foxtel/qc/qc_adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+            <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter" schemaLocation="wfAdapter/wfAdapter.xsd"/>
+            <xs:element name="startRequest" type="tns:invokeIntalioQCFlow"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="startRequest">
+        <wsdl:part name="body" element="this:startRequest"/>
+    </wsdl:message>
+    <wsdl:portType name="Forcaller">
+        <wsdl:operation name="start">
+            <wsdl:input message="this:startRequest" name="start"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CanonicBindingForcaller" type="this:Forcaller">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="start">
+            <soap:operation style="document" soapAction="http://ns.mediasmithsforge.com/foxtel/qc/workflow/Forcaller/start"/>
+            <wsdl:input name="start">
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CanonicServiceForcaller">
+        <wsdl:port name="canonicPort" binding="this:CanonicBindingForcaller">
+            <soap:address location="http://10.111.224.101:8081/ode/processes/fx-flows/qc/workflow/caller"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,35 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:tcBuildJobXML="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcBuildJobXML.rest" xmlns:tcGeneratePCP="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGeneratePCP.rest" xmlns:tcGetResult="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetResult.rest" xmlns:tcGetStatus="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcGetStatus.rest" xmlns:tcStartJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/tcStartJob.rest" xmlns:getTranscodeOutputLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getTranscodeOutputLocation.rest" xmlns:materialTransferForTC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/export/FS_Adapter" xmlns:TC="http://ns.mediasmithsforge.com/foxtel/export/TC" xmlns:complexvar="http://www.example.org/complexvar" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export">
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getTranscodeOutputLocation.rest" location="wfAdapter/getTranscodeOutputLocation.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/materialTransferForTC.rest" location="wfAdapter/materialTransferForTC.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" location="wfAdapter/tcFailure.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" location="wfAdapter/tcPassed.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" location="wfAdapter/tcTotalFailure.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/export/TC" location="export-TC.wsdl"/>
+    <pnlk:partnerLinkType name="CallerAndTC">
+        <pnlk:role name="TC_for_Caller" portType="TC:ForCaller"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="FS_AdapterAndTCForHttpPortPlk">
+        <pnlk:role name="FS_Adapter_for_TC" portType="delete:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="TcAndTCAdapterForHttpPortPlk">
+        <pnlk:role name="TCAdapter_for_TC" portType="createJob:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFAdapterAndTCForHttpPortPlk0">
+        <pnlk:role name="WFAdapter_for_TC" portType="getTranscodeOutputLocation:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFAdapterAndTCForHttpPortPlk1">
+        <pnlk:role name="WFAdapter_for_TC" portType="materialTransferForTC:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFAdapterAndTCForHttpPortPlk2">
+        <pnlk:role name="WFAdapter_for_TC" portType="tcFailure:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFAdapterAndTCForHttpPortPlk3">
+        <pnlk:role name="WFAdapter_for_TC" portType="tcPassed:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="WFAdapterAndTCForHttpPortPlk4">
+        <pnlk:role name="WFAdapter_for_TC" portType="tcTotalFailure:restInterface"/>
+    </pnlk:partnerLinkType>
+</wsdl:definitions>
