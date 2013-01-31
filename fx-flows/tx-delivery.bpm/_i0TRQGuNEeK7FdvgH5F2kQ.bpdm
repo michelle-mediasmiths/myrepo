@@ -185,7 +185,62 @@
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="queryJobQueryJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_input" bpdm:binding="queryJob:restBinding" bpdm:ID="_MVQxAGuQEeK7FdvgH5F2kQ"></bpdm:linkset>
                         <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="queryJobQueryJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_output" bpdm:binding="queryJob:restBinding" bpdm:ID="_Mn-4sGuQEeK7FdvgH5F2kQ"></bpdm:linkset>
                     </bpdm:messagingtask>
-                    <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_Q9cdEGuQEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="true"></bpdm:gateway>
+                    <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_Q9cdEGuQEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
+                        <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_aBaX8GuQEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[GatewayDataBasedExclusive - Transcode Success]">
+                            <bpel:condition>$queryJobQueryJobResponseMsg.response/tns:result/text() = "SUCCESS"
+<mapper:mapperLink>
+  <mapper:vertice id="17045181" targetPath="$condition" targetedBy="30041179-arg2"></mapper:vertice>
+  <mapper:vertice id="30041179" dimension="37x25" location="348,216">
+    <mapper:value>=</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="27000973" sourcePath="$queryJobQueryJobResponseMsg.response/tns:result/text()" targetedBy="30041179-arg0"></mapper:vertice>
+  <mapper:vertice id="10363395" dimension="78x24" location="252,264" targetedBy="30041179-arg1">
+    <mapper:value>"SUCCESS"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink></bpel:condition>
+                        </bpdm:linkset>
+                        <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_aUfE8GuQEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
+                        <bpel:sequence>
+                            <bpdm:messagingtask bpdm:label="Transcode Success" bpdm:ID="_W3INQGuQEeK7FdvgH5F2kQ"></bpdm:messagingtask>
+                            <bpdm:messagingtask bpdm:label="Update Success Variable" bpdm:ID="_tIhywGuQEeK7FdvgH5F2kQ">
+                                <bpdm:linkset bpdm:type="assignments">
+                                    <bpel:copy>
+                                        <bpel:from>true()</bpel:from>
+                                        <bpel:to>$TranscodeSuccess</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="12598692" targetPath="$TranscodeSuccess" targetedBy="15254069-arg0"></mapper:vertice>
+  <mapper:vertice id="15254069" dimension="78x24" location="371,290">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                    </bpel:copy>
+                                </bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask bpdm:label="Send Success Message" bpdm:ID="_-knPIGuQEeK7FdvgH5F2kQ"></bpdm:messagingtask>
+                        </bpel:sequence>
+                        <bpel:sequence>
+                            <bpdm:messagingtask bpdm:label="Transcode Failure" bpdm:ID="_YpF6IGuQEeK7FdvgH5F2kQ"></bpdm:messagingtask>
+                            <bpdm:messagingtask bpdm:label="Increment Error Count" bpdm:ID="_09wCkGuQEeK7FdvgH5F2kQ">
+                                <bpdm:linkset bpdm:type="assignments">
+                                    <bpel:copy>
+                                        <bpel:from>$TranscodeErrorCount + 1</bpel:from>
+                                        <bpel:to>$TranscodeErrorCount</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="13090220" targetPath="$TranscodeErrorCount" targetedBy="26544501-arg2"></mapper:vertice>
+  <mapper:vertice id="26544501" dimension="78x24" location="314,246">
+    <mapper:value>+</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="33048555" sourcePath="$TranscodeErrorCount" targetedBy="26544501-arg0"></mapper:vertice>
+  <mapper:vertice id="15039352" dimension="78x24" location="240,312" targetedBy="26544501-arg1">
+    <mapper:value>1</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                    </bpel:copy>
+                                </bpdm:linkset>
+                            </bpdm:messagingtask>
+                            <bpdm:messagingtask bpdm:label="Send Failure Message" bpdm:ID="_Arc_0GuREeK7FdvgH5F2kQ"></bpdm:messagingtask>
+                        </bpel:sequence>
+                    </bpdm:gateway>
                 </bpel:sequence>
             </bpel:scope>
         </bpel:sequence>

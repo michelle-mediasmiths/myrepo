@@ -114,13 +114,31 @@
             </bpel:copy>
           </bpel:assign>
           <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="Check Result" name="Check_Result-1" bpmn:id="_HWzS8GuQEeK7FdvgH5F2kQ"></bpel:invoke>
-          <bpel:empty>
-            <bpel:links>
-              <bpel:sources>
-                <bpel:source linkName="_HWzS8GuQEeK7FdvgH5F2kQ_to__Q9cdEGuQEeK7FdvgH5F2kQ"/>
-              </bpel:sources>
-            </bpel:links>
-          </bpel:empty>
+          <bpel:if>
+            <bpel:condition>$queryJobQueryJobResponseMsg.response/tns:result/text() = "SUCCESS"</bpel:condition>
+            <bpel:sequence>
+              <bpel:empty bpmn:label="Transcode Success" name="Transcode_Success" bpmn:id="_W3INQGuQEeK7FdvgH5F2kQ"/>
+              <bpel:assign bpmn:label="Update Success Variable" name="Update_Success_Variable" bpmn:id="_tIhywGuQEeK7FdvgH5F2kQ">
+                <bpel:copy>
+                  <bpel:from>true()</bpel:from>
+                  <bpel:to>$TranscodeSuccess</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:empty bpmn:label="Send Success Message" name="Send_Success_Message" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"/>
+            </bpel:sequence>
+            <bpel:else>
+              <bpel:sequence>
+                <bpel:empty bpmn:label="Transcode Failure" name="Transcode_Failure" bpmn:id="_YpF6IGuQEeK7FdvgH5F2kQ"/>
+                <bpel:assign bpmn:label="Increment Error Count" name="Increment_Error_Count" bpmn:id="_09wCkGuQEeK7FdvgH5F2kQ">
+                  <bpel:copy>
+                    <bpel:from>$TranscodeErrorCount + 1</bpel:from>
+                    <bpel:to>$TranscodeErrorCount</bpel:to>
+                  </bpel:copy>
+                </bpel:assign>
+                <bpel:empty bpmn:label="Send Failure Message" name="Send_Failure_Message" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ"/>
+              </bpel:sequence>
+            </bpel:else>
+          </bpel:if>
         </bpel:sequence>
         <bpel:condition>($TranscodeSuccess = true()) or ($TranscodeErrorCount&gt;= 3)</bpel:condition>
       </bpel:repeatUntil>

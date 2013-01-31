@@ -132,10 +132,22 @@
         <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_MVQxAWuQEeK7FdvgH5F2kQ"/>
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_Mn-4sWuQEeK7FdvgH5F2kQ"/>
       </vertices>
-      <vertices xmi:type="bpmn:Activity" xmi:id="_Q9cdEWuQEeK7FdvgH5F2kQ" iD="_Q9cdEGuQEeK7FdvgH5F2kQ" incomingEdges="_SyEcYWuQEeK7FdvgH5F2kQ" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Q9cdEWuQEeK7FdvgH5F2kQ" iD="_Q9cdEGuQEeK7FdvgH5F2kQ" outgoingEdges="_aBaX8WuQEeK7FdvgH5F2kQ _aUfE8WuQEeK7FdvgH5F2kQ" incomingEdges="_SyEcYWuQEeK7FdvgH5F2kQ" activityType="GatewayDataBasedExclusive"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_W3INQWuQEeK7FdvgH5F2kQ" iD="_W3INQGuQEeK7FdvgH5F2kQ" outgoingEdges="_wsisEWuQEeK7FdvgH5F2kQ" incomingEdges="_aBaX8WuQEeK7FdvgH5F2kQ" name="Transcode Success"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_YpF6IWuQEeK7FdvgH5F2kQ" iD="_YpF6IGuQEeK7FdvgH5F2kQ" outgoingEdges="_2958cGuQEeK7FdvgH5F2kQ" incomingEdges="_aUfE8WuQEeK7FdvgH5F2kQ" name="Transcode Failure"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_tIhywWuQEeK7FdvgH5F2kQ" iD="_tIhywGuQEeK7FdvgH5F2kQ" outgoingEdges="_ARXr4WuREeK7FdvgH5F2kQ" incomingEdges="_wsisEWuQEeK7FdvgH5F2kQ" name="Update Success Variable"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_09wCkWuQEeK7FdvgH5F2kQ" iD="_09wCkGuQEeK7FdvgH5F2kQ" outgoingEdges="_C2es8WuREeK7FdvgH5F2kQ" incomingEdges="_2958cGuQEeK7FdvgH5F2kQ" name="Increment Error Count"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_-knPIWuQEeK7FdvgH5F2kQ" iD="_-knPIGuQEeK7FdvgH5F2kQ" incomingEdges="_ARXr4WuREeK7FdvgH5F2kQ" name="Send Success Message"/>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Arc_0WuREeK7FdvgH5F2kQ" iD="_Arc_0GuREeK7FdvgH5F2kQ" incomingEdges="_C2es8WuREeK7FdvgH5F2kQ" name="Send Failure Message"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_7wPfgWuPEeK7FdvgH5F2kQ" iD="_7wPfgGuPEeK7FdvgH5F2kQ"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_JHNgoWuQEeK7FdvgH5F2kQ" iD="_JHNgoGuQEeK7FdvgH5F2kQ"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_SyEcYWuQEeK7FdvgH5F2kQ" iD="_SyEcYGuQEeK7FdvgH5F2kQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_aBaX8WuQEeK7FdvgH5F2kQ" iD="_aBaX8GuQEeK7FdvgH5F2kQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_aUfE8WuQEeK7FdvgH5F2kQ" iD="_aUfE8GuQEeK7FdvgH5F2kQ" conditionType="Default" isDefault="true"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_wsisEWuQEeK7FdvgH5F2kQ" iD="_wsisEGuQEeK7FdvgH5F2kQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2958cGuQEeK7FdvgH5F2kQ" iD="_295VYGuQEeK7FdvgH5F2kQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ARXr4WuREeK7FdvgH5F2kQ" iD="_ARXr4GuREeK7FdvgH5F2kQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_C2es8WuREeK7FdvgH5F2kQ" iD="_C2es8GuREeK7FdvgH5F2kQ"/>
     </vertices>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_qz4-AWuNEeK7FdvgH5F2kQ" iD="_qz4-AGuNEeK7FdvgH5F2kQ"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_HPuFcWuOEeK7FdvgH5F2kQ" iD="_HPuFcGuOEeK7FdvgH5F2kQ"/>
