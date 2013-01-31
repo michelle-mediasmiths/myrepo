@@ -25,6 +25,10 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForCaller" type="this:ForCaller" bpdm:isSynchronized="true"/>
+            <vprop:property name="package" type="xs:string"/>
+            <vprop:propertyAlias propertyName="this:package" element="this:EventStartMessageRequest">
+                <vprop:query>wfAdapter:packageID/text()</vprop:query>
+            </vprop:propertyAlias>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ" bpdm:label="Caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/createJob.wsdl"/>

@@ -381,7 +381,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID)
 	{
-		String ret = txDeliveryLocation + packageID;
+		String ret = txDeliveryLocation;
 		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
 		
 		return ret;
