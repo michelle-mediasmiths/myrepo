@@ -22,11 +22,12 @@ public class MediasmithsDestinations
 	@Named("mule.tc.dest")
 	private String mule_tc_destination;
 	@Inject
+	@Named("mule.tx.dest")
+	private String muleTxDestinaion;
+	@Inject
 	@Named("mule.export.dest")
 	private String muleExportDestination;
 
-	public static final String TRANSCODE_INPUT_FILE = "f:\tcinput\test.mxf";
-	public static final String TRANSCODE_OUTPUT_DIR = "f:\tcoutput";
 	
 	@Inject
 	public MediasmithsDestinations(
@@ -74,6 +75,11 @@ public class MediasmithsDestinations
 	public String getMuleExportDestination()
 	{
 		return muleExportDestination;
+	}
+
+	public String getMule_tx_destination()
+	{
+		return muleTxDestinaion;
 	}
 
 }

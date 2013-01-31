@@ -1,0 +1,50 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:this="http://thisdiagram/WFAdapter__2" xmlns:diag="http://thisdiagram" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFAdapter__2">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" bpdm:prefix="getDeliveryLocation" bpdm:comment="contrib=&apos;project:///wfAdapter/getDeliveryLocation.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" bpdm:prefix="writeSegmentXML" bpdm:comment="contrib=&apos;project:///wfAdapter/writeSegmentXML.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter__2" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Delivery" bpdm:prefix="Delivery" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ" bpdm:label="Delivery"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/getDeliveryLocation.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/writeSegmentXML.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="WFAdapter  2" bpdm:ID="_Gm-mQGuVEeK7FdvgH5F2kQ">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk1Var" partnerLinkType="diag:DeliveryAndWFAdapter__2ForHttpPortPlk1" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="writeSegmentXML:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivery/writeSegmentXML?packageID={packageID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_lCmwUWuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk0Var" partnerLinkType="diag:DeliveryAndWFAdapter__2ForHttpPortPlk0" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="getDeliveryLocation:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_IoFs8GuWEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="getDeliveryLocationGetDeliveryLocationRequestMsg" messageType="getDeliveryLocation:getDeliveryLocation_input" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="0" bpdm:id="_JgxodWuWEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_JgmCQGuWEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="1" bpdm:id="_JwEosGuWEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_Jv6QoGuWEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="getDeliveryLocation:getDeliveryLocation_output" bpdm:linkedPart="response" bpdm:binding="getDeliveryLocation:restBinding" bpdm:opMsgType="1" bpdm:operation="getDeliveryLocation"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="writeSegmentXMLWriteSegmentXMLRequestMsg" messageType="writeSegmentXML:writeSegmentXML_input" binding="writeSegmentXML:restBinding" operation="writeSegmentXML" opMsgType="0" bpdm:id="_mz-nUGuXEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_mzs6gGuXEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="writeSegmentXMLWriteSegmentXMLResponseMsg" messageType="writeSegmentXML:writeSegmentXML_output" binding="writeSegmentXML:restBinding" operation="writeSegmentXML" opMsgType="1" bpdm:id="_nDJrwGuXEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_nC-soGuXEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="writeSegmentXML:writeSegmentXML_output" bpdm:linkedPart="response" bpdm:binding="writeSegmentXML:restBinding" bpdm:opMsgType="1" bpdm:operation="writeSegmentXML"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="getDeliveryLocation" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk0Var" portType="getDeliveryLocation:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getDeliveryLocation" bpdm:ID="_IoFs8GuWEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_input" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_JgmCQGuWEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_output" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_Jv6QoGuWEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="writeSegmentXML" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="writeSegmentXML:restInterface" isMyRole="true" enableSharing="false" bpdm:label="writeSegmentXML" bpdm:ID="_lCmwUWuXEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="writeSegmentXML:writeSegmentXML_input" bpdm:binding="writeSegmentXML:restBinding" bpdm:ID="_mzs6gGuXEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpdm:msgVarScopeId="_Gm-mQGuVEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="writeSegmentXML:writeSegmentXML_output" bpdm:binding="writeSegmentXML:restBinding" bpdm:ID="_nC-soGuXEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>

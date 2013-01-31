@@ -14,6 +14,7 @@ import org.mule.api.MuleMessage;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
+import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
@@ -27,9 +28,9 @@ public class MuleWorkflowController {
 	@Inject
 	private MediasmithsDestinations destinations;
 	
-//	@Inject
-//	@Named("wfe.marshaller")
-//	private Marshaller wfeMarshaller;
+	@Inject
+	@Named("wfe.marshaller")
+	private Marshaller wfeMarshaller;
 	
 	public MuleWorkflowController() 
 	{
@@ -75,32 +76,24 @@ public class MuleWorkflowController {
 		log.info("Message sent to Mule to generate report. Destination : " + destinations.getMule_reporting_destination() + " Payload: " + request);
 	}
 	
-	public MuleMessage initiateTxDeliveryWorkflow(String assetID, long taskID,String title)
-	{
-		String payload = "<?xml version=\"1.0\"?>";
-		payload += "<invokeIntalioTCFlow>";
-		payload += "<inputFile>" + MediasmithsDestinations.TRANSCODE_INPUT_FILE + "</inputFile>";
-		payload += "<outputFolder>" + MediasmithsDestinations.TRANSCODE_OUTPUT_DIR + "</outputFolder>";
-		payload += "<packageID>" + assetID + "</packageID>";
-		payload += "<taskID>"+taskID+"</taskID>";
-		payload += "<title>"+title+"</title>";
-		payload += "</invokeIntalioTCFlow>";
-		log.info("Message sent to Mule to initiate Tx Delivery. Destination : " +  destinations.getMule_tc_destination()  + " Payload: " + payload);
-		return client.send(destinations.getMule_tc_destination(), payload, null);
+	public void initiateTxDeliveryWorkflow(InvokeIntalioTXFlow startMessage) throws UnsupportedEncodingException, JAXBException{
+		String payload = getSerialisationOf(startMessage);
+		client.dispatch(destinations.getMule_tx_destination(), payload, null);
+		log.info("Message sent to Mule to initiate TX workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 	}
 	
-//	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
-//	{
-//		String payload = getSerialisationOf(ie);
-//		client.dispatch(destinations.getMule_qc_destination(), payload, null);
-//		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
-//	}
+	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
+	{
+		String payload = getSerialisationOf(ie);
+		client.dispatch(destinations.getMule_qc_destination(), payload, null);
+		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
+	}
 	
-//	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
-//	{
-//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//		wfeMarshaller.marshal(payload, baos);
-//		return baos.toString("UTF-8");
-//	}
+	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
+	{
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		wfeMarshaller.marshal(payload, baos);
+		return baos.toString("UTF-8");
+	}
 	
 }

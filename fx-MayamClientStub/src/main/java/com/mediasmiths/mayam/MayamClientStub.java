@@ -927,4 +927,11 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public boolean autoQcRequiredForTXTask(Long taskID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

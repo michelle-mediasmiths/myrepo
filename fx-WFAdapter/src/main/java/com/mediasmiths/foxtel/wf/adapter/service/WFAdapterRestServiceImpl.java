@@ -300,7 +300,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcFailedTotal")
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
-		log.info(String.format("Received notification of TC totalfailure Package ID %s ", notification.getPackageID()));
+		log.info(String.format("Received notification of TC totalfailure Package ID %s ", notification.getAssetID()));
 		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE);
 
 	}
@@ -311,7 +311,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
 
-		log.info(String.format("Received notification of TC failure Package ID %s", notification.getPackageID()));
+		log.info(String.format("Received notification of TC failure Package ID %s", notification.getAssetID()));
 		saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE);
 
 	}
@@ -321,7 +321,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcPassed")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
-		log.info(String.format("Received notification of TC passed Package ID %s", notification.getPackageID()));
+		log.info(String.format("Received notification of TC passed Package ID %s", notification.getAssetID()));
 		saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
 
 		
