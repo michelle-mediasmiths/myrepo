@@ -45,7 +45,7 @@
 
   <xs:complexType abstract="true" name="tcNotification">
     <xs:sequence>
-      <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+      <xs:element minOccurs="0" name="assetID" type="xs:string"/>
       <xs:element name="taskID" type="xs:long"/>
       <xs:element name="title" type="xs:string"/>
     </xs:sequence>

@@ -35,7 +35,7 @@
         <bpel:from>
           <bpel:literal>
 <wfAdapter:tcTotalFailure>
-  <wfAdapter:packageID></wfAdapter:packageID>
+  <wfAdapter:assetID></wfAdapter:assetID>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcTotalFailure></bpel:literal>
@@ -81,7 +81,7 @@
             <bpel:from>
               <bpel:literal>
 <wfAdapter:tcPassedNotification>
-  <wfAdapter:packageID></wfAdapter:packageID>
+  <wfAdapter:assetID></wfAdapter:assetID>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcPassedNotification></bpel:literal>
@@ -92,7 +92,7 @@
             <bpel:from>
               <bpel:literal>
 <wfAdapter:tcFailureNotification>
-  <wfAdapter:packageID></wfAdapter:packageID>
+  <wfAdapter:assetID></wfAdapter:assetID>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcFailureNotification></bpel:literal>

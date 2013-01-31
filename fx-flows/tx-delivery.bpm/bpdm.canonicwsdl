@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://thisdiagram" xmlns:TCAdapter="http://thisdiagram/TCAdapter" xmlns:Transcode="http://thisdiagram/Transcode" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_cOjFQGuNEeK7FdvgH5F2kQ" bpdm:displayName="diag">
+<wsdl:definitions xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:diag="http://thisdiagram" xmlns:Transcode="http://thisdiagram/Transcode" xmlns:WFAdapter="http://thisdiagram/WFAdapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_cOjFQGuNEeK7FdvgH5F2kQ" bpdm:displayName="diag">
   <pnlk:partnerLinkType name="TranscodeAndCaller" bpdm:poolOneId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="Transcode" bpdm:poolTwoId="_cOjsVGuNEeK7FdvgH5F2kQ" bpdm:poolTwoIsExecutable="false" bpdm:poolTwoName="Caller">
     <pnlk:role name="Transcode_for_Caller" portType="Transcode:ForCaller" bpdm:thisPoolId="_i0TRQGuNEeK7FdvgH5F2kQ">
       <wsdl:portType name="ForCaller">
@@ -10,7 +10,7 @@
     </pnlk:role>
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="TranscodeAndTCAdapter" bpdm:poolOneId="_KQmcgGuOEeK7FdvgH5F2kQ" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="TCAdapter" bpdm:poolTwoId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="Transcode">
-    <pnlk:role name="TCAdapter_for_Transcode" portType="TCAdapter:ForTranscode" bpdm:thisPoolId="_KQmcgGuOEeK7FdvgH5F2kQ">
+    <pnlk:role name="TCAdapter_for_Transcode" portType="{http://thisdiagram/TCAdapter}ForTranscode" bpdm:thisPoolId="_KQmcgGuOEeK7FdvgH5F2kQ">
       <wsdl:portType name="ForTranscode">
         <wsdl:operation name="createJob" bpdm:canid="_CaL54GuOEeK7FdvgH5F2kQ._OpjkUGuPEeK7FdvgH5F2kQ." bpdm:dataobjectPointer="project:///tcAdapter/createJob.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest}restService/httpPort/createJob">
           <wsdl:input message="createJob:createJobRequest" name="createJob" bpdm:canid="_P70dcGuPEeK7FdvgH5F2kQ" bpdm:senderId="_CaL54GuOEeK7FdvgH5F2kQ" bpdm:receiverId="_OpjkUGuPEeK7FdvgH5F2kQ" bpdm:senderName="Create Transcode Job" bpdm:receiverName="createJob" bpdm:receiverPoolId="_KQmcgGuOEeK7FdvgH5F2kQ" bpdm:dataobjectPointer="project:///tcAdapter/createJob.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest}restService/httpPort/createJob/input/createJobRequest"></wsdl:input>
@@ -32,5 +32,25 @@
   </pnlk:partnerLinkType>
   <pnlk:partnerLinkType name="TranscodeAndTCAdapterForHttpPortPlk1" bpdm:canPlkId="_i0TRQGuNEeK7FdvgH5F2kQ-_KQmcgGuOEeK7FdvgH5F2kQ">
     <pnlk:role name="TCAdapter_for_Transcode" portType="queryJob:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="TranscodeAndWFAdapter" bpdm:poolOneId="_-kFOMGuREeK7FdvgH5F2kQ" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="WFAdapter" bpdm:poolTwoId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="Transcode">
+    <pnlk:role name="WFAdapter_for_Transcode" portType="WFAdapter:ForTranscode" bpdm:thisPoolId="_-kFOMGuREeK7FdvgH5F2kQ">
+      <wsdl:portType name="ForTranscode">
+        <wsdl:operation name="tcFailure" bpdm:canid="_Arc_0GuREeK7FdvgH5F2kQ._R0kAYGuSEeK7FdvgH5F2kQ." bpdm:dataobjectPointer="project:///wfAdapter/tcFailure.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure">
+          <wsdl:input message="tcFailure:tcFailureRequest" name="tcFailure" bpdm:canid="_d5RvcGuSEeK7FdvgH5F2kQ" bpdm:senderId="_Arc_0GuREeK7FdvgH5F2kQ" bpdm:receiverId="_R0kAYGuSEeK7FdvgH5F2kQ" bpdm:senderName="Send Failure Message" bpdm:receiverName="tcFailure" bpdm:receiverPoolId="_-kFOMGuREeK7FdvgH5F2kQ" bpdm:dataobjectPointer="project:///wfAdapter/tcFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure/input/tcFailureRequest"></wsdl:input>
+          <wsdl:output message="tcFailure:tcFailureResponse" name="tcFailureResponse" bpdm:canid="_eL6XkGuSEeK7FdvgH5F2kQ" bpdm:senderId="_R0kAYGuSEeK7FdvgH5F2kQ" bpdm:receiverId="_Arc_0GuREeK7FdvgH5F2kQ" bpdm:senderName="tcFailure" bpdm:receiverName="Send Failure Message" bpdm:receiverPoolId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:dataobjectPointer="project:///wfAdapter/tcFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure/output/tcFailureResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="tcPassed" bpdm:canid="_-knPIGuQEeK7FdvgH5F2kQ._TRreoGuSEeK7FdvgH5F2kQ." bpdm:dataobjectPointer="project:///wfAdapter/tcPassed.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed">
+          <wsdl:input message="tcPassed:tcPassedRequest" name="tcPassed" bpdm:canid="_dO-OMGuSEeK7FdvgH5F2kQ" bpdm:senderId="_-knPIGuQEeK7FdvgH5F2kQ" bpdm:receiverId="_TRreoGuSEeK7FdvgH5F2kQ" bpdm:senderName="Send Success Message" bpdm:receiverName="tcPassed" bpdm:receiverPoolId="_-kFOMGuREeK7FdvgH5F2kQ" bpdm:dataobjectPointer="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/input/tcPassedRequest"></wsdl:input>
+          <wsdl:output message="tcPassed:tcPassedResponse" name="tcPassedResponse" bpdm:canid="_djeekGuSEeK7FdvgH5F2kQ" bpdm:senderId="_TRreoGuSEeK7FdvgH5F2kQ" bpdm:receiverId="_-knPIGuQEeK7FdvgH5F2kQ" bpdm:senderName="tcPassed" bpdm:receiverName="Send Success Message" bpdm:receiverPoolId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:dataobjectPointer="project:///wfAdapter/tcPassed.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest}restService/httpPort/tcPassed/output/tcPassedResponse"></wsdl:output>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="TranscodeAndWFAdapterForHttpPortPlk0" bpdm:canPlkId="_i0TRQGuNEeK7FdvgH5F2kQ-_-kFOMGuREeK7FdvgH5F2kQ">
+    <pnlk:role name="WFAdapter_for_Transcode" portType="tcFailure:restInterface"></pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="TranscodeAndWFAdapterForHttpPortPlk1" bpdm:canPlkId="_i0TRQGuNEeK7FdvgH5F2kQ-_-kFOMGuREeK7FdvgH5F2kQ">
+    <pnlk:role name="WFAdapter_for_Transcode" portType="tcPassed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
 </wsdl:definitions>

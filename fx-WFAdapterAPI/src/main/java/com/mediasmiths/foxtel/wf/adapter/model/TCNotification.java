@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 
 public abstract class TCNotification
 {
-	private String packageID;
+	private String assetID;
 
 	private long taskID;
 
@@ -20,14 +20,14 @@ public abstract class TCNotification
 	}
 
 	@XmlElement
-	public String getPackageID()
+	public String getAssetID()
 	{
-		return packageID;
+		return assetID;
 	}
 
-	public void setPackageID(String packageID)
+	public void setAssetID(String assetID)
 	{
-		this.packageID = packageID;
+		this.assetID = assetID;
 	}
 	
 	private String title;
