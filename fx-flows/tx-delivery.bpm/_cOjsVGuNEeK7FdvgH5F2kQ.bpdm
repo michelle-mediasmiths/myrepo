@@ -1,32 +1,32 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Transcode___QC="http://thisdiagram/Transcode___QC" xmlns:diag="http://thisdiagram" xmlns:this="http://thisdiagram/Caller" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Caller">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:diag="http://thisdiagram" xmlns:Transcode="http://thisdiagram/Transcode" xmlns:this="http://thisdiagram/Caller" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Caller">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode___QC" bpdm:prefix="Transcode___QC" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode" bpdm:prefix="Transcode" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Caller" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode + QC"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Caller" bpdm:ID="_cOjsVGuNEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="transcode___QcAndCallerPlkVar" partnerLinkType="diag:Transcode___QcAndCaller" initializePartnerRole="yes" partnerRole="Transcode___QC_for_Caller" bpdm:invokedService="Transcode___QC:CanonicServiceForCaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Transcode/Caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_cOjsVGuNEeK7FdvgH5F2kQ:_cOjsVmuNEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="diag:TranscodeAndCaller" initializePartnerRole="yes" partnerRole="Transcode_for_Caller" bpdm:invokedService="Transcode:CanonicServiceForCaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Transcode/Caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_cOjsVGuNEeK7FdvgH5F2kQ:_cOjsVmuNEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="transcodeEventStartMessageRequest" messageType="Transcode___QC:EventStartMessageRequest" bpdm:id="_nN6V0GuNEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_nN35kGuNEeK7FdvgH5F2kQ">
+            <bpel:variable name="transcodeEventStartMessageRequest" messageType="Transcode:EventStartMessageRequest" bpdm:id="_nN6V0GuNEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_nN35kGuNEeK7FdvgH5F2kQ">
                 <bpel:from bpdm:toPart="body">
-                    <bpel:literal bpdm:linkedMessageType="Transcode___QC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
+                    <bpel:literal bpdm:linkedMessageType="Transcode:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="EventStartMessage" partnerLink="transcode___QcAndCallerPlkVar" portType="Transcode___QC:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Caller Invokes TX Delivery" bpdm:ID="_cOjsVmuNEeK7FdvgH5F2kQ">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="transcodeEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Transcode___QC:EventStartMessageRequest" bpdm:ID="_nN35kGuNEeK7FdvgH5F2kQ"></bpdm:linkset>
+            <bpdm:messagingtask operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="Transcode:ForCaller" isMyRole="false" enableSharing="false" bpdm:label="Caller Invokes TX Delivery" bpdm:ID="_cOjsVmuNEeK7FdvgH5F2kQ">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="transcodeEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Transcode:EventStartMessageRequest" bpdm:ID="_nN35kGuNEeK7FdvgH5F2kQ"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

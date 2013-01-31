@@ -1,0 +1,11 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<dd:process xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Delivery" fileName="tx-delivery-Delivery.bpel">
+  <dd:property name="PATH">tx-delivery</dd:property>
+  <dd:property name="SVG">tx-delivery.svg</dd:property>
+  <dd:provide partnerLink="transcodeAndDeliveryPlkVar">
+    <dd:service name="this:CanonicServiceForTranscode" port="canonicPort"></dd:service>
+  </dd:provide>
+  <dd:provide partnerLink="deliveryAndQCPlkVar">
+    <dd:service name="this:CanonicServiceForQC" port="canonicPort"></dd:service>
+  </dd:provide>
+</dd:process>

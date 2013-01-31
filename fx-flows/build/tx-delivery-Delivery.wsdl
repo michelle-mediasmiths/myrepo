@@ -1,0 +1,50 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
+    <wsdl:types>
+        <xs:schema elementFormDefault="qualified" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
+            <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter" schemaLocation="wfAdapter/wfAdapter.xsd"/>
+            <xs:element name="EventStartMessageRequest" type="tns:invokeIntalioTXFlow"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="EventStartMessageRequest">
+        <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+    </wsdl:message>
+    <wsdl:portType name="ForQC">
+        <wsdl:operation name="EventStartMessage">
+            <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:portType name="ForTranscode">
+        <wsdl:operation name="EventStartMessage">
+            <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CanonicBindingForQC" type="this:ForQC">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="EventStartMessage">
+            <soap:operation style="document" soapAction="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery/ForQC/EventStartMessage"/>
+            <wsdl:input name="EventStartMessage">
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="CanonicBindingForTranscode" type="this:ForTranscode">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="EventStartMessage">
+            <soap:operation style="document" soapAction="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery/ForTranscode/EventStartMessage"/>
+            <wsdl:input name="EventStartMessage">
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="CanonicServiceForQC">
+        <wsdl:port name="canonicPort" binding="this:CanonicBindingForQC">
+            <soap:address location="http://10.111.224.101:8081/ode/processes/fx-flows/tx-delivery/Delivery/QC"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:service name="CanonicServiceForTranscode">
+        <wsdl:port name="canonicPort" binding="this:CanonicBindingForTranscode">
+            <soap:address location="http://10.111.224.101:8081/ode/processes/fx-flows/tx-delivery/Delivery/Transcode"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

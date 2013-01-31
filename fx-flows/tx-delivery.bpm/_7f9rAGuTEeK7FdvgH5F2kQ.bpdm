@@ -1,0 +1,60 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/QC" xmlns:diag="http://thisdiagram" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/QC">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/QC" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Delivery" bpdm:prefix="Delivery" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:portType name="ForTranscode">
+                <wsdl:operation name="EventStartMessage" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ">
+                    <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+                </wsdl:operation>
+            </wsdl:portType>
+            <xs:element name="EventStartMessageRequest" type="tns:invokeIntalioTXFlow" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <wsdl:message name="EventStartMessageRequest" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ">
+                <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+            </wsdl:message>
+            <bpel:binding name="CanonicBindingForTranscode" type="this:ForTranscode" bpdm:isSynchronized="true"/>
+        </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ" bpdm:label="Delivery"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="QC" bpdm:ID="_7f9rAGuTEeK7FdvgH5F2kQ">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="transcodeAndQCPlkVar" partnerLinkType="diag:TranscodeAndQC" myRole="QC_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForTranscode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/QC/Transcode" bpdm:providedIsDefault="true" bpdm:clientTasks="_7f9rAGuTEeK7FdvgH5F2kQ:_AnHLAGuUEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="deliveryAndQCPlkVar" partnerLinkType="diag:DeliveryAndQC" initializePartnerRole="yes" partnerRole="Delivery_for_QC" bpdm:invokedService="Delivery:CanonicServiceForQC" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Delivery/QC" bpdm:invokedIsDefault="true" bpdm:clientTasks="_7f9rAGuTEeK7FdvgH5F2kQ:_tjAygGuUEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_BW_IxWuUEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_BWpKgGuUEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest" bpdm:id="_yZ3MsGuUEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_yZ0JYGuUEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="body">
+                    <bpel:literal bpdm:linkedMessageType="Delivery:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndQCPlkVar" portType="this:ForTranscode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_AnHLAGuUEeK7FdvgH5F2kQ">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_BWpKgGuUEeK7FdvgH5F2kQ"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask operation="EventStartMessage" partnerLink="deliveryAndQCPlkVar" portType="Delivery:ForQC" isMyRole="false" enableSharing="false" bpdm:label="TODO: QC!" bpdm:ID="_tjAygGuUEeK7FdvgH5F2kQ">
+                <bpdm:linkset bpdm:type="assignments">
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
+                        <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="24547614" targetPath="$deliveryEventStartMessageRequest.body" targetedBy="25448552-arg0"></mapper:vertice>
+  <mapper:vertice id="25448552" sourcePath="$thisEventStartMessageRequest.body"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deliveryEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageRequest" bpdm:ID="_yZ0JYGuUEeK7FdvgH5F2kQ"></bpdm:linkset>
+            </bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>
