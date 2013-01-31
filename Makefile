@@ -37,6 +37,9 @@ bmmqclient: mqclient
 bmpa : placeholderagent	
 	rsync -v fx-PlaceholderAgent/target/fx-PlaceholderAgent.war sysadmin@10.111.224.101:mediasmiths/bundle/
 
+bmwfa : wfadapter
+	rsync -v fx-WFAdapter/target/fx-WFAdapter.war sysadmin@10.111.224.101:mediasmiths/bundle/
+
 #
 # Targets
 #
@@ -51,6 +54,8 @@ mqclient:
 carbon:
 	$(MVN) clean package -am --projects fx-TcAdapter
 
+wfadapter:
+	$(MVN) clean package -am --projects fx-WFAdapter
 
 #
 #

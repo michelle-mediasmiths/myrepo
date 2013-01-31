@@ -66,7 +66,13 @@
       </bpel:copy>
     </bpel:assign>
     <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlkVar" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="Move To Delivery Location" name="Move_To_Delivery_Location-1" bpmn:id="_l_DR0GuUEeK7FdvgH5F2kQ"></bpel:invoke>
-    <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="writeSegmentXML:restInterface" operation="writeSegmentXML" inputVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" outputVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpmn:label="Write Segment XML" name="Write_Segment_XML" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ"></bpel:invoke>
+    <bpel:assign bpmn:label="Write Segment XML" name="Write_Segment_XML" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ">
+      <bpel:copy>
+        <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+        <bpel:to>$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="writeSegmentXML:restInterface" operation="writeSegmentXML" inputVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" outputVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpmn:label="Write Segment XML" name="Write_Segment_XML-1" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ"></bpel:invoke>
     <bpel:empty bpmn:label="Notity WFE TX delivery complete" name="Notity_WFE_TX_delivery_complete" bpmn:id="_9HhCMGuUEeK7FdvgH5F2kQ"/>
     <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event" bpmn:id="_6eyscGuUEeK7FdvgH5F2kQ"/>
   </bpel:sequence>

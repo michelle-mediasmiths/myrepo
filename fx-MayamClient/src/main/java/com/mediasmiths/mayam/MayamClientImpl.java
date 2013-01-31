@@ -629,17 +629,9 @@ public class MayamClientImpl implements MayamClient
 	{
 		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
 		
-		Boolean adult = info.getTitleAttributes().getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+		boolean adult = AssetProperties.isAO(info.getTitleAttributes());
 
-		if (adult != null)
-		{
-			return adult.booleanValue();
-		}
-		else
-		{
-			log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + info.getTitleID());
-			throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
-		}
+		return adult;
 	}
 
 	@Override

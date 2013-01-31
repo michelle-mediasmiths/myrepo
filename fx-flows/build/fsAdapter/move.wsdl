@@ -33,7 +33,7 @@
   </wsdl:binding>
   <wsdl:service name="restService">
     <wsdl:port name="httpPort" binding="move:restBinding">
-      <http:address location="http://mamwkf01.mam.foxtel.com.au:8082/fx-FSAdapter/rest/fs/move"/>
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/move"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
