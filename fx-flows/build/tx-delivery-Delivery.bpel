@@ -1,30 +1,73 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Delivery" name="Delivery" bpmn:id="_HwWekGuUEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:WFAdapter__2="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter__2" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Delivery" name="Delivery" bpmn:id="_HwWekGuUEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" location="fsAdapter/move.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" location="wfAdapter/getDeliveryLocation.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" location="wfAdapter/writeSegmentXML.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" location="tx-delivery-Delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
     <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="diag:TranscodeAndDelivery" myRole="Delivery_for_Transcode"/>
-    <bpel:partnerLink name="deliveryAndQCPlkVar" partnerLinkType="diag:DeliveryAndQC" myRole="Delivery_for_QC"/>
+    <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk0Var" partnerLinkType="diag:DeliveryAndWFAdapter__2ForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
+    <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlkVar" partnerLinkType="diag:FS_AdapterAndDeliveryForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Delivery"/>
+    <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk1Var" partnerLinkType="diag:DeliveryAndWFAdapter__2ForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
   </bpel:partnerLinks>
   <bpel:variables>
+    <bpel:variable name="getDeliveryLocationGetDeliveryLocationRequestMsg" messageType="getDeliveryLocation:getDeliveryLocation_input"/>
+    <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output"/>
+    <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input"/>
+    <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
+    <bpel:variable name="writeSegmentXMLWriteSegmentXMLRequestMsg" messageType="writeSegmentXML:writeSegmentXML_input"/>
+    <bpel:variable name="writeSegmentXMLWriteSegmentXMLResponseMsg" messageType="writeSegmentXML:writeSegmentXML_output"/>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
   </bpel:variables>
-  <bpel:flow bpmn:label="Delivery" name="Delivery-1">
-    <bpel:sequence>
-      <bpel:receive partnerLink="deliveryAndQCPlkVar" portType="this:ForQC" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ"></bpel:receive>
-      <bpel:empty bpmn:label="Get Delivery Location" name="Get_Delivery_Location" bpmn:id="_ko_d0GuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Move To Delivery Location" name="Move_To_Delivery_Location" bpmn:id="_l_DR0GuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Write Segment XML" name="Write_Segment_XML" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Notity WFE TX delivery complete" name="Notity_WFE_TX_delivery_complete" bpmn:id="_9HhCMGuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event" bpmn:id="_6eyscGuUEeK7FdvgH5F2kQ"/>
-    </bpel:sequence>
-    <bpel:sequence>
-      <bpel:receive partnerLink="transcodeAndDeliveryPlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event-1" bpmn:id="_UgCdQGuUEeK7FdvgH5F2kQ"></bpel:receive>
-      <bpel:empty bpmn:label="Get Delivery Location" name="Get_Delivery_Location-1" bpmn:id="_ko_d0GuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Move To Delivery Location" name="Move_To_Delivery_Location-1" bpmn:id="_l_DR0GuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Write Segment XML" name="Write_Segment_XML-1" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Notity WFE TX delivery complete" name="Notity_WFE_TX_delivery_complete-1" bpmn:id="_9HhCMGuUEeK7FdvgH5F2kQ"/>
-      <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-1" bpmn:id="_6eyscGuUEeK7FdvgH5F2kQ"/>
-    </bpel:sequence>
-  </bpel:flow>
+  <bpel:sequence>
+    <bpel:receive partnerLink="transcodeAndDeliveryPlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ"></bpel:receive>
+    <bpel:assign name="init-variables-Delivery" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ">
+      <bpel:copy bpmn:label="$getDeliveryLocationGetDeliveryLocationRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<getDeliveryLocation:packageID_urlType></getDeliveryLocation:packageID_urlType></bpel:literal>
+        </bpel:from>
+        <bpel:to>$getDeliveryLocationGetDeliveryLocationRequestMsg.packageID</bpel:to>
+      </bpel:copy>
+      <bpel:copy bpmn:label="$moveMoveRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<FSAdapter:moveRequest>
+  <FSAdapter:from></FSAdapter:from>
+  <FSAdapter:to></FSAdapter:to>
+</FSAdapter:moveRequest></bpel:literal>
+        </bpel:from>
+        <bpel:to>$moveMoveRequestMsg.body</bpel:to>
+      </bpel:copy>
+      <bpel:copy bpmn:label="$writeSegmentXMLWriteSegmentXMLRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<writeSegmentXML:packageID_urlType></writeSegmentXML:packageID_urlType></bpel:literal>
+        </bpel:from>
+        <bpel:to>$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:assign bpmn:label="Get Delivery Location" name="Get_Delivery_Location" bpmn:id="_ko_d0GuUEeK7FdvgH5F2kQ">
+      <bpel:copy>
+        <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+        <bpel:to>$getDeliveryLocationGetDeliveryLocationRequestMsg.packageID</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk0Var" portType="getDeliveryLocation:restInterface" operation="getDeliveryLocation" inputVariable="getDeliveryLocationGetDeliveryLocationRequestMsg" outputVariable="getDeliveryLocationGetDeliveryLocationResponseMsg" bpmn:label="Get Delivery Location" name="Get_Delivery_Location-1" bpmn:id="_ko_d0GuUEeK7FdvgH5F2kQ"></bpel:invoke>
+    <bpel:assign bpmn:label="Move To Delivery Location" name="Move_To_Delivery_Location" bpmn:id="_l_DR0GuUEeK7FdvgH5F2kQ">
+      <bpel:copy>
+        <bpel:from>concat(concat($thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text(), $thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()), ".gxf")</bpel:from>
+        <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
+      </bpel:copy>
+      <bpel:copy>
+        <bpel:from>concat($getDeliveryLocationGetDeliveryLocationResponseMsg.response/text(), ".gxf")</bpel:from>
+        <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:invoke partnerLink="fS_AdapterAndDeliveryForHttpPortPlkVar" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="Move To Delivery Location" name="Move_To_Delivery_Location-1" bpmn:id="_l_DR0GuUEeK7FdvgH5F2kQ"></bpel:invoke>
+    <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="writeSegmentXML:restInterface" operation="writeSegmentXML" inputVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" outputVariable="writeSegmentXMLWriteSegmentXMLResponseMsg" bpmn:label="Write Segment XML" name="Write_Segment_XML" bpmn:id="_pCyIkGuUEeK7FdvgH5F2kQ"></bpel:invoke>
+    <bpel:empty bpmn:label="Notity WFE TX delivery complete" name="Notity_WFE_TX_delivery_complete" bpmn:id="_9HhCMGuUEeK7FdvgH5F2kQ"/>
+    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event" bpmn:id="_6eyscGuUEeK7FdvgH5F2kQ"/>
+  </bpel:sequence>
 </bpel:process>

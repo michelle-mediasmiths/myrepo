@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -172,17 +173,31 @@ public class FSRestServiceImpl implements FSRestService
 			}
 			else
 			{
-				try
+				String fromPath = from.getAbsolutePath();
+				String toPath = to.getAbsolutePath();
+				
+				if (to.isDirectory()
+						&& FilenameUtils.getFullPathNoEndSeparator(fromPath).equals(
+								FilenameUtils.getFullPathNoEndSeparator(toPath)))
 				{
-					FileUtils.moveFile(from, to);
-					log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
+					log.info(String.format("Move from %s to %s is the same folder", fromPath, toPath));
 					return new MoveResponse(true);
 				}
-				catch (IOException e)
+				else
 				{
-					String message = String.format("Error moving file %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
-					log.error(message, e);
-					throw new FSAdapterException(message, e);
+
+					try
+					{
+						FileUtils.moveFile(from, to);
+						log.info(String.format("Move from %s to %s complete", from.getAbsolutePath(), to.getAbsolutePath()));
+						return new MoveResponse(true);
+					}
+					catch (IOException e)
+					{
+						String message = String.format("Error moving file %s to %s", from.getAbsolutePath(), to.getAbsolutePath());
+						log.error(message, e);
+						throw new FSAdapterException(message, e);
+					}
 				}
 			}
 

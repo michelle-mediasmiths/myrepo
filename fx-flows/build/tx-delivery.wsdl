@@ -1,25 +1,30 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery">
+<wsdl:definitions xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery">
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" location="fsAdapter/move.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" location="wfAdapter/autoQCRequiredForTX.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" location="wfAdapter/getDeliveryLocation.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" location="wfAdapter/tcFailure.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" location="wfAdapter/tcPassed.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" location="wfAdapter/tcTotalFailure.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" location="wfAdapter/writeSegmentXML.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" location="tx-delivery-Delivery.wsdl"/>
-    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC" location="tx-delivery-QC.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" location="tx-delivery-Transcode.wsdl"/>
-    <pnlk:partnerLinkType name="DeliveryAndQC">
-        <pnlk:role name="Delivery_for_QC" portType="Delivery:ForQC"/>
+    <pnlk:partnerLinkType name="DeliveryAndWFAdapter__2ForHttpPortPlk0">
+        <pnlk:role name="WFAdapter__2_for_Delivery" portType="getDeliveryLocation:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="DeliveryAndWFAdapter__2ForHttpPortPlk1">
+        <pnlk:role name="WFAdapter__2_for_Delivery" portType="writeSegmentXML:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="FS_AdapterAndDeliveryForHttpPortPlk">
+        <pnlk:role name="FS_Adapter_for_Delivery" portType="move:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="TranscodeAndCaller">
         <pnlk:role name="Transcode_for_Caller" portType="Transcode:ForCaller"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="TranscodeAndDelivery">
         <pnlk:role name="Delivery_for_Transcode" portType="Delivery:ForTranscode"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="TranscodeAndQC">
-        <pnlk:role name="QC_for_Transcode" portType="QC:ForTranscode"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="TranscodeAndTCAdapterForHttpPortPlk0">
         <pnlk:role name="TCAdapter_for_Transcode" portType="createJob:restInterface"/>
