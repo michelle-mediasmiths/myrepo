@@ -1,0 +1,84 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/WFAdapter" xmlns:Transcode___QC="http://thisdiagram/Transcode___QC" xmlns:diag="http://thisdiagram" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/WFAdapter">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" bpdm:prefix="autoQCRequiredForTX" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequiredForTX.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode___QC" bpdm:prefix="Transcode___QC" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode + QC"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcPassed.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcFailure.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcTotalFailure.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQCRequiredForTX.wsdl"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="WFAdapter" bpdm:ID="_-kFOMGuREeK7FdvgH5F2kQ">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="transcode___QcAndWFAdapterForHttpPortPlk0Var" partnerLinkType="diag:Transcode___QcAndWFAdapterForHttpPortPlk0" myRole="WFAdapter_for_Transcode___QC" bpdm:enableSharing="false" bpdm:providedService="autoQCRequiredForTX:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_hsH5gmuTEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcode___QcAndWFAdapterForHttpPortPlk1Var" partnerLinkType="diag:Transcode___QcAndWFAdapterForHttpPortPlk1" myRole="WFAdapter_for_Transcode___QC" bpdm:enableSharing="false" bpdm:providedService="tcFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_R0kAYGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcode___QcAndWFAdapterForHttpPortPlk2Var" partnerLinkType="diag:Transcode___QcAndWFAdapterForHttpPortPlk2" myRole="WFAdapter_for_Transcode___QC" bpdm:enableSharing="false" bpdm:providedService="tcPassed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_TRreoGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcode___QcAndWFAdapterForHttpPortPlk3Var" partnerLinkType="diag:Transcode___QcAndWFAdapterForHttpPortPlk3" myRole="WFAdapter_for_Transcode___QC" bpdm:enableSharing="false" bpdm:providedService="tcTotalFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_yXguMGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="tcPassedTcPassedRequestMsg" messageType="tcPassed:tcPassed_input" binding="tcPassed:restBinding" operation="tcPassed" opMsgType="0" bpdm:id="_dPOs4GuSEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_dO-OMGuSEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="tcPassedTcPassedResponseMsg" messageType="tcPassed:tcPassed_output" binding="tcPassed:restBinding" operation="tcPassed" opMsgType="1" bpdm:id="_djpdsGuSEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_djeekGuSEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="tcPassed:tcPassed_output" bpdm:linkedPart="response" bpdm:binding="tcPassed:restBinding" bpdm:opMsgType="1" bpdm:operation="tcPassed"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tcFailureTcFailureRequestMsg" messageType="tcFailure:tcFailure_input" binding="tcFailure:restBinding" operation="tcFailure" opMsgType="0" bpdm:id="_d5nGpWuSEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_d5RvcGuSEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="tcFailureTcFailureResponseMsg" messageType="tcFailure:tcFailure_output" binding="tcFailure:restBinding" operation="tcFailure" opMsgType="1" bpdm:id="_eMIaAGuSEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_eL6XkGuSEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="tcFailure:tcFailure_output" bpdm:linkedPart="response" bpdm:binding="tcFailure:restBinding" bpdm:opMsgType="1" bpdm:operation="tcFailure"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input" binding="tcTotalFailure:restBinding" operation="tcTotalFailure" opMsgType="0" bpdm:id="_z3TtBWuSEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_z27SgGuSEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output" binding="tcTotalFailure:restBinding" operation="tcTotalFailure" opMsgType="1" bpdm:id="_0KRsUGuSEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_0KE4AGuSEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="tcTotalFailure:tcTotalFailure_output" bpdm:linkedPart="response" bpdm:binding="tcTotalFailure:restBinding" bpdm:opMsgType="1" bpdm:operation="tcTotalFailure"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="0" bpdm:id="_j8GYFWuTEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_j7oeAGuTEeK7FdvgH5F2kQ"/>
+            <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="1" bpdm:id="_kSthQGuTEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_kSe3wGuTEeK7FdvgH5F2kQ">
+                <bpel:from bpdm:toPart="autoQcRequiredForTX">
+                    <bpel:literal bpdm:linkedMessageType="autoQCRequiredForTX:autoQcRequiredForTX_output" bpdm:linkedPart="autoQcRequiredForTX" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:opMsgType="1" bpdm:operation="autoQcRequiredForTX"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+        </bpel:variables>
+        <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="autoQcRequiredForTX" partnerLink="transcode___QcAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcRequiredForTX" bpdm:ID="_hsH5gmuTEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequiredForTX:autoQcRequiredForTX_input" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:ID="_j7oeAGuTEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpdm:msgVarScopeId="_-kFOMGuREeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:ID="_kSe3wGuTEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="tcPassed" partnerLink="transcode___QcAndWFAdapterForHttpPortPlk2Var" portType="tcPassed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcPassed" bpdm:ID="_TRreoGuSEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_dO-OMGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcPassedTcPassedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_output" bpdm:binding="tcPassed:restBinding" bpdm:ID="_djeekGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="tcFailure" partnerLink="transcode___QcAndWFAdapterForHttpPortPlk1Var" portType="tcFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcFailure" bpdm:ID="_R0kAYGuSEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_d5RvcGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_eL6XkGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcode___QcAndWFAdapterForHttpPortPlk3Var" portType="tcTotalFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcTotalFailure" bpdm:ID="_yXguMGuSEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_z27SgGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcTotalFailureTcTotalFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_output" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_0KE4AGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+        </bpel:flow>
+    </bpel:scope>
+</bpel:process>
