@@ -818,5 +818,12 @@ public class MayamClientImpl implements MayamClient
 		}
 		
 	}
+
+	@Override
+	public boolean isPackageSD(String packageID) throws MayamClientException
+	{
+		SegmentList segmentList = packageController.getSegmentList(packageID);
+		return AssetProperties.isPackageSD(segmentList.getAttributeMap());
+	}
 	
 }

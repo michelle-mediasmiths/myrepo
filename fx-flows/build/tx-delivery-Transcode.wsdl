@@ -28,8 +28,4 @@
             <soap:address location="http://10.111.224.101:8081/ode/processes/fx-flows/tx-delivery/Transcode/Caller"/>
         </wsdl:port>
     </wsdl:service>
-    <vprop:property name="package" type="xs:string"/>
-    <vprop:propertyAlias propertyName="this:package" element="this:EventStartMessageRequest">
-        <vprop:query>wfAdapter:packageID/text()</vprop:query>
-    </vprop:propertyAlias>
 </wsdl:definitions>

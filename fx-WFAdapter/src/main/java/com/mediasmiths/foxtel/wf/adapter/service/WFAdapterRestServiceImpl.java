@@ -409,6 +409,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
 		try
 		{
+			log.debug("Writing segmentinfo to "+segmentXmlFile);
+			log.debug("Segment info is "+companion);
 			FileUtils.writeStringToFile(segmentXmlFile, companion);
 			return true;
 		}

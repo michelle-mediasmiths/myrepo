@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:Caller="http://thisdiagram/Caller" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
@@ -10,6 +10,7 @@
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Caller" bpdm:prefix="Caller" bpdm:comment="contrib=&apos;partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Delivery" bpdm:prefix="Delivery" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
@@ -25,10 +26,6 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForCaller" type="this:ForCaller" bpdm:isSynchronized="true"/>
-            <vprop:property name="package" type="xs:string"/>
-            <vprop:propertyAlias propertyName="this:package" element="this:EventStartMessageRequest">
-                <vprop:query>wfAdapter:packageID/text()</vprop:query>
-            </vprop:propertyAlias>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ" bpdm:label="Caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/createJob.wsdl"/>
@@ -127,11 +124,7 @@
                         <bpdm:linkset bpdm:type="assignments">
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:tcParams</bpel:from>
-                                <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="21944034" targetPath="$createJobCreateJobRequestMsg.body" targetedBy="32956367-arg0"></mapper:vertice>
-  <mapper:vertice id="32956367" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to><mapper:mapperLink><mapper:vertice id="21944034" targetPath="$createJobCreateJobRequestMsg.body" targetedBy="32956367-arg0"></mapper:vertice><mapper:vertice id="32956367" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="createJobCreateJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_input" bpdm:binding="createJob:restBinding" bpdm:ID="_P70dcGuPEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -139,17 +132,7 @@
                     </bpdm:messagingtask>
                     <bpel:scope bpdm:label="Poll until job finishes" bpdm:ID="_a0OKYGuPEeK7FdvgH5F2kQ">
                         <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                            <bpel:condition bpdm:loopType="repeatUntil">"INCOMPLETE" != $queryJobQueryJobResponseMsg.response/tns:state/text()
-<mapper:mapperLink>
-  <mapper:vertice id="17166422" targetPath="$repeat until" targetedBy="15312594-arg1"></mapper:vertice>
-  <mapper:vertice id="15312594" dimension="78x24" location="289,427">
-    <mapper:value>!=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="19931746" dimension="97x24" location="156,480" targetedBy="15312594-arg0">
-    <mapper:value>"INCOMPLETE"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="29000559" sourcePath="$queryJobQueryJobResponseMsg.response/tns:state/text()" targetedBy="15312594-arg2"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                            <bpel:condition bpdm:loopType="repeatUntil">"INCOMPLETE" != $queryJobQueryJobResponseMsg.response/tns:state/text()<mapper:mapperLink><mapper:vertice id="17166422" targetPath="$repeat until" targetedBy="15312594-arg1"></mapper:vertice><mapper:vertice id="15312594" dimension="78x24" location="289,427"><mapper:value>!=</mapper:value></mapper:vertice><mapper:vertice id="19931746" dimension="97x24" location="156,480" targetedBy="15312594-arg0"><mapper:value>"INCOMPLETE"</mapper:value></mapper:vertice><mapper:vertice id="29000559" sourcePath="$queryJobQueryJobResponseMsg.response/tns:state/text()" targetedBy="15312594-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpel:variables>
                             <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input" binding="queryJob:restBinding" operation="queryJob" opMsgType="0" bpdm:id="_378ugGuPEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_37y9gGuPEeK7FdvgH5F2kQ">
@@ -189,17 +172,7 @@
                     </bpdm:messagingtask>
                     <bpdm:gateway bpdm:label="Check Job Result" bpdm:ID="_Q9cdEGuQEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_aBaX8GuQEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[Check Job Result - Transcode Success]">
-                            <bpel:condition>"SUCCESS" = $queryJobQueryJobResponseMsg.response/tns:state/text()
-<mapper:mapperLink>
-  <mapper:vertice id="17084541" targetPath="$condition" targetedBy="1184260-arg1"></mapper:vertice>
-  <mapper:vertice id="1184260" dimension="37x25" location="348,216">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="8494718" dimension="78x24" location="252,264" targetedBy="1184260-arg0">
-    <mapper:value>"SUCCESS"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="21068211" sourcePath="$queryJobQueryJobResponseMsg.response/tns:state/text()" targetedBy="1184260-arg2"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                            <bpel:condition>"SUCCESS" = $queryJobQueryJobResponseMsg.response/tns:state/text()<mapper:mapperLink><mapper:vertice id="17084541" targetPath="$condition" targetedBy="1184260-arg1"></mapper:vertice><mapper:vertice id="1184260" dimension="37x25" location="348,216"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="8494718" dimension="78x24" location="252,264" targetedBy="1184260-arg0"><mapper:value>"SUCCESS"</mapper:value></mapper:vertice><mapper:vertice id="21068211" sourcePath="$queryJobQueryJobResponseMsg.response/tns:state/text()" targetedBy="1184260-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_aUfE8GuQEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpel:sequence>

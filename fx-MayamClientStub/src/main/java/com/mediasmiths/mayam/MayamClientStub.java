@@ -934,4 +934,11 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public boolean isPackageSD(String packageID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
