@@ -370,7 +370,7 @@ public class MayamPackageController extends MayamController
 					
 					if (txPackage.getTargetDate() != null)
 					{
-						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
+						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					}
 					
 					attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());

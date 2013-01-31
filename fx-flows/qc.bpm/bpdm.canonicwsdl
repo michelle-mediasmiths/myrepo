@@ -1,8 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:diag="http://thisdiagram" xmlns:wfadpater="http://thisdiagram/wfadpater" xmlns:workflow="http://thisdiagram/workflow" xmlns:complexvar="http://www.example.org/complexvar" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_Q35DkB9xEeKCKo-8QnTuIA" bpdm:displayName="diag">
-  <pnlk:partnerLinkType name="qc_adapterAndWorkflow" bpdm:poolOneId="_U-qPMB9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="qc adapter" bpdm:poolTwoId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="workflow">
-    <pnlk:role name="qc_adapter_for_workflow" portType="{http://thisdiagram/qc_adapter}Forworkflow" bpdm:thisPoolId="_U-qPMB9yEeKCKo-8QnTuIA">
-      <wsdl:portType name="Forworkflow">
+<wsdl:definitions xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:diag="http://thisdiagram" xmlns:auto_qc="http://thisdiagram/auto_qc" xmlns:qc_adapter="http://thisdiagram/qc_adapter" xmlns:complexvar="http://www.example.org/complexvar" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:AutoQC="http://thisdiagram" targetNamespace="http://thisdiagram" bpdm:version="6000089" bpdm:canid="_Q35DkB9xEeKCKo-8QnTuIA" bpdm:displayName="AutoQC">
+  <pnlk:partnerLinkType name="auto_qcAndCaller" bpdm:poolOneId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="auto qc" bpdm:poolTwoId="_Q35Dlh9xEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="false" bpdm:poolTwoName="caller">
+    <pnlk:role name="auto_qc_for_caller" portType="auto_qc:Forcaller" bpdm:thisPoolId="_SmKt0B9yEeKCKo-8QnTuIA">
+      <wsdl:portType name="Forcaller">
+        <wsdl:operation name="start" bpdm:canid="_Q35DmB9xEeKCKo-8QnTuIA._bWc3sB9yEeKCKo-8QnTuIA.">
+          <wsdl:input message="auto_qc:startRequest" name="start" bpdm:canid="_XVXLYB9zEeKCKo-8QnTuIA" bpdm:senderId="_Q35DmB9xEeKCKo-8QnTuIA" bpdm:receiverId="_bWc3sB9yEeKCKo-8QnTuIA" bpdm:senderName="invoke" bpdm:receiverName="start" bpdm:receiverPoolId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow" bpdm:bodyPartElemName="startRequest" bpdm:bodyPartElemType="{http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"></wsdl:input>
+        </wsdl:operation>
+      </wsdl:portType>
+    </pnlk:role>
+  </pnlk:partnerLinkType>
+  <pnlk:partnerLinkType name="qc_adapterAndAuto_qc" bpdm:poolOneId="_U-qPMB9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="qc adapter" bpdm:poolTwoId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="auto qc">
+    <pnlk:role name="qc_adapter_for_auto_qc" portType="qc_adapter:Forauto_qc" bpdm:thisPoolId="_U-qPMB9yEeKCKo-8QnTuIA">
+      <wsdl:portType name="Forauto_qc">
         <wsdl:operation name="qcFinished" bpdm:canid="_lOQN0B9zEeKCKo-8QnTuIA._yPDAEB9yEeKCKo-8QnTuIA." bpdm:dataobjectPointer="project:///qcAdapterRest/qcFinished.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished">
           <wsdl:input message="qcFinished:qcFinishedRequest" name="qcFinished" bpdm:canid="_9NUPAB9zEeKCKo-8QnTuIA" bpdm:senderId="_yPDAEB9yEeKCKo-8QnTuIA" bpdm:receiverId="_lOQN0B9zEeKCKo-8QnTuIA" bpdm:senderName="check if qc finished" bpdm:receiverName="qcFinished" bpdm:receiverPoolId="_U-qPMB9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/input/qcFinishedRequest"></wsdl:input>
           <wsdl:output message="qcFinished:qcFinishedResponse" name="qcFinishedResponse" bpdm:canid="_9hfIMB9zEeKCKo-8QnTuIA" bpdm:senderId="_lOQN0B9zEeKCKo-8QnTuIA" bpdm:receiverId="_yPDAEB9yEeKCKo-8QnTuIA" bpdm:senderName="qcFinished" bpdm:receiverName="check if qc finished" bpdm:receiverPoolId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///qcAdapterRest/qcFinished.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest}restService/httpPort/qcFinished/output/qcFinishedResponse"></wsdl:output>
@@ -18,18 +27,18 @@
       </wsdl:portType>
     </pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk0" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="qc_adapter_for_workflow" portType="qcFinished:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="qc_adapterAndAuto_qcForHttpPortPlk0" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="qc_adapter_for_auto_qc" portType="qcFinished:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk1" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="qc_adapter_for_workflow" portType="qcResult:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="qc_adapterAndAuto_qcForHttpPortPlk1" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="qc_adapter_for_auto_qc" portType="qcResult:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk2" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="qc_adapter_for_workflow" portType="qcStart:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="qc_adapterAndAuto_qcForHttpPortPlk2" bpdm:canPlkId="_U-qPMB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="qc_adapter_for_auto_qc" portType="qcStart:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflow" bpdm:poolOneId="_Wd6bcB9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="wfadpater" bpdm:poolTwoId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="workflow">
-    <pnlk:role name="wfadpater_for_workflow" portType="wfadpater:Forworkflow" bpdm:thisPoolId="_Wd6bcB9yEeKCKo-8QnTuIA">
-      <wsdl:portType name="Forworkflow">
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qc" bpdm:poolOneId="_Wd6bcB9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="false" bpdm:poolOneName="wfadpater" bpdm:poolTwoId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="true" bpdm:poolTwoName="auto qc">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="{http://thisdiagram/wfadpater}Forauto_qc" bpdm:thisPoolId="_Wd6bcB9yEeKCKo-8QnTuIA">
+      <wsdl:portType name="Forauto_qc">
         <wsdl:operation name="autoQcError" bpdm:canid="_MsJxAB9zEeKCKo-8QnTuIA._tusk4R9zEeKCKo-8QnTuIA." bpdm:dataobjectPointer="project:///wfAdapter/autoQcError.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError">
           <wsdl:input message="autoQcError:autoQcErrorRequest" name="autoQcError" bpdm:canid="_BjN4QB90EeKCKo-8QnTuIA" bpdm:senderId="_MsJxAB9zEeKCKo-8QnTuIA" bpdm:receiverId="_tusk4R9zEeKCKo-8QnTuIA" bpdm:senderName="notify error" bpdm:receiverName="autoQcError" bpdm:receiverPoolId="_Wd6bcB9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/input/autoQcErrorRequest"></wsdl:input>
           <wsdl:output message="autoQcError:autoQcErrorResponse" name="autoQcErrorResponse" bpdm:canid="_B4e9oB90EeKCKo-8QnTuIA" bpdm:senderId="_tusk4R9zEeKCKo-8QnTuIA" bpdm:receiverId="_MsJxAB9zEeKCKo-8QnTuIA" bpdm:senderName="autoQcError" bpdm:receiverName="notify error" bpdm:receiverPoolId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/output/autoQcErrorResponse"></wsdl:output>
@@ -53,28 +62,19 @@
       </wsdl:portType>
     </pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk0" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="assetTransferForQC:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qcForHttpPortPlk0" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="assetTransferForQC:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk1" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="autoQcError:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qcForHttpPortPlk1" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="autoQcError:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk2" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="autoQcFailed:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qcForHttpPortPlk2" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="autoQcFailed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk3" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="autoQcPassed:restInterface"></pnlk:role>
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qcForHttpPortPlk3" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="autoQcPassed:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk4" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
-    <pnlk:role name="wfadpater_for_workflow" portType="getProfileForQC:restInterface"></pnlk:role>
-  </pnlk:partnerLinkType>
-  <pnlk:partnerLinkType name="workflowAndCaller" bpdm:poolOneId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:poolOneIsExecutable="true" bpdm:poolOneName="workflow" bpdm:poolTwoId="_Q35Dlh9xEeKCKo-8QnTuIA" bpdm:poolTwoIsExecutable="false" bpdm:poolTwoName="caller">
-    <pnlk:role name="workflow_for_caller" portType="workflow:Forcaller" bpdm:thisPoolId="_SmKt0B9yEeKCKo-8QnTuIA">
-      <wsdl:portType name="Forcaller">
-        <wsdl:operation name="start" bpdm:canid="_Q35DmB9xEeKCKo-8QnTuIA._bWc3sB9yEeKCKo-8QnTuIA.">
-          <wsdl:input message="workflow:startRequest" name="start" bpdm:canid="_XVXLYB9zEeKCKo-8QnTuIA" bpdm:senderId="_Q35DmB9xEeKCKo-8QnTuIA" bpdm:receiverId="_bWc3sB9yEeKCKo-8QnTuIA" bpdm:senderName="invoke" bpdm:receiverName="start" bpdm:receiverPoolId="_SmKt0B9yEeKCKo-8QnTuIA" bpdm:dataobjectPointer="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow" bpdm:bodyPartElemName="startRequest" bpdm:bodyPartElemType="{http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioQCFlow"></wsdl:input>
-        </wsdl:operation>
-      </wsdl:portType>
-    </pnlk:role>
+  <pnlk:partnerLinkType name="wfadpaterAndAuto_qcForHttpPortPlk4" bpdm:canPlkId="_Wd6bcB9yEeKCKo-8QnTuIA-_SmKt0B9yEeKCKo-8QnTuIA">
+    <pnlk:role name="wfadpater_for_auto_qc" portType="getProfileForQC:restInterface"></pnlk:role>
   </pnlk:partnerLinkType>
 </wsdl:definitions>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_cOjFQWuNEeK7FdvgH5F2kQ" iD="_cOjFQGuNEeK7FdvgH5F2kQ">
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_cOjFQWuNEeK7FdvgH5F2kQ" iD="_cOjFQGuNEeK7FdvgH5F2kQ" name="TX Delivery" title="TX Delivery">
   <pools xmi:type="bpmn:Pool" xmi:id="_cOjsVWuNEeK7FdvgH5F2kQ" iD="_cOjsVGuNEeK7FdvgH5F2kQ" name="Caller">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_iMPLsGuNEeK7FdvgH5F2kQ" source="executablepool">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_iMPLsWuNEeK7FdvgH5F2kQ" key="poolIsExecutable" value="false"/>

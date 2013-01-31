@@ -27,7 +27,7 @@
       <http:operation location=""/>
       <wsdl:input>
         <http:urlReplacement/>
-        <mime:content type="text/xml" part="body"/>
+        <mime:content type="application/xml" part="body"/>
       </wsdl:input>
       <wsdl:output>
         <mime:content type="text/plain" part="response"/>

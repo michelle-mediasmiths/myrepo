@@ -29,7 +29,7 @@
         <http:urlReplacement/>
       </wsdl:input>
       <wsdl:output>
-        <mime:content type="text/xml" part="response"/>
+        <mime:content type="application/xml" part="response"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>

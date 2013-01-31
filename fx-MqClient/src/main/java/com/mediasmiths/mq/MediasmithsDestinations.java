@@ -19,9 +19,6 @@ public class MediasmithsDestinations
 	@Named("mule.reporting.dest")
 	private String mule_reporting_destination;
 	@Inject
-	@Named("mule.tc.dest")
-	private String mule_tc_destination;
-	@Inject
 	@Named("mule.tx.dest")
 	private String muleTxDestinaion;
 	@Inject
@@ -65,11 +62,6 @@ public class MediasmithsDestinations
 	public String getMule_reporting_destination()
 	{
 		return mule_reporting_destination;
-	}
-
-	public String getMule_tc_destination()
-	{
-		return mule_tc_destination;
 	}
 
 	public String getMuleExportDestination()

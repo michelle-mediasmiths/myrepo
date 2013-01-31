@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="a flow">
-    <flow SubFlow="false" name="invokeTX" entity-id="cfce9d18-406f-413e-a93c-a92aac0e6508">
+    <flow SubFlow="false" name="invokeTX" entity-id="8442d791-8348-4eb9-a170-e2777769a478">
         <properties>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
@@ -15,7 +15,7 @@
             <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#1">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
-                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="request-response" name="exchange-pattern"/>
                     <property value="2" name="auxiliary;index"/>
                     <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
                     <property value="2" name="auxiliary;index"/>
@@ -76,46 +76,54 @@
                     <property value="3" name="auxiliary;index"/>
                 </properties>
             </pattern>
-            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#2">
+            <pattern type="org.mule.tooling.ui.modules.core.pattern.echo" name="Echo" entity-id="Echo#1">
+                <properties>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="http://localhost:8089/ode/processes/fx-flows/tx-delivery/Transcode/Caller" entity-id="HTTP#2">
                 <properties>
                     <property value="one-way" name="exchange-pattern"/>
                     <property value="request-response" name="exchange-pattern"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property name="httpLabel"/>
                     <property name="host"/>
                     <property name="port"/>
                     <property name="path"/>
                     <property name="method"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property name="businessEventsLabel"/>
                     <property name="tracking:enable-default-events"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="http://localhost:8089/ode/processes/fx-TXDelivery/tx/workflow/caller" name="address"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="http://localhost:8089/ode/processes/fx-flows/tx-delivery/Transcode/Caller" name="address"/>
                     <property value="UTF-8" name="encoding"/>
                     <property name="disableTransportTransformer"/>
                     <property value="text/xml" name="mimeType"/>
                     <property name="responseTimeout"/>
                     <property name="followRedirects"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property name="connector-ref"/>
                     <property name="ref"/>
                     <property name="transformer-refs"/>
                     <property name="responseTransformer-refs"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property name="user"/>
                     <property name="password"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                     <property name="contentType"/>
                     <property name="keep-alive"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
-                    <property value="4" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property value="6" name="auxiliary;index"/>
                 </properties>
             </endpoint>
         </lane>

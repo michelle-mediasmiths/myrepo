@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_Q35DkR9xEeKCKo-8QnTuIA" iD="_Q35DkB9xEeKCKo-8QnTuIA">
+<bpmn:BpmnDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:bpmn="http://stp.eclipse.org/bpmn" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmi:id="_Q35DkR9xEeKCKo-8QnTuIA" iD="_Q35DkB9xEeKCKo-8QnTuIA" name="AutoQC" title="AutoQC">
   <pools xmi:type="bpmn:Pool" xmi:id="_Q35Dlx9xEeKCKo-8QnTuIA" iD="_Q35Dlh9xEeKCKo-8QnTuIA" name="caller">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SMd0YB9yEeKCKo-8QnTuIA" source="executablepool">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SMd0YR9yEeKCKo-8QnTuIA" key="poolIsExecutable" value="false"/>
@@ -20,12 +20,12 @@
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_XVXLYR9zEeKCKo-8QnTuIA"/>
     </vertices>
   </pools>
-  <pools xmi:type="bpmn:Pool" xmi:id="_SmKt0R9yEeKCKo-8QnTuIA" iD="_SmKt0B9yEeKCKo-8QnTuIA" name="workflow">
+  <pools xmi:type="bpmn:Pool" xmi:id="_SmKt0R9yEeKCKo-8QnTuIA" iD="_SmKt0B9yEeKCKo-8QnTuIA" name="auto qc">
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_XVaOtx9zEeKCKo-8QnTuIA" iD="_XVaOth9zEeKCKo-8QnTuIA">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVaOuB9zEeKCKo-8QnTuIA" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVaOuR9zEeKCKo-8QnTuIA" key="isBpelDeclaration" value="true"/>
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVbc0h9zEeKCKo-8QnTuIA" key="defaultDeclarationName" value="thisStartRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVcD4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/workflow}startRequest"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_XVcD4R9zEeKCKo-8QnTuIA" key="douri2" value="builtin:///diagram?wsdlmessage={http://thisdiagram/auto_qc}startRequest"/>
       </eAnnotations>
       <associations xmi:type="bpmn:Association" xmi:id="_XVbc0x9zEeKCKo-8QnTuIA" direction="From">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_XVbc1B9zEeKCKo-8QnTuIA" source="dataObjectAssociationTypeSource">

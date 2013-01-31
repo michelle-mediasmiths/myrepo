@@ -115,6 +115,7 @@
   <tns:purpose></tns:purpose>
   <tns:resolution></tns:resolution>
   <tns:audioType></tns:audioType>
+  <tns:description></tns:description>
   <tns:inputFile></tns:inputFile>
   <tns:outputFolder></tns:outputFolder>
   <tns:outputFileBasename></tns:outputFileBasename>

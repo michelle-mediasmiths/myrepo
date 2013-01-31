@@ -6,8 +6,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd ">
     <flow name="invokeTX" doc:name="invokeTX">
-        <http:inbound-endpoint exchange-pattern="one-way" address="http://localhost:8088/tx" doc:name="HTTP"/>
+        <http:inbound-endpoint exchange-pattern="request-response" address="http://localhost:8088/tx" doc:name="HTTP"/>
         <mulexml:xslt-transformer maxIdleTransformers="2" maxActiveTransformers="5" xsl-file="invokeTX.xsl" outputEncoding="UTF-8" doc:name="XSLT"/>
-        <http:outbound-endpoint exchange-pattern="request-response" address="http://localhost:8089/ode/processes/fx-TXDelivery/tx/workflow/caller" encoding="UTF-8" mimeType="text/xml" doc:name="HTTP"/>
+        <echo-component doc:name="Echo"/>
+        <http:outbound-endpoint exchange-pattern="request-response" address="http://localhost:8089/ode/processes/fx-flows/tx-delivery/Transcode/Caller" encoding="UTF-8" mimeType="text/xml" doc:name="http://localhost:8089/ode/processes/fx-flows/tx-delivery/Transcode/Caller"/>
     </flow>
 </mule>

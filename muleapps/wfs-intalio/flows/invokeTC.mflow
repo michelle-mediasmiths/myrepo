@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="a flow">
-    <flow SubFlow="false" name="invokeTC" entity-id="7b97edd5-2f1a-4f79-8957-28d1e0b12647">
+    <flow SubFlow="false" name="invokeTC" entity-id="fa0ff3fa-d96d-4526-97df-9f23a9aaf090">
         <properties>
             <property name="processingStrategy2"/>
             <property name="processingStrategy"/>
@@ -14,45 +14,32 @@
         <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
             <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#1">
                 <properties>
-                    <property value="one-way" name="exchange-pattern"/>
-                    <property value="one-way" name="exchange-pattern"/>
-                    <property value="2" name="auxiliary;index"/>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="" name="port"/>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="" name="host"/>
                     <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property name="httpLabel"/>
-                    <property name="host"/>
-                    <property name="port"/>
-                    <property name="path"/>
-                    <property name="method"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property name="businessEventsLabel"/>
-                    <property name="tracking:enable-default-events"/>
-                    <property value="2" name="auxiliary;index"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="httpLabel"/>
                     <property value="http://localhost:8088/tc" name="address"/>
-                    <property name="encoding"/>
-                    <property name="disableTransportTransformer"/>
-                    <property name="mimeType"/>
-                    <property name="responseTimeout"/>
-                    <property name="followRedirects"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="path"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="" name="user"/>
+                    <property value="" name="responseTimeout"/>
+                    <property value="" name="mimeType"/>
+                    <property value="" name="connector-ref"/>
                     <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property name="connector-ref"/>
-                    <property name="ref"/>
-                    <property name="transformer-refs"/>
-                    <property name="responseTransformer-refs"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property name="user"/>
-                    <property name="password"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property name="contentType"/>
-                    <property name="keep-alive"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
-                    <property value="2" name="auxiliary;index"/>
+                    <property name="updated"/>
                 </properties>
+                <description></description>
             </endpoint>
             <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="XSLT#1">
                 <properties>

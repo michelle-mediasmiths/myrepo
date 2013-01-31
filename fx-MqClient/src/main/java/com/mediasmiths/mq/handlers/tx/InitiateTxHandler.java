@@ -17,6 +17,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
+import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
@@ -57,14 +58,22 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			
 			boolean isAO = AssetProperties.isAO(materialAttributes);
 			boolean materialIsSurround = AssetProperties.isMaterialSurround(materialAttributes);
+			boolean materialIsSD = AssetProperties.isMaterialSD(materialAttributes);
 			boolean isPackageSD = AssetProperties.isPackageSD(segmentList.getAttributeMap());
+			
 			
 			String title = materialAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
 			Date requiredDate = (Date) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST);
 			
+			if(requiredDate==null){
+				log.info("No required date set on package! "+packageID);
+				requiredDate = new Date(Date.UTC(3000, 1, 1, 0,0,0));
+				log.info("Using required date "+requiredDate);
+			}
+			
 			String materialPath = mayamClient.pathToMaterial(materialID);
 			
-			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSurround,isPackageSD,requiredDate,materialPath);
+			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSD, materialIsSurround,isPackageSD,requiredDate,materialPath);
 			
 			startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
 			
@@ -87,7 +96,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		}
 	}
 
-	private TCJobParameters createTCParamsForTxDelivery(String packageID,boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath)
+	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath)
 	{
 		TCJobParameters ret = new TCJobParameters();
 		
@@ -105,11 +114,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		ret.inputFile=materialPath;
 		ret.outputFileBasename=packageID;
 		ret.outputFolder=txDeliveryLocation;
-		
 		ret.priority=getPriorityForTXJob(requiredDate);
 		
 		if(isPackageSD){
 			ret.purpose=TCOutputPurpose.TX_SD;	
+			ret.resolution=TCResolution.SD;
 		}
 		else{
 			ret.purpose=TCOutputPurpose.TX_HD;

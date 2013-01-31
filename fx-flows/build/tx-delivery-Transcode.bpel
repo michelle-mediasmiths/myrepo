@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" location="wfAdapter/autoQCRequiredForTX.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -10,14 +10,14 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" location="tx-delivery-Delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" location="tx-delivery-Transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
-    <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="diag:TranscodeAndCaller" myRole="Transcode_for_Caller"/>
-    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="diag:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="diag:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="diag:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="diag:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="diag:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="diag:TranscodeAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="diag:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="TX_Delivery:TranscodeAndCaller" myRole="Transcode_for_Caller"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
@@ -62,6 +62,7 @@
     <tns:purpose></tns:purpose>
     <tns:resolution></tns:resolution>
     <tns:audioType></tns:audioType>
+    <tns:description></tns:description>
     <tns:inputFile></tns:inputFile>
     <tns:outputFolder></tns:outputFolder>
     <tns:outputFileBasename></tns:outputFileBasename>
@@ -115,6 +116,7 @@
   <tns:purpose></tns:purpose>
   <tns:resolution></tns:resolution>
   <tns:audioType></tns:audioType>
+  <tns:description></tns:description>
   <tns:inputFile></tns:inputFile>
   <tns:outputFolder></tns:outputFolder>
   <tns:outputFileBasename></tns:outputFileBasename>
@@ -198,7 +200,7 @@
                 </bpel:assign>
                 <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="Query Job Status" name="Query_Job_Status-1" bpmn:id="_a0QmoGuPEeK7FdvgH5F2kQ"></bpel:invoke>
               </bpel:sequence>
-              <bpel:condition>$queryJobQueryJobResponseMsg.response/tns:result/text() != "INCOMPLETE"</bpel:condition>
+              <bpel:condition>"INCOMPLETE" != $queryJobQueryJobResponseMsg.response/tns:state/text()</bpel:condition>
             </bpel:repeatUntil>
           </bpel:scope>
           <bpel:assign bpmn:label="Check Result" name="Check_Result" bpmn:id="_HWzS8GuQEeK7FdvgH5F2kQ">
@@ -209,7 +211,7 @@
           </bpel:assign>
           <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="Check Result" name="Check_Result-1" bpmn:id="_HWzS8GuQEeK7FdvgH5F2kQ"></bpel:invoke>
           <bpel:if>
-            <bpel:condition>$queryJobQueryJobResponseMsg.response/tns:result/text() = "SUCCESS"</bpel:condition>
+            <bpel:condition>"SUCCESS" = $queryJobQueryJobResponseMsg.response/tns:state/text()</bpel:condition>
             <bpel:sequence>
               <bpel:empty bpmn:label="Transcode Success" name="Transcode_Success" bpmn:id="_W3INQGuQEeK7FdvgH5F2kQ"/>
               <bpel:assign bpmn:label="Update Success Variable" name="Update_Success_Variable" bpmn:id="_tIhywGuQEeK7FdvgH5F2kQ">
