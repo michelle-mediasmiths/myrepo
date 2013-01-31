@@ -318,5 +318,7 @@ public interface MayamClient
 
 	public boolean autoQcRequiredForTXTask(Long taskID) throws MayamClientException;
 
+	public boolean isPackageSD(String packageID) throws MayamClientException;
+
 	
 }

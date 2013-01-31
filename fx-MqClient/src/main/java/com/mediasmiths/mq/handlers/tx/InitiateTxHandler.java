@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
+import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -72,8 +73,9 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			}
 			
 			String materialPath = mayamClient.pathToMaterial(materialID);
+			String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
 			
-			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSD, materialIsSurround,isPackageSD,requiredDate,materialPath);
+			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSD, materialIsSurround,isPackageSD,requiredDate,materialPath,outputLocation);
 			
 			startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
 			
@@ -92,11 +94,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		}
 		catch (MayamClientException e)
 		{
-			log.error("error getting materials location");
+			log.error("error getting materials location or fetching delivery location for package",e);
 		}
 	}
 
-	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath)
+	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath, String outputLocation)
 	{
 		TCJobParameters ret = new TCJobParameters();
 		
@@ -113,7 +115,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		
 		ret.inputFile=materialPath;
 		ret.outputFileBasename=packageID;
-		ret.outputFolder=txDeliveryLocation;
+		ret.outputFolder=outputLocation;
 		ret.priority=getPriorityForTXJob(requiredDate);
 		
 		if(isPackageSD){

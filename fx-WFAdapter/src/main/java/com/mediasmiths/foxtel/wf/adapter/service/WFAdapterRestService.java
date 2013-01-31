@@ -154,11 +154,12 @@ public interface WFAdapterRestService
 	 * Returns the location that tx packages to be delivered to
 	 * @param packageID
 	 * @return
+	 * @throws MayamClientException 
 	 */
 	@GET
 	@Path("/tx/deliveryLocation")
 	@Produces("text/plain")
-	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID);
+	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException;
 	
 	/**
 	 * @param packageID

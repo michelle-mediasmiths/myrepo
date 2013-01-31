@@ -39,6 +39,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
+import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -379,12 +380,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/deliveryLocation")
 	@Produces("text/plain")
-	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID)
+	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException
 	{
-		String ret = txDeliveryLocation;
-		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
-		
-		return ret;
+		return TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
 	}
 
 	@Override
