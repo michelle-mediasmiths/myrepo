@@ -69,7 +69,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			
 			
 			String title = materialAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
-			Date requiredDate = DateUtil.parseDateString((String) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST));
+			Date requiredDate = (Date) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST);
 			
 			if(requiredDate==null){
 				log.info("No required date set on package! "+packageID);

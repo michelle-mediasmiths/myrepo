@@ -115,25 +115,25 @@
             <bpel:from>
               <bpel:literal>
 <tns:TCJob>
-  <tns:priority></tns:priority>
-  <tns:timecode>
-    <tns:foreground></tns:foreground>
-    <tns:background></tns:background>
-    <tns:size></tns:size>
-    <tns:location></tns:location>
-  </tns:timecode>
-  <tns:bug>
-    <tns:opacity></tns:opacity>
-    <tns:position></tns:position>
-    <tns:channel></tns:channel>
-  </tns:bug>
-  <tns:outputFileBasename></tns:outputFileBasename>
-  <tns:outputFolder></tns:outputFolder>
-  <tns:inputFile></tns:inputFile>
-  <tns:description></tns:description>
-  <tns:audioType></tns:audioType>
-  <tns:resolution></tns:resolution>
   <tns:purpose></tns:purpose>
+  <tns:resolution></tns:resolution>
+  <tns:audioType></tns:audioType>
+  <tns:description></tns:description>
+  <tns:inputFile></tns:inputFile>
+  <tns:outputFolder></tns:outputFolder>
+  <tns:outputFileBasename></tns:outputFileBasename>
+  <tns:bug>
+    <tns:channel></tns:channel>
+    <tns:position></tns:position>
+    <tns:opacity></tns:opacity>
+  </tns:bug>
+  <tns:timecode>
+    <tns:location></tns:location>
+    <tns:size></tns:size>
+    <tns:background></tns:background>
+    <tns:foreground></tns:foreground>
+  </tns:timecode>
+  <tns:priority></tns:priority>
 </tns:TCJob></bpel:literal>
             </bpel:from>
             <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>

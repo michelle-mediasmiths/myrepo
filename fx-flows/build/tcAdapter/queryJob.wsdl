@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" xmlns:adapter="http://ns.mediasmiths.com/foxtel/tc/adapter" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest">
   <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/tc/adapter">
+      <xs:include schemaLocation="tcAdapter.xsd"/>
+    </xs:schema>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:string" name="guid_urlType"/>
@@ -10,7 +13,7 @@
     <wsdl:part name="guid" element="queryJob:guid_urlType"/>
   </wsdl:message>
   <wsdl:message name="queryJob_output">
-    <wsdl:part name="response" element="null:JobInfo"/>
+    <wsdl:part name="response" element="adapter:JobInfo"/>
   </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="queryJob">

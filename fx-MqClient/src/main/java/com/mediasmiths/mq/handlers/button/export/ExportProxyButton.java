@@ -45,7 +45,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
 		boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
 		String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
-		Date firstTX = DateUtil.parseDateString((String) materialAttributes.getAttribute(Attribute.TX_FIRST));
+		Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
 
 		//construct transcode job parameters
 		TCJobParameters jobParams;

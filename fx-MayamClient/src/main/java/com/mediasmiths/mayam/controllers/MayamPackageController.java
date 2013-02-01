@@ -105,7 +105,7 @@ public class MayamPackageController extends MayamController
 					
 					if (txPackage.getTargetDate() != null)
 					{
-						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()).toString());
+						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					}
 					
 					client.assetApi().updateAsset(material);
@@ -151,7 +151,7 @@ public class MayamPackageController extends MayamController
 					if (txPackage.getNumberOfSegments() != null)
 						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
 					if (txPackage.getTargetDate() != null)
-						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, txPackage.getTargetDate().toString());
+						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 				
 					
 					
@@ -370,7 +370,7 @@ public class MayamPackageController extends MayamController
 					
 					if (txPackage.getTargetDate() != null)
 					{
-						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()).toString());
+						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					}
 					
 					attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
