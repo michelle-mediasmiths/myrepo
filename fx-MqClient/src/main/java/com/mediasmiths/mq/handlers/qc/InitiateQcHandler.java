@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class InitiateQcHandler extends TaskStateChangeHandler
@@ -29,8 +30,14 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 		}
 		else
 		{
-			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
-			if (MayamPreviewResults.isPreviewPass(previewStatus))
+			if (AssetProperties.isQCPassed(messageAttributes))
+			{
+				log.info(String.format(
+						"A qc task was created for an item %s but it has already passed qc, cancelling",
+						messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+				cancelTask(messageAttributes, "Item has already passed qc");
+			}
+			else if (MayamPreviewResults.isPreviewPass((String)messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT)))
 			{
 				log.info(String.format(
 						"A qc task was created for an item %s but it has already passed preview, cancelling",
@@ -43,7 +50,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 			}
 		}
 	}
-	
+
 	private void fileformatVerification(AttributeMap messageAttributes)
 	{
 		// task just created, lets perform file format verification
@@ -57,7 +64,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 					"MayamClient exception while performing file format verification for asset"
 							+ messageAttributes.getAttributeAsString(Attribute.ASSET_ID),
 					e);
-			
+
 			String errorMessage = "Error performing file format verification";
 			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 			messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
@@ -74,7 +81,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 
 	private void cancelTask(AttributeMap messageAttributes, String errorMessage)
 	{
-		// a qc task has been created for an item with no media, cancel the task
+		// a qc task has been created for an item it shouldnt have been, cancel
 		messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
 		messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
 		try
@@ -92,8 +99,6 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 	{
 		return "Initiate QC";
 	}
-
-	
 
 	@Override
 	public MayamTaskListType getTaskType()

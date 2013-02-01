@@ -941,4 +941,18 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public void txDeliveryCompleted(String packageID, long taskID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

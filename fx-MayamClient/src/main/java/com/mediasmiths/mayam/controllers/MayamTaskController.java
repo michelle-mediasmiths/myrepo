@@ -383,14 +383,6 @@ public class MayamTaskController extends MayamController
 	{
 		try
 		{
-			try
-			{
-				task = accessRightsController.updateAccessRights(task);
-			}
-			catch (Exception e)
-			{
-				log.error("Error updating access rights before task save", e);
-			}
 			client.taskApi().updateTask(task);
 		}
 		catch (RemoteException e)
