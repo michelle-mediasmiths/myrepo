@@ -94,10 +94,10 @@ public interface ReportUI
 	@Produces("text/html")
 	public String getFileTapeIngestUI();
 	
-	@GET
-	@Path("/file_tape_ingest_csv")
-	@Produces("text/html")
-	public void getFileTapeIngestCSV();
+//	@GET
+//	@Path("/file_tape_ingest_csv")
+//	@Produces("text/html")
+//	public void getFileTapeIngestCSV();
 	
 	@GET
 	@Path("/file_tape_ingest_pdf")

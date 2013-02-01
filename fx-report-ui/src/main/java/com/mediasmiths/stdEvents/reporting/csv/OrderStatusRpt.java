@@ -21,7 +21,7 @@ import com.mediasmiths.stdEvents.report.entity.OrderStatus;
 
 public class OrderStatusRpt
 {
-public static final transient Logger logger = Logger.getLogger(CsvImpl.class);
+	public static final transient Logger logger = Logger.getLogger(CsvImpl.class);
 	
 	//Edit this variable to change where your reports get saved to
 	@Inject

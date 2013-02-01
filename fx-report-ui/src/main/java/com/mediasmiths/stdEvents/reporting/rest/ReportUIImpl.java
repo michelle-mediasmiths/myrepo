@@ -22,6 +22,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
+import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
 
@@ -43,6 +44,8 @@ public class ReportUIImpl implements ReportUI
 	private EventAPI eventApi;
 	@Inject
 	private OrderStatusRpt orderStatus;
+	@Inject
+	private AcquisitionRpt acquisition;
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
@@ -281,7 +284,7 @@ public class ReportUIImpl implements ReportUI
 		//List <EventEntity> tape = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape");
 		//List <EventEntity> file = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File");
 		List<EventEntity> materials = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
-		csvApi.writeAcquisitionDelivery(materials);
+		acquisition.writeAcquisitionDelivery(materials);
 		
 		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
 		int perByFile = 0;
@@ -325,15 +328,15 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 	
-	@Transactional
-	public void getFileTapeIngestCSV()
-	{
-		List<EventEntity> completed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable");
-		List<EventEntity> failed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "failed");
-		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
-
-		csvApi.writeFileTapeIngest(completed, failed, unmatched);
-	}
+//	@Transactional
+//	public void getFileTapeIngestCSV()
+//	{
+//		List<EventEntity> completed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable");
+//		List<EventEntity> failed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "failed");
+//		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
+//
+//		csvApi.writeFileTapeIngest(completed, failed, unmatched);
+//	}
 	
 	@Transactional
 	public void getFileTapeIngestPDF()

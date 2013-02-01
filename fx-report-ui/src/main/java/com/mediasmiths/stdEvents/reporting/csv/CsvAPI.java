@@ -9,7 +9,7 @@ public interface CsvAPI
 	
 	//public void writeLateOrderStatus(List<EventEntity> outstanding, List<EventEntity> unmatched);
 	
-	public void writeAcquisitionDelivery(List<EventEntity> materials);
+	//public void writeAcquisitionDelivery(List<EventEntity> materials);
 	
 	//public void writeFileTapeIngest(List<EventEntity> completed, List<EventEntity> failed, List<EventEntity> unmatched);
 	
