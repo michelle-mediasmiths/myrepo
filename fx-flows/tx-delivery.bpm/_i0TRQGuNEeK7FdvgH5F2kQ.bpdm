@@ -273,10 +273,16 @@
                     <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_XOIQoGuTEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_eQvXwGuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_ej_q8GuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[GatewayDataBasedExclusive - QC Required]">
-                            <bpel:condition>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()
+                            <bpel:condition>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text() = true()
 <mapper:mapperLink>
-  <mapper:vertice id="5184019" targetPath="$condition" targetedBy="32118030-arg0"></mapper:vertice>
-  <mapper:vertice id="32118030" sourcePath="$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()"></mapper:vertice>
+  <mapper:vertice id="24513877" targetPath="$condition" targetedBy="21692584-arg2"></mapper:vertice>
+  <mapper:vertice id="21692584" dimension="78x24" location="537,669">
+    <mapper:value>=</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="22620013" sourcePath="$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()" targetedBy="21692584-arg0"></mapper:vertice>
+  <mapper:vertice id="25095523" dimension="78x24" location="283,720" targetedBy="21692584-arg1">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
 </mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpel:sequence>
