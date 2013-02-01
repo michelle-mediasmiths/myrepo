@@ -44,12 +44,13 @@ public class QCDaoImpl extends HibernateDao<QC, Long> implements EventMarshaller
 		logger.info("Setting qc for event...");
 		QC qc = new QC();
 		String qcStr = event.getPayload();
-		logger.info("String recived: " +qcStr);
+		logger.trace("String recived: " +qcStr);
 		if (qcStr.contains("JobName"))
 			qc.setJobName(qcStr.substring(qcStr.indexOf("JobName") +8, qcStr.indexOf("</JobName>")));
-		
+		if (qcStr.contains("Title"))
+			qc.setTitle(qcStr.substring(qcStr.indexOf("Title")+6, qcStr.indexOf("</Title")));
 		if (qcStr.contains("AssetID"))
-			qc.setAssetId(qcStr.substring(qcStr.indexOf("AssetId") +8, qcStr.indexOf("</AssetId>")));
+			qc.setAssetId(qcStr.substring(qcStr.indexOf("AssetID") +8, qcStr.indexOf("</AssetID")));
 		if (qcStr.contains("ForTXDelivery")) {
 			String bool = qcStr.substring(qcStr.indexOf("ForTXDelivery") +14, qcStr.indexOf("</ForTXDelivery>"));
 			if (bool.equals("true")) {
@@ -61,6 +62,8 @@ public class QCDaoImpl extends HibernateDao<QC, Long> implements EventMarshaller
 				logger.info("Tx delivery = false");
 			}
 		}
+		if (qcStr.contains("QCStatus"))
+			qc.setQcStatus(qcStr.substring(qcStr.indexOf("QCStatus")+9, qcStr.indexOf("</QCStatus")));
 		
 		logger.info("QC constructed");
 		

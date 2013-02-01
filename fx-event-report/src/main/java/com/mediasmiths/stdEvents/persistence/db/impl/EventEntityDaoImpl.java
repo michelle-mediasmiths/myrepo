@@ -54,6 +54,7 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("namespace", namespace));
 		logger.info("Finished search");
+		logger.info("List: " +  getList(criteria));
 		return getList(criteria);
 	}
 

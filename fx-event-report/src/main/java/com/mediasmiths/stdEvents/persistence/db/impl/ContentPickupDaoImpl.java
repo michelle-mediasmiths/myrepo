@@ -45,7 +45,7 @@ public class ContentPickupDaoImpl extends HibernateDao<ContentPickup, Long> impl
 		logger.info("Setting content pickup for event");
 		ContentPickup material = new ContentPickup();
 		String matStr = event.getPayload();
-		logger.info("Payload recieved: " + matStr);
+		logger.trace("Payload recieved: " + matStr);
 
 		if (matStr.contains("AdultMaterial"))
 		{

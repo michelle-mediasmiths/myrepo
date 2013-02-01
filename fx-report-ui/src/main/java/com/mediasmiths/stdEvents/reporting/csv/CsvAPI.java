@@ -6,13 +6,14 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 public interface CsvAPI
 {	
-	public void writeOrderStatus(List<EventEntity> delivered, List<EventEntity> outstanding, List<EventEntity> overdue, List<EventEntity> unmatched);
 	
-	public void writeLateOrderStatus(List<EventEntity> outstanding, List<EventEntity> unmatched);
+	//public void writeLateOrderStatus(List<EventEntity> outstanding, List<EventEntity> unmatched);
 	
-	public void writeAcquisitionDelivery(List<EventEntity> file, List<EventEntity> tape);
+	public void writeAcquisitionDelivery(List<EventEntity> materials);
 	
-	public void writeFileTapeIngest(List<EventEntity> completed, List<EventEntity> failed, List<EventEntity> unmatched);
+	//public void writeFileTapeIngest(List<EventEntity> completed, List<EventEntity> failed, List<EventEntity> unmatched);
+	
+	public void writeManualQA(List<EventEntity> events);
 	
 	public void writeAutoQc(List<EventEntity> passed);
 	

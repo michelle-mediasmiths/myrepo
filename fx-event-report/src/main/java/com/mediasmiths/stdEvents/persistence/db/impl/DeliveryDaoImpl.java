@@ -35,7 +35,7 @@ public class DeliveryDaoImpl extends HibernateDao<DeliveryDetails, Long> impleme
 		logger.info("Setting delivery for event");
 		DeliveryDetails delivery = new DeliveryDetails();
 		String str = event.getPayload();
-		logger.info(str);
+		logger.trace(str);
 		if (str.contains("MasterID"))
 			delivery.setMasterId(str.substring(str.indexOf("MasterID")+9, str.indexOf("</MasterID")));
 		if (str.contains("Title"))

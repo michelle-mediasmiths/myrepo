@@ -105,6 +105,11 @@ public interface ReportUI
 	public void getFileTapeIngestPDF();
 	
 	@GET
+	@Path("/manual_qa_csv")
+	@Produces("text/html")
+	public void getManualQACSV();
+	
+	@GET
 	@Path("/auto_qc_ui")
 	@Produces("text/html")
 	public String getAutoQCUI();

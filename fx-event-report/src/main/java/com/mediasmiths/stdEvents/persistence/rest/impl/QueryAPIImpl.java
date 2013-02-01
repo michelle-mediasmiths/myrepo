@@ -29,6 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+
 public class QueryAPIImpl implements QueryAPI
 {
 	@Inject
@@ -114,7 +118,7 @@ public class QueryAPIImpl implements QueryAPI
 	public List<EventEntity> getByNamespace(String namespace)
 	{
 		List<EventEntity> events = eventDao.findByNamespace(namespace);
-		eventDao.printXML(events);
+		//eventDao.printXML(events);
 		return events;
 	}
 
@@ -122,7 +126,7 @@ public class QueryAPIImpl implements QueryAPI
 	public List<EventEntity> getByEventName(String eventName)
 	{
 		List<EventEntity> events = eventDao.findByEventName(eventName);
-		eventDao.printXML(events);
+		//eventDao.printXML(events);
 		return events;
 	}
 
@@ -288,6 +292,7 @@ public class QueryAPIImpl implements QueryAPI
 		return events;
 	}
 	
+	
 	@Transactional                                     
 	public List<EventEntity> getCompliance()
 	{
@@ -333,5 +338,145 @@ public class QueryAPIImpl implements QueryAPI
 			formats.add(content.getFormat());
 		}
 		return formats;
+	}
+	
+	@Transactional
+	public List<EventEntity> getTotalQAd()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Transactional
+	public List<EventEntity> getTotalFailedQA()
+	{
+		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> failedQA = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
+			if (qcStatus.equals("QCFail(Overridden)"))
+				failedQA.add(event);
+		}
+		return failedQA;
+	}
+
+	@Transactional
+	public List<EventEntity> getTotalQCd()
+	{
+		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> qcd = new ArrayList<EventEntity>();
+		for (EventEntity event : events) {
+			String str = event.getPayload();
+			if (str.contains("QCStatus")) {
+				String qcStatus = str.substring(str.indexOf("QCStatus")+9, str.indexOf("</QCStatus"));
+				if (qcStatus.equals("QCPass"))
+					qcd.add(event);
+			}	
+		}
+		return qcd;
+	}
+
+	@Transactional
+	public List<EventEntity> getFailedQc()
+	{
+		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> failed = new ArrayList<EventEntity>();
+		for (EventEntity event : events) {
+			String str = event.getPayload();
+			if (str.contains("QCStatus")) {
+				String qcStatus = str.substring(str.indexOf("QCStatus")+9, str.indexOf("</QCStatus"));
+				if ((qcStatus.equals("QCFail")) || (qcStatus.equals("QCFail(Overridden")))
+					failed.add(event);
+			}	
+		}
+		return failed;
+	}
+
+	@Transactional
+	public List<EventEntity> getOperatorOverridden()
+	{
+		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> overridden = new ArrayList<EventEntity>();
+		for (EventEntity event : events) {
+			String str = event.getPayload();
+			if (str.contains("QCStatus")) {
+				String qcStatus = str.substring(str.indexOf("QCStatus")+9, str.indexOf("</QCStatus"));
+				if (qcStatus.equals("QCFail(Overridden"))
+					overridden.add(event);
+			}	
+		}
+		return overridden;
+	}
+
+	@Transactional
+	public List<EventEntity> getExpiringPurged()
+	{
+		List<EventEntity> events = getEvents("http://www.foxtel.com.au/ip/qc", "ManualPurge");
+		logger.info("Events: " + events);
+		List<EventEntity> purged = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if (payload.contains("DeletedIn")) {
+				String deletedIn = payload.substring(payload.indexOf("DeletedIn")+10, payload.indexOf("</DeletedIn"));
+				int deleted = Integer.parseInt(deletedIn);
+				logger.info("Deleted in: " + deleted);
+				if (deleted < 4)
+					purged.add(event);
+			}
+		}
+		logger.info(purged);
+		return purged;
+	}
+
+	@Transactional
+	public List<EventEntity> getPurgeProtected()
+	{
+		List<EventEntity> events = getEvents("http://www.foxtel.com.au/ip/qc", "ManualPurge");
+		List<EventEntity> purged = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if (payload.contains("ProtectedStatus")) {
+				String protectedStatus = payload.substring(payload.indexOf("ProtectedStatus")+16, payload.indexOf("</ProtectedStatus"));
+				if (protectedStatus.equals("true"))
+					purged.add(event);
+			}
+		}
+		return purged;
+	}
+
+	@Transactional
+	public List<EventEntity> getPurgePosponed()
+	{
+		List<EventEntity> events = getEvents("http://www.foxtel.com.au/ip/qc", "ManualPurge");
+		List<EventEntity> purged = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if (payload.contains("ExtendedStatus")) {
+				String extendedStatus = payload.substring(payload.indexOf("ExtendedStatus")+15, payload.indexOf("</ExtendedStatus"));
+				if (extendedStatus.equals("true"))
+					purged.add(event);
+			}
+		}
+		return purged;
+	}
+
+	@Transactional
+	public List<EventEntity> getTotalPurged()
+	{
+		List<EventEntity> title = getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle");
+		List<EventEntity> material = getEvents("http://www.foxtel.com.au/ip/bms", "DeleteMaterial");
+		List<EventEntity> pack = getEvents("http://www.foxtel.com.au/ip/bms", "DeletePackage");
+		List<EventEntity> manual = getEvents("http://www.foxtel.com.au/ip/bms", "MaunalPurge");
+		List<EventEntity> purged = new ArrayList<EventEntity>();
+		purged.addAll(title);
+		purged.addAll(material);
+		purged.addAll(pack);
+		purged.addAll(manual);
+		return purged;
 	}
 }

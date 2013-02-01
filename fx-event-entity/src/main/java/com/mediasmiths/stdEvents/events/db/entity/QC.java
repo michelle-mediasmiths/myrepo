@@ -154,4 +154,14 @@ public class QC extends HibernateEventingMessage
 		this.title = title;
 	}
 
+	public String getQcStatus()
+	{
+		return qcStatus;
+	}
+
+	public void setQcStatus(String qcStatus)
+	{
+		this.qcStatus = qcStatus;
+	}
+
 }

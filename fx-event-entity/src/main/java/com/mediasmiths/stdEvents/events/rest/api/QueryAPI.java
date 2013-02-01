@@ -89,6 +89,51 @@ public interface QueryAPI
 	public List<EventEntity> getCompliance();
 	
 	@GET
+	@Path("/totalQAd")
+	@Produces("text/plain")
+	public List<EventEntity> getTotalQAd();
+	
+	@GET
+	@Path("/failedQA")
+	@Produces("text/plain")
+	public List<EventEntity> getTotalFailedQA();
+	
+	@GET
+	@Path("/totalQcd")
+	@Produces("text/plain")
+	public List<EventEntity> getTotalQCd();
+	
+	@GET
+	@Path("/failedQc")
+	@Produces("text/plain")
+	public List<EventEntity> getFailedQc();
+	
+	@GET
+	@Path("/operatorOverridden")
+	@Produces("text/plain")
+	public List<EventEntity> getOperatorOverridden();
+	
+	@GET
+	@Path("/getExpiringPurged")
+	@Produces("text/plain")
+	public List<EventEntity> getExpiringPurged();
+	
+	@GET
+	@Path("/purgeProtected")
+	@Produces("text/plain")
+	public List<EventEntity> getPurgeProtected();
+	
+	@GET
+	@Path("/purgePosponed")
+	@Produces("text/plain")
+	public List<EventEntity> getPurgePosponed();
+	
+	@GET
+	@Path("/totalPurged")
+	@Produces("text/plain")
+	public List<EventEntity> getTotalPurged();
+	
+	@GET
 	@Path("/total")
 	@Produces("text/plain")
 	public int getTotal(List<EventEntity> events);
