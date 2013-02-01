@@ -318,7 +318,7 @@
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_cm1FkWuREeK7FdvgH5F2kQ" iD="_cm1FkGuREeK7FdvgH5F2kQ"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_WYNVQWuTEeK7FdvgH5F2kQ" iD="_WYNVQGuTEeK7FdvgH5F2kQ"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_YBOhgWuTEeK7FdvgH5F2kQ" iD="_YBOhgGuTEeK7FdvgH5F2kQ"/>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_eQvXwWuTEeK7FdvgH5F2kQ" iD="_eQvXwGuTEeK7FdvgH5F2kQ"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_eQvXwWuTEeK7FdvgH5F2kQ" iD="_eQvXwGuTEeK7FdvgH5F2kQ" conditionType="Default" isDefault="true"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ej_q8WuTEeK7FdvgH5F2kQ" iD="_ej_q8GuTEeK7FdvgH5F2kQ" conditionType="None" isDefault="false"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_16KjUWuXEeK7FdvgH5F2kQ" iD="_16KjUGuXEeK7FdvgH5F2kQ"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_2KooQWuXEeK7FdvgH5F2kQ" iD="_2KooQGuXEeK7FdvgH5F2kQ"/>

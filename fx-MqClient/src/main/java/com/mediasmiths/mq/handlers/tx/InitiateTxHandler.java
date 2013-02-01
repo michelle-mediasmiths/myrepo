@@ -39,11 +39,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 
 	@Inject
 	private MuleWorkflowController mule;
-	
+
 	@Inject
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
-	
+
 	@Override
 	public String getName()
 	{
@@ -53,127 +53,169 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
-		try
-		{
-			String packageID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
 
-			SegmentList segmentList = packageController.getSegmentList(packageID);
-			String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
-			AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-			
-			boolean isAO = AssetProperties.isAO(materialAttributes);
-			boolean materialIsSurround = AssetProperties.isMaterialSurround(materialAttributes);
-			boolean materialIsSD = AssetProperties.isMaterialSD(materialAttributes);
-			boolean isPackageSD = AssetProperties.isPackageSD(segmentList.getAttributeMap());
-			
-			
-			String title = materialAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
-			Date requiredDate = (Date) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST);
-			
-			if(requiredDate==null){
-				log.info("No required date set on package! "+packageID);
-				requiredDate = new Date(Date.UTC(3000, 1, 1, 0,0,0));
-				log.info("Using required date "+requiredDate);
-			}
-			
-			String materialPath = mayamClient.pathToMaterial(materialID);
-			String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
-			
-			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSD, materialIsSurround,isPackageSD,requiredDate,materialPath,outputLocation);
-			
-			
-			String fileName = tcParams.outputFolder+"/"+tcParams.outputFileBasename+".gxf";
-			File f = new File(fileName);
-			
-			if(f.exists()){
-				String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
-				log.error(errorMessage);
-				
-				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-				updateMap.setAttribute(Attribute.ERROR_MSG, errorMessage);
+		if (!AssetProperties.isPackageTXReady(messageAttributes))
+		{
+			AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
+			updateMap.setAttribute(Attribute.ERROR_MSG, "Package is not TX Ready");
+			try
+			{
 				taskController.saveTask(updateMap);
 			}
-			else{
-				startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
-				
-				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-				taskController.saveTask(updateMap);
+			catch (MayamClientException e)
+			{
+				log.error("error rejecting tx delivery task",e);
 			}
-			
 		}
-		catch (PackageNotFoundException pnfe)
+		else
 		{
-			log.error("package not found when attempting to initiate tx delivery!", pnfe);
-		}
-		catch (UnsupportedEncodingException e)
-		{
-			log.error("error invoking tx delivery",e);
-		}
-		catch (JAXBException e)
-		{
-			log.error("error invoking tx delivery",e);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("error getting materials location or fetching delivery location for package",e);
+
+			try
+			{
+				String packageID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+				Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
+
+				SegmentList segmentList = packageController.getSegmentList(packageID);
+				String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
+				AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+
+				boolean isAO = AssetProperties.isAO(materialAttributes);
+				boolean materialIsSurround = AssetProperties.isMaterialSurround(materialAttributes);
+				boolean materialIsSD = AssetProperties.isMaterialSD(materialAttributes);
+				boolean isPackageSD = AssetProperties.isPackageSD(segmentList.getAttributeMap());
+
+				String title = materialAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
+				Date requiredDate = (Date) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST);
+
+				if (requiredDate == null)
+				{
+					log.info("No required date set on package! " + packageID);
+					requiredDate = new Date(Date.UTC(3000, 1, 1, 0, 0, 0));
+					log.info("Using required date " + requiredDate);
+				}
+
+				String materialPath = mayamClient.pathToMaterial(materialID);
+				String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
+
+				TCJobParameters tcParams = createTCParamsForTxDelivery(
+						packageID,
+						materialIsSD,
+						materialIsSurround,
+						isPackageSD,
+						requiredDate,
+						materialPath,
+						outputLocation);
+
+				String fileName = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".gxf";
+				File f = new File(fileName);
+
+				if (f.exists())
+				{
+					String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
+					log.error(errorMessage);
+
+					AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+					updateMap.setAttribute(Attribute.ERROR_MSG, errorMessage);
+					taskController.saveTask(updateMap);
+				}
+				else
+				{
+					startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
+
+					AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+					taskController.saveTask(updateMap);
+				}
+
+			}
+			catch (PackageNotFoundException pnfe)
+			{
+				log.error("package not found when attempting to initiate tx delivery!", pnfe);
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				log.error("error invoking tx delivery", e);
+			}
+			catch (JAXBException e)
+			{
+				log.error("error invoking tx delivery", e);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error getting materials location or fetching delivery location for package", e);
+			}
+
 		}
 	}
-	
-	
-	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath, String outputLocation)
+
+	private TCJobParameters createTCParamsForTxDelivery(
+			String packageID,
+			boolean materialIsSD,
+			boolean materialIsSurround,
+			boolean isPackageSD,
+			Date requiredDate,
+			String materialPath,
+			String outputLocation)
 	{
 		TCJobParameters ret = new TCJobParameters();
-		
-		if(materialIsSurround){
-			ret.audioType=TCAudioType.DOLBY_E;
-		}
-		else{
-			ret.audioType=TCAudioType.STEREO;
-		}
-		
-		//no bug for tx delivery
-		ret.bug=null;
-		ret.description=String.format("TX Delivery for package %s", packageID);
-		
-		ret.inputFile=materialPath;
-		ret.outputFileBasename=packageID;
-		ret.outputFolder=outputLocation;
-		ret.priority=getPriorityForTXJob(requiredDate);
-		
-		if(isPackageSD){
-			ret.purpose=TCOutputPurpose.TX_SD;	
-			ret.resolution=TCResolution.SD;
-		}
-		else{
-			ret.purpose=TCOutputPurpose.TX_HD;
-		}
-		
-		//no timecode for tx delivery
-		ret.timecode=null;
-		
-		return ret;
-}
-	
-	
-	
 
-	private void startTXFlow(boolean isAO, String packageID, Date requiredDate, Long taskID, TCJobParameters tcParams, String title) throws UnsupportedEncodingException, JAXBException{
+		if (materialIsSurround)
+		{
+			ret.audioType = TCAudioType.DOLBY_E;
+		}
+		else
+		{
+			ret.audioType = TCAudioType.STEREO;
+		}
+
+		// no bug for tx delivery
+		ret.bug = null;
+		ret.description = String.format("TX Delivery for package %s", packageID);
+
+		ret.inputFile = materialPath;
+		ret.outputFileBasename = packageID;
+		ret.outputFolder = outputLocation;
+		ret.priority = getPriorityForTXJob(requiredDate);
+
+		if (isPackageSD)
+		{
+			ret.purpose = TCOutputPurpose.TX_SD;
+			ret.resolution = TCResolution.SD;
+		}
+		else
+		{
+			ret.purpose = TCOutputPurpose.TX_HD;
+		}
+
+		// no timecode for tx delivery
+		ret.timecode = null;
+
+		return ret;
+	}
+
+	private void startTXFlow(
+			boolean isAO,
+			String packageID,
+			Date requiredDate,
+			Long taskID,
+			TCJobParameters tcParams,
+			String title) throws UnsupportedEncodingException, JAXBException
+	{
 		InvokeIntalioTXFlow startMessage = new InvokeIntalioTXFlow();
-		
+
 		startMessage.setAO(isAO);
 		startMessage.setPackageID(packageID);
 		startMessage.setRequiredDate(requiredDate);
 		startMessage.setTaskID(taskID);
 		startMessage.setTcParams(tcParams);
 		startMessage.setTitle(title);
-		
+
 		mule.initiateTxDeliveryWorkflow(startMessage);
-		
+
 	}
-	
+
 	@Override
 	public MayamTaskListType getTaskType()
 	{
@@ -191,37 +233,40 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	private final static long ONE_DAY = ONE_HOUR * 24;
 	private final static long THREE_DAYS = ONE_DAY * 3;
 	private final static long EIGHT_DAYS = ONE_DAY * 8;
-	
-	
+
 	public int getPriorityForTXJob(Date txDate)
 	{
-		log.debug(String.format("determining prority for job for asset tx date is %s",txDate.toString()));
-	
-		int priority=1;
-		
+		log.debug(String.format("determining prority for job for asset tx date is %s", txDate.toString()));
+
+		int priority = 1;
+
 		long now = System.currentTimeMillis();
 		long txTime = txDate.getTime();
 		long difference = txTime - now;
-		
-		if(difference < TWELVE_HOURS){
-			priority=8;
+
+		if (difference < TWELVE_HOURS)
+		{
+			priority = 8;
 		}
-		else if(difference < ONE_DAY){
-			priority=7;
+		else if (difference < ONE_DAY)
+		{
+			priority = 7;
 		}
-		else if(difference < THREE_DAYS){
-			priority=6;
-		}		
-		else if(difference < EIGHT_DAYS){
-			priority=4;
-		}	
-		else{
-			priority=2;
+		else if (difference < THREE_DAYS)
+		{
+			priority = 6;
 		}
-		
-		log.debug("returning prority "+priority);
+		else if (difference < EIGHT_DAYS)
+		{
+			priority = 4;
+		}
+		else
+		{
+			priority = 2;
+		}
+
+		log.debug("returning prority " + priority);
 		return priority;
 	}
 
-	
 }

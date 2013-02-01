@@ -154,5 +154,20 @@ public class AssetProperties
 			return p.booleanValue();
 		}
 	}
+	
+	public static boolean isPackageTXReady(AttributeMap attributes){
+		
+		Boolean p = attributes.getAttribute(Attribute.TX_READY);
+		
+		if(p==null){
+			return false;
+		}
+		else{
+			return p.booleanValue();
+		}
+				
+		
+		
+	}
 
 }

@@ -1822,6 +1822,7 @@
 <line clip-path="url(#clipPath218)" fill="none" x1="2341" x2="2346" y1="190" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath218)" fill="none" x1="2346" x2="2351" y1="187" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath218)" fill="none" x1="2351" x2="2407" y1="187" y2="187" opacity="0.6667"/>
+<line clip-path="url(#clipPath218)" fill="none" x1="2346" x2="2351" y1="180" y2="193" opacity="0.6667"/>
 <polygon clip-path="url(#clipPath233)" opacity="0.6667" points=" 2400 190 2407 187 2400 184" stroke="none"/>
 <line clip-path="url(#clipPath233)" fill="none" x1="2400" x2="2407" y1="190" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath233)" fill="none" x1="2407" x2="2400" y1="187" y2="184" opacity="0.6667"/>
@@ -2317,6 +2318,7 @@
 <line clip-path="url(#clipPath218)" fill="none" x1="2341" x2="2346" y1="190" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath218)" fill="none" x1="2346" x2="2351" y1="187" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath218)" fill="none" x1="2351" x2="2407" y1="187" y2="187" opacity="0.6667"/>
+<line clip-path="url(#clipPath218)" fill="none" x1="2346" x2="2351" y1="180" y2="193" opacity="0.6667"/>
 <polygon clip-path="url(#clipPath233)" opacity="0.6667" points=" 2400 190 2407 187 2400 184" stroke="none"/>
 <line clip-path="url(#clipPath233)" fill="none" x1="2400" x2="2407" y1="190" y2="187" opacity="0.6667"/>
 <line clip-path="url(#clipPath233)" fill="none" x1="2407" x2="2400" y1="187" y2="184" opacity="0.6667"/>

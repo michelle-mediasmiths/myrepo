@@ -25,8 +25,6 @@ public class ProtectButton extends ButtonClickHandler
 		{
 			log.info("Protecting asset "+messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
-			updateMap.setAttribute(Attribute.ASSET_TYPE, messageAttributes.getAttribute(Attribute.ASSET_TYPE));
-			updateMap.setAttribute(Attribute.ASSET_ID, messageAttributes.getAttribute(Attribute.ASSET_ID));
 			updateMap.setAttribute(Attribute.PURGE_PROTECTED, Boolean.TRUE);
 			try
 			{

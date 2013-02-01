@@ -209,13 +209,7 @@
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>true()</bpel:from>
-                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="26313837" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="25551731-arg0"></mapper:vertice>
-  <mapper:vertice id="25551731" dimension="78x24" location="485,69">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="26313837" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="25551731-arg0"></mapper:vertice><mapper:vertice id="25551731" dimension="78x24" location="485,69"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_dO-OMGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -248,13 +242,7 @@
                                     </bpel:copy>
                                     <bpel:copy>
                                         <bpel:from>true()</bpel:from>
-                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="29842993" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="2906593-arg0"></mapper:vertice>
-  <mapper:vertice id="2906593" dimension="78x24" location="523,85">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="29842993" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="2906593-arg0"></mapper:vertice><mapper:vertice id="2906593" dimension="78x24" location="523,85"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_d5RvcGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -283,10 +271,14 @@
                         <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:ID="_kSe3wGuTEeK7FdvgH5F2kQ"></bpdm:linkset>
                     </bpdm:messagingtask>
                     <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_XOIQoGuTEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
-                        <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_eQvXwGuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[GatewayDataBasedExclusive - QC not Required]">
-                            <bpel:condition>not($autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text())<mapper:mapperLink><mapper:vertice id="5207653" targetPath="$condition" targetedBy="26947621-arg1"></mapper:vertice><mapper:vertice id="26947621" dimension="78x24" location="468,245"><mapper:value>not()</mapper:value></mapper:vertice><mapper:vertice id="16501153" sourcePath="$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()" targetedBy="26947621-arg0"></mapper:vertice></mapper:mapperLink></bpel:condition>
+                        <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_eQvXwGuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
+                        <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_ej_q8GuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[GatewayDataBasedExclusive - QC Required]">
+                            <bpel:condition>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()
+<mapper:mapperLink>
+  <mapper:vertice id="5184019" targetPath="$condition" targetedBy="32118030-arg0"></mapper:vertice>
+  <mapper:vertice id="32118030" sourcePath="$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()"></mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
-                        <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_ej_q8GuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="QC not Required" bpdm:ID="_bM2I8GuTEeK7FdvgH5F2kQ">
                                 <bpdm:linkset bpdm:type="assignments">
@@ -332,13 +324,7 @@
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>true()</bpel:from>
-                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="9141274" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="15741566-arg0"></mapper:vertice>
-  <mapper:vertice id="15741566" dimension="78x24" location="480,84">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="9141274" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="15741566-arg0"></mapper:vertice><mapper:vertice id="15741566" dimension="78x24" location="480,84"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_z27SgGuSEeK7FdvgH5F2kQ"></bpdm:linkset>

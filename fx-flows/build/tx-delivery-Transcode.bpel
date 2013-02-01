@@ -329,19 +329,19 @@
         </bpel:assign>
         <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" operation="autoQcRequiredForTX" inputVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" outputVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpmn:label="Check If QC Required" name="Check_If_QC_Required-1" bpmn:id="_ULatkGuTEeK7FdvgH5F2kQ"></bpel:invoke>
         <bpel:if>
-          <bpel:condition>not($autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text())</bpel:condition>
+          <bpel:condition>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()</bpel:condition>
           <bpel:sequence>
-            <bpel:assign bpmn:label="QC not Required" name="QC_not_Required" bpmn:id="_bM2I8GuTEeK7FdvgH5F2kQ">
-              <bpel:copy>
-                <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
-                <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
-              </bpel:copy>
-            </bpel:assign>
+            <bpel:empty bpmn:label="QC Required" name="QC_Required" bpmn:id="_clWM8GuTEeK7FdvgH5F2kQ"/>
+            <bpel:invoke partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" operation="EventStartMessage" inputVariable="auto_QCEventStartMessageRequest" outputVariable="auto_QCEventStartMessageResponse" bpmn:label="QC" name="QC" bpmn:id="_0ciuwGuXEeK7FdvgH5F2kQ"></bpel:invoke>
           </bpel:sequence>
           <bpel:else>
             <bpel:sequence>
-              <bpel:empty bpmn:label="QC Required" name="QC_Required" bpmn:id="_clWM8GuTEeK7FdvgH5F2kQ"/>
-              <bpel:invoke partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" operation="EventStartMessage" inputVariable="auto_QCEventStartMessageRequest" outputVariable="auto_QCEventStartMessageResponse" bpmn:label="QC" name="QC" bpmn:id="_0ciuwGuXEeK7FdvgH5F2kQ"></bpel:invoke>
+              <bpel:assign bpmn:label="QC not Required" name="QC_not_Required" bpmn:id="_bM2I8GuTEeK7FdvgH5F2kQ">
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
+                  <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
             </bpel:sequence>
           </bpel:else>
         </bpel:if>
