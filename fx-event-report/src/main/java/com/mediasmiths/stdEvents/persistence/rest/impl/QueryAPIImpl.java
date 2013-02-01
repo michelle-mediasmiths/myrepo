@@ -193,15 +193,15 @@ public class QueryAPIImpl implements QueryAPI
 	public List<EventEntity> getDelivered()
 	{		
 		List<EventEntity> createTitle = getEvents("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle");
-		List<EventEntity> addMaterial = getEvents("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial");
-		List<EventEntity> addPackage = getEvents("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage");
+		//List<EventEntity> addMaterial = getEvents("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial");
+		//List<EventEntity> addPackage = getEvents("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage");
 
 		List<EventEntity> delivered = new ArrayList<EventEntity>();
-		delivered.addAll(createTitle);
-		delivered.addAll(addMaterial);
-		delivered.addAll(addPackage);
+		//delivered.addAll(createTitle);
+		//delivered.addAll(addMaterial);
+		//delivered.addAll(addPackage);
 		
-		return delivered;
+		return createTitle;
 	}
 
 	@Transactional

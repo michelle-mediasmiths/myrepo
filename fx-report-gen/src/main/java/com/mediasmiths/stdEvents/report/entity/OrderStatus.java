@@ -9,6 +9,7 @@ public class OrderStatus
 	String channel;
 	String aggregatorID;
 	String taskType;
+	String ingestDate;
 	
 	public OrderStatus()
 	{
@@ -20,15 +21,25 @@ public class OrderStatus
 		titleID = tID;
 	}
 	
-	public OrderStatus(String dr, String s, String tID, String o, String c, String aID, String tt)
+	public OrderStatus(
+			String dateRange,
+			String status,
+			String titleID,
+			String orderRef,
+			String channel,
+			String aggregatorID,
+			String taskType,
+			String ingestDate)
 	{
-		dateRange = dr;
-		status = s;
-		titleID = tID;
-		orderRef = o;
-		channel = c;
-		aggregatorID = aID;
-		taskType = tt;
+		super();
+		this.dateRange = dateRange;
+		this.status = status;
+		this.titleID = titleID;
+		this.orderRef = orderRef;
+		this.channel = channel;
+		this.aggregatorID = aggregatorID;
+		this.taskType = taskType;
+		this.ingestDate = ingestDate;
 	}
 
 	public String getDateRange()
@@ -99,6 +110,16 @@ public class OrderStatus
 	public void setTaskType(String taskType)
 	{
 		this.taskType = taskType;
+	}
+
+	public String getIngestDate()
+	{
+		return ingestDate;
+	}
+
+	public void setIngestDate(String ingestDate)
+	{
+		this.ingestDate = ingestDate;
 	}
 
 	

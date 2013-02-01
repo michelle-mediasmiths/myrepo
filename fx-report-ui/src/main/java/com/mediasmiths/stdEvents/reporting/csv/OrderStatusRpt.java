@@ -54,26 +54,34 @@ public class OrderStatusRpt
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			if (event.getEventName().equals("CreateOrUpdateTitle"))
-				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-			else if ((event.getEventName().equals("AddOrUpdateMaterial")) || (event.getEventName().equals("AddOrUpdatePackage")) || (event.getEventName().equals("DeletePackage")) || (event.getEventName().equals("DeleteMaterial")))
-				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('>', (payload.indexOf("titleID")+9)));
-			else if (event.getEventName().equals("PurgeTitle"))
-				titleID = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('/', (payload.indexOf("titleID")+9)));
-			else
-				titleID = "not available";
-			
+			logger.info(payload);
 			OrderStatus title = new OrderStatus(); 
-			title.setTitleID(titleID);
+			if (payload.contains("titleID"))
+				title.setTitleID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
 			title.setStatus(status);			
 			if (payload.contains("OrderReference"))
 				title.setOrderRef(payload.substring(payload.indexOf("OrderReference")+15, payload.indexOf("</OrderReference")));
 			if (payload.contains("channelName"))
 				title.setChannel(payload.substring(payload.indexOf("channelName")+13, payload.indexOf('"',(payload.indexOf("channelName")+13))));
-			if (payload.contains("aggregatorID"))
-				title.setAggregatorID(payload.substring(payload.indexOf("aggregatorID")+14, payload.indexOf('"',(payload.indexOf("aggregatorID")+14))));
+			
+			List<EventEntity> aggregatorEvents = queryApi.getByEventName("AddOrUpdateMaterial");
+			for (EventEntity aggregatorEvent : aggregatorEvents)
+			{
+				String str = aggregatorEvent.getPayload();
+				String aggregatorTitle = str.substring(str.indexOf("materialID")+12, str.indexOf('"', (str.indexOf("materialID")+12)));
+				logger.info("agg:" + aggregatorTitle);
+				if (payload.contains("titleID")) {
+					String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
+					logger.info("Current " + curTitle);
+					if (curTitle.equals(aggregatorTitle)) {
+						title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
+						title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
+					}
+				}
+			}
+			title.setIngestDate(Long.toString(event.getTime()));
   			titleList.add(title);
-			}	
+		}	
 		return titleList;
 	}
 	
@@ -101,7 +109,7 @@ public class OrderStatusRpt
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + name + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String [] header = {"dateRange", "status", "titleID", "orderRef", "channel", "aggregatorID", "taskType"};
+			final String [] header = {"dateRange", "status", "titleID", "orderRef", "channel", "aggregatorID", "taskType", "ingestDate"};
 			final CellProcessor[] processors = getTitleProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -140,8 +148,9 @@ public class OrderStatusRpt
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
-				new NotNull(),
-				new NotNull(),
+				new Optional(),
+				new Optional(),
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),
