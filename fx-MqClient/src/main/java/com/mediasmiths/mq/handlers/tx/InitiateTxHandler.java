@@ -88,14 +88,18 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			if(f.exists()){
 				String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
 				log.error(errorMessage);
-				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-				messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
-				taskController.saveTask(messageAttributes);
+				
+				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+				updateMap.setAttribute(Attribute.ERROR_MSG, errorMessage);
+				taskController.saveTask(updateMap);
 			}
 			else{
 				startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
-				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-				taskController.saveTask(messageAttributes);
+				
+				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+				taskController.saveTask(updateMap);
 			}
 			
 		}

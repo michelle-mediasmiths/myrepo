@@ -81,12 +81,14 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 
 	private void cancelTask(AttributeMap messageAttributes, String errorMessage)
 	{
+		
+		AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
 		// a qc task has been created for an item it shouldnt have been, cancel
-		messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
-		messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
+		updateMap.setAttribute(Attribute.ERROR_MSG, errorMessage);
 		try
 		{
-			taskController.saveTask(messageAttributes);
+			taskController.saveTask(updateMap);
 		}
 		catch (MayamClientException e)
 		{

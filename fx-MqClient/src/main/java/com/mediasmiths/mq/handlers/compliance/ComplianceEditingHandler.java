@@ -33,12 +33,10 @@ public class ComplianceEditingHandler  extends TaskStateChangeHandler{
 		String assetHouseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 				
-		AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetID);
-		asset.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);	
-		asset.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
-		tasksClient.assetApi().updateAsset(asset);
-		
-		taskController.createTask(assetHouseID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.QC_VIEW, asset);
+		AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
+		updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);	
+		updateMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
+		tasksClient.assetApi().updateAsset(updateMap);
 		
 		SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
 		if (lists != null) 

@@ -76,25 +76,27 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		String result = after.getAttribute(Attribute.QC_RESULT);
 		try
 		{
+			AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+			
 			if (result.equals(MANUAL_QC_PASS))
 			{
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS_MANUAL);
-				taskController.saveTask(currentAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.PASS_MANUAL);
+				taskController.saveTask(updateMap);
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REORDER))
 			{
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
-				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
-				taskController.saveTask(currentAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
+				taskController.saveTask(updateMap);
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
 				// user has requested reingest, fail the qc task
 				log.debug("User requested uningest, failing qc task");
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
-				currentAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
-				taskController.saveTask(currentAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
+				taskController.saveTask(updateMap);
 
 				if (AssetProperties.isMaterialProgramme(currentAttributes)
 						|| AssetProperties.isMaterialAssociated(currentAttributes))
@@ -127,8 +129,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		{
 			try
 			{
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
-				taskController.saveTask(currentAttributes);
+				
+				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+				taskController.saveTask(updateMap);
 			}
 			catch (MayamClientException e)
 			{
@@ -161,8 +165,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		{
 			try
 			{
-				currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
-				taskController.saveTask(currentAttributes);
+				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+				taskController.saveTask(updateMap);
 			}
 			catch (MayamClientException e)
 			{
@@ -175,9 +180,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	{
 		try
 		{
-			currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			currentAttributes.setAttribute(Attribute.QC_STATUS, passStatus);
-			taskController.saveTask(currentAttributes);
+			AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+			updateMap.setAttribute(Attribute.QC_STATUS, passStatus);
+			taskController.saveTask(updateMap);
 		}
 		catch (MayamClientException e)
 		{
@@ -192,8 +198,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 			try
 			{
-				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-				taskController.saveTask(messageAttributes);
+				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+				taskController.saveTask(updateMap);
 			}
 			catch (Exception e)
 			{

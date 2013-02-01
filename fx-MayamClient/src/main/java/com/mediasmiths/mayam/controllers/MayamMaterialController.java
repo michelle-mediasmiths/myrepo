@@ -339,14 +339,16 @@ public class MayamMaterialController extends MayamController
 		for (AttributeMap material : materials)
 		{
 
+			AttributeMap update = taskController.updateMapForAsset(material);
+			
 			for (Attribute a : materialsAttributesInheritedFromTitle)
 			{
-				material.setAttribute(a, title.getAttribute(a));
+				update.setAttribute(a, title.getAttribute(a));
 			}
 
 			try
 			{
-				client.assetApi().updateAsset(material);
+				client.assetApi().updateAsset(update);
 			}
 			catch (RemoteException e)
 			{
@@ -1164,20 +1166,22 @@ public class MayamMaterialController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED, e1);
 		}
 
+		AttributeMap update = taskController.updateMapForTask(qcTaskAttributes);
+		
 		try
 		{
 			fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
-			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
 		}
 		catch (FileFormatVerificationFailureException ffve)
 		{
 			log.warn("file format verification failed", ffve);
-			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.FAIL);
-			qcTaskAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
-			qcTaskAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffve.getMessage());
+			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.FAIL);
+			update.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
+			update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffve.getMessage());
 		}
 
-		taskController.saveTask(qcTaskAttributes);
+		taskController.saveTask(update);
 	}
 
 	public boolean isFileFormatVerificationRequiredForMaterial(AttributeMap messageAttributes)

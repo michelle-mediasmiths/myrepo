@@ -48,11 +48,12 @@ public class UnmatchedJobHandler extends JobHandler
 				if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
 				{
 					//attempt to set the source as import or ingest
-					material.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
+					AttributeMap updateMap = taskController.updateMapForAsset(material);
+					updateMap.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
 					
 					try
 					{
-						tasksClient.assetApi().updateAsset(material);
+						tasksClient.assetApi().updateAsset(updateMap);
 					}
 					catch (RemoteException e)
 					{

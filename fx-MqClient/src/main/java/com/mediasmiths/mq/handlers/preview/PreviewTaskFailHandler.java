@@ -41,9 +41,7 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
 		AssetType type = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 
-		AttributeMap updateAssetMap = taskController.getTasksClient().createAttributeMap();
-		updateAssetMap.setAttribute(Attribute.ASSET_ID, assetId);
-		updateAssetMap.setAttribute(Attribute.ASSET_TYPE, type);
+		AttributeMap updateAssetMap = taskController.updateMapForAsset(messageAttributes);
 		updateAssetMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_FAIL);
 		try
 		{

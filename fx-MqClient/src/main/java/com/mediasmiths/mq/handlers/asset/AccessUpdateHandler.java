@@ -30,10 +30,7 @@ public class AccessUpdateHandler extends UpdateAttributeHandler
 			{
 				AttributeMap withNewAccessRights = accessRightsController.updateAccessRights(currentAttributes.copy());
 				
-				AttributeMap update = tasksClient.createAttributeMap();
-				//make the update as minimal as possible, we only want to be setting access rights here
-				update.setAttribute(Attribute.ASSET_TYPE, withNewAccessRights.getAttribute(Attribute.ASSET_TYPE));
-				update.setAttribute(Attribute.ASSET_ID, withNewAccessRights.getAttribute(Attribute.ASSET_ID));
+				AttributeMap update = taskController.updateMapForAsset(withNewAccessRights);
 				update.setAttribute(Attribute.ASSET_ACCESS, withNewAccessRights.getAttribute(Attribute.ASSET_ACCESS));
 				
 				tasksClient.assetApi().updateAsset(update);

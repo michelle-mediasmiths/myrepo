@@ -433,7 +433,19 @@ public class MayamTaskController extends MayamController
 	}
 
 
-
-
+	public AttributeMap updateMapForAsset(AttributeMap assetAttributes){
+		AttributeMap updateMap = client.createAttributeMap();
+		updateMap.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
+		updateMap.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+		return updateMap;
+	}	
+	
+	public AttributeMap updateMapForTask(AttributeMap taskAttributes){
+		AttributeMap updateMap = client.createAttributeMap();
+		updateMap.setAttribute(Attribute.ASSET_TYPE, taskAttributes.getAttribute(Attribute.ASSET_TYPE));
+		updateMap.setAttribute(Attribute.ASSET_ID, taskAttributes.getAttribute(Attribute.ASSET_ID));
+		updateMap.setAttribute(Attribute.TASK_ID, taskAttributes.getAttribute(Attribute.TASK_ID));
+		return updateMap;
+	}	
 
 }

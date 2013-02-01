@@ -37,9 +37,6 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 				{
 					String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
 					long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
-					AttributeMap newTask = taskController.getTask(taskID);
-					newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-					taskController.saveTask(newTask);
 				}
 			}
 			

@@ -22,11 +22,14 @@ public class PreviewTaskCreateHandler extends TaskStateChangeHandler
 		if(!AssetProperties.isQCPassed(messageAttributes)){
 			
 			log.warn("Preview task createed for material that has not passed qc, rejecting");
-			messageAttributes.setAttribute(Attribute.ERROR_MSG, "Item has not passed qc");
-			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			
+			
+			AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
+			updateMap.setAttribute(Attribute.ERROR_MSG, "Item has not passed qc");
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 			try
 			{
-				taskController.saveTask(messageAttributes);
+				taskController.saveTask(updateMap);
 			}
 			catch (MayamClientException e)
 			{

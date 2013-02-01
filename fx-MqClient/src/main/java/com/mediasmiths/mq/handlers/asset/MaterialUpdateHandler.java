@@ -77,7 +77,10 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 					if (attributeChanged(Attribute.ARCHIVE_POLICY, before, after, currentAttributes)) // if the archive policy changed, save
 					{
 						log.info("Archive policy changed, saving");
-						tasksClient.assetApi().updateAsset(currentAttributes);
+						
+						AttributeMap update = taskController.updateMapForAsset(currentAttributes);
+						update.setAttribute(Attribute.ARCHIVE_POLICY, currentAttributes.getAttribute(Attribute.ARCHIVE_POLICY));
+						tasksClient.assetApi().updateAsset(update);
 					}
 					else
 					{
