@@ -825,5 +825,55 @@ public class MayamClientImpl implements MayamClient
 		SegmentList segmentList = packageController.getSegmentList(packageID);
 		return AssetProperties.isPackageSD(segmentList.getAttributeMap());
 	}
+
+	@Override
+	public void txDeliveryCompleted(String packageID, long taskID) throws MayamClientException
+	{
+		try
+		{
+			AttributeMap txTask = tasksController.getTask(taskID);
+			if (txTask != null)
+			{
+				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.TRUE);
+				tasksController.saveTask(txTask);
+			}
+			else
+			{
+				log.error("Failed to fetch tx delivery task with id " + taskID);
+				throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+			}
+		}
+		catch (RemoteException e)
+		{
+			log.error("Failed to fetch tx delivery task with id " + taskID, e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
+		}
+	}
+
+	@Override
+	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException
+	{
+		try
+		{
+			AttributeMap txTask = tasksController.getTask(taskID);
+			if (txTask != null)
+			{
+				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.FALSE);
+				txTask.setAttribute(Attribute.ERROR_MSG, String.format("TX Delivery Failed at : %s",stage));
+				txTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+				tasksController.saveTask(txTask);
+			}
+			else
+			{
+				log.error("Failed to fetch tx delivery task with id " + taskID);
+				throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+			}
+		}
+		catch (RemoteException e)
+		{
+			log.error("Failed to fetch tx delivery task with id " + taskID, e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
+		}		
+	}
 	
 }

@@ -320,5 +320,10 @@ public interface MayamClient
 
 	public boolean isPackageSD(String packageID) throws MayamClientException;
 
+	public void txDeliveryCompleted(String packageID, long taskID) throws MayamClientException;
+
+	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException;
+
+
 	
 }

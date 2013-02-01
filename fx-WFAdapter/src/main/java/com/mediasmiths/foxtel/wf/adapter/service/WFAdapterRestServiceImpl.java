@@ -39,6 +39,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -354,12 +355,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@PUT
 	@Path("/tx/failed")
 	@Consumes("application/xml")
-	public void notifyTXDeliveryFailed(TXDeliveryFailure notification)
+	public void notifyTXDeliveryFailed(TXDeliveryFailure notification) throws MayamClientException
 	{
 		log.fatal(String.format(
 				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
 				notification.getPackageID(),
 				notification.getStage()));
+		
+		mayamClient.txDeliveryFailed(notification.getPackageID(), notification.getTaskID(), notification.getStage());
 		
 		saveEvent("DeliveryFailed", notification, TX_EVENT_NAMESPACE);
 	}
@@ -450,6 +453,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		mexMarshaller.marshal(programme, sw);
 		return sw.toString();
 
+	}
+
+	@Override
+	@PUT
+	@Path("/tx/delivered")
+	@Consumes("application/xml")
+	public void notifiyTXDelivered(TXDeliveryFinished deliveryFinished) throws MayamClientException
+	{
+		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
 	}
 
 }

@@ -8,8 +8,8 @@
   <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk1Var">
     <dd:service name="materialTransferForTC:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="tcAndTCAdapterForHttpPortPlkVar">
-    <dd:service name="createJob:restService" port="httpPort"/>
+  <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk4Var">
+    <dd:service name="tcTotalFailure:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk3Var">
     <dd:service name="tcPassed:restService" port="httpPort"/>
@@ -17,13 +17,13 @@
   <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk2Var">
     <dd:service name="tcFailure:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk0Var">
-    <dd:service name="getTranscodeOutputLocation:restService" port="httpPort"/>
-  </dd:invoke>
   <dd:invoke partnerLink="fS_AdapterAndTCForHttpPortPlkVar">
     <dd:service name="delete:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk4Var">
-    <dd:service name="tcTotalFailure:restService" port="httpPort"/>
+  <dd:invoke partnerLink="wFAdapterAndTCForHttpPortPlk0Var">
+    <dd:service name="getTranscodeOutputLocation:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="tcAndTCAdapterForHttpPortPlkVar">
+    <dd:service name="createJob:restService" port="httpPort"/>
   </dd:invoke>
 </dd:process>

@@ -25,6 +25,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -140,6 +141,9 @@ public interface WFAdapterRestService
 	@Consumes("application/xml")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
 	
+	
+	
+	
 	/**
 	 * Returns the output location for transcode of materials to tx packages
 	 * @param packageID
@@ -187,12 +191,22 @@ public interface WFAdapterRestService
 	/**
 	 * Used to indicate there has been a failure in a tx delivery workflow
 	 * @param notification
+	 * @throws MayamClientException 
 	 */
 	@PUT
 	@Path("/tx/failed")
 	@Consumes("application/xml")
-	public void notifyTXDeliveryFailed(TXDeliveryFailure notification);
+	public void notifyTXDeliveryFailed(TXDeliveryFailure notification) throws MayamClientException;
 
+	/**
+	 * Called once tx delivery is complete
+	 */
+	@PUT
+	@Path("/tx/delivered")
+	@Consumes("application/xml")
+	public void notifiyTXDelivered(TXDeliveryFinished deliveryFinished)throws MayamClientException;
+	
+	
 	@GET
 	@Path("/tx/delivery/getAOSegmentXML")
 	@Produces("application/xml")

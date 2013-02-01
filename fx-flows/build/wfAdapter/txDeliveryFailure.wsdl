@@ -1,0 +1,44 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" xmlns:txDeliveryFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter">
+      <xs:include schemaLocation="wfAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest">
+      <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter"/>
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="adapter:txDeliveryFailure" name="body_txDeliveryFailure_inputType"/>
+      <xs:element type="xs:anyType" name="response_txDeliveryFailure_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="txDeliveryFailure_input">
+    <wsdl:part name="body" element="txDeliveryFailure:body_txDeliveryFailure_inputType"/>
+  </wsdl:message>
+  <wsdl:message name="txDeliveryFailure_output">
+    <wsdl:part name="response" element="txDeliveryFailure:response_txDeliveryFailure_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="txDeliveryFailure">
+      <wsdl:input message="txDeliveryFailure:txDeliveryFailure_input"/>
+      <wsdl:output message="txDeliveryFailure:txDeliveryFailure_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="txDeliveryFailure:restInterface">
+    <wsdl:operation name="txDeliveryFailure">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="application/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="txDeliveryFailure:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/failed"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

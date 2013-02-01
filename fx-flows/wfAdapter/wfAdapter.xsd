@@ -35,6 +35,8 @@
 
   <xs:element name="txDeliveryFailure" type="tns:txDeliveryFailure"/>
 
+  <xs:element name="txDeliveryFinished" type="tns:txDeliveryFinished"/>
+
   <xs:complexType name="tcFailureNotification">
     <xs:complexContent>
       <xs:extension base="tns:tcNotification">
@@ -67,6 +69,13 @@
     <xs:sequence>
       <xs:element name="assetID" type="xs:string"/>
       <xs:element name="forTX" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="txDeliveryFinished">
+    <xs:sequence>
+      <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 

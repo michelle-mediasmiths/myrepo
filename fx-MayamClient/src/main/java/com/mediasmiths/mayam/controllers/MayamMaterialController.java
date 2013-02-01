@@ -85,6 +85,8 @@ public class MayamMaterialController extends MayamController
 
 	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
+		log.info(String.format("Creating Material %s for title %s", material.getMaterialID(),titleID));
+		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
@@ -366,6 +368,8 @@ public class MayamMaterialController extends MayamController
 	public String createMaterial(MarketingMaterialType material, String titleID, Details details, Title title)
 			throws MayamClientException
 	{
+		log.info(String.format("Creating Marketing Material for title %s",titleID));
+		
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 
@@ -584,6 +588,8 @@ public class MayamMaterialController extends MayamController
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
 	{
+		log.info(String.format("Updating material %s for title %s",material.getMaterialID(), title.getTitleID()));
+		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
 		boolean isPlaceholder = false;
@@ -753,6 +759,8 @@ public class MayamMaterialController extends MayamController
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
+		log.info(String.format("Updating material %s",material.getMaterialID()));
+		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
 		if (material != null)
@@ -964,7 +972,7 @@ public class MayamMaterialController extends MayamController
 			log.trace(e1);
 		}
 
-		log.debug("Material found: " + materialFound);
+		log.info(String.format("Material %s found: %b ",materialID, materialFound));
 		return materialFound;
 	}
 

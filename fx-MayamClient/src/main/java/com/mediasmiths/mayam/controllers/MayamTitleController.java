@@ -66,6 +66,9 @@ public class MayamTitleController extends MayamController{
 		
 		if (title != null && title.getTitleID() != null && !title.getTitleID().equals(""))
 		{
+			
+			log.info(String.format("Creating title %s",title.getTitleID()));
+			
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.TITLE.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, TITLE_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, title.getTitleID());
@@ -153,6 +156,8 @@ public class MayamTitleController extends MayamController{
 		
 		if (title != null)
 		{
+			log.info(String.format("Creating title %s",title.getTitleID()));
+			
 			TitleDescriptionType titleDescription = title.getTitleDescription();
 			
 			if (titleDescription != null) {				
@@ -282,6 +287,8 @@ public class MayamTitleController extends MayamController{
 		boolean attributesValid = true;
 	
 		if (title != null) {
+			log.info(String.format("updating title %s",title.getTitleID()));
+			
 				AttributeMap assetAttributes = null;
 				MayamAttributeController attributes = null;
 				
@@ -377,6 +384,8 @@ public class MayamTitleController extends MayamController{
 		boolean attributesValid = true;
 		
 		if (title != null) {
+			log.info(String.format("updating title %s",title.getTitleID()));
+			
 			TitleDescriptionType titleDescription = title.getTitleDescription();
 			
 			if (titleDescription != null) {
@@ -550,6 +559,8 @@ public class MayamTitleController extends MayamController{
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		
+		log.info(String.format("purge title %s",titleID));
+		
 		if (isProtected(titleID)) 
 		{
 			try
@@ -606,6 +617,9 @@ public class MayamTitleController extends MayamController{
 			log.info("Exception thrown by Mayam while attempting to retrieve asset" + titleID+" , assuming it doesnt exist");
 			log.trace(e1);
 		}
+		
+		log.info(String.format("title %s exists : %b",titleID, titleFound));
+		
 		return titleFound;
 	}
 	
@@ -632,6 +646,9 @@ public class MayamTitleController extends MayamController{
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while checking Protected status of Title : " + titleID,e);
 		}
+		
+		log.info(String.format("title %s isprotected : %b",titleID, isProtected));
+		
 		return isProtected;
 	}
 

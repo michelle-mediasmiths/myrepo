@@ -6,7 +6,7 @@
 
 # Set up maven binary, also an alias for skipTests.
 
-notest=false
+notest=true
 MAVEN_PARALLELISM=4
 
 ifneq ($(notest), false)

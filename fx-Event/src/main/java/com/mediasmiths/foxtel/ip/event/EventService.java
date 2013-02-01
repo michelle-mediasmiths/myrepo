@@ -44,7 +44,7 @@ public class EventService implements EventHandler
 		if (enabled)
 		{
 
-			if (logger.isDebugEnabled()) logger.debug("saving event with name" + eventName);
+			if (logger.isDebugEnabled()) logger.debug("saving event with name " + eventName);
 
 			try
 			{
