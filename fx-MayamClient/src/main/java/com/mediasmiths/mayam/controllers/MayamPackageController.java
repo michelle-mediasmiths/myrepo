@@ -105,7 +105,7 @@ public class MayamPackageController extends MayamController
 					
 					if (txPackage.getTargetDate() != null)
 					{
-						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()).toString());
 					}
 					
 					client.assetApi().updateAsset(material);
@@ -370,7 +370,7 @@ public class MayamPackageController extends MayamController
 					
 					if (txPackage.getTargetDate() != null)
 					{
-						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()).toString());
 					}
 					
 					attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());

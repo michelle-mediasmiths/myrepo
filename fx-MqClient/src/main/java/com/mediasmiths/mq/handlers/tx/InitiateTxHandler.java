@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.DateUtil;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -68,7 +69,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			
 			
 			String title = materialAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
-			Date requiredDate = (Date) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST);
+			Date requiredDate = DateUtil.parseDateString((String) segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST));
 			
 			if(requiredDate==null){
 				log.info("No required date set on package! "+packageID);
@@ -120,6 +121,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			log.error("error getting materials location or fetching delivery location for package",e);
 		}
 	}
+	
 	
 	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath, String outputLocation)
 	{
