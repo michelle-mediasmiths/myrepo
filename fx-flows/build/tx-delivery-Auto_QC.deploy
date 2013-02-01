@@ -1,0 +1,8 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<dd:process xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Auto_QC" fileName="tx-delivery-Auto_QC.bpel">
+  <dd:property name="PATH">tx-delivery</dd:property>
+  <dd:property name="SVG">tx-delivery.svg</dd:property>
+  <dd:provide partnerLink="auto_QcAndTranscodePlkVar">
+    <dd:service name="this:CanonicServiceForTranscode" port="canonicPort"></dd:service>
+  </dd:provide>
+</dd:process>

@@ -1,10 +1,10 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" xmlns:txDeliveryComplete="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest">
+<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:txDeliveryFinished="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest">
   <wsdl:types>
     <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter">
       <xs:include schemaLocation="wfAdapter.xsd"/>
     </xs:schema>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest">
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:anyType" name="response_txDeliveryComplete_outputType"/>
     </xs:schema>
@@ -13,15 +13,15 @@
     <wsdl:part name="body" element="adapter:txDeliveryFinished"/>
   </wsdl:message>
   <wsdl:message name="txDeliveryComplete_output">
-    <wsdl:part name="response" element="txDeliveryComplete:response_txDeliveryComplete_outputType"/>
+    <wsdl:part name="response" element="txDeliveryFinished:response_txDeliveryComplete_outputType"/>
   </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="txDeliveryComplete">
-      <wsdl:input message="txDeliveryComplete:txDeliveryComplete_input"/>
-      <wsdl:output message="txDeliveryComplete:txDeliveryComplete_output"/>
+      <wsdl:input message="txDeliveryFinished:txDeliveryComplete_input"/>
+      <wsdl:output message="txDeliveryFinished:txDeliveryComplete_output"/>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="restBinding" type="txDeliveryComplete:restInterface">
+  <wsdl:binding name="restBinding" type="txDeliveryFinished:restInterface">
     <wsdl:operation name="txDeliveryComplete">
       <ode:binding verb="PUT"/>
       <http:operation location=""/>
@@ -35,7 +35,7 @@
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">
-    <wsdl:port name="httpPort" binding="txDeliveryComplete:restBinding">
+    <wsdl:port name="httpPort" binding="txDeliveryFinished:restBinding">
       <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivered"/>
     </wsdl:port>
   </wsdl:service>

@@ -13,12 +13,12 @@
   <bpel:partnerLinks>
     <bpel:partnerLink name="callerAndTCPlkVar" partnerLinkType="diag:CallerAndTC" myRole="TC_for_Caller"/>
     <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk1Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
-    <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk4Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
+    <bpel:partnerLink name="tcAndTCAdapterForHttpPortPlkVar" partnerLinkType="diag:TcAndTCAdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="TCAdapter_for_TC"/>
     <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk3Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
     <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk2Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
-    <bpel:partnerLink name="fS_AdapterAndTCForHttpPortPlkVar" partnerLinkType="diag:FS_AdapterAndTCForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_TC"/>
     <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk0Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
-    <bpel:partnerLink name="tcAndTCAdapterForHttpPortPlkVar" partnerLinkType="diag:TcAndTCAdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="TCAdapter_for_TC"/>
+    <bpel:partnerLink name="fS_AdapterAndTCForHttpPortPlkVar" partnerLinkType="diag:FS_AdapterAndTCForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_TC"/>
+    <bpel:partnerLink name="wFAdapterAndTCForHttpPortPlk4Var" partnerLinkType="diag:WFAdapterAndTCForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_TC"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="complexvariable" type="complexvar:complexvariable"/>
