@@ -998,6 +998,9 @@ public class MayamMaterialController extends MayamController
 		try
 		{
 			AttributeMap asset = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
+			
+			if(asset==null) throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+			
 			return asset;
 		}
 		catch (RemoteException e)
