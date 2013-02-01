@@ -1,10 +1,14 @@
 package com.mediasmiths.mq.handlers.tx;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.activemq.thread.Task;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -77,7 +81,22 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			
 			TCJobParameters tcParams = createTCParamsForTxDelivery(packageID, materialIsSD, materialIsSurround,isPackageSD,requiredDate,materialPath,outputLocation);
 			
-			startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
+			
+			String fileName = tcParams.outputFolder+"/"+tcParams.outputFileBasename+".gxf";
+			File f = new File(fileName);
+			
+			if(f.exists()){
+				String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
+				log.error(errorMessage);
+				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+				messageAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);
+				taskController.saveTask(messageAttributes);
+			}
+			else{
+				startTXFlow(isAO, packageID, requiredDate, taskID, tcParams, title);
+				messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+				taskController.saveTask(messageAttributes);
+			}
 			
 		}
 		catch (PackageNotFoundException pnfe)
@@ -97,7 +116,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			log.error("error getting materials location or fetching delivery location for package",e);
 		}
 	}
-
+	
 	private TCJobParameters createTCParamsForTxDelivery(String packageID, boolean materialIsSD, boolean materialIsSurround, boolean isPackageSD, Date requiredDate, String materialPath, String outputLocation)
 	{
 		TCJobParameters ret = new TCJobParameters();

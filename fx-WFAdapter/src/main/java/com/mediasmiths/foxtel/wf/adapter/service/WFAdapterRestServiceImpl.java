@@ -159,7 +159,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// id is a package id
 				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC");
 			}
 			else
 			{
@@ -280,8 +280,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
-				mayamClient.failTaskForAsset(MayamTaskListType.TX_DELIVERY, notification.getAssetId());
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);				
 			}
 			else
 			{
@@ -302,9 +301,31 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/tcFailedTotal")
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
-		log.info(String.format("Received notification of TC totalfailure Package ID %s ", notification.getAssetID()));
+		log.info(String.format(
+				"Received notification of transcode Error asset ID %s isTX %b",
+				notification.getAssetID(),
+				notification.isForTXDelivery()));
+		
 		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE);
-
+		
+		try
+		{
+			if (notification.isForTXDelivery())
+			{
+				// auto qc was for tx delivery
+				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
+			}
+			else
+			{
+				// auto qc was for export task
+			}
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Failed to fail task!", e);
+			throw e;
+		}
+		
 	}
 
 	@Override

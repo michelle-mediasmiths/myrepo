@@ -30,6 +30,7 @@
     <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
     <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest"/>
     <bpel:variable name="auto_QCEventStartMessageRequest" messageType="Auto_QC:EventStartMessageRequest"/>
+    <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
@@ -39,6 +40,7 @@
           <bpel:literal>
 <wfAdapter:tcTotalFailure>
   <wfAdapter:assetID></wfAdapter:assetID>
+  <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcTotalFailure></bpel:literal>
@@ -61,25 +63,25 @@
   <wfAdapter:requiredDate></wfAdapter:requiredDate>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:tcParams>
-    <tns:purpose></tns:purpose>
-    <tns:resolution></tns:resolution>
-    <tns:audioType></tns:audioType>
-    <tns:description></tns:description>
-    <tns:inputFile></tns:inputFile>
-    <tns:outputFolder></tns:outputFolder>
-    <tns:outputFileBasename></tns:outputFileBasename>
-    <tns:bug>
-      <tns:channel></tns:channel>
-      <tns:position></tns:position>
-      <tns:opacity></tns:opacity>
-    </tns:bug>
-    <tns:timecode>
-      <tns:location></tns:location>
-      <tns:size></tns:size>
-      <tns:background></tns:background>
-      <tns:foreground></tns:foreground>
-    </tns:timecode>
     <tns:priority></tns:priority>
+    <tns:timecode>
+      <tns:foreground></tns:foreground>
+      <tns:background></tns:background>
+      <tns:size></tns:size>
+      <tns:location></tns:location>
+    </tns:timecode>
+    <tns:bug>
+      <tns:opacity></tns:opacity>
+      <tns:position></tns:position>
+      <tns:channel></tns:channel>
+    </tns:bug>
+    <tns:outputFileBasename></tns:outputFileBasename>
+    <tns:outputFolder></tns:outputFolder>
+    <tns:inputFile></tns:inputFile>
+    <tns:description></tns:description>
+    <tns:audioType></tns:audioType>
+    <tns:resolution></tns:resolution>
+    <tns:purpose></tns:purpose>
   </wfAdapter:tcParams>
   <wfAdapter:title></wfAdapter:title>
 </Delivery:EventStartMessageRequest></bpel:literal>
@@ -89,7 +91,34 @@
       <bpel:copy bpmn:label="$auto_QCEventStartMessageRequest">
         <bpel:from>
           <bpel:literal>
-<Auto_QC:EventStartMessageRequest></Auto_QC:EventStartMessageRequest></bpel:literal>
+<Auto_QC:EventStartMessageRequest>
+  <wfAdapter:AO></wfAdapter:AO>
+  <wfAdapter:packageID></wfAdapter:packageID>
+  <wfAdapter:requiredDate></wfAdapter:requiredDate>
+  <wfAdapter:taskID></wfAdapter:taskID>
+  <wfAdapter:tcParams>
+    <tns:priority></tns:priority>
+    <tns:timecode>
+      <tns:foreground></tns:foreground>
+      <tns:background></tns:background>
+      <tns:size></tns:size>
+      <tns:location></tns:location>
+    </tns:timecode>
+    <tns:bug>
+      <tns:opacity></tns:opacity>
+      <tns:position></tns:position>
+      <tns:channel></tns:channel>
+    </tns:bug>
+    <tns:outputFileBasename></tns:outputFileBasename>
+    <tns:outputFolder></tns:outputFolder>
+    <tns:inputFile></tns:inputFile>
+    <tns:description></tns:description>
+    <tns:audioType></tns:audioType>
+    <tns:resolution></tns:resolution>
+    <tns:purpose></tns:purpose>
+  </wfAdapter:tcParams>
+  <wfAdapter:title></wfAdapter:title>
+</Auto_QC:EventStartMessageRequest></bpel:literal>
         </bpel:from>
         <bpel:to>$auto_QCEventStartMessageRequest.body</bpel:to>
       </bpel:copy>
@@ -122,25 +151,25 @@
               <bpel:from>
                 <bpel:literal>
 <tns:TCJob>
-  <tns:purpose></tns:purpose>
-  <tns:resolution></tns:resolution>
-  <tns:audioType></tns:audioType>
-  <tns:description></tns:description>
-  <tns:inputFile></tns:inputFile>
-  <tns:outputFolder></tns:outputFolder>
-  <tns:outputFileBasename></tns:outputFileBasename>
-  <tns:bug>
-    <tns:channel></tns:channel>
-    <tns:position></tns:position>
-    <tns:opacity></tns:opacity>
-  </tns:bug>
-  <tns:timecode>
-    <tns:location></tns:location>
-    <tns:size></tns:size>
-    <tns:background></tns:background>
-    <tns:foreground></tns:foreground>
-  </tns:timecode>
   <tns:priority></tns:priority>
+  <tns:timecode>
+    <tns:foreground></tns:foreground>
+    <tns:background></tns:background>
+    <tns:size></tns:size>
+    <tns:location></tns:location>
+  </tns:timecode>
+  <tns:bug>
+    <tns:opacity></tns:opacity>
+    <tns:position></tns:position>
+    <tns:channel></tns:channel>
+  </tns:bug>
+  <tns:outputFileBasename></tns:outputFileBasename>
+  <tns:outputFolder></tns:outputFolder>
+  <tns:inputFile></tns:inputFile>
+  <tns:description></tns:description>
+  <tns:audioType></tns:audioType>
+  <tns:resolution></tns:resolution>
+  <tns:purpose></tns:purpose>
 </tns:TCJob></bpel:literal>
               </bpel:from>
               <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
@@ -157,6 +186,7 @@
                 <bpel:literal>
 <wfAdapter:tcPassedNotification>
   <wfAdapter:assetID></wfAdapter:assetID>
+  <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcPassedNotification></bpel:literal>
@@ -168,6 +198,7 @@
                 <bpel:literal>
 <wfAdapter:tcFailureNotification>
   <wfAdapter:assetID></wfAdapter:assetID>
+  <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
 </wfAdapter:tcFailureNotification></bpel:literal>
@@ -242,6 +273,10 @@
                   <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
                   <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:title</bpel:to>
                 </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>true()</bpel:from>
+                  <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
+                </bpel:copy>
               </bpel:assign>
               <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"></bpel:invoke>
             </bpel:sequence>
@@ -266,6 +301,10 @@
                   <bpel:copy>
                     <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
                     <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                    <bpel:from>true()</bpel:from>
+                    <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
                   </bpel:copy>
                 </bpel:assign>
                 <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="tcFailure:restInterface" operation="tcFailure" inputVariable="tcFailureTcFailureRequestMsg" outputVariable="tcFailureTcFailureResponseMsg" bpmn:label="Send Failure Message" name="Send_Failure_Message-1" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ"></bpel:invoke>
@@ -301,7 +340,7 @@
           <bpel:else>
             <bpel:sequence>
               <bpel:empty bpmn:label="QC Required" name="QC_Required" bpmn:id="_clWM8GuTEeK7FdvgH5F2kQ"/>
-              <bpel:invoke partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" operation="EventStartMessage" inputVariable="auto_QCEventStartMessageRequest" bpmn:label="QC" name="QC" bpmn:id="_0ciuwGuXEeK7FdvgH5F2kQ"></bpel:invoke>
+              <bpel:invoke partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" operation="EventStartMessage" inputVariable="auto_QCEventStartMessageRequest" outputVariable="auto_QCEventStartMessageResponse" bpmn:label="QC" name="QC" bpmn:id="_0ciuwGuXEeK7FdvgH5F2kQ"></bpel:invoke>
             </bpel:sequence>
           </bpel:else>
         </bpel:if>
@@ -327,6 +366,10 @@
             <bpel:copy>
               <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
               <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
+            </bpel:copy>
+            <bpel:copy>
+              <bpel:from>true()</bpel:from>
+              <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
             </bpel:copy>
           </bpel:assign>
           <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcTotalFailure:restInterface" operation="tcTotalFailure" inputVariable="tcTotalFailureTcTotalFailureRequestMsg" outputVariable="tcTotalFailureTcTotalFailureResponseMsg" bpmn:label="Transcode Failed" name="Transcode_Failed-1" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ"></bpel:invoke><bpel:throw faultName="this:Error_End_Event"/>

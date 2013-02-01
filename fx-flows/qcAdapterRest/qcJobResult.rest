@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result" ID="_rrEh8GxvEeK85v-SsU5zfw">
+  <rest:operation verb="GET" name="getJobResult" ID="_rrEh8mxvEeK85v-SsU5zfw">
+    <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcJobResult" name="response" headerDirection="request" contentType="application/xml" ID="_rrEh82xvEeK85v-SsU5zfw"/>
+  </rest:operation>
+  <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_rrEh8WxvEeK85v-SsU5zfw"/>
+</rest:descriptor>

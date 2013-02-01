@@ -7,6 +7,19 @@ public abstract class TCNotification
 	private String assetID;
 
 	private long taskID;
+	
+	private boolean isForTXDelivery;
+
+	public boolean isForTXDelivery()
+	{
+		return isForTXDelivery;
+	}
+
+	@XmlElement(required = true)
+	public void setForTXDelivery(boolean isForTXDelivery)
+	{
+		this.isForTXDelivery = isForTXDelivery;
+	}
 
 	public long getTaskID()
 	{

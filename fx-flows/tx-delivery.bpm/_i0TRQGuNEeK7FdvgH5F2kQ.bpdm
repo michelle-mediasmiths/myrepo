@@ -79,6 +79,7 @@
                     <bpel:literal bpdm:linkedMessageType="Auto_QC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse" bpdm:id="_Y6VuNWxsEeKv3LhB37uiLw" bpdm:messageIds="inc:_Y6L9MGxsEeKv3LhB37uiLw"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_lpG7MGuNEeK7FdvgH5F2kQ">
@@ -206,6 +207,16 @@
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
                                         <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:title/text()</bpel:to><mapper:mapperLink><mapper:vertice id="13599615" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:title/text()" targetedBy="26384785-arg0"></mapper:vertice><mapper:vertice id="26384785" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:title/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
+                                    <bpel:copy>
+                                        <bpel:from>true()</bpel:from>
+                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="26313837" targetPath="$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="25551731-arg0"></mapper:vertice>
+  <mapper:vertice id="25551731" dimension="78x24" location="485,69">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                    </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_dO-OMGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
                                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcPassedTcPassedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_output" bpdm:binding="tcPassed:restBinding" bpdm:ID="_djeekGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -234,6 +245,16 @@
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
                                         <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:assetID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="29814079" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:assetID/text()" targetedBy="14646538-arg0"></mapper:vertice><mapper:vertice id="14646538" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID/text()"></mapper:vertice></mapper:mapperLink>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                        <bpel:from>true()</bpel:from>
+                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="29842993" targetPath="$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="2906593-arg0"></mapper:vertice>
+  <mapper:vertice id="2906593" dimension="78x24" location="523,85">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_d5RvcGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -279,7 +300,8 @@
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="QC Required" bpdm:ID="_clWM8GuTEeK7FdvgH5F2kQ"></bpdm:messagingtask>
                             <bpdm:messagingtask operation="EventStartMessage" partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" isMyRole="false" enableSharing="false" bpdm:label="QC" bpdm:ID="_0ciuwGuXEeK7FdvgH5F2kQ">
-                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="auto_QCEventStartMessageRequest" bpdm:msgVarScopeId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageRequest" bpdm:ID="__PfWEGxqEeKv3LhB37uiLw"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="auto_QCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageRequest" bpdm:ID="__PfWEGxqEeKv3LhB37uiLw"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="auto_QCEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageResponse" bpdm:ID="_Y6L9MGxsEeKv3LhB37uiLw"></bpdm:linkset>
                             </bpdm:messagingtask>
                         </bpel:sequence>
                     </bpdm:gateway>
@@ -307,6 +329,16 @@
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
                                 <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:assetID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12587565" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:assetID/text()" targetedBy="11928875-arg0"></mapper:vertice><mapper:vertice id="11928875" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID/text()"></mapper:vertice></mapper:mapperLink>
+                            </bpel:copy>
+                            <bpel:copy>
+                                <bpel:from>true()</bpel:from>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="9141274" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery/text()" targetedBy="15741566-arg0"></mapper:vertice>
+  <mapper:vertice id="15741566" dimension="78x24" location="480,84">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_z27SgGuSEeK7FdvgH5F2kQ"></bpdm:linkset>

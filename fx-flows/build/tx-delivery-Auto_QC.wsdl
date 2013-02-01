@@ -1,16 +1,22 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
     <wsdl:types>
         <xs:schema elementFormDefault="qualified" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
-            <xs:element name="EventStartMessageRequest" type="xs:string"/>
+            <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter" schemaLocation="wfAdapter/wfAdapter.xsd"/>
+            <xs:element name="EventStartMessageRequest" type="tns:invokeIntalioTXFlow"/>
+            <xs:element name="EventStartMessageResponse" type="xs:string"/>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="EventStartMessageRequest">
         <wsdl:part name="body" element="this:EventStartMessageRequest"/>
     </wsdl:message>
+    <wsdl:message name="EventStartMessageResponse">
+        <wsdl:part name="body" element="this:EventStartMessageResponse"/>
+    </wsdl:message>
     <wsdl:portType name="ForTranscode">
         <wsdl:operation name="EventStartMessage">
             <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+            <wsdl:output message="this:EventStartMessageResponse" name="EventStartMessageResponse"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="CanonicBindingForTranscode" type="this:ForTranscode">
@@ -20,6 +26,9 @@
             <wsdl:input name="EventStartMessage">
                 <soap:body use="literal"/>
             </wsdl:input>
+            <wsdl:output name="EventStartMessageResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="CanonicServiceForTranscode">

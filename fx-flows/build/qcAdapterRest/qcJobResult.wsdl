@@ -1,0 +1,41 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:adapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/qc/adapter">
+      <xs:include schemaLocation="qcAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="jobname_urlType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getJobResult_input">
+    <wsdl:part name="jobname" element="qcJobResult:jobname_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="getJobResult_output">
+    <wsdl:part name="response" element="adapter:qcJobResult"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="getJobResult">
+      <wsdl:input message="qcJobResult:getJobResult_input"/>
+      <wsdl:output message="qcJobResult:getJobResult_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="qcJobResult:restInterface">
+    <wsdl:operation name="getJobResult">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="application/xml" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="qcJobResult:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

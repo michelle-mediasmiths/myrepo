@@ -1,8 +1,29 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<dd:process xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Auto_QC" fileName="tx-delivery-Auto_QC.bpel">
+<dd:process xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Auto_QC" fileName="tx-delivery-Auto_QC.bpel">
   <dd:property name="PATH">tx-delivery</dd:property>
   <dd:property name="SVG">tx-delivery.svg</dd:property>
   <dd:provide partnerLink="auto_QcAndTranscodePlkVar">
     <dd:service name="this:CanonicServiceForTranscode" port="canonicPort"></dd:service>
   </dd:provide>
+  <dd:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk0Var">
+    <dd:service name="qcFinished:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk1Var">
+    <dd:service name="qcResult:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk0Var">
+    <dd:service name="autoQcError:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk1Var">
+    <dd:service name="autoQcFailed:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk3Var">
+    <dd:service name="getProfileForQC:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk2Var">
+    <dd:service name="autoQcPassed:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk2Var">
+    <dd:service name="qcStart:restService" port="httpPort"/>
+  </dd:invoke>
 </dd:process>
