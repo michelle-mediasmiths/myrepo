@@ -94,15 +94,20 @@ public interface ReportUI
 	@Produces("text/html")
 	public String getFileTapeIngestUI();
 	
-	@GET
-	@Path("/file_tape_ingest_csv")
-	@Produces("text/html")
-	public void getFileTapeIngestCSV();
+//	@GET
+//	@Path("/file_tape_ingest_csv")
+//	@Produces("text/html")
+//	public void getFileTapeIngestCSV();
 	
 	@GET
 	@Path("/file_tape_ingest_pdf")
 	@Produces("text/html")
 	public void getFileTapeIngestPDF();
+	
+	@GET
+	@Path("/manual_qa_csv")
+	@Produces("text/html")
+	public void getManualQACSV();
 	
 	@GET
 	@Path("/auto_qc_ui")

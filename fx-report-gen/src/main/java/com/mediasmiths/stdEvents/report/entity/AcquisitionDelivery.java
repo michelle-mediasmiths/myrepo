@@ -2,26 +2,90 @@ package com.mediasmiths.stdEvents.report.entity;
 
 public class AcquisitionDelivery
 {
-	String status;
-	String titleID;
+	String dateRange;
+	String materialID;
+	String channels;
+	String aggregatorID;
+	String tape;
+	String file;
 	String format;
+	String fileSize;
 	String duration;
 	
-	public String getStatus()
+	public AcquisitionDelivery()
 	{
-		return status;
 	}
-	public void setStatus(String status)
+	
+	public AcquisitionDelivery(String materialID, String channels)
 	{
-		this.status = status;
+		super();
+		this.materialID = materialID;
+		this.channels = channels;
 	}
-	public String getTitleID()
+
+	public AcquisitionDelivery(String materialID, String channels, String aggregatorID, String tape, String file,
+			String format,String fileSize,String duration, String dateRange)
 	{
-		return titleID;
+		super();
+		this.dateRange = dateRange;
+		this.materialID = materialID;
+		this.channels = channels;
+		this.aggregatorID = aggregatorID;
+		this.tape = tape;
+		this.file = file;
+		this.format = format;
+		this.fileSize = fileSize;
+		this.duration = duration;
 	}
-	public void setTitleID(String titleID)
+
+
+	public String getDateRange()
 	{
-		this.titleID = titleID;
+		return dateRange;
+	}
+	public void setDateRange(String dateRange)
+	{
+		this.dateRange = dateRange;
+	}
+	public String getMaterialID()
+	{
+		return materialID;
+	}
+	public void setMaterialID(String materialID)
+	{
+		this.materialID = materialID;
+	}
+	public String getChannels()
+	{
+		return channels;
+	}
+	public void setChannels(String channels)
+	{
+		this.channels = channels;
+	}
+	public String getAggregatorID()
+	{
+		return aggregatorID;
+	}
+	public void setAggregatorID(String aggregatorID)
+	{
+		this.aggregatorID = aggregatorID;
+	}
+	public String getTape()
+	{
+		return tape;
+	}
+	public void setTape(String tape)
+	{
+		this.tape = tape;
+	}
+	public String getFile()
+	{
+		return file;
+	}
+	public void setFile(String file)
+	{
+		this.file = file;
 	}
 	public String getFormat()
 	{
@@ -31,6 +95,14 @@ public class AcquisitionDelivery
 	{
 		this.format = format;
 	}
+	public String getFileSize()
+	{
+		return fileSize;
+	}
+	public void setFileSize(String fileSize)
+	{
+		this.fileSize = fileSize;
+	}
 	public String getDuration()
 	{
 		return duration;
@@ -39,5 +111,7 @@ public class AcquisitionDelivery
 	{
 		this.duration = duration;
 	}
+	
+	
 	
 }

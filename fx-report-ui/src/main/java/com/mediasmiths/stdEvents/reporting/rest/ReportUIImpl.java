@@ -22,7 +22,12 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
+import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
+import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
+import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
+import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
+import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -40,6 +45,16 @@ public class ReportUIImpl implements ReportUI
 	
 	@Inject
 	private EventAPI eventApi;
+	@Inject
+	private OrderStatusRpt orderStatus;
+	@Inject
+	private AcquisitionRpt acquisition;
+	@Inject
+	private ManualQARpt manualQa;
+	@Inject
+	private AutoQCRpt autoQc;
+	@Inject
+	private PurgeContentRpt purgeContent;
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
@@ -190,7 +205,7 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> outstanding = queryApi.getOutstanding();
 		List<EventEntity> overdue = queryApi.getOverdue();
  		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
-		csvApi.writeOrderStatus(delivered, outstanding, overdue, unmatched);
+		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched);
 	}
 	
 	@Transactional
@@ -230,7 +245,7 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> outstanding = queryApi.getOutstanding();
 		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
 		
-		csvApi.writeLateOrderStatus(outstanding, unmatched);
+		//csvApi.writeLateOrderStatus(outstanding, unmatched);
 		
 		String outstandingQ = Integer.toString(queryApi.getTotal(queryApi.getOutstanding()));	
 		String unmatchedQ = Integer.toString(queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable")));
@@ -275,10 +290,10 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAquisitionReportCSV()
 	{
-		List <EventEntity> tape = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape");
-		List <EventEntity> file = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File");
-		
-		csvApi.writeAcquisitionDelivery(file, tape);
+		//List <EventEntity> tape = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape");
+		//List <EventEntity> file = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File");
+		List<EventEntity> materials = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
+		acquisition.writeAcquisitionDelivery(materials);
 		
 		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
 		int perByFile = 0;
@@ -322,15 +337,15 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 	
-	@Transactional
-	public void getFileTapeIngestCSV()
-	{
-		List<EventEntity> completed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable");
-		List<EventEntity> failed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "failed");
-		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
-
-		csvApi.writeFileTapeIngest(completed, failed, unmatched);
-	}
+//	@Transactional
+//	public void getFileTapeIngestCSV()
+//	{
+//		List<EventEntity> completed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable");
+//		List<EventEntity> failed = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "failed");
+//		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
+//
+//		csvApi.writeFileTapeIngest(completed, failed, unmatched);
+//	}
 	
 	@Transactional
 	public void getFileTapeIngestPDF()
@@ -340,6 +355,21 @@ public class ReportUIImpl implements ReportUI
 		rptList.addAll(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
 		
 		jasperApi.createFileTapeIngest(rptList);
+	}
+	
+	@Transactional
+	public void getManualQACSV()
+	{
+		List<EventEntity> qc = queryApi.getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> manualQA = new ArrayList<EventEntity>();
+		for (EventEntity event : qc) 
+		{
+			String payload = event.getPayload();
+			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
+			if (qcStatus.equals("QCFail(Overridden)"))
+				manualQA.add(event);
+		}
+		manualQa.writeManualQA(manualQA);
 	}
 
 	@Transactional
@@ -358,7 +388,7 @@ public class ReportUIImpl implements ReportUI
 	public void getAutoQCCSV()
 	{
 		List<EventEntity> passed = queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed");
-		csvApi.writeAutoQc(passed);
+		autoQc.writeAutoQc(passed);
 	}
 	
 	@Transactional
@@ -386,8 +416,16 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> purged = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle");
-		csvApi.writePurgeTitles(purged);
+		List<EventEntity> title = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle");
+		List<EventEntity> material = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "DeleteMaterial");
+		List<EventEntity> pack = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "DeletePackage");
+		List<EventEntity> manual = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "MaunalPurge");
+		List<EventEntity> purged = new ArrayList<EventEntity>();
+		purged.addAll(title);
+		purged.addAll(material);
+		purged.addAll(pack);
+		purged.addAll(manual);
+		purgeContent.writePurgeTitles(purged);
 	}
 
 	@Transactional
@@ -413,6 +451,8 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
+
+
 
 
 }

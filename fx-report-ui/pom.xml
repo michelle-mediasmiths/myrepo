@@ -44,7 +44,7 @@
    		<artifactId>fx-event-reports</artifactId>
    		<version>3.0-SNAPSHOT</version>
    </dependency>
-   <dependency>
+    <dependency>
    		<groupId>com.mediasmiths.foxtel</groupId>
    		<artifactId>fx-report-gen</artifactId>
    		<version>3.0-SNAPSHOT</version>

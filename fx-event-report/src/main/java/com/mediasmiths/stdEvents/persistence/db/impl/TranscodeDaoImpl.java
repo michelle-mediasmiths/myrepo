@@ -26,7 +26,7 @@ public class TranscodeDaoImpl extends HibernateDao<Transcode, Long> implements E
 		logger.info("Setting tc passed notification...");
 		Transcode notification = new Transcode();
 		String noteStr = event.getPayload();
-		logger.info(noteStr);
+		logger.trace(noteStr);
 		if (noteStr.contains("PackageID"))
 			notification.setPackageID(noteStr.substring(noteStr.indexOf("PackageID")+10, noteStr.indexOf("</PackageID")));
 		
