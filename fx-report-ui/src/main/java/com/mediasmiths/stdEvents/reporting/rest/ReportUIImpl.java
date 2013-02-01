@@ -23,8 +23,11 @@ import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
+import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
+import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
+import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -46,6 +49,12 @@ public class ReportUIImpl implements ReportUI
 	private OrderStatusRpt orderStatus;
 	@Inject
 	private AcquisitionRpt acquisition;
+	@Inject
+	private ManualQARpt manualQa;
+	@Inject
+	private AutoQCRpt autoQc;
+	@Inject
+	private PurgeContentRpt purgeContent;
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
@@ -360,7 +369,7 @@ public class ReportUIImpl implements ReportUI
 			if (qcStatus.equals("QCFail(Overridden)"))
 				manualQA.add(event);
 		}
-		csvApi.writeManualQA(manualQA);
+		manualQa.writeManualQA(manualQA);
 	}
 
 	@Transactional
@@ -379,7 +388,7 @@ public class ReportUIImpl implements ReportUI
 	public void getAutoQCCSV()
 	{
 		List<EventEntity> passed = queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed");
-		csvApi.writeAutoQc(passed);
+		autoQc.writeAutoQc(passed);
 	}
 	
 	@Transactional
@@ -416,7 +425,7 @@ public class ReportUIImpl implements ReportUI
 		purged.addAll(material);
 		purged.addAll(pack);
 		purged.addAll(manual);
-		csvApi.writePurgeTitles(purged);
+		purgeContent.writePurgeTitles(purged);
 	}
 
 	@Transactional

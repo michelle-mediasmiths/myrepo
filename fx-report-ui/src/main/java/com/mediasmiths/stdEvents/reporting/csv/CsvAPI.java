@@ -13,9 +13,9 @@ public interface CsvAPI
 	
 	//public void writeFileTapeIngest(List<EventEntity> completed, List<EventEntity> failed, List<EventEntity> unmatched);
 	
-	public void writeManualQA(List<EventEntity> events);
+	//public void writeManualQA(List<EventEntity> events);
 	
-	public void writeAutoQc(List<EventEntity> passed);
+	//public void writeAutoQc(List<EventEntity> passed);
 	
-	public void writePurgeTitles(List<EventEntity> purged);
+	//public void writePurgeTitles(List<EventEntity> purged);
 }

@@ -49,83 +49,9 @@ public class CsvImpl implements CsvAPI
 	
 	
 	
-	public void writeManualQA(List<EventEntity> events)
-	{
-		List<ManualQA> manualQAs = getManualQAList(events);
-		
-		ICsvBeanWriter beanWriter = null;
-		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "manualQAcsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "title", "assetID", "operator", "aggregatorID", "qaStatus", "duration"};
-			final CellProcessor[] processors = getManualQAProcessor();
-			beanWriter.writeHeader(header);
-			
-			ManualQA failed = new ManualQA("Total failed", Integer.toString(queryApi.getLength(queryApi.getTotalFailedQA())));
-			manualQAs.add(failed);
-			
-			for (ManualQA manualQA : manualQAs) 
-			{
-				beanWriter.write(manualQA, header, processors);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		finally {
-			if (beanWriter != null)
-			{
-				try
-				{
-					beanWriter.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	
-	public void writeAutoQc(List<EventEntity> passed)
-	{
-		List<AutoQC> autoQcs = getQCList(passed);
-		
-		ICsvBeanWriter beanWriter = null;
-		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "autoQcCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "content", "operator", "taskStatus", "qcStatus", "taskStart", "manualOverride", "failureParameter", "titleLength"};
-			final CellProcessor[] processors = getAutoQCProcessor();
-			beanWriter.writeHeader(header);
-			
-			AutoQC totalPass = new AutoQC("Total OC'd", Integer.toString(queryApi.getLength(queryApi.getTotalQCd())));
-			AutoQC failed = new AutoQC("Failed QC", Integer.toString(queryApi.getLength(queryApi.getFailedQc())));
-			AutoQC overridden = new AutoQC("Operator Overridden", Integer.toString(queryApi.getLength(queryApi.getOperatorOverridden())));
-			autoQcs.add(totalPass);
-			autoQcs.add(failed);
-			autoQcs.add(overridden);
-			
-			for (AutoQC autoQc : autoQcs)
-			{
-				beanWriter.write(autoQc, header, processors);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		finally {
-			if (beanWriter != null)
-			{
-				try
-				{
-					beanWriter.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+	
+	
 	
 //	public void writeFileTapeIngest(List<EventEntity> completed, List<EventEntity> failed, List<EventEntity> unmatched)
 //	{
@@ -142,246 +68,23 @@ public class CsvImpl implements CsvAPI
 //		createOrderStatusCsv(titles, "fileTapeIngestCsv");
 //	}
 
-	public void writePurgeTitles(List<EventEntity> events)
-	{
-		List<Purge> purged = getPurgeList(events);
-		logger.info("Events: " + events);
-		logger.info("Purged: " + purged);
-		ICsvBeanWriter beanWriter = null;
-		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "purgedContentCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "channel", "mediaID", "purgeStatus", "protectedStatus", "extendedStatus", "size"};
-			final CellProcessor[] processors = getPurgeProcessor();
-			beanWriter.writeHeader(header);
-			
-			Purge expiring = new Purge("Expiring", Integer.toString(queryApi.getLength(queryApi.getExpiring())));
-			Purge purgeProtected = new Purge("Total Protected", Integer.toString(queryApi.getLength(queryApi.getPurgeProtected())));
-			Purge purgePosponed = new Purge("Total Postponed", Integer.toString(queryApi.getLength(queryApi.getPurgePosponed())));
-			Purge total = new Purge("Total Purged", Integer.toString(queryApi.getLength(queryApi.getTotalPurged())));
-			purged.add(expiring);
-			purged.add(purgeProtected);
-			purged.add(purgePosponed);
-			purged.add(total);
-			
-			for (Purge purge : purged)
-			{
-				beanWriter.write(purge, header, processors);
-			}
-		}
-		catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-		finally {
-			if (beanWriter != null)
-			{
-				try
-				{
-					beanWriter.close();
-				}
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
 	
 	
 	
-	public List<ManualQA> getManualQAList(List<EventEntity> events)
-	{
-		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
-		for (EventEntity event : events)
-		{
-			ManualQA manualQA = new ManualQA();
-			String payload = event.getPayload();
-			logger.info(payload);
-			if (payload.contains("AssetID"))
-				manualQA.setAssetID(payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID")));
-			if (payload.contains("Title"))
-				manualQA.setTitle(payload.substring(payload.indexOf("Title")+6, payload.indexOf("</Title")));
-			
-			List<EventEntity> aggregatorEvents = queryApi.getByEventName("AddOrUpdateMaterial");
-			for (EventEntity aggregatorEvent : aggregatorEvents)
-			{
-				String str = aggregatorEvent.getPayload();
-				String aggregatorTitle = str.substring(str.indexOf("materialID")+12, str.indexOf('"', (str.indexOf("materialID")+12)));
-				if (payload.contains("AssetID")) {
-					String curTitle =  payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
-					if (curTitle.equals(aggregatorTitle))
-						manualQA.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
-				}
-			}
-			
-			if (payload.contains("QCStatus")) 
-				manualQA.setQaStatus(payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus")));
-			
-			List<EventEntity> lengthEvents = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
-			for (EventEntity lengthEvent : lengthEvents)
-			{
-				String str = lengthEvent.getPayload();
-				String lengthTitle = str.substring(str.indexOf("materialId") +11, str.indexOf("</materialId"));
-				logger.info("Length: " + lengthTitle);
-				if (payload.contains("AssetID")) {
-					String curTitle = payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
-					logger.info("Current: " + curTitle);
-					if (curTitle.equals(lengthTitle)) {
-						if (str.contains("Duration"))
-							manualQA.setDuration(str.substring(str.indexOf("Duration") +9, str.indexOf("</Duration")));
-					}
-				}
-			}
-			
-			manualQAList.add(manualQA);
-		}
-		return manualQAList;
-	}
-	public List<AutoQC> getQCList(List<EventEntity> events)
-	{
-		List<AutoQC> titleList = new ArrayList<AutoQC>();
-		for (EventEntity event : events)
-		{
-			AutoQC autoQc = new AutoQC();
-			String payload = event.getPayload();
-			if (payload.contains("AssetID"))
-				autoQc.setMaterialID(payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID")));
-			if (payload.contains("Title"))
-				autoQc.setTitle(payload.substring(payload.indexOf("Title")+6, payload.indexOf("</Title")));
-			if (payload.contains("QCStatus")) {
-				String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
-				autoQc.setQcStatus(qcStatus);
-				
-				if (qcStatus.equals("QCPass"))
-					autoQc.setTaskStatus("Completed");
-				else if (qcStatus.equals("QCNotDone"))
-					autoQc.setTaskStatus("Processing");
-				else if (qcStatus.equals("QCFail"))
-					autoQc.setTaskStatus("Completed/ Failed");
-				else if (qcStatus.equals("QCFail(Overridden)"))
-					autoQc.setTaskStatus("Completed/Failed");
-				
-			}
-			
-			autoQc.setTaskStart(Long.toString(event.getTime()));
-			
-			List<EventEntity> channelEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-			for (EventEntity channelEvent : channelEvents)
-			{
-				String str = channelEvent.getPayload();
-				String channelTitle = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
-				if (payload.contains("AssetID")) {
-					String curTitle =  payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
-					if (curTitle.equals(channelTitle)) {
-						if (str.contains("channelName"))
-							autoQc.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
-					}
-				}
-			}
-			
-			List<EventEntity> lengthEvents = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
-			for (EventEntity lengthEvent : lengthEvents)
-			{
-				String str = lengthEvent.getPayload();
-				String lengthTitle = str.substring(str.indexOf("materialId") +11, str.indexOf("</materialId"));
-				if (payload.contains("AssetID")) {
-					String curTitle = payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
-					if (curTitle.equals(lengthTitle)) {
-						if (payload.contains("Duration"))
-							autoQc.setTitleLength(str.substring(str.indexOf("Duration") +9, str.indexOf("</Duration")));
-					}
-				}
-				titleList.add(autoQc);
-			}
-		}	
-		return titleList;
-	}
 	
-	public List<Purge> getPurgeList(List<EventEntity> events)
-	{
-		List<Purge> purgeList = new ArrayList<Purge>();
-		for (EventEntity event : events)
-		{
-			String payload = event.getPayload();
-			Purge purge = new Purge();
-			if (payload.contains("titleID"))
-				purge.setMediaID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
-			if (payload.contains("PurgeStatus"))
-				purge.setPurgeStatus(payload.substring(payload.indexOf("PurgeStatus")+12, payload.indexOf("</PurgeStatus")));
-			if (payload.contains("ProtectedStatus"))
-				purge.setProtectedStatus(payload.substring(payload.indexOf("ProtectedStatus")+16, payload.indexOf("</ProtectedStatus")));
-			if (payload.contains("ExtendedStatus"))
-				purge.setExtendedStatus(payload.substring(payload.indexOf("ExtendedStatus")+15, payload.indexOf("</ExtendedStatus")));
-			purgeList.add(purge);
-			
-			List<EventEntity> channelEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-			for (EventEntity channelEvent : channelEvents)
-			{
-				String str = channelEvent.getPayload();
-				String channelTitle = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
-				if (payload.contains("titleID")) {
-					String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-					if (curTitle.equals(channelTitle)) {
-						if (str.contains("channelName"))
-							purge.setChannel(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
-					}
-				}
-			}
-			purgeList.add(purge);
-		}
-		
-		return purgeList;
-	}
+	
+	
+	
+	
 	
 	
 
 
 	
 	
-	public CellProcessor[] getManualQAProcessor()
-	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
-		return processors;
-	}
+
 	
-	public CellProcessor[] getAutoQCProcessor()
-	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(), 
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
-		return processors;
-	}
+
 	
-	public CellProcessor[] getPurgeProcessor()
-	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
-		return processors;
-	}
+
 }
