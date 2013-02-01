@@ -42,18 +42,20 @@ public class AcquisitionRpt
 			beanWriter.writeHeader(header);
 			
 			AcquisitionDelivery noFile = new AcquisitionDelivery("No Delivered By File", Integer.toString(queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File"))));
-			AcquisitionDelivery noTape = new AcquisitionDelivery("No Delivered By Tape", Integer.toString(queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File"))));
+			AcquisitionDelivery noTape = new AcquisitionDelivery("No Delivered By Tape", Integer.toString(queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))));
 			titles.add(noFile);
 			titles.add(noTape);
 			
 			int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-			int perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
-			int perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
-			perByTape = perByTape * 100;
-			perByFile = perByFile * 100;
+			logger.info("total: " + total);
+			double perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"));
+			double perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File"));
+			perByTape = (perByTape/total)*100;
+			perByFile = (perByFile/total)*100;
+			logger.info("Tape: " + perByTape + "File: " + perByFile);
 			
-			AcquisitionDelivery perFile = new AcquisitionDelivery("% By File", Integer.toString(perByFile));
-			AcquisitionDelivery perTape = new AcquisitionDelivery("% By Tape", Integer.toString(perByTape));
+			AcquisitionDelivery perFile = new AcquisitionDelivery("% By File", Double.toString(perByFile));
+			AcquisitionDelivery perTape = new AcquisitionDelivery("% By Tape", Double.toString(perByTape));
 			titles.add(perFile);
 			titles.add(perTape);
 			
