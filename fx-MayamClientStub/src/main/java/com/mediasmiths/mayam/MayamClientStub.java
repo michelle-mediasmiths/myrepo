@@ -955,4 +955,11 @@ public class MayamClientStub implements MayamClient
 		
 	}
 
+	@Override
+	public long createWFEErrorTaskForUnmatched(String aggregator,
+			String fileName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
