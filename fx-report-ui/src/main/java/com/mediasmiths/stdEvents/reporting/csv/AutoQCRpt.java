@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,9 +31,9 @@ public class AutoQCRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeAutoQc(List<EventEntity> passed)
+	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate)
 	{
-		List<AutoQC> autoQcs = getQCList(passed);
+		List<AutoQC> autoQcs = getQCList(passed, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try {
@@ -72,12 +73,13 @@ public class AutoQCRpt
 		}
 	}
 	
-	public List<AutoQC> getQCList(List<EventEntity> events)
+	public List<AutoQC> getQCList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<AutoQC> titleList = new ArrayList<AutoQC>();
 		for (EventEntity event : events)
 		{
 			AutoQC autoQc = new AutoQC();
+			autoQc.setDateRange(startDate.toString() + " - " + endDate.toString());
 			String payload = event.getPayload();
 			if (payload.contains("AssetID"))
 				autoQc.setMaterialID(payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID")));

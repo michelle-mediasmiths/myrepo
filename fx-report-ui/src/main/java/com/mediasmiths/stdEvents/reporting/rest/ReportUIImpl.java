@@ -24,10 +24,13 @@ import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
+import com.mediasmiths.stdEvents.reporting.csv.ComplianceRpt;
 import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
+import com.mediasmiths.stdEvents.reporting.csv.ExportRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
 import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
+import com.mediasmiths.stdEvents.reporting.csv.TaskListRpt;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -54,7 +57,13 @@ public class ReportUIImpl implements ReportUI
 	@Inject
 	private AutoQCRpt autoQc;
 	@Inject
+	private TaskListRpt taskList;
+	@Inject
 	private PurgeContentRpt purgeContent;
+	@Inject
+	private ComplianceRpt compliance;
+	@Inject
+	private ExportRpt export;
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
@@ -103,75 +112,66 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 	
-//	@Transactional
-//	public void saveStartDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
-//	{
-//		startDay = Integer.parseInt(date);
-//		startMonth = Integer.parseInt(month);
-//		startYear = Integer.parseInt(year);
-//		
-//		Calendar startCal = Calendar.getInstance();
+	@Transactional
+	public void saveStartDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
+	{
+		startDay = Integer.parseInt(date);
+		startMonth = Integer.parseInt(month);
+		startYear = Integer.parseInt(year);
+		
+		Calendar startCal = Calendar.getInstance();
 //		startCal.set(startCal.DATE, startDay);
 //		startCal.set(startCal.MONTH, startMonth);
 //		startCal.set(startCal.YEAR, startYear);
-//		
-//		startLong = startCal.getTimeInMillis();
-//		
-//		startDate = new Date(startLong);
-//				
-//		logger.info("Start date: " + startCal + "Start long: " + startLong);
-//	}
-//	
-//	@Transactional
-//	public void saveEndDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
-//	{
-//		endDay = Integer.parseInt(date);
-//		endMonth = Integer.parseInt(month);
-//		endYear = Integer.parseInt(year);
-//		
-//		Calendar endCal = Calendar.getInstance();
-//		endCal.set(endCal.DATE, endDay);
-//		endCal.set(endCal.MONTH, endMonth);
-//		endCal.set(endCal.YEAR, endYear);
-//		
-//		endLong = endCal.getTimeInMillis();
-//		
-//		endDate = new Date(endLong/1000);
-//
-//		logger.info("Start date: " + startCal + "End date: " + endCal);
-//	}
-//	
-//	public Date longToCal(Long longDate)
-//	{
-//		Calendar cal = Calendar.getInstance();
-//		cal.setTimeInMillis(longDate);
-//		Date date = cal.getTime();
-//		return date;
-//	}
-//	
-//	public List<EventEntity> getWithinRange (List<EventEntity> events)
-//	{
-//		List<EventEntity> withinRange = new ArrayList<EventEntity>();
-//		
-//		for (EventEntity event : events)
-//		{
-//			Long eventTime = event.getTime();
-//			logger.info("Event time long: " + eventTime);
-//			Calendar cal = Calendar.getInstance();
-//			cal.setTimeInMillis(eventTime);
-//			logger.info("Event time cal: " + cal);
-//
-//			
-//			if ((cal.after(startCal) && (cal.before(endCal))))
-//			{
-//				logger.info("Event in date range");				
-//				withinRange.add(event);
-//			}
-//			else
-//				logger.info("Out of range");
-//		}
-//		return withinRange;
-//	}
+//		startCal.set(startCal.HOUR_OF_DAY, 00);
+//		startCal.set(startCal.MINUTE, 00);
+		startCal.set(startCal.SECOND, 00);
+		startCal.set(startYear, startMonth, startDay, 00, 00);
+		
+		startLong = startCal.getTimeInMillis();
+		
+		startDate = new Date(startLong);
+				
+		logger.info("Start date: " + startCal + " Start long: " + startLong);
+	}
+	
+	@Transactional
+	public void saveEndDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
+	{
+		endDay = Integer.parseInt(date);
+		endMonth = Integer.parseInt(month);
+		endYear = Integer.parseInt(year);
+		
+		Calendar endCal = Calendar.getInstance();
+		endCal.set(endYear, endMonth, endDay, 00, 00);
+		endCal.set(endCal.SECOND, 00);
+		endLong = endCal.getTimeInMillis();
+		
+		endDate = new Date(endLong);
+
+		logger.info("End date: " + endCal + " End long: " + endLong);
+	}
+	
+	public boolean checkDate(Long eventTime)
+	{
+		boolean within = false;
+		int startComp = eventTime.compareTo(startLong);
+		int endComp = eventTime.compareTo(endLong);
+		logger.info("Start compare: " + startComp + " End compare: " + endComp);
+		if ((startComp > 0) && (endComp < 0))
+		{
+			within = true;
+		}
+		return within;
+	}
+	
+	public Date longToCal(Long longDate)
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(longDate);
+		Date date = cal.getTime();
+		return date;
+	}
 	
 	@Transactional
 	public String getById(@QueryParam("id") Long id)
@@ -293,7 +293,14 @@ public class ReportUIImpl implements ReportUI
 		//List <EventEntity> tape = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape");
 		//List <EventEntity> file = queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File");
 		List<EventEntity> materials = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
-		acquisition.writeAcquisitionDelivery(materials);
+		List<EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : materials) {
+			boolean within = checkDate(event.getTime());
+			logger.info("Start long: " + startLong + " End long: " + endLong + " Current long: " + event.getTime() + " Valid: " + within);
+			if (within)
+				valid.add(event);
+		}
+		acquisition.writeAcquisitionDelivery(valid, startDate, endDate);
 		
 		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
 		int perByFile = 0;
@@ -366,10 +373,13 @@ public class ReportUIImpl implements ReportUI
 		{
 			String payload = event.getPayload();
 			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
-			if (qcStatus.equals("QCFail(Overridden)"))
-				manualQA.add(event);
+			if (qcStatus.equals("QCFail(Overridden)")) {
+				boolean within = checkDate(event.getTime());
+				if (within)
+					manualQA.add(event);
+			}
 		}
-		manualQa.writeManualQA(manualQA);
+		manualQa.writeManualQA(manualQA, startDate, endDate);
 	}
 
 	@Transactional
@@ -388,7 +398,14 @@ public class ReportUIImpl implements ReportUI
 	public void getAutoQCCSV()
 	{
 		List<EventEntity> passed = queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed");
-		autoQc.writeAutoQc(passed);
+		List<EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : passed) {
+			boolean within = checkDate(event.getTime());
+			logger.info("Current: " + event.getTime() + " Valid: " + within);
+			if (within)
+				valid.add(event);
+		}
+		autoQc.writeAutoQc(valid, startDate, endDate);
 	}
 	
 	@Transactional
@@ -397,6 +414,14 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> passed = queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed");
 		
 		jasperApi.createAutoQc(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed"), Integer.toString(queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed"))), Integer.toString(queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "autoqcfailed"))));	
+	}
+	
+	@Transactional
+	public void getTaskListCSV()
+	{
+		List<EventEntity> tasks = new ArrayList<EventEntity>();
+		//NEEED TEST DATA TO SEND TO REPORT
+		taskList.writeTaskList(tasks);
 	}
 
 	@Transactional
@@ -416,16 +441,24 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> title = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle");
-		List<EventEntity> material = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "DeleteMaterial");
-		List<EventEntity> pack = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "DeletePackage");
-		List<EventEntity> manual = queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "MaunalPurge");
+		List<EventEntity> title = queryApi.getByEventName("PurgeTitle");
+		List<EventEntity> material = queryApi.getByEventName("DeleteMaterial");
+		List<EventEntity> pack = queryApi.getByEventName("DeletePackage");
+		List<EventEntity> manual = queryApi.getByEventName("ManualPurge");
 		List<EventEntity> purged = new ArrayList<EventEntity>();
 		purged.addAll(title);
 		purged.addAll(material);
 		purged.addAll(pack);
 		purged.addAll(manual);
-		purgeContent.writePurgeTitles(purged);
+		logger.info("Purged: " + purged);
+		List<EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : purged) {
+			boolean within = checkDate(event.getTime());
+			logger.info("Current: " + event.getTime() + " Valid: " + within);
+			if (within)
+				valid.add(event);
+		}
+		purgeContent.writePurgeTitles(valid, startDate, endDate);
 	}
 
 	@Transactional
@@ -443,6 +476,22 @@ public class ReportUIImpl implements ReportUI
 		call.set("complianceQ", queryApi.getLength(queryApi.getCompliance()));
 		return call.process();
 	}
+	
+	@Transactional
+	public void getComplianceEditCSV()
+	{
+		List<EventEntity> events = new ArrayList<EventEntity>();
+		//NEED TEST DATA TO SEND REPORT
+		compliance.writeCompliance(events);
+	}
+	
+	@Transactional
+	public void getExportCSV()
+	{
+		List<EventEntity> events = new ArrayList<EventEntity>();
+		//NEED TEST DATA TO SEND TO REPORT
+		export.writeExport(events);
+	}
 
 	@Override
 	public String displayPath(@QueryParam("path")String path)
@@ -451,8 +500,4 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
-
-
-
-
 }

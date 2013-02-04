@@ -1,5 +1,7 @@
 package com.mediasmiths.stdEvents.reporting.rest;
 
+import java.util.Date;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,15 +36,20 @@ public interface ReportUI
 	@Produces("text/html")
 	public String getById(@QueryParam("id")Long id);
 	
-//	@GET
-//	@Path("/start_date/date/month/year")
-//	@Produces("text/html")
-//	public void saveStartDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
-//	
-//	@GET
-//	@Path("/end_date/date/month/year")
-//	@Produces("text/html")
-//	public void saveEndDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
+	@GET
+	@Path("/start_date/date/month/year")
+	@Produces("text/html")
+	public void saveStartDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
+	
+	@GET
+	@Path("/end_date/date/month/year")
+	@Produces("text/html")
+	public void saveEndDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
+	
+	@GET
+	@Path("/long_to_cal/date")
+	@Produces("text/html")
+	public Date longToCal(@QueryParam("date")Long date);
 	
 	@GET
 	@Path("/order_status_ui")
@@ -124,6 +131,12 @@ public interface ReportUI
 	@Produces("text/html")
 	public void getAutoQCPDF();
 	
+	
+	@GET
+	@Path("/task_list_csv")
+	@Produces("text/html")
+	public void getTaskListCSV();
+	
 	@GET
 	@Path("/purge_content_ui")
 	@Produces("text/html")
@@ -143,6 +156,16 @@ public interface ReportUI
 	@Path("/compliance_edits_ui")
 	@Produces("text/html")
 	public String getComplianceEditsUI();
+	
+	@GET
+	@Path("/compliance_edit_csv")
+	@Produces("text/html")
+	public void getComplianceEditCSV();
+	
+	@GET
+	@Path("/export_csv")
+	@Produces("text/html")
+	public void getExportCSV();
 	
 	@POST
 	@Path("/display_path/path")

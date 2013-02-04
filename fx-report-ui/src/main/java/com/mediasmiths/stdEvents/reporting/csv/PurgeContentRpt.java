@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,9 +31,9 @@ public class PurgeContentRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writePurgeTitles(List<EventEntity> events)
+	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Purge> purged = getPurgeList(events);
+		List<Purge> purged = getPurgeList(events, startDate, endDate);
 		logger.info("Events: " + events);
 		logger.info("Purged: " + purged);
 		ICsvBeanWriter beanWriter = null;
@@ -75,13 +76,14 @@ public class PurgeContentRpt
 		}
 	}
 	
-	public List<Purge> getPurgeList(List<EventEntity> events)
+	public List<Purge> getPurgeList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<Purge> purgeList = new ArrayList<Purge>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
 			Purge purge = new Purge();
+			purge.setDateRange(startDate.toString() + " - " + endDate.toString());
 			if (payload.contains("titleID"))
 				purge.setMediaID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
 			if (payload.contains("PurgeStatus"))
