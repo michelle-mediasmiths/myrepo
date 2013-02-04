@@ -29,6 +29,7 @@ import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -960,6 +961,12 @@ public class MayamClientStub implements MayamClient
 			String fileName) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public TaskState getTaskState(long taskid) throws MayamClientException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
