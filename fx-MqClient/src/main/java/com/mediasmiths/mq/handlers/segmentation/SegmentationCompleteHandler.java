@@ -33,11 +33,11 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				log.info(String.format("Classification not set on package %s reopening segmentation task", houseID));
 				taskController.createErrorTXDeliveryTaskForPackage(houseID, "Classification not set");
 			} // check package has required number of segments, awaiting a means of seeing if the user wishes to override this requirement
-			else if (!packageController.packageHasRequiredNumberOfSegments(houseID))
-			{
-				log.info(String.format("Package %s does not have the required number of segments", houseID));
-				taskController.createErrorTXDeliveryTaskForPackage(houseID, "Number of segments does not match requirements");
-			}
+//			else if (!packageController.packageHasRequiredNumberOfSegments(houseID))
+//			{
+//				log.info(String.format("Package %s does not have the required number of segments", houseID));
+//				taskController.createErrorTXDeliveryTaskForPackage(houseID, "Number of segments does not match requirements");
+//			}
 			else
 			{
 				log.debug("Creating tx delivery task");

@@ -90,7 +90,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 
 				if (requiredDate == null)
 				{
-					log.info("No required date set on package! " + packageID);
+					log.warn("No required date set on package! " + packageID);
 					requiredDate = new Date(Date.UTC(3000, 1, 1, 0, 0, 0));
 					log.info("Using required date " + requiredDate);
 				}

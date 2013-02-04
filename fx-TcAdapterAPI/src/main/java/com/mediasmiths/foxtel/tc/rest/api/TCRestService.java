@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.tc.rest.api;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -43,4 +44,8 @@ public interface TCRestService
 	@PUT
 	@Path("/job/{guid}/priority")
 	public void setJobPriority(@PathParam("guid") String guid, @QueryParam("priority") Integer newPriority) throws Exception;
+	
+	@DELETE
+	@Path("/job/{guid}")
+	public void deleteJob(@PathParam("guid") String guid) throws Exception;
 }

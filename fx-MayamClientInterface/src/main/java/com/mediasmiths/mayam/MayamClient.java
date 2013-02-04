@@ -10,6 +10,7 @@ import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.MayamApiException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -323,6 +324,8 @@ public interface MayamClient
 	public void txDeliveryCompleted(String packageID, long taskID) throws MayamClientException;
 
 	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException;
+
+	public TaskState getTaskState(long taskid) throws MayamClientException;
 
 
 	

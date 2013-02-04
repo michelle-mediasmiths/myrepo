@@ -1,0 +1,39 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:long" name="taskid_urlType"/>
+      <xs:element type="xs:boolean" name="response_isCancelled_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="isCancelled_input">
+    <wsdl:part name="taskid" element="isTaskCancelled:taskid_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="isCancelled_output">
+    <wsdl:part name="response" element="isTaskCancelled:response_isCancelled_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="isCancelled">
+      <wsdl:input message="isTaskCancelled:isCancelled_input"/>
+      <wsdl:output message="isTaskCancelled:isCancelled_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="isTaskCancelled:restInterface">
+    <wsdl:operation name="isCancelled">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="isTaskCancelled:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

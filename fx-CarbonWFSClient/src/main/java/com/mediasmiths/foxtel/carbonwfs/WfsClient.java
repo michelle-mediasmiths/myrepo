@@ -11,6 +11,7 @@ import javax.xml.bind.Unmarshaller;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.datacontract.schemas._2004._07.rhozet.ArrayOfJob;
 import org.datacontract.schemas._2004._07.rhozet.ArrayOfPreset;
 import org.datacontract.schemas._2004._07.rhozet.Dashboard;
 import org.datacontract.schemas._2004._07.rhozet.Job;
@@ -49,6 +50,15 @@ public class WfsClient
 	{
 		Job job = getJob(jobid);
 		return job.getStatus();
+	}
+	
+	public void deleteJob(UUID jobid){
+		Job job = getJob(jobid);
+		job.setStatus(JobStatus.ABORT);
+		
+		ArrayOfJob aoj = new ArrayOfJob();
+		aoj.getJob().add(job);
+		service.updateJobStatus(aoj);
 	}
 
 	/**

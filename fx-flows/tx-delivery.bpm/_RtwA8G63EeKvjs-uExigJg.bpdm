@@ -1,0 +1,69 @@
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/cancelled" xmlns:TX_Delivery="http://thisdiagram" xmlns:Transcode="http://thisdiagram/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/cancelled">
+    <bpdm:dependencies version="6000089">
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="wfAdapter" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/cancelled" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="TX_Delivery" bpdm:comment="contrib=&apos;partner-pool:///_PVVBAGuWEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode" bpdm:prefix="Transcode" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <wsdl:portType name="ForTranscode">
+                <wsdl:operation name="EventStartMessage" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ">
+                    <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
+                </wsdl:operation>
+            </wsdl:portType>
+            <xs:element name="EventStartMessageRequest" type="xs:string" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <wsdl:message name="EventStartMessageRequest" bpdm:source="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ">
+                <wsdl:part name="body" element="this:EventStartMessageRequest"/>
+            </wsdl:message>
+            <bpel:binding name="CanonicBindingForTranscode" type="this:ForTranscode" bpdm:isSynchronized="true"/>
+        </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:label="FS Adapter"/>
+        <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode"/>
+    </bpdm:dependencies>
+    <bpel:scope bpdm:label="cancelled" bpdm:ID="_RtwA8G63EeKvjs-uExigJg">
+        <bpel:partnerLinks>
+            <bpel:partnerLink name="cancelledAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:cancelledAndFS_AdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_cancelled" bpdm:invokedService="delete:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:invokedIsDefault="true" bpdm:clientTasks="_RtwA8G63EeKvjs-uExigJg:_XHSRcG63EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_PVVBAGuWEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndCancelledPlkVar" partnerLinkType="TX_Delivery:TranscodeAndCancelled" myRole="cancelled_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForTranscode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/cancelled/Transcode" bpdm:providedIsDefault="true" bpdm:clientTasks="_RtwA8G63EeKvjs-uExigJg:_T0KT0G63EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+        </bpel:partnerLinks>
+        <bpel:variables>
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_ozM5kG63EeKvjs-uExigJg" bpdm:messageIds=" out:_ozEWsG63EeKvjs-uExigJg">
+                <bpel:from bpdm:toPart="body">
+                    <bpel:literal bpdm:linkedMessageType="delete:delete_input" bpdm:linkedPart="body" bpdm:binding="delete:restBinding" bpdm:opMsgType="0" bpdm:operation="delete"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_pEFOMG63EeKvjs-uExigJg" bpdm:messageIds="inc:_pDzhYG63EeKvjs-uExigJg"/>
+            <bpel:variable name="TranscodeOutputPath" type="xs:string"/>
+            <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_80o_5W69EeKvjs-uExigJg" bpdm:messageIds="inc:_80OwMG69EeKvjs-uExigJg"/>
+        </bpel:variables>
+        <bpel:sequence>
+            <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCancelledPlkVar" portType="this:ForTranscode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_T0KT0G63EeKvjs-uExigJg">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_80OwMG69EeKvjs-uExigJg"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask bpdm:label="Initialise Variables" bpdm:ID="_U9esUG63EeKvjs-uExigJg"></bpdm:messagingtask>
+            <bpdm:messagingtask operation="delete" partnerLink="cancelledAndFS_AdapterForHttpPortPlkVar" portType="delete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Delete Transcode Output File" bpdm:ID="_XHSRcG63EeKvjs-uExigJg">
+                <bpdm:linkset bpdm:type="assignments">
+                    <bpel:copy>
+                        <bpel:from>$TranscodeOutputPath</bpel:from>
+                        <bpel:to>$deleteDeleteRequestMsg.body/tns:path/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="22499912" targetPath="$deleteDeleteRequestMsg.body/tns:path/text()" targetedBy="27623936-arg0"></mapper:vertice>
+  <mapper:vertice id="27623936" sourcePath="$TranscodeOutputPath"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_ozEWsG63EeKvjs-uExigJg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_pDzhYG63EeKvjs-uExigJg"></bpdm:linkset>
+            </bpdm:messagingtask>
+            <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_mzIbEG6-EeKvjs-uExigJg"></bpdm:messagingtask>
+        </bpel:sequence>
+    </bpel:scope>
+</bpel:process>

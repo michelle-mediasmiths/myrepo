@@ -1,0 +1,11 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<dd:process xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/cancelled" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:cancelled" fileName="tx-delivery-cancelled.bpel">
+  <dd:property name="PATH">tx-delivery</dd:property>
+  <dd:property name="SVG">tx-delivery.svg</dd:property>
+  <dd:provide partnerLink="transcodeAndCancelledPlkVar">
+    <dd:service name="this:CanonicServiceForTranscode" port="canonicPort"></dd:service>
+  </dd:provide>
+  <dd:invoke partnerLink="cancelledAndFS_AdapterForHttpPortPlkVar">
+    <dd:service name="delete:restService" port="httpPort"/>
+  </dd:invoke>
+</dd:process>

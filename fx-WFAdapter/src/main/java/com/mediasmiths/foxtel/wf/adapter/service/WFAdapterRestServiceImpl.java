@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -84,6 +86,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("cerify.report.location")
 	private String cerifyReportLocation;
+	@Inject
+	@Named("cerify.report.location.ardome")
+	private String ardomeCerifyReportLocation;	
 	@Inject
 	@Named("cerfiy.report.ardomehandle")
 	private String cerifyReportArdomeserviceHandle;
@@ -159,7 +164,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// id is a package id
 				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
-				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC");
+				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 			}
 			else
 			{
@@ -257,11 +262,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		for (File file : reports)
 		{
-			
 			if (attachQcReports)
 			{
-				log.info(String.format("attach file %s to material", file.getAbsolutePath()));
-				mayamClient.attachFileToMaterial(assetID, file.getAbsolutePath(), cerifyReportArdomeserviceHandle);
+				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
+				
+				log.info(String.format("attach file {%s} to material using ardome path {%s}", file.getAbsolutePath(),ardomeFilePath));
+				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
 			}
 		}
 	}
@@ -280,7 +286,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
-				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);				
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
+				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
 			}
 			else
 			{
@@ -483,6 +490,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifiyTXDelivered(TXDeliveryFinished deliveryFinished) throws MayamClientException
 	{
 		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
+	}
+
+	@Override
+	@GET
+	@Path("/task/{taskid}/cancelled")
+	@Produces("text/plain")
+	public boolean isTxTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException
+	{
+		TaskState state = mayamClient.getTaskState(taskid);
+		return state == TaskState.REJECTED ||  state == TaskState.REMOVED;
 	}
 
 }

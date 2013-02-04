@@ -4,8 +4,10 @@ import java.rmi.RemoteException;
 
 import javassist.NotFoundException;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -105,6 +107,16 @@ public interface QCRestService {
 			@QueryParam("run") @DefaultValue("0") Integer runNumber)
 			throws NotFoundException, MediaLocationNotFoundException;
 
+	/**
+	 * Attempts to cancel the job with the specified name
+	 * @param jobName
+	 * @throws NotFoundException 
+	 */
+	@DELETE
+	@Path("/job/{jobname}")
+	public void cancelJob(@PathParam("jobname") String jobName) throws NotFoundException;
+	
+	
 	/**
 	 * Used to query if a given profile exists, this may be useful for
 	 * clients to validate their configuration on startup

@@ -7,7 +7,9 @@ import java.util.List;
 
 import javassist.NotFoundException;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -31,10 +33,12 @@ import com.mediasmiths.foxtel.qc.model.QCMediaResult;
 import com.mediasmiths.foxtel.qc.model.QCStartRequest;
 import com.mediasmiths.foxtel.qc.model.QCStartResponse;
 import com.mediasmiths.foxtel.qc.model.QCStartStatus;
+import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
+import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 
 public class QCRestServiceImpl implements QCRestService
@@ -241,5 +245,42 @@ public class QCRestServiceImpl implements QCRestService
 		QCJobStatus jobStatus = jobStatus(ident);
 
 		return jobStatus.getStatus() == JobStatusType.complete || jobStatus.getStatus() == JobStatusType.stopping;
+	}
+
+	@Override
+	@DELETE
+	@Path("/job/{jobname}/cancel")
+	public void cancelJob(@PathParam("jobname") String jobName) throws NotFoundException
+	{
+		log.info(String.format("Cancel requested for job %s",jobName));
+		try
+		{
+			cerifyClient.cancelJob(jobName);
+		}
+		catch (JobDoesntExistFault e)
+		{
+			String message = String.format("Cancel request for job %s failed (JobDoesntExistFault)", jobName);
+			log.warn(message, e);
+			throw new NotFoundException(message, e);
+		}
+		catch (JobIsArchivedFault e)
+		{
+			String message = String.format("Cancel request for job %s failed (JobIsArchivedFault)", jobName);
+			log.warn(message, e);
+			throw new InternalServerErrorException(message, e);
+		}
+		catch (BaseCeritalkFault e)
+		{
+			String message = String.format("Cancel request for job %s failed (BaseCeritalkFault)", jobName);
+			log.warn(message, e);
+			throw new InternalServerErrorException(message, e);
+		}
+		catch (RemoteException e)
+		{
+			String message = String.format("Cancel request for job %s failed (RemoteException)", jobName);
+			log.warn(message, e);
+			throw new InternalServerErrorException(message, e);
+		}
+		
 	}
 }

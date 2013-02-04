@@ -15,6 +15,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.UUID;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+
 public class TCRestServiceImpl implements TCRestService
 {
 	private static final Logger log = Logger.getLogger(TCRestServiceImpl.class);
@@ -92,5 +96,15 @@ public class TCRestServiceImpl implements TCRestService
 		final UUID id = UUID.fromString(guid);
 
 		wfsClient.updatejobPriority(id, newPriority);
+	}
+
+	@Override
+	@DELETE
+	@Path("/job/{guid}")
+	public void deleteJob(@PathParam("guid") String guid) throws Exception
+	{
+		log.info(String.format("Received delete request for job %s", guid));
+		
+		wfsClient.deleteJob(UUID.fromString(guid));
 	}
 }

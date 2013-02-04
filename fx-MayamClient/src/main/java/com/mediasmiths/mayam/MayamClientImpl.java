@@ -859,7 +859,7 @@ public class MayamClientImpl implements MayamClient
 			if (txTask != null)
 			{
 				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.FALSE);
-				txTask.setAttribute(Attribute.ERROR_MSG, String.format("TX Delivery Failed at : %s",stage));
+				txTask.setAttribute(Attribute.ERROR_MSG, String.format("TX Delivery Failed : %s",stage));
 				txTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 				tasksController.saveTask(txTask);
 			}
@@ -874,6 +874,26 @@ public class MayamClientImpl implements MayamClient
 			log.error("Failed to fetch tx delivery task with id " + taskID, e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e);
 		}		
+	}
+
+	@Override
+	public TaskState getTaskState(long taskid) throws MayamClientException
+	{
+		AttributeMap task;
+		try
+		{
+			task = tasksController.getTask(taskid);
+		}
+		catch (RemoteException e)
+		{
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+		}
+		
+		if(task != null){
+			return (TaskState) task.getAttribute(Attribute.TASK_STATE);
+		}
+		
+		throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 	}
 	
 }

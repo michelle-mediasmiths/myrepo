@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<dd:process xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Transcode" fileName="tx-delivery-Transcode.bpel">
+<dd:process xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:cancelled="http://ns.mediasmithsforge.com/foxtel/tx-delivery/cancelled" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:Transcode" fileName="tx-delivery-Transcode.bpel">
   <dd:property name="PATH">tx-delivery</dd:property>
   <dd:property name="SVG">tx-delivery.svg</dd:property>
   <dd:provide partnerLink="transcodeAndCallerPlkVar">
@@ -8,14 +8,23 @@
   <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk0Var">
     <dd:service name="createJob:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var">
+  <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk2Var">
     <dd:service name="queryJob:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var">
+  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var">
+    <dd:service name="isTaskCancelled:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var">
+    <dd:service name="deleteJob:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var">
     <dd:service name="tcPassed:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var">
+  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var">
     <dd:service name="tcFailure:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndCancelledPlkVar">
+    <dd:service name="cancelled:CanonicServiceForTranscode" port="canonicPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var">
     <dd:service name="autoQCRequiredForTX:restService" port="httpPort"/>
@@ -26,7 +35,7 @@
   <dd:invoke partnerLink="transcodeAndDeliveryPlkVar">
     <dd:service name="Delivery:CanonicServiceForTranscode" port="canonicPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var">
+  <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var">
     <dd:service name="tcTotalFailure:restService" port="httpPort"/>
   </dd:invoke>
 </dd:process>

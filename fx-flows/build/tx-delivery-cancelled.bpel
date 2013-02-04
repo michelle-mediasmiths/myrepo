@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/cancelled" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="cancelled" name="cancelled" bpmn:id="_RtwA8G63EeKvjs-uExigJg" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/cancelled">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/cancelled" location="tx-delivery-cancelled.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:partnerLinks>
+    <bpel:partnerLink name="transcodeAndCancelledPlkVar" partnerLinkType="TX_Delivery:TranscodeAndCancelled" myRole="cancelled_for_Transcode"/>
+    <bpel:partnerLink name="cancelledAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:cancelledAndFS_AdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_cancelled"/>
+  </bpel:partnerLinks>
+  <bpel:variables>
+    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+    <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
+    <bpel:variable name="TranscodeOutputPath" type="xs:string"/>
+    <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
+  </bpel:variables>
+  <bpel:sequence>
+    <bpel:receive partnerLink="transcodeAndCancelledPlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_T0KT0G63EeKvjs-uExigJg"></bpel:receive>
+    <bpel:assign name="init-variables-cancelled" bpmn:id="_T0KT0G63EeKvjs-uExigJg">
+      <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<tns:deleteRequest>
+  <tns:path></tns:path>
+</tns:deleteRequest></bpel:literal>
+        </bpel:from>
+        <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:empty bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_U9esUG63EeKvjs-uExigJg"/>
+    <bpel:assign bpmn:label="Delete Transcode Output File" name="Delete_Transcode_Output_File" bpmn:id="_XHSRcG63EeKvjs-uExigJg">
+      <bpel:copy>
+        <bpel:from>$TranscodeOutputPath</bpel:from>
+        <bpel:to>$deleteDeleteRequestMsg.body/tns:path</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:invoke partnerLink="cancelledAndFS_AdapterForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Transcode Output File" name="Delete_Transcode_Output_File-1" bpmn:id="_XHSRcG63EeKvjs-uExigJg"></bpel:invoke>
+    <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event" bpmn:id="_mzIbEG6-EeKvjs-uExigJg"/>
+  </bpel:sequence>
+</bpel:process>

@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
@@ -216,5 +217,10 @@ public interface WFAdapterRestService
 	@Path("/tx/delivery/getSegmentXML")
 	@Produces("application/xml")
 	public String getSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException;
+	
+	@GET
+	@Path("/task/{taskid}/cancelled")
+	@Produces("text/plain")
+	public boolean isTxTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException;
 }
 
