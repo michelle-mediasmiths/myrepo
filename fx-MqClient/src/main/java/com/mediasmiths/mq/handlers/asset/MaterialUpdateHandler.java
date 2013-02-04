@@ -97,13 +97,19 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			{
 				try {
 					Boolean presentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
+					log.info("Presentation flag for " + materialID + "set to " + presentationFlag); 
+					
 					if (presentationFlag != null && presentationFlag.equals(Boolean.TRUE))
-					{
+					{	
 						AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
 						if (task != null) 
 						{
+							log.info("Presentation flag for " + materialID + "set, removing purge candidate task"); 
 							task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 							taskController.saveTask(task);
+						}
+						else {
+							log.warn("Presentation flag for " + materialID + "set but failed to find a purge candidate task to remove"); 
 						}
 					}
 				} catch (MayamClientException e) {
