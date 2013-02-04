@@ -835,6 +835,7 @@ public class MayamClientImpl implements MayamClient
 			if (txTask != null)
 			{
 				txTask.setAttribute(Attribute.TX_DELIVER, Boolean.TRUE);
+				txTask.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 				tasksController.saveTask(txTask);
 			}
 			else
