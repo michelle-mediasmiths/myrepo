@@ -60,6 +60,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 								currentAttributes.setAttribute(Attribute.AGGREGATOR, aggregator);
 								tasksClient.assetApi().updateAsset(currentAttributes);
 								log.info("Aggregator " + aggregator + " added for unmatched asset " + assetID);
+								
+								wfeTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+								tasksClient.taskApi().updateTask(wfeTask);
 								break;
 							}
 						}
