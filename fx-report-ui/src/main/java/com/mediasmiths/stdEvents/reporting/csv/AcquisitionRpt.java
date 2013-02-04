@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -17,10 +18,11 @@ import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.AcquisitionDelivery;
+import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 
 public class AcquisitionRpt
 {
-	public static final transient Logger logger = Logger.getLogger(CsvImpl.class);
+	public static final transient Logger logger = Logger.getLogger(AcquisitionRpt.class);
 	
 	//Edit this variable to change where your reports get saved to
 	@Inject
@@ -29,10 +31,12 @@ public class AcquisitionRpt
 	
 	@Inject
 	private QueryAPI queryApi;
+	@Inject
+	private ReportUI reportUi;
 	
-	public void writeAcquisitionDelivery(List<EventEntity> materials)
+	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate)
 	{
-		List<AcquisitionDelivery> titles = getAcquisitionDeliveryList(materials);
+		List<AcquisitionDelivery> titles = getAcquisitionDeliveryList(materials, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try{
@@ -83,13 +87,14 @@ public class AcquisitionRpt
 		}
 	}
 	
-	public List<AcquisitionDelivery> getAcquisitionDeliveryList(List<EventEntity> events)
+	public List<AcquisitionDelivery> getAcquisitionDeliveryList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<AcquisitionDelivery> titleList = new ArrayList<AcquisitionDelivery>();
 		for(EventEntity event : events)
 		{
 			String payload = event.getPayload();
 			AcquisitionDelivery title = new AcquisitionDelivery();
+			title.setDateRange(startDate.toString() + " - " + endDate.toString());
 			if (payload.contains("materialId"))
 			{
 				String materialId = payload.substring(payload.indexOf("materialId") +11, payload.indexOf("</materialId"));

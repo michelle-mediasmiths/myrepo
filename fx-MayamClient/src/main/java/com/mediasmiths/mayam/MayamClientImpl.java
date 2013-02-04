@@ -723,6 +723,29 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
+	public long createWFEErrorTaskForUnmatched(String aggregator, String filename)
+	{
+		long taskId = -1;
+		
+		AttributeMap task = client.createAttributeMap();
+		task.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR);
+		task.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
+		
+		task.setAttribute(Attribute.ASSET_TITLE, filename);
+		task.setAttribute(Attribute.AGGREGATOR, aggregator);
+		
+		try {
+			AttributeMap newTask = client.taskApi().createTask(task);
+			taskId = newTask.getAttribute(Attribute.TASK_ID);
+		} 
+		catch (RemoteException e) {
+			log.error("Exception while creating WFE Error task to store Unmatched Aggregator", e);
+			e.printStackTrace();
+		}
+		return taskId;
+	}
+	
+	@Override
 	public long createWFEErrorTaskForPackage(String packageID, String message)
 	{
 		return createWFEErrorTaskForAsset(MayamAssetType.PACKAGE, packageID,message);

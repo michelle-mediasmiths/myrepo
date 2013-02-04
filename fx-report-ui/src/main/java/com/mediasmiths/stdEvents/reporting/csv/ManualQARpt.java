@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,9 +31,9 @@ public class ManualQARpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeManualQA(List<EventEntity> events)
+	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<ManualQA> manualQAs = getManualQAList(events);
+		List<ManualQA> manualQAs = getManualQAList(events, startDate, endDate);
 
 		ICsvBeanWriter beanWriter = null;
 		try {
@@ -69,12 +70,13 @@ public class ManualQARpt
 		}
 	}
 	
-	public List<ManualQA> getManualQAList(List<EventEntity> events)
+	public List<ManualQA> getManualQAList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
 		for (EventEntity event : events)
 		{
 			ManualQA manualQA = new ManualQA();
+			manualQA.setDateRange(startDate.toString() + " - " + endDate.toString());
 			String payload = event.getPayload();
 			logger.info(payload);
 			if (payload.contains("AssetID"))

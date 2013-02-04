@@ -152,6 +152,10 @@ public class UnmatchedMaterialProcessor implements Runnable {
 				logger.info(String.format("Trying to move file %s to %s", mxf.getFilePath(), destination));
 				FileUtils.moveFile(new File(mxf.getFilePath()), dest);
 				
+				String path = FilenameUtils.separatorsToUnix(FilenameUtils.getPathNoEndSeparator(mxf.getFilePath()));
+				String aggregator = path.substring(path.lastIndexOf("/"));
+				mayamClient.createWFEErrorTaskForUnmatched(aggregator, FilenameUtils.getBaseName(mxf.getFilePath()));
+				
 				//send event
 				events.saveEvent("UnmatchedContentAvailable", destination);
 				
