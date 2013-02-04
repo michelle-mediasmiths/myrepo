@@ -28,10 +28,10 @@
     <bpel:scope bpdm:label="WFAdapter  2" bpdm:ID="_Gm-mQGuVEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk0Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk0" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="getDeliveryLocation:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_IoFs8GuWEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk2Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk2" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="txDeliveryComplete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivered" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_LiKeEGxqEeKl4J7m4-ouog" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk1Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk1" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="isTaskCancelled:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_c4IccG68EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk3Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk3" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="txDeliveryFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/failed" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_nmXlJW7aEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk4Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk4" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="writeSegmentXML:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivery/writeSegmentXML?packageID={packageID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_lCmwUWuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk2Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk2" myRole="WFAdapter__2_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="txDeliveryComplete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivered" bpdm:providedIsDefault="true" bpdm:clientTasks="_Gm-mQGuVEeK7FdvgH5F2kQ:_LiKeEGxqEeKl4J7m4-ouog" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="getDeliveryLocationGetDeliveryLocationRequestMsg" messageType="getDeliveryLocation:getDeliveryLocation_input" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="0" bpdm:id="_JgxodWuWEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_JgmCQGuWEeK7FdvgH5F2kQ"/>
@@ -46,12 +46,6 @@
                     <bpel:literal bpdm:linkedMessageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:linkedPart="response" bpdm:binding="txDeliveryFailure:restBinding" bpdm:opMsgType="1" bpdm:operation="txDeliveryFailure"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteRequestMsg" messageType="txDeliveryComplete:txDeliveryComplete_input" binding="txDeliveryComplete:restBinding" operation="txDeliveryComplete" opMsgType="0" bpdm:id="_OABnpWxqEeKl4J7m4-ouog" bpdm:messageIds="inc:_N_pNIGxqEeKl4J7m4-ouog"/>
-            <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteResponseMsg" messageType="txDeliveryComplete:txDeliveryComplete_output" binding="txDeliveryComplete:restBinding" operation="txDeliveryComplete" opMsgType="1" bpdm:id="_OyoJQGxqEeKl4J7m4-ouog" bpdm:messageIds=" out:_OyaG0GxqEeKl4J7m4-ouog">
-                <bpel:from bpdm:toPart="response">
-                    <bpel:literal bpdm:linkedMessageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:linkedPart="response" bpdm:binding="txDeliveryComplete:restBinding" bpdm:opMsgType="1" bpdm:operation="txDeliveryComplete"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="0" bpdm:id="_gxrg5W68EeKvjs-uExigJg" bpdm:messageIds="inc:_gxSfUG68EeKvjs-uExigJg"/>
             <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="1" bpdm:id="_hDJrYG68EeKvjs-uExigJg" bpdm:messageIds=" out:_hC8QAG68EeKvjs-uExigJg">
                 <bpel:from bpdm:toPart="response">
@@ -64,20 +58,14 @@
                     <bpel:literal bpdm:linkedMessageType="writeSegmentXML:writeSegmentXML_output" bpdm:linkedPart="response" bpdm:binding="writeSegmentXML:restBinding" bpdm:opMsgType="1" bpdm:operation="writeSegmentXML"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteRequestMsg" messageType="txDeliveryComplete:txDeliveryComplete_input" binding="txDeliveryComplete:restBinding" operation="txDeliveryComplete" opMsgType="0" bpdm:id="_6-QtQm7iEeKkE6ll_3FDMA" bpdm:messageIds="inc:_69450G7iEeKkE6ll_3FDMA"/>
+            <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteResponseMsg" messageType="txDeliveryComplete:txDeliveryComplete_output" binding="txDeliveryComplete:restBinding" operation="txDeliveryComplete" opMsgType="1" bpdm:id="_7U6SsG7iEeKkE6ll_3FDMA" bpdm:messageIds=" out:_7UteYG7iEeKkE6ll_3FDMA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:linkedPart="response" bpdm:binding="txDeliveryComplete:restBinding" bpdm:opMsgType="1" bpdm:operation="txDeliveryComplete"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
         </bpel:variables>
         <bpel:flow>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk2Var" portType="txDeliveryComplete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryComplete" bpdm:ID="_LiKeEGxqEeKl4J7m4-ouog">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_N_pNIGxqEeKl4J7m4-ouog"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_OyaG0GxqEeKl4J7m4-ouog"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="isCancelled" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_c4IccG68EeKvjs-uExigJg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_gxSfUG68EeKvjs-uExigJg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_hC8QAG68EeKvjs-uExigJg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
             <bpel:sequence>
                 <bpdm:messagingtask operation="writeSegmentXML" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk4Var" portType="writeSegmentXML:restInterface" isMyRole="true" enableSharing="false" bpdm:label="writeSegmentXML" bpdm:ID="_lCmwUWuXEeK7FdvgH5F2kQ">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="writeSegmentXML:writeSegmentXML_input" bpdm:binding="writeSegmentXML:restBinding" bpdm:ID="_dyU4MG7aEeKkE6ll_3FDMA"></bpdm:linkset>
@@ -91,9 +79,21 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
+                <bpdm:messagingtask operation="txDeliveryComplete" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk2Var" portType="txDeliveryComplete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="txDeliveryComplete" bpdm:ID="_LiKeEGxqEeKl4J7m4-ouog">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:msgVarScopeId="_Gm-mQGuVEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
                 <bpdm:messagingtask operation="getDeliveryLocation" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk0Var" portType="getDeliveryLocation:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getDeliveryLocation" bpdm:ID="_IoFs8GuWEeK7FdvgH5F2kQ">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_input" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_JgmCQGuWEeK7FdvgH5F2kQ"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getDeliveryLocationGetDeliveryLocationResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getDeliveryLocation:getDeliveryLocation_output" bpdm:binding="getDeliveryLocation:restBinding" bpdm:ID="_Jv6QoGuWEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="isCancelled" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_c4IccG68EeKvjs-uExigJg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_gxSfUG68EeKvjs-uExigJg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_hC8QAG68EeKvjs-uExigJg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>

@@ -955,30 +955,6 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_N_2BcWxqEeKl4J7m4-ouog" iD="_N_2BcGxqEeKl4J7m4-ouog">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_N_2BcmxqEeKl4J7m4-ouog" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_N_2Bc2xqEeKl4J7m4-ouog" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_N_658mxqEeKl4J7m4-ouog" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OAAZgWxqEeKl4J7m4-ouog" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_input"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_N_8vIGxqEeKl4J7m4-ouog" direction="To">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_N_-kUGxqEeKl4J7m4-ouog" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OAAZgGxqEeKl4J7m4-ouog" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_OyxTMWxqEeKl4J7m4-ouog" iD="_OyxTMGxqEeKl4J7m4-ouog">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OyxTMmxqEeKl4J7m4-ouog" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OyxTM2xqEeKl4J7m4-ouog" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Oy4n-GxqEeKl4J7m4-ouog" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Oy-ukWxqEeKl4J7m4-ouog" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_output"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_Oy6dIGxqEeKl4J7m4-ouog" direction="From">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Oy85YGxqEeKl4J7m4-ouog" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Oy-ukGxqEeKl4J7m4-ouog" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_gxeskW68EeKvjs-uExigJg" iD="_gxeskG68EeKvjs-uExigJg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gxeskm68EeKvjs-uExigJg" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gxesk268EeKvjs-uExigJg" key="isBpelDeclaration" value="true"/>
@@ -1027,6 +1003,30 @@
         </eAnnotations>
       </associations>
     </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_6-Cq0W7iEeKkE6ll_3FDMA" iD="_6-Cq0G7iEeKkE6ll_3FDMA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6-Cq0m7iEeKkE6ll_3FDMA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-Cq027iEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-Ixcm7iEeKkE6ll_3FDMA" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-QGMW7iEeKkE6ll_3FDMA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_6-LNsG7iEeKkE6ll_3FDMA" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6-Np8G7iEeKkE6ll_3FDMA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-QGMG7iEeKkE6ll_3FDMA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7VF44W7iEeKkE6ll_3FDMA" iD="_7VF44G7iEeKkE6ll_3FDMA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7VF44m7iEeKkE6ll_3FDMA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VF4427iEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VL_gW7iEeKkE6ll_3FDMA" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VT7UW7iEeKkE6ll_3FDMA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7VObwG7iEeKkE6ll_3FDMA" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7VQ4AG7iEeKkE6ll_3FDMA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VT7UG7iEeKkE6ll_3FDMA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
     <vertices xmi:type="bpmn:Activity" xmi:id="_ko_d0WuUEeK7FdvgH5F2kQ" iD="_ko_d0GuUEeK7FdvgH5F2kQ" associations="_JgvzQGuWEeK7FdvgH5F2kQ _JwLWYGuWEeK7FdvgH5F2kQ" outgoingEdges="_c6J6EW7aEeKkE6ll_3FDMA" incomingEdges="_n70zYW68EeKvjs-uExigJg" name="Get Delivery Location">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_JgmCQWuWEeK7FdvgH5F2kQ"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_Jv6QoWuWEeK7FdvgH5F2kQ"/>
@@ -1034,11 +1034,7 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_x0Nh8WuUEeK7FdvgH5F2kQ" iD="_x0Nh8GuUEeK7FdvgH5F2kQ" associations="_6pVoMGuXEeK7FdvgH5F2kQ" outgoingEdges="_ZPpS0W68EeKvjs-uExigJg" activityType="EventStartMessage">
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_6o5jUWuXEeK7FdvgH5F2kQ"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_q_dB0WxeEeKl4J7m4-ouog" iD="_q_dB0GxeEeKl4J7m4-ouog" outgoingEdges="_3PVfEWxeEeKl4J7m4-ouog" incomingEdges="__VqsAW7aEeKkE6ll_3FDMA" name="Segment XML Written Successfully"/>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_1LjpcWxeEeKl4J7m4-ouog" iD="_1LjpcGxeEeKl4J7m4-ouog" associations="_N_8vIGxqEeKl4J7m4-ouog _Oy6dIGxqEeKl4J7m4-ouog" outgoingEdges="_tFgZQW7YEeKkE6ll_3FDMA" incomingEdges="_3PVfEWxeEeKl4J7m4-ouog" name="Notify TX Delivery Complete">
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_N_pNIWxqEeKl4J7m4-ouog"/>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_OyaG0WxqEeKl4J7m4-ouog"/>
-    </vertices>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_q_dB0WxeEeKl4J7m4-ouog" iD="_q_dB0GxeEeKl4J7m4-ouog" outgoingEdges="_6Lo9gW7iEeKkE6ll_3FDMA" incomingEdges="__VqsAW7aEeKkE6ll_3FDMA" name="Segment XML Written Successfully"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_VG570W68EeKvjs-uExigJg" iD="_VG570G68EeKvjs-uExigJg" outgoingEdges="_Zk5xIW68EeKvjs-uExigJg" incomingEdges="_ZPpS0W68EeKvjs-uExigJg" name="initialise variables"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_YH0vIW68EeKvjs-uExigJg" iD="_YH0vIG68EeKvjs-uExigJg" associations="_gxmoYG68EeKvjs-uExigJg _hDebgG68EeKvjs-uExigJg" outgoingEdges="_kt43wW68EeKvjs-uExigJg" incomingEdges="_Zk5xIW68EeKvjs-uExigJg" name="check if cancelled">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_gxSfUW68EeKvjs-uExigJg"/>
@@ -1049,7 +1045,7 @@
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_Ot-jgW6_EeKvjs-uExigJg"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_vN_ZcW68EeKvjs-uExigJg" iD="_vN_ZcG68EeKvjs-uExigJg" incomingEdges="_v0BesW68EeKvjs-uExigJg" activityType="EventEndEmpty"/>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_sjGPwW7YEeKkE6ll_3FDMA" iD="_sjGPwG7YEeKkE6ll_3FDMA" associations="_yKYoYG7YEeKkE6ll_3FDMA" incomingEdges="_tFgZQW7YEeKkE6ll_3FDMA" activityType="EventEndMessage">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_sjGPwW7YEeKkE6ll_3FDMA" iD="_sjGPwG7YEeKkE6ll_3FDMA" associations="_yKYoYG7YEeKkE6ll_3FDMA" incomingEdges="_6icT8W7iEeKkE6ll_3FDMA" activityType="EventEndMessage">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_yKHioW7YEeKkE6ll_3FDMA"/>
     </vertices>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_aHdwAW7aEeKkE6ll_3FDMA" iD="_aHdwAG7aEeKkE6ll_3FDMA" outgoingEdges="__VqsAW7aEeKkE6ll_3FDMA" incomingEdges="_c6J6EW7aEeKkE6ll_3FDMA">
@@ -1113,17 +1109,21 @@
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_o2oTIW7aEeKkE6ll_3FDMA"/>
       </vertices>
     </vertices>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_3PVfEWxeEeKl4J7m4-ouog" iD="_3PVfEGxeEeKl4J7m4-ouog"/>
+    <vertices xmi:type="bpmn:Activity" xmi:id="_5K55QW7iEeKkE6ll_3FDMA" iD="_5K55QG7iEeKkE6ll_3FDMA" associations="_6-LNsG7iEeKkE6ll_3FDMA _7VObwG7iEeKkE6ll_3FDMA" outgoingEdges="_6icT8W7iEeKkE6ll_3FDMA" incomingEdges="_6Lo9gW7iEeKkE6ll_3FDMA" name="notify complete">
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_69450W7iEeKkE6ll_3FDMA"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_7UteYW7iEeKkE6ll_3FDMA"/>
+    </vertices>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ZPpS0W68EeKvjs-uExigJg" iD="_ZPpS0G68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_Zk5xIW68EeKvjs-uExigJg" iD="_Zk5xIG68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_kt43wW68EeKvjs-uExigJg" iD="_kt43wG68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_nAl6MW68EeKvjs-uExigJg" iD="_nAl6MG68EeKvjs-uExigJg"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_n70zYW68EeKvjs-uExigJg" iD="_n70zYG68EeKvjs-uExigJg" conditionType="Default" isDefault="true"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_v0BesW68EeKvjs-uExigJg" iD="_v0BesG68EeKvjs-uExigJg"/>
-    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_tFgZQW7YEeKkE6ll_3FDMA" iD="_tFgZQG7YEeKkE6ll_3FDMA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_c6J6EW7aEeKkE6ll_3FDMA" iD="_c6J6EG7aEeKkE6ll_3FDMA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_jaBggW7aEeKkE6ll_3FDMA" iD="_jaBggG7aEeKkE6ll_3FDMA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="__VqsAW7aEeKkE6ll_3FDMA" iD="__VqsAG7aEeKkE6ll_3FDMA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_6Lo9gW7iEeKkE6ll_3FDMA" iD="_6Lo9gG7iEeKkE6ll_3FDMA"/>
+    <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_6icT8W7iEeKkE6ll_3FDMA" iD="_6icT8G7iEeKkE6ll_3FDMA"/>
   </pools>
   <pools xmi:type="bpmn:Pool" xmi:id="_Gm-mQWuVEeK7FdvgH5F2kQ" iD="_Gm-mQGuVEeK7FdvgH5F2kQ" name="WFAdapter  2">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_H14pYGuVEeK7FdvgH5F2kQ" source="executablepool">
@@ -1187,30 +1187,6 @@
         </eAnnotations>
       </associations>
     </artifacts>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_OABnpmxqEeKl4J7m4-ouog" iD="_OABnpWxqEeKl4J7m4-ouog">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OABnp2xqEeKl4J7m4-ouog" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OABnqGxqEeKl4J7m4-ouog" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OAFSAmxqEeKl4J7m4-ouog" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteRequestMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OAJjcWxqEeKl4J7m4-ouog" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_input"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_OAGgIGxqEeKl4J7m4-ouog" direction="From">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OAIVUGxqEeKl4J7m4-ouog" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OAJjcGxqEeKl4J7m4-ouog" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
-    <artifacts xmi:type="bpmn:DataObject" xmi:id="_OyoJQWxqEeKl4J7m4-ouog" iD="_OyoJQGxqEeKl4J7m4-ouog">
-      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OyoJQmxqEeKl4J7m4-ouog" source="attachedDataobject">
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OyoJQ2xqEeKl4J7m4-ouog" key="isBpelDeclaration" value="true"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OyrzomxqEeKl4J7m4-ouog" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteResponseMsg"/>
-        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OywsIWxqEeKl4J7m4-ouog" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_output"/>
-      </eAnnotations>
-      <associations xmi:type="bpmn:Association" xmi:id="_Oyto0GxqEeKl4J7m4-ouog" direction="To">
-        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Oyu28GxqEeKl4J7m4-ouog" source="dataObjectAssociationTypeSource">
-          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OywsIGxqEeKl4J7m4-ouog" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
-        </eAnnotations>
-      </associations>
-    </artifacts>
     <artifacts xmi:type="bpmn:DataObject" xmi:id="_gxsH8G68EeKvjs-uExigJg" iD="_gxrg5W68EeKvjs-uExigJg">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_gxsH8W68EeKvjs-uExigJg" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_gxsH8m68EeKvjs-uExigJg" key="isBpelDeclaration" value="true"/>
@@ -1259,6 +1235,30 @@
         </eAnnotations>
       </associations>
     </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_6-QtQ27iEeKkE6ll_3FDMA" iD="_6-QtQm7iEeKkE6ll_3FDMA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6-QtRG7iEeKkE6ll_3FDMA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-QtRW7iEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-U-sW7iEeKkE6ll_3FDMA" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteRequestMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-Z3MW7iEeKkE6ll_3FDMA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_input"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_6-WM0G7iEeKkE6ll_3FDMA" direction="From">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_6-YCAG7iEeKkE6ll_3FDMA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_6-Z3MG7iEeKkE6ll_3FDMA" key="dataObjectAssociationTypeValue" value="incomingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
+    <artifacts xmi:type="bpmn:DataObject" xmi:id="_7U6SsW7iEeKkE6ll_3FDMA" iD="_7U6SsG7iEeKkE6ll_3FDMA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7U6Ssm7iEeKkE6ll_3FDMA" source="attachedDataobject">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7U6Ss27iEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7U-kKG7iEeKkE6ll_3FDMA" key="defaultDeclarationName" value="txDeliveryCompleteTxDeliveryCompleteResponseMsg"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VFR0G7iEeKkE6ll_3FDMA" key="douri2" value="builtin:///diagram?wsdlmessage={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}txDeliveryComplete_output"/>
+      </eAnnotations>
+      <associations xmi:type="bpmn:Association" xmi:id="_7VBAYG7iEeKkE6ll_3FDMA" direction="To">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7VC1kG7iEeKkE6ll_3FDMA" source="dataObjectAssociationTypeSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7VEqwG7iEeKkE6ll_3FDMA" key="dataObjectAssociationTypeValue" value="outgoingMesssageVariable"/>
+        </eAnnotations>
+      </associations>
+    </artifacts>
     <vertices xmi:type="bpmn:Activity" xmi:id="_IoIJMGuWEeK7FdvgH5F2kQ" iD="_IoFs8GuWEeK7FdvgH5F2kQ" associations="_Jgy2kGuWEeK7FdvgH5F2kQ _JwHE8GuWEeK7FdvgH5F2kQ" name="getDeliveryLocation" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_IoIJMWuWEeK7FdvgH5F2kQ" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_IoIJMmuWEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/getDeliveryLocation.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest}restService/httpPort/getDeliveryLocation"/>
@@ -1273,12 +1273,12 @@
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_dyU4MW7aEeKkE6ll_3FDMA"/>
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_eGACIW7aEeKkE6ll_3FDMA"/>
     </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_LiM6UGxqEeKl4J7m4-ouog" iD="_LiKeEGxqEeKl4J7m4-ouog" associations="_OAGgIGxqEeKl4J7m4-ouog _Oyto0GxqEeKl4J7m4-ouog" name="txDeliveryComplete" activityType="Task">
+    <vertices xmi:type="bpmn:Activity" xmi:id="_LiM6UGxqEeKl4J7m4-ouog" iD="_LiKeEGxqEeKl4J7m4-ouog" associations="_6-WM0G7iEeKkE6ll_3FDMA _7VBAYG7iEeKkE6ll_3FDMA" name="txDeliveryComplete" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LiM6UWxqEeKl4J7m4-ouog" source="attachedDataobject">
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LiM6UmxqEeKl4J7m4-ouog" key="douri" value="project:///wfAdapter/txDeliveryComplete.wsdl?wsdloperationbound={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}restService/httpPort/txDeliveryComplete"/>
       </eAnnotations>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_N_pNIWxqEeKl4J7m4-ouog"/>
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_OyaG0WxqEeKl4J7m4-ouog"/>
+      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_69450W7iEeKkE6ll_3FDMA"/>
+      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_7UteYW7iEeKkE6ll_3FDMA"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_c4KRqG68EeKvjs-uExigJg" iD="_c4IccG68EeKvjs-uExigJg" associations="_gxxngG68EeKvjs-uExigJg _hDPyAG68EeKvjs-uExigJg" name="isCancelled" activityType="Task">
       <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_c4KRqW68EeKvjs-uExigJg" source="attachedDataobject">
@@ -2015,16 +2015,6 @@
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_-Yid0WuXEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioTXFlow"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_N_pNIWxqEeKl4J7m4-ouog" iD="_N_pNIGxqEeKl4J7m4-ouog" source="_1LjpcWxeEeKl4J7m4-ouog" target="_LiM6UGxqEeKl4J7m4-ouog">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_N_uFoGxqEeKl4J7m4-ouog" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_N_uFoWxqEeKl4J7m4-ouog" key="douri" value="project:///wfAdapter/txDeliveryComplete.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}restService/httpPort/txDeliveryComplete/input/txDeliveryCompleteRequest"/>
-    </eAnnotations>
-  </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_OyaG0WxqEeKl4J7m4-ouog" iD="_OyaG0GxqEeKl4J7m4-ouog" source="_LiM6UGxqEeKl4J7m4-ouog" target="_1LjpcWxeEeKl4J7m4-ouog">
-    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_OyfmYGxqEeKl4J7m4-ouog" source="attachedDataobject">
-      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OyfmYWxqEeKl4J7m4-ouog" key="douri" value="project:///wfAdapter/txDeliveryComplete.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}restService/httpPort/txDeliveryComplete/output/txDeliveryCompleteResponse"/>
-    </eAnnotations>
-  </messages>
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="__PfWEWxqEeKv3LhB37uiLw" iD="__PfWEGxqEeKv3LhB37uiLw" source="_0ciuwWuXEeK7FdvgH5F2kQ" target="_-UyoYWxqEeKv3LhB37uiLw">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_rn4ycGxsEeKv3LhB37uiLw" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_rn4ycWxsEeKv3LhB37uiLw" key="douri" value="project:///wfAdapter/wfAdapter.xsd?xsdtype={http://ns.mediasmiths.com/foxtel/wf/adapter}invokeIntalioTXFlow"/>
@@ -2222,6 +2212,16 @@
   <messages xmi:type="bpmn:MessagingEdge" xmi:id="_o2oTIW7aEeKkE6ll_3FDMA" iD="_o2oTIG7aEeKkE6ll_3FDMA" source="_nmZaWG7aEeKkE6ll_3FDMA" target="_iz-NIW7aEeKkE6ll_3FDMA">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_o2tLoG7aEeKkE6ll_3FDMA" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o2tLoW7aEeKkE6ll_3FDMA" key="douri" value="project:///wfAdapter/txDeliveryFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest}restService/httpPort/txDeliveryFailure/output/txDeliveryFailureResponse"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_69450W7iEeKkE6ll_3FDMA" iD="_69450G7iEeKkE6ll_3FDMA" source="_5K55QW7iEeKkE6ll_3FDMA" target="_LiM6UGxqEeKl4J7m4-ouog">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_697WEG7iEeKkE6ll_3FDMA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_697WEW7iEeKkE6ll_3FDMA" key="douri" value="project:///wfAdapter/txDeliveryComplete.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}restService/httpPort/txDeliveryComplete/input/txDeliveryCompleteRequest"/>
+    </eAnnotations>
+  </messages>
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_7UteYW7iEeKkE6ll_3FDMA" iD="_7UteYG7iEeKkE6ll_3FDMA" source="_LiM6UGxqEeKl4J7m4-ouog" target="_5K55QW7iEeKkE6ll_3FDMA">
+    <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7UxIwG7iEeKkE6ll_3FDMA" source="attachedDataobject">
+      <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7UxIwW7iEeKkE6ll_3FDMA" key="douri" value="project:///wfAdapter/txDeliveryComplete.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest}restService/httpPort/txDeliveryComplete/output/txDeliveryCompleteResponse"/>
     </eAnnotations>
   </messages>
 </bpmn:BpmnDiagram>
