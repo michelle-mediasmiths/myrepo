@@ -2,7 +2,10 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -31,19 +34,39 @@ public class OrderStatusRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeOrderStatus(List<EventEntity> delivered, List<EventEntity> outstanding, List<EventEntity> overdue, List<EventEntity> unmatched)
+	private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+	
+	public void writeOrderStatus(List<EventEntity> delivered, List<EventEntity> outstanding, List<EventEntity> overdue, List<EventEntity> unmatched, Date startDate, Date endDate)
 	{
 		List<OrderStatus> deliveredTitles = getTitleList(delivered, "Delivered");
 		List<OrderStatus> outstandingTitles = getTitleList(outstanding, "Outstanding");
 		List<OrderStatus> overdueTitles = getTitleList(overdue, "Overdue");
-		List<OrderStatus> unmatchedTitles = getMaterialList(unmatched, "Unmatched");
+		List<OrderStatus> unmatchedTitles = getMaterialList(unmatched, "Unmatched", startDate, endDate);
 		List<OrderStatus> titles = new ArrayList<OrderStatus>();
 		titles.addAll(deliveredTitles);
 		titles.addAll(outstandingTitles);
 		titles.addAll(overdueTitles);
 		logger.info(unmatchedTitles);
-		titles.addAll(unmatchedTitles);
-		
+		List<OrderStatus> valid = new ArrayList<OrderStatus>();
+		for (OrderStatus order : titles)
+		{
+			if (order.getIngestDate() != null) {
+				String ingestString = order.getIngestDate();
+				try
+				{
+					Date ingestDate = sdf.parse(ingestString);
+					logger.info("Date: " + ingestDate);
+					if ((ingestDate.after(startDate)) && (ingestDate.before(endDate)))
+						order.setDateRange(startDate + " - " + endDate);
+						valid.add(order);
+				}
+				catch (ParseException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+		valid.addAll(unmatchedTitles);
 		createOrderStatusCsv(titles, "orderStatusCsv");
 	}
 	
@@ -79,13 +102,14 @@ public class OrderStatusRpt
 					}
 				}
 			}
-			title.setIngestDate(Long.toString(event.getTime()));
+			Date ingestDate = new Date(event.getTime());
+			title.setIngestDate(ingestDate.toString());
   			titleList.add(title);
 		}	
 		return titleList;
 	}
 	
-	public List<OrderStatus> getMaterialList(List<EventEntity> events, String status)
+	public List<OrderStatus> getMaterialList(List<EventEntity> events, String status, Date startDate, Date endDate)
 	{
 		List<OrderStatus> titleList = new ArrayList<OrderStatus>();
 		for (EventEntity event : events)
@@ -97,8 +121,13 @@ public class OrderStatusRpt
 				OrderStatus title = new OrderStatus();
 				title.setTitleID(titleID);
 				title.setStatus(status);
-				titleList.add(title);
+				Date ingestDate = new Date(event.getTime());
+				if ((ingestDate.after(startDate)) && (ingestDate.before(endDate))) {
+					title.setDateRange(startDate + " - " + endDate);
+					titleList.add(title);
+				}
 			}
+			
 		}	
 		return titleList;
 	}

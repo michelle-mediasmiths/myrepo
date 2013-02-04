@@ -188,7 +188,7 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> outstanding = queryApi.getOutstanding();
 		List<EventEntity> overdue = queryApi.getOverdue();
  		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
-		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched);
+		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched, startDate, endDate);
 	}
 
 	@Transactional
