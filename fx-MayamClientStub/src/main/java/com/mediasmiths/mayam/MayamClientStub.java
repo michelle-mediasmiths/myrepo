@@ -64,7 +64,7 @@ public class MayamClientStub implements MayamClient
 	public final static String ERROR_PACKAGE_ID = "ERROR_PACKAGE";
 	public final static String PROTECTED_PACKAGE_ID = "PROTECTED_PACKAGE";
 
-	private final static String [] CHANNELS = new String[] {"D3F","ARN","BIO","HIT","COM","CIN","FOX","HST","LHO","LST","LSY","FBO","AO","MEV","FKC","FOD","AED","SOH"};
+	private final static String [] CHANNELS = new String[] {"D3F","ARN","BIO","HIT","COM","CIN","FOX","HST","LHO","LST","LSY","FBO","AO","MEV","FKC","FOD","AED","SOH", "MO1", "MO2", "MO3", "MO5", "MO6", "MO7", "SHF", "SHH"};
 
 	@Override
 	public void shutdown()
