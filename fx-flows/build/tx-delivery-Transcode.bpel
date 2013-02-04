@@ -44,6 +44,7 @@
     <bpel:variable name="cancelledEventStartMessageRequest" messageType="cancelled:EventStartMessageRequest"/>
     <bpel:variable name="TranscodeJobID" type="xs:string"/>
     <bpel:variable name="TranscodeJobResult" type="xs:string"/>
+    <bpel:variable name="deliveryEventStartMessageResponse" messageType="Delivery:EventStartMessageResponse"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
@@ -337,100 +338,110 @@
               <bpel:condition>($TaskIsCancelled = true()) or ("INCOMPLETE" != $queryJobQueryJobResponseMsg.response/tns:state/text())</bpel:condition>
             </bpel:repeatUntil>
           </bpel:scope>
-          <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_N9MxYG7AEeKvjs-uExigJg">
-            <bpel:variables>
-              <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
-              <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
-            </bpel:variables>
-            <bpel:faultHandlers>
-              <bpel:catchAll>
-                <bpel:empty bpmn:label="no-activities-for-Error_Intermediate_Event" name="no-activities-for-Error_Intermediate_Event-2" bpmn:id="_QGEiYG7AEeKvjs-uExigJg"/>
-              </bpel:catchAll>
-            </bpel:faultHandlers>
-            <bpel:sequence>
-              <bpel:assign name="init-variables-SubProcess" bpmn:id="_N9MxYG7AEeKvjs-uExigJg">
-                <bpel:copy bpmn:label="$queryJobQueryJobRequestMsg">
-                  <bpel:from>
-                    <bpel:literal>
-<queryJob:guid_urlType></queryJob:guid_urlType></bpel:literal>
-                  </bpel:from>
-                  <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:assign bpmn:label="get job result" name="get_job_result" bpmn:id="_GnToQG7IEeKkE6ll_3FDMA">
-                <bpel:copy>
-                  <bpel:from>$TranscodeJobID</bpel:from>
-                  <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk2Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="get job result" name="get_job_result-1" bpmn:id="_GnToQG7IEeKkE6ll_3FDMA"></bpel:invoke>
-              <bpel:assign bpmn:label="map job result to variable" name="map_job_result_to_variable" bpmn:id="_ah68kG7IEeKkE6ll_3FDMA">
-                <bpel:copy>
-                  <bpel:from>$queryJobQueryJobResponseMsg.response/tns:state/text()</bpel:from>
-                  <bpel:to>$TranscodeJobResult</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-            </bpel:sequence>
-          </bpel:scope>
           <bpel:if>
-            <bpel:condition>"SUCCESS" = $TranscodeJobResult</bpel:condition>
+            <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
             <bpel:sequence>
-              <bpel:empty bpmn:label="Transcode Success" name="Transcode_Success" bpmn:id="_W3INQGuQEeK7FdvgH5F2kQ"/>
-              <bpel:assign bpmn:label="Update Success Variable" name="Update_Success_Variable" bpmn:id="_tIhywGuQEeK7FdvgH5F2kQ">
-                <bpel:copy>
-                  <bpel:from>true()</bpel:from>
-                  <bpel:to>$TranscodeSuccess</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:assign bpmn:label="Send Success Message" name="Send_Success_Message" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ">
-                <bpel:copy>
-                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
-                  <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:assetID</bpel:to>
-                </bpel:copy>
-                <bpel:copy>
-                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-                  <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:taskID</bpel:to>
-                </bpel:copy>
-                <bpel:copy>
-                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
-                  <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:title</bpel:to>
-                </bpel:copy>
-                <bpel:copy>
-                  <bpel:from>true()</bpel:from>
-                  <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"></bpel:invoke>
+              <bpel:empty bpmn:label="cancelled" name="cancelled" bpmn:id="_KxhFQG7QEeKkE6ll_3FDMA"/>
             </bpel:sequence>
             <bpel:else>
               <bpel:sequence>
-                <bpel:empty bpmn:label="Transcode Failure" name="Transcode_Failure" bpmn:id="_YpF6IGuQEeK7FdvgH5F2kQ"/>
-                <bpel:assign bpmn:label="Increment Error Count" name="Increment_Error_Count" bpmn:id="_09wCkGuQEeK7FdvgH5F2kQ">
-                  <bpel:copy>
-                    <bpel:from>$TranscodeErrorCount + 1</bpel:from>
-                    <bpel:to>$TranscodeErrorCount</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:assign bpmn:label="Send Failure Message" name="Send_Failure_Message" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ">
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-                    <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:taskID</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
-                    <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:title</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
-                    <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>true()</bpel:from>
-                    <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcFailure:restInterface" operation="tcFailure" inputVariable="tcFailureTcFailureRequestMsg" outputVariable="tcFailureTcFailureResponseMsg" bpmn:label="Send Failure Message" name="Send_Failure_Message-1" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ"></bpel:invoke>
-                <bpel:empty bpmn:label="Delete Partial Files" name="Delete_Partial_Files" bpmn:id="_IPTy0GuREeK7FdvgH5F2kQ"/>
+                <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_N9MxYG7AEeKvjs-uExigJg">
+                  <bpel:variables>
+                    <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
+                    <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
+                  </bpel:variables>
+                  <bpel:faultHandlers>
+                    <bpel:catchAll>
+                      <bpel:empty bpmn:label="no-activities-for-Error_Intermediate_Event" name="no-activities-for-Error_Intermediate_Event-2" bpmn:id="_QGEiYG7AEeKvjs-uExigJg"/>
+                    </bpel:catchAll>
+                  </bpel:faultHandlers>
+                  <bpel:sequence>
+                    <bpel:assign name="init-variables-SubProcess" bpmn:id="_N9MxYG7AEeKvjs-uExigJg">
+                      <bpel:copy bpmn:label="$queryJobQueryJobRequestMsg">
+                        <bpel:from>
+                          <bpel:literal>
+<queryJob:guid_urlType></queryJob:guid_urlType></bpel:literal>
+                        </bpel:from>
+                        <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:assign bpmn:label="get job result" name="get_job_result" bpmn:id="_GnToQG7IEeKkE6ll_3FDMA">
+                      <bpel:copy>
+                        <bpel:from>$TranscodeJobID</bpel:from>
+                        <bpel:to>$queryJobQueryJobRequestMsg.guid</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk2Var" portType="queryJob:restInterface" operation="queryJob" inputVariable="queryJobQueryJobRequestMsg" outputVariable="queryJobQueryJobResponseMsg" bpmn:label="get job result" name="get_job_result-1" bpmn:id="_GnToQG7IEeKkE6ll_3FDMA"></bpel:invoke>
+                    <bpel:assign bpmn:label="map job result to variable" name="map_job_result_to_variable" bpmn:id="_ah68kG7IEeKkE6ll_3FDMA">
+                      <bpel:copy>
+                        <bpel:from>$queryJobQueryJobResponseMsg.response/tns:state/text()</bpel:from>
+                        <bpel:to>$TranscodeJobResult</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                  </bpel:sequence>
+                </bpel:scope>
+                <bpel:if>
+                  <bpel:condition>"SUCCESS" = $TranscodeJobResult</bpel:condition>
+                  <bpel:sequence>
+                    <bpel:empty bpmn:label="Transcode Success" name="Transcode_Success" bpmn:id="_W3INQGuQEeK7FdvgH5F2kQ"/>
+                    <bpel:assign bpmn:label="Update Success Variable" name="Update_Success_Variable" bpmn:id="_tIhywGuQEeK7FdvgH5F2kQ">
+                      <bpel:copy>
+                        <bpel:from>true()</bpel:from>
+                        <bpel:to>$TranscodeSuccess</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:assign bpmn:label="Send Success Message" name="Send_Success_Message" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ">
+                      <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
+                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:assetID</bpel:to>
+                      </bpel:copy>
+                      <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:taskID</bpel:to>
+                      </bpel:copy>
+                      <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
+                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:title</bpel:to>
+                      </bpel:copy>
+                      <bpel:copy>
+                        <bpel:from>true()</bpel:from>
+                        <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"></bpel:invoke>
+                  </bpel:sequence>
+                  <bpel:else>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="Transcode Failure" name="Transcode_Failure" bpmn:id="_YpF6IGuQEeK7FdvgH5F2kQ"/>
+                      <bpel:assign bpmn:label="Increment Error Count" name="Increment_Error_Count" bpmn:id="_09wCkGuQEeK7FdvgH5F2kQ">
+                        <bpel:copy>
+                          <bpel:from>$TranscodeErrorCount + 1</bpel:from>
+                          <bpel:to>$TranscodeErrorCount</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:assign bpmn:label="Send Failure Message" name="Send_Failure_Message" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ">
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+                          <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:taskID</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
+                          <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:title</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
+                          <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>true()</bpel:from>
+                          <bpel:to>$tcFailureTcFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcFailure:restInterface" operation="tcFailure" inputVariable="tcFailureTcFailureRequestMsg" outputVariable="tcFailureTcFailureResponseMsg" bpmn:label="Send Failure Message" name="Send_Failure_Message-1" bpmn:id="_Arc_0GuREeK7FdvgH5F2kQ"></bpel:invoke>
+                      <bpel:empty bpmn:label="Delete Partial Files" name="Delete_Partial_Files" bpmn:id="_IPTy0GuREeK7FdvgH5F2kQ"/>
+                    </bpel:sequence>
+                  </bpel:else>
+                </bpel:if>
               </bpel:sequence>
             </bpel:else>
           </bpel:if>
@@ -442,7 +453,13 @@
       <bpel:condition>$TranscodeSuccess</bpel:condition>
       <bpel:sequence>
         <bpel:empty bpmn:label="Transcode Finished Successfuly" name="Transcode_Finished_Successfuly" bpmn:id="_Q02FQGuREeK7FdvgH5F2kQ"/>
-        <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="check if cancelled" name="check_if_cancelled-2" bpmn:id="_bfFisG64EeKvjs-uExigJg"></bpel:invoke>
+        <bpel:assign bpmn:label="check if cancelled" name="check_if_cancelled-2" bpmn:id="_bfFisG64EeKvjs-uExigJg">
+          <bpel:copy>
+            <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+            <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
+          </bpel:copy>
+        </bpel:assign>
+        <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="check if cancelled" name="check_if_cancelled-3" bpmn:id="_bfFisG64EeKvjs-uExigJg"></bpel:invoke>
         <bpel:if>
           <bpel:condition>true() = $isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:condition>
           <bpel:sequence>
@@ -514,12 +531,25 @@
                   <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
                 </bpel:copy>
               </bpel:assign>
-              <bpel:invoke partnerLink="transcodeAndDeliveryPlkVar" portType="Delivery:ForTranscode" operation="EventStartMessage" inputVariable="deliveryEventStartMessageRequest" bpmn:label="Deliver" name="Deliver-1" bpmn:id="_xcqdQGuXEeK7FdvgH5F2kQ"></bpel:invoke>
+              <bpel:invoke partnerLink="transcodeAndDeliveryPlkVar" portType="Delivery:ForTranscode" operation="EventStartMessage" inputVariable="deliveryEventStartMessageRequest" outputVariable="deliveryEventStartMessageResponse" bpmn:label="Deliver" name="Deliver-1" bpmn:id="_xcqdQGuXEeK7FdvgH5F2kQ"></bpel:invoke>
               <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-1" bpmn:id="_avNdkG67EeKvjs-uExigJg"/>
             </bpel:sequence>
           </bpel:else>
         </bpel:if>
       </bpel:sequence>
+      <bpel:elseif>
+        <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
+        <bpel:sequence>
+          <bpel:assign bpmn:label="canceled" name="canceled-2" bpmn:id="_pQKs8G64EeKvjs-uExigJg">
+            <bpel:copy>
+              <bpel:from>concat(concat($thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFolder/text(), $thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFileBasename/text()), ".gxf")</bpel:from>
+              <bpel:to>$cancelledEventStartMessageRequest.body</bpel:to>
+            </bpel:copy>
+          </bpel:assign>
+          <bpel:invoke partnerLink="transcodeAndCancelledPlkVar" portType="cancelled:ForTranscode" operation="EventStartMessage" inputVariable="cancelledEventStartMessageRequest" bpmn:label="canceled" name="canceled-3" bpmn:id="_pQKs8G64EeKvjs-uExigJg"></bpel:invoke>
+          <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-2" bpmn:id="_xWbQIG69EeKvjs-uExigJg"/>
+        </bpel:sequence>
+      </bpel:elseif>
       <bpel:else>
         <bpel:sequence>
           <bpel:assign bpmn:label="Transcode Failed" name="Transcode_Failed" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ">

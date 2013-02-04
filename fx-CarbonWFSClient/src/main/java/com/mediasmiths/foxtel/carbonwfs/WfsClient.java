@@ -211,7 +211,7 @@ public class WfsClient
 	 */
 	public void updatejobPriority(UUID jobid, Integer priority) {
 		
-		log.info(String.format("updating the priority of job %s to %n", jobid, priority));
+		log.info(String.format("updating the priority of job %s to %d", jobid, priority.intValue()));
 		
 		if(priority.intValue() < 1 || priority.intValue() > 10){
 			log.warn("Priority is outside of the expected range");

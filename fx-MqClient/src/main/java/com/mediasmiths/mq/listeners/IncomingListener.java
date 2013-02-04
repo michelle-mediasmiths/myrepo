@@ -181,7 +181,7 @@ public class IncomingListener extends MqClientListener
 					}
 					else
 					{
-						logger.warn("could not discern nature of message");
+						logger.warn("message was not a type I handle");
 					}
 				}
 				else

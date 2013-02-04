@@ -26,7 +26,12 @@
         <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
       </bpel:copy>
     </bpel:assign>
-    <bpel:empty bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_U9esUG63EeKvjs-uExigJg"/>
+    <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_U9esUG63EeKvjs-uExigJg">
+      <bpel:copy>
+        <bpel:from>$thisEventStartMessageRequest.body/text()</bpel:from>
+        <bpel:to>$TranscodeOutputPath</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
     <bpel:assign bpmn:label="Delete Transcode Output File" name="Delete_Transcode_Output_File" bpmn:id="_XHSRcG63EeKvjs-uExigJg">
       <bpel:copy>
         <bpel:from>$TranscodeOutputPath</bpel:from>

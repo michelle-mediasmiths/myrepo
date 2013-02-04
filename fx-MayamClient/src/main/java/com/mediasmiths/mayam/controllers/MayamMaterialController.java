@@ -1117,24 +1117,30 @@ public class MayamMaterialController extends MayamController
 
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
 	{
-		// TODO : perform update
 		log.warn("no attempt made to update material " + materialID);
-		//
-		// AttributeMap itemAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
-		// String assetID = itemAttributes.getAttribute(Attribute.ASSET_ID);
-		//
-		// AttributeMap updateMap = client.createAttributeMap();
-		// updateMap.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-		// updateMap.setAttribute(Attribute.ASSET_ID, assetID);
-		//
-		// if(details.getTitle() != null){
-		// updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
-		// }
-		//
-		// if(details.getFormat() != null){
-		//
-		// }
-
+		
+		AttributeMap materialAttributes = getMaterialAttributes(materialID);
+		AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
+		
+	
+		 if(details.getTitle() != null){
+			 updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
+		 }
+		
+		 if(details.getFormat() != null){
+			 log.warn("have not updated format");
+		 }
+		 
+		 //TODO : update any other metadata
+		 
+		try
+		{
+			client.assetApi().updateAsset(updateMap);
+		}
+		catch (RemoteException e)
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED, e);
+		}
 	}
 
 	public List<AttributeMap> getChildren(String assetId, AssetType childAssetType)

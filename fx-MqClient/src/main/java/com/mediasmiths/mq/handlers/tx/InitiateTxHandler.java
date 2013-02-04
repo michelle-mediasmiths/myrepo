@@ -107,10 +107,12 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 						materialPath,
 						outputLocation);
 
-				String fileName = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".gxf";
-				File f = new File(fileName);
-
-				if (f.exists())
+				String essenceFilePath = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".gxf";
+				String companionFilePath = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".xml";
+				File essenceFile = new File(essenceFilePath);
+				File companionFile = new File(companionFilePath);
+				
+				if (essenceFile.exists() || companionFile.exists())
 				{
 					String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
 					log.error(errorMessage);

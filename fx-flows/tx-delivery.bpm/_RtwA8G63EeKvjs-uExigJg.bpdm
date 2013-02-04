@@ -22,12 +22,12 @@
             </wsdl:message>
             <bpel:binding name="CanonicBindingForTranscode" type="this:ForTranscode" bpdm:isSynchronized="true"/>
         </bpdm:namespaceContributor>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:label="FS Adapter"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:label="Transcode"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="cancelled" bpdm:ID="_RtwA8G63EeKvjs-uExigJg">
         <bpel:partnerLinks>
@@ -48,16 +48,23 @@
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCancelledPlkVar" portType="this:ForTranscode" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_T0KT0G63EeKvjs-uExigJg">
                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_80OwMG69EeKvjs-uExigJg"></bpdm:linkset>
             </bpdm:messagingtask>
-            <bpdm:messagingtask bpdm:label="Initialise Variables" bpdm:ID="_U9esUG63EeKvjs-uExigJg"></bpdm:messagingtask>
+            <bpdm:messagingtask bpdm:label="Initialise Variables" bpdm:ID="_U9esUG63EeKvjs-uExigJg">
+                <bpdm:linkset bpdm:type="assignments">
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/text()</bpel:from>
+                        <bpel:to>$TranscodeOutputPath</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="14075609" targetPath="$TranscodeOutputPath" targetedBy="9050055-arg0"></mapper:vertice>
+  <mapper:vertice id="9050055" sourcePath="$thisEventStartMessageRequest.body/text()"></mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                </bpdm:linkset>
+            </bpdm:messagingtask>
             <bpdm:messagingtask operation="delete" partnerLink="cancelledAndFS_AdapterForHttpPortPlkVar" portType="delete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Delete Transcode Output File" bpdm:ID="_XHSRcG63EeKvjs-uExigJg">
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>$TranscodeOutputPath</bpel:from>
-                        <bpel:to>$deleteDeleteRequestMsg.body/tns:path/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="22499912" targetPath="$deleteDeleteRequestMsg.body/tns:path/text()" targetedBy="27623936-arg0"></mapper:vertice>
-  <mapper:vertice id="27623936" sourcePath="$TranscodeOutputPath"></mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$deleteDeleteRequestMsg.body/tns:path/text()</bpel:to><mapper:mapperLink><mapper:vertice id="22499912" targetPath="$deleteDeleteRequestMsg.body/tns:path/text()" targetedBy="27623936-arg0"></mapper:vertice><mapper:vertice id="27623936" sourcePath="$TranscodeOutputPath"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_ozEWsG63EeKvjs-uExigJg"></bpdm:linkset>
