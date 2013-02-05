@@ -728,7 +728,7 @@ public class MayamClientImpl implements MayamClient
 		long taskId = -1;
 		
 		AttributeMap task = client.createAttributeMap();
-		task.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR);
+		task.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.getText());
 		task.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 		
 		task.setAttribute(Attribute.ASSET_TITLE, filename);
