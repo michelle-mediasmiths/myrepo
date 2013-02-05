@@ -27,6 +27,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.*;
+import com.mayam.wf.attributes.shared.type.Marker.Type;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
@@ -51,6 +52,7 @@ import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.io.PropertyFile;
 
@@ -1322,9 +1324,63 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public void exportMarkers(AttributeMap messageAttributes)
+	public void exportMarkers(AttributeMap messageAttributes) throws MayamClientException
 	{
-		//TODO export markers
-		log.error("markers not exported!");
+		
+		String assetID = messageAttributes.getAttributeAsString(Attribute.ASSET_ID);
+		String user = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);
+		String revisionId = null;
+		try
+		{
+			revisionId = RevisionUtil.findHighestRevision(assetID, client);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error finding highest reivsion for asset "+ assetID,e);		
+			throw new MayamClientException(MayamClientErrorCode.REVISION_FIND_FAILED,e);
+		}
+		
+		MarkerList markers = null;
+		
+		try
+		{
+			markers = client.assetApi().getMarkers(AssetType.ITEM, assetID, revisionId);
+		}
+		catch (RemoteException e)
+		{
+			log.error(String.format("Error fetching markerts for revision %s asset %s",revisionId,assetID));
+		}
+		
+		if (markers == null)
+		{
+			log.info(String.format("No markers found for revision %s asset %s", revisionId, assetID));
+		}
+		else
+		{
+			log.info(String.format("found %d markers  ",markers.size()));
+			
+			for (Marker marker : markers)
+			{
+				String id = marker.getId();
+				String mediaId = marker.getMediaId();
+				Timecode in = marker.getIn();
+				Timecode duration = marker.getDuration();
+				String title = marker.getTitle();
+				Type type = marker.getType();
+
+				log.info(String.format(
+						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}",
+						id,
+						mediaId,
+						in.toSmpte(),
+						duration.toSmpte(),
+						title,
+						type.toString(),user));
+				
+				
+			}
+			
+			log.error("markers not exported! I dont know the users email address");
+		}		
 	}
 }

@@ -44,6 +44,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
+import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.types.Framerate;
 
@@ -183,7 +184,7 @@ public class MayamPackageController extends MayamController
 				
 					log.debug("Getting materials asset id");
 					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
-					String revisionID = findHighestRevision(materialAssetID);
+					String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
 					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
 					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
 					log.info("Created SegmentList with id :"+newSegmentList.getId());
@@ -290,26 +291,6 @@ public class MayamPackageController extends MayamController
 		
 		return null;
 	}
-
-	
-
-	private String findHighestRevision(String itemId) throws RemoteException
-	{
-		List<AttributeMap> maps = client.assetApi().getAssetChildren(AssetType.ITEM, itemId, AssetType.REVISION);
-		int maxno = -1;
-		String retId = null;
-		for (AttributeMap map : maps)
-		{
-			Integer no = map.getAttribute(Attribute.REVISION_NUMBER);
-			if (no > maxno)
-			{
-				retId = map.getAttribute(Attribute.ASSET_ID);
-				maxno = no;
-			}
-		}
-		return retId;
-	}
-
 
 	public MayamClientErrorCode updatePackage(PackageType txPackage)
 	{
