@@ -1,0 +1,45 @@
+package com.mediasmiths.mq.handlers.button;
+
+import org.apache.log4j.Logger;
+import org.mortbay.log.Log;
+
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.mayam.MayamButtonType;
+
+public class QcParallel extends ButtonClickHandler
+{
+
+	private final static Logger log = Logger.getLogger(QcParallel.class);
+	
+	@Override
+	protected void buttonClicked(AttributeMap messageAttributes)
+	{
+		Log.info(String.format("QC Parallel clicked for item with house id %s", messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+		AttributeMap update = taskController.updateMapForAsset(messageAttributes);
+		update.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.TRUE);
+		try
+		{
+			tasksClient.assetApi().updateAsset(update);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error setting qc parallel allow flag on asset ",e);
+		}
+		
+	}
+
+	@Override
+	public MayamButtonType getButtonType()
+	{
+		return MayamButtonType.QC_PARALLEL_ALLOWED;
+	}
+
+	@Override
+	public String getName()
+	{
+		return "QC Parallel Allowed";
+	}
+
+}
