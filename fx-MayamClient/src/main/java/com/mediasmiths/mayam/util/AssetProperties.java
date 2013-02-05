@@ -112,10 +112,10 @@ public class AssetProperties
 
 	}
 
-	public static boolean isPurgeProtected(AttributeMap titleAttributes)
+	public static boolean isPurgeProtected(AttributeMap asset)
 	{
 
-		Boolean purgeProtected = titleAttributes.getAttribute(Attribute.PURGE_PROTECTED);
+		Boolean purgeProtected = asset.getAttribute(Attribute.PURGE_PROTECTED);
 
 		if (purgeProtected == null)
 		{
@@ -124,20 +124,6 @@ public class AssetProperties
 		else
 		{
 			return purgeProtected.booleanValue();
-		}
-	}
-
-	public static boolean isProtected(AttributeMap attributes)
-	{
-		Boolean p = attributes.getAttribute(Attribute.PURGE_PROTECTED);
-
-		if (p == null)
-		{
-			return false;
-		}
-		else
-		{
-			return p.booleanValue();
 		}
 	}
 
@@ -167,6 +153,20 @@ public class AssetProperties
 		}
 				
 		
+		
+	}
+
+	public static boolean isQCParallel(AttributeMap attributes)
+	{
+		Boolean p = attributes.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+		
+		if(p==null){
+			return false;
+		}
+		else{
+			return p.booleanValue();
+		}
+				
 		
 	}
 

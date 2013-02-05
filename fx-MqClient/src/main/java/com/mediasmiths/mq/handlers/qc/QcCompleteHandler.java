@@ -10,6 +10,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class QcCompleteHandler extends TaskStateChangeHandler
@@ -29,7 +30,15 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		}
 		else
 		{
-			preview(houseID);
+			if (!AssetProperties.isQCParallel(messageAttributes))
+			{
+				log.info("Asset has not been marked as qc parallel, creating preview task");
+				preview(houseID);
+			}
+			else
+			{
+				log.info("Asset has been marked as qc parallel, a preview task should already have been created");
+			}
 		}
 		
 	}

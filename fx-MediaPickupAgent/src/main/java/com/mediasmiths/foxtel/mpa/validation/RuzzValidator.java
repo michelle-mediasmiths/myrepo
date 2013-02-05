@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
@@ -26,10 +27,10 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 	
 	@Inject
 	public RuzzValidator(
-			Unmarshaller unmarshaller,
+			@Named("ruzz.unmarshaller") Unmarshaller unmarshaller,
 			MayamClient mayamClient,
 			ReceiptWriter receiptWriter,
-			SchemaValidator schemaValidator) throws SAXException
+			@Named("ruzz.schema.validator") SchemaValidator schemaValidator) throws SAXException
 	{
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient=mayamClient;

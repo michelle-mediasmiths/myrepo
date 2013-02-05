@@ -136,7 +136,7 @@ public class IncomingListener extends MqClientListener
 	PublicityProxy publicityProxyButton;
 	@Inject
 	CaptionProxy captionProxyButton;
-	@Inject
+	@Inject 
 	ComplianceProxy complianceProxyButton;
 	@Inject
 	UnprotectButton unprotectButton;

@@ -67,9 +67,12 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 		boolean folderIsAO = watchFolders.isAo(FilenameUtils.getFullPathNoEndSeparator(messagePath));
 		boolean materialIsAO = isMaterialAO(message);
 		boolean isAggregatorAO = isAggregatorAO(message);
-		boolean expectAOPlaceholder = folderIsAO || materialIsAO || isAggregatorAO;
-
-		return validateTitle(message.getTitle(), message.getDetails(), expectAOPlaceholder);
+		
+		if((folderIsAO != materialIsAO) || (folderIsAO != isAggregatorAO)){
+				return MessageValidationResult.AO_MISMATCH; 
+		}
+		
+		return validateTitle(message.getTitle(), message.getDetails(), folderIsAO);
 	}
 
 	private boolean isAggregatorAO(Material message)

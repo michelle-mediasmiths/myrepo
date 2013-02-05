@@ -31,7 +31,7 @@ public class IngestCompleteHandler extends TaskStateChangeHandler
 			Date requiredby = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
 			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
 			
-			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus);
+			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus,messageAttributes);
 			
 		}
 		catch (Exception e)

@@ -64,7 +64,7 @@ public class UnmatchedJobHandler extends JobHandler
 					String houseID = material.getAttributeAsString(Attribute.HOUSE_ID);
 					try
 					{
-						taskController.createQCTaskForMaterial(houseID, null,null);
+						taskController.createQCTaskForMaterial(houseID, null,null, material);
 					}
 					catch (MayamClientException e)
 					{

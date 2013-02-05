@@ -38,6 +38,7 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRights;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.Triplet;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -75,9 +76,9 @@ public class MayamTaskController extends MayamController
 
 	}
 	
-	public void createQCTaskForMaterial(String materialID, Date requiredByDate, String previewStatus) throws MayamClientException
+	public void createQCTaskForMaterial(String materialID, Date requiredByDate, String previewStatus, AttributeMap material) throws MayamClientException
 	{
-		if(!MayamPreviewResults.isPreviewPass(previewStatus)){
+		if(!MayamPreviewResults.isPreviewPass(previewStatus) && ! AssetProperties.isQCPassed(material)){
 		
 			log.info(String.format("Creating qc task for asset "+materialID));
 		
@@ -91,10 +92,15 @@ public class MayamTaskController extends MayamController
 			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); //reset qc status when creating new task
 			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
-		
+			
+			if(AssetProperties.isQCParallel(material)){
+				log.info("Item was marked as qc parallel, creating preview task");
+				createPreviewTaskForMaterial(materialID);
+			}
+			
 		}
 		else{
-			log.info(String.format("Did not create qc task for asset %s as preview already passed",materialID));
+			log.info(String.format("Did not create qc task for asset %s as preview already passed or qc already passed",materialID));
 		}
 	}
 	
@@ -111,8 +117,7 @@ public class MayamTaskController extends MayamController
 	
 	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
 		
-		log.info(String.format("Creating preview task for asset "+materialID));
-		
+		log.info(String.format("Creating preview task for asset "+materialID));		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW,initialAttributes);

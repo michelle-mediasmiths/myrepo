@@ -19,9 +19,9 @@ public class PreviewTaskCreateHandler extends TaskStateChangeHandler
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
 
-		if(!AssetProperties.isQCPassed(messageAttributes)){
+		if(! (AssetProperties.isQCPassed(messageAttributes) || AssetProperties.isQCParallel(messageAttributes))){
 			
-			log.warn("Preview task createed for material that has not passed qc, rejecting");
+			log.warn("Preview task created for material that has not passed qc or marked as qc parallel, rejecting");
 			
 			
 			AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);

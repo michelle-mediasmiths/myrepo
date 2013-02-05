@@ -47,7 +47,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			{
 				
 				log.debug("Attribute affecting archive policy has changed");
-				boolean isProtected = AssetProperties.isProtected(currentAttributes);
+				boolean isProtected = AssetProperties.isPurgeProtected(currentAttributes);
 				boolean isAO = AssetProperties.isAO(currentAttributes);
 				boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) currentAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT));
 

@@ -19,6 +19,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
+import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
@@ -85,6 +86,62 @@ public class MediaPickupModule extends AbstractModule {
 			throw e;
 		}
 		return marshaller;
+	}
+	
+	@Provides
+	@Named("ruzz.jaxb.context")
+	public JAXBContext provideRuzzJaxBContext() throws JAXBException{
+		JAXBContext jc = null;
+		try {
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.ruzz");
+		} catch (JAXBException e) {
+			logger.fatal("Could not create jaxb context", e);
+			throw e;
+		}
+		return jc;
+	}
+	
+	
+	@Provides
+	@Named("ruzz.unmarshaller")
+	public Unmarshaller provideRuzzUnmarshaller(@Named("ruzz.jaxb.context")JAXBContext jc) throws JAXBException {
+		
+		Unmarshaller unmarshaller = null;
+		try {
+			unmarshaller = jc.createUnmarshaller();
+		} catch (JAXBException e) {
+			logger.fatal("Could not create unmarshaller", e);
+			throw e;
+		}
+		return unmarshaller;
+	}
+	
+	@Provides
+	@Named("ruzz.marshaller")
+	public Marshaller provideRuzzMarshaller(@Named("ruzz.jaxb.context")JAXBContext jc, @Named("ruzz.schema.location") String schemaLocation) throws JAXBException, SAXException {
+		Marshaller marshaller = null;
+		try {
+			marshaller = jc.createMarshaller();
+			
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			SchemaFactory factory = SchemaFactory
+					.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = factory.newSchema(getClass().getClassLoader()
+					.getResource(schemaLocation));
+			marshaller.setSchema(schema);
+			
+		} catch (JAXBException e) {
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+	
+	@Provides
+	@Named("ruzz.schema.validator") 
+	public SchemaValidator ruzzSchemaValidator(@Named("ruzz.schema.location") String schemaLocation) throws SAXException{
+		SchemaValidator sv = new SchemaValidator(schemaLocation);
+		return sv;
 	}
 
 }
