@@ -16,6 +16,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.AcquisitionDelivery;
@@ -68,7 +69,7 @@ public class AcquisitionRpt
 			
 			for (String channel : channels) 
 			{
-				AcquisitionDelivery channelStat = new AcquisitionDelivery(channel, Integer.toString(queryApi.getByChannel(channel, titles).size()));
+				AcquisitionDelivery channelStat = new AcquisitionDelivery(channel, Integer.toString(getByChannel(channel, titles).size()));
 				titles.add(channelStat);
 			}
 			
@@ -177,6 +178,21 @@ public class AcquisitionRpt
 				channels.add(channel);
 			}
 		}
+	}
+	
+	public List<AcquisitionDelivery> getByChannel(String channel, List<AcquisitionDelivery> materials)
+	{
+		List<AcquisitionDelivery> byChannel = new ArrayList<AcquisitionDelivery>();
+		logger.info("Material list: " + materials);
+		for (AcquisitionDelivery event : materials)
+		{
+			if (event.getChannels() != null) {
+				if (event.getChannels().contains(channel))
+					byChannel.add(event);
+			}
+		}
+		logger.info("Channel list: " + byChannel);
+		return byChannel;
 	}
 	
 	public CellProcessor[] getAcquisitionProcessor()
