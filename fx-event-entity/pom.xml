@@ -21,6 +21,11 @@
 			<artifactId>fx-event-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-report-gen</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

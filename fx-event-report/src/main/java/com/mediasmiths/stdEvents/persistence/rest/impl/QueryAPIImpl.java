@@ -17,6 +17,7 @@ import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
+import com.mediasmiths.stdEvents.report.entity.AcquisitionDelivery;
 
 import org.apache.log4j.Logger;
 
@@ -479,4 +480,21 @@ public class QueryAPIImpl implements QueryAPI
 		purged.addAll(manual);
 		return purged;
 	}
+
+	@Transactional
+	public List<AcquisitionDelivery> getByChannel(String channel, List<AcquisitionDelivery> materials)
+	{
+		List<AcquisitionDelivery> byChannel = new ArrayList<AcquisitionDelivery>();
+		logger.info("Material list: " + materials);
+		for (AcquisitionDelivery event : materials)
+		{
+			if (event.getChannels() != null) {
+				if (event.getChannels().contains(channel))
+					byChannel.add(event);
+			}
+		}
+		logger.info("Channel list: " + byChannel);
+		return byChannel;
+	}
+
 }

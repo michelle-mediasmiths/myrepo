@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class AcquisitionRpt
 	@Inject
 	private ReportUI reportUi;
 	
+	private List<String> channels = new ArrayList<String>();
+	
 	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate)
 	{
 		List<AcquisitionDelivery> titles = getAcquisitionDeliveryList(materials, startDate, endDate);
@@ -62,6 +65,12 @@ public class AcquisitionRpt
 			AcquisitionDelivery perTape = new AcquisitionDelivery("% By Tape", Double.toString(perByTape));
 			titles.add(perFile);
 			titles.add(perTape);
+			
+			for (String channel : channels) 
+			{
+				AcquisitionDelivery channelStat = new AcquisitionDelivery(channel, Integer.toString(queryApi.getByChannel(channel, titles).size()));
+				titles.add(channelStat);
+			}
 			
 			for (AcquisitionDelivery title : titles)
 			{
@@ -110,8 +119,11 @@ public class AcquisitionRpt
 				if (payload.contains("materialId")) {
 					String curTitle =  payload.substring(payload.indexOf("materialId") +11, payload.indexOf("</materialId"));
 					logger.info("Current: " + curTitle);
-					if (curTitle.equals(channelTitle)) 
-						title.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
+					if (curTitle.equals(channelTitle)) {
+						title.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13))));
+						logger.info("Channel name: " + title.getChannels());
+						extractChannels(title.getChannels());
+					}
 				}
 			}
 			
@@ -146,6 +158,25 @@ public class AcquisitionRpt
 		titleList.add(title);	
 		}
 		return titleList;
+	}
+	
+	public void extractChannels(String channel)
+	{
+		if (channel.contains(","))
+		{
+			String[] channelArray = channel.split(",");
+			logger.info("Channel array: " + channelArray);
+			for (int i=0; i<channelArray.length; i++) {
+				if (!channels.contains(channelArray[i]))
+					channels.add(channelArray[i]);
+			}
+		}
+		else {
+			if (!channels.contains(channel)) {
+				logger.info("Adding channel: " + channel);
+				channels.add(channel);
+			}
+		}
 	}
 	
 	public CellProcessor[] getAcquisitionProcessor()

@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.report.entity.AcquisitionDelivery;
 
 /**
  * Used to query the database with criteria to create specific lists of events
@@ -132,6 +133,11 @@ public interface QueryAPI
 	@Path("/totalPurged")
 	@Produces("text/plain")
 	public List<EventEntity> getTotalPurged();
+	
+	@GET
+	@Path("/byChannel")
+	@Produces("text/plain")
+	public List<AcquisitionDelivery> getByChannel(String channel, List<AcquisitionDelivery> materials);
 	
 	@GET
 	@Path("/total")
