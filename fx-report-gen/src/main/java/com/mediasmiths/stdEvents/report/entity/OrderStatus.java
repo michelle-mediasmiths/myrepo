@@ -10,6 +10,7 @@ public class OrderStatus
 	String aggregatorID;
 	String taskType;
 	String ingestDate;
+	String requiredBy;
 	
 	public OrderStatus()
 	{
@@ -29,7 +30,8 @@ public class OrderStatus
 			String channel,
 			String aggregatorID,
 			String taskType,
-			String ingestDate)
+			String ingestDate,
+			String requiredBy)
 	{
 		super();
 		this.dateRange = dateRange;
@@ -40,6 +42,7 @@ public class OrderStatus
 		this.aggregatorID = aggregatorID;
 		this.taskType = taskType;
 		this.ingestDate = ingestDate;
+		this.requiredBy = requiredBy;
 	}
 
 	public String getDateRange()
@@ -120,6 +123,16 @@ public class OrderStatus
 	public void setIngestDate(String ingestDate)
 	{
 		this.ingestDate = ingestDate;
+	}
+
+	public String getRequiredBy()
+	{
+		return requiredBy;
+	}
+
+	public void setRequiredBy(String requiredBy)
+	{
+		this.requiredBy = requiredBy;
 	}
 
 	

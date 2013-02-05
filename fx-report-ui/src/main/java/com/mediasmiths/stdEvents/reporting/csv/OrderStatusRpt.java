@@ -99,6 +99,7 @@ public class OrderStatusRpt
 					if (curTitle.equals(aggregatorTitle)) {
 						title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
 						title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
+						title.setRequiredBy(str.substring(str.indexOf("RequiredBy")+11, str.indexOf("</RequiredBy")));
 					}
 				}
 			}
@@ -122,6 +123,7 @@ public class OrderStatusRpt
 				title.setTitleID(titleID);
 				title.setStatus(status);
 				Date ingestDate = new Date(event.getTime());
+				logger.info(titleID + " " + ingestDate);
 				if ((ingestDate.after(startDate)) && (ingestDate.before(endDate))) {
 					title.setDateRange(startDate + " - " + endDate);
 					titleList.add(title);
@@ -138,7 +140,7 @@ public class OrderStatusRpt
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + name + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String [] header = {"dateRange", "status", "titleID", "orderRef", "channel", "aggregatorID", "taskType", "ingestDate"};
+			final String [] header = {"dateRange", "status", "titleID", "orderRef", "channel", "aggregatorID", "taskType", "ingestDate", "requiredBy"};
 			final CellProcessor[] processors = getTitleProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -176,6 +178,7 @@ public class OrderStatusRpt
 	public CellProcessor[] getTitleProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),
