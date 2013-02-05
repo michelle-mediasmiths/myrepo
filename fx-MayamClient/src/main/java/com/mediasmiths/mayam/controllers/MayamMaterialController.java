@@ -1085,9 +1085,25 @@ public class MayamMaterialController extends MayamController
 
 				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID);
 				
+				String parentId = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+				
 				client.assetApi().deleteAsset(
 						MayamAssetType.MATERIAL.getAssetType(),
 						assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
+				
+				if (parentId != null) {
+					AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), parentId);
+					if (title != null) {
+						String assetId = title.getAttribute(Attribute.ASSET_ID);
+						List<AttributeMap> childAssets = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetId, MayamAssetType.MATERIAL.getAssetType());
+						if (childAssets == null || childAssets.isEmpty())
+						{
+							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId);
+							log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
+						}
+					}
+				}
+				
 			}
 			catch (RemoteException e)
 			{
