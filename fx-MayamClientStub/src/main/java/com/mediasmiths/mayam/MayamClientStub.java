@@ -969,4 +969,11 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public boolean titleIsAO(String titleID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
