@@ -8,6 +8,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
@@ -179,10 +180,21 @@ public abstract class MessageProcessor<T> implements Runnable {
 			{
 				logger.warn(String.format("Message at %s did not validate", filePath));
 				messageValidationFailed(filePath, result);
-				moveFileToFailureFolder(new File(filePath));
+				
+				if(result==MessageValidationResult.AO_MISMATCH){
+					aoMismatch(new File(filePath));					
+				}
+				else{
+					moveFileToFailureFolder(new File(filePath));
+				}
 			}
 		}
 
+	}
+
+	protected void aoMismatch(File file)
+	{
+		moveFileToFailureFolder(file);
 	}
 
 	/**

@@ -328,6 +328,8 @@ public interface MayamClient
 
 	public TaskState getTaskState(long taskid) throws MayamClientException;
 
+	public boolean titleIsAO(String titleID) throws MayamClientException;
+
 
 	
 }

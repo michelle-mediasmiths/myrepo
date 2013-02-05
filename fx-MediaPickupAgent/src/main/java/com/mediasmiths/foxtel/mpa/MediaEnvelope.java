@@ -4,31 +4,58 @@ import java.io.File;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 
-public class MediaEnvelope<T> extends MessageEnvelope<T> {
+public class MediaEnvelope<T> extends MessageEnvelope<T>
+{
 
 	private String masterID;
-	
-	public MediaEnvelope(File file, T message) {
-		super(file, message);		
+
+	private final boolean quarrentineOnMatch;
+
+	public MediaEnvelope(File file, T message)
+	{
+		this(file, message, false);
 	}
-	
-	public MediaEnvelope(File file, T message, String masterID) {
-		super(file, message);		
-		setMasterID(masterID);
+
+	public MediaEnvelope(File file, T message, boolean quarrentineOnMatch)
+	{
+		super(file, message);
+		this.quarrentineOnMatch = quarrentineOnMatch;
 	}
-	
-	public MediaEnvelope(MessageEnvelope<T> envelope, String masterID) {
-		super(envelope.getFile(), envelope.getMessage());
+
+	public MediaEnvelope(File file, T message, String masterID)
+	{
+		this(file, message, masterID, false);
+	}
+
+	public MediaEnvelope(File file, T message, String masterID, boolean quarrentineOnMatch)
+	{
+		this(file, message, quarrentineOnMatch);
 		setMasterID(masterID);
 	}
 
-	public String getMasterID() {
+	public MediaEnvelope(MessageEnvelope<T> envelope, String masterID)
+	{
+		this(envelope.getFile(), envelope.getMessage(), masterID, false);
+	}
+
+	public MediaEnvelope(MessageEnvelope<T> envelope, String masterID, boolean quarrentineOnMatch)
+	{
+		this(envelope.getFile(), envelope.getMessage(), masterID, quarrentineOnMatch);
+	}
+
+	public String getMasterID()
+	{
 		return masterID;
 	}
 
-	public final void setMasterID(String masterID) {
+	public final void setMasterID(String masterID)
+	{
 		this.masterID = masterID;
 	}
 
+	public boolean isQuarrentineOnMatch()
+	{
+		return quarrentineOnMatch;
+	}
 
 }

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -13,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -39,6 +41,10 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 	private final MediaCheck mediaCheck;
 
+	@Inject
+	@Named("ao.quarrentine.folder")
+	private String aoQuarrentineFolder;
+	
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
@@ -141,7 +147,14 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		if (materialEnvelope != null) {
 			logger.info(String.format("found material description %s for mxf",
 					materialEnvelope.getFile().getAbsolutePath()));
-			createPendingImportIfValid(mxf, materialEnvelope);
+			if(materialEnvelope.isQuarrentineOnMatch()){
+				logger.info("mxf detected as requiring quarrentine");
+				moveToAOFolder(materialEnvelope.getFile().getAbsolutePath());
+				moveToAOFolder(filePath);
+			}
+			else{
+				createPendingImportIfValid(mxf, materialEnvelope);
+			}
 		} else {
 			logger.debug("No matching xml file \\ material envelope found");
 		}
@@ -302,6 +315,57 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		eventService.saveEvent("error",message);
 		
 		super.moveFileToFailureFolder(file);
+	}
+	
+	@Override
+	protected void aoMismatch(File file)
+	{
+		Object unmarshalled = null;
+		try
+		{
+			unmarshalled = unmarhsaller.unmarshal(file);
+		}
+		catch (JAXBException e)
+		{
+			logger.error("unmarshalling failed", e);
+		}
+
+		if (unmarshalled != null)
+		{
+			@SuppressWarnings("unchecked")
+			T message = (T) unmarshalled;
+
+			// wait for or find mxf to allow files to be quarrentined together
+
+			@SuppressWarnings("rawtypes")
+			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", true);
+			// try to get the mxf file for this xml
+			String mxfFile = matchMaker.matchXML(materialEnvelope);
+
+			if (mxfFile != null)
+			{
+				logger.info(String.format("found mxf %s for material", mxfFile));
+				moveToAOFolder(mxfFile);
+				moveToAOFolder(file.getAbsolutePath());
+			}
+			else
+			{
+				logger.debug("No matching media found");
+			}
+		}
+	}
+
+	private void moveToAOFolder(String file)
+	{
+		File f = new File(file);
+		try
+		{
+			moveFileToFolder(f, aoQuarrentineFolder, true);
+		}
+		catch (IOException e)
+		{
+			logger.warn("IOException moving file to quarrentine fodler " + file, e);
+		}
 	}
 
 

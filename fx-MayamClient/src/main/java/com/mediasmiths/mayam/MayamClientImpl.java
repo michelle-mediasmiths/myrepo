@@ -919,5 +919,12 @@ public class MayamClientImpl implements MayamClient
 		
 		throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 	}
+
+	@Override
+	public boolean titleIsAO(String titleID) throws MayamClientException
+	{
+		AttributeMap title = titleController.getTitle(titleID);
+		return AssetProperties.isAO(title);
+	}
 	
 }
