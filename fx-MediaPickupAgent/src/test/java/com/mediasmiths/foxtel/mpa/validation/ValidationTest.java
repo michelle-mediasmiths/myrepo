@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -52,6 +53,8 @@ public abstract class ValidationTest {
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		receiptFolderPath = TestUtil.prepareTempFolder("RECEIPTS");
 		validator = new MaterialExchangeValidator(unmarhsaller, mayamClient, new ReceiptWriter(), new SchemaValidator("MaterialExchange_V2.0.xsd"));
+		validator.setWatchFolders(new WatchFolders());
+		validator.setAoAggregatorName("ADULTS");
 		
 	}
 	

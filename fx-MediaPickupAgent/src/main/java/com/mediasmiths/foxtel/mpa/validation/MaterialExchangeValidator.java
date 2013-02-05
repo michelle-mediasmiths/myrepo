@@ -32,9 +32,19 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 	@Named("watchfolder.locations")
 	private WatchFolders watchFolders;
 
+	public void setWatchFolders(WatchFolders watchFolders)
+	{
+		this.watchFolders = watchFolders;
+	}
+
 	@Inject
 	@Named("ao.aggregator.name")
 	private String aoAggregatorName;
+
+	public void setAoAggregatorName(String aoAggregatorName)
+	{
+		this.aoAggregatorName = aoAggregatorName;
+	}
 
 	@Inject
 	public MaterialExchangeValidator(
