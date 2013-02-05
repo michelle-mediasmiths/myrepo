@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:quartz="http://www.mulesoft.org/schema/mule/quartz" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="CE-3.3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/quartz http://www.mulesoft.org/schema/mule/quartz/current/mule-quartz.xsd 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd "
+xmlns:context="http://www.springframework.org/schema/context">
+   
+    <context:property-placeholder location="file:///Users/alisonboal/MuleStudio/workspace/servicetimer/src/main/app/default.properties"/>
+    
+    <spring:beans>
+        <spring:bean id="Bean" name="caller" class="com.mediasmiths.servicetimer.Caller"/>
+    </spring:beans>
+    
+    
+    <flow name="servicetimer" doc:name="servicetimer">
+        <quartz:inbound-endpoint jobName="callservice" responseTimeout="10000" doc:name="Quartz" cronExpression="${servicecaller.heartbeat}">
+        	<quartz:custom-job job-ref="caller"/>
+        </quartz:inbound-endpoint>
+        <outbound-endpoint address="http://www.google.com" doc:name="Generic"/>
+    </flow>
+</mule>

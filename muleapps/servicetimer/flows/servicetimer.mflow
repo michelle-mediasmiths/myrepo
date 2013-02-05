@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="servicetimer">
+    <global-element type="http://www.springframework.org/schema/context/property-placeholder" name="Property Placeholder" entity-id="Property Placeholder#1">
+        <properties>
+            <property value="file:///Users/alisonboal/MuleStudio/workspace/servicetimer/src/main/app/default.properties" name="location"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="1" name="auxiliary;index"/>
+        </properties>
+    </global-element>
+    <global-element type="http://www.springframework.org/schema/beans/bean" name="Bean" entity-id="Bean#1">
+        <properties>
+            <property value="Bean" name="id"/>
+            <property value="caller" name="name"/>
+            <property value="com.mediasmiths.servicetimer.Caller" name="class"/>
+            <property name="parent"/>
+            <property name="scope"/>
+            <property name="children"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="2" name="auxiliary;wrapIn"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="2" name="auxiliary;wrapIn"/>
+            <property name="abstract"/>
+            <property name="lazy-init"/>
+            <property name="autowire"/>
+            <property name="depends-on"/>
+            <property name="autowire-candidate"/>
+            <property name="primary"/>
+            <property name="init-method"/>
+            <property name="destroy-method"/>
+            <property name="factory-method"/>
+            <property name="factory-bean"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="2" name="auxiliary;wrapIn"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="2" name="auxiliary;wrapIn"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="2" name="auxiliary;wrapIn"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="servicetimer" entity-id="9948aad6-d405-4d18-b89d-513ac66f60d3">
+        <properties>
+            <property name="processingStrategy2"/>
+            <property name="processingStrategy"/>
+            <property value="4" name="auxiliary;index"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="4" name="auxiliary;index"/>
+            <property value="4" name="auxiliary;index"/>
+            <property value="4" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/quartz/endpoint" name="Quartz" entity-id="Quartz#1">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="callservice" name="jobName"/>
+                    <property value="${servicecaller.heartbeat}" name="cronExpression"/>
+                    <property name="repeatInterval"/>
+                    <property name="repeatCount"/>
+                    <property name="startDelay"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="address"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/quartz/custom-job;0">
+                        <property value="caller" name="job-ref"/>
+                        <property value="6" name="auxiliary;wrapIn"/>
+                        <property value="6" name="auxiliary;index"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/core/endpoint" name="Generic" entity-id="Generic#1">
+                <properties>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="exchange-pattern"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="http://www.google.com" name="address"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property name="responseTimeout"/>
+                    <property name="encoding"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property name="connector-ref"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="responseTransformer-refs"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="7" name="auxiliary;index"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
