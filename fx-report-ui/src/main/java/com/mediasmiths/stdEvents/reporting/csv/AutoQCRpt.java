@@ -34,11 +34,10 @@ public class AutoQCRpt
 	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate)
 	{
 		List<AutoQC> autoQcs = getQCList(passed, startDate, endDate);
-		
 		ICsvBeanWriter beanWriter = null;
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "autoQcCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "content", "operator", "taskStatus", "qcStatus", "taskStart", "manualOverride", "failureParameter", "titleLength"};
+			final String[] header = {"dateRange", "title", "materialID", "channels", "contentType", "operator", "taskStatus", "qcStatus", "taskStart", "manualOverride", "failureParameter", "titleLength"};
 			final CellProcessor[] processors = getAutoQCProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -48,6 +47,11 @@ public class AutoQCRpt
 			autoQcs.add(totalPass);
 			autoQcs.add(failed);
 			autoQcs.add(overridden);
+			
+			AutoQC avConc = new AutoQC("Average Concurrant Titles", null);
+			AutoQC maxConc = new AutoQC("Max Concurrant Titles", null);
+			autoQcs.add(avConc);
+			autoQcs.add(maxConc);
 			
 			for (AutoQC autoQc : autoQcs)
 			{
@@ -100,7 +104,7 @@ public class AutoQCRpt
 				
 			}
 			
-			autoQc.setTaskStart(Long.toString(event.getTime()));
+			autoQc.setTaskStart(new Date(event.getTime()).toString());
 			
 			List<EventEntity> channelEvents = queryApi.getByEventName("CreateOrUpdateTitle");
 			for (EventEntity channelEvent : channelEvents)
@@ -124,12 +128,16 @@ public class AutoQCRpt
 				if (payload.contains("AssetID")) {
 					String curTitle = payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
 					if (curTitle.equals(lengthTitle)) {
-						if (payload.contains("Duration"))
+						if (str.contains("Duration")) 
 							autoQc.setTitleLength(str.substring(str.indexOf("Duration") +9, str.indexOf("</Duration")));
+						if (lengthEvent.getEventName().equals("UnmatchedContentAvailable"))
+							autoQc.setContentType("Unmatched");
+						else
+							autoQc.setContentType("Programme");
 					}
 				}
-				titleList.add(autoQc);
 			}
+			titleList.add(autoQc);
 		}	
 		return titleList;
 	}

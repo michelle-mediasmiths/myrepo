@@ -9,6 +9,7 @@ public class ManualQA
 	String aggregatorID;
 	String qaStatus;
 	String duration;
+	String channel;
 	
 	public ManualQA ()
 	{
@@ -21,7 +22,7 @@ public class ManualQA
 		this.assetID = assetID;
 	}
 
-	public ManualQA(String dateRange, String title, String assetID, String operator, String aggregatorID, String qaStatus, String duration)
+	public ManualQA(String dateRange, String title, String assetID, String operator, String aggregatorID, String qaStatus, String duration, String channel)
 	{
 		super();
 		this.dateRange = dateRange;
@@ -31,6 +32,7 @@ public class ManualQA
 		this.aggregatorID = aggregatorID;
 		this.qaStatus = qaStatus;
 		this.duration = duration;
+		this.channel = channel;
 	}
 
 	public String getDateRange()
@@ -101,5 +103,15 @@ public class ManualQA
 	public void setAssetID(String assetID)
 	{
 		this.assetID = assetID;
+	}
+
+	public String getChannel()
+	{
+		return channel;
+	}
+
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
 	}	
 }

@@ -243,7 +243,7 @@ public class MayamTitleController extends MayamController{
 				if (ao) {
 					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");		
 				}
-				else if (title.isPurgeProtect()) {
+				else if (title.isPurgeProtect() != null && title.isPurgeProtect()) {
 					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 				}
 				

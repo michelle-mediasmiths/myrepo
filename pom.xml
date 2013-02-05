@@ -60,7 +60,9 @@
 		<module>fx-report-gen</module>
 		<module>fx-report-ui</module>
   		<module>fx-IbmsHelper</module>
-  </modules>
+        <module>fx-heartbeat-api</module>
+
+    </modules>
 
 	<properties>
 		<junit.version>4.10</junit.version>

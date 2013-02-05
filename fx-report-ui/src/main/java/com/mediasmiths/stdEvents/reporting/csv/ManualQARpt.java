@@ -38,12 +38,22 @@ public class ManualQARpt
 		ICsvBeanWriter beanWriter = null;
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "manualQAcsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "title", "assetID", "operator", "aggregatorID", "qaStatus", "duration"};
+			final String[] header = {"dateRange", "title", "assetID", "operator", "aggregatorID", "qaStatus", "duration", "channel"};
 			final CellProcessor[] processors = getManualQAProcessor();
 			beanWriter.writeHeader(header);
 
 			ManualQA failed = new ManualQA("Total failed", Integer.toString(queryApi.getLength(queryApi.getTotalFailedQA())));
+			ManualQA passed = new ManualQA("Total QA'd", null);
+			ManualQA noEscalated = new ManualQA("Number Escalated", null);
+			ManualQA avEscalated = new ManualQA("Average Time Escalated", null);
+			ManualQA noReordered = new ManualQA ("Number Reordered", null);
+			ManualQA requiring = new ManualQA("Requiring Fix/ Stitch", null);
 			manualQAs.add(failed);
+			manualQAs.add(passed);
+			manualQAs.add(noEscalated);
+			manualQAs.add(avEscalated);
+			manualQAs.add(noReordered);
+			manualQAs.add(requiring);
 
 			for (ManualQA manualQA : manualQAs) 
 			{
@@ -115,6 +125,22 @@ public class ManualQARpt
 				}
 			}
 			
+			List<EventEntity> creates = queryApi.getByEventName("CreateOrUpdateTitle");
+			for (EventEntity create : creates)
+			{
+				String str = create.getPayload();
+				if (str.contains("titleID")) {
+					String title = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
+					logger.info("titleID: " + title);
+					if (str.contains("channelName")) {
+						String curTitle = payload.substring(payload.indexOf("AssetID") +8, payload.indexOf("</AssetID"));
+						logger.info("AssetID: " + curTitle);
+						if (curTitle.equals(title))
+							manualQA.setChannel(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13))));
+					}	
+				}
+			}
+			
 			manualQAList.add(manualQA);
 		}
 		return manualQAList;
@@ -123,6 +149,7 @@ public class ManualQARpt
 	public CellProcessor[] getManualQAProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),

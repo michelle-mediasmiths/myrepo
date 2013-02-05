@@ -6,7 +6,7 @@ public class AutoQC
 	String title;
 	String materialID;
 	String channels;
-	String content;
+	String contentType;
 	String operator;
 	String taskStatus;
 	String qcStatus;
@@ -38,7 +38,7 @@ public class AutoQC
 		this.title = title;
 		this.materialID = materialID;
 		this.channels = channels;
-		this.content = content;
+		this.contentType = content;
 		this.operator = operator;
 		this.taskStatus = taskStatus;
 		this.qcStatus = qcStatus;
@@ -95,14 +95,14 @@ public class AutoQC
 		this.channels = channels;
 	}
 
-	public String getContent()
+	public String getContentType()
 	{
-		return content;
+		return contentType;
 	}
 
-	public void setContent(String content)
+	public void setContentType(String contentType)
 	{
-		this.content = content;
+		this.contentType = contentType;
 	}
 
 	public String getOperator()

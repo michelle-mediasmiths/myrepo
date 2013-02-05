@@ -17,7 +17,6 @@ import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
-
 import org.apache.log4j.Logger;
 
 import java.text.DateFormat;
