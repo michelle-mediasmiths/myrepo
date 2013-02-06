@@ -117,13 +117,16 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 					{
 						int numberOfDays = 30;
 						String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
-						if (contentType.equals(MayamContentTypes.EPK)) 
+						if (contentType != null)
 						{
-							numberOfDays = 90;
-						}
-						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
-						{
-							numberOfDays = 7;
+							if (contentType.equals(MayamContentTypes.EPK)) 
+							{
+								numberOfDays = 90;
+							}
+							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
+							{
+								numberOfDays = 7;
+							}
 						}
 						taskController.createPurgeCandidateTask(MayamAssetType.MATERIAL, materialID, numberOfDays);	
 					}
