@@ -51,6 +51,7 @@ import com.mediasmiths.mq.handlers.segmentation.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.tx.InitiateTxHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedJobHandler;
+import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskUpdateHandler;
 
 @Singleton
@@ -145,6 +146,8 @@ public class IncomingListener extends MqClientListener
 	ProtectButton protectButton;
 	@Inject
 	QcParallel qcParallelButton;
+	@Inject
+	UnmatchedTaskCreateHandler unmatchedTaskCreate;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -217,6 +220,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
 		passEventToHandler(previewTaskCreateHandler, messageAttributes);
+		passEventToHandler(unmatchedTaskCreate, messageAttributes);
 
 	}
 

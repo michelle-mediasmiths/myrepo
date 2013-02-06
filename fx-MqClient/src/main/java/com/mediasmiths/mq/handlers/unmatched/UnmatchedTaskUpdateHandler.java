@@ -36,41 +36,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 			try {			
 				if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()) && attributeChanged(Attribute.ASSET_PEER_ID, before, after,currentAttributes)) 
 				{
-					//Attempt to find Aggregator
-					String title = currentAttributes.getAttribute(Attribute.SERIES_TITLE);
 					
-					AttributeMap aggregatorEqualities = tasksClient.createAttributeMap();
-					AttributeMap aggregatorSimilarities = tasksClient.createAttributeMap();
-					aggregatorEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.toString());
-					aggregatorSimilarities.setAttribute(Attribute.ASSET_TITLE, title);
-					FilterCriteria aggregatorCriteria = new FilterCriteria();
-					aggregatorCriteria.setFilterEqualities(aggregatorEqualities);
-					aggregatorCriteria.setFilterSimilarities(aggregatorSimilarities);
-					FilterResult wfeTasks = tasksClient.taskApi().getTasks(aggregatorCriteria, 50, 0);
-					
-					if (wfeTasks.getTotalMatches() > 0) 
-					{
-						for (int i = 0; i < wfeTasks.getTotalMatches(); i++)
-						{
-							AttributeMap wfeTask = wfeTasks.getMatches().get(i);
-							String assetTitle = wfeTask.getAttribute(Attribute.ASSET_TITLE);
-							if (assetTitle.contains(title))
-							{
-								String aggregator = wfeTask.getAttribute(Attribute.AGGREGATOR);
-								currentAttributes.setAttribute(Attribute.AGGREGATOR, aggregator);
-								tasksClient.assetApi().updateAsset(currentAttributes);
-								log.info("Aggregator " + aggregator + " added for unmatched asset " + assetID);
-								
-								wfeTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-								tasksClient.taskApi().updateTask(wfeTask);
-								break;
-							}
-						}
-					}
-					else {
-						log.warn("Failed to locate an Aggregator for unmatched asset " + assetID);
-					}
-					
+					try{
 					//Remove from any task lists
 					AttributeMap filterEqualities = tasksClient.createAttributeMap();
 					//filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
@@ -86,8 +53,18 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						{
 							AttributeMap task = tasks.get(i);
 							task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							try{
 							taskController.saveTask(task);
+							}
+							catch(Exception e){
+								log.error("error removing task",e);
+							}
+									
 						}
+					}
+					}
+					catch(Exception e){
+						log.error("error performing task search",e);
 					}
 					
 					// Move media
