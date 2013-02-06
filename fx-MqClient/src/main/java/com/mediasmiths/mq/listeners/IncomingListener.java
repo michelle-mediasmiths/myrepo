@@ -180,7 +180,11 @@ public class IncomingListener extends MqClientListener
 					}
 					else if (isAttributePair(type) && isTask(origin) && isUpdate(changeType))
 					{
-						onTaskUpdate(msg);
+						onTaskUpdateWithBeforeAndAfter(msg);
+					}
+					else if (isAttributes(type) && isTask(origin) && isUpdate(changeType))
+					{
+						onTaskUpdateCurrentOnly(msg);
 					}
 					else
 					{
@@ -204,6 +208,7 @@ public class IncomingListener extends MqClientListener
 		}
 	}
 
+
 	private void onTaskCreate(MqMessage msg)
 	{
 		log.trace("onTaskCreate");
@@ -215,9 +220,9 @@ public class IncomingListener extends MqClientListener
 
 	}
 
-	private void onTaskUpdate(MqMessage msg)
+	private void onTaskUpdateWithBeforeAndAfter(MqMessage msg)
 	{
-		logger.trace("onTaskUpdate");
+		logger.trace("onTaskUpdate (message included before and after attributes)");
 		AttributeMapPair messageAttributes = msg.getSubjectPair();
 		AttributeMap beforeAttributes = messageAttributes.getBefore();
 		AttributeMap afterAttributes = messageAttributes.getAfter();
@@ -237,16 +242,7 @@ public class IncomingListener extends MqClientListener
 			if (!initialState.equals(newState))
 			{
 				
-				//buttons
-				passEventToHandler(uningestButton, currentAttributes);
-				passEventToHandler(deleteButton,currentAttributes);
-				passEventToHandler(exportMarkersButton, currentAttributes);
-				passEventToHandler(publicityProxyButton, currentAttributes);
-				passEventToHandler(captionProxyButton, currentAttributes);
-				passEventToHandler(complianceProxyButton,currentAttributes);
-				passEventToHandler(unprotectButton, currentAttributes);
-				passEventToHandler(protectButton, currentAttributes);
-				passEventToHandler(qcParallelButton, currentAttributes);
+				
 				
 				//tasks
 				passEventToHandler(ingestCompleteHandler,currentAttributes);
@@ -264,7 +260,31 @@ public class IncomingListener extends MqClientListener
 		}
 		catch (Exception e)
 		{
-			logger.error("error onTaskUpdate");
+			logger.error("error onTaskUpdateWithBeforeAndAfter",e);
+		}
+	}
+
+	private void onTaskUpdateCurrentOnly(MqMessage msg)
+	{
+		log.debug("onTaskUpdateCurrentOnly");
+		try
+		{
+			AttributeMap messageAttributes = msg.getSubject();
+
+			// buttons
+			passEventToHandler(uningestButton, messageAttributes);
+			passEventToHandler(deleteButton, messageAttributes);
+			passEventToHandler(exportMarkersButton, messageAttributes);
+			passEventToHandler(publicityProxyButton, messageAttributes);
+			passEventToHandler(captionProxyButton, messageAttributes);
+			passEventToHandler(complianceProxyButton, messageAttributes);
+			passEventToHandler(unprotectButton, messageAttributes);
+			passEventToHandler(protectButton, messageAttributes);
+			passEventToHandler(qcParallelButton, messageAttributes);
+		}
+		catch (Exception e)
+		{
+			logger.error("error onTaskUpdateWithBeforeAndAfter",e);
 		}
 	}
 

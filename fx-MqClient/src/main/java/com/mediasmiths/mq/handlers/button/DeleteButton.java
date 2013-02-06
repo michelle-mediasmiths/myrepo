@@ -22,15 +22,13 @@ public class DeleteButton extends ButtonClickHandler
 		log.info(String.format("Delete Requested for asset %s of type %s",houseID,type.toString()));
 		
 		if(type==MayamAssetType.MATERIAL.getAssetType()){
-			MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID);
+			materialController.deleteMaterial(houseID);
 		}
 		else if(type==MayamAssetType.TITLE.getAssetType()){
 			titlecontroller.purgeTitle(houseID);			
 		}
 		else if(type==MayamAssetType.PACKAGE.getAssetType()){		
-			log.error("not implemented");
-			//TODO: implement;
-			throw new RuntimeException("manual package delete not implemented");
+			packageController.deletePackage(houseID);
 		}
 		
 	}

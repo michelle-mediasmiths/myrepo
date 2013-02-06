@@ -26,6 +26,8 @@ public class AccessUpdateHandler extends UpdateAttributeHandler
 
 		if (anyChanged)
 		{
+			log.info("Attributes affecting access rights changed, updating");
+			
 			try
 			{
 				AttributeMap withNewAccessRights = accessRightsController.updateAccessRights(currentAttributes.copy());
@@ -45,6 +47,6 @@ public class AccessUpdateHandler extends UpdateAttributeHandler
 	@Override
 	public String getName()
 	{
-		return "Temporary Content";
+		return "Access rights";
 	}
 }

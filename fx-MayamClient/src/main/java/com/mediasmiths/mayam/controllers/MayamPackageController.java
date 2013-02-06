@@ -533,6 +533,9 @@ public class MayamPackageController extends MayamController
 					return MayamClientErrorCode.PACKAGE_DELETE_FAILED;
 				}
 			}
+			else{
+				log.info("Package's parent item is protect, will not perform delete");
+			}
 		}
 		else
 		{

@@ -29,42 +29,51 @@ public class IngestJobHandler extends JobHandler
 				
 				if (task != null)
 				{
-					AttributeMap updateMap = taskController.updateMapForTask(task);
 					
-					if (jobStatus.equals(JobStatus.STARTED))
-					{
-						log.info(String.format("Import started for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-						taskController.saveTask(updateMap);
-					}
-					else if (jobStatus.equals(JobStatus.FAILED))
-					{
-						log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
-	
-						try
-						{
-							String jobID = jobMessage.getJobId();
-							JobType jobType = jobMessage.getJobType();
-							String ingestNotes = String.format("Job %s of type %s failed", jobID, jobType.toString());
-							updateMap.setAttribute(Attribute.INGEST_NOTES, ingestNotes);
-						}
-						catch (Exception e)
-						{
-							log.error("Error setting failure reason on ingest task", e);
-						}
+					TaskState taskState = (TaskState) task.getAttribute(Attribute.TASK_STATE);
+					
+					if(taskState != TaskState.FINISHED){
+					
+						AttributeMap updateMap = taskController.updateMapForTask(task);
 						
-						taskController.saveTask(updateMap);	
+						if (jobStatus.equals(JobStatus.STARTED))
+						{
+							log.info(String.format("Import started for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+							taskController.saveTask(updateMap);
+						}
+						else if (jobStatus.equals(JobStatus.FAILED))
+						{
+							log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+		
+							try
+							{
+								String jobID = jobMessage.getJobId();
+								JobType jobType = jobMessage.getJobType();
+								String ingestNotes = String.format("Job %s of type %s failed", jobID, jobType.toString());
+								updateMap.setAttribute(Attribute.INGEST_NOTES, ingestNotes);
+							}
+							catch (Exception e)
+							{
+								log.error("Error setting failure reason on ingest task", e);
+							}
+							
+							taskController.saveTask(updateMap);	
+						}
+						else if (jobStatus.equals(JobStatus.FINISHED))
+						{
+							log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+							updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
+							taskController.saveTask(updateMap);
+						}
+						else {
+							log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
+						}
 					}
-					else if (jobStatus.equals(JobStatus.FINISHED))
-					{
-						log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-						updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
-						taskController.saveTask(updateMap);
-					}
-					else {
-						log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
+					else{
+						log.info("Items ingest task was already finished, I am making no updates");
 					}
 				}
 				else {
