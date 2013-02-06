@@ -37,6 +37,7 @@ public class AcquisitionRpt
 	private ReportUI reportUi;
 	
 	private List<String> channels = new ArrayList<String>();
+	private List<String> formats = new ArrayList<String>();
 	
 	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate)
 	{
@@ -71,6 +72,12 @@ public class AcquisitionRpt
 			{
 				AcquisitionDelivery channelStat = new AcquisitionDelivery(channel, Integer.toString(getByChannel(channel, titles).size()));
 				titles.add(channelStat);
+			}
+			
+			for (String format : formats)
+			{
+				AcquisitionDelivery formatStat = new AcquisitionDelivery(format, Integer.toString(getByFormat(format, titles).size()));
+				titles.add(formatStat);
 			}
 			
 			for (AcquisitionDelivery title : titles)
@@ -147,9 +154,10 @@ public class AcquisitionRpt
 			if (payload.contains("File"))
 					title.setFile("1");
 		
-		if (payload.contains("Format"))
+		if (payload.contains("Format")) {
 			title.setFormat(payload.substring(payload.indexOf("Format") +7, payload.indexOf("</Format")));
-			
+			extractFormats(title.getFormat());
+		}
 		if (payload.contains("Duration"))
 		{
 			String duration = payload.substring(payload.indexOf("Duration") +9, payload.indexOf("</Duration"));
@@ -180,6 +188,15 @@ public class AcquisitionRpt
 		}
 	}
 	
+	public void extractFormats(String format)
+	{
+		if (!formats.contains(format))
+		{
+			logger.info("Adding format");
+			formats.add(format);
+		}
+	}
+	
 	public List<AcquisitionDelivery> getByChannel(String channel, List<AcquisitionDelivery> materials)
 	{
 		List<AcquisitionDelivery> byChannel = new ArrayList<AcquisitionDelivery>();
@@ -193,6 +210,19 @@ public class AcquisitionRpt
 		}
 		logger.info("Channel list: " + byChannel);
 		return byChannel;
+	}
+	
+	public List<AcquisitionDelivery> getByFormat(String format, List<AcquisitionDelivery> materials)
+	{
+		List<AcquisitionDelivery> byFormat = new ArrayList<AcquisitionDelivery>();
+		for (AcquisitionDelivery event : materials)
+		{
+			if (event.getFormat() != null) {
+				if (event.getFormat().contains(format))
+					byFormat.add(event);
+			}
+		}
+		return byFormat;
 	}
 	
 	public CellProcessor[] getAcquisitionProcessor()

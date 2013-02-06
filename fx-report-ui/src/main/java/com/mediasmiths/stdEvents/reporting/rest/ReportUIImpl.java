@@ -31,6 +31,7 @@ import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
 import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
 import com.mediasmiths.stdEvents.reporting.csv.TaskListRpt;
+import com.mediasmiths.stdEvents.reporting.csv.TranscoderLoadRpt;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -64,6 +65,8 @@ public class ReportUIImpl implements ReportUI
 	private ComplianceRpt compliance;
 	@Inject
 	private ExportRpt export;
+	@Inject
+	private TranscoderLoadRpt transcoderLoad;
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
@@ -262,7 +265,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAutoQCCSV()
 	{
-		List<EventEntity> passed = queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed");
+		List<EventEntity> passed = queryApi.getByNamespace("http://www.foxtel.com.au/ip/qc");
 		List<EventEntity> valid = new ArrayList<EventEntity>();
 		for (EventEntity event : passed) {
 			boolean within = checkDate(event.getTime());
@@ -279,21 +282,7 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> tasks = new ArrayList<EventEntity>();
 		//NEEED TEST DATA TO SEND TO REPORT
 		taskList.writeTaskList(tasks);
-	}
-
-	@Transactional
-	public String getPurgeContentUI()
-	{
-		final TemplateCall call = templater.template("purge_content");
-
-		call.set("purged", queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle"));
-
-		call.set("amtPurged", queryApi.getTotal(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle")));
-		call.set("amtExpired", queryApi.getLength(queryApi.getExpiring()));
-		call.set("amtProtected", queryApi.getTotal(queryApi.getProtected()));
-
-		return call.process();
-	}
+	}	
 	
 	@Transactional
 	public void getPurgeContentCSV()
@@ -333,6 +322,19 @@ public class ReportUIImpl implements ReportUI
 		//NEED TEST DATA TO SEND TO REPORT
 		export.writeExport(events);
 	}
+	
+	@Transactional
+	public void getTranscoderLoadCSV()
+	{
+		List<EventEntity> events = queryApi.getByNamespace("http://www.foxtel.com.au/ip/tc");
+		List<EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : events) {
+			boolean within = checkDate(event.getTime());
+			if (within)
+				valid.add(event);
+		}
+		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate);
+	}
 
 	@Override
 	public String displayPath(@QueryParam("path")String path)
@@ -340,7 +342,9 @@ public class ReportUIImpl implements ReportUI
 		final TemplateCall call = templater.template("path_demo");
 		call.set("path", path);
 		return call.process();
-	}	
+	}
+
+	
 
 //	@Transactional
 //	public String getOrderStatusUI()
@@ -486,7 +490,19 @@ public class ReportUIImpl implements ReportUI
 //		jasperApi.createAutoQc(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed"), Integer.toString(queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed"))), Integer.toString(queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "autoqcfailed"))));	
 //	}
 //	
+//	@Transactional
+//	public String getPurgeContentUI()
+//	{
+//		final TemplateCall call = templater.template("purge_content");
 //
+//		call.set("purged", queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle"));
+//
+//		call.set("amtPurged", queryApi.getTotal(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeTitle")));
+//		call.set("amtExpired", queryApi.getLength(queryApi.getExpiring()));
+//		call.set("amtProtected", queryApi.getTotal(queryApi.getProtected()));
+//
+//		return call.process();
+//	}
 //	@Transactional
 //	public void getPurgeContentPDF()
 //	{

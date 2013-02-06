@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -111,6 +112,20 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 						else {
 							log.warn("Presentation flag for " + materialID + "set but failed to find a purge candidate task to remove"); 
 						}
+					}
+					else if (presentationFlag != null && presentationFlag.equals(Boolean.FALSE))
+					{
+						int numberOfDays = 30;
+						String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
+						if (contentType.equals(MayamContentTypes.EPK)) 
+						{
+							numberOfDays = 90;
+						}
+						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
+						{
+							numberOfDays = 7;
+						}
+						taskController.createPurgeCandidateTask(MayamAssetType.MATERIAL, materialID, numberOfDays);	
 					}
 				} catch (MayamClientException e) {
 					log.error("Exception thrown while removing Purge Candidate Task for material : " + materialID, e);
