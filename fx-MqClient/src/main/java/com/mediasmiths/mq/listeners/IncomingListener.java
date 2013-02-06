@@ -212,15 +212,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
 		passEventToHandler(previewTaskCreateHandler, messageAttributes);
-		passEventToHandler(uningestButton, messageAttributes);
-		passEventToHandler(deleteButton,messageAttributes);
-		passEventToHandler(exportMarkersButton, messageAttributes);
-		passEventToHandler(publicityProxyButton, messageAttributes);
-		passEventToHandler(captionProxyButton, messageAttributes);
-		passEventToHandler(complianceProxyButton,messageAttributes);
-		passEventToHandler(unprotectButton, messageAttributes);
-		passEventToHandler(protectButton, messageAttributes);
-		passEventToHandler(qcParallelButton, messageAttributes);
+
 	}
 
 	private void onTaskUpdate(MqMessage msg)
@@ -244,6 +236,19 @@ public class IncomingListener extends MqClientListener
 			
 			if (!initialState.equals(newState))
 			{
+				
+				//buttons
+				passEventToHandler(uningestButton, currentAttributes);
+				passEventToHandler(deleteButton,currentAttributes);
+				passEventToHandler(exportMarkersButton, currentAttributes);
+				passEventToHandler(publicityProxyButton, currentAttributes);
+				passEventToHandler(captionProxyButton, currentAttributes);
+				passEventToHandler(complianceProxyButton,currentAttributes);
+				passEventToHandler(unprotectButton, currentAttributes);
+				passEventToHandler(protectButton, currentAttributes);
+				passEventToHandler(qcParallelButton, currentAttributes);
+				
+				//tasks
 				passEventToHandler(ingestCompleteHandler,currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
