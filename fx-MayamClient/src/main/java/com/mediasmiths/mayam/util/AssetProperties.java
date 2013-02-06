@@ -36,7 +36,7 @@ public class AssetProperties
 
 		AudioTrackList audioTracks = map.getAttribute(Attribute.AUDIO_TRACKS);
 
-		if (audioTracks.size() > 2)
+		if(audioTracks != null && audioTracks.size() > 2)
 		{
 			return true;
 		}

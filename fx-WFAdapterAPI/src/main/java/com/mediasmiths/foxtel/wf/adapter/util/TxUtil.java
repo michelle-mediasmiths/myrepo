@@ -10,20 +10,30 @@ public class TxUtil
 		
 	private final static Logger log = Logger.getLogger(TxUtil.class);
 	
-	public static String deliveryLocationForPackage(String packageID, MayamClient mayamClient, String baseTXDeliveryLocation) throws MayamClientException{
+	public static String deliveryLocationForPackage(String packageID, MayamClient mayamClient, String baseTXDeliveryLocation, String aoDeliveryLocation, boolean isAO) throws MayamClientException{
 	
 		boolean isSD = mayamClient.isPackageSD(packageID);
 		String subFolder;
 		
-		if(isSD){
-			subFolder="SD";
+		if (isSD)
+		{
+			subFolder = "SD";
 		}
-		else{
-			subFolder="HD";
+		else
+		{
+			subFolder = "HD";
 		}
 		
-		String ret = String.format("%s/%s/",baseTXDeliveryLocation,subFolder); 
-		
+		String ret;
+		if (!isAO)
+		{
+			ret = String.format("%s/%s/", baseTXDeliveryLocation, subFolder);
+		}
+		else
+		{
+			ret = String.format("%s/", aoDeliveryLocation);
+		}
+
 		log.info(String.format("Returning delivery location %s for package %s", ret,packageID));
 		
 		return ret;

@@ -74,6 +74,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
 	@Inject
+	@Named("ao.tx.delivery.location")
+	private String aoTxDeliveryLocation;	
+	@Inject
 	@Named("mex.marshaller")
 	private Marshaller mexMarshaller;
 	@Inject
@@ -413,7 +416,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException
 	{
-		return TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
+		
+		boolean packageAO = mayamClient.isPackageAO(packageID);
+		return TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation, aoTxDeliveryLocation, packageAO);
 	}
 
 	@Override

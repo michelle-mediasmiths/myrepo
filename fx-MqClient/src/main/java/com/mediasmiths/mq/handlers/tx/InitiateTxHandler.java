@@ -44,6 +44,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
 
+
+	@Inject
+	@Named("ao.tx.delivery.location")
+	private String aoDeliveryLocation;
+	
 	@Override
 	public String getName()
 	{
@@ -95,8 +100,8 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 					log.info("Using required date " + requiredDate);
 				}
 
-				String materialPath = mayamClient.pathToMaterial(materialID);
-				String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation);
+				String materialPath = mayamClient.pathToMaterial(materialID);				
+				String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation, aoDeliveryLocation, isAO);
 
 				TCJobParameters tcParams = createTCParamsForTxDelivery(
 						packageID,

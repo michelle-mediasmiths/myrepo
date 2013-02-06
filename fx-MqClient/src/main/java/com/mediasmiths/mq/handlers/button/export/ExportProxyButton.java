@@ -30,68 +30,77 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 {
 	private final static Logger log = Logger.getLogger(ExportProxyButton.class);
 
-//	@Inject
-//	private MuleWorkflowController mule;
+	// @Inject
+	// private MuleWorkflowController mule;
 
 	@Override
 	protected void buttonClicked(AttributeMap materialAttributes)
 	{
-		String outputFileName = (String) materialAttributes.getAttribute(Attribute.OP_FILENAME);
-		String buglocation = (String) materialAttributes.getAttribute(Attribute.VISUAL_BUG);
-		String timecodePosition = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
-		String timecodeColour = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
-		StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
-		String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
-		boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
-		boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
-		String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
-		Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
+		boolean isAO = AssetProperties.isAO(materialAttributes);
 
-		//construct transcode job parameters
-		TCJobParameters jobParams;
-		try
+		if (!isAO)
 		{
-			jobParams = jobParams(
-					isSurround,
-					isSD,
-					outputFileName,
-					buglocation,
-					timecodePosition,
-					timecodeColour,
-					channels,
-					materialID,
-					materialAttributes);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("error constructing job params for export proxy", e);
-			return;
-		}
 
-		// create export task
-		long taskID;
-		try
-		{
-			taskID = createExportTask(jobParams, materialID, materialAttributes);
-		}
-		catch (MayamClientException e1)
-		{
-			log.error("error creating export task", e1);
-			return;
-		}
+			String outputFileName = (String) materialAttributes.getAttribute(Attribute.OP_FILENAME);
+			String buglocation = (String) materialAttributes.getAttribute(Attribute.VISUAL_BUG);
+			String timecodePosition = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
+			String timecodeColour = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
+			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
+			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
+			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
+			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
+			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
+			Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
 
-		// invoke export flow
-		try
-		{
-			initiateWorkflow(title, firstTX, materialID, jobParams, taskID);
+			// construct transcode job parameters
+			TCJobParameters jobParams;
+			try
+			{
+				jobParams = jobParams(
+						isSurround,
+						isSD,
+						outputFileName,
+						buglocation,
+						timecodePosition,
+						timecodeColour,
+						channels,
+						materialID,
+						materialAttributes);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error constructing job params for export proxy", e);
+				return;
+			}
+
+			// create export task
+			long taskID;
+			try
+			{
+				taskID = createExportTask(jobParams, materialID, materialAttributes);
+			}
+			catch (MayamClientException e1)
+			{
+				log.error("error creating export task", e1);
+				return;
+			}
+
+			// invoke export flow
+			try
+			{
+				initiateWorkflow(title, firstTX, materialID, jobParams, taskID);
+			}
+			catch (UnsupportedEncodingException e)
+			{
+				log.error("error initiating export workflow", e);
+			}
+			catch (JAXBException e)
+			{
+				log.error("error initiating export workflow", e);
+			}
 		}
-		catch (UnsupportedEncodingException e)
-		{
-			log.error("error initiating export workflow", e);
-		}
-		catch (JAXBException e)
-		{
-			log.error("error initiating export workflow", e);
+		else{
+			log.info("Item is ao, will not attempt to export");
 		}
 
 	}
@@ -107,7 +116,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
 
-//		mule.initiateExportWorkflow(ie);
+		// mule.initiateExportWorkflow(ie);
 	}
 
 	private long createExportTask(TCJobParameters jobParams, String materialID, AttributeMap materialAttributes)
