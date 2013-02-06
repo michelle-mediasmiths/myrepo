@@ -337,7 +337,6 @@ public class IncomingListener extends MqClientListener
 		// passEventToHandler(assetPurgeHandler, messageAttributes);
 		// passEventToHandler(emergencyIngestHandler, messageAttributes);
 		// passEventToHandler(packageUpdateHandler, messageAttributes);
-		 passEventToHandler(unmatchedAssetCreateHandler, messageAttributes);
 	}
 
 	private void onAssetUpdate(MqMessage msg)

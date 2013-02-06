@@ -13,7 +13,7 @@ import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 public class UnmatchedTaskCreateHandler extends TaskStateChangeHandler
 {
 
-	private final static Logger log = Logger.getLogger(UnmatchedAssetCreateHandler.class);
+	private final static Logger log = Logger.getLogger(UnmatchedTaskCreateHandler.class);
 	
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
