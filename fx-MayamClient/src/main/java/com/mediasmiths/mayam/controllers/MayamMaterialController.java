@@ -1,4 +1,3 @@
-package com.mediasmiths.mayam.controllers;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -1100,6 +1099,16 @@ public class MayamMaterialController extends MayamController
 						{
 							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId);
 							log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
+						}
+						else if (childAssets.size() == 1)
+						{
+							AttributeMap childAsset = childAssets.get(0);
+							String childId = childAsset.getAttribute(Attribute.ASSET_ID);
+							if (childId != null && childId.equals(assetAttributes.getAttributeAsString(Attribute.ASSET_ID)))
+							{
+								client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId);
+								log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
+							}
 						}
 					}
 				}
