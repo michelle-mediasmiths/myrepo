@@ -91,6 +91,11 @@ public interface ReportUI
 	@Produces("text/html")
 	public void getExportCSV();
 	
+	@GET
+	@Path("/transcoder_load_csv")
+	@Produces("text/html")
+	public void getTranscoderLoadCSV();
+	
 	@POST
 	@Path("/display_path/path")
 	@Produces("text/html")

@@ -37,7 +37,8 @@ public class PreviewEventDetailDaoImpl extends HibernateDao<PreviewEventDetail, 
 			preview.setMasterId(str.substring(str.indexOf("MasterID")+9, str.indexOf("</MasterID")));
 		if (str.contains("Title"))
 			preview.setTitle(str.substring(str.indexOf("Title")+6, str.indexOf("</Title")));
-		preview.setPreviewStatus(event.getEventName());
+		if (str.contains("PreviewStatus"))
+			preview.setPreviewStatus(str.substring(str.indexOf("PreviewStatus")+14, str.indexOf("</PreviewStatus")));
 		return preview;
 	}
 
