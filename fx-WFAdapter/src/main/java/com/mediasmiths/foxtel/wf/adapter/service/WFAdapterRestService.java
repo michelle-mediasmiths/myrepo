@@ -142,19 +142,6 @@ public interface WFAdapterRestService
 	@Consumes("application/xml")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException;
 	
-	
-	
-	
-	/**
-	 * Returns the output location for transcode of materials to tx packages
-	 * @param packageID
-	 * @return
-	 */
-	@GET
-	@Path("/tx/transcodeOutputLocation")
-	@Produces("text/plain")
-	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID);
-	
 	/**
 	 * Returns the location that tx packages to be delivered to
 	 * @param packageID
@@ -221,6 +208,6 @@ public interface WFAdapterRestService
 	@GET
 	@Path("/task/{taskid}/cancelled")
 	@Produces("text/plain")
-	public boolean isTxTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException;
+	public boolean isTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException;
 }
 

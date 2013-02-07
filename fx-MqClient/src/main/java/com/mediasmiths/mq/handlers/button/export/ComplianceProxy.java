@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.button.export;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.mayam.MayamButtonType;
@@ -7,6 +9,10 @@ import com.mediasmiths.mayam.MayamButtonType;
 public class ComplianceProxy extends ExportProxyButton
 {
 
+	@Inject
+	@Named("export.compliance.transcode.location")
+	private String transcodeDestination;
+	
 	@Override
 	public MayamButtonType getButtonType()
 	{
@@ -20,10 +26,9 @@ public class ComplianceProxy extends ExportProxyButton
 	}
 
 	@Override
-	protected String getOutputFolder(AttributeMap materialAttributes)
+	protected String getTranscodeDestination(AttributeMap materialAttributes)
 	{
-		//TODO: of course this needs to be configurable and the output should include the channel groups name (see folder locations diagram)
-		return "/storage/corp/exports/compliance";
+		return transcodeDestination;
 	}
 
 	@Override

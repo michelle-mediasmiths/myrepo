@@ -30,8 +30,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 {
 	private final static Logger log = Logger.getLogger(ExportProxyButton.class);
 
-	// @Inject
-	// private MuleWorkflowController mule;
+	 @Inject
+	 private MuleWorkflowController mule;
 
 	@Override
 	protected void buttonClicked(AttributeMap materialAttributes)
@@ -116,7 +116,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
 
-		// mule.initiateExportWorkflow(ie);
+		mule.initiateExportWorkflow(ie);
 	}
 
 	private long createExportTask(TCJobParameters jobParams, String materialID, AttributeMap materialAttributes)
@@ -137,10 +137,21 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			AttributeMap materialAttributes) throws MayamClientException
 	{
 		TCJobParameters jobParams = new TCJobParameters();
-
+		String channel=null;
+		
+		// get the first channel
+		if (channels != null && channels.get(0) != null)
+		{
+			String firstChannel = channels.get(0);
+			channel = firstChannel;
+		}
+		else{
+			throw new IllegalArgumentException("no channels in asset metadata!");
+		}
+		
 		if (buglocation != null)
 		{
-			TCBugOptions bug = bug(buglocation, channels);
+			TCBugOptions bug = bug(buglocation, channel);
 			jobParams.bug = bug;
 		}
 
@@ -176,11 +187,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		jobParams.priority = getPriority(materialAttributes);
 
 		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
-		jobParams.outputFolder = getOutputFolder(materialAttributes);
+		jobParams.outputFolder = getTranscodeDestination(materialAttributes);
 		return jobParams;
 	}
 
-	protected abstract String getOutputFolder(AttributeMap materialAttributes);
+	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
 
 	protected abstract int getPriority(AttributeMap materialAttributes);
 
@@ -240,18 +251,12 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		throw new IllegalArgumentException("Unknown timecode colour");
 	}
 
-	private TCBugOptions bug(String buglocation, StringList channels)
+	private TCBugOptions bug(String buglocation, String channel)
 	{
 		// a bug location has been specified
 		TCBugOptions bug = new TCBugOptions();
-
-		// get the first channel
-		if (channels != null && channels.get(0) != null)
-		{
-			String firstChannel = channels.get(0);
-			bug.channel = firstChannel;
-			bug.position = location(buglocation);
-		}
+		bug.channel = channel;
+		bug.position = location(buglocation);
 		return bug;
 	}
 

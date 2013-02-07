@@ -68,9 +68,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	private QcProfileSelector qcProfileSelector;
 	@Inject
-	@Named("tx.tcoutput.location")
-	private String tcoutputlocation;
-	@Inject
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
 	@Inject
@@ -124,6 +121,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (req.isForTXDelivery())
 		{
+			boolean packageAO = mayamClient.isPackageAO(id);
+			String tcoutputlocation = TxUtil.deliveryLocationForPackage(id, mayamClient, txDeliveryLocation, aoTxDeliveryLocation, packageAO);
+			
 			// for tx delivery we return the location of transcoded package
 			String ret = tcoutputlocation + id + "/" + id + ".gxf";
 			destinationFile = new File(ret);
@@ -400,18 +400,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@Override
 	@GET
-	@Path("/tx/transcodeOutputLocation")
-	@Produces("text/plain")
-	public String transcodeOutputLocationForPackage(@QueryParam("packageID") String packageID)
-	{
-		String ret = tcoutputlocation + packageID;
-		log.info(String.format("Returning transcode output location %s for package %s", ret, packageID));
-
-		return ret;
-	}
-
-	@Override
-	@GET
 	@Path("/tx/deliveryLocation")
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException
@@ -501,7 +489,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/task/{taskid}/cancelled")
 	@Produces("text/plain")
-	public boolean isTxTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException
+	public boolean isTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException
 	{
 		TaskState state = mayamClient.getTaskState(taskid);
 		return state == TaskState.REJECTED ||  state == TaskState.REMOVED;
