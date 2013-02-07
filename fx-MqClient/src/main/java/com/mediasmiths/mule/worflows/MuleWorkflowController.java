@@ -85,7 +85,7 @@ public class MuleWorkflowController {
 	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
 	{
 		String payload = getSerialisationOf(ie);
-		client.dispatch(destinations.getMule_qc_destination(), payload, null);
+		client.dispatch(destinations.getMuleExportDestination(), payload, null);
 		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 	}
 	
