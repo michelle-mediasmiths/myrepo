@@ -29,11 +29,7 @@
         </wsdl:port>
     </wsdl:service>
     <vprop:property name="material" type="xs:string"/>
-    <vprop:property name="materialid" type="xs:string"/>
     <vprop:propertyAlias propertyName="this:material" messageType="this:startRequest" part="body">
-        <vprop:query>tns:assetId/text()</vprop:query>
-    </vprop:propertyAlias>
-    <vprop:propertyAlias propertyName="this:materialid" messageType="this:startRequest" part="body">
         <vprop:query>tns:assetId/text()</vprop:query>
     </vprop:propertyAlias>
 </wsdl:definitions>

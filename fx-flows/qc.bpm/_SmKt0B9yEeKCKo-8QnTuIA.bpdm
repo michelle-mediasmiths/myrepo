@@ -30,11 +30,7 @@
                 <wsdl:part name="body" element="this:startRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForcaller" type="this:Forcaller" bpdm:isSynchronized="true"/>
-            <vprop:property name="materialid" type="xs:string"/>
             <vprop:propertyAlias propertyName="this:material" messageType="this:startRequest" part="body">
-                <vprop:query>tns:assetId/text()</vprop:query>
-            </vprop:propertyAlias>
-            <vprop:propertyAlias propertyName="this:materialid" messageType="this:startRequest" part="body">
                 <vprop:query>tns:assetId/text()</vprop:query>
             </vprop:propertyAlias>
         </bpdm:namespaceContributor>

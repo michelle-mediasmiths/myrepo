@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Auto QC" name="Auto_QC" bpmn:id="_mbM9EGxqEeKv3LhB37uiLw" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Auto QC" name="Auto_QC" bpmn:id="_mbM9EGxqEeKv3LhB37uiLw" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" location="fsAdapter/move.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -22,6 +23,7 @@
     <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndFS_AdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Auto_QC"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
@@ -37,6 +39,8 @@
     <bpel:variable name="AutoQCJobIdent" type="xs:string"/>
     <bpel:variable name="AutoQCResult" type="xs:string"/>
     <bpel:variable name="TaskIsCancelled" type="xs:boolean"/>
+    <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input"/>
+    <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="auto_QcAndTranscodePlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_-UyoYGxqEeKv3LhB37uiLw"></bpel:receive>
@@ -75,6 +79,16 @@
         </bpel:from>
         <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body</bpel:to>
       </bpel:copy>
+      <bpel:copy bpmn:label="$moveMoveRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<FSAdapter:moveRequest>
+  <FSAdapter:from></FSAdapter:from>
+  <FSAdapter:to></FSAdapter:to>
+</FSAdapter:moveRequest></bpel:literal>
+        </bpel:from>
+        <bpel:to>$moveMoveRequestMsg.body</bpel:to>
+      </bpel:copy>
     </bpel:assign>
     <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_IwqxYGxrEeKv3LhB37uiLw">
       <bpel:copy>
@@ -112,9 +126,9 @@
     <bpel:scope bpmn:label="Perform QC" name="Perform_QC" bpmn:id="_SdtecGxrEeKv3LhB37uiLw">
       <bpel:variables>
         <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input"/>
-        <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
         <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input"/>
         <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output"/>
+        <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
       </bpel:variables>
       <bpel:repeatUntil bpmn:label="Perform QC" name="Perform_QC-1">
         <bpel:sequence>
@@ -195,11 +209,11 @@
           </bpel:scope>
           <bpel:scope bpmn:label="Poll Every 30 Seconds" name="Poll_Every_30_Seconds" bpmn:id="_bVBdYGxrEeKv3LhB37uiLw">
             <bpel:variables>
-              <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input"/>
-              <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output"/>
-              <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
-              <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
               <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input"/>
+              <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input"/>
+              <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
+              <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output"/>
+              <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
               <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output"/>
             </bpel:variables>
             <bpel:faultHandlers>
@@ -210,6 +224,13 @@
             <bpel:repeatUntil bpmn:label="Poll Every 30 Seconds" name="Poll_Every_30_Seconds-1">
               <bpel:sequence>
                 <bpel:assign name="init-variables-Poll_Every_30_Seconds" bpmn:id="_bVBdYGxrEeKv3LhB37uiLw">
+                  <bpel:copy bpmn:label="$qcJobCancelQcCancelJobRequestMsg">
+                    <bpel:from>
+                      <bpel:literal>
+<qcJobCancel:jobname_urlType></qcJobCancel:jobname_urlType></bpel:literal>
+                    </bpel:from>
+                    <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
+                  </bpel:copy>
                   <bpel:copy bpmn:label="$qcFinishedQcFinishedRequestMsg">
                     <bpel:from>
                       <bpel:literal>
@@ -223,13 +244,6 @@
 <isTaskCancelled:taskid_urlType></isTaskCancelled:taskid_urlType></bpel:literal>
                     </bpel:from>
                     <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy bpmn:label="$qcJobCancelQcCancelJobRequestMsg">
-                    <bpel:from>
-                      <bpel:literal>
-<qcJobCancel:jobname_urlType></qcJobCancel:jobname_urlType></bpel:literal>
-                    </bpel:from>
-                    <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
                   </bpel:copy>
                 </bpel:assign>
                 <bpel:wait bpmn:label="wait 10 seconds" name="wait_10_seconds" bpmn:id="_dsNXMGxrEeKv3LhB37uiLw">
@@ -426,6 +440,17 @@
             <bpel:condition>($AutoQCFinished = true()) and ($AutoQCSuccess = false())</bpel:condition>
             <bpel:sequence>
               <bpel:empty bpmn:label="qc failure" name="qc_failure" bpmn:id="_Cz84IG7YEeKkE6ll_3FDMA"/>
+              <bpel:assign bpmn:label="move media to quarrentine location" name="move_media_to_quarrentine_location" bpmn:id="_SMOUkHFHEeKXOL1w3D1sTw">
+                <bpel:copy>
+                  <bpel:from>concat(concat($thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text(), $thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()), ".gxf")</bpel:from>
+                  <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>"missingPrototype"</bpel:from>
+                  <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:invoke partnerLink="auto_QcAndFS_AdapterForHttpPortPlkVar" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="move media to quarrentine location" name="move_media_to_quarrentine_location-1" bpmn:id="_SMOUkHFHEeKXOL1w3D1sTw"></bpel:invoke>
             </bpel:sequence>
             <bpel:else>
               <bpel:sequence>

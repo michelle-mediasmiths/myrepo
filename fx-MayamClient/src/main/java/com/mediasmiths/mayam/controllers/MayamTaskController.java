@@ -93,11 +93,11 @@ public class MayamTaskController extends MayamController
 			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
 			
-			if(AssetProperties.isQCParallel(material)){
-				log.info("Item was marked as qc parallel, creating preview task");
-				createPreviewTaskForMaterial(materialID);
-			}
-			
+//			if(AssetProperties.isQCParallel(material)){
+//				log.info("Item was marked as qc parallel, creating preview task");
+//				createPreviewTaskForMaterial(materialID);
+//			}
+//			
 		}
 		else{
 			log.info(String.format("Did not create qc task for asset %s as preview already passed or qc already passed",materialID));

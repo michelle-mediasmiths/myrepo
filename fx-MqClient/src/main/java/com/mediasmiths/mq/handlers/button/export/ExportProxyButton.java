@@ -52,6 +52,19 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
 			Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
 
+			// create export task
+			long taskID;
+			try
+			{
+				taskID = createExportTask(materialID, materialAttributes);
+			}
+			catch (MayamClientException e1)
+			{
+				log.error("error creating export task", e1);
+				return;
+			}
+
+			
 			// construct transcode job parameters
 			TCJobParameters jobParams;
 			try
@@ -65,23 +78,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 						timecodeColour,
 						channels,
 						materialID,
-						materialAttributes);
+						materialAttributes, taskID);
 			}
 			catch (MayamClientException e)
 			{
 				log.error("error constructing job params for export proxy", e);
-				return;
-			}
-
-			// create export task
-			long taskID;
-			try
-			{
-				taskID = createExportTask(jobParams, materialID, materialAttributes);
-			}
-			catch (MayamClientException e1)
-			{
-				log.error("error creating export task", e1);
 				return;
 			}
 
@@ -119,7 +120,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		mule.initiateExportWorkflow(ie);
 	}
 
-	private long createExportTask(TCJobParameters jobParams, String materialID, AttributeMap materialAttributes)
+	private long createExportTask(String materialID, AttributeMap materialAttributes)
 			throws MayamClientException
 	{
 		return taskController.createExportTask(materialID, materialAttributes);
@@ -134,7 +135,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String timecodeColour,
 			StringList channels,
 			String materialID,
-			AttributeMap materialAttributes) throws MayamClientException
+			AttributeMap materialAttributes, long taskID) throws MayamClientException
 	{
 		TCJobParameters jobParams = new TCJobParameters();
 		String channel=null;
@@ -187,7 +188,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		jobParams.priority = getPriority(materialAttributes);
 
 		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
-		jobParams.outputFolder = getTranscodeDestination(materialAttributes);
+		jobParams.outputFolder = getTranscodeDestination(materialAttributes) + "/" + taskID;
 		return jobParams;
 	}
 
@@ -235,11 +236,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	private TCTimecodeColour timeCodeColour(char charAt)
 	{
-		if (charAt == 'W')
+		if (charAt == 'W' || charAt == 'w')
 		{
 			return TCTimecodeColour.WHITE;
 		}
-		else if (charAt == 'B')
+		else if (charAt == 'B' || charAt == 'b')
 		{
 			return TCTimecodeColour.BLACK;
 		}

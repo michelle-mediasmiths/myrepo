@@ -330,6 +330,10 @@ public interface MayamClient
 
 	public boolean titleIsAO(String titleID) throws MayamClientException;
 
+	public void exportCompleted(long taskID) throws MayamClientException;
+
+	void exportFailed(long taskID) throws MayamClientException;
+
 
 	
 }

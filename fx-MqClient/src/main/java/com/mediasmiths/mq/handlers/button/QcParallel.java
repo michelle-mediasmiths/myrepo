@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamButtonType;
+import com.mediasmiths.mayam.MayamClientException;
 
 public class QcParallel extends ButtonClickHandler
 {
@@ -26,6 +27,15 @@ public class QcParallel extends ButtonClickHandler
 		catch (RemoteException e)
 		{
 			log.error("error setting qc parallel allow flag on asset ",e);
+		}
+		
+		try
+		{
+			taskController.createPreviewTaskForMaterial(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error creating preview task for material",e);
 		}
 		
 	}

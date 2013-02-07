@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/export/caller" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcadapter="http://ns.mediasmithsforge.com/foxtel/export/tcadapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="transcode" name="transcode" bpmn:id="_ZRM1AHEMEeKgV8mGUipbQA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export/transcode">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:Pool="http://ns.mediasmithsforge.com/foxtel/export/Pool" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/export/caller" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcadapter="http://ns.mediasmithsforge.com/foxtel/export/tcadapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="transcode" name="transcode" bpmn:id="_ZRM1AHEMEeKgV8mGUipbQA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export/transcode">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -11,6 +12,7 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/export/transcode" location="export-transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
     <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="diag:transcodeAndCaller" myRole="transcode_for_caller"/>
+    <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" initializePartnerRole="yes" partnerRole="Pool_for_transcode"/>
     <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk0Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
     <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk2Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk0Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk0" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
@@ -28,6 +30,7 @@
     <bpel:variable name="TranscodeStatus" type="xs:string"/>
     <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input"/>
     <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output"/>
+    <bpel:variable name="TcOutputPath" type="xs:string"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:Forcaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_b0q3UHEMEeKgV8mGUipbQA"></bpel:receive>
@@ -73,22 +76,47 @@
             <bpel:variable name="tcPassedTcPassedResponseMsg" messageType="tcPassed:tcPassed_output"/>
             <bpel:variable name="tcFailureTcFailureRequestMsg" messageType="tcFailure:tcFailure_input"/>
             <bpel:variable name="tcFailureTcFailureResponseMsg" messageType="tcFailure:tcFailure_output"/>
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
           </bpel:variables>
           <bpel:faultHandlers>
             <bpel:catchAll>
-              <bpel:sequence>
-                <bpel:empty bpmn:label="error" name="error" bpmn:id="_wKncwHEMEeKgV8mGUipbQA"/>
-                <bpel:assign bpmn:label="incremement error count" name="incremement_error_count" bpmn:id="_Gk24YHEREeKgV8mGUipbQA">
-                  <bpel:copy>
-                    <bpel:from>$TranscodeErrorCount + 1</bpel:from>
-                    <bpel:to>$TranscodeErrorCount</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:empty bpmn:label="TODO: Delete Partial Files" name="TODO__Delete_Partial_Files" bpmn:id="_H45TIHEREeKgV8mGUipbQA"/>
-                <bpel:wait bpmn:label="wait a minute before any retry" name="wait_a_minute_before_any_retry" bpmn:id="_KSoKoHEREeKgV8mGUipbQA">
-                  <bpel:for>"PT60S"</bpel:for>
-                </bpel:wait>
-              </bpel:sequence>
+              <bpel:scope bpmn:label="transcode error" name="transcode_error" bpmn:id="_wKlnkHEMEeKgV8mGUipbQA">
+                <bpel:variables>
+                  <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+                  <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
+                </bpel:variables>
+                <bpel:sequence>
+                  <bpel:assign name="init-variables-transcode_error" bpmn:id="_wKlnkHEMEeKgV8mGUipbQA">
+                    <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+                      <bpel:from>
+                        <bpel:literal>
+<FSAdapter:deleteRequest>
+  <FSAdapter:path></FSAdapter:path>
+</FSAdapter:deleteRequest></bpel:literal>
+                      </bpel:from>
+                      <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                  <bpel:empty bpmn:label="error" name="error" bpmn:id="_wKncwHEMEeKgV8mGUipbQA"/>
+                  <bpel:assign bpmn:label="incremement error count" name="incremement_error_count" bpmn:id="_Gk24YHEREeKgV8mGUipbQA">
+                    <bpel:copy>
+                      <bpel:from>$TranscodeErrorCount + 1</bpel:from>
+                      <bpel:to>$TranscodeErrorCount</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                  <bpel:assign bpmn:label="Delete Partial Files" name="Delete_Partial_Files" bpmn:id="_H45TIHEREeKgV8mGUipbQA">
+                    <bpel:copy>
+                      <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                      <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                  <bpel:invoke partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete Partial Files" name="Delete_Partial_Files-1" bpmn:id="_H45TIHEREeKgV8mGUipbQA"></bpel:invoke>
+                  <bpel:wait bpmn:label="wait a minute before any retry" name="wait_a_minute_before_any_retry" bpmn:id="_KSoKoHEREeKgV8mGUipbQA">
+                    <bpel:for>"PT60S"</bpel:for>
+                  </bpel:wait>
+                </bpel:sequence>
+              </bpel:scope>
             </bpel:catchAll>
           </bpel:faultHandlers>
           <bpel:sequence>
@@ -143,6 +171,15 @@
 </tns:tcFailureNotification></bpel:literal>
                 </bpel:from>
                 <bpel:to>$tcFailureTcFailureRequestMsg.body</bpel:to>
+              </bpel:copy>
+              <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+                <bpel:from>
+                  <bpel:literal>
+<FSAdapter:deleteRequest>
+  <FSAdapter:path></FSAdapter:path>
+</FSAdapter:deleteRequest></bpel:literal>
+                </bpel:from>
+                <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
               </bpel:copy>
             </bpel:assign>
             <bpel:assign bpmn:label="create transcode job" name="create_transcode_job" bpmn:id="_sopx4HEMEeKgV8mGUipbQA">
@@ -246,6 +283,13 @@
               <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
               <bpel:sequence>
                 <bpel:empty bpmn:label="cancelled" name="cancelled" bpmn:id="_cxK0cHEPEeKgV8mGUipbQA"/>
+                <bpel:assign bpmn:label="Delete partial files" name="Delete_partial_files" bpmn:id="_uBEZgHEQEeKgV8mGUipbQA">
+                  <bpel:copy>
+                    <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                    <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                  </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete partial files" name="Delete_partial_files-1" bpmn:id="_uBEZgHEQEeKgV8mGUipbQA"></bpel:invoke>
               </bpel:sequence>
               <bpel:else>
                 <bpel:sequence>
@@ -308,7 +352,13 @@
                           </bpel:copy>
                         </bpel:assign>
                         <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk1Var" portType="tcFailure:restInterface" operation="tcFailure" inputVariable="tcFailureTcFailureRequestMsg" outputVariable="tcFailureTcFailureResponseMsg" bpmn:label="send failure message" name="send_failure_message-1" bpmn:id="_sYJT4HEQEeKgV8mGUipbQA"></bpel:invoke>
-                        <bpel:empty bpmn:label="TODO Delete partial files" name="TODO_Delete_partial_files" bpmn:id="_uBEZgHEQEeKgV8mGUipbQA"/>
+                        <bpel:assign bpmn:label="Delete partial files" name="Delete_partial_files-2" bpmn:id="_uBEZgHEQEeKgV8mGUipbQA">
+                          <bpel:copy>
+                            <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                            <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+                          </bpel:copy>
+                        </bpel:assign>
+                        <bpel:invoke partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="Delete partial files" name="Delete_partial_files-3" bpmn:id="_uBEZgHEQEeKgV8mGUipbQA"></bpel:invoke>
                       </bpel:sequence>
                     </bpel:else>
                   </bpel:if>

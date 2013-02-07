@@ -328,6 +328,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// auto qc was for export task
+				mayamClient.exportFailed(notification.getTaskID());
 			}
 		}
 		catch (MayamClientException e)
@@ -356,9 +357,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info(String.format("Received notification of TC passed Package ID %s", notification.getAssetID()));
 		saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
-
 		
-		//TODO update task
+		if(! notification.isForTXDelivery()){
+			mayamClient.exportCompleted(notification.getTaskID());
+		}
 	}
 
 	protected void saveEvent(String name, String payload, String nameSpace)

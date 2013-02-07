@@ -1,6 +1,7 @@
 package com.mediasmiths.mq.handlers.purge;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,51 +25,33 @@ public class PurgeCandidateExtendHandler extends TaskUpdateHandler
 		return "Purge Candidate Extend";
 	}
 
+	private final static long FOURTEEN_DAYS = 1000l * 3600 * 24 * 14;
+	
 	@Override
 	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
-		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
-		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 		TaskState taskState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 		
 		try {			
 			if (attributeChanged(Attribute.TASK_STATE, before, after,currentAttributes) && taskState != null && taskState.equals(TaskState.EXTENDED))
 			{
-				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
-				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
-				String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
-				if (contentType.equals(MayamContentTypes.EPK) || contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
-				{
-					AttributeMap filterEqualities = tasksClient.createAttributeMap();
-					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
-					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
-					FilterCriteria criteria = new FilterCriteria();
-					criteria.setFilterEqualities(filterEqualities);
-					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 10, 0);
+				//extends date by fourteen days
+				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
 				
-					if (existingTasks.getTotalMatches() > 0) 
-					{
-						List<AttributeMap> tasks = existingTasks.getMatches();
-						for (int i = 0; i < existingTasks.getTotalMatches(); i++) 
-						{
-							AttributeMap task = tasks.get(i);
-							Calendar date = Calendar.getInstance();
-							if (contentType.equals(MayamContentTypes.EPK)) 
-							{
-								date.add(Calendar.DAY_OF_MONTH, 90);
-								task.setAttribute(Attribute.OP_DATE, date.getTime());
-								task.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-							}
-							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
-							{
-								date.add(Calendar.DAY_OF_MONTH, 7);
-								task.setAttribute(Attribute.OP_DATE, date.getTime());
-								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-							}
-							taskController.saveTask(task);
-						}
-					}
+				Date currentValue = (Date) currentAttributes.getAttribute(Attribute.OP_DATE);
+				
+				if(currentValue==null){
+					log.info("current expiration date is null, adding fourteen days to current time");
+					currentValue = new Date();
 				}
+				
+				long currentValueMillis = currentValue.getTime();
+				long newValueMillis = currentValueMillis + FOURTEEN_DAYS;
+				
+				Date newValue = new Date(newValueMillis);
+				updateMap.setAttribute(Attribute.OP_DATE, newValue);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+				taskController.saveTask(updateMap);			
 			}
 		}
 		catch (Exception e) {

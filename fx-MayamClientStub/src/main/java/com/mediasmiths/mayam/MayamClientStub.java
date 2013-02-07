@@ -976,4 +976,18 @@ public class MayamClientStub implements MayamClient
 		return false;
 	}
 
+	@Override
+	public void exportCompleted(long taskID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void exportFailed(long taskID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

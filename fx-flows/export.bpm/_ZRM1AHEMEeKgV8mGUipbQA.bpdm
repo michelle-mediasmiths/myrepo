@@ -1,20 +1,22 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://thisdiagram/transcode" xmlns:diag="http://thisdiagram" xmlns:wfadapter="http://thisdiagram/wfadapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://thisdiagram/transcode" xmlns:Pool="http://thisdiagram/Pool" xmlns:diag="http://thisdiagram" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/transcode">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" bpdm:prefix="deleteJob" bpdm:comment="contrib=&apos;project:///tcAdapter/deleteJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" bpdm:prefix="createJob" bpdm:comment="contrib=&apos;project:///tcAdapter/createJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" bpdm:prefix="queryJob" bpdm:comment="contrib=&apos;project:///tcAdapter/queryJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/transcode" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Pool" bpdm:prefix="Pool" bpdm:comment="contrib=&apos;partner-pool:///_0kXf4HE7EeKXOL1w3D1sTw"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_XSVUkHEMEeKgV8mGUipbQA"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/wfadapter" bpdm:prefix="wfadapter" bpdm:comment="contrib=&apos;partner-pool:///_mijEYHEOEeKgV8mGUipbQA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
             <vprop:property name="materialid" type="xs:string"/>
             <wsdl:portType name="Forcaller">
@@ -27,9 +29,6 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForcaller" type="this:Forcaller" bpdm:isSynchronized="true"/>
-            <vprop:propertyAlias propertyName="this:materialid" messageType="this:EventStartMessageRequest" part="body">
-                <vprop:query>tns:assetID/text()</vprop:query>
-            </vprop:propertyAlias>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_XSVUkHEMEeKgV8mGUipbQA" bpdm:label="caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
@@ -43,6 +42,9 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcPassed.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcFailure.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcTotalFailure.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_0kXf4HE7EeKXOL1w3D1sTw" bpdm:label="Pool"/>
+        <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="transcode" bpdm:ID="_ZRM1AHEMEeKgV8mGUipbQA">
         <bpel:partnerLinks>
@@ -54,6 +56,7 @@
             <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk0Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk0" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode" bpdm:invokedService="isTaskCancelled:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:invokedIsDefault="true" bpdm:clientTasks="_wL8dAHENEeKgV8mGUipbQA:__CEjwHENEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_mijEYHEOEeKgV8mGUipbQA"/>
             <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk2Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode" bpdm:invokedService="tcPassed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_son8sHEMEeKgV8mGUipbQA:_qeWgsHEQEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_mijEYHEOEeKgV8mGUipbQA"/>
             <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk3Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ZRM1AHEMEeKgV8mGUipbQA:_AdVEAHESEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_mijEYHEOEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" initializePartnerRole="yes" partnerRole="Pool_for_transcode" bpdm:invokedService="delete:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:invokedIsDefault="true" bpdm:clientTasks="_wKlnkHEMEeKgV8mGUipbQA:_H45TIHEREeKgV8mGUipbQA, _son8sHEMEeKgV8mGUipbQA:_uBEZgHEQEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_0kXf4HE7EeKXOL1w3D1sTw"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_fTyChXEMEeKgV8mGUipbQA" bpdm:messageIds="inc:_fTpfoHEMEeKgV8mGUipbQA"/>
@@ -68,6 +71,7 @@
                 </bpel:from>
             </bpel:variable>
             <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output" binding="tcTotalFailure:restBinding" operation="tcTotalFailure" opMsgType="1" bpdm:id="_JinNhXESEeKgV8mGUipbQA" bpdm:messageIds="inc:_JiRPQHESEeKgV8mGUipbQA"/>
+            <bpel:variable name="TcOutputPath" type="xs:string"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="this:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_b0q3UHEMEeKgV8mGUipbQA">
@@ -91,8 +95,8 @@
                         <bpel:from>"INCOMPLETE"</bpel:from>
                         <bpel:to>$TranscodeStatus</bpel:to>
 <mapper:mapperLink>
-  <mapper:vertice id="29592212" targetPath="$TranscodeStatus" targetedBy="5401184-arg0"></mapper:vertice>
-  <mapper:vertice id="5401184" dimension="109x24" location="420,240">
+  <mapper:vertice id="4543331" targetPath="$TranscodeStatus" targetedBy="19075292-arg0"></mapper:vertice>
+  <mapper:vertice id="19075292" dimension="109x24" location="372,180">
     <mapper:value>"INCOMPLETE"</mapper:value>
   </mapper:vertice>
 </mapper:mapperLink>
@@ -101,37 +105,7 @@
             </bpdm:messagingtask>
             <bpel:scope bpdm:label="Attempt Transcode up to 3 times" bpdm:ID="_oN3BkHEMEeKgV8mGUipbQA">
                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                    <bpel:condition bpdm:loopType="repeatUntil">($TaskIsCancelled = true()) or (($TranscodeErrorCount &gt;= 3) or (true() = $TranscodeSuccess))
-<mapper:mapperLink>
-  <mapper:vertice id="7542554" targetPath="$repeat until" targetedBy="28100390-arg2"></mapper:vertice>
-  <mapper:vertice id="28100390" dimension="78x24" location="648,336">
-    <mapper:value>or</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="11916284" dimension="85x25" location="276,456" targetedBy="28100390-arg0">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="27921157" sourcePath="$TaskIsCancelled" targetedBy="11916284-arg0"></mapper:vertice>
-  <mapper:vertice id="23794641" dimension="78x24" location="168,504" targetedBy="11916284-arg1">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="33552993" dimension="78x24" location="432,240" targetedBy="28100390-arg1">
-    <mapper:value>or</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="13695735" dimension="78x24" location="291,151" targetedBy="33552993-arg0">
-    <mapper:value>&gt;=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="28423838" sourcePath="$TranscodeErrorCount" targetedBy="13695735-arg0"></mapper:vertice>
-  <mapper:vertice id="32186291" dimension="78x24" location="168,192" targetedBy="13695735-arg1">
-    <mapper:value>3</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="67526" dimension="78x24" location="294,320" targetedBy="33552993-arg1">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="17680760" dimension="78x24" location="180,360" targetedBy="67526-arg0">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="19668604" sourcePath="$TranscodeSuccess" targetedBy="67526-arg1"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition bpdm:loopType="repeatUntil">($TaskIsCancelled = true()) or (($TranscodeErrorCount&gt;= 3) or (true() = $TranscodeSuccess))<mapper:mapperLink><mapper:vertice id="7542554" targetPath="$repeat until" targetedBy="28100390-arg2"></mapper:vertice><mapper:vertice id="28100390" dimension="78x24" location="648,336"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="11916284" dimension="85x25" location="276,456" targetedBy="28100390-arg0"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="27921157" sourcePath="$TaskIsCancelled" targetedBy="11916284-arg0"></mapper:vertice><mapper:vertice id="23794641" dimension="78x24" location="168,504" targetedBy="11916284-arg1"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="33552993" dimension="78x24" location="432,240" targetedBy="28100390-arg1"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="13695735" dimension="78x24" location="291,151" targetedBy="33552993-arg0"><mapper:value>&gt;=</mapper:value></mapper:vertice><mapper:vertice id="28423838" sourcePath="$TranscodeErrorCount" targetedBy="13695735-arg0"></mapper:vertice><mapper:vertice id="32186291" dimension="78x24" location="168,192" targetedBy="13695735-arg1"><mapper:value>3</mapper:value></mapper:vertice><mapper:vertice id="67526" dimension="78x24" location="294,320" targetedBy="33552993-arg1"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="17680760" dimension="78x24" location="180,360" targetedBy="67526-arg0"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="19668604" sourcePath="$TranscodeSuccess" targetedBy="67526-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:sequence>
                     <bpel:scope bpdm:label="Attempt Transcode" bpdm:ID="_son8sHEMEeKgV8mGUipbQA">
@@ -154,41 +128,52 @@
                                 </bpel:from>
                             </bpel:variable>
                             <bpel:variable name="tcFailureTcFailureResponseMsg" messageType="tcFailure:tcFailure_output" binding="tcFailure:restBinding" operation="tcFailure" opMsgType="1" bpdm:id="_4PeuQHEQEeKgV8mGUipbQA" bpdm:messageIds="inc:_4PJ-IHEQEeKgV8mGUipbQA"/>
+                            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_6x1HsHE7EeKXOL1w3D1sTw" bpdm:messageIds=" out:_6xnsUHE7EeKXOL1w3D1sTw">
+                                <bpel:from bpdm:toPart="body">
+                                    <bpel:literal bpdm:linkedMessageType="delete:delete_input" bpdm:linkedPart="body" bpdm:binding="delete:restBinding" bpdm:opMsgType="0" bpdm:operation="delete"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_7aBJEHE7EeKXOL1w3D1sTw" bpdm:messageIds="inc:_7ZwDUHE7EeKXOL1w3D1sTw"/>
                         </bpel:variables>
                         <bpel:faultHandlers>
                             <bpel:catchAll>
                                 <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_uCSeUHEMEeKgV8mGUipbQA" bpdm:type="error"></bpdm:eventHandler>
                                 <bpel:scope bpdm:label="transcode error" bpdm:ID="_wKlnkHEMEeKgV8mGUipbQA">
+                                    <bpel:variables>
+                                        <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_Gm4qIHE8EeKXOL1w3D1sTw" bpdm:messageIds=" out:_Gmr10HE8EeKXOL1w3D1sTw">
+                                            <bpel:from bpdm:toPart="body">
+                                                <bpel:literal bpdm:linkedMessageType="delete:delete_input" bpdm:linkedPart="body" bpdm:binding="delete:restBinding" bpdm:opMsgType="0" bpdm:operation="delete"></bpel:literal>
+                                            </bpel:from>
+                                        </bpel:variable>
+                                        <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_HBMnlXE8EeKXOL1w3D1sTw" bpdm:messageIds="inc:_HA9XAHE8EeKXOL1w3D1sTw"/>
+                                    </bpel:variables>
                                     <bpel:sequence>
                                         <bpdm:messagingtask bpdm:label="error" bpdm:ID="_wKncwHEMEeKgV8mGUipbQA"></bpdm:messagingtask>
                                         <bpdm:messagingtask bpdm:label="incremement error count" bpdm:ID="_Gk24YHEREeKgV8mGUipbQA">
                                             <bpdm:linkset bpdm:type="assignments">
                                                 <bpel:copy>
                                                     <bpel:from>$TranscodeErrorCount + 1</bpel:from>
-                                                    <bpel:to>$TranscodeErrorCount</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="16121062" targetPath="$TranscodeErrorCount" targetedBy="32074310-arg2"></mapper:vertice>
-  <mapper:vertice id="32074310" dimension="121x25" location="456,240">
-    <mapper:value>+</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="8568974" sourcePath="$TranscodeErrorCount" targetedBy="32074310-arg0"></mapper:vertice>
-  <mapper:vertice id="15215439" dimension="78x24" location="309,298" targetedBy="32074310-arg1">
-    <mapper:value>1</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                                    <bpel:to>$TranscodeErrorCount</bpel:to><mapper:mapperLink><mapper:vertice id="16121062" targetPath="$TranscodeErrorCount" targetedBy="32074310-arg2"></mapper:vertice><mapper:vertice id="32074310" dimension="121x25" location="456,240"><mapper:value>+</mapper:value></mapper:vertice><mapper:vertice id="8568974" sourcePath="$TranscodeErrorCount" targetedBy="32074310-arg0"></mapper:vertice><mapper:vertice id="15215439" dimension="78x24" location="309,298" targetedBy="32074310-arg1"><mapper:value>1</mapper:value></mapper:vertice></mapper:mapperLink>
                                                 </bpel:copy>
                                             </bpdm:linkset>
                                         </bpdm:messagingtask>
-                                        <bpdm:messagingtask bpdm:label="TODO: Delete Partial Files" bpdm:ID="_H45TIHEREeKgV8mGUipbQA"></bpdm:messagingtask>
+                                        <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Delete Partial Files" bpdm:ID="_H45TIHEREeKgV8mGUipbQA">
+                                            <bpdm:linkset bpdm:type="assignments">
+                                                <bpel:copy>
+                                                    <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                                                    <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="3974627" targetPath="$deleteDeleteRequestMsg.body/FSAdapter:path/text()" targetedBy="8021045-arg0"></mapper:vertice>
+  <mapper:vertice id="8021045" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                </bpel:copy>
+                                            </bpdm:linkset>
+                                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_Gmr10HE8EeKXOL1w3D1sTw"></bpdm:linkset>
+                                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_HA9XAHE8EeKXOL1w3D1sTw"></bpdm:linkset>
+                                        </bpdm:messagingtask>
                                         <bpdm:messagingtask eventType="intermediate: timer" bpdm:label="wait a minute before any retry" bpdm:ID="_KSoKoHEREeKgV8mGUipbQA">
                                             <bpdm:linkset bpdm:type="timer">
-                                                <bpel:for>"PT60S"
-<mapper:mapperLink>
-  <mapper:vertice id="6595567" targetPath="$duration" targetedBy="2082096-arg0"></mapper:vertice>
-  <mapper:vertice id="2082096" dimension="78x24" location="459,250">
-    <mapper:value>"PT60S"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:for>
+                                                <bpel:for>"PT60S"<mapper:mapperLink><mapper:vertice id="6595567" targetPath="$duration" targetedBy="2082096-arg0"></mapper:vertice><mapper:vertice id="2082096" dimension="78x24" location="459,250"><mapper:value>"PT60S"</mapper:value></mapper:vertice></mapper:mapperLink></bpel:for>
                                             </bpdm:linkset>
                                         </bpdm:messagingtask>
                                     </bpel:sequence>
@@ -258,11 +243,7 @@
                                         <bpdm:linkset bpdm:type="assignments">
                                             <bpel:copy>
                                                 <bpel:from>$queryJobQueryJobResponseMsg.response/tcAdapter:state/text()</bpel:from>
-                                                <bpel:to>$TranscodeStatus</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="21384094" targetPath="$TranscodeStatus" targetedBy="30253950-arg0"></mapper:vertice>
-  <mapper:vertice id="30253950" sourcePath="$queryJobQueryJobResponseMsg.response/tcAdapter:state/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                <bpel:to>$TranscodeStatus</bpel:to><mapper:mapperLink><mapper:vertice id="21384094" targetPath="$TranscodeStatus" targetedBy="30253950-arg0"></mapper:vertice><mapper:vertice id="30253950" sourcePath="$queryJobQueryJobResponseMsg.response/tcAdapter:state/text()"></mapper:vertice></mapper:mapperLink>
                                             </bpel:copy>
                                         </bpdm:linkset>
                                     </bpdm:messagingtask>
@@ -316,17 +297,7 @@
                                     <bpdm:messagingtask bpdm:label="not cancelled" bpdm:ID="_cVng4HEPEeKgV8mGUipbQA"></bpdm:messagingtask>
                                     <bpdm:gateway bpdm:label="check job results" bpdm:ID="_7TqGYHEPEeKgV8mGUipbQA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_Cm_xIHEQEeKgV8mGUipbQA" bpdm:targetDisplayName="[check job results - transcode succesful]">
-                                            <bpel:condition>"SUCCESS" = $TranscodeStatus
-<mapper:mapperLink>
-  <mapper:vertice id="25099694" targetPath="$condition" targetedBy="12567449-arg2"></mapper:vertice>
-  <mapper:vertice id="12567449" dimension="78x24" location="473,279">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="1027167" dimension="78x24" location="372,312" targetedBy="12567449-arg0">
-    <mapper:value>"SUCCESS"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="20278584" sourcePath="$TranscodeStatus" targetedBy="12567449-arg1"></mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                                            <bpel:condition>"SUCCESS" = $TranscodeStatus<mapper:mapperLink><mapper:vertice id="25099694" targetPath="$condition" targetedBy="12567449-arg2"></mapper:vertice><mapper:vertice id="12567449" dimension="78x24" location="473,279"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="1027167" dimension="78x24" location="372,312" targetedBy="12567449-arg0"><mapper:value>"SUCCESS"</mapper:value></mapper:vertice><mapper:vertice id="20278584" sourcePath="$TranscodeStatus" targetedBy="12567449-arg1"></mapper:vertice></mapper:mapperLink></bpel:condition>
                                         </bpdm:linkset>
                                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_C8dq0HEQEeKgV8mGUipbQA" bpdm:targetDisplayName="default"></bpdm:linkset>
                                         <bpel:sequence>
@@ -335,13 +306,7 @@
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>true()</bpel:from>
-                                                        <bpel:to>$TranscodeSuccess</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="11702381" targetPath="$TranscodeSuccess" targetedBy="15277201-arg0"></mapper:vertice>
-  <mapper:vertice id="15277201" dimension="78x24" location="387,256">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$TranscodeSuccess</bpel:to><mapper:mapperLink><mapper:vertice id="11702381" targetPath="$TranscodeSuccess" targetedBy="15277201-arg0"></mapper:vertice><mapper:vertice id="15277201" dimension="78x24" location="387,256"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                             </bpdm:messagingtask>
@@ -349,37 +314,19 @@
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:assetID/text()</bpel:from>
-                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:assetID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="1722819" targetPath="$tcPassedTcPassedRequestMsg.body/tns:assetID/text()" targetedBy="11643129-arg0"></mapper:vertice>
-  <mapper:vertice id="11643129" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:assetID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1722819" targetPath="$tcPassedTcPassedRequestMsg.body/tns:assetID/text()" targetedBy="11643129-arg0"></mapper:vertice><mapper:vertice id="11643129" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>false()</bpel:from>
-                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="7614565" targetPath="$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery/text()" targetedBy="26394336-arg0"></mapper:vertice>
-  <mapper:vertice id="26394336" dimension="78x24" location="432,276">
-    <mapper:value>false()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="7614565" targetPath="$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery/text()" targetedBy="26394336-arg0"></mapper:vertice><mapper:vertice id="26394336" dimension="78x24" location="432,276"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="1932125" targetPath="$tcPassedTcPassedRequestMsg.body/tns:taskID/text()" targetedBy="26747024-arg0"></mapper:vertice>
-  <mapper:vertice id="26747024" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1932125" targetPath="$tcPassedTcPassedRequestMsg.body/tns:taskID/text()" targetedBy="26747024-arg0"></mapper:vertice><mapper:vertice id="26747024" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="26884380" targetPath="$tcPassedTcPassedRequestMsg.body/tns:title/text()" targetedBy="18479413-arg0"></mapper:vertice>
-  <mapper:vertice id="18479413" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title/text()</bpel:to><mapper:mapperLink><mapper:vertice id="26884380" targetPath="$tcPassedTcPassedRequestMsg.body/tns:title/text()" targetedBy="18479413-arg0"></mapper:vertice><mapper:vertice id="18479413" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcPassedTcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcPassed:tcPassed_input" bpdm:binding="tcPassed:restBinding" bpdm:ID="_2p-JAHEQEeKgV8mGUipbQA"></bpdm:linkset>
@@ -392,17 +339,7 @@
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>1 + $TranscodeErrorCount</bpel:from>
-                                                        <bpel:to>$TranscodeErrorCount</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="31770483" targetPath="$TranscodeErrorCount" targetedBy="26657980-arg2"></mapper:vertice>
-  <mapper:vertice id="26657980" dimension="78x24" location="312,300">
-    <mapper:value>+</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="26072844" dimension="78x24" location="188,361" targetedBy="26657980-arg0">
-    <mapper:value>1</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="12595837" sourcePath="$TranscodeErrorCount" targetedBy="26657980-arg1"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$TranscodeErrorCount</bpel:to><mapper:mapperLink><mapper:vertice id="31770483" targetPath="$TranscodeErrorCount" targetedBy="26657980-arg2"></mapper:vertice><mapper:vertice id="26657980" dimension="78x24" location="312,300"><mapper:value>+</mapper:value></mapper:vertice><mapper:vertice id="26072844" dimension="78x24" location="188,361" targetedBy="26657980-arg0"><mapper:value>1</mapper:value></mapper:vertice><mapper:vertice id="12595837" sourcePath="$TranscodeErrorCount" targetedBy="26657980-arg1"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                             </bpdm:messagingtask>
@@ -410,48 +347,57 @@
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:assetID/text()</bpel:from>
-                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:assetID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="24274533" targetPath="$tcFailureTcFailureRequestMsg.body/tns:assetID/text()" targetedBy="22405317-arg0"></mapper:vertice>
-  <mapper:vertice id="22405317" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:assetID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="24274533" targetPath="$tcFailureTcFailureRequestMsg.body/tns:assetID/text()" targetedBy="22405317-arg0"></mapper:vertice><mapper:vertice id="22405317" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>false()</bpel:from>
-                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="22915521" targetPath="$tcFailureTcFailureRequestMsg.body/tns:forTXDelivery/text()" targetedBy="18039103-arg0"></mapper:vertice>
-  <mapper:vertice id="18039103" dimension="78x24" location="492,288">
-    <mapper:value>false()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="22915521" targetPath="$tcFailureTcFailureRequestMsg.body/tns:forTXDelivery/text()" targetedBy="18039103-arg0"></mapper:vertice><mapper:vertice id="18039103" dimension="78x24" location="492,288"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="26028698" targetPath="$tcFailureTcFailureRequestMsg.body/tns:taskID/text()" targetedBy="18278955-arg0"></mapper:vertice>
-  <mapper:vertice id="18278955" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="26028698" targetPath="$tcFailureTcFailureRequestMsg.body/tns:taskID/text()" targetedBy="18278955-arg0"></mapper:vertice><mapper:vertice id="18278955" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:title/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="23256690" targetPath="$tcFailureTcFailureRequestMsg.body/tns:title/text()" targetedBy="6953564-arg0"></mapper:vertice>
-  <mapper:vertice id="6953564" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcFailureTcFailureRequestMsg.body/tns:title/text()</bpel:to><mapper:mapperLink><mapper:vertice id="23256690" targetPath="$tcFailureTcFailureRequestMsg.body/tns:title/text()" targetedBy="6953564-arg0"></mapper:vertice><mapper:vertice id="6953564" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_36nRgHEQEeKgV8mGUipbQA"></bpdm:linkset>
                                                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_4PJ-IHEQEeKgV8mGUipbQA"></bpdm:linkset>
                                             </bpdm:messagingtask>
-                                            <bpdm:messagingtask bpdm:label="TODO Delete partial files" bpdm:ID="_uBEZgHEQEeKgV8mGUipbQA"></bpdm:messagingtask>
+                                            <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Delete partial files" bpdm:ID="_uBEZgHEQEeKgV8mGUipbQA">
+                                                <bpdm:linkset bpdm:type="assignments">
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                                                        <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="26563401" targetPath="$deleteDeleteRequestMsg.body/FSAdapter:path/text()" targetedBy="18997701-arg0"></mapper:vertice>
+  <mapper:vertice id="18997701" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                    </bpel:copy>
+                                                </bpdm:linkset>
+                                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_6xnsUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
+                                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_7ZwDUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
+                                            </bpdm:messagingtask>
                                         </bpel:sequence>
                                     </bpdm:gateway>
                                 </bpel:sequence>
                                 <bpel:sequence>
                                     <bpdm:messagingtask bpdm:label="cancelled" bpdm:ID="_cxK0cHEPEeKgV8mGUipbQA"></bpdm:messagingtask>
+                                    <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Delete partial files" bpdm:ID="_uBEZgHEQEeKgV8mGUipbQA">
+                                        <bpdm:linkset bpdm:type="assignments">
+                                            <bpel:copy>
+                                                <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()</bpel:from>
+                                                <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="26563401" targetPath="$deleteDeleteRequestMsg.body/FSAdapter:path/text()" targetedBy="18997701-arg0"></mapper:vertice>
+  <mapper:vertice id="18997701" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                            </bpel:copy>
+                                        </bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_6xnsUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_7ZwDUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
+                                    </bpdm:messagingtask>
                                 </bpel:sequence>
                             </bpdm:gateway>
                         </bpel:sequence>
@@ -460,31 +406,11 @@
             </bpel:scope>
             <bpdm:gateway bpdm:label="check result" bpdm:ID="_tKC1cHEREeKgV8mGUipbQA" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                 <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_x9puYHEREeKgV8mGUipbQA" bpdm:targetDisplayName="[check result - success]">
-                    <bpel:condition>$TranscodeSuccess = true()
-<mapper:mapperLink>
-  <mapper:vertice id="16058563" targetPath="$condition" targetedBy="11079825-arg2"></mapper:vertice>
-  <mapper:vertice id="11079825" dimension="78x24" location="619,286">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="558882" sourcePath="$TranscodeSuccess" targetedBy="11079825-arg0"></mapper:vertice>
-  <mapper:vertice id="23632073" dimension="78x24" location="512,338" targetedBy="11079825-arg1">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition>$TranscodeSuccess = true()<mapper:mapperLink><mapper:vertice id="16058563" targetPath="$condition" targetedBy="11079825-arg2"></mapper:vertice><mapper:vertice id="11079825" dimension="78x24" location="619,286"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="558882" sourcePath="$TranscodeSuccess" targetedBy="11079825-arg0"></mapper:vertice><mapper:vertice id="23632073" dimension="78x24" location="512,338" targetedBy="11079825-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_yTgCkHEREeKgV8mGUipbQA" bpdm:targetDisplayName="default"></bpdm:linkset>
                 <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_yr-M8HEREeKgV8mGUipbQA" bpdm:targetDisplayName="[check result - cancelled]">
-                    <bpel:condition>$TaskIsCancelled = true()
-<mapper:mapperLink>
-  <mapper:vertice id="6826903" targetPath="$condition" targetedBy="20374123-arg1"></mapper:vertice>
-  <mapper:vertice id="20374123" dimension="78x24" location="336,216">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="33412041" sourcePath="$TaskIsCancelled" targetedBy="20374123-arg0"></mapper:vertice>
-  <mapper:vertice id="23295856" dimension="78x24" location="180,300" targetedBy="20374123-arg2">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                    <bpel:condition>$TaskIsCancelled = true()<mapper:mapperLink><mapper:vertice id="6826903" targetPath="$condition" targetedBy="20374123-arg1"></mapper:vertice><mapper:vertice id="20374123" dimension="78x24" location="336,216"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="33412041" sourcePath="$TaskIsCancelled" targetedBy="20374123-arg0"></mapper:vertice><mapper:vertice id="23295856" dimension="78x24" location="180,300" targetedBy="20374123-arg2"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:sequence>
                     <bpdm:messagingtask bpdm:label="success" bpdm:ID="_u1kjIHEREeKgV8mGUipbQA"></bpdm:messagingtask>
@@ -495,41 +421,23 @@
                         <bpdm:linkset bpdm:type="assignments">
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/tns:assetID/text()</bpel:from>
-                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:assetID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="15437706" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:assetID/text()" targetedBy="5249023-arg0"></mapper:vertice>
-  <mapper:vertice id="5249023" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:assetID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="15437706" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:assetID/text()" targetedBy="5249023-arg0"></mapper:vertice><mapper:vertice id="5249023" sourcePath="$thisEventStartMessageRequest.body/tns:assetID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>false()</bpel:from>
-                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:forTXDelivery/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="515155" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:forTXDelivery/text()" targetedBy="4145092-arg0"></mapper:vertice>
-  <mapper:vertice id="4145092" dimension="78x24" location="534,282">
-    <mapper:value>false()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:forTXDelivery/text()</bpel:to><mapper:mapperLink><mapper:vertice id="515155" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:forTXDelivery/text()" targetedBy="4145092-arg0"></mapper:vertice><mapper:vertice id="4145092" dimension="78x24" location="534,282"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="32705711" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:taskID/text()" targetedBy="25690193-arg0"></mapper:vertice>
-  <mapper:vertice id="25690193" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="32705711" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:taskID/text()" targetedBy="25690193-arg0"></mapper:vertice><mapper:vertice id="25690193" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:title/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="4303081" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:title/text()" targetedBy="16971680-arg0"></mapper:vertice>
-  <mapper:vertice id="16971680" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/tns:title/text()</bpel:to><mapper:mapperLink><mapper:vertice id="4303081" targetPath="$tcTotalFailureTcTotalFailureRequestMsg.body/tns:title/text()" targetedBy="16971680-arg0"></mapper:vertice><mapper:vertice id="16971680" sourcePath="$thisEventStartMessageRequest.body/tns:title/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_JKPJwHESEeKgV8mGUipbQA"></bpdm:linkset>
-                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcTotalFailureTcTotalFailureResponseMsg" bpdm:msgVarScopeId="_ZRM1AHEMEeKgV8mGUipbQA" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_output" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_JiRPQHESEeKgV8mGUipbQA"></bpdm:linkset>
+                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcTotalFailureTcTotalFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_output" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_JiRPQHESEeKgV8mGUipbQA"></bpdm:linkset>
                     </bpdm:messagingtask>
                 </bpel:sequence>
                 <bpel:sequence>

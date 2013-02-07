@@ -926,5 +926,43 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap title = titleController.getTitle(titleID);
 		return AssetProperties.isAO(title);
 	}
+
+	@Override
+	public void exportCompleted(long taskID) throws MayamClientException
+	{
+		AttributeMap task;
+		try
+		{
+			task = tasksController.getTask(taskID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error fetching task "+taskID,e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+		}
+		
+		AttributeMap update = tasksController.updateMapForTask(task);
+		update.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+		tasksController.saveTask(update);
+	}
+	
+	@Override
+	public void exportFailed(long taskID) throws MayamClientException
+	{
+		AttributeMap task;
+		try
+		{
+			task = tasksController.getTask(taskID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error fetching task "+taskID,e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+		}
+		
+		AttributeMap update = tasksController.updateMapForTask(task);
+		update.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		tasksController.saveTask(update);
+	}
 	
 }

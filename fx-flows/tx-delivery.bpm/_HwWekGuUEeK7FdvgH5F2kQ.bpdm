@@ -1,11 +1,11 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:WFAdapter__2="http://thisdiagram/WFAdapter__2" xmlns:txDeliveryFinished="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" xmlns:txDeliveryComplete="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" xmlns:diag="http://thisdiagram" xmlns:txDeliveryFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:cancelled_2="http://thisdiagram/cancelled_2" xmlns:this="http://thisdiagram/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Delivery">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:FS_Adapter="http://thisdiagram/FS_Adapter" xmlns:txDeliveryFinished="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" xmlns:txDeliveryComplete="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" xmlns:diag="http://thisdiagram" xmlns:txDeliveryFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:cancelled_2="http://thisdiagram/cancelled_2" xmlns:this="http://thisdiagram/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Delivery">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" bpdm:prefix="getDeliveryLocation" bpdm:comment="contrib=&apos;project:///wfAdapter/getDeliveryLocation.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter__2" bpdm:prefix="WFAdapter__2" bpdm:comment="contrib=&apos;partner-pool:///_Gm-mQGuVEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/FS_Adapter" bpdm:prefix="FS_Adapter" bpdm:comment="contrib=&apos;partner-pool:///_PVVBAGuWEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" bpdm:prefix="txDeliveryFinished" bpdm:comment="contrib=&apos;project:///wfAdapter/txDeliveryFinished.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" bpdm:prefix="txDeliveryComplete" bpdm:comment="contrib=&apos;project:///wfAdapter/txDeliveryComplete.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_i0TRQGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
@@ -47,16 +47,18 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/txDeliveryFinished.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/isTaskCancelled.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_95U6kG6-EeKvjs-uExigJg" bpdm:label="cancelled 2"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:label="FS Adapter"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Delivery" bpdm:ID="_HwWekGuUEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk0Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery" bpdm:invokedService="getDeliveryLocation:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/deliveryLocation?packageID={packageID}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_ko_d0GuUEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_Gm-mQGuVEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" myRole="Delivery_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForTranscode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Delivery/Transcode" bpdm:providedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_sjGPwG7YEeKkE6ll_3FDMA, _HwWekGuUEeK7FdvgH5F2kQ:_x0Nh8GuUEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" myRole="Delivery_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForTranscode" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Delivery/Transcode" bpdm:providedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_x0Nh8GuUEeK7FdvgH5F2kQ, _HwWekGuUEeK7FdvgH5F2kQ:_sjGPwG7YEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk1Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery" bpdm:invokedService="isTaskCancelled:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:invokedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_YH0vIG68EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_Gm-mQGuVEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk3Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery" bpdm:invokedService="txDeliveryFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/failed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_iz57sG7aEeKkE6ll_3FDMA:_iz-NIG7aEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_Gm-mQGuVEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndCancelled_2PlkVar" partnerLinkType="TX_Delivery:DeliveryAndCancelled_2" initializePartnerRole="yes" partnerRole="cancelled_2_for_Delivery" bpdm:invokedService="cancelled_2:CanonicServiceForDelivery" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/cancelled_2/Delivery" bpdm:invokedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_lQsp4G68EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_95U6kG6-EeKvjs-uExigJg"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk2Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery" bpdm:invokedService="txDeliveryComplete:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivered" bpdm:invokedIsDefault="true" bpdm:clientTasks="_HwWekGuUEeK7FdvgH5F2kQ:_5K55QG7iEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_Gm-mQGuVEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk4Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery" bpdm:invokedService="writeSegmentXML:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivery/writeSegmentXML?packageID={packageID}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aHdwAG7aEeKkE6ll_3FDMA:_aHhaYG7aEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_Gm-mQGuVEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlkVar" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Delivery" bpdm:invokedService="move:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/move" bpdm:invokedIsDefault="true" bpdm:clientTasks="_iz57sG7aEeKkE6ll_3FDMA:_FG-yEHFGEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_PVVBAGuWEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="getDeliveryLocationGetDeliveryLocationRequestMsg" messageType="getDeliveryLocation:getDeliveryLocation_input" binding="getDeliveryLocation:restBinding" operation="getDeliveryLocation" opMsgType="0" bpdm:id="_JgtXAGuWEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_JgmCQGuWEeK7FdvgH5F2kQ">
@@ -142,7 +144,7 @@
                             <bpel:variable name="writeSegmentXMLWriteSegmentXMLResponseMsg" messageType="writeSegmentXML:writeSegmentXML_output" binding="writeSegmentXML:restBinding" operation="writeSegmentXML" opMsgType="1" bpdm:id="_eGaR1W7aEeKkE6ll_3FDMA" bpdm:messageIds="inc:_eGACIG7aEeKkE6ll_3FDMA"/>
                         </bpel:variables>
                         <bpel:faultHandlers>
-                            <bpel:catch>
+                            <bpel:catchAll>
                                 <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_esLRUG7aEeKkE6ll_3FDMA" bpdm:type="error"></bpdm:eventHandler>
                                 <bpel:scope bpdm:label="SubProcess" bpdm:ID="_iz57sG7aEeKkE6ll_3FDMA">
                                     <bpel:variables>
@@ -152,54 +154,86 @@
                                             </bpel:from>
                                         </bpel:variable>
                                         <bpel:variable name="txDeliveryFailureTxDeliveryFailureResponseMsg" messageType="txDeliveryFailure:txDeliveryFailure_output" binding="txDeliveryFailure:restBinding" operation="txDeliveryFailure" opMsgType="1" bpdm:id="_o27OFW7aEeKkE6ll_3FDMA" bpdm:messageIds="inc:_o2oTIG7aEeKkE6ll_3FDMA"/>
+                                        <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input" binding="move:restBinding" operation="move" opMsgType="0" bpdm:id="_I_IIUHFGEeKXOL1w3D1sTw" bpdm:messageIds=" out:_I_BaoHFGEeKXOL1w3D1sTw">
+                                            <bpel:from bpdm:toPart="body">
+                                                <bpel:literal bpdm:linkedMessageType="move:move_input" bpdm:linkedPart="body" bpdm:binding="move:restBinding" bpdm:opMsgType="0" bpdm:operation="move"></bpel:literal>
+                                            </bpel:from>
+                                        </bpel:variable>
+                                        <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:id="_JWam9XFGEeKXOL1w3D1sTw" bpdm:messageIds="inc:_JWKIQHFGEeKXOL1w3D1sTw"/>
                                     </bpel:variables>
                                     <bpel:sequence>
                                         <bpdm:messagingtask operation="txDeliveryFailure" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk3Var" portType="txDeliveryFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="segment xml write failed" bpdm:ID="_iz-NIG7aEeKkE6ll_3FDMA">
                                             <bpdm:linkset bpdm:type="assignments">
                                                 <bpel:copy>
                                                     <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="3907337" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="21958079-arg0"></mapper:vertice>
-  <mapper:vertice id="21958079" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="3907337" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:packageID/text()" targetedBy="21958079-arg0"></mapper:vertice><mapper:vertice id="21958079" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
                                                 </bpel:copy>
                                                 <bpel:copy>
                                                     <bpel:from>"Segment XML Write"</bpel:from>
-                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="2366242" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="30221751-arg0"></mapper:vertice>
-  <mapper:vertice id="30221751" dimension="253x145" location="480,108">
-    <mapper:value>"Segment XML Write"</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()</bpel:to><mapper:mapperLink><mapper:vertice id="2366242" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:stage/text()" targetedBy="30221751-arg0"></mapper:vertice><mapper:vertice id="30221751" dimension="253x145" location="480,108"><mapper:value>"Segment XML Write"</mapper:value></mapper:vertice></mapper:mapperLink>
                                                 </bpel:copy>
                                                 <bpel:copy>
                                                     <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="24756683" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="31441707-arg0"></mapper:vertice>
-  <mapper:vertice id="31441707" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                    <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="24756683" targetPath="$txDeliveryFailureTxDeliveryFailureRequestMsg.body/tns:taskID/text()" targetedBy="31441707-arg0"></mapper:vertice><mapper:vertice id="31441707" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                                                 </bpel:copy>
                                             </bpdm:linkset>
                                             <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_input" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_od-ikG7aEeKkE6ll_3FDMA"></bpdm:linkset>
                                             <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryFailureTxDeliveryFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryFailure:txDeliveryFailure_output" bpdm:binding="txDeliveryFailure:restBinding" bpdm:ID="_o2oTIG7aEeKkE6ll_3FDMA"></bpdm:linkset>
                                         </bpdm:messagingtask>
+                                        <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlkVar" portType="move:restInterface" isMyRole="false" enableSharing="false" bpdm:label="move transcoded media to quarrentine" bpdm:ID="_FG-yEHFGEeKXOL1w3D1sTw">
+                                            <bpdm:linkset bpdm:type="assignments">
+                                                <bpel:copy>
+                                                    <bpel:from>concat(concat($thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text(), $thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()), ".gxf")</bpel:from>
+                                                    <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="16015305" targetPath="$moveMoveRequestMsg.body/FSAdapter:from/text()" targetedBy="28875225-arg2"></mapper:vertice>
+  <mapper:vertice id="28875225" dimension="78x24" location="564,360">
+    <mapper:value>concat()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="13690281" dimension="78x24" location="442,384" targetedBy="28875225-arg0">
+    <mapper:value>concat()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="15503442" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()" targetedBy="13690281-arg0"></mapper:vertice>
+  <mapper:vertice id="180141" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()" targetedBy="13690281-arg1"></mapper:vertice>
+  <mapper:vertice id="21605853" dimension="78x24" location="420,444" targetedBy="28875225-arg1">
+    <mapper:value>".gxf"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                                </bpel:copy>
+                                                <bpel:copy>
+                                                    <bpel:from>concat(concat("/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine", $thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()), ".gxf")</bpel:from>
+                                                    <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="32309005" targetPath="$moveMoveRequestMsg.body/FSAdapter:to/text()" targetedBy="3196101-arg2"></mapper:vertice>
+  <mapper:vertice id="3196101" dimension="78x24" location="579,543">
+    <mapper:value>concat()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="1487061" dimension="78x24" location="416,542" targetedBy="3196101-arg0">
+    <mapper:value>concat()</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="26471376" dimension="78x24" location="226,528" targetedBy="1487061-arg0">
+    <mapper:value>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="21948585" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()" targetedBy="1487061-arg1"></mapper:vertice>
+  <mapper:vertice id="20652831" dimension="78x24" location="408,588" targetedBy="3196101-arg1">
+    <mapper:value>".gxf"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                                </bpel:copy>
+                                            </bpdm:linkset>
+                                            <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_I_BaoHFGEeKXOL1w3D1sTw"></bpdm:linkset>
+                                            <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="moveMoveResponseMsg" bpdm:msgVarScopeId="_iz57sG7aEeKkE6ll_3FDMA" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_JWKIQHFGEeKXOL1w3D1sTw"></bpdm:linkset>
+                                        </bpdm:messagingtask>
                                     </bpel:sequence>
                                 </bpel:scope>
-                            </bpel:catch>
+                            </bpel:catchAll>
                         </bpel:faultHandlers>
                         <bpel:sequence>
                             <bpdm:messagingtask operation="writeSegmentXML" partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk4Var" portType="writeSegmentXML:restInterface" isMyRole="false" enableSharing="false" bpdm:label="write segment xml" bpdm:ID="_aHhaYG7aEeKkE6ll_3FDMA">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                        <bpel:to>$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="21500238" targetPath="$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID/text()" targetedBy="24066677-arg0"></mapper:vertice>
-  <mapper:vertice id="24066677" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                        <bpel:to>$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="21500238" targetPath="$writeSegmentXMLWriteSegmentXMLRequestMsg.packageID/text()" targetedBy="24066677-arg0"></mapper:vertice><mapper:vertice id="24066677" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="writeSegmentXMLWriteSegmentXMLRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="writeSegmentXML:writeSegmentXML_input" bpdm:binding="writeSegmentXML:restBinding" bpdm:ID="_dyU4MG7aEeKkE6ll_3FDMA"></bpdm:linkset>
@@ -212,23 +246,15 @@
                         <bpdm:linkset bpdm:type="assignments">
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice>
-  <mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="12534988" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:packageID/text()" targetedBy="3402296-arg0"></mapper:vertice><mapper:vertice id="3402296" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice>
-  <mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                <bpel:to>$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="1490260" targetPath="$txDeliveryCompleteTxDeliveryCompleteRequestMsg.body/tns:taskID/text()" targetedBy="5270776-arg0"></mapper:vertice><mapper:vertice id="5270776" sourcePath="$thisEventStartMessageRequest.body/tns:taskID/text()"></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_input" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_69450G7iEeKkE6ll_3FDMA"></bpdm:linkset>
-                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:msgVarScopeId="_HwWekGuUEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
+                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="txDeliveryComplete:txDeliveryComplete_output" bpdm:binding="txDeliveryComplete:restBinding" bpdm:ID="_7UteYG7iEeKkE6ll_3FDMA"></bpdm:linkset>
                     </bpdm:messagingtask>
                     <bpdm:messagingtask eventType="end: message" operation="EventStartMessage" partnerLink="transcodeAndDeliveryPlkVar" portType="this:ForTranscode" isMyRole="true" enableSharing="false" bpdm:label="Message_End_Event" bpdm:ID="_sjGPwG7YEeKkE6ll_3FDMA">
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="thisEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageResponse" bpdm:ID="_yKHioG7YEeKkE6ll_3FDMA"></bpdm:linkset>

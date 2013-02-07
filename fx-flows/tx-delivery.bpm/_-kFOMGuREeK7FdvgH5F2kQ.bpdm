@@ -38,12 +38,12 @@
             <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" myRole="WFAdapter_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="tcFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_R0kAYGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" myRole="WFAdapter_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="autoQCRequiredForTX:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_hsH5gmuTEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk0" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="autoQcError:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/autoQcError" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_NA595WxzEeK5yedkU6Xcmg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk1" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="autoQcFailed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/autoQcFailed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_7F5J0GxyEeK5yedkU6Xcmg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk3" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="getProfileForQC:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/profile?assetID={assetID}&amp;isForTX={isForTX}" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_8V9SQGxsEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk2" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="autoQcPassed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/autoQcPassed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_5nX9YWxyEeK5yedkU6Xcmg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
             <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" myRole="WFAdapter_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="tcTotalFailure:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_yXguMGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" myRole="WFAdapter_for_Transcode" bpdm:enableSharing="false" bpdm:providedService="tcPassed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_TRreoGuSEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_i0TRQGuNEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk3" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="getProfileForQC:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/profile?assetID={assetID}&amp;isForTX={isForTX}" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_8V9SQGxsEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
+            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk1" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="autoQcFailed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/autoQcFailed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_7F5J0GxyEeK5yedkU6Xcmg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
             <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk4" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="isTaskCancelled:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_8K80kG67EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
+            <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk2" myRole="WFAdapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="autoQcPassed:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/qc/autoQcPassed" bpdm:providedIsDefault="true" bpdm:clientTasks="_-kFOMGuREeK7FdvgH5F2kQ:_5nX9YWxyEeK5yedkU6Xcmg" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="tcPassedTcPassedRequestMsg" messageType="tcPassed:tcPassed_input" binding="tcPassed:restBinding" operation="tcPassed" opMsgType="0" bpdm:id="_dPOs4GuSEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_dO-OMGuSEeK7FdvgH5F2kQ"/>
@@ -76,18 +76,6 @@
                     <bpel:literal bpdm:linkedMessageType="getProfileForQC:getProfileForQC_output" bpdm:linkedPart="response" bpdm:binding="getProfileForQC:restBinding" bpdm:opMsgType="1" bpdm:operation="getProfileForQC"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input" binding="autoQcPassed:restBinding" operation="autoQcPassed" opMsgType="0" bpdm:id="_8ZVusGxyEeK5yedkU6Xcmg" bpdm:messageIds="inc:_8Y3NkGxyEeK5yedkU6Xcmg"/>
-            <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output" binding="autoQcPassed:restBinding" operation="autoQcPassed" opMsgType="1" bpdm:id="_8rYg8GxyEeK5yedkU6Xcmg" bpdm:messageIds=" out:_8rHbMGxyEeK5yedkU6Xcmg">
-                <bpel:from bpdm:toPart="response">
-                    <bpel:literal bpdm:linkedMessageType="autoQcPassed:autoQcPassed_output" bpdm:linkedPart="response" bpdm:binding="autoQcPassed:restBinding" bpdm:opMsgType="1" bpdm:operation="autoQcPassed"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
-            <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="0" bpdm:id="_9DZ_ZWxyEeK5yedkU6Xcmg" bpdm:messageIds="inc:_9C_vsGxyEeK5yedkU6Xcmg"/>
-            <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="1" bpdm:id="_9Xq_MGxyEeK5yedkU6Xcmg" bpdm:messageIds=" out:_9Xc8wGxyEeK5yedkU6Xcmg">
-                <bpel:from bpdm:toPart="response">
-                    <bpel:literal bpdm:linkedMessageType="autoQcFailed:autoQcFailed_output" bpdm:linkedPart="response" bpdm:binding="autoQcFailed:restBinding" bpdm:opMsgType="1" bpdm:operation="autoQcFailed"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="autoQcErrorAutoQcErrorRequestMsg" messageType="autoQcError:autoQcError_input" binding="autoQcError:restBinding" operation="autoQcError" opMsgType="0" bpdm:id="_N5ucRWxzEeK5yedkU6Xcmg" bpdm:messageIds="inc:_N5MQwGxzEeK5yedkU6Xcmg"/>
             <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output" binding="autoQcError:restBinding" operation="autoQcError" opMsgType="1" bpdm:id="_OOvC8GxzEeK5yedkU6Xcmg" bpdm:messageIds=" out:_OOfLUGxzEeK5yedkU6Xcmg">
                 <bpel:from bpdm:toPart="response">
@@ -100,8 +88,56 @@
                     <bpel:literal bpdm:linkedMessageType="isTaskCancelled:isCancelled_output" bpdm:linkedPart="response" bpdm:binding="isTaskCancelled:restBinding" bpdm:opMsgType="1" bpdm:operation="isCancelled"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
+            <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input" binding="autoQcPassed:restBinding" operation="autoQcPassed" opMsgType="0" bpdm:id="_8ZVusGxyEeK5yedkU6Xcmg" bpdm:messageIds="inc:_8Y3NkGxyEeK5yedkU6Xcmg"/>
+            <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="0" bpdm:id="_9DZ_ZWxyEeK5yedkU6Xcmg" bpdm:messageIds="inc:_9C_vsGxyEeK5yedkU6Xcmg"/>
+            <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output" binding="autoQcFailed:restBinding" operation="autoQcFailed" opMsgType="1" bpdm:id="_9Xq_MGxyEeK5yedkU6Xcmg" bpdm:messageIds=" out:_9Xc8wGxyEeK5yedkU6Xcmg">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="autoQcFailed:autoQcFailed_output" bpdm:linkedPart="response" bpdm:binding="autoQcFailed:restBinding" bpdm:opMsgType="1" bpdm:operation="autoQcFailed"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output" binding="autoQcPassed:restBinding" operation="autoQcPassed" opMsgType="1" bpdm:id="_8rYg8GxyEeK5yedkU6Xcmg" bpdm:messageIds=" out:_8rHbMGxyEeK5yedkU6Xcmg">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="autoQcPassed:autoQcPassed_output" bpdm:linkedPart="response" bpdm:binding="autoQcPassed:restBinding" bpdm:opMsgType="1" bpdm:operation="autoQcPassed"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
         </bpel:variables>
         <bpel:flow>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="getProfileForQC" partnerLink="auto_QcAndWFAdapterForHttpPortPlk3Var" portType="getProfileForQC:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getProfileForQC" bpdm:ID="_8V9SQGxsEeKv3LhB37uiLw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getProfileForQCGetProfileForQCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_input" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="__rrQ4GxsEeKv3LhB37uiLw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getProfileForQCGetProfileForQCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_output" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="_AIxckGxtEeKv3LhB37uiLw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_uiIq9W66EeKvjs-uExigJg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_vNbqsG66EeKvjs-uExigJg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_vfaLgG66EeKvjs-uExigJg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="autoQcFailed" partnerLink="auto_QcAndWFAdapterForHttpPortPlk1Var" portType="autoQcFailed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcFailed" bpdm:ID="_7F5J0GxyEeK5yedkU6Xcmg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcFailedAutoQcFailedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_input" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_9C_vsGxyEeK5yedkU6Xcmg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcFailedAutoQcFailedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_output" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_9Xc8wGxyEeK5yedkU6Xcmg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="tcFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcFailure" bpdm:ID="_R0kAYGuSEeK7FdvgH5F2kQ">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_d5RvcGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_eL6XkGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_khIK9W64EeKvjs-uExigJg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_mIqwgG64EeKvjs-uExigJg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_mcBKUG64EeKvjs-uExigJg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="autoQcError" partnerLink="auto_QcAndWFAdapterForHttpPortPlk0Var" portType="autoQcError:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcError" bpdm:ID="_NA595WxzEeK5yedkU6Xcmg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcErrorAutoQcErrorRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcError:autoQcError_input" bpdm:binding="autoQcError:restBinding" bpdm:ID="_N5MQwGxzEeK5yedkU6Xcmg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcErrorAutoQcErrorResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcError:autoQcError_output" bpdm:binding="autoQcError:restBinding" bpdm:ID="_OOfLUGxzEeK5yedkU6Xcmg"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
             <bpel:sequence>
                 <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcTotalFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcTotalFailure" bpdm:ID="_yXguMGuSEeK7FdvgH5F2kQ">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcTotalFailureTcTotalFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcTotalFailure:tcTotalFailure_input" bpdm:binding="tcTotalFailure:restBinding" bpdm:ID="_z27SgGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
@@ -115,21 +151,9 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="tcFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcFailure:restInterface" isMyRole="true" enableSharing="false" bpdm:label="tcFailure" bpdm:ID="_R0kAYGuSEeK7FdvgH5F2kQ">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="tcFailureTcFailureRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_input" bpdm:binding="tcFailure:restBinding" bpdm:ID="_d5RvcGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="tcFailureTcFailureResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcFailure:tcFailure_output" bpdm:binding="tcFailure:restBinding" bpdm:ID="_eL6XkGuSEeK7FdvgH5F2kQ"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="autoQcFailed" partnerLink="auto_QcAndWFAdapterForHttpPortPlk1Var" portType="autoQcFailed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcFailed" bpdm:ID="_7F5J0GxyEeK5yedkU6Xcmg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcFailedAutoQcFailedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_input" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_9C_vsGxyEeK5yedkU6Xcmg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcFailedAutoQcFailedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_output" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_9Xc8wGxyEeK5yedkU6Xcmg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="getProfileForQC" partnerLink="auto_QcAndWFAdapterForHttpPortPlk3Var" portType="getProfileForQC:restInterface" isMyRole="true" enableSharing="false" bpdm:label="getProfileForQC" bpdm:ID="_8V9SQGxsEeKv3LhB37uiLw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="getProfileForQCGetProfileForQCRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_input" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="__rrQ4GxsEeKv3LhB37uiLw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="getProfileForQCGetProfileForQCResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="getProfileForQC:getProfileForQC_output" bpdm:binding="getProfileForQC:restBinding" bpdm:ID="_AIxckGxtEeKv3LhB37uiLw"></bpdm:linkset>
+                <bpdm:messagingtask operation="autoQcPassed" partnerLink="auto_QcAndWFAdapterForHttpPortPlk2Var" portType="autoQcPassed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcPassed" bpdm:ID="_5nX9YWxyEeK5yedkU6Xcmg">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcPassedAutoQcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcPassed:autoQcPassed_input" bpdm:binding="autoQcPassed:restBinding" bpdm:ID="_8Y3NkGxyEeK5yedkU6Xcmg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcPassedAutoQcPassedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcPassed:autoQcPassed_output" bpdm:binding="autoQcPassed:restBinding" bpdm:ID="_8rHbMGxyEeK5yedkU6Xcmg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -139,33 +163,9 @@
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_khIK9W64EeKvjs-uExigJg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_mIqwgG64EeKvjs-uExigJg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_mcBKUG64EeKvjs-uExigJg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_uiIq9W66EeKvjs-uExigJg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_vNbqsG66EeKvjs-uExigJg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_vfaLgG66EeKvjs-uExigJg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
                 <bpdm:messagingtask operation="isCancelled" partnerLink="auto_QcAndWFAdapterForHttpPortPlk4Var" portType="isTaskCancelled:restInterface" isMyRole="true" enableSharing="false" bpdm:label="isCancelled" bpdm:ID="_8K80kG67EeKvjs-uExigJg">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="isTaskCancelledIsCancelledRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_input" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_ARo9IG68EeKvjs-uExigJg"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_BAEJYG68EeKvjs-uExigJg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="autoQcError" partnerLink="auto_QcAndWFAdapterForHttpPortPlk0Var" portType="autoQcError:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcError" bpdm:ID="_NA595WxzEeK5yedkU6Xcmg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcErrorAutoQcErrorRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcError:autoQcError_input" bpdm:binding="autoQcError:restBinding" bpdm:ID="_N5MQwGxzEeK5yedkU6Xcmg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcErrorAutoQcErrorResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcError:autoQcError_output" bpdm:binding="autoQcError:restBinding" bpdm:ID="_OOfLUGxzEeK5yedkU6Xcmg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="autoQcPassed" partnerLink="auto_QcAndWFAdapterForHttpPortPlk2Var" portType="autoQcPassed:restInterface" isMyRole="true" enableSharing="false" bpdm:label="autoQcPassed" bpdm:ID="_5nX9YWxyEeK5yedkU6Xcmg">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="autoQcPassedAutoQcPassedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcPassed:autoQcPassed_input" bpdm:binding="autoQcPassed:restBinding" bpdm:ID="_8Y3NkGxyEeK5yedkU6Xcmg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="autoQcPassedAutoQcPassedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcPassed:autoQcPassed_output" bpdm:binding="autoQcPassed:restBinding" bpdm:ID="_8rHbMGxyEeK5yedkU6Xcmg"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
