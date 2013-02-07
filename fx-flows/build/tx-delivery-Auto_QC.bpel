@@ -446,7 +446,7 @@
                   <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
                 </bpel:copy>
                 <bpel:copy>
-                  <bpel:from>"missingPrototype"</bpel:from>
+                  <bpel:from>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</bpel:from>
                   <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
                 </bpel:copy>
               </bpel:assign>

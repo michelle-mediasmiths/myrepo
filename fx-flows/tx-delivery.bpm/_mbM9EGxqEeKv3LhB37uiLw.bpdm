@@ -504,12 +504,12 @@
 </mapper:mapperLink>
                                     </bpel:copy>
                                     <bpel:copy>
-                                        <bpel:from>"missingPrototype"</bpel:from>
+                                        <bpel:from>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</bpel:from>
                                         <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to/text()</bpel:to>
 <mapper:mapperLink>
   <mapper:vertice id="13729685" targetPath="$moveMoveRequestMsg.body/FSAdapter:to/text()" targetedBy="23971297-arg0"></mapper:vertice>
-  <mapper:vertice id="23971297" dimension="78x24" location="449,615">
-    <mapper:value>/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine</mapper:value>
+  <mapper:vertice id="23971297" dimension="416x24" location="449,615">
+    <mapper:value>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</mapper:value>
   </mapper:vertice>
 </mapper:mapperLink>
                                     </bpel:copy>
