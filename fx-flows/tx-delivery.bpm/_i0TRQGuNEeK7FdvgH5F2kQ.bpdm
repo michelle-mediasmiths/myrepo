@@ -29,6 +29,10 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForCaller" type="this:ForCaller" bpdm:isSynchronized="true"/>
+            <vprop:property name="packageid" type="xs:string"/>
+            <vprop:propertyAlias propertyName="this:packageid" messageType="this:EventStartMessageRequest" part="body">
+                <vprop:query>wfAdapter:packageID/text()</vprop:query>
+            </vprop:propertyAlias>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ" bpdm:label="Caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/createJob.wsdl"/>
@@ -492,7 +496,7 @@
                                     </bpel:copy>
                                 </bpdm:linkset>
                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deliveryEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageRequest" bpdm:ID="_6o5jUGuXEeK7FdvgH5F2kQ"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deliveryEventStartMessageResponse" bpdm:msgVarScopeId="_i0TRQGuNEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageResponse" bpdm:ID="_yKHioG7YEeKkE6ll_3FDMA"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deliveryEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageResponse" bpdm:ID="_yKHioG7YEeKkE6ll_3FDMA"></bpdm:linkset>
                             </bpdm:messagingtask>
                             <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_avNdkG67EeKvjs-uExigJg"></bpdm:messagingtask>
                         </bpel:sequence>

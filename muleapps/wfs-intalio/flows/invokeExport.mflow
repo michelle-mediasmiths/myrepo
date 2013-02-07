@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="a flow">
+    <flow SubFlow="false" name="invokeExport" entity-id="b0abb55e-55db-45ad-8986-eac4fa353101">
+        <properties>
+            <property value="" name="processingStrategy2"/>
+            <property value="true" name="auxiliary;erased;processingStrategy2"/>
+            <property value="1" name="auxiliary;index"/>
+            <property name="updated"/>
+        </properties>
+        <description></description>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="HTTP" entity-id="HTTP#1">
+                <properties>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="" name="port"/>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="" name="host"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="httpLabel"/>
+                    <property value="http://localhost:8088/export" name="address"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="path"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="" name="user"/>
+                    <property value="" name="responseTimeout"/>
+                    <property value="" name="mimeType"/>
+                    <property value="" name="connector-ref"/>
+                    <property value="2" name="auxiliary;index"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" name="XSLT" entity-id="XSLT#1">
+                <properties>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="" name="returnClass"/>
+                    <property value="invokeExport.xsl" name="xsl-file"/>
+                    <property value="false" name="ignoreBadInput"/>
+                    <property value="5" name="maxActiveTransformers"/>
+                    <property value="2" name="maxIdleTransformers"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="transformerFactoryClass"/>
+                    <property value="" name="xslt-text"/>
+                    <property value="UTF-8" name="outputEncoding"/>
+                    <property value="" name="uriResolver"/>
+                    <property value="" name="mimeType"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property name="updated"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/xslt-text;7396679">
+                        <property value="" name="xslt-text"/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/http/endpoint" name="intalio" entity-id="HTTP#2">
+                <properties>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="" name="port"/>
+                    <property value="" name="host"/>
+                    <property value="false" name="followRedirects"/>
+                    <property value="http://www.mulesoft.org/schema/mule/http/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property value="" name="httpLabel"/>
+                    <property value="http://localhost:8089/ode/processes/fx-flows/export/transcode/caller" name="address"/>
+                    <property value="" name="path"/>
+                    <property value="UTF-8" name="encoding"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="POST" name="method"/>
+                    <property value="" name="user"/>
+                    <property value="" name="responseTimeout"/>
+                    <property value="text/xml" name="mimeType"/>
+                    <property value="" name="connector-ref"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
