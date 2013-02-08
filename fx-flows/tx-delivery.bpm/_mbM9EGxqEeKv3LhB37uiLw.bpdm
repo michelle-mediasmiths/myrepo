@@ -761,8 +761,14 @@
                                 <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from/text()</bpel:to><mapper:mapperLink><mapper:vertice id="27306231" targetPath="$moveMoveRequestMsg.body/FSAdapter:from/text()" targetedBy="28291786-arg2"></mapper:vertice><mapper:vertice id="28291786" dimension="78x24" location="408,516"><mapper:value>concat()</mapper:value></mapper:vertice><mapper:vertice id="15155204" dimension="78x24" location="242,478" targetedBy="28291786-arg0"><mapper:value>concat()</mapper:value></mapper:vertice><mapper:vertice id="30204139" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFolder/text()" targetedBy="15155204-arg0"></mapper:vertice><mapper:vertice id="12928226" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:outputFileBasename/text()" targetedBy="15155204-arg1"></mapper:vertice><mapper:vertice id="30487648" dimension="78x24" location="288,588" targetedBy="28291786-arg1"><mapper:value>".gxf"</mapper:value></mapper:vertice></mapper:mapperLink>
                             </bpel:copy>
                             <bpel:copy>
-                                <bpel:from>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</bpel:from>
-                                <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to/text()</bpel:to><mapper:mapperLink><mapper:vertice id="13729685" targetPath="$moveMoveRequestMsg.body/FSAdapter:to/text()" targetedBy="23971297-arg0"></mapper:vertice><mapper:vertice id="23971297" dimension="416x24" location="449,615"><mapper:value>"/storage/mam/hires01/mediasmiths/exports/broadcast/quarentine"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                <bpel:from>"/storage/mam/watch01/tx-exports/broadcast/failed"</bpel:from>
+                                <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="10892159" targetPath="$moveMoveRequestMsg.body/FSAdapter:to/text()" targetedBy="827141-arg0"></mapper:vertice>
+  <mapper:vertice id="827141" dimension="416x24" location="449,615">
+    <mapper:value>"/storage/mam/watch01/tx-exports/broadcast/failed"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                             </bpel:copy>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_XOSgQHFHEeKXOL1w3D1sTw"></bpdm:linkset>
