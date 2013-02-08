@@ -2,6 +2,7 @@
 <rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" ID="_yUA3kBbKEeKoOf_lVyekrA">
   <rest:operation verb="GET" name="qcResult" ID="_yUA3kxbKEeKoOf_lVyekrA">
     <rest:output type="project:///qcAdapterRest/qcAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/qc/adapter}qcMediaResult" name="response" headerDirection="request" contentType="application/xml" ID="_yUA3lBbKEeKoOf_lVyekrA"/>
+    <rest:fault type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="fault" headerDirection="request" contentType="text/html" ID="_Cu1eoHH5EeKofd0UxythbA"/>
   </rest:operation>
   <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_yUA3kRbKEeKoOf_lVyekrA"/>
   <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="path" headerDirection="request" contentType="text/xml" ID="_yUA3khbKEeKoOf_lVyekrA"/>

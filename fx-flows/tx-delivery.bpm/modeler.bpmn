@@ -233,9 +233,12 @@
           </eAnnotations>
         </associations>
       </artifacts>
-      <vertices xmi:type="bpmn:SubProcess" xmi:id="_a0OKYWuPEeK7FdvgH5F2kQ" iD="_a0OKYGuPEeK7FdvgH5F2kQ" outgoingEdges="_JNQdMW7QEeKkE6ll_3FDMA" incomingEdges="_0xbsgW6_EeKvjs-uExigJg" name="Poll until job finishes" activityType="SubProcess" looping="true">
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_a0OKYWuPEeK7FdvgH5F2kQ" iD="_a0OKYGuPEeK7FdvgH5F2kQ" outgoingEdges="_JNQdMW7QEeKkE6ll_3FDMA" incomingEdges="_0xbsgW6_EeKvjs-uExigJg" documentation="" name="Poll until job finishes" activityType="SubProcess" looping="true">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_o4ldAGuPEeK7FdvgH5F2kQ" source="forEachSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o4ldAWuPEeK7FdvgH5F2kQ" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
+        </eAnnotations>
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_3o16QHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_3o16QXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
         </eAnnotations>
         <artifacts xmi:type="bpmn:DataObject" xmi:id="_378ugWuPEeK7FdvgH5F2kQ" iD="_378ugGuPEeK7FdvgH5F2kQ">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_378ugmuPEeK7FdvgH5F2kQ" source="attachedDataobject">
@@ -351,6 +354,9 @@
         <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_fkVFgXFEEeKXOL1w3D1sTw"/>
       </vertices>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_wzKgIW6_EeKvjs-uExigJg" iD="_wzKgIG6_EeKvjs-uExigJg" outgoingEdges="_0xbsgW6_EeKvjs-uExigJg">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_4aBfkHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_4aBfkXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
+        </eAnnotations>
         <artifacts xmi:type="bpmn:DataObject" xmi:id="_1WhWkW6_EeKvjs-uExigJg" iD="_1WhWkG6_EeKvjs-uExigJg">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1WhWkm6_EeKvjs-uExigJg" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_1WhWk26_EeKvjs-uExigJg" key="isBpelDeclaration" value="true"/>
@@ -384,6 +390,9 @@
         <eventHandlers xmi:type="bpmn:Activity" xmi:id="_M5stAW7AEeKvjs-uExigJg" iD="_M5stAG7AEeKvjs-uExigJg" outgoingEdges="_vAsG0W7IEeKkE6ll_3FDMA" activityType="EventIntermediateError"/>
       </vertices>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_N9MxYW7AEeKvjs-uExigJg" iD="_N9MxYG7AEeKvjs-uExigJg" outgoingEdges="_IOKRUW7IEeKkE6ll_3FDMA" incomingEdges="_JnJj4W7QEeKkE6ll_3FDMA">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_2LYdwHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2LYdwXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
+        </eAnnotations>
         <artifacts xmi:type="bpmn:DataObject" xmi:id="_K6LysW7IEeKkE6ll_3FDMA" iD="_K6LysG7IEeKkE6ll_3FDMA">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_K6Lysm7IEeKkE6ll_3FDMA" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_K6Lys27IEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
@@ -1115,6 +1124,9 @@
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_yKHioW7YEeKkE6ll_3FDMA"/>
     </vertices>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_aHdwAW7aEeKkE6ll_3FDMA" iD="_aHdwAG7aEeKkE6ll_3FDMA" outgoingEdges="__VqsAW7aEeKkE6ll_3FDMA" incomingEdges="_c6J6EW7aEeKkE6ll_3FDMA">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LNsvEHH-EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LNsvEXH-EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
+      </eAnnotations>
       <artifacts xmi:type="bpmn:DataObject" xmi:id="_dyf3UW7aEeKkE6ll_3FDMA" iD="_dyf3UG7aEeKkE6ll_3FDMA">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_dyf3Um7aEeKkE6ll_3FDMA" source="attachedDataobject">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_dyf3U27aEeKkE6ll_3FDMA" key="isBpelDeclaration" value="true"/>
@@ -1622,6 +1634,9 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__qCIUXHhEeKIgPAPmx2ukA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
       </eAnnotations>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_8tQyAXHdEeKIgPAPmx2ukA" iD="_8tQyAHHdEeKIgPAPmx2ukA" name="attempt qc">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_uSaWYHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_uSaWYXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
+        </eAnnotations>
         <artifacts xmi:type="bpmn:DataObject" xmi:id="_nhhiIXHfEeKIgPAPmx2ukA" iD="_nhhiIHHfEeKIgPAPmx2ukA">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_nhhiInHfEeKIgPAPmx2ukA" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_nhhiI3HfEeKIgPAPmx2ukA" key="isBpelDeclaration" value="true"/>
@@ -1726,6 +1741,9 @@
         <vertices xmi:type="bpmn:SubProcess" xmi:id="_Bc4i0XHeEeKIgPAPmx2ukA" iD="_Bc4i0HHeEeKIgPAPmx2ukA" outgoingEdges="_glcWQXHeEeKIgPAPmx2ukA" incomingEdges="_F5jicXHeEeKIgPAPmx2ukA" name="loop until finished or cancelled" ncname="" activityType="SubProcess" looping="true">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z5K-0HHgEeKIgPAPmx2ukA" source="forEachSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z5K-0XHgEeKIgPAPmx2ukA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
+          </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xsIEMHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xsIEMXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <artifacts xmi:type="bpmn:DataObject" xmi:id="_ZS98QXHgEeKIgPAPmx2ukA" iD="_ZS98QHHgEeKIgPAPmx2ukA">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ZS98QnHgEeKIgPAPmx2ukA" source="attachedDataobject">
@@ -1860,6 +1878,9 @@
         <eventHandlers xmi:type="bpmn:Activity" xmi:id="_95MkMXHeEeKIgPAPmx2ukA" iD="_95MkMHHeEeKIgPAPmx2ukA" outgoingEdges="_EyFHkXHfEeKIgPAPmx2ukA" activityType="EventIntermediateError"/>
       </vertices>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_CmwfgXHfEeKIgPAPmx2ukA" iD="_CmwfgHHfEeKIgPAPmx2ukA" incomingEdges="_EyFHkXHfEeKIgPAPmx2ukA" name="qc error">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_AtRTsHHyEeKIgPAPmx2ukA" source="skipAsScope">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AtRTsXHyEeKIgPAPmx2ukA" key="skip" value="false"/>
+        </eAnnotations>
         <vertices xmi:type="bpmn:Activity" xmi:id="_CmxtoXHfEeKIgPAPmx2ukA" iD="_CmxtoHHfEeKIgPAPmx2ukA" outgoingEdges="_I9eJ8XHfEeKIgPAPmx2ukA" name="error"/>
         <vertices xmi:type="bpmn:Activity" xmi:id="_Fyqa0XHfEeKIgPAPmx2ukA" iD="_Fyqa0HHfEeKIgPAPmx2ukA" outgoingEdges="_JT7iIXHfEeKIgPAPmx2ukA" incomingEdges="_I9eJ8XHfEeKIgPAPmx2ukA" name="increment error count"/>
         <vertices xmi:type="bpmn:Activity" xmi:id="_HnwUMXHfEeKIgPAPmx2ukA" iD="_HnwUMHHfEeKIgPAPmx2ukA" incomingEdges="_JT7iIXHfEeKIgPAPmx2ukA" name="wait before retry" activityType="EventIntermediateTimer"/>

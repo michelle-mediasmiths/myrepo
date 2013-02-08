@@ -7,6 +7,7 @@
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:anyType" name="response_autoQcPassed_outputType"/>
+      <xs:element type="xs:anyType" name="fault_autoQcPassed_faultType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="autoQcPassed_input">
@@ -15,10 +16,14 @@
   <wsdl:message name="autoQcPassed_output">
     <wsdl:part name="response" element="autoQcPassed:response_autoQcPassed_outputType"/>
   </wsdl:message>
+  <wsdl:message name="autoQcPassed_fault">
+    <wsdl:part name="fault" element="autoQcPassed:fault_autoQcPassed_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="autoQcPassed">
       <wsdl:input message="autoQcPassed:autoQcPassed_input"/>
       <wsdl:output message="autoQcPassed:autoQcPassed_output"/>
+      <wsdl:fault message="autoQcPassed:autoQcPassed_fault" name="autoQcPassedFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="autoQcPassed:restInterface">
@@ -32,6 +37,9 @@
       <wsdl:output>
         <mime:content type="text/xml" part="response"/>
       </wsdl:output>
+      <wsdl:fault name="autoQcPassedFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

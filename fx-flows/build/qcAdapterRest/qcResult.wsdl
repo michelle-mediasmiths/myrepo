@@ -8,6 +8,7 @@
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:string" name="jobname_urlType"/>
       <xs:element type="xs:string" name="path_urlType"/>
+      <xs:element type="xs:anyType" name="fault_qcResult_faultType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="qcResult_input">
@@ -17,10 +18,14 @@
   <wsdl:message name="qcResult_output">
     <wsdl:part name="response" element="adapter:qcMediaResult"/>
   </wsdl:message>
+  <wsdl:message name="qcResult_fault">
+    <wsdl:part name="fault" element="qcResult:fault_qcResult_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="qcResult">
       <wsdl:input message="qcResult:qcResult_input"/>
       <wsdl:output message="qcResult:qcResult_output"/>
+      <wsdl:fault message="qcResult:qcResult_fault" name="qcResultFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="qcResult:restInterface">
@@ -33,6 +38,9 @@
       <wsdl:output>
         <mime:content type="application/xml" part="response"/>
       </wsdl:output>
+      <wsdl:fault name="qcResultFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

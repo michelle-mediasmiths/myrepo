@@ -94,6 +94,9 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TfBE0XHZEeKzdrjGTgFYAA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
       </eAnnotations>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_3ru9YXHTEeKzdrjGTgFYAA" iD="_3ru9YHHTEeKzdrjGTgFYAA" name="attempt qc">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_qms5oHH7EeKIgPAPmx2ukA" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_qms5oXH7EeKIgPAPmx2ukA" key="odeFailureFaultOnFailure" value="true"/>
+        </eAnnotations>
         <artifacts xmi:type="bpmn:DataObject" xmi:id="_heLOsXHWEeKzdrjGTgFYAA" iD="_heLOsHHWEeKzdrjGTgFYAA">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_heLOsnHWEeKzdrjGTgFYAA" source="attachedDataobject">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_heLOs3HWEeKzdrjGTgFYAA" key="isBpelDeclaration" value="true"/>

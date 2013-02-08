@@ -209,6 +209,9 @@
             </bpel:copy>
           </bpel:assign>
           <bpel:scope bpmn:label="SubProcess" name="SubProcess" bpmn:id="_wzKgIG6_EeKvjs-uExigJg">
+            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+              <ext:faultOnFailure>true</ext:faultOnFailure>
+            </ext:failureHandling>
             <bpel:variables>
               <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input"/>
               <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output"/>
@@ -264,6 +267,9 @@
             </bpel:sequence>
           </bpel:scope>
           <bpel:scope bpmn:label="Poll until job finishes" name="Poll_until_job_finishes" bpmn:id="_a0OKYGuPEeK7FdvgH5F2kQ">
+            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+              <ext:faultOnFailure>true</ext:faultOnFailure>
+            </ext:failureHandling>
             <bpel:variables>
               <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
               <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
@@ -361,6 +367,9 @@
             <bpel:else>
               <bpel:sequence>
                 <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_N9MxYG7AEeKvjs-uExigJg">
+                  <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                    <ext:faultOnFailure>true</ext:faultOnFailure>
+                  </ext:failureHandling>
                   <bpel:variables>
                     <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
                     <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>

@@ -4,7 +4,10 @@
     <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/qc/adapter">
       <xs:include schemaLocation="qcAdapter.xsd"/>
     </xs:schema>
-    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest"/>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:anyType" name="fault_qcStart_faultType"/>
+    </xs:schema>
   </wsdl:types>
   <wsdl:message name="qcStart_input">
     <wsdl:part name="body" element="adapter:qcStartRequest"/>
@@ -12,10 +15,14 @@
   <wsdl:message name="qcStart_output">
     <wsdl:part name="response" element="adapter:qcStartResponse"/>
   </wsdl:message>
+  <wsdl:message name="qcStart_fault">
+    <wsdl:part name="fault" element="qcStart:fault_qcStart_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="qcStart">
       <wsdl:input message="qcStart:qcStart_input"/>
       <wsdl:output message="qcStart:qcStart_output"/>
+      <wsdl:fault message="qcStart:qcStart_fault" name="qcStartFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="qcStart:restInterface">
@@ -29,6 +36,9 @@
       <wsdl:output>
         <mime:content type="application/xml" part="response"/>
       </wsdl:output>
+      <wsdl:fault name="qcStartFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

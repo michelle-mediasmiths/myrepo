@@ -4,16 +4,21 @@
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:string" name="jobname_urlType"/>
+      <xs:element type="xs:anyType" name="fault_qcCancelJob_faultType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="qcCancelJob_input">
     <wsdl:part name="jobname" element="qcJobCancel:jobname_urlType"/>
   </wsdl:message>
   <wsdl:message name="qcCancelJob_output"/>
+  <wsdl:message name="qcCancelJob_fault">
+    <wsdl:part name="fault" element="qcJobCancel:fault_qcCancelJob_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="qcCancelJob">
       <wsdl:input message="qcJobCancel:qcCancelJob_input"/>
       <wsdl:output message="qcJobCancel:qcCancelJob_output"/>
+      <wsdl:fault message="qcJobCancel:qcCancelJob_fault" name="qcCancelJobFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="qcJobCancel:restInterface">
@@ -24,6 +29,9 @@
         <http:urlReplacement/>
       </wsdl:input>
       <wsdl:output/>
+      <wsdl:fault name="qcCancelJobFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

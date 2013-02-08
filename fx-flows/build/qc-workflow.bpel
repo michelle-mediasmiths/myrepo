@@ -141,6 +141,9 @@
     <bpel:scope bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times" bpmn:id="_zPs28HHTEeKzdrjGTgFYAA">
       <bpel:repeatUntil bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times-1">
         <bpel:scope bpmn:label="attempt qc" name="attempt_qc" bpmn:id="_3ru9YHHTEeKzdrjGTgFYAA">
+          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:faultOnFailure>true</ext:faultOnFailure>
+          </ext:failureHandling>
           <bpel:variables>
             <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input"/>
             <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output"/>
