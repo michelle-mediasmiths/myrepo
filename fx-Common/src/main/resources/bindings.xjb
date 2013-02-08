@@ -22,5 +22,11 @@
                 		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events.config" />
              </jaxb:schemaBindings>
     	</jaxb:bindings>
+    		<jaxb:bindings schemaLocation="ComplianceLoggingMarker.xsd">
+             <jaxb:schemaBindings>
+                		<jaxb:package name="http://com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker" />
+             </jaxb:schemaBindings>
+    	</jaxb:bindings>
+	
 	
 </jaxb:bindings>
