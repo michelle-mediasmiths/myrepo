@@ -1,32 +1,32 @@
 ﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:workflow="http://thisdiagram/workflow" xmlns:this="http://thisdiagram/caller" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:AutoQC="http://thisdiagram" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/caller">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="workflow" bpdm:comment="contrib=&apos;partner-pool:///_SmKt0B9yEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="workflow" bpdm:comment="contrib=&apos;partner-pool:///_Aq5isHHSEeKzdrjGTgFYAA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/caller" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="AutoQC" bpdm:comment="contrib=&apos;partner-pool:///_SmKt0B9yEeKCKo-8QnTuIA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="AutoQC" bpdm:comment="contrib=&apos;partner-pool:///_Aq5isHHSEeKzdrjGTgFYAA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types"></bpdm:namespaceContributor>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_SmKt0B9yEeKCKo-8QnTuIA" bpdm:label="workflow"/>
+        <bpdm:namespaceContributor bpdm:url="partner-pool:///_Aq5isHHSEeKzdrjGTgFYAA" bpdm:label="workflow"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/tcAdapter.xsd"/>
     </bpdm:dependencies>
-    <bpel:scope bpdm:label="caller" bpdm:ID="_Q35Dlh9xEeKCKo-8QnTuIA">
+    <bpel:scope bpdm:label="caller" bpdm:ID="_kq5JsHHTEeKzdrjGTgFYAA">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="workflowAndCallerPlkVar" partnerLinkType="AutoQC:workflowAndCaller" initializePartnerRole="yes" partnerRole="workflow_for_caller" bpdm:invokedService="workflow:CanonicServiceForcaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/auto_qc/caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Q35Dlh9xEeKCKo-8QnTuIA:_Q35DmB9xEeKCKo-8QnTuIA" bpdm:isManaged="true" bpdm:otherPoolId="_SmKt0B9yEeKCKo-8QnTuIA"/>
+            <bpel:partnerLink name="callerAndWorkflowPlkVar" partnerLinkType="AutoQC:callerAndWorkflow" initializePartnerRole="yes" partnerRole="workflow_for_caller" bpdm:invokedService="workflow:CanonicServiceForcaller" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/qc/caller" bpdm:invokedIsDefault="true" bpdm:clientTasks="_kq5JsHHTEeKzdrjGTgFYAA:_lqp9kHHTEeKzdrjGTgFYAA" bpdm:isManaged="true" bpdm:otherPoolId="_Aq5isHHSEeKzdrjGTgFYAA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="auto_qcStartRequestMsg" messageType="workflow:startRequest" bpdm:id="_XVYZgB9zEeKCKo-8QnTuIA" bpdm:messageIds=" out:_XVXLYB9zEeKCKo-8QnTuIA">
+            <bpel:variable name="qcEventStartMessageRequest" messageType="workflow:EventStartMessageRequest" bpdm:id="_mkw1YHHTEeKzdrjGTgFYAA" bpdm:messageIds=" out:_mksj8HHTEeKzdrjGTgFYAA">
                 <bpel:from bpdm:toPart="body">
-                    <bpel:literal bpdm:linkedMessageType="workflow:startRequest" bpdm:linkedPart="body"></bpel:literal>
+                    <bpel:literal bpdm:linkedMessageType="workflow:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="start" partnerLink="workflowAndCallerPlkVar" portType="workflow:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="invoke" bpdm:ID="_Q35DmB9xEeKCKo-8QnTuIA">
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="auto_qcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="workflow:startRequest" bpdm:ID="_XVXLYB9zEeKCKo-8QnTuIA"></bpdm:linkset>
+            <bpdm:messagingtask operation="EventStartMessage" partnerLink="callerAndWorkflowPlkVar" portType="workflow:Forcaller" isMyRole="false" enableSharing="false" bpdm:label="invoke" bpdm:ID="_lqp9kHHTEeKzdrjGTgFYAA">
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="qcEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="workflow:EventStartMessageRequest" bpdm:ID="_mksj8HHTEeKzdrjGTgFYAA"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

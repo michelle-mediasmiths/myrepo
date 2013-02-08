@@ -1,6 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadpater="http://ns.mediasmithsforge.com/foxtel/qc/wfadpater" xmlns:workflow="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:complexvar="http://www.example.org/complexvar" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc">
+<wsdl:definitions xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:workflow="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc">
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" location="qcAdapterRest/qcStart.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" location="wfAdapter/assetTransferForQC.wsdl"/>
@@ -8,32 +9,39 @@
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" location="wfAdapter/autoQcFailed.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" location="wfAdapter/autoQcPassed.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" location="wfAdapter/getProfileForQC.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" location="wfAdapter/isTaskCancelled.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow" location="qc-workflow.wsdl"/>
-    <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk0">
-        <pnlk:role name="qc_adapter_for_workflow" portType="qcFinished:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk1">
-        <pnlk:role name="qc_adapter_for_workflow" portType="qcResult:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="qc_adapterAndWorkflowForHttpPortPlk2">
-        <pnlk:role name="qc_adapter_for_workflow" portType="qcStart:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk0">
-        <pnlk:role name="wfadpater_for_workflow" portType="assetTransferForQC:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk1">
-        <pnlk:role name="wfadpater_for_workflow" portType="autoQcError:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk2">
-        <pnlk:role name="wfadpater_for_workflow" portType="autoQcFailed:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk3">
-        <pnlk:role name="wfadpater_for_workflow" portType="autoQcPassed:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="wfadpaterAndWorkflowForHttpPortPlk4">
-        <pnlk:role name="wfadpater_for_workflow" portType="getProfileForQC:restInterface"/>
-    </pnlk:partnerLinkType>
-    <pnlk:partnerLinkType name="workflowAndCaller">
+    <pnlk:partnerLinkType name="callerAndWorkflow">
         <pnlk:role name="workflow_for_caller" portType="workflow:Forcaller"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="qcadapterAndWorkflowForHttpPortPlk0">
+        <pnlk:role name="qcadapter_for_workflow" portType="qcFinished:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="qcadapterAndWorkflowForHttpPortPlk1">
+        <pnlk:role name="qcadapter_for_workflow" portType="qcJobCancel:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="qcadapterAndWorkflowForHttpPortPlk2">
+        <pnlk:role name="qcadapter_for_workflow" portType="qcResult:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="qcadapterAndWorkflowForHttpPortPlk3">
+        <pnlk:role name="qcadapter_for_workflow" portType="qcStart:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk0">
+        <pnlk:role name="wfadapter_for_workflow" portType="assetTransferForQC:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk1">
+        <pnlk:role name="wfadapter_for_workflow" portType="autoQcError:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk2">
+        <pnlk:role name="wfadapter_for_workflow" portType="autoQcFailed:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk3">
+        <pnlk:role name="wfadapter_for_workflow" portType="autoQcPassed:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk4">
+        <pnlk:role name="wfadapter_for_workflow" portType="getProfileForQC:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndWorkflowForHttpPortPlk5">
+        <pnlk:role name="wfadapter_for_workflow" portType="isTaskCancelled:restInterface"/>
     </pnlk:partnerLinkType>
 </wsdl:definitions>
