@@ -1,7 +1,7 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:this="http://thisdiagram/QC_Adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:TX_Delivery="http://thisdiagram" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/QC_Adapter">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tns="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:this="http://thisdiagram/QC_Adapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:TX_Delivery="http://thisdiagram" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/QC_Adapter">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" bpdm:prefix="qcJobResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcJobResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" bpdm:prefix="qcJobResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcJobResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/QC_Adapter" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
@@ -23,60 +23,60 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="QC Adapter" bpdm:ID="_HOKK4GxtEeKv3LhB37uiLw">
         <bpel:partnerLinks>
+            <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk0" myRole="QC_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="qcFinished:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" bpdm:providedIsDefault="true" bpdm:clientTasks="_HOKK4GxtEeKv3LhB37uiLw:_0qdJsGxtEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
             <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk1" myRole="QC_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="qcJobCancel:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}" bpdm:providedIsDefault="true" bpdm:clientTasks="_HOKK4GxtEeKv3LhB37uiLw:_5BfWAG7LEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
             <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk2" myRole="QC_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="qcResult:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/result/file?path={path}" bpdm:providedIsDefault="true" bpdm:clientTasks="_HOKK4GxtEeKv3LhB37uiLw:__vchIWxtEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk0" myRole="QC_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="qcFinished:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" bpdm:providedIsDefault="true" bpdm:clientTasks="_HOKK4GxtEeKv3LhB37uiLw:_0qdJsGxtEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
             <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk3" myRole="QC_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="qcStart:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/start" bpdm:providedIsDefault="true" bpdm:clientTasks="_HOKK4GxtEeKv3LhB37uiLw:_N0RjQGxtEeKv3LhB37uiLw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input" binding="qcJobCancel:restBinding" operation="qcCancelJob" opMsgType="0" bpdm:id="_674mJW7LEeKkE6ll_3FDMA" bpdm:messageIds="inc:_67kdEG7LEeKkE6ll_3FDMA"/>
-            <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input" binding="qcResult:restBinding" operation="qcResult" opMsgType="0" bpdm:id="_soVuNW6uEeKvjs-uExigJg" bpdm:messageIds="inc:_soHEsG6uEeKvjs-uExigJg"/>
-            <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_2cnD1WxtEeKv3LhB37uiLw" bpdm:messageIds="inc:_2caPgGxtEeKv3LhB37uiLw"/>
-            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_x6bvYG6tEeKvjs-uExigJg" bpdm:messageIds="inc:_x6KCkG6tEeKvjs-uExigJg"/>
-            <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_2vu0IGxtEeKv3LhB37uiLw" bpdm:messageIds=" out:_2vlDIGxtEeKv3LhB37uiLw">
+            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_nhnBsHHfEeKIgPAPmx2ukA" bpdm:messageIds="inc:_nhXKEHHfEeKIgPAPmx2ukA"/>
+            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_n08NYHHfEeKIgPAPmx2ukA" bpdm:messageIds=" out:_n0x1UHHfEeKIgPAPmx2ukA">
+                <bpel:from bpdm:toPart="response">
+                    <bpel:literal bpdm:linkedMessageType="qcStart:qcStart_output" bpdm:linkedPart="response" bpdm:binding="qcStart:restBinding" bpdm:opMsgType="1" bpdm:operation="qcStart"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_ZTA_lXHgEeKIgPAPmx2ukA" bpdm:messageIds="inc:_ZSzkMHHgEeKIgPAPmx2ukA"/>
+            <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="1" bpdm:id="_ZodrIHHgEeKIgPAPmx2ukA" bpdm:messageIds=" out:_ZoSE8HHgEeKIgPAPmx2ukA">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="qcFinished:qcFinished_output" bpdm:linkedPart="response" bpdm:binding="qcFinished:restBinding" bpdm:opMsgType="1" bpdm:operation="qcFinished"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output" binding="qcJobCancel:restBinding" operation="qcCancelJob" opMsgType="1" bpdm:id="_7RSOYG7LEeKkE6ll_3FDMA" bpdm:messageIds=" out:_7REL8G7LEeKkE6ll_3FDMA">
+            <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input" binding="qcJobCancel:restBinding" operation="qcCancelJob" opMsgType="0" bpdm:id="_MiEnMnHhEeKIgPAPmx2ukA" bpdm:messageIds="inc:_MhxFMHHhEeKIgPAPmx2ukA"/>
+            <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output" binding="qcJobCancel:restBinding" operation="qcCancelJob" opMsgType="1" bpdm:id="_M41hYHHhEeKIgPAPmx2ukA" bpdm:messageIds=" out:_M4ne8HHhEeKIgPAPmx2ukA">
                 <bpel:from>
                     <bpel:literal bpdm:linkedMessageType="qcJobCancel:qcCancelJob_output"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output" binding="qcResult:restBinding" operation="qcResult" opMsgType="1" bpdm:id="_tKeK4G6uEeKvjs-uExigJg" bpdm:messageIds=" out:_tKQIcG6uEeKvjs-uExigJg">
+            <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input" binding="qcResult:restBinding" operation="qcResult" opMsgType="0" bpdm:id="_RhGtBXHhEeKIgPAPmx2ukA" bpdm:messageIds="inc:_RgwHsHHhEeKIgPAPmx2ukA"/>
+            <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output" binding="qcResult:restBinding" operation="qcResult" opMsgType="1" bpdm:id="_R44T0HHhEeKIgPAPmx2ukA" bpdm:messageIds=" out:_R4q4cHHhEeKIgPAPmx2ukA">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="qcResult:qcResult_output" bpdm:linkedPart="response" bpdm:binding="qcResult:restBinding" bpdm:opMsgType="1" bpdm:operation="qcResult"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
-            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output" binding="qcStart:restBinding" operation="qcStart" opMsgType="1" bpdm:id="_yfzGQG6tEeKvjs-uExigJg" bpdm:messageIds=" out:_yfj1sG6tEeKvjs-uExigJg">
-                <bpel:from bpdm:toPart="response">
-                    <bpel:literal bpdm:linkedMessageType="qcStart:qcStart_output" bpdm:linkedPart="response" bpdm:binding="qcStart:restBinding" bpdm:opMsgType="1" bpdm:operation="qcStart"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="qcCancelJob" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk1Var" portType="qcJobCancel:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcCancelJob" bpdm:ID="_5BfWAG7LEeKkE6ll_3FDMA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcJobCancelQcCancelJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcJobCancel:qcCancelJob_input" bpdm:binding="qcJobCancel:restBinding" bpdm:ID="_67kdEG7LEeKkE6ll_3FDMA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcJobCancelQcCancelJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcJobCancel:qcCancelJob_output" bpdm:binding="qcJobCancel:restBinding" bpdm:ID="_7REL8G7LEeKkE6ll_3FDMA"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
                 <bpdm:messagingtask operation="qcResult" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk2Var" portType="qcResult:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcResult" bpdm:ID="__vchIWxtEeKv3LhB37uiLw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcResultQcResultRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_input" bpdm:binding="qcResult:restBinding" bpdm:ID="_soHEsG6uEeKvjs-uExigJg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcResultQcResultResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_output" bpdm:binding="qcResult:restBinding" bpdm:ID="_tKQIcG6uEeKvjs-uExigJg"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="qcFinished" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcFinished" bpdm:ID="_0qdJsGxtEeKv3LhB37uiLw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcFinishedQcFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_input" bpdm:binding="qcFinished:restBinding" bpdm:ID="_2caPgGxtEeKv3LhB37uiLw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcFinishedQcFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_output" bpdm:binding="qcFinished:restBinding" bpdm:ID="_2vlDIGxtEeKv3LhB37uiLw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcResultQcResultRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_input" bpdm:binding="qcResult:restBinding" bpdm:ID="_RgwHsHHhEeKIgPAPmx2ukA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcResultQcResultResponseMsg" bpdm:msgVarScopeId="_HOKK4GxtEeKv3LhB37uiLw" bpdm:variableIsManaged="true" bpdm:messageType="qcResult:qcResult_output" bpdm:binding="qcResult:restBinding" bpdm:ID="_R4q4cHHhEeKIgPAPmx2ukA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
                 <bpdm:messagingtask operation="qcStart" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk3Var" portType="qcStart:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcStart" bpdm:ID="_N0RjQGxtEeKv3LhB37uiLw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_x6KCkG6tEeKvjs-uExigJg"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_yfj1sG6tEeKvjs-uExigJg"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcStartQcStartRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_input" bpdm:binding="qcStart:restBinding" bpdm:ID="_nhXKEHHfEeKIgPAPmx2ukA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcStartQcStartResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcStart:qcStart_output" bpdm:binding="qcStart:restBinding" bpdm:ID="_n0x1UHHfEeKIgPAPmx2ukA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcFinished" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk0Var" portType="qcFinished:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcFinished" bpdm:ID="_0qdJsGxtEeKv3LhB37uiLw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcFinishedQcFinishedRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_input" bpdm:binding="qcFinished:restBinding" bpdm:ID="_ZSzkMHHgEeKIgPAPmx2ukA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcFinishedQcFinishedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcFinished:qcFinished_output" bpdm:binding="qcFinished:restBinding" bpdm:ID="_ZoSE8HHgEeKIgPAPmx2ukA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="qcCancelJob" partnerLink="auto_QcAndQC_AdapterForHttpPortPlk1Var" portType="qcJobCancel:restInterface" isMyRole="true" enableSharing="false" bpdm:label="qcCancelJob" bpdm:ID="_5BfWAG7LEeKkE6ll_3FDMA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="qcJobCancelQcCancelJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcJobCancel:qcCancelJob_input" bpdm:binding="qcJobCancel:restBinding" bpdm:ID="_MhxFMHHhEeKIgPAPmx2ukA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="qcJobCancelQcCancelJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="qcJobCancel:qcCancelJob_output" bpdm:binding="qcJobCancel:restBinding" bpdm:ID="_M4ne8HHhEeKIgPAPmx2ukA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>

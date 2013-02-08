@@ -39,7 +39,6 @@
     <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
     <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest"/>
     <bpel:variable name="auto_QCEventStartMessageRequest" messageType="Auto_QC:EventStartMessageRequest"/>
-    <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse"/>
     <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
     <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
     <bpel:variable name="TaskIsCancelled" type="xs:boolean"/>
@@ -48,6 +47,7 @@
     <bpel:variable name="TranscodeJobResult" type="xs:string"/>
     <bpel:variable name="deliveryEventStartMessageResponse" messageType="Delivery:EventStartMessageResponse"/>
     <bpel:variable name="TCFilePath" type="xs:string"/>
+    <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
