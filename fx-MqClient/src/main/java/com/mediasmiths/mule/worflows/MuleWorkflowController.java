@@ -52,7 +52,7 @@ public class MuleWorkflowController {
 		invokeQc.setTitle(title);
 		
 		String payload = getSerialisationOf(invokeQc);
-		client.dispatch(destinations.getMule_tx_destination(), payload, null);
+		client.dispatch(destinations.getMule_qc_destination(), payload, null);
 		log.info("Message sent to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
 	}
 	

@@ -143,11 +143,11 @@
                       <bpel:copy bpmn:label="$txDeliveryFailureTxDeliveryFailureRequestMsg">
                         <bpel:from>
                           <bpel:literal>
-<txDeliveryFailure:body_txDeliveryFailure_inputType>
+<tns:txDeliveryFailure>
   <tns:packageID></tns:packageID>
   <tns:stage></tns:stage>
   <tns:taskID></tns:taskID>
-</txDeliveryFailure:body_txDeliveryFailure_inputType></bpel:literal>
+</tns:txDeliveryFailure></bpel:literal>
                         </bpel:from>
                         <bpel:to>$txDeliveryFailureTxDeliveryFailureRequestMsg.body</bpel:to>
                       </bpel:copy>
