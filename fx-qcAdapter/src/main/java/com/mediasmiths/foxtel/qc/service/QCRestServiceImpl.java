@@ -98,7 +98,15 @@ public class QCRestServiceImpl implements QCRestService
 		
 		String relativePathToFile = pathResolver.getRelativePath(location.getPath(), request.getFile());
 	
-		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName(),location);
+		String proirity = "Medium";
+		if(request.getPriority() != null){
+			proirity=request.getPriority();
+		}
+		else{
+			log.warn("requested qc priority is was null");
+		}
+		
+		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName(),location,proirity);
 		log.info(String.format("Job %s created", jobName));
 		QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
 		QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);

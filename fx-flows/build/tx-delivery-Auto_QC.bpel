@@ -178,6 +178,7 @@
 <qcAdapter:qcStartRequest>
   <qcAdapter:file></qcAdapter:file>
   <qcAdapter:ident></qcAdapter:ident>
+  <qcAdapter:priority></qcAdapter:priority>
   <qcAdapter:profile></qcAdapter:profile>
 </qcAdapter:qcStartRequest></bpel:literal>
                   </bpel:from>

@@ -34,4 +34,15 @@ public class QCStartRequest
 	String file;
 	String ident;
 	String profileName;
+	String priority;
+	
+	@XmlElement(name="priority")
+	public String getPriority()
+	{
+		return priority;
+	}
+	public void setPriority(String priority)
+	{
+		this.priority = priority;
+	}
 }
