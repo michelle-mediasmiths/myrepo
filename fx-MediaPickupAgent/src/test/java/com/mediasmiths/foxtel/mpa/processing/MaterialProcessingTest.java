@@ -18,7 +18,8 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -36,7 +37,7 @@ import com.mediasmiths.mayam.MayamClient;
 public abstract class MaterialProcessingTest {
 
 	MaterialExchangeProcessor processor;
-	FilesPendingProcessingQueue filesPendingProcessingQueue;
+	FilePickUpProcessingQueue filesPendingProcessingQueue;
 	PendingImportQueue pendingImportQueue;
 	MaterialExchangeValidator validator;
 	ReceiptWriter receiptWriter;
@@ -68,7 +69,7 @@ public abstract class MaterialProcessingTest {
 	public void before() throws IOException, JAXBException,
 			DatatypeConfigurationException, SAXException {
 
-		filesPendingProcessingQueue = new FilesPendingProcessingQueue();
+		filesPendingProcessingQueue = new FilePickUpFromDirectories();
 		pendingImportQueue = new PendingImportQueue();
 		validator = mock(MaterialExchangeValidator.class);
 		receiptWriter = mock(ReceiptWriter.class);

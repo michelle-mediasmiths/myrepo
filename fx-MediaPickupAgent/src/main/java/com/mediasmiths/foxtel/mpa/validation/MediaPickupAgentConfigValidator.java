@@ -25,9 +25,7 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
-			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount,
-			@Named(MXF_NOT_TOUCHED_PERIOD) String mxfNotTouched,
-			@Named(XML_NOT_TOUCHED_PERIOD) String xmlNotTouched
+			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount
 			)
 			throws ConfigValidationFailureException {
 		super();
@@ -68,35 +66,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 					timeBetweenPurges);
 		}
 		
-		
-		if (isValidLong(xmlNotTouched)) {
-			configValidationPasses(XML_NOT_TOUCHED_PERIOD,
-					xmlNotTouched);
-		} else {
-			anyFailures = true;
-			configValidationFails(XML_NOT_TOUCHED_PERIOD,
-					xmlNotTouched);
-		}
-		
-		
-		if(isValidInt(mxfNotTouched)){
-			configValidationPasses(MXF_NOT_TOUCHED_PERIOD,
-					mxfNotTouched);
-		} else {
-			anyFailures = true;
-			configValidationFails(MXF_NOT_TOUCHED_PERIOD,
-					mxfNotTouched);
-		}
-
-		//using relative folder paths for failed,archived,recipts, this check no longer relevant
-//		if(isAOAgent.booleanValue()==true){
-//			if(! failurePath.equals(emergencyImportFolder)){
-//				anyFailures=true;
-//				logger.error("AO agent should quarrentine unmatched content, set emergency import folder to be equal to the quarrentine / failure folder");				
-//				configValidationFails(ARDOME_EMERGENCY_IMPORT_FOLDER,
-//						emergencyImportFolder);
-//			}
-//		}
 
 		if (anyFailures) {
 			onFailure();

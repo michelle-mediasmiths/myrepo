@@ -11,12 +11,15 @@ import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 
-public class PlaceholderAgent extends XmlWatchingAgent<PlaceholderMessage> {
+public class PlaceholderAgent extends XmlWatchingAgent<PlaceholderMessage>
+{
 
 	@Inject
-	public PlaceholderAgent(ConfigValidator configValidator,DirectoryWatchingQueuer directoryWatcher,
+	public PlaceholderAgent(
+			ConfigValidator configValidator,
 			MessageProcessor<PlaceholderMessage> messageProcessor,
-			ShutdownManager shutdownManager) throws JAXBException {
-		super(configValidator,directoryWatcher, messageProcessor, shutdownManager);
+			ShutdownManager shutdownManager) throws JAXBException
+	{
+		super(configValidator, messageProcessor, shutdownManager);
 	}
 }

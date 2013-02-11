@@ -5,9 +5,11 @@ package com.mediasmiths.foxtel.agent.processing;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
+import com.mediasmiths.std.threading.Daemon;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -28,11 +30,11 @@ import java.util.Locale;
  * @see MessageValidator
  * 
  */
-public abstract class MessageProcessor<T> implements Runnable {
+public abstract class MessageProcessor<T> extends Daemon implements StoppableService {
 
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
-	private final FilesPendingProcessingQueue filePathsPending;
+	private final FilePickUpProcessingQueue filePathsPending;
 	
 	protected final Unmarshaller unmarhsaller;	
 	protected final Marshaller marshaller;
@@ -48,7 +50,7 @@ public abstract class MessageProcessor<T> implements Runnable {
 	
 	@Inject
 	public MessageProcessor(
-			FilesPendingProcessingQueue filePathsPendingProcessing,
+			FilePickUpProcessingQueue filePathsPendingProcessing,
 			MessageValidator<T> messageValidator, ReceiptWriter receiptWriter,
 			Unmarshaller unmarshaller, Marshaller marshaller, com.mediasmiths.foxtel.ip.event.EventService eventService) {
 		this.filePathsPending = filePathsPendingProcessing;
@@ -335,9 +337,10 @@ public abstract class MessageProcessor<T> implements Runnable {
 	@Override
 	public void run() {
 
-		while (!Thread.interrupted()) {
+		while (isRunning()) {
 			try {
-				String filePath = getFilePathsPending().take();
+				File file = getFilePathsPending().take();
+				String filePath = file.getAbsolutePath();
 
 				if (isMessage(filePath)) {
 					validateThenProcessFile(filePath);
@@ -345,9 +348,6 @@ public abstract class MessageProcessor<T> implements Runnable {
 					processNonMessageFile(filePath);
 				}
 
-			} catch (InterruptedException e) {
-				logger.info("Interruped!", e);
-				return;
 			} catch (Exception e) {
 				logger.fatal(
 						"Uncaught exception almost killed MessageProcessor thread, this is very bad",
@@ -368,8 +368,20 @@ public abstract class MessageProcessor<T> implements Runnable {
 				.equals("xml");
 	}
 
-	public FilesPendingProcessingQueue getFilePathsPending() {
+	public FilePickUpProcessingQueue getFilePathsPending() {
 		return filePathsPending;
+	}
+	
+	@Override
+	protected boolean shouldStartAsDaemon()
+	{
+		return true;
+	}
+	
+	@Override
+	public void shutdown() {
+		stopThread();
+		filePathsPending.shutdown();
 	}
 
 }

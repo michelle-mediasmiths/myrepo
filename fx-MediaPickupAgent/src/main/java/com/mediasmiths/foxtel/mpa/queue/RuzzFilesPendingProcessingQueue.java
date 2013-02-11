@@ -1,11 +1,9 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
 import com.google.inject.Singleton;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 
 @Singleton
-public class RuzzFilesPendingProcessingQueue extends FilesPendingProcessingQueue{
+public interface RuzzFilesPendingProcessingQueue extends FilePickUpProcessingQueue{
 
-	private static final long serialVersionUID = 1L;
-	
 }

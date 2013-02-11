@@ -21,8 +21,10 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
+import com.mediasmiths.std.threading.Daemon;
 
-public class Importer implements Runnable {
+public class Importer extends Daemon implements StoppableService {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
 
@@ -50,7 +52,7 @@ public class Importer implements Runnable {
 	public void run() {
 		logger.debug("Importer start");
 
-		while (!Thread.interrupted()) {
+		while (isRunning()) {
 			try {
 				PendingImport pi = pendingImports.take();
 				logger.info("Picked up an import");
@@ -66,7 +68,6 @@ public class Importer implements Runnable {
 				logger.info("Finished with import");
 			} catch (InterruptedException e) {
 				logger.info("Interruped!", e);
-				return;
 			}
 		}
 
@@ -235,5 +236,17 @@ public class Importer implements Runnable {
 
 	protected PendingImportQueue getPendingImports() {
 		return pendingImports;
+	}
+	
+	@Override
+	protected boolean shouldStartAsDaemon()
+	{
+		return true;
+	}
+
+	@Override
+	public void shutdown()
+	{
+		stopThread();
 	}
 }

@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.guice;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mediasmiths.foxtel.agent.WatchedFilesConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
@@ -18,6 +19,7 @@ public class MediaPickupSetup implements GuiceSetup
 	public void registerModules(List<Module> modules, PropertyFile config)
 	{
 		modules.add(new WatchFolderLocationsModule());
+		modules.add(new WatchedFilesConfigModule());
 		
 		if (config.getBoolean("stub.out.mayam", false))
 		{

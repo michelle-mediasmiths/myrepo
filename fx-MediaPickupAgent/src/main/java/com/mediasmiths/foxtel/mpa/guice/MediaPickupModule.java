@@ -17,11 +17,12 @@ import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.mpa.queue.MaterialFolderWatcher;
+import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -33,9 +34,9 @@ public class MediaPickupModule extends AbstractModule {
 	
 	@Override
 	protected void configure() {
-		bind(DirectoryWatchingQueuer.class).to(MaterialFolderWatcher.class);
-//		bind(MESSAGEPROCESSOR_LITERAL).to(MaterialExchangeProcessor.class);
 		bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
+		bind(FilePickUpProcessingQueue.class).to(FilePickUpFromDirectories.class);
+		bind(MediaPickupAgent.class).asEagerSingleton();
 	}
 
 	protected static final TypeLiteral<MessageProcessor<Material>> MESSAGEPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<Material>>(){};

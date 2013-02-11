@@ -160,7 +160,6 @@ public abstract class PlaceholderManagerTest {
 				});
 		// run placeholder manager
 		PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
-		pm.run();
 	}
 
 	class TestPlaceHolderMangementModule extends PlaceholderAgentModule {

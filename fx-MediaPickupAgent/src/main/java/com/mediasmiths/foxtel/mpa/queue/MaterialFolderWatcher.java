@@ -1,5 +1,5 @@
 package com.mediasmiths.foxtel.mpa.queue;
-
+/**
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIOD;
 
@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 
 public class MaterialFolderWatcher extends DirectoryWatchingQueuer
 {
@@ -27,7 +27,7 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer
 
 	@Inject
 	public MaterialFolderWatcher(
-			FilesPendingProcessingQueue filePathsPendingValidation,
+			FilePickUpProcessingQueue filePathsPendingValidation,
 			RuzzFilesPendingProcessingQueue ruzzfilePathsPendingProcesing,
 			@Named("watchfolder.locations") WatchFolders paths,
 			@Named(MXF_NOT_TOUCHED_PERIOD) Long mxfNotTouchedPeriod,
@@ -110,4 +110,4 @@ public class MaterialFolderWatcher extends DirectoryWatchingQueuer
 			return this.filePathsPendingValidation.add(file.getAbsolutePath());
 		}
 	}
-}
+}*/

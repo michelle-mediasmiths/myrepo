@@ -20,7 +20,7 @@ import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -50,7 +50,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 	private final String emergencyImportFolder;
 	public MediaPickupProcessor(
-			FilesPendingProcessingQueue filePathsPendingProcessing,
+			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
 			MessageValidator<T> messageValidator,
 			ReceiptWriter receiptWriter,

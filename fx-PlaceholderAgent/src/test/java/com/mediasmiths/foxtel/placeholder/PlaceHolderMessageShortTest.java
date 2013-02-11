@@ -28,7 +28,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
@@ -113,7 +114,7 @@ public abstract class PlaceHolderMessageShortTest
 		Marshaller marshaller = jc.createMarshaller();
 		EventService events = mock(EventService.class);
 		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
-		processor = new PlaceholderMessageProcessor(new FilesPendingProcessingQueue(), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
+		processor = new PlaceholderMessageProcessor(new FilePickUpFromDirectories(), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
 
 	}
 

@@ -12,7 +12,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -30,7 +30,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 	
 	@Inject
 	public MaterialExchangeProcessor(
-			FilesPendingProcessingQueue filePathsPendingProcessing,
+			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,

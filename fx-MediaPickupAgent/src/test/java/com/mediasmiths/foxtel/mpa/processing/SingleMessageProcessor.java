@@ -2,6 +2,8 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
+import java.io.File;
+
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -10,7 +12,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
@@ -21,7 +23,7 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
 	@Inject
 	public SingleMessageProcessor(
-			FilesPendingProcessingQueue filePathsPendingProcessing,
+			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,
@@ -45,13 +47,9 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
 		logger.trace("SingleMessageProcessor.run() enter");
 
-		try {
-			String filePath = getFilePathsPending().take();
-			validateThenProcessFile(filePath);
-		} catch (InterruptedException e) {
-			logger.info("Interruped!", e);
-			return;
-		}
+		File file = getFilePathsPending().take();
+		String filePath = file.getAbsolutePath();
+		validateThenProcessFile(filePath);
 
 		logger.trace("SingleMessageProcessor.run() exit");
 
