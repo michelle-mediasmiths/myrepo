@@ -75,7 +75,7 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 
 	/** whether events are being recorded for pickup */
 	@Inject
-	@Named("service.events.enabled")
+	@Named("filepickup.events.enabled")
 	boolean eventsEnabled;
 	
 	/** the namespace to use for file pickup events */
