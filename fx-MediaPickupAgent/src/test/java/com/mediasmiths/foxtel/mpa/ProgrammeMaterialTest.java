@@ -58,7 +58,6 @@ import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.processing.DoNothingUnmatchedMaterial;
 import com.mediasmiths.foxtel.mpa.processing.SingleMessageProcessor;
 import com.mediasmiths.foxtel.mpa.processing.UnmatchedMaterialProcessor;
-import com.mediasmiths.foxtel.mpa.queue.MaterialFolderExistingFilesOnly;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -164,8 +163,7 @@ public class ProgrammeMaterialTest {
 					}
 				});
 		// run pickup agent
-		MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);
-		mpa.run();
+		MediaPickupAgent mpa = injector.getInstance(MediaPickupAgent.class);		
 	}
 
 	class TestMediaPickupModule extends MediaPickupModule {
@@ -182,7 +180,6 @@ public class ProgrammeMaterialTest {
 			bind(MayamClient.class).toInstance(mc);
 			bind(MESSAGEPROCESSOR_LITERAL).to(SingleMessageProcessor.class);
 			bind(ConfigValidator.class).to(MediaPickupAgentConfigValidator.class);
-			bind(DirectoryWatchingQueuer.class).to(MaterialFolderExistingFilesOnly.class);
 			
 			bind(Importer.class).to(DoNothingImporter.class);
 			bind(UnmatchedMaterialProcessor.class).to(DoNothingUnmatchedMaterial.class);

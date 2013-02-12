@@ -62,7 +62,7 @@ public class CerifyClient
 	 * @throws RemoteException
 	 * @throws MediaLocationNotFoundException 
 	 */
-	public String startQcForFile(String file, String ident, String profileName, MediaLocation location) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
+	public String startQcForFile(String file, String ident, String profileName, MediaLocation location, String priority) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
 	{
 		log.info("QC start request for " + file);
 		
@@ -72,10 +72,10 @@ public class CerifyClient
 		mediaSetName = createMediaSet(file, ident, mediaSetName,location,0);
 
 		String jobName = jobName(profileName, mediaSetName);
-		PriorityType priority = PriorityType.Medium;
+		PriorityType priorityType = PriorityType.fromString(priority);
 
 		log.info(String.format("Creating a job %s", jobName));
-		CreateJob createJob = new CreateJob(jobName, mediaSetName, profileName, priority);
+		CreateJob createJob = new CreateJob(jobName, mediaSetName, profileName, priorityType);
 		log.debug("Sending CreateJobRequest");
 		service.createJob(createJob);
 

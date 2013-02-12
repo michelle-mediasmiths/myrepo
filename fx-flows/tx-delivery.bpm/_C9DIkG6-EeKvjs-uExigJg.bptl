@@ -1,4 +1,0 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
-<bpt:template xmlns:bpt="http://www.intalio/designer/business-process-data-modeling/template" ID="_C9DIkG6-EeKvjs-uExigJg" displayName="cancelled" ownerPoolId="_RtwA8G63EeKvjs-uExigJg" ownerPoolNcName="cancelled" ownerPoolIsExecutable="true" version="6000089">
-    <bpt:container ID="_RtwA8G63EeKvjs-uExigJg" displayName="cancelled" containerType="scope"></bpt:container>
-</bpt:template>

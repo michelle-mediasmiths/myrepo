@@ -46,6 +46,7 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="file" type="xs:string"/>
       <xs:element minOccurs="0" name="ident" type="xs:string"/>
+      <xs:element minOccurs="0" name="priority" type="xs:string"/>
       <xs:element minOccurs="0" name="profile" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>

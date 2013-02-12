@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.placeholder;
 
 import static org.mockito.Mockito.mock;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -129,6 +132,8 @@ public abstract class PlaceholderManagerTest {
 
 		// start up a placeholder manager to process the created message
 		runPlaceholderManager(messagePath);
+		
+		Thread.sleep(2000l);
 
 	}
 
@@ -160,7 +165,6 @@ public abstract class PlaceholderManagerTest {
 				});
 		// run placeholder manager
 		PlaceholderAgent pm = injector.getInstance(PlaceholderAgent.class);
-		pm.run();
 	}
 
 	class TestPlaceHolderMangementModule extends PlaceholderAgentModule {
@@ -187,21 +191,19 @@ public abstract class PlaceholderManagerTest {
 			}).to(SingleMessageProcessor.class);
 			// we dont need to continue to monitor the message folder as we are
 			// only picking up a single file for this test
-			bind(DirectoryWatchingQueuer.class).to(
-					PickupExistingFilesOnlyDirectoryWatcher.class);
+			bind(FilePickUpProcessingQueue.class).to(FilePickUpFromDirectories.class);
 			bind(ChannelValidator.class).to(ChannelValidatorImpl.class);
 		}
-		
-//		@Override
-//		protected EventAPI getEventService(
-//				@Named("service.events.api.endpoint") final URI endpoint,
-//				final JAXRSProxyClientFactory clientFactory)
-//		{
-//			logger.info(String.format("events api endpoint set to %s", endpoint));
-//			EventAPI service = mock(EventAPI.class);
-//
-//			return service;
-//		}
+		@Provides
+		protected EventAPI getEventService(
+				@Named("service.events.api.endpoint") final URI endpoint,
+				final JAXRSProxyClientFactory clientFactory)
+		{
+			logger.info(String.format("events api endpoint set to %s", endpoint));
+			EventAPI service = mock(EventAPI.class);
+
+			return service;
+		}
 
 		
 		@Provides
@@ -213,8 +215,13 @@ public abstract class PlaceholderManagerTest {
 			locations.add(inputPath);
 			return new WatchFolders(locations);
 		}
-
 		
+		@Provides
+		@Named("filepickup.watched.directories")
+		public File[] providePickupDirectories(){
+			return new File[] { new File(inputPath)};
+		}
+
 	}
 
 }

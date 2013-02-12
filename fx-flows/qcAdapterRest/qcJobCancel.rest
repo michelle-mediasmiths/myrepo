@@ -1,5 +1,7 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8080/fx-qcAdapter/rest/qc/job/{jobname}" ID="_rrEh8GxvEeK85v-SsU5zfw">
-  <rest:operation verb="DELETE" name="qcCancelJob" ID="_rrEh8mxvEeK85v-SsU5zfw"/>
+  <rest:operation verb="DELETE" name="qcCancelJob" ID="_rrEh8mxvEeK85v-SsU5zfw">
+    <rest:fault type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="fault" headerDirection="request" contentType="text/html" ID="_Hj0QkHH5EeKofd0UxythbA"/>
+  </rest:operation>
   <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="jobname" headerDirection="request" contentType="text/xml" ID="_rrEh8WxvEeK85v-SsU5zfw"/>
 </rest:descriptor>

@@ -5,14 +5,12 @@
       <xs:include schemaLocation="wfAdapter.xsd"/>
     </xs:schema>
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest">
-      <xs:import namespace="http://ns.mediasmiths.com/foxtel/wf/adapter"/>
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
-      <xs:element type="adapter:txDeliveryFailure" name="body_txDeliveryFailure_inputType"/>
       <xs:element type="xs:anyType" name="response_txDeliveryFailure_outputType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="txDeliveryFailure_input">
-    <wsdl:part name="body" element="txDeliveryFailure:body_txDeliveryFailure_inputType"/>
+    <wsdl:part name="body" element="adapter:txDeliveryFailure"/>
   </wsdl:message>
   <wsdl:message name="txDeliveryFailure_output">
     <wsdl:part name="response" element="txDeliveryFailure:response_txDeliveryFailure_outputType"/>

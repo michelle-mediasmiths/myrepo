@@ -14,6 +14,7 @@ import org.mule.api.MuleMessage;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
+import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioQCFlow;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.MediasmithsDestinations;
@@ -42,24 +43,15 @@ public class MuleWorkflowController {
 		
 	}
 	
-	public void initiateQcWorkflow(String assetID, boolean isTx, long taskID, String title)
+	public void initiateQcWorkflow(String assetID, boolean isTx, long taskID, String title) throws UnsupportedEncodingException, JAXBException
 	{
-		String payload = "<?xml version=\"1.0\"?><invokeIntalioQCFlow><assetId>";
-		payload += assetID;
-		payload += "</assetId><forTXDelivery>";
-		payload += isTx;
-		payload += "</forTXDelivery>";
-		payload += "<taskID>"+taskID+"</taskID>";
-		payload += "<title>"+title+"</title>";
-		payload+="</invokeIntalioQCFlow>";
+		InvokeIntalioQCFlow invokeQc= new InvokeIntalioQCFlow();
+		invokeQc.setAssetId(assetID);
+		invokeQc.setForTXDelivery(isTx);
+		invokeQc.setTaskID(taskID);
+		invokeQc.setTitle(title);
 		
-		if(client==null){
-			log.error("mule client is null");	
-		}
-		if(destinations.getMule_qc_destination() == null){
-			log.error("qc destination is null");
-		}
-		
+		String payload = getSerialisationOf(invokeQc);
 		client.dispatch(destinations.getMule_qc_destination(), payload, null);
 		log.info("Message sent to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
 	}

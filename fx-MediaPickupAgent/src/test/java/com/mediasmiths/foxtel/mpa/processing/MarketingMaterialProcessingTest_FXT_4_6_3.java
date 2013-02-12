@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
@@ -29,6 +30,7 @@ import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
+@Ignore
 public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessingTest {
 	
 	private static Logger logger = Logger.getLogger(MarketingMaterialProcessingTest_FXT_4_6_3.class);

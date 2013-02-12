@@ -28,8 +28,10 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
+import com.mediasmiths.std.threading.Daemon;
 
-public class UnmatchedMaterialProcessor implements Runnable {
+public class UnmatchedMaterialProcessor extends Daemon implements StoppableService {
 
 	private final Long timeout;
 	private final MatchMaker matchMaker;
@@ -289,5 +291,17 @@ public class UnmatchedMaterialProcessor implements Runnable {
 			logger.error("error determining automatch info for message " + unmatchedMessage.getFile().getAbsolutePath());
 			return null;
 		}
+	}
+
+	@Override
+	protected boolean shouldStartAsDaemon()
+	{
+		return true;
+	}
+	
+	@Override
+	public void shutdown()
+	{
+		stopThread();		
 	}
 }

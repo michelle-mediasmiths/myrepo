@@ -7,6 +7,7 @@
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:anyType" name="response_autoQcError_outputType"/>
+      <xs:element type="xs:anyType" name="fault_autoQcError_faultType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="autoQcError_input">
@@ -15,10 +16,14 @@
   <wsdl:message name="autoQcError_output">
     <wsdl:part name="response" element="autoQcError:response_autoQcError_outputType"/>
   </wsdl:message>
+  <wsdl:message name="autoQcError_fault">
+    <wsdl:part name="fault" element="autoQcError:fault_autoQcError_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="autoQcError">
       <wsdl:input message="autoQcError:autoQcError_input"/>
       <wsdl:output message="autoQcError:autoQcError_output"/>
+      <wsdl:fault message="autoQcError:autoQcError_fault" name="autoQcErrorFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="autoQcError:restInterface">
@@ -32,6 +37,9 @@
       <wsdl:output>
         <mime:content type="text/xml" part="response"/>
       </wsdl:output>
+      <wsdl:fault name="autoQcErrorFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

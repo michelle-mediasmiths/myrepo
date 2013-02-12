@@ -92,6 +92,9 @@ public class EventService implements EventHandler
 			{
 				logger.error(String.format("error saving event %s",eventName), e);
 			}
+			catch(Exception e){
+				logger.error("error sending event",e);
+			}
 		}
 		else
 		{

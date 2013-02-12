@@ -659,7 +659,7 @@
         <styles xmi:type="notation:FillStyle" xmi:id="_1oOqFnEOEeKgV8mGUipbQA"/>
         <styles xmi:type="notation:LineStyle" xmi:id="_1oOqF3EOEeKgV8mGUipbQA" lineColor="0"/>
         <element xmi:type="bpmn:Activity" href="modeler.bpmn#_1oP4MHEOEeKgV8mGUipbQA"/>
-        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1oOqGHEOEeKgV8mGUipbQA" x="1277" y="3" width="76"/>
+        <layoutConstraint xmi:type="notation:Bounds" xmi:id="_1oOqGHEOEeKgV8mGUipbQA" x="1341" y="3" width="76"/>
       </children>
       <children xmi:type="notation:Node" xmi:id="_21-PkHEOEeKgV8mGUipbQA" type="2005">
         <children xmi:type="notation:Node" xmi:id="_21-2oHEOEeKgV8mGUipbQA" type="4004"/>

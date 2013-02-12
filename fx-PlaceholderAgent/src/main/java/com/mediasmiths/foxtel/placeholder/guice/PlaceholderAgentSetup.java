@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.placeholder.guice;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mediasmiths.foxtel.agent.WatchedFilesConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.foxtel.placeholder.validation.channels.ChannelValidatorModule;
@@ -19,6 +20,7 @@ public class PlaceholderAgentSetup implements GuiceSetup {
 		modules.add(new PlaceholderAgentModule());
 		modules.add(new ChannelValidatorModule());
 		modules.add(new WatchFolderLocationsModule());
+		modules.add(new WatchedFilesConfigModule());
 		
 		if (config.getBoolean("stub.out.mayam", false))
 		{

@@ -43,14 +43,12 @@ public interface QCRestService {
 	 * @param profileName
 	 *            - the qc profile to check file against
 	 * @return
-	 * @throws RemoteException 
-	 * @throws MalformedURIException 
-	 * @throws MediaLocationNotFoundException 
+	 * @throws QCAdapterException 
 	 */
 	@PUT
 	@Path("/start")
 	@Produces("application/xml")
-	public QCStartResponse start(QCStartRequest req) throws MalformedURIException, RemoteException, MediaLocationNotFoundException;
+	public QCStartResponse start(QCStartRequest req) throws QCAdapterException;
 
 	/**
 	 * Returns the status of a given qc job
@@ -60,18 +58,19 @@ public interface QCRestService {
 	 * @return the status of the job
 	 * @throws NotFoundException
 	 *             if the specified job does not exist
+	 * @throws QCAdapterException 
 	 */
 	@GET
 	@Path("/job/{identifier}/status")
 	@Produces("application/xml")
 	public QCJobStatus jobStatus(@PathParam("identifier") QCJobIdentifier ident)
-			throws NotFoundException;
+			throws NotFoundException, QCAdapterException;
 
 	@GET
 	@Path("/job/{identifier}/finished")
 	@Produces("text/plain")
 	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident)
-			throws NotFoundException;
+			throws NotFoundException, QCAdapterException;
 	
 	/**
 	 * Returns the result of a given job
@@ -81,12 +80,13 @@ public interface QCRestService {
 	 * @return
 	 * @throws NotFoundException
 	 *             - if the job does not exist
+	 * @throws QCAdapterException 
 	 */
 	@GET
 	@Path("/job/{identifier}/result")
 	@Produces("application/xml")
 	public QCJobResult jobResult(@PathParam("identifier") QCJobIdentifier ident)
-			throws NotFoundException;
+			throws NotFoundException, QCAdapterException;
 
 	/**
 	 * Returns the result of the given media as part of the given job
@@ -97,6 +97,7 @@ public interface QCRestService {
 	 * 
 	 * @throws NotFoundException
 	 * @throws MediaLocationNotFoundException 
+	 * @throws QCAdapterException 
 	 * 
 	 */
 	@GET
@@ -105,16 +106,17 @@ public interface QCRestService {
 	public QCMediaResult mediaResult(@QueryParam("path") String file,
 			@PathParam("jobname") String jobName,
 			@QueryParam("run") @DefaultValue("0") Integer runNumber)
-			throws NotFoundException, MediaLocationNotFoundException;
+			throws NotFoundException, MediaLocationNotFoundException, QCAdapterException;
 
 	/**
 	 * Attempts to cancel the job with the specified name
 	 * @param jobName
+	 * @throws QCAdapterException 
 	 * @throws NotFoundException 
 	 */
 	@DELETE
 	@Path("/job/{jobname}")
-	public void cancelJob(@PathParam("jobname") String jobName) throws NotFoundException;
+	public void cancelJob(@PathParam("jobname") String jobName) throws QCAdapterException;
 	
 	
 	/**

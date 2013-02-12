@@ -733,6 +733,7 @@ public class MayamClientImpl implements MayamClient
 		
 		task.setAttribute(Attribute.ASSET_TITLE, filename);
 		task.setAttribute(Attribute.AGGREGATOR, aggregator);
+		task.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		
 		try {
 			AttributeMap newTask = client.taskApi().createTask(task);

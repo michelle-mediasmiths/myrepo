@@ -7,6 +7,7 @@
     <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest">
       <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <xs:element type="xs:string" name="jobname_urlType"/>
+      <xs:element type="xs:anyType" name="fault_getJobResult_faultType"/>
     </xs:schema>
   </wsdl:types>
   <wsdl:message name="getJobResult_input">
@@ -15,10 +16,14 @@
   <wsdl:message name="getJobResult_output">
     <wsdl:part name="response" element="adapter:qcJobResult"/>
   </wsdl:message>
+  <wsdl:message name="getJobResult_fault">
+    <wsdl:part name="fault" element="qcJobResult:fault_getJobResult_faultType"/>
+  </wsdl:message>
   <wsdl:portType name="restInterface">
     <wsdl:operation name="getJobResult">
       <wsdl:input message="qcJobResult:getJobResult_input"/>
       <wsdl:output message="qcJobResult:getJobResult_output"/>
+      <wsdl:fault message="qcJobResult:getJobResult_fault" name="getJobResultFault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="restBinding" type="qcJobResult:restInterface">
@@ -31,6 +36,9 @@
       <wsdl:output>
         <mime:content type="application/xml" part="response"/>
       </wsdl:output>
+      <wsdl:fault name="getJobResultFault">
+        <ode:fault/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="restService">

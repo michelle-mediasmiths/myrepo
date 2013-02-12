@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
+import java.io.File;
+
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -7,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilesPendingProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
@@ -23,7 +25,7 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 
 	@Inject
 	public SingleMessageProcessor(
-			FilesPendingProcessingQueue filePathsPendingProcessing,
+			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PlaceholderMessageValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
@@ -44,13 +46,9 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 
 		logger.trace("SingleMessageProcessor.run() enter");
 
-		try {
-			String filePath = getFilePathsPending().take();
-			validateThenProcessFile(filePath);
-		} catch (InterruptedException e) {
-			logger.info("Interruped!", e);
-			return;
-		}
+		File file = getFilePathsPending().take();
+		String filePath = file.getAbsolutePath();
+		validateThenProcessFile(filePath);
 
 		logger.trace("SingleMessageProcessor.run() exit");
 

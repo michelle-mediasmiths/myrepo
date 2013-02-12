@@ -54,7 +54,7 @@ public class QCRestServiceImpl implements QCRestService
 	private MediaLocationService mediaLocations;
 
 	@Override
-	public QCJobStatus jobStatus(QCJobIdentifier job) throws NotFoundException
+	public QCJobStatus jobStatus(QCJobIdentifier job) throws QCAdapterException
 	{
 
 		log.debug(String.format("Status request for job %s", job.getIdentifier()));
@@ -73,12 +73,12 @@ public class QCRestServiceImpl implements QCRestService
 		{
 			String message = String.format("Status request for job %s failed", job.getIdentifier());
 			log.warn(message, e);
-			throw new NotFoundException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (RemoteException e)
 		{
 			log.error(String.format("RemoteException querying status of job %s", job.getIdentifier()), e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 	}
 
@@ -89,16 +89,42 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCStartResponse start(QCStartRequest request) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
+	public QCStartResponse start(QCStartRequest request) throws QCAdapterException
 	{
 
 		log.debug(String.format("Start requested for file  %s", request.getFile()));
 
-		MediaLocation location = mediaLocations.getLocationForAbsoluteFilePath(request.getFile());
+		MediaLocation location;
+		try
+		{
+			location = mediaLocations.getLocationForAbsoluteFilePath(request.getFile());
+		}
+		catch (MediaLocationNotFoundException e)
+		{
+			log.error("error getting media location for file",e);
+			throw new QCAdapterException("error getting media location for file",e);
+		}
 		
 		String relativePathToFile = pathResolver.getRelativePath(location.getPath(), request.getFile());
 	
-		String jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName(),location);
+		String proirity = "Medium";
+		if(request.getPriority() != null){
+			proirity=request.getPriority();
+		}
+		else{
+			log.warn("requested qc priority is was null");
+		}
+		
+		String jobName;
+		try
+		{
+			jobName = cerifyClient.startQcForFile(relativePathToFile, request.getIdent(), request.getProfileName(),location,proirity);
+		}
+		catch (MalformedURIException | RemoteException | MediaLocationNotFoundException e)
+		{
+			log.error("error starting qc for file",e);
+			throw new QCAdapterException("error starting qc for file",e);
+		}
 		log.info(String.format("Job %s created", jobName));
 		QCStartResponse res = new QCStartResponse(QCStartStatus.STARTED);
 		QCJobIdentifier jobIdent = new QCJobIdentifier(jobName);
@@ -109,7 +135,7 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCJobResult jobResult(QCJobIdentifier ident) throws NotFoundException
+	public QCJobResult jobResult(QCJobIdentifier ident) throws QCAdapterException
 	{
 
 		log.debug(String.format("Result requested for job %s", ident.getIdentifier()));
@@ -133,17 +159,17 @@ public class QCRestServiceImpl implements QCRestService
 		{
 			String message = String.format("Result request for job %s failed", ident.getIdentifier());
 			log.warn(message, e);
-			throw new NotFoundException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (RemoteException e)
 		{
 			log.error("remote exception querying job result for job " + ident, e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 		catch (URISyntaxException e)
 		{
 			log.error("A uri returned by the cerify api is malformed", e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 
 	}
@@ -177,7 +203,7 @@ public class QCRestServiceImpl implements QCRestService
 	}
 
 	@Override
-	public QCMediaResult mediaResult(String file, String jobName, Integer runNumber) throws NotFoundException, MediaLocationNotFoundException
+	public QCMediaResult mediaResult(String file, String jobName, Integer runNumber) throws QCAdapterException
 	{
 
 		QCJobIdentifier ident = new QCJobIdentifier(jobName);
@@ -187,11 +213,29 @@ public class QCRestServiceImpl implements QCRestService
 		try
 		{
 			
-			MediaLocation location = mediaLocations.getLocationForAbsoluteFilePath(file);
+			MediaLocation location;
+			try
+			{
+				location = mediaLocations.getLocationForAbsoluteFilePath(file);
+			}
+			catch (MediaLocationNotFoundException e)
+			{
+				log.error("error getting media location for file",e);
+				throw new QCAdapterException("error getting media location for file",e);				
+			}
 			
 			String relativePathToFile = pathResolver.getRelativePath(location.getPath(),file);
 		
-			GetMediaFileResultsResponse res = cerifyClient.getMediaResult(relativePathToFile, ident.getIdentifier(),location, runNumber.intValue());
+			GetMediaFileResultsResponse res;
+			try
+			{
+				res = cerifyClient.getMediaResult(relativePathToFile, ident.getIdentifier(),location, runNumber.intValue());
+			}
+			catch (MediaLocationNotFoundException e)
+			{
+				log.error("error getting media result",e);
+				throw new QCAdapterException("error getting media result",e);
+			}
 			
 			//TODO: include serialized full report!
 			
@@ -209,28 +253,28 @@ public class QCRestServiceImpl implements QCRestService
 		{
 			String message = String.format("Media Result request for job %s failed", ident.getIdentifier());
 			log.warn(message, e);
-			throw new NotFoundException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (MediaFileNotInJobFault e)
 		{
 			String message = String.format("Media %s is not part of job %s ", file, ident.getIdentifier());
 			log.warn(message, e);
-			throw new NotFoundException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (RemoteException e)
 		{
 			log.error("remote exception requesting media qc result ", e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 		catch (MalformedURIException e)
 		{
 			log.error("The cerify client has produced a malformed uri", e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 		catch (URISyntaxException e)
 		{
 			log.error("A uri returned by the cerify api is malformed", e);
-			throw new InternalServerErrorException(e);
+			throw new QCAdapterException(e);
 		}
 	}
 
@@ -238,7 +282,7 @@ public class QCRestServiceImpl implements QCRestService
 	@GET
 	@Path("/job/{identifier}/finished")
 	@Produces("text/plain")
-	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident) throws NotFoundException
+	public Boolean jobFinished(@PathParam("identifier") QCJobIdentifier ident) throws QCAdapterException
 	{
 		log.debug(String.format("Finished request for job %s", ident.getIdentifier()));
 
@@ -250,7 +294,7 @@ public class QCRestServiceImpl implements QCRestService
 	@Override
 	@DELETE
 	@Path("/job/{jobname}/cancel")
-	public void cancelJob(@PathParam("jobname") String jobName) throws NotFoundException
+	public void cancelJob(@PathParam("jobname") String jobName) throws QCAdapterException
 	{
 		log.info(String.format("Cancel requested for job %s",jobName));
 		try
@@ -261,25 +305,25 @@ public class QCRestServiceImpl implements QCRestService
 		{
 			String message = String.format("Cancel request for job %s failed (JobDoesntExistFault)", jobName);
 			log.warn(message, e);
-			throw new NotFoundException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (JobIsArchivedFault e)
 		{
 			String message = String.format("Cancel request for job %s failed (JobIsArchivedFault)", jobName);
 			log.warn(message, e);
-			throw new InternalServerErrorException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (BaseCeritalkFault e)
 		{
 			String message = String.format("Cancel request for job %s failed (BaseCeritalkFault)", jobName);
 			log.warn(message, e);
-			throw new InternalServerErrorException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		catch (RemoteException e)
 		{
 			String message = String.format("Cancel request for job %s failed (RemoteException)", jobName);
 			log.warn(message, e);
-			throw new InternalServerErrorException(message, e);
+			throw new QCAdapterException(message, e);
 		}
 		
 	}

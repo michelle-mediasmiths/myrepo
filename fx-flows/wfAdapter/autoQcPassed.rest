@@ -3,5 +3,6 @@
   <rest:operation verb="PUT" name="autoQcPassed" ID="_YHfIwR6rEeKHiaCwzLaVjQ">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}autoQCPassNotification" name="body" headerDirection="request" contentType="application/xml" ID="_YHfIwh6rEeKHiaCwzLaVjQ"/>
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/xml" ID="_YHfIwx6rEeKHiaCwzLaVjQ"/>
+    <rest:fault type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="fault" headerDirection="request" contentType="text/html" ID="_Ql5VEHH5EeKofd0UxythbA"/>
   </rest:operation>
 </rest:descriptor>

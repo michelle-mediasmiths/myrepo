@@ -6,10 +6,10 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 
-public class RuzzFilesPendingProcessingQueue extends FilePickUpFromDirectories{
+public class MaterialExchangeFilesPendingProcessingQueue extends FilePickUpFromDirectories{
 
 	@Inject
-	public RuzzFilesPendingProcessingQueue(@Named("ruzz.watched.directories") File[] pickupDirectories)
+	public MaterialExchangeFilesPendingProcessingQueue(@Named("mex.watched.directories") File[] pickupDirectories)
 	{
 		super(pickupDirectories);
 	}

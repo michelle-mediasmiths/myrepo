@@ -27,19 +27,20 @@ import com.mediasmiths.FileWatcher.DirectoryWatcher;
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 
+@Deprecated
 public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		Runnable {
 
 	private final WatchFolders watchFolders;
 	protected final List<String> sourcePaths;
-	protected final FilesPendingProcessingQueue filePathsPendingValidation;
+	protected final FilePickUpProcessingQueue filePathsPendingValidation;
 
 	private static Logger logger = Logger
 			.getLogger(DirectoryWatchingQueuer.class);
 
 	@Inject
 	public DirectoryWatchingQueuer(
-			FilesPendingProcessingQueue filePathsPendingValidation,
+			FilePickUpProcessingQueue filePathsPendingValidation,
 			@Named("watchfolder.locations") WatchFolders paths) {
 		this.filePathsPendingValidation = filePathsPendingValidation;
 		this.watchFolders = paths;
@@ -67,8 +68,8 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 
 	protected boolean queueFile(File file) {
 		
-		
-		return this.filePathsPendingValidation.add(file.getAbsolutePath());
+		return false;
+//		return this.filePathsPendingValidation.add(file.getAbsolutePath());
 	}
 
 	@Override

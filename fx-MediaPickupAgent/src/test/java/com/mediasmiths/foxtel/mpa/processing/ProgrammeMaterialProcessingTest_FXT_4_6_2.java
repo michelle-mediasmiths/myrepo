@@ -36,6 +36,7 @@ import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
+@Ignore
 public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessingTest {
 	
 	private static Logger logger = Logger.getLogger(ProgrammeMaterialProcessingTest_FXT_4_6_2.class);

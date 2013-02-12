@@ -59,6 +59,7 @@ public class ValidationFailedMessageMovesToFailureFolderTest extends
 
 		// run manager
 		runPlaceholderManager(messagePath);
+		Thread.sleep(2000l);
 
 		// after manager has run and processed the single task the request
 		// should now be in the failure folder
@@ -105,7 +106,7 @@ logger.info("archivePath "+archivePath);
 
 		// run manager
 		writeMessageAndRunManager(message, messagePath, filename);
-
+		
 		// after manager has run and processed the single task the request
 		// should now be in the failure folder
 		File failFile = new File(failurePath + IOUtils.DIR_SEPARATOR

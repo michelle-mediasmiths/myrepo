@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -316,6 +317,21 @@ public class FileFormatVerification
 			{
 				sb.append("\n");
 				return true;
+			}
+			else if(expected instanceof String){ //allows multiple comma separated values to be specified for string values
+				
+				String exp = (String) expected;
+				String[] split = exp.split(",");
+				List<String> asList = Arrays.asList(split);
+				
+				if(asList.contains(actual)){
+					sb.append("\n");
+					return true;
+				}
+				else{
+					sb.append("*\n");
+					return false;
+				}
 			}
 			else
 			{
