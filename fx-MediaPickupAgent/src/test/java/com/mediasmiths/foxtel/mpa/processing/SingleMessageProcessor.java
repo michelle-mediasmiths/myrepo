@@ -14,6 +14,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
@@ -23,7 +24,7 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
 	@Inject
 	public SingleMessageProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			MaterialExchangeFilesPendingProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,

@@ -1,6 +1,11 @@
 package com.mediasmiths.foxtel.mpa.guice;
 
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
+
+import java.io.File;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -14,8 +19,11 @@ import org.xml.sax.SAXException;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
@@ -143,6 +151,68 @@ public class MediaPickupModule extends AbstractModule {
 	public SchemaValidator ruzzSchemaValidator(@Named("ruzz.schema.location") String schemaLocation) throws SAXException{
 		SchemaValidator sv = new SchemaValidator(schemaLocation);
 		return sv;
+	}
+	
+	@Singleton
+	@Provides
+	@Named("ruzz.watched.directories")
+	public File[] provideRuzzWatchedDirectories(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders)
+	{
+		
+		return getFileArrayOfWatchFolders(watchFolders, false);
+
+	}
+	
+	@Singleton
+	@Provides
+	@Named("mex.watched.directories")
+	public File[] provideMexWatchedDirectories(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders)
+	{
+		return getFileArrayOfWatchFolders(watchFolders, true);
+
+	}
+
+	private File[] getFileArrayOfWatchFolders(WatchFolders watchFolders, boolean isRuzz)
+	{
+		if (watchFolders == null || watchFolders.isEmpty())
+		{
+			logger.error("No Directory Watched Paths defined in filepickup.watched.directoryNames");
+
+			throw new IllegalArgumentException("No Directory Watched Paths defined in filepickup.watched.directoryNames");
+		}
+
+		List<File> watchedPaths = new ArrayList<File>();
+
+		for (int i = 0; i < watchFolders.size(); i++)
+		{
+			WatchFolder wf = watchFolders.get(i);
+			if (wf.isRuzz() == isRuzz)
+			{
+				File source = new File(wf.getSource());
+				if (!acceptableFilePermissions(source))
+				{
+					logger.error("Watched path is not usable: " +source);
+
+					throw new IllegalArgumentException("Watched path is not usable: " + source);
+
+				}
+				else{
+					watchedPaths.add(source);
+				}
+			}
+		}
+
+		return watchedPaths.toArray(new File[watchedPaths.size()]);
+	}
+
+	/**
+	 *
+	 * @param fileRef of the file being considered
+	 * @return true if the file has permissions that will enable its correct processing by a FileProcessing instance
+	 */
+	private boolean acceptableFilePermissions(final File fileRef)
+	{
+		return fileRef.exists() && fileRef.isDirectory() && fileRef.canRead() && fileRef.canWrite();
 	}
 
 }

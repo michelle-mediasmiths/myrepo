@@ -1,9 +1,17 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
-import com.google.inject.Singleton;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import java.io.File;
 
-@Singleton
-public interface RuzzFilesPendingProcessingQueue extends FilePickUpProcessingQueue{
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+
+public class RuzzFilesPendingProcessingQueue extends FilePickUpFromDirectories{
+
+	@Inject
+	public RuzzFilesPendingProcessingQueue(@Named("ruzz.watched.directories") File[] pickupDirectories)
+	{
+		super(pickupDirectories);
+	}
 
 }

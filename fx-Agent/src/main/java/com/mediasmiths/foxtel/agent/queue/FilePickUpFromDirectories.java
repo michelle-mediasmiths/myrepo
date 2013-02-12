@@ -60,9 +60,7 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 	long RESILIENCE_WAIT_TIME;
 
     /** The collection of directories that are being watched  */
-	@Inject
-	@Named("filepickup.watched.directories")
-	private File[] pickUpDirectories;
+	private final File[] pickUpDirectories;
 
 	/** The kind of pick up that is being performed e.g. placeholder, media etc */
     @Inject
@@ -97,6 +95,15 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 	/** false if enclosing system is active and false if shutting down */
     private volatile boolean shuttingDown = false;
 
+    @Inject
+    /**
+     * The files to be monitors are inject on construction to allow extending classes to pick up their directories from a different @Named parameter
+     * @param pickupDirectories
+     */
+    public FilePickUpFromDirectories(@Named("filepickup.watched.directories") File[] pickupDirectories){
+    	this.pickUpDirectories = pickupDirectories;
+    }
+    
 	/**
 	 * set that the system is shutting down and activities should stop
 	 */

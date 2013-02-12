@@ -29,6 +29,7 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
+import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
@@ -37,7 +38,7 @@ import com.mediasmiths.mayam.MayamClient;
 public abstract class MaterialProcessingTest {
 
 	MaterialExchangeProcessor processor;
-	FilePickUpProcessingQueue filesPendingProcessingQueue;
+	MaterialExchangeFilesPendingProcessingQueue filesPendingProcessingQueue;
 	PendingImportQueue pendingImportQueue;
 	MaterialExchangeValidator validator;
 	ReceiptWriter receiptWriter;
@@ -69,7 +70,7 @@ public abstract class MaterialProcessingTest {
 	public void before() throws IOException, JAXBException,
 			DatatypeConfigurationException, SAXException {
 
-		filesPendingProcessingQueue = new FilePickUpFromDirectories();
+		
 		pendingImportQueue = new PendingImportQueue();
 		validator = mock(MaterialExchangeValidator.class);
 		receiptWriter = mock(ReceiptWriter.class);
@@ -85,6 +86,7 @@ public abstract class MaterialProcessingTest {
 		archivePath =	TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
 		emergencyImportPath = TestUtil.prepareTempFolder("EMERGENCYIMPORT");
+		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
