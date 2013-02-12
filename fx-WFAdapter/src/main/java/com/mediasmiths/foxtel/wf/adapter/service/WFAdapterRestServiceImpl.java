@@ -497,4 +497,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		return state == TaskState.REJECTED ||  state == TaskState.REMOVED;
 	}
 
+	@Override
+	@GET
+	@Path("/mex/{materialid}/deliveryversion")
+	@Produces("text/plain")
+	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException
+	{
+		return mayamClient.getLastDeliveryVersionForMaterial(materialID);
+	}
+
 }

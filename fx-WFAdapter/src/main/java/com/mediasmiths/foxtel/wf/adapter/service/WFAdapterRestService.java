@@ -209,5 +209,12 @@ public interface WFAdapterRestService
 	@Path("/task/{taskid}/cancelled")
 	@Produces("text/plain")
 	public boolean isTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException;
+	
+	@GET
+	@Path("/mex/{materialid}/deliveryversion")
+	@Produces("text/plain")
+	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException;
+
+	
 }
 
