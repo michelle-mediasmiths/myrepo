@@ -41,7 +41,8 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	
 	public final static String FAILUREFOLDERNAME="failed";
-	public final static String ARCHIVEFOLDERNAME="completed"; 	
+	public final static String ARCHIVEFOLDERNAME="completed";
+	public final static String PROCESSINGFOLDERNAME="processing";
 	
 	private final MessageValidator<T> messageValidator;
 	private final ReceiptWriter receiptWriter;
@@ -140,12 +141,10 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		}
 		else
 		{
-
-			logger.debug("Asking for validation of " + filePath);
-
 			MessageValidationResult result;
 			try
 			{
+				logger.debug("Asking for validation of " + filePath);
 				result = messageValidator.validateFile(filePath);
 			}
 			catch (Exception e)
@@ -239,10 +238,34 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	public static String getFailureFolderForFile(File file) {
 		
 		String pathToFile = file.getAbsolutePath();		
-		String failurePath = FilenameUtils.getFullPath(pathToFile) + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;		
+		
+		boolean fileInProcessingFolder = fileIsInProcessingFolder(pathToFile);
+		
+		String failurePath;
+		
+		if(fileInProcessingFolder){
+			failurePath = FilenameUtils.getFullPath(pathToFile) + "../" + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;
+		}
+		else{
+			failurePath = FilenameUtils.getFullPath(pathToFile) + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;
+		}
 		logger.debug(String.format("returning failure folder %s for file %s ", failurePath,pathToFile));
 		
 		return failurePath;
+	}
+
+	public static boolean fileIsInProcessingFolder(String pathToFile)
+	{
+	
+		String folder = FilenameUtils.getBaseName(FilenameUtils.getFullPathNoEndSeparator(pathToFile));
+		logger.debug("folder : "+folder);
+		if(folder.equals(PROCESSINGFOLDERNAME)){
+			logger.debug("file is in processing folder");
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	/**
@@ -267,17 +290,56 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		}
 
 	}
+	
+	private String moveMessageToProcessingFolder(String messagePath) throws IOException {
+		logger.info(String.format(
+				"Message %s has arrived, moving to processing folder",
+				messagePath));
+		String processingPath = getProcessingPathForFile(messagePath);
+		logger.debug(String.format("processing folder is: %s ", processingPath));
+
+		try {
+			return moveFileToFolder(new File(messagePath), processingPath, false);
+		} catch (IOException e) {
+
+			logger.warn(String.format(
+					"IOException moving message %s to archive %s", messagePath,
+					processingPath), e);
+			throw e;
+		}
+
+	}
+
+	private String getProcessingPathForFile(String pathToFile)
+	{
+		
+		String processingPath = FilenameUtils.getFullPath(pathToFile) + PROCESSINGFOLDERNAME + IOUtils.DIR_SEPARATOR;
+		logger.debug(String.format("returning processing path %s for file %s ", processingPath,pathToFile));
+		
+		return processingPath;
+	}
 
 	public static String getArchivePathForFile(String messagePath) {
 		
 		String pathToFile = messagePath;		
-		String archivePath = FilenameUtils.getFullPath(pathToFile) + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;		
+		
+		boolean fileInProcessingFolder = fileIsInProcessingFolder(pathToFile);
+		
+		String archivePath;
+		
+		if(fileInProcessingFolder){
+			archivePath = FilenameUtils.getFullPath(pathToFile) + "../" + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;
+		}
+		else{
+			archivePath = FilenameUtils.getFullPath(pathToFile) + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;
+		}
+		
 		logger.debug(String.format("returning archivePath folder %s for file %s ", archivePath,pathToFile));
 		
 		return archivePath;
 	}
 
-	protected synchronized void moveFileToFolder(File file,
+	protected synchronized String moveFileToFolder(File file,
 			String destinationFolderPath, boolean ensureUniqueFirst)
 			throws IOException {
 		final String destination = getDestinationPathForFileMove(file,
@@ -287,6 +349,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				file.getAbsolutePath(), destination));
 
 		FileUtils.moveFile(file, new File(destination));
+		return destination;
 	}
 
 	public static String getDestinationPathForFileMove(File file,
@@ -342,10 +405,13 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				File file = getFilePathsPending().take();
 				String filePath = file.getAbsolutePath();
 
-				if (isMessage(filePath)) {
-					validateThenProcessFile(filePath);
+				logger.debug("moving file to processing folder");
+				String processingPath = moveMessageToProcessingFolder(filePath);
+				
+				if (isMessage(processingPath)) {
+					validateThenProcessFile(processingPath);
 				} else {
-					processNonMessageFile(filePath);
+					processNonMessageFile(processingPath);
 				}
 
 			} catch (Exception e) {
