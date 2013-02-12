@@ -3,7 +3,10 @@ package com.mediasmiths.foxtel.agent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 
 public class WatchFolders extends ArrayList<WatchFolder>
 {
@@ -31,14 +34,14 @@ public class WatchFolders extends ArrayList<WatchFolder>
 
 		for (WatchFolder f : this)
 		{
-			if (f.getSource().equals(src))
+			if (src.startsWith(f.getSource()))
 			{
-				log.trace(String.format("%s eq %s", f.getSource(), src));
+				log.trace(String.format("%s prefix of %s", f.getSource(), src));
 				return f.isAO();
 			}
 			else
 			{
-				log.trace(String.format("%s neq %s", f.getSource(), src));
+				log.trace(String.format("%s not prefix of %s", f.getSource(), src));
 			}
 		}
 
@@ -52,14 +55,14 @@ public class WatchFolders extends ArrayList<WatchFolder>
 
 		for (WatchFolder f : this)
 		{
-			if (f.getSource().equals(src))
+			if (src.startsWith(f.getSource()))
 			{
-				log.trace(String.format("%s eq %s", f.getSource(), src));
+				log.trace(String.format("%s prefix of %s", f.getSource(), src));
 				return f.isRuzz();
 			}
 			else
 			{
-				log.trace(String.format("%s neq %s", f.getSource(), src));
+				log.trace(String.format("%s not prefix of %s", f.getSource(), src));
 			}
 		}
 
@@ -74,14 +77,14 @@ public class WatchFolders extends ArrayList<WatchFolder>
 		for (WatchFolder f : this)
 		{
 
-			if (f.getSource().equals(src))
+			if (src.startsWith(f.getSource()))
 			{
-				log.trace(String.format("%s eq %s", f.getSource(), src));
+				log.trace(String.format("%s prefix of %s", f.getSource(), src));
 				return f.getDelivery();
 			}
 			else
 			{
-				log.trace(String.format("%s neq %s", f.getSource(), src));
+				log.trace(String.format("%s not prefix of %s", f.getSource(), src));
 			}
 		}
 
