@@ -503,7 +503,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException
 	{
-		return mayamClient.getLastDeliveryVersionForMaterial(materialID);
+		
+		if(mayamClient.materialExists(materialID))
+		{
+			return mayamClient.getLastDeliveryVersionForMaterial(materialID);		
+		}
+		
+		throw new IllegalArgumentException("specified material does not exist");
+		
 	}
 
 }
