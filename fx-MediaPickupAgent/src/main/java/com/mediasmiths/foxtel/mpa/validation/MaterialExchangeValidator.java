@@ -210,6 +210,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 			{
 				if (itemDeliveryVersion != (deliveryVersion - 1))
 				{
+					logger.error(String.format("Unexpected delivery version for material {%s} Expected {%d} Actual {%d}", materialID, itemDeliveryVersion+1, deliveryVersion));
 					return MessageValidationResult.UNEXPECTED_DELIVERY_VERSION;
 				}
 			}

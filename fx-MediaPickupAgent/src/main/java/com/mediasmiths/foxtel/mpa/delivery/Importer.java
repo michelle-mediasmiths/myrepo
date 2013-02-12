@@ -123,6 +123,17 @@ public class Importer extends Daemon implements StoppableService {
 		dst = new File(MessageProcessor.getArchivePathForFile(src
 				.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
+		
+		if(dst.exists()){
+			int i=1;
+			
+			while(dst.exists()){
+				dst = new File(MessageProcessor.getArchivePathForFile(src
+						.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
+						+ "_"+ i +".xml");
+				i++;
+			}
+		}
 
 		logger.debug(String.format("Attempting to move from %s to %s",
 				src.getAbsolutePath(), dst.getAbsolutePath()));
