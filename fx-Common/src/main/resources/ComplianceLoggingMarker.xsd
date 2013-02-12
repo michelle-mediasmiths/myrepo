@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema"
-           targetNamespace="http://com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker"
-           elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<xs:schema
+	xmlns="http://com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker"
+	xmlns:mns="http://com.mediasmiths.foxtel.ip.common.events.email"
+
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
 
 
-	<xs:element name="ComplianceLoggingMarker">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element type="xs:string" name="MasterID" />
-				<xs:element type="xs:string" name="TitleField" />
-				<xs:element type="xs:string" name="Loggerdetails" />
-				<xs:element name="emailaddresses">
-					<xs:complexType>
-						<xs:sequence>
-							<xs:element type="xs:string" name="emailaddress"
-								maxOccurs="unbounded" minOccurs="1" />
-						</xs:sequence>
-					</xs:complexType>
-				</xs:element>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+
+	<xs:import namespace="http://com.mediasmiths.foxtel.ip.common.events.email"
+		schemaLocation="EmailNotificationTypes.xsd" />
+
+	<xs:element name="ComplianceLoggingMarker" type="ComplianceLoggingMarker" />
+
+	<xs:complexType name="ComplianceLoggingMarker">
+		<xs:sequence>
+			<xs:element type="xs:string" name="MasterID" />
+			<xs:element type="xs:string" name="TitleField" />
+			<xs:element type="xs:string" name="Loggerdetails" />
+			<xs:element name="emailaddresses" type="mns:emailaddresses" />
+		</xs:sequence>
+	</xs:complexType>
 
 </xs:schema>

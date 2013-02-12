@@ -1,0 +1,24 @@
+<xs:schema attributeFormDefault="unqualified"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://com.mediasmiths.foxtel.ip.common.events.email"
+	xmlns:mns="http://com.mediasmiths.foxtel.ip.common.events.email">
+
+	<xs:element name="EmailConfiguration">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element type="mns:emailaddresses" name="emailaddresses" />
+				<xs:element type="xs:string" name="title" />
+				<xs:element type="xs:string" name="body" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+
+	<xs:complexType name="emailaddresses">
+		<xs:sequence>
+			<xs:element type="xs:string" name="emailaddress"
+				maxOccurs="unbounded" minOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
