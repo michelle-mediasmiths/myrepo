@@ -127,20 +127,27 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 			{
 				File candidate = getOldestPendingFile();
 
-				if (candidate != null && isStableFile(candidate))
+				if (candidate == null)
 				{
-					sendPickUpTimingEvent(candidate);
-					return candidate;
+					sleepUntilNextInspection();
 				}
 				else
 				{
-					sleepUntilFileStable();
+					if (isStableFile(candidate))
+					{
+						sendPickUpTimingEvent(candidate);
+						return candidate;
+					}
+					else
+					{
+						sleepUntilFileStable();
+					}
 				}
 			}
 		}
 		while (!shuttingDown);
 
-		logger.info("Shutdown occurring");
+		logger.info("Shutdown down TAKE operation");
 		return null;
 	}
 
@@ -192,17 +199,23 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 	 */
 	private File getOldestPendingFile()
 	{
-		File candidate;
+		File candidate = null;
 
-		candidate = getOldestFileInDirectory(pickUpDirectories[0]);
-
-		for (int i = 1; i < pickUpDirectories.length; i++)
+		for (File dir : pickUpDirectories)
 		{
-			File posCandidate = getOldestFileInDirectory(pickUpDirectories[i]);
+			File possibleCandidate = getOldestFileInDirectory(dir);
 
-			if (posCandidate != null && oldestFileComparator.compare(posCandidate, candidate) < 0)
+			if (possibleCandidate != null)
 			{
-				candidate = posCandidate;
+				if (candidate == null)
+				{
+					candidate = possibleCandidate;
+				}
+				else if (oldestFileComparator.compare(possibleCandidate, candidate) < 0)
+				{
+					candidate = possibleCandidate;
+
+				}
 			}
 		}
 		return candidate;
@@ -295,6 +308,20 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 		}
 	}
 
+	/**
+	 * Sleep for a period before looking for new files.
+	 */
+	private void sleepUntilNextInspection()
+	{
+		try
+		{
+			Thread.sleep(WAIT_TIME);
+		}
+		catch (InterruptedException e)
+		{
+			logger.info("Sleeping file pick up queue was interrupted - this has no effect");
+		}
+	}
 
 	/**
 	 * Sleep for a defined period to enable a file to become stable
