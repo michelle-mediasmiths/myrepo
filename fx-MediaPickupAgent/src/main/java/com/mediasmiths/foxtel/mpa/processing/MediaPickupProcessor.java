@@ -133,10 +133,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 		if (!FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
 				.equals("mxf")) {
-			logger.warn("a non mxf has arrived!"); // this really shouldn't
-													// happen if the
-													// MaterialFolderWatcher is
-													// doing its job right
+			logger.warn("a non mxf has arrived, moving it to the failure folders"); 
+			moveFileToFailureFolder(new File(filePath));
 			return;
 		}
 
