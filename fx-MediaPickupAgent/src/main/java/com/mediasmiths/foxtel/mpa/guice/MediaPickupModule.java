@@ -159,7 +159,7 @@ public class MediaPickupModule extends AbstractModule {
 	public File[] provideRuzzWatchedDirectories(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders)
 	{
 		
-		return getFileArrayOfWatchFolders(watchFolders, false);
+		return getFileArrayOfWatchFolders(watchFolders, true);
 
 	}
 	
@@ -168,7 +168,7 @@ public class MediaPickupModule extends AbstractModule {
 	@Named("mex.watched.directories")
 	public File[] provideMexWatchedDirectories(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders)
 	{
-		return getFileArrayOfWatchFolders(watchFolders, true);
+		return getFileArrayOfWatchFolders(watchFolders, false);
 
 	}
 

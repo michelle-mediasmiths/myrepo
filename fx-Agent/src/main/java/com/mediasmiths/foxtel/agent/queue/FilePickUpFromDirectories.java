@@ -383,6 +383,12 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,pickUpStats,eventNamespace);
 	}
 
+	@Override
+	public File[] getWatchedDirectories()
+	{
+		return pickUpDirectories;
+	}
+
 
 
 }

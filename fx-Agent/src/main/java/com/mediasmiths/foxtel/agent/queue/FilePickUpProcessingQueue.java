@@ -53,4 +53,9 @@ public interface FilePickUpProcessingQueue
 	 * signal FilePickupProcessingQueue should shutdown
 	 */
 	public void shutdown();
+	
+	/**
+	 * returns a list of directories watched by this FilePickupProcessingQueue 
+	 */
+	public File[] getWatchedDirectories();
 }
