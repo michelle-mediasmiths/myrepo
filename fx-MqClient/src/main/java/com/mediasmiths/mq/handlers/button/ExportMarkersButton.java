@@ -2,23 +2,97 @@ package com.mediasmiths.mq.handlers.button;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.Marker;
+import com.mayam.wf.attributes.shared.type.MarkerList;
+import com.mayam.wf.attributes.shared.type.Timecode;
+import com.mayam.wf.attributes.shared.type.Marker.Type;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ComplianceLoggingMarker;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+
+import email.events.common.ip.foxtel.mediasmiths.com.Emailaddresses;
 
 public class ExportMarkersButton extends ButtonClickHandler
 {
 
+	private static final String COMPLIANCE_LOGGING_MARKER = "ComplianceLoggingMarker";
 	private final static Logger log = Logger.getLogger(ExportMarkersButton.class);
+
+	@Inject(optional=false)
+	@Named("system.events.namespace")
+	private String systemEventNamespace;
+	
+	@Inject
+	@Named("complianceLogging.serialiser")
+	private JAXBSerialiser serialiser;
 	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
 	{
 		try
 		{
-			materialController.exportMarkers(messageAttributes);
+			String user = messageAttributes.getAttributeAsString(Attribute.TASK_CREATED_BY);
+			String email = String.format("%s@foxtel.com.au",user);
+			
+			log.info(String.format("using email address %s for user %s",email, user));
+			
+			MarkerList markers = materialController.getMarkers(messageAttributes);
+			
+			if(markers == null){
+				log.warn(String.format("no markers found for item %s", messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+				return;
+			}
+			
+			StringBuilder sb = new StringBuilder();
+			
+			for (Marker marker : markers)
+			{
+				String id = marker.getId();
+				String mediaId = marker.getMediaId();
+				Timecode in = marker.getIn();
+				Timecode duration = marker.getDuration();
+				String title = marker.getTitle();
+				Type type = marker.getType();
+
+				String str = String.format(
+						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}\n",
+						id,
+						mediaId,
+						in.toSmpte(),
+						duration.toSmpte(),
+						title,
+						type.toString(),user);
+				
+				log.debug(str);
+				sb.append(str);
+			}
+			
+			
+			ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
+			clm.setLoggerdetails(sb.toString());
+			clm.setMasterID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+			clm.setTitleField(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+			Emailaddresses emails = new Emailaddresses();
+			emails.getEmailaddress().add("bryce.mcleod@mediasmiths.com");
+			clm.setEmailaddresses(emails);
+			
+			String eventName = COMPLIANCE_LOGGING_MARKER;
+			String event = serialiser.serialise(clm);
+			String namespace = systemEventNamespace;
+
+			eventsService.saveEvent(eventName, event, namespace);
+			
 		}
 		catch (MayamClientException e)
+		{
+			log.error("error exporting markers",e);
+		}
+		catch(Exception e)
 		{
 			log.error("error exporting markers",e);
 		}

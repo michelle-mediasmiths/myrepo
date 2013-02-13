@@ -1,4 +1,4 @@
-<FoxtelEmailConfiguration>
+<FoxtelEmailConfiguration xmlns="http://com.mediasmiths.foxtel.ip.common.events.mailData">
 	<!-- QC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
@@ -409,8 +409,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>OutOfOrder</eventname>
 		<MailTemplate>
-			<subject>A material exchange message has arrived with an unexpected
-				delivery version for material [MasterID]
+			<subject>A material exchange message has arrived with an unexpected	delivery version for material [MasterID]
 			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>

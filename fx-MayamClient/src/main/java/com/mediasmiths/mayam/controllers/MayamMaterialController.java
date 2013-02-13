@@ -1351,7 +1351,7 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public void exportMarkers(AttributeMap messageAttributes) throws MayamClientException
+	public MarkerList getMarkers(AttributeMap messageAttributes) throws MayamClientException
 	{
 		
 		String assetID = messageAttributes.getAttributeAsString(Attribute.ASSET_ID);
@@ -1381,33 +1381,13 @@ public class MayamMaterialController extends MayamController
 		if (markers == null)
 		{
 			log.info(String.format("No markers found for revision %s asset %s", revisionId, assetID));
+			return null;
 		}
 		else
 		{
 			log.info(String.format("found %d markers  ",markers.size()));
 			
-			for (Marker marker : markers)
-			{
-				String id = marker.getId();
-				String mediaId = marker.getMediaId();
-				Timecode in = marker.getIn();
-				Timecode duration = marker.getDuration();
-				String title = marker.getTitle();
-				Type type = marker.getType();
-
-				log.info(String.format(
-						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}",
-						id,
-						mediaId,
-						in.toSmpte(),
-						duration.toSmpte(),
-						title,
-						type.toString(),user));
-				
-				
-			}
-			
-			log.error("markers not exported! I dont know the users email address");
+			return markers;
 		}		
 	}
 }

@@ -20,6 +20,7 @@ import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.MediasmithsDestinations;
 import com.mediasmiths.mule.IMuleClient;
 import com.mediasmiths.mule.MuleClientImpl;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 public class MuleWorkflowController {
 
@@ -30,8 +31,8 @@ public class MuleWorkflowController {
 	private MediasmithsDestinations destinations;
 	
 	@Inject
-	@Named("wfe.marshaller")
-	private Marshaller wfeMarshaller;
+	@Named("wfe.serialiser")
+	private JAXBSerialiser serialiser;
 	
 	public MuleWorkflowController() 
 	{
@@ -83,9 +84,11 @@ public class MuleWorkflowController {
 	
 	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
 	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		wfeMarshaller.marshal(payload, baos);
-		return baos.toString("UTF-8");
+		return serialiser.serialise(payload);
+		
+//		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		wfeMarshaller.marshal(payload, baos);
+//		return baos.toString("UTF-8");
 	}
 	
 }

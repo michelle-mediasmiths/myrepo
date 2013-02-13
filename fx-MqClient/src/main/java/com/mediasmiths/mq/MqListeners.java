@@ -23,33 +23,25 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.listeners.IncomingListener;
+import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
+import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
+import com.mediasmiths.std.threading.Daemon;
 
-public class MqListeners implements Runnable {
+public class MqListeners extends Daemon implements StoppableService {
 	private ArrayList<Detachable> listeners;
 	
-	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
-	@Inject
-	TasksClient client;
 	
-	@Inject
-	MayamTaskController taskController;
+	private final TasksClient client;
 	
-	@Inject 
-	Mq mq;
+	private final MayamTaskController taskController;
 	
-	@Inject
-	IncomingListener incomingListener;
+	private final Mq mq;
 	
-	@Inject
-	private MediasmithsDestinations destinations;
+	private final IncomingListener incomingListener;
+	
+	private final MediasmithsDestinations destinations;
 
-	//need a marshaller before this will inject
-//	@Inject
-//	EventService eventService;
-	
-	Injector injector;
-	Provider<AttributeMessageBuilder> ambp;
-	AtomicBoolean listening = new AtomicBoolean(true);
+	private final  ShutdownManager shutDownManager;
 	
 	protected final static Logger log = Logger.getLogger(MqListeners.class); 
 	
@@ -60,29 +52,27 @@ public class MqListeners implements Runnable {
 		listeners = new ArrayList<Detachable>();
 		attachIncomingListners();
 		
-		while (listening.get()) {
+		while (isRunning()) {
 			mq.listen(ListenIntensity.NORMAL);
 		}
-		
-		shutdown();
 		
 		log.trace("MqListeners.run() return");
 	}
 	
 	@Inject
-	public MqListeners() 
+	public MqListeners(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController,Mq mq,IncomingListener incomingListener,MediasmithsDestinations destinations, ShutdownManager shutdownManager) 
 	{
-		log.trace("MqListeners()");
-	}
-	
-	public void stopListening()
-	{
-		listening.set(false);
-	}
-	
-	public void startListening()
-	{
-		listening.set(true);
+		log.info("MqListeners startup");
+		this.client=client;
+		this.taskController=taskController;
+		this.mq=mq;
+		this.incomingListener=incomingListener;
+		this.shutDownManager = shutdownManager;
+		this.destinations=destinations;
+		
+		// register with shutdown manager		
+		shutdownManager.register(this);
+		this.startThread();
 	}
 	
 	public void attachListener(MqDestination type, Listener listener)
@@ -113,12 +103,13 @@ public class MqListeners implements Runnable {
 		
 		log.info("Shutting down");
 		
-		listening.set(false);
 		for (int i=0; i < listeners.size(); i++)
 		{
 			listeners.get(i).detach();
 		}
 		mq.shutdownConsumers();
 		mq.shutdownProducers();
+		
+		stopThread();
 	}
 }

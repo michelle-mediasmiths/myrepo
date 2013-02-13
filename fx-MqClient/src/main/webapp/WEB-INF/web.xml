@@ -4,12 +4,13 @@
  <description>Foxtel Mq Listeners</description>
  <display-name>fx-MqListeners</display-name>
 	<listener>
-		<listener-class>com.mediasmiths.mq.MqService</listener-class>
+		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
+
 
 	<servlet>
 		<servlet-name>Resteasy</servlet-name>
-		<servlet-class>com.mediasmiths.std.guice.web.rest.resteasy.GuiceRestEasyDispatcher</servlet-class>
+		<servlet-class>com.mediasmiths.std.guice.web.rest.resteasy.ResteasyDispatcher</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 

@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -35,6 +36,9 @@ public abstract class AttributeHandler implements Handler
 	
 	@Inject
 	protected MayamAccessRightsController accessRightsController;
+	
+	@Inject
+	protected EventService eventsService;
 	
 	public abstract void process(AttributeMap messageAttributes) ;
 

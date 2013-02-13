@@ -5,21 +5,25 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 public class QcTaskUpdateHandler extends TaskUpdateHandler
 {
 
+	private static final String QC_FAILED_RE_ORDER = "QcFailedReOrder";
 	private static final String MANUAL_QC_PASS = "pass";
 	private final static String MANUAL_QC_FAIL_WITH_REINGEST = "reingest";
 	private final static String MANUAL_QC_FAIL_WITH_REORDER = "reorder";
@@ -28,6 +32,15 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 	@Inject
 	MuleWorkflowController mule;
+	
+	@Inject(optional=false)
+	@Named("qc.events.namespace")
+	private String qcEventNamespace;
+	
+	@Inject
+	@Named("wfe.serialiser")
+	private JAXBSerialiser serialiser;
+	
 
 	@Override
 	public String getName()
@@ -89,6 +102,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(updateMap);
+				
+				sendQcFailedReorderEvent(currentAttributes);
+				
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
@@ -112,6 +128,35 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		catch (MayamClientException e)
 		{
 			log.error("error updating task status", e);
+		}
+	}
+
+	private void sendQcFailedReorderEvent(AttributeMap currentAttributes)
+	{
+		try
+		{
+			AutoQCErrorNotification aen = new AutoQCErrorNotification();
+			aen.setAssetId(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+			aen.setForTXDelivery(false);
+			aen.setJobName("");
+			Long taskId = (Long) currentAttributes.getAttribute(Attribute.TASK_ID);
+
+			if (taskId != null)
+			{
+				aen.setTaskID(taskId.longValue());
+			}
+
+			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
+
+			String eventName = QC_FAILED_RE_ORDER;
+			String event = serialiser.serialise(aen);
+			String namespace = qcEventNamespace;
+
+			eventsService.saveEvent(eventName, event, namespace);
+		}
+		catch (Exception e)
+		{
+			log.error("error sending "+QC_FAILED_RE_ORDER+" event",e);
 		}
 	}
 

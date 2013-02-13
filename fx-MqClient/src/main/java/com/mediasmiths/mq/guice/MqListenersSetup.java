@@ -15,6 +15,7 @@ public class MqListenersSetup implements GuiceSetup {
 
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config) {
+		modules.add(new EventServiceModule());
 		modules.add(new MqListenersModule());	
 		modules.add(new MayamClientModule());
 		modules.add(new AttributesModule());
