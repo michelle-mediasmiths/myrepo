@@ -47,7 +47,7 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		String archivePath =	TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		String failurePath = TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.FAILUREFOLDERNAME);
 		String deliveryPath =  TestUtil.prepareTempFolder("DELIVERY");
-		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
+//		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
 		
 		WatchFolders wfs = new WatchFolders();
 		WatchFolder wf = new WatchFolder(incomingFolderPath);
@@ -80,7 +80,7 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		EventService events = mock(EventService.class);
 				
 		//run object being tested
-		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges, emergencyFolderPath,wfs,mm,events);
+		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,mm,events);
 		Thread unmatcherThread = new Thread(toTest);
 		unmatcherThread.start();
 		
@@ -102,11 +102,11 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		Boolean fileMovedToFailed=new File(failedMessagesPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName).exists();
 		assertTrue(fileMovedToFailed);
 		
-		Boolean fileMovedToEmergency=new File(emergencyFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists();
-		assertTrue(fileMovedToEmergency);
+		Boolean fileMovedToDeliveryLocation=new File(deliveryPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists();
+		assertTrue(fileMovedToDeliveryLocation);
 		
 		
-		if (!mxfExists && !xmlExists && fileMovedToEmergency && fileMovedToFailed)
+		if (!mxfExists && !xmlExists && fileMovedToDeliveryLocation && fileMovedToFailed)
 		{
 			resultLogger.info("FXT 4.6.4.1  - Media with no xml is moved to Viz Ardome emergency import folder --Passed");
 		}

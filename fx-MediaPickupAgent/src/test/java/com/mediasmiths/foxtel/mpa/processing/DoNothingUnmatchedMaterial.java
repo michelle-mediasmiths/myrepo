@@ -16,10 +16,9 @@ public class DoNothingUnmatchedMaterial extends UnmatchedMaterialProcessor {
 	public DoNothingUnmatchedMaterial(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			MatchMaker matchMaker, EventService event) {
-		super(timeout, sleepTime, emergencyImportFolder, watchFolders, matchMaker, event);
+		super(timeout, sleepTime, watchFolders, matchMaker, event);
 	}
 
 	@Override

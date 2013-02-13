@@ -35,7 +35,6 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 
 	private final Long timeout;
 	private final MatchMaker matchMaker;
-	private final String emergencyImportFolder;
 	private final long sleepTime;
 	private final WatchFolders watchFolders;
 
@@ -51,12 +50,10 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 	public UnmatchedMaterialProcessor(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			MatchMaker matchMaker, EventService events) {
 		this.timeout = timeout;
 		this.matchMaker = matchMaker;
-		this.emergencyImportFolder = emergencyImportFolder;
 		this.watchFolders = watchFolders;
 		this.sleepTime = sleepTime.longValue();
 		this.events = events;
@@ -118,7 +115,7 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 				destinationFolder = MessageProcessor.getFailureFolderForFile(new File(mxf.getFilePath()));
 			}
 			else{
-				destinationFolder = emergencyImportFolder;
+				destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getFilePath()));
 			}
 			
 			
@@ -139,7 +136,7 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 				{
 					logger.warn(String.format("Destination file %s already exists", destination));
 
-					sb = new StringBuilder(emergencyImportFolder);
+					sb = new StringBuilder(destinationFolder);
 					sb.append(IOUtils.DIR_SEPARATOR);
 					sb.append(FilenameUtils.getBaseName(mxf.getFilePath()));
 					sb.append("_");
