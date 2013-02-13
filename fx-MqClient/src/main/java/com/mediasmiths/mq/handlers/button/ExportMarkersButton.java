@@ -87,14 +87,16 @@ public class ExportMarkersButton extends ButtonClickHandler
 			clm.setMasterID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			clm.setTitleField(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 			Emailaddresses emails = new Emailaddresses();
-			emails.getEmailaddress().add("bryce.mcleod@mediasmiths.com");
+			emails.getEmailaddress().add(email);
 			clm.setEmailaddresses(emails);
 			
 			String eventName = COMPLIANCE_LOGGING_MARKER;
 			String event = compLoggingMarkerInfoToString(clm);
 			String namespace = systemEventNamespace;
 
-			eventsService.saveEvent(eventName, event, namespace);
+			log.warn("not sending event for export markers email");
+			
+//			eventsService.saveEvent(eventName, event, namespace);
 			
 		}
 		catch (MayamClientException e)
