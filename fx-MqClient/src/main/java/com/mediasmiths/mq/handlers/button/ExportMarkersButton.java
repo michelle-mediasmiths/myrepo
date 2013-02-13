@@ -1,5 +1,12 @@
 package com.mediasmiths.mq.handlers.button;
 
+import java.io.StringWriter;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -10,6 +17,8 @@ import com.mayam.wf.attributes.shared.type.Marker;
 import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Marker.Type;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ComplianceLoggingMarker;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -28,8 +37,8 @@ public class ExportMarkersButton extends ButtonClickHandler
 	private String systemEventNamespace;
 	
 	@Inject
-	@Named("complianceLogging.serialiser")
-	private JAXBSerialiser serialiser;
+	@Named("complianceLogging.marshaller")
+	private Marshaller compLoggingMarshaller;
 	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
@@ -82,7 +91,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			clm.setEmailaddresses(emails);
 			
 			String eventName = COMPLIANCE_LOGGING_MARKER;
-			String event = serialiser.serialise(clm);
+			String event = compLoggingMarkerInfoToString(clm);
 			String namespace = systemEventNamespace;
 
 			eventsService.saveEvent(eventName, event, namespace);
@@ -96,6 +105,17 @@ public class ExportMarkersButton extends ButtonClickHandler
 		{
 			log.error("error exporting markers",e);
 		}
+	}
+
+	private String compLoggingMarkerInfoToString(ComplianceLoggingMarker clm) throws JAXBException
+	{
+		com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ObjectFactory of = new  com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ObjectFactory();
+		
+		JAXBElement<ComplianceLoggingMarker> j = of.createComplianceLoggingMarker(clm);
+		StringWriter sw = new StringWriter();
+		compLoggingMarshaller.marshal(j, sw);
+		String event = sw.toString();
+		return event;
 	}
 
 	@Override

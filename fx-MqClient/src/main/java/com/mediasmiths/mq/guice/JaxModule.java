@@ -99,5 +99,25 @@ public class JaxModule extends AbstractModule
 		return JAXBSerialiser.getInstance(context);
 
 	}
+	
+	@Provides
+	@Singleton
+	@Named("complianceLogging.marshaller")
+	Marshaller provideCompLoggingMarshaller(@Named("complianceLogging.context") JAXBContext jc) throws JAXBException, SAXException
+	{
+		Marshaller marshaller = null;
+		try
+		{
+			marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
 
 }
