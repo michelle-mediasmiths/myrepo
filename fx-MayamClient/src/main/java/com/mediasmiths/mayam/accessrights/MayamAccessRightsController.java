@@ -279,6 +279,15 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 				accessRights=new AssetAccess();
 			}
 			
+			accessRights.getMedia().clear();
+			accessRights.getStandard().clear();
+			
+			//set owner to _none
+			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+			entry.setEntityType(EntityType.USER);
+			entry.setEntity("_none");
+			accessRights.getStandard().add(entry);
+			
 			HashMap<String, Triplet<Boolean, Boolean, Boolean>> groupMap = new HashMap<String, Triplet<Boolean, Boolean, Boolean>>();
 			
 			for (int i = 0; i < allRights.size(); i++)
