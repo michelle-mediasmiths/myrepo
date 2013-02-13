@@ -40,7 +40,7 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate>
-			<subject>An item has failed qc and required reordering [MasterID]</subject>
+			<subject>An item has failed qc and requires reordering [MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
