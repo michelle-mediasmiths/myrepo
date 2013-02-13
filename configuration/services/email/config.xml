@@ -1,4 +1,5 @@
-<FoxtelEmailConfiguration xmlns="http://com.mediasmiths.foxtel.ip.common.events.mailData">
+<FoxtelEmailConfiguration
+	xmlns="http://com.mediasmiths.foxtel.ip.common.events.mailData">
 	<!-- QC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
@@ -35,9 +36,7 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QCproblemwithTCMedia</eventname>
 		<MailTemplate>
-			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID]
-				[TitleField]
-			</subject>
+			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID] [TitleField]</subject>
 			<body>QCproblemwithTCMedia</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -56,8 +55,8 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate>
-			<subject>An item has arrived out of order at QC! ID: [MasterID]
-			</subject>
+			<subject>An item has failed QC and required re ordering ID:
+				[MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_BOPS@foxtel.com.au</emailaddress>
@@ -79,8 +78,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>FailedInSendtoTX</eventname>
 		<MailTemplate>
-			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]
-			</subject>
+			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]</subject>
 			<body>FailedInSendtoTX</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -99,8 +97,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>PublicityFailure</eventname>
 		<MailTemplate>
-			<subject>[MasterID] [TitleField]. Publicity transcode failed in MAM.
-			</subject>
+			<subject>[MasterID] [TitleField]. Publicity transcode failed in MAM.</subject>
 			<body>PublicityFailure</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -111,9 +108,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>CaptionProxySuccess</eventname>
 		<MailTemplate>
-			<subject>[MasterID] [TitleField]. Caption proxy item sent to external
-				location
-			</subject>
+			<subject>[MasterID] [TitleField]. Caption proxy item sent to external location</subject>
 			<body>CaptionProxySuccess</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -124,9 +119,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>CaptionProxyFailure</eventname>
 		<MailTemplate>
-			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode
-				failed in MAM.
-			</subject>
+			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode failed in MAM.</subject>
 			<body>CaptionProxyFailure</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -137,9 +130,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ClassificationProxySuccess</eventname>
 		<MailTemplate>
-			<subject>[MasterID] [TitleField]. Classification proxy item sent to
-				external location
-			</subject>
+			<subject>[MasterID] [TitleField]. Classification proxy item sent to external location</subject>
 			<body>ClassificationProxySuccess</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -150,9 +141,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ClassificationProxyFailure</eventname>
 		<MailTemplate>
-			<subject>[MasterID] [TitleField]. Classification proxy transcode
-				failed in MAM.
-			</subject>
+			<subject>[MasterID] [TitleField]. Classification proxy transcode failed in MAM.</subject>
 			<body>ClassificationProxyFailure</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -163,9 +152,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ExportFailure</eventname>
 		<MailTemplate>
-			<subject>[TitleField] [MasterID]. 3rd Party proxy transcode failed in
-				MAM.
-			</subject>
+			<subject>[TitleField] [MasterID]. 3rd Party proxy transcode failed in MAM.</subject>
 			<body>ExportFailure</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
@@ -409,7 +396,8 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>OutOfOrder</eventname>
 		<MailTemplate>
-			<subject>A material exchange message has arrived with an unexpected	delivery version for material [MasterID]
+			<subject>A material exchange message has arrived with an unexpected
+				delivery version for material [MasterID]
 			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>
