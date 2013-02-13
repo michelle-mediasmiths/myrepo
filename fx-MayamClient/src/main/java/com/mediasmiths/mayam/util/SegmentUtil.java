@@ -143,20 +143,19 @@ public class SegmentUtil
 
 	public static Segment convertMaterialExchangeSegmentToMayamSegment(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment in) throws InvalidTimecodeException{
 		
-		String som = in.getSOM();
-		String eom = in.getEOM();
-		String title = in.getSegmentTitle();
-		String duration= null;
-		int number = in.getSegmentNumber();
 		
-		Timecode start =  Timecode.getInstance(som, Framerate.HZ_25); 
+		com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment filled = fillEomAndDurationOfSegment(in);
 		
-		if(duration == null){
-			Timecode end =  Timecode.getInstance(eom, Framerate.HZ_25);
-			long durationSamples = (end.getSampleCount().getSamples() - start.getSampleCount().getSamples());
-			Timecode durationTimecode = Timecode.getInstance(new SampleCount(durationSamples, Framerate.HZ_25));
-			duration = durationTimecode.toSMPTEString();
+		String som = filled.getSOM();
+		String eom = filled.getEOM();
+		String title = filled.getSegmentTitle();
+		
+		if(title == null){
+			title = "";
 		}
+		
+		String duration= filled.getDuration();
+		int number = in.getSegmentNumber();
 		
 		return Segment.create().in(new com.mayam.wf.attributes.shared.type.Timecode(som)).duration(new com.mayam.wf.attributes.shared.type.Timecode(duration)).number(number).title(title).build();
 		

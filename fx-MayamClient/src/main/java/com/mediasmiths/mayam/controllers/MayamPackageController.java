@@ -117,8 +117,12 @@ public class MayamPackageController extends MayamController
 								requiresSegmentationTask = true;
 					}		
 					
-					
+					try{
 					segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
+					}
+					catch(Exception e){
+						log.error("error finding existing segment info for tx package",e);
+					}
 					
 					if(segmentation==null){
 						log.info("no existing segmentation information for this tx package");
@@ -176,6 +180,9 @@ public class MayamPackageController extends MayamController
 					}
 					catch (InvalidTimecodeException e)
 					{
+						log.error("could not convert segmentation info stored against item", e);
+					}
+					catch (Exception e){
 						log.error("could not convert segmentation info stored against item", e);
 					}
 						
@@ -254,10 +261,14 @@ public class MayamPackageController extends MayamController
 		if (p != null)
 		{
 			List<Package> packages = p.getPackage();
+			
+			log.debug(String.format("Found %d segment lists for material %s",packages.size(),materialId));
+			
 			for (Package pc : packages)
 			{
 				if (pc.getPresentationID().equals(txPackage.getPresentationID()))
 				{
+					log.debug("Found segmentation info");
 					return pc.getSegmentation();
 				}
 			}
@@ -436,15 +447,21 @@ public class MayamPackageController extends MayamController
 							if (segment != null)
 							{
 							
-								com.mediasmiths.std.types.Timecode startTime = com.mediasmiths.std.types.Timecode.getInstance( segment.getSOM(), Framerate.HZ_25);
-								com.mediasmiths.std.types.Timecode duration = com.mediasmiths.std.types.Timecode.getInstance( segment.getDuration(), Framerate.HZ_25);
-								//TODO handle EOM if duration is null
+								SegmentationType.Segment filled = SegmentUtil.fillEomAndDurationOfSegment(segment);
+								
+								com.mediasmiths.std.types.Timecode startTime = com.mediasmiths.std.types.Timecode.getInstance( filled.getSOM(), Framerate.HZ_25);
+								com.mediasmiths.std.types.Timecode duration = com.mediasmiths.std.types.Timecode.getInstance( filled.getDuration(), Framerate.HZ_25);
+								String title = filled.getSegmentTitle();
+								
+								if(title==null){
+									title = "";
+								}
 								
 								com.mayam.wf.attributes.shared.type.Segment mamSegment = com.mayam.wf.attributes.shared.type.Segment.create()
 																.in(new Timecode(startTime.getDurationInFrames()))
 																.duration(new Timecode(duration.getDurationInFrames()))
-																.number(segment.getSegmentNumber())
-																.title(segment.getSegmentTitle()).build();
+																.number(filled.getSegmentNumber())
+																.title(title).build();
 																
 								mamSegments.add(mamSegment);
 							}
