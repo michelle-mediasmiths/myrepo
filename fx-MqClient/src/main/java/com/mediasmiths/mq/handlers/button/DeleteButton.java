@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers.button;
 
 import org.apache.log4j.Logger;
 
+import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
@@ -63,7 +64,9 @@ public class DeleteButton extends ButtonClickHandler
 			dm.setTitleID(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 			dm.setMaterial(m);
 			
-			ph.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
+			Actions a = new Actions();
+			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
+			ph.setActions(a);
 			
 			String eventName = MANUAL_PURGE;
 			String event = serialiser.serialise(ph);
