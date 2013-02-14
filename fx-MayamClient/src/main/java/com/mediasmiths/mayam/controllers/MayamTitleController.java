@@ -612,8 +612,14 @@ public class MayamTitleController extends MayamController{
 				for (int i = 0; i < tasks.size(); i++)
 				{
 					AttributeMap task = tasks.get(i);
-					task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-					client.taskApi().updateTask(task);
+					
+					TaskState currentState = (TaskState) task.getAttribute(Attribute.TASK_STATE);
+					
+					if(! TaskState.CLOSED_STATES.contains(currentState)) //dont try to remove tasks that are in a closed state, it wont work
+					{					
+						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						client.taskApi().updateTask(task);
+					}
 				}
 				
 				//Delete the asset
