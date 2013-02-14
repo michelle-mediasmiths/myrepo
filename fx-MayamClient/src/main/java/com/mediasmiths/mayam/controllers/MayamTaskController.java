@@ -276,17 +276,7 @@ public class MayamTaskController extends MayamController
 			}
 			try
 			{
-				AttributeMap newTask;
-
-				try
-				{
-					newTask = accessRightsController.updateAccessRights(attributes.getAttributes());
-				}
-				catch (Exception e)
-				{
-					log.error("Error setting access rights on new task", e);
-					newTask = attributes.getAttributes();
-				}
+				AttributeMap newTask = attributes.getAttributes();
 
 				log.debug("Creating task :" + LogUtil.mapToString(newTask));
 
