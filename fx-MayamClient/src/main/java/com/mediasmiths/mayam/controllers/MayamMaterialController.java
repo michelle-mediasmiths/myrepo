@@ -100,7 +100,7 @@ public class MayamMaterialController extends MayamController
 		boolean createCompLoggingTask = false;
 
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
-		attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, MayamPreviewResults.PREVIEW_NOT_DONE);
+		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
 		
 		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
@@ -395,7 +395,7 @@ public class MayamMaterialController extends MayamController
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
-		attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, MayamPreviewResults.PREVIEW_NOT_DONE);
+		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
 		
 		boolean attributesValid = true;
