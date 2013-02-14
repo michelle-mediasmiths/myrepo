@@ -98,6 +98,7 @@ public class MayamMaterialController extends MayamController
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		boolean createCompLoggingTask = false;
+		String parentAssetID = null; //parent asset id to use if a compliance logging task is to be created
 
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
@@ -195,6 +196,7 @@ public class MayamMaterialController extends MayamController
 					}
 				}
 
+
 				Compile compile = source.getCompile();
 				if (compile != null)
 				{
@@ -205,6 +207,7 @@ public class MayamMaterialController extends MayamController
 								compile.getParentMaterialID());
 
 						createCompLoggingTask = true;
+						parentAssetID = parentMaterial.getAttributeAsString(Attribute.ASSET_ID);
 
 					}
 					catch (RemoteException e)
@@ -260,7 +263,7 @@ public class MayamMaterialController extends MayamController
 							}
 
 							long taskID = taskController.createComplianceLoggingTaskForMaterial(
-									material.getMaterialID(),
+									material.getMaterialID(),parentAssetID,
 									requiredBy);
 							log.debug("created task with id : " + taskID);
 						}

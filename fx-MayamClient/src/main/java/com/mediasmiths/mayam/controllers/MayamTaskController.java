@@ -104,12 +104,13 @@ public class MayamTaskController extends MayamController
 		}
 	}
 	
-	public long createComplianceLoggingTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	public long createComplianceLoggingTaskForMaterial(String materialID,String parentAssetID, Date requiredByDate) throws MayamClientException
 	{
 		
-		log.info(String.format("Creating compliance logging task for asset "+materialID));
+		log.info(String.format("Creating compliance logging task for asset "+materialID+" whose source material has asset id "+parentAssetID));
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.ASSET_PEER_ID, parentAssetID);
 		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING, initialAttributes);
 
