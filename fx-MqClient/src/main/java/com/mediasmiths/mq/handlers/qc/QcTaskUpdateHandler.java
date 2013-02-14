@@ -67,20 +67,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		if (after.containsAttribute(Attribute.QC_RESULT))
 		{
 			qcResultSetManually(currentAttributes, after);
-		}
-		
-		QcStatus qcStatus = currentAttributes.getAttribute(Attribute.QC_STATUS);
-		if (qcStatus == QcStatus.FAIL) 
-		{
-			String houseID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
-			AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
-			try {
-				taskController.createPurgeCandidateTask(MayamAssetType.fromString(assetType.toString()), houseID, 30);
-			} catch (MayamClientException e) {
-				log.error("Exception thrown while creating Purge Candidate test for task : " + houseID, e);
-				e.printStackTrace();
-			}
-		}
+		}				
 
 	}
 
