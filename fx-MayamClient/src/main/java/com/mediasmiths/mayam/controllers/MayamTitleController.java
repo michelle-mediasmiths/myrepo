@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class MayamTitleController extends MayamController{
 			
 			attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
 			
-			String assetTitle = title.getProgrammeTitle() + " - " + title.getSeriesNumber() + " - " + title.getEpisodeNumber() + " - " + title.getEpisodeTitle();
+			String assetTitle = buildAssetTitle(title.getProgrammeTitle(),title.getSeriesNumber(), title.getEpisodeNumber(),title.getEpisodeTitle());
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
 			
 			if (title.getYearOfProduction() != null)
@@ -241,7 +242,7 @@ public class MayamTitleController extends MayamController{
 				if(titleDescription.getEpisodeNumber() != null)
 				attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 				
-				String assetTitle = titleDescription.getProgrammeTitle() + " - " + titleDescription.getSeriesNumber() + " - " + titleDescription.getEpisodeNumber() + " - " + titleDescription.getEpisodeTitle();
+				String assetTitle = buildAssetTitle(titleDescription.getProgrammeTitle(),titleDescription.getSeriesNumber() , titleDescription.getEpisodeNumber() ,titleDescription.getEpisodeTitle());
 				attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
 				
 				attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());
@@ -303,6 +304,35 @@ public class MayamTitleController extends MayamController{
 		return returnCode;
 	}
 
+	private String buildAssetTitle(String programmeTitle, BigInteger seriesNumber, BigInteger episodeNumber, String episodeTitle)
+	{
+		StringBuilder builderAssetTitle = new StringBuilder();
+		
+		if(programmeTitle != null){
+			builderAssetTitle.append(programmeTitle);
+		}
+		
+		builderAssetTitle.append(" - ");
+		
+		if(seriesNumber != null){
+			builderAssetTitle.append(seriesNumber);
+		}
+		
+		builderAssetTitle.append(" - ");
+		
+		if(episodeNumber != null){
+			builderAssetTitle.append(episodeNumber);
+		}
+		
+		builderAssetTitle.append(" - ");
+		
+		if(episodeTitle != null){
+			builderAssetTitle.append(episodeTitle);
+		}
+		
+		return builderAssetTitle.toString();
+	}
+
 	public MayamClientErrorCode updateTitle(Material.Title title)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
@@ -326,22 +356,6 @@ public class MayamTitleController extends MayamController{
 					attributes = new MayamAttributeController(client.createAttributeMap());
 					attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
 					attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
-					
-					attributesValid &= attributes.setAttribute(Attribute.SERIES_TITLE, title.getProgrammeTitle());
-					if(title.getSeriesNumber() != null)
-					attributesValid &= attributes.setAttribute(Attribute.SEASON_NUMBER, title.getSeriesNumber().intValue());
-					
-					attributesValid &= attributes.setAttribute(Attribute.EPISODE_TITLE, title.getEpisodeTitle());
-					if(title.getEpisodeNumber() != null)
-					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, title.getEpisodeNumber().intValue());
-					
-					String assetTitle = title.getProgrammeTitle() + " - " + title.getSeriesNumber() + " - " + title.getEpisodeNumber() + " - " + title.getEpisodeTitle();
-					attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
-					
-					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, title.getProductionNumber());
-					if( title.getYearOfProduction() != null)
-					attributesValid &= attributes.setAttribute(Attribute.SERIES_YEAR, title.getYearOfProduction().toString());
-					attributesValid &= attributes.setAttribute(Attribute.LOCATION, title.getCountryOfProduction());
 					
 					Distributor distributor = title.getDistributor();
 					if (distributor != null) {
@@ -492,7 +506,7 @@ public class MayamTitleController extends MayamController{
 					if(titleDescription.getEpisodeNumber() != null)
 					attributesValid &= attributes.setAttribute(Attribute.EPISODE_NUMBER, titleDescription.getEpisodeNumber().intValue());
 					
-					String assetTitle = titleDescription.getProgrammeTitle() + " - " + titleDescription.getSeriesNumber() + " - " + titleDescription.getEpisodeNumber() + " - " + titleDescription.getEpisodeTitle();
+					String assetTitle = buildAssetTitle(titleDescription.getProgrammeTitle(),titleDescription.getSeriesNumber() , titleDescription.getEpisodeNumber() ,titleDescription.getEpisodeTitle());
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, assetTitle);
 					
 					attributesValid &= attributes.setAttribute(Attribute.PRODUCTION_NUMBER, titleDescription.getProductionNumber());

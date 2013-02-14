@@ -649,7 +649,7 @@ public class MayamMaterialController extends MayamController
 			catch (RemoteException e1)
 			{
 				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
-				throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED,e1);
 			}
 
 			if (assetAttributes != null)
