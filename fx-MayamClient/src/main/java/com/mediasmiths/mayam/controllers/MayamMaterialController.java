@@ -99,6 +99,10 @@ public class MayamMaterialController extends MayamController
 		boolean attributesValid = true;
 		boolean createCompLoggingTask = false;
 
+		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
+		attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, MayamPreviewResults.PREVIEW_NOT_DONE);
+		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
+		
 		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
 		{
 			// setting parent_house_id is an unsupported operation
@@ -389,6 +393,11 @@ public class MayamMaterialController extends MayamController
 		log.info(String.format("Creating Marketing Material for title %s",titleID));
 		
 		MayamAttributeController attributes = new MayamAttributeController(client);
+		
+		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
+		attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, MayamPreviewResults.PREVIEW_NOT_DONE);
+		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
+		
 		boolean attributesValid = true;
 
 		if (material != null)
