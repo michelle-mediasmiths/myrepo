@@ -40,6 +40,7 @@ import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -57,6 +58,9 @@ public class MayamTitleController extends MayamController{
 	
 	@Inject
 	MayamTaskController taskController;
+	
+	@Inject
+	private MayamAccessRightsController accessRightsController;
 	
 	public MayamClientErrorCode createTitle(Material.Title title)
 	{
@@ -129,9 +133,18 @@ public class MayamTitleController extends MayamController{
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 			
+			AttributeMap newAsset = null;
+			try{
+				newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
+			}
+			catch(Exception e){
+				log.error("error determining access rights for new asset",e);
+				newAsset = attributes.getAttributes();
+			}
+			
 			AttributeMap result;
 			try {
-				result = client.assetApi().createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(newAsset);
 				if (result == null) {
 					log.warn("Mayam failed to create new title asset");
 					returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
@@ -251,10 +264,19 @@ public class MayamTitleController extends MayamController{
 					log.warn("Title created but one or more attributes were invalid");
 					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 				}
+			
+				AttributeMap newAsset = null;
+				try{
+					newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
+				}
+				catch(Exception e){
+					log.error("error determining access rights for new asset",e);
+					newAsset = attributes.getAttributes();
+				}
 				
 				AttributeMap result;
 				try {
-					result = client.assetApi().createAsset(attributes.getAttributes());
+					result = client.assetApi().createAsset(newAsset);
 					if (result == null) {
 						log.warn("Mayam failed to create new Title asset");
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;

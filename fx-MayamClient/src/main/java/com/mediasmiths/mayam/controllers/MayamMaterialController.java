@@ -52,6 +52,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
@@ -79,6 +80,9 @@ public class MayamMaterialController extends MayamController
 	@Inject
 	private FileFormatVerification fileformatVerification;
 
+	@Inject
+	private MayamAccessRightsController accessRightsController;
+	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
 	{
@@ -220,10 +224,19 @@ public class MayamMaterialController extends MayamController
 				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
 			}
 
+			AttributeMap newAsset = null;
+			try{
+				newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
+			}
+			catch(Exception e){
+				log.error("error determining access rights for new asset",e);
+				newAsset = attributes.getAttributes();
+			}
+			
 			AttributeMap result;
 			try
 			{
-				result = client.assetApi().createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(newAsset);
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
@@ -499,10 +512,19 @@ public class MayamMaterialController extends MayamController
 				throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
 			}
 
+			AttributeMap newAsset = null;
+			try{
+				newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
+			}
+			catch(Exception e){
+				log.error("error determining access rights for new asset",e);
+				newAsset = attributes.getAttributes();
+			}
+			
 			AttributeMap result;
 			try
 			{
-				result = client.assetApi().createAsset(attributes.getAttributes());
+				result = client.assetApi().createAsset(newAsset);
 				if (result == null)
 				{
 					log.warn("Mayam failed to create Material");
