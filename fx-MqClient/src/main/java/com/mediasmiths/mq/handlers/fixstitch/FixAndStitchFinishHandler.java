@@ -27,12 +27,15 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
 		try{
-			String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			String assetID = (String) messageAttributes.getAttribute(Attribute.ASSET_ID);
+			String materialID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
+			AssetType assetType = (AssetType) messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 					
 			final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
 			if (lists != null) 
 			{
+				log.info(String.format("%d segment lists found for material %s", lists.size(), materialID));
+				
 				for (SegmentList segmentList : lists)
 				{
 					String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);

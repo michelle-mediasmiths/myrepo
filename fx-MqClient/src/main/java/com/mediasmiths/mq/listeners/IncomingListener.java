@@ -35,6 +35,7 @@ import com.mediasmiths.mq.handlers.button.export.ComplianceProxy;
 import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
@@ -148,6 +149,8 @@ public class IncomingListener extends MqClientListener
 	QcParallel qcParallelButton;
 	@Inject
 	UnmatchedTaskCreateHandler unmatchedTaskCreate;
+	@Inject
+	ConformJobHandler conformJobHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -310,6 +313,10 @@ public class IncomingListener extends MqClientListener
 				{
 					passEventToHandler(ingestJobHandler, jobMessage);
 					passEventToHandler(unmatchedJobHandler, jobMessage);
+				}
+				else if(jobType.equals(JobType.CONFORM))
+				{
+					passEventToHandler(conformJobHandler, jobMessage);
 				}
 			}
 		}

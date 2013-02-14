@@ -120,4 +120,52 @@ public class JaxModule extends AbstractModule
 		return marshaller;
 	}
 
+	@Provides
+	@Singleton
+	@Named("placeholderManagement.context")
+	JAXBContext provideplaceholderManagementJAXBContext() throws JAXBException
+	{
+		JAXBContext jc = null;
+		try
+		{
+			jc = JAXBContext.newInstance("au.com.foxtel.cf.mam.pms");
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create jaxb context", e);
+			throw e;
+		}
+		return jc;
+	}
+
+	@Provides
+	@Singleton
+	@Named("placeholderManagement.serialiser")
+	JAXBSerialiser providePHMJAXBSerialiser(@Named("placeholderManagement.context") JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
+	}
+	
+	@Provides
+	@Singleton
+	@Named("placeholderManagement.marshaller")
+	Marshaller providePHMMarshaller(@Named("placeholderManagement.context") JAXBContext jc) throws JAXBException, SAXException
+	{
+		Marshaller marshaller = null;
+		try
+		{
+			marshaller = jc.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create marshaller", e);
+			throw e;
+		}
+		return marshaller;
+	}
+	
 }
