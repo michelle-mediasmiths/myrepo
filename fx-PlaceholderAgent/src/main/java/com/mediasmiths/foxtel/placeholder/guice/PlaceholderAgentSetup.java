@@ -4,7 +4,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.agent.WatchedFilesConfigModule;
 import com.mediasmiths.foxtel.agent.guice.WatchFolderLocationsModule;
-import com.mediasmiths.foxtel.channels.config.ChannelValidatorModule;
+import com.mediasmiths.foxtel.channels.config.ChannelConfigModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
@@ -18,7 +18,7 @@ public class PlaceholderAgentSetup implements GuiceSetup {
 	@Override
 	public void registerModules(List<Module> modules, PropertyFile config) {
 		modules.add(new PlaceholderAgentModule());
-		modules.add(new ChannelValidatorModule());
+		modules.add(new ChannelConfigModule());
 		modules.add(new WatchFolderLocationsModule());
 		modules.add(new WatchedFilesConfigModule());
 		

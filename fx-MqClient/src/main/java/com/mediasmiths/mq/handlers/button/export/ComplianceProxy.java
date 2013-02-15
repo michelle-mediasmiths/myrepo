@@ -15,6 +15,10 @@ public class ComplianceProxy extends ExportProxyButton
 	@Named("export.compliance.foldername")
 	private String outputFolderName;
 	
+	@Inject
+	@Named("export.compliance.path.prefix")
+	private String outputPrefix;
+	
 	@Override
 	public MayamButtonType getButtonType()
 	{
@@ -31,7 +35,7 @@ public class ComplianceProxy extends ExportProxyButton
 	protected String getTranscodeDestination(AttributeMap materialAttributes)
 	{
 		String exportLocation = getExportLocationForFirstChannel(materialAttributes);
-		return String.format("%s/%s",exportLocation,outputFolderName);
+		return String.format("%s/%s/%s",outputPrefix,exportLocation,outputFolderName);
 	}
 
 	@Override

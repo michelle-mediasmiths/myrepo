@@ -15,10 +15,10 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 	@Named("channel.formats")
 	private PropertyFile channelFormats;
 	@Inject
-	@Named("channel.groups.map")
+	@Named("channel.groups")
 	private PropertyFile channelGroupsMap;
 	@Inject
-	@Named("groups.export.path.map")
+	@Named("groups.export.paths")
 	private PropertyFile channelGroupsExportPaths;
 	
 	@Inject

@@ -17,7 +17,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
-import com.mediasmiths.foxtel.channels.config.ChannelValidator;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.validation.MayamValidator;
@@ -39,17 +39,17 @@ public class PlaceholderMessageValidator extends
 
 	private final MayamClient mayamClient;
 	private final MayamValidator mayamValidator;
-	private final ChannelValidator channelValidator;
+	private final ChannelProperties channelValidator;
 
 	@Inject
 	public PlaceholderMessageValidator(Unmarshaller unmarshaller,
 			MayamClient mayamClient, MayamValidator mayamValidator,
 			ReceiptWriter receiptWriter, SchemaValidator schemaValidator,
-			ChannelValidator channelValidator) throws SAXException {
+			ChannelProperties channelProperties) throws SAXException {
 		super(unmarshaller, receiptWriter, schemaValidator);
 		this.mayamClient = mayamClient;
 		this.mayamValidator = mayamValidator;
-		this.channelValidator = channelValidator;
+		this.channelValidator = channelProperties;
 	}
 
 	@Override

@@ -33,8 +33,8 @@ import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
-import com.mediasmiths.foxtel.channels.config.ChannelValidator;
-import com.mediasmiths.foxtel.channels.config.ChannelValidatorImpl;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.channels.config.ChannelPropertiesImpl;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.guice.PlaceholderAgentModule;
@@ -64,7 +64,7 @@ public abstract class PlaceholderManagerTest {
 	protected ReceiptWriter receiptWriter;
 	
 	protected PlaceholderMessageValidator validator;
-	protected ChannelValidator channelValidator;
+	protected ChannelProperties channelValidator;
 	protected EventService events;
 
 	public PlaceholderManagerTest() throws JAXBException, SAXException {
@@ -104,7 +104,7 @@ public abstract class PlaceholderManagerTest {
 			}
 		};
 		receiptWriter = mock(ReceiptWriter.class);
-		channelValidator = new ChannelValidatorImpl();
+		channelValidator = new ChannelPropertiesImpl();
 		try {
 			validator = new PlaceholderMessageValidator(unmarhsaller,
 					mayamClient, mayamValidator, receiptWriter,
@@ -192,7 +192,7 @@ public abstract class PlaceholderManagerTest {
 			// we dont need to continue to monitor the message folder as we are
 			// only picking up a single file for this test
 			bind(FilePickUpProcessingQueue.class).to(FilePickUpFromDirectories.class);
-			bind(ChannelValidator.class).to(ChannelValidatorImpl.class);
+			bind(ChannelProperties.class).to(ChannelPropertiesImpl.class);
 		}
 		@Provides
 		protected EventAPI getEventService(

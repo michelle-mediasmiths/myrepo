@@ -16,17 +16,20 @@ public class PathResolverTestMultiplePaths
 	private final static String NIXPATH1 = "/storage/mam/hires01";
 	private final static String NIXPATH2 = "/storage/mam/hires02";
 	private final static String NIXPATH3 = "/storage/";
-	private final static String NIXPATH = String.format("%s,%s,%s", NIXPATH3, NIXPATH2,NIXPATH1);
+	private final static String NIXPATH4 = "/storage/mam/hires03";
+	private final static String NIXPATH = String.format("%s,%s,%s,%s",NIXPATH4, NIXPATH3, NIXPATH2,NIXPATH1);
 	
 	private final static String WINPATH1 = "f:";
 	private final static String WINPATH2 = "g:";
 	private final static String WINPATH3 = "h:";
-	private final static String WINPATH =  String.format("%s,%s,%s", WINPATH3, WINPATH2,WINPATH1);
+	private final static String WINPATH4 = "g:\\subfolderOfG";
+	private final static String WINPATH =  String.format("%s,%s,%s,%s",WINPATH4,WINPATH3, WINPATH2,WINPATH1);
 	
 	private final static String UNCPATH1 = "\\\\foxtel\\hires01";
 	private final static String UNCPATH2 = "\\\\foxtel\\hires02";
 	private final static String UNCPATH3 = "\\\\foxtel\\";
-	private final static String UNCPATH =  String.format("%s,%s,%s", UNCPATH3, UNCPATH2,UNCPATH1);
+	private final static String UNCPATH4 = "\\\\foxtel\\hires02\\subfolderOfG";
+	private final static String UNCPATH =  String.format("%s,%s,%s,%s",UNCPATH4, UNCPATH3, UNCPATH2,UNCPATH1);
 	
 	
 	private final static String USERFTPPREFIX = "ftp://user:pass@host.mediasmiths.com:2121";
@@ -34,7 +37,8 @@ public class PathResolverTestMultiplePaths
 	private final static String FTPPATH1 = "//some/path/to/storage/hi1";
 	private final static String FTPPATH2 = "//some/path/to/storage/hi2";
 	private final static String FTPPATH3 = "//some/path/";
-	private final static String FTPPATH = String.format("%s,%s,%s", FTPPATH3, FTPPATH2,FTPPATH1);
+	private final static String FTPPATH4 = "//some/path/to/storage/hi3";
+	private final static String FTPPATH = String.format("%s,%s,%s,%s",FTPPATH4, FTPPATH3, FTPPATH2,FTPPATH1);
 	
 	PathResolver toTest;
 
@@ -72,6 +76,13 @@ public class PathResolverTestMultiplePaths
 		
 		assertEquals(expected, output);
 
+		input = NIXPATH4 + "/my/important/folder";
+		output = toTest.winPath(PathType.NIX, input);
+		expected = WINPATH4 + "\\my\\important\\folder";
+		System.out.println("input : "+ input);
+		System.out.println("output : "+ output);
+		
+		assertEquals(expected, output);
 		
 	}
 	

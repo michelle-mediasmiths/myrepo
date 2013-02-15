@@ -31,7 +31,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
-import com.mediasmiths.foxtel.channels.config.ChannelValidator;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.util.Util;
@@ -48,7 +48,7 @@ public abstract class PlaceHolderMessageShortTest
 	protected PlaceholderMessageProcessor processor;
 	protected final MayamClient mayamClient = mock(MayamClient.class);
 	protected final MayamValidator mayamValidator = mock(MayamValidator.class);
-	protected final ChannelValidator channelValidator = new ChannelValidator()
+	protected final ChannelProperties ChannelProperties = new ChannelProperties()
 	{
 
 		@Override
@@ -67,6 +67,18 @@ public abstract class PlaceHolderMessageShortTest
 		public boolean isTagValid(String channelTag)
 		{
 			return true;
+		}
+
+		@Override
+		public String channelGroupForChannel(String channelTag)
+		{
+			return "group";
+		}
+
+		@Override
+		public String exportPathForChannelGroup(String channelGroupName)
+		{
+			return "path";
 		}
 	};
 	protected final AlertInterface alert = mock(AlertInterface.class);
@@ -113,7 +125,7 @@ public abstract class PlaceHolderMessageShortTest
 		Unmarshaller unmarhsaller = jc.createUnmarshaller();
 		Marshaller marshaller = jc.createMarshaller();
 		EventService events = mock(EventService.class);
-		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(), new SchemaValidator("PlaceholderManagement.xsd"), channelValidator);
+		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(), new SchemaValidator("PlaceholderManagement.xsd"), ChannelProperties);
 		processor = new PlaceholderMessageProcessor(new FilePickUpFromDirectories(new File[] {File.createTempFile("test", "test")}), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
 
 	}

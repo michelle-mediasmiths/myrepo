@@ -22,7 +22,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
-import com.mediasmiths.foxtel.channels.config.ChannelValidator;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.ReceiptWriterThatAlwaysReturnsUniqueFiles;
@@ -36,7 +36,7 @@ public class UnmarshallFailureTest {
 	protected MayamClient mayamClient = mock(MayamClient.class);
 	protected MayamValidator mayamValidator = mock(MayamValidator.class);
 	protected Unmarshaller unmarshaller = mock(Unmarshaller.class);
-	protected ChannelValidator channelValidator = mock(ChannelValidator.class);	
+	protected ChannelProperties channelValidator = mock(ChannelProperties.class);	
 	
 	@Before
 	public void beforeTest() throws SAXException{

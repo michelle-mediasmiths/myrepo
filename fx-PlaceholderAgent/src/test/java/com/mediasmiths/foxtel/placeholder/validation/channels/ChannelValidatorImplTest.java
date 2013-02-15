@@ -11,12 +11,13 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mediasmiths.foxtel.channels.config.ChannelValidatorImpl;
+import com.mediasmiths.foxtel.channels.config.ChannelPropertiesImpl;
+import com.mediasmiths.std.io.PropertyFile;
 
 public class ChannelValidatorImplTest {
-	ChannelValidatorImpl validator;
-	Properties channelProperties;
-	Properties formatProperties;
+	ChannelPropertiesImpl validator;
+	PropertyFile channelProperties;
+	PropertyFile formatProperties;
 	
 	public ChannelValidatorImplTest() {
 		super();
@@ -25,36 +26,36 @@ public class ChannelValidatorImplTest {
 	@Before 
 	public void setup()
 	{
-		channelProperties = mock(Properties.class);
-		formatProperties = mock(Properties.class);
-		validator = new ChannelValidatorImpl(channelProperties, formatProperties);
+		channelProperties = mock(PropertyFile.class);
+		formatProperties = mock(PropertyFile.class);
+		validator = new ChannelPropertiesImpl(channelProperties, formatProperties);
 	}
 	
 	@Test
 	public void isValidNameForTagSuccess() 
 	{
-		when(channelProperties.getProperty(anyString())).thenReturn("success");
+		when(channelProperties.get(anyString())).thenReturn("success");
 		assertTrue(validator.isValidNameForTag("channelTag", "success"));
 	}
 	
 	@Test
 	public void isValidNameForTagFail() 
 	{
-		when(channelProperties.getProperty(anyString())).thenReturn("failure");
+		when(channelProperties.get(anyString())).thenReturn("failure");
 		assertFalse(validator.isValidNameForTag("channelTag", "success"));	
 	}
 	
 	@Test
 	public void isValidFormatForTagSuccess() 
 	{
-		when(formatProperties.getProperty(anyString())).thenReturn("success");
+		when(formatProperties.get(anyString())).thenReturn("success");
 		assertTrue(validator.isValidFormatForTag("channelTag", "success"));	
 	}
 	
 	@Test
 	public void isValidFormatForTagFail() 
 	{
-		when(formatProperties.getProperty(anyString())).thenReturn("failure");
+		when(formatProperties.get(anyString())).thenReturn("failure");
 		assertFalse(validator.isValidFormatForTag("channelTag", "success"));	
 	}
 }

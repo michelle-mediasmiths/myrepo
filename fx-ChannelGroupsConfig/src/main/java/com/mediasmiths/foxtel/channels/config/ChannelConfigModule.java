@@ -43,7 +43,7 @@ public class ChannelConfigModule extends AbstractModule
 	
 	@Provides
 	@Singleton
-	@Named("groups.export.path.map")
+	@Named("groups.export.paths")
 	public PropertyFile provideChannelGroupsExportPaths(@Named("groups.export.path.map.config.location") String pathToPropertiesFile)
 	{
 

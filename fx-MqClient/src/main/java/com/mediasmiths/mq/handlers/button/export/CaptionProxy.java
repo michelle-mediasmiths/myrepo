@@ -10,8 +10,8 @@ public class CaptionProxy extends ExportProxyButton
 {
 
 	@Inject
-	@Named("export.caption.transcode.location")
-	private String transcodeDestination;
+	@Named("export.caption.path.prefix")
+	private String outputPath;
 	
 	@Override
 	public MayamButtonType getButtonType()
@@ -28,7 +28,7 @@ public class CaptionProxy extends ExportProxyButton
 	@Override
 	protected String getTranscodeDestination(AttributeMap materialAttributes)
 	{
-		return transcodeDestination;
+		return outputPath;
 	}
 
 	@Override

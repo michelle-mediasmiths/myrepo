@@ -13,6 +13,10 @@ public class PublicityProxy extends ExportProxyButton
 	@Named("export.publicity.foldername")
 	private String outputFolderName;
 	
+	@Inject
+	@Named("export.publicity.path.prefix")
+	private String outputPrefix;
+	
 	@Override
 	public MayamButtonType getButtonType()
 	{
@@ -29,7 +33,7 @@ public class PublicityProxy extends ExportProxyButton
 	protected String getTranscodeDestination(AttributeMap materialAttributes)
 	{
 		String exportLocation = getExportLocationForFirstChannel(materialAttributes);
-		return String.format("%s/%s",exportLocation,outputFolderName);
+		return String.format("%s/%s/%s",outputPrefix,exportLocation,outputFolderName);
 	}
 
 	@Override
