@@ -2,7 +2,9 @@ package com.mediasmiths.mq.handlers.button.export;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.mayam.MayamButtonType;
 
@@ -10,8 +12,8 @@ public class ComplianceProxy extends ExportProxyButton
 {
 
 	@Inject
-	@Named("export.compliance.transcode.location")
-	private String transcodeDestination;
+	@Named("export.compliance.foldername")
+	private String outputFolderName;
 	
 	@Override
 	public MayamButtonType getButtonType()
@@ -28,7 +30,8 @@ public class ComplianceProxy extends ExportProxyButton
 	@Override
 	protected String getTranscodeDestination(AttributeMap materialAttributes)
 	{
-		return transcodeDestination;
+		String exportLocation = getExportLocationForFirstChannel(materialAttributes);
+		return String.format("%s/%s",exportLocation,outputFolderName);
 	}
 
 	@Override

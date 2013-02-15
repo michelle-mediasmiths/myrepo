@@ -41,12 +41,6 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mediasmiths.std.dexter</groupId>
-			<artifactId>dexter-common</artifactId>
-			<version>${stdlib.version}</version>
-		</dependency>
-
 		<!-- reporting\events service -->
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>

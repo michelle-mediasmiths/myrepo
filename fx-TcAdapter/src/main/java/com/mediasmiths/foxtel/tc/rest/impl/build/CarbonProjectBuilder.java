@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mediasmiths.carbon.type.mutable.CarbonDestination;
+import com.mediasmiths.carbon.type.mutable.CarbonFTPUpload;
 import com.mediasmiths.carbon.type.mutable.CarbonModule;
 import com.mediasmiths.carbon.type.mutable.CarbonMultisourceModuleDataSimple;
 import com.mediasmiths.carbon.type.mutable.CarbonProject;
@@ -11,6 +12,7 @@ import com.mediasmiths.carbon.type.mutable.CarbonSource;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.tc.CarbonBaseProfile;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
+import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
@@ -46,6 +48,13 @@ public class CarbonProjectBuilder
 	@Named("carbon.bug-filter.filename")
 	String bugFilterResource = "pcp/filter-bug.xml";
 
+	/**
+	 * Classpath resrouce for the prototype ftpupload XML
+	 */
+	@Inject(optional = true)
+	@Named("carbon.ftpupload.filename")
+	String ftpUploadResource="pcp/ftpupload.xml";
+	
 	/**
 	 * The folder where Carbon bugs are placed. We expect the bugs to be named:
 	 * <pre><b>carbon.bug.folder.nix</b>/<b>CHANNEL</b>/bugs/<b>CHANNEL</b>_<b>HD/SD</b>_<b>TL/TR/BL/BR</b>.tga</pre>
@@ -93,9 +102,31 @@ public class CarbonProjectBuilder
 		if (parameters.description != null)
 			project.setDescription(parameters.description);
 
+		//optionally upload media to an ftp location then delete from intermediate 'output' location
+		CarbonFTPUpload ftpUpload = null;
+		
+		if(parameters.ftpupload != null)
+		{
+			ftpUpload = buildFTPUpload(parameters.ftpupload);
+		}
+		
 		setInputFile(project, parameters.inputFile);
 
-		setOutputFile(project, parameters.outputFolder, parameters.outputFileBasename);
+		setOutputFile(project, parameters.outputFolder, parameters.outputFileBasename,ftpUpload);		
+	}
+
+	private CarbonFTPUpload buildFTPUpload(TCFTPUpload ftpupload)
+	{
+		// Load bug filter resource template
+		final Element xml = loadXML(ftpUploadResource);
+		CarbonFTPUpload upload = new CarbonFTPUpload(xml);
+		upload.setRemoteFTPFile(ftpupload.filename);
+		upload.setRemoteFTPFolder(ftpupload.folder);
+		upload.setFTPPassword(ftpupload.password);
+		upload.setFTPUsername(ftpupload.user);
+		upload.setFTPServer(ftpupload.server);
+		
+		return upload;
 	}
 
 	private void addBug(final CarbonProject project, final TCBugOptions parameters, final TCResolution resolution)
@@ -271,7 +302,7 @@ public class CarbonProjectBuilder
 		}
 	}
 
-	private void setOutputFile(final CarbonProject project, final String outputFolder, final String outputFileBasename)
+	private void setOutputFile(final CarbonProject project, final String outputFolder, final String outputFileBasename, CarbonFTPUpload ftpUpload)
 	{
 		final String filepath = nixtoUNC(outputFolder);
 
@@ -281,6 +312,12 @@ public class CarbonProjectBuilder
 		                                                      filepath); // Set the filename too (so there's no reference to a local path no matter what the template XML says)
 		destination.setDestinationUNC(filepath);
 		destination.setDestinationBaseFilename(outputFileBasename);
+		
+		if(ftpUpload != null){
+			destination.addFTPUpload(ftpUpload); //add ftp upload to carbon destination
+			destination.addPostTranscodeDelete(); //delete file after performing ftp upload
+		}
+		
 	}
 
 	/**

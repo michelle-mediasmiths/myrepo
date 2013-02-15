@@ -56,4 +56,10 @@ public class TCJobParameters
 	 */
 	@XmlElement(required = true)
 	public int priority = 5;
+	
+	/**
+	 * Upload transcoded media to ftp location (if required)
+	 */
+	@XmlElement(required=false)
+	public TCFTPUpload ftpupload;
 }

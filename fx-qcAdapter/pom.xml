@@ -47,11 +47,6 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 
-		<dependency>
-			<groupId>com.mediasmiths.std.dexter</groupId>
-			<artifactId>dexter-common</artifactId>
-			<version>${stdlib.version}</version>
-		</dependency>
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
 

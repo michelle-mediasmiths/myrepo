@@ -25,13 +25,7 @@
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-MuleClient</artifactId>
 			<version>3.0-SNAPSHOT</version>			
-		</dependency>		
-			<!--  reporting\events service -->
-		<!--dependency>	
-			<groupId>com.mediasmiths.foxtel</groupId>
-			<artifactId>fx-Event</artifactId>
-			<version>${project.version}</version>			
-		</dependency-->			
+		</dependency>				
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -105,6 +99,11 @@
 			<version>${project.version}</version>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-ChannelGroupsConfig</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 	</dependencies>
 

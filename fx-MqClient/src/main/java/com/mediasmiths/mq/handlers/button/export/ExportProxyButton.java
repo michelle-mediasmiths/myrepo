@@ -8,12 +8,15 @@ import javax.xml.bind.JAXBException;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.DateUtil;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
+import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCLocation;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
@@ -30,9 +33,28 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 {
 	private final static Logger log = Logger.getLogger(ExportProxyButton.class);
 
-	 @Inject
-	 private MuleWorkflowController mule;
+	@Inject
+	private MuleWorkflowController mule;
+	
+	@Inject
+	@Named("export.ftp.user")
+	private String exportFTPUser;
 
+	@Inject
+	@Named("export.ftp.password")
+	private String exportFTPPassword;
+
+	@Inject
+	@Named("export.ftp.server")
+	private String exportFTPServer;
+
+	@Inject
+	@Named("export.transient.tc.output.location") //where transcoded files go before ftp upload + deletion
+	private String exportOutputLocation;
+	
+	@Inject
+	protected ChannelProperties channelProperties;
+	
 	@Override
 	protected void buttonClicked(AttributeMap materialAttributes)
 	{
@@ -83,6 +105,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			catch (MayamClientException e)
 			{
 				log.error("error constructing job params for export proxy", e);
+				taskController.failTaskWithMessage(taskID, "Error constructing transcode paramters");
 				return;
 			}
 
@@ -94,10 +117,12 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			catch (UnsupportedEncodingException e)
 			{
 				log.error("error initiating export workflow", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
 			}
 			catch (JAXBException e)
 			{
 				log.error("error initiating export workflow", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
 			}
 		}
 		else{
@@ -188,7 +213,15 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		jobParams.priority = getPriority(materialAttributes);
 
 		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
-		jobParams.outputFolder = getTranscodeDestination(materialAttributes) + "/" + taskID;
+		jobParams.outputFolder = exportOutputLocation + "/" + taskID;
+		
+		jobParams.ftpupload = new TCFTPUpload();
+		jobParams.ftpupload.filename=jobParams.outputFileBasename;
+		jobParams.ftpupload.folder=getTranscodeDestination(materialAttributes);
+		jobParams.ftpupload.user=exportFTPUser;
+		jobParams.ftpupload.password=exportFTPPassword;
+		jobParams.ftpupload.server=exportFTPServer;
+				
 		return jobParams;
 	}
 
@@ -289,6 +322,20 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		}
 
 		throw new IllegalArgumentException("unrecognised bug locaiton");
+	}
+	
+	protected String getExportLocationForFirstChannel(AttributeMap materialAttributes){
+		StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
+		
+		if(channels.size()==0){
+			throw new IllegalArgumentException("no channels found for material, cannot pick export location");
+		}
+		
+		String channelTag = channels.get(0);
+		String channelGroup = channelProperties.channelGroupForChannel(channelTag);
+		String exportLocation = channelProperties.exportPathForChannelGroup(channelGroup);
+		return exportLocation;
+		
 	}
 
 }

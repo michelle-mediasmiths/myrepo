@@ -61,7 +61,7 @@
 		<module>fx-report-ui</module>
   		<module>fx-IbmsHelper</module>
         <module>fx-heartbeat-api</module>
-
+		<module>fx-ChannelGroupsConfig</module>
     </modules>
 
 	<properties>
@@ -72,7 +72,7 @@
 		<worklists.version>0.9.9.9.31</worklists.version>
 		<mayam.wf.mq.version>0.9.9.9.14</mayam.wf.mq.version>
 		<mayam.wf.siteconfig.version>0.9.9.9.14</mayam.wf.siteconfig.version>
-		<stdlib.version>3.2.10</stdlib.version>
+		<stdlib.version>3.3.4</stdlib.version>
 		<events.version>1.10</events.version>
 		<commons.lang.version>2.5</commons.lang.version>
 	</properties>

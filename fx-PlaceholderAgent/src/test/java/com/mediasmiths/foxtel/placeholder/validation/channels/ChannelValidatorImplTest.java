@@ -11,6 +11,8 @@ import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mediasmiths.foxtel.channels.config.ChannelValidatorImpl;
+
 public class ChannelValidatorImplTest {
 	ChannelValidatorImpl validator;
 	Properties channelProperties;

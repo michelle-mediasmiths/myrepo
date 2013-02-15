@@ -34,11 +34,11 @@
 			<version>${stdlib.version}</version>
 		</dependency>
 
-		<dependency>
+		<!-- dependency>
 			<groupId>com.mediasmiths.std.dexter</groupId>
 			<artifactId>dexter-common</artifactId>
 			<version>${stdlib.version}</version>
-		</dependency>
+		</dependency-->
 		<!-- end mediasmiths dependencies -->
 	</dependencies>
 

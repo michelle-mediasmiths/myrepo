@@ -442,6 +442,35 @@ public class MayamTaskController extends MayamController
 		updateMap.setAttribute(Attribute.ASSET_ID, taskAttributes.getAttribute(Attribute.ASSET_ID));
 		updateMap.setAttribute(Attribute.TASK_ID, taskAttributes.getAttribute(Attribute.TASK_ID));
 		return updateMap;
+	}
+
+
+	public void failTaskWithMessage(long taskID, String message)
+	{
+		log.info(String.format("Failing task %d with error message {%s}",taskID,message));
+		
+		AttributeMap task;
+		try
+		{
+			task = getTask(taskID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error fetching tasks to with intent of marking it as failed",e);
+			return;
+		}
+		AttributeMap updateMapForTask = updateMapForTask(task);
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+		updateMapForTask.setAttribute(Attribute.ERROR_MSG, message);
+		try
+		{
+			saveTask(updateMapForTask);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error setting task to failed state",e);
+			return;
+		}
 	}	
 
 }
