@@ -275,7 +275,7 @@ public class MayamPackageController extends MayamController
 		}
 		
 		//didnt find anything from presentation information that came with material exchange xml, lets use the natural breaks field
-		String segNotes = material.getAttribute(Attribute.SEGMENTATION_NOTES);
+		String segNotes = material.getAttribute(Attribute.AUX_VAL);
 		
 		if(segNotes != null){
 			try{
