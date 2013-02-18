@@ -31,7 +31,7 @@ public class QcParallel extends ButtonClickHandler
 		
 		try
 		{
-			taskController.createPreviewTaskForMaterial(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+			taskController.createPreviewTaskForMaterial(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID), null);
 		}
 		catch (MayamClientException e)
 		{

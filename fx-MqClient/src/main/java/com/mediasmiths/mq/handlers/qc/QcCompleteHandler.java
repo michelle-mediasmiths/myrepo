@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.qc;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
@@ -33,7 +35,7 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 			if (!AssetProperties.isQCParallel(messageAttributes))
 			{
 				log.info("Asset has not been marked as qc parallel, creating preview task");
-				preview(houseID);
+				preview(houseID, (Date) messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
 			}
 			else
 			{
@@ -43,12 +45,12 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		
 	}
 	
-	private void preview(String houseID)
+	private void preview(String houseID, Date requiredByDate)
 	{
 		try
 		{
 
-			taskController.createPreviewTaskForMaterial(houseID);
+			taskController.createPreviewTaskForMaterial(houseID,requiredByDate);
 		}
 		catch (Exception e)
 		{

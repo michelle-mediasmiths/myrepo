@@ -116,12 +116,29 @@ public class MayamTaskController extends MayamController
 
 	}
 	
-	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
+	public long createPreviewTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException{
 		
 		log.info(String.format("Creating preview task for asset "+materialID));		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
+		
+		if(requiredByDate != null){
+			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+		}
+		
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW,initialAttributes);
+	}
+	
+	public long createFixStictchTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException{
+		
+		log.info(String.format("Creating preview task for asset "+materialID));		
+		AttributeMap initialAttributes = client.createAttributeMap();
+		
+		if(requiredByDate != null){
+			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+		}
+		
+		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.FIX_STITCH_EDIT,initialAttributes);
 	}
 	
 	public long createPurgeCandidateTask(MayamAssetType assetType, String siteID, int numberOfDays) throws MayamClientException{

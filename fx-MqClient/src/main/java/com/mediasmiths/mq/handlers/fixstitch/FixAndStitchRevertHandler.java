@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
@@ -28,9 +30,10 @@ public class FixAndStitchRevertHandler  extends TaskStateChangeHandler
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
 		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		Date requiredByDate = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
 		try
 		{
-			taskController.createPreviewTaskForMaterial(houseID);
+			taskController.createPreviewTaskForMaterial(houseID, requiredByDate);
 		}
 		catch (MayamClientException e)
 		{

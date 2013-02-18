@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.preview;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
@@ -96,9 +98,9 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 
 			if (fixeditrequired || stitcheditrequired)
 			{
-				String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-				createFixStitchTask(assetID, assetType);
+				String materialID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+				Date requiredByDate = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
+				createFixStitchTask(materialID, requiredByDate);
 			}
 
 			if (reorder)
@@ -111,9 +113,9 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 
 	}
 	
-	private void createFixStitchTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException
-	{
-		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.FIX_STITCH_EDIT);
+	private void createFixStitchTask(String materialID, Date requiredByDate) throws MayamClientException, RemoteException
+	{		
+		taskController.createFixStictchTaskForMaterial(materialID, requiredByDate);
 	}
 
 	private void createSegmentationTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException
