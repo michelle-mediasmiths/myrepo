@@ -45,13 +45,13 @@ public class QCDaoImpl extends HibernateDao<QC, Long> implements EventMarshaller
 		QC qc = new QC();
 		String qcStr = event.getPayload();
 		logger.trace("String recived: " +qcStr);
-		if (qcStr.contains("JobName"))
+		if (qcStr.contains("JobName>"))
 			qc.setJobName(qcStr.substring(qcStr.indexOf("JobName") +8, qcStr.indexOf("</JobName>")));
-		if (qcStr.contains("Title"))
+		if (qcStr.contains("Title>"))
 			qc.setTitle(qcStr.substring(qcStr.indexOf("Title")+6, qcStr.indexOf("</Title")));
-		if (qcStr.contains("AssetID"))
+		if (qcStr.contains("AssetID>"))
 			qc.setAssetId(qcStr.substring(qcStr.indexOf("AssetID") +8, qcStr.indexOf("</AssetID")));
-		if (qcStr.contains("ForTXDelivery")) {
+		if (qcStr.contains("ForTXDelivery>")) {
 			String bool = qcStr.substring(qcStr.indexOf("ForTXDelivery") +14, qcStr.indexOf("</ForTXDelivery>"));
 			if (bool.equals("true")) {
 				qc.setForTXDelivery(true);

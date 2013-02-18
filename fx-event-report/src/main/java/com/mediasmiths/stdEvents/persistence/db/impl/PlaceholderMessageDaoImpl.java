@@ -49,7 +49,7 @@ public class PlaceholderMessageDaoImpl extends HibernateDao<PlaceholderMessage, 
 		}
 		else
 		{
-			if (messageString.contains("Actions"))
+			if (messageString.contains("Actions>"))
 				message.setActions(messageString.substring(messageString.indexOf("Actions")+8, messageString.indexOf("/Actions")));
 			if (messageString.contains("senderID"))
 				message.setSenderID(messageString.substring(messageString.indexOf("senderID")+9, messageString.indexOf(' ', messageString.indexOf("senderID"))));
