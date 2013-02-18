@@ -194,6 +194,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		else
 		{
 			ret.purpose = TCOutputPurpose.TX_HD;
+			ret.resolution = TCResolution.HD;
 		}
 
 		// no timecode for tx delivery
