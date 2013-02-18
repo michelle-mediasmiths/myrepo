@@ -21,7 +21,7 @@ public class AssetProperties
 
 		String format = map.getAttribute(Attribute.CONT_FMT);
 
-		if (format.equals("SD"))
+		if (format != null && format.equals("SD"))
 		{
 			return true;
 		}

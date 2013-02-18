@@ -1,14 +1,21 @@
 package com.mediasmiths.mq.handlers.unmatched;
 
+import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.jasypt.encryption.pbe.CleanablePasswordBased;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -51,6 +58,9 @@ public class UnmatchedJobHandler extends JobHandler
 					AttributeMap updateMap = taskController.updateMapForAsset(material);
 					updateMap.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
 					
+					String fileName = getFileName((String)material.getAttribute(Attribute.ASSET_ID));
+					updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+					
 					try
 					{
 						tasksClient.assetApi().updateAsset(updateMap);
@@ -73,6 +83,23 @@ public class UnmatchedJobHandler extends JobHandler
 				}
 			}
 		}
+	}
+
+	private String getFileName(String assetID)
+	{
+		String path;
+		try
+		{
+			path = materialController.getAssetPath(assetID);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error getting path to file for asset "+ assetID);
+			return "";
+		}
+		
+		return FilenameUtils.getName(path);
+		
 	}
 
 	@Override

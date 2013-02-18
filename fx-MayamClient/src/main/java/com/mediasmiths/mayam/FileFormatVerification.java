@@ -119,14 +119,14 @@ public class FileFormatVerification
 		
 		String reqfmt = materialAttributes.getAttribute(Attribute.REQ_FMT);
 		boolean requiredFormatKnown = false;
-		boolean hd = false;
+		boolean sd = false;
 
 		if (reqfmt != null)
 		{
 			requiredFormatKnown = true;
-			if (reqfmt.toLowerCase().equals("hd"))
+			if (reqfmt.toLowerCase().equals("sd"))
 			{
-				hd = true;
+				sd = true;
 			}
 		}
 
@@ -205,15 +205,15 @@ public class FileFormatVerification
 
 		if (requiredFormatKnown)
 		{
-			if (hd)
+			if (sd)
 			{
-				boolean pass = performTests(sb, hdTests);
+				boolean pass = performTests(sb, sdTests);
 				log.info(sb.toString());
 				return pass;
 			}
 			else
 			{
-				boolean pass = performTests(sb, sdTests);
+				boolean pass = performTests(sb, hdTests);
 				log.info(sb.toString());
 				return pass;
 			}

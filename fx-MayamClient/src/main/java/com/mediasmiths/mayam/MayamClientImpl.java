@@ -76,8 +76,7 @@ public class MayamClientImpl implements MayamClient
 	MayamTaskController tasksController;
 	@Inject
 	MayamValidator validator;
-	@Inject
-	PathResolver pathResolver;
+
 
 	@Inject
 	public MayamClientImpl() throws MalformedURLException, IOException
@@ -428,38 +427,7 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap material = materialController.getMaterialAttributes(materialID);
 		
 		String assetID = material.getAttribute(Attribute.ASSET_ID);
-		
-		FileFormatInfo fileinfo;
-		try
-		{
-			fileinfo = client.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(), assetID);
-		}
-		catch (RemoteException e)
-		{
-			log.error("error getting file format info for material "+materialID,e);
-			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
-		}
-		
-		
-		List<String> urls = fileinfo.getUrls();
-		
-		if(urls == null || urls.size()==0){
-			log.error("no urls for media found!");
-			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
-		}
-		
-		String url = urls.get(0);
-		String nixPath;
-		try
-		{
-			nixPath = pathResolver.nixPath(PathType.FTP, url);
-			return nixPath;
-		}
-		catch (UnknownPathException e)
-		{
-			log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
-			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED,e);
-		}
+		return materialController.getAssetPath(assetID);
 	}
 
 	@Override

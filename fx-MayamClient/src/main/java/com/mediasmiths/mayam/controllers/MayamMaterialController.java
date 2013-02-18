@@ -42,6 +42,9 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.foxtel.pathresolver.PathResolver;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
+import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.mayam.FileFormatVerification;
 import com.mediasmiths.mayam.FileFormatVerificationFailureException;
 import com.mediasmiths.mayam.MayamAspectRatios;
@@ -82,6 +85,9 @@ public class MayamMaterialController extends MayamController
 
 	@Inject
 	private MayamAccessRightsController accessRightsController;
+	
+	@Inject
+	private PathResolver pathResolver;
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
@@ -1424,4 +1430,40 @@ public class MayamMaterialController extends MayamController
 			return markers;
 		}		
 	}
+	
+	public String getAssetPath(String assetID) throws MayamClientException{
+
+		FileFormatInfo fileinfo;
+		try
+		{
+			fileinfo = client.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(), assetID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error getting file format info for asset "+assetID,e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
+		}
+		
+		
+		List<String> urls = fileinfo.getUrls();
+		
+		if(urls == null || urls.size()==0){
+			log.error("no urls for media found!");
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
+		}
+		
+		String url = urls.get(0);
+		String nixPath;
+		try
+		{
+			nixPath = pathResolver.nixPath(PathType.FTP, url);
+			return nixPath;
+		}
+		catch (UnknownPathException e)
+		{
+			log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED,e);
+		}
+	}
+	
 }

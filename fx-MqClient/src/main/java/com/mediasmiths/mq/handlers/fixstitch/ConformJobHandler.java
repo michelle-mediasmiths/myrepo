@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.type.Job;
@@ -20,13 +21,16 @@ public class ConformJobHandler extends JobHandler
 		
 		String assetID = jobMessage.getAssetId();
 		
-		if(assetID == null){
-			log.error("asset id is null in CONFORM job message, I cant do anything");
+		if(StringUtils.isEmpty(assetID)){
+			log.error("asset id is null or empty in CONFORM job message, I cant do anything");
 			return;
 		}
 		
 		if(isConform && isFinished){
 			log.info(String.format("a conform job has finished for assetID %s", assetID));
+			
+			
+			
 			
 		}
 	}
