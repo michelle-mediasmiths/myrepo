@@ -128,6 +128,16 @@
                         <bpel:from>concat(concat($thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFolder/text(), $thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFileBasename/text()), ".gxf")</bpel:from>
                         <bpel:to>$TCFilePath</bpel:to><mapper:mapperLink><mapper:vertice id="31551280" targetPath="$TCFilePath" targetedBy="23607160-arg2"></mapper:vertice><mapper:vertice id="23607160" dimension="78x24" location="423,461"><mapper:value>concat()</mapper:value></mapper:vertice><mapper:vertice id="9404550" dimension="78x24" location="228,432" targetedBy="23607160-arg0"><mapper:value>concat()</mapper:value></mapper:vertice><mapper:vertice id="21972740" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFolder/text()" targetedBy="9404550-arg0"></mapper:vertice><mapper:vertice id="7814565" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFileBasename/text()" targetedBy="9404550-arg1"></mapper:vertice><mapper:vertice id="4210238" dimension="78x24" location="252,518" targetedBy="23607160-arg1"><mapper:value>".gxf"</mapper:value></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>"INCOMPLETE"</bpel:from>
+                        <bpel:to>$TranscodeJobResult</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="5633419" targetPath="$TranscodeJobResult" targetedBy="10485325-arg0"></mapper:vertice>
+  <mapper:vertice id="10485325" dimension="78x24" location="393,378">
+    <mapper:value>"INCOMPLETE"</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
             <bpel:scope bpdm:label="Attempt Transcode three Times" bpdm:ID="_CaKEsGuOEeK7FdvgH5F2kQ">

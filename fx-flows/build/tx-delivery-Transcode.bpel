@@ -161,6 +161,10 @@
         <bpel:from>concat(concat($thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFolder/text(), $thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:outputFileBasename/text()), ".gxf")</bpel:from>
         <bpel:to>$TCFilePath</bpel:to>
       </bpel:copy>
+      <bpel:copy>
+        <bpel:from>"INCOMPLETE"</bpel:from>
+        <bpel:to>$TranscodeJobResult</bpel:to>
+      </bpel:copy>
     </bpel:assign>
     <bpel:scope bpmn:label="Attempt Transcode three Times" name="Attempt_Transcode_three_Times" bpmn:id="_CaKEsGuOEeK7FdvgH5F2kQ">
       <bpel:variables>
