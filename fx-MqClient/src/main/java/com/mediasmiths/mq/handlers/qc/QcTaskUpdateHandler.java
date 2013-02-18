@@ -68,7 +68,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		{
 			qcResultSetManually(currentAttributes, after);
 		}				
-
+		
 	}
 
 	private void qcResultSetManually(AttributeMap currentAttributes, AttributeMap after)

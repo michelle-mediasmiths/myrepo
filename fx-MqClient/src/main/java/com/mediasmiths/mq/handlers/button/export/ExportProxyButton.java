@@ -13,6 +13,8 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.DateUtil;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
@@ -118,12 +120,32 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			{
 				log.error("error initiating export workflow", e);
 				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				return;
 			}
 			catch (JAXBException e)
 			{
 				log.error("error initiating export workflow", e);
 				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				return;
 			}
+			
+			//set task to active state
+			try
+			{
+				AttributeMap task;task = taskController.getTask(taskID);
+				AttributeMap updateMap = taskController.updateMapForTask(task);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+				taskController.saveTask(updateMap);
+			}
+			catch (RemoteException e)
+			{
+				log.error("error setting task "+ taskID + " to state ACTIVE",e);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error setting task "+ taskID + " to state ACTIVE",e);
+			}
+			
 		}
 		else{
 			log.info("Item is ao, will not attempt to export");

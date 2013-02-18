@@ -5,11 +5,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -19,6 +23,10 @@ import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 {
 	private final static Logger log = Logger.getLogger(UnmatchedTaskUpdateHandler.class);
+
+	@Inject
+	@Named("ff.sd.video.imagex")
+	private int sdVideoX = 720;
 
 	@Override
 	public String getName()
@@ -44,43 +52,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID)));
 
-				try
-				{
-					// Remove unmatched task from any task lists
-					AttributeMap filterEqualities = tasksClient.createAttributeMap();
-					filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
-					FilterCriteria criteria = new FilterCriteria();
-					criteria.setFilterEqualities(filterEqualities);
-					FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 50, 0);
-
-					if (existingTasks.getTotalMatches() > 0)
-					{
-						List<AttributeMap> tasks = existingTasks.getMatches();
-						for (int i = 0; i < existingTasks.getTotalMatches(); i++)
-						{
-							AttributeMap task = tasks.get(i);
-							TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-
-							if (!TaskState.CLOSED_STATES.contains(currentState))
-							{
-
-								task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-								try
-								{
-									taskController.saveTask(task);
-								}
-								catch (Exception e)
-								{
-									log.error("error removing task", e);
-								}
-							}
-						}
-					}
-				}
-				catch (Exception e)
-				{
-					log.error("error performing task search", e);
-				}
+				String format = getFormat(currentAttributes);
+				removeUnmatchedAssetFromTaskLists(assetID);
 
 				// Move media
 				tasksClient.assetApi().moveMediaEssence(
@@ -92,18 +65,14 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				// close unmatched task
 				closeTask(currentAttributes);
 
+				//get the id of the asset being matched to
 				String peerID = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+
+				//set the format (hd/sd, don't have a way of detecting 3d)
+				setFormat(peerID, format);
 
 				// close open ingest task for the target asset
 				closeIngestTaskForAsset(peerID);
-
-				// Create QC task
-				AttributeMap matchedAsset = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), peerID);
-				taskController.createQCTaskForMaterial(
-						matchedAsset.getAttributeAsString(Attribute.HOUSE_ID),
-						(Date) matchedAsset.getAttribute(Attribute.COMPLETE_BY_DATE),
-						matchedAsset.getAttributeAsString(Attribute.QC_PREVIEW_RESULT),
-						matchedAsset);
 			}
 		}
 		catch (Exception e)
@@ -113,6 +82,98 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 	}
 
+	private void setFormat(String peerID, String format)
+	{
+		AttributeMap peer;
+		try
+		{
+			peer = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), peerID);
+
+			AttributeMap updateMap = taskController.updateMapForAsset(peer);
+			updateMap.setAttribute(Attribute.CONT_FMT, format);
+			tasksClient.assetApi().updateAsset(updateMap);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error setting content format on asset " + peerID, e);
+		}
+	}
+
+	private String getFormat(AttributeMap currentAttributes) throws RemoteException
+	{
+		String format = "HD";
+		try
+		{
+			FileFormatInfo formatInfo = tasksClient.assetApi().getFormatInfo(
+					MayamAssetType.MATERIAL.getAssetType(),
+					(String) currentAttributes.getAttribute(Attribute.ASSET_ID));
+
+			if (formatInfo.getImageSizeX() <= sdVideoX)
+			{
+				format = "SD";
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error determining format for asset", e);
+			try
+			{
+				taskController.createWFEErorTask(
+						MayamAssetType.MATERIAL,
+						currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						"Error determining content format during unmatched asset workflow");
+			}
+			catch (MayamClientException e1)
+			{
+				log.error("error creating error task!", e1);
+			}
+
+		}
+
+		return format;
+	}
+
+	private void removeUnmatchedAssetFromTaskLists(String assetID)
+	{
+		try
+		{
+			// Remove unmatched task from any task lists
+			AttributeMap filterEqualities = tasksClient.createAttributeMap();
+			filterEqualities.setAttribute(Attribute.HOUSE_ID, assetID);
+			FilterCriteria criteria = new FilterCriteria();
+			criteria.setFilterEqualities(filterEqualities);
+			FilterResult existingTasks = tasksClient.taskApi().getTasks(criteria, 50, 0);
+
+			if (existingTasks.getTotalMatches() > 0)
+			{
+				List<AttributeMap> tasks = existingTasks.getMatches();
+				for (int i = 0; i < existingTasks.getTotalMatches(); i++)
+				{
+					AttributeMap task = tasks.get(i);
+					TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
+
+					if (!TaskState.CLOSED_STATES.contains(currentState))
+					{
+
+						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						try
+						{
+							taskController.saveTask(task);
+						}
+						catch (Exception e)
+						{
+							log.error("error removing task", e);
+						}
+					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error performing task search", e);
+		}
+	}
+
 	private void closeIngestTaskForAsset(String peerID)
 	{
 		AttributeMap task;
@@ -120,28 +181,29 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		{
 			task = taskController.getTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
 
-			if(task == null){
-				log.warn("no ingest task found for assetID "+ peerID);
+			if (task == null)
+			{
+				log.warn("no ingest task found for assetID " + peerID);
 				return;
 			}
-			
+
 			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-			
-			if(TaskState.CLOSED_STATES.contains(currentState)){
-				log.warn("Ingest task for asset is already in a closed state  "+ currentState);
+
+			if (TaskState.CLOSED_STATES.contains(currentState))
+			{
+				log.warn("Ingest task for asset is already in a closed state  " + currentState);
 				return;
 			}
-			
+
 			log.info(String.format("Import finished for asset %s (%s)", task.getAttributeAsString(Attribute.HOUSE_ID), peerID));
 			AttributeMap updateMap = taskController.updateMapForTask(task);
 			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 			updateMap.setAttribute(Attribute.INGEST_NOTES, "Unmatched asset matched to this placeholder");
-			updateMap.setAttribute(Attribute.CONT_FMT, task.getAttribute(Attribute.REQ_FMT));
 			taskController.saveTask(updateMap);
 		}
 		catch (MayamClientException e)
 		{
-			log.error("Error closing ingest task for asset " + peerID);
+			log.error("Error closing ingest task for asset " + peerID,e);
 		}
 	}
 
