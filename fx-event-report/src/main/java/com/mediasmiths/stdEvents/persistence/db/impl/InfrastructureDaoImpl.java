@@ -35,13 +35,13 @@ public class InfrastructureDaoImpl extends HibernateDao<Infrastructure, Long> im
 		logger.info("Setting Infrastructure for event");
 		Infrastructure inf = new Infrastructure();
 		String str = event.getPayload();
-		if (str.contains("FileSystemReference")) {
+		if (str.contains("FileSystemReference>")) {
 			inf.setFileSystemReference(str.substring(str.indexOf("FileSystemReference")+20, str.indexOf("</FileSystemReference")));
 		}
-		if (str.contains("MegaBytesUsed")) {
+		if (str.contains("MegaBytesUsed>")) {
 			inf.setMegaBytesUsed(str.substring(str.indexOf("MegaBytesUsed")+13, str.indexOf("</MegaBytesUsed")));
 		}
-		if (str.contains("MegaBytesFree")) {
+		if (str.contains("MegaBytesFree>")) {
 			inf.setMegaBytesFree(str.substring(str.indexOf("MegaBytesFree")+14, str.indexOf("</MegaBytesFree")));
 		}
 		return inf;

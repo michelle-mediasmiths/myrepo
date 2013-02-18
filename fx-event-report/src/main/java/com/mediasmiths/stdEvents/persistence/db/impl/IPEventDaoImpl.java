@@ -42,19 +42,19 @@ public class IPEventDaoImpl extends HibernateDao<IPEvent, Long> implements Event
 		IPEvent ip = new IPEvent();
 		String str = event.getPayload();
 		
-		if (str.contains("PickUpKind"))
+		if (str.contains("PickUpKind>"))
 			ip.setPickUpKind(str.substring(str.indexOf("PickUpKind") +11, str.indexOf("</PickUpKind")));
-		if (str.contains("FilePath"))
+		if (str.contains("FilePath>"))
 			ip.setFilePath(str.substring(str.indexOf("FilePath") +9, str.indexOf("</FilePath")));
-		if (str.contains("WaitTime"))
+		if (str.contains("WaitTime>"))
 			ip.setWaitTime(str.substring(str.indexOf("WaitTime") +9, str.indexOf("</WaitTime")));
-		if (str.contains("Source"))
+		if (str.contains("Source>"))
 			ip.setSource(str.substring(str.indexOf("Source") +7, str.indexOf("</Source")));
-		if (str.contains("Target"))
+		if (str.contains("Target>"))
 			ip.setTarget(str.substring(str.indexOf("Target") +7, str.indexOf("</Target")));
-		if (str.contains("FailureShortDesc"))
+		if (str.contains("FailureShortDesc>"))
 			ip.setFailureShortDesc(str.substring(str.indexOf("FailureShortDesc") +17, str.indexOf("</FailureShortDesc")));
-		if (str.contains("FailureLongDescription"))
+		if (str.contains("FailureLongDescription>"))
 			ip.setFailureLongDescription(str.substring(str.indexOf("FailureLongDescription") +23, str.indexOf("</FailureLongDescription")));
 	
 		return ip;

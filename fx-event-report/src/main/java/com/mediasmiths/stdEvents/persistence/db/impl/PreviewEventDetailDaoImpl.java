@@ -33,11 +33,11 @@ public class PreviewEventDetailDaoImpl extends HibernateDao<PreviewEventDetail, 
 		PreviewEventDetail preview = new PreviewEventDetail();
 		String str = event.getPayload();
 		logger.trace(str);
-		if (str.contains("MasterID"))
+		if (str.contains("MasterID>"))
 			preview.setMasterId(str.substring(str.indexOf("MasterID")+9, str.indexOf("</MasterID")));
-		if (str.contains("Title"))
+		if (str.contains("Title>"))
 			preview.setTitle(str.substring(str.indexOf("Title")+6, str.indexOf("</Title")));
-		if (str.contains("PreviewStatus"))
+		if (str.contains("PreviewStatus>"))
 			preview.setPreviewStatus(str.substring(str.indexOf("PreviewStatus")+14, str.indexOf("</PreviewStatus")));
 		return preview;
 	}

@@ -36,13 +36,13 @@ public class DeliveryDaoImpl extends HibernateDao<DeliveryDetails, Long> impleme
 		DeliveryDetails delivery = new DeliveryDetails();
 		String str = event.getPayload();
 		logger.trace(str);
-		if (str.contains("MasterID"))
-			delivery.setMasterId(str.substring(str.indexOf("MasterID")+9, str.indexOf("</MasterID")));
-		if (str.contains("Title"))
+		if (str.contains("MasterID>"))
+			delivery.setMasterId(str.substring(str.indexOf("MasterID")+8, str.indexOf("</MasterID")));
+		if (str.contains("Title>"))
 			delivery.setTitle(str.substring(str.indexOf("Title")+6, str.indexOf("</Title")));
-		if (str.contains("FileLocation"))
+		if (str.contains("FileLocation>"))
 			delivery.setFileLocation(str.substring(str.indexOf("FileLocation")+13, str.indexOf("</FileLocation")));
-		if (str.contains("Delivered")) {
+		if (str.contains("Delivered>")) {
 			String delivered = str.substring(str.indexOf("Delivered")+10, str.indexOf("</Delivered"));
 			if (delivered.equals("true"))
 				delivery.setDelivered(true);

@@ -19,13 +19,18 @@
        		<table id="deliveryTable" class="table table-striped tablesorter">
        			<thead>
        				<tr>
-       					<th>TitleID</th>
-
+       					<th>MasterID</th>
+						<th>Title</th>
+						<th>FileLocation</th>
+						<th>Delivered</th>
        				</tr>
        			</thead>
        			<tbody>
        				<tr th:each="delivery: ${deliveries}">
-       					<td th:text="${delivery.titleID}">titleID</td>
+       					<td th:text="${delivery.masterId}">masterId</td>
+       					<td th:text="${delivery.title}">title</td>
+       					<td th:text="${delivery.fileLocation}">fileLocation</td>
+       					<td th:text="${delivery.delivered}">delivered</td>
        				</tr>
        			</tbody>
        		</table>
