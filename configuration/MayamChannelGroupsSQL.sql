@@ -29,3 +29,6 @@ INSERT INTO MayamChannelGroups VALUES(20, 'MO6', 'MV');
 INSERT INTO MayamChannelGroups VALUES(21, 'MO7', 'MV');   
 INSERT INTO MayamChannelGroups VALUES(22, 'SHF', 'MV');     
 INSERT INTO MayamChannelGroups VALUES(23, 'SHH', 'MV');              
+INSERT INTO MayamChannelGroups VALUES(24, 'WWW', 'GE');
+INSERT INTO MayamChannelGroups VALUES(25, 'EVE', 'ME');
+INSERT INTO MayamChannelGroups VALUES(26, 'AES', 'FC');

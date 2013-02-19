@@ -526,8 +526,8 @@ public class MayamTitleController extends MayamController{
 					
 					boolean isProtected =false;
 					log.debug("updating protected attribute ...");
-					if(attributes.getAttributes().getAttribute(Attribute.AUX_FLAG) != null){
-						 isProtected = attributes.getAttributes().getAttribute(Attribute.AUX_FLAG);
+					if(attributes.getAttributes().getAttribute(Attribute.PURGE_PROTECTED) != null){
+						 isProtected = attributes.getAttributes().getAttribute(Attribute.PURGE_PROTECTED);
 					}
 					
 					boolean titleIsPurgeProtected = false;
