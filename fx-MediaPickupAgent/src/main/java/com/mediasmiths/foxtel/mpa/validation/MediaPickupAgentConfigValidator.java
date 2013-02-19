@@ -1,11 +1,8 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MXF_NOT_TOUCHED_PERIOD;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.XML_NOT_TOUCHED_PERIOD;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +19,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 	
 	@Inject
 	public MediaPickupAgentConfigValidator(
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount
@@ -31,15 +27,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 		super();
 
 		boolean anyFailures = false;
-
-		if (haveReadWritePermissions(emergencyImportFolder)) {
-			configValidationPasses(ARDOME_EMERGENCY_IMPORT_FOLDER,
-					emergencyImportFolder);
-		} else {
-			anyFailures = true;
-			configValidationFails(ARDOME_EMERGENCY_IMPORT_FOLDER,
-					emergencyImportFolder);
-		}
 
 		if (isValidLong(companionTimeout)) {
 			configValidationPasses(MEDIA_COMPANION_TIMEOUT, companionTimeout);

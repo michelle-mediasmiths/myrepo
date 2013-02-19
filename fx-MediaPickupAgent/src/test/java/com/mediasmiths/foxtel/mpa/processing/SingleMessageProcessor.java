@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import java.io.File;
 
@@ -33,11 +32,10 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService){
 		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
 				receiptWriter, unmarhsaller,marshaller, mayamClient, matchMaker,
-				mediaCheck, emergencyImportFolder,eventService);
+				mediaCheck, eventService);
 	}
 
 	protected static Logger logger = Logger

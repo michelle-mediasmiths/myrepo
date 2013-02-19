@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +47,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	// matches mxf and xml files together
 	private final MatchMaker matchMaker;
 
-	private final String emergencyImportFolder;
 	public MediaPickupProcessor(
 			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
@@ -59,7 +57,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService)
 	{
 		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
@@ -67,8 +64,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
 		this.mediaCheck = mediaCheck;
-		this.emergencyImportFolder=emergencyImportFolder;
-		logger.debug("Using emergency import folder "+emergencyImportFolder);
 	}
 
 	protected Logger logger = Logger.getLogger(MediaPickupProcessor.class);
@@ -236,51 +231,15 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		
 	}
 	
-	private void moveFileToEmergencyImportFolder(File mxf)
-	{
-		logger.info(String.format(
-				"File %s has invalid companion xml, moving to emergency import folder",
-				mxf.getAbsolutePath()));
-		logger.debug(String.format("Failure folder is: %s ", emergencyImportFolder));
-
-		try {
-			moveFileToFolder(mxf, emergencyImportFolder,true);
-		} catch (IOException e) {
-			logger.error(String.format(
-					"IOException moving invalid file %s to %s",
-					mxf.getAbsolutePath(), emergencyImportFolder), e);
-			
-			// send out alert that material could not be transferd to
-			// emergency import folder
-			StringBuilder sb = new StringBuilder();
-			sb.append(String
-					.format("There has been a failure to deliver material %s with invalid companion xml to the Viz Ardome emergency import folder",
-							FilenameUtils.getName(mxf.getAbsolutePath())));
-			eventService.saveEvent("error",sb.toString());	
-		}
-	}
 	
 	private void createPendingImportIfValid(File mxf,
 			MediaEnvelope materialEnvelope) {
-
-		if (mediaCheck.mediaCheck(mxf, materialEnvelope)) {
 
 			// we have an xml and an mxf, add pending import
 			PendingImport pendingImport = new PendingImport(mxf,
 					materialEnvelope);
 
 			filesPendingImport.add(pendingImport);
-		} else {
-			logger.error(String.format(
-					"Media check of Material %s failed",
-					FilenameUtils.getName(mxf.getAbsolutePath())));
-			
-			moveFileToEmergencyImportFolder(mxf);
-			moveFileToFailureFolder(materialEnvelope.getFile());
-			
-			// send out alert that there has been an error
-			eventService.saveEvent("failure", materialEnvelope.getMessage());
-		}
 	}
 	
 	protected String getIDFromMessage(MessageEnvelope<T> envelope) {

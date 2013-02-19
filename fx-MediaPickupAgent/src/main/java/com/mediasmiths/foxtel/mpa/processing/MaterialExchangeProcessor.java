@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
@@ -40,7 +39,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
 			MediaCheck mediaCheck,
-			@Named(ARDOME_EMERGENCY_IMPORT_FOLDER) String emergencyImportFolder,
 			EventService eventService){
 		super(filePathsPendingProcessing,
 			filesPendingImport,
@@ -51,7 +49,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			mayamClient,
 			matchMaker,
 			mediaCheck,
-			 emergencyImportFolder,
 			eventService);
 	}
 

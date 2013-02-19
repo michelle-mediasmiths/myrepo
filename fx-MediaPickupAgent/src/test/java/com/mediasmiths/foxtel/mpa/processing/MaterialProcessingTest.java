@@ -85,7 +85,6 @@ public abstract class MaterialProcessingTest {
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath =	TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
-		emergencyImportPath = TestUtil.prepareTempFolder("EMERGENCYIMPORT");
 		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
@@ -93,7 +92,7 @@ public abstract class MaterialProcessingTest {
 
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, mediaCheck,emergencyImportPath,eventService);
+				mayamClient, matchMaker, mediaCheck,eventService);
 
 		
 		processorThread = new Thread(processor);

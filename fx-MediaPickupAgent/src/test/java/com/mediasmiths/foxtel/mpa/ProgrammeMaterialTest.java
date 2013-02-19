@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.mpa;
 
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_EMERGENCY_IMPORT_FOLDER;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.ARDOME_IMPORT_FOLDER;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -139,10 +137,6 @@ public class ProgrammeMaterialTest {
 		propertyFile.merge(PropertyFile.find("service.properties"));
 
 		Properties overridenProperties = new Properties();
-		overridenProperties.put(ARDOME_IMPORT_FOLDER,
-				ardomeImportFolder);
-		overridenProperties.put(ARDOME_EMERGENCY_IMPORT_FOLDER,
-				ardomeEmergencyImportFolder);
 		overridenProperties.put(MEDIA_COMPANION_TIMEOUT, companionTimeout);
 		propertyFile.merge(overridenProperties);
 

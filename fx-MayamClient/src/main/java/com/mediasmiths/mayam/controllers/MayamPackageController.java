@@ -274,31 +274,33 @@ public class MayamPackageController extends MayamController
 			}
 		}
 		
-		//didnt find anything from presentation information that came with material exchange xml, lets use the natural breaks field
-		String segNotes = material.getAttribute(Attribute.AUX_VAL);
+		//MAM-41  dont populate semgents with original conform information
 		
-		if(segNotes != null){
-			try{
-				List<Segment> originalConform = SegmentUtil.stringToSegmentList(segNotes);
-				
-				if(txPackage.getNumberOfSegments() != null && txPackage.getNumberOfSegments().intValue() != originalConform.size()){
-					
-					log.info(String.format("number of required segments for package %s doesnt match the nubmer of segments in the original conform, not prepopulating segmentation info", txPackage.getPresentationID()));
-					return null; // the number of segments did not match the required number, not going to return the original conform segmentation info
-				}
-				
-				Segmentation s = new Segmentation();
-				s.getSegment().addAll(originalConform);
-				return s;
-			}
-			catch(Exception e){
-				log.error("error selecting segmentation info for tx package from natural break fields",e);
-			}
-		
-		}
-		else{
-			log.info("Segmentation notes are null for "+materialId);
-		}
+//		//didnt find anything from presentation information that came with material exchange xml, lets use the natural breaks field
+//		String segNotes = material.getAttribute(Attribute.AUX_VAL);
+//		
+//		if(segNotes != null){
+//			try{
+//				List<Segment> originalConform = SegmentUtil.stringToSegmentList(segNotes);
+//				
+//				if(txPackage.getNumberOfSegments() != null && txPackage.getNumberOfSegments().intValue() != originalConform.size()){
+//					
+//					log.info(String.format("number of required segments for package %s doesnt match the nubmer of segments in the original conform, not prepopulating segmentation info", txPackage.getPresentationID()));
+//					return null; // the number of segments did not match the required number, not going to return the original conform segmentation info
+//				}
+//				
+//				Segmentation s = new Segmentation();
+//				s.getSegment().addAll(originalConform);
+//				return s;
+//			}
+//			catch(Exception e){
+//				log.error("error selecting segmentation info for tx package from natural break fields",e);
+//			}
+//		
+//		}
+//		else{
+//			log.info("Segmentation notes are null for "+materialId);
+//		}
 		
 		return null;
 	}
