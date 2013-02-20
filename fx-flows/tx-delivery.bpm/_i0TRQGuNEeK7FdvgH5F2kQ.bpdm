@@ -130,11 +130,15 @@
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>"INCOMPLETE"</bpel:from>
-                        <bpel:to>$TranscodeJobResult</bpel:to>
+                        <bpel:to>$TranscodeJobResult</bpel:to><mapper:mapperLink><mapper:vertice id="5633419" targetPath="$TranscodeJobResult" targetedBy="10485325-arg0"></mapper:vertice><mapper:vertice id="10485325" dimension="78x24" location="393,378"><mapper:value>"INCOMPLETE"</mapper:value></mapper:vertice></mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>""</bpel:from>
+                        <bpel:to>$TranscodeJobID</bpel:to>
 <mapper:mapperLink>
-  <mapper:vertice id="5633419" targetPath="$TranscodeJobResult" targetedBy="10485325-arg0"></mapper:vertice>
-  <mapper:vertice id="10485325" dimension="78x24" location="393,378">
-    <mapper:value>"INCOMPLETE"</mapper:value>
+  <mapper:vertice id="18619622" targetPath="$TranscodeJobID" targetedBy="25272819-arg0"></mapper:vertice>
+  <mapper:vertice id="25272819" dimension="78x24" location="429,99">
+    <mapper:value>""</mapper:value>
   </mapper:vertice>
 </mapper:mapperLink>
                     </bpel:copy>

@@ -104,6 +104,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String ping()
 	{
+		log.info("Ping request receivied");
 		return "ping";
 	}
 

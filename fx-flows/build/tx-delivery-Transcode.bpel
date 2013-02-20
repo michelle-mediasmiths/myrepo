@@ -165,6 +165,10 @@
         <bpel:from>"INCOMPLETE"</bpel:from>
         <bpel:to>$TranscodeJobResult</bpel:to>
       </bpel:copy>
+      <bpel:copy>
+        <bpel:from>""</bpel:from>
+        <bpel:to>$TranscodeJobID</bpel:to>
+      </bpel:copy>
     </bpel:assign>
     <bpel:scope bpmn:label="Attempt Transcode three Times" name="Attempt_Transcode_three_Times" bpmn:id="_CaKEsGuOEeK7FdvgH5F2kQ">
       <bpel:variables>
