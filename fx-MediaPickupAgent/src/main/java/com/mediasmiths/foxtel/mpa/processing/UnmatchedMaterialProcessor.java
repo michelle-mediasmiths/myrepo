@@ -46,6 +46,10 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 	private MayamClient mayamClient;
 	
 	@Inject
+	@Named("ao.quarrentine.folder")
+	private String aoQuarrentineFolder;
+	
+	@Inject
 	public UnmatchedMaterialProcessor(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
@@ -111,7 +115,7 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 			String destinationFolder;
 			
 			if(watchFolders.isAo(sourceFolder)){
-				destinationFolder = MessageProcessor.getFailureFolderForFile(new File(mxf.getFilePath()));
+				destinationFolder = aoQuarrentineFolder;
 			}
 			else{
 				destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getFilePath()));
