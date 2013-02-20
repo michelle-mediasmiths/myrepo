@@ -116,29 +116,20 @@
 </dd:process><dd:process xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:workflow" fileName="qc-workflow.bpel">
   <dd:property name="PATH">qc</dd:property>
   <dd:property name="SVG">qc.svg</dd:property>
-  <dd:provide partnerLink="callerAndWorkflowPlkVar">
-    <dd:service name="this:CanonicServiceForcaller" port="canonicPort"></dd:service>
-  </dd:provide>
-  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk0Var">
-    <dd:service name="assetTransferForQC:restService" port="httpPort"></dd:service>
-  </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk4Var">
-    <dd:service name="getProfileForQC:restService" port="httpPort"></dd:service>
-  </dd:invoke>
   <dd:invoke partnerLink="qcadapterAndWorkflowForHttpPortPlk3Var">
     <dd:service name="qcStart:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="qcadapterAndWorkflowForHttpPortPlk0Var">
     <dd:service name="qcFinished:restService" port="httpPort"></dd:service>
   </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk5Var">
-    <dd:service name="isTaskCancelled:restService" port="httpPort"></dd:service>
-  </dd:invoke>
   <dd:invoke partnerLink="qcadapterAndWorkflowForHttpPortPlk1Var">
     <dd:service name="qcJobCancel:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="qcadapterAndWorkflowForHttpPortPlk2Var">
     <dd:service name="qcResult:restService" port="httpPort"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk5Var">
+    <dd:service name="isTaskCancelled:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk3Var">
     <dd:service name="autoQcPassed:restService" port="httpPort"></dd:service>
@@ -149,6 +140,15 @@
   <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk1Var">
     <dd:service name="autoQcError:restService" port="httpPort"></dd:service>
   </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk0Var">
+    <dd:service name="assetTransferForQC:restService" port="httpPort"></dd:service>
+  </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk4Var">
+    <dd:service name="getProfileForQC:restService" port="httpPort"></dd:service>
+  </dd:invoke>
+  <dd:provide partnerLink="callerAndWorkflowPlkVar">
+    <dd:service name="this:CanonicServiceForcaller" port="canonicPort"></dd:service>
+  </dd:provide>
 </dd:process><dd:process xmlns:caller="http://ns.mediasmithsforge.com/foxtel/export/caller" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:Pool="http://ns.mediasmithsforge.com/foxtel/export/Pool" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcadapter="http://ns.mediasmithsforge.com/foxtel/export/tcadapter" xmlns:dd="http://www.apache.org/ode/schemas/dd/2007/03" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="this:transcode" fileName="export-transcode.bpel">
   <dd:property name="PATH">export</dd:property>
   <dd:property name="SVG">export.svg</dd:property>
