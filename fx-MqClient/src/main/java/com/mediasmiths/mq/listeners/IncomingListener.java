@@ -263,6 +263,8 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchCancelHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
+				//initiate tx handler is present for both task create and state change in order to enable 'retry'
+				passEventToHandler(initiateTxHandler, currentAttributes);
 			}
 		}
 		catch (Exception e)
