@@ -31,8 +31,7 @@ public class QcParallel extends ButtonClickHandler
 			log.error("error setting qc parallel allow flag on asset ",e);
 		}
 		
-		QcStatus qcStatus = messageAttributes.getAttribute(Attribute.QC_STATUS);
-		if(!AssetProperties.isMaterialPlaceholder(messageAttributes) && (null == qcStatus || qcStatus == QcStatus.TBD)) {
+		if(!AssetProperties.isMaterialPlaceholder(messageAttributes) && ! AssetProperties.isQCStatusDetermined(messageAttributes)) {
 			log.info("QC Parallel: creating preview task _ item is not a place holder and QC status is not set ");
 			
 			try

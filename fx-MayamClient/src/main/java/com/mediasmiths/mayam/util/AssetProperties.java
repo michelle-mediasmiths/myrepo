@@ -112,6 +112,26 @@ public class AssetProperties
 
 	}
 
+	public static boolean isQCStatusDetermined(AttributeMap materialAttributes)
+	{
+
+		QcStatus qcStatus = materialAttributes.getAttribute(Attribute.QC_STATUS);
+
+		if (qcStatus == null)
+		{
+			return false;
+		}
+		else if (qcStatus.equals(QcStatus.TBD))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+
+	}
+
 	public static boolean isPurgeProtected(AttributeMap asset)
 	{
 
