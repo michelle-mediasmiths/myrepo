@@ -262,20 +262,24 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	protected void moveFileToFailureFolder(File file){
 		
 		String message;
-		try{
-			if(FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase().equals("xml")){
+		try
+		{
+			if (FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase().equals("xml"))
+			{
 				message = FileUtils.readFileToString(file);
 			}
-			else{
+			else
+			{
 				message = file.getAbsolutePath();
 			}
 		}
-		catch(IOException e){
-			logger.warn("IOException reading "+file.getAbsolutePath(),e);
+		catch (IOException e)
+		{
+			logger.warn("IOException reading " + file.getAbsolutePath(), e);
 			message = file.getAbsolutePath();
 		}
-		eventService.saveEvent("error",message);
-		
+		eventService.saveEvent("error", message);
+
 		super.moveFileToFailureFolder(file);
 	}
 	

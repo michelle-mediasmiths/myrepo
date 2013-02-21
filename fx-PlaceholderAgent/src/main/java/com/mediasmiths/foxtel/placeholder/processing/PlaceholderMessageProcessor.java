@@ -278,23 +278,28 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 
 	@Override
-	protected void moveFileToFailureFolder(File file){
-		
+	protected void moveFileToFailureFolder(File file)
+	{
+
 		String message;
-		try{
-			if(FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase().equals("xml")){
+		try
+		{
+			if (FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase().equals("xml"))
+			{
 				message = FileUtils.readFileToString(file);
 			}
-			else{
+			else
+			{
 				message = file.getAbsolutePath();
 			}
 		}
-		catch(IOException e){
-			logger.warn("IOException reading "+file.getAbsolutePath(),e);
+		catch (IOException e)
+		{
+			logger.warn("IOException reading " + file.getAbsolutePath(), e);
 			message = file.getAbsolutePath();
 		}
-		eventService.saveEvent("failed",message);
-		
+		eventService.saveEvent("failed", message);
+
 		super.moveFileToFailureFolder(file);
 	}
 	

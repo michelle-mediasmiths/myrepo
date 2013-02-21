@@ -142,27 +142,27 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			catch (PackageNotFoundException pnfe)
 			{
 				log.error("package not found when attempting to initiate tx delivery!", pnfe);
-				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (UnsupportedEncodingException e)
 			{
 				log.error("error invoking tx delivery", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (JAXBException e)
 			{
 				log.error("error invoking tx delivery", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (MayamClientException e)
 			{
 				log.error("error getting materials location or fetching delivery location for package", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (MuleException e)
 			{
 				log.error("error initiating tx delivery",e);
-				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 
 		}

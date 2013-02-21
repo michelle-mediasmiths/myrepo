@@ -108,12 +108,12 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			catch (MayamClientException e)
 			{
 				log.error("error constructing job params for export proxy", e);
-				taskController.failTaskWithMessage(taskID, "Error constructing transcode paramters");
+				taskController.setTaskToErrorWithMessage(taskID, "Error constructing transcode paramters");
 				return;
 			}
 			catch(Exception e){
 				log.error("error constructing job params for export proxy", e);
-				taskController.failTaskWithMessage(taskID, e.getMessage());
+				taskController.setTaskToErrorWithMessage(taskID, e.getMessage());
 				return;
 			}
 
@@ -125,19 +125,19 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			catch (UnsupportedEncodingException e)
 			{
 				log.error("error initiating export workflow", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
 				return;
 			}
 			catch (JAXBException e)
 			{
 				log.error("error initiating export workflow", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
 				return;
 			}
 			catch (MuleException e)
 			{
 				log.error("error initiating export workflow", e);
-				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
 				return;
 			}
 			

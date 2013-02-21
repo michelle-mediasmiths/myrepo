@@ -462,7 +462,7 @@ public class MayamTaskController extends MayamController
 	}
 
 
-	public void failTaskWithMessage(long taskID, String message)
+	public void setTaskToErrorWithMessage(long taskID, String message)
 	{
 		log.info(String.format("Failing task %d with error message {%s}",taskID,message));
 		
@@ -477,7 +477,7 @@ public class MayamTaskController extends MayamController
 			return;
 		}
 		AttributeMap updateMapForTask = updateMapForTask(task);
-		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		updateMapForTask.setAttribute(Attribute.ERROR_MSG, message);
 		try
 		{

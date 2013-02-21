@@ -252,7 +252,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		catch (Exception e)
 		{
 			log.error("Error initiating auto qc : ", e);
-			taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+			taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 		}
 	}
 
