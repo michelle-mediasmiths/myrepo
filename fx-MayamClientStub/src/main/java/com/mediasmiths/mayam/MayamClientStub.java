@@ -603,7 +603,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
+	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
 	{
 		log.info("returning empty attriburte map from mayam client stub");
 		return new AttributeMap();

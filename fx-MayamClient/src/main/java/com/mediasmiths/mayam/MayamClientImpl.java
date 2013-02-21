@@ -437,9 +437,9 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
+	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
 	{
-		return tasksController.getTaskForAssetBySiteID(type, id);
+		return tasksController.getOnlyTaskForAssetBySiteID(type, id);
 	}
 
 	@Override
@@ -454,7 +454,7 @@ public class MayamClientImpl implements MayamClient
 
 		log.info(String.format("Failing task of type %s for asset %s", type.getText(), id));
 
-		AttributeMap task = this.getTaskForAsset(type, id);
+		AttributeMap task = this.getOnlyTaskForAsset(type, id);
 		task.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
 		this.saveTask(task);
 	}

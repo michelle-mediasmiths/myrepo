@@ -345,19 +345,19 @@ public class MayamTaskController extends MayamController
 		return returnCode;
 	}
 
-	public AttributeMap getTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException
+	public AttributeMap getOnlyTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException
 	{
-		return getTaskForAssetByID(type, siteid, Attribute.HOUSE_ID);
+		return getTaskForAssetByID(type, siteid, Attribute.HOUSE_ID,1);
 
 	}
 
-	public AttributeMap getTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
+	public AttributeMap getOnlyTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
 	{
-		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID);
+		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
 
 	}
 
-	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute)
+	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute, int expectedResultCount)
 			throws MayamClientException
 	{
 		log.info(String.format(
@@ -376,9 +376,9 @@ public class MayamTaskController extends MayamController
 			result = client.taskApi().getTasks(criteria, 10, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
-			if (result.getTotalMatches() != 1)
+			if (result.getTotalMatches() != expectedResultCount)
 			{
-				log.error("unexpected number of results for search expected 1 got " + result.getTotalMatches());
+				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
 				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 

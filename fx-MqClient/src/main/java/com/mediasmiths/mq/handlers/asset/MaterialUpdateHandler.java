@@ -102,7 +102,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 					
 					if (presentationFlag != null && presentationFlag.equals(Boolean.TRUE))
 					{	
-						AttributeMap task = taskController.getTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
+						AttributeMap task = taskController.getOnlyTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
 						if (task != null) 
 						{
 							log.info("Presentation flag for " + materialID + "set, removing purge candidate task"); 

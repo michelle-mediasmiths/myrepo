@@ -232,7 +232,7 @@ public interface MayamClient
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public AttributeMap getTaskForAsset(MayamTaskListType type, String assetid) throws MayamClientException;
+	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String assetid) throws MayamClientException;
 
 	/**
 	 * Save the given task

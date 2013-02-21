@@ -941,7 +941,7 @@ public class MayamMaterialController extends MayamController
 					{
 						try
 						{
-							AttributeMap compLoggingTask = taskController.getTaskForAssetBySiteID(
+							AttributeMap compLoggingTask = taskController.getOnlyTaskForAssetBySiteID(
 									MayamTaskListType.COMPLIANCE_LOGGING,
 									material.getMaterialID());
 							if (compLoggingTask != null)
@@ -955,7 +955,7 @@ public class MayamMaterialController extends MayamController
 								}
 							}
 
-							AttributeMap ingestTask = taskController.getTaskForAssetBySiteID(
+							AttributeMap ingestTask = taskController.getOnlyTaskForAssetBySiteID(
 									MayamTaskListType.INGEST,
 									material.getMaterialID());
 							if (ingestTask != null)
