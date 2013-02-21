@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class IngestCompleteHandler extends TaskStateChangeHandler
@@ -32,6 +33,11 @@ public class IngestCompleteHandler extends TaskStateChangeHandler
 			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
 			
 			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus,messageAttributes);
+			
+			if (AssetProperties.isQCParallel(messageAttributes)) {
+				log.info(String.format("QC Parallel is set for item with house id %s, creating preview task for it", assetID));
+				taskController.createPreviewTaskForMaterial(assetID, requiredby);
+			}
 			
 		}
 		catch (Exception e)

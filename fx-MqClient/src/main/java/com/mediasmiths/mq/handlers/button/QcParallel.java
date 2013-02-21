@@ -5,6 +5,8 @@ import org.mortbay.log.Log;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -29,15 +31,19 @@ public class QcParallel extends ButtonClickHandler
 			log.error("error setting qc parallel allow flag on asset ",e);
 		}
 		
-		try
-		{
-			taskController.createPreviewTaskForMaterial(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID), null);
+		QcStatus qcStatus = messageAttributes.getAttribute(Attribute.QC_STATUS);
+		if(!AssetProperties.isMaterialPlaceholder(messageAttributes) && (null == qcStatus)) {
+			log.info("QC Parallel: creating preview task _ item is not a place holder and QC status is not set ");
+			
+			try
+			{
+				taskController.createPreviewTaskForMaterial(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID), null);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error creating preview task for material",e);
+			}
 		}
-		catch (MayamClientException e)
-		{
-			log.error("error creating preview task for material",e);
-		}
-		
 	}
 
 	@Override
