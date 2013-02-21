@@ -159,6 +159,7 @@
 					<xs:element name="title" type="xs:string" />
 					<xs:element name="materialID" type="xs:string"/>
 					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="contentType" type="xs:string"/>
 					<xs:element name="operator" type="xs:string"/>
 					<xs:element name="taskStatus" type="xs:string"/>
 					<xs:element name="qcStatus" type="xs:string"/>

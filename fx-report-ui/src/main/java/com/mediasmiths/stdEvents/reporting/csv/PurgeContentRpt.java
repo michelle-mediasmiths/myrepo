@@ -39,7 +39,7 @@ public class PurgeContentRpt
 		ICsvBeanWriter beanWriter = null;
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "purgedContentCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "channel", "mediaID", "purgeStatus", "protectedStatus", "extendedStatus", "size"};
+			final String[] header = {"dateRange", "entityType", "title", "materialID", "channels", "isProtected", "extended", "purged", "expires"};
 			final CellProcessor[] processors = getPurgeProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -84,15 +84,23 @@ public class PurgeContentRpt
 			String payload = event.getPayload();
 			Purge purge = new Purge();
 			purge.setDateRange(startDate.toString() + " - " + endDate.toString());
-			if (payload.contains("titleID"))
-				purge.setMediaID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
-			if (payload.contains("PurgeStatus"))
-				purge.setPurgeStatus(payload.substring(payload.indexOf("PurgeStatus")+12, payload.indexOf("</PurgeStatus")));
-			if (payload.contains("ProtectedStatus"))
-				purge.setProtectedStatus(payload.substring(payload.indexOf("ProtectedStatus")+16, payload.indexOf("</ProtectedStatus")));
-			if (payload.contains("ExtendedStatus"))
-				purge.setExtendedStatus(payload.substring(payload.indexOf("ExtendedStatus")+15, payload.indexOf("</ExtendedStatus")));
-			purgeList.add(purge);
+			
+			if (event.getEventName().equals("PurgeTitle"))
+			{
+				purge.setEntityType("Subprogramme");
+				if (payload.contains("titleID"))
+					purge.setMaterialID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
+			}
+				
+				
+				
+//			if (payload.contains("PurgeStatus"))
+//				purge.setPurgeStatus(payload.substring(payload.indexOf("PurgeStatus")+12, payload.indexOf("</PurgeStatus")));
+//			if (payload.contains("ProtectedStatus"))
+//				purge.setProtectedStatus(payload.substring(payload.indexOf("ProtectedStatus")+16, payload.indexOf("</ProtectedStatus")));
+//			if (payload.contains("ExtendedStatus"))
+//				purge.setExtendedStatus(payload.substring(payload.indexOf("ExtendedStatus")+15, payload.indexOf("</ExtendedStatus")));
+//			purgeList.add(purge);
 			
 			List<EventEntity> channelEvents = queryApi.getByEventName("CreateOrUpdateTitle");
 			for (EventEntity channelEvent : channelEvents)
@@ -103,7 +111,7 @@ public class PurgeContentRpt
 					String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
 					if (curTitle.equals(channelTitle)) {
 						if (str.contains("channelName"))
-							purge.setChannel(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
+							purge.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
 					}
 				}
 			}
@@ -116,6 +124,8 @@ public class PurgeContentRpt
 	public CellProcessor[] getPurgeProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
+				new Optional(),
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),

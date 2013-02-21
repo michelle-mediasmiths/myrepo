@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.report.entity;
 public class AcquisitionDelivery
 {
 	String dateRange;
+	String title;
 	String materialID;
 	String channels;
 	String aggregatorID;
@@ -16,18 +17,19 @@ public class AcquisitionDelivery
 	{
 	}
 	
-	public AcquisitionDelivery(String materialID, String channels)
+	public AcquisitionDelivery(String title, String materialID)
 	{
 		super();
+		this.title = title;
 		this.materialID = materialID;
-		this.channels = channels;
 	}
 
 	public AcquisitionDelivery(String materialID, String channels, String aggregatorID, String tape, String file,
-			String format,String fileSize,String duration, String dateRange)
+			String format,String fileSize,String duration, String dateRange, String title)
 	{
 		super();
 		this.dateRange = dateRange;
+		this.title = title;
 		this.materialID = materialID;
 		this.channels = channels;
 		this.aggregatorID = aggregatorID;
@@ -38,6 +40,16 @@ public class AcquisitionDelivery
 		this.duration = duration;
 	}
 
+
+	public String getTitle()
+	{
+		return title;
+	}
+
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 
 	public String getDateRange()
 	{

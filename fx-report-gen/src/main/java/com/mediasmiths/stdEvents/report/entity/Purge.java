@@ -3,41 +3,47 @@ package com.mediasmiths.stdEvents.report.entity;
 public class Purge
 {
 	String dateRange;
-	String channel;
-	String mediaID;
-	String purgeStatus;
-	String protectedStatus;
-	String extendedStatus;
-	String size;
+	String entityType;
+	String title;
+	String materialID;
+	String channels;
+	String isProtected;
+	String extended;
+	String purged;
+	String expires;
 	
 	public Purge()
 	{
 	}
-	
-	public Purge(String channel, String mediaID)
+
+	public Purge(String entityType, String title)
 	{
 		super();
-		this.channel = channel;
-		this.mediaID = mediaID;
+		this.entityType = entityType;
+		this.title = title;
 	}
 
 	public Purge(
 			String dateRange,
-			String channel,
-			String mediaID,
-			String purgeStatus,
-			String protectedStatus,
-			String extendedStatus,
-			String size)
+			String entityType,
+			String title,
+			String materialID,
+			String channels,
+			String isProtected,
+			String extended,
+			String purged,
+			String expores)
 	{
 		super();
 		this.dateRange = dateRange;
-		this.channel = channel;
-		this.mediaID = mediaID;
-		this.purgeStatus = purgeStatus;
-		this.protectedStatus = protectedStatus;
-		this.extendedStatus = extendedStatus;
-		this.size = size;
+		this.entityType = entityType;
+		this.title = title;
+		this.materialID = materialID;
+		this.channels = channels;
+		this.isProtected = isProtected;
+		this.extended = extended;
+		this.purged = purged;
+		this.expires = expores;
 	}
 
 	public String getDateRange()
@@ -50,63 +56,83 @@ public class Purge
 		this.dateRange = dateRange;
 	}
 
-	public String getChannel()
+	public String getEntityType()
 	{
-		return channel;
+		return entityType;
 	}
 
-	public void setChannel(String channel)
+	public void setEntityType(String entityType)
 	{
-		this.channel = channel;
+		this.entityType = entityType;
 	}
 
-	public String getMediaID()
+	public String getTitle()
 	{
-		return mediaID;
+		return title;
 	}
 
-	public void setMediaID(String mediaID)
+	public void setTitle(String title)
 	{
-		this.mediaID = mediaID;
+		this.title = title;
 	}
 
-	public String getPurgeStatus()
+	public String getMaterialID()
 	{
-		return purgeStatus;
+		return materialID;
 	}
 
-	public void setPurgeStatus(String purgeStatus)
+	public void setMaterialID(String materialID)
 	{
-		this.purgeStatus = purgeStatus;
+		this.materialID = materialID;
 	}
 
-	public String getProtectedStatus()
+	public String getChannels()
 	{
-		return protectedStatus;
+		return channels;
 	}
 
-	public void setProtectedStatus(String protectedStatus)
+	public void setChannels(String channels)
 	{
-		this.protectedStatus = protectedStatus;
+		this.channels = channels;
 	}
 
-	public String getExtendedStatus()
+	public String getIsProtected()
 	{
-		return extendedStatus;
+		return isProtected;
 	}
 
-	public void setExtendedStatus(String extendedStatus)
+	public void setIsProtected(String isProtected)
 	{
-		this.extendedStatus = extendedStatus;
+		this.isProtected = isProtected;
 	}
 
-	public String getSize()
+	public String getExtended()
 	{
-		return size;
+		return extended;
 	}
 
-	public void setSize(String size)
+	public void setExtended(String extended)
 	{
-		this.size = size;
+		this.extended = extended;
+	}
+
+	public String getPurged()
+	{
+		return purged;
+	}
+
+	public void setPurged(String purged)
+	{
+		this.purged = purged;
+	}
+
+	public String getExpires()
+	{
+		return expires;
+	}
+
+	public void setExpires(String expires)
+	{
+		this.expires = expires;
 	}
 }

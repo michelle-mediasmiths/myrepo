@@ -11,6 +11,8 @@ public class AutoQC
 	String taskStatus;
 	String qcStatus;
 	String taskStart;
+	String taskFinish;
+	String warningTime;
 	String manualOverride;
 	String failureParameter;
 	String titleLength;
@@ -18,17 +20,26 @@ public class AutoQC
 	public AutoQC() 
 	{
 	}
-	
+
+	public AutoQC(String title, String materialID)
+	{
+		super();
+		this.title = title;
+		this.materialID = materialID;
+	}
+
 	public AutoQC(
 			String dateRange,
 			String title,
 			String materialID,
 			String channels,
-			String content,
+			String contentType,
 			String operator,
 			String taskStatus,
 			String qcStatus,
 			String taskStart,
+			String taskFinish,
+			String warningTime,
 			String manualOverride,
 			String failureParameter,
 			String titleLength)
@@ -38,21 +49,16 @@ public class AutoQC
 		this.title = title;
 		this.materialID = materialID;
 		this.channels = channels;
-		this.contentType = content;
+		this.contentType = contentType;
 		this.operator = operator;
 		this.taskStatus = taskStatus;
 		this.qcStatus = qcStatus;
 		this.taskStart = taskStart;
+		this.taskFinish = taskFinish;
+		this.warningTime = warningTime;
 		this.manualOverride = manualOverride;
 		this.failureParameter = failureParameter;
 		this.titleLength = titleLength;
-	}
-
-	public AutoQC(String title, String materialID)
-	{
-		super();
-		this.title = title;
-		this.materialID = materialID;
 	}
 
 	public String getDateRange()
@@ -145,6 +151,26 @@ public class AutoQC
 		this.taskStart = taskStart;
 	}
 
+	public String getTaskFinish()
+	{
+		return taskFinish;
+	}
+
+	public void setTaskFinish(String taskFinish)
+	{
+		this.taskFinish = taskFinish;
+	}
+
+	public String getWarningTime()
+	{
+		return warningTime;
+	}
+
+	public void setWarningTime(String warningTime)
+	{
+		this.warningTime = warningTime;
+	}
+
 	public String getManualOverride()
 	{
 		return manualOverride;
@@ -174,7 +200,4 @@ public class AutoQC
 	{
 		this.titleLength = titleLength;
 	}
-	
-	
-	
 }
