@@ -191,6 +191,27 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
+	<xs:complexType name="PurgeContent">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The Export report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:IPEvent">
+				<xs:sequence>
+					<xs:element name="entityType" type="xs:string" />
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="isProtected" type="xs:string"/>
+					<xs:element name="extended" type="xs:string"/>
+					<xs:element name="purged" type="xs:string"/>
+					<xs:element name="expires" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
 	<xs:complexType name="ComplianceLogging">
 		<xs:complexContent>
 			<xs:annotation>
