@@ -4,45 +4,52 @@ public class OrderStatus
 {
 	String dateRange;
 	String status;
-	String titleID;
-	String orderRef;
+	String title;
+	String materialID;
 	String channel;
+	String orderRef;
+	String requiredBy;
+	String completedInDateRange;
+	String overdueInDateRange;
 	String aggregatorID;
 	String taskType;
-	String ingestDate;
-	String requiredBy;
+	String completionDate;
 	
 	public OrderStatus()
 	{
 	}
 	
-	public OrderStatus(String s, String tID)
+	public OrderStatus(String t, String mID)
 	{
-		status = s;
-		titleID = tID;
+		title = t;
+		materialID = mID;
 	}
-	
+
 	public OrderStatus(
 			String dateRange,
-			String status,
-			String titleID,
-			String orderRef,
+			String title,
+			String materialID,
 			String channel,
+			String orderRef,
+			String requiredBy,
+			String completedInDateRange,
+			String overdueInDateRange,
 			String aggregatorID,
 			String taskType,
-			String ingestDate,
-			String requiredBy)
+			String completionDate)
 	{
 		super();
 		this.dateRange = dateRange;
-		this.status = status;
-		this.titleID = titleID;
-		this.orderRef = orderRef;
+		this.title = title;
+		this.materialID = materialID;
 		this.channel = channel;
+		this.orderRef = orderRef;
+		this.requiredBy = requiredBy;
+		this.completedInDateRange = completedInDateRange;
+		this.overdueInDateRange = overdueInDateRange;
 		this.aggregatorID = aggregatorID;
 		this.taskType = taskType;
-		this.ingestDate = ingestDate;
-		this.requiredBy = requiredBy;
+		this.completionDate = completionDate;
 	}
 
 	public String getDateRange()
@@ -55,24 +62,34 @@ public class OrderStatus
 		this.dateRange = dateRange;
 	}
 
-	public String getStatus()
+	public String getTitle()
 	{
-		return status;
+		return title;
 	}
 
-	public void setStatus(String status)
+	public void setTitle(String title)
 	{
-		this.status = status;
+		this.title = title;
 	}
 
-	public String getTitleID()
+	public String getMaterialID()
 	{
-		return titleID;
+		return materialID;
 	}
 
-	public void setTitleID(String titleID)
+	public void setMaterialID(String materialID)
 	{
-		this.titleID = titleID;
+		this.materialID = materialID;
+	}
+
+	public String getChannel()
+	{
+		return channel;
+	}
+
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
 	}
 
 	public String getOrderRef()
@@ -85,14 +102,34 @@ public class OrderStatus
 		this.orderRef = orderRef;
 	}
 
-	public String getChannel()
+	public String getRequiredBy()
 	{
-		return channel;
+		return requiredBy;
 	}
 
-	public void setChannel(String channel)
+	public void setRequiredBy(String requiredBy)
 	{
-		this.channel = channel;
+		this.requiredBy = requiredBy;
+	}
+
+	public String getCompletedInDateRange()
+	{
+		return completedInDateRange;
+	}
+
+	public void setCompletedInDateRange(String completedInDateRange)
+	{
+		this.completedInDateRange = completedInDateRange;
+	}
+
+	public String getOverdueInDateRange()
+	{
+		return overdueInDateRange;
+	}
+
+	public void setOverdueInDateRange(String overdueInDateRange)
+	{
+		this.overdueInDateRange = overdueInDateRange;
 	}
 
 	public String getAggregatorID()
@@ -115,25 +152,26 @@ public class OrderStatus
 		this.taskType = taskType;
 	}
 
-	public String getIngestDate()
+	public String getCompletionDate()
 	{
-		return ingestDate;
+		return completionDate;
 	}
 
-	public void setIngestDate(String ingestDate)
+	public void setCompletionDate(String completionDate)
 	{
-		this.ingestDate = ingestDate;
+		this.completionDate = completionDate;
 	}
 
-	public String getRequiredBy()
+	public String getStatus()
 	{
-		return requiredBy;
+		return status;
 	}
 
-	public void setRequiredBy(String requiredBy)
+	public void setStatus(String status)
 	{
-		this.requiredBy = requiredBy;
+		this.status = status;
 	}
-
+	
+	
 	
 }

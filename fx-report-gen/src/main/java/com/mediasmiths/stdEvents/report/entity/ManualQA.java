@@ -4,35 +4,61 @@ public class ManualQA
 {
 	String dateRange;
 	String title;
-	String assetID;
+	String materialID;
+	String channel;
 	String operator;
 	String aggregatorID;
-	String qaStatus;
-	String duration;
-	String channel;
+	String taskStatus;
+	String previewStatus;
+	String hrPreview;
+	String hrPreviewRequested;
+	String escalated;
+	String timeEscalated;
+	String titleLength;
+	String reordered;
 	
 	public ManualQA ()
 	{
 	}
 	
-	public ManualQA(String title, String assetID)
+	public ManualQA(String title, String materialID)
 	{
 		super();
 		this.title = title;
-		this.assetID = assetID;
+		this.materialID = materialID;
 	}
 
-	public ManualQA(String dateRange, String title, String assetID, String operator, String aggregatorID, String qaStatus, String duration, String channel)
+	public ManualQA(
+			String dateRange,
+			String title,
+			String materialID,
+			String channel,
+			String operator,
+			String aggregatorID,
+			String taskStatus,
+			String previewStatus,
+			String hrPreview,
+			String hrPreviewRequested,
+			String escalated,
+			String timeEscalated,
+			String titleLength,
+			String reordered)
 	{
 		super();
 		this.dateRange = dateRange;
 		this.title = title;
-		this.assetID = assetID;
+		this.materialID = materialID;
+		this.channel = channel;
 		this.operator = operator;
 		this.aggregatorID = aggregatorID;
-		this.qaStatus = qaStatus;
-		this.duration = duration;
-		this.channel = channel;
+		this.taskStatus = taskStatus;
+		this.previewStatus = previewStatus;
+		this.hrPreview = hrPreview;
+		this.hrPreviewRequested = hrPreviewRequested;
+		this.escalated = escalated;
+		this.timeEscalated = timeEscalated;
+		this.titleLength = titleLength;
+		this.reordered = reordered;
 	}
 
 	public String getDateRange()
@@ -55,6 +81,26 @@ public class ManualQA
 		this.title = title;
 	}
 
+	public String getMaterialID()
+	{
+		return materialID;
+	}
+
+	public void setMaterialID(String materialID)
+	{
+		this.materialID = materialID;
+	}
+
+	public String getChannel()
+	{
+		return channel;
+	}
+
+	public void setChannel(String channel)
+	{
+		this.channel = channel;
+	}
+
 	public String getOperator()
 	{
 		return operator;
@@ -75,43 +121,85 @@ public class ManualQA
 		this.aggregatorID = aggregatorID;
 	}
 
-	public String getQaStatus()
+	public String getTaskStatus()
 	{
-		return qaStatus;
+		return taskStatus;
 	}
 
-	public void setQaStatus(String qaStatus)
+	public void setTaskStatus(String taskStatus)
 	{
-		this.qaStatus = qaStatus;
+		this.taskStatus = taskStatus;
 	}
 
-	public String getDuration()
+	public String getPreviewStatus()
 	{
-		return duration;
+		return previewStatus;
 	}
 
-	public void setDuration(String duration)
+	public void setPreviewStatus(String previewStatus)
 	{
-		this.duration = duration;
+		this.previewStatus = previewStatus;
 	}
 
-	public String getAssetID()
+	public String getHrPreview()
 	{
-		return assetID;
+		return hrPreview;
 	}
 
-	public void setAssetID(String assetID)
+	public void setHrPreview(String hrPreview)
 	{
-		this.assetID = assetID;
+		this.hrPreview = hrPreview;
 	}
 
-	public String getChannel()
+	public String getHrPreviewRequested()
 	{
-		return channel;
+		return hrPreviewRequested;
 	}
 
-	public void setChannel(String channel)
+	public void setHrPreviewRequested(String hrPreviewRequested)
 	{
-		this.channel = channel;
-	}	
+		this.hrPreviewRequested = hrPreviewRequested;
+	}
+
+	public String getEscalated()
+	{
+		return escalated;
+	}
+
+	public void setEscalated(String escalated)
+	{
+		this.escalated = escalated;
+	}
+
+	public String getTimeEscalated()
+	{
+		return timeEscalated;
+	}
+
+	public void setTimeEscalated(String timeEscalated)
+	{
+		this.timeEscalated = timeEscalated;
+	}
+
+	public String getTitleLength()
+	{
+		return titleLength;
+	}
+
+	public void setTitleLength(String titleLength)
+	{
+		this.titleLength = titleLength;
+	}
+
+	public String getReordered()
+	{
+		return reordered;
+	}
+
+	public void setReordered(String reordered)
+	{
+		this.reordered = reordered;
+	}
+	
+	
 }

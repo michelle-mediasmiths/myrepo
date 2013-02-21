@@ -92,6 +92,11 @@ public interface ReportUI
 	public void getExportCSV();
 	
 	@GET
+	@Path("/watch_folder_storage_csv")
+	@Produces("text/html")
+	public void getWatchFolderStorageCSV();
+	
+	@GET
 	@Path("/transcoder_load_csv")
 	@Produces("text/html")
 	public void getTranscoderLoadCSV();

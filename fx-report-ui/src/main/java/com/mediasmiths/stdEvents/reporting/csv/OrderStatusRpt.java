@@ -2,11 +2,15 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
@@ -46,47 +50,36 @@ public class OrderStatusRpt
 		titles.addAll(deliveredTitles);
 		titles.addAll(outstandingTitles);
 		titles.addAll(overdueTitles);
+		titles.addAll(unmatchedTitles);
 		logger.info(unmatchedTitles);
-		List<OrderStatus> valid = new ArrayList<OrderStatus>();
+		
 		for (OrderStatus order : titles)
 		{
-			if (order.getIngestDate() != null) {
-				String ingestString = order.getIngestDate();
-				try
-				{
-					Date ingestDate = sdf.parse(ingestString);
-					logger.info("Date: " + ingestDate);
-					if ((ingestDate.after(startDate)) && (ingestDate.before(endDate)))
-						order.setDateRange(startDate + " - " + endDate);
-						valid.add(order);
-				}
-				catch (ParseException e)
-				{
-					e.printStackTrace();
-				}
-			}
+			order.setDateRange(startDate + " - " + endDate);					
 		}
-		valid.addAll(unmatchedTitles);
+		
 		createOrderStatusCsv(titles, "orderStatusCsv");
 	}
 	
 	public List<OrderStatus> getTitleList(List<EventEntity> events, String status)
 	{
 		List<OrderStatus> titleList = new ArrayList<OrderStatus>();
-		String titleID;
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
 			logger.info(payload);
 			OrderStatus title = new OrderStatus(); 
+			title.setStatus(status);	
+			if (payload.contains("ProgrammeTitle"))
+				title.setTitle(payload.substring(payload.indexOf("ProgrammeTitle")+15, payload.indexOf("</ProgrammeTitle")));
 			if (payload.contains("titleID"))
-				title.setTitleID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
-			title.setStatus(status);			
+				title.setMaterialID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
 			if (payload.contains("OrderReference"))
 				title.setOrderRef(payload.substring(payload.indexOf("OrderReference")+15, payload.indexOf("</OrderReference")));
 			if (payload.contains("channelName"))
 				title.setChannel(payload.substring(payload.indexOf("channelName")+13, payload.indexOf('"',(payload.indexOf("channelName")+13))));
 			
+			Calendar required = null;
 			List<EventEntity> aggregatorEvents = queryApi.getByEventName("AddOrUpdateMaterial");
 			for (EventEntity aggregatorEvent : aggregatorEvents)
 			{
@@ -100,11 +93,44 @@ public class OrderStatusRpt
 						title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
 						title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
 						title.setRequiredBy(str.substring(str.indexOf("RequiredBy")+11, str.indexOf("</RequiredBy")));
+						required = DatatypeConverter.parseDate(title.getRequiredBy());
+						logger.info("RequiredBy: " + required);
 					}
 				}
 			}
-			Date ingestDate = new Date(event.getTime());
-			title.setIngestDate(ingestDate.toString());
+			
+			Calendar completion = null;
+			List<EventEntity> completionEvents = queryApi.getByEventName("ProgrammeContentAvailable");
+			for (EventEntity completionEvent : completionEvents)
+			{
+				String str = completionEvent.getPayload();
+				if (str.contains("titleID"))
+				{
+					String titleID = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
+					String curTitle = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
+					logger.info("TitleID: " + titleID + " curTitle: " + curTitle);
+					if (titleID.equals(curTitle))
+					{
+						if (str.contains("DateOfDelivery"))
+						{
+							title.setCompletionDate(str.substring(str.indexOf("DateOfDelivery")+15, str.indexOf("</DateOfDelivery")));
+							logger.info("CompletionDate: " + title.getCompletionDate());
+							completion = DatatypeConverter.parseDate(title.getCompletionDate());
+							logger.info("cal: " + completion);
+						}
+					}
+				}	
+			}
+			
+			if ((required != null) && (completion == null))
+				title.setOverdueInDateRange("1");
+			else if (required.before(completion))
+				title.setOverdueInDateRange("1");
+			else if (required.after(completion))
+				title.setCompletedInDateRange("1");
+			
+			title.setTaskType("Ingest");
+
   			titleList.add(title);
 		}	
 		return titleList;
@@ -116,22 +142,21 @@ public class OrderStatusRpt
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			if (payload.contains("materialId"))
-			{
-				String titleID = payload.substring(payload.indexOf("materialId") +11, payload.indexOf("</materialId"));
-				OrderStatus title = new OrderStatus();
-				title.setTitleID(titleID);
-				title.setStatus(status);
-				Date ingestDate = new Date(event.getTime());
-				logger.info(titleID + " " + ingestDate);
-				if ((ingestDate.after(startDate)) && (ingestDate.before(endDate))) {
-					title.setDateRange(startDate + " - " + endDate);
-					titleList.add(title);
-				}
-			}
+			logger.info("unmatched payload:" + payload);
+			OrderStatus title = new OrderStatus();
+			Date ingestDate = new Date(event.getTime());
+				
+			title.setStatus(status);
+			title.setTitle(payload);
+			title.setTaskType("Unmatched");
 			
-		}	
+			if ((ingestDate.after(startDate)) && (ingestDate.before(endDate))) {
+				title.setDateRange(startDate + " - " + endDate);
+				titleList.add(title);
+			}
+		}
 		return titleList;
+			
 	}
 	
 	public void createOrderStatusCsv(List<OrderStatus> titles, String name)
@@ -140,7 +165,7 @@ public class OrderStatusRpt
 		try {
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + name + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String [] header = {"dateRange", "status", "titleID", "orderRef", "channel", "aggregatorID", "taskType", "ingestDate", "requiredBy"};
+			final String [] header = {"dateRange", "status", "title", "materialID", "channel", "orderRef", "requiredBy", "completedInDateRange", "overdueInDateRange", "aggregatorID", "taskType", "completionDate"};
 			final CellProcessor[] processors = getTitleProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -175,9 +200,24 @@ public class OrderStatusRpt
 		}
 	}
 	
+	//2013-02-13T10:00:00+11:00
+	//public Date getDate(String dateString)
+	//{
+//		Date date = new Date();
+//		DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz"); 
+//		date = (Date) formatter.parse(dateString);
+		
+		//Calendar cal = DatatypeConverter.parseDate(dateString);		
+
+
+	//}
+	
 	public CellProcessor[] getTitleProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
+				new Optional(),
+				new Optional(),
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),

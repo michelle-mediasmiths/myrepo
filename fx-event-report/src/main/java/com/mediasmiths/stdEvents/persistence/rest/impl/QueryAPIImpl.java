@@ -380,13 +380,13 @@ public class QueryAPIImpl implements QueryAPI
 	@Transactional
 	public List<EventEntity> getFailedQc()
 	{
-		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> events = getByEventName("AutoQC");
 		List<EventEntity> failed = new ArrayList<EventEntity>();
 		for (EventEntity event : events) {
 			String str = event.getPayload();
-			if (str.contains("QCStatus")) {
-				String qcStatus = str.substring(str.indexOf("QCStatus")+9, str.indexOf("</QCStatus"));
-				if ((qcStatus.equals("QCFail")) || (qcStatus.equals("QCFail(Overridden")))
+			if (str.contains("qcStatus")) {
+				String qcStatus = str.substring(str.indexOf("qcStatus")+9, str.indexOf("</qcStatus"));
+				if (qcStatus.contains("Fail"))
 					failed.add(event);
 			}	
 		}
@@ -396,13 +396,13 @@ public class QueryAPIImpl implements QueryAPI
 	@Transactional
 	public List<EventEntity> getOperatorOverridden()
 	{
-		List<EventEntity> events = getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> events = getByEventName("AutoQC");
 		List<EventEntity> overridden = new ArrayList<EventEntity>();
 		for (EventEntity event : events) {
 			String str = event.getPayload();
-			if (str.contains("QCStatus")) {
-				String qcStatus = str.substring(str.indexOf("QCStatus")+9, str.indexOf("</QCStatus"));
-				if (qcStatus.equals("QCFail(Overridden"))
+			if (str.contains("qcStatus")) {
+				String qcStatus = str.substring(str.indexOf("qcStatus")+9, str.indexOf("</qcStatus"));
+				if (qcStatus.equals("QCFail(Overridden)"))
 					overridden.add(event);
 			}	
 		}

@@ -32,6 +32,7 @@ import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
 import com.mediasmiths.stdEvents.reporting.csv.PurgeContentRpt;
 import com.mediasmiths.stdEvents.reporting.csv.TaskListRpt;
 import com.mediasmiths.stdEvents.reporting.csv.TranscoderLoadRpt;
+import com.mediasmiths.stdEvents.reporting.csv.WatchFolderRpt;
 
 public class ReportUIImpl implements ReportUI
 {
@@ -65,6 +66,8 @@ public class ReportUIImpl implements ReportUI
 	private ComplianceRpt compliance;
 	@Inject
 	private ExportRpt export;
+	@Inject
+	private WatchFolderRpt watchFolder;
 	@Inject
 	private TranscoderLoadRpt transcoderLoad;
 
@@ -123,11 +126,6 @@ public class ReportUIImpl implements ReportUI
 		startYear = Integer.parseInt(year);
 		
 		Calendar startCal = Calendar.getInstance();
-//		startCal.set(startCal.DATE, startDay);
-//		startCal.set(startCal.MONTH, startMonth);
-//		startCal.set(startCal.YEAR, startYear);
-//		startCal.set(startCal.HOUR_OF_DAY, 00);
-//		startCal.set(startCal.MINUTE, 00);
 		startCal.set(startCal.SECOND, 00);
 		startCal.set(startYear, startMonth, startDay, 00, 00);
 		
@@ -158,6 +156,8 @@ public class ReportUIImpl implements ReportUI
 	public boolean checkDate(Long eventTime)
 	{
 		boolean within = false;
+		logger.info("getting valid " + eventTime + " " + startLong);
+		
 		int startComp = eventTime.compareTo(startLong);
 		int endComp = eventTime.compareTo(endLong);
 		logger.info("Start compare: " + startComp + " End compare: " + endComp);
@@ -187,11 +187,25 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getOrderStatusCSV()
 	{
-		List<EventEntity> delivered = queryApi.getDelivered();
-		List<EventEntity> outstanding = queryApi.getOutstanding();
-		List<EventEntity> overdue = queryApi.getOverdue();
- 		List<EventEntity> unmatched = queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable");
+		List<EventEntity> delivered = getInDate(queryApi.getDelivered());
+		
+		List<EventEntity> outstanding = getInDate(queryApi.getOutstanding());
+		List<EventEntity> overdue = getInDate(queryApi.getOverdue());
+ 		List<EventEntity> unmatched = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
 		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched, startDate, endDate);
+	}
+	
+	public List<EventEntity> getInDate(List<EventEntity> events)
+	{
+		List <EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			logger.info("event.getTime()" + event.getTime());
+			boolean within = checkDate(event.getTime());
+			if (within)
+				valid.add(event);
+		}
+		return valid;
 	}
 
 	@Transactional
@@ -247,25 +261,25 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getManualQACSV()
 	{
-		List<EventEntity> qc = queryApi.getByNamespace("http://www.foxtel.com.au/ip/qc");
-		List<EventEntity> manualQA = new ArrayList<EventEntity>();
-		for (EventEntity event : qc) 
-		{
-			String payload = event.getPayload();
-			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
-			if (qcStatus.equals("QCFail(Overridden)")) {
-				boolean within = checkDate(event.getTime());
-				if (within)
-					manualQA.add(event);
-			}
-		}
-		manualQa.writeManualQA(manualQA, startDate, endDate);
+		List<EventEntity> preview = queryApi.getByEventName("ManualQA");
+//		List<EventEntity> manualQA = new ArrayList<EventEntity>();
+//		for (EventEntity event : qc) 
+//		{
+//			String payload = event.getPayload();
+//			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
+//			if (qcStatus.equals("QCFail(Overridden)")) {
+//				boolean within = checkDate(event.getTime());
+//				if (within)
+//					manualQA.add(event);
+//			}
+//		}
+		manualQa.writeManualQA(preview, startDate, endDate);
 	}
 
 	@Transactional
 	public void getAutoQCCSV()
 	{
-		List<EventEntity> passed = queryApi.getByNamespace("http://www.foxtel.com.au/ip/qc");
+		List<EventEntity> passed = queryApi.getByEventName("AutoQC");
 		List<EventEntity> valid = new ArrayList<EventEntity>();
 		for (EventEntity event : passed) {
 			boolean within = checkDate(event.getTime());
@@ -324,6 +338,14 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional
+	public void getWatchFolderStorageCSV()
+	{
+		List<EventEntity> events = new ArrayList<EventEntity>();
+		//NEED TEST DATA TO SEND REPORT
+		watchFolder.writeWatchFolder(events, startDate, endDate);
+	}
+	
+	@Transactional
 	public void getTranscoderLoadCSV()
 	{
 		List<EventEntity> events = queryApi.getByNamespace("http://www.foxtel.com.au/ip/tc");
@@ -343,8 +365,6 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
-
-	
 
 //	@Transactional
 //	public String getOrderStatusUI()

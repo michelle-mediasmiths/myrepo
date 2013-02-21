@@ -46,7 +46,7 @@ public class AcquisitionRpt
 		ICsvBeanWriter beanWriter = null;
 		try{
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "acquisitionDeliveryCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "materialID", "channels", "aggregatorID", "tape", "file", "format", "fileSize", "duration"};
+			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tape", "file", "format", "fileSize", "duration"};
 			final CellProcessor[] processors = getAcquisitionProcessor();
 			beanWriter.writeHeader(header);
 			
@@ -110,6 +110,7 @@ public class AcquisitionRpt
 		for(EventEntity event : events)
 		{
 			String payload = event.getPayload();
+			logger.info(payload);
 			AcquisitionDelivery title = new AcquisitionDelivery();
 			title.setDateRange(startDate.toString() + " - " + endDate.toString());
 			if (payload.contains("materialId"))
@@ -131,6 +132,8 @@ public class AcquisitionRpt
 						title.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13))));
 						logger.info("Channel name: " + title.getChannels());
 						extractChannels(title.getChannels());
+						if (str.contains("ProgrammeTitle"))
+							title.setTitle(str.substring(str.indexOf("ProgrammeTitle")+15, str.indexOf("</ProgrammeTitle")));
 					}
 				}
 			}
@@ -149,9 +152,9 @@ public class AcquisitionRpt
 				}
 			}
 			
-			if (payload.contains("Tape"))
+			if ((payload.contains("Tape")) || (payload.contains("tapeMediaType")))
 					title.setTape("1");
-			if (payload.contains("File"))
+			if ((payload.contains("File")) || (payload.contains("fileMediaType")))
 					title.setFile("1");
 		
 		if (payload.contains("Format")) {
@@ -169,7 +172,7 @@ public class AcquisitionRpt
 		return titleList;
 	}
 	
-	public void extractChannels(String channel)
+	private void extractChannels(String channel)
 	{
 		if (channel.contains(","))
 		{
@@ -230,6 +233,7 @@ public class AcquisitionRpt
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
 				new Optional(), 
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),
