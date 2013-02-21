@@ -30,6 +30,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
@@ -56,6 +57,9 @@ public class MayamTitleController extends MayamController{
 	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
 		client = mayamClient;
 	}
+	
+	@Inject
+	ChannelProperties channelProperties;
 	
 	@Inject
 	MayamTaskController taskController;
@@ -204,17 +208,25 @@ public class MayamTitleController extends MayamController{
 							if (channelList != null) {
 								for(ChannelType channel : channelList)
 								{
-									rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
-									rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
-									rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
-									rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
-									rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
-									String channelTag = channel.getChannelTag();
-									if(AO_CHANNEL_TAG.equals(channelTag)){
-										ao=true;
+									if (channelProperties.isTagValid(channel.getChannelTag()))
+									{
+										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+										String channelTag = channel.getChannelTag();
+										if (AO_CHANNEL_TAG.equals(channelTag))
+										{
+											ao = true;
+										}
+										channelStringList.add(channelTag);
+										rowCounter++;
 									}
-									channelStringList.add(channelTag);
-									rowCounter ++;
+									else
+									{
+										log.debug("did not add rights entry for channel "+channel.getChannelTag());
+									}
 								}
 							}
 						}
@@ -477,21 +489,28 @@ public class MayamTitleController extends MayamController{
 								if (channelList != null) {
 									for(ChannelType channel : channelList)
 									{
-										rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
-										rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
-										rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
-										rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
-										rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+										if (channelProperties.isTagValid(channel.getChannelTag()))
+										{
 										
-										String channelTag = channel.getChannelTag();
-										
-										if(AO_CHANNEL_TAG.equals(channelTag)){
-											ao=true;
+											rightsTable.setCellValue(rowCounter, 0, holder.getOrganisationID());
+											rightsTable.setCellValue(rowCounter, 1, holder.getOrganisationName());
+											rightsTable.setCellValue(rowCounter, 2, period.getStartDate().toString());
+											rightsTable.setCellValue(rowCounter, 3, period.getEndDate().toString());
+											rightsTable.setCellValue(rowCounter, 4, channel.getChannelName());
+											
+											String channelTag = channel.getChannelTag();
+											
+											if(AO_CHANNEL_TAG.equals(channelTag)){
+												ao=true;
+											}
+											
+											channelStringList.add(channelTag);
+											
+											rowCounter ++;
 										}
-										
-										channelStringList.add(channelTag);
-										
-										rowCounter ++;
+										else{
+											log.debug("did not add rights entry for channel "+channel.getChannelTag());
+										}
 									}
 								}
 							}

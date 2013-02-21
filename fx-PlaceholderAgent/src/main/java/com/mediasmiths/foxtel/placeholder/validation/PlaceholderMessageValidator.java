@@ -472,6 +472,8 @@ public class PlaceholderMessageValidator extends
 		}
 		
 		RightsType rights = action.getRights();
+		
+		boolean atLeastOneKnownChannel = false;
 
 		for (License l : rights.getLicense()) {
 			XMLGregorianCalendar startDate = l.getLicensePeriod()
@@ -489,26 +491,23 @@ public class PlaceholderMessageValidator extends
 				for (ChannelType channel : channels.getChannel()) {
 					if (!channelValidator.isTagValid(
 							channel.getChannelTag())) {
-						logger.error(String
-								.format("Channel tag invalid 's%'",
+						logger.warn(String
+								.format("Channel tag unknown 's%' but message wont be rejected because of it",
 										channel.getChannelTag()));
-						return MessageValidationResult.CHANNEL_NAME_INVALID;
+						
+					}
+					else{
+						atLeastOneKnownChannel = true;
 					}
 				}
 			}
 		}
-
-		String channelTag = action.getRights().getLicense().get(0)
-				.getChannels().getChannel().get(0).getChannelTag();
-		String channelName = action.getRights().getLicense().get(0)
-				.getChannels().getChannel().get(0).getChannelName();
-		if (channelTag != null && channelName != null) {
-			if ((channelTag.equals("UNKNOWN_CHANNEL_TAG"))
-					|| (channelName.equals("UNKNOWN_CHANNEL_NAME"))) {
-				logger.error("UNKOWN_CHANNEL");
-				return MessageValidationResult.UNKOWN_CHANNEL;
-			}
+		
+		if(! atLeastOneKnownChannel){
+			logger.error("message did not contain any known channels");
+			return MessageValidationResult.CHANNEL_NAME_INVALID;
 		}
+		
 
 		return MessageValidationResult.IS_VALID;
 	}
