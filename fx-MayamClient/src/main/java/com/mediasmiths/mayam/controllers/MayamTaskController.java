@@ -489,5 +489,41 @@ public class MayamTaskController extends MayamController
 			return;
 		}
 	}	
+//	
+//	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id){
+//		
+//		
+//		log.info(String.format(
+//				"Searching for task of type %s for asset %s using id attribute %s",
+//				taskList.getText(),
+//				id,
+//				idAttribute.toString()));
+//
+//		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+//		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
+//		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+//		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+//		FilterResult result;
+//		try
+//		{
+//			result = client.taskApi().getTasks(criteria, 10, 0);
+//			log.info("Total matches: " + result.getTotalMatches());
+//
+//			if (result.getTotalMatches() != expectedResultCount)
+//			{
+//				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
+//				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
+//			}
+//
+//			return result.getMatches().get(0);
+//		}
+//		catch (RemoteException e)
+//		{
+//			log.error("remote expcetion searching for task", e);
+//			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+//		}
+//
+//		
+//	}
 
 }

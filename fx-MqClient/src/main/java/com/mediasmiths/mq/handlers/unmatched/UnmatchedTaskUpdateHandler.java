@@ -179,7 +179,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		AttributeMap task;
 		try
 		{
-			task = taskController.getTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
+			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
 
 			if (task == null)
 			{

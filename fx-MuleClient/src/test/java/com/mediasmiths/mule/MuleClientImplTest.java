@@ -76,8 +76,8 @@ public class MuleClientImplTest {
 			fail("Client failed to initialise");	
 		}
 
-		client.dispatch("testDestination", "testPackage", props);
 		try {
+			client.dispatch("testDestination", "testPackage", props);
 			verify(muleClient).dispatch("testDestination", "testPackage", props);
 		} catch (MuleException e) {
 			fail("MuleException when mocking dispatch call");

@@ -204,7 +204,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		else
 			resultLogger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Failed");
 		
-		assertEquals(MessageValidationResult.UNKOWN_CHANNEL, validateFile);
+		assertEquals(MessageValidationResult.IS_VALID, validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
