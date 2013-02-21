@@ -492,7 +492,7 @@ public class PlaceholderMessageValidator extends
 					if (!channelValidator.isTagValid(
 							channel.getChannelTag())) {
 						logger.warn(String
-								.format("Channel tag unknown 's%' but message wont be rejected because of it",
+								.format("Channel tag unknown '%s' but message wont be rejected because of it",
 										channel.getChannelTag()));
 						
 					}
