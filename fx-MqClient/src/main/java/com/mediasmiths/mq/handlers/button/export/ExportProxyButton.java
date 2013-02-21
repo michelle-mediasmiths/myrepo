@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.mule.api.MuleException;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -110,6 +111,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				taskController.failTaskWithMessage(taskID, "Error constructing transcode paramters");
 				return;
 			}
+			catch(Exception e){
+				log.error("error constructing job params for export proxy", e);
+				taskController.failTaskWithMessage(taskID, e.getMessage());
+				return;
+			}
 
 			// invoke export flow
 			try
@@ -123,6 +129,12 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				return;
 			}
 			catch (JAXBException e)
+			{
+				log.error("error initiating export workflow", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
+				return;
+			}
+			catch (MuleException e)
 			{
 				log.error("error initiating export workflow", e);
 				taskController.failTaskWithMessage(taskID, "Error initiating export workflow");
@@ -155,7 +167,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,
-			JAXBException
+			JAXBException, MuleException
 	{
 		InvokeExport ie = new InvokeExport();
 		ie.setAssetID(materialID);
@@ -194,7 +206,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			channel = firstChannel;
 		}
 		else{
-			throw new IllegalArgumentException("no channels in asset metadata!");
+			throw new IllegalArgumentException("no channels in asset metadata");
 		}
 		
 		if (buglocation != null)

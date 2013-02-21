@@ -225,6 +225,8 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 	private void initiateAutoQc(AttributeMap messageAttributes)
 	{
+		Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
+		
 		try
 		{
 
@@ -242,7 +244,6 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 
 			log.info("Initiating qc workflow for asset " + assetID);
-			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
 			
 			String assetTitle = messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
 			
@@ -250,7 +251,8 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		catch (Exception e)
 		{
-			log.error("Exception in the Mayam client while handling Inititae QC Message : ", e);
+			log.error("Error initiating auto qc : ", e);
+			taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
 		}
 	}
 

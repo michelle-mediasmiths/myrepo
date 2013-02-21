@@ -10,6 +10,7 @@ import org.apache.activemq.thread.Task;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
+import org.mule.api.MuleException;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -76,11 +77,12 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		else
 		{
 
+			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
+
+			
 			try
 			{
-				String packageID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
-
+				String packageID = messageAttributes.getAttribute(Attribute.HOUSE_ID);			
 				SegmentList segmentList = packageController.getSegmentList(packageID);
 				String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
 				AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
@@ -140,18 +142,27 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			catch (PackageNotFoundException pnfe)
 			{
 				log.error("package not found when attempting to initiate tx delivery!", pnfe);
+				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (UnsupportedEncodingException e)
 			{
 				log.error("error invoking tx delivery", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (JAXBException e)
 			{
 				log.error("error invoking tx delivery", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
 			}
 			catch (MayamClientException e)
 			{
 				log.error("error getting materials location or fetching delivery location for package", e);
+				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
+			}
+			catch (MuleException e)
+			{
+				log.error("error initiating tx delivery",e);
+				taskController.failTaskWithMessage(taskID, "Error initiating tx workflow");
 			}
 
 		}
@@ -209,7 +220,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			Date requiredDate,
 			Long taskID,
 			TCJobParameters tcParams,
-			String title) throws UnsupportedEncodingException, JAXBException
+			String title) throws UnsupportedEncodingException, JAXBException, MuleException
 	{
 		InvokeIntalioTXFlow startMessage = new InvokeIntalioTXFlow();
 

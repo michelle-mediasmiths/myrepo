@@ -44,7 +44,7 @@ public class MuleWorkflowController {
 		
 	}
 	
-	public void initiateQcWorkflow(String assetID, boolean isTx, long taskID, String title) throws UnsupportedEncodingException, JAXBException
+	public void initiateQcWorkflow(String assetID, boolean isTx, long taskID, String title) throws UnsupportedEncodingException, JAXBException, MuleException
 	{
 		InvokeIntalioQCFlow invokeQc= new InvokeIntalioQCFlow();
 		invokeQc.setAssetId(assetID);
@@ -53,8 +53,10 @@ public class MuleWorkflowController {
 		invokeQc.setTitle(title);
 		
 		String payload = getSerialisationOf(invokeQc);
+		log.info("About to send message to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
+		
 		client.dispatch(destinations.getMule_qc_destination(), payload, null);
-		log.info("Message sent to Mule to initiate QC workflow. Destination : " + destinations.getMule_qc_destination() + " Payload: " + payload);
+		
 	}
 	
 	public void generateReport(String name, String namespace, String reportType)
@@ -69,17 +71,18 @@ public class MuleWorkflowController {
 		log.info("Message sent to Mule to generate report. Destination : " + destinations.getMule_reporting_destination() + " Payload: " + request);
 	}
 	
-	public void initiateTxDeliveryWorkflow(InvokeIntalioTXFlow startMessage) throws UnsupportedEncodingException, JAXBException{
+	public void initiateTxDeliveryWorkflow(InvokeIntalioTXFlow startMessage) throws UnsupportedEncodingException, JAXBException, MuleException{
 		String payload = getSerialisationOf(startMessage);
+	
+		log.info("About to send message to Mule to initiate TX workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 		client.dispatch(destinations.getMule_tx_destination(), payload, null);
-		log.info("Message sent to Mule to initiate TX workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 	}
 	
-	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException
+	public void initiateExportWorkflow(InvokeExport ie) throws UnsupportedEncodingException, JAXBException, MuleException
 	{
 		String payload = getSerialisationOf(ie);
+		log.info("About to send message to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 		client.dispatch(destinations.getMuleExportDestination(), payload, null);
-		log.info("Message sent to Mule to initiate Export workflow. Destination : " + destinations.getMuleExportDestination() + " Payload: " + payload);
 	}
 	
 	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException

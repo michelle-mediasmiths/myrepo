@@ -56,13 +56,8 @@ public class MuleClientImpl implements IMuleClient {
 	}
 
 	// Make an asynchronous 'fire and forget' call
-	public void dispatch(String destination, Object payLoad,  Map<String, Object> properties) {
-		try {
-			client.dispatch(destination, payLoad, properties);
-
-		} catch (MuleException e) {
-			logger.error("Mule Exception caught when dispatching message to destination: " + destination + " " ,e);
-		}
+	public void dispatch(String destination, Object payLoad,  Map<String, Object> properties)  throws MuleException{
+		client.dispatch(destination, payLoad, properties);
 	}
 		
 	public ArrayList<MuleMessage> request(String destination, long timeout) {

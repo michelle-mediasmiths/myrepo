@@ -282,7 +282,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		
 		String message;
 		try{
-			message = FileUtils.readFileToString(file);
+			if(FilenameUtils.getExtension(file.getAbsolutePath()).toLowerCase().equals("xml")){
+				message = FileUtils.readFileToString(file);
+			}
+			else{
+				message = file.getAbsolutePath();
+			}
 		}
 		catch(IOException e){
 			logger.warn("IOException reading "+file.getAbsolutePath(),e);
