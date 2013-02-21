@@ -32,7 +32,7 @@ public class QcParallel extends ButtonClickHandler
 		}
 		
 		QcStatus qcStatus = messageAttributes.getAttribute(Attribute.QC_STATUS);
-		if(!AssetProperties.isMaterialPlaceholder(messageAttributes) && (null == qcStatus)) {
+		if(!AssetProperties.isMaterialPlaceholder(messageAttributes) && (null == qcStatus || qcStatus == QcStatus.TBD)) {
 			log.info("QC Parallel: creating preview task _ item is not a place holder and QC status is not set ");
 			
 			try
