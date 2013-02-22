@@ -933,5 +933,11 @@ public class MayamClientImpl implements MayamClient
 		update.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		tasksController.saveTask(update);
 	}
+
+	@Override
+	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException
+	{
+		tasksController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, daysUntilPurge);
+	}
 	
 }

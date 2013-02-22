@@ -128,7 +128,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 								numberOfDays = 7;
 							}
 						}
-						taskController.createPurgeCandidateTask(MayamAssetType.MATERIAL, materialID, numberOfDays);	
+						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);	
 					}
 				} catch (MayamClientException e) {
 					log.error("Exception thrown while removing Purge Candidate Task for material : " + materialID, e);

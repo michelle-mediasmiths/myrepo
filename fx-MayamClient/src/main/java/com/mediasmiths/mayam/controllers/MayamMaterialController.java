@@ -290,8 +290,8 @@ public class MayamMaterialController extends MayamController
 								requiredBy = material.getRequiredBy().toGregorianCalendar().getTime();
 							}
 
-							long taskID = taskController.createIngestTaskForMaterial(material.getMaterialID(), requiredBy);
-							log.debug("created task with id : " + taskID);
+							taskController.createIngestTaskForMaterial(material.getMaterialID(), requiredBy);
+							log.debug("created ingest task");
 						}
 						catch (MayamClientException e)
 						{
@@ -570,8 +570,8 @@ public class MayamMaterialController extends MayamController
 			// create ingest task
 			try
 			{
-				long taskID = taskController.createIngestTaskForMaterial(siteID, null);
-				log.debug("created task with id : " + taskID);
+				log.debug("trying to create ingest task");
+				taskController.createIngestTaskForMaterial(siteID, null);
 			}
 			catch (Exception e)
 			{
@@ -579,38 +579,6 @@ public class MayamMaterialController extends MayamController
 			}
 
 			return siteID;
-			// AttributeMap item;
-			// try
-			// {
-			// item = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
-			// String siteID = item.getAttribute(Attribute.ASSET_SITE_ID);
-			// log.info(String.format("item id %s returned after fetching created item", siteID));
-			//
-			// if (siteID == null)
-			// {
-			// throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED);
-			// }
-			//
-			// try {
-			// long taskID = taskController.createTask(siteID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST);
-			// log.debug("created task with id : "+taskID);
-			// AttributeMap newTask = taskController.getTask(taskID);
-			// newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-			// taskController.saveTask(newTask);
-			// }
-			// catch (RemoteException e) {
-			// log.error("Exception thrown in Mayam while creating Ingest task for Material : " + siteID, e);
-			// }
-			//
-			//
-			// return siteID;
-			// }
-			// catch (RemoteException e)
-			// {
-			// log.error("Exception thrown by Mayam while fetch newly create Material", e);
-			// throw new MayamClientException(MayamClientErrorCode.MATERIAL_CREATION_FAILED, e);
-			// }
-
 		}
 		else
 		{
@@ -1123,7 +1091,7 @@ public class MayamMaterialController extends MayamController
 		{
 			try
 			{
-				taskController.createPurgeCandidateTask(MayamAssetType.MATERIAL,materialID, 30);
+				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL,materialID, 30);
 			}
 			catch (MayamClientException e)
 			{
@@ -1142,6 +1110,15 @@ public class MayamMaterialController extends MayamController
 				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID);
 				
 				String parentId = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+				
+				try
+				{
+					taskController.cancelAllOpenTasksForAsset(MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
+				}
+				catch (MayamClientException e)
+				{
+					log.error("error cancelling open tasks for asset during delete",e);
+				}
 				
 				client.assetApi().deleteAsset(
 						MayamAssetType.MATERIAL.getAssetType(),
@@ -1372,6 +1349,15 @@ public class MayamMaterialController extends MayamController
 
 			deleteAssetsPackages(assetType, assetID, houseID);
 			
+			try
+			{
+				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error cancelling open tasks for assset", e);
+			}
+			
 			// create ingest task
 			log.debug("creating new ingest task");
 			taskController.createIngestTaskForMaterial(houseID,
@@ -1388,6 +1374,21 @@ public class MayamMaterialController extends MayamController
 			log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
 			for (SegmentList segmentList : packages)
 			{
+				
+				log.debug(String.format("Removing tasks of segment %s", segmentList.getId()));
+				try
+				{
+					taskController.cancelAllOpenTasksForAsset(
+							MayamAssetType.PACKAGE.getAssetType(),
+							Attribute.ASSET_ID,
+							segmentList.getId());
+				}
+				catch (MayamClientException e)
+				{
+					log.error("error closing open tasks for asset", e);
+					// dont rethrow, we still want the delete to go ahead;
+				}
+				
 				log.debug(String.format("Deleting segment %s", segmentList.getId()));
 				try
 				{

@@ -990,4 +990,11 @@ public class MayamClientStub implements MayamClient
 		
 	}
 
+	@Override
+	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

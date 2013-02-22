@@ -334,6 +334,6 @@ public interface MayamClient
 
 	void exportFailed(long taskID) throws MayamClientException;
 
-
+	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException;
 	
 }

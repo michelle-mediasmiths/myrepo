@@ -65,15 +65,39 @@ public class MayamTaskController extends MayamController
 	}
 	
 	
-	public long createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	public void createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
 	{
-		log.info(String.format("Creating ingest task for asset "+materialID));
-		
-		AttributeMap initialAttributes = client.createAttributeMap();
-		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-		initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
-		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
+		log.info(String.format("Creating ingest task for asset " + materialID));
 
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(
+				MayamTaskListType.INGEST,
+				MayamAssetType.MATERIAL.getAssetType(),
+				Attribute.HOUSE_ID,
+				materialID);
+		if (!openTasksForAsset.isEmpty())
+		{
+			log.debug("no unclosed ingest tasks for asset");
+
+			AttributeMap initialAttributes = client.createAttributeMap();
+			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
+			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
+		}
+		else
+		{
+			log.info("There is already at least one unclosed ingest task for asset, will not create another");
+
+			if (requiredByDate != null)
+			{
+				log.info("updating requiredby date on existing task(s)");
+				for (AttributeMap task : openTasksForAsset)
+				{
+					AttributeMap updateMapForTask = updateMapForTask(task);
+					updateMapForTask.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+					saveTask(updateMapForTask);
+				}
+			}
+		}
 	}
 	
 	public void createQCTaskForMaterial(String materialID, Date requiredByDate, String previewStatus, AttributeMap material) throws MayamClientException
@@ -141,18 +165,40 @@ public class MayamTaskController extends MayamController
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.FIX_STITCH_EDIT,initialAttributes);
 	}
 	
-	public long createPurgeCandidateTask(MayamAssetType assetType, String siteID, int numberOfDays) throws MayamClientException{
+	public void createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType assetType, String siteID, int numberOfDays) throws MayamClientException{
 		
 		log.info(String.format("Creating purge candidate task for asset "+siteID));
 		
-		AttributeMap initialAttributes = client.createAttributeMap();
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.PURGE_CANDIDATE_LIST, assetType.getAssetType(), Attribute.HOUSE_ID, siteID);
 		
 		Calendar date = Calendar.getInstance();
 		date.add(Calendar.DAY_OF_MONTH, numberOfDays);
-		initialAttributes.setAttribute(Attribute.OP_DATE, date.getTime());
-		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 		
-		return createTask(siteID,assetType,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
+		if(openTasksForAsset.isEmpty()){
+			
+			log.info("no existing purge candidate tasks found, creating");
+			AttributeMap initialAttributes = client.createAttributeMap();
+			initialAttributes.setAttribute(Attribute.OP_DATE, date.getTime());
+			initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+			
+			createTask(siteID,assetType,MayamTaskListType.PURGE_CANDIDATE_LIST,initialAttributes);
+		}
+		else{
+			log.info("existing tasks found, updating");
+			
+			if(openTasksForAsset.size() > 1){
+				log.warn("more than the expected number of purge candidate tasks for asset "+siteID);				
+			}
+			
+			//update
+			for (AttributeMap task : openTasksForAsset)
+			{
+				AttributeMap updateMap = updateMapForTask(task);
+				updateMap.setAttribute(Attribute.OP_DATE, date.getTime());
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+				saveTask(updateMap);
+			}				
+		}			
 	}
 
 	
@@ -489,41 +535,95 @@ public class MayamTaskController extends MayamController
 			return;
 		}
 	}	
-//	
-//	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id){
-//		
-//		
-//		log.info(String.format(
-//				"Searching for task of type %s for asset %s using id attribute %s",
-//				taskList.getText(),
-//				id,
-//				idAttribute.toString()));
-//
-//		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
-//		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
-//		criteria.getFilterEqualities().setAttribute(idAttribute, id);
-//		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
-//		FilterResult result;
-//		try
-//		{
-//			result = client.taskApi().getTasks(criteria, 10, 0);
-//			log.info("Total matches: " + result.getTotalMatches());
-//
-//			if (result.getTotalMatches() != expectedResultCount)
-//			{
-//				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
-//				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
-//			}
-//
-//			return result.getMatches().get(0);
-//		}
-//		catch (RemoteException e)
-//		{
-//			log.error("remote expcetion searching for task", e);
-//			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
-//		}
-//
-//		
-//	}
+	
+	/**
+	 * Returns all tasks of the specified type that are no in end states
+	 * @param taskList
+	 * @param assetType
+	 * @param idAttribute
+	 * @param id
+	 * @return
+	 * @throws MayamClientException
+	 */
+	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		
+		log.info(String.format(
+				"Searching for task of type %s for asset %s using id attribute %s",
+				taskList.getText(),
+				id,
+				idAttribute.toString()));
 
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
+		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+		criteria.getFilterAlternatives()
+	   		.addAsExclusions(Attribute.TASK_STATE, TaskState.CLOSED_STATES);
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+		
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 100, 0);
+			log.debug("Total matches: " + result.getTotalMatches());
+			return result.getMatches();
+		}
+		catch (RemoteException e)
+		{
+			log.error("remote exception searching for task", e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+		}
+	}
+
+	/**
+	 * returns all tasks for an asset that are not in end states
+	 * @return
+	 */
+	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		
+		log.info(String.format(
+				"Searching for non closed tasks of for asset %s using id attribute %s",
+				id,
+				idAttribute.toString()));
+
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+		criteria.getFilterAlternatives()
+	   		.addAsExclusions(Attribute.TASK_STATE, TaskState.CLOSED_STATES);
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+		
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 100, 0);
+			log.debug("Total matches: " + result.getTotalMatches());
+			return result.getMatches();
+		}
+		catch (RemoteException e)
+		{
+			log.error("remote exception searching for task", e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+		}
+	}
+	
+	public void cancelAllOpenTasksForAsset(AssetType assetType, Attribute idAttribute, String id) throws MayamClientException
+	{
+
+		List<AttributeMap> tasksForAsset = getAllOpenTasksForAsset(assetType, idAttribute, id);
+
+		for (AttributeMap task : tasksForAsset)
+		{
+			log.debug(String.format("removing task %s ", task.getAttribute(Attribute.TASK_ID)));
+			task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			try
+			{
+				client.taskApi().updateTask(task);
+			}
+			catch (RemoteException e)
+			{
+				log.error("exception removing task");
+				throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED);
+			}
+		}
+	}
+	
 }
