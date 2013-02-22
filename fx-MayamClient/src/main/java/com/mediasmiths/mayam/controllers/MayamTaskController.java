@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -574,6 +575,13 @@ public class MayamTaskController extends MayamController
 		}
 	}
 
+	 final EnumSet<TaskState> END_STATES = EnumSet.of(
+				TaskState.FINISHED,
+				TaskState.FINISHED_FAILED,
+				TaskState.REJECTED,
+				TaskState.REMOVED
+			);
+	
 	/**
 	 * returns all tasks for an asset that are not in end states
 	 * @return
@@ -587,8 +595,10 @@ public class MayamTaskController extends MayamController
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+		
 		criteria.getFilterAlternatives()
-	   		.addAsExclusions(Attribute.TASK_STATE, TaskState.CLOSED_STATES);
+	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
+		
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
 		FilterResult result;
@@ -612,7 +622,7 @@ public class MayamTaskController extends MayamController
 
 		for (AttributeMap task : tasksForAsset)
 		{
-			log.debug(String.format("removing task %s ", task.getAttribute(Attribute.TASK_ID)));
+			log.debug(String.format("removing task %s which has state %s", task.getAttribute(Attribute.TASK_ID), task.getAttribute(Attribute.TASK_STATE)));
 			task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 			try
 			{
