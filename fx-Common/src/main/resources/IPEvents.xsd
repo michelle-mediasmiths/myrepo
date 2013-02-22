@@ -159,7 +159,7 @@
 					<xs:element name="title" type="xs:string" />
 					<xs:element name="materialID" type="xs:string"/>
 					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="contentType" type="xs:string"/>
+                    <xs:element name="contentType" type="xs:string"/>
 					<xs:element name="operator" type="xs:string"/>
 					<xs:element name="taskStatus" type="xs:string"/>
 					<xs:element name="qcStatus" type="xs:string"/>
@@ -212,7 +212,16 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
+
+    <xs:complexType name="ComplianceLoggingMarkerType">
+        <xs:sequence>
+            <xs:element type="xs:string" name="MasterID" />
+            <xs:element type="xs:string" name="TitleField" />
+            <xs:element type="xs:string" name="Loggerdetails" />
+            <xs:element name="emailaddresses" type="emailaddresses" />
+        </xs:sequence>
+    </xs:complexType>
+
 	<xs:complexType name="ComplianceLogging">
 		<xs:complexContent>
 			<xs:annotation>
@@ -250,8 +259,128 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
-	
+
+    <xs:complexType name="tcFailureNotification">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="packageID" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="autoQCRequest">
+        <xs:sequence>
+            <xs:element name="assetId" type="xs:string" />
+            <xs:element name="forTXDelivery" type="xs:boolean" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="autoQCErrorNotification">
+        <xs:complexContent>
+            <xs:extension base="autoQCResultNotification">
+                <xs:sequence />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType abstract="true" name="autoQCResultNotification">
+        <xs:complexContent>
+            <xs:extension base="autoQCRequest">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="jobName" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="getQCProfileResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="profile" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="invokeIntalioQCFlow">
+        <xs:complexContent>
+            <xs:extension base="autoQCRequest">
+                <xs:sequence />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="assetTransferForQCRequest">
+        <xs:complexContent>
+            <xs:extension base="autoQCRequest">
+                <xs:sequence />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="tcPassedNotification">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="packageID" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="materialTransferForTCResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="destination" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="invokeIntalioTXFlow">
+        <xs:sequence>
+            <xs:element name="packageID" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="materialTransferForTCRequest">
+        <xs:sequence>
+            <xs:element name="assetID" type="xs:string" />
+            <xs:element name="forTX" type="xs:boolean" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="assetTransferForQCResponse">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="destination" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="invokeIntalioTCFlow">
+        <xs:sequence>
+            <xs:element name="assetID" type="xs:string" />
+            <xs:element name="forTX" type="xs:boolean" />
+            <xs:element name="outputFolder" type="xs:string" />
+            <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="tcTotalFailure">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="packageID" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="autoQCFailureNotification">
+        <xs:complexContent>
+            <xs:extension base="autoQCResultNotification">
+                <xs:sequence />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="autoQCPassNotification">
+        <xs:complexContent>
+            <xs:extension base="autoQCResultNotification">
+                <xs:sequence />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="txDeliveryFailure">
+        <xs:sequence>
+            <xs:element minOccurs="0" name="packageID" type="xs:string" />
+            <xs:element minOccurs="0" name="stage" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
 
 	<xs:simpleType name="PreviewStatus">
 		<xs:annotation>
@@ -274,9 +403,57 @@
 			<xs:enumeration value="Media" />
 		</xs:restriction>
 	</xs:simpleType>
-		<xs:simpleType name="smpteTimecode" final="restriction">
+
+	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]):([0-1][0-9]|[2][0-4])"/>
 		</xs:restriction>
 	</xs:simpleType>
+
+    <xs:element name="EmailConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="emailaddresses" name="emailaddresses" />
+                <xs:element type="xs:string" name="title" />
+                <xs:element type="xs:string" name="body" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:complexType name="emailaddresses">
+        <xs:sequence>
+            <xs:element type="xs:string" name="emailaddress"
+                        maxOccurs="unbounded" minOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="FoxtelEmailConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="MailData" type="MailData" />
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="MailData">
+        <xs:sequence>
+            <xs:element type="xs:string" name="namespace" />
+            <xs:element type="xs:string" name="eventname" />
+            <xs:choice maxOccurs="1">
+                <xs:element name="MailTemplate" type="MailTemplate" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MailTemplate">
+        <xs:sequence>
+            <xs:element name="subject" type="xs:string" />
+            <xs:element name="body" type="xs:string" />
+            <xs:element name="emailaddresses" type="emailaddresses" />
+        </xs:sequence>
+    </xs:complexType>
+
 </xs:schema>

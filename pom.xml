@@ -62,6 +62,9 @@
   		<module>fx-IbmsHelper</module>
         <module>fx-heartbeat-api</module>
 		<module>fx-ChannelGroupsConfig</module>
+        <module>fx-MailAgent</module>
+        <module>fx-MailAgentClient</module>
+
     </modules>
 
 	<properties>
