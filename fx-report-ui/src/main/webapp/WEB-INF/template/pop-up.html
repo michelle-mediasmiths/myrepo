@@ -1,0 +1,107 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>Report</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<table id="inputTable" class="table table-striped tablesorter">
+	<tbody> 
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/start_date/date/month/year}">
+				<td><label>Start Date: </label></td>
+				<td><input name="date" type="text" class="input-small search-query" placeholder="date"/></td>
+				<td><input name="month" type="text" class="input-small search-query" placeholder="month - 0-11 (JAN=0)"/></td>
+				<td><input name="year" type="text" class="input-small search-query" placeholder="year"/></td>
+				<td><button class="btn-primary" id="saveStartDateBtn" type="submit">Save Start Date</button></td>
+			</form>
+		</tr>
+				
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/end_date/date/month/year}">
+				<td><label>End Date: </label></td>
+				<td><input name="date" type="text" class="input-small search-query" placeholder="date"/></td>
+				<td><input name="month" type="text" class="input-small search-query" placeholder="month - 0-11 (JAN=0)"/></td>
+				<td><input name="year" type="text" class="input-small search-query" placeholder="year"/></td>
+				<td><button class="btn-primary" id="saveStartDateBtn" type="submit">Save End Date</button></td>
+			</form>
+		</tr>
+		
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/report_name/name}">
+				<td><label>Report Name: </label></td>
+				<td><input name="name" type="text" class="input-small search-query" /></td>
+				<td><button class="btn-primary" id="saveNameBtn" type="submit">Save Name</button></td>
+ 			</form>
+ 		</tr>
+ 	</tbody>
+ 	</table>
+ 		
+ 	<table id="reportTable" class="table table-striped tablesorter">
+ 	<tbody>	
+ 		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/order_status_csv}">
+				<td><label>1. Order Status: </label></td>
+				<td><button class="btn-primary" id="rpt1Btn" type="submit">CSV</button></td>
+			</form>
+			<form class="form-search" method="GET" th:action="@{/rest/query/purge_content_csv}">
+				<td><label>16. Purge Content: </label></td>
+				<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
+			</form>
+		</tr>
+
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/acquisition_report_csv}">
+				<td><label>2. Acquisition Delivery Report: </label></td>
+				<td><button class="btn-primary" id="rpt2bBtn" type="submit">CSV</button></td>
+			</form>
+			<form class="form-search" method="GET" th:action="@{/rest/query/compliance_edit_csv}">
+				<td><label>20. Compliance Edits: </label></td>
+				<td><button class="btn-primary" id="rpt20bBtn" type="submit">CSV</button></td>
+			</form>
+		</tr>
+
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/manual_qa_csv}">
+				<td><label>10a. Manual QA: </label></td>
+				<td><button class="btn-primary" id="rpt5Btn" type="submit">CSV</button></td>
+			</form>
+			<form class="form-search" method="GET" th:action="@{/rest/query/export_csv}">
+				<td><label>21. Extended Publishing and File Export: </label></td>
+				<td><button class="btn-primary" id="rpt21Btn" type="submit">CSV</button></td>
+			</form>
+		</tr>
+
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/auto_qc_csv}">
+				<td><label>10b. Auto QC: </label></td>
+				<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
+			</form>
+			<form class="form-search" method="GET" th:action="@{/rest/query/watch_folder_storage_csv}">
+				<td><label>24. Watch Folder Storage: </label></td>
+				<td><button class="btn-primary" id="rpt24Btn" type="submit">CSV</button></td>
+			</form>
+		</tr>
+		
+		<tr>
+			<form class="form-search" method="GET" th:action="@{/rest/query/task_list_csv}">
+				<td><label>12. Task List Status: </label></td>
+				<td><button class="btn-primary" id="rpt12Btn" type="submit">CSV</button></td>
+			</form>
+			<form class="form-search" method="GET" th:action="@{/rest/query/transcoder_load_csv}">
+				<td><label>26. Transcoder Load: </label></td>
+				<td><button class="btn-primary" id="rpt26Btn" type="submit">CSV</button></td>
+			</form>
+		</tr>
+ 	</tbody>
+ 	</table>
+</body>
+
+</html>

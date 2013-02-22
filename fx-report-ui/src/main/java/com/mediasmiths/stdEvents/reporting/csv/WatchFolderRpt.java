@@ -30,13 +30,13 @@ public class WatchFolderRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeWatchFolder(List<EventEntity> events, Date startDate, Date endDate)
+	public void writeWatchFolder(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<WatchFolder> watched = getWatchFolderList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try { 
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "watchFolderCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "filename", "timeDiscovered", "timeProcessed", "aggregator"};
 			final CellProcessor[] processors = getWatchFolderProcessor();
 			beanWriter.writeHeader(header);

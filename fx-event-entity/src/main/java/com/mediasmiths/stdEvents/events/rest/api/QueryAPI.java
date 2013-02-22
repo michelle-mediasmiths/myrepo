@@ -71,7 +71,7 @@ public interface QueryAPI
 	@GET
 	@Path("/overdue")
 	@Produces("text/plain")
-	public List<EventEntity> getOverdue();
+	public List<EventEntity> getOverdue(List<EventEntity> events);
 	
 	@GET
 	@Path("/expiring")
@@ -147,4 +147,21 @@ public interface QueryAPI
 	@Path("/format")
 	@Produces("text/plain")
 	public List<String> getFormat(List<EventEntity> events);
+	
+	@GET
+	@Path("/outstandingTasks")
+	@Produces("text/plain")
+	public List<EventEntity> getOutstandingTasks(List<EventEntity> events);
+	
+	@GET
+	@Path("/completedTasks")
+	@Produces("text/plain")
+	public List<EventEntity> getCompletedTasks(List<EventEntity> events);
+	
+	@GET
+	@Path("/avCompletionTime")
+	@Produces("text/plain")
+	public String getAvCompletionTime(List<EventEntity> events);
+	
+	
 }

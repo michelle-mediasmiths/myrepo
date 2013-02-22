@@ -33,13 +33,13 @@ public class ManualQARpt
 	
 	private List<String> channels = new ArrayList<String>();
 	
-	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate)
+	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<ManualQA> manualQAs = getManualQAList(events, startDate, endDate);
 
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "manualQAcsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "title", "materialID", "channel", "operator", "aggregatorID", "taskStatus", "previewStatus", "hrPreview", "hrPreviewRequested", "escalated", "timeEscalated", "titleLength", "reordered"};
 			final CellProcessor[] processors = getManualQAProcessor();
 			beanWriter.writeHeader(header);
@@ -110,14 +110,14 @@ public class ManualQARpt
 	private String formatIntoHHMMSS(int secsIn)
 	{
 
-	int hours = secsIn / 3600,
-	remainder = secsIn % 3600,
-	minutes = remainder / 60,
-	seconds = remainder % 60;
+		int hours = secsIn / 3600,
+		remainder = secsIn % 3600,
+		minutes = remainder / 60,
+		seconds = remainder % 60;
 
-	return ( (hours < 10 ? "0" : "") + hours
-	+ ":" + (minutes < 10 ? "0" : "") + minutes
-	+ ":" + (seconds< 10 ? "0" : "") + seconds );
+		return ( (hours < 10 ? "0" : "") + hours
+		+ ":" + (minutes < 10 ? "0" : "") + minutes
+		+ ":" + (seconds< 10 ? "0" : "") + seconds );
 
 	}
 	

@@ -3,8 +3,10 @@ package com.mediasmiths.stdEvents.report.entity;
 public class TaskList
 {
 	String dateRange;
+	String taskType;
 	String channel;
-	String process;
+	String taskStatus;
+	String requiredBy;
 	String department;
 	String operator;
 	String taskStart;
@@ -13,18 +15,20 @@ public class TaskList
 	public TaskList()
 	{
 	}
-	
-	public TaskList(String channel, String process)
+
+	public TaskList(String taskType, String channel)
 	{
 		super();
+		this.taskType = taskType;
 		this.channel = channel;
-		this.process = process;
 	}
 
 	public TaskList(
 			String dateRange,
+			String taskType,
 			String channel,
-			String process,
+			String taskStatus,
+			String requiredBy,
 			String department,
 			String operator,
 			String taskStart,
@@ -32,8 +36,10 @@ public class TaskList
 	{
 		super();
 		this.dateRange = dateRange;
+		this.taskType = taskType;
 		this.channel = channel;
-		this.process = process;
+		this.taskStatus = taskStatus;
+		this.requiredBy = requiredBy;
 		this.department = department;
 		this.operator = operator;
 		this.taskStart = taskStart;
@@ -50,6 +56,16 @@ public class TaskList
 		this.dateRange = dateRange;
 	}
 
+	public String getTaskType()
+	{
+		return taskType;
+	}
+
+	public void setTaskType(String taskType)
+	{
+		this.taskType = taskType;
+	}
+
 	public String getChannel()
 	{
 		return channel;
@@ -60,14 +76,24 @@ public class TaskList
 		this.channel = channel;
 	}
 
-	public String getProcess()
+	public String getTaskStatus()
 	{
-		return process;
+		return taskStatus;
 	}
 
-	public void setProcess(String process)
+	public void setTaskStatus(String taskStatus)
 	{
-		this.process = process;
+		this.taskStatus = taskStatus;
+	}
+
+	public String getRequiredBy()
+	{
+		return requiredBy;
+	}
+
+	public void setRequiredBy(String requiredBy)
+	{
+		this.requiredBy = requiredBy;
 	}
 
 	public String getDepartment()
@@ -109,6 +135,4 @@ public class TaskList
 	{
 		this.taskFinish = taskFinish;
 	}
-	
-	
 }
