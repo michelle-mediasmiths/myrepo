@@ -30,7 +30,7 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		{
 			unmatched(houseID);
 		}
-		else if (MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(MayamContentTypes.PROGRAMME))
+		else if (MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(contentMaterialType))
 		{
 			if (!AssetProperties.isQCParallel(messageAttributes))
 			{
