@@ -19,12 +19,12 @@ import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Marker.Type;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ComplianceLoggingMarker;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
+import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
-import email.events.common.ip.foxtel.mediasmiths.com.Emailaddresses;
 
 public class ExportMarkersButton extends ButtonClickHandler
 {
@@ -37,8 +37,8 @@ public class ExportMarkersButton extends ButtonClickHandler
 	private String systemEventNamespace;
 	
 	@Inject
-	@Named("complianceLogging.marshaller")
-	private Marshaller compLoggingMarshaller;
+	@Named("fxcommon.marshaller")
+	private Marshaller fxcommonMarshaller;
 	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
@@ -82,7 +82,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			}
 			
 			
-			ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
+			ComplianceLoggingMarkerType clm = new ComplianceLoggingMarkerType();
 			clm.setLoggerdetails(sb.toString());
 			clm.setMasterID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			clm.setTitleField(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
@@ -109,13 +109,10 @@ public class ExportMarkersButton extends ButtonClickHandler
 		}
 	}
 
-	private String compLoggingMarkerInfoToString(ComplianceLoggingMarker clm) throws JAXBException
+	private String compLoggingMarkerInfoToString(ComplianceLoggingMarkerType clm) throws JAXBException
 	{
-		com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ObjectFactory of = new  com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker.ObjectFactory();
-		
-		JAXBElement<ComplianceLoggingMarker> j = of.createComplianceLoggingMarker(clm);
 		StringWriter sw = new StringWriter();
-		compLoggingMarshaller.marshal(j, sw);
+		fxcommonMarshaller.marshal(clm, sw);
 		String event = sw.toString();
 		return event;
 	}

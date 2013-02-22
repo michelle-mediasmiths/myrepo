@@ -74,13 +74,13 @@ public class JaxModule extends AbstractModule
 
 	@Provides
 	@Singleton
-	@Named("complianceLogging.context")
-	JAXBContext providecomplianceLoggingJAXBContext() throws JAXBException
+	@Named("fxcommon.context")
+	JAXBContext providefxcommonJAXBContext() throws JAXBException
 	{
 		JAXBContext jc = null;
 		try
 		{
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker");
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.ip.common.events");
 		}
 		catch (JAXBException e)
 		{
@@ -92,8 +92,8 @@ public class JaxModule extends AbstractModule
 
 	@Provides
 	@Singleton
-	@Named("complianceLogging.serialiser")
-	JAXBSerialiser providecomplianceLoggingJAXBSerialiser(@Named("complianceLogging.context") JAXBContext context)
+	@Named("fxcommon.serialiser")
+	JAXBSerialiser providefxcommonJAXBSerialiser(@Named("fxcommon.context") JAXBContext context)
 	{
 
 		return JAXBSerialiser.getInstance(context);
@@ -102,8 +102,8 @@ public class JaxModule extends AbstractModule
 	
 	@Provides
 	@Singleton
-	@Named("complianceLogging.marshaller")
-	Marshaller provideCompLoggingMarshaller(@Named("complianceLogging.context") JAXBContext jc) throws JAXBException, SAXException
+	@Named("fxcommon.marshaller")
+	Marshaller providefxCommonMarshaller(@Named("fxcommon.context") JAXBContext jc) throws JAXBException, SAXException
 	{
 		Marshaller marshaller = null;
 		try
