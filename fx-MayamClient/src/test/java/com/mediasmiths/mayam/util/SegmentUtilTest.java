@@ -9,6 +9,8 @@ import org.junit.Test;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 
 public class SegmentUtilTest
 {
@@ -125,6 +127,85 @@ public class SegmentUtilTest
 			
 			
 		}
+		
+		@Test
+		public void testPresentationToHumanString(){
+			
+			Presentation presentation = new Presentation();
+			
+			//package 1
+			com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package package1 = new com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package();
+			package1.setPresentationID("PACKAGE1");
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s1 = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			s1.setSOM("00:01:00:01");
+			s1.setDuration("00:03:01:17");
+			s1.setSegmentNumber(1);
+			s1.setSegmentTitle("title1");	
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s2 = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			s2.setSOM("00:04:00:01");
+			s2.setEOM("00:07:10:17");
+			s2.setSegmentNumber(2);
+			s2.setSegmentTitle("title2");	
+			
+			
+			Segmentation segmentation1 = new Segmentation();
+			segmentation1.getSegment().add(s1);
+			segmentation1.getSegment().add(s2);
+			
+			package1.setSegmentation(segmentation1);
+			
+			//pacakge2
+			com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package package2 = new com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package();
+			package2.setPresentationID("PACKAGE2");
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment p2s1 = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			p2s1.setSOM("00:01:00:00");
+			p2s1.setDuration("00:03:01:16");
+			p2s1.setSegmentNumber(1);
+			p2s1.setSegmentTitle("pack2title1");	
+			
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment p2s2 = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			p2s2.setSOM("00:04:01:16");
+			p2s2.setEOM("00:05:10:17");
+			p2s2.setSegmentNumber(2);
+			p2s2.setSegmentTitle("pack2title2");	
+			
+			
+			Segmentation segmentation2 = new Segmentation();
+			segmentation2.getSegment().add(p2s1);
+			segmentation2.getSegment().add(p2s2);
+			
+			package2.setSegmentation(segmentation2);
+			
+			presentation.getPackage().add(package1);
+			presentation.getPackage().add(package2);
+			
+			String actual = SegmentUtil.presentationToHumanString(presentation);
+			System.out.println(actual);
+			
+			String expected = "PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:18_title1\n2_00:04:00:01_00:03:10:16_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:16_pack2title1\n2_00:04:01:16_00:01:09:01_00:05:10:17_pack2title2\n\n";
+			
+			//if this test is failing the following may be uncommented to see where the first differnece in the expected and actual strings are
+			/*
+			char[] actualChar = actual.toCharArray();
+			char[] expectedChar = expected.toCharArray();
+			
+			assertEquals(expectedChar.length, actualChar.length);
+			
+			for(int i=0;i<expectedChar.length;i++){
+				
+				if(expectedChar[i] != actualChar[i]){
+					System.out.println("first difference at char "+i);
+					break;
+				}
+			}
+			*/
+			
+			assertEquals(expected, actual);			
+		}
+
 }
 
 

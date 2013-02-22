@@ -12,13 +12,13 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class QcCompleteHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(QcCompleteHandler.class);
-
 
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
@@ -30,7 +30,7 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		{
 			unmatched(houseID);
 		}
-		else
+		else if (MayamMaterialController.PROGRAMME_MATERIAL_CONTENT_TYPE.equals(MayamContentTypes.PROGRAMME))
 		{
 			if (!AssetProperties.isQCParallel(messageAttributes))
 			{
@@ -42,15 +42,18 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 				log.info("Asset has been marked as qc parallel, a preview task should already have been created");
 			}
 		}
-		
+		else
+		{
+			log.info("Asset was not programme or unmatched material");
+		}
+
 	}
-	
+
 	private void preview(String houseID, Date requiredByDate)
 	{
 		try
 		{
-
-			taskController.createPreviewTaskForMaterial(houseID,requiredByDate);
+			taskController.createPreviewTaskForMaterial(houseID, requiredByDate);
 		}
 		catch (Exception e)
 		{
@@ -76,7 +79,6 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		return "QC Complete";
 	}
 
-
 	@Override
 	public MayamTaskListType getTaskType()
 	{
@@ -86,6 +88,6 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 	@Override
 	public TaskState getTaskState()
 	{
-		return TaskState.FINISHED;		
+		return TaskState.FINISHED;
 	}
 }

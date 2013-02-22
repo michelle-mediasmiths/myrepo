@@ -693,6 +693,9 @@ public class MayamMaterialController extends MayamController
 
 					Presentation presentation = material.getPresentation();
 				
+					//stash to file for populating segmentation information later on
+					
+					//stashing to file will be replaced by stashing in pending tx pacakge list
 					try
 					{
 						String presentationString = presentationToString(presentation);
@@ -703,8 +706,20 @@ public class MayamMaterialController extends MayamController
 						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
 					}
 					catch(Exception e){
-						log.error("error saving presentation infor for material",e);
+						log.error("error saving presentation info for material",e);
 					}
+					
+					// save the segmentation information to the natural breaks string
+					try
+					{
+						String presentationString = SegmentUtil.presentationToHumanString(presentation);
+						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
+					}
+					catch (Exception e)
+					{
+						log.error("error converting segmentation informatio to human string for natual breaks field", e);
+					}
+					
 				}
 
 				AudioTracks audioTracks = material.getAudioTracks();

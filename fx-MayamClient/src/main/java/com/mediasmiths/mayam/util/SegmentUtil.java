@@ -10,6 +10,9 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
@@ -218,6 +221,31 @@ public class SegmentUtil
 		for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s: segment)
 		{
 			sb.append(segmentToString(s));
+		}
+		
+		return sb.toString();
+	}
+
+	public static String presentationToHumanString(Presentation presentation)
+	{
+		List<Package> packages = presentation.getPackage();
+
+		StringBuilder sb = new StringBuilder();
+		
+		for (Package packge : packages)
+		{
+			sb.append(packge.getPresentationID());
+			sb.append("\n");
+			sb.append("N____SOM_______DURATION_____EOM_______TITLE\n");
+			
+			List<com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment> segments = packge.getSegmentation().getSegment();
+			
+			for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment segment : segments)
+			{
+				sb.append(segmentToString(segment));
+			}
+			
+			sb.append("\n");
 		}
 		
 		return sb.toString();
