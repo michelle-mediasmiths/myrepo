@@ -1,11 +1,7 @@
 package com.mediasmiths.mq.handlers.button;
 
-import java.io.StringWriter;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
 
@@ -17,11 +13,8 @@ import com.mayam.wf.attributes.shared.type.Marker;
 import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Marker.Type;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
-import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -95,9 +88,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			String event = compLoggingMarkerInfoToString(clm);
 			String namespace = systemEventNamespace;
 
-			log.warn("not sending event for export markers email");
-			
-//			eventsService.saveEvent(eventName, event, namespace);
+			eventsService.saveEvent(eventName, event, namespace);
 			
 		}
 		catch (MayamClientException e)
@@ -112,7 +103,6 @@ public class ExportMarkersButton extends ButtonClickHandler
 
 	private String compLoggingMarkerInfoToString(ComplianceLoggingMarkerType clm) throws JAXBException
 	{
-		
 		return commonSerialiser.serialise(clm);
 	}
 

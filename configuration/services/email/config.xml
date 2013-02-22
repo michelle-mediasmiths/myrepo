@@ -9,7 +9,7 @@
 			<subject>Auto QC Fail in MAM: [TitleField]</subject>
 			<body>AutoQCFailed</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_LS_Promo@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_OD_Promo@foxtel.com.au</tns:emailaddress>
@@ -26,7 +26,7 @@
 			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
 			<body>CerifyQCError</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</tns:emailaddress>
@@ -47,7 +47,7 @@
 				<tns:emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</tns:emailaddress>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -60,7 +60,7 @@
 				[MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_LS_Promo@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FC_ Promo@foxtel.com.au</tns:emailaddress>
@@ -89,7 +89,7 @@
 				<tns:emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</tns:emailaddress>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -168,7 +168,7 @@
 			<body>TCFailed</body>
 			<emailaddresses>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -201,7 +201,7 @@
 			<emailaddresses>
 				<tns:emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</tns:emailaddress>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -220,7 +220,7 @@
 			<subject>Pass-Reorder Item in MAM: [MasterID] [TitleField]</subject>
 			<body>PreviewFailed</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_LS_Promo@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FC_ Promo@foxtel.com.au</tns:emailaddress>
@@ -246,7 +246,7 @@
 				<tns:emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</tns:emailaddress>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -347,7 +347,7 @@
 			<subject>Ardome import has failed</subject>
 			<body>ArdomeImportFailure</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
@@ -360,7 +360,7 @@
 			<subject>Ardome import has failed</subject>
 			<body>ProgrammeFileIngestFailure</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
@@ -373,7 +373,7 @@
 			<subject>Ardome import has failed</subject>
 			<body>MediaFileImportFailure</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
@@ -386,7 +386,7 @@
 			<subject>Ardome import has failed</subject>
 			<body>EmergencyImportFailure</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</tns:emailaddress>
@@ -402,7 +402,7 @@
 			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>
-				<tns:emailaddress>GS-MAM_BOPS@foxtel.com.au</tns:emailaddress>
+				<tns:emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</tns:emailaddress>
 				<tns:emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</tns:emailaddress>
 			</emailaddresses>
