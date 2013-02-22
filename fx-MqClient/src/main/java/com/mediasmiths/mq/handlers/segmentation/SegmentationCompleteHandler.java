@@ -35,7 +35,6 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
 				updateMap.setAttribute(Attribute.TX_READY, Boolean.TRUE);
 				tasksClient.assetApi().updateAsset(updateMap);
-
 			}
 			else
 			{
