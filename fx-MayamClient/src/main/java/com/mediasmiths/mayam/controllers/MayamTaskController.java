@@ -74,7 +74,7 @@ public class MayamTaskController extends MayamController
 				MayamAssetType.MATERIAL.getAssetType(),
 				Attribute.HOUSE_ID,
 				materialID);
-		if (!openTasksForAsset.isEmpty())
+		if (openTasksForAsset.isEmpty())
 		{
 			log.debug("no unclosed ingest tasks for asset");
 
