@@ -680,11 +680,11 @@ public class MayamMaterialController extends MayamController
 					try
 					{
 						String presentationString = SegmentUtil.originalConformToHumanString(originalConform);
-						attributesValid &= attributes.setAttribute(Attribute.AUX_VAL, presentationString);
+						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
 					}
 					catch (Exception e)
 					{
-						log.error("error setting original conform information in AUX_VAL", e);
+						log.error("error setting original conform information in SEGMENTATION_NOTES", e);
 					}
 
 				}
