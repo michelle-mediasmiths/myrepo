@@ -31,14 +31,14 @@ public class PurgeContentRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate)
+	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<Purge> purged = getPurgeList(events, startDate, endDate);
 		logger.info("Events: " + events);
 		logger.info("Purged: " + purged);
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "purgedContentCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "entityType", "title", "materialID", "channels", "isProtected", "extended", "purged", "expires"};
 			final CellProcessor[] processors = getPurgeProcessor();
 			beanWriter.writeHeader(header);

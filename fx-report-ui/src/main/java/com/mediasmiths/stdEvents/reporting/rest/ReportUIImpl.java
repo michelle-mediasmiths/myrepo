@@ -86,11 +86,20 @@ public class ReportUIImpl implements ReportUI
 	public static Long endLong;
 	public static Calendar endCal;
 	public static Date endDate;
+	
+	public static String REPORT_NAME;
 
 	@Transactional
 	public String getReport()
 	{
 		TemplateCall call = templater.template("report");
+		return call.process();
+	}
+	
+	@Transactional
+	public String getPopup()
+	{
+		TemplateCall call = templater.template("pop-up");
 		return call.process();
 	}
 	
@@ -177,6 +186,13 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional
+	public void saveReportName(@QueryParam("name") String name)
+	{
+		REPORT_NAME = name;
+		logger.info("REPORT_NAME: " + REPORT_NAME);
+	}
+	
+	@Transactional
 	public String getById(@QueryParam("id") Long id)
 	{
 		final TemplateCall call = templater.template("search");
@@ -190,9 +206,11 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> delivered = getInDate(queryApi.getDelivered());
 		
 		List<EventEntity> outstanding = getInDate(queryApi.getOutstanding());
-		List<EventEntity> overdue = getInDate(queryApi.getOverdue());
+		//List<EventEntity> overdue = getInDate(queryApi.getOverdue());
+		List<EventEntity> overdue = new ArrayList<EventEntity>();
  		List<EventEntity> unmatched = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
-		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched, startDate, endDate);
+ 		logger.info("writeOrderStatus: " + REPORT_NAME);
+		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched, startDate, endDate, REPORT_NAME);
 	}
 	
 	public List<EventEntity> getInDate(List<EventEntity> events)
@@ -243,7 +261,7 @@ public class ReportUIImpl implements ReportUI
 			if (within)
 				valid.add(event);
 		}
-		acquisition.writeAcquisitionDelivery(valid, startDate, endDate);
+		acquisition.writeAcquisitionDelivery(valid, startDate, endDate, REPORT_NAME);
 		
 		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
 		int perByFile = 0;
@@ -273,7 +291,7 @@ public class ReportUIImpl implements ReportUI
 //					manualQA.add(event);
 //			}
 //		}
-		manualQa.writeManualQA(preview, startDate, endDate);
+		manualQa.writeManualQA(preview, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
@@ -287,15 +305,15 @@ public class ReportUIImpl implements ReportUI
 			if (within)
 				valid.add(event);
 		}
-		autoQc.writeAutoQc(valid, startDate, endDate);
+		autoQc.writeAutoQc(valid, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getTaskListCSV()
 	{
-		List<EventEntity> tasks = new ArrayList<EventEntity>();
+		List<EventEntity> tasks = queryApi.getByEventName("TaskList");
 		//NEEED TEST DATA TO SEND TO REPORT
-		taskList.writeTaskList(tasks);
+		taskList.writeTaskList(tasks, startDate, endDate, REPORT_NAME);
 	}	
 	
 	@Transactional
@@ -318,7 +336,7 @@ public class ReportUIImpl implements ReportUI
 			if (within)
 				valid.add(event);
 		}
-		purgeContent.writePurgeTitles(valid, startDate, endDate);
+		purgeContent.writePurgeTitles(valid, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
@@ -342,7 +360,7 @@ public class ReportUIImpl implements ReportUI
 	{
 		List<EventEntity> events = new ArrayList<EventEntity>();
 		//NEED TEST DATA TO SEND REPORT
-		watchFolder.writeWatchFolder(events, startDate, endDate);
+		watchFolder.writeWatchFolder(events, startDate, endDate, REPORT_NAME);
 	}
 	
 	@Transactional
@@ -355,7 +373,7 @@ public class ReportUIImpl implements ReportUI
 			if (within)
 				valid.add(event);
 		}
-		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate);
+		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate, REPORT_NAME);
 	}
 
 	@Override

@@ -39,13 +39,13 @@ public class AcquisitionRpt
 	private List<String> channels = new ArrayList<String>();
 	private List<String> formats = new ArrayList<String>();
 	
-	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate)
+	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate, String reportName)
 	{
 		List<AcquisitionDelivery> titles = getAcquisitionDeliveryList(materials, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try{
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "acquisitionDeliveryCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tape", "file", "format", "fileSize", "duration"};
 			final CellProcessor[] processors = getAcquisitionProcessor();
 			beanWriter.writeHeader(header);

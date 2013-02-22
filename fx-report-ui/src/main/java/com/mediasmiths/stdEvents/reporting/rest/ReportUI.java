@@ -17,6 +17,10 @@ public interface ReportUI
 	public String getReport();
 	
 	@GET
+	@Path("/popup")
+	public String getPopup();
+	
+	@GET
 	@Path("/search_namespace/namespace")
 	@Produces("text/html")
 	public String getByNamespace(@QueryParam("namespace")String namespace);
@@ -50,6 +54,11 @@ public interface ReportUI
 	@Path("/long_to_cal/date")
 	@Produces("text/html")
 	public Date longToCal(@QueryParam("date")Long date);
+	
+	@GET
+	@Path("/report_name/name")
+	@Produces("text/html")
+	public void saveReportName(@QueryParam("name")String name);
 	
 	@GET
 	@Path("/order_status_csv")

@@ -542,6 +542,16 @@ public class MayamPackageController extends MayamController
 		{
 			if ( ! isProtected(segmentList,presentationID))
 			{
+				
+				try
+				{
+					taskController.cancelAllOpenTasksForAsset(MayamAssetType.PACKAGE.getAssetType(), Attribute.HOUSE_ID, presentationID);
+				}
+				catch (MayamClientException e)
+				{	
+					log.error("error cancelling open tasks for asset during delete",e);
+				}
+				
 				try
 				{
 					client.segmentApi().deleteSegmentList(segmentList.getId());

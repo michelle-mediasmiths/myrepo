@@ -30,13 +30,13 @@ public class TranscoderLoadRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeTranscoderLoad(List<EventEntity> events, Date startDate, Date endDate)
+	public void writeTranscoderLoad(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<TranscoderLoad> transcodes = getTranscoderList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "transcoderLoadCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "mediaID", "transcodeFinish", "duration", "sourceFormat", "result"};
 			final CellProcessor[] processors = getTranscoderProcessor();
 			beanWriter.writeHeader(header);

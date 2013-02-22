@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -29,27 +30,29 @@ public class TaskListRpt
 	@Inject 
 	private QueryAPI queryApi;
 	
-	public void writeTaskList(List<EventEntity> events)
+	public void writeTaskList(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<TaskList> tasks = getTaskList(events);
+		List<TaskList> tasks = getTaskList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "taskListCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "channel", "process", "department", "operator", "taskStart", "taskFinish"};
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			final String[] header = {"dateRange", "taskType", "channel", "taskStatus", "requiredBy", "operator", "department", "taskStart", "taskFinish"};
 			final CellProcessor[] processors = getTaskListProcessor();
 			beanWriter.writeHeader(header);
 			
-			TaskList total = new TaskList("Total Tasks", null);
-			TaskList outstanding = new TaskList("Outstanding", null);
-			TaskList completed = new TaskList ("Completed Tasks", null);
-			TaskList overdue = new TaskList ("OverdueTasks", null);
-			TaskList average = new TaskList ("Average Completion Time", null);
+			TaskList total = new TaskList("Total Tasks", Integer.toString(tasks.size()));
+			TaskList outstanding = new TaskList("Outstanding", Integer.toString(queryApi.getOutstandingTasks(events).size()));
+			TaskList completed = new TaskList ("Completed Tasks", Integer.toString(queryApi.getCompletedTasks(events).size()));
+			TaskList overdue = new TaskList ("OverdueTasks", Integer.toString(queryApi.getOverdue(events).size()));
+			TaskList average = new TaskList ("Average Completion Time", queryApi.getAvCompletionTime(events));
 			tasks.add(total);
 			tasks.add(outstanding);
 			tasks.add(completed);
 			tasks.add(average);
 			tasks.add(overdue);
+			
+			logger.info(tasks);
 			
 			for (TaskList task : tasks)
 			{
@@ -75,7 +78,7 @@ public class TaskListRpt
 		}
 	}
 	
-	public List<TaskList> getTaskList(List<EventEntity> events)
+	public List<TaskList> getTaskList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<TaskList> tasks = new ArrayList<TaskList>();
 		for (EventEntity event : events)
@@ -83,8 +86,24 @@ public class TaskListRpt
 			String payload = event.getPayload();
 			TaskList task = new TaskList();
 			
-			//GET FIELDS FOR REPORT TYPE
-			
+			task.setDateRange(startDate + " - " + endDate);
+			if (payload.contains("taskType"))
+				task.setTaskType(payload.substring(payload.indexOf("taskType")+9, payload.indexOf("</taskType")));
+			if (payload.contains("channel"))
+				task.setChannel(payload.substring(payload.indexOf("channel")+8, payload.indexOf("</channel")));
+			if (payload.contains("taskStatus"))
+				task.setTaskStatus(payload.substring(payload.indexOf("taskStatus")+11, payload.indexOf("</taskStatus")));
+			if (payload.contains("requiredBy"))
+				task.setRequiredBy(payload.substring(payload.indexOf("requiredBy")+11, payload.indexOf("</requiredBy")));
+			if (payload.contains("operator"))
+				task.setOperator(payload.substring(payload.indexOf("operator")+9, payload.indexOf("</operator")));
+			if (payload.contains("department"))
+				task.setDepartment(payload.substring(payload.indexOf("department")+11, payload.indexOf("</department")));
+			if (payload.contains("taskStart"))
+				task.setTaskStart(payload.substring(payload.indexOf("taskStart")+10, payload.indexOf("</taskStart")));
+			if (payload.contains("taskFinish"))
+				task.setTaskFinish(payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinish")));
+				
 			tasks.add(task);
 		}
 		
@@ -96,6 +115,8 @@ public class TaskListRpt
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
 				new Optional(), 
+				new Optional(),
+				new Optional(),
 				new Optional(),
 				new Optional(),
 				new Optional(),

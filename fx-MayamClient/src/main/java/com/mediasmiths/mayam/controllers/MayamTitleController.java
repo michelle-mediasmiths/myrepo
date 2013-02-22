@@ -629,7 +629,7 @@ public class MayamTitleController extends MayamController{
 		{
 			try
 			{
-				taskController.createPurgeCandidateTask(MayamAssetType.TITLE,titleID, 30);
+				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.TITLE,titleID, 30);
 			}
 			catch (MayamClientException e)
 			{
@@ -643,27 +643,16 @@ public class MayamTitleController extends MayamController{
 				AttributeMap assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				String assetID = assetAttributes.getAttribute(Attribute.ASSET_ID);
 				
-				//Close all associated tasks
-				FilterCriteria searchCriteria = client.taskApi().createFilterCriteria();
-				AttributeMap filterEqualities = client.createAttributeMap();
-				filterEqualities.setAttribute(Attribute.ASSET_ID, assetID);
-				searchCriteria.setFilterEqualities(filterEqualities);
-				FilterResult searchResults = client.taskApi().getTasks(searchCriteria, 100, 0);
-				List<AttributeMap> tasks = searchResults.getMatches();
-				
-				for (int i = 0; i < tasks.size(); i++)
+				try
 				{
-					AttributeMap task = tasks.get(i);
-					
-					TaskState currentState = (TaskState) task.getAttribute(Attribute.TASK_STATE);
-					
-					if(! TaskState.CLOSED_STATES.contains(currentState)) //dont try to remove tasks that are in a closed state, it wont work
-					{					
-						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-						client.taskApi().updateTask(task);
-					}
+					taskController.cancelAllOpenTasksForAsset(MayamAssetType.TITLE.getAssetType(), Attribute.ASSET_ID,assetID);
 				}
-				
+				catch (MayamClientException e)
+				{
+					log.error("error closing open tasks for title before deletion",e);
+					//user intent is for title to delete so dont let failure of side effect (removal of open tasks) prevent that
+				}
+								
 				//Delete the asset
 				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
 				
