@@ -21,6 +21,10 @@ public interface ReportUI
 	public String getPopup();
 	
 	@GET
+	@Path("/parent")
+	public String getParent();
+	
+	@GET
 	@Path("/search_namespace/namespace")
 	@Produces("text/html")
 	public String getByNamespace(@QueryParam("namespace")String namespace);

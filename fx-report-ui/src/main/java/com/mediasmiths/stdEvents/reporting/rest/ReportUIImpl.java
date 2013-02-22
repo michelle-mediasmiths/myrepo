@@ -104,6 +104,13 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional
+	public String getParent()
+	{
+		TemplateCall call = templater.template("parent");
+		return call.process();
+	}
+	
+	@Transactional
 	public String getByNamespace(@QueryParam("namespace") String namespace)
 	{
 		final TemplateCall call = templater.template("search");
@@ -383,6 +390,7 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
+
 
 //	@Transactional
 //	public String getOrderStatusUI()

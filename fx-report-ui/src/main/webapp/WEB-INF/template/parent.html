@@ -1,0 +1,25 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
+<head>
+<title>PopUpLauncher</title>
+<link th:substituteby="includes :: htmlhead" />
+
+	<script type="text/javascript" language="javascript">
+		function openPopUp(url, title, height, width)
+		{
+			window.showModalDialog(url, title, dialogHeight=' +height+ 'px;dialogWidth=' +width+ 'px);
+		}
+	</script>
+</head>
+
+<body>
+	<input type="button" id="popUpButton" onClick="openPopUp('http://localhost:8080/fx-report-ui/rest/query/pop-up', 'Report', 400, 500);"/>
+
+</body>
+</html>
