@@ -40,7 +40,7 @@ public class OrderStatusRpt
 	
 	private SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
 	
-	public void writeOrderStatus(List<EventEntity> delivered, List<EventEntity> outstanding, List<EventEntity> overdue, List<EventEntity> unmatched, Date startDate, Date endDate)
+	public void writeOrderStatus(List<EventEntity> delivered, List<EventEntity> outstanding, List<EventEntity> overdue, List<EventEntity> unmatched, Date startDate, Date endDate, String reportName)
 	{
 		List<OrderStatus> deliveredTitles = getTitleList(delivered, "Delivered");
 		List<OrderStatus> outstandingTitles = getTitleList(outstanding, "Outstanding");
@@ -58,7 +58,7 @@ public class OrderStatusRpt
 			order.setDateRange(startDate + " - " + endDate);					
 		}
 		
-		createOrderStatusCsv(titles, "orderStatusCsv");
+		createOrderStatusCsv(titles, "orderStatusCsv", reportName);
 	}
 	
 	public List<OrderStatus> getTitleList(List<EventEntity> events, String status)
@@ -159,11 +159,12 @@ public class OrderStatusRpt
 			
 	}
 	
-	public void createOrderStatusCsv(List<OrderStatus> titles, String name)
+	public void createOrderStatusCsv(List<OrderStatus> titles, String name, String reportName)
 	{
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + name + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			logger.info("reportName: " + reportName);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
 			final String [] header = {"dateRange", "status", "title", "materialID", "channel", "orderRef", "requiredBy", "completedInDateRange", "overdueInDateRange", "aggregatorID", "taskType", "completionDate"};
 			final CellProcessor[] processors = getTitleProcessor();

@@ -23,6 +23,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ import java.util.Map;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.xml.bind.DatatypeConverter;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -150,42 +152,6 @@ public class QueryAPIImpl implements QueryAPI
 			}
 		}
 		return results;
-	}
-
-	@Transactional
-	public List<EventEntity> getOverdue()
-	{
-		List<EventEntity> notDelivered = getOutstanding();
-		List<EventEntity> overdue = new ArrayList<EventEntity>();
-
-		for (EventEntity event : notDelivered)
-		{
-			String payload = event.getPayload();
-			if (payload.contains("RequiredBy"))
-			{
-				String requiredBy = payload.substring(payload.indexOf("RequiredBy") + 11, payload.indexOf("</RequiredBy"));
-
-				try
-				{
-					DateFormat formatter;
-					formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSSz");
-					Date requiredByDate;
-
-					requiredByDate = (Date) formatter.parse(requiredBy);
-
-
-					if (requiredByDate.after(new Date()))
-					{
-						overdue.add(event);
-					}
-				}
-				catch (ParseException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-		return overdue;
 	}
 
 	@Transactional
@@ -478,4 +444,110 @@ public class QueryAPIImpl implements QueryAPI
 		purged.addAll(manual);
 		return purged;
 	}
+
+	@Transactional
+	public List<EventEntity> getOutstandingTasks(List<EventEntity> events)
+	{
+		List<EventEntity> outstanding = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if (payload.contains("taskStatus"))
+			{
+				String status = payload.substring(payload.indexOf("taskStatus")+11, payload.indexOf("</taskStatus"));
+				if ((status.equals("OPEN")) || (status.equals("ACTIVE")) || (status.equals("WARNING") || status.equals("ERROR")))
+						outstanding.add(event);
+			}		
+		}
+		return outstanding;
+	}
+
+	@Transactional
+	public List<EventEntity> getCompletedTasks(List<EventEntity> events)
+	{
+		List<EventEntity> completed = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if (payload.contains("taskStatus"))
+			{
+				String status = payload.substring(payload.indexOf("taskStatus")+11, payload.indexOf("</taskStatus"));
+				if ((status.equals("FINISHED")) || (status.equals("FINISHED_FAILED")))
+						completed.add(event);
+			}	
+		}
+		return completed;
+	}
+	
+	@Transactional
+	public List<EventEntity> getOverdue(List<EventEntity> events)
+	{
+		List<EventEntity> overdue = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			logger.info(payload);
+			if ((payload.contains("requiredBy")) && (payload.contains("taskFinish")))
+			{
+				String requiredString = payload.substring(payload.indexOf("requiredBy")+11, payload.indexOf("</requiredBy"));
+				String finishString = payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinish"));
+				if ((! requiredString.isEmpty()) && (! finishString.isEmpty()))
+				{
+					Calendar requiredBy = DatatypeConverter.parseDateTime(requiredString);
+					Calendar taskFinish = DatatypeConverter.parseDateTime(finishString);
+					if (requiredBy.before(taskFinish))
+						overdue.add(event);
+				}
+			}	
+		}
+		return overdue;	
+	}
+
+	@Transactional
+	public String getAvCompletionTime(List<EventEntity> events)
+	{
+		double totalTime = 0;
+		int number = 0;
+		for (EventEntity event : events)
+		{
+			String payload = event.getPayload();
+			if ((payload.contains("taskStart")) && (payload.contains("taskFinish")))
+			{
+				String startString = payload.substring(payload.indexOf("taskStart")+10, payload.indexOf("</taskStart"));
+				String finishString = payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinsh"));
+				if ((! startString.isEmpty()) && (! finishString.isEmpty()))
+				{
+					//use date time format
+					Calendar taskStart = DatatypeConverter.parseDateTime(startString);
+					Calendar taskFinish = DatatypeConverter.parseDateTime(finishString);
+					double diff = (taskFinish.getTimeInMillis()) - (taskStart.getTimeInMillis());
+					logger.info("diff: " + diff);
+					totalTime += diff;
+					number ++;
+				}
+			}
+			
+		}
+		double average = totalTime/number;
+		int avInt = (int) Math.round(average);
+		String formatted = millisToHHMMSS(avInt);
+		logger.info("double average: " + average + " int average: " + avInt + " string: " + formatted);
+		return formatted;
+	}
+	
+	private String millisToHHMMSS(int millis)
+	{
+		int secs = millis /1000;
+		
+		int hours = secs / 3600,
+			remainder = secs % 3600,
+			minutes = remainder / 60,
+			seconds = remainder % 60;
+
+				return ( (hours < 10 ? "0" : "") + hours
+				+ ":" + (minutes < 10 ? "0" : "") + minutes
+				+ ":" + (seconds< 10 ? "0" : "") + seconds );
+	}
+	
+	
 }

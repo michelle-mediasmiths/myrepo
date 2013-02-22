@@ -31,12 +31,12 @@ public class AutoQCRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate)
+	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate, String reportName)
 	{
 		List<AutoQC> autoQcs = getQCList(passed, startDate, endDate);
 		ICsvBeanWriter beanWriter = null;
 		try {
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "autoQcCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			final String[] header = {"dateRange", "title", "materialID", "channels", "contentType", "operator", "taskStatus", "qcStatus", "taskStart", "taskFinish", "warningTime", "manualOverride", "failureParameter", "titleLength"};
 			final CellProcessor[] processors = getAutoQCProcessor();
 			beanWriter.writeHeader(header);
