@@ -214,12 +214,16 @@
 	</xs:complexType>
 
     <xs:complexType name="ComplianceLoggingMarkerType">
+        <xs:complexContent>
+        <xs:extension base="fns:IPEvent">
         <xs:sequence>
             <xs:element type="xs:string" name="MasterID" />
             <xs:element type="xs:string" name="TitleField" />
             <xs:element type="xs:string" name="Loggerdetails" />
             <xs:element name="emailaddresses" type="emailaddresses" />
         </xs:sequence>
+        </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
 	<xs:complexType name="ComplianceLogging">
