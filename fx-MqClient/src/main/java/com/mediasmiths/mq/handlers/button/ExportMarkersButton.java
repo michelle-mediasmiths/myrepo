@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
+import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -37,8 +38,8 @@ public class ExportMarkersButton extends ButtonClickHandler
 	private String systemEventNamespace;
 	
 	@Inject
-	@Named("fxcommon.marshaller")
-	private Marshaller fxcommonMarshaller;
+	@Named("fxcommon.serialiser")
+	private JAXBSerialiser commonSerialiser;
 	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
@@ -111,10 +112,8 @@ public class ExportMarkersButton extends ButtonClickHandler
 
 	private String compLoggingMarkerInfoToString(ComplianceLoggingMarkerType clm) throws JAXBException
 	{
-		StringWriter sw = new StringWriter();
-		fxcommonMarshaller.marshal(clm, sw);
-		String event = sw.toString();
-		return event;
+		
+		return commonSerialiser.serialise(clm);
 	}
 
 	@Override
