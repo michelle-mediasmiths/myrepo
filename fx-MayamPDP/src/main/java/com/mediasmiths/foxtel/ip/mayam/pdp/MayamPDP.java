@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -26,21 +27,51 @@ public interface MayamPDP
 	@Path("segmentMismatch")
 	@GET()
 	@Produces("application/json")
-	public String segmentMismatch(Map<String, String> attributeMap);
+	@Consumes("application/json")
+	public  Map<String, String> segmentMismatch(Map<String, String> attributeMap);
 
 	@Path("segmentClassificationCheck")
 	@GET()
 	@Produces("application/json")
-	public String segmentClassificationCheck(Map<String, String> attributeMap);
+	@Consumes("application/json")
+	public  Map<String, String> segmentClassificationCheck(Map<String, String> attributeMap);
 
 	@Path("uningestProtected")
 	@GET()
 	@Produces("application/json")
-	public String uningestProtected(Map<String, String> attributeMap);
+	@Consumes("application/json")
+	public  Map<String, String> uningestProtected(Map<String, String> attributeMap);
 
 	@Path("deleteProtected")
 	@GET()
 	@Produces("application/json")
-	public String deleteProtected(Map<String, String> attributeMap);
+	@Consumes("application/json")
+	public  Map<String, String> deleteProtected(Map<String, String> attributeMap);
+
+	@Path("protect")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public  Map<String, String> protect(Map<String, String> attributeMap);
+
+	@Path("unprotect")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public  Map<String, String> unprotect(Map<String, String> attributeMap);
+
+	@Path("delete")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public  Map<String, String> delete(Map<String, String> attributeMap);
+
+	@Path("proxyFileCheck")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public  Map<String, String> proxyfileCheck(Map<String, String> attributeMap);
+
+
 
 }

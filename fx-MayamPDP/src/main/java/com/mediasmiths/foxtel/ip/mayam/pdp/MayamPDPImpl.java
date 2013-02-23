@@ -1,23 +1,17 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
-import javax.xml.ws.WebServiceException;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
-import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.mq.Mq;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mayam.util.RevisionUtil;
-import com.mediasmiths.mayam.util.SegmentUtil;
+
+import javax.xml.ws.WebServiceException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Mayam sends JSON that looks like this. A collection of mapped variables.
@@ -56,11 +50,11 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 	@Override
-	public String segmentMismatch(final Map<String, String> attributeMap)
+	public  Map<String, String> segmentMismatch(final Map<String, String> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER.toString(), Attribute.HOUSE_ID.toString());
 
-	    Map<String, String> returnMap = new HashMap<String, String>();
+	    Map<String, String> returnMap = new HashMap<>();
 	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
 	    
 	    //Segmentation check
@@ -96,11 +90,11 @@ public class MayamPDPImpl implements MayamPDP
 	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "A technical fault has occurred while retrieving segemnt list");
 	    }
 	    
-		return returnMap.toString();
+		return returnMap;
 	}
 	
 	@Override
-	public String segmentClassificationCheck(final Map<String, String> attributeMap)
+	public  Map<String, String> segmentClassificationCheck(final Map<String, String> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, null, null);
 
@@ -119,11 +113,11 @@ public class MayamPDPImpl implements MayamPDP
 	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
 	    }
 	    
-		return returnMap.toString();
+		return returnMap;
 	}
 	
 	@Override
-	public String uningestProtected(final Map<String, String> attributeMap)
+	public  Map<String, String> uningestProtected(final Map<String, String> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString());
 
@@ -150,15 +144,28 @@ public class MayamPDPImpl implements MayamPDP
 	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
 	    }
 	    
-		return returnMap.toString();
+		return returnMap;
 	}
-	
+
 	@Override
-	public String deleteProtected(final Map<String, String> attributeMap)
+	public  Map<String, String> delete(final Map<String, String> attributeMap)
+	{
+		validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
+
+		Map<String, String> returnMap = new HashMap<>();
+		returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+
+
+		return returnMap;
+	}
+
+
+	@Override
+	public  Map<String, String> deleteProtected(final Map<String, String> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
 
-	    Map<String, String> returnMap = new HashMap<String, String>();
+	    Map<String, String> returnMap = new HashMap<>();
 	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
@@ -181,9 +188,34 @@ public class MayamPDPImpl implements MayamPDP
 	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
 	    }
 	    
-		return returnMap.toString();
+		return returnMap;
 	}
-	
+
+
+
+	@Override
+	public  Map<String, String> protect(final Map<String, String> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public  Map<String, String> unprotect(final Map<String, String> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+
+
+	@Override
+	public  Map<String, String> proxyfileCheck(final Map<String, String> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+
+
+
 	/**
 	 *
 	 * @param attributeMap the incoming Mayam Attribute map
