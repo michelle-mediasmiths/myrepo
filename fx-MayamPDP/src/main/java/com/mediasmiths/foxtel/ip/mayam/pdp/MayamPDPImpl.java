@@ -11,6 +11,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
+import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.mq.Mq;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -66,7 +67,15 @@ public class MayamPDPImpl implements MayamPDP
 	    String requestedNumber = attributeMap.get(Attribute.REQ_NUMBER.toString());
 	    int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
 	    String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
-	    SegmentList segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
+	    
+	    SegmentList segmentList = null;
+	    try {
+	    	segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
+	    }
+	    catch (RemoteException e) {
+	    	segmentList = null;
+	    }
+	    
 	    if (segmentList != null && segmentList.getEntries() != null)
 	    {
 		    int segmentsSize = segmentList.getEntries().size();
