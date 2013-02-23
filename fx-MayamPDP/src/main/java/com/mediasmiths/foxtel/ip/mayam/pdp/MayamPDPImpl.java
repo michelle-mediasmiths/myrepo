@@ -17,9 +17,6 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
-import com.mediasmiths.mq.MediasmithsDestinations;
-import com.mediasmiths.mq.ShutdownManager;
-import com.mediasmiths.mq.listeners.IncomingListener;
 
 /**
  * Mayam sends JSON that looks like this. A collection of mapped variables.
@@ -66,7 +63,8 @@ public class MayamPDPImpl implements MayamPDP
 	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
 	    
 	    //Segmentation check
-	    int numberOfSegmentsRequested = attributeMap.get(Attribute.REQ_NUMBER.toString());
+	    String requestedNumber = attributeMap.get(Attribute.REQ_NUMBER.toString());
+	    int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
 	    String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
 	    SegmentList segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
 	    if (segmentList != null && segmentList.getEntries() != null)
@@ -115,6 +113,28 @@ public class MayamPDPImpl implements MayamPDP
 		return returnMap.toString();
 	}
 	
+	@Override
+	public String segmentMismatch(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, null, null);
+
+	    Map<String, String> returnMap = new HashMap<String, String>();
+	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    
+	    String classification = attributeMap.get(Attribute.PURGE_PROTECTED.toString());
+	    if (classification == null || classification.equals(""))
+	    {
+	    	String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    	
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.CLASSIFICATION_FAILURE.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "The Tx Package has not been classified: " + presentationID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
+	    }
+	    
+		return returnMap.toString();
+	}
 	
 	/**
 	 *
