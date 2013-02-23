@@ -82,7 +82,7 @@ public class MayamPDPImpl implements MayamPDP
 	    else {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.STATUS.toString(), "Success");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT);
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
 	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Unable to retrieve Segment List for Presentation ID : " + presentationID);
 	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "A technical fault has occurred while retrieving segemnt list");
 	    }
