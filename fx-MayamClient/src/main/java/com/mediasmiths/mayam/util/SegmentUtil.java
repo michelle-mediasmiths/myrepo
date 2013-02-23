@@ -85,6 +85,26 @@ public class SegmentUtil
 		
 	}
 	
+	public static int stringToNumberOfSegments(String str) throws IllegalArgumentException
+	{
+		Matcher m  = stringToSeg.matcher(str.substring(str.indexOf('\n')));
+		int segmentCount = 0;
+		
+		while (m.find())
+		{
+			com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s = new com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment();
+			int number = Integer.parseInt(m.group(1));
+			String title = m.group(5);
+			String som = m.group(2);
+			String eom = m.group(4);
+			String duration = m.group(3);
+
+			segmentCount ++;
+		}
+		
+		return segmentCount;
+	}
+	
 	/**
 	 * Takes a segment and produces a copy with both eom and duration populated (eom and duration are a choice in the schema, returned object will not be schema compliant, not for marshalling)
 	 * @param s

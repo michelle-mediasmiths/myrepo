@@ -4,6 +4,22 @@ import javax.xml.ws.WebServiceException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
+import com.mayam.wf.mq.Mq;
+import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.util.RevisionUtil;
+import com.mediasmiths.mayam.util.SegmentUtil;
+import com.mediasmiths.mq.MediasmithsDestinations;
+import com.mediasmiths.mq.ShutdownManager;
+import com.mediasmiths.mq.listeners.IncomingListener;
 
 /**
  * Mayam sends JSON that looks like this. A collection of mapped variables.
@@ -31,18 +47,75 @@ import java.util.Map;
 public class MayamPDPImpl implements MayamPDP
 {
 
+	private final TasksClient client;
+	private final MayamTaskController taskController;
 
+	@Inject
+	public MayamPDPImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController) 
+	{
+		this.client=client;
+		this.taskController=taskController;
+	}
 
 	@Override
 	public String segmentMismatch(final Map<String, String> attributeMap)
 	{
+	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER.toString(), Attribute.HOUSE_ID.toString());
+
+	    Map<String, String> returnMap = new HashMap<String, String>();
+	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    
+	    //Segmentation check
+	    int numberOfSegmentsRequested = attributeMap.get(Attribute.REQ_NUMBER.toString());
+	    String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    SegmentList segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
+	    if (segmentList != null && segmentList.getEntries() != null)
+	    {
+		    int segmentsSize = segmentList.getEntries().size();
+		    if (numberOfSegmentsRequested != segmentsSize) 
+		    {
+		    	returnMap.clear();
+		    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+		    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.SEGMENT_NUMBER_MISMATCH.toString());
+		    	returnMap.put(PDPAttributes.LOGGING.toString(), "Presentation ID : " + presentationID + ", user has requested " + numberOfSegmentsRequested + " segemenst, while placeholder contained " + segmentsSize);
+		    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed <OK, cancel>");
+		    }
+	    }
+	    else {
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT);
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Unable to retrieve Segment List for Presentation ID : " + presentationID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "A technical fault has occurred while retrieving segemnt list");
+	    }
+	    
+		return returnMap.toString();
+	}
+	
+	@Override
+	public String segmentClassificationCheck(final Map<String, String> attributeMap)
+	{
 	    validateAttributeMap(attributeMap, null, null);
 
-
-		return null;
+	    Map<String, String> returnMap = new HashMap<String, String>();
+	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    
+	    String classification = attributeMap.get(Attribute.CONT_CLASSIFICATION.toString());
+	    if (classification == null || classification.equals(""))
+	    {
+	    	String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    	
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.CLASSIFICATION_FAILURE.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "The Tx Package has not been classified: " + presentationID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
+	    }
+	    
+		return returnMap.toString();
 	}
-
-
+	
+	
 	/**
 	 *
 	 * @param attributeMap the incoming Mayam Attribute map

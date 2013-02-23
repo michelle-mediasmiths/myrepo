@@ -28,4 +28,6 @@ public interface MayamPDP
 	@Produces("application/json")
 	public String segmentMismatch(Map<String, String> attributeMap);
 
+	String segmentClassificationCheck(Map<String, String> attributeMap);
+
 }
