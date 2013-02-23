@@ -28,6 +28,19 @@ public interface MayamPDP
 	@Produces("application/json")
 	public String segmentMismatch(Map<String, String> attributeMap);
 
-	String segmentClassificationCheck(Map<String, String> attributeMap);
+	@Path("segmentClassificationCheck")
+	@GET()
+	@Produces("application/json")
+	public String segmentClassificationCheck(Map<String, String> attributeMap);
+
+	@Path("uningestProtected")
+	@GET()
+	@Produces("application/json")
+	public String uningestProtected(Map<String, String> attributeMap);
+
+	@Path("deleteProtected")
+	@GET()
+	@Produces("application/json")
+	public String deleteProtected(Map<String, String> attributeMap);
 
 }

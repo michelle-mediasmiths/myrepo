@@ -114,23 +114,62 @@ public class MayamPDPImpl implements MayamPDP
 	}
 	
 	@Override
-	public String segmentMismatch(final Map<String, String> attributeMap)
+	public String uningestProtected(final Map<String, String> attributeMap)
 	{
-	    validateAttributeMap(attributeMap, null, null);
+	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString());
 
 	    Map<String, String> returnMap = new HashMap<String, String>();
 	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
 	    
-	    String classification = attributeMap.get(Attribute.PURGE_PROTECTED.toString());
-	    if (classification == null || classification.equals(""))
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString());
+	    String protectedString = attributeMap.get(Attribute.PURGE_PROTECTED.toString());
+	    Boolean purgeProtected = Boolean.parseBoolean(protectedString);
+	    
+	    if (purgeProtected == null || purgeProtected)
 	    {
-	    	String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString());
-	    	
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.CLASSIFICATION_FAILURE.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "The Tx Package has not been classified: " + presentationID);
-	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.PROTECTED.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Protected asset cannot be uningested: " + houseID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested <OK>");
+	    }
+	    else {
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Warning");
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
+	    }
+	    
+		return returnMap.toString();
+	}
+	
+	@Override
+	public String deleteProtected(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
+
+	    Map<String, String> returnMap = new HashMap<String, String>();
+	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString());
+	    String protectedString = attributeMap.get(Attribute.PURGE_PROTECTED.toString());
+	    Boolean purgeProtected = Boolean.parseBoolean(protectedString);
+	    
+	    if (purgeProtected == null || purgeProtected)
+	    {
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.PROTECTED.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Protected asset cannot be uningested: " + houseID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted <OK>");
+	    }
+	    else {
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Warning");
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
 	    }
 	    
 		return returnMap.toString();
