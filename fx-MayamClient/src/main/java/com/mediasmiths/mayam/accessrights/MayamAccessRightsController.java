@@ -147,7 +147,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		  return new ArrayList<MayamAccessRights>(getList(criteria));
 	 }  
 	
-	public AttributeMap updateAccessRights(AttributeMap attributeMap)
+	public List<MayamAccessRights> retrieveAllRightsForAsset(AttributeMap attributeMap)
 	{
 		AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
 		String houseId = attributeMap.getAttribute(Attribute.HOUSE_ID);
@@ -246,7 +246,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			}
 		}
 		
-		List<MayamAccessRights> allRights = retrieve(
+		return retrieve(
 				qcStatusString,
 				qaStatusString,
 				qcParallel,
@@ -254,6 +254,11 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 				channelList,
 				retrictedAccess,
 				adultOnly);
+	}
+	
+	public AttributeMap updateAccessRights(AttributeMap attributeMap)
+	{
+		List<MayamAccessRights> allRights = retrieveAllRightsForAsset(attributeMap);
 		
 		if(allRights == null){
 			log.warn("allrights is null");
