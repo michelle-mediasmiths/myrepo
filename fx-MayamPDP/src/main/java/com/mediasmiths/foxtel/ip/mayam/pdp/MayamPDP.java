@@ -72,6 +72,48 @@ public interface MayamPDP
 	@Consumes("application/json")
 	public  Map<String, String> proxyfileCheck(Map<String, String> attributeMap);
 
+	@Path("ingest")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> ingest(Map<String, String> attributeMap);
+
+	@Path("complianceLogging")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> complianceLogging(Map<String, String> attributeMap);
+
+	@Path("complianceEdit")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> complianceEdit(Map<String, String> attributeMap);
+
+	@Path("unmatched")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> unmatched(Map<String, String> attributeMap);
+
+	@Path("preview")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> preview(Map<String, String> attributeMap);
+
+	@Path("autoQC")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> autoQC(Map<String, String> attributeMap);
+
+	@Path("txDelivery")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> txDelivery(Map<String, String> attributeMap);
+
 
 
 }

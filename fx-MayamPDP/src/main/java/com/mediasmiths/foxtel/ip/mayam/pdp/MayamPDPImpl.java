@@ -3,9 +3,12 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 
@@ -191,7 +194,103 @@ public class MayamPDPImpl implements MayamPDP
 		return returnMap;
 	}
 
+	@Override
+	public  Map<String, String> ingest(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
 
+		return doesTaskExist(houseID, MayamTaskListType.INGEST);
+	}
+	
+	@Override
+	public  Map<String, String> txDelivery(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+
+		return doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
+	}
+	
+	@Override
+	public  Map<String, String> autoQC(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+
+		return doesTaskExist(houseID, MayamTaskListType.QC_VIEW);
+	}
+	
+	@Override
+	public  Map<String, String> preview(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+
+		return doesTaskExist(houseID, MayamTaskListType.PREVIEW);
+	}
+	
+	@Override
+	public  Map<String, String> unmatched(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+
+		return doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA);
+	}
+	
+	@Override
+	public  Map<String, String> complianceEdit(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString());
+	    
+	    Map<String, String> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
+	    if (returnMap != null)
+	    {
+	    	String status = returnMap.get(PDPAttributes.STATUS);
+	    	if (status.equals("Success"))
+	    	{
+	    		if (parentHouseID == null || parentHouseID.equals(""))
+	    		{
+	    	    	returnMap.clear();
+	    	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.COMPILE_FLAG_NOT_SET.toString());
+	    	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
+	    	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created <OK>");
+	    		}
+	    	}
+	    }
+	    
+	    return returnMap;
+	}
+	
+	@Override
+	public  Map<String, String> complianceLogging(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString());
+	    String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString());
+	    
+	    Map<String, String> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+	    if (returnMap != null)
+	    {
+	    	String status = returnMap.get(PDPAttributes.STATUS);
+	    	if (status.equals("Success"))
+	    	{
+	    		if (parentHouseID == null || parentHouseID.equals(""))
+	    		{
+	    	    	returnMap.clear();
+	    	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.COMPILE_FLAG_NOT_SET.toString());
+	    	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created");
+	    	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created <OK>");
+	    		}
+	    	}
+	    }
+		return doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+	}
 
 	@Override
 	public  Map<String, String> protect(final Map<String, String> attributeMap)
@@ -253,6 +352,40 @@ public class MayamPDPImpl implements MayamPDP
 
 
 		return result;
+	}
+	
+	private Map<String, String> doesTaskExist(String houseID, MayamTaskListType task)
+	{
+		Map<String, String> returnMap = new HashMap<>();
+		returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+		
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
+		criteria.getFilterEqualities().setAttribute(Attribute.HOUSE_ID, houseID);
+		FilterResult result = null;
+		
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 10, 0);
+		}
+		catch(RemoteException e) {
+			returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Exception thrown in Mayam while searching for existing tasks for : " + houseID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID + " <OK>");
+		}
+		
+		if (result != null && result.getTotalMatches() > 0)
+		{
+	    	returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TASK_ALREADY_EXISTS.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), task.toString() + " task already exists for : " + houseID + ", will not create new task");
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "An " + task.toString() + " task already exists for : " + houseID  + ", cannot create new task. <OK>");
+		}
+		
+		return returnMap;
 	}
 
 
