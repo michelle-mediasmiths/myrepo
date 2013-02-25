@@ -25,7 +25,7 @@ public class IngestJobHandler extends JobHandler
 		
 		if(assetId!=null){
 				try {
-				AttributeMap task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
+				AttributeMap task = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
 				
 				if (task != null)
 				{

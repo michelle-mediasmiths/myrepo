@@ -397,14 +397,61 @@ public class MayamTaskController extends MayamController
 		return getTaskForAssetByID(type, siteid, Attribute.HOUSE_ID,1);
 
 	}
+	
+	public AttributeMap getOnlyOpenTaskForAssetBySiteID(MayamTaskListType type, String siteid) throws MayamClientException
+	{
+		return getOpenTaskForAssetByID(type, siteid, Attribute.HOUSE_ID,1);
+
+	}
 
 	public AttributeMap getOnlyTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
 	{
 		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
 
 	}
+	
+	public AttributeMap getOnlyOpenTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
+	{
+		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
+
+	}
 
 	private AttributeMap getTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute, int expectedResultCount)
+			throws MayamClientException
+	{
+		log.info(String.format(
+				"Searching for task of type %s for asset %s using id attribute %s",
+				type.getText(),
+				id,
+				idattribute.toString()));
+
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
+		criteria.getFilterEqualities().setAttribute(idattribute, id);
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 10, 0);
+			log.info("Total matches: " + result.getTotalMatches());
+
+			if (result.getTotalMatches() != expectedResultCount)
+			{
+				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
+				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
+			}
+
+			return result.getMatches().get(0);
+		}
+		catch (RemoteException e)
+		{
+			log.error("remote expcetion searching for task", e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+		}
+
+	}
+	
+	private AttributeMap getOpenTaskForAssetByID(MayamTaskListType type, String id, Attribute idattribute, int expectedResultCount)
 			throws MayamClientException
 	{
 		log.info(String.format(

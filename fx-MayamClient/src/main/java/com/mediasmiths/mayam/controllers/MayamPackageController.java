@@ -26,6 +26,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
@@ -93,7 +94,7 @@ public class MayamPackageController extends MayamController
 
 			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 			
-			AttributeMap material;
+			AttributeMap material = null;
 			Segmentation segmentation = null; //segmentation information that arrived with the media as part of material exchange
 			boolean requiresSegmentationTask = false;
 			try
@@ -153,48 +154,61 @@ public class MayamPackageController extends MayamController
 					// map.setAttribute(Attribute.?????????, txPackage.getNotes());
 					if (txPackage.getPresentationFormat() != null)
 						attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
-					if (txPackage.getNumberOfSegments() != null)
-						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
 					if (txPackage.getTargetDate() != null)
 						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
-				
 					
+					TaskState fixAndStitchState = null;
 					
-					
-					SegmentListBuilder listbuilder = SegmentList.create();
-					listbuilder.attributeMap(attributes.getAttributes());
-	
-					try
-					{
-						if (segmentation != null)
+					if (material != null) {
+						String materialAssetID = material.getAttributeAsString(Attribute.ASSET_ID);
+						AttributeMap fixAndStitchTask = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.FIX_STITCH_EDIT, materialAssetID);
+						if (fixAndStitchTask != null)
 						{
-	
-							for (Segment s : segmentation.getSegment())
-							{
-	
-								com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
-								listbuilder = listbuilder.segment(converted);
-							}
-	
+							fixAndStitchState =  fixAndStitchTask.getAttribute(Attribute.TASK_STATE);
 						}
 					}
-					catch (InvalidTimecodeException e)
-					{
-						log.error("could not convert segmentation info stored against item", e);
-					}
-					catch (Exception e){
-						log.error("could not convert segmentation info stored against item", e);
-					}
-						
 					
-					SegmentList segmentList = listbuilder.build();
-				
-					log.debug("Getting materials asset id");
-					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
-					String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
-					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
-					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
-					log.info("Created SegmentList with id :"+newSegmentList.getId());
+					if(fixAndStitchState == null || !fixAndStitchState.equals(TaskState.FINISHED)) 
+					{
+						if (txPackage.getNumberOfSegments() != null)
+							attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+	
+						SegmentListBuilder listbuilder = SegmentList.create();
+						listbuilder.attributeMap(attributes.getAttributes());
+		
+						try
+						{
+							if (segmentation != null)
+							{
+		
+								for (Segment s : segmentation.getSegment())
+								{
+		
+									com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
+									listbuilder = listbuilder.segment(converted);
+								}
+		
+							}
+						}
+						catch (InvalidTimecodeException e)
+						{
+							log.error("could not convert segmentation info stored against item", e);
+						}
+						catch (Exception e){
+							log.error("could not convert segmentation info stored against item", e);
+						}
+							
+						
+						SegmentList segmentList = listbuilder.build();
+					
+						log.debug("Getting materials asset id");
+						String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
+						String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
+						log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
+						SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
+						log.info("Created SegmentList with id :"+newSegmentList.getId());
+					}
+					
 					
 					if (requiresSegmentationTask) {
 						String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
