@@ -236,13 +236,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		String separatorAndExtension = getOutputFileExtension();
 		
-		if (outputFileName != null)
+		if (outputFileName != null) 
 		{
-			jobParams.outputFileBasename = outputFileName;
+			jobParams.outputFileBasename = outputFileName + separatorAndExtension;
 		}
 		else
 		{
-			jobParams.outputFileBasename = materialID;
+			jobParams.outputFileBasename = materialID + separatorAndExtension;
 		}
 
 		jobParams.timecode = timecode(timecodeColour, timecodePosition);
@@ -320,7 +320,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		{
 			return TCTimecodeColour.BLACK;
 		}
-		else if (charAt == 'T')
+		else if (charAt == 'T' || charAt == 't')
 		{
 			return TCTimecodeColour.TRANSPARENT;
 		}
