@@ -13,6 +13,7 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.util.RevisionUtil;
 
 import javax.xml.ws.WebServiceException;
 import java.util.HashMap;
