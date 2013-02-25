@@ -418,13 +418,13 @@ public class MayamTaskController extends MayamController
 
 	public AttributeMap getOnlyTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
 	{
-		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
+		return getOpenTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
 
 	}
 	
 	public AttributeMap getOnlyOpenTaskForAssetByAssetID(MayamTaskListType type, String assetId) throws MayamClientException
 	{
-		return getTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
+		return getOpenTaskForAssetByID(type, assetId, Attribute.ASSET_ID,1);
 
 	}
 
@@ -444,7 +444,7 @@ public class MayamTaskController extends MayamController
 		FilterResult result;
 		try
 		{
-			result = client.taskApi().getTasks(criteria, 10, 0);
+			result = client.taskApi().getTasks(criteria, 100, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
 			if (result.getTotalMatches() != expectedResultCount)
@@ -475,33 +475,26 @@ public class MayamTaskController extends MayamController
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
 		criteria.getFilterEqualities().setAttribute(idattribute, id);
+		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, END_STATES);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try
 		{
-			result = client.taskApi().getTasks(criteria, 10, 0);
+			result = client.taskApi().getTasks(criteria, 100, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
-			int numberOpenTasks = 0;
-			AttributeMap openTask = null;
-			
-			for (int i = 0; i < result.getTotalMatches(); i++)
-			{
-				TaskState taskState = result.getMatches().get(i).getAttribute(Attribute.TASK_STATE);
-				if (!END_STATES.contains(taskState))
-				{
-					numberOpenTasks++;
-					openTask = result.getMatches().get(i);
-				}
-			}
-			
-			if (numberOpenTasks != expectedResultCount)
+			if (result.getTotalMatches() != expectedResultCount)
 			{
 				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
 				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 
-			return openTask;
+			if(result.getTotalMatches() > 0){
+				return result.getMatches().get(0);
+			}
+			else{
+				return null;
+			}
 		}
 		catch (RemoteException e)
 		{
@@ -666,7 +659,7 @@ public class MayamTaskController extends MayamController
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
 		criteria.getFilterAlternatives()
-	   		.addAsExclusions(Attribute.TASK_STATE, TaskState.CLOSED_STATES);
+	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
 		FilterResult result;
@@ -703,7 +696,6 @@ public class MayamTaskController extends MayamController
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
-		
 		criteria.getFilterAlternatives()
 	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
 		
