@@ -328,7 +328,7 @@ public class MayamPDPImpl implements MayamPDP
 	    
 		AttributeMap filterEqualities = client.createAttributeMap();
 		filterEqualities.setAttribute(Attribute.OP_FILENAME, filename);
-		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.EXPORT);
+		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.EXTENDED_PUBLISHING);
 		FilterCriteria criteria = new FilterCriteria();
 		criteria.setFilterEqualities(filterEqualities);
 		FilterResult existingTasks = client.taskApi().getTasks(criteria, 50, 0);
