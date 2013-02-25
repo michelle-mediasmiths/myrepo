@@ -61,7 +61,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER.toString(), Attribute.HOUSE_ID.toString());
 
 	    Map<String, Object> returnMap = new HashMap<>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    //Segmentation check
 	    String requestedNumber = attributeMap.get(Attribute.REQ_NUMBER.toString()).toString();
@@ -82,18 +82,16 @@ public class MayamPDPImpl implements MayamPDP
 		    if (numberOfSegmentsRequested != segmentsSize) 
 		    {
 		    	returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR.toString());
-		    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.SEGMENT_NUMBER_MISMATCH.toString());
-		    	returnMap.put(PDPAttributes.LOGGING.toString(), "Presentation ID : " + presentationID + ", user has requested " + numberOfSegmentsRequested + " segements, while placeholder contained " + segmentsSize);
-		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
+		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Presentation ID : " + presentationID + ", user has requested " + numberOfSegmentsRequested + " segements, while placeholder contained " + segmentsSize);
+		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
 		    }
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR.toString());
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Unable to retrieve Segment List for Presentation ID : " + presentationID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A technical fault has occurred while retrieving segemnt list");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Unable to retrieve Segment List for Presentation ID : " + presentationID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "A technical fault has occurred while retrieving segemnt list");
 	    }
 	    
 		return returnMap;
@@ -105,7 +103,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, null, null);
 
 	    Map<String, Object> returnMap = new HashMap<String, Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String classification = attributeMap.get(Attribute.CONT_CLASSIFICATION.toString()).toString();
 	    if (classification == null || classification.equals(""))
@@ -113,10 +111,9 @@ public class MayamPDPImpl implements MayamPDP
 	    	String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
 	    	
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.CLASSIFICATION_FAILURE.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "The Tx Package has not been classified: " + presentationID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The Tx Package has not been classified: " + presentationID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
 	    }
 	    
 		return returnMap;
@@ -128,7 +125,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString());
 
 	    Map<String, Object> returnMap = new HashMap<String, Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
 	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString()).toString();
@@ -138,16 +135,15 @@ public class MayamPDPImpl implements MayamPDP
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.PROTECTED.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Protected asset cannot be uningested: " + houseID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Protected asset cannot be uningested: " + houseID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested <OK>");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Warning");
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
 	    }
 	    
 		return returnMap;
@@ -159,7 +155,7 @@ public class MayamPDPImpl implements MayamPDP
 		validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
 
 		Map<String, Object> returnMap = new HashMap<>();
-		returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 
 
 		return returnMap;
@@ -171,7 +167,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
 
 	    Map<String, Object> returnMap = new HashMap<>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
 	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString()).toString();
@@ -181,16 +177,15 @@ public class MayamPDPImpl implements MayamPDP
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.PROTECTED.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Protected asset cannot be uningested: " + houseID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Protected asset cannot be uningested: " + houseID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted <OK>");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Warning");
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
 	    }
 	    
 		return returnMap;
@@ -202,7 +197,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString());
 
 	    Map<String, Object> returnMap = new HashMap<>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
 	    String assetID = attributeMap.get(Attribute.ASSET_ID.toString()).toString();
@@ -216,19 +211,17 @@ public class MayamPDPImpl implements MayamPDP
 			if (markers == null || markers.size() == 0)
 			{
 				returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-		    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
-		    	returnMap.put(PDPAttributes.LOGGING.toString(), "No export markers exist for " + houseID);
-		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "No export markers exist for " + houseID + " <OK>");
+		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "No export markers exist for " + houseID);
+		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "No export markers exist for " + houseID + " <OK>");
 			}
 		}
 		catch (RemoteException e)
 		{
 			returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Exception thrown in Mayam while searching for markers for : " + houseID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID + " <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Exception thrown in Mayam while searching for markers for : " + houseID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID + " <OK>");
 		}
 	    
 		return returnMap;
@@ -289,16 +282,15 @@ public class MayamPDPImpl implements MayamPDP
 	    Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 	    if (returnMap != null)
 	    {
-	    	String status = returnMap.get(PDPAttributes.OP_STAT).toString();
-	    	if (status.equals("Success"))
+	    	Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+	    	if (status.equals(StatusCodes.CONFIRM))
 	    	{
 	    		if (parentHouseID == null || parentHouseID.equals(""))
 	    		{
 	    	    	returnMap.clear();
-	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.COMPILE_FLAG_NOT_SET.toString());
-	    	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
-	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created <OK>");
+	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
+	    	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created <OK>");
 	    		}
 	    	}
 	    }
@@ -316,16 +308,15 @@ public class MayamPDPImpl implements MayamPDP
 	    Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
 	    if (returnMap != null)
 	    {
-	    	String status = returnMap.get(PDPAttributes.OP_STAT).toString();
-	    	if (status.equals("Success"))
+	    	Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+	    	if (status.equals(StatusCodes.OK))
 	    	{
 	    		if (parentHouseID == null || parentHouseID.equals(""))
 	    		{
 	    	    	returnMap.clear();
-	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.COMPILE_FLAG_NOT_SET.toString());
-	    	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created");
-	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created <OK>");
+	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created");
+	    	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created <OK>");
 	    		}
 	    	}
 	    }
@@ -397,7 +388,7 @@ public class MayamPDPImpl implements MayamPDP
 	private Map<String, Object> doesTaskExist(String houseID, MayamTaskListType task)
 	{
 		Map<String, Object> returnMap = new HashMap<>();
-		returnMap.put(PDPAttributes.OP_STAT.toString(), "Success");
+		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 		
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
@@ -410,19 +401,17 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch(RemoteException e) {
 			returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Exception thrown in Mayam while searching for existing tasks for : " + houseID);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID + " <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Exception thrown in Mayam while searching for existing tasks for : " + houseID);
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID + " <OK>");
 		}
 		
 		if (result != null && result.getTotalMatches() > 0)
 		{
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), "Failure");
-	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TASK_ALREADY_EXISTS.toString());
-	    	returnMap.put(PDPAttributes.LOGGING.toString(), task.toString() + " task already exists for : " + houseID + ", will not create new task");
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Task already exists. No new task created <OK>");
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), task.toString() + " task already exists for : " + houseID + ", will not create new task");
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Task already exists. No new task created <OK>");
 		}
 		
 		return returnMap;

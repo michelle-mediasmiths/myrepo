@@ -2,9 +2,8 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 public enum PDPAttributes {
 	OP_STAT("OP_STAT"),
-	FAILURE_CODE("FAILURE_CODE"),
 	ERROR_MSG("ERROR_MSG"),
-	LOGGING("LogMessage");
+	FORM_MSG("FORM_MSG");
 	
 	private String text;
 
