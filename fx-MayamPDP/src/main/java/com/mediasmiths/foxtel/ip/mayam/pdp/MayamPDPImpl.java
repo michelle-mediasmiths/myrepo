@@ -326,19 +326,28 @@ public class MayamPDPImpl implements MayamPDP
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
 	    String filename = attributeMap.get(Attribute.OP_FILENAME.toString()).toString();
 	    
-		AttributeMap filterEqualities = client.createAttributeMap();
-		filterEqualities.setAttribute(Attribute.OP_FILENAME, filename);
-		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.EXTENDED_PUBLISHING);
-		FilterCriteria criteria = new FilterCriteria();
-		criteria.setFilterEqualities(filterEqualities);
-		FilterResult existingTasks = client.taskApi().getTasks(criteria, 50, 0);
-	    
-		if (existingTasks != null && existingTasks.getTotalMatches() > 0) {
+	    try
+	    {
+			AttributeMap filterEqualities = client.createAttributeMap();
+			filterEqualities.setAttribute(Attribute.OP_FILENAME, filename);
+			filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.EXTENDED_PUBLISHING);
+			FilterCriteria criteria = new FilterCriteria();
+			criteria.setFilterEqualities(filterEqualities);
+			FilterResult existingTasks = client.taskApi().getTasks(criteria, 50, 0);
+			
+			if (existingTasks != null && existingTasks.getTotalMatches() > 0) {
+				returnMap.clear();
+		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A Proxy with name " + filename + " already exists");
+			}
+	    }
+	    catch(RemoteException e)
+	    {
 			returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A Proxy with name " + filename + " already exists");
-		}
-
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while retrieving existing Extended Publishing tasks");
+	    }
+	    
 		return returnMap;  
 	}
 
