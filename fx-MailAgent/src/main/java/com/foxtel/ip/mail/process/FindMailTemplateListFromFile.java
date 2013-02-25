@@ -40,7 +40,7 @@ public class FindMailTemplateListFromFile
 		{
 			logger.trace("file");
 
-			jaxbContext = JAXBContext.newInstance("com.mediasmiths.jaxbcreator");
+			jaxbContext = JAXBContext.newInstance("com.mediasmiths.foxtel.ip.common.events");
 					logger.trace("newInstance");
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			logger.trace("jaxbUnmarshaller");
