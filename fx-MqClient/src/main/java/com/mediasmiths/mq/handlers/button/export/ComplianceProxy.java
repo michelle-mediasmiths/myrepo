@@ -47,7 +47,7 @@ public class ComplianceProxy extends ExportProxyButton
 	@Override
 	protected TCOutputPurpose getPurpose()
 	{
-		return TCOutputPurpose.CAPTIONING;
+		return TCOutputPurpose.DVD;
 	}
 
 }

@@ -9,7 +9,7 @@ public class TCTimecodeOptions
 	@XmlElement(required = true)
 	public TCLocation location = TCLocation.BOTTOM;
 	@XmlElement(required = true)
-	public TCTimecodeSize size = TCTimecodeSize.LARGE;
+	public TCTimecodeSize size = TCTimecodeSize.SMALL;
 	@XmlElement(required = true)
 	public TCTimecodeColour background = TCTimecodeColour.BLACK;
 	@XmlElement(required = true)

@@ -75,6 +75,7 @@ public class CarbonProjectBuilder
 	private static final String TIMECODE_FILTER_FG_WHITE = "0";
 	private static final String TIMECODE_FILTER_TEXT_TOP = "0"; // Topmost
 	private static final String TIMECODE_FILTER_TEXT_BOTTOM = "4"; // Bottommost
+	private static final String TIMECODE_FILTER_TEXTSIZE_SMALL = "1";
 	private static final String TIMECODE_FILTER_TEXTSIZE_MEDIUM = "2";
 	private static final String TIMECODE_FILTER_TEXTSIZE_LARGE = "3";
 
@@ -250,6 +251,9 @@ public class CarbonProjectBuilder
 		// Text size
 		switch (parameters.size)
 		{
+			case SMALL:
+				setAttribute(module, "TextSize.DWD", TIMECODE_FILTER_TEXTSIZE_SMALL);
+				break;
 			case LARGE:
 				setAttribute(module, "TextSize.DWD", TIMECODE_FILTER_TEXTSIZE_LARGE);
 				break;

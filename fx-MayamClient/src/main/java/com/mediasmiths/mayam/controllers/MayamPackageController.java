@@ -212,38 +212,15 @@ public class MayamPackageController extends MayamController
 
 			if (materialHasMedia && materialHasPreviewPass)
 			{
-
-				// tx package can be created
 				try
 				{
-					String revisionID = RevisionUtil.findHighestRevision(materialAssetID, client);
-					log.debug("creating segment for material " + materialAssetID + " revision:" + revisionID);
-					SegmentList newSegmentList = client.segmentApi().createSegmentList(
-							AssetType.REVISION,
-							revisionID,
-							segmentList);
-					log.info("Created SegmentList with id :" + newSegmentList.getId());
-				}
-				catch (RemoteException e)
-				{
-					log.error("Exception thrown by Mayam while attempting to create Package", e);
-					return MayamClientErrorCode.MAYAM_EXCEPTION;
-				}
-
-				// create segmentation task
-				String houseID = txPackage.getPresentationID();
-				long taskID;
-				try
-				{
-					taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
-					log.info("Segmentation task created with id :" + taskID);
+					createSegmentList(txPackage.getPresentationID(), materialAssetID, segmentList);
 				}
 				catch (MayamClientException e)
 				{
-					log.error("error creating segmentation task", e);
+					log.error("error creating segment list", e);
 					return e.getErrorcode();
 				}
-
 			}
 			else
 			{
@@ -270,6 +247,30 @@ public class MayamPackageController extends MayamController
 			return MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
 		return MayamClientErrorCode.SUCCESS;
+	}
+
+	public void createSegmentList(String presentationID, String materialAssetID, SegmentList segmentList) throws MayamClientException
+	{
+		try
+		{
+			String revisionID = RevisionUtil.findHighestRevision(materialAssetID, client);
+			log.debug("creating segment for material " + materialAssetID + " revision:" + revisionID);
+			SegmentList newSegmentList = client.segmentApi().createSegmentList(
+					AssetType.REVISION,
+					revisionID,
+					segmentList);
+			log.info("Created SegmentList with id :" + newSegmentList.getId());
+		}
+		catch (RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while attempting to create Package", e);
+			throw new MayamClientException(MayamClientErrorCode.PACKAGE_CREATION_FAILED,e);
+		}
+
+		// create segmentation task
+		long taskID = taskController.createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+		log.info("Segmentation task created with id :" + taskID);
+	
 	}
 	
 	/**
@@ -737,9 +738,8 @@ public class MayamPackageController extends MayamController
 	}
 	
 	public SegmentList getTxPackage(String presentationID, String materialID, AttributeMap material) throws PackageNotFoundException, MayamClientException{
-		boolean materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
-		boolean materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
-		boolean pendingPackage = ! ( materialHasPreviewPass && materialHasMedia);
+	
+		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(material);
 		
 		if(pendingPackage){
 			log.debug("looking for pending tx package");
@@ -777,9 +777,8 @@ public class MayamPackageController extends MayamController
 	}
 	
 	public void updateTxPackage(SegmentList segmentList, String presentationID, String materialID, AttributeMap material) throws MayamClientException{
-		boolean materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
-		boolean materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
-		boolean pendingPackage = ! ( materialHasPreviewPass && materialHasMedia);
+	
+		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(material);
 		
 		if(pendingPackage){
 			log.debug("pending tx package");

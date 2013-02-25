@@ -5,6 +5,5 @@ import javax.xml.bind.annotation.XmlEnum;
 @XmlEnum
 public enum TCTimecodeSize
 {
-	MEDIUM,
-	LARGE;
+	SMALL, MEDIUM, LARGE;
 }

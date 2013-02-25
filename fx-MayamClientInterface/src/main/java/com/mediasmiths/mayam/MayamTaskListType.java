@@ -16,7 +16,7 @@ public enum MayamTaskListType {
 	EXTENDED_PUBLISHING("export"),
 	ASSOCIATED_TASKS("associated tasks"), 
 	WFE_ERROR("wfe_error"),
-	PENDING_TX_PACKAGE("pending_tx_package");
+	PENDING_TX_PACKAGE("pending_tx_pkg");
 	
 	  private String text;
 
