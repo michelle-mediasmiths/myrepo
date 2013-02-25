@@ -47,5 +47,10 @@ public class PublicityProxy extends ExportProxyButton
 	{
 		return TCOutputPurpose.DVD;
 	}
-
+	@Override
+	protected String getOutputFileExtension()
+	{
+		return ""; //output is dvd foder struture, the user supplied name is sufficient
+	}
+	
 }

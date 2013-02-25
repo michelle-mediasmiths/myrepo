@@ -12,6 +12,9 @@ public class CaptionProxy extends ExportProxyButton
 	@Inject
 	@Named("export.caption.path.prefix")
 	private String outputPath;
+	@Inject
+	@Named("export.caption.extention")
+	private String outputExtension;
 	
 	@Override
 	public MayamButtonType getButtonType()
@@ -41,6 +44,12 @@ public class CaptionProxy extends ExportProxyButton
 	protected TCOutputPurpose getPurpose()
 	{
 		return TCOutputPurpose.CAPTIONING;
+	}
+
+	@Override
+	protected String getOutputFileExtension()
+	{
+		return String.format(".%s",outputExtension);
 	}
 
 }

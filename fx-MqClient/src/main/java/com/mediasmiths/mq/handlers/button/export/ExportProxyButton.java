@@ -234,6 +234,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			jobParams.resolution = TCResolution.HD;
 		}
 
+		String separatorAndExtension = getOutputFileExtension();
+		
 		if (outputFileName != null)
 		{
 			jobParams.outputFileBasename = outputFileName;
@@ -260,6 +262,12 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		return jobParams;
 	}
 
+	/**
+	 * returns a string to be added to the end of output file name, eg .mpg
+	 * @return
+	 */
+	protected abstract String getOutputFileExtension();
+	
 	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
 
 	protected abstract int getPriority(AttributeMap materialAttributes);
