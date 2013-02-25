@@ -26,6 +26,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
+import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeSize;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;

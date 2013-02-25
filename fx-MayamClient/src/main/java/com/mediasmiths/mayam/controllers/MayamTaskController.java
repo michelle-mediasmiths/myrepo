@@ -242,6 +242,18 @@ public class MayamTaskController extends MayamController
 	}
 	
 
+	public void createPendingTxPackage(String materialID,String presentationID, Date firstTx, SegmentList txpackage) throws MayamClientException{
+		
+		log.info(String.format("Creating pending tx package task for package %s material %s", presentationID,materialID));
+		
+		 AttributeMap initialAttributes = client.createAttributeMap();
+		 initialAttributes.setAttribute(Attribute.AUX_EXTIDSTR, presentationID);
+		 initialAttributes.setAttribute(Attribute.EVENT_DATE, firstTx);
+		 initialAttributes.setAttribute(Attribute.SEGMENTATION_LIST, txpackage);
+		
+		 createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PENDING_TX_PACKAGE, initialAttributes);
+	}
+	
 	public long createWFEErorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
 	{
 		AttributeMap asset;

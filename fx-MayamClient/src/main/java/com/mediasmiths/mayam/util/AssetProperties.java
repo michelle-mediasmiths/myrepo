@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 
 public class AssetProperties
@@ -187,6 +188,19 @@ public class AssetProperties
 			return p.booleanValue();
 		}
 				
+		
+	}
+
+	public static boolean isMaterialPreviewPassed(AttributeMap material) {
+	
+		String qcPreviewResult = material.getAttribute(Attribute.QC_PREVIEW_RESULT);
+		
+		if(qcPreviewResult==null){
+			return false;
+		}
+		else{
+			return MayamPreviewResults.isPreviewPass(qcPreviewResult);
+		}
 		
 	}
 

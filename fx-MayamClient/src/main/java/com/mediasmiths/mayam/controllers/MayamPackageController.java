@@ -45,6 +45,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.types.Framerate;
@@ -96,7 +97,9 @@ public class MayamPackageController extends MayamController
 			
 			AttributeMap material = null;
 			Segmentation segmentation = null; //segmentation information that arrived with the media as part of material exchange
-			boolean requiresSegmentationTask = false;
+			boolean materialHasPreviewPass = false;
+			boolean materialHasMedia = false;
+			
 			try
 			{
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
@@ -112,20 +115,20 @@ public class MayamPackageController extends MayamController
 					
 					client.assetApi().updateAsset(material);
 					
-					//Has Material been set to Preview Pass
-					if(material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(MayamPreviewResults.PREVIEW_PASSED) 
-							|| material.getAttribute(Attribute.QC_PREVIEW_RESULT).equals(MayamPreviewResults.PREVIEW_PASSED_BUT_REORDER)) {
-								requiresSegmentationTask = true;
-					}		
-					
-					try{
-					segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
+					//the following determine if segmentation tasks need created and if package should be created in ardome or saved to the pending tx package list
+					materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
+					materialHasMedia = ! AssetProperties.isMaterialPlaceholder(material);
+				
+					try {
+						segmentation = findExistingSegmentInfoForTxPackage(
+								txPackage, material);
+					} catch (Exception e) {
+						log.error(
+								"error finding existing segment info for tx package",
+								e);
 					}
-					catch(Exception e){
-						log.error("error finding existing segment info for tx package",e);
-					}
-					
-					if(segmentation==null){
+
+					if (segmentation == null) {
 						log.info("no existing segmentation information for this tx package");
 					}
 					
@@ -151,7 +154,6 @@ public class MayamPackageController extends MayamController
 						attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
 					if (txPackage.getConsumerAdvice() != null)
 						attributesValid &= attributes.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
-					// map.setAttribute(Attribute.?????????, txPackage.getNotes());
 					if (txPackage.getPresentationFormat() != null)
 						attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
 					if (txPackage.getTargetDate() != null)
@@ -167,15 +169,17 @@ public class MayamPackageController extends MayamController
 							fixAndStitchState =  fixAndStitchTask.getAttribute(Attribute.TASK_STATE);
 						}
 					}
-					
-					if(fixAndStitchState == null || !fixAndStitchState.equals(TaskState.FINISHED)) 
-					{
-						if (txPackage.getNumberOfSegments() != null)
-							attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+				
+					if (txPackage.getNumberOfSegments() != null)
+						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+
+					SegmentListBuilder listbuilder = SegmentList.create();
+					listbuilder.attributeMap(attributes.getAttributes());
 	
-						SegmentListBuilder listbuilder = SegmentList.create();
-						listbuilder.attributeMap(attributes.getAttributes());
-		
+
+					//attempt to populate segmentlist with information supplied by aggregators only if fix stitch task has never been created for item
+					if(fixAndStitchState == null)  
+					{
 						try
 						{
 							if (segmentation != null)
@@ -197,20 +201,18 @@ public class MayamPackageController extends MayamController
 						catch (Exception e){
 							log.error("could not convert segmentation info stored against item", e);
 						}
-							
-						
-						SegmentList segmentList = listbuilder.build();
-					
-						log.debug("Getting materials asset id");
-						String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
-						String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
-						log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
-						SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
-						log.info("Created SegmentList with id :"+newSegmentList.getId());
 					}
 					
+					SegmentList segmentList = listbuilder.build();
+				
+					log.debug("Getting materials asset id");
+					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
+					String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
+					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
+					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
+					log.info("Created SegmentList with id :"+newSegmentList.getId());
 					
-					if (requiresSegmentationTask) {
+					if (materialHasPreviewPass) {
 						String houseID = txPackage.getPresentationID();
 						long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
 						log.info("Segmentation task created with id :"+taskID);
