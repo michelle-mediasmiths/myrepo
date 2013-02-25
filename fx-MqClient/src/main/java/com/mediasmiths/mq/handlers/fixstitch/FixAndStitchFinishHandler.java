@@ -32,9 +32,9 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 			String materialID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 			AssetType assetType = (AssetType) messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 			
-			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(assetType, assetID);
-			assetAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
-			tasksClient.assetApi().updateAsset(assetAttributes);
+			AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
+			updateMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
+			tasksClient.assetApi().updateAsset(updateMap);
 			
 			final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
 			if (lists != null) 
