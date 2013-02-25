@@ -422,7 +422,7 @@ public class MayamPDPImpl implements MayamPDP
 	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
 	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TASK_ALREADY_EXISTS.toString());
 	    	returnMap.put(PDPAttributes.LOGGING.toString(), task.toString() + " task already exists for : " + houseID + ", will not create new task");
-	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "An " + task.toString() + " task already exists for : " + houseID  + ", cannot create new task. <OK>");
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "Task already exists. No new task created <OK>");
 		}
 		
 		return returnMap;
