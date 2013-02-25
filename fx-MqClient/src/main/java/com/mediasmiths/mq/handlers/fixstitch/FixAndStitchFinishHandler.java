@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
@@ -30,7 +31,11 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 			String assetID = (String) messageAttributes.getAttribute(Attribute.ASSET_ID);
 			String materialID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 			AssetType assetType = (AssetType) messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					
+			
+			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(assetType, assetId);
+			assetAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_PASSED);
+			tasksClient.assetApi().updateAsset(assetAttributes);
+			
 			final SegmentListList lists = tasksClient.segmentApi().getSegmentListsForAsset(assetType, assetID);
 			if (lists != null) 
 			{
