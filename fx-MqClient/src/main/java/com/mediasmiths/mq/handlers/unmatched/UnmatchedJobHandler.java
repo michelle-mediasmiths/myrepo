@@ -3,6 +3,7 @@ package com.mediasmiths.mq.handlers.unmatched;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jasypt.encryption.pbe.CleanablePasswordBased;
 
@@ -58,8 +59,12 @@ public class UnmatchedJobHandler extends JobHandler
 					AttributeMap updateMap = taskController.updateMapForAsset(material);
 					updateMap.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
 					
-					String fileName = getFileName((String)material.getAttribute(Attribute.ASSET_ID));
-					updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+					String currenttitle = material.getAttributeAsString(Attribute.ASSET_TITLE);
+					
+					if(StringUtils.isEmpty(currenttitle)){					
+						String fileName = getFileName((String)material.getAttribute(Attribute.ASSET_ID));
+						updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+					}
 					
 					try
 					{
