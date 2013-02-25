@@ -211,7 +211,7 @@ public class MayamPackageController extends MayamController
 					
 					
 					if (requiresSegmentationTask) {
-						String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
+						String houseID = txPackage.getPresentationID();
 						long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
 						log.info("Segmentation task created with id :"+taskID);
 					}
