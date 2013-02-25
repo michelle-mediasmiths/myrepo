@@ -610,7 +610,43 @@ public class MayamTaskController extends MayamController
 	}	
 	
 	/**
-	 * Returns all tasks of the specified type that are no in end states
+	 * Returns tasks for item
+	 * @param taskList
+	 * @param assetType
+	 * @param idAttribute
+	 * @param id
+	 * @return
+	 * @throws MayamClientException
+	 */
+	public List<AttributeMap> getTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		
+		log.info(String.format(
+				"Searching for task of type %s for asset %s using id attribute %s",
+				taskList.getText(),
+				id,
+				idAttribute.toString()));
+
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
+		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
+		
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 100, 0);
+			log.debug("Total matches: " + result.getTotalMatches());
+			return result.getMatches();
+		}
+		catch (RemoteException e)
+		{
+			log.error("remote exception searching for task", e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+		}
+	}
+	
+	/**
+	 * Returns all tasks of the specified type that are not in end states
 	 * @param taskList
 	 * @param assetType
 	 * @param idAttribute
@@ -706,6 +742,18 @@ public class MayamTaskController extends MayamController
 				throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED);
 			}
 		}
+	}
+	
+	public boolean fixAndStitchTaskExistsForItem(String itemAssetID) throws MayamClientException{
+		
+		List<AttributeMap> tasksForAsset = getTasksForAsset(
+				MayamTaskListType.FIX_STITCH_EDIT, AssetType.ITEM,
+				Attribute.ASSET_ID, itemAssetID);
+
+		if (tasksForAsset.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 	
 }

@@ -84,163 +84,189 @@ public class MayamPackageController extends MayamController
 
 		if (txPackage != null)
 		{
-			
-			
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
-			
-			//ASSET_TITLE is a required attribute
-			attributesValid &= attributes.setAttribute(Attribute.ASSET_TITLE, txPackage.getPresentationID());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
 
-			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
-			
+			attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
+			attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
+			attributes.setAttribute(Attribute.ASSET_TITLE, txPackage.getPresentationID());
+			attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+			attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
+
 			AttributeMap material = null;
-			Segmentation segmentation = null; //segmentation information that arrived with the media as part of material exchange
+			Segmentation segmentation = null; // segmentation information that arrived with the media as part of material exchange
+
 			boolean materialHasPreviewPass = false;
 			boolean materialHasMedia = false;
-			
+			Date firstTx = null;
+
 			try
 			{
 				material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), txPackage.getMaterialID());
 				if (material != null)
 				{
-					if(txPackage.getClassification() != null)
-					material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
-					
+					if (txPackage.getClassification() != null)
+					{
+						material.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+					}
+
 					if (txPackage.getTargetDate() != null)
 					{
 						material.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					}
-					
+
 					client.assetApi().updateAsset(material);
-					
-					//the following determine if segmentation tasks need created and if package should be created in ardome or saved to the pending tx package list
+
+					// the following determine if segmentation tasks need created and if package should be created in ardome or saved to the pending tx package list
 					materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
-					materialHasMedia = ! AssetProperties.isMaterialPlaceholder(material);
-				
-					try {
-						segmentation = findExistingSegmentInfoForTxPackage(
-								txPackage, material);
-					} catch (Exception e) {
-						log.error(
-								"error finding existing segment info for tx package",
-								e);
+					materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
+
+					try
+					{
+						segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
+					}
+					catch (Exception e)
+					{
+						log.error("error finding existing segment info for tx package", e);
 					}
 
-					if (segmentation == null) {
+					if (segmentation == null)
+					{
 						log.info("no existing segmentation information for this tx package");
 					}
-					
+
 				}
 			}
 			catch (RemoteException e1)
 			{
-				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID(),e1);				
-			} 
-			
-			if (!attributesValid)
-			{
-				log.warn("PAckage created but one or more attributes was invalid");
-				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+				log.error("Exception thrown by Mayam while attempting to retrieve asset : " + txPackage.getMaterialID(), e1);
 			}
-			
+
+			attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
+			attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+
+			if (txPackage.getClassification() != null)
+				attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+			if (txPackage.getConsumerAdvice() != null)
+				attributes.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
+			if (txPackage.getPresentationFormat() != null)
+				attributes.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
+			if (txPackage.getTargetDate() != null)
+			{
+				firstTx = dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate());
+				attributes.setAttribute(Attribute.TX_FIRST, firstTx);
+			}
+			if (txPackage.getNumberOfSegments() != null)
+				attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+
+			log.debug("Getting materials asset id");
+			String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(
+					Attribute.ASSET_ID);
+
+			boolean fixAndStitchItem = true;
+
 			try
 			{
-					attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, txPackage.getPresentationID());
-					attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
-					
-					if (txPackage.getClassification() != null)
-						attributesValid &= attributes.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
-					if (txPackage.getConsumerAdvice() != null)
-						attributesValid &= attributes.setAttribute(Attribute.REQ_NOTES, txPackage.getConsumerAdvice());
-					if (txPackage.getPresentationFormat() != null)
-						attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, txPackage.getPresentationFormat().toString());
-					if (txPackage.getTargetDate() != null)
-						attributesValid &= attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
-					
-					TaskState fixAndStitchState = null;
-					
-					if (material != null) {
-						String materialAssetID = material.getAttributeAsString(Attribute.ASSET_ID);
-						AttributeMap fixAndStitchTask = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.FIX_STITCH_EDIT, materialAssetID);
-						if (fixAndStitchTask != null)
-						{
-							fixAndStitchState =  fixAndStitchTask.getAttribute(Attribute.TASK_STATE);
-						}
-					}
-				
-					if (txPackage.getNumberOfSegments() != null)
-						attributesValid &= attributes.setAttribute(Attribute.REQ_NUMBER, txPackage.getNumberOfSegments().intValue());
+				fixAndStitchItem = taskController.fixAndStitchTaskExistsForItem(materialAssetID);
+			}
+			catch (MayamClientException e)
+			{
+				log.error(
+						"error searching for fix and stitch tasks, will not populate segmentation info but will still try to create package",
+						e);
+			}
 
-					SegmentListBuilder listbuilder = SegmentList.create();
-					listbuilder.attributeMap(attributes.getAttributes());
-	
+			SegmentListBuilder listbuilder = SegmentList.create();
+			listbuilder.attributeMap(attributes.getAttributes());
 
-					//attempt to populate segmentlist with information supplied by aggregators only if fix stitch task has never been created for item
-					if(fixAndStitchState == null)  
+			// attempt to populate segmentlist with information supplied by aggregators only if fix stitch task has never been created for item
+			if (!fixAndStitchItem)
+			{
+				try
+				{
+					if (segmentation != null)
 					{
-						try
+
+						for (Segment s : segmentation.getSegment())
 						{
-							if (segmentation != null)
-							{
-		
-								for (Segment s : segmentation.getSegment())
-								{
-		
-									com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
-									listbuilder = listbuilder.segment(converted);
-								}
-		
-							}
+							com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
+							listbuilder = listbuilder.segment(converted);
 						}
-						catch (InvalidTimecodeException e)
-						{
-							log.error("could not convert segmentation info stored against item", e);
-						}
-						catch (Exception e){
-							log.error("could not convert segmentation info stored against item", e);
-						}
+
 					}
-					
-					SegmentList segmentList = listbuilder.build();
-				
-					log.debug("Getting materials asset id");
-					String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(Attribute.ASSET_ID);
-					String revisionID = RevisionUtil.findHighestRevision(materialAssetID,client);
-					log.debug("creating segment for material "+ materialAssetID+" revision:"+revisionID);
-					SegmentList newSegmentList = client.segmentApi().createSegmentList(AssetType.REVISION, revisionID,	segmentList);
-					log.info("Created SegmentList with id :"+newSegmentList.getId());
-					
-					if (materialHasPreviewPass) {
-						String houseID = txPackage.getPresentationID();
-						long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
-						log.info("Segmentation task created with id :"+taskID);
-					}
-			
-					return MayamClientErrorCode.SUCCESS;
+				}
+				catch (InvalidTimecodeException e)
+				{
+					log.error("could not convert segmentation info stored against item", e);
+				}
+				catch (Exception e)
+				{
+					log.error("could not convert segmentation info stored against item", e);
+				}
 			}
-			catch (RemoteException e)
+
+			SegmentList segmentList = listbuilder.build();
+
+			if (materialHasMedia && materialHasPreviewPass)
 			{
-				e.printStackTrace();
-				log.error("Exception thrown by Mayam while attempting to create Package",e);
-				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
-			} 
-			catch (MayamClientException e2) 
-			{
-				log.error("Exception thrown by Mayam while attempting to retrieve task for asset : " + txPackage.getMaterialID(),e2);	
+
+				// tx package can be created
+				try
+				{
+					String revisionID = RevisionUtil.findHighestRevision(materialAssetID, client);
+					log.debug("creating segment for material " + materialAssetID + " revision:" + revisionID);
+					SegmentList newSegmentList = client.segmentApi().createSegmentList(
+							AssetType.REVISION,
+							revisionID,
+							segmentList);
+					log.info("Created SegmentList with id :" + newSegmentList.getId());
+				}
+				catch (RemoteException e)
+				{
+					log.error("Exception thrown by Mayam while attempting to create Package", e);
+					return MayamClientErrorCode.MAYAM_EXCEPTION;
+				}
+
+				// create segmentation task
+				String houseID = txPackage.getPresentationID();
+				long taskID;
+				try
+				{
+					taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+					log.info("Segmentation task created with id :" + taskID);
+				}
+				catch (MayamClientException e)
+				{
+					log.error("error creating segmentation task", e);
+					return e.getErrorcode();
+				}
+
 			}
+			else
+			{
+				// tx package needs stashed on the pending tx package list
+				try
+				{
+					taskController.createPendingTxPackage(
+							txPackage.getMaterialID(),
+							txPackage.getPresentationID(),
+							firstTx,
+							segmentList);
+
+				}
+				catch (MayamClientException e)
+				{
+					log.error("error creating pending tx pacakge task", e);
+					returnCode = e.getErrorcode();
+				}
+			}
+
 		}
 		else
 		{
 			log.warn("Null package object, unable to create asset");
-			returnCode = MayamClientErrorCode.PACKAGE_UNAVAILABLE;
+			return MayamClientErrorCode.PACKAGE_UNAVAILABLE;
 		}
-		return returnCode;
+		return MayamClientErrorCode.SUCCESS;
 	}
-
-	
-	
 	
 	/**
 	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
