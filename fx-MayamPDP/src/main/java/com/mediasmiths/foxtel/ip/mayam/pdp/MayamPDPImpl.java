@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.MarkerList;
@@ -146,18 +147,6 @@ public class MayamPDPImpl implements MayamPDP
 
 	@Override
 	public  Map<String, Object> delete(final Map<String, Object> attributeMap)
-	{
-		validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
-
-		Map<String, Object> returnMap = new HashMap<>();
-		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
-
-
-		return returnMap;
-	}
-
-	@Override
-	public  Map<String, Object> deleteProtected(final Map<String, Object> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
 
@@ -329,7 +318,28 @@ public class MayamPDPImpl implements MayamPDP
 	@Override
 	public  Map<String, Object> proxyfileCheck(final Map<String, Object> attributeMap)
 	{
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString(), Attribute.OP_FILENAME.toString());
+
+	    Map<String, Object> returnMap = new HashMap<>();
+	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+	    String filename = attributeMap.get(Attribute.OP_FILENAME.toString()).toString();
+	    
+		AttributeMap filterEqualities = client.createAttributeMap();
+		filterEqualities.setAttribute(Attribute.OP_FILENAME, filename);
+		filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.EXPORT);
+		FilterCriteria criteria = new FilterCriteria();
+		criteria.setFilterEqualities(filterEqualities);
+		FilterResult existingTasks = client.taskApi().getTasks(criteria, 50, 0);
+	    
+		if (existingTasks != null && existingTasks.getTotalMatches() > 0) {
+			returnMap.clear();
+	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A Proxy with name " + filename + " already exists");
+		}
+
+		return returnMap;  
 	}
 
 

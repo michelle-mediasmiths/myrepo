@@ -43,12 +43,6 @@ public interface MayamPDP
 	@Consumes(MediaType.APPLICATION_JSON)
 	public  Map<String, Object> uningestProtected(Map<String, Object> attributeMap);
 
-	@Path("deleteProtected")
-	@POST()
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public  Map<String, Object> deleteProtected(Map<String, Object> attributeMap);
-
 	@Path("protect")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
