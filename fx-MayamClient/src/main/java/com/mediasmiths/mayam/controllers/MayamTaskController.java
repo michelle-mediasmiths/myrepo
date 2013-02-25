@@ -475,7 +475,7 @@ public class MayamTaskController extends MayamController
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, type.getText());
 		criteria.getFilterEqualities().setAttribute(idattribute, id);
-		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, END_STATES);
+		criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try
