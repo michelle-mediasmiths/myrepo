@@ -423,13 +423,26 @@ public class MayamTaskController extends MayamController
 			result = client.taskApi().getTasks(criteria, 10, 0);
 			log.info("Total matches: " + result.getTotalMatches());
 
-			if (result.getTotalMatches() != expectedResultCount)
+			int numberOpenTasks = 0;
+			AttributeMap openTask = null;
+			
+			for (int i = 0; i < result.getTotalMatches(); i++)
+			{
+				TaskState taskState = result.getMatches().get(i).getAttribute(Attribute.TASK_STATE);
+				if (!END_STATES.contains(taskState))
+				{
+					numberOpenTasks++;
+					openTask = result.getMatches().get(i);
+				}
+			}
+			
+			if (numberOpenTasks != expectedResultCount)
 			{
 				log.error("unexpected number of results for search expected "+ expectedResultCount + " got " + result.getTotalMatches());
 				throw new MayamClientException(MayamClientErrorCode.UNEXPECTED_NUMBER_OF_TASKS);
 			}
 
-			return result.getMatches().get(0);
+			return openTask;
 		}
 		catch (RemoteException e)
 		{
