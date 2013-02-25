@@ -3,7 +3,9 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
@@ -162,7 +164,6 @@ public class MayamPDPImpl implements MayamPDP
 		return returnMap;
 	}
 
-
 	@Override
 	public  Map<String, String> deleteProtected(final Map<String, String> attributeMap)
 	{
@@ -193,7 +194,45 @@ public class MayamPDPImpl implements MayamPDP
 	    
 		return returnMap;
 	}
+	
+	@Override
+	public  Map<String, String> exportMarkers(final Map<String, String> attributeMap)
+	{
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString());
 
+	    Map<String, String> returnMap = new HashMap<>();
+	    returnMap.put(PDPAttributes.STATUS.toString(), "Success");
+	    
+	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()); 
+	    String assetID = attributeMap.get(Attribute.ASSET_ID.toString());
+	    MarkerList markers = null;
+		String revisionId = null;
+		try
+		{
+			revisionId = RevisionUtil.findHighestRevision(assetID, client);
+			markers = client.assetApi().getMarkers(AssetType.ITEM, assetID, revisionId);
+			
+			if (markers == null || markers.size() == 0)
+			{
+				returnMap.clear();
+		    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+		    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
+		    	returnMap.put(PDPAttributes.LOGGING.toString(), "No export markers exist for " + houseID);
+		    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "No export markers exist for " + houseID + " <OK>");
+			}
+		}
+		catch (RemoteException e)
+		{
+			returnMap.clear();
+	    	returnMap.put(PDPAttributes.STATUS.toString(), "Failure");
+	    	returnMap.put(PDPAttributes.FAILURE_CODE.toString(), PDPErrorCodes.TECHNICAL_FAULT.toString());
+	    	returnMap.put(PDPAttributes.LOGGING.toString(), "Exception thrown in Mayam while searching for markers for : " + houseID);
+	    	returnMap.put(PDPAttributes.UI_MESSAGE.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID + " <OK>");
+		}
+	    
+		return returnMap;
+	}
+	
 	@Override
 	public  Map<String, String> ingest(final Map<String, String> attributeMap)
 	{

@@ -114,6 +114,12 @@ public interface MayamPDP
 	@Consumes("application/json")
 	public Map<String, String> txDelivery(Map<String, String> attributeMap);
 
+	@Path("exportMarkers")
+	@GET()
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, String> exportMarkers(Map<String, String> attributeMap);
+
 
 
 }
