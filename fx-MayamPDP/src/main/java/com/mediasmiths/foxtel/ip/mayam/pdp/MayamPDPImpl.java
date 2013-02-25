@@ -82,16 +82,14 @@ public class MayamPDPImpl implements MayamPDP
 		    if (numberOfSegmentsRequested != segmentsSize) 
 		    {
 		    	returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Presentation ID : " + presentationID + ", user has requested " + numberOfSegmentsRequested + " segements, while placeholder contained " + segmentsSize);
+		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
 		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
 		    }
 	    }
 	    else {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Unable to retrieve Segment List for Presentation ID : " + presentationID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "A technical fault has occurred while retrieving segemnt list");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A technical fault has occurred while retrieving segemnt list");
 	    }
 	    
 		return returnMap;
@@ -112,8 +110,7 @@ public class MayamPDPImpl implements MayamPDP
 	    	
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The Tx Package has not been classified: " + presentationID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 	    }
 	    
 		return returnMap;
@@ -136,14 +133,12 @@ public class MayamPDPImpl implements MayamPDP
 	    {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Protected asset cannot be uningested: " + houseID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested");
 	    }
 	    else {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
 		return returnMap;
@@ -178,14 +173,12 @@ public class MayamPDPImpl implements MayamPDP
 	    {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Protected asset cannot be uningested: " + houseID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted");
 	    }
 	    else {
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Warning user that : " + houseID + " and associated metadata will be deleted");
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone. <OK, Cancel>");
+	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
 		return returnMap;
@@ -213,15 +206,13 @@ public class MayamPDPImpl implements MayamPDP
 				returnMap.clear();
 		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
 		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "No export markers exist for " + houseID);
-		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "No export markers exist for " + houseID + " <OK>");
 			}
 		}
 		catch (RemoteException e)
 		{
 			returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Exception thrown in Mayam while searching for markers for : " + houseID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID + " <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID);
 		}
 	    
 		return returnMap;
@@ -290,7 +281,6 @@ public class MayamPDPImpl implements MayamPDP
 	    	    	returnMap.clear();
 	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
 	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
-	    	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created <OK>");
 	    		}
 	    	}
 	    }
@@ -316,7 +306,6 @@ public class MayamPDPImpl implements MayamPDP
 	    	    	returnMap.clear();
 	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
 	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created");
-	    	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created <OK>");
 	    		}
 	    	}
 	    }
@@ -402,16 +391,14 @@ public class MayamPDPImpl implements MayamPDP
 		catch(RemoteException e) {
 			returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Exception thrown in Mayam while searching for existing tasks for : " + houseID);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID + " <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID);
 		}
 		
 		if (result != null && result.getTotalMatches() > 0)
 		{
 	    	returnMap.clear();
 	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), task.toString() + " task already exists for : " + houseID + ", will not create new task");
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "Task already exists. No new task created <OK>");
+	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Task already exists. No new task created");
 		}
 		
 		return returnMap;
