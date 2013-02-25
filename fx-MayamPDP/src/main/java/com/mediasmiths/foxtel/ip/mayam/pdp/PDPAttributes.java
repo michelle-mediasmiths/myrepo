@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 public enum PDPAttributes {
-	STATUS("OperationStatus"),
-	FAILURE_CODE("ReasonForFailure"),
-	UI_MESSAGE("DisplayMessage"),
+	OP_STAT("OP_STAT"),
+	FAILURE_CODE("FAILURE_CODE"),
+	ERROR_MSG("ERROR_MSG"),
 	LOGGING("LogMessage");
 	
 	private String text;
@@ -12,7 +12,7 @@ public enum PDPAttributes {
 		this.text = text;
 	}
 
-	public String getText() {
+	public String toString() {
 		return this.text;
 	}
 }

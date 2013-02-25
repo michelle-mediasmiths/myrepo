@@ -36,31 +36,36 @@
         <artifactId>fx-event-entity</artifactId>
         <version>3.0-SNAPSHOT</version>
     </dependency>
-    <dependency>
-        <groupId>com.mediasmiths.foxtel</groupId>
-        <artifactId>fx-event-reports</artifactId>
-        <version>3.0-SNAPSHOT</version>
-    </dependency>
-   	<dependency>
-		<groupId>com.mediasmiths.foxtel</groupId>
-		<artifactId>fx-MayamClient</artifactId>
-		<version>3.0-SNAPSHOT</version>
-	</dependency>
-    <dependency>
-        <groupId>com.mediasmiths.foxtel</groupId>
-        <artifactId>fx-report-gen</artifactId>
-        <version>3.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>com.mediasmiths.std.guice</groupId>
-        <artifactId>stdlib-guice-webapp</artifactId>
-        <version>${stdlib.version}</version>
-    </dependency>
-    <dependency>
+        <dependency>
+            <groupId>com.mediasmiths.foxtel</groupId>
+            <artifactId>fx-event-reports</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mediasmiths.foxtel</groupId>
+            <artifactId>fx-MayamClient</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mediasmiths.foxtel</groupId>
+            <artifactId>fx-report-gen</artifactId>
+            <version>3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mediasmiths.std.guice</groupId>
+            <artifactId>stdlib-guice-webapp</artifactId>
+            <version>${stdlib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jackson-provider</artifactId>
+            <version>2.3.4.Final</version>
+        </dependency>
+        <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
-    </dependency>
+        </dependency>
     </dependencies>
 
     <build>
