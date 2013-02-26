@@ -40,6 +40,12 @@ bmpa : placeholderagent
 bmwfa : wfadapter
 	rsync -v fx-WFAdapter/target/fx-WFAdapter.war sysadmin@10.111.224.101:mediasmiths/bundle/
 
+
+bmpdp : mayampdp
+	rsync -v fx-MayamPDP/target/fx-MayamPDP.war sysadmin@10.111.224.101:mediasmiths/bundle/
+
+
+
 #
 # Targets
 #
@@ -57,6 +63,10 @@ carbon:
 wfadapter:
 	$(MVN) clean package -am --projects fx-WFAdapter
 
+mayampdp:
+	$(MVN) clean package -am --projects fx-MayamPDP
+	
+	
 #
 #
 # Standard Maven targets

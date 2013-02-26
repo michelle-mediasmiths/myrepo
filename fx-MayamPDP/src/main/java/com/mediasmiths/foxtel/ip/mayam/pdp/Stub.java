@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
@@ -13,6 +14,8 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import org.apache.log4j.Logger;
 
 import javax.xml.ws.WebServiceException;
+
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -251,6 +254,8 @@ public class Stub implements MayamPDP
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
 		criteria.getFilterEqualities().setAttribute(Attribute.HOUSE_ID, houseID);
+		criteria.getFilterAlternatives()
+   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
 		FilterResult result = null;
 
 		try
@@ -273,6 +278,15 @@ public class Stub implements MayamPDP
 		return returnMap;
 	}
 
+
+	 final EnumSet<TaskState> END_STATES = EnumSet.of(
+				TaskState.FINISHED,
+				TaskState.FINISHED_FAILED,
+				TaskState.REJECTED,
+				TaskState.REMOVED
+			);
+	
+	
 	private void dumpPayload(final Map<String, Object> attributeMap)
 	{
 		if (attributeMap == null)
