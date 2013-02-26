@@ -238,7 +238,7 @@ public class ConformJobHandler extends JobHandler
 		reasociatedSegment.getAttributeMap().setAttribute(Attribute.HOUSE_ID, packageID);
 		try
 		{
-			tasksClient.assetApi().updateAsset(segmentList.getAttributeMap());
+			tasksClient.assetApi().updateAsset(reasociatedSegment.getAttributeMap());
 		}
 		catch (RemoteException e)
 		{
