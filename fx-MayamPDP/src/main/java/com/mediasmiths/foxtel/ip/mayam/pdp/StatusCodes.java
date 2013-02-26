@@ -1,13 +1,12 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
-public enum PDPAttributes {
-	OP_STAT("OP_STAT"),
-	ERROR_MSG("ERROR_MSG"),
-	FORM_MSG("FORM_MSG");
-	
+public enum StatusCodes
+{
+	OK("ok"), ERROR("error"), CONFIRM("confirm"), AUTH_FAIL("auth_fail");
+
 	private String text;
 
-	PDPAttributes(String text) {
+	StatusCodes(String text) {
 		this.text = text;
 	}
 

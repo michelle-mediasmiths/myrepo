@@ -1,9 +1,10 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.util.Map;
 
 /**
@@ -25,100 +26,94 @@ public interface MayamPDP
 	 *
 	 */
 	@Path("segmentMismatch")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> segmentMismatch(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> segmentMismatch(Map<String, Object> attributeMap);
 
 	@Path("segmentClassificationCheck")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> segmentClassificationCheck(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> segmentClassificationCheck(Map<String, Object> attributeMap);
 
 	@Path("uningestProtected")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> uningestProtected(Map<String, String> attributeMap);
-
-	@Path("deleteProtected")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> deleteProtected(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> uningestProtected(Map<String, Object> attributeMap);
 
 	@Path("protect")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> protect(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> protect(Map<String, Object> attributeMap);
 
 	@Path("unprotect")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> unprotect(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> unprotect(Map<String, Object> attributeMap);
 
 	@Path("delete")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> delete(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> delete(Map<String, Object> attributeMap);
 
 	@Path("proxyFileCheck")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public  Map<String, String> proxyfileCheck(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public  Map<String, Object> proxyfileCheck(Map<String, Object> attributeMap);
 
 	@Path("ingest")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> ingest(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> ingest(Map<String, Object> attributeMap);
 
 	@Path("complianceLogging")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> complianceLogging(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> complianceLogging(Map<String, Object> attributeMap);
 
 	@Path("complianceEdit")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> complianceEdit(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> complianceEdit(Map<String, Object> attributeMap);
 
 	@Path("unmatched")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> unmatched(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> unmatched(Map<String, Object> attributeMap);
 
 	@Path("preview")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> preview(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> preview(Map<String, Object> attributeMap);
 
 	@Path("autoQC")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> autoQC(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> autoQC(Map<String, Object> attributeMap);
 
 	@Path("txDelivery")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> txDelivery(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> txDelivery(Map<String, Object> attributeMap);
 
 	@Path("exportMarkers")
-	@GET()
-	@Produces("application/json")
-	@Consumes("application/json")
-	public Map<String, String> exportMarkers(Map<String, String> attributeMap);
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> exportMarkers(Map<String, Object> attributeMap);
 
 
 
