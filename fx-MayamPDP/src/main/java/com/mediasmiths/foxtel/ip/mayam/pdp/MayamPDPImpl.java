@@ -57,11 +57,17 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 	@Override
+	public String ping()
+	{
+		return "<html>Ping</html>";
+	}
+
+	@Override
 	public  Map<String, Object> segmentMismatch(final Map<String, Object> attributeMap)
 	{
 	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER.toString(), Attribute.HOUSE_ID.toString());
 
-	    Map<String, Object> returnMap = new HashMap<>();
+	    Map<String, Object> returnMap = new HashMap<String,Object>();
 	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    //Segmentation check
@@ -150,7 +156,7 @@ public class MayamPDPImpl implements MayamPDP
 	{
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
 
-	    Map<String, Object> returnMap = new HashMap<>();
+	    Map<String, Object> returnMap = new HashMap<String,Object>();
 	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
@@ -178,7 +184,7 @@ public class MayamPDPImpl implements MayamPDP
 	{
 	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString());
 
-	    Map<String, Object> returnMap = new HashMap<>();
+	    Map<String, Object> returnMap = new HashMap<String,Object>();
 	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
@@ -280,24 +286,24 @@ public class MayamPDPImpl implements MayamPDP
 	@Override
 	public  Map<String, Object> complianceLogging(final Map<String, Object> attributeMap)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString()).toString();
-	    
-	    Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
-	    if (returnMap != null)
-	    {
-	    	Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
-	    	if (status.equals(StatusCodes.OK))
-	    	{
-	    		if (parentHouseID == null || parentHouseID.equals(""))
-	    		{
-	    	    	returnMap.clear();
-	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Logging task cannot be created");
-	    		}
-	    	}
-	    }
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		String sourceHouseId = attributeMap.get(Attribute.SOURCE_HOUSE_ID.toString()).toString();
+
+		Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+		if (returnMap != null)
+		{
+			Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+			if (status.equals(StatusCodes.OK))
+			{
+				if (sourceHouseId == null || sourceHouseId.equals(""))
+				{
+					returnMap.clear();
+					returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
+					returnMap.put(PDPAttributes.ERROR_MSG.toString(), "String.format(messageComplianceLoggingNone, houseID)");
+				}
+			}
+		}
 		return doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
 	}
 
@@ -320,7 +326,7 @@ public class MayamPDPImpl implements MayamPDP
 	{
 	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString(), Attribute.OP_FILENAME.toString());
 
-	    Map<String, Object> returnMap = new HashMap<>();
+	    Map<String, Object> returnMap = new HashMap<String,Object>();
 	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 	    
 	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
@@ -387,7 +393,7 @@ public class MayamPDPImpl implements MayamPDP
 	 */
 	private Map<String, Object> formResult(boolean success, String feedBackMessage)
 	{
-		Map<String, Object> result = new HashMap<>();
+		Map<String, Object> result = new HashMap<String,Object>();
 
 
 		return result;
@@ -395,7 +401,7 @@ public class MayamPDPImpl implements MayamPDP
 	
 	private Map<String, Object> doesTaskExist(String houseID, MayamTaskListType task)
 	{
-		Map<String, Object> returnMap = new HashMap<>();
+		Map<String, Object> returnMap = new HashMap<String,Object>();
 		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
 		
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
