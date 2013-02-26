@@ -23,18 +23,20 @@ public class ComplianceLoggingHandler extends TaskStateChangeHandler
 			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 			String notes = messageAttributes.getAttribute(Attribute.COMPLIANCE_NOTES);
-			createComplianceEditTask(assetID, assetType, notes);
+			String assetPeerID = messageAttributes.getAttribute(Attribute.ASSET_PEER_ID);
+			createComplianceEditTask(assetID, assetType, notes, assetPeerID);
 						
 		} catch (Exception e) {
 			log.error("Exception in the Mayam client while handling Compliance logging Task Message : " + e,e);
 		}
 	}
 	
-	private void createComplianceEditTask(String assetID, AssetType assetType, String complianceNotes) throws MayamClientException, RemoteException
+	private void createComplianceEditTask(String assetID, AssetType assetType, String complianceNotes, String assetPeerID) throws MayamClientException, RemoteException
 	{
 		
 		AttributeMap map = tasksClient.createAttributeMap();
 		map.setAttribute(Attribute.COMPLIANCE_NOTES, complianceNotes);
+		map.setAttribute(Attribute.ASSET_PEER_ID, assetPeerID);
 		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_EDIT,map);
 	}
 
