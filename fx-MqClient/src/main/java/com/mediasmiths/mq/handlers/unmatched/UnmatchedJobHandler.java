@@ -1,31 +1,22 @@
 package com.mediasmiths.mq.handlers.unmatched;
 
-import java.util.List;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.jasypt.encryption.pbe.CleanablePasswordBased;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Job;
-import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
-import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
 
 public class UnmatchedJobHandler extends JobHandler
 {
-	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
+	private final static Logger log = Logger.getLogger(UnmatchedJobHandler.class);
 
 	public void process(Job jobMessage)
 	{
@@ -61,9 +52,16 @@ public class UnmatchedJobHandler extends JobHandler
 					
 					String currenttitle = material.getAttributeAsString(Attribute.ASSET_TITLE);
 					
-					if(StringUtils.isEmpty(currenttitle)){					
-						String fileName = getFileName((String)material.getAttribute(Attribute.ASSET_ID));
-						updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+					if(StringUtils.isEmpty(currenttitle)){		
+						try
+						{
+							String fileName = getFileName((String) material.getAttribute(Attribute.ASSET_ID));
+							updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+						}
+						catch (Exception e)
+						{
+							log.error("error setting asset title on unmatched item", e);
+						}
 					}
 					
 					try
