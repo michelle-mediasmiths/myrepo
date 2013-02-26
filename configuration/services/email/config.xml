@@ -1,5 +1,5 @@
-<FoxtelEmailConfiguration
-	xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000">
+<?xml version="1.0" encoding="UTF-8"?>
+<FoxtelEmailConfiguration xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000">
 	<!-- QC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
@@ -8,13 +8,15 @@
 			<subject>Auto QC Fail in MAM: [TitleField]</subject>
 			<body>AutoQCFailed</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROMO@Factuals.com.au</emailaddress>
+				<emailaddress>MEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROMO@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -25,10 +27,8 @@
 			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
 			<body>CerifyQCError</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -39,15 +39,8 @@
 			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID] [TitleField]</subject>
 			<body>QCproblemwithTCMedia</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -55,24 +48,21 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate>
-			<subject>An item has failed QC and required re ordering ID:
-				[MasterID]</subject>
+			<subject>An item has failed QC and requires re ordering ID: [MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_ Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROMO@Factuals.com.au</emailaddress>
+				<emailaddress>MEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROMO@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
-
 	<!-- TC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
@@ -81,15 +71,15 @@
 			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]</subject>
 			<body>FailedInSendtoTX</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@Foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -166,14 +156,11 @@
 			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
 			<body>TCFailed</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- BMS -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
@@ -182,12 +169,13 @@
 			<subject>[MasterID] [TitleField] Purge Not Processed</subject>
 			<body>ProtectedPurgeFail</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -198,19 +186,11 @@
 			<subject>[MasterID] [TitleField] Manual Purge Actioned.</subject>
 			<body>ManualPurge</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>CPMAM@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
-
-
-
-
 	<!-- Preview -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
@@ -219,14 +199,15 @@
 			<subject>Pass-Reorder Item in MAM: [MasterID] [TitleField]</subject>
 			<body>PreviewFailed</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_ Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROMO@Factuals.com.au</emailaddress>
+				<emailaddress>MEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROMO@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -237,28 +218,31 @@
 			<subject>Preview Fail Item in MAM: [MasterID] [TitleField]</subject>
 			<body>PreviewFurtherAnalysis</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>MEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>AOMAMPROG@Foxtel.com.au </emailaddress>
+				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- Delivery -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>DeliveryFailed</eventname>
 		<MailTemplate>
-			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to
-				external location
+			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to external location
 			</subject>
 			<body>DeliveryFailed</body>
 			<emailaddresses>
@@ -270,8 +254,7 @@
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>Delivered</eventname>
 		<MailTemplate>
-			<subject> [MasterID] [TitleField]. Publicity item sent to external
-				location
+			<subject> [MasterID] [TitleField]. Publicity item sent to external location
 			</subject>
 			<body>Delivered</body>
 			<emailaddresses>
@@ -279,8 +262,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- System -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/system</namespace>
@@ -289,7 +270,7 @@
 			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
 			<body>CommError</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -300,20 +281,19 @@
 			<subject>[MasterID] [TitleField]. Extract of Marked Up item</subject>
 			<body>ComplianceLoggingMarker</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
 	<!-- Content -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>ContentWithoutMasterID</eventname>
 		<MailTemplate>
-			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<subject>Unmatched Item in MAM: MasterID missing</subject>
 			<body>ContentWithoutMasterID</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -321,10 +301,10 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>PlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate>
-			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<subject>Unmatched Item in MAM:  MasterID missing</subject>
 			<body>PlaceHolderCannotBeIdentified</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -335,7 +315,7 @@
 			<subject>Placeholder already has media</subject>
 			<body>PlaceholderAlreadyHasMedia</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -346,9 +326,8 @@
 			<subject>Ardome import has failed</subject>
 			<body>ArdomeImportFailure</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -359,9 +338,8 @@
 			<subject>Ardome import has failed</subject>
 			<body>ProgrammeFileIngestFailure</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -372,9 +350,8 @@
 			<subject>Ardome import has failed</subject>
 			<body>MediaFileImportFailure</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -385,10 +362,8 @@
 			<subject>Ardome import has failed</subject>
 			<body>EmergencyImportFailure</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_ORDERING@foxtel.com.au</emailaddress>
+				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -396,14 +371,11 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>OutOfOrder</eventname>
 		<MailTemplate>
-			<subject>A material exchange message has arrived with an unexpected
-				delivery version for material [MasterID]
+			<subject>A material exchange message has arrived with an unexpected delivery version for material [MasterID]
 			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>

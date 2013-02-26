@@ -1,5 +1,5 @@
-<FoxtelEmailConfiguration
-	xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000">
+<?xml version="1.0" encoding="UTF-8"?>
+<FoxtelEmailConfiguration xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000">
 	<!-- QC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
@@ -41,7 +41,7 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate>
-			<subject>An item has failed qc and requires reordering [MasterID]</subject>
+			<subject>An item has failed QC and requires re ordering ID: [MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -49,12 +49,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
-
-
-
-
 	<!-- TC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
@@ -96,8 +90,7 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>CaptionProxyFailure</eventname>
 		<MailTemplate>
-			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode failed in MAM.
-			</subject>
+			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode failed in MAM.</subject>
 			<body>CaptionProxyFailure</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -153,8 +146,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- BMS -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
@@ -180,12 +171,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
-
-
-
-
 	<!-- Preview -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
@@ -211,14 +196,13 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- Delivery -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>DeliveryFailed</eventname>
 		<MailTemplate>
-			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to external location</subject>
+			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to external location
+			</subject>
 			<body>DeliveryFailed</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -230,7 +214,8 @@
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>Delivered</eventname>
 		<MailTemplate>
-			<subject> [MasterID] [TitleField]. Publicity item sent to external location</subject>
+			<subject> [MasterID] [TitleField]. Publicity item sent to external location
+			</subject>
 			<body>Delivered</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -238,8 +223,6 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- System -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/system</namespace>
@@ -265,14 +248,12 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
-
-
 	<!-- Content -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>ContentWithoutMasterID</eventname>
 		<MailTemplate>
-			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<subject>Unmatched Item in MAM: MasterID missing</subject>
 			<body>ContentWithoutMasterID</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -284,7 +265,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>PlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate>
-			<subject>Unmatched Item in MAM: [MasterID] missing</subject>
+			<subject>Unmatched Item in MAM:  MasterID missing</subject>
 			<body>PlaceHolderCannotBeIdentified</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
@@ -356,7 +337,8 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>OutOfOrder</eventname>
 		<MailTemplate>
-			<subject>A material exchange message has arrived with an unexpected delivery version for material [MasterID]</subject>
+			<subject>A material exchange message has arrived with an unexpected delivery version for material [MasterID]
+			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>
 				<emailaddress>minh.pham@mediasmiths.com</emailaddress>
