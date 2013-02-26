@@ -21,34 +21,11 @@
         <version>3.8.1</version>
         <scope>test</scope>
     </dependency>
-    <dependency>
-        <groupId>com.mediasmiths.std.guice</groupId>
-        <artifactId>stdlib-guice-hibernate</artifactId>
-        <version>${stdlib.version}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.mediasmiths.foxtel</groupId>
-        <artifactId>fx-event-core</artifactId>
-        <version>3.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-        <groupId>com.mediasmiths.foxtel</groupId>
-        <artifactId>fx-event-entity</artifactId>
-        <version>3.0-SNAPSHOT</version>
-    </dependency>
-        <dependency>
-            <groupId>com.mediasmiths.foxtel</groupId>
-            <artifactId>fx-event-reports</artifactId>
-            <version>3.0-SNAPSHOT</version>
-        </dependency>
+
+
         <dependency>
             <groupId>com.mediasmiths.foxtel</groupId>
             <artifactId>fx-MayamClient</artifactId>
-            <version>3.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.mediasmiths.foxtel</groupId>
-            <artifactId>fx-report-gen</artifactId>
             <version>3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
@@ -75,8 +52,8 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-                <source>1.7</source>
-                <target>1.7</target>
+                <source>1.6</source>
+                <target>1.6</target>
                 <encoding>UTF-8</encoding>
             </configuration>
         </plugin>

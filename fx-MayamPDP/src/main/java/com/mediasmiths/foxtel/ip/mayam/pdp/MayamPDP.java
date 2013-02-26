@@ -15,9 +15,13 @@ import java.util.Map;
  * Author: Harmer
  */
 
-@Path("/pdp")
+@Path("/pdp/")
 public interface MayamPDP
 {
+
+	@Path("ping")
+	@Produces(MediaType.TEXT_HTML)
+	public  String ping();
 
 	/**
 	 *
