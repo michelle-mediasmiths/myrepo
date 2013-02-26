@@ -20,15 +20,7 @@ public class WFAdapterSetup extends AbstractRESTGuiceSetup
 		modules.add(new WFAdapterModule());
 		modules.add(new EventServiceModule());
 		modules.add(new ChannelConfigModule());
-		
-		if (config.getBoolean("stub.out.mayam", false))
-		{
-			modules.add(new MayamClientStubModule());
-		}
-		else
-		{
-			modules.add(new MayamClientModule());
-		}
+		modules.add(new MayamClientModule());		
 	}
 
 	@Override

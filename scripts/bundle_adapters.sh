@@ -13,6 +13,7 @@ cp ../fx-MqClient/target/fx-MqClient.war /tmp/bundle
 cp ../fx-event-ui/target/fx-event-ui.war /tmp/bundle
 cp ../fx-report-ui/target/fx-report-ui.war /tmp/bundle
 cp ../fx-MailAgent/target/fx-MailAgent.war /tmp/bundle
+cp ../fx-MayamPDP/target/fx-MayamPDP.war /tmp/bundle/
 
 cd /tmp/bundle
 tar -cvzf mediasmiths-wfe-bundle.tar.gz *
