@@ -27,6 +27,9 @@ import com.mediasmiths.mayam.MayamClientException;
 
 public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 
+	@Inject
+	@Named("purge.associated.material.without.title.days")
+	private int purgeTimeForAssociatedMaterialWithoutTitle;
 	
 	@Inject
 	public MaterialExchangeProcessor(
@@ -105,7 +108,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 					 */
 					try
 					{
-						mayamClient.addMaterialToPurgeCandidateList(masterID, 90);
+						mayamClient.addMaterialToPurgeCandidateList(masterID, purgeTimeForAssociatedMaterialWithoutTitle);
 					}
 					catch (MayamClientException e)
 					{

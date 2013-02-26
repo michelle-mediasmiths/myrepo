@@ -1087,19 +1087,7 @@ public class MayamMaterialController extends MayamController
 	public MayamClientErrorCode deleteMaterial(String materialID)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		if (isProtected(materialID))
-		{
-			try
-			{
-				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL,materialID, 30);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error creating purage candidate task",e);
-				returnCode = e.getErrorcode();
-			}
-		}
-		else
+		if (! isProtected(materialID))
 		{
 			try
 			{

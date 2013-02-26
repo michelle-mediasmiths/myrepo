@@ -2,6 +2,8 @@ package com.mediasmiths.mq.handlers.asset;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -115,17 +117,17 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 					}
 					else if (presentationFlag != null && presentationFlag.equals(Boolean.FALSE))
 					{
-						int numberOfDays = 30;
+						int numberOfDays = defaultPurgeTime;
 						String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
 						if (contentType != null)
 						{
 							if (contentType.equals(MayamContentTypes.EPK)) 
 							{
-								numberOfDays = 90;
+								numberOfDays = associatedPurgeTime;
 							}
 							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
 							{
-								numberOfDays = 7;
+								numberOfDays = editClipsPurgeTime;
 							}
 						}
 						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);	
@@ -137,6 +139,18 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			}
 		}
 	}
+	
+	@Inject
+	@Named("purge.presentation.flag.removed.days.default")
+	private int defaultPurgeTime;
+	
+	@Inject
+	@Named("purge.presentation.flag.removed.days.editclips")
+	private int editClipsPurgeTime;
+	
+	@Inject
+	@Named("purge.presentation.flag.removed.days.associated")
+	private int associatedPurgeTime;
 
 	@Override
 	public String getName()

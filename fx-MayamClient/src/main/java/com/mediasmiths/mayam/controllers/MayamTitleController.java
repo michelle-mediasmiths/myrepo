@@ -627,15 +627,15 @@ public class MayamTitleController extends MayamController{
 		
 		if (isProtected(titleID)) 
 		{
-			try
-			{
-				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.TITLE,titleID, 30);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error creating purage candidate task",e);
-				returnCode = e.getErrorcode();
-			}
+//			try
+//			{
+//				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.TITLE,titleID, 30);
+//			}
+//			catch (MayamClientException e)
+//			{
+//				log.error("error creating purage candidate task",e);
+//				returnCode = e.getErrorcode();
+//			}
 		}
 		else {
 			try {

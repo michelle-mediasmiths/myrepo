@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -53,13 +55,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 							Calendar date = Calendar.getInstance();
 							if (contentType.equals(MayamContentTypes.EPK)) 
 							{
-								date.add(Calendar.DAY_OF_MONTH, 90);
+								date.add(Calendar.DAY_OF_MONTH, associatedPurgeTime);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
 								task.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 							}
 							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
 							{
-								date.add(Calendar.DAY_OF_MONTH, 7);
+								date.add(Calendar.DAY_OF_MONTH, editClipsPurgeTime);
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
 								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							}
@@ -74,13 +76,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 						Calendar date = Calendar.getInstance();
 						if (contentType.equals(MayamContentTypes.EPK)) 
 						{
-							date.add(Calendar.DAY_OF_MONTH, 90);
+							date.add(Calendar.DAY_OF_MONTH, associatedPurgeTime);
 							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
 						}
 						else if (contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
 						{
-							date.add(Calendar.DAY_OF_MONTH, 7);
+							date.add(Calendar.DAY_OF_MONTH,editClipsPurgeTime);
 							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 						}
@@ -95,6 +97,13 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		}
 	}
 
+	@Named("purge.content.type.change.days.editclips")
+	private int editClipsPurgeTime;
+	
+	@Inject
+	@Named("purge.content.type.change.days.associated")
+	private int associatedPurgeTime;
+	
 	@Override
 	public String getName()
 	{
