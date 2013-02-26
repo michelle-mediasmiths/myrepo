@@ -338,5 +338,7 @@ public interface MayamClient
 	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException;
 
 	public List<AttributeMap> getAllPurgeCandidatesPendingDeletion()throws MayamClientException;
+
+	public boolean deletePurgeCandidates()throws MayamClientException;
 	
 }

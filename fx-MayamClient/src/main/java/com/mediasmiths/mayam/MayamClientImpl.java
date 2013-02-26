@@ -945,6 +945,7 @@ public class MayamClientImpl implements MayamClient
 	{
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
+		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.REMOVED);
 		criteria.getFilterRanges().setAttributeRange(Attribute.OP_DATE, new Date(0), new Date()); //find all with OP_DATE between start of epoch and now
 		criteria.getSortOrders().add(new SortOrder(Attribute.OP_DATE, SortOrder.Direction.ASC));
 		FilterResult result;
@@ -959,5 +960,62 @@ public class MayamClientImpl implements MayamClient
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e1);
 		}
 	}
-	
+
+	@Override
+	public boolean deletePurgeCandidates() throws MayamClientException
+	{
+		List<AttributeMap> allPurgeCandidatesPendingDeletion = getAllPurgeCandidatesPendingDeletion();
+
+		log.info(String.format("%d purge candidates due for deletion",allPurgeCandidatesPendingDeletion.size()));
+		
+		boolean allsuccess = true;
+
+		for (AttributeMap asset : allPurgeCandidatesPendingDeletion)
+		{
+			try
+			{
+				AssetType assetType = asset.getAttribute(Attribute.ASSET_TYPE);
+				String houseID = asset.getAttributeAsString(Attribute.HOUSE_ID);
+
+				if(houseID==null){
+					log.info(String.format("house id null for asset %s", asset.getAttribute(Attribute.ASSET_ID)));
+				}
+				else
+				if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
+				{
+					log.debug("purge title " + houseID);
+					titleController.purgeTitle(houseID);
+				}
+				else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
+				{
+					log.debug("delete item " + houseID);
+					MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID);
+					if (deleteMaterial == MayamClientErrorCode.MATERIAL_FIND_FAILED)
+					{
+						log.info("failed to find material for deletion, it may have already been deleted, closing purge candidate task");
+						AttributeMap updateMap = tasksController.updateMapForTask(asset);
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						tasksController.saveTask(updateMap);
+					}
+				}
+				else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
+				{
+					log.debug("delete package " + houseID);
+					packageController.deletePackage(houseID);
+				}
+				else
+				{
+					log.info(String.format("Unknown asset type %s wont attempt delete", assetType));
+				}
+			}
+			catch (Exception e)
+			{
+				log.error("Error deleting asset", e);
+				allsuccess = false;
+			}
+
+		}
+		return allsuccess;
+	}
+
 }

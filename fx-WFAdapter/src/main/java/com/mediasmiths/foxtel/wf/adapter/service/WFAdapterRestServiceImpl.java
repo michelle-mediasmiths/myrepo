@@ -539,12 +539,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		List<AttributeMap> purgeTasks = mayamClient.getAllPurgeCandidatesPendingDeletion();
 
 		StringBuilder sb = new StringBuilder();
-		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tASSET_TITLE\tDATE");
+		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tASSET_TITLE\tDATE\n");
 
 		for (AttributeMap attributeMap : purgeTasks)
 		{
 			sb.append(String.format(
-					"%s\t%s\t%s\t%s\t%s",
+					"%s\t%s\t%s\t%s\t%s\n",
 					attributeMap.getAttributeAsString(Attribute.TASK_ID),
 					attributeMap.getAttributeAsString(Attribute.ASSET_ID),
 					attributeMap.getAttributeAsString(Attribute.ASSET_TYPE),
@@ -562,8 +562,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public boolean performPendingPerges() throws MayamClientException
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return mayamClient.deletePurgeCandidates();
 	}
 
 }

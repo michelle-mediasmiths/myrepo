@@ -1095,6 +1095,11 @@ public class MayamMaterialController extends MayamController
 						MayamAssetType.MATERIAL.getAssetType(),
 						materialID);
 
+				if(assetAttributes==null){
+					log.warn("delete request for material that doesnt exist "+materialID);
+					return MayamClientErrorCode.MATERIAL_FIND_FAILED;
+				}
+				
 				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID);
 				
 				String parentId = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);

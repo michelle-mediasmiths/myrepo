@@ -1004,4 +1004,11 @@ public class MayamClientStub implements MayamClient
 		return new ArrayList<AttributeMap>();
 	}
 
+	@Override
+	public boolean deletePurgeCandidates() throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }
