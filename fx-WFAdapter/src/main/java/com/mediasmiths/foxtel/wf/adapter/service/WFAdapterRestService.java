@@ -215,6 +215,25 @@ public interface WFAdapterRestService
 	@Produces("text/plain")
 	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException;
 
+	/**
+	 * Lists items pending purge
+	 * @return
+	 * @throws MayamClientException
+	 */
+	@GET
+	@Path("/purge/list")
+	@Produces("text/plain")
+	public String getPurgePendingList() throws MayamClientException;
+	
+	/**
+	 * Performs pending purges
+	 * @return
+	 * @throws MayamClientException
+	 */
+	@POST
+	@Path("/purge/perform")
+	@Produces("text/plain")
+	public boolean performPendingPerges() throws MayamClientException;
 	
 }
 

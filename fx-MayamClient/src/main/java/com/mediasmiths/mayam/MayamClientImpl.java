@@ -939,5 +939,25 @@ public class MayamClientImpl implements MayamClient
 	{
 		tasksController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, daysUntilPurge);
 	}
+
+	@Override
+	public List<AttributeMap> getAllPurgeCandidatesPendingDeletion() throws MayamClientException
+	{
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
+		criteria.getFilterRanges().setAttributeRange(Attribute.OP_DATE, new Date(0), new Date()); //find all with OP_DATE between start of epoch and now
+		criteria.getSortOrders().add(new SortOrder(Attribute.OP_DATE, SortOrder.Direction.ASC));
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 1000, 0);			
+			return result.getMatches();
+		}
+		catch (RemoteException e1)
+		{
+			log.error("error searching for purge candidates",e1);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e1);
+		}
+	}
 	
 }

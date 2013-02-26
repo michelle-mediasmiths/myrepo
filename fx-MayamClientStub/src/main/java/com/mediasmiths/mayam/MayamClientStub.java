@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -995,6 +996,12 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<AttributeMap> getAllPurgeCandidatesPendingDeletion() throws MayamClientException
+	{
+		return new ArrayList<AttributeMap>();
 	}
 
 }

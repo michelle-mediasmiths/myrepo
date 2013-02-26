@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
@@ -335,5 +336,7 @@ public interface MayamClient
 	void exportFailed(long taskID) throws MayamClientException;
 
 	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException;
+
+	public List<AttributeMap> getAllPurgeCandidatesPendingDeletion()throws MayamClientException;
 	
 }

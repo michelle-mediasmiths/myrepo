@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -23,6 +24,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
@@ -55,7 +58,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private static final String TC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/tc";
 
 	private static final String QC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/qc";
-	
+
 	private static final String TX_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/delivery";
 
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
@@ -72,7 +75,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private String txDeliveryLocation;
 	@Inject
 	@Named("ao.tx.delivery.location")
-	private String aoTxDeliveryLocation;	
+	private String aoTxDeliveryLocation;
 	@Inject
 	@Named("mex.marshaller")
 	private Marshaller mexMarshaller;
@@ -82,22 +85,20 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("wfe.marshaller")
 	private Marshaller wfeMarshaller;
-	
+
 	@Inject
 	@Named("cerify.report.location")
 	private String cerifyReportLocation;
 	@Inject
 	@Named("cerify.report.location.ardome")
-	private String ardomeCerifyReportLocation;	
+	private String ardomeCerifyReportLocation;
 	@Inject
 	@Named("cerfiy.report.ardomehandle")
 	private String cerifyReportArdomeserviceHandle;
 	@Inject
 	@Named("cerify.report.attatch")
 	private boolean attachQcReports;
-	
-	
-	
+
 	@Override
 	@GET
 	@Path("/ping")
@@ -114,8 +115,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("application/xml")
 	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException
 	{
-		//doesnt actually do a transfer! just returns location (method needs renamed)
-		
+		// doesnt actually do a transfer! just returns location (method needs renamed)
+
 		log.info("Received AssetTransferForQCRequest " + req.toString());
 		final String id = req.getAssetId();
 		File destinationFile;
@@ -123,8 +124,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		if (req.isForTXDelivery())
 		{
 			boolean packageAO = mayamClient.isPackageAO(id);
-			String tcoutputlocation = TxUtil.deliveryLocationForPackage(id, mayamClient, txDeliveryLocation, aoTxDeliveryLocation, packageAO);
-			
+			String tcoutputlocation = TxUtil.deliveryLocationForPackage(
+					id,
+					mayamClient,
+					txDeliveryLocation,
+					aoTxDeliveryLocation,
+					packageAO);
+
 			// for tx delivery we return the location of transcoded package
 			String ret = tcoutputlocation + id + "/" + id + ".gxf";
 			destinationFile = new File(ret);
@@ -161,7 +167,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of Auto QC failure ID %s isTX %b",
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
-		
+
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -175,8 +181,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// id is an item id
 				saveEvent("AutoQCFailed", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
-				attachQcReports(notification.getAssetId(),notification.getJobName());
-				
+				attachQcReports(notification.getAssetId(), notification.getJobName());
+
 			}
 		}
 		catch (MayamClientException e)
@@ -195,8 +201,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info("Received MaterialTransferForTCRequest " + req.toString());
 		final String assetID = req.getAssetID();
 		String materialID;
-		
-		//we dont actually need to transfer the media, just get its location
+
+		// we dont actually need to transfer the media, just get its location
 		if (req.isForTX())
 		{
 			materialID = mayamClient.getMaterialIDofPackageID(assetID);
@@ -206,9 +212,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		
 		String path = mayamClient.pathToMaterial(materialID);
-		
+
 		return new MaterialTransferForTCResponse(path);
 	}
 
@@ -231,46 +236,51 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			mayamClient.autoQcPassedForMaterial(notification.getAssetId(), notification.getTaskID());
-			attachQcReports(notification.getAssetId(),notification.getJobName());
-			
+			attachQcReports(notification.getAssetId(), notification.getJobName());
+
 		}
 	}
 
 	private void attachQcReports(final String assetID, final String jobName) throws MayamClientException
 	{
-		//find report pdfs
+		// find report pdfs
 		IOFileFilter reportPDFAcceptor = new IOFileFilter()
 		{
-			
+
 			@Override
 			public boolean accept(File dir, String name)
 			{
-				return false; //dont look in sub directories
+				return false; // dont look in sub directories
 			}
-			
+
 			@Override
 			public boolean accept(File file)
 			{
 				String name = FilenameUtils.getName(file.getAbsolutePath());
-				if(name.startsWith(jobName)){
+				if (name.startsWith(jobName))
+				{
 					return true;
 				}
-				else{
+				else
+				{
 					return false;
 				}
 			}
 		};
-		
-		Collection<File> reports = FileUtils.listFiles(new File(cerifyReportLocation),reportPDFAcceptor,reportPDFAcceptor);
-		//attach report(s) to item
-		
+
+		Collection<File> reports = FileUtils.listFiles(new File(cerifyReportLocation), reportPDFAcceptor, reportPDFAcceptor);
+		// attach report(s) to item
+
 		for (File file : reports)
 		{
 			if (attachQcReports)
 			{
 				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
-				
-				log.info(String.format("attach file {%s} to material using ardome path {%s}", file.getAbsolutePath(),ardomeFilePath));
+
+				log.info(String.format(
+						"attach file {%s} to material using ardome path {%s}",
+						file.getAbsolutePath(),
+						ardomeFilePath));
 				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
 			}
 		}
@@ -296,8 +306,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// auto qc was for qc task
-				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);				
-				mayamClient.autoQcFailedForMaterial(notification.getAssetId(),notification.getTaskID());
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
+				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 			}
 		}
 		catch (MayamClientException e)
@@ -316,9 +326,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"Received notification of transcode Error asset ID %s isTX %b",
 				notification.getAssetID(),
 				notification.isForTXDelivery()));
-		
+
 		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE);
-		
+
 		try
 		{
 			if (notification.isForTXDelivery())
@@ -337,7 +347,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.error("Failed to fail task!", e);
 			throw e;
 		}
-		
+
 	}
 
 	@Override
@@ -358,20 +368,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
 		saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
-		
-		if(! notification.isForTXDelivery()){
+
+		if (!notification.isForTXDelivery())
+		{
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
 	}
 
 	protected void saveEvent(String name, String payload, String nameSpace)
 	{
-		events.saveEvent(name, payload,nameSpace);
+		events.saveEvent(name, payload, nameSpace);
 	}
 
 	protected void saveEvent(String name, Object payload, String nameSpace)
 	{
-		events.saveEvent(name, payload,nameSpace);
+		events.saveEvent(name, payload, nameSpace);
 	}
 
 	@Override
@@ -380,9 +391,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public Boolean autoQCRequiredForTxTask(@QueryParam("taskID") Long taskID) throws MayamClientException
 	{
-		
+
 		return Boolean.valueOf(mayamClient.autoQcRequiredForTXTask(taskID));
-		
+
 	}
 
 	@Override
@@ -395,9 +406,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				"TX DELIVERY FAILURE FOR PACKAGE %s AT STAGE %s",
 				notification.getPackageID(),
 				notification.getStage()));
-		
+
 		mayamClient.txDeliveryFailed(notification.getPackageID(), notification.getTaskID(), notification.getStage());
-		
+
 		saveEvent("DeliveryFailed", notification, TX_EVENT_NAMESPACE);
 	}
 
@@ -407,7 +418,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException
 	{
-		
+
 		boolean packageAO = mayamClient.isPackageAO(packageID);
 		return TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation, aoTxDeliveryLocation, packageAO);
 	}
@@ -416,37 +427,42 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@GET
 	@Path("/tx/delivery/writeSegmentXML")
 	@Produces("text/plain")
-	public boolean writeSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, IOException, JAXBException
+	public boolean writeSegmentXML(@QueryParam("packageID") String packageID)
+			throws MayamClientException,
+			IOException,
+			JAXBException
 	{
-		log.debug(String.format("Writing segment xml for package %s",packageID));
-		
+		log.debug(String.format("Writing segment xml for package %s", packageID));
+
 		String companion;
-		
-		if(mayamClient.isPackageAO(packageID)){
+
+		if (mayamClient.isPackageAO(packageID))
+		{
 			companion = getAOSegmentXML(packageID);
 		}
-		else{
-			companion = getSegmentXML(packageID);	
+		else
+		{
+			companion = getSegmentXML(packageID);
 		}
 		String deliveryLocation = deliveryLocationForPackage(packageID);
-		
+
 		File deliveryLocationFile = new File(deliveryLocation);
 		deliveryLocationFile.mkdirs();
-		
+
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
 		try
 		{
-			log.debug("Writing segmentinfo to "+segmentXmlFile);
-			log.debug("Segment info is "+companion);
+			log.debug("Writing segmentinfo to " + segmentXmlFile);
+			log.debug("Segment info is " + companion);
 			FileUtils.writeStringToFile(segmentXmlFile, companion);
 			return true;
 		}
 		catch (IOException e)
 		{
-			log.error(String.format("Error writing companion xml for package %s", packageID),e);
-			throw e;			
+			log.error(String.format("Error writing companion xml for package %s", packageID), e);
+			throw e;
 		}
-		
+
 	}
 
 	@Override
@@ -495,7 +511,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public boolean isTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException
 	{
 		TaskState state = mayamClient.getTaskState(taskid);
-		return state == TaskState.REJECTED ||  state == TaskState.REMOVED;
+		return state == TaskState.REJECTED || state == TaskState.REMOVED;
 	}
 
 	@Override
@@ -504,14 +520,50 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Produces("text/plain")
 	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException
 	{
-		
-		if(mayamClient.materialExists(materialID))
+
+		if (mayamClient.materialExists(materialID))
 		{
-			return mayamClient.getLastDeliveryVersionForMaterial(materialID);		
+			return mayamClient.getLastDeliveryVersionForMaterial(materialID);
 		}
-		
+
 		throw new IllegalArgumentException("specified material does not exist");
-		
+
+	}
+
+	@Override
+	@GET
+	@Path("/purge/list")
+	@Produces("text/plain")
+	public String getPurgePendingList() throws MayamClientException
+	{
+		List<AttributeMap> purgeTasks = mayamClient.getAllPurgeCandidatesPendingDeletion();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tASSET_TITLE\tDATE");
+
+		for (AttributeMap attributeMap : purgeTasks)
+		{
+			sb.append(String.format(
+					"%s\t%s\t%s\t%s\t%s",
+					attributeMap.getAttributeAsString(Attribute.TASK_ID),
+					attributeMap.getAttributeAsString(Attribute.ASSET_ID),
+					attributeMap.getAttributeAsString(Attribute.ASSET_TYPE),
+					attributeMap.getAttributeAsString(Attribute.ASSET_TITLE),
+					attributeMap.getAttributeAsString(Attribute.OP_DATE)));
+		}
+
+		return sb.toString();
+
+	}
+
+	@Override
+	@POST
+	@Path("/purge/perform")
+	@Produces("text/plain")
+	public boolean performPendingPerges() throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
