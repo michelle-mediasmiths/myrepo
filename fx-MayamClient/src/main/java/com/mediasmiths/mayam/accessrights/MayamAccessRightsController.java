@@ -259,6 +259,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	public AttributeMap updateAccessRights(AttributeMap attributeMap)
 	{
 		List<MayamAccessRights> allRights = retrieveAllRightsForAsset(attributeMap);
+		String houseId = attributeMap.getAttribute(Attribute.HOUSE_ID);
 		
 		if(allRights == null){
 			log.warn("allrights is null");
