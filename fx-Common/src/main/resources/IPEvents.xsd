@@ -125,95 +125,7 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
-	<xs:complexType name="ManualQA">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>Used for the ManualQA report
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="operator" type="xs:string"/>
-					<xs:element name="aggregatorID" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="hrPreview" type="xs:string"/>
-					<xs:element name="hrPreviewRequested" type="xs:string"/>
-					<xs:element name="timeEscalated" type="xs:string"/>
-					<xs:element name="titleLength" type="smpteTimecode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:complexType name="AutoQC">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The AutoQC report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-                    <xs:element name="contentType" type="xs:string"/>
-					<xs:element name="operator" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="qcStatus" type="xs:string"/>
-					<xs:element name="taskFinish" type="xs:dateTime"/>
-					<xs:element name="warningTime" type="xs:string"/>
-					<xs:element name="failureParameter" type="xs:string"/>
-					<xs:element name="titleLength" type="smpteTimecode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:complexType name="TaskList">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The TaskListStatus report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="taskType" type="xs:string" />
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="requiredBy" type="xs:string"/>
-					<xs:element name="operator" type="xs:string"/>
-					<xs:element name="department" type="xs:string"/>
-					<xs:element name="taskFinish" type="xs:string"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:complexType name="PurgeContent">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The Export report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="entityType" type="xs:string" />
-					<xs:element name="title" type="xs:string"/>
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="isProtected" type="xs:string"/>
-					<xs:element name="extended" type="xs:string"/>
-					<xs:element name="purged" type="xs:string"/>
-					<xs:element name="expires" type="xs:dateTime"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-    <xs:complexType name="ComplianceLoggingMarkerType">
+	<xs:complexType name="ComplianceLoggingMarkerType">
         <xs:complexContent>
         <xs:extension base="fns:IPEvent">
         <xs:sequence>
@@ -225,44 +137,6 @@
         </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-	<xs:complexType name="ComplianceLogging">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The ComplianceLogging report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="taskFinish" type="xs:date"/>
-					<xs:element name="externalCompliance" type="xs:string"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
-	<xs:complexType name="Export">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The Export report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="exportType" type="xs:string"/>
-					<xs:element name="titleLength" type="smpteTimecode"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
 
     <xs:complexType name="tcFailureNotification">
         <xs:sequence>

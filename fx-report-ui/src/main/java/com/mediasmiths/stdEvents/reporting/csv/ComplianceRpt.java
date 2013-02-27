@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -29,9 +30,9 @@ public class ComplianceRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeCompliance(List<EventEntity> events)
+	public void writeCompliance(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Compliance> comps = getComplianceList(events);
+		List<Compliance> comps = getComplianceList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try{
@@ -69,7 +70,7 @@ public class ComplianceRpt
 		}
 	}
 	
-	public List<Compliance> getComplianceList(List<EventEntity> events)
+	public List<Compliance> getComplianceList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<Compliance> comps = new ArrayList<Compliance>();
 		for (EventEntity event : events)
@@ -77,7 +78,21 @@ public class ComplianceRpt
 			String payload = event.getPayload();
 			Compliance comp = new Compliance();
 			
-			//GET FIELDS FOR REPORT TYPE
+			comp.setDateRange(startDate + " - " + endDate);
+			if (payload.contains("title"))
+				comp.setTitle(payload.substring(payload.indexOf("title")+6, payload.indexOf("</title")));
+			if (payload.contains("materialID"))
+				comp.setMaterialID(payload.substring(payload.indexOf("materialID")+11, payload.indexOf("</materialID")));
+			if (payload.contains("channel"))
+				comp.setChannel(payload.substring(payload.indexOf("channel")+8, payload.indexOf("</channel")));
+			if (payload.contains("taskStatus"))
+				comp.setTaskStatus(payload.substring(payload.indexOf("taskStatus")+11, payload.indexOf("</taskStatus")));
+			if (payload.contains("taskStart"))
+				comp.setTaskStart(payload.substring(payload.indexOf("taskStart")+10, payload.indexOf("</taskStart")));
+			if (payload.contains("taskFinish"))
+				comp.setTaskFinish(payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinish")));
+			if (payload.contains("externalCompliance"))
+				comp.setExternalCompliance(payload.substring(payload.indexOf("externalCompliance")+19, payload.indexOf("</externalCompliance")));
 			
 			comps.add(comp);
 		}

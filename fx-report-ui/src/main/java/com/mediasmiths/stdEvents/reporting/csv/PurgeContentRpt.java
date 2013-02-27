@@ -85,36 +85,23 @@ public class PurgeContentRpt
 			Purge purge = new Purge();
 			purge.setDateRange(startDate.toString() + " - " + endDate.toString());
 			
-			if (event.getEventName().equals("PurgeTitle"))
-			{
-				purge.setEntityType("Subprogramme");
-				if (payload.contains("titleID"))
-					purge.setMaterialID(payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9))));
-			}
-				
-				
-				
-//			if (payload.contains("PurgeStatus"))
-//				purge.setPurgeStatus(payload.substring(payload.indexOf("PurgeStatus")+12, payload.indexOf("</PurgeStatus")));
-//			if (payload.contains("ProtectedStatus"))
-//				purge.setProtectedStatus(payload.substring(payload.indexOf("ProtectedStatus")+16, payload.indexOf("</ProtectedStatus")));
-//			if (payload.contains("ExtendedStatus"))
-//				purge.setExtendedStatus(payload.substring(payload.indexOf("ExtendedStatus")+15, payload.indexOf("</ExtendedStatus")));
-//			purgeList.add(purge);
-			
-			List<EventEntity> channelEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-			for (EventEntity channelEvent : channelEvents)
-			{
-				String str = channelEvent.getPayload();
-				String channelTitle = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
-				if (payload.contains("titleID")) {
-					String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-					if (curTitle.equals(channelTitle)) {
-						if (str.contains("channelName"))
-							purge.setChannels(str.substring(str.indexOf("channelName")+13, str.indexOf('"',(str.indexOf("channelName")+13)))); 
-					}
-				}
-			}
+			if (payload.contains("entityType"))
+				purge.setEntityType(payload.substring(payload.indexOf("entityType")+11, payload.indexOf("</entityType")));
+			if (payload.contains("title"))
+				purge.setEntityType(payload.substring(payload.indexOf("title")+7, payload.indexOf("</title")));
+			if (payload.contains("materialID"))
+				purge.setEntityType(payload.substring(payload.indexOf("materialID")+11, payload.indexOf("</materialID")));
+			if (payload.contains("channels"))
+				purge.setEntityType(payload.substring(payload.indexOf("channels")+10, payload.indexOf("</channels")));
+			if (payload.contains("isProtected"))
+				purge.setEntityType(payload.substring(payload.indexOf("isProtected")+12, payload.indexOf("</isProtected")));
+			if (payload.contains("extended"))
+				purge.setEntityType(payload.substring(payload.indexOf("extended")+9, payload.indexOf("</extended")));
+			if (payload.contains("purged"))
+				purge.setEntityType(payload.substring(payload.indexOf("purged")+7, payload.indexOf("</purged")));
+			if (payload.contains("expires"))
+				purge.setEntityType(payload.substring(payload.indexOf("expires")+8, payload.indexOf("</expires")));
+
 			purgeList.add(purge);
 		}
 		

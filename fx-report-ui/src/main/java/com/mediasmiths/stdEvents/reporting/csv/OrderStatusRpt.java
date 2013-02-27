@@ -84,17 +84,19 @@ public class OrderStatusRpt
 			for (EventEntity aggregatorEvent : aggregatorEvents)
 			{
 				String str = aggregatorEvent.getPayload();
-				String aggregatorTitle = str.substring(str.indexOf("materialID")+12, str.indexOf('"', (str.indexOf("materialID")+12)));
-				logger.info("agg:" + aggregatorTitle);
-				if (payload.contains("titleID")) {
-					String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-					logger.info("Current " + curTitle);
-					if (curTitle.equals(aggregatorTitle)) {
-						title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
-						title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
-						title.setRequiredBy(str.substring(str.indexOf("RequiredBy")+11, str.indexOf("</RequiredBy")));
-						required = DatatypeConverter.parseDate(title.getRequiredBy());
-						logger.info("RequiredBy: " + required);
+				if (str.contains("</materialID")) {
+					String aggregatorTitle = str.substring(str.indexOf("materialID")+12, str.indexOf("</materialID"));
+					//logger.info("agg:" + aggregatorTitle);
+					if (payload.contains("titleID")) {
+						String curTitle =  payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
+						//logger.info("Current " + curTitle);
+						if (curTitle.equals(aggregatorTitle)) {
+							title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
+							title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
+							title.setRequiredBy(str.substring(str.indexOf("RequiredBy")+11, str.indexOf("</RequiredBy")));
+							required = DatatypeConverter.parseDate(title.getRequiredBy());
+							//logger.info("RequiredBy: " + required);
+						}
 					}
 				}
 			}
@@ -108,7 +110,7 @@ public class OrderStatusRpt
 				{
 					String titleID = str.substring(str.indexOf("titleID")+9, str.indexOf('"', (str.indexOf("titleID")+9)));
 					String curTitle = payload.substring(payload.indexOf("titleID")+9, payload.indexOf('"', (payload.indexOf("titleID")+9)));
-					logger.info("TitleID: " + titleID + " curTitle: " + curTitle);
+					//logger.info("TitleID: " + titleID + " curTitle: " + curTitle);
 					if (titleID.equals(curTitle))
 					{
 						if (str.contains("DateOfDelivery"))
@@ -116,7 +118,7 @@ public class OrderStatusRpt
 							title.setCompletionDate(str.substring(str.indexOf("DateOfDelivery")+15, str.indexOf("</DateOfDelivery")));
 							logger.info("CompletionDate: " + title.getCompletionDate());
 							completion = DatatypeConverter.parseDate(title.getCompletionDate());
-							logger.info("cal: " + completion);
+							//logger.info("cal: " + completion);
 						}
 					}
 				}	
@@ -124,10 +126,15 @@ public class OrderStatusRpt
 			
 			if ((required != null) && (completion == null))
 				title.setOverdueInDateRange("1");
-			else if (required.before(completion))
-				title.setOverdueInDateRange("1");
-			else if (required.after(completion))
-				title.setCompletedInDateRange("1");
+			
+			if ((required != null) && (completion != null))
+			{
+				//logger.info("Required and completion = null");
+				if (required.before(completion))
+					title.setOverdueInDateRange("1");
+				else if (required.after(completion))
+					title.setCompletedInDateRange("1");
+			}
 			
 			title.setTaskType("Ingest");
 
