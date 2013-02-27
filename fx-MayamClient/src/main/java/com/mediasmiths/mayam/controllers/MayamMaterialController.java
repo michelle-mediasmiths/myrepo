@@ -1235,11 +1235,15 @@ public class MayamMaterialController extends MayamController
 		{
 			fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
 			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
+			update.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
+			update.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 		}
 		catch (FileFormatVerificationFailureException ffve)
 		{
 			log.warn("file format verification failed", ffve);
 			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.FAIL);
+			update.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
+			update.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 			update.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 			update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffve.getMessage());
 		}

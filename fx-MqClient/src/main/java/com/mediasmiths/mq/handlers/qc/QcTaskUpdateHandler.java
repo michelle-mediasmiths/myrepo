@@ -176,14 +176,14 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	private void fileFormatVerificationStatusChanged(AttributeMap currentAttributes, AttributeMap after)
 	{
 		// file format verification status updated
-		QcStatus fileFormat = after.getAttribute(Attribute.QC_SUBSTATUS1);
+		QcStatus fileFormat = currentAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
 
 		if (fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL))
 		{
 			boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(currentAttributes);
-			boolean isAutoQcRunOrRunning = materialController.isAutoQcRunOrRunningForMaterial(currentAttributes);
+//			boolean isAutoQcRunOrRunning = materialController.isAutoQcRunOrRunningForMaterial(currentAttributes);
 
-			if (autoQcRequired && !isAutoQcRunOrRunning)
+			if (autoQcRequired)
 			{
 				initiateAutoQc(currentAttributes);
 			}
