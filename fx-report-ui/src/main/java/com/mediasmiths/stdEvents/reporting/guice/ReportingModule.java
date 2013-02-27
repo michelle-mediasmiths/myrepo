@@ -25,8 +25,6 @@ import com.mediasmiths.stdEvents.persistence.rest.impl.EventAPIImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperImpl;
-import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
-import com.mediasmiths.stdEvents.reporting.csv.CsvImpl;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
@@ -41,7 +39,6 @@ public class ReportingModule extends AbstractModule
 		bind(ReportUI.class).to(ReportUIImpl.class);
 		bind(QueryAPI.class).to(QueryAPIImpl.class);
 		bind(JasperAPI.class).to(JasperImpl.class);
-		bind(CsvAPI.class).to(CsvImpl.class);
 		
 		Multibinder<EventMarshaller> marshallerBinding = Multibinder.newSetBinder(binder(), EventMarshaller.class);
 		marshallerBinding.addBinding().to(PlaceholderMessageDaoImpl.class);

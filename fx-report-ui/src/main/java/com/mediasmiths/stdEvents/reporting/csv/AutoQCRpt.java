@@ -21,7 +21,7 @@ import com.mediasmiths.stdEvents.report.entity.AutoQC;
 
 public class AutoQCRpt
 {
-	public static final transient Logger logger = Logger.getLogger(CsvImpl.class);
+	public static final transient Logger logger = Logger.getLogger(AutoQCRpt.class);
 	
 	//Edit this variable to change where your reports get saved to
 	@Inject

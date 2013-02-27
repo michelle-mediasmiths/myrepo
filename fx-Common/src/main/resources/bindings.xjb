@@ -23,6 +23,10 @@
              </jaxb:schemaBindings>
     	</jaxb:bindings>
 
-	
+	<jaxb:bindings schemaLocation="Report.xsd">
+             <jaxb:schemaBindings>
+                		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events.report" />
+             </jaxb:schemaBindings>
+    	</jaxb:bindings>
 	
 </jaxb:bindings>
