@@ -57,23 +57,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="StorageReport">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The details of storage use within the
-					infrastructure.
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="report" type="fns:StorageUsageDetails"
-						minOccurs="1" />
-
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
 	<xs:complexType name="StorageUsageDetails">
 		<xs:annotation>
 			<xs:documentation>The Details of Storage use for a particular mount
@@ -138,7 +121,6 @@
         </xs:complexContent>
     </xs:complexType>
 
-<<<<<<< HEAD
 	<xs:complexType name="ComplianceLogging">
 		<xs:complexContent>
 			<xs:annotation>
@@ -190,10 +172,8 @@
 			</xs:sequence>
 		</xs:extension>
 	</xs:complexContent>
-</xs:complexType>
+	</xs:complexType>
 
-=======
->>>>>>> 0b63699ced13ebe056417ce065f7e52d66c686e6
     <xs:complexType name="tcFailureNotification">
         <xs:sequence>
             <xs:element minOccurs="0" name="packageID" type="xs:string" />
