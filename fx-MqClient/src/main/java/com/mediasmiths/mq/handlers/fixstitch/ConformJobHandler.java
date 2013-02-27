@@ -207,7 +207,7 @@ public class ConformJobHandler extends JobHandler
 
 		// append -PACEHOLDER to the package id
 		String packageID = copy.getAttributeMap().getAttributeAsString(Attribute.HOUSE_ID);
-		copy.getAttributeMap().setAttribute(Attribute.HOUSE_ID, String.format("%s-PLACEHOLDER", packageID));
+		copy.getAttributeMap().setAttribute(Attribute.HOUSE_ID, String.format("%s-MOVED", packageID));
 
 		SegmentList reasociatedSegment = null;
 

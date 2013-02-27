@@ -264,6 +264,21 @@
 		</xs:complexContent>
 	</xs:complexType>
 
+	<xs:complexType name="ArdomeJobFailure">
+	<xs:complexContent>
+		<xs:annotation>
+			<xs:documentation>A type to represent an ArdomeJobFailure event
+			</xs:documentation>
+		</xs:annotation>
+		<xs:extension base="fns:IPEvent">
+			<xs:sequence>
+				<xs:element name="assetID" type="xs:string" />
+				<xs:element name="jobID" type="xs:string" />
+			</xs:sequence>
+		</xs:extension>
+	</xs:complexContent>
+</xs:complexType>
+
     <xs:complexType name="tcFailureNotification">
         <xs:sequence>
             <xs:element minOccurs="0" name="packageID" type="xs:string" />
@@ -460,4 +475,5 @@
         </xs:sequence>
     </xs:complexType>
 
+	
 </xs:schema>
