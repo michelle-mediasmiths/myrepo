@@ -19,6 +19,7 @@ import com.mediasmiths.mayam.util.RevisionUtil;
 import javax.xml.ws.WebServiceException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Mayam sends JSON that looks like this. A collection of mapped variables.
@@ -48,6 +49,14 @@ public class MayamPDPImpl implements MayamPDP
 
 	private final TasksClient client;
 	private final MayamTaskController taskController;
+
+	@Inject
+	@Named("foxtel.groups.nonao")
+	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsNonAO;
+
+	@Inject
+	@Named("foxtel.groups.ao")
+	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsAO;
 
 	@Inject
 	public MayamPDPImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController) 
@@ -212,7 +221,25 @@ public class MayamPDPImpl implements MayamPDP
 	    
 		return returnMap;
 	}
-	
+
+	@Override
+	public Map<String, Object> complianceProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Map<String, Object> captionsProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Map<String, Object> publicityProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
 	@Override
 	public  Map<String, Object> ingest(final Map<String, Object> attributeMap)
 	{

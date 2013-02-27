@@ -18,8 +18,7 @@ import javax.xml.ws.WebServiceException;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-
+import java.util.Set;
 
 
 public class Stub implements MayamPDP
@@ -99,6 +98,15 @@ public class Stub implements MayamPDP
 
 	private final TasksClient client;
 	private final MayamTaskController taskController;
+
+	@Inject
+	@Named("foxtel.groups.nonao")
+	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsNonAO;
+
+	@Inject
+	@Named("foxtel.groups.ao")
+	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsAO;
+
 
 	@Inject
 	public Stub(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController)
@@ -245,6 +253,24 @@ public class Stub implements MayamPDP
 		return okStatus;
 	}
 
+	@Override
+	public Map<String, Object> complianceProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Map<String, Object> captionsProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+	@Override
+	public Map<String, Object> publicityProxy(final Map<String, Object> attributeMap)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
 	private Map<String, Object> doesTaskExist(String houseID, MayamTaskListType task)
 	{
 
@@ -323,7 +349,7 @@ public class Stub implements MayamPDP
 
 		for (String mapItemName: attributeNamesRequired)
 		{
-			if (!attributeMap.keySet().contains(mapItemName))
+			if (!attributeMap.keySet().contains(mapItemName.toLowerCase()))
 				throw new WebServiceException("Mayam Attribute " + mapItemName + " must be set in this call to the PDP");
 		}
 

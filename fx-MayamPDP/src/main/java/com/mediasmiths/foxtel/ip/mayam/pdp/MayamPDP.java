@@ -120,5 +120,23 @@ public interface MayamPDP
 	public Map<String, Object> exportMarkers(Map<String, Object> attributeMap);
 
 
+	@Path("complianceProxy")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> complianceProxy(Map<String, Object> attributeMap);
+
+	@Path("captionsProxy")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> captionsProxy(Map<String, Object> attributeMap);
+
+	@Path("publicityProxy")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Map<String, Object> publicityProxy(Map<String, Object> attributeMap);
+
 
 }
