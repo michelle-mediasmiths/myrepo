@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.ingest;
 
+import javax.xml.bind.JAXBElement;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -11,6 +13,8 @@ import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
+import com.mediasmiths.foxtel.ip.common.events.IPEvent;
+import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
@@ -102,11 +106,15 @@ public class IngestJobHandler extends JobHandler
 
 	private void sendImportFailureEvent(String assetId, String jobID)
 	{
-		ArdomeJobFailure ajf = new ArdomeJobFailure();
+		ObjectFactory of = new ObjectFactory();
+		
+		ArdomeJobFailure ajf = of.createArdomeJobFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
 		
-		String event = fxcommonSerialiser.serialise(ajf);
+		JAXBElement<IPEvent> eventElement = of.createIPEventElement(ajf);
+		
+		String event = fxcommonSerialiser.serialise(eventElement);
 		String eventName = "ArdomeImportFailure";
 		String namespace = contentEventNamespace;
 		
