@@ -125,6 +125,7 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> segmentMismatch(final Map<String, Object> attributeMap)
 	{
+		defaultValidation(attributeMap);		
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -132,12 +133,15 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> segmentClassificationCheck(final Map<String, Object> attributeMap)
 	{
+		defaultValidation(attributeMap);
+		
 		return okStatus;
 	}
 
 	@Override
 	public Map<String, Object> uningestProtected(final Map<String, Object> attributeMap)
 	{
+		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -145,6 +149,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> protect(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.PROTECT;
+		defaultValidation(attributeMap);
+		
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -152,6 +159,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> unprotect(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.UNPROTECT;
+		defaultValidation(attributeMap);
+		
 		dumpPayload(attributeMap);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
@@ -159,6 +169,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> delete(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.DELETE;
+		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -166,6 +178,7 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> proxyfileCheck(final Map<String, Object> attributeMap)
 	{
+		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -173,7 +186,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> ingest(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.INGEST;		
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.INGEST);
@@ -182,7 +197,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> complianceEdit(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_EDITING;
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 		String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
@@ -207,13 +224,18 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> complianceLogging(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_LOGGING;
+		defaultValidation(attributeMap);
+		
 		return okStatus;
 	}
 
 	@Override
 	public Map<String, Object> unmatched(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.MATCHING;
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA);
@@ -222,7 +244,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> preview(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.PREVIEW;
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.PREVIEW);
@@ -231,7 +255,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> autoQC(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.QC_VIEW);
@@ -240,7 +266,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> txDelivery(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		PrivilegedOperations operation = PrivilegedOperations.TX_DELIVERY;
+		defaultValidation(attributeMap);
+		
 		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
@@ -249,6 +277,9 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> exportMarkers(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.EXPORT_MARKERS;
+		defaultValidation(attributeMap);
+		
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
@@ -256,18 +287,27 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> complianceProxy(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_PROXY;
+		defaultValidation(attributeMap);
+		
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
 	public Map<String, Object> captionsProxy(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.CAPTIONS_PROXY;
+		defaultValidation(attributeMap);
+		
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
 	public Map<String, Object> publicityProxy(final Map<String, Object> attributeMap)
 	{
+		PrivilegedOperations operation = PrivilegedOperations.PUBLICITY_PROXY;
+		defaultValidation(attributeMap);
+		
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
@@ -332,6 +372,15 @@ public class Stub implements MayamPDP
 		}
 	}
 
+	private void defaultValidation(Map<String,Object> attributeMap){
+		validateAttributeMap(
+				attributeMap,
+				Attribute.HOUSE_ID.toString().toLowerCase(),
+				Attribute.HOUSE_ID.toString().toLowerCase(),
+				Attribute.ASSET_TYPE.toString().toLowerCase(),
+				Attribute.TASK_CREATED_BY.toString().toLowerCase());
+	}
+	
 
 	/**
 	 *
