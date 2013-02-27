@@ -44,7 +44,7 @@ public class CaptionProxy extends ExportProxyButton
 	protected TCOutputPurpose getPurpose()
 	{
 		return TCOutputPurpose.CAPTIONING;
-	}
+	} 
 
 	@Override
 	protected String getOutputFileExtension()
