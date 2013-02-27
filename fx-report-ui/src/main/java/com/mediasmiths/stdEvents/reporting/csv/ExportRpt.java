@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -29,9 +30,9 @@ public class ExportRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeExport(List<EventEntity> events)
+	public void writeExport(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Export> exports = getExportList(events);
+		List<Export> exports = getExportList(events, startDate , endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		
@@ -72,14 +73,16 @@ public class ExportRpt
 		}
 	}
 	
-	public List<Export> getExportList(List<EventEntity> events)
+	public List<Export> getExportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		List<Export> exports = new ArrayList<Export>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
 			Export export = new Export();
-			//GET FIELDS FOR REPORT TYPE
+			export.setDateRange(startDate + " - " + endDate);
+
+			
 			exports.add(export);
 		}		
 		return exports;

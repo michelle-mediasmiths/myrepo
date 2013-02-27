@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events.report/001/000"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.events.report/001/000"
+	xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events.report/001/000"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="1.0">
+	
+	<xs:complexType name="Report">
+		<xs:annotation>
+			<xs:documentation>The root type for events about the IP service
+				infrastructure.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="OrderStatus">
+		<xs:complexContent>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="orderRef" type="xs:string"/>
+					<xs:element name="requiredBy" type="xs:dateTime"/>
+					<xs:element name="aggregatorID" type="xs:string"/>
+					<xs:element name="taskType" type="xs:string"/>
+					<xs:element name="completionDate" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="Acquisition">
+		<xs:complexContent>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="aggregatorID" type="xs:string"/>
+					<xs:element name="tapeDelivery" type="xs:string"/>
+					<xs:element name="fileDelivery" type="xs:string"/>
+					<xs:element name="format" type="xs:string"/>
+					<xs:element name="filesize" type="xs:string"/>
+					<xs:element name="titleLength" type="timecode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="ManualQA">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>Used for the ManualQA report
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="operator" type="xs:string"/>
+					<xs:element name="aggregatorID" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="hrPreview" type="xs:string"/>
+					<xs:element name="hrPreviewRequested" type="xs:string"/>
+					<xs:element name="timeEscalated" type="timecode"/>
+					<xs:element name="titleLength" type="timecode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="AutoQC">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The AutoQC report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+                    <xs:element name="contentType" type="xs:string"/>
+					<xs:element name="operator" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="qcStatus" type="xs:string"/>
+					<xs:element name="taskFinish" type="xs:dateTime"/>
+					<xs:element name="warningTime" type="timecode"/>
+					<xs:element name="failureParameter" type="xs:string"/>
+					<xs:element name="titleLength" type="timecode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="TaskList">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The TaskListStatus report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="taskType" type="xs:string" />
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="requiredBy" type="xs:dateTime"/>
+					<xs:element name="operator" type="xs:string"/>
+					<xs:element name="department" type="xs:string"/>
+					<xs:element name="taskFinish" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="PurgeContent">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The Export report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="entityType" type="xs:string" />
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="isProtected" type="xs:string"/>
+					<xs:element name="extended" type="xs:string"/>
+					<xs:element name="purged" type="xs:string"/>
+					<xs:element name="expires" type="xs:dateTime"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="ComplianceLogging">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The ComplianceLogging report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="taskFinish" type="xs:dateTime"/>
+					<xs:element name="externalCompliance" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="Export">
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>The Export report type
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:Report">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string" />
+					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="exportType" type="xs:string"/>
+					<xs:element name="titleLength" type="timecode"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+		
+	<xs:simpleType name="timecode">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]):([0-1][0-9]|[2][0-4])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+</xs:schema>

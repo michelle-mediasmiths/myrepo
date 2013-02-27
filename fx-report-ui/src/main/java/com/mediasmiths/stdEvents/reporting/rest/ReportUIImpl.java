@@ -326,15 +326,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> title = queryApi.getByEventName("PurgeTitle");
-		List<EventEntity> material = queryApi.getByEventName("DeleteMaterial");
-		List<EventEntity> pack = queryApi.getByEventName("DeletePackage");
-		List<EventEntity> manual = queryApi.getByEventName("ManualPurge");
-		List<EventEntity> purged = new ArrayList<EventEntity>();
-		purged.addAll(title);
-		purged.addAll(material);
-		purged.addAll(pack);
-		purged.addAll(manual);
+		List<EventEntity> purged = queryApi.getByEventName("PurgeContent");
 		logger.info("Purged: " + purged);
 		List<EventEntity> valid = new ArrayList<EventEntity>();
 		for (EventEntity event : purged) {
@@ -349,9 +341,16 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getComplianceEditCSV()
 	{
-		List<EventEntity> events = new ArrayList<EventEntity>();
+		List<EventEntity> events = queryApi.getByEventName("ComplianceEdit");
+		List<EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : events) {
+			boolean within = checkDate(event.getTime());
+			if (within)
+				valid.add(event);
+		}
 		//NEED TEST DATA TO SEND REPORT
-		compliance.writeCompliance(events);
+		compliance.writeCompliance(valid, startDate, endDate);
+		
 	}
 	
 	@Transactional
@@ -359,7 +358,7 @@ public class ReportUIImpl implements ReportUI
 	{
 		List<EventEntity> events = new ArrayList<EventEntity>();
 		//NEED TEST DATA TO SEND TO REPORT
-		export.writeExport(events);
+		export.writeExport(events, startDate, endDate);
 	}
 	
 	@Transactional
