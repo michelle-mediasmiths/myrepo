@@ -25,7 +25,6 @@ import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ComplianceRpt;
-import com.mediasmiths.stdEvents.reporting.csv.CsvAPI;
 import com.mediasmiths.stdEvents.reporting.csv.ExportRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ManualQARpt;
 import com.mediasmiths.stdEvents.reporting.csv.OrderStatusRpt;
@@ -44,9 +43,6 @@ public class ReportUIImpl implements ReportUI
 	
 	@Inject
 	private JasperAPI jasperApi;
-	
-	@Inject
-	private CsvAPI csvApi;
 	
 	@Inject
 	private EventAPI eventApi;
@@ -192,6 +188,19 @@ public class ReportUIImpl implements ReportUI
 		return date;
 	}
 	
+	private List<EventEntity> getInDate(List<EventEntity> events)
+	{
+		List <EventEntity> valid = new ArrayList<EventEntity>();
+		for (EventEntity event : events)
+		{
+			logger.info("event.getTime()" + event.getTime());
+			boolean within = checkDate(event.getTime());
+			if (within)
+				valid.add(event);
+		}
+		return valid;
+	}
+	
 	@Transactional
 	public void saveReportName(@QueryParam("name") String name)
 	{
@@ -210,28 +219,18 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getOrderStatusCSV()
 	{
-		List<EventEntity> delivered = getInDate(queryApi.getDelivered());
-		
-		List<EventEntity> outstanding = getInDate(queryApi.getOutstanding());
+		//List<EventEntity> delivered = getInDate(queryApi.getDelivered());
+		//List<EventEntity> outstanding = getInDate(queryApi.getOutstanding());
 		//List<EventEntity> overdue = getInDate(queryApi.getOverdue());
-		List<EventEntity> overdue = new ArrayList<EventEntity>();
- 		List<EventEntity> unmatched = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
+		//List<EventEntity> overdue = new ArrayList<EventEntity>();
+ 		//List<EventEntity> unmatched = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
  		logger.info("writeOrderStatus: " + REPORT_NAME);
-		orderStatus.writeOrderStatus(delivered, outstanding, overdue, unmatched, startDate, endDate, REPORT_NAME);
+ 		List<EventEntity> orders = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "OrderStatusReport"));
+ 		
+		orderStatus.writeOrderStatus(orders, null, null, null, startDate, endDate, REPORT_NAME);
 	}
 	
-	public List<EventEntity> getInDate(List<EventEntity> events)
-	{
-		List <EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : events)
-		{
-			logger.info("event.getTime()" + event.getTime());
-			boolean within = checkDate(event.getTime());
-			if (within)
-				valid.add(event);
-		}
-		return valid;
-	}
+	
 
 	@Transactional
 	public String getAquisitionReportUI()

@@ -21,7 +21,7 @@ import com.mediasmiths.stdEvents.report.entity.Purge;
 
 public class PurgeContentRpt
 {
-	public static final transient Logger logger = Logger.getLogger(CsvImpl.class);
+	public static final transient Logger logger = Logger.getLogger(PurgeContentRpt.class);
 	
 	//Edit this variable to change where your reports get saved to
 	@Inject
