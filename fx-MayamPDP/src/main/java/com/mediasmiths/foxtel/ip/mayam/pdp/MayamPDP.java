@@ -5,6 +5,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
+import com.mayam.wf.exception.RemoteException;
+
 import java.util.Map;
 
 /**
@@ -51,19 +54,19 @@ public interface MayamPDP
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public  Map<String, Object> protect(Map<String, Object> attributeMap);
+	public  Map<String, Object> protect(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("unprotect")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public  Map<String, Object> unprotect(Map<String, Object> attributeMap);
+	public  Map<String, Object> unprotect(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("delete")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public  Map<String, Object> delete(Map<String, Object> attributeMap);
+	public  Map<String, Object> delete(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("proxyFileCheck")
 	@POST()
@@ -75,68 +78,68 @@ public interface MayamPDP
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> ingest(Map<String, Object> attributeMap);
+	public Map<String, Object> ingest(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("complianceLogging")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> complianceLogging(Map<String, Object> attributeMap);
+	public Map<String, Object> complianceLogging(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("complianceEdit")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> complianceEdit(Map<String, Object> attributeMap);
+	public Map<String, Object> complianceEdit(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("unmatched")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> unmatched(Map<String, Object> attributeMap);
+	public Map<String, Object> unmatched(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("preview")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> preview(Map<String, Object> attributeMap);
+	public Map<String, Object> preview(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("autoQC")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> autoQC(Map<String, Object> attributeMap);
+	public Map<String, Object> autoQC(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("txDelivery")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> txDelivery(Map<String, Object> attributeMap);
+	public Map<String, Object> txDelivery(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("exportMarkers")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> exportMarkers(Map<String, Object> attributeMap);
+	public Map<String, Object> exportMarkers(Map<String, Object> attributeMap) throws RemoteException;
 
 
 	@Path("complianceProxy")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> complianceProxy(Map<String, Object> attributeMap);
+	public Map<String, Object> complianceProxy(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("captionsProxy")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> captionsProxy(Map<String, Object> attributeMap);
+	public Map<String, Object> captionsProxy(Map<String, Object> attributeMap) throws RemoteException;
 
 	@Path("publicityProxy")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Map<String, Object> publicityProxy(Map<String, Object> attributeMap);
+	public Map<String, Object> publicityProxy(Map<String, Object> attributeMap) throws RemoteException;
 
 
 }

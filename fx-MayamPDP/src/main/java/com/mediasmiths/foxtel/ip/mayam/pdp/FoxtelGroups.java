@@ -43,7 +43,9 @@ public enum FoxtelGroups
 	GS_MAM_AO_Editing("GS-MAM_AO_Editing"),
 	GS_MAM_AO_Conforming("GS-MAM_AO_Conforming"),
 	GS_MAM_AO_Publicity("GS-MAM_AO_Publicity"),
-	GC_MAM_FULL_SysAdmin("GS-MAM_FULL_SysAdmin");
+	GC_MAM_FULL_SysAdmin("GS-MAM_FULL_SysAdmin"),
+	admin("admin"),
+	ardendo("ardendo");
 
 	private final String text;
 
