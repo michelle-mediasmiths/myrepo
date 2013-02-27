@@ -56,4 +56,16 @@ public enum FoxtelGroups
 	{
 		return text;
 	}
+	
+	public static FoxtelGroups fromString(String s)
+	{
+		if (s == null)
+		{
+			return valueOf(s);
+		}
+		else
+		{
+			return valueOf(s.replace('-', '_'));
+		}
+	}
 }

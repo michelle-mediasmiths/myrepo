@@ -173,8 +173,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> ingest(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.INGEST);
 	}
@@ -182,21 +182,21 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> complianceEdit(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-		String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
+		String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 		if (returnMap != null)
 		{
-			Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+			Object status = returnMap.get(PDPAttributes.OP_STAT).toString().toLowerCase();
 			if (status.equals(StatusCodes.CONFIRM))
 			{
 				if (parentHouseID == null || parentHouseID.equals(""))
 				{
 					returnMap.clear();
-					returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-					returnMap.put(PDPAttributes.ERROR_MSG.toString(), String.format(messageComplianceEditNone, houseID));
+					returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.ERROR);
+					returnMap.put(PDPAttributes.ERROR_MSG.toString().toLowerCase(), String.format(messageComplianceEditNone, houseID));
 				}
 			}
 		}
@@ -213,8 +213,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> unmatched(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA);
 	}
@@ -222,8 +222,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> preview(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.PREVIEW);
 	}
@@ -231,8 +231,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> autoQC(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.QC_VIEW);
 	}
@@ -240,8 +240,8 @@ public class Stub implements MayamPDP
 	@Override
 	public Map<String, Object> txDelivery(final Map<String, Object> attributeMap)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString().toLowerCase());
+		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString().toLowerCase();
 
 		return doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
 	}
@@ -275,7 +275,7 @@ public class Stub implements MayamPDP
 	{
 
 		Map<String, Object> returnMap = new HashMap<String,Object>();
-		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+		returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.OK);
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
@@ -290,15 +290,15 @@ public class Stub implements MayamPDP
 		}
 		catch(RemoteException e) {
 			returnMap.clear();
-			returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-			returnMap.put(PDPAttributes.ERROR_MSG.toString(), String.format(messageTaskPermission, houseID));
+			returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.ERROR);
+			returnMap.put(PDPAttributes.ERROR_MSG.toString().toLowerCase(), String.format(messageTaskPermission, houseID));
 		}
 
 		if (result != null && result.getTotalMatches() > 0)
 		{
 			returnMap.clear();
-			returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-			returnMap.put(PDPAttributes.ERROR_MSG.toString(), String.format(messageTaskMultiple,task.getText()));
+			returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.ERROR);
+			returnMap.put(PDPAttributes.ERROR_MSG.toString().toLowerCase(), String.format(messageTaskMultiple,task.getText()));
 		}
 
 		return returnMap;
@@ -327,7 +327,7 @@ public class Stub implements MayamPDP
 		{
 			for (String key: attributeMap.keySet())
 			{
-				logger.info(key + "<->" + attributeMap.get(key).toString());
+				logger.info(key + "<->" + attributeMap.get(key).toString().toLowerCase());
 			}
 		}
 	}
@@ -349,7 +349,7 @@ public class Stub implements MayamPDP
 
 		for (String mapItemName: attributeNamesRequired)
 		{
-			if (!attributeMap.keySet().contains(mapItemName.toLowerCase()))
+			if (!attributeMap.keySet().contains(mapItemName))
 				throw new WebServiceException("Mayam Attribute " + mapItemName + " must be set in this call to the PDP");
 		}
 

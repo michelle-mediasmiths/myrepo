@@ -119,7 +119,7 @@ public class MayamPDPSetUp extends AbstractModule
 
 		for (String el : elements)
 		{
-			FoxtelGroups grp = FoxtelGroups.valueOf(el);
+			FoxtelGroups grp = FoxtelGroups.fromString(el);
 
 			grps.add(grp);
 		}
