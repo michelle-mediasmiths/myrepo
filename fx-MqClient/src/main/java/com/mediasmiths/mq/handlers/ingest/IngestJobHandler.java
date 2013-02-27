@@ -106,15 +106,11 @@ public class IngestJobHandler extends JobHandler
 
 	private void sendImportFailureEvent(String assetId, String jobID)
 	{
-		ObjectFactory of = new ObjectFactory();
-		
-		ArdomeJobFailure ajf = of.createArdomeJobFailure();
+		ArdomeJobFailure ajf = new ArdomeJobFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
 		
-		JAXBElement<IPEvent> eventElement = of.createIPEventElement(ajf);
-		
-		String event = fxcommonSerialiser.serialise(eventElement);
+		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
 		String namespace = contentEventNamespace;
 		

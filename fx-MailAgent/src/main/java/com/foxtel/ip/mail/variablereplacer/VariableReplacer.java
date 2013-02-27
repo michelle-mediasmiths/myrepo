@@ -15,7 +15,7 @@ import com.foxtel.ip.mail.variablereplacer.variablegenerators.system.ComplianceL
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.tcdata.TcFailedNotificationVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.tcdata.TcPassedNotificationVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.tcdata.TcTotalFailureNotificationVariableGenerator;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
@@ -86,7 +86,7 @@ public class VariableReplacer
 						logger.info("Matches ComplianceLoggingMarkerVariableGenerator");
 						// logger.info("ComplianceLoggingMarkerVariableGenerator payload " + payload);
 
-						ComplianceLoggingMarkerType complianceLoggingMarker = (ComplianceLoggingMarkerType) obj;
+						ComplianceLoggingMarker complianceLoggingMarker = (ComplianceLoggingMarker) obj;
 
 						// logger.info("Email logger set " + complianceLoggingMarker.getLoggerdetails());
 						logger.info("Assigning mail template email as obj email");

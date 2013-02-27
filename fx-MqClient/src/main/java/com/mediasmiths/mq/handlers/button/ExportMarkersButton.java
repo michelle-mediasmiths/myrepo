@@ -13,8 +13,9 @@ import com.mayam.wf.attributes.shared.type.Marker;
 import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Marker.Type;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
+import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -76,7 +77,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			}
 			
 			
-			ComplianceLoggingMarkerType clm = new ComplianceLoggingMarkerType();
+			ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
 			clm.setLoggerdetails(sb.toString());
 			clm.setMasterID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			clm.setTitleField(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
@@ -101,7 +102,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 		}
 	}
 
-	private String compLoggingMarkerInfoToString(ComplianceLoggingMarkerType clm) throws JAXBException
+	private String compLoggingMarkerInfoToString(ComplianceLoggingMarker clm) throws JAXBException
 	{
 		return commonSerialiser.serialise(clm);
 	}

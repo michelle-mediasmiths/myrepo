@@ -2,7 +2,7 @@ package com.foxtel.ip.mail.variablereplacer.variablegenerators.system;
 
 import com.foxtel.ip.mail.variablereplacer.EmailVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.EmailVariables;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarkerType;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 
 public class ComplianceLoggingMarkerVariableGenerator implements EmailVariableGenerator
 {
@@ -11,17 +11,17 @@ public class ComplianceLoggingMarkerVariableGenerator implements EmailVariableGe
 	public boolean handles(Object obj)
 	{
 
-		return obj.getClass().equals(ComplianceLoggingMarkerType.class);
+		return obj.getClass().equals(ComplianceLoggingMarker.class);
 	}
 
 	@Override
 	public EmailVariables getVariables(Object obj, String comment)
 	{
 
-		return getVariableReplacer((ComplianceLoggingMarkerType) obj);
+		return getVariableReplacer((ComplianceLoggingMarker) obj);
 	}
 
-	EmailVariables getVariableReplacer(ComplianceLoggingMarkerType obj)
+	EmailVariables getVariableReplacer(ComplianceLoggingMarker obj)
 	{
 
 		EmailVariables replacer = new EmailVariables();

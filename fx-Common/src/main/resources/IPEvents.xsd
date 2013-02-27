@@ -5,7 +5,6 @@
 	elementFormDefault="qualified" attributeFormDefault="unqualified"
 	version="1.0">
 
-	<xs:element name="IPEventElement" type="IPEvent" />
 	<xs:complexType name="IPEvent">
 		<xs:annotation>
 			<xs:documentation>The root type for events about the IP service
@@ -108,7 +107,8 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
-	<xs:complexType name="ComplianceLoggingMarkerType">
+	<xs:element name="ComplianceLoggingMarker">
+	<xs:complexType>
         <xs:complexContent>
         <xs:extension base="fns:IPEvent">
         <xs:sequence>
@@ -120,6 +120,7 @@
         </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
 	<xs:complexType name="ComplianceLogging">
 		<xs:complexContent>
@@ -159,7 +160,8 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="ArdomeJobFailure">
+	<xs:element name="ArdomeJobFailure">
+	<xs:complexType>
 	<xs:complexContent>
 		<xs:annotation>
 			<xs:documentation>A type to represent an ArdomeJobFailure event
@@ -173,6 +175,7 @@
 		</xs:extension>
 	</xs:complexContent>
 	</xs:complexType>
+	</xs:element>
 
     <xs:complexType name="tcFailureNotification">
         <xs:sequence>
