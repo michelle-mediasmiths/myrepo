@@ -54,6 +54,7 @@ import com.mediasmiths.mq.handlers.unmatched.UnmatchedAssetCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedJobHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskUpdateHandler;
+import com.mediasmiths.mq.handlers.pendingtx.PendingTxUpdateHandler;
 
 @Singleton
 public class IncomingListener extends MqClientListener
@@ -151,6 +152,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedTaskCreateHandler unmatchedTaskCreate;
 	@Inject
 	ConformJobHandler conformJobHandler;
+	@Inject
+	PendingTxUpdateHandler pendingTxUpdate;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -244,6 +247,7 @@ public class IncomingListener extends MqClientListener
 			TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 
 			passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(pendingTxUpdate,currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(unmatchedTaskUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			
 			if (!initialState.equals(newState))
