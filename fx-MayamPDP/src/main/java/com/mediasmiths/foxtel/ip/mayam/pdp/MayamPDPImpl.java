@@ -98,7 +98,7 @@ public class MayamPDPImpl implements MayamPDP
 		    if (numberOfSegmentsRequested != segmentsSize) 
 		    {
 		    	returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
+		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM.toString());
 		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
 		    }
 	    }

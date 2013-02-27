@@ -3,6 +3,10 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
 import java.util.HashMap;
 import java.util.Map;
@@ -180,6 +184,42 @@ public class Stub2 implements MayamPDP
 		}
 
 		return true;
+	}
+
+
+	@Override
+	@Path("complianceProxy")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, Object> complianceProxy(Map<String, Object> attributeMap)
+	{
+		dumpPayload(attributeMap);
+		return okStatus;
+	}
+
+
+	@Override
+	@Path("captionsProxy")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, Object> captionsProxy(Map<String, Object> attributeMap)
+	{
+		dumpPayload(attributeMap);
+		return okStatus;
+	}
+
+
+	@Override
+	@Path("publicityProxy")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public Map<String, Object> publicityProxy(Map<String, Object> attributeMap)
+	{
+		dumpPayload(attributeMap);
+		return okStatus;
 	}
 
 }
