@@ -1280,7 +1280,13 @@ public class MayamMaterialController extends MayamController
 		{
 			boolean aggregatorRequiresAutoQc = serviceProperties.getBoolean("aggregators." + aggregator.toLowerCase()
 					+ ".requiresQC", false);
-			return aggregatorRequiresAutoQc;
+			if(aggregatorRequiresAutoQc){
+				return true;
+			}
+		}
+		
+		if(AssetProperties.isQCParallel(messageAttributes)){
+			return true;
 		}
 
 		return false;
