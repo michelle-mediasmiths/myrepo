@@ -46,6 +46,18 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 							currentAttributes.getAttributeAsString(Attribute.AUX_EXTIDSTR),
 							currentAttributes.getAttributeAsString(Attribute.ASSET_ID),
 							segmentList);
+					
+					try
+					{
+						// update the pending tx delivery task
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+						taskController.saveTask(updateMap);
+					}
+					catch (MayamClientException e)
+					{
+						log.error("error updating pending tx delivery task status", e);
+					}
+					
 				}
 				catch (MayamClientException e)
 				{
