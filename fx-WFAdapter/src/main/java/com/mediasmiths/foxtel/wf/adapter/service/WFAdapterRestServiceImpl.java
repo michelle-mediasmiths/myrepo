@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.InetAddress;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -497,6 +499,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.gxf.pass")
 	private String aoGXFFTPDestinationPass;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.path")
+	private String aoGXFFTPDestinationPath;
 	
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.host")
@@ -507,23 +512,44 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.pass")
 	private String aoXMLFTPDestinationPass;
-	
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.path")
+	private String aoXMLFTPDestinationPath;
 	
 	private boolean aoFXPtransfer(File segmentXmlFile, File gxfFile)
 	{
 
-		ProtocolCommandListener listener = new PrintCommandListener(new PrintWriter(System.out), true);
-		FTPClient ftp1 = new FTPClient();
-		ftp1.addProtocolCommandListener(listener);
-		FTPClient ftp2 = new FTPClient();
-		ftp2.addProtocolCommandListener(listener);
+		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
+		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
 
+		
 		// first upload xml
+		boolean xmlUpload =	ftpProxyTransfer(segmentFileName,String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
 
-		// next upload gxf
-
-		return true;
+		if(xmlUpload){
+			// next upload gxf
+			boolean gxfUpload = ftpProxyTransfer(segmentFileName,String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
+			
+			if(gxfUpload){
+				log.info("gxf upload complete");
+				return true;
+			}
+			else{
+				log.error("gxf upload failed");
+				return false;
+			}
+		}
+		else{
+			log.error("xml segment upload failed");
+			return false;
+		}
 	}
+
+	private boolean ftpProxyTransfer(String sourceFileName,String targetPath, String targetHost, String targetUser, String targetPass){
+		return Fxp.ftpProxyTransfer(sourceFileName, aoFTPProxyHost, aoFTPProxyUser, aoFTPProxyPass, targetPath, targetHost, targetUser, targetPass);
+	}
+	
+	
 
 	@Override
 	@GET

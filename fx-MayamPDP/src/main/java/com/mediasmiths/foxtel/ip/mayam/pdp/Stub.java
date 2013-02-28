@@ -484,7 +484,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return  mapper.serialize(okStatus);
+			return  okStatus;
 		}
 		else
 		{
@@ -504,7 +504,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return  mapper.serialize(okStatus);
+			return okStatus;
 		}
 		else
 		{
@@ -524,7 +524,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return  mapper.serialize(okStatus);
+			return  okStatus;
 		}
 		else
 		{
@@ -544,7 +544,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return  mapper.serialize(okStatus);
+			return okStatus;
 		}
 		else
 		{
