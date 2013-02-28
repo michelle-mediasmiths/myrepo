@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:fsadapter="http://ns.mediasmithsforge.com/foxtel/qc/fsadapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -13,17 +14,18 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qc" location="qc.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow" location="qc-workflow.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
-    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk3Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk3" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
-    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk0Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk0" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
-    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk1" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
-    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
-    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk5Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk5" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
-    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk3Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
-    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
-    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
+    <bpel:partnerLink name="callerAndWorkflowPlkVar" partnerLinkType="AutoQC:callerAndWorkflow" myRole="workflow_for_caller"/>
     <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk0Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk0" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
     <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk4Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk4" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
-    <bpel:partnerLink name="callerAndWorkflowPlkVar" partnerLinkType="AutoQC:callerAndWorkflow" myRole="workflow_for_caller"/>
+    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk3Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk3" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
+    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk0Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk0" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
+    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk5Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk5" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
+    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk1" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
+    <bpel:partnerLink name="qcadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:qcadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="qcadapter_for_workflow"/>
+    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk3Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
+    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk2Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
+    <bpel:partnerLink name="workflowAndFsadapterForHttpPortPlkVar" partnerLinkType="AutoQC:workflowAndFsadapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="fsadapter_for_workflow"/>
+    <bpel:partnerLink name="wfadapterAndWorkflowForHttpPortPlk1Var" partnerLinkType="AutoQC:wfadapterAndWorkflowForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_workflow"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="QCErrorCount" type="xs:integer"/>
@@ -40,6 +42,8 @@
     <bpel:variable name="QCFileLocation" type="xs:string"/>
     <bpel:variable name="autoQcErrorAutoQcErrorRequestMsg" messageType="autoQcError:autoQcError_input"/>
     <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output"/>
+    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
+    <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="callerAndWorkflowPlkVar" portType="this:Forcaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_jysWYHHTEeKzdrjGTgFYAA"></bpel:receive>
@@ -82,6 +86,15 @@
 </tns:autoQCErrorNotification></bpel:literal>
         </bpel:from>
         <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body</bpel:to>
+      </bpel:copy>
+      <bpel:copy bpmn:label="$deleteDeleteRequestMsg">
+        <bpel:from>
+          <bpel:literal>
+<FSAdapter:deleteRequest>
+  <FSAdapter:path></FSAdapter:path>
+</FSAdapter:deleteRequest></bpel:literal>
+        </bpel:from>
+        <bpel:to>$deleteDeleteRequestMsg.body</bpel:to>
       </bpel:copy>
     </bpel:assign>
     <bpel:assign bpmn:label="initialise variables" name="initialise_variables" bpmn:id="_m2VtkHHTEeKzdrjGTgFYAA">
@@ -434,6 +447,13 @@
         <bpel:condition>(($QCErrorCount&gt;= 3) or ($TaskIsCancelled = true())) or ($QCFinished = true())</bpel:condition>
       </bpel:repeatUntil>
     </bpel:scope>
+    <bpel:assign bpmn:label="delete mediasets" name="delete_mediasets" bpmn:id="_zpgjkIF1EeKzLqM6JIlZ8g">
+      <bpel:copy>
+        <bpel:from>$QCFileLocation</bpel:from>
+        <bpel:to>$deleteDeleteRequestMsg.body/FSAdapter:path</bpel:to>
+      </bpel:copy>
+    </bpel:assign>
+    <bpel:invoke partnerLink="workflowAndFsadapterForHttpPortPlkVar" portType="delete:restInterface" operation="delete" inputVariable="deleteDeleteRequestMsg" outputVariable="deleteDeleteResponseMsg" bpmn:label="delete mediasets" name="delete_mediasets-1" bpmn:id="_zpgjkIF1EeKzLqM6JIlZ8g"></bpel:invoke>
     <bpel:if>
       <bpel:condition>$QCSuccess = true()</bpel:condition>
       <bpel:sequence>
