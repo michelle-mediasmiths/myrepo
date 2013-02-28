@@ -2,7 +2,9 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
@@ -13,6 +15,10 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
 
 import java.util.Collections;
@@ -103,8 +109,6 @@ public class Stub implements MayamPDP
 
 	private Logger logger = Logger.getLogger(MayamPDPImpl.class);
 
-	private final Map<String, Object> okStatus = new HashMap<String, Object>();
-
 	private final TasksClient client;
 	private final MayamTaskController taskController;
 
@@ -116,13 +120,20 @@ public class Stub implements MayamPDP
 	@Named("foxtel.groups.ao")
 	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsAO;
 
+	private String okStatus;
+
+	private  AttributeMapMapper mapper;
+	
 	@Inject
-	public Stub(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient client, MayamTaskController taskController)
+	public Stub(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient client, MayamTaskController taskController, AttributeMapMapper mapper)
 	{
 		this.client = client;
 		this.taskController = taskController;
 
-		okStatus.put(PDPAttributes.OP_STAT.toString(), "ok");
+		AttributeMap okStatusMap = new AttributeMap();
+		okStatusMap.setAttribute(Attribute.OP_STAT, "ok");
+		this.mapper=mapper;
+		okStatus =  mapper.serialize(okStatusMap);
 
 	}
 
@@ -133,8 +144,10 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> segmentMismatch(final Map<String, Object> attributeMap)
+	public String segmentMismatch(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		
 		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 
@@ -142,23 +155,27 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> segmentClassificationCheck(final Map<String, Object> attributeMap)
+	public String segmentClassificationCheck(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		
 		defaultValidation(attributeMap);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> uningestProtected(final Map<String, Object> attributeMap)
+	public String uningestProtected(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> protect(final Map<String, Object> attributeMap) throws RemoteException
+	public String protect(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.PROTECT;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -176,8 +193,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> unprotect(final Map<String, Object> attributeMap) throws RemoteException
+	public String unprotect(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.UNPROTECT;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -195,8 +213,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> delete(final Map<String, Object> attributeMap) throws RemoteException
+	public String delete(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.DELETE;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -214,16 +233,18 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> proxyfileCheck(final Map<String, Object> attributeMap)
+	public String proxyfileCheck(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> ingest(final Map<String, Object> attributeMap) throws RemoteException
+	public String ingest(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.INGEST;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -232,8 +253,8 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			return doesTaskExist(houseID, MayamTaskListType.INGEST);
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.INGEST));
 		}
 		else
 		{
@@ -242,8 +263,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> complianceEdit(final Map<String, Object> attributeMap) throws RemoteException
+	public String complianceEdit(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_EDITING;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -252,21 +274,21 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			String sourceHouseID = (String) attributeMap.get(Attribute.SOURCE_HOUSE_ID.toString().toLowerCase());
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
 
-			Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
+			AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 			if (returnMap != null)
 			{
-				Object status = returnMap.get(PDPAttributes.OP_STAT.toString()).toString();
+				Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
 				if (status.equals(StatusCodes.OK.toString()))
 				{
 					if (sourceHouseID == null || sourceHouseID.equals(""))
 					{
 						returnMap.clear();
-						returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-						returnMap.put(
-								PDPAttributes.ERROR_MSG.toString().toLowerCase(),
+						returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+						returnMap.setAttribute(
+								Attribute.ERROR_MSG,
 								String.format(messageComplianceEditNone, houseID));
 					}
 					else
@@ -280,7 +302,7 @@ public class Stub implements MayamPDP
 				}
 			}
 
-			return returnMap;
+			return mapper.serialize(returnMap);
 		}
 		else
 		{
@@ -289,8 +311,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> complianceLogging(final Map<String, Object> attributeMap) throws RemoteException
+	public String complianceLogging(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_LOGGING;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -299,21 +322,21 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			String sourceHouseID = (String) attributeMap.get(Attribute.SOURCE_HOUSE_ID.toString().toLowerCase());
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
 
-			Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+			AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
 			if (returnMap != null)
 			{
-				Object status = returnMap.get(PDPAttributes.OP_STAT.toString()).toString();
+				String status = returnMap.getAttributeAsString(Attribute.OP_STAT);
 				if (status.equals(StatusCodes.OK.toString()))
 				{
 					if (sourceHouseID == null || sourceHouseID.equals(""))
 					{
 						returnMap.clear();
-						returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-						returnMap.put(
-								PDPAttributes.ERROR_MSG.toString().toLowerCase(),
+						returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+						returnMap.setAttribute(
+								Attribute.ERROR_MSG,
 								String.format(messageComplianceLoggingNone, houseID));
 					}
 					else
@@ -327,7 +350,7 @@ public class Stub implements MayamPDP
 				}
 			}
 
-			return returnMap;
+			return  mapper.serialize(returnMap);
 		}
 		else
 		{
@@ -336,8 +359,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> unmatched(final Map<String, Object> attributeMap) throws RemoteException
+	public String unmatched(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.MATCHING;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -346,8 +370,8 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			return doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA);
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA));
 		}
 		else
 		{
@@ -356,8 +380,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> preview(final Map<String, Object> attributeMap) throws RemoteException
+	public String preview(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.PREVIEW;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -366,8 +391,8 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			return doesTaskExist(houseID, MayamTaskListType.PREVIEW);
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.PREVIEW));
 		}
 		else
 		{
@@ -376,8 +401,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> autoQC(final Map<String, Object> attributeMap) throws RemoteException
+	public String autoQC(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -386,8 +412,29 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			return doesTaskExist(houseID, MayamTaskListType.QC_VIEW);
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.QC_VIEW));
+		}
+		else
+		{
+			return getTaskPermissionErrorStatus(operation);
+		}
+	}
+	
+
+	@Override
+	public String qcParallel(String attributeMapStr) throws RemoteException
+	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
+		dumpPayload(attributeMap);
+		defaultValidation(attributeMap);
+
+		boolean permission = userCanPerformOperation(operation, attributeMap);
+
+		if (permission)
+		{
+			return okStatus;
 		}
 		else
 		{
@@ -396,8 +443,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> txDelivery(final Map<String, Object> attributeMap) throws RemoteException
+	public String txDelivery(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.TX_DELIVERY;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -406,8 +454,8 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			String houseID = attributeMap.get(Attribute.HOUSE_ID.toString().toLowerCase()).toString();
-			return doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
+			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY));
 		}
 		else
 		{
@@ -416,8 +464,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> exportMarkers(final Map<String, Object> attributeMap) throws RemoteException
+	public String exportMarkers(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.EXPORT_MARKERS;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -426,7 +475,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return okStatus;
+			return  mapper.serialize(okStatus);
 		}
 		else
 		{
@@ -435,8 +484,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> complianceProxy(final Map<String, Object> attributeMap) throws RemoteException
+	public String complianceProxy(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_PROXY;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -445,7 +495,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return okStatus;
+			return  mapper.serialize(okStatus);
 		}
 		else
 		{
@@ -454,8 +504,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> captionsProxy(final Map<String, Object> attributeMap) throws RemoteException
+	public String captionsProxy(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.CAPTIONS_PROXY;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -464,7 +515,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return okStatus;
+			return  mapper.serialize(okStatus);
 		}
 		else
 		{
@@ -473,8 +524,9 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> publicityProxy(final Map<String, Object> attributeMap) throws RemoteException
+	public String publicityProxy(final String attributeMapStr) throws RemoteException
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		PrivilegedOperations operation = PrivilegedOperations.PUBLICITY_PROXY;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
@@ -483,7 +535,7 @@ public class Stub implements MayamPDP
 
 		if (permission)
 		{
-			return okStatus;
+			return  mapper.serialize(okStatus);
 		}
 		else
 		{
@@ -491,31 +543,31 @@ public class Stub implements MayamPDP
 		}
 	}
 
-	private Map<String, Object> getTaskPermissionErrorStatus(PrivilegedOperations operation)
+	private String getTaskPermissionErrorStatus(PrivilegedOperations operation)
 	{
-		Map<String, Object> permissionErrorStatus = new HashMap<String, Object>();
+		AttributeMap permissionErrorStatus =client.createAttributeMap();
 
-		permissionErrorStatus.put(PDPAttributes.OP_STAT.toString(), "error");
-		permissionErrorStatus.put(PDPAttributes.ERROR_MSG.toString(), String.format(permissionErrorTaskMessage, operation.toString()));
+		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorTaskMessage, operation.toString()));
 
-		return permissionErrorStatus;
+		return  mapper.serialize(permissionErrorStatus);
 	}
 	
-	private Map<String, Object> getActionPermissionsErrorStatus(PrivilegedOperations operation)
+	private String getActionPermissionsErrorStatus(PrivilegedOperations operation)
 	{
-		Map<String, Object> permissionErrorStatus = new HashMap<String, Object>();
+		AttributeMap permissionErrorStatus =client.createAttributeMap();
 
-		permissionErrorStatus.put(PDPAttributes.OP_STAT.toString(), "error");
-		permissionErrorStatus.put(PDPAttributes.ERROR_MSG.toString(), String.format(permissionErrorActionMessage, operation.toString()));
+		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorActionMessage, operation.toString()));
 
-		return permissionErrorStatus;
+		return  mapper.serialize(permissionErrorStatus);
 	}
 
-	private Map<String, Object> doesTaskExist(String houseID, MayamTaskListType task)
+	private AttributeMap doesTaskExist(String houseID, MayamTaskListType task)
 	{
-
-		Map<String, Object> returnMap = new HashMap<String, Object>();
-		returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.OK);
+		AttributeMap returnMap =client.createAttributeMap();
+		
+		returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 
 		logger.info(String.format("Searching for tasks of type %s for asset %s", task.getText(), houseID));
 
@@ -533,16 +585,16 @@ public class Stub implements MayamPDP
 		{
 			logger.warn("Exception searching for tasks");
 			returnMap.clear();
-			returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.ERROR);
-			returnMap.put(PDPAttributes.ERROR_MSG.toString().toLowerCase(), String.format(messageTaskTechnical, houseID));
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+			returnMap.setAttribute(Attribute.ERROR_MSG, String.format(messageTaskTechnical, houseID));
 		}
 
 		if (result != null && result.getTotalMatches() > 0)
 		{
 			logger.debug("found tasks");
 			returnMap.clear();
-			returnMap.put(PDPAttributes.OP_STAT.toString().toLowerCase(), StatusCodes.ERROR);
-			returnMap.put(PDPAttributes.ERROR_MSG.toString().toLowerCase(), String.format(messageTaskMultiple, task.getText()));
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+			returnMap.setAttribute(Attribute.ERROR_MSG, String.format(messageTaskMultiple, task.getText()));
 		}
 
 		logger.debug("found no tasks");
@@ -555,36 +607,36 @@ public class Stub implements MayamPDP
 			TaskState.REJECTED,
 			TaskState.REMOVED);
 
-	private void dumpPayload(final Map<String, Object> attributeMap)
+	private void dumpPayload(final AttributeMap attributeMap)
 	{
 		if (attributeMap == null)
 		{
 			logger.info("Payload is null");
 		}
-		else if (attributeMap.keySet().isEmpty())
+		else if (attributeMap.getAttributeSet().isEmpty())
 		{
 			logger.info("There is not data in the received map");
 		}
 		else
 		{
-			for (String key : attributeMap.keySet())
+			for (Attribute key : attributeMap.getAttributeSet())
 			{
-				logger.info(key + "<->" + attributeMap.get(key).toString());
+				logger.info(key + "<->" + attributeMap.getAttributeAsString(key));
 			}
 		}
 	}
 
-	private String getUser(Map<String, Object> attributeMap)
+	private String getUser(AttributeMap attributeMap)
 	{
-		return (String) attributeMap.get(Attribute.TASK_CREATED_BY.toString().toLowerCase());
+		return attributeMap.getAttributeAsString(Attribute.TASK_CREATED_BY);
 	}
 
-	private boolean isAo(Map<String, Object> attributeMap)
+	private boolean isAo(AttributeMap attributeMap)
 	{
 
 		try
 		{
-			Object o = attributeMap.get(Attribute.CONT_RESTRICTED_MATERIAL.toString().toLowerCase());
+			Object o = attributeMap.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
 
 			if (o instanceof Boolean)
 			{
@@ -609,15 +661,15 @@ public class Stub implements MayamPDP
 
 	}
 
-	private void defaultValidation(Map<String, Object> attributeMap)
+	private void defaultValidation(AttributeMap attributeMap)
 	{
 		validateAttributeMap(
 				attributeMap,
-				Attribute.HOUSE_ID.toString().toLowerCase(),
-				Attribute.HOUSE_ID.toString().toLowerCase(),
-				Attribute.ASSET_TYPE.toString().toLowerCase(),
-				Attribute.TASK_CREATED_BY.toString().toLowerCase(),
-				Attribute.CONT_RESTRICTED_MATERIAL.toString().toLowerCase());
+				Attribute.HOUSE_ID,
+				Attribute.HOUSE_ID,
+				Attribute.ASSET_TYPE,
+				Attribute.TASK_CREATED_BY,
+				Attribute.CONT_RESTRICTED_MATERIAL);
 	}
 
 	/**
@@ -628,18 +680,18 @@ public class Stub implements MayamPDP
 	 *            the required fields that must be set in this attribute map.
 	 * @return true if all the attribute names in attributeNamesRequired are in the asset map.
 	 */
-	private boolean validateAttributeMap(Map<String, Object> attributeMap, String... attributeNamesRequired)
+	private boolean validateAttributeMap(AttributeMap attributeMap, Attribute... attributesRequired)
 	{
-		if (attributeMap == null || attributeMap.keySet().isEmpty())
+		if (attributeMap == null || attributeMap.getAttributeSet().isEmpty())
 			throw new WebServiceException("MAYAM Attribute Map is EMPTY");
 
-		if (attributeNamesRequired == null || attributeNamesRequired.length == 0)
+		if (attributesRequired == null || attributesRequired.length == 0)
 			throw new IllegalArgumentException("MayamPDPSetUp Internal Error: There must be some input map names from Mayam");
 
-		for (String mapItemName : attributeNamesRequired)
+		for (Attribute a : attributesRequired)
 		{
-			if (!attributeMap.keySet().contains(mapItemName))
-				throw new WebServiceException("Mayam Attribute " + mapItemName + " must be set in this call to the PDP");
+			if (!attributeMap.getAttributeSet().contains(a))
+				throw new WebServiceException("Mayam Attribute " + a + " must be set in this call to the PDP");
 		}
 
 		return true;
@@ -666,7 +718,7 @@ public class Stub implements MayamPDP
 
 	}
 
-	private boolean userCanPerformOperation(final PrivilegedOperations operation, final Map<String, Object> attributeMap)
+	private boolean userCanPerformOperation(final PrivilegedOperations operation, final AttributeMap attributeMap)
 			throws RemoteException
 	{
 
@@ -697,5 +749,6 @@ public class Stub implements MayamPDP
 			return true;
 		}
 	}
+
 
 }

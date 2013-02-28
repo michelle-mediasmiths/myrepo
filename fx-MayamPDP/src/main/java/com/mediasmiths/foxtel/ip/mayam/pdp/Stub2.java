@@ -1,6 +1,11 @@
 package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 import com.google.inject.Inject;
+import com.mayam.wf.attributes.server.AttributeMapMapper;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.exception.RemoteException;
+
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -23,12 +28,18 @@ public class Stub2 implements MayamPDP
 
 	private Logger logger = Logger.getLogger(MayamPDPImpl.class);
 
-	private final Map<String,Object> okStatus = new HashMap<String,Object>();
+	private String okStatus;
 
+	
+	private AttributeMapMapper mapper;
 
 	@Inject
-	public Stub2()
+	public Stub2(AttributeMapMapper mapper)
 	{
+		AttributeMap okStatusMap = new AttributeMap();
+		okStatusMap.setAttribute(Attribute.OP_STAT, "ok");
+		this.mapper=mapper;
+		okStatus =  mapper.serialize(okStatusMap);
 	}
 
 
@@ -39,127 +50,128 @@ public class Stub2 implements MayamPDP
 	}
 
 	@Override
-	public Map<String, Object> segmentMismatch(final Map<String, Object> attributeMap)
+	public String segmentMismatch(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> segmentClassificationCheck(final Map<String, Object> attributeMap)
+	public String segmentClassificationCheck(final String attributeMapStr)
 	{
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> uningestProtected(final Map<String, Object> attributeMap)
+	public String uningestProtected(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> protect(final Map<String, Object> attributeMap)
+	public String protect(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> unprotect(final Map<String, Object> attributeMap)
+	public String unprotect(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	public Map<String, Object> delete(final Map<String, Object> attributeMap)
+	public String delete(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> proxyfileCheck(final Map<String, Object> attributeMap)
+	public String proxyfileCheck(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> ingest(final Map<String, Object> attributeMap)
+	public String ingest(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> complianceEdit(final Map<String, Object> attributeMap)
+	public String complianceEdit(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> complianceLogging(final Map<String, Object> attributeMap)
+	public String complianceLogging(final String attributeMapStr)
 	{
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> unmatched(final Map<String, Object> attributeMap)
+	public String unmatched(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> preview(final Map<String, Object> attributeMap)
+	public String preview(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> autoQC(final Map<String, Object> attributeMap)
+	public String autoQC(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> txDelivery(final Map<String, Object> attributeMap)
+	public String txDelivery(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 	@Override
-	public Map<String, Object> exportMarkers(final Map<String, Object> attributeMap)
+	public String exportMarkers(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
 
 
-	private void dumpPayload(final Map<String, Object> attributeMap)
+	private void dumpPayload(final String attributeMapStr)
 	{
-		if (attributeMap == null)
-		{
-			logger.info("Payload is null");
-		}
-		else if (attributeMap.keySet().isEmpty())
-		{
-			logger.info("There is not data in the received map");
-		}
-		else
-		{
-			for (String key: attributeMap.keySet())
-			{
-				logger.info(key + "<->" + attributeMap.get(key).toString());
-			}
-		}
+		logger.info(attributeMapStr);
+//		if (attributeMap == null)
+//		{
+//			logger.info("Payload is null");
+//		}
+//		else if (attributeMap.getAttributeSet().isEmpty())
+//		{
+//			logger.info("There is not data in the received map");
+//		}
+//		else
+//		{
+//			for (Attribute key: attributeMap.getAttributeSet())
+//			{
+//				logger.info(key + "<->" + attributeMap.getAttributeAsString(key));
+//			}
+//		}
 	}
 
 
@@ -169,18 +181,18 @@ public class Stub2 implements MayamPDP
 	 * @param attributeNamesRequired the required fields that must be set in this attribute map.
 	 * @return true if all the attribute names in attributeNamesRequired are in the asset map.
 	 */
-	private boolean validateAttributeMap(Map<String, Object> attributeMap, String... attributeNamesRequired)
+	private boolean validateAttributeMap(AttributeMap attributeMap, Attribute... attributeNamesRequired)
 	{
-		if (attributeMap == null || attributeMap.keySet().isEmpty())
+		if (attributeMap == null || attributeMap.getAttributeSet().isEmpty())
 			throw new WebServiceException("MAYAM Attribute Map is EMPTY");
 
 		if (attributeNamesRequired == null || attributeNamesRequired.length == 0)
 			throw new IllegalArgumentException("MayamPDPSetUp Internal Error: There must be some input map names from Mayam");
 
-		for (String mapItemName: attributeNamesRequired)
+		for (Attribute a: attributeNamesRequired)
 		{
-			if (!attributeMap.keySet().contains(mapItemName))
-				throw new WebServiceException("Mayam Attribute " + mapItemName + " must be set in this call to the PDP");
+			if (!attributeMap.getAttributeSet().contains(a))
+				throw new WebServiceException("Mayam Attribute " + a + " must be set in this call to the PDP");
 		}
 
 		return true;
@@ -192,9 +204,9 @@ public class Stub2 implements MayamPDP
 	@POST
 	@Produces("application/json")
 	@Consumes("application/json")
-	public Map<String, Object> complianceProxy(Map<String, Object> attributeMap)
+	public String complianceProxy(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
@@ -204,9 +216,9 @@ public class Stub2 implements MayamPDP
 	@POST
 	@Produces("application/json")
 	@Consumes("application/json")
-	public Map<String, Object> captionsProxy(Map<String, Object> attributeMap)
+	public String captionsProxy(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
 	}
 
@@ -216,10 +228,22 @@ public class Stub2 implements MayamPDP
 	@POST
 	@Produces("application/json")
 	@Consumes("application/json")
-	public Map<String, Object> publicityProxy(Map<String, Object> attributeMap)
+	public String publicityProxy(final String attributeMapStr)
 	{
-		dumpPayload(attributeMap);
+		dumpPayload(attributeMapStr);
 		return okStatus;
+	}
+
+
+	@Override
+	@Path("qcParallel")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String qcParallel(String attributeMapStr) throws RemoteException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

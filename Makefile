@@ -43,6 +43,9 @@ bmwfa : wfadapter
 bmpdp : mayampdp
 	rsync -v fx-MayamPDP/target/fx-MayamPDP.war sysadmin@10.111.224.101:mediasmiths/bundle/
 
+bmpdptest : mayampdp
+	rsync -v fx-MayamPDP/target/fx-MayamPDP.war sysadmin@10.111.224.101:mediasmiths/bundle/fx-MayamPDP-test.war
+
 uploadall : install
 	-mkdir /tmp/bundle/
 	-rm /tmp/bundle/*.war

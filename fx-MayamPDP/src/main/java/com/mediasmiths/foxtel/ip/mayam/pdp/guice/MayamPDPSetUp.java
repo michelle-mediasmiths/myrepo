@@ -17,6 +17,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.module.SimpleModule;
+
 public class MayamPDPSetUp extends AbstractModule
 {
 
@@ -41,6 +44,8 @@ public class MayamPDPSetUp extends AbstractModule
 		                                                                                         Names.named("groups.delete.nonao")))));
 		securityGroups.put(PrivilegedOperations.AUTOQC, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                         Names.named("groups.autoQC.nonao")))));
+		securityGroups.put(PrivilegedOperations.QCPARALLEL, getGroupSet(injector.getInstance(Key.get(String.class,
+                Names.named("groups.qcParallel.nonao")))));
 		securityGroups.put(PrivilegedOperations.INGEST, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                         Names.named("groups.ingest.nonao")))));
 		securityGroups.put(PrivilegedOperations.UNINGEST, getGroupSet(injector.getInstance(Key.get(String.class,
@@ -82,6 +87,8 @@ public class MayamPDPSetUp extends AbstractModule
 		                                                                                         Names.named("groups.delete.ao")))));
 		securityGroups.put(PrivilegedOperations.AUTOQC, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                         Names.named("groups.autoQC.ao")))));
+		securityGroups.put(PrivilegedOperations.QCPARALLEL, getGroupSet(injector.getInstance(Key.get(String.class,
+                Names.named("groups.qcParallel.ao")))));
 		securityGroups.put(PrivilegedOperations.INGEST, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                         Names.named("groups.ingest.ao")))));
 		securityGroups.put(PrivilegedOperations.UNINGEST, getGroupSet(injector.getInstance(Key.get(String.class,

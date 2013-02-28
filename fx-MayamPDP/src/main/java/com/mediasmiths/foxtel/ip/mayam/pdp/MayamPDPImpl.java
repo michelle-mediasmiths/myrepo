@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.ip.mayam.pdp;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -16,6 +17,10 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.RevisionUtil;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,11 +63,14 @@ public class MayamPDPImpl implements MayamPDP
 	@Named("foxtel.groups.ao")
 	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsAO;
 
+	private final AttributeMapMapper mapper;
+	
 	@Inject
-	public MayamPDPImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController) 
+	public MayamPDPImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController,AttributeMapMapper mapper) 
 	{
 		this.client=client;
 		this.taskController=taskController;
+		this.mapper=mapper;
 	}
 
 	@Override
@@ -72,17 +80,18 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 	@Override
-	public  Map<String, Object> segmentMismatch(final Map<String, Object> attributeMap)
+	public  String segmentMismatch(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER.toString(), Attribute.HOUSE_ID.toString());
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
 
-	    Map<String, Object> returnMap = new HashMap<String,Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
 	    //Segmentation check
-	    String requestedNumber = attributeMap.get(Attribute.REQ_NUMBER.toString()).toString();
+	    String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
 	    int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
-	    String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+	    String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    
 	    SegmentList segmentList = null;
 	    try {
@@ -98,106 +107,110 @@ public class MayamPDPImpl implements MayamPDP
 		    if (numberOfSegmentsRequested != segmentsSize) 
 		    {
 		    	returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM.toString());
-		    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
+		    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
 		    }
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A technical fault has occurred while retrieving segemnt list");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
 	    }
 	    
-		return returnMap;
+		return mapper.serialize(returnMap);
 	}
 	
 	@Override
-	public  Map<String, Object> segmentClassificationCheck(final Map<String, Object> attributeMap)
+	public  String segmentClassificationCheck(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 	    validateAttributeMap(attributeMap, null, null);
 
-	    Map<String, Object> returnMap = new HashMap<String, Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
-	    String classification = attributeMap.get(Attribute.CONT_CLASSIFICATION.toString()).toString();
+	    String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
 	    if (classification == null || classification.equals(""))
 	    {
-	    	String presentationID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+	    	String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    	
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 	    }
 	    
-		return returnMap;
+		return  mapper.serialize(returnMap);
 	}
 	
 	@Override
-	public  Map<String, Object> uningestProtected(final Map<String, Object> attributeMap)
+	public  String uningestProtected(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString());
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED);
 
-	    Map<String, Object> returnMap = new HashMap<String, Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString()).toString();
-	    String protectedString = attributeMap.get(Attribute.PURGE_PROTECTED.toString()).toString();
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    String assetType = attributeMap.getAttributeAsString(Attribute.ASSET_TYPE);
+	    String protectedString = attributeMap.getAttributeAsString(Attribute.PURGE_PROTECTED);
 	    Boolean purgeProtected = Boolean.parseBoolean(protectedString);
 	    
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM);
+	    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
-		return returnMap;
+		return  mapper.serialize(returnMap);
 	}
 
 	@Override
-	public  Map<String, Object> delete(final Map<String, Object> attributeMap)
+	public  String delete(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED.toString(), Attribute.HOUSE_ID.toString(), Attribute.ASSET_TYPE.toString());
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED, Attribute.HOUSE_ID, Attribute.ASSET_TYPE);
 
-	    Map<String, Object> returnMap = new HashMap<String,Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String assetType = attributeMap.get(Attribute.ASSET_TYPE.toString()).toString();
-	    String protectedString = attributeMap.get(Attribute.PURGE_PROTECTED.toString()).toString();
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    String assetType = attributeMap.getAttributeAsString(Attribute.ASSET_TYPE);
+	    String protectedString = attributeMap.getAttributeAsString(Attribute.PURGE_PROTECTED);
 	    Boolean purgeProtected = Boolean.parseBoolean(protectedString);
 	    
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.CONFIRM);
-	    	returnMap.put(PDPAttributes.FORM_MSG.toString(), "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM);
+	    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
-		return returnMap;
+		return  mapper.serialize(returnMap);
 	}
 	
 	@Override
-	public  Map<String, Object> exportMarkers(final Map<String, Object> attributeMap)
+	public  String exportMarkers(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString());
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID, Attribute.ASSET_ID);
 
-	    Map<String, Object> returnMap = new HashMap<String,Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String assetID = attributeMap.get(Attribute.ASSET_ID.toString()).toString();
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    String assetID = attributeMap.getAttributeAsString(Attribute.ASSET_ID);
 	    MarkerList markers = null;
 		String revisionId = null;
 		try
@@ -208,156 +221,169 @@ public class MayamPDPImpl implements MayamPDP
 			if (markers == null || markers.size() == 0)
 			{
 				returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "No export markers exist for " + houseID);
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+		    	returnMap.setAttribute(Attribute.ERROR_MSG, "No export markers exist for " + houseID);
 			}
 		}
 		catch (RemoteException e)
 		{
 			returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while retrieving markers for " + houseID);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while retrieving markers for " + houseID);
 		}
 	    
-		return returnMap;
+		return  mapper.serialize(returnMap);
 	}
 
 	@Override
-	public Map<String, Object> complianceProxy(final Map<String, Object> attributeMap)
+	public String complianceProxy(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	public Map<String, Object> captionsProxy(final Map<String, Object> attributeMap)
+	public String captionsProxy(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	public Map<String, Object> publicityProxy(final Map<String, Object> attributeMap)
+	public String publicityProxy(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	public  Map<String, Object> ingest(final Map<String, Object> attributeMap)
+	public  String ingest(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-		return doesTaskExist(houseID, MayamTaskListType.INGEST);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.INGEST));
 	}
 	
 	@Override
-	public  Map<String, Object> txDelivery(final Map<String, Object> attributeMap)
+	public  String txDelivery(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-		return doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY));
 	}
 	
 	@Override
-	public  Map<String, Object> autoQC(final Map<String, Object> attributeMap)
+	public  String autoQC(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-		return doesTaskExist(houseID, MayamTaskListType.QC_VIEW);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.QC_VIEW));
 	}
 	
 	@Override
-	public  Map<String, Object> preview(final Map<String, Object> attributeMap)
+	public  String preview(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-		return doesTaskExist(houseID, MayamTaskListType.PREVIEW);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.PREVIEW));
 	}
 	
 	@Override
-	public  Map<String, Object> unmatched(final Map<String, Object> attributeMap)
+	public  String unmatched(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-		return doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA));
 	}
 	
 	@Override
-	public  Map<String, Object> complianceEdit(final Map<String, Object> attributeMap)
+	public  String complianceEdit(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String parentHouseID = attributeMap.get(Attribute.PARENT_HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    String parentHouseID = attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 	    
-	    Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
+	    AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 	    if (returnMap != null)
 	    {
-	    	Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+	    	Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
 	    	if (status.equals(StatusCodes.CONFIRM))
 	    	{
 	    		if (parentHouseID == null || parentHouseID.equals(""))
 	    		{
 	    	    	returnMap.clear();
-	    	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
+	    	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	    	returnMap.setAttribute(Attribute.ERROR_MSG, "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
 	    		}
 	    	}
 	    }
 	    
-	    return returnMap;
+	    return  mapper.serialize(returnMap);
 	}
 	
 	@Override
-	public  Map<String, Object> complianceLogging(final Map<String, Object> attributeMap)
+	public  String complianceLogging(final String attributeMapStr)
 	{
-		validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString());
-		String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-		String sourceHouseId = attributeMap.get(Attribute.SOURCE_HOUSE_ID.toString()).toString();
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		validateAttributeMap(attributeMap, Attribute.HOUSE_ID);
+		String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+		String sourceHouseId = attributeMap.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 
-		Map<String, Object> returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+		AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
 		if (returnMap != null)
 		{
-			Object status = returnMap.get(PDPAttributes.OP_STAT).toString();
+			Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
 			if (status.equals(StatusCodes.OK))
 			{
 				if (sourceHouseId == null || sourceHouseId.equals(""))
 				{
 					returnMap.clear();
-					returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-					returnMap.put(PDPAttributes.ERROR_MSG.toString(), "String.format(messageComplianceLoggingNone, houseID)");
+					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+					returnMap.setAttribute(Attribute.ERROR_MSG, "String.format(messageComplianceLoggingNone, houseID)");
 				}
 			}
 		}
-		return doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+		return  mapper.serialize(doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING));
 	}
 
 	@Override
-	public  Map<String, Object> protect(final Map<String, Object> attributeMap)
+	public  String protect(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 	@Override
-	public  Map<String, Object> unprotect(final Map<String, Object> attributeMap)
+	public  String unprotect(final String attributeMapStr)
 	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 
 
 	@Override
-	public  Map<String, Object> proxyfileCheck(final Map<String, Object> attributeMap)
+	public  String proxyfileCheck(final String attributeMapStr)
 	{
-	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID.toString(), Attribute.ASSET_ID.toString(), Attribute.OP_FILENAME.toString());
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID, Attribute.ASSET_ID, Attribute.OP_FILENAME);
 
-	    Map<String, Object> returnMap = new HashMap<String,Object>();
-	    returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 	    
-	    String houseID = attributeMap.get(Attribute.HOUSE_ID.toString()).toString();
-	    String filename = attributeMap.get(Attribute.OP_FILENAME.toString()).toString();
+	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    String filename = attributeMap.getAttributeAsString(Attribute.OP_FILENAME);
 	    
 	    try
 	    {
@@ -370,18 +396,18 @@ public class MayamPDPImpl implements MayamPDP
 			
 			if (existingTasks != null && existingTasks.getTotalMatches() > 0) {
 				returnMap.clear();
-		    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-		    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "A Proxy with name " + filename + " already exists");
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+		    	returnMap.setAttribute(Attribute.ERROR_MSG, "A Proxy with name " + filename + " already exists");
 			}
 	    }
 	    catch(RemoteException e)
 	    {
 			returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while retrieving existing Extended Publishing tasks");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while retrieving existing Extended Publishing tasks");
 	    }
 	    
-		return returnMap;  
+		return  mapper.serialize(returnMap);
 	}
 
 
@@ -393,18 +419,18 @@ public class MayamPDPImpl implements MayamPDP
 	 * @param attributeNamesRequired the required fields that must be set in this attribute map.
 	 * @return true if all the attribute names in attributeNamesRequired are in the asset map.
 	 */
-	private boolean validateAttributeMap(Map<String, Object> attributeMap, String... attributeNamesRequired)
+	private boolean validateAttributeMap(AttributeMap attributeMap, Attribute... attributeNamesRequired)
 	{
-		if (attributeMap == null || attributeMap.keySet().isEmpty())
+		if (attributeMap == null || attributeMap.getAttributeSet().isEmpty())
 			throw new WebServiceException("MAYAM Attribute Map is EMPTY");
 
 		if (attributeNamesRequired == null || attributeNamesRequired.length == 0)
 			throw new IllegalArgumentException("MayamPDPSetUp Internal Error: There must be some input map names from Mayam");
 
-		for (String mapItemName: attributeNamesRequired)
+		for (Attribute a: attributeNamesRequired)
 		{
-			if (!attributeMap.keySet().contains(mapItemName))
-				throw new WebServiceException("Mayam Attribute " + mapItemName + " must be set in this call to the PDP");
+			if (!attributeMap.getAttributeSet().contains(a))
+				throw new WebServiceException("Mayam Attribute " + a + " must be set in this call to the PDP");
 		}
 
 		return true;
@@ -418,18 +444,18 @@ public class MayamPDPImpl implements MayamPDP
 	 *
 	 * @return the standard attribute map result for Mayam.
 	 */
-	private Map<String, Object> formResult(boolean success, String feedBackMessage)
+	private AttributeMap formResult(boolean success, String feedBackMessage)
 	{
-		Map<String, Object> result = new HashMap<String,Object>();
+		AttributeMap result = client.createAttributeMap();
 
 
 		return result;
 	}
 	
-	private Map<String, Object> doesTaskExist(String houseID, MayamTaskListType task)
+	private AttributeMap doesTaskExist(String houseID, MayamTaskListType task)
 	{
-		Map<String, Object> returnMap = new HashMap<String,Object>();
-		returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.OK);
+		AttributeMap returnMap = client.createAttributeMap();
+		returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 		
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
@@ -442,18 +468,29 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch(RemoteException e) {
 			returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "WARNING: A technical error occurred while checking if tasks already exist for " + houseID);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while checking if tasks already exist for " + houseID);
 		}
 		
 		if (result != null && result.getTotalMatches() > 0)
 		{
 	    	returnMap.clear();
-	    	returnMap.put(PDPAttributes.OP_STAT.toString(), StatusCodes.ERROR);
-	    	returnMap.put(PDPAttributes.ERROR_MSG.toString(), "Task already exists. No new task created");
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "Task already exists. No new task created");
 		}
 		
 		return returnMap;
+	}
+
+	@Override
+	@Path("qcParallel")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String qcParallel(String attributeMapStr) throws RemoteException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
