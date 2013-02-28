@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.ManualQA;
+import com.mediasmiths.stdEvents.report.entity.ManualQART;
 
 public class ManualQARpt
 {
@@ -35,7 +35,7 @@ public class ManualQARpt
 	
 	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<ManualQA> manualQAs = getManualQAList(events, startDate, endDate);
+		List<ManualQART> manualQAs = getManualQAList(events, startDate, endDate);
 
 		ICsvBeanWriter beanWriter = null;
 		try {
@@ -48,7 +48,7 @@ public class ManualQARpt
 			int reordered = 0;
 			int requiring = 0;
 			
-			for (ManualQA manualQA : manualQAs)
+			for (ManualQART manualQA : manualQAs)
 			{
 				if (manualQA.getEscalated().equals("1"))
 					escalated++;
@@ -59,7 +59,7 @@ public class ManualQARpt
 			}
 			
 			int totalTime = 0;
-			for (ManualQA manualQA : manualQAs)
+			for (ManualQART manualQA : manualQAs)
 			{
 				String time = manualQA.getTimeEscalated();
 				int hours = Integer.parseInt(time.substring(3, 5)) * 3600;
@@ -71,18 +71,18 @@ public class ManualQARpt
 			String timeEscalated = formatIntoHHMMSS(totalTime);
 			logger.info("totalTime: " + totalTime + "timeEscalated: " + timeEscalated);
 			
-			ManualQA passed = new ManualQA("Total QA'd", Integer.toString(manualQAs.size()));
-			ManualQA noEscalated = new ManualQA("Number Escalated", Integer.toString(escalated));
-			ManualQA avEscalated = new ManualQA("Average Time Escalated", timeEscalated);
-			ManualQA noReordered = new ManualQA ("Number Reordered", Integer.toString(reordered));
-			ManualQA noRequiring = new ManualQA("Requiring Fix/ Stitch", Integer.toString(requiring));
+			ManualQART passed = new ManualQART("Total QA'd", Integer.toString(manualQAs.size()));
+			ManualQART noEscalated = new ManualQART("Number Escalated", Integer.toString(escalated));
+			ManualQART avEscalated = new ManualQART("Average Time Escalated", timeEscalated);
+			ManualQART noReordered = new ManualQART ("Number Reordered", Integer.toString(reordered));
+			ManualQART noRequiring = new ManualQART("Requiring Fix/ Stitch", Integer.toString(requiring));
 			manualQAs.add(passed);
 			manualQAs.add(noEscalated);
 			manualQAs.add(avEscalated);
 			manualQAs.add(noReordered);
 			manualQAs.add(noRequiring);
 
-			for (ManualQA manualQA : manualQAs) 
+			for (ManualQART manualQA : manualQAs) 
 			{
 				beanWriter.write(manualQA, header, processors);
 			}
@@ -121,12 +121,12 @@ public class ManualQARpt
 
 	}
 	
-	public List<ManualQA> getManualQAList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ManualQART> getManualQAList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
+		List<ManualQART> manualQAList = new ArrayList<ManualQART>();
 		for (EventEntity event : events)
 		{
-			ManualQA manualQA = new ManualQA();
+			ManualQART manualQA = new ManualQART();
 			manualQA.setDateRange(startDate.toString() + " - " + endDate.toString());
 			String payload = event.getPayload();
 			logger.info(payload);

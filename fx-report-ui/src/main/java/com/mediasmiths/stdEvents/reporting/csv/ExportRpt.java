@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.Export;
+import com.mediasmiths.stdEvents.report.entity.ExportRT;
 
 public class ExportRpt
 {
@@ -32,7 +32,7 @@ public class ExportRpt
 	
 	public void writeExport(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Export> exports = getExportList(events, startDate , endDate);
+		List<ExportRT> exports = getExportList(events, startDate , endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		
@@ -42,14 +42,14 @@ public class ExportRpt
 			final CellProcessor[] processors = getExportProcessor();
 			beanWriter.writeHeader(header);
 			
-			Export compliance = new Export("Number of Titles Exported Compliance", null);
-			Export captioning = new Export("Number of Titles Exported Captioning", null);
-			Export publicity = new Export("Number of Titles Exported Publicity", null);
+			ExportRT compliance = new ExportRT("Number of Titles Exported Compliance", null);
+			ExportRT captioning = new ExportRT("Number of Titles Exported Captioning", null);
+			ExportRT publicity = new ExportRT("Number of Titles Exported Publicity", null);
 			exports.add(compliance);
 			exports.add(captioning);
 			exports.add(publicity);
 			
-			for (Export export : exports)
+			for (ExportRT export : exports)
 			{
 				beanWriter.write(export, header, processors);
 			}
@@ -73,13 +73,13 @@ public class ExportRpt
 		}
 	}
 	
-	public List<Export> getExportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ExportRT> getExportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Export> exports = new ArrayList<Export>();
+		List<ExportRT> exports = new ArrayList<ExportRT>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			Export export = new Export();
+			ExportRT export = new ExportRT();
 			export.setDateRange(startDate + " - " + endDate);
 
 			

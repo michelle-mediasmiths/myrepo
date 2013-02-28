@@ -219,18 +219,10 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getOrderStatusCSV()
 	{
-		//List<EventEntity> delivered = getInDate(queryApi.getDelivered());
-		//List<EventEntity> outstanding = getInDate(queryApi.getOutstanding());
-		//List<EventEntity> overdue = getInDate(queryApi.getOverdue());
-		//List<EventEntity> overdue = new ArrayList<EventEntity>();
- 		//List<EventEntity> unmatched = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "UnmatchedContentAvailable"));
  		logger.info("writeOrderStatus: " + REPORT_NAME);
  		List<EventEntity> orders = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "OrderStatusReport"));
- 		
-		orderStatus.writeOrderStatus(orders, null, null, null, startDate, endDate, REPORT_NAME);
+		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
 	}
-	
-	
 
 	@Transactional
 	public String getAquisitionReportUI()
@@ -259,15 +251,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAquisitionReportCSV()
 	{
-		List<EventEntity> materials = queryApi.getByNamespace("http://www.foxtel.com.au/ip/content");
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : materials) {
-			boolean within = checkDate(event.getTime());
-			logger.info("Start long: " + startLong + " End long: " + endLong + " Current long: " + event.getTime() + " Valid: " + within);
-			if (within)
-				valid.add(event);
-		}
-		acquisition.writeAcquisitionDelivery(valid, startDate, endDate, REPORT_NAME);
+		List<EventEntity> materials = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "AcquisitionReport"));
+		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
 		
 		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
 		int perByFile = 0;

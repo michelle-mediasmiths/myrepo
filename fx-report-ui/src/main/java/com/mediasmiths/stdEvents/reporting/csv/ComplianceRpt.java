@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.Compliance;
+import com.mediasmiths.stdEvents.report.entity.ComplianceLoggingRT;
 
 public class ComplianceRpt
 {
@@ -32,7 +32,7 @@ public class ComplianceRpt
 	
 	public void writeCompliance(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Compliance> comps = getComplianceList(events, startDate, endDate);
+		List<ComplianceLoggingRT> comps = getComplianceList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try{
@@ -41,12 +41,12 @@ public class ComplianceRpt
 			final CellProcessor[] processors = getComplianceProcessor();
 			beanWriter.writeHeader(header);
 			
-			Compliance total = new Compliance("Number of Titles", null);
-			Compliance time = new Compliance("Average Completion Time", null);
+			ComplianceLoggingRT total = new ComplianceLoggingRT("Number of Titles", null);
+			ComplianceLoggingRT time = new ComplianceLoggingRT("Average Completion Time", null);
 			comps.add(total);
 			comps.add(time);
 			
-			for (Compliance comp : comps)
+			for (ComplianceLoggingRT comp : comps)
 			{
 				beanWriter.write(comp, header, processors);
 			}
@@ -70,13 +70,13 @@ public class ComplianceRpt
 		}
 	}
 	
-	public List<Compliance> getComplianceList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ComplianceLoggingRT> getComplianceList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Compliance> comps = new ArrayList<Compliance>();
+		List<ComplianceLoggingRT> comps = new ArrayList<ComplianceLoggingRT>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			Compliance comp = new Compliance();
+			ComplianceLoggingRT comp = new ComplianceLoggingRT();
 			
 			comp.setDateRange(startDate + " - " + endDate);
 			if (payload.contains("title"))

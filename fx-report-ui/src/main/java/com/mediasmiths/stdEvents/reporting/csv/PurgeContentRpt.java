@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.Purge;
+import com.mediasmiths.stdEvents.report.entity.PurgeRT;
 
 public class PurgeContentRpt
 {
@@ -33,7 +33,7 @@ public class PurgeContentRpt
 	
 	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<Purge> purged = getPurgeList(events, startDate, endDate);
+		List<PurgeRT> purged = getPurgeList(events, startDate, endDate);
 		logger.info("Events: " + events);
 		logger.info("Purged: " + purged);
 		ICsvBeanWriter beanWriter = null;
@@ -43,16 +43,16 @@ public class PurgeContentRpt
 			final CellProcessor[] processors = getPurgeProcessor();
 			beanWriter.writeHeader(header);
 			
-			Purge expiring = new Purge("Expiring", Integer.toString(queryApi.getLength(queryApi.getExpiring())));
-			Purge purgeProtected = new Purge("Total Protected", Integer.toString(queryApi.getLength(queryApi.getPurgeProtected())));
-			Purge purgePosponed = new Purge("Total Postponed", Integer.toString(queryApi.getLength(queryApi.getPurgePosponed())));
-			Purge total = new Purge("Total Purged", Integer.toString(queryApi.getLength(queryApi.getTotalPurged())));
+			PurgeRT expiring = new PurgeRT("Expiring", Integer.toString(queryApi.getLength(queryApi.getExpiring())));
+			PurgeRT purgeProtected = new PurgeRT("Total Protected", Integer.toString(queryApi.getLength(queryApi.getPurgeProtected())));
+			PurgeRT purgePosponed = new PurgeRT("Total Postponed", Integer.toString(queryApi.getLength(queryApi.getPurgePosponed())));
+			PurgeRT total = new PurgeRT("Total Purged", Integer.toString(queryApi.getLength(queryApi.getTotalPurged())));
 			purged.add(expiring);
 			purged.add(purgeProtected);
 			purged.add(purgePosponed);
 			purged.add(total);
 			
-			for (Purge purge : purged)
+			for (PurgeRT purge : purged)
 			{
 				beanWriter.write(purge, header, processors);
 			}
@@ -76,13 +76,13 @@ public class PurgeContentRpt
 		}
 	}
 	
-	public List<Purge> getPurgeList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<PurgeRT> getPurgeList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<Purge> purgeList = new ArrayList<Purge>();
+		List<PurgeRT> purgeList = new ArrayList<PurgeRT>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			Purge purge = new Purge();
+			PurgeRT purge = new PurgeRT();
 			purge.setDateRange(startDate.toString() + " - " + endDate.toString());
 			
 			if (payload.contains("entityType"))

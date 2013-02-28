@@ -17,7 +17,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.TaskList;
+import com.mediasmiths.stdEvents.report.entity.TaskListRT;
 
 public class TaskListRpt
 {
@@ -32,7 +32,7 @@ public class TaskListRpt
 	
 	public void writeTaskList(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<TaskList> tasks = getTaskList(events, startDate, endDate);
+		List<TaskListRT> tasks = getTaskList(events, startDate, endDate);
 		
 		ICsvBeanWriter beanWriter = null;
 		try {
@@ -41,11 +41,11 @@ public class TaskListRpt
 			final CellProcessor[] processors = getTaskListProcessor();
 			beanWriter.writeHeader(header);
 			
-			TaskList total = new TaskList("Total Tasks", Integer.toString(tasks.size()));
-			TaskList outstanding = new TaskList("Outstanding", Integer.toString(queryApi.getOutstandingTasks(events).size()));
-			TaskList completed = new TaskList ("Completed Tasks", Integer.toString(queryApi.getCompletedTasks(events).size()));
-			TaskList overdue = new TaskList ("OverdueTasks", Integer.toString(queryApi.getOverdue(events).size()));
-			TaskList average = new TaskList ("Average Completion Time", queryApi.getAvCompletionTime(events));
+			TaskListRT total = new TaskListRT("Total Tasks", Integer.toString(tasks.size()));
+			TaskListRT outstanding = new TaskListRT("Outstanding", Integer.toString(queryApi.getOutstandingTasks(events).size()));
+			TaskListRT completed = new TaskListRT ("Completed Tasks", Integer.toString(queryApi.getCompletedTasks(events).size()));
+			TaskListRT overdue = new TaskListRT ("OverdueTasks", Integer.toString(queryApi.getOverdue(events).size()));
+			TaskListRT average = new TaskListRT ("Average Completion Time", queryApi.getAvCompletionTime(events));
 			tasks.add(total);
 			tasks.add(outstanding);
 			tasks.add(completed);
@@ -54,7 +54,7 @@ public class TaskListRpt
 			
 			logger.info(tasks);
 			
-			for (TaskList task : tasks)
+			for (TaskListRT task : tasks)
 			{
 				beanWriter.write(task, header, processors);
 			}
@@ -78,13 +78,13 @@ public class TaskListRpt
 		}
 	}
 	
-	public List<TaskList> getTaskList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<TaskListRT> getTaskList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<TaskList> tasks = new ArrayList<TaskList>();
+		List<TaskListRT> tasks = new ArrayList<TaskListRT>();
 		for (EventEntity event : events)
 		{
 			String payload = event.getPayload();
-			TaskList task = new TaskList();
+			TaskListRT task = new TaskListRT();
 			
 			task.setDateRange(startDate + " - " + endDate);
 			if (payload.contains("taskType"))

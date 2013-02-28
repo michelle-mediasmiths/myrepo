@@ -18,11 +18,14 @@
 	<xs:element name="OrderStatus">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string"/>
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="orderRef" type="xs:string"/>
 				<xs:element name="requiredBy" type="xs:dateTime"/>
+				<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
+				<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="aggregatorID" type="xs:string"/>
 				<xs:element name="taskType" type="xs:string"/>
 				<xs:element name="completionDate" type="xs:dateTime"/>
@@ -33,6 +36,7 @@
 	<xs:element name="Acquisition">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string"/>
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
@@ -49,16 +53,20 @@
 	<xs:element name="ManualQA">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="operator" type="xs:string"/>
 				<xs:element name="aggregatorID" type="xs:string"/>
 				<xs:element name="taskStatus" type="xs:string"/>
+				<xs:element name="previewStatus" type="xs:string"/>
 				<xs:element name="hrPreview" type="xs:string"/>
 				<xs:element name="hrPreviewRequested" type="xs:string"/>
+				<xs:element name="escalated" type="xs:string" minOccurs="0"/>
 				<xs:element name="timeEscalated" type="xs:string"/>
 				<xs:element name="titleLength" type="xs:string"/>
+				<xs:element name="reordered" type="xs:string" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -66,6 +74,7 @@
 	<xs:element name="AutoQC">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
@@ -73,8 +82,10 @@
 				<xs:element name="operator" type="xs:string"/>
 				<xs:element name="taskStatus" type="xs:string"/>
 				<xs:element name="qcStatus" type="xs:string"/>
+				<xs:element name="taskStart" type="xs:string"/>
 				<xs:element name="taskFinish" type="xs:dateTime"/>
 				<xs:element name="warningTime" type="xs:string"/>
+				<xs:element name="manualOverride" type="xs:string"/>
 				<xs:element name="failureParameter" type="xs:string"/>
 				<xs:element name="titleLength" type="xs:string"/>
 				</xs:sequence>
@@ -84,12 +95,14 @@
 	<xs:element name="TaskList">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="taskType" type="xs:string" />
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="taskStatus" type="xs:string"/>
 				<xs:element name="requiredBy" type="xs:dateTime"/>
 				<xs:element name="operator" type="xs:string"/>
 				<xs:element name="department" type="xs:string"/>
+				<xs:element name="taskStart" type="xs:string"/>
 				<xs:element name="taskFinish" type="xs:dateTime"/>
 			</xs:sequence>
 		</xs:complexType>
@@ -98,11 +111,12 @@
 	<xs:element name="PurgeContent">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="entityType" type="xs:string" />
 				<xs:element name="title" type="xs:string"/>
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
-				<xs:element name="isProtected" type="xs:string"/>
+				<xs:element name="protected" type="xs:string"/>
 				<xs:element name="extended" type="xs:string"/>
 				<xs:element name="purged" type="xs:string"/>
 				<xs:element name="expires" type="xs:dateTime"/>
@@ -113,10 +127,12 @@
 	<xs:element name="ComplianceLogging">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="taskStatus" type="xs:string"/>
+				<xs:element name="taksStart" type="xs:string"/>
 				<xs:element name="taskFinish" type="xs:dateTime"/>
 				<xs:element name="externalCompliance" type="xs:string"/>
 			</xs:sequence>
@@ -126,6 +142,7 @@
 	<xs:element name="Export">
 		<xs:complexType>
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
