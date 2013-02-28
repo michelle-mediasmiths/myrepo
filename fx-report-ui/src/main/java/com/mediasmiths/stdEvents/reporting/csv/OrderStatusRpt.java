@@ -114,7 +114,7 @@ public class OrderStatusRpt
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
 			final String [] header = {"dateRange", "title", "materialID", "channels", "orderRef", "requiredBy", "completedInDateRange", "overdueInDateRange", "aggregatorID", "taskType", "completionDate"};
-			final CellProcessor[] processors = getTitleProcessor();
+			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
 				
 			
@@ -142,7 +142,7 @@ public class OrderStatusRpt
 		}
 	}
 	
-	private CellProcessor[] getTitleProcessor()
+	private CellProcessor[] getProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),

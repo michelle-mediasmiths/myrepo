@@ -132,7 +132,7 @@
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="taskStatus" type="xs:string"/>
-				<xs:element name="taksStart" type="xs:string"/>
+				<xs:element name="taskStart" type="xs:string"/>
 				<xs:element name="taskFinish" type="xs:dateTime"/>
 				<xs:element name="externalCompliance" type="xs:string"/>
 			</xs:sequence>
