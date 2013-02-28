@@ -637,7 +637,7 @@ public class Stub implements MayamPDP
 
 	private String getUser(AttributeMap attributeMap)
 	{
-		return attributeMap.getAttributeAsString(Attribute.TASK_CREATED_BY);
+		return attributeMap.getAttributeAsString(Attribute.TASK_UPDATED_BY);
 	}
 
 	private boolean isAo(AttributeMap attributeMap)
@@ -677,7 +677,7 @@ public class Stub implements MayamPDP
 				Attribute.HOUSE_ID,
 				Attribute.HOUSE_ID,
 				Attribute.ASSET_TYPE,
-				Attribute.TASK_CREATED_BY,
+				Attribute.TASK_UPDATED_BY,
 				Attribute.CONT_RESTRICTED_MATERIAL);
 	}
 
