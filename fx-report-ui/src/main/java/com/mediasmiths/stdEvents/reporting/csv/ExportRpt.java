@@ -15,6 +15,9 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.report.Export;
+import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.ExportRT;
@@ -30,28 +33,61 @@ public class ExportRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeExport(List<EventEntity> events, Date startDate, Date endDate)
+	public void writeExport(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<ExportRT> exports = getExportList(events, startDate , endDate);
-		
+		List<Export> exports = getReportList(events, startDate , endDate);
+		createCsv(exports, reportName);
+	}
+	
+	private Export unmarshall(EventEntity event)
+	{
+		Object title = new Export();
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload " + payload);
+
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			logger.info("Deserialising payload");
+			title = JAXB_SERIALISER.deserialise(payload);
+			logger.info("Object created");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return (Export)title;
+	}
+	
+	private List<Export> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	{
+		logger.info("Creating export list");
+		List<Export> exports = new ArrayList<Export>();
+		for (EventEntity event : events)
+		{
+			Export export = unmarshall(event);
+			export.setDateRange(startDate + " - " + endDate);
+			
+			exports.add(export);
+		}		
+		return exports;
+	}
+	
+	private void createCsv(List<Export> titles, String reportName)
+	{
 		ICsvBeanWriter beanWriter = null;
-		
-		try{
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "extendedPublishingAndFileExportCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "title", "materialID", "channel", "taskStatus", "exportType", "duration"};
-			final CellProcessor[] processors = getExportProcessor();
+		try {
+			logger.info("reportName: " + reportName);
+			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			logger.info("Saving to: " + REPORT_LOC);
+			final String[] header = {"dateRange", "title", "materialID", "channels", "taskStatus", "exportType", "titleLength"};
+			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
+				
 			
-			ExportRT compliance = new ExportRT("Number of Titles Exported Compliance", null);
-			ExportRT captioning = new ExportRT("Number of Titles Exported Captioning", null);
-			ExportRT publicity = new ExportRT("Number of Titles Exported Publicity", null);
-			exports.add(compliance);
-			exports.add(captioning);
-			exports.add(publicity);
-			
-			for (ExportRT export : exports)
+			for (Export title : titles)
 			{
-				beanWriter.write(export, header, processors);
+				beanWriter.write(title, header, processors);
 			}
 		}
 		catch (IOException e)
@@ -73,22 +109,7 @@ public class ExportRpt
 		}
 	}
 	
-	public List<ExportRT> getExportList(List<EventEntity> events, Date startDate, Date endDate)
-	{
-		List<ExportRT> exports = new ArrayList<ExportRT>();
-		for (EventEntity event : events)
-		{
-			String payload = event.getPayload();
-			ExportRT export = new ExportRT();
-			export.setDateRange(startDate + " - " + endDate);
-
-			
-			exports.add(export);
-		}		
-		return exports;
-	}
-	
-	public CellProcessor[] getExportProcessor()
+	private CellProcessor[] getProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
@@ -101,6 +122,5 @@ public class ExportRpt
 		};
 		return processors;
 	}
-
 }
 

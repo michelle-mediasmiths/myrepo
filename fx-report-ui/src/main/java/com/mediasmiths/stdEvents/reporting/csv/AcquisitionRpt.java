@@ -44,7 +44,7 @@ public class AcquisitionRpt
 	
 	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate, String reportName)
 	{
-		List<AcquisitionRT> titles = getReportList(materials, startDate, endDate);
+		List<Acquisition> titles = getReportList(materials, startDate, endDate);
 		createCSV(titles, reportName);	
 	}
 	
@@ -67,44 +67,33 @@ public class AcquisitionRpt
 		return (Acquisition) title;
 	}
 	
-	public List<AcquisitionRT> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating acquisition list");
-		List<AcquisitionRT> acqs = new ArrayList<AcquisitionRT>();
+		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		for (EventEntity event : events)
 		{
 			Acquisition title = unmarshall(event);
-			AcquisitionRT acq = new AcquisitionRT();
+			title.setDateRange(startDate + " - " + endDate);
 			
-			acq.setDateRange(startDate + " - " + endDate);
-			acq.setTitle(title.getTitle());
-			acq.setMaterialID(title.getMaterialID());
-			acq.setChannels(title.getChannels());
-			acq.setAggregatorID(title.getAggregatorID());
-			acq.setTape(title.getTapeDelivery());
-			acq.setFile(title.getFileDelivery());
-			acq.setFormat(title.getFormat());
-			acq.setFileSize(title.getFilesize());
-			acq.setDuration(title.getTitleLength());
-			
-			acqs.add(acq);
+			acqs.add(title);
 		}
 		return acqs;
 	}
 	
-	private void createCSV(List<AcquisitionRT> titles, String reportName)
+	private void createCSV(List<Acquisition> titles, String reportName)
 	{
 		ICsvBeanWriter beanWriter = null;
 		try {
 			logger.info("reportName: " + reportName);
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tape", "file", "format", "fileSize", "duration"};
+			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDelivery", "fileDelivery", "format", "filesize", "titleLength"};
 			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
 				
 			
-			for (AcquisitionRT title : titles)
+			for (Acquisition title : titles)
 			{
 				beanWriter.write(title, header, processors);
 			}

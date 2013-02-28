@@ -254,23 +254,23 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> materials = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "AcquisitionReport"));
 		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
 		
-		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-		int perByFile = 0;
-		int perByTape = 0;
-		if (total != 0)
-		{
-			perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
-			perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
-		}
-
-		perByTape = perByTape * 100;
-		perByFile = perByFile * 100;
+//		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
+//		int perByFile = 0;
+//		int perByTape = 0;
+//		if (total != 0)
+//		{
+//			perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
+//			perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
+//		}
+//
+//		perByTape = perByTape * 100;
+//		perByFile = perByFile * 100;
 	}
 
 	@Transactional
 	public void getManualQACSV()
 	{
-		List<EventEntity> preview = queryApi.getByEventName("ManualQA");
+		List<EventEntity> preview = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "ManualQAReport"));
 //		List<EventEntity> manualQA = new ArrayList<EventEntity>();
 //		for (EventEntity event : qc) 
 //		{
@@ -288,61 +288,36 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAutoQCCSV()
 	{
-		List<EventEntity> passed = queryApi.getByEventName("AutoQC");
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : passed) {
-			boolean within = checkDate(event.getTime());
-			logger.info("Current: " + event.getTime() + " Valid: " + within);
-			if (within)
-				valid.add(event);
-		}
-		autoQc.writeAutoQc(valid, startDate, endDate, REPORT_NAME);
+		List<EventEntity> passed = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCReport"));
+		autoQc.writeAutoQc(passed, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getTaskListCSV()
 	{
-		List<EventEntity> tasks = queryApi.getByEventName("TaskList");
-		//NEEED TEST DATA TO SEND TO REPORT
+		List<EventEntity> tasks = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "TaskListReport"));
 		taskList.writeTaskList(tasks, startDate, endDate, REPORT_NAME);
 	}	
 	
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> purged = queryApi.getByEventName("PurgeContent");
-		logger.info("Purged: " + purged);
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : purged) {
-			boolean within = checkDate(event.getTime());
-			logger.info("Current: " + event.getTime() + " Valid: " + within);
-			if (within)
-				valid.add(event);
-		}
-		purgeContent.writePurgeTitles(valid, startDate, endDate, REPORT_NAME);
+		List<EventEntity> purged = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeContentReport"));
+		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getComplianceEditCSV()
 	{
-		List<EventEntity> events = queryApi.getByEventName("ComplianceEdit");
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : events) {
-			boolean within = checkDate(event.getTime());
-			if (within)
-				valid.add(event);
-		}
-		//NEED TEST DATA TO SEND REPORT
-		compliance.writeCompliance(valid, startDate, endDate);
-		
+		List<EventEntity> events = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "ComplianceLoggingReport"));
+		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
 	}
 	
 	@Transactional
 	public void getExportCSV()
 	{
-		List<EventEntity> events = new ArrayList<EventEntity>();
-		//NEED TEST DATA TO SEND TO REPORT
-		export.writeExport(events, startDate, endDate);
+		List<EventEntity> events = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/delivery", "ExportReport"));
+		export.writeExport(events, startDate, endDate, REPORT_NAME);
 	}
 	
 	@Transactional

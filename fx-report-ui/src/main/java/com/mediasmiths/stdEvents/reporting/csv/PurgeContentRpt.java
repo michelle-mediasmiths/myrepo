@@ -15,6 +15,9 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
+import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.PurgeRT;
@@ -33,28 +36,59 @@ public class PurgeContentRpt
 	
 	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
-		List<PurgeRT> purged = getPurgeList(events, startDate, endDate);
-		logger.info("Events: " + events);
-		logger.info("Purged: " + purged);
+		List<PurgeContent> purged = getReportList(events, startDate, endDate);
+		createCsv(purged, reportName);
+	}
+	
+	private PurgeContent unmarshall(EventEntity event)
+	{
+		Object title = new PurgeContent();
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload " + payload);
+
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			logger.info("Deserialising payload");
+			title = JAXB_SERIALISER.deserialise(payload);
+			logger.info("Object created");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return (PurgeContent)title;
+	}
+	
+	public List<PurgeContent> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	{
+		logger.info("Creating purgeContent list");
+		List<PurgeContent> purgeList = new ArrayList<PurgeContent>();
+		for (EventEntity event : events)
+		{
+			PurgeContent purge = unmarshall(event);
+			purge.setDateRange(startDate + " - " + endDate);
+
+			purgeList.add(purge);
+		}
+		return purgeList;
+	}
+	
+	private void createCsv(List<PurgeContent> titles, String reportName)
+	{
 		ICsvBeanWriter beanWriter = null;
 		try {
+			logger.info("reportName: " + reportName);
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
-			final String[] header = {"dateRange", "entityType", "title", "materialID", "channels", "isProtected", "extended", "purged", "expires"};
-			final CellProcessor[] processors = getPurgeProcessor();
+			logger.info("Saving to: " + REPORT_LOC);
+			final String[] header = {"dateRange", "entityType", "title", "materialID", "channels", "protected", "extended", "purged", "expires"};
+			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
+				
 			
-			PurgeRT expiring = new PurgeRT("Expiring", Integer.toString(queryApi.getLength(queryApi.getExpiring())));
-			PurgeRT purgeProtected = new PurgeRT("Total Protected", Integer.toString(queryApi.getLength(queryApi.getPurgeProtected())));
-			PurgeRT purgePosponed = new PurgeRT("Total Postponed", Integer.toString(queryApi.getLength(queryApi.getPurgePosponed())));
-			PurgeRT total = new PurgeRT("Total Purged", Integer.toString(queryApi.getLength(queryApi.getTotalPurged())));
-			purged.add(expiring);
-			purged.add(purgeProtected);
-			purged.add(purgePosponed);
-			purged.add(total);
-			
-			for (PurgeRT purge : purged)
+			for (PurgeContent title : titles)
 			{
-				beanWriter.write(purge, header, processors);
+				beanWriter.write(title, header, processors);
 			}
 		}
 		catch (IOException e)
@@ -76,39 +110,7 @@ public class PurgeContentRpt
 		}
 	}
 	
-	public List<PurgeRT> getPurgeList(List<EventEntity> events, Date startDate, Date endDate)
-	{
-		List<PurgeRT> purgeList = new ArrayList<PurgeRT>();
-		for (EventEntity event : events)
-		{
-			String payload = event.getPayload();
-			PurgeRT purge = new PurgeRT();
-			purge.setDateRange(startDate.toString() + " - " + endDate.toString());
-			
-			if (payload.contains("entityType"))
-				purge.setEntityType(payload.substring(payload.indexOf("entityType")+11, payload.indexOf("</entityType")));
-			if (payload.contains("title"))
-				purge.setEntityType(payload.substring(payload.indexOf("title")+7, payload.indexOf("</title")));
-			if (payload.contains("materialID"))
-				purge.setEntityType(payload.substring(payload.indexOf("materialID")+11, payload.indexOf("</materialID")));
-			if (payload.contains("channels"))
-				purge.setEntityType(payload.substring(payload.indexOf("channels")+10, payload.indexOf("</channels")));
-			if (payload.contains("isProtected"))
-				purge.setEntityType(payload.substring(payload.indexOf("isProtected")+12, payload.indexOf("</isProtected")));
-			if (payload.contains("extended"))
-				purge.setEntityType(payload.substring(payload.indexOf("extended")+9, payload.indexOf("</extended")));
-			if (payload.contains("purged"))
-				purge.setEntityType(payload.substring(payload.indexOf("purged")+7, payload.indexOf("</purged")));
-			if (payload.contains("expires"))
-				purge.setEntityType(payload.substring(payload.indexOf("expires")+8, payload.indexOf("</expires")));
-
-			purgeList.add(purge);
-		}
-		
-		return purgeList;
-	}
-	
-	public CellProcessor[] getPurgeProcessor()
+	private CellProcessor[] getProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
@@ -124,3 +126,65 @@ public class PurgeContentRpt
 		return processors;
 	}
 }
+
+//logger.info("Events: " + events);
+//logger.info("Purged: " + purged);
+//ICsvBeanWriter beanWriter = null;
+//try {
+//	beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+//	final String[] header = {"dateRange", "entityType", "title", "materialID", "channels", "isProtected", "extended", "purged", "expires"};
+//	final CellProcessor[] processors = getPurgeProcessor();
+//	beanWriter.writeHeader(header);
+//	
+//	PurgeRT expiring = new PurgeRT("Expiring", Integer.toString(queryApi.getLength(queryApi.getExpiring())));
+//	PurgeRT purgeProtected = new PurgeRT("Total Protected", Integer.toString(queryApi.getLength(queryApi.getPurgeProtected())));
+//	PurgeRT purgePosponed = new PurgeRT("Total Postponed", Integer.toString(queryApi.getLength(queryApi.getPurgePosponed())));
+//	PurgeRT total = new PurgeRT("Total Purged", Integer.toString(queryApi.getLength(queryApi.getTotalPurged())));
+//	purged.add(expiring);
+//	purged.add(purgeProtected);
+//	purged.add(purgePosponed);
+//	purged.add(total);
+//	
+//	for (PurgeRT purge : purged)
+//	{
+//		beanWriter.write(purge, header, processors);
+//	}
+//}
+//catch (IOException e)
+//{
+//	e.printStackTrace();
+//}
+//finally {
+//	if (beanWriter != null)
+//	{
+//		try
+//		{
+//			beanWriter.close();
+//		}
+//		catch(IOException e)
+//		{
+//			e.printStackTrace();
+//		}
+//	}
+//}
+//
+//String payload = event.getPayload();
+//PurgeRT purge = new PurgeRT();
+//purge.setDateRange(startDate.toString() + " - " + endDate.toString());
+//
+//if (payload.contains("entityType"))
+//	purge.setEntityType(payload.substring(payload.indexOf("entityType")+11, payload.indexOf("</entityType")));
+//if (payload.contains("title"))
+//	purge.setEntityType(payload.substring(payload.indexOf("title")+7, payload.indexOf("</title")));
+//if (payload.contains("materialID"))
+//	purge.setEntityType(payload.substring(payload.indexOf("materialID")+11, payload.indexOf("</materialID")));
+//if (payload.contains("channels"))
+//	purge.setEntityType(payload.substring(payload.indexOf("channels")+10, payload.indexOf("</channels")));
+//if (payload.contains("isProtected"))
+//	purge.setEntityType(payload.substring(payload.indexOf("isProtected")+12, payload.indexOf("</isProtected")));
+//if (payload.contains("extended"))
+//	purge.setEntityType(payload.substring(payload.indexOf("extended")+9, payload.indexOf("</extended")));
+//if (payload.contains("purged"))
+//	purge.setEntityType(payload.substring(payload.indexOf("purged")+7, payload.indexOf("</purged")));
+//if (payload.contains("expires"))
+//	purge.setEntityType(payload.substring(payload.indexOf("expires")+8, payload.indexOf("</expires")));
