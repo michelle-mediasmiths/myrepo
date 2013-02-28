@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +21,9 @@ import javax.xml.bind.Marshaller;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ProtocolCommandListener;
+import org.apache.commons.net.ftp.FTPClient;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -435,8 +439,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.debug(String.format("Writing segment xml for package %s", packageID));
 
 		String companion;
+		
+		boolean ao =mayamClient.isPackageAO(packageID);
 
-		if (mayamClient.isPackageAO(packageID))
+		if (ao)
 		{
 			companion = getAOSegmentXML(packageID);
 		}
@@ -450,11 +456,18 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		deliveryLocationFile.mkdirs();
 
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
+		File gxfFile =  new File(String.format("%s/%s.gxf", deliveryLocation, packageID));
 		try
 		{
 			log.debug("Writing segmentinfo to " + segmentXmlFile);
 			log.debug("Segment info is " + companion);
 			FileUtils.writeStringToFile(segmentXmlFile, companion);
+			
+			if(ao){
+				//should probably be its own intalio workflow step but doing it here for now
+				return aoFXPtransfer(segmentXmlFile,gxfFile);
+			}
+			
 			return true;
 		}
 		catch (IOException e)
@@ -463,6 +476,53 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			throw e;
 		}
 
+	}
+
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.host")	
+	private String aoFTPProxyHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.user")
+	private String aoFTPProxyUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.pass")
+	private String aoFTPProxyPass;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.host")
+	private String aoGXFFTPDestinationHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.user")
+	private String aoGXFFTPDestinationUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.pass")
+	private String aoGXFFTPDestinationPass;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.host")
+	private String aoXMLFTPDestinationHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.user")
+	private String aoXMLFTPDestinationUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.pass")
+	private String aoXMLFTPDestinationPass;
+	
+	
+	private boolean aoFXPtransfer(File segmentXmlFile, File gxfFile)
+	{
+
+		ProtocolCommandListener listener = new PrintCommandListener(new PrintWriter(System.out), true);
+		FTPClient ftp1 = new FTPClient();
+		ftp1.addProtocolCommandListener(listener);
+		FTPClient ftp2 = new FTPClient();
+		ftp2.addProtocolCommandListener(listener);
+
+		// first upload xml
+
+		// next upload gxf
+
+		return true;
 	}
 
 	@Override

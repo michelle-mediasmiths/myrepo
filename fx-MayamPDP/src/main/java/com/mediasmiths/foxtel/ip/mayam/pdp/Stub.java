@@ -219,17 +219,26 @@ public class Stub implements MayamPDP
 		PrivilegedOperations operation = PrivilegedOperations.DELETE;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
-
+		String houseID =attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+		
 		boolean permission = userCanPerformOperation(operation, attributeMap);
 
 		if (permission)
 		{
-			return okStatus;
+			return getConfirmStatus(String.format("Are you sure you wish to delete item %s",houseID));
 		}
 		else
 		{
 			return getActionPermissionsErrorStatus(operation);
 		}
+	}
+
+	private String getConfirmStatus(String message)
+	{
+		AttributeMap attributeMap = client.createAttributeMap();
+		attributeMap.setAttribute(Attribute.OP_STAT, "confirm");
+		attributeMap.setAttribute(Attribute.FORM_MSG_NOTE, message);
+		return mapper.serialize(attributeMap);
 	}
 
 	@Override
@@ -426,7 +435,7 @@ public class Stub implements MayamPDP
 	public String qcParallel(String attributeMapStr) throws RemoteException
 	{
 		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
+		PrivilegedOperations operation = PrivilegedOperations.QCPARALLEL;
 		dumpPayload(attributeMap);
 		defaultValidation(attributeMap);
 

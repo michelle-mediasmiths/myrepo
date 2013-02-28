@@ -62,6 +62,14 @@
 		</dependency>
 
 		<!-- end mediasmiths dependencies -->
+
+
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.2</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<finalName>fx-WFAdapter</finalName>
