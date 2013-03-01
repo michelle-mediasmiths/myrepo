@@ -13,22 +13,22 @@
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
     </bpdm:dependencies>
-    <bpel:scope bpdm:label="fsadapter" bpdm:ID="_2tIFkIF1EeKzLqM6JIlZ8g">
+    <bpel:scope bpdm:label="fsadapter" bpdm:ID="_wpwU8IBkEeKB_f26SiHOjg">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="workflowAndFsadapterForHttpPortPlkVar" partnerLinkType="AutoQC:workflowAndFsadapterForHttpPortPlk" myRole="fsadapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_2tIFkIF1EeKzLqM6JIlZ8g:_CqG08YF2EeKzLqM6JIlZ8g" bpdm:isManaged="true" bpdm:otherPoolId="_Aq5isHHSEeKzdrjGTgFYAA"/>
+            <bpel:partnerLink name="fsadapterAndWorkflowForHttpPortPlkVar" partnerLinkType="AutoQC:fsadapterAndWorkflowForHttpPortPlk" myRole="fsadapter_for_workflow" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_wpwU8IBkEeKB_f26SiHOjg:_QT_SFYBlEeKB_f26SiHOjg" bpdm:isManaged="true" bpdm:otherPoolId="_Aq5isHHSEeKzdrjGTgFYAA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_EZ4wgIF2EeKzLqM6JIlZ8g" bpdm:messageIds="inc:_EZVW4IF2EeKzLqM6JIlZ8g"/>
-            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_FRFeQIF2EeKzLqM6JIlZ8g" bpdm:messageIds=" out:_FQ87YIF2EeKzLqM6JIlZ8g">
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_Y4PyJYBlEeKB_f26SiHOjg" bpdm:messageIds="inc:_Y31icIBlEeKB_f26SiHOjg"/>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_cU44IIBlEeKB_f26SiHOjg" bpdm:messageIds=" out:_cUxjYIBlEeKB_f26SiHOjg">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="delete:delete_output" bpdm:linkedPart="response" bpdm:binding="delete:restBinding" bpdm:opMsgType="1" bpdm:operation="delete"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:sequence>
-            <bpdm:messagingtask operation="delete" partnerLink="workflowAndFsadapterForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_CqG08YF2EeKzLqM6JIlZ8g">
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:msgVarScopeId="_2tIFkIF1EeKzLqM6JIlZ8g" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_EZVW4IF2EeKzLqM6JIlZ8g"></bpdm:linkset>
-                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_2tIFkIF1EeKzLqM6JIlZ8g" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_FQ87YIF2EeKzLqM6JIlZ8g"></bpdm:linkset>
+            <bpdm:messagingtask operation="delete" partnerLink="fsadapterAndWorkflowForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_QT_SFYBlEeKB_f26SiHOjg">
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_Y31icIBlEeKB_f26SiHOjg"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_wpwU8IBkEeKB_f26SiHOjg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_cUxjYIBlEeKB_f26SiHOjg"></bpdm:linkset>
             </bpdm:messagingtask>
         </bpel:sequence>
     </bpel:scope>

@@ -32,7 +32,7 @@
   <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk2Var">
     <dd:service name="autoQcFailed:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="workflowAndFsadapterForHttpPortPlkVar">
+  <dd:invoke partnerLink="fsadapterAndWorkflowForHttpPortPlkVar">
     <dd:service name="delete:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndWorkflowForHttpPortPlk1Var">
