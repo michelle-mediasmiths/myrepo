@@ -9,14 +9,14 @@
 			<body>AutoQCFailed</body>
 			<emailaddresses>
 				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -40,7 +40,7 @@
 			<body>QCproblemwithTCMedia</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -52,14 +52,14 @@
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
 				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROMO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -72,14 +72,14 @@
 			<body>FailedInSendtoTX</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@Foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -169,13 +169,13 @@
 			<subject>[MasterID] [TitleField] Purge Not Processed</subject>
 			<body>ProtectedPurgeFail</body>
 			<emailaddresses>
-				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -200,14 +200,14 @@
 			<body>PreviewFailed</body>
 			<emailaddresses>
 				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROMO@foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -219,21 +219,21 @@
 			<body>PreviewFurtherAnalysis</body>
 			<emailaddresses>
 				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROMO@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>MEMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROMO@Foxtel.com.au</emailaddress>
-				<emailaddress>LSMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>FACTMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>GEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>AOMAMPROG@Foxtel.com.au </emailaddress>
-				<emailaddress>MEMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>ODMAMPROG@Foxtel.com.au</emailaddress>
-				<emailaddress>MOVMAMPROG@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -327,7 +327,7 @@
 			<body>ArdomeImportFailure</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -339,7 +339,7 @@
 			<body>ProgrammeFileIngestFailure</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -351,7 +351,7 @@
 			<body>MediaFileImportFailure</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -363,7 +363,7 @@
 			<body>EmergencyImportFailure</body>
 			<emailaddresses>
 				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>BOPSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
