@@ -21,6 +21,10 @@ public class ComplianceProxy extends ExportProxyButton
 	@Named("export.compliance.path.prefix")
 	private String outputPrefix;
 	
+	@Inject
+	@Named("export.compliance.extention")
+	private String outputExtension;
+	
 	@Override
 	public MayamButtonType getButtonType()
 	{
@@ -85,7 +89,7 @@ public class ComplianceProxy extends ExportProxyButton
 	@Override
 	protected String getOutputFileExtension()
 	{
-		return ""; //output is dvd foder struture, the user supplied name is sufficient
+		return String.format(".%s",outputExtension);
 	}
 
 }

@@ -19,6 +19,10 @@ public class PublicityProxy extends ExportProxyButton
 	@Named("export.publicity.path.prefix")
 	private String outputPrefix;
 	
+	@Inject
+	@Named("export.publicity.extention")
+	private String outputExtension;
+	
 	@Override
 	public MayamButtonType getButtonType()
 	{
@@ -85,7 +89,7 @@ public class PublicityProxy extends ExportProxyButton
 	@Override
 	protected String getOutputFileExtension()
 	{
-		return ""; //output is dvd foder struture, the user supplied name is sufficient
+		return String.format(".%s",outputExtension);
 	}
 	
 }
