@@ -133,6 +133,13 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 						return MessageValidationResult.AO_MISMATCH;
 					}
 				}
+				else
+				{
+					if (mayamClient.titleIsAO(title.getTitleID()))
+					{
+						return MessageValidationResult.AO_MISMATCH;
+					}
+				}
 			}
 			catch (MayamClientException e)
 			{
@@ -166,7 +173,22 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 			}
 			else
 			{
-				return MessageValidationResult.IS_VALID;
+				try
+				{
+					if (mayamClient.titleIsAO(title.getTitleID()))
+					{
+						return MessageValidationResult.AO_MISMATCH;
+					}
+					else
+					{
+						return MessageValidationResult.IS_VALID;
+					}	
+				}
+				catch (MayamClientException e)
+				{
+					logger.error("exception validating material exchange message", e);
+					return MessageValidationResult.MAYAM_CLIENT_ERROR;
+				}
 			}
 		}
 
