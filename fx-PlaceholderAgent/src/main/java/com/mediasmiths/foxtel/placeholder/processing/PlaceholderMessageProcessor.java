@@ -59,8 +59,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	private final MayamClient mayamClient;
 	
 	@Inject
-	@Named("fxcommon.serialiser")
-	private JAXBSerialiser commonSerialiser;
+	@Named("fxreportserialiser")
+	private JAXBSerialiser reportSerialiser;
 	
 	@Inject
 	public PlaceholderMessageProcessor(
@@ -221,7 +221,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		os.setMaterialID(action.getMaterial().getMaterialID());
 		os.setTaskType(MayamTaskListType.INGEST.getText());
 		
-		String osString = commonSerialiser.serialise(os);
+		String osString = reportSerialiser.serialise(os);
 		
 		//send event
 		eventService.saveEvent("OrderStatusReport", osString);
@@ -259,7 +259,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		os.setMaterialID(action.getTitleID());
 		os.setTitle(action.getTitleDescription().getProgrammeTitle());
 		
-		String osString = commonSerialiser.serialise(os);
+		String osString = reportSerialiser.serialise(os);
 		
 		//send event
 		eventService.saveEvent("OrderStatusReport", osString);
@@ -270,7 +270,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		
 		OrderStatus os = new OrderStatus();
 		os.setMaterialID(action.getPackage().getPresentationID());
-		String osString = commonSerialiser.serialise(os);
+		String osString = reportSerialiser.serialise(os);
 		
 		//send event
 		eventService.saveEvent("OrderStatusReport", osString);
