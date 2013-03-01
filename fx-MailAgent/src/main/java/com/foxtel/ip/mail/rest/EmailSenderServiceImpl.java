@@ -88,8 +88,8 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		Properties props = System.getProperties();
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", emailProperties.hostName);
-//		props.put("mail.smtp.user", emailProperties.emailAddress);
-//		props.put("mail.smtp.password", emailProperties.password);
+		props.put("mail.smtp.user", emailProperties.emailAddress);
+		props.put("mail.smtp.password", emailProperties.password);
 		props.put("mail.smtp.port", emailProperties.smtpPort);
 		props.put("mail.smtp.auth", "false");
 
@@ -105,11 +105,10 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
 		message.setSubject(subject);
 		message.setContent(body, "text/html");
-		Transport.send(message);
-//		Transport transport = session.getTransport("smtp");
-//		transport.connect(emailProperties.hostName, emailProperties.emailAddress, emailProperties.password);
-//		transport.sendMessage(message, message.getAllRecipients());
-//		transport.close();
+		Transport transport = session.getTransport("smtp");
+		transport.connect(emailProperties.hostName, emailProperties.emailAddress, emailProperties.password);
+		transport.sendMessage(message, message.getAllRecipients());
+		transport.close();
 
 	}
 

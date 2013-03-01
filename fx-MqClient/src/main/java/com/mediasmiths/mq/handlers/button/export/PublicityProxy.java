@@ -2,6 +2,8 @@ package com.mediasmiths.mq.handlers.button.export;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -22,6 +24,8 @@ public class PublicityProxy extends ExportProxyButton
 	@Inject
 	@Named("export.publicity.extention")
 	private String outputExtension;
+	
+	private final static Logger log = Logger.getLogger(PublicityProxy.class);
 	
 	@Override
 	public MayamButtonType getButtonType()
@@ -48,6 +52,7 @@ public class PublicityProxy extends ExportProxyButton
 	{
 		if (firstTx == null)
 		{
+			log.debug("first tx is null");
 			return 1; // no tx date set, assume it is a long time from now
 		}
 		else
@@ -58,6 +63,8 @@ public class PublicityProxy extends ExportProxyButton
 			long txTime = firstTx.getTime();
 			long difference = txTime - now;
 
+			log.debug("String now: "+now+" txtime: "+txTime+ " difference: "+difference);
+			
 			if (difference > 0)
 			{
 				// tx date is in the future
@@ -75,7 +82,7 @@ public class PublicityProxy extends ExportProxyButton
 					priority = 1;// else content goes to the lowest priority queue for that destination
 				}
 			}
-
+			log.debug("returning priority "+priority);
 			return priority;
 		}
 	}

@@ -2,20 +2,29 @@ package com.mediasmiths.foxtel.placeholder.processing;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
+import au.com.foxtel.cf.mam.pms.ChannelType;
+import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
+import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
+import au.com.foxtel.cf.mam.pms.RightsType;
+import au.com.foxtel.cf.mam.pms.Source;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -25,11 +34,13 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -72,6 +83,15 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createMaterial(action.getMaterial(), action.getTitleID());
+				
+				try
+				{
+					sendMaterialOrderStatus(action);
+				}
+				catch (Exception e)
+				{
+					logger.error("error sending order status event on material create", e);
+				}
 			}
 
 			checkResult(result);
@@ -101,6 +121,15 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createPackage(action.getPackage());
+				
+				try
+				{
+					sendPackageOrderStatus(action);
+				}
+				catch (Exception e)
+				{
+					logger.error("error sending order status event on package create", e);
+				}
 			}
 
 			checkResult(result);
@@ -152,6 +181,15 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createTitle(action);
+				
+				try
+				{
+					sendTitleOrderStatus(action);
+				}
+				catch (Exception e)
+				{
+					logger.error("error sending order status event on title create", e);
+				}
 			}
 
 			checkResult(result);
@@ -161,6 +199,69 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			logger.error(String.format("MayamClientException querying if title %s exists", action.getTitleID()), e);
 			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 		}
+	}
+
+	private void sendMaterialOrderStatus(AddOrUpdateMaterial action){
+		OrderStatus os = new OrderStatus();
+		
+		Source source = action.getMaterial().getSource();
+		if(source.getAggregation() != null && source.getAggregation().getAggregator() != null){
+			os.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
+		}
+		if(source.getAggregation().getOrder() != null){
+			os.setOrderRef(source.getAggregation().getOrder().getOrderReference());
+		}
+		os.setRequiredBy(action.getMaterial().getRequiredBy());
+		os.setMaterialID(action.getMaterial().getMaterialID());
+		os.setTaskType(MayamTaskListType.INGEST.getText());
+		
+		//send event
+		eventService.saveEvent("OrderStatusReport", os);
+	}
+	
+	private void sendTitleOrderStatus(CreateOrUpdateTitle action)
+	{
+	
+		OrderStatus os = new OrderStatus();
+		
+		List<String> channelsList = new ArrayList<String>();
+		
+		RightsType rights = action.getRights();
+		if(rights!=null){
+			List<License> licenses = rights.getLicense();
+			if(licenses!=null){
+				for (License l  : licenses)
+				{
+					Channels channels = l.getChannels();
+					if(channels!= null){
+						List<ChannelType> channel = channels.getChannel();
+						if(channel!=null){
+							for (ChannelType channelType : channel)
+							{
+								channelsList.add(channelType.getChannelTag());
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		String channelsString = StringUtils.join(channelsList, ',');
+		os.setChannels(channelsString);
+		os.setMaterialID(action.getTitleID());
+		os.setTitle(action.getTitleDescription().getProgrammeTitle());
+		
+		//send event
+		eventService.saveEvent("OrderStatusReport", os);
+		
+	}
+	
+	private void sendPackageOrderStatus(AddOrUpdatePackage action){
+		
+		OrderStatus os = new OrderStatus();
+		os.setMaterialID(action.getPackage().getPresentationID());
+		//send event
+		eventService.saveEvent("OrderStatusReport", os);		
 	}
 
 	private void deleteMaterial(DeleteMaterial action) throws MessageProcessingFailedException

@@ -2,6 +2,8 @@ package com.mediasmiths.mq.handlers.button.export;
 
 import java.util.Date;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -19,6 +21,7 @@ public class CaptionProxy extends ExportProxyButton
 	@Named("export.caption.extention")
 	private String outputExtension;
 	
+	private final static Logger log = Logger.getLogger(CaptionProxy.class);	
 	
 	@Override
 	public MayamButtonType getButtonType()
@@ -43,6 +46,7 @@ public class CaptionProxy extends ExportProxyButton
 	{
 		if (firstTx == null)
 		{
+			log.debug("first tx is null");
 			return 2; // no tx date set, assume it is a long time from now
 		}
 		else
@@ -53,6 +57,8 @@ public class CaptionProxy extends ExportProxyButton
 			long txTime = firstTx.getTime();
 			long difference = txTime - now;
 
+			log.debug("String now: "+now+" txtime: "+txTime+ " difference: "+difference);
+			
 			if (difference > 0)
 			{
 				// tx date is in the future
@@ -82,6 +88,7 @@ public class CaptionProxy extends ExportProxyButton
 				}
 			}
 
+			log.debug("returning priority "+priority);
 			return priority;
 		}
 	}

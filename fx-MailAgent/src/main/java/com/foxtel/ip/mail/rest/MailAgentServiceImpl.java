@@ -91,35 +91,42 @@ public class MailAgentServiceImpl implements MailAgentService
 						if (logger.isDebugEnabled())
 							logger.debug("Preparing to send mail to: " + email);
 
-						if (m.getSubject().equals("Email Error: Could not find generator"))
-							try
-							{
-								if (logger.isTraceEnabled())
-									logger.info("Preparing to send mail to: " + email);
+						try
+						{
+							if (logger.isTraceEnabled())
+								logger.info("Preparing to send mail to: " + email);
 
-								if (m.getSubject().equals("Email Error: Could not find generator"))
-								{
-									// Sending normal email so unprocessed xml can be viewed
-									logger.info("Could not find generator, sending normal email.");
-									emailService.createEmail(email, m.getSubject(), m.getBody());
-								}
-								else
-									emailService.createMimeEmail(email, m.getSubject(), m.getBody());
-							}
-							catch (EmailException e)
+							if (m.getSubject().equals("Email Error: Could not find generator"))
 							{
-								logger.error("EmailException: " + e);
-								return "Error: EmailException: "+e;
+								// Sending normal email so unprocessed xml can be viewed
+								logger.info("Could not find generator, sending normal email.");
+								emailService.createEmail(email, m.getSubject(), m.getBody());
+							}
+							else
+							{
+
+//								logger.info("sending as simple (non mime email) ");
+								emailService.createMimeEmail(email, m.getSubject(), m.getBody());
+								// emailService.createEmail(email, m.getSubject(), m.getBody());
 
 							}
-							catch (MessagingException e)
-							{
-								logger.error("MessagingException (is your configuration right?): " + e);
-								return "Error: MessagingException: "+e;
-							}
+						}
+						catch (EmailException e)
+						{
+							logger.error("EmailException: " + e);
+							return "Error: EmailException: " + e;
+
+						}
+						catch (MessagingException e)
+						{
+							logger.error("MessagingException (is your configuration right?): " + e);
+							return "Error: MessagingException: " + e;
+						}
 
 						if (logger.isInfoEnabled())
+						{
 							logger.info("Sent email to: " + email);
+						}
 					}
 				}
 				else
