@@ -83,7 +83,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			long taskID;
 			try
 			{
-				taskID = createExportTask(materialID, materialAttributes,materialAttributes.getAttributeAsString(Attribute.OP_TYPE));
+				taskID = createExportTask(materialID, materialAttributes,getJobType());
 			}
 			catch (MayamClientException e1)
 			{
@@ -166,6 +166,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		}
 
 	}
+
+	protected abstract String getJobType();
 
 	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,

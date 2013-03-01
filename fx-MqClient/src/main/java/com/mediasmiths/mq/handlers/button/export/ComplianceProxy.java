@@ -92,4 +92,10 @@ public class ComplianceProxy extends ExportProxyButton
 		return String.format(".%s",outputExtension);
 	}
 
+	@Override
+	protected String getJobType()
+	{
+		return "compliance";
+	}
+
 }

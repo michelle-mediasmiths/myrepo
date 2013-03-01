@@ -98,4 +98,10 @@ public class CaptionProxy extends ExportProxyButton
 		return String.format(".%s",outputExtension);
 	}
 
+	@Override
+	protected String getJobType()
+	{
+		return "caption";
+	}
+
 }

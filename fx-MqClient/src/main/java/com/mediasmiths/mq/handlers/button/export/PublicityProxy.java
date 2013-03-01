@@ -91,5 +91,11 @@ public class PublicityProxy extends ExportProxyButton
 	{
 		return String.format(".%s",outputExtension);
 	}
+
+	@Override
+	protected String getJobType()
+	{
+		return "publicity";
+	}
 	
 }
