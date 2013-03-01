@@ -79,7 +79,7 @@ public class ComplianceProxy extends ExportProxyButton
 	@Override
 	protected TCOutputPurpose getPurpose()
 	{
-		return TCOutputPurpose.DVD;
+		return TCOutputPurpose.MPG4;
 	}
 
 	@Override

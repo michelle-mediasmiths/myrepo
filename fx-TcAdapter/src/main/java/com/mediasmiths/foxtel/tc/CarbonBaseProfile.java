@@ -93,8 +93,25 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	DVD_STEREO(TCOutputPurpose.DVD, null, TCAudioType.STEREO, "DVD_ALL_STEREO.pcp");
-
+	DVD_STEREO(TCOutputPurpose.DVD, null, TCAudioType.STEREO, "DVD_ALL_STEREO.pcp"),
+	/**
+	 * Delivery content for single MPG4 file (where the source has DolbyE audio)
+	 * <ul>
+	 * <li>Does not seem to matter whether SD/HD</li>
+	 * <li>A1 and A2 are Stereo tracks</li>
+	 * <li>A3 and A4 are DolbyE</li>
+	 * </ul>
+	 */
+	MPG4_DOLBYE(TCOutputPurpose.MPG4, null, TCAudioType.DOLBY_E, "MPG4_ALL_DOLBYE.pcp"),
+	/**
+	 * Delivery content for single MPG4 file (where the source has only Stereo audio)
+	 * <ul>
+	 * <li>Does not seem to matter whether SD/HD</li>
+	 * <li>A1 and A2 are Stereo tracks</li>
+	 * </ul>
+	 */
+	MPG4_STEREO(TCOutputPurpose.MPG4, null, TCAudioType.STEREO, "MPG4_ALL_STEREO.pcp");
+	
 	private final TCAudioType audioType;
 	private final TCOutputPurpose purpose;
 	private final TCResolution source;

@@ -1,6 +1,5 @@
 package com.mediasmiths.mq.handlers.button.export;
 
-import static com.mediasmiths.mq.handlers.button.export.ExportProxyButton.log;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;

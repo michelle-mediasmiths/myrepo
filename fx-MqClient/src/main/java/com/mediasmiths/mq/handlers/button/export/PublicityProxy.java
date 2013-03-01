@@ -80,7 +80,7 @@ public class PublicityProxy extends ExportProxyButton
 	@Override
 	protected TCOutputPurpose getPurpose()
 	{
-		return TCOutputPurpose.DVD;
+		return TCOutputPurpose.MPG4;
 	}
 	@Override
 	protected String getOutputFileExtension()
