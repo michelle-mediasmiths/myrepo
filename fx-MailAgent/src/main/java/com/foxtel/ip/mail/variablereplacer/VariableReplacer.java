@@ -3,6 +3,7 @@ package com.foxtel.ip.mail.variablereplacer;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.DeliveryDetailsVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.EmailConfigGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.PlaceholderMessageEmailVariableGenerator;
+import com.foxtel.ip.mail.variablereplacer.variablegenerators.content.ArdomeFailureVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.material.MarketingMaterialTypeNotificationVariableGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.material.MaterialNotificationGenerator;
 import com.foxtel.ip.mail.variablereplacer.variablegenerators.material.MaterialTypeNotificationVariableGenerator;
@@ -54,6 +55,7 @@ public class VariableReplacer
 		generators.add(new DeliveryDetailsVariableGenerator());
 		generators.add(new ComplianceLoggingMarkerVariableGenerator());
 
+		generators.add(new ArdomeFailureVariableGenerator());
 	}
 
 	/**
