@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.button.export;
 
+import static com.mediasmiths.mq.handlers.button.export.ExportProxyButton.log;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -247,7 +249,14 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		jobParams.timecode = timecode(timecodeColour, timecodePosition);
 		jobParams.purpose = getPurpose();
-		jobParams.priority = getPriority(materialAttributes);
+		
+		Date materialFirstTX = materialAttributes.getAttribute(Attribute.TX_FIRST);
+		
+		if(materialFirstTX == null){
+			log.warn("no first tx date set on material! will assume that first tx is > 7 days aways");
+		}
+		
+		jobParams.priority = getPriority(materialFirstTX);
 
 		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
 		jobParams.outputFolder = exportOutputLocation + "/" + taskID;
@@ -270,7 +279,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	
 	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
 
-	protected abstract int getPriority(AttributeMap materialAttributes);
+	protected abstract int getPriority(Date firstTx);
 
 	protected abstract TCOutputPurpose getPurpose();
 
@@ -381,4 +390,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		
 	}
 
+	protected final static long ONE_DAY = 3600l * 24;
+	protected final static long TWO_DAYS = ONE_DAY * 2;
+	protected final static long THREE_DAYS = ONE_DAY * 3;
+	protected final static long SEVEN_DAYS = ONE_DAY * 7;
+	protected final static long EIGHT_DAYS = ONE_DAY * 8;
+	
 }

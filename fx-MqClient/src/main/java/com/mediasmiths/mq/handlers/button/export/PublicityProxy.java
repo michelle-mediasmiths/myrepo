@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.button.export;
 
+import java.util.Date;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
@@ -36,11 +38,44 @@ public class PublicityProxy extends ExportProxyButton
 		return String.format("%s/%s/%s",outputPrefix,exportLocation,outputFolderName);
 	}
 
+
 	@Override
-	protected int getPriority(AttributeMap materialAttributes)
+	protected int getPriority(Date firstTx)
 	{
-		return 1; 
+		if (firstTx == null)
+		{
+			return 1; // no tx date set, assume it is a long time from now
+		}
+		else
+		{
+			int priority = 1;
+
+			long now = System.currentTimeMillis();
+			long txTime = firstTx.getTime();
+			long difference = txTime - now;
+
+			if (difference > 0)
+			{
+				// tx date is in the future
+				priority = 1; 
+			}
+			else
+			{
+				// tx date is in the past
+				if (Math.abs(difference) <= SEVEN_DAYS)
+				{
+					priority = 5; // go to the highest priority for this destination if the target date is no more than 7 days in the past
+				}
+				else
+				{
+					priority = 1;// else content goes to the lowest priority queue for that destination
+				}
+			}
+
+			return priority;
+		}
 	}
+
 
 	@Override
 	protected TCOutputPurpose getPurpose()

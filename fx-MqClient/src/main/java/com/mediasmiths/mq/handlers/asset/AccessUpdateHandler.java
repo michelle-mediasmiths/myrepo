@@ -31,10 +31,8 @@ public class AccessUpdateHandler extends UpdateAttributeHandler
 			try
 			{
 				AttributeMap withNewAccessRights = accessRightsController.updateAccessRights(currentAttributes.copy());
-				
 				AttributeMap update = taskController.updateMapForAsset(withNewAccessRights);
 				update.setAttribute(Attribute.ASSET_ACCESS, withNewAccessRights.getAttribute(Attribute.ASSET_ACCESS));
-				
 				tasksClient.assetApi().updateAsset(update);
 			}
 			catch (Exception e)

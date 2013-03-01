@@ -251,6 +251,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	private final static long TWELVE_HOURS = ONE_HOUR * 12;
 	private final static long ONE_DAY = ONE_HOUR * 24;
 	private final static long THREE_DAYS = ONE_DAY * 3;
+	private final static long SEVEN_DAYS = ONE_DAY * 7;
 	private final static long EIGHT_DAYS = ONE_DAY * 8;
 
 	public int getPriorityForTXJob(Date txDate)
@@ -263,25 +264,41 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		long txTime = txDate.getTime();
 		long difference = txTime - now;
 
-		if (difference < TWELVE_HOURS)
+		if (difference > 0)
 		{
-			priority = 8;
-		}
-		else if (difference < ONE_DAY)
-		{
-			priority = 7;
-		}
-		else if (difference < THREE_DAYS)
-		{
-			priority = 6;
-		}
-		else if (difference < EIGHT_DAYS)
-		{
-			priority = 4;
+			// tx date is in the future
+			if (difference < TWELVE_HOURS)
+			{
+				priority = 8;
+			}
+			else if (difference < ONE_DAY)
+			{
+				priority = 7;
+			}
+			else if (difference < THREE_DAYS)
+			{
+				priority = 6;
+			}
+			else if (difference < EIGHT_DAYS)
+			{
+				priority = 4;
+			}
+			else
+			{
+				priority = 2;
+			}
 		}
 		else
 		{
-			priority = 2;
+			// tx date is in the past
+			if (Math.abs(difference) <= SEVEN_DAYS)
+			{
+				priority = 8; // go to the highest priority for this destination if the target date is no more than 7 days in the past
+			}
+			else
+			{
+				priority = 2;// else content goes to the lowest priority queue for that destination
+			}
 		}
 
 		log.debug("returning prority " + priority);
