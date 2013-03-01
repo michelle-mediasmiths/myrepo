@@ -8,11 +8,11 @@
 			<subject>Auto QC Fail in MAM: [TitleField]</subject>
 			<body>AutoQCFailed</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
@@ -27,8 +27,9 @@
 			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
 			<body>CerifyQCError</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -39,8 +40,9 @@
 			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID] [TitleField]</subject>
 			<body>QCproblemwithTCMedia</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -51,11 +53,11 @@
 			<subject>An item has failed QC and requires re ordering ID: [MasterID]</subject>
 			<body>QcFailedReOrder</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>CSMAMPROMO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
@@ -71,15 +73,9 @@
 			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]</subject>
 			<body>FailedInSendtoTX</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -90,7 +86,7 @@
 			<subject>[MasterID] [TitleField]. Publicity transcode failed in MAM.</subject>
 			<body>PublicityFailure</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -101,7 +97,7 @@
 			<subject>[MasterID] [TitleField]. Caption proxy item sent to external location</subject>
 			<body>CaptionProxySuccess</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -112,7 +108,7 @@
 			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode failed in MAM.</subject>
 			<body>CaptionProxyFailure</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -123,7 +119,7 @@
 			<subject>[MasterID] [TitleField]. Classification proxy item sent to external location</subject>
 			<body>ClassificationProxySuccess</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -134,7 +130,7 @@
 			<subject>[MasterID] [TitleField]. Classification proxy transcode failed in MAM.</subject>
 			<body>ClassificationProxyFailure</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -145,7 +141,7 @@
 			<subject>[TitleField] [MasterID]. 3rd Party proxy transcode failed in MAM.</subject>
 			<body>ExportFailure</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -153,11 +149,10 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>TCFailed</eventname>
 		<MailTemplate>
-			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
+			<subject>TC Server Issue: [MasterID] [TitleField]</subject>
 			<body>TCFailed</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -169,13 +164,11 @@
 			<subject>[MasterID] [TitleField] Purge Not Processed</subject>
 			<body>ProtectedPurgeFail</body>
 			<emailaddresses>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -186,8 +179,11 @@
 			<subject>[MasterID] [TitleField] Manual Purge Actioned.</subject>
 			<body>ManualPurge</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
-				<emailaddress>CPMAM@Foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -199,11 +195,11 @@
 			<subject>Pass-Reorder Item in MAM: [MasterID] [TitleField]</subject>
 			<body>PreviewFailed</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
@@ -218,11 +214,11 @@
 			<subject>Preview Fail Item in MAM: [MasterID] [TitleField]</subject>
 			<body>PreviewFurtherAnalysis</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>CSMAMPROMO@Foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
@@ -246,7 +242,7 @@
 			</subject>
 			<body>DeliveryFailed</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -258,7 +254,7 @@
 			</subject>
 			<body>Delivered</body>
 			<emailaddresses>
-				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -270,7 +266,7 @@
 			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
 			<body>CommError</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -293,7 +289,9 @@
 			<subject>Unmatched Item in MAM: MasterID missing</subject>
 			<body>ContentWithoutMasterID</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -304,7 +302,8 @@
 			<subject>Unmatched Item in MAM:  MasterID missing</subject>
 			<body>PlaceHolderCannotBeIdentified</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -315,7 +314,8 @@
 			<subject>Placeholder already has media</subject>
 			<body>PlaceholderAlreadyHasMedia</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -326,8 +326,9 @@
 			<subject>Ardome import has failed</subject>
 			<body>ArdomeImportFailure</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -338,8 +339,9 @@
 			<subject>Ardome import has failed</subject>
 			<body>ProgrammeFileIngestFailure</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -350,8 +352,9 @@
 			<subject>Ardome import has failed</subject>
 			<body>MediaFileImportFailure</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -362,8 +365,9 @@
 			<subject>Ardome import has failed</subject>
 			<body>EmergencyImportFailure</body>
 			<emailaddresses>
-				<emailaddress>ESSMAM@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -375,7 +379,7 @@
 			</subject>
 			<body>OutOfOrder</body>
 			<emailaddresses>
-				<emailaddress>InboundContent@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
