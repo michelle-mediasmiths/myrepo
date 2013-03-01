@@ -14,7 +14,9 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
@@ -23,6 +25,7 @@ import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class PlaceholderAgentModule extends AbstractModule {
@@ -87,14 +90,31 @@ public class PlaceholderAgentModule extends AbstractModule {
 		return marshaller;
 	}
 	
-//	@Provides
-//	protected EventAPI getEventService(
-//			@Named("service.events.api.endpoint") final URI endpoint,
-//			final JAXRSProxyClientFactory clientFactory)
-//	{
-//		logger.info(String.format("events api endpoint set to %s", endpoint));
-//		EventAPI service = clientFactory.createClient(EventAPI.class, endpoint);
-//
-//		return service;
-//	}	
+	@Provides
+	@Singleton
+	@Named("fxreportcontext")
+	JAXBContext providefxreportJAXBContext() throws JAXBException
+	{
+		JAXBContext jc = null;
+		try
+		{
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.ip.common.events.report");
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create jaxb context", e);
+			throw e;
+		}
+		return jc;
+	}
+
+	@Provides
+	@Singleton
+	@Named("fxreportserialiser")
+	JAXBSerialiser providefxreportJAXBSerialiser(@Named("fxreportcontext") JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
+	}
 }

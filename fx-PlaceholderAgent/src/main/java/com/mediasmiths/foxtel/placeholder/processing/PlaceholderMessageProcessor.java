@@ -27,6 +27,7 @@ import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
@@ -41,6 +42,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -55,7 +57,11 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
 
 	private final MayamClient mayamClient;
-
+	
+	@Inject
+	@Named("fxcommon.serialiser")
+	private JAXBSerialiser commonSerialiser;
+	
 	@Inject
 	public PlaceholderMessageProcessor(
 			FilePickUpProcessingQueue filePathsPendingProcessing,
@@ -215,8 +221,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		os.setMaterialID(action.getMaterial().getMaterialID());
 		os.setTaskType(MayamTaskListType.INGEST.getText());
 		
+		String osString = commonSerialiser.serialise(os);
+		
 		//send event
-		eventService.saveEvent("OrderStatusReport", os);
+		eventService.saveEvent("OrderStatusReport", osString);
 	}
 	
 	private void sendTitleOrderStatus(CreateOrUpdateTitle action)
@@ -251,8 +259,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		os.setMaterialID(action.getTitleID());
 		os.setTitle(action.getTitleDescription().getProgrammeTitle());
 		
+		String osString = commonSerialiser.serialise(os);
+		
 		//send event
-		eventService.saveEvent("OrderStatusReport", os);
+		eventService.saveEvent("OrderStatusReport", osString);
 		
 	}
 	
@@ -260,8 +270,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		
 		OrderStatus os = new OrderStatus();
 		os.setMaterialID(action.getPackage().getPresentationID());
+		String osString = commonSerialiser.serialise(os);
+		
 		//send event
-		eventService.saveEvent("OrderStatusReport", os);		
+		eventService.saveEvent("OrderStatusReport", osString);
 	}
 
 	private void deleteMaterial(DeleteMaterial action) throws MessageProcessingFailedException
