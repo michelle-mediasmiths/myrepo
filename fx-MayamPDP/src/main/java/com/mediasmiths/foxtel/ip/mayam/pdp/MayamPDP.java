@@ -149,4 +149,10 @@ public interface MayamPDP
 	@Consumes("application/json")
 	public String qcParallel(String attributeMapStr) throws RemoteException;
 
+	@Path("fileHeaderVerifyOverride")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String fileHeaderVerifyOverride(String attributeMapStr) throws RemoteException;
+
 }

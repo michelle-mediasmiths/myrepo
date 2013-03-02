@@ -17,9 +17,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.module.SimpleModule;
-
 public class MayamPDPSetUp extends AbstractModule
 {
 
@@ -68,6 +65,8 @@ public class MayamPDPSetUp extends AbstractModule
 		                                                                                                 Names.named("groups.captionsProxy.nonao")))));
 		securityGroups.put(PrivilegedOperations.PUBLICITY_PROXY, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                  Names.named("groups.publicityProxy.nonao")))));
+		securityGroups.put(PrivilegedOperations.FILEVERIFYOVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
+		                                                                                                  Names.named("groups.files.verifyOverride.nonao")))));
 		return securityGroups;
 
 	}
@@ -111,6 +110,9 @@ public class MayamPDPSetUp extends AbstractModule
 		                                                                                                 Names.named("groups.captionsProxy.ao")))));
 		securityGroups.put(PrivilegedOperations.PUBLICITY_PROXY, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                  Names.named("groups.publicityProxy.ao")))));
+
+		securityGroups.put(PrivilegedOperations.FILEVERIFYOVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
+		                                                                                                     Names.named("groups.files.verifyOverride.ao")))));
 		return securityGroups;
 
 	}

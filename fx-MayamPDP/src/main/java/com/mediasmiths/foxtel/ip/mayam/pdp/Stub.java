@@ -15,15 +15,9 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
-
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -452,6 +446,27 @@ public class Stub implements MayamPDP
 	}
 
 	@Override
+	public String fileHeaderVerifyOverride(final String attributeMapStr) throws RemoteException
+	{
+		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+		PrivilegedOperations operation = PrivilegedOperations.FILEVERIFYOVERRIDE;
+		dumpPayload(attributeMap);
+		defaultValidation(attributeMap);
+
+		boolean permission = userCanPerformOperation(operation, attributeMap);
+
+		if (permission)
+		{
+			return okStatus;
+		}
+		else
+		{
+			return getTaskPermissionErrorStatus(operation);
+		}
+
+	}
+
+	@Override
 	public String txDelivery(final String attributeMapStr) throws RemoteException
 	{
 		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
@@ -685,7 +700,7 @@ public class Stub implements MayamPDP
 	 * 
 	 * @param attributeMap
 	 *            the incoming Mayam Attribute map
-	 * @param attributeNamesRequired
+	 * @param attributesRequired
 	 *            the required fields that must be set in this attribute map.
 	 * @return true if all the attribute names in attributeNamesRequired are in the asset map.
 	 */
