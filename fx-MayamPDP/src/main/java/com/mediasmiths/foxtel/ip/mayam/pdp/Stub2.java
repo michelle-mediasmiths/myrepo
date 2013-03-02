@@ -5,7 +5,6 @@ import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.exception.RemoteException;
-
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -13,8 +12,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
-import java.util.HashMap;
-import java.util.Map;
 
 
 
@@ -244,6 +241,12 @@ public class Stub2 implements MayamPDP
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String fileHeaderVerifyOverride(final String attributeMapStr) throws RemoteException
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 }

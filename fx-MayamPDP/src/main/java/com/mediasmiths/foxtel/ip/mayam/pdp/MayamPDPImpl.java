@@ -22,7 +22,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -491,6 +490,12 @@ public class MayamPDPImpl implements MayamPDP
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String fileHeaderVerifyOverride(final String attributeMapStr) throws RemoteException
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 
