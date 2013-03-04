@@ -41,8 +41,8 @@
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
 				<xs:element name="aggregatorID" type="xs:string"/>
-				<xs:element name="tapeDelivery" type="xs:string"/>
-				<xs:element name="fileDelivery" type="xs:string"/>
+				<xs:element name="tapeDelivery" type="xs:boolean"/>
+				<xs:element name="fileDelivery" type="xs:boolean"/>
 				<xs:element name="format" type="xs:string"/>
 				<xs:element name="filesize" type="xs:string"/>
 				<xs:element name="titleLength" type="xs:string"/>
