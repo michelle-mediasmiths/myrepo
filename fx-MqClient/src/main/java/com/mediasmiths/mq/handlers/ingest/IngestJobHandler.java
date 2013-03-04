@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
@@ -96,10 +97,16 @@ public class IngestJobHandler extends JobHandler
 							updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
 							taskController.saveTask(updateMap);
 							
-							GregorianCalendar c = new GregorianCalendar();
-							c.setTime(jobMessage.getJobUpdated());
-							XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-							sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
+							try {
+								GregorianCalendar c = new GregorianCalendar();
+								c.setTime(jobMessage.getJobUpdated());
+								XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+								sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
+							}
+							catch(DatatypeConfigurationException e)
+							{
+								log.error("Datatype Configuration exception thrown while converting update time for %s : " + assetId, e);
+							}
 						}
 						else {
 							log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
