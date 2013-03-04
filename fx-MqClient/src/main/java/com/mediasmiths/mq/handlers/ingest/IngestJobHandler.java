@@ -21,6 +21,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import com.mediasmiths.foxtel.ip.common.events.report.CreationComplete;
 
 public class IngestJobHandler extends JobHandler
 {
@@ -125,8 +126,8 @@ public class IngestJobHandler extends JobHandler
 	private void sendImportCompleteEvent(String mediaId, Date completionDate)
 	{
 		CreationComplete cce = new CreationComplete();
-		cce.setMediaID(assetId);
-		cce.setCompletionDate(jobID);
+		cce.setMediaID(mediaId);
+		cce.setCompletionDate(completionDate);
 		
 		String event = fxcommonSerialiser.serialise(cce);
 		String eventName = "CreationComplete";
