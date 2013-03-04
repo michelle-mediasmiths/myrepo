@@ -181,6 +181,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// id is a package id
 				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
+				// attach qc report if qc is failed
+				attachQcReports(notification.getAssetId(), notification.getJobName());
 			}
 			else
 			{
@@ -237,6 +239,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (notification.isForTXDelivery())
 		{
+			// attach qc report if qc is passed
+			attachQcReports(notification.getAssetId(), notification.getJobName());
 			// update tasks status as required, next stage will be kicked off by intalio
 		}
 		else
