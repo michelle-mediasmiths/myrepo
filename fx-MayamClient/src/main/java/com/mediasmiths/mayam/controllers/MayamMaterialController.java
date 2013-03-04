@@ -67,9 +67,11 @@ public class MayamMaterialController extends MayamController
 {
 
 	public static final String PROGRAMME_MATERIAL_AGL_NAME = "programme";
+	public static final String AO_PROGRAMME_MATERIAL_AGL_NAME = "ao programme";
 	public static final String PROGRAMME_MATERIAL_CONTENT_TYPE = "PG";
 
 	public static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
+	public static final String AO_ASSOCIATED_MATERIAL_AGL_NAME = "ao associated";
 	public static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
 
 	private final TasksClient client;
@@ -143,6 +145,11 @@ public class MayamMaterialController extends MayamController
 					{
 						attributesValid = attributesValid
 								&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
+						attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, AO_PROGRAMME_MATERIAL_AGL_NAME);
+					}
+					else
+					{
+						attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 					}
 				}
 			}
@@ -155,7 +162,6 @@ public class MayamMaterialController extends MayamController
 			// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, PROGRAMME_MATERIAL_AGL_NAME);
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());
 			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, PROGRAMME_MATERIAL_CONTENT_TYPE);
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
@@ -430,7 +436,7 @@ public class MayamMaterialController extends MayamController
 			}
 
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, ASSOCIATED_MATERIAL_AGL_NAME);
+			
 			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, ASSOCIATED_MATERIAL_CONTENT_TYPE);
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, QcStatus.TBD);
@@ -446,6 +452,11 @@ public class MayamMaterialController extends MayamController
 			{
 				attributesValid = attributesValid
 						&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
+				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, AO_ASSOCIATED_MATERIAL_AGL_NAME);
+			}
+			else
+			{
+				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, ASSOCIATED_MATERIAL_AGL_NAME);
 			}
 			
 			// As per Foxtel and Mayam decision, duration and timecodes will be detected in Ardome, no need to store
