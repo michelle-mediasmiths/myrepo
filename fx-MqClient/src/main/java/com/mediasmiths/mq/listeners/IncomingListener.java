@@ -316,7 +316,7 @@ public class IncomingListener extends MqClientListener
 
 			if (jobType != null)
 			{
-				if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT))
+				if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT) || jobType.equals(JobType.CONFORM))
 				{
 					passEventToHandler(ingestJobHandler, jobMessage);
 					passEventToHandler(unmatchedJobHandler, jobMessage);
