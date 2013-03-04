@@ -1,18 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ChannelType;
@@ -25,7 +12,6 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -36,6 +22,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
+import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
@@ -43,6 +30,17 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -89,15 +87,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createMaterial(action.getMaterial(), action.getTitleID());
-				
-				try
-				{
-					sendMaterialOrderStatus(action);
-				}
-				catch (Exception e)
-				{
-					logger.error("error sending order status event on material create", e);
-				}
+
+				// sendMaterialOrderStatus(action);
+
 			}
 
 			checkResult(result);
@@ -127,15 +119,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createPackage(action.getPackage());
-				
-				try
-				{
-					sendPackageOrderStatus(action);
-				}
-				catch (Exception e)
-				{
-					logger.error("error sending order status event on package create", e);
-				}
+
+				// sendPackageOrderStatus(action);
+
 			}
 
 			checkResult(result);
@@ -188,14 +174,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			{
 				result = mayamClient.createTitle(action);
 				
-				try
-				{
-					sendTitleOrderStatus(action);
-				}
-				catch (Exception e)
-				{
-					logger.error("error sending order status event on title create", e);
-				}
+
+				// sendTitleOrderStatus(action);
+
 			}
 
 			checkResult(result);
@@ -217,6 +198,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		if(source.getAggregation().getOrder() != null){
 			os.setOrderRef(source.getAggregation().getOrder().getOrderReference());
 		}
+		os.setTitle("");
 		os.setRequiredBy(action.getMaterial().getRequiredBy());
 		os.setMaterialID(action.getMaterial().getMaterialID());
 		os.setTaskType(MayamTaskListType.INGEST.getText());
@@ -231,10 +213,25 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	{
 	
 		OrderStatus os = new OrderStatus();
+
+		List<String> channelsList = getChannels(action.getRights());
 		
+		String channelsString = StringUtils.join(channelsList, ',');
+		os.setChannels(channelsString);
+		os.setMaterialID(action.getTitleID());
+		os.setTitle(action.getTitleDescription().getProgrammeTitle());
+		
+		String osString = reportSerialiser.serialise(os);
+		
+		//send event
+		eventService.saveEvent("OrderStatusReport", osString);
+		
+	}
+
+	private List<String> getChannels(final RightsType rights)
+	{
 		List<String> channelsList = new ArrayList<String>();
-		
-		RightsType rights = action.getRights();
+
 		if(rights!=null){
 			List<License> licenses = rights.getLicense();
 			if(licenses!=null){
@@ -253,19 +250,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 				}
 			}
 		}
-		
-		String channelsString = StringUtils.join(channelsList, ',');
-		os.setChannels(channelsString);
-		os.setMaterialID(action.getTitleID());
-		os.setTitle(action.getTitleDescription().getProgrammeTitle());
-		
-		String osString = reportSerialiser.serialise(os);
-		
-		//send event
-		eventService.saveEvent("OrderStatusReport", osString);
-		
+		return channelsList;
 	}
-	
+
 	private void sendPackageOrderStatus(AddOrUpdatePackage action){
 		
 		OrderStatus os = new OrderStatus();
@@ -276,10 +263,57 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		eventService.saveEvent("OrderStatusReport", osString);
 	}
 
+	private void sendPurgePackage(MayamClientErrorCode opCode, DeletePackage action)
+	{
+
+		if (opCode == MayamClientErrorCode.SUCCESS)
+		{
+			PurgeContent pc = new PurgeContent();
+			pc.setMaterialID(action.getPackage().getPresentationID());
+
+			//send event
+			try
+			{
+				String osString = reportSerialiser.serialise(pc);
+
+				eventService.saveEvent("PurgeContentReport", osString);
+			}
+			catch (Throwable e)
+			{
+				logger.info("Unable to send PurgeContentReport for Delete Package", e);
+			}
+		}
+	}
+
+
+	private void sendPurgeMaterial(MayamClientErrorCode opCode, DeleteMaterial action)
+	{
+
+		if (opCode == MayamClientErrorCode.SUCCESS)
+		{
+			PurgeContent pc = new PurgeContent();
+			pc.setMaterialID(action.getMaterial().getMaterialID());
+
+			//send event
+			try
+			{
+				String osString = reportSerialiser.serialise(pc);
+
+				eventService.saveEvent("PurgeContentReport", osString);
+			}
+			catch (Exception e)
+			{
+				logger.info("Unable to send PurgeContentReport for DeleteMaterial", e);
+			}
+		}
+	}
+
+
 	private void deleteMaterial(DeleteMaterial action) throws MessageProcessingFailedException
 	{
 
 		MayamClientErrorCode result = mayamClient.deleteMaterial(action);
+		sendPurgeMaterial(result, action);
 		checkResult(result);
 
 	}
@@ -288,6 +322,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	{
 
 		MayamClientErrorCode result = mayamClient.deletePackage(action);
+		sendPurgePackage(result, action);
 		checkResult(result);
 
 	}
@@ -295,7 +330,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	/**
 	 * Processes a PlaceHoldermessage (which is assumed to have already been validated)
 	 * 
-	 * @param message
+	 * @param envelope
 	 * @throws MessageProcessingFailedException
 	 */
 	@Override
