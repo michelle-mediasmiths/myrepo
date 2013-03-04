@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.handlers.ingest;
 
+import java.util.Date;
+
 import javax.xml.bind.JAXBElement;
 
 import org.apache.log4j.Logger;
@@ -32,6 +34,9 @@ public class IngestJobHandler extends JobHandler
 	@Named("content.events.namespace")
 	private String contentEventNamespace;
 	
+	@Inject(optional=false)
+	@Named("bms.events.namespace")
+	private String bmsEventsNamespace;
 	
 	public void process(Job jobMessage)
 	{	
@@ -113,6 +118,19 @@ public class IngestJobHandler extends JobHandler
 		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
 		String namespace = contentEventNamespace;
+		
+		eventsService.saveEvent(eventName, event, namespace);
+	}
+	
+	private void sendImportCompleteEvent(String mediaId, Date completionDate)
+	{
+		CreationComplete cce = new CreationComplete();
+		cce.setMediaID(assetId);
+		cce.setCompletionDate(jobID);
+		
+		String event = fxcommonSerialiser.serialise(cce);
+		String eventName = "CreationComplete";
+		String namespace = bmsEventsNamespace;
 		
 		eventsService.saveEvent(eventName, event, namespace);
 	}
