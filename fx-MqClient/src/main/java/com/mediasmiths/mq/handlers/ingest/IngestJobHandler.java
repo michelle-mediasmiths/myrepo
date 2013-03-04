@@ -1,8 +1,10 @@
 package com.mediasmiths.mq.handlers.ingest;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
@@ -93,6 +95,11 @@ public class IngestJobHandler extends JobHandler
 							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 							updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
 							taskController.saveTask(updateMap);
+							
+							GregorianCalendar c = new GregorianCalendar();
+							c.setTime(jobMessage.getJobUpdated());
+							XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+							sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
 						}
 						else {
 							log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
