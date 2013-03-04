@@ -1,28 +1,30 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
-import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
-
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+
+import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
+import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
 public class Importer extends Daemon implements StoppableService {
 
@@ -36,6 +38,8 @@ public class Importer extends Daemon implements StoppableService {
 	private final int deliveryAttemptsToMake;
 
 	private final EventService eventService;
+
+	public static final JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events.report");
 
 	@Inject
 	public Importer(PendingImportQueue pendingImports,
@@ -155,43 +159,84 @@ public class Importer extends Daemon implements StoppableService {
 
 			return;
 		}
-		
-		eventService.saveEvent(getEventNameForDropSuccessEvent(pi), getPayLoadForDropSuccessEvent(pi));
-		
+
+		saveEvent(pi);
+
 	}
 
-	private Object getPayLoadForDropSuccessEvent(PendingImport pi)
-	{
-		MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
-		Object message = materialEnvelope.getMessage();
-		
-		return message;
-	}
 
-	private String getEventNameForDropSuccessEvent(PendingImport pi)
+	private void saveEvent(PendingImport pi)
 	{
-		MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
-		Object message = materialEnvelope.getMessage();
-		
-		if(message instanceof Material){
-				
-				if(com.mediasmiths.foxtel.mpa.Util.isProgramme((Material) message)){
-					return "ProgrammeContentAvailable";
-				}
-				else{
-					Material m = (Material) message;
-					MarketingMaterialType marketingMaterial = m.getTitle().getMarketingMaterial();
-					return "MarketingContentAvailable";
-				}
-			
+		try
+		{
+			Acquisition payload = new Acquisition();
+
+			MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
+			Object message = materialEnvelope.getMessage();
+
+			if(message instanceof Material){
+
+				Material m = (Material) message;
+
+				if(com.mediasmiths.foxtel.mpa.Util.isProgramme(m))
+					{
+						ProgrammeMaterialType p = m.getTitle().getProgrammeMaterial();
+
+						payload.setMaterialID(p.getMaterialID());
+						payload.setTitle(m.getTitle().getEpisodeTitle());
+						payload.setAggregatorID(m.getDetails().getSupplier().getSupplierID());
+						payload.setFormat(p.getFormat());
+						payload.setFileDelivery(true);
+						payload.setTapeDelivery(false);
+						payload.setFilesize(pi.getMediaFile().length()+"");
+						payload.setTitleLength(p.getDuration());
+
+						eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
+					}
+					else
+					{
+						MarketingMaterialType marketingMaterial = m.getTitle().getMarketingMaterial();
+
+						payload.setMaterialID(materialEnvelope.getMasterID());
+						payload.setTitle(m.getTitle().getEpisodeTitle());
+						payload.setAggregatorID(m.getDetails().getSupplier().getSupplierID());
+						payload.setFormat(marketingMaterial.getFormat());
+						payload.setTapeDelivery(false);
+						payload.setFileDelivery(true);
+						payload.setFilesize(pi.getMediaFile().length()+"");
+						payload.setTitleLength(marketingMaterial.getDuration());
+
+
+						eventService.saveEvent("MarketingContentAvailable", JAXB_SERIALISER.serialise(payload));
+
+					}
+
+			}
+			else if(message instanceof RuzzIngestRecord)
+			{
+				RuzzIngestRecord r = (RuzzIngestRecord)message;
+
+				payload.setMaterialID(r.getMaterial().getMaterialID());
+				payload.setTitle(r.getMaterial().getDetails().getTitle());
+				payload.setAggregatorID("");
+				payload.setFormat(r.getMaterial().getDetails().getFormat());
+				payload.setTapeDelivery(false);
+				payload.setFileDelivery(true);
+				payload.setFilesize(pi.getMediaFile().length()+"");
+				payload.setTitleLength(r.getMaterial().getDetails().getDuration());
+
+				eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
+
+			}
+			else
+			{
+				logger.info("Unknown type being processed by importer - no event created.");
+			}
 		}
-		else if(message instanceof RuzzIngestRecord){
-			
-			//TODO check this is the right name for ruzz ingest
-			return "ProgrammeContentAvailable";
+		catch (Throwable e)
+		{
+			logger.info("Unknown event processing error.", e);
 		}
-		
-		else return "unknown";
 	}
 
 	/**
