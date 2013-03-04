@@ -1,10 +1,10 @@
 package com.foxtel.ip.mail.variablereplacer.variablegenerators.system;
 
-import com.foxtel.ip.mail.variablereplacer.EmailVariableGenerator;
-import com.foxtel.ip.mail.variablereplacer.EmailVariables;
+import com.foxtel.ip.mail.variablereplacer.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.CommFailure;
+import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
 
-public class CommErrorNotificationVariableGenerator implements EmailVariableGenerator
+public class CommErrorNotificationVariableGenerator implements EmailTemplateGenerator
 {
 
 	@Override
@@ -15,20 +15,19 @@ public class CommErrorNotificationVariableGenerator implements EmailVariableGene
 	}
 
 	@Override
-	public EmailVariables getVariables(Object obj, String comment)
+	public void customiseTemplate(MailTemplate template, Object obj, String comment)
 	{
 
-		return getVariableReplacer((CommFailure) obj);
+		 getVariableReplacer(template, (CommFailure) obj);
 	}
 
-	EmailVariables getVariableReplacer(CommFailure obj)
+	void getVariableReplacer(MailTemplate template, CommFailure obj)
 	{
 
-		EmailVariables replacer = new EmailVariables();
-		replacer.setVariable("XXX", "Mediasmiths placeholder Commerror");
+		// EmailVariables replacer = new EmailVariables();
+		//replacer.setVariable("XXX", "Mediasmiths placeholder Commerror");
 		// replacer.setVariable("MasterID", obj.getPackageID());
 
-		return replacer;
 	}
 
 }

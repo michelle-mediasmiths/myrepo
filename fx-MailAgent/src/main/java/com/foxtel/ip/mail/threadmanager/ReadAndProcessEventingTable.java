@@ -1,8 +1,5 @@
 package com.foxtel.ip.mail.threadmanager;
 
-import java.util.List;
-import org.apache.log4j.Logger;
-
 import com.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.foxtel.ip.mail.data.db.dao.EventingTableDao;
 import com.foxtel.ip.mail.data.db.entity.EventTableEntity;
@@ -10,6 +7,9 @@ import com.foxtel.ip.mail.data.db.entity.EventingTableEntity;
 import com.foxtel.ip.mail.rest.MailAgentServiceImpl;
 import com.foxtel.ip.mailclient.ServiceCallerEntity;
 import com.google.inject.Inject;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ReadAndProcessEventingTable
 {
@@ -60,7 +60,16 @@ public class ReadAndProcessEventingTable
 					serviceCallerEntity.namespace = event.namespace;
 					logger.info("Calling mail agent service.");
 
-					emailStatus = mailAgentServiceImpl.sendMail(serviceCallerEntity);
+					try
+					{
+						mailAgentServiceImpl.sendMail(serviceCallerEntity);
+						eventingTableDao.delete(eventEntity);
+					}
+					catch (Exception e)
+					{
+						logger.error("Failed to send email for - " + event.eventName);
+					}
+
 				}
 
 				else
@@ -70,23 +79,6 @@ public class ReadAndProcessEventingTable
 						logger.info("Could not find event with ID: " + eventID);
 					}
 				}
-
-				if (logger.isTraceEnabled())
-					logger.info("Email status: " + emailStatus);
-
-				if (!emailStatus.startsWith("Error"))
-				{
-					if (logger.isTraceEnabled())
-						logger.info("Deleting item in eventing with Id: " + eventID);
-					eventingTableDao.delete(eventEntity);
-				}
-				else
-				{
-					if (logger.isTraceEnabled())
-						logger.info("item returned an error, not being deleted from table");
-				}
-				if (logger.isTraceEnabled())
-					logger.info("No items found in event table that correspond to event, going to sleep");
 			}
 			catch (Throwable t)
 			{

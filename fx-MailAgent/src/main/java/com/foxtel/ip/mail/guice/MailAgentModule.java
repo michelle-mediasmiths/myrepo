@@ -3,6 +3,7 @@ package com.foxtel.ip.mail.guice;
 import javax.inject.Named;
 import javax.xml.bind.JAXBException;
 
+import com.foxtel.ip.mail.process.EventMailConfiguration;
 import org.apache.log4j.Logger;
 
 import com.foxtel.ip.mail.data.FileAndFolderLocations;
@@ -10,7 +11,6 @@ import com.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.foxtel.ip.mail.data.db.dao.EventingTableDao;
 import com.foxtel.ip.mail.data.db.impl.EventTableDaoImpl;
 import com.foxtel.ip.mail.data.db.impl.EventingTableDaoImpl;
-import com.foxtel.ip.mail.process.FindMailTemplateListFromFile;
 import com.foxtel.ip.mail.process.ReadBodyFile;
 import com.foxtel.ip.mail.process.ReadConfiguration;
 import com.foxtel.ip.mail.rest.EmailSenderService;
@@ -51,16 +51,16 @@ public class MailAgentModule extends AbstractModule
 
 	@Provides
 	@Named("email.configuration")
-	public FindMailTemplateListFromFile provideEmailConfig(FileAndFolderLocations fileLocation) throws JAXBException
+	public EventMailConfiguration provideEmailConfig(FileAndFolderLocations fileLocation) throws JAXBException
 	{
-		logger.info("Creating FindMailTemplateListFromFile");
+		logger.info("Creating EventMailConfiguration");
 		logger.info("Looking for config file: " + fileLocation.configurationLocation);
 
 		try
 		{
-			FindMailTemplateListFromFile findMailTemplateListFromFile = new FindMailTemplateListFromFile(
+			EventMailConfiguration findMailTemplateListFromFile = new EventMailConfiguration(
 					fileLocation.configurationLocation);
-			logger.info("FindMailTemplateListFromFile loaded successfully!");
+			logger.info("EventMailConfiguration loaded successfully!");
 
 			return findMailTemplateListFromFile;
 		}

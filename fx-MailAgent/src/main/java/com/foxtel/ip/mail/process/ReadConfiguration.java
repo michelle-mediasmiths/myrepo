@@ -1,12 +1,11 @@
 package com.foxtel.ip.mail.process;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class ReadConfiguration
 {
@@ -14,7 +13,7 @@ public class ReadConfiguration
 
 	@Inject(optional = false)
 	@Named("email.configuration")
-	public FindMailTemplateListFromFile findMailTemplateListFromFile;
+	public EventMailConfiguration findMailTemplateListFromFile;
 
 	public ReadConfiguration()
 	{

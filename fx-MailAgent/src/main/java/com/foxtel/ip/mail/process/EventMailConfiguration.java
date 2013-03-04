@@ -1,25 +1,23 @@
 package com.foxtel.ip.mail.process;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.mediasmiths.foxtel.ip.common.events.FoxtelEmailConfiguration;
+import com.mediasmiths.foxtel.ip.common.events.MailData;
+import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
+import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import org.apache.log4j.Logger;
-
-import com.mediasmiths.foxtel.ip.common.events.FoxtelEmailConfiguration;
-import com.mediasmiths.foxtel.ip.common.events.MailData;
-import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
 
-public class FindMailTemplateListFromFile
+public class EventMailConfiguration
 {
-	private static final transient Logger logger = Logger.getLogger(FindMailTemplateListFromFile.class);
+	private static final transient Logger logger = Logger.getLogger(EventMailConfiguration.class);
 
 	private final FoxtelEmailConfiguration mailDataList;
 
@@ -29,9 +27,9 @@ public class FindMailTemplateListFromFile
 	 * @param configFilePath
 	 * @throws JAXBException
 	 */
-	public FindMailTemplateListFromFile(String configFilePath) throws JAXBException
+	public EventMailConfiguration(String configFilePath) throws JAXBException
 	{
-		logger.trace("FindMailTemplateListFromFile loader Called");
+		logger.trace("EventMailConfiguration loader Called");
 
 		File file = new File(configFilePath);
 

@@ -1,21 +1,19 @@
 package com.foxtel.ip.mail.rest;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.List;
-
-import javax.mail.MessagingException;
-
-import org.apache.commons.mail.EmailException;
-import org.apache.log4j.Logger;
-
 import com.foxtel.ip.mail.process.ReadBodyFile;
 import com.foxtel.ip.mail.process.ReadConfiguration;
-import com.foxtel.ip.mail.variablereplacer.VariableReplacer;
+import com.foxtel.ip.mail.variablereplacer.EMailTemplater;
 import com.foxtel.ip.mailclient.MailAgentService;
 import com.foxtel.ip.mailclient.ServiceCallerEntity;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.events.MailTemplate;
+import org.apache.commons.mail.EmailException;
+import org.apache.log4j.Logger;
+
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.List;
 
 public class MailAgentServiceImpl implements MailAgentService
 {
@@ -30,7 +28,7 @@ public class MailAgentServiceImpl implements MailAgentService
 	@Inject
 	protected ReadBodyFile readBodyFile;
 
-	protected VariableReplacer variableReplacer = new VariableReplacer();
+	protected EMailTemplater eMailTemplater = new EMailTemplater();
 
 	public MailAgentServiceImpl()
 	{
@@ -46,7 +44,7 @@ public class MailAgentServiceImpl implements MailAgentService
 	 * Takes in service caller entity and processes
 	 */
 	@Override
-	public String sendMail(ServiceCallerEntity caller)
+	public void sendMail(ServiceCallerEntity caller) throws Exception
 	{
 
 		if (logger.isInfoEnabled())
@@ -59,15 +57,15 @@ public class MailAgentServiceImpl implements MailAgentService
 			if (logger.isInfoEnabled())
 				logger.info("Number of items matching eventname and namespace: " + templateList.size());
 
-			for (MailTemplate test : templateList)
+			for (MailTemplate mailTemplate : templateList)
 			{
 
 				// This is needed so body section is not overwritten with contents of file
 				MailTemplate m = new MailTemplate();
-				m.setEmailaddresses(test.getEmailaddresses());
-				m.setSubject(test.getSubject());
+				m.setEmailaddresses(mailTemplate.getEmailaddresses());
+				m.setSubject(mailTemplate.getSubject());
 
-				m.setBody(readBodyFile.readFile(test.getBody()));
+				m.setBody(mailTemplate.getBody());
 
 				if (caller.payload.startsWith("%"))
 				{
@@ -76,77 +74,67 @@ public class MailAgentServiceImpl implements MailAgentService
 					caller.payload = decoder(caller.payload);
 				}
 
-				if (logger.isInfoEnabled())
-					logger.info("Calling variable replacer");
-
-				m = variableReplacer.generate(m, caller.payload, caller.comment);
-				logger.info("variableReplacer returned");
+				m = eMailTemplater.generate(m, caller.payload, caller.comment);
 
 				if (m.getEmailaddresses().getEmailaddress().size() != 0)
 				{
-					if (logger.isTraceEnabled())
-						logger.info("Email addresses found!");
-					for (String email : m.getEmailaddresses().getEmailaddress())
-					{
-						if (logger.isDebugEnabled())
-							logger.debug("Preparing to send mail to: " + email);
-
-						try
-						{
-							if (logger.isTraceEnabled())
-								logger.info("Preparing to send mail to: " + email);
-
-							if (m.getSubject().equals("Email Error: Could not find generator"))
-							{
-								// Sending normal email so unprocessed xml can be viewed
-								logger.info("Could not find generator, sending normal email.");
-								emailService.createEmail(email, m.getSubject(), m.getBody());
-							}
-							else
-							{
-
-//								logger.info("sending as simple (non mime email) ");
-								emailService.createMimeEmail(email, m.getSubject(), m.getBody());
-								// emailService.createEmail(email, m.getSubject(), m.getBody());
-
-							}
-						}
-						catch (EmailException e)
-						{
-							logger.error("EmailException: " + e);
-							return "Error: EmailException: " + e;
-
-						}
-						catch (MessagingException e)
-						{
-							logger.error("MessagingException (is your configuration right?): " + e);
-							return "Error: MessagingException: " + e;
-						}
-
-						if (logger.isInfoEnabled())
-						{
-							logger.info("Sent email to: " + email);
-						}
-					}
+					sendEmailsForEvent(m);
 				}
 				else
 				{
-					if (logger.isTraceEnabled())
-						logger.info("No email addresses found! Check configuration");
-					return "No email addresses found! Check configuration";
+					logger.info("No email addresses found! Check configuration");
 				}
-				return "Email(s) send correctly)";
-
 			}
-
 		}
 		else
 		{
 			if (logger.isInfoEnabled())
 				logger.info("Nothing matching eventname and namespace");
-			return "No results found";
 		}
-		return "Error: Undefined";
+	}
+
+	private void sendEmailsForEvent(final MailTemplate m) throws EmailException, MessagingException
+	{
+
+		for (String emailAddress : m.getEmailaddresses().getEmailaddress())
+		{
+			if (logger.isDebugEnabled())
+				logger.debug("Preparing to send mail to: " + emailAddress);
+
+			try
+			{
+
+				if (m.getSubject().equals("Email Error: Could not find generator"))
+				{
+					// Sending normal email so unprocessed xml can be viewed
+					logger.info("Could not find generator, sending normal email.");
+
+					emailService.createEmail(emailAddress, m.getSubject(), m.getBody());
+				}
+				else
+				{
+					emailService.createMimeEmail(emailAddress, m.getSubject(), m.getBody());
+
+					// emailService.createEmail(email, m.getSubject(), m.getBody());
+				}
+				if (logger.isInfoEnabled())
+				{
+					logger.info("Sent email to: " + emailAddress);
+				}
+			}
+			catch (EmailException e)
+			{
+				logger.error("EmailException: " + e);
+				throw e;
+
+			}
+			catch (MessagingException e)
+			{
+				logger.error("MessagingException (is your configuration right?): " + e);
+				throw e;
+			}
+
+		}
 	}
 
 	/**

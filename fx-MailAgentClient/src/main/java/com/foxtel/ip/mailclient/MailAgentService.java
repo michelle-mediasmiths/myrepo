@@ -14,7 +14,7 @@ public interface MailAgentService
 	@Path("/send_mail")
 	@Consumes("application/xml")
 	@Produces("text/html")
-	public String sendMail(ServiceCallerEntity caller);
+	public void sendMail(ServiceCallerEntity caller) throws Exception;
 
 	@GET
 	@Path("/")

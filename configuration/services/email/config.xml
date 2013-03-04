@@ -6,7 +6,7 @@
 		<eventname>AutoQCFailed</eventname>
 		<MailTemplate>
 			<subject>Auto QC Fail in MAM: [TitleField]</subject>
-			<body>AutoQCFailed</body>
+			<body>Item called "Title field + Master ID" is on the Auto QC Fail worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification. </body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -25,7 +25,7 @@
 		<eventname>CerifyQCError</eventname>
 		<MailTemplate>
 			<subject>QC Server Issue: [MasterID] [TitleField]</subject>
-			<body>CerifyQCError</body>
+			<body>Cerify has not processed this item. Please resolve the cause of issue.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -38,7 +38,7 @@
 		<eventname>QCproblemwithTCMedia</eventname>
 		<MailTemplate>
 			<subject>URGENT ISSUE: Quarantined item in MAM [MasterID] [TitleField]</subject>
-			<body>QCproblemwithTCMedia</body>
+			<body>Cerify has found an issue with this item so MAM has quarantined it. Please resolve urgently.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -51,7 +51,7 @@
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate>
 			<subject>An item has failed QC and requires re ordering ID: [MasterID]</subject>
-			<body>QcFailedReOrder</body>
+			<body>An item has been marked as requiring reorder ID: %s</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -71,7 +71,7 @@
 		<eventname>FailedInSendtoTX</eventname>
 		<MailTemplate>
 			<subject>URGENT ISSUE: TX transcode failed [MasterID] [TitleField]</subject>
-			<body>FailedInSendtoTX</body>
+			<body><b>Item remains on "send to TX" list and has not transcoded and has not transferred to play out. Please resolve URGENTLY.</b></body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -84,7 +84,7 @@
 		<eventname>PublicityFailure</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField]. Publicity transcode failed in MAM.</subject>
-			<body>PublicityFailure</body>
+			<body>Item has failed Publicity transcode, therefore has not been created or sent to external location.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -95,7 +95,7 @@
 		<eventname>CaptionProxySuccess</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField]. Caption proxy item sent to external location</subject>
-			<body>CaptionProxySuccess</body>
+			<body>Item is located %s. [insert associated details]</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -106,7 +106,7 @@
 		<eventname>CaptionProxyFailure</eventname>
 		<MailTemplate>
 			<subject>URGENT: [MasterID] [TitleField]. Caption proxy transcode failed in MAM.</subject>
-			<body>CaptionProxyFailure</body>
+			<body>Item has failed Caption proxy transcode, therefore has not been created or sent to external location.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -117,7 +117,7 @@
 		<eventname>ClassificationProxySuccess</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField]. Classification proxy item sent to external location</subject>
-			<body>ClassificationProxySuccess</body>
+			<body>Item is located $s.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -128,7 +128,7 @@
 		<eventname>ClassificationProxyFailure</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField]. Classification proxy transcode failed in MAM.</subject>
-			<body>ClassificationProxyFailure</body>
+			<body>Item has failed Classification transcode, therefore has not been created or sent to external location.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -139,7 +139,7 @@
 		<eventname>ExportFailure</eventname>
 		<MailTemplate>
 			<subject>[TitleField] [MasterID]. 3rd Party proxy transcode failed in MAM.</subject>
-			<body>ExportFailure</body>
+			<body>>Item has failed 3rd Party transcode, therefore has not been created or sent to external location.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -150,7 +150,7 @@
 		<eventname>TCFailed</eventname>
 		<MailTemplate>
 			<subject>TC Server Issue: [MasterID] [TitleField]</subject>
-			<body>TCFailed</body>
+			<body>Rhozet has not processed this item. Please resolve the cause of issue.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -162,7 +162,7 @@
 		<eventname>ProtectedPurgeFail</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField] Purge Not Processed</subject>
-			<body>ProtectedPurgeFail</body>
+			<body>Purge request not processed, as item is "MAM Protected"</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -177,7 +177,7 @@
 		<eventname>ManualPurge</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField] Manual Purge Actioned.</subject>
-			<body>ManualPurge</body>
+			<body><b>Item will be deleted from MAM in %d days. Please resolve this issue.</b></body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -193,7 +193,7 @@
 		<eventname>PreviewFailed</eventname>
 		<MailTemplate>
 			<subject>Pass-Reorder Item in MAM: [MasterID] [TitleField]</subject>
-			<body>PreviewFailed</body>
+			<body>There is a new item on the Pass-Reorder worklist. Please resolve this matter. ear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -212,7 +212,7 @@
 		<eventname>PreviewFurtherAnalysis</eventname>
 		<MailTemplate>
 			<subject>Preview Fail Item in MAM: [MasterID] [TitleField]</subject>
-			<body>PreviewFurtherAnalysis</body>
+			<body>There is a new item on the Pass-Reorder worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -240,7 +240,7 @@
 		<MailTemplate>
 			<subject> [MasterID] [TitleField]. 3rd Party proxy item sent to external location
 			</subject>
-			<body>DeliveryFailed</body>
+			<body>Item is located %s. [insert associated details]</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -252,7 +252,7 @@
 		<MailTemplate>
 			<subject> [MasterID] [TitleField]. Publicity item sent to external location
 			</subject>
-			<body>Delivered</body>
+			<body>Item is located [XXX]. [insert associated details]</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -264,7 +264,7 @@
 		<eventname>CommError</eventname>
 		<MailTemplate>
 			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
-			<body>CommError</body>
+			<body>MAM is trying to communicate with an interfacing system. no response has been since %s period</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -275,7 +275,7 @@
 		<eventname>ComplianceLoggingMarker</eventname>
 		<MailTemplate>
 			<subject>[MasterID] [TitleField]. Extract of Marked Up item</subject>
-			<body>ComplianceLoggingMarker</body>
+			<body>Marked up item details can be found below: [InsertLoggerDetails]</body>
 			<emailaddresses>
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>
@@ -287,7 +287,7 @@
 		<eventname>ContentWithoutMasterID</eventname>
 		<MailTemplate>
 			<subject>Unmatched Item in MAM: MasterID missing</subject>
-			<body>ContentWithoutMasterID</body>
+			<body>There is a new item on the Unmatched worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -300,7 +300,7 @@
 		<eventname>PlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate>
 			<subject>Unmatched Item in MAM:  MasterID missing</subject>
-			<body>PlaceHolderCannotBeIdentified</body>
+			<body>>There is a new item on the Unmatched worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -312,7 +312,7 @@
 		<eventname>PlaceholderAlreadyHasMedia</eventname>
 		<MailTemplate>
 			<subject>Placeholder already has media</subject>
-			<body>PlaceholderAlreadyHasMedia</body>
+			<body>Media already exists for this placeholder. Check item and contact ESS.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -324,7 +324,7 @@
 		<eventname>ArdomeImportFailure</eventname>
 		<MailTemplate>
 			<subject>Ardome import has failed</subject>
-			<body>ArdomeImportFailure</body>
+			<body>Item has failed to successfully auto-import to Ardome.</body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -350,7 +350,7 @@
 		<eventname>MediaFileImportFailure</eventname>
 		<MailTemplate>
 			<subject>Ardome import has failed</subject>
-			<body>MediaFileImportFailure</body>
+			<body>Item has failed to successfully auto-import to Ardome </body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -363,7 +363,7 @@
 		<eventname>EmergencyImportFailure</eventname>
 		<MailTemplate>
 			<subject>Ardome import has failed</subject>
-			<body>EmergencyImportFailure</body>
+			<body>Item has failed to successfully auto-import to Ardome </body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -377,7 +377,7 @@
 		<MailTemplate>
 			<subject>A material exchange message has arrived with an unexpected delivery version for material [MasterID]
 			</subject>
-			<body>OutOfOrder</body>
+			<body>A material exchange message has arrived with an unexpected delivery version for material %s </body>
 			<emailaddresses>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
