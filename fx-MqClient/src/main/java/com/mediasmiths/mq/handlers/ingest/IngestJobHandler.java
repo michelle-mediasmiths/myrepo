@@ -3,6 +3,7 @@ package com.mediasmiths.mq.handlers.ingest;
 import java.util.Date;
 
 import javax.xml.bind.JAXBElement;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.log4j.Logger;
 
@@ -123,7 +124,7 @@ public class IngestJobHandler extends JobHandler
 		eventsService.saveEvent(eventName, event, namespace);
 	}
 	
-	private void sendImportCompleteEvent(String mediaId, Date completionDate)
+	private void sendImportCompleteEvent(String mediaId, XMLGregorianCalendar completionDate)
 	{
 		CreationComplete cce = new CreationComplete();
 		cce.setMediaID(mediaId);
