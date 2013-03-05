@@ -178,15 +178,22 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 	{
 		String assetId = ingestTaskAttributes.getAttribute(Attribute.ASSET_ID);
 		AssetType assetType = ingestTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
-		AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
-		for (Attribute attribute:unmatchedAttributes.getAttributeSet())
+		try 
 		{
-			if (asset.getAttribute(attribute) == null)
+			AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
+			for (Attribute attribute:unmatchedAttributes.getAttributeSet())
 			{
-				asset.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
+				if (asset.getAttribute(attribute) == null)
+				{
+					asset.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
+				}
 			}
+			tasksClient.assetApi().updateAsset(asset);
 		}
-		tasksClient.assetApi().updateAsset(asset);
+		catch (RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while updating asset : " + assetId, e);
+		}
 	}
 	
 	private void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
