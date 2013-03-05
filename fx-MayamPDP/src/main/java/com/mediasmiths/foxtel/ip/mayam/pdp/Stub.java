@@ -189,7 +189,21 @@ public class Stub implements MayamPDP
 		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 		
 		defaultValidation(attributeMap);
-		return okStatus;
+
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    
+	    String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
+	    if (classification == null || classification.equals(""))
+	    {
+	    	String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    	
+	    	returnMap.clear();
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+	    }
+	    
+		return  mapper.serialize(returnMap);;
 	}
 
 	@Override
