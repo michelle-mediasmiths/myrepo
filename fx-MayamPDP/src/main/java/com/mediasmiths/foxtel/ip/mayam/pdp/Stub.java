@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
@@ -145,7 +146,41 @@ public class Stub implements MayamPDP
 		defaultValidation(attributeMap);
 		dumpPayload(attributeMap);
 
-		return okStatus;
+	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
+
+	    AttributeMap returnMap = client.createAttributeMap();
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    
+	    //Segmentation check
+	    String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
+	    int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
+	    String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+	    
+	    SegmentList segmentList = null;
+	    try {
+	    	segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
+	    }
+	    catch (RemoteException e) {
+	    	segmentList = null;
+	    }
+	    
+	    if (segmentList != null && segmentList.getEntries() != null)
+	    {
+		    int segmentsSize = segmentList.getEntries().size();
+		    if (numberOfSegmentsRequested != segmentsSize) 
+		    {
+		    	returnMap.clear();
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
+		    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
+		    }
+	    }
+	    else {
+	    	returnMap.clear();
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
+	    }
+	    
+		return mapper.serialize(returnMap);
 	}
 
 	@Override
