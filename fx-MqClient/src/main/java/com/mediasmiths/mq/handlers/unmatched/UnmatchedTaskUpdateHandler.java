@@ -72,7 +72,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				setFormat(peerID, format);
 
 				// close open ingest task for the target asset
-				closeIngestTaskForAsset(peerID);
+				closeIngestTaskForAsset(peerID, currentAttributes);
 			}
 		}
 		catch (Exception e)
@@ -174,13 +174,30 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		}
 	}
 
-	private void closeIngestTaskForAsset(String peerID)
+	private void copyUnmatchedAttribtes(AttributeMap ingestTaskAttributes, AttributeMap unmatchedAttributes)
+	{
+		String assetId = ingestTaskAttributes.getAttribute(Attribute.ASSET_ID);
+		AssetType assetType = ingestTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
+		AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
+		for (Attribute attribute:unmatchedAttributes.getAttributeSet())
+		{
+			if (asset.getAttribute(attribute) == null)
+			{
+				asset.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
+			}
+		}
+		tasksClient.assetApi().updateAsset(asset);
+	}
+	
+	private void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
 	{
 		AttributeMap task;
 		try
 		{
 			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
 
+			copyUnmatchedAttribtes(task, unmatchedAttributes);
+			
 			if (task == null)
 			{
 				log.warn("no ingest task found for assetID " + peerID);
