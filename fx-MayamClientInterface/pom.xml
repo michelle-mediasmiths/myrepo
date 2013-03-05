@@ -22,7 +22,7 @@
 		<dependency>
 		  <groupId>com.mayam.wf</groupId>
 		  <artifactId>tasks-ws-client-with-dependencies</artifactId>
-		  <version>${worklists.version}</version>
+		  <version>0.9.9.9.6</version>
 		  <classifier>dependencies</classifier>
 		</dependency>
 
