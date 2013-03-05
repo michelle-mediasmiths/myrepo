@@ -203,7 +203,7 @@ public class Stub implements MayamPDP
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 	    }
 	    
-		return  mapper.serialize(returnMap);;
+		return  mapper.serialize(returnMap);
 	}
 
 	@Override
