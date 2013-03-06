@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.email/001/000"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://com.mediasmiths.foxtel.ip.common.email/001/000"
            xmlns:fns="http://com.mediasmiths.foxtel.ip.common.email/001/000"
            elementFormDefault="qualified" attributeFormDefault="unqualified"
            version="1.0">
