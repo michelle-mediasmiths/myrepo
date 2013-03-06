@@ -341,4 +341,6 @@ public interface MayamClient
 
 	public boolean deletePurgeCandidates()throws MayamClientException;
 	
+	public AttributeMap getTask(long taskId);
+	
 }

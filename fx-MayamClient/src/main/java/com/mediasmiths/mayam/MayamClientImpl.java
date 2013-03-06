@@ -1017,5 +1017,19 @@ public class MayamClientImpl implements MayamClient
 		}
 		return allsuccess;
 	}
+	
+	@Override
+	public AttributeMap getTask(long taskId)
+	{
+		AttributeMap returnMap = null;
+		try{
+			returnMap = taskController.getTask(taskId);
+		}
+		catch(RemoteException e)
+		{
+			log.error("Exception thrown by Mayam while retrieving task : " + taskId, e);
+		}
+		return returnMap;
+	}
 
 }

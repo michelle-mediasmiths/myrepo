@@ -53,6 +53,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 //import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
@@ -367,8 +368,23 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 
 		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
-		saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE);
-
+		long taskId = notification.getTaskID();
+		AttributeMap task = mayamClient.getTask(taskId);
+		
+		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
+		
+		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
+		{
+			saveEvent("Caption Proxy Failed", notification, TC_EVENT_NAMESPACE);
+		}
+		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
+		{
+			saveEvent("Classification Proxy Failed", notification, TC_EVENT_NAMESPACE);
+		}
+		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
+		{
+			saveEvent("Compliance Proxy Failed", notification, TC_EVENT_NAMESPACE);
+		}
 	}
 
 	@Override
@@ -377,7 +393,24 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
-		saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
+		
+		long taskId = notification.getTaskID();
+		AttributeMap task = mayamClient.getTask(taskId);
+		
+		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
+		
+		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
+		{
+			saveEvent("Caption Proxy Success", notification, TC_EVENT_NAMESPACE);
+		}
+		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
+		{
+			saveEvent("Classification Proxy Success", notification, TC_EVENT_NAMESPACE);
+		}
+		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
+		{
+			saveEvent("Compliance Proxy Success", notification, TC_EVENT_NAMESPACE);
+		}
 
 		if (!notification.isForTXDelivery())
 		{
