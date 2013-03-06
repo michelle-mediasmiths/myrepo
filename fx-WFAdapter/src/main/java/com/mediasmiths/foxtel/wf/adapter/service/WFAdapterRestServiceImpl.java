@@ -1,12 +1,34 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.InetAddress;
-import java.util.Collection;
-import java.util.List;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
+import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
+import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
+import com.mediasmiths.mayam.MayamButtonType;
+import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,44 +40,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.net.PrintCommandListener;
-import org.apache.commons.net.ProtocolCommandListener;
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mayam.wf.attributes.shared.Attribute;
-import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
-import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
-import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
-import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
-import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
-import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
-import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamButtonType;
-import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamTaskListType;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.List;
 //import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
 //import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
 
@@ -375,15 +364,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("Caption Proxy Failed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("CaptionProxyFailed", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("Classification Proxy Failed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ClassificationProxyFailed", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("Compliance Proxy Failed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ComplianceProxyFailed", notification, TC_EVENT_NAMESPACE);
+		}
+		else
+		{
+			saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE);
 		}
 	}
 
@@ -401,15 +394,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("Caption Proxy Success", notification, TC_EVENT_NAMESPACE);
+			saveEvent("CaptionProxySuccess", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("Classification Proxy Success", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ClassificationProxySuccess", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("Compliance Proxy Success", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ComplianceProxySuccess", notification, TC_EVENT_NAMESPACE);
+		}
+		else
+		{
+			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE);
 		}
 
 		if (!notification.isForTXDelivery())
