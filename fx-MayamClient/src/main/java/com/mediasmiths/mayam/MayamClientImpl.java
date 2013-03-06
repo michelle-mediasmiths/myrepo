@@ -1023,7 +1023,7 @@ public class MayamClientImpl implements MayamClient
 	{
 		AttributeMap returnMap = null;
 		try{
-			returnMap = taskController.getTask(taskId);
+			returnMap = tasksController.getTask(taskId);
 		}
 		catch(RemoteException e)
 		{
