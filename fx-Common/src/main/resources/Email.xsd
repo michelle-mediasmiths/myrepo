@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.email/001/000"
+           xmlns:fns="http://com.mediasmiths.foxtel.ip.common.email/001/000"
+           elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+
+
+    <xs:element name="FoxtelEmailConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                    <xs:element name="MailData" type="fns:MailData"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="MailData">
+        <xs:sequence>
+            <xs:element type="xs:string" name="namespace"/>
+            <xs:element type="xs:string" name="eventname"/>
+            <xs:element name="MailTemplate" type="fns:MailTemplate" minOccurs="1" maxOccurs="1">
+
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="MailTemplate">
+        <xs:sequence>
+            <xs:element name="subject" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="body" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="emailaddresses" type="fns:emailaddresses" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="emailaddresses">
+        <xs:sequence>
+            <xs:element type="xs:string" name="emailaddress"
+                        maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

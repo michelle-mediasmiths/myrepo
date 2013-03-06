@@ -27,6 +27,12 @@
              <jaxb:schemaBindings>
                 		<jaxb:package name="com.mediasmiths.foxtel.ip.common.events.report" />
              </jaxb:schemaBindings>
-    	</jaxb:bindings>
+    </jaxb:bindings>
+
+    <jaxb:bindings schemaLocation="Email.xsd">
+                 <jaxb:schemaBindings>
+                    		<jaxb:package name="com.mediasmiths.foxtel.ip.common.email" />
+                 </jaxb:schemaBindings>
+    </jaxb:bindings>
 	
 </jaxb:bindings>
