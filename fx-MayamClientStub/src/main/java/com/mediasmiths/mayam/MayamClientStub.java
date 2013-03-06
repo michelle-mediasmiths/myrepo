@@ -1011,4 +1011,10 @@ public class MayamClientStub implements MayamClient
 		return true;
 	}
 
+	@Override
+	public AttributeMap getTask(long taskId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
