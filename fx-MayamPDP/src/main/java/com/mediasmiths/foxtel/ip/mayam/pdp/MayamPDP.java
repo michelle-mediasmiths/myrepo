@@ -45,6 +45,12 @@ public interface MayamPDP
 	@Consumes(MediaType.APPLICATION_JSON)
 	public String segmentClassificationCheck(String attributeMapStr);
 
+	@Path("uningest")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public String uningest(String attributeMapStr);
+
 	@Path("uningestProtected")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)

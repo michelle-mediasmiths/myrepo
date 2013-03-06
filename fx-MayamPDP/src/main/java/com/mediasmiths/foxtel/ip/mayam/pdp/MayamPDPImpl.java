@@ -140,7 +140,13 @@ public class MayamPDPImpl implements MayamPDP
 	    
 		return  mapper.serialize(returnMap);
 	}
-	
+
+	@Override
+	public String uningest(final String attributeMapStr)
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
 	@Override
 	public  String uningestProtected(final String attributeMapStr)
 	{

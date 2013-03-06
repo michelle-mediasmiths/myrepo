@@ -141,138 +141,214 @@ public class Stub implements MayamPDP
 	@Override
 	public String segmentMismatch(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		
-		defaultValidation(attributeMap);
-		dumpPayload(attributeMap);
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 
-	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
+			defaultValidation(attributeMap);
+			dumpPayload(attributeMap);
 
-	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
-	    
-	    //Segmentation check
-	    String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
-	    int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
-	    String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
-	    
-	    SegmentList segmentList = null;
-	    try {
-	    	segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
-	    }
-	    catch (RemoteException e) {
-	    	segmentList = null;
-	    }
-	    
-	    if (segmentList != null && segmentList.getEntries() != null)
-	    {
-		    int segmentsSize = segmentList.getEntries().size();
-		    if (numberOfSegmentsRequested != segmentsSize) 
-		    {
-		    	returnMap.clear();
-		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
-		    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
-		    }
-	    }
-	    else {
-	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
-	    	returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
-	    }
-	    
-		return mapper.serialize(returnMap);
+			validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
+
+			AttributeMap returnMap = client.createAttributeMap();
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+
+			//Segmentation check
+			String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
+			int numberOfSegmentsRequested = Integer.parseInt(requestedNumber);
+			String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+
+			SegmentList segmentList = null;
+			try {
+				segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
+			}
+			catch (RemoteException e) {
+				segmentList = null;
+			}
+
+			if (segmentList != null && segmentList.getEntries() != null)
+			{
+				int segmentsSize = segmentList.getEntries().size();
+				if (numberOfSegmentsRequested != segmentsSize)
+				{
+					returnMap.clear();
+					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
+					returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
+				}
+			}
+			else {
+				returnMap.clear();
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+				returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
+			}
+
+			return mapper.serialize(returnMap);
+		}
+		catch (Exception e)
+		{
+			return getErrorStatus(e.getMessage());
+		}
 	}
 
 	@Override
 	public String segmentClassificationCheck(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		
-		defaultValidation(attributeMap);
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 
-	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
-	    
-	    String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
-	    if (classification == null || classification.equals(""))
-	    {
-	    	String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
-	    	
-	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
-	    	returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
-	    }
-	    
-		return  mapper.serialize(returnMap);
+			defaultValidation(attributeMap);
+
+			AttributeMap returnMap = client.createAttributeMap();
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+
+			String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
+			if (classification == null || classification.equals(""))
+			{
+				String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+
+				returnMap.clear();
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+			}
+
+			return  mapper.serialize(returnMap);
+		}
+		catch (Exception e)
+		{
+			return getErrorStatus(e.getMessage());
+		}
+	}
+
+	@Override
+	public String uningest(final String attributeMapStr)
+	{
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			defaultValidation(attributeMap);
+			PrivilegedOperations operation = PrivilegedOperations.UNINGEST;
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String protectedString = attributeMap.getAttributeAsString(Attribute.PURGE_PROTECTED);
+				if (Boolean.parseBoolean(protectedString))
+				{
+					return getErrorStatus(messageItemUningestProtected);
+				}
+				else
+				{
+					return okStatus;
+				}
+			}
+			else
+			{
+				return getActionPermissionsErrorStatus(operation);
+			}
+		}
+		catch (Exception e)
+		{
+			return getErrorStatus(e.getMessage());
+		}
 	}
 
 	@Override
 	public String uningestProtected(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		defaultValidation(attributeMap);
-		dumpPayload(attributeMap);
-		return okStatus;
-	}
-
-	@Override
-	public String protect(final String attributeMapStr) throws RemoteException
-	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.PROTECT;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			defaultValidation(attributeMap);
+			dumpPayload(attributeMap);
 			return okStatus;
 		}
-		else
+		catch (Exception e)
 		{
-			return getActionPermissionsErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String unprotect(final String attributeMapStr) throws RemoteException
+	public String protect(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.UNPROTECT;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.PROTECT;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getActionPermissionsErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getActionPermissionsErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String delete(final String attributeMapStr) throws RemoteException
+	public String unprotect(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.DELETE;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-		String houseID =attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
-		
-		boolean permission = userCanPerformOperation(operation, attributeMap);
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.UNPROTECT;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
 
-		if (permission)
-		{
-			return getConfirmStatus(String.format("Are you sure you wish to delete item %s",houseID));
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getActionPermissionsErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getActionPermissionsErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
+		}
+	}
+
+	@Override
+	public String delete(final String attributeMapStr)
+	{
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.DELETE;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+			String houseID =attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return getConfirmStatus(String.format("Are you sure you wish to delete item %s",houseID));
+			}
+			else
+			{
+				return getActionPermissionsErrorStatus(operation);
+			}
+		}
+		catch (Exception e)
+		{
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
@@ -287,332 +363,430 @@ public class Stub implements MayamPDP
 	@Override
 	public String proxyfileCheck(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-		return okStatus;
-	}
-
-	@Override
-	public String ingest(final String attributeMapStr) throws RemoteException
-	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.INGEST;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.INGEST));
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+			return okStatus;
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String complianceEdit(final String attributeMapStr) throws RemoteException
+	public String ingest(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_EDITING;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.INGEST;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
 
-			AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
-			if (returnMap != null)
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
 			{
-				Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
-				if (status.equals(StatusCodes.OK.toString()))
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.INGEST));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
+		}
+		catch (RemoteException e)
+		{
+			return getErrorStatus(e.getMessage());
+		}
+	}
+
+	@Override
+	public String complianceEdit(final String attributeMapStr)
+	{
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_EDITING;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
+
+				AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
+				if (returnMap != null)
 				{
-					if (sourceHouseID == null || sourceHouseID.equals(""))
+					Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
+					if (status.equals(StatusCodes.OK.toString()))
 					{
-						returnMap.clear();
-						returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-						returnMap.setAttribute(
-								Attribute.ERROR_MSG,
-								String.format(messageComplianceEditNone, houseID));
+						if (sourceHouseID == null || sourceHouseID.equals(""))
+						{
+							returnMap.clear();
+							returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+							returnMap.setAttribute(
+									Attribute.ERROR_MSG,
+									String.format(messageComplianceEditNone, houseID));
+						}
+						else
+						{
+							logger.debug("parent house id was not null or empty");
+						}
 					}
 					else
 					{
-						logger.debug("parent house id was not null or empty");
+						logger.debug("returned status was not ok");
 					}
 				}
-				else
-				{
-					logger.debug("returned status was not ok");
-				}
-			}
 
-			return mapper.serialize(returnMap);
+				return mapper.serialize(returnMap);
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String complianceLogging(final String attributeMapStr) throws RemoteException
+	public String complianceLogging(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_LOGGING;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_LOGGING;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
 
-			AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
-			if (returnMap != null)
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
 			{
-				String status = returnMap.getAttributeAsString(Attribute.OP_STAT);
-				if (status.equals(StatusCodes.OK.toString()))
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				String sourceHouseID = (String) attributeMap.getAttribute(Attribute.SOURCE_HOUSE_ID);
+
+				AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_LOGGING);
+				if (returnMap != null)
 				{
-					if (sourceHouseID == null || sourceHouseID.equals(""))
+					String status = returnMap.getAttributeAsString(Attribute.OP_STAT);
+					if (status.equals(StatusCodes.OK.toString()))
 					{
-						returnMap.clear();
-						returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-						returnMap.setAttribute(
-								Attribute.ERROR_MSG,
-								String.format(messageComplianceLoggingNone, houseID));
+						if (sourceHouseID == null || sourceHouseID.equals(""))
+						{
+							returnMap.clear();
+							returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+							returnMap.setAttribute(
+									Attribute.ERROR_MSG,
+									String.format(messageComplianceLoggingNone, houseID));
+						}
+						else
+						{
+							logger.debug("parent house id was not null or empty");
+						}
 					}
 					else
 					{
-						logger.debug("parent house id was not null or empty");
+						logger.debug("returned status was not ok");
 					}
 				}
-				else
-				{
-					logger.debug("returned status was not ok");
-				}
+
+				return  mapper.serialize(returnMap);
 			}
-
-			return  mapper.serialize(returnMap);
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
-		}
-	}
-
-	@Override
-	public String unmatched(final String attributeMapStr) throws RemoteException
-	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.MATCHING;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
-		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA));
-		}
-		else
-		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String preview(final String attributeMapStr) throws RemoteException
+	public String unmatched(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.PREVIEW;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.PREVIEW));
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.MATCHING;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.UNMATCHED_MEDIA));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String autoQC(final String attributeMapStr) throws RemoteException
+	public String preview(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.QC_VIEW));
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.PREVIEW;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.PREVIEW));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
+		}
+	}
+
+	@Override
+	public String autoQC(final String attributeMapStr)
+	{
+		try
+		{
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.AUTOQC;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.QC_VIEW));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
+		}
+		catch (Exception e)
+		{
+			return getErrorStatus(e.getMessage());
 		}
 	}
 	
 
 	@Override
-	public String qcParallel(String attributeMapStr) throws RemoteException
+	public String qcParallel(String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.QCPARALLEL;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.QCPARALLEL;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String fileHeaderVerifyOverride(final String attributeMapStr) throws RemoteException
+	public String fileHeaderVerifyOverride(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.FILEVERIFYOVERRIDE;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.FILEVERIFYOVERRIDE;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 
 	}
 
 	@Override
-	public String txDelivery(final String attributeMapStr) throws RemoteException
+	public String txDelivery(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.TX_DELIVERY;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-			return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY));
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.TX_DELIVERY;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
+				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY));
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (RemoteException e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String exportMarkers(final String attributeMapStr) throws RemoteException
+	public String exportMarkers(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.EXPORT_MARKERS;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return  okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.EXPORT_MARKERS;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return  okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String complianceProxy(final String attributeMapStr) throws RemoteException
+	public String complianceProxy(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_PROXY;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.COMPLIANCE_PROXY;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String captionsProxy(final String attributeMapStr) throws RemoteException
+	public String captionsProxy(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.CAPTIONS_PROXY;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return  okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.CAPTIONS_PROXY;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return  okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
 	@Override
-	public String publicityProxy(final String attributeMapStr) throws RemoteException
+	public String publicityProxy(final String attributeMapStr)
 	{
-		final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-		PrivilegedOperations operation = PrivilegedOperations.PUBLICITY_PROXY;
-		dumpPayload(attributeMap);
-		defaultValidation(attributeMap);
-
-		boolean permission = userCanPerformOperation(operation, attributeMap);
-
-		if (permission)
+		try
 		{
-			return okStatus;
+			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
+			PrivilegedOperations operation = PrivilegedOperations.PUBLICITY_PROXY;
+			dumpPayload(attributeMap);
+			defaultValidation(attributeMap);
+
+			boolean permission = userCanPerformOperation(operation, attributeMap);
+
+			if (permission)
+			{
+				return okStatus;
+			}
+			else
+			{
+				return getTaskPermissionErrorStatus(operation);
+			}
 		}
-		else
+		catch (Exception e)
 		{
-			return getTaskPermissionErrorStatus(operation);
+			return getErrorStatus(e.getMessage());
 		}
 	}
 
@@ -821,6 +995,17 @@ public class Stub implements MayamPDP
 			logger.info(String.format("User %s does have permission for %s", user, operation.toString()));
 			return true;
 		}
+	}
+
+	private String getErrorStatus(String msg)
+	{
+
+		AttributeMap errorStatus = new AttributeMap();
+		errorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+		errorStatus.setAttribute(Attribute.ERROR_MSG, msg);
+
+		return mapper.serialize(errorStatus);
+
 	}
 
 
