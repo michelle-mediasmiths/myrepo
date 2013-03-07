@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventingTableDao;
-import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventTableEntity;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventingTableEntity;
 import com.mediasmiths.foxtel.ip.mail.rest.MailAgentServiceImpl;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
@@ -32,16 +31,6 @@ public class DeleteItemsIntable
 
 	}
 
-	public void deleteEvent()
-	{
-		logger.info("Deleting all items Event table");
-		List<EventTableEntity> event = eventTableDao.getAll();
-		for (EventTableEntity eventEntity : event)
-		{
-			eventTableDao.delete(eventEntity);
-		}
-	}
-
 	public void deleteEventing()
 	{
 		logger.info("Deleting all items Eventing table");
@@ -49,13 +38,13 @@ public class DeleteItemsIntable
 		int deleteCount;
 		do
 		{
-			deleteCount = deletePage();
+			deleteCount = deleteEventingTablePage();
 		}
 		while (deleteCount != 0);
 	}
 
 	@Transactional
-	protected int deletePage()
+	protected int deleteEventingTablePage()
 	{
 		List<EventingTableEntity> eventing;
 		eventing = eventingTableDao.getAll(0, 1000);

@@ -1,15 +1,14 @@
 package com.mediasmiths.foxtel.ip.mail.threadmanager;
 
-import java.util.concurrent.TimeUnit;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.threading.Timeout;
+import org.apache.log4j.Logger;
+
+import java.util.concurrent.TimeUnit;
 
 public class EventMapperThreadManager extends Daemon implements StoppableService
 {
@@ -44,9 +43,6 @@ public class EventMapperThreadManager extends Daemon implements StoppableService
 
 		if (deleteOnStartup)
 		{
-			logger.info("Call to delete all items in event table");
-			deleteItemsIntable.deleteEvent();
-
 			logger.info("Call to delete all items in eventing table");
 			deleteItemsIntable.deleteEventing();
 		}
@@ -55,6 +51,7 @@ public class EventMapperThreadManager extends Daemon implements StoppableService
 
 		if (logger.isTraceEnabled())
 			logger.info("Starting worker service running");
+
 		while (isRunning())
 		{
 			try

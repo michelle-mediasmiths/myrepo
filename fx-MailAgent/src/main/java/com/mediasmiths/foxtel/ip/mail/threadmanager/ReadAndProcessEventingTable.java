@@ -68,7 +68,7 @@ public class ReadAndProcessEventingTable
 					}
 					catch (Exception e)
 					{
-						logger.error("Failed to send email for - " + event.eventName + "..queued to resend later.");
+						logger.error("Failed to send email for - " + event.eventName + "..queued to resend later.", e);
 					}
 				}
 				else

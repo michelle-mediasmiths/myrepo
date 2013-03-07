@@ -7,6 +7,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
@@ -17,6 +18,8 @@ import java.net.URLDecoder;
 public class MailAgentServiceImpl implements MailAgentService
 {
 	private static final transient Logger logger = Logger.getLogger(MailAgentServiceImpl.class);
+
+	private JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events:com.mediasmiths.foxtel.ip.common.events.report:");
 
 	@Inject
 	protected EmailSenderService emailService;

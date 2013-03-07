@@ -9,4 +9,5 @@ public interface EmailTemplateGenerator
 
 	public MailTemplate customiseTemplate(Object obj, String comment);
 
+
 }
