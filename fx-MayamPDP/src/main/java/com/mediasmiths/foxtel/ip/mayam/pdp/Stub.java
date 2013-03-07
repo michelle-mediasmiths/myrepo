@@ -169,6 +169,7 @@ public class Stub implements MayamPDP
 			if (segmentList != null && segmentList.getEntries() != null)
 			{
 				int segmentsSize = segmentList.getEntries().size();
+				logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
 				if (numberOfSegmentsRequested != segmentsSize)
 				{
 					returnMap.clear();
