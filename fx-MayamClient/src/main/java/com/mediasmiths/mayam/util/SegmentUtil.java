@@ -139,7 +139,7 @@ public class SegmentUtil
 		return filled;
 	}
 
-	private static String calculateEOM(String duration, Timecode start)
+	public static String calculateEOM(String duration, Timecode start)
 	{
 		String eom;
 		Timecode durationTimecode =  Timecode.getInstance(duration, Framerate.HZ_25);
@@ -149,7 +149,7 @@ public class SegmentUtil
 		Timecode endTimecode = Timecode.getInstance(new SampleCount(endSamples, Framerate.HZ_25));
 		eom = endTimecode.toSMPTEString();
 		return eom;
-	}
+	}ß
 	
 	public static String totalDuration(List<Segment> segments){
 		

@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.lang.StringUtils;
@@ -15,13 +16,17 @@ import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTracks;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
+import com.mediasmiths.foxtel.generated.ruzz.AudioListType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
+import com.mediasmiths.std.types.Framerate;
+import com.mediasmiths.std.types.Timecode;
 
 public class MediaExchangeProgrammeOutputBuilder
 {
@@ -109,14 +114,53 @@ public class MediaExchangeProgrammeOutputBuilder
 	{
 		Programme.Detail programmeDetail = new Programme.Detail();
 
-		programmeDetail.setEXTCLIPUMID("");
+		programmeDetail.setEXTCLIPUMID(pack.getPackageId());
 		programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
 		programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
 		programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
-
+		
+		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT)));
+		programmeDetail.setAspectRaio(pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO).toString());
+		
+		String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
+		Supplier supplier = new Supplier();
+		supplier.setSupplierID(supplierId);
+		programmeDetail.setSupplier(supplier);
+		
+		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+		if (audioTracks == null || audioTracks.size() == 0)
+		{
+			log.error("no audio tracks found when processing package " + pack.getPackageId());
+		}
+		else
+		{
+			EncodingType encoding = audioTracks.get(0).getEncoding();
+	
+			if (encoding != null)
+			{
+				switch (encoding)
+				{
+					case DOLBY_E:
+						programmeDetail.setAudioType(AudioListType.DIGITAL);
+						break;
+					case LINEAR:
+						programmeDetail.setAudioType(AudioListType.STEREO);
+						break;
+					default:
+						break;
+	
+				}
+			}
+			else
+			{
+				log.error("null encoding on audio track information!");
+			}
+		}
+		
 		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
 		{
 			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
+			programmeDetail.setEOM(SegmentUtil.calculateEOM(pack.getSegmentList().getEntries().get(0).getDuration().toSmpte(), Timecode.getInstance(pack.getSegmentList().getEntries().get(0).getIn().toSmpte(), Framerate.HZ_25)));
 			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
 		}
 		else
@@ -147,6 +191,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			{
 				xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 				programmeDetail.setDueDate(xmlDate);
+				programmeDetail.setPurgeDate(xmlDate.setYear(xmlDate.getYear() + 3));
 			}
 			catch (DatatypeConfigurationException e)
 			{
