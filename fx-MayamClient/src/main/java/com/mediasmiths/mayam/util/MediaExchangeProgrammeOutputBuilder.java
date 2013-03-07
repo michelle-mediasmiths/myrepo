@@ -120,7 +120,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
 		programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
 		
-		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT)));
+		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT).toString()));
 		programmeDetail.setAspectRaio(pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO).toString());
 		
 		String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
