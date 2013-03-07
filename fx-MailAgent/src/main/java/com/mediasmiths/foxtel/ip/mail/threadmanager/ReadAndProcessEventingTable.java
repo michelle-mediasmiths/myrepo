@@ -38,7 +38,7 @@ public class ReadAndProcessEventingTable
 		if (logger.isTraceEnabled())
 			logger.info("ReadAndProcessEventingTable called: ");
 
-		List<EventingTableEntity> eventing = eventingTableDao.getAll();
+		List<EventingTableEntity> eventing = eventingTableDao.getAll(0, 1000);
 
 		if (logger.isTraceEnabled()) logger.info("Entities in eventing table: " + eventing.size());
 

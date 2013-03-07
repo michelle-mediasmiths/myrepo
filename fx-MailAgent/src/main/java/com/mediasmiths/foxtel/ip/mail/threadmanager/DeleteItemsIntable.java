@@ -1,16 +1,18 @@
 package com.mediasmiths.foxtel.ip.mail.threadmanager;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventingTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventTableEntity;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventingTableEntity;
 import com.mediasmiths.foxtel.ip.mail.rest.MailAgentServiceImpl;
-import com.google.inject.Inject;
+import com.mediasmiths.std.guice.database.annotation.Transactional;
+import org.apache.log4j.Logger;
 
+import java.util.List;
+
+@Singleton
 public class DeleteItemsIntable
 {
 	public static final transient Logger logger = Logger.getLogger(DeleteItemsIntable.class);
@@ -44,10 +46,23 @@ public class DeleteItemsIntable
 	{
 		logger.info("Deleting all items Eventing table");
 
-		List<EventingTableEntity> eventing = eventingTableDao.getAll();
+		int deleteCount;
+		do
+		{
+			deleteCount = deletePage();
+		}
+		while (deleteCount != 0);
+	}
+
+	@Transactional
+	protected int deletePage()
+	{
+		List<EventingTableEntity> eventing;
+		eventing = eventingTableDao.getAll(0, 1000);
 		for (EventingTableEntity eventingEntity : eventing)
 		{
 			eventingTableDao.delete(eventingEntity);
 		}
+		return eventing.size();
 	}
 }
