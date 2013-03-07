@@ -7,7 +7,6 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 import java.io.File;
-import java.util.List;
 
 public class TestConfigImport
 {
@@ -37,19 +36,16 @@ public class TestConfigImport
 
 	public static void lookUp(String ns, String e)
 	{
-		List<EmailTemplateGenerator> t = conf.getTemplate(e, ns);
-
-		System.out.println("Templates = " + t.size());
+		EmailTemplateGenerator t = conf.getTemplate(e, ns);
 
 		TcFailureNotification tc= new TcFailureNotification();
 		tc.setPackageID("77777");
 
-		for (EmailTemplateGenerator etg : t)
-		{
-			//System.out.println(jaxb.serialise(etg));
-			System.out.println(etg.getClass().getName());
 
-			MailTemplate temp = etg.customiseTemplate(tc, "Hello cruel world");
+			//System.out.println(jaxb.serialise(etg));
+			System.out.println(t.getClass().getName());
+
+			MailTemplate temp = t.customiseTemplate(tc, "Hello cruel world");
 
 			System.out.println(temp.getEmailaddresses());
 			System.out.println(temp.getBody());
@@ -57,5 +53,5 @@ public class TestConfigImport
 			System.out.println(temp.getSubject());
 
 		}
-	}
+
 }

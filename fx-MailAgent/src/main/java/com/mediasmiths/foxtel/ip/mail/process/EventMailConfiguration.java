@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.process;
 
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.email.FoxtelEmailConfiguration;
 import com.mediasmiths.foxtel.ip.common.email.MailData;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
 
@@ -12,16 +12,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-
+import java.util.Map;
 
 
 public class EventMailConfiguration
 {
 	private static final transient Logger logger = Logger.getLogger(EventMailConfiguration.class);
 
-	private FoxtelEmailConfiguration mailDataList;
+
+	private Map<String, MailData> eventMapping = new HashMap<>();
 
 	/**
 	 * Read configuration file to know which mail data corresponds to eventname and namespace
@@ -35,7 +36,7 @@ public class EventMailConfiguration
 
 		try
 		{
-			mailDataList = (FoxtelEmailConfiguration) JAXB.deserialise(new BufferedReader(new FileReader(config)));
+			FoxtelEmailConfiguration mailDataList = (FoxtelEmailConfiguration) JAXB.deserialise(new BufferedReader(new FileReader(config)));
 
 			if (mailDataList == null)
 				throw new Exception("Configuration file is empty");
@@ -49,10 +50,8 @@ public class EventMailConfiguration
 				genMD.setNamespace(md.getNamespace());
 
 				genMD.setMailTemplate(getGeneratorTemplate(md.getMailTemplate()));
-				genTemplates.add(genMD);
+				eventMapping.put(hashFor(md.getNamespace(), md.getEventname()), genMD);
 			}
-			mailDataList.getMailData().clear();
-			mailDataList.getMailData().addAll(genTemplates);
 
 			logger.info("Email templates unmarshalled from file " + config.getAbsolutePath());
 		}
@@ -64,6 +63,8 @@ public class EventMailConfiguration
 		}
 
 	}
+
+
 
 	private MailTemplate getGeneratorTemplate(final MailTemplate mt) throws Throwable
 	{
@@ -91,39 +92,43 @@ public class EventMailConfiguration
 	 * @param nameSpace
 	 * @return
 	 */
-	public List<EmailTemplateGenerator> getTemplate(String eventName, String nameSpace)
+	public EmailTemplateGenerator getTemplate(String eventName, String nameSpace)
 	{
 		List<EmailTemplateGenerator> mailTemplateList = new ArrayList<>();
 
-		// Reading the configuration file, this is used to find email address, title and body file location of an event using an given namespace and eventname
 		if (logger.isTraceEnabled())
 			logger.info("Attempting to find mailtemplate for : " + eventName + " and " + nameSpace);
 
-		for (MailData m : mailDataList.getMailData())
+		MailData m = eventMapping.get(hashFor(nameSpace, eventName));
+
+		if (m != null)
 		{
-			System.out.println("Search " + m.getEventname() + " " + m.getNamespace());
 
-			if (m.getEventname().equalsIgnoreCase(eventName) && m.getNamespace().equalsIgnoreCase(nameSpace))
+			Object mailTemplate = m.getMailTemplate();
+
+			System.out.println(mailTemplate.getClass().getName());
+
+			if (mailTemplate instanceof EmailTemplateGenerator)
 			{
-				if (logger.isTraceEnabled())
-					logger.info("Found item matching: " + eventName + " and " + nameSpace);
-
-				Object mailTemplate = m.getMailTemplate();
-
-				System.out.println(mailTemplate.getClass().getName());
-
-				if (mailTemplate instanceof EmailTemplateGenerator)
-				{
-				    mailTemplateList.add((EmailTemplateGenerator)mailTemplate);
-				}
-				else
-				{
-					System.out.println("Not a generator");
-					logger.error("Email template is not a template generator: " + m.getClass().getName());
-				}
+				return (EmailTemplateGenerator) mailTemplate;
+			}
+			else
+			{
+				logger.error("Email template is not a template generator: " + m.getClass().getName());
+				return null;
 			}
 		}
+		else
+		{
+			return null;
+		}
 
-		return mailTemplateList;
+
 	}
+
+	private String hashFor(final String namespace, final String eventname)
+	{
+		return namespace+eventname;
+	}
+
 }

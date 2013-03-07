@@ -1,19 +1,18 @@
 package com.mediasmiths.foxtel.ip.mail.rest;
 
-import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.foxtel.ip.mailclient.MailAgentService;
 import com.foxtel.ip.mailclient.ServiceCallerEntity;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
 
 public class MailAgentServiceImpl implements MailAgentService
 {
@@ -46,36 +45,31 @@ public class MailAgentServiceImpl implements MailAgentService
 		if (logger.isInfoEnabled())
 			logger.info("Preparing to send mail, MailAgentServiceImpl Called");
 
-		List<EmailTemplateGenerator> templateList = emailConfig.getTemplate(caller.eventName, caller.namespace);
+		EmailTemplateGenerator mailTemplate = emailConfig.getTemplate(caller.eventName, caller.namespace);
 
-		if (templateList != null && !templateList.isEmpty())
+		if (mailTemplate != null)
 		{
 			logger.info("Email event registered for: " + caller.eventName);
 
-			if (logger.isInfoEnabled())
-				logger.info("Number of items matching eventname and namespace: " + templateList.size());
-
-			for (EmailTemplateGenerator mailTemplate : templateList)
+			if (caller.payload.startsWith("%"))
 			{
-				if (caller.payload.startsWith("%"))
-				{
-					if (logger.isInfoEnabled())
-						logger.info("Payload is url encoded, decoding...");
+				if (logger.isInfoEnabled())
+					logger.info("Payload is url encoded, decoding...");
 
-					caller.payload = decoder(caller.payload);
-				}
-
-				MailTemplate m = mailTemplate.customiseTemplate(caller.payload, caller.comment);
-
-				if (m.getEmailaddresses().getEmailaddress().size() != 0)
-				{
-					sendEmailsForEvent(m);
-				}
-				else
-				{
-					logger.info("No email addresses found! Check configuration");
-				}
+				caller.payload = decoder(caller.payload);
 			}
+
+			MailTemplate m = mailTemplate.customiseTemplate(caller.payload, caller.comment);
+
+			if (m.getEmailaddresses().getEmailaddress().size() != 0)
+			{
+				sendEmailsForEvent(m);
+			}
+			else
+			{
+				logger.info("No email addresses found! Check configuration");
+			}
+
 		}
 		else
 		{
