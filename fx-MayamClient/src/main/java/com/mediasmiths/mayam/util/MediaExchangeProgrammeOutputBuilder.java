@@ -23,6 +23,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTracks;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
+import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
 import com.mediasmiths.foxtel.generated.ruzz.AudioListType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.std.types.Framerate;
