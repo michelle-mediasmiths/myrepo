@@ -1,5 +1,8 @@
 package com.mediasmiths.foxtel.ip.mail.guice;
 
+import com.foxtel.ip.mailclient.MailAgentService;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventingTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.impl.EventTableDaoImpl;
@@ -11,9 +14,6 @@ import com.mediasmiths.foxtel.ip.mail.rest.MailAgentServiceImpl;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.DeleteItemsIntable;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.EventMapperThreadManager;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.ReadAndProcessEventingTable;
-import com.foxtel.ip.mailclient.MailAgentService;
-import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
@@ -57,7 +57,7 @@ public class MailAgentModule extends AbstractModule
 
 			File configFile = new File(configLocation);
 			if (!configFile.exists() || !configFile.canRead())
-				throw new Exception("Configuration file does not exist or is unreadable");
+				throw new Exception("Configuration file does not exist or is unreadable " + configLocation + " looking in " + configFile.getAbsolutePath());
 
 			EventMailConfiguration findMailTemplateListFromFile = new EventMailConfiguration(configFile, JAXB);
 

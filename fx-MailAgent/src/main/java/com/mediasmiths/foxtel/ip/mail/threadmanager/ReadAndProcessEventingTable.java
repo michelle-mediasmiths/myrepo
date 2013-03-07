@@ -38,17 +38,19 @@ public class ReadAndProcessEventingTable
 		if (logger.isTraceEnabled())
 			logger.info("ReadAndProcessEventingTable called: ");
 
-		String emailStatus = "Error";
 		List<EventingTableEntity> eventing = eventingTableDao.getAll();
-		logger.info("Entities in eventing table: " + eventing.size());
+
+		if (logger.isTraceEnabled()) logger.info("Entities in eventing table: " + eventing.size());
 
 		for (EventingTableEntity eventEntity : eventing)
 		{
 			try
 			{
 				Long eventID = eventEntity.getEventId();
+
 				if (logger.isTraceEnabled())
 					logger.info("eventTableID and eventingTableID Id: " + eventID);
+
 				EventTableEntity event = eventTableDao.getById(eventID);
 
 				if (event != null)
@@ -58,7 +60,6 @@ public class ReadAndProcessEventingTable
 					serviceCallerEntity.eventName = event.eventName;
 					serviceCallerEntity.payload = event.payload;
 					serviceCallerEntity.namespace = event.namespace;
-					logger.info("Calling mail agent service.");
 
 					try
 					{
@@ -67,21 +68,21 @@ public class ReadAndProcessEventingTable
 					}
 					catch (Exception e)
 					{
-						logger.error("Failed to send email for - " + event.eventName);
+						logger.error("Failed to send email for - " + event.eventName + "..queued to resend later.");
 					}
-
 				}
-
 				else
 				{
-					if (logger.isTraceEnabled())
-					{
-						logger.info("Could not find event with ID: " + eventID);
-					}
+
+					logger.info("Could not find event with ID: " + eventID + "...deleting as corrupt");
+
+					eventingTableDao.delete(eventEntity);
 				}
 			}
 			catch (Throwable t)
 			{
+				logger.info("Could not find event with ID: " + eventEntity.getEventId() + " ...will retry later.");
+
 				logger.error(t);
 			}
 		}
