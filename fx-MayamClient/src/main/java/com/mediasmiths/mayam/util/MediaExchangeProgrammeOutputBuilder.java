@@ -121,12 +121,12 @@ public class MediaExchangeProgrammeOutputBuilder
 		programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
 		
 		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT).toString()));
-		programmeDetail.setAspectRaio(pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO).toString());
+		programmeDetail.setAspectRatio(pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO).toString());
 		
 		String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
 		Supplier supplier = new Supplier();
 		supplier.setSupplierID(supplierId);
-		programmeDetail.setSupplier(supplier);
+		programmeDetail.setSUPPLIER(supplier);
 		
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		if (audioTracks == null || audioTracks.size() == 0)
@@ -192,7 +192,8 @@ public class MediaExchangeProgrammeOutputBuilder
 			{
 				xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 				programmeDetail.setDueDate(xmlDate);
-				programmeDetail.setPurgeDate(xmlDate.setYear(xmlDate.getYear() + 3));
+				xmlDate.setYear(xmlDate.getYear() + 3);
+				programmeDetail.setPurgeDate(xmlDate);
 			}
 			catch (DatatypeConfigurationException e)
 			{
