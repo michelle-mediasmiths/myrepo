@@ -126,7 +126,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
 		Supplier supplier = new Supplier();
 		supplier.setSupplierID(supplierId);
-		programmeDetail.setSUPPLIER(supplier);
+		programmeDetail.setSUPPLIER(supplier.toString());
 		
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		if (audioTracks == null || audioTracks.size() == 0)
