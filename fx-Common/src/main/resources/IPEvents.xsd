@@ -323,6 +323,7 @@
         <xs:sequence>
             <xs:element minOccurs="0" name="packageID" type="xs:string" />
             <xs:element minOccurs="0" name="stage" type="xs:string" />
+            <xs:element minOccurs="0" name="jobName" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
