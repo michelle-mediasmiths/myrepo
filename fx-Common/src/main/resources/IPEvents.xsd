@@ -112,6 +112,18 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+
+    <xs:complexType name="PreviewFailed">
+        <xs:complexContent>
+            <xs:extension base="fns:IPEvent">
+                <xs:sequence>
+                    <xs:element name="assetId" type="xs:string" />
+                    <xs:element name="title" type="xs:string" />
+                    <xs:element name="date" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
 	
 	<xs:element name="ComplianceLoggingMarker">
 	<xs:complexType>
