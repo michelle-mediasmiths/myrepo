@@ -361,6 +361,18 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="txMoveFailure">
+        <xs:complexContent>
+            <xs:extension base="IPEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="fileSource" type="xs:string" />
+                    <xs:element minOccurs="0" name="fileDestination" type="xs:string" />
+                    <xs:element minOccurs="0" name="time" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
 	<xs:simpleType name="PreviewStatus">
 		<xs:annotation>
 			<xs:documentation>A list of the types of Preview events
