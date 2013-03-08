@@ -1,20 +1,19 @@
 package com.mediasmiths.mq.handlers.preview;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.SegmentList;
-import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class PreviewTaskFailHandler extends TaskStateChangeHandler
 {
@@ -54,7 +53,13 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		}
 		finally
 		{
-			// TODO: An email notification is sent to the relevant channel owner alerting them that the content should be reordered.
+			PreviewFailed pf = new PreviewFailed();
+			pf.setDate((new Date()).toString());
+			pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
+			pf.setAssetId(assetId);
+
+			eventsService.saveEvent("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", pf);
+
 		}
 	}
 
