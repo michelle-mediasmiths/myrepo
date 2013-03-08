@@ -337,6 +337,14 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="protectedPurgeFail">
+        <xs:complexContent>
+            <xs:extension base="purgeNotification">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+
     <xs:complexType name="autoQCFailureNotification">
         <xs:complexContent>
             <xs:extension base="autoQCResultNotification">
