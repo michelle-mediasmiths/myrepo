@@ -186,5 +186,30 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		return events;
 	}
 
+	@Transactional
+	public List<EventEntity> namespacePaginated(String namespace, int start, int max)
+	{
+		logger.info("Finding events from " + start + " namespace: " + namespace + " max: " + max);
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("namespace", namespace));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		logger.info("Finished search");
+		return getList(criteria);
+	}
+
+	@Override
+	public List<EventEntity> findUniquePaginated(String namespace, String eventName, int start, int max)
+	{
+		logger.info("Finding events from " + start + " namespace " + namespace + " eventname: " + eventName + " max: " + max);
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("namespace", namespace));
+		criteria.add(Restrictions.eq("eventName", eventName));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		logger.info("Finished search");
+		return getList(criteria);
+	}
+
 		
 }

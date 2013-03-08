@@ -31,6 +31,7 @@ import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.xml.bind.DatatypeConverter;
 
@@ -121,6 +122,40 @@ public class QueryAPIImpl implements QueryAPI
 		List<EventEntity> events = eventDao.findByNamespace(namespace);
 		//eventDao.printXML(events);
 		return events;
+	}
+	
+	@Transactional
+	public List<EventEntity> getByNamespaceWindow(@PathParam("namespace") String namespace, @PathParam("max") int max)
+	{
+		List<EventEntity> events = eventDao.namespacePaginated(namespace, 0, max);
+		List<EventEntity> all = new ArrayList<EventEntity>();
+		int start = 0;
+		while (events.size()==max) {
+			events = eventDao.namespacePaginated(namespace, start, max);
+			start = start + max;
+			all.addAll(events);
+			logger.info("start: " + start + " Size: " + events.size());
+			logger.info("Results: " + events);
+		}
+		return all;
+	}
+	
+	@Transactional
+	public List<EventEntity> getEventsWindow(@PathParam("namespace")String namespace, @PathParam("eventname")String eventname, @PathParam("max")int max)
+	{
+		logger.info("max @ queryAPIImpl: " + max);
+		List<EventEntity> events = eventDao.findUniquePaginated(namespace, eventname, 0, max);
+		List<EventEntity> all = new ArrayList<EventEntity>();
+		all.addAll(events);
+		int start=0;
+		while (events.size()==max) {
+			events = eventDao.findUniquePaginated(namespace, eventname, start, max);
+			start = start + max;
+			all.addAll(events);
+			logger.info("start: " + start + " Size: " + events.size());
+			logger.info("Results: " + events);
+		}
+		return all;
 	}
 
 	@Transactional
@@ -548,6 +583,4 @@ public class QueryAPIImpl implements QueryAPI
 				+ ":" + (minutes < 10 ? "0" : "") + minutes
 				+ ":" + (seconds< 10 ? "0" : "") + seconds );
 	}
-	
-	
 }
