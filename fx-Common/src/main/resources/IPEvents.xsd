@@ -371,44 +371,52 @@
 		</xs:restriction>
 	</xs:simpleType>
 	
-	<xs:complexType name="OrderStatus">
-		<xs:sequence>
-			<xs:element name="title" type="xs:string"/>
-			<xs:element name="materialID" type="xs:string"/>
-			<xs:element name="channels" type="xs:string" minOccurs="0"/>
-			<xs:element name="orderRef" type="xs:string" minOccurs="0"/>
-			<xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
-			<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
-			<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
-			<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
-			<xs:element name="taskType" type="xs:string" minOccurs="0"/>
-			<xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
+	<xs:element name="OrderStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="title" type="xs:string"/>
+				<xs:element name="materialID" type="xs:string"/>
+				<xs:element name="channels" type="xs:string" minOccurs="0"/>
+				<xs:element name="orderRef" type="xs:string" minOccurs="0"/>
+				<xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
+				<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
+				<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
+				<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+				<xs:element name="taskType" type="xs:string" minOccurs="0"/>
+				<xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	
-	<xs:complexType name="CreateOrUpdateTitle">
-		<xs:sequence>
-			<xs:element name="title" type="xs:string"/>
-			<xs:element name="titleID" type="xs:string"/>
-			<xs:element name="channels" type="xs:string"/>
- 		</xs:sequence>
-	</xs:complexType>
+	<xs:element name="CreateOrUpdateTitle">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="title" type="xs:string"/>
+				<xs:element name="titleID" type="xs:string"/>
+				<xs:element name="channels" type="xs:string"/>
+ 			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	
-	<xs:complexType name="AddOrUpdateMaterial">
-		<xs:sequence>
-			<xs:element name="materialID" type="xs:string"/>
-			<xs:element name="completionDate" type="xs:dateTime"/>
-		</xs:sequence>
-	</xs:complexType>
+	<xs:element name="AddOrUpdateMaterial">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="materialID" type="xs:string"/>
+				<xs:element name="completionDate" type="xs:dateTime"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	
-	<xs:complexType name="AddOrUpdatePackage">
-		<xs:sequence>
-			<xs:element name="titleID" type="xs:string"/>
-			<xs:element name="materialID" type="xs:string"/>
-			<xs:element name="packageID" type="xs:string"/>
-			<xs:element name="requiredBy" type="xs:dateTime"/>
-		</xs:sequence>
-	</xs:complexType>
+	<xs:element name="AddOrUpdatePackage">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="titleID" type="xs:string"/>
+				<xs:element name="materialID" type="xs:string"/>
+				<xs:element name="packageID" type="xs:string"/>
+				<xs:element name="requiredBy" type="xs:dateTime"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 	
 	<xs:complexType name="ContentPickup">
 		<xs:sequence>
