@@ -305,6 +305,22 @@
         </xs:sequence>
     </xs:complexType>
 
+    <xs:complexType name="purgeNotification">
+        <xs:sequence>
+            <xs:element name="titleID" type="xs:string" />
+            <xs:element name="materialId" type="xs:string"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="time" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="manualPurge">
+        <xs:complexContent>
+            <xs:extension base="purgeNotification">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="autoQCFailureNotification">
         <xs:complexContent>
             <xs:extension base="autoQCResultNotification">
