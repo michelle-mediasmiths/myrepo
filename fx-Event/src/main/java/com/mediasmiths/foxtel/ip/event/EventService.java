@@ -1,9 +1,10 @@
 package com.mediasmiths.foxtel.ip.event;
 
 
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.IPEvent;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import org.apache.log4j.Logger;
@@ -37,6 +38,8 @@ public class EventService implements EventHandler
 	@Inject
 	@Named("service.events.enabled")
 	protected boolean enabled;
+
+	private static final JAXBSerialiser jax_b = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
 
 	@Override
 	public void saveEvent(String eventName, String payload, String namespace)
@@ -114,6 +117,19 @@ public class EventService implements EventHandler
 		saveEvent(eventName, payload,eventsNamespace);
 	}
 
+
+	public void saveEvent(String namespace, String eventName, IPEvent ipEvent)
+	{
+		try
+		{
+			saveEvent(eventName,  jax_b.serialise(ipEvent), namespace);
+		}
+		catch (Throwable e)
+		{
+			logger.error("Could not unmarshall event " + eventName, e);
+		}
+	}
+
 	/**
 	 *
 	 * @param payload the object to be serialised
@@ -128,4 +144,6 @@ public class EventService implements EventHandler
 		marshaller.marshal(payload, baos);
 		return baos.toString("UTF-8");
 	}
+
+
 }

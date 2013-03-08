@@ -320,10 +320,10 @@ public class IncomingListener extends MqClientListener
 				{
 					passEventToHandler(ingestJobHandler, jobMessage);
 					passEventToHandler(unmatchedJobHandler, jobMessage);
-				}
-				else if(jobType.equals(JobType.CONFORM))
-				{
-					passEventToHandler(conformJobHandler, jobMessage);
+					if(jobType.equals(JobType.CONFORM))
+					{
+						passEventToHandler(conformJobHandler, jobMessage);
+					}
 				}
 			}
 		}
