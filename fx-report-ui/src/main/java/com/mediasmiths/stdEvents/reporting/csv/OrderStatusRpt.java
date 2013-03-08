@@ -19,6 +19,9 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
+import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
@@ -45,7 +48,7 @@ public class OrderStatusRpt
 	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
-		setStats(orders);
+		//setStats(orders);
 		OrderStatus del = addStats("Total Delivered", Integer.toString(delivered));
 		OrderStatus out = addStats("Total Outstanding", Integer.toString(outstanding));
 		OrderStatus ove = addStats("Total Overdue", Integer.toString(overdue));
@@ -58,24 +61,24 @@ public class OrderStatusRpt
 		createCsv(orders, reportName);
 	}
 	
-	private OrderStatus unmarshall(EventEntity event)
+	private Object unmarshall(EventEntity event)
 	{
-		Object title = new OrderStatus();
+		Object placeholder = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
-			title = JAXB_SERIALISER.deserialise(payload);
+			placeholder = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
 		}
 		catch (Exception e)		
 		{
 			e.printStackTrace();
 		}	
-		return (OrderStatus)title;
+		return placeholder;
 	}
 		
 	 
@@ -85,21 +88,54 @@ public class OrderStatusRpt
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
 		for (EventEntity event : events)
 		{
-			OrderStatus title = unmarshall(event);
-			title.setDateRange(startDate + " - " + endDate);
-			if ((title.getRequiredBy() != null) && (title.getCompletionDate() != null))
+			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+			AddOrUpdatePackage pack = new AddOrUpdatePackage();
+			List<EventEntity> packList = queryApi.getByEventName("AddOrUpdatePackage");
+			for (EventEntity packEvent : packList)
 			{
-				Calendar required = DatatypeConverter.parseDateTime(title.getRequiredBy().toString());
-				Calendar completed = DatatypeConverter.parseDateTime(title.getCompletionDate().toString());
-				if (required.after(completed))
-					title.setCompletedInDateRange("1");
-				else 
-					title.setOverdueInDateRange("1");
+				AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(packEvent);
+				if (currentPack.getTitleID().equals(title.getTitleID())) {
+					pack = currentPack;
+					logger.info("package found");
+				}
 			}
-			else if ((title.getRequiredBy() != null) && (title.getCompletionDate() == null))
-				title.setOverdueInDateRange("1");
+			
+			AddOrUpdateMaterial material = new AddOrUpdateMaterial();
+			List<EventEntity> materialList = queryApi.getByEventName("AddOrUpdateMaterial");
+			for (EventEntity materialEvent : materialList)
+			{
+				AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(materialEvent);
+				if (currentMaterial.getMaterialID().equals(pack.getMaterialID())) {
+					material = currentMaterial;
+					logger.info("material found");
+				}
+			}
+			
+			OrderStatus order = new OrderStatus();
+			order.setDateRange(startDate + " - " + endDate);
+			order.setTitle(title.getTitle());
+			order.setMaterialID(pack.getMaterialID());
+			order.setChannels(title.getChannels());
+			order.setRequiredBy(pack.getRequiredBy());
+			order.setCompletionDate(material.getCompletionDate());
+			
+			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
+			{
+				Calendar required = DatatypeConverter.parseDateTime(order.getRequiredBy().toString());
+				Calendar completed = DatatypeConverter.parseDateTime(order.getCompletionDate().toString());
+				if (required.after(completed))
+					order.setCompletedInDateRange("1");
+				else
+					order.setOverdueInDateRange("1");
+			}
+			else if (order.getRequiredBy() != null)
+			{
+				Calendar required = DatatypeConverter.parseDateTime(order.getRequiredBy().toString());
+				if (required.after(new Date()))
+					order.setOverdueInDateRange("1");
+			}
 
-			orders.add(title);
+			orders.add(order);
 			logger.info("Order: " + title.getTitle() + " " + title);
 		}
 		return orders;

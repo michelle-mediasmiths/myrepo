@@ -230,7 +230,7 @@ public class ReportUIImpl implements ReportUI
 	public void getOrderStatusCSV()
 	{
  		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
- 		List<EventEntity> orders = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "OrderStatusReport", MAX));
+ 		List<EventEntity> orders = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle", MAX));
 		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
 	}
 
