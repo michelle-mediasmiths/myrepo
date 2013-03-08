@@ -48,34 +48,4 @@ public interface EventUI
 	@Path("/atom_rss_feed.html")
 	@Produces("text/html")
 	public String getFeed();
-	
-	@GET
-	@Path("/bms.html")
-	@Produces("text/html")
-	public String getBms();
-	
-	@GET
-	@Path("/content_pickup.html")
-	@Produces("text/html")
-	public String getContentPickup();
-
-	@GET
-	@Path("/transcode.html")
-	@Produces("text/html")
-	public String getTranscode();
-	
-	@GET
-	@Path("/qc.html")
-	@Produces("text/html")
-	public String getQC();
-	
-	@GET
-	@Path("/delivery.html")
-	@Produces("text/html")
-	public String getDelivery();
-	
-	@GET
-	@Path("/system.html")
-	@Produces("text/html")
-	public String getSystem();
 }

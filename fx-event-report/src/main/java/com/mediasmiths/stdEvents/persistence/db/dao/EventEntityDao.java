@@ -13,9 +13,7 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 	public List<EventEntity> findByEventName(String eventName);
 
 	public List<EventEntity> findUnique(String namespace, String eventName);
-	
-	public void printXML(List<EventEntity> events);
-	
+		
 	public void saveFile (String eventString);
 
 	public ArrayList<EventEntity> toBeanArray (List<EventEntity> events);

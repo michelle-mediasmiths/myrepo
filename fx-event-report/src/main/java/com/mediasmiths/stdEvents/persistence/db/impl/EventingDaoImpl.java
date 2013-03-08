@@ -8,7 +8,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 
 public class EventingDaoImpl extends HibernateDao<EventingEntity, Long> implements EventingDao
 {
-	public static final transient Logger logger = Logger.getLogger(PlaceholderMessageDaoImpl.class);
+	public static final transient Logger logger = Logger.getLogger(EventingDaoImpl.class);
 
 	public EventingDaoImpl()
 	{

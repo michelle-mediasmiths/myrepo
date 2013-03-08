@@ -1,31 +1,15 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import javax.ws.rs.PathParam;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.marshaller.EventMarshaller;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
-import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
-import com.mediasmiths.stdEvents.persistence.db.impl.ContentPickupDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.DeliveryDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.IPEventDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.InfrastructureDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.ManualPurgeDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.PlaceholderMessageDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.PreviewEventDetailDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.QCDaoImpl;
-import com.mediasmiths.stdEvents.persistence.db.impl.TranscodeDaoImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
 import org.apache.log4j.Logger;
 

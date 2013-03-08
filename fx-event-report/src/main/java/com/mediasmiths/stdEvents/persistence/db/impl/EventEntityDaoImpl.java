@@ -91,7 +91,7 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		logger.info("Finished search");
 		return getList(criteria);
 	}
-	
+
 	@Transactional
 	public void saveFile (String eventString)
 	{
@@ -105,7 +105,7 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*@Override
 	public void deleteEventing(Long id)
 	{
@@ -114,68 +114,6 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		eventingDao.deleteById(id);
 	}*/
 
-	@Override
-	public void printXML(List<EventEntity> events)
-	{
-		try {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			
-			Document doc = docBuilder.newDocument();
-			Element rootElement = doc.createElement("EventReport");
-			Attr attr = doc.createAttribute("date");
-			attr.setValue(new Date().toString());
-			rootElement.setAttributeNode(attr);
-			doc.appendChild(rootElement);
-			
-			for (int i=0; i<events.size(); i++) {
-				EventEntity event = events.get(i);
-				
-				Element eventEntity = doc.createElement("eventEntity");
-				rootElement.appendChild(eventEntity);
-				
-				Element time = doc.createElement("time");
-				time.appendChild(doc.createTextNode(String.valueOf(event.getTime())));
-				eventEntity.appendChild(time);
-				
-				Element namespace = doc.createElement("namespace");
-				namespace.appendChild(doc.createTextNode(event.getNamespace()));
-				eventEntity.appendChild(namespace);
-				
-				Element eventName = doc.createElement("eventName");
-				eventName.appendChild(doc.createTextNode(event.getEventName()));
-				eventEntity.appendChild(eventName);
-				
-				Element payload = doc.createElement("payload");
-				payload.appendChild(doc.createTextNode(event.getPayload()));
-				eventEntity.appendChild(payload);
-				
-				Element content = doc.createElement("content");
-				payload.appendChild(doc.createTextNode(event.getContent()));
-				eventEntity.appendChild(content);
-				
-				Element eventTime = doc.createElement("eventTime");
-				payload.appendChild(doc.createTextNode(String.valueOf(event.getEventTime())));
-				eventEntity.appendChild(eventTime);
-			}
-			
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("/Users/alisonboal/Documents/PersistenceInterface/sptFiles/report.xml"));
-			
-			transformer.transform(source, result);
-			logger.info("File saved");
-		} 
-		catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}catch (TransformerException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
 	public ArrayList<EventEntity> toBeanArray(List<EventEntity> items)
 	{	
 		ArrayList<EventEntity> events = new ArrayList<EventEntity>();
@@ -211,5 +149,5 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		return getList(criteria);
 	}
 
-		
+
 }

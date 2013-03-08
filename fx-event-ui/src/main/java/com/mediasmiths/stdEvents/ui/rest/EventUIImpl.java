@@ -1,12 +1,7 @@
 package com.mediasmiths.stdEvents.ui.rest;
 
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -83,54 +78,6 @@ public class EventUIImpl implements EventUI
 	{
 		TemplateCall call = templater.template("atom_rss_feed");
 		call.set("feeds", notificationServiceApi.getFeedAsString());
-		return call.process();
-	}
-
-	@Transactional
-	public String getBms()
-	{
-		final TemplateCall call = templater.template("bms");
-		call.set("placeholderMessages", queryApi.getAll("placeholderMessage"));
-		return call.process();
-	}
-
-	@Transactional
-	public String getContentPickup()
-	{
-		final TemplateCall call = templater.template("content_pickup");
-		call.set("materialTypes", queryApi.getAll("contentPickup"));
-		return call.process();
-	}
-
-	@Transactional
-	public String getTranscode()
-	{
-		final TemplateCall call = templater.template("transcode");
-		call.set("transcodes", queryApi.getAll("transcode"));
-		return call.process();
-	}
-
-	@Transactional
-	public String getQC()
-	{
-		final TemplateCall call = templater.template("qc");
-		call.set("qcs", queryApi.getAll("qc"));
-		return call.process();
-	}
-
-	@Transactional
-	public String getDelivery()
-	{
-		final TemplateCall call = templater.template("delivery");
-		call.set("deliveries", queryApi.getAll("delivery"));
-		return call.process();
-	}
-
-	@Transactional
-	public String getSystem()
-	{
-		final TemplateCall call = templater.template("system");
-		call.set("ipEvents", queryApi.getAll("system"));
 		return call.process();
 	}
 }

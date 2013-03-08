@@ -22,7 +22,6 @@ import com.mediasmiths.std.guice.thymeleaf.Templater;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.reporting.csv.AcquisitionRpt;
 import com.mediasmiths.stdEvents.reporting.csv.AutoQCRpt;
 import com.mediasmiths.stdEvents.reporting.csv.ComplianceRpt;
@@ -41,9 +40,6 @@ public class ReportUIImpl implements ReportUI
 	
 	@Inject
 	private QueryAPI queryApi;
-	
-	@Inject
-	private JasperAPI jasperApi;
 	
 	@Inject
 	private EventAPI eventApi;
@@ -243,22 +239,6 @@ public class ReportUIImpl implements ReportUI
 	{
 		final TemplateCall call = templater.template("acquisition_delivery");
 		
-		call.set("tapeEvents", queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"));
-		call.set("fileEvents", queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File"));
-
-		call.set("noByTape", queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")));
-		call.set("noByFile", queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-		
-		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-		int perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
-		int perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
-
-		perByTape = perByTape * 100;
-		perByFile = perByFile * 100;
-		
-		call.set("perByTape", perByTape);
-		call.set("perByFile", perByFile);
-
 		return call.process();
 	}
 	
