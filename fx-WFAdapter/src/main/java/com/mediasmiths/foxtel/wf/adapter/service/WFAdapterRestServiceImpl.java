@@ -7,6 +7,11 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.ip.common.events.TcFailureNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcPassedNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcTotalFailure;
+import com.mediasmiths.foxtel.ip.common.events.TxDeliveryFailure;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
@@ -17,6 +22,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.TCNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
@@ -25,6 +31,7 @@ import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -45,8 +52,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
-//import com.mediasmiths.stdEvents.persistence.db.entity.EventEntity;
-//import com.mediasmiths.stdEvents.persistence.rest.api.EventAPI;
+
 
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
@@ -415,15 +421,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 	}
 
-	protected void saveEvent(String name, String payload, String nameSpace)
-	{
-		events.saveEvent(name, payload, nameSpace);
-	}
-
-	protected void saveEvent(String name, Object payload, String nameSpace)
-	{
-		events.saveEvent(name, payload, nameSpace);
-	}
 
 	@Override
 	@GET
@@ -684,5 +681,149 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		return mayamClient.deletePurgeCandidates();
 	}
+
+
+
+
+	////// -------------------- Eventing
+
+	// temporary serialiser until moved within event service.
+
+	private static JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
+
+
+
+
+	protected void saveEvent(String name, String payload, String nameSpace)
+	{
+		events.saveEvent(name, payload, nameSpace);
+	}
+
+
+	// TC Events
+
+	protected void saveEvent(String name, TCFailureNotification payload, String nameSpace)
+	{
+		try
+		{
+			TcFailureNotification tcFailedNotification = new TcFailureNotification();
+			setTCNotification(payload, tcFailedNotification);
+			events.saveEvent(name, JAXB.serialise(tcFailedNotification), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+	protected void saveEvent(String name, TCTotalFailure payload, String nameSpace)
+	{
+		try
+		{
+			TcTotalFailure tcTotalFailure = new TcTotalFailure();
+			setTCNotification(payload, tcTotalFailure);
+			events.saveEvent(name, JAXB.serialise(tcTotalFailure), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+	private void setTCNotification(final TCNotification payload, final TcNotification tcNotification)
+	{
+		tcNotification.setAssetID(payload.getAssetID());
+		tcNotification.setTaskID(payload.getTitle());
+		tcNotification.setTaskID(payload.getTaskID() + "");
+	}
+
+
+
+	protected void saveEvent(String name, TCPassedNotification payload, String nameSpace)
+	{
+		try
+		{
+			TcPassedNotification tcPassedNotification = new TcPassedNotification();
+			setTCNotification(payload, tcPassedNotification);
+			events.saveEvent(name, JAXB.serialise(tcPassedNotification), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+	// Auto QC Event
+
+	protected void saveEvent(String name, AutoQCErrorNotification payload, String nameSpace)
+	{
+		try
+		{
+			com.mediasmiths.foxtel.ip.common.events.AutoQCErrorNotification qcErrorNotification = new com.mediasmiths.foxtel.ip.common.events.AutoQCErrorNotification();
+			setQCNotification(payload, qcErrorNotification);
+			events.saveEvent(name, JAXB.serialise(qcErrorNotification), nameSpace);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
+	}
+
+
+	protected void saveEvent(String name, AutoQCFailureNotification payload, String nameSpace)
+	{
+		try
+		{
+			com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification autoQCFailureNotification = new com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification();
+			setQCNotification(payload, autoQCFailureNotification);
+			events.saveEvent(name, JAXB.serialise(autoQCFailureNotification), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+	protected void saveEvent(String name, AutoQCPassNotification payload, String nameSpace)
+	{
+		try
+		{
+			com.mediasmiths.foxtel.ip.common.events.AutoQCPassNotification qcFailureNotification = new com.mediasmiths.foxtel.ip.common.events.AutoQCPassNotification();
+			setQCNotification(payload, qcFailureNotification);
+			events.saveEvent(name, JAXB.serialise(qcFailureNotification), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+	private void setQCNotification(final com.mediasmiths.foxtel.wf.adapter.model.AutoQCResultNotification payload,
+	                               final com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification qcErrorNotification)
+	{
+		qcErrorNotification.setAssetId(payload.getAssetId());
+		qcErrorNotification.setForTXDelivery(payload.isForTXDelivery());
+		qcErrorNotification.setJobId(payload.getJobName());
+	}
+
+	// TX Delivery
+
+	protected void saveEvent(String name, TXDeliveryFailure payload, String nameSpace)
+	{
+		try
+		{
+			TxDeliveryFailure deliveryFailure = new TxDeliveryFailure();
+			deliveryFailure.setPackageID(payload.getPackageID());
+			deliveryFailure.setStage(payload.getStage());
+			deliveryFailure.setJobName(payload.getTaskID() + "");
+			events.saveEvent(name, JAXB.serialise(deliveryFailure), nameSpace);
+		}
+		catch (Exception e)
+		{
+			log.error("Events unable to serialise message", e);
+		}
+	}
+
+
 
 }
