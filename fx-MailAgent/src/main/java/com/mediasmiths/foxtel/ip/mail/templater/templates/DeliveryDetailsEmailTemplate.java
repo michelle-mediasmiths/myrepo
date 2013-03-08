@@ -21,7 +21,7 @@ public class DeliveryDetailsEmailTemplate extends MailTemplate implements EmailT
 
 		 DeliveryDetails dd = (DeliveryDetails)obj;
 
-		t.setSubject(String.format(getSubject(), dd.getMasterId(), dd.getTitle()));
+		t.setSubject(String.format(getSubject(), dd.getAssetID(), dd.getTitle()));
 		t.setEmailaddresses(getEmailaddresses());
 		t.setBody(String.format(getBody(), dd.getFileLocation()));
 

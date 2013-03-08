@@ -19,7 +19,7 @@ public class AutoQcFailureNotificationEmailTemplate extends MailTemplate impleme
         MailTemplate t = new MailTemplate();
 		AutoQCFailureNotification aQC = (AutoQCFailureNotification) obj;
 
-		t.setBody(String.format(getBody(), aQC.getJobName(), aQC.getAssetId()));
+		t.setBody(String.format(getBody(), aQC.getJobId(), aQC.getAssetId()));
 		t.setEmailaddresses(getEmailaddresses());
 		t.setSubject(String.format(getSubject(), aQC.getAssetId()));
 		return t;

@@ -1,8 +1,8 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata;
 
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.TcPassedNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 
 public class TcPassedNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -10,7 +10,7 @@ public class TcPassedNotificationEmailTemplate extends MailTemplate implements E
 	@Override
 	public boolean handles(Object obj)
 	{
-		return obj.getClass().equals(TCPassedNotification.class);
+		return obj.getClass().equals(TcPassedNotification.class);
 	}
 
 	@Override
@@ -18,17 +18,17 @@ public class TcPassedNotificationEmailTemplate extends MailTemplate implements E
 	{
 		MailTemplate m = new MailTemplate();
 
-		//TCPassedNotification tcPassed = (TCPassedNotification)obj;
+		TcPassedNotification tcPassed = (TcPassedNotification)obj;
 
 		m.setBody((String)obj);
 		m.setEmailaddresses(getEmailaddresses());
 		m.setSubject(getSubject());
-/*
+
 		if (tcPassed.getAssetID()!=null)
 			m.setSubject(String.format(getSubject(), tcPassed.getAssetID(), tcPassed.getTitle()));
 		else
 			m.setSubject(getSubject() + "Could not find packageID");
-*/
+
 		return m;
 
 	}

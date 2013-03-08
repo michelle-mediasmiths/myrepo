@@ -21,7 +21,7 @@ public class DeliverFailureNotificationEmailTemplate extends MailTemplate implem
 
 		m.setEmailaddresses(getEmailaddresses());
 		m.setBody(getBody());
-		m.setSubject(String.format(getSubject(), d.getMasterId(), d.getTitle()));
+		m.setSubject(String.format(getSubject(), d.getAssetID(), d.getTitle()));
 
 		return m;
 	}

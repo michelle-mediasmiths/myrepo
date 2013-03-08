@@ -22,7 +22,7 @@ public class AutoQcErrorNotificationEmailTemplate extends MailTemplate implement
 		AutoQCErrorNotification aqce = (AutoQCErrorNotification) obj;
 
 		t.setEmailaddresses(getEmailaddresses());
-		t.setSubject(String.format(getSubject(), aqce.getJobName(), aqce.getAssetId()));
+		t.setSubject(String.format(getSubject(), aqce.getJobId(), aqce.getAssetId()));
 		t.setBody(getBody());
 		return t;
 
@@ -31,7 +31,7 @@ public class AutoQcErrorNotificationEmailTemplate extends MailTemplate implement
 	void getTemplate(MailTemplate template, AutoQCErrorNotification obj)
 	{
 
-		template.setSubject(template.getSubject() + obj.getAssetId() + " " + obj.getJobName());
+		template.setSubject(template.getSubject() + obj.getAssetId() + " " + obj.getJobId());
 
 	}
 
