@@ -42,26 +42,7 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
-	@Inject
-	protected PlaceholderMessageDaoImpl placeholderMessageDao;
-	@Inject
-	protected ContentPickupDaoImpl contentPickupDao;
-	@Inject
-	protected TranscodeDaoImpl transcodeDao;
-	@Inject
-	protected QCDaoImpl qcDao;
-	@Inject
-	protected DeliveryDaoImpl deliveryDao;
-	@Inject
-	protected InfrastructureDaoImpl infrastructureDao;
-	@Inject
-	protected ManualPurgeDaoImpl manualPurgeDao;
-	@Inject
-	protected PreviewEventDetailDaoImpl previewDao;
-	@Inject
-	protected QueryAPI queryApi;
-
-
+	
 	private final EventingDao eventingDao;
 
 	@Inject
@@ -70,9 +51,6 @@ public class EventAPIImpl implements EventAPI
 		this.eventingDao = eventingDao;
 
 	}
-
-	@Inject
-	private Set<EventMarshaller> translateDaoSet;
 	
 	private static final transient Logger logger = Logger.getLogger(EventAPIImpl.class);
 
@@ -80,24 +58,7 @@ public class EventAPIImpl implements EventAPI
 
 	EventTypeMapper storageTypeMapper = new EventTypeMapper();
 	
-	Map<String, Class<? extends EventMarshaller>> storeFormat = createTranslateMap();
 	
-	private Map<String, Class<? extends EventMarshaller>> createTranslateMap()
-	{
-		Map<String, Class<? extends EventMarshaller>> storeFormat = new HashMap<String, Class<? extends EventMarshaller>>();
-		storeFormat.put("http://www.foxtel.com.au/ip/bms", PlaceholderMessageDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/content", ContentPickupDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/tc", TranscodeDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/qc", QCDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/delivery", DeliveryDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/system", IPEventDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/infrastructure", InfrastructureDaoImpl.class);
-		storeFormat.put("http://www.foxtel.com.au/ip/preview", PreviewEventDetailDaoImpl.class);
-
-		logger.info("\t" + storeFormat.toString());
-
-		return storeFormat;
-	}
 
 	/**
 	 * Takes in event details and saves them in the database
@@ -113,13 +74,7 @@ public class EventAPIImpl implements EventAPI
 
 			// Save event to the all events table.
 		eventDao.saveOrUpdate(event);
-		Class<? extends EventMarshaller> daoClass = storeFormat.get(event.getNamespace());
 		
-		if (daoClass != null)
-		{
-			EventMarshaller dao = injector.getInstance(daoClass);
-			dao.save(event);
-		}
 		logger.info("Saving to Eventing table");
 		EventingEntity eventingEntity = new EventingEntity();
 		logger.info("Created correctly");
@@ -138,27 +93,6 @@ public class EventAPIImpl implements EventAPI
 		EventEntity event = eventDao.getById(id);
 		return event;
 	}
-
-	@Transactional
-	public List<EventEntity> getByNamespace(@PathParam("namespace") String namespace)
-	{
-		logger.info("Getting event by namespace...");
-		List<EventEntity> events = eventDao.findByNamespace(namespace);
-		logger.info("Finished search");
-		eventDao.printXML(events);
-		return events;
-	}
-
-	@Transactional
-	public List<EventEntity> getByEventName(@PathParam("eventname") String eventName)
-	{
-		logger.info("Getting event by eventName...");
-		List<EventEntity> events = eventDao.findByEventName(eventName);
-		logger.info("Finished search");
-		eventDao.printXML(events);
-		return events;
-	}
-
 
 	@Transactional
 	public void setEventingSwitch(boolean value)
