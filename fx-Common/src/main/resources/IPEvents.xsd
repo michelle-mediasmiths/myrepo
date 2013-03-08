@@ -177,11 +177,6 @@
 	</xs:complexType>
 	</xs:element>
 
-    <xs:complexType name="tcFailureNotification">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="packageID" type="xs:string" />
-        </xs:sequence>
-    </xs:complexType>
 
     <xs:complexType abstract="true" name="autoQCRequest">
         <xs:sequence>
@@ -217,7 +212,7 @@
     <xs:complexType name="invokeIntalioQCFlow">
         <xs:complexContent>
             <xs:extension base="autoQCRequest">
-                <xs:sequence />
+                <xs:sequence/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -230,11 +225,33 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="tcPassedNotification">
+    <xs:complexType name="tcNotification">
         <xs:sequence>
-            <xs:element minOccurs="0" name="packageID" type="xs:string" />
+            <xs:element minOccurs="0" name="taskID" type="xs:string" />
+            <xs:element minOccurs="0" name="assetID" type="xs:string" />
+            <xs:element minOccurs="0" name="title" type="xs:string" />
+            <xs:element minOccurs="0" name="packageID" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:complexType name="tcPassedNotification">
+        <xs:complexContent>
+            <xs:extension base="fns:tcNotification"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="tcFailureNotification">
+        <xs:complexContent>
+            <xs:extension base="fns:tcNotification"/>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="tcTotalFailure">
+        <xs:complexContent>
+            <xs:extension base="fns:tcNotification"/>
+        </xs:complexContent>
+    </xs:complexType>
+
 
     <xs:complexType name="materialTransferForTCResponse">
         <xs:sequence>
@@ -267,12 +284,6 @@
             <xs:element name="forTX" type="xs:boolean" />
             <xs:element name="outputFolder" type="xs:string" />
             <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime" />
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:complexType name="tcTotalFailure">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="packageID" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
