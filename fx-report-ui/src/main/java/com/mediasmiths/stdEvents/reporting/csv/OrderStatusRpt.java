@@ -2,13 +2,9 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
@@ -26,7 +22,6 @@ import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.OrderStatusRT;
 
 public class OrderStatusRpt
 {
@@ -48,7 +43,7 @@ public class OrderStatusRpt
 	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
-		//setStats(orders);
+		setStats(orders);
 		OrderStatus del = addStats("Total Delivered", Integer.toString(delivered));
 		OrderStatus out = addStats("Total Outstanding", Integer.toString(outstanding));
 		OrderStatus ove = addStats("Total Overdue", Integer.toString(overdue));
@@ -89,9 +84,9 @@ public class OrderStatusRpt
 		for (EventEntity event : events)
 		{
 			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+			
 			AddOrUpdatePackage pack = new AddOrUpdatePackage();
-			List<EventEntity> packList = queryApi.getByEventName("AddOrUpdatePackage");
-			for (EventEntity packEvent : packList)
+			for (EventEntity packEvent : queryApi.getByEventName("AddOrUpdatePackage"))
 			{
 				AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(packEvent);
 				if (currentPack.getTitleID().equals(title.getTitleID())) {
@@ -101,8 +96,7 @@ public class OrderStatusRpt
 			}
 			
 			AddOrUpdateMaterial material = new AddOrUpdateMaterial();
-			List<EventEntity> materialList = queryApi.getByEventName("AddOrUpdateMaterial");
-			for (EventEntity materialEvent : materialList)
+			for (EventEntity materialEvent : queryApi.getByEventName("AddOrUpdateMaterial"))
 			{
 				AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(materialEvent);
 				if (currentMaterial.getMaterialID().equals(pack.getMaterialID())) {
@@ -117,21 +111,19 @@ public class OrderStatusRpt
 			order.setMaterialID(pack.getMaterialID());
 			order.setChannels(title.getChannels());
 			order.setRequiredBy(pack.getRequiredBy());
+			order.setTaskType("Ingest");
 			order.setCompletionDate(material.getCompletionDate());
 			
 			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
 			{
-				Calendar required = DatatypeConverter.parseDateTime(order.getRequiredBy().toString());
-				Calendar completed = DatatypeConverter.parseDateTime(order.getCompletionDate().toString());
-				if (required.after(completed))
+				if (order.getRequiredBy().toGregorianCalendar().after(order.getCompletionDate().toGregorianCalendar()))
 					order.setCompletedInDateRange("1");
 				else
 					order.setOverdueInDateRange("1");
 			}
 			else if (order.getRequiredBy() != null)
 			{
-				Calendar required = DatatypeConverter.parseDateTime(order.getRequiredBy().toString());
-				if (required.after(new Date()))
+				if (order.getRequiredBy().toGregorianCalendar().before(new Date()))
 					order.setOverdueInDateRange("1");
 			}
 
@@ -199,12 +191,12 @@ public class OrderStatusRpt
 	{
 		for (OrderStatus event : events)
 		{
-			if (!(event.getCompletedInDateRange() == null))
+			if ((event.getCompletedInDateRange() != null) && (event.getTaskType() != null))
 			{
-				if ((event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
+				if ((event.getCompletedInDateRange().equals("1")) && ((event.getTaskType().equals("Ingest") || (event.getTaskType().equals("ingest")))))
 					delivered++;
 				logger.info("getting outstanding");
-				if ((! event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
+				if ((! event.getCompletedInDateRange().equals("1")) && ((event.getTaskType().equals("Ingest") || event.getTaskType().equals("ingest"))))
 					outstanding++;
 				logger.info("getting overdue");
 			}
