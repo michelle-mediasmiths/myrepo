@@ -320,6 +320,35 @@
 			<xs:enumeration value="Media" />
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<xs:complexType name="PlaceholderMessage">
+		<xs:sequence>
+			<xs:element name="title" type="xs:string"/>
+			<xs:element name="materialID" type="xs:string"/>
+			<xs:element name="channels" type="xs:string" minOccurs="0"/>
+			<xs:element name="orderRef" type="xs:string" minOccurs="0"/>
+			<xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
+			<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
+			<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+			<xs:element name="taskType" type="xs:string" minOccurs="0"/>
+			<xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:complexType name="ContentPickup">
+		<xs:sequence>
+			<xs:element name="title" type="xs:string"/>
+			<xs:element name="materialID" type="xs:string"/>
+			<xs:element name="channels" type="xs:string" minOccurs="0"/>
+			<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+			<xs:element name="tapeDelivery" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="fileDelivery" type="xs:boolean" minOccurs="0"/>
+			<xs:element name="format" type="xs:string" minOccurs="0"/>
+			<xs:element name="filesize" type="xs:string" minOccurs="0"/>
+			<xs:element name="titleLength" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">
