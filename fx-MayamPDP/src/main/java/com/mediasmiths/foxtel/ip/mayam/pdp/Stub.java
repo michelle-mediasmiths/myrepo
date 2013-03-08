@@ -148,8 +148,6 @@ public class Stub implements MayamPDP
 			defaultValidation(attributeMap);
 			dumpPayload(attributeMap);
 
-			validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
-
 			AttributeMap returnMap = client.createAttributeMap();
 			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
 
@@ -913,7 +911,6 @@ public class Stub implements MayamPDP
 	{
 		validateAttributeMap(
 				attributeMap,
-				Attribute.HOUSE_ID,
 				Attribute.HOUSE_ID,
 				Attribute.ASSET_TYPE,
 				Attribute.TASK_UPDATED_BY,
