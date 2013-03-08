@@ -82,6 +82,8 @@
 			<xs:extension base="fns:IPEvent">
 				<xs:sequence>
 					<xs:element name="materialID" type="xs:string"/>
+					<xs:element name="assetID" type="xs:string"/>
+					<xs:element name="jobName" type="xs:string"/>
 					<xs:element name="title" type="xs:string" />
 					<xs:element name="fileLocation" type="xs:string" />
 					<xs:element name="channels" type="xs:string"/>
