@@ -203,6 +203,8 @@
 
     <xs:complexType abstract="true" name="autoQCResultNotification">
         <xs:sequence>
+            <xs:element name="assetId" type="xs:string" />
+            <xs:element name="jobId" type="xs:string" />
             <xs:element name="materialID" type="xs:string" />
             <xs:element name="forTXDelivery" type="xs:boolean" />
             <xs:element name="title" type="xs:string" />
