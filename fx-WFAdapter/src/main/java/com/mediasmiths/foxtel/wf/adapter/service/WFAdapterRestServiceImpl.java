@@ -11,6 +11,7 @@ import com.mediasmiths.foxtel.ip.common.events.TcFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.common.events.TcPassedNotification;
 import com.mediasmiths.foxtel.ip.common.events.TcTotalFailure;
+import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.common.events.TxDeliveryFailure;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -51,6 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 
@@ -619,6 +621,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifiyTXDelivered(TXDeliveryFinished deliveryFinished) throws MayamClientException
 	{
 		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
+
+		TxDelivered txDelivered = new TxDelivered();
+		txDelivered.setPackageID(deliveryFinished.getPackageID());
+		txDelivered.setTaskID(deliveryFinished.getTaskID()+"");
+		txDelivered.setTime((new Date()).toString());
+		events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
 	}
 
 	@Override
