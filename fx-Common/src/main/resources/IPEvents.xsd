@@ -381,6 +381,18 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="txDelivered">
+        <xs:complexContent>
+            <xs:extension base="IPEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="taskID" type="xs:string" />
+                    <xs:element minOccurs="0" name="packageID" type="xs:string" />
+                    <xs:element minOccurs="0" name="time" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
 	<xs:simpleType name="PreviewStatus">
 		<xs:annotation>
 			<xs:documentation>A list of the types of Preview events

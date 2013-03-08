@@ -19,7 +19,7 @@ public class MailAgentServiceImpl implements MailAgentService
 {
 	private static final transient Logger logger = Logger.getLogger(MailAgentServiceImpl.class);
 
-	private JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events:com.mediasmiths.foxtel.ip.common.events.report:");
+	private static final JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
 
 	@Inject
 	protected EmailSenderService emailService;
@@ -62,7 +62,7 @@ public class MailAgentServiceImpl implements MailAgentService
 				caller.payload = decoder(caller.payload);
 			}
 
-			MailTemplate m = mailTemplate.customiseTemplate(caller.payload, caller.comment);
+			MailTemplate m = getMailTemplate(caller, mailTemplate);
 
 			if (m.getEmailaddresses().getEmailaddress().size() != 0)
 			{
@@ -79,6 +79,45 @@ public class MailAgentServiceImpl implements MailAgentService
 			if (logger.isInfoEnabled())
 				logger.info("Nothing matching eventname and namespace");
 		}
+	}
+
+	private MailTemplate getMailTemplate(final ServiceCallerEntity caller, final EmailTemplateGenerator mailTemplate)
+	{
+		try
+		{
+			Object payloadObj = JAXB.deserialise(caller.payload);
+
+			if (mailTemplate.handles(payloadObj))
+			{
+			    return mailTemplate.customiseTemplate(caller.payload, caller.comment);
+			}
+			else
+			{
+				logger.error("Template does not handle type .. sending reduced functionality email." + caller.eventName);
+
+				return defaultTemplate(caller.payload, (MailTemplate)mailTemplate);
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("Unable to deserialise obj .. sendind reduced functionality email.", e);
+			return defaultTemplate(caller.payload, (MailTemplate)mailTemplate);
+		}
+	}
+
+	/**
+	 *
+	 * @param payload
+	 * @param mailTemplate
+	 * @return a template formed just from the raw title, subject, body
+	 */
+	private MailTemplate defaultTemplate(final String payload, final MailTemplate mailTemplate)
+	{
+		MailTemplate t = new MailTemplate();
+		t.setEmailaddresses(mailTemplate.getEmailaddresses());
+		t.setSubject(mailTemplate.getSubject());
+		t.setBody(t.getBody() + payload);
+		return t;
 	}
 
 	private void sendEmailsForEvent(final MailTemplate m) throws EmailException, MessagingException

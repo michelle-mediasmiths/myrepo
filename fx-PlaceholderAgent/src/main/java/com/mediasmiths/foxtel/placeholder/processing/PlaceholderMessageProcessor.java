@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -40,6 +41,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -256,7 +258,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	private void sendPackageOrderStatus(AddOrUpdatePackage action){
 		
 		OrderStatus os = new OrderStatus();
-		os.setMaterialID(action.getPackage().getPresentationID());
+		os.setMaterialID(action.getPackage().getMaterialID());
 		String osString = reportSerialiser.serialise(os);
 		
 		//send event
@@ -477,8 +479,13 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		{
 			logger.error("Failed to create wfe error task",e);
 		}
-		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED){
-			eventService.saveEvent("ProtectedPurgeFail",message);
+		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
+		{
+			ProtectedPurgeFail ppf = new ProtectedPurgeFail();
+            ppf.setTitle(result.name());
+			ppf.setTime((new Date()).toString());
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
 		else{
 			eventService.saveEvent("failed",message);
