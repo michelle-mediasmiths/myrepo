@@ -41,6 +41,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 
@@ -270,14 +271,6 @@ public class MayamTitleController extends MayamController{
 				}
 				else{
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, title.isPurgeProtect());
-				}
-				
-				
-				if (ao) {
-					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");		
-				}
-				else if (title.isPurgeProtect() != null && title.isPurgeProtect()) {
-					attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 				}
 				
 				if (!attributesValid) {
@@ -556,10 +549,11 @@ public class MayamTitleController extends MayamController{
  					}
 					
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, Boolean.valueOf(titleIsPurgeProtected));
+					boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) attributes.getAttributes().getAttribute(Attribute.QC_PREVIEW_RESULT));
 					
 					if (isProtected != titleIsPurgeProtected){
 						
-						if (titleIsPurgeProtected) {
+						if (titleIsPurgeProtected && isPreviewPass) {
 							attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 						}
 						try {
@@ -567,10 +561,10 @@ public class MayamTitleController extends MayamController{
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, titleIsPurgeProtected);
-								if (ao) {
+								if (ao && isPreviewPass) {
 									material.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
 								}
-								else if (titleIsPurgeProtected) {
+								else if (titleIsPurgeProtected && isPreviewPass) {
 									material.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 								}
 								client.assetApi().updateAsset(material);
@@ -580,7 +574,7 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					
-					if (ao) {
+					if (ao && isPreviewPass) {
 						attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
 					}
 					

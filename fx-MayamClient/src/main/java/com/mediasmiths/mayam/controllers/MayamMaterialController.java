@@ -127,11 +127,6 @@ public class MayamMaterialController extends MayamController
 					if (isProtected != null)
 					{
 						attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, isProtected.booleanValue());
-						
-						if (isProtected)
-						{
-							attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");
-						}
 					}
 
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
@@ -143,8 +138,6 @@ public class MayamMaterialController extends MayamController
 
 					if (isAO != null && isAO.equals(Boolean.TRUE))
 					{
-						attributesValid = attributesValid
-								&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 						attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, AO_PROGRAMME_MATERIAL_AGL_NAME);
 					}
 					else
@@ -450,8 +443,6 @@ public class MayamMaterialController extends MayamController
 
 			if (material.isAdultMaterial())
 			{
-				attributesValid = attributesValid
-						&& attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, AO_ASSOCIATED_MATERIAL_AGL_NAME);
 			}
 			else
