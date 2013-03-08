@@ -42,6 +42,11 @@
 		</dependency>
 
 		<!-- reporting\events service -->
+        <dependency>
+            <groupId>com.mediasmiths.foxtel</groupId>
+            <artifactId>fx-Common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-Event</artifactId>
