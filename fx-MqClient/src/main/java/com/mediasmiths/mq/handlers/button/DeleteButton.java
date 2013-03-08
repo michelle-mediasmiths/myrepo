@@ -1,21 +1,19 @@
 package com.mediasmiths.mq.handlers.button;
 
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mediasmiths.foxtel.ip.common.events.ManualPurge;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamButtonType;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.log4j.Logger;
 
 public class DeleteButton extends ButtonClickHandler
 {
@@ -67,12 +65,10 @@ public class DeleteButton extends ButtonClickHandler
 			Actions a = new Actions();
 			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
 			ph.setActions(a);
-			
-			String eventName = MANUAL_PURGE;
-			String event = serialiser.serialise(ph);
-			String namespace = bmsEventsNamespace;
-			
-			eventsService.saveEvent(eventName, event, namespace);
+
+			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID),
+			                     (String) messageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID),
+			                     (String) messageAttributes.getAttribute(Attribute.ASSET_TITLE));
 			
 		}
 		catch (Exception e)
@@ -81,6 +77,8 @@ public class DeleteButton extends ButtonClickHandler
 		}
 		
 	}
+
+
 
 	@Override
 	public MayamButtonType getButtonType()
@@ -92,6 +90,20 @@ public class DeleteButton extends ButtonClickHandler
 	public String getName()
 	{
 		return "Delete Button Click";
+	}
+
+
+	private void sendManualPurgeEvent(String materialId, String titleId, String assetTitle)
+	{
+		ManualPurge manualPurge = new ManualPurge();
+		manualPurge.setMaterialId(materialId);
+		manualPurge.setTitle(assetTitle);
+		manualPurge.setTitleID(titleId);
+
+		String eventName = MANUAL_PURGE;
+		String namespace = bmsEventsNamespace;
+
+		eventsService.saveEvent(namespace, eventName,  manualPurge);
 	}
 
 }
