@@ -45,18 +45,16 @@ public class OrderStatusRpt
 	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
+		setStats(orders);
+		OrderStatus del = addStats("Total Delivered", Integer.toString(delivered));
+		OrderStatus out = addStats("Total Outstanding", Integer.toString(outstanding));
+		OrderStatus ove = addStats("Total Overdue", Integer.toString(overdue));
+		OrderStatus unm = addStats("Total Unmatched", Integer.toString(unmatched));
 		
-//		setStats(orders);
-//		OrderStatus del = new OrderStatus("Total Delivered", Integer.toString(delivered));
-//		OrderStatus out = new OrderStatus("Total Outstanding", Integer.toString(outstanding));
-//		OrderStatus ove = new OrderStatus("Total Overdue", Integer.toString(overdue));
-//		OrderStatus unm = new OrderStatus("Total Unmatched", Integer.toString(unmatched));
-//		
-//		orders.add(del);
-//		orders.add(out);
-//		orders.add(ove);
-//		orders.add(unm);
-		
+		orders.add(del);
+		orders.add(out);
+		orders.add(ove);
+		orders.add(unm);
 		createCsv(orders, reportName);
 	}
 	
@@ -73,12 +71,13 @@ public class OrderStatusRpt
 			title = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
 		}
-		catch (Exception e)
+		catch (Exception e)		
 		{
 			e.printStackTrace();
-		}
+		}	
 		return (OrderStatus)title;
 	}
+		
 	 
 	private List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
 	{
@@ -99,7 +98,7 @@ public class OrderStatusRpt
 			}
 			else if ((title.getRequiredBy() != null) && (title.getCompletionDate() == null))
 				title.setOverdueInDateRange("1");
-			
+
 			orders.add(title);
 			logger.info("Order: " + title.getTitle() + " " + title);
 		}
@@ -164,21 +163,100 @@ public class OrderStatusRpt
 	{
 		for (OrderStatus event : events)
 		{
+			if (!(event.getCompletedInDateRange() == null))
+			{
+				if ((event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
+					delivered++;
+				logger.info("getting outstanding");
+				if ((! event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
+					outstanding++;
+				logger.info("getting overdue");
+			}
 			
-			if ((event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
-				delivered++;
-			logger.info("getting outstanding");
-			if ((! event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
-				outstanding++;
-			logger.info("getting overdue");
+			if (!(event.getOverdueInDateRange() == null))
+			{
+				if ((event.getOverdueInDateRange().equals("1")) && ((event.getTaskType().equals("Ingest")) || (event.getTaskType().equals("ingest"))))
+					overdue++;
+			}
 			
-			if ((event.getOverdueInDateRange().equals("1")) && (event.getTaskType().equals("Ingest")))
-				overdue++;
 			logger.info("getting unmatched");
-			if (event.getTaskType().equals("Unmatched"))
-				unmatched++;
-		}
+			if (event.getTaskType() != null)
+			{
+				if (event.getTaskType().equals("Unmatched"))
+					unmatched++;
+			}
+		}	
 	}
 	
-	
+	private OrderStatus addStats(String name, String value)
+	{
+		OrderStatus stat = new OrderStatus();
+		stat.setTitle(name);
+		stat.setMaterialID(value);
+		return stat;
+	}
 }
+	
+
+
+
+
+
+//logger.info("Creating orderStatus list");
+//List<OrderStatusRT> orders = new ArrayList<OrderStatusRT>();
+//for (EventEntity event : events)
+//{
+//	String payload = event.getPayload();
+//	OrderStatusRT title = new OrderStatusRT();
+//	title.setDateRange(startDate + " - " + endDate);
+//	if (payload.contains("ProgrammeTitle"))
+//		title.setTitle(payload.substring(payload.indexOf("ProgrammeTitle")+15, payload.indexOf("</ProgrammeTitle")));
+//	if (payload.contains("mediaID"))
+//		title.setMaterialID(payload.substring(payload.indexOf("mediaID")+8, payload.indexOf("</mediaID")));
+//	if (payload.contains("OrderReference"))
+//		title.setOrderRef(payload.substring(payload.indexOf("OrderReference")+15, payload.indexOf("</OrderReference")));
+//	if (payload.contains("channelName"))
+//		title.setChannel(payload.substring(payload.indexOf("channelName")+13, payload.indexOf('"',(payload.indexOf("channelName")+13))));
+//	
+//	Calendar required = null;
+//	List<EventEntity> aggregatorEvents = queryApi.getByEventName("AddOrUpdateMaterial");
+//	for (EventEntity aggregatorEvent : aggregatorEvents)
+//	{
+//		String str = aggregatorEvent.getPayload();
+//		String aggregatorTitle = str.substring(str.indexOf("mediaID")+8, str.indexOf("</mediaID"));
+//		logger.info("agg:" + aggregatorTitle);
+//		if (payload.contains("mediaID")) {
+//			String curTitle =  payload.substring(payload.indexOf("mediaID")+8, payload.indexOf("</mediaID"));
+//			logger.info("Current " + curTitle);
+//			if (curTitle.equals(aggregatorTitle)) {
+//				title.setAggregatorID(str.substring(str.indexOf("aggregatorID")+14, str.indexOf('"',(str.indexOf("aggregatorID")+14))));
+//				title.setOrderRef(str.substring(str.indexOf("OrderReference")+15, str.indexOf('<', (str.indexOf("OrderReference")))));
+//				title.setRequiredBy(str.substring(str.indexOf("RequiredBy")+11, str.indexOf("</RequiredBy")));
+//				required = DatatypeConverter.parseDate(title.getRequiredBy());
+//				logger.info("RequiredBy: " + required);
+//			}
+//		}
+//	}
+//	
+//	Calendar completion = null;
+//	List<EventEntity> completionEvents = queryApi.getByEventName("CreationComplete");
+//	for (EventEntity completionEvent : completionEvents)
+//	{
+//		String str = completionEvent.getPayload();
+//		if (str.contains("mediaID"))
+//		{
+//			String titleID = str.substring(str.indexOf("mediaID")+8, str.indexOf("</mediaID"));
+//			String curTitle = payload.substring(payload.indexOf("mediaID")+9, payload.indexOf("</mediaID"));
+//			logger.info("TitleID: " + titleID + " curTitle: " + curTitle);
+//			if (titleID.equals(curTitle))
+//			{
+//				if (str.contains("DateOfDelivery"))
+//				{
+//					title.setCompletionDate(str.substring(str.indexOf("DateOfDelivery")+15, str.indexOf("</DateOfDelivery")));
+//					logger.info("CompletionDate: " + title.getCompletionDate());
+//					completion = DatatypeConverter.parseDate(title.getCompletionDate());
+//					logger.info("cal: " + completion);
+//				}
+//			}
+//		}	
+//	}

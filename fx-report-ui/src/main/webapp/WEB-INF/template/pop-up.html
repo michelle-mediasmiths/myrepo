@@ -9,16 +9,19 @@
 <head>
 <title>Report</title>
 <link th:substituteby="includes :: htmlhead" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" />  
+<script src="http://twitter-bootstrap.node1.zygote.cc/js/bootstrap-modal.js" /> 
 </head>
 
 <body>
-	<table id="inputTable" class="table table-striped tablesorter">
-	<tbody> 
-		<tr>
-			<form class="form-search" method="GET" th:action="@{/rest/query/start_date/date/month/year}">
-				<td><label>Start Date: </label></td>
-				<td>
-					<select name="date">
+	<div>
+		<table id="inputTable" class="table table-striped tablesorter">
+			<tbody> 
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/start_date/date/month/year}">
+						<td><label>Start Date: </label></td>
+						<td>
+							<select name="date">
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -141,11 +144,6 @@
  		</tr>
  	</tbody>
  	</table>
- 	
- 	<!--<form action="demo_form.asp">
-  		Birthday (date and time): <input type="date" name="bdaytime">
-  		<input type="submit">
-	</form>-->
  		
  	<table id="reportTable" class="table table-striped tablesorter">
  	<tbody>	
@@ -190,21 +188,22 @@
 			<form class="form-search" method="GET" th:action="@{/rest/query/watch_folder_storage_csv}">
 				<td><label>24. Watch Folder Storage: </label></td>
 				<td><button class="btn-primary" id="rpt24Btn" type="submit">CSV</button></td>
-			</form>
-		</tr>
+					</form>
+				</tr>
 		
-		<tr>
-			<form class="form-search" method="GET" th:action="@{/rest/query/task_list_csv}">
-				<td><label>12. Task List Status: </label></td>
-				<td><button class="btn-primary" id="rpt12Btn" type="submit">CSV</button></td>
-			</form>
-			<form class="form-search" method="GET" th:action="@{/rest/query/transcoder_load_csv}">
-				<td><label>26. Transcoder Load: </label></td>
-				<td><button class="btn-primary" id="rpt26Btn" type="submit">CSV</button></td>
-			</form>
-		</tr>
- 	</tbody>
- 	</table>
+				<tr>
+					<form class="form-search" method="GET" th:action="@{/rest/query/task_list_csv}">
+						<td><label>12. Task List Status: </label></td>
+						<td><button class="btn-primary" id="rpt12Btn" type="submit">CSV</button></td>
+					</form>
+					<form class="form-search" method="GET" th:action="@{/rest/query/transcoder_load_csv}">
+						<td><label>26. Transcoder Load: </label></td>
+						<td><button class="btn-primary" id="rpt26Btn" type="submit">CSV</button></td>
+					</form>
+				</tr>
+ 			</tbody>
+ 		</table>
+	</div>	
 </body>
 
 </html>

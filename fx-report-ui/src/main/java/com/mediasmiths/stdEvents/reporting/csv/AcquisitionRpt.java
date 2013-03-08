@@ -42,9 +42,26 @@ public class AcquisitionRpt
 	private List<String> channels = new ArrayList<String>();
 	private List<String> formats = new ArrayList<String>();
 	
+	private int noFile=0;
+	private int noTape=0;
+	private double perFile=0;
+	private double perTape=0;
+	
 	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate, String reportName)
 	{
 		List<Acquisition> titles = getReportList(materials, startDate, endDate);
+		//setStats(titles);
+		
+		Acquisition noFileS = addStats("No By File", Integer.toString(noFile));
+		Acquisition noTapeS = addStats("No By Tape", Integer.toString(noTape));
+		Acquisition perFileS = addStats("% By File", Double.toString(perFile));
+		Acquisition perTapeS = addStats("% By Tape", Double.toString(perTape));
+		
+		titles.add(noFileS);
+		titles.add(noTapeS);
+		titles.add(perFileS);
+		titles.add(perTapeS);
+		
 		createCSV(titles, reportName);	
 	}
 	
@@ -67,7 +84,7 @@ public class AcquisitionRpt
 		return (Acquisition) title;
 	}
 	
-	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	private List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating acquisition list");
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
@@ -75,7 +92,10 @@ public class AcquisitionRpt
 		{
 			Acquisition title = unmarshall(event);
 			title.setDateRange(startDate + " - " + endDate);
-			
+			if (title.isTapeDelivery() != null)
+				title.setTapeDel("1");
+			if (title.isFileDelivery() != null)
+				title.setFileDel("1");
 			acqs.add(title);
 		}
 		return acqs;
@@ -88,7 +108,7 @@ public class AcquisitionRpt
 			logger.info("reportName: " + reportName);
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDelivery", "fileDelivery", "format", "filesize", "titleLength"};
+			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel", "format", "filesize", "titleLength"};
 			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
 				
@@ -117,7 +137,7 @@ public class AcquisitionRpt
 		}
 	}
 	
-	public CellProcessor[] getProcessor()
+	private CellProcessor[] getProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
 				new Optional(),
@@ -132,6 +152,27 @@ public class AcquisitionRpt
 				new Optional()
 		};
 		return processors;
+	}
+	
+	private void setStats(List<Acquisition> events)
+	{
+		for (Acquisition event : events)
+		{
+			if (event.isFileDelivery())
+				noFile ++;
+			if (event.isTapeDelivery())
+				noTape ++;
+			perFile = (noFile / events.size()) * 100;
+			perTape = (noTape / events.size()) * 100;
+		}
+	}
+	
+	private Acquisition addStats(String name, String value)
+	{
+		Acquisition acq = new Acquisition();
+		acq.setTitle(name);
+		acq.setMaterialID(value);
+		return acq;
 	}
 }
 	

@@ -30,6 +30,11 @@ public interface ReportUI
 	public String getByNamespace(@QueryParam("namespace")String namespace);
 	
 	@GET
+	@Path("/search_namespace_window/namespace")
+	@Produces("text/html")
+	public String getByNamespaceWindow(@QueryParam("namespace")String namespace);
+	
+	@GET
 	@Path("/search_eventname/eventname")
 	@Produces("text/html")
 	public String getByEventName(@QueryParam("eventname")String eventname);

@@ -36,11 +36,30 @@ public class ManualQARpt
 	
 	private List<String> channels = new ArrayList<String>();
 	
+	private int total=0;
+	private int escalated=0;
+	private int failed=0;
+	private int reordered=0;
+	private int hr=0;
+	
 	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<ManualQA> manualQAs = getReportList(events, startDate, endDate);
-		createCsv(manualQAs, reportName);
+		setStats(manualQAs);
 		
+		ManualQA totalS = addStats("Total QA'd", Integer.toString(total));
+		ManualQA escalatedS = addStats("Total Escalated", Integer.toString(escalated));
+		ManualQA failedS = addStats("Total Failed QA", Integer.toString(failed));
+		ManualQA reorderedS = addStats("Total Needs Reordered", Integer.toString(reordered));
+		ManualQA hrS = addStats("Total QA'd HR", Integer.toString(hr));
+		
+		manualQAs.add(totalS);
+		manualQAs.add(escalatedS);
+		manualQAs.add(failedS);
+		manualQAs.add(reorderedS);
+		manualQAs.add(hrS);
+		
+		createCsv(manualQAs, reportName);
 	}
 	
 	private ManualQA unmarshall(EventEntity event)
@@ -72,8 +91,13 @@ public class ManualQARpt
 			ManualQA manualQA = unmarshall(event);
 			manualQA.setDateRange(startDate + " - " + endDate);
 			
-			if (!(manualQA.getTimeEscalated() == null))
+			logger.info("timeEscalated: " + manualQA.getTimeEscalated());
+			if ((manualQA.getTimeEscalated()==null) || (manualQA.getTimeEscalated().equals("")))
+				manualQA.setEscalated(null);
+			
+			if (manualQA.getTimeEscalated().length()>1) 
 				manualQA.setEscalated("1");
+			logger.info("escalated: " + manualQA.getEscalated());
 			
 			if (manualQA.getPreviewStatus().contains("reorder"))
 				manualQA.setReordered("1");
@@ -139,6 +163,32 @@ public class ManualQARpt
 		};
 		return processors;
 	}
+	
+	private void setStats(List<ManualQA> events)
+	{
+		for (ManualQA event : events)
+		{
+			if (event.getTaskStatus().contains("FINISHED"))
+				total ++;
+			if (!(event.getEscalated()==null))
+				escalated ++;
+			if (event.getTaskStatus().contains("FAILED"))
+				failed ++;
+			if (event.getReordered().equals("1"))
+				reordered ++;
+			if (event.getHrPreview().equals("1"))
+				hr ++;
+		}
+	}
+	
+	private ManualQA addStats(String name, String value)
+	{
+		ManualQA qa = new ManualQA();
+		qa.setTitle(name);
+		qa.setMaterialID(value);
+		return qa;
+	}
+}
 	
 //	ICsvBeanWriter beanWriter = null;
 //	try {
@@ -354,4 +404,4 @@ public class ManualQARpt
 //				}	
 //			}
 //		}
-}
+

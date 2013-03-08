@@ -150,6 +150,17 @@
 
 			</tbody>
 		</table>
+		
+		<table>
+			<tbody>
+				<tr>
+					<form class="form-search form-inline" method="GET" th:action="@{/rest/query/search_namespace_window/namespace}">
+						<td><input name="namespace" id="namespaceText" type="text" class="input-small search-query" placeholder="namespace"/></td>
+						<td><button class="btn-primary" id="submitNamespaceBtn" type="submit">Namespace Windowed</button></td>
+					</form>
+				</tr>
+			</tbody>
+		</table>
 
 	</div>
 

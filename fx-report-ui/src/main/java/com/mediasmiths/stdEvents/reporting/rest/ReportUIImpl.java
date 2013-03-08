@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.TemplateCall;
 import com.mediasmiths.std.guice.thymeleaf.Templater;
@@ -84,6 +85,10 @@ public class ReportUIImpl implements ReportUI
 	public static Date endDate;
 	
 	public static String REPORT_NAME;
+	
+	@Inject
+	@Named("windowMax")
+	public int MAX;
 
 	@Transactional
 	public String getReport()
@@ -111,6 +116,15 @@ public class ReportUIImpl implements ReportUI
 	{
 		final TemplateCall call = templater.template("search");
 		call.set("events", queryApi.getByNamespace(namespace));
+		return call.process();
+	}
+	
+	@Transactional
+	public String getByNamespaceWindow(@QueryParam("namespace") String namespace)
+	{
+		final TemplateCall call = templater.template("search");
+		logger.info("ReportUIImpl max: " + MAX);
+		call.set("events", queryApi.getByNamespaceWindow(namespace, MAX));
 		return call.process();
 	}
 	
@@ -219,8 +233,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getOrderStatusCSV()
 	{
- 		logger.info("writeOrderStatus: " + REPORT_NAME);
- 		List<EventEntity> orders = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "OrderStatusReport"));
+ 		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
+ 		List<EventEntity> orders = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "OrderStatusReport", MAX));
 		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
 	}
 
@@ -251,7 +265,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAquisitionReportCSV()
 	{
-		List<EventEntity> materials = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/content", "AcquisitionReport"));
+		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
+		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
 		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
 		
 //		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
@@ -270,7 +285,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getManualQACSV()
 	{
-		List<EventEntity> preview = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "ManualQAReport"));
+		List<EventEntity> preview = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQAReport", MAX));
 //		List<EventEntity> manualQA = new ArrayList<EventEntity>();
 //		for (EventEntity event : qc) 
 //		{
@@ -288,35 +303,35 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getAutoQCCSV()
 	{
-		List<EventEntity> passed = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCReport"));
+		List<EventEntity> passed = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCReport", MAX));
 		autoQc.writeAutoQc(passed, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getTaskListCSV()
 	{
-		List<EventEntity> tasks = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "TaskListReport"));
+		List<EventEntity> tasks = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "TaskListReport", MAX));
 		taskList.writeTaskList(tasks, startDate, endDate, REPORT_NAME);
 	}	
 	
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> purged = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/bms", "PurgeContentReport"));
+		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeContentReport", MAX));
 		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getComplianceEditCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/preview", "ComplianceLoggingReport"));
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ComplianceLoggingReport", MAX));
 		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
 	}
 	
 	@Transactional
 	public void getExportCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getEvents("http://www.foxtel.com.au/ip/delivery", "ExportReport"));
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/delivery", "ExportReport", MAX));
 		export.writeExport(events, startDate, endDate, REPORT_NAME);
 	}
 	
@@ -331,7 +346,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getTranscoderLoadCSV()
 	{
-		List<EventEntity> events = queryApi.getByNamespace("http://www.foxtel.com.au/ip/tc");
+		List<EventEntity> events = queryApi.getByNamespaceWindow("http://www.foxtel.com.au/ip/tc", MAX);
 		List<EventEntity> valid = new ArrayList<EventEntity>();
 		for (EventEntity event : events) {
 			boolean within = checkDate(event.getTime());

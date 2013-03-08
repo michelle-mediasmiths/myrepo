@@ -163,5 +163,15 @@ public interface QueryAPI
 	@Produces("text/plain")
 	public String getAvCompletionTime(List<EventEntity> events);
 	
+	@GET
+	@Path("getbynamespacewindow/{namespace}/{max}")
+	@Produces("text/plain")
+	public List<EventEntity> getByNamespaceWindow(@PathParam("namespace")String namespace, @PathParam("max")int max);
+	
+	@GET
+	@Path("/get_report-window/{namespace}/{eventname}/{max}")
+	@Produces("text/plain")
+	public List<EventEntity> getEventsWindow (@PathParam("namespace")String namespace, @PathParam("eventname")String eventName, @PathParam("max")int max);
+	
 	
 }

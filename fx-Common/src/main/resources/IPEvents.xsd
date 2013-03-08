@@ -81,9 +81,13 @@
 			</xs:annotation>
 			<xs:extension base="fns:IPEvent">
 				<xs:sequence>
-					<xs:element name="masterId" type="xs:string" />
+					<xs:element name="materialID" type="xs:string"/>
 					<xs:element name="title" type="xs:string" />
 					<xs:element name="fileLocation" type="xs:string" />
+					<xs:element name="channels" type="xs:string"/>
+					<xs:element name="taskStatus" type="xs:string"/>
+					<xs:element name="exportType" type="xs:string"/>
+					<xs:element name="titleLength" type="xs:string"/>
 					<xs:element name="delivered" type="xs:boolean" />
 				</xs:sequence>
 			</xs:extension>
@@ -188,19 +192,29 @@
     <xs:complexType name="autoQCErrorNotification">
         <xs:complexContent>
             <xs:extension base="autoQCResultNotification">
-                <xs:sequence />
+            	<xs:sequence>
+            		<xs:element name="failureParameter" type="xs:string"/>
+            	</xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType abstract="true" name="autoQCResultNotification">
-        <xs:complexContent>
-            <xs:extension base="autoQCRequest">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="jobName" type="xs:string" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+        <xs:sequence>
+            <xs:element name="materialID" type="xs:string" />
+            <xs:element name="forTXDelivery" type="xs:boolean" />
+            <xs:element name="title" type="xs:string" />
+			<xs:element name="channels" type="xs:string"/>
+            <xs:element name="contentType" type="xs:string"/>
+			<xs:element name="operator" type="xs:string"/>
+			<xs:element name="taskStatus" type="xs:string"/>
+			<xs:element name="qcStatus" type="xs:string"/>
+			<xs:element name="taskStart" type="xs:string"/>
+			<xs:element name="taskFinish" type="xs:dateTime"/>
+			<xs:element name="warningTime" type="xs:string"/>
+			<xs:element name="manualOverride" type="xs:string"/>
+			<xs:element name="titleLength" type="xs:string"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="getQCProfileResponse">
@@ -360,6 +374,27 @@
 			<xs:element name="titleLength" type="xs:string" minOccurs="0"/>
 		</xs:sequence>
 	</xs:complexType>
+	
+	<xs:element name="ManualQA">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
+				<xs:element name="title" type="xs:string" />
+				<xs:element name="materialID" type="xs:string"/>
+				<xs:element name="channels" type="xs:string"/>
+				<xs:element name="operator" type="xs:string"/>
+				<xs:element name="aggregatorID" type="xs:string"/>
+				<xs:element name="taskStatus" type="xs:string"/>
+				<xs:element name="previewStatus" type="xs:string"/>
+				<xs:element name="hrPreview" type="xs:string"/>
+				<xs:element name="hrPreviewRequested" type="xs:string"/>
+				<xs:element name="escalated" type="xs:string" minOccurs="0"/>
+				<xs:element name="timeEscalated" type="xs:string"/>
+				<xs:element name="titleLength" type="xs:string"/>
+				<xs:element name="reordered" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">

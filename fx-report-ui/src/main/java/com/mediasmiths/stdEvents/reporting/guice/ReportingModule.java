@@ -8,6 +8,7 @@ import java.util.Properties;
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
+
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.stdEvents.coreEntity.db.marshaller.EventMarshaller;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -25,6 +26,8 @@ import com.mediasmiths.stdEvents.persistence.rest.impl.EventAPIImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 import com.mediasmiths.stdEvents.report.jasper.JasperAPI;
 import com.mediasmiths.stdEvents.report.jasper.JasperImpl;
+import com.mediasmiths.stdEvents.reporting.popup.PopupAPI;
+import com.mediasmiths.stdEvents.reporting.popup.PopupImpl;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
@@ -48,6 +51,9 @@ public class ReportingModule extends AbstractModule
 		marshallerBinding.addBinding().to(DeliveryDaoImpl.class);
 		
 		RestResourceRegistry.register(ReportUI.class);
+		
+		bind(PopupAPI.class).to(PopupImpl.class);
+		RestResourceRegistry.register(PopupAPI.class);
 		
 //		Properties props = new Properties();
 //		try {
