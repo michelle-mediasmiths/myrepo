@@ -12,6 +12,17 @@
 	<packaging>jar</packaging>
 	<name>Foxtel IP Common Schema</name>
 
+    <dependencies>
+
+    <dependency>
+        <groupId>com.mediasmiths.std.guice</groupId>
+        <artifactId>stdlib-guice-common</artifactId>
+        <version>${stdlib.version}</version>
+    </dependency>
+
+
+    </dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

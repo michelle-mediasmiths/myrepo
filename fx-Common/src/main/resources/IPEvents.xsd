@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-	xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
-	elementFormDefault="qualified" attributeFormDefault="unqualified"
-	version="1.0">
+	        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+	        xmlns:fns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
+	        elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+	        version="1.0">
 
 	<xs:complexType name="IPEvent">
 		<xs:annotation>
@@ -16,131 +18,147 @@
 	</xs:complexType>
 
 
-	<xs:complexType name="FilePickup">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The definition for File Pickup Details.
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="pickUpKind" type="FilePickUpKinds" />
-					<xs:element name="filePath" type="xs:string"/>
-					<xs:element name="filename" type="xs:string"/>
-					<xs:element name="timeDiscovered" type="xs:dateTime"/>
-					<xs:element name="timeProcessed" type="xs:dateTime"/>
-					<xs:element name="aggregator" type="xs:string"/>
-					<xs:element name="waitTime" type="xs:long"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-
-	<xs:complexType name="CommFailure">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The details of a component or infrastructure
-					communication failure.
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="source" type="xs:string" />
-					<xs:element name="target" type="xs:string" />
-					<xs:element name="failureShortDesc" type="xs:string" />
-					<xs:element name="failureLongDescription" type="xs:string"
-						minOccurs="0" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-	<xs:complexType name="StorageUsageDetails">
-		<xs:annotation>
-			<xs:documentation>The Details of Storage use for a particular mount
-				point
-			</xs:documentation>
-		</xs:annotation>
-		<xs:sequence>
-			<xs:element name="fileSystemReference" type="xs:string"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element name="megaBytesUsed" type="xs:double"
-				minOccurs="1" maxOccurs="1" />
-			<xs:element name="megaBytesFree" type="xs:double"
-				minOccurs="1" maxOccurs="1" />
-		</xs:sequence>
-	</xs:complexType>
-
-
-	<xs:complexType name="DeliveryDetails">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The definition a delivery (successful or not)
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="assetID" type="xs:string"/>
-					<xs:element name="jobName" type="xs:string"/>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="fileLocation" type="xs:string" />
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="exportType" type="xs:string"/>
-					<xs:element name="titleLength" type="xs:string"/>
-					<xs:element name="delivered" type="xs:boolean" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-	<xs:complexType name="PreviewEventDetail">
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>A Preview has been performed and this captures the
-					outcome
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="masterId" type="xs:string" />
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="op" type="PreviewStatus" />
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-
-    <xs:complexType name="PreviewFailed">
-        <xs:complexContent>
-            <xs:extension base="fns:IPEvent">
-                <xs:sequence>
-                    <xs:element name="assetId" type="xs:string" />
-                    <xs:element name="title" type="xs:string" />
-                    <xs:element name="date" type="xs:string" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-	
-	<xs:element name="ComplianceLoggingMarker">
-	<xs:complexType>
-        <xs:complexContent>
-        <xs:extension base="fns:IPEvent">
-        <xs:sequence>
-            <xs:element type="xs:string" name="MasterID" />
-            <xs:element type="xs:string" name="TitleField" />
-            <xs:element type="xs:string" name="Loggerdetails" />
-            <xs:element name="emailaddresses" type="emailaddresses" />
-        </xs:sequence>
-        </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+    <xs:element name="FilePickup">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:annotation>
+                    <xs:documentation>The definition for File Pickup Details.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="pickUpKind" type="FilePickUpKinds"/>
+                        <xs:element name="filePath" type="xs:string"/>
+                        <xs:element name="filename" type="xs:string"/>
+                        <xs:element name="timeDiscovered" type="xs:dateTime"/>
+                        <xs:element name="timeProcessed" type="xs:dateTime"/>
+                        <xs:element name="aggregator" type="xs:string"/>
+                        <xs:element name="waitTime" type="xs:long"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
     </xs:element>
 
-	<xs:complexType name="ComplianceLogging">
+
+    <xs:element name="CommFailure">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:annotation>
+                    <xs:documentation>The details of a component or infrastructure
+                        communication failure.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="source" type="xs:string"/>
+                        <xs:element name="target" type="xs:string"/>
+                        <xs:element name="failureShortDesc" type="xs:string"/>
+                        <xs:element name="failureLongDescription" type="xs:string"
+                                    minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="StorageUsageDetails">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="fns:IPEvent">
+                    <xs:annotation>
+                        <xs:documentation>The Details of Storage use for a particular mount
+                            point
+                        </xs:documentation>
+                    </xs:annotation>
+                    <xs:sequence>
+                        <xs:element name="fileSystemReference" type="xs:string"
+                                    minOccurs="1" maxOccurs="1"/>
+                        <xs:element name="megaBytesUsed" type="xs:double"
+                                    minOccurs="1" maxOccurs="1"/>
+                        <xs:element name="megaBytesFree" type="xs:double"
+                                    minOccurs="1" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="DeliveryDetails">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:annotation>
+                    <xs:documentation>The definition a delivery (successful or not)
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="assetID" type="xs:string"/>
+                        <xs:element name="jobName" type="xs:string"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="fileLocation" type="xs:string"/>
+                        <xs:element name="channels" type="xs:string"/>
+                        <xs:element name="taskStatus" type="xs:string"/>
+                        <xs:element name="exportType" type="xs:string"/>
+                        <xs:element name="titleLength" type="xs:string"/>
+                        <xs:element name="delivered" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="PreviewEventDetail">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:annotation>
+                    <xs:documentation>A Preview has been performed and this captures the
+                        outcome
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="masterId" type="xs:string"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="op" type="PreviewStatus"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="PreviewFailed">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="assetId" type="xs:string"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="date" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ComplianceLoggingMarker">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element type="xs:string" name="MasterID"/>
+                        <xs:element type="xs:string" name="TitleField"/>
+                        <xs:element type="xs:string" name="Loggerdetails"/>
+                        <xs:element name="emailaddresses" type="emailaddresses"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="ComplianceLogging">
+	<xs:complexType>
 		<xs:complexContent>
 			<xs:annotation>
 				<xs:documentation>The ComplianceLogging report type
@@ -158,8 +176,10 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
-	
-	<xs:complexType name="Export">
+    </xs:element>
+
+    <xs:element name="Export">
+    <xs:complexType>
 		<xs:complexContent>
 			<xs:annotation>
 				<xs:documentation>The Export report type
@@ -177,6 +197,7 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+    </xs:element>
 
 	<xs:element name="ArdomeJobFailure">
 	<xs:complexType>
@@ -197,13 +218,22 @@
 
 
     <xs:complexType abstract="true" name="autoQCRequest">
-        <xs:sequence>
-            <xs:element name="assetId" type="xs:string" />
-            <xs:element name="forTXDelivery" type="xs:boolean" />
-        </xs:sequence>
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:documentation>A type to represent an ArdomeJobFailure event
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="fns:IPEvent">
+                <xs:sequence>
+                    <xs:element name="assetId" type="xs:string"/>
+                    <xs:element name="forTXDelivery" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="autoQCErrorNotification">
+    <xs:element name="autoQCErrorNotification">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="autoQCResultNotification">
             	<xs:sequence>
@@ -211,26 +241,35 @@
             	</xs:sequence>
             </xs:extension>
         </xs:complexContent>
-    </xs:complexType>
+        </xs:complexType>
+    </xs:element>
 
     <xs:complexType abstract="true" name="autoQCResultNotification">
-        <xs:sequence>
-            <xs:element name="assetId" type="xs:string" />
-            <xs:element name="jobId" type="xs:string" />
-            <xs:element name="materialID" type="xs:string" />
-            <xs:element name="forTXDelivery" type="xs:boolean" />
-            <xs:element name="title" type="xs:string" />
-			<xs:element name="channels" type="xs:string"/>
-            <xs:element name="contentType" type="xs:string"/>
-			<xs:element name="operator" type="xs:string"/>
-			<xs:element name="taskStatus" type="xs:string"/>
-			<xs:element name="qcStatus" type="xs:string"/>
-			<xs:element name="taskStart" type="xs:string"/>
-			<xs:element name="taskFinish" type="xs:dateTime"/>
-			<xs:element name="warningTime" type="xs:string"/>
-			<xs:element name="manualOverride" type="xs:string"/>
-			<xs:element name="titleLength" type="xs:string"/>
-        </xs:sequence>
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:documentation>A type to represent an ArdomeJobFailure event
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="fns:IPEvent">
+                <xs:sequence>
+                    <xs:element name="assetId" type="xs:string"/>
+                    <xs:element name="jobId" type="xs:string"/>
+                    <xs:element name="materialID" type="xs:string"/>
+                    <xs:element name="forTXDelivery" type="xs:boolean"/>
+                    <xs:element name="title" type="xs:string"/>
+                    <xs:element name="channels" type="xs:string"/>
+                    <xs:element name="contentType" type="xs:string"/>
+                    <xs:element name="operator" type="xs:string"/>
+                    <xs:element name="taskStatus" type="xs:string"/>
+                    <xs:element name="qcStatus" type="xs:string"/>
+                    <xs:element name="taskStart" type="xs:string"/>
+                    <xs:element name="taskFinish" type="xs:dateTime"/>
+                    <xs:element name="warningTime" type="xs:string"/>
+                    <xs:element name="manualOverride" type="xs:string"/>
+                    <xs:element name="titleLength" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="getQCProfileResponse">
@@ -258,12 +297,12 @@
     <xs:complexType name="tcNotification">
         <xs:complexContent>
             <xs:extension base="fns:IPEvent">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="taskID" type="xs:string" />
-            <xs:element minOccurs="0" name="assetID" type="xs:string" />
-            <xs:element minOccurs="0" name="title" type="xs:string" />
-            <xs:element minOccurs="0" name="packageID" type="xs:string"/>
-        </xs:sequence>
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="taskID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="assetID" type="xs:string"/>
+                    <xs:element minOccurs="0" name="title" type="xs:string"/>
+                    <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -333,6 +372,7 @@
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
+                    <xs:element name="materialId" type="xs:string"/>
                     <xs:element name="filelocation" type="xs:string"/>
                     <xs:element name="time" type="xs:string"/>
                 </xs:sequence>
@@ -354,19 +394,22 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="manualPurge">
-        <xs:complexContent>
-            <xs:extension base="purgeNotification">
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+    <xs:element name="manualPurge">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="purgeNotification"/>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 
-    <xs:complexType name="protectedPurgeFail">
+    <xs:element name="protectedPurgeFail">
+        <xs:complexType>
         <xs:complexContent>
             <xs:extension base="purgeNotification">
             </xs:extension>
         </xs:complexContent>
-    </xs:complexType>
+            </xs:complexType>
+    </xs:element>
 
 
     <xs:complexType name="autoQCFailureNotification">
@@ -377,149 +420,177 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="autoQCPassNotification">
-        <xs:complexContent>
-            <xs:extension base="autoQCResultNotification">
-                <xs:sequence />
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+    <xs:element name="autoQCPassNotification">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="autoQCResultNotification">
+                    <xs:sequence/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 
     <xs:complexType name="txDeliveryFailure">
         <xs:sequence>
-            <xs:element minOccurs="0" name="packageID" type="xs:string" />
-            <xs:element minOccurs="0" name="stage" type="xs:string" />
-            <xs:element minOccurs="0" name="jobName" type="xs:string" />
+            <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+            <xs:element minOccurs="0" name="stage" type="xs:string"/>
+            <xs:element minOccurs="0" name="jobName" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="txMoveFailure">
-        <xs:complexContent>
-            <xs:extension base="IPEvent">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="fileSource" type="xs:string" />
-                    <xs:element minOccurs="0" name="fileDestination" type="xs:string" />
-                    <xs:element minOccurs="0" name="time" type="xs:string" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+    <xs:element name="txMoveFailure">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="fileSource" type="xs:string"/>
+                        <xs:element minOccurs="0" name="fileDestination" type="xs:string"/>
+                        <xs:element minOccurs="0" name="time" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="txDelivered">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="taskID" type="xs:string"/>
+                        <xs:element minOccurs="0" name="packageID" type="xs:string"/>
+                        <xs:element minOccurs="0" name="time" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:simpleType name="PreviewStatus">
+        <xs:annotation>
+            <xs:documentation>A list of the types of Preview events
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PreviewFailed"/>
+            <xs:enumeration value="PreviewFurtherAnalysis"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FilePickUpKinds">
+        <xs:annotation>
+            <xs:documentation>A list of the types of File Pickups with the IP
+                Platform
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Placeholder"/>
+            <xs:enumeration value="Media"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:element name="OrderStatus">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="channels" type="xs:string" minOccurs="0"/>
+                        <xs:element name="orderRef" type="xs:string" minOccurs="0"/>
+                        <xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
+                        <xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
+                        <xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
+                        <xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+                        <xs:element name="taskType" type="xs:string" minOccurs="0"/>
+                        <xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="CreateOrUpdateTitle">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="titleID" type="xs:string"/>
+                        <xs:element name="channels" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="AddOrUpdateMaterial">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="aggregatorID" type="xs:string"/>
+                        <xs:element name="completionDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="AddOrUpdatePackage">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="titleID" type="xs:string"/>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="packageID" type="xs:string"/>
+                        <xs:element name="requiredBy" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="ContentPickup">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="materialID" type="xs:string"/>
+            <xs:element name="channels" type="xs:string" minOccurs="0"/>
+            <xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+            <xs:element name="tapeDelivery" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="fileDelivery" type="xs:boolean" minOccurs="0"/>
+            <xs:element name="format" type="xs:string" minOccurs="0"/>
+            <xs:element name="filesize" type="xs:string" minOccurs="0"/>
+            <xs:element name="titleLength" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="txDelivered">
-        <xs:complexContent>
-            <xs:extension base="IPEvent">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="taskID" type="xs:string" />
-                    <xs:element minOccurs="0" name="packageID" type="xs:string" />
-                    <xs:element minOccurs="0" name="time" type="xs:string" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-
-	<xs:simpleType name="PreviewStatus">
-		<xs:annotation>
-			<xs:documentation>A list of the types of Preview events
-			</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="PreviewFailed" />
-			<xs:enumeration value="PreviewFurtherAnalysis" />
-		</xs:restriction>
-	</xs:simpleType>
-	<xs:simpleType name="FilePickUpKinds">
-		<xs:annotation>
-			<xs:documentation>A list of the types of File Pickups with the IP
-				Platform
-			</xs:documentation>
-		</xs:annotation>
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="Placeholder" />
-			<xs:enumeration value="Media" />
-		</xs:restriction>
-	</xs:simpleType>
-	
-	<xs:element name="OrderStatus">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="title" type="xs:string"/>
-				<xs:element name="materialID" type="xs:string"/>
-				<xs:element name="channels" type="xs:string" minOccurs="0"/>
-				<xs:element name="orderRef" type="xs:string" minOccurs="0"/>
-				<xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
-				<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
-				<xs:element name="taskType" type="xs:string" minOccurs="0"/>
-				<xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="CreateOrUpdateTitle">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="title" type="xs:string"/>
-				<xs:element name="titleID" type="xs:string"/>
-				<xs:element name="channels" type="xs:string"/>
- 			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="AddOrUpdateMaterial">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="materialID" type="xs:string"/>
-				<xs:element name="completionDate" type="xs:dateTime"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:element name="AddOrUpdatePackage">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="titleID" type="xs:string"/>
-				<xs:element name="materialID" type="xs:string"/>
-				<xs:element name="packageID" type="xs:string"/>
-				<xs:element name="requiredBy" type="xs:dateTime"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
-	<xs:complexType name="ContentPickup">
-		<xs:sequence>
-			<xs:element name="title" type="xs:string"/>
-			<xs:element name="materialID" type="xs:string"/>
-			<xs:element name="channels" type="xs:string" minOccurs="0"/>
-			<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
-			<xs:element name="tapeDelivery" type="xs:boolean" minOccurs="0"/>
-			<xs:element name="fileDelivery" type="xs:boolean" minOccurs="0"/>
-			<xs:element name="format" type="xs:string" minOccurs="0"/>
-			<xs:element name="filesize" type="xs:string" minOccurs="0"/>
-			<xs:element name="titleLength" type="xs:string" minOccurs="0"/>
-		</xs:sequence>
-	</xs:complexType>
-	
-	<xs:element name="ManualQA">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="title" type="xs:string" />
-				<xs:element name="materialID" type="xs:string"/>
-				<xs:element name="channels" type="xs:string"/>
-				<xs:element name="operator" type="xs:string"/>
-				<xs:element name="aggregatorID" type="xs:string"/>
-				<xs:element name="taskStatus" type="xs:string"/>
-				<xs:element name="previewStatus" type="xs:string"/>
-				<xs:element name="hrPreview" type="xs:string"/>
-				<xs:element name="hrPreviewRequested" type="xs:string"/>
-				<xs:element name="escalated" type="xs:string" minOccurs="0"/>
-				<xs:element name="timeEscalated" type="xs:string"/>
-				<xs:element name="titleLength" type="xs:string"/>
-				<xs:element name="reordered" type="xs:string" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
+    <xs:element name="ManualQA">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="dateRange" type="xs:string" minOccurs="0"/>
+                        <xs:element name="title" type="xs:string"/>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="channels" type="xs:string"/>
+                        <xs:element name="operator" type="xs:string"/>
+                        <xs:element name="aggregatorID" type="xs:string"/>
+                        <xs:element name="taskStatus" type="xs:string"/>
+                        <xs:element name="previewStatus" type="xs:string"/>
+                        <xs:element name="hrPreview" type="xs:string"/>
+                        <xs:element name="hrPreviewRequested" type="xs:string"/>
+                        <xs:element name="escalated" type="xs:string" minOccurs="0"/>
+                        <xs:element name="timeEscalated" type="xs:string"/>
+                        <xs:element name="titleLength" type="xs:string"/>
+                        <xs:element name="reordered" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">
