@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 
-public class AutoQcErrorNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
 	@Override

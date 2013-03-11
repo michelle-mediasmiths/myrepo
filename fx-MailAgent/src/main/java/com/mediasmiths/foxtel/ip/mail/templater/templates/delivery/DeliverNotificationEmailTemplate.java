@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.DeliveryDetails;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 
-public class DeliverFailureNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class DeliverNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 	@Override
 	public boolean handles(final Object obj)

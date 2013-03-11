@@ -1,4 +1,4 @@
-package com.mediasmiths.foxtel.ip.mail.templater.templates;
+package com.mediasmiths.foxtel.ip.mail.templater.templates.delivery;
 
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.DeliveryDetails;
@@ -11,7 +11,7 @@ public class DeliveryDetailsEmailTemplate extends MailTemplate implements EmailT
 	public boolean handles(Object obj)
 	{
 
-		return obj.getClass().equals(DeliveryDetails.class);
+		return obj instanceof DeliveryDetails;
 	}
 
 	@Override
@@ -19,7 +19,7 @@ public class DeliveryDetailsEmailTemplate extends MailTemplate implements EmailT
 	{
          MailTemplate t = new MailTemplate();
 
-		 DeliveryDetails dd = (DeliveryDetails)obj;
+		DeliveryDetails dd = (DeliveryDetails)obj;
 
 		t.setSubject(String.format(getSubject(), dd.getAssetID(), dd.getTitle()));
 		t.setEmailaddresses(getEmailaddresses());

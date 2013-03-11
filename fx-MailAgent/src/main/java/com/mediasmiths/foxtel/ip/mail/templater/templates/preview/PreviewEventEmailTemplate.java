@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.PreviewEventDetail;
 
-public class PreviewEventDetailEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
 	@Override

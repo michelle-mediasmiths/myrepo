@@ -1,10 +1,5 @@
 package com.mediasmiths.mq.handlers.unmatched;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -19,6 +14,9 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 {
@@ -51,6 +49,19 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						"Unmatched task for material %s updated with match to asset %s",
 						currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID)));
+
+				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(AssetType.ITEM, currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+
+				String targetAsset = assetAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+
+				if (targetAsset !=  null ||  targetAsset.length() != 0)
+				{ // refuse to match it.
+					currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+					currentAttributes.setAttribute(Attribute.ERROR_MSG, "Cannot match asset to placeholder as placeholder already has media attached");
+					taskController.saveTask(currentAttributes);
+					return;
+				}
+
 
 				String format = getFormat(currentAttributes);
 				removeUnmatchedAssetFromTaskLists(assetID);

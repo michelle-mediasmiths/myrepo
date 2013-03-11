@@ -6,10 +6,10 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 
 
-public class TcFailedNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class TcNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
-	public TcFailedNotificationEmailTemplate()
+	public TcNotificationEmailTemplate()
 	{
 
 	}
