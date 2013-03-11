@@ -122,6 +122,8 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		  }
 		  if (channels != null) {
 			 
+			  Disjunction restrictions = Restrictions.disjunction();
+			  restrictions.add(Restrictions.eq("channelOwner", "*"));
 			  for (int i = 0; i < channels.size(); i++)
 			  {
 				  List<MayamChannelGroups> groups = channelGroupsController.retrieve(channels.get(i), null);
@@ -130,8 +132,6 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 				  log.trace(String.format("%d groups returned for channel %s",groups.size(), channels.get(i)));
 				  }
 				  
-				  Disjunction restrictions = Restrictions.disjunction();
-				  restrictions.add(Restrictions.eq("channelOwner", "*"));
 				  if (groups != null) 
 				  {
 					  for (int j = 0; j < groups.size(); j++) 
@@ -139,9 +139,8 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 						  restrictions.add(Restrictions.eq("channelOwner", groups.get(j).getChannelOwner()));
 					  }
 				  }
-				  criteria.add(restrictions);
 			  }
-
+			  criteria.add(restrictions);
 		  }
 
 		  return new ArrayList<MayamAccessRights>(getList(criteria));
