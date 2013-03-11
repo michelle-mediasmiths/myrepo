@@ -149,7 +149,7 @@ public class Stub implements MayamPDP
 			dumpPayload(attributeMap);
 
 			AttributeMap returnMap = client.createAttributeMap();
-			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 
 			//Segmentation check
 			String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
@@ -177,7 +177,7 @@ public class Stub implements MayamPDP
 			}
 			else {
 				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 				returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
 			}
 
@@ -199,7 +199,7 @@ public class Stub implements MayamPDP
 			defaultValidation(attributeMap);
 
 			AttributeMap returnMap = client.createAttributeMap();
-			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 
 			String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
 			if (classification == null || classification.equals(""))
@@ -207,7 +207,7 @@ public class Stub implements MayamPDP
 				String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
 				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 			}
 
@@ -423,7 +423,7 @@ public class Stub implements MayamPDP
 				AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 				if (returnMap != null)
 				{
-					Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
+					String status = returnMap.getAttribute(Attribute.OP_STAT).toString();
 					if (status.equals(StatusCodes.OK.toString()))
 					{
 						if (sourceHouseID == null || sourceHouseID.equals(""))
@@ -913,8 +913,7 @@ public class Stub implements MayamPDP
 				attributeMap,
 				Attribute.HOUSE_ID,
 				Attribute.ASSET_TYPE,
-				Attribute.TASK_UPDATED_BY,
-				Attribute.CONT_RESTRICTED_MATERIAL);
+				Attribute.TASK_UPDATED_BY);
 	}
 
 	/**

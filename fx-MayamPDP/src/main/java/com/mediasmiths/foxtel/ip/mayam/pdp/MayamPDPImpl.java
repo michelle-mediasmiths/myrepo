@@ -85,7 +85,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.REQ_NUMBER, Attribute.HOUSE_ID);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    //Segmentation check
 	    String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
@@ -112,7 +112,7 @@ public class MayamPDPImpl implements MayamPDP
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
 	    }
 	    
@@ -126,7 +126,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, null, null);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
 	    if (classification == null || classification.equals(""))
@@ -134,7 +134,7 @@ public class MayamPDPImpl implements MayamPDP
 	    	String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    	
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 	    }
 	    
@@ -154,7 +154,7 @@ public class MayamPDPImpl implements MayamPDP
 		validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    String assetType = attributeMap.getAttributeAsString(Attribute.ASSET_TYPE);
@@ -164,12 +164,12 @@ public class MayamPDPImpl implements MayamPDP
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: " + assetType + " " + houseID + "is protected and cannot be uningested");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
 	    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
@@ -183,7 +183,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.PURGE_PROTECTED, Attribute.HOUSE_ID, Attribute.ASSET_TYPE);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    String assetType = attributeMap.getAttributeAsString(Attribute.ASSET_TYPE);
@@ -193,12 +193,12 @@ public class MayamPDPImpl implements MayamPDP
 	    if (purgeProtected == null || purgeProtected)
 	    {
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: " + assetType + " " + houseID + "is protected and cannot be deleted");
 	    }
 	    else {
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
 	    	returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "WARNING: You are about to delete this media and all associated metadata, are you sure you want to proceed? This cannot be undone.");
 	    }
 	    
@@ -212,7 +212,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID, Attribute.ASSET_ID);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    String assetID = attributeMap.getAttributeAsString(Attribute.ASSET_ID);
@@ -226,14 +226,14 @@ public class MayamPDPImpl implements MayamPDP
 			if (markers == null || markers.size() == 0)
 			{
 				returnMap.clear();
-		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 		    	returnMap.setAttribute(Attribute.ERROR_MSG, "No export markers exist for " + houseID);
 			}
 		}
 		catch (RemoteException e)
 		{
 			returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while retrieving markers for " + houseID);
 		}
 	    
@@ -322,13 +322,13 @@ public class MayamPDPImpl implements MayamPDP
 	    AttributeMap returnMap = doesTaskExist(houseID, MayamTaskListType.COMPLIANCE_EDIT);
 	    if (returnMap != null)
 	    {
-	    	Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
-	    	if (status.equals(StatusCodes.CONFIRM))
+	    	String status = returnMap.getAttribute(Attribute.OP_STAT).toString();
+	    	if (status.equals(StatusCodes.CONFIRM.toString()))
 	    	{
 	    		if (parentHouseID == null || parentHouseID.equals(""))
 	    		{
 	    	    	returnMap.clear();
-	    	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	    	returnMap.setAttribute(Attribute.ERROR_MSG, "Compile flag is not set for " + houseID + ". Compliance Edit task cannot be created");
 	    		}
 	    	}
@@ -349,12 +349,12 @@ public class MayamPDPImpl implements MayamPDP
 		if (returnMap != null)
 		{
 			Object status = returnMap.getAttribute(Attribute.OP_STAT).toString();
-			if (status.equals(StatusCodes.OK))
+			if (status.equals(StatusCodes.OK.toString()))
 			{
 				if (sourceHouseId == null || sourceHouseId.equals(""))
 				{
 					returnMap.clear();
-					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 					returnMap.setAttribute(Attribute.ERROR_MSG, "String.format(messageComplianceLoggingNone, houseID)");
 				}
 			}
@@ -385,7 +385,7 @@ public class MayamPDPImpl implements MayamPDP
 	    validateAttributeMap(attributeMap, Attribute.HOUSE_ID, Attribute.ASSET_ID, Attribute.OP_FILENAME);
 
 	    AttributeMap returnMap = client.createAttributeMap();
-	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+	    returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 	    
 	    String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 	    String filename = attributeMap.getAttributeAsString(Attribute.OP_FILENAME);
@@ -401,14 +401,14 @@ public class MayamPDPImpl implements MayamPDP
 			
 			if (existingTasks != null && existingTasks.getTotalMatches() > 0) {
 				returnMap.clear();
-		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+		    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 		    	returnMap.setAttribute(Attribute.ERROR_MSG, "A Proxy with name " + filename + " already exists");
 			}
 	    }
 	    catch(RemoteException e)
 	    {
 			returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while retrieving existing Extended Publishing tasks");
 	    }
 	    
@@ -460,7 +460,7 @@ public class MayamPDPImpl implements MayamPDP
 	private AttributeMap doesTaskExist(String houseID, MayamTaskListType task)
 	{
 		AttributeMap returnMap = client.createAttributeMap();
-		returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK);
+		returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 		
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, task.getText());
@@ -473,14 +473,14 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch(RemoteException e) {
 			returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "WARNING: A technical error occurred while checking if tasks already exist for " + houseID);
 		}
 		
 		if (result != null && result.getTotalMatches() > 0)
 		{
 	    	returnMap.clear();
-	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR);
+	    	returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 	    	returnMap.setAttribute(Attribute.ERROR_MSG, "Task already exists. No new task created");
 		}
 		
