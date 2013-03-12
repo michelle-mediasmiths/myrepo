@@ -11,7 +11,7 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 	public boolean handles(Object obj)
 	{
 
-		return obj.getClass().equals(PreviewEventDetail.class);
+		return obj instanceof PreviewEventDetail;
 	}
 
 	@Override
