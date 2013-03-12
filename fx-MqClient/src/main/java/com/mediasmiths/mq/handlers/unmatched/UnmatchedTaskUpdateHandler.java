@@ -5,28 +5,34 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
+import com.mediasmiths.mq.transferqueue.TransferItem;
+import com.mediasmiths.mq.transferqueue.TransferManager;
+import com.mediasmiths.std.threading.Timeout;
 import org.apache.log4j.Logger;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 {
-	public final long MOVE_WAIT_DELAY = 2000;
-
 	private final static Logger log = Logger.getLogger(UnmatchedTaskUpdateHandler.class);
 
 	@Inject
-	@Named("ff.sd.video.imagex")
-	private int sdVideoX = 720;
+	TransferManager transferManager;
+
+	/**
+	 * The maximum amount of time we're willing to wait for a transfer to succeed/fail
+	 */
+	@Inject(optional=true)
+	@Named("UnmatchedTaskUpdateHandler.transferTimeout")
+	Timeout transferTimeout = new Timeout(48, TimeUnit.HOURS);
 
 	@Override
 	public String getName()
@@ -64,24 +70,17 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					taskController.saveTask(currentAttributes);
 					return;
 				}
-
-
-				String format = getFormat(currentAttributes);
 				removeUnmatchedAssetFromTaskLists(assetID);
-				moveEssenceWithRetry(currentAttributes);
 
 
-				// close unmatched task
-				closeTask(currentAttributes);
+				final String assetId = currentAttributes.getAttribute(Attribute.ASSET_ID).toString();
+				final String assetPeerId = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
 
-				//get the id of the asset being matched to
-				String peerID = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+				// We're only willing to wait this long until we assume the transfer has timed out
+				Date timeout = transferTimeout.start().getDate();
 
-				//set the format (hd/sd, don't have a way of detecting 3d)
-				setFormat(peerID, format);
 
-				// close open ingest task for the target asset
-				closeIngestTaskForAsset(peerID, currentAttributes);
+				transferManager.add(new TransferItem(assetId, assetPeerId, timeout));
 			}
 		}
 		catch (Exception e)
@@ -91,88 +90,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 	}
 
-	private void moveEssenceWithRetry(final AttributeMap currentAttributes) throws RemoteException
-	{
-		boolean mediaInTransit=true;
 
-		do
-		{
-			try
-			{
-				// Move media
-				tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(),
-				                                        currentAttributes.getAttribute(Attribute.ASSET_ID).toString(),
-				                                        MayamAssetType.MATERIAL.getAssetType(),
-				                                        currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
-				mediaInTransit = false;
-			}
-			catch (Exception e)
-			{
-                log.info("Media in transit...waiting. For: " + currentAttributes.getAttribute(Attribute.ASSET_ID).toString());
-				try
-				{
-					Thread.sleep(MOVE_WAIT_DELAY);
-				}
-				catch (InterruptedException e1)
-				{
-					log.info("Sleeping transfer was interrupted. For: " + currentAttributes.getAttribute(Attribute.ASSET_ID).toString());
-				}
-			}
-		}
-		while (mediaInTransit);
-
-	}
-
-	private void setFormat(String peerID, String format)
-	{
-		AttributeMap peer;
-		try
-		{
-			peer = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), peerID);
-
-			AttributeMap updateMap = taskController.updateMapForAsset(peer);
-			updateMap.setAttribute(Attribute.CONT_FMT, format);
-			tasksClient.assetApi().updateAsset(updateMap);
-		}
-		catch (RemoteException e)
-		{
-			log.error("Error setting content format on asset " + peerID, e);
-		}
-	}
-
-	private String getFormat(AttributeMap currentAttributes) throws RemoteException
-	{
-		String format = "HD";
-		try
-		{
-			FileFormatInfo formatInfo = tasksClient.assetApi().getFormatInfo(
-					MayamAssetType.MATERIAL.getAssetType(),
-					(String) currentAttributes.getAttribute(Attribute.ASSET_ID));
-
-			if (formatInfo.getImageSizeX() <= sdVideoX)
-			{
-				format = "SD";
-			}
-		}
-		catch (Exception e)
-		{
-			log.error("error determining format for asset", e);
-			try
-			{
-				taskController.createWFEErorTask(
-						MayamAssetType.MATERIAL,
-						currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
-						"Error determining content format during unmatched asset workflow");
-			}
-			catch (MayamClientException e1)
-			{
-				log.error("error creating error task!", e1);
-			}
-
-		}
-
-		return format;
-	}
 
 	private void removeUnmatchedAssetFromTaskLists(String assetID)
 	{
@@ -212,76 +130,6 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		catch (Exception e)
 		{
 			log.error("error performing task search", e);
-		}
-	}
-
-	private void copyUnmatchedAttribtes(AttributeMap ingestTaskAttributes, AttributeMap unmatchedAttributes)
-	{
-		String assetId = ingestTaskAttributes.getAttribute(Attribute.ASSET_ID);
-		AssetType assetType = ingestTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
-		try 
-		{
-			AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
-			for (Attribute attribute:unmatchedAttributes.getAttributeSet())
-			{
-				if (asset.getAttribute(attribute) == null)
-				{
-					asset.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
-				}
-			}
-			tasksClient.assetApi().updateAsset(asset);
-		}
-		catch (RemoteException e)
-		{
-			log.error("Exception thrown by Mayam while updating asset : " + assetId, e);
-		}
-	}
-	
-	private void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
-	{
-		AttributeMap task;
-		try
-		{
-			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
-
-			copyUnmatchedAttribtes(task, unmatchedAttributes);
-			
-			if (task == null)
-			{
-				log.warn("no ingest task found for assetID " + peerID);
-				return;
-			}
-
-			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-
-			if (TaskState.CLOSED_STATES.contains(currentState))
-			{
-				log.warn("Ingest task for asset is already in a closed state  " + currentState);
-				return;
-			}
-
-			log.info(String.format("Import finished for asset %s (%s)", task.getAttributeAsString(Attribute.HOUSE_ID), peerID));
-			AttributeMap updateMap = taskController.updateMapForTask(task);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			updateMap.setAttribute(Attribute.INGEST_NOTES, "Unmatched asset matched to this placeholder");
-			taskController.saveTask(updateMap);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Error closing ingest task for asset " + peerID,e);
-		}
-	}
-
-	protected void closeTask(AttributeMap messageAttributes)
-	{
-		try
-		{
-			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-			taskController.saveTask(messageAttributes);
-		}
-		catch (Exception e)
-		{
-			log.error("Exception removing task " + getTaskType(), e);
 		}
 	}
 
