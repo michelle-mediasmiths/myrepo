@@ -20,6 +20,8 @@ import java.util.List;
 
 public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 {
+	public final long MOVE_WAIT_DELAY = 2000;
+
 	private final static Logger log = Logger.getLogger(UnmatchedTaskUpdateHandler.class);
 
 	@Inject
@@ -50,7 +52,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID)));
 
-				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(AssetType.ITEM, currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(AssetType.ITEM,
+				                                                               currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
 				String targetAsset = assetAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 
@@ -65,13 +68,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 				String format = getFormat(currentAttributes);
 				removeUnmatchedAssetFromTaskLists(assetID);
+				moveEssenceWithRetry(currentAttributes);
 
-				// Move media
-				tasksClient.assetApi().moveMediaEssence(
-						MayamAssetType.MATERIAL.getAssetType(),
-						currentAttributes.getAttribute(Attribute.ASSET_ID).toString(),
-						MayamAssetType.MATERIAL.getAssetType(),
-						currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
 
 				// close unmatched task
 				closeTask(currentAttributes);
@@ -90,6 +88,38 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		{
 			log.error("Exception in the Mayam client while handling unmatched task update Message : " + e.getMessage(), e);
 		}
+
+	}
+
+	private void moveEssenceWithRetry(final AttributeMap currentAttributes) throws RemoteException
+	{
+		boolean mediaInTransit=true;
+
+		do
+		{
+			try
+			{
+				// Move media
+				tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(),
+				                                        currentAttributes.getAttribute(Attribute.ASSET_ID).toString(),
+				                                        MayamAssetType.MATERIAL.getAssetType(),
+				                                        currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString());
+				mediaInTransit = false;
+			}
+			catch (Exception e)
+			{
+                log.info("Media in transit...waiting. For: " + currentAttributes.getAttribute(Attribute.ASSET_ID).toString());
+				try
+				{
+					Thread.sleep(MOVE_WAIT_DELAY);
+				}
+				catch (InterruptedException e1)
+				{
+					log.info("Sleeping transfer was interrupted. For: " + currentAttributes.getAttribute(Attribute.ASSET_ID).toString());
+				}
+			}
+		}
+		while (mediaInTransit);
 
 	}
 

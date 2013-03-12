@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
@@ -665,10 +666,50 @@ public class Stub implements MayamPDP
 
 			boolean permission = userCanPerformOperation(operation, attributeMap);
 
+
 			if (permission)
 			{
 				String houseID = attributeMap.getAttribute(Attribute.HOUSE_ID).toString();
-				return mapper.serialize(doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY));
+
+				AttributeMap txTask = doesTaskExist(houseID, MayamTaskListType.TX_DELIVERY);
+				String txExists = txTask.getAttributeAsString(Attribute.OP_STAT);
+
+				if (txExists.equals(StatusCodes.ERROR.toString()))
+				{ // there is a task already.  Don't create another.
+
+					return mapper.serialize(txTask);
+
+				}
+
+				QcStatus qcStatus = attributeMap.getAttribute(Attribute.QC_STATUS);
+
+				if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
+				{
+					return okStatus;
+				}
+
+				boolean qcParallel = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED).toString());
+
+				if (qcParallel)
+				{
+					AttributeMap confirm = new AttributeMap();
+					confirm.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
+					confirm.setAttribute(Attribute.FORM_MSG_ERROR, "QC Parallel is set. QC is not Passed. Do you wish to create a Tx task?");
+
+					return mapper.serialize(confirm);
+				}
+
+				boolean qcRequired = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_STATUS).toString());
+
+				if (qcRequired)
+				{
+					return getErrorStatus("Asset has not passed QC.");
+				}
+				else
+				{
+					return okStatus;
+				}
+
 			}
 			else
 			{
