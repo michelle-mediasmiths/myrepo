@@ -174,14 +174,17 @@ public class Stub implements MayamPDP
 					returnMap.clear();
 					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
 					returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
+					logger.info("Number of Segments Mismatch discovered. Return Map : " + mapper.serialize(returnMap));
 				}
 			}
 			else {
 				returnMap.clear();
 				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 				returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
+				logger.info("Unable to retrieve Segment List. Return Map : " + mapper.serialize(returnMap));
 			}
 
+			logger.info("Return Map : " + mapper.serialize(returnMap));
 			return mapper.serialize(returnMap);
 		}
 		catch (Exception e)
@@ -1042,6 +1045,7 @@ public class Stub implements MayamPDP
 		errorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
 		errorStatus.setAttribute(Attribute.ERROR_MSG, msg);
 
+		logger.info("Return Map : " + mapper.serialize(errorStatus));
 		return mapper.serialize(errorStatus);
 
 	}
