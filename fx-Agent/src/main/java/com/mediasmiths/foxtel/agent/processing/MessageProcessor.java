@@ -3,10 +3,8 @@ package com.mediasmiths.foxtel.agent.processing;
 
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
@@ -37,10 +35,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
 	private final FilePickUpProcessingQueue filePathsPending;
-	
-	@Inject
-	@Named("watchfolder.locations")
-	private WatchFolders watchFolders;
 	
 	protected final Unmarshaller unmarhsaller;	
 	protected final Marshaller marshaller;
@@ -190,20 +184,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				
 				if(result==MessageValidationResult.AO_MISMATCH){
 					aoMismatch(new File(filePath));					
-				} else if ((result== MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW) || (result== MessageValidationResult.UNEXPECTED_DELIVERY_VERSION))
-				{
-					// if AO folder then strictly to quarantine area otherwise to failure folder.
-					
-					boolean folderIsAO = watchFolders.isAo(filePath);
-					if (folderIsAO)
-					{
-						aoMismatch(new File(filePath));
-					}
-					else
-					{
-						moveBothFilesToFailureFolder(new File(filePath));
-					}
-					
 				}
 				else{
 					moveFileToFailureFolder(new File(filePath));
@@ -214,17 +194,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	}
 
 	protected void aoMismatch(File file)
-	{
-		moveFileToFailureFolder(file);
-	}
-	
-	/**
-	 * both the metadata and media files will be moved to the failure folder.
-	 * 
-	 * 
-	 * @param file
-	 */
-	protected void moveBothFilesToFailureFolder(File file)
 	{
 		moveFileToFailureFolder(file);
 	}
