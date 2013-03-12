@@ -17,7 +17,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
@@ -321,66 +320,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			}
 		}
 	}
-	
-	@Override
-	protected void moveBothFilesToFailureFolder(File file)
-	{
-		logger.info(String.format(
-				"File %s is invalid already having media file, sending to failure folder",
-				file.getAbsolutePath()));
-		
-		String failurePath = getFailureFolderForFile(file);
-		try {
-			moveFileToFolder(file, failurePath,true);
-			
-		} catch (IOException ioe)
-		{
-			logger.error(String.format(
-					"IOException moving invalid file %s to %s",
-					file.getAbsolutePath(), failurePath), ioe);
-			
-		}
-		
-		Object unmarshalled = null;
-		// search for media file and move to failure folder too
-		
-		try {
-			
-			unmarshalled = unmarhsaller.unmarshal(file);
-		} catch (JAXBException e)
-		{
-			logger.error("unmarshalling failed", e);
-		}
-		
-		if (unmarshalled != null)
-		{	
-			@SuppressWarnings("unchecked")
-			T message = (T) unmarshalled;
-			
-			MediaEnvelope<T> mediaEnvelope = new MediaEnvelope<T>(file, message, false);
-			
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(mediaEnvelope);
-			
-			if (null != mxfFile)
-			{
-				try {
-					File mxf = new File(mxfFile);
-					moveFileToFolder(mxf, failurePath,true);
-					
-				} catch (IOException ie)
-				{
-					logger.error(String.format(
-							"IOException moving invalid file %s to %s",
-							mxfFile, failurePath), ie);
-				}
-				
-			}
-			
-		}
-		
-	}
-
 
 	private void moveToAOFolder(String file)
 	{

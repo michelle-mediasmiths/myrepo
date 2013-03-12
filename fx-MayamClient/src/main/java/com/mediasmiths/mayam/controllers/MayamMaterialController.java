@@ -935,7 +935,7 @@ public class MayamMaterialController extends MayamController
 								{
 									compLoggingTask.setAttribute(
 											Attribute.REQ_BY,
-											material.getRequiredBy().toGregorianCalendar().getTime());
+											material.getRequiredBy().toGregorianCalendar().getTime().toString());
 									taskController.saveTask(compLoggingTask);
 								}
 							}
@@ -949,7 +949,7 @@ public class MayamMaterialController extends MayamController
 								{
 									ingestTask.setAttribute(
 											Attribute.REQ_BY,
-											material.getRequiredBy().toGregorianCalendar().getTime());
+											material.getRequiredBy().toGregorianCalendar().getTime().toString());
 									taskController.saveTask(ingestTask);
 								}
 							}

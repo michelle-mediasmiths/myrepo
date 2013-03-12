@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mq.transferqueue.TransferItem;
 import com.mediasmiths.mq.transferqueue.TransferManager;
@@ -62,8 +63,10 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				                                                               currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
 				String targetAsset = assetAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+				
+				boolean isAssociated = AssetProperties.isMaterialAssociated(currentAttributes);
 
-				if (targetAsset !=  null ||  targetAsset.length() != 0)
+				if (targetAsset !=  null &&  targetAsset.length() != 0 && !isAssociated)
 				{ // refuse to match it.
 					currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 					currentAttributes.setAttribute(Attribute.ERROR_MSG, "Cannot match asset to placeholder as placeholder already has media attached");

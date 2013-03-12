@@ -17,9 +17,11 @@ import java.net.URLDecoder;
 
 public class MailAgentServiceImpl implements MailAgentService
 {
+	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
+
 	private static final transient Logger logger = Logger.getLogger(MailAgentServiceImpl.class);
 
-	private static final JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
+	private final JAXBSerialiser JAXB;
 
 	@Inject
 	protected EmailSenderService emailService;
@@ -28,8 +30,20 @@ public class MailAgentServiceImpl implements MailAgentService
 	@Named("email.configuration")
 	EventMailConfiguration emailConfig;
 
-	public MailAgentServiceImpl()
+	public MailAgentServiceImpl() throws Exception
 	{
+		try
+		{
+			JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
+
+			logger.info("JAXB serialiser created:");
+		}
+		catch (Exception e)
+		{
+			logger.info("Unable to create JAXB serialiser: ", e);
+
+			throw e;
+		}
 	}
 
 	@Override
@@ -54,13 +68,8 @@ public class MailAgentServiceImpl implements MailAgentService
 		{
 			logger.info("Email event registered for: " + caller.eventName);
 
-			if (caller.payload.startsWith("%"))
-			{
-				if (logger.isInfoEnabled())
-					logger.info("Payload is url encoded, decoding...");
 
-				caller.payload = decoder(caller.payload);
-			}
+			caller.setPayload(objXMLFor(caller));
 
 			MailTemplate m = getMailTemplate(caller, mailTemplate);
 
@@ -81,6 +90,21 @@ public class MailAgentServiceImpl implements MailAgentService
 		}
 	}
 
+	private String objXMLFor(final ServiceCallerEntity caller)
+	{
+		if(caller.payload.startsWith("%"))
+		{
+			if (logger.isInfoEnabled())
+				logger.info("Payload is url encoded, decoding...");
+
+			caller.payload = decoder(caller.payload);
+		}
+
+		return caller.payload.replaceFirst("^ *", "");
+
+
+	}
+
 	private MailTemplate getMailTemplate(final ServiceCallerEntity caller, final EmailTemplateGenerator mailTemplate)
 	{
 		try
@@ -89,7 +113,7 @@ public class MailAgentServiceImpl implements MailAgentService
 
 			if (mailTemplate.handles(payloadObj))
 			{
-			    return mailTemplate.customiseTemplate(caller.payload, caller.comment);
+			    return mailTemplate.customiseTemplate(payloadObj, caller.comment);
 			}
 			else
 			{
@@ -100,7 +124,9 @@ public class MailAgentServiceImpl implements MailAgentService
 		}
 		catch (Exception e)
 		{
+
 			logger.error("Unable to deserialise obj .. sendind reduced functionality email.", e);
+			logger.info(caller.payload);
 			return defaultTemplate(caller.payload, (MailTemplate)mailTemplate);
 		}
 	}

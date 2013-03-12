@@ -1,8 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata;
 
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.ip.common.events.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCErrorNotification;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -10,7 +11,7 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 	@Override
 	public boolean handles(Object obj)
 	{
-		return obj.getClass().equals(AutoQCErrorNotification.class);
+		return obj instanceof AutoQCResultNotification;
 	}
 
 	@Override
@@ -19,7 +20,7 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 
 		MailTemplate t = new MailTemplate();
 
-		AutoQCErrorNotification aqce = (AutoQCErrorNotification) obj;
+		AutoQCResultNotification aqce = (AutoQCResultNotification) obj;
 
 		t.setEmailaddresses(getEmailaddresses());
 		t.setSubject(String.format(getSubject(), aqce.getJobId(), aqce.getAssetId()));

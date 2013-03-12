@@ -11,7 +11,7 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 	public boolean handles(Object obj)
 	{
 
-		return obj.getClass().equals(ComplianceLoggingMarker.class);
+		return obj instanceof ComplianceLoggingMarker;
 	}
 
 	@Override

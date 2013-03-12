@@ -1,19 +1,17 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.material;
 
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
-import org.apache.log4j.Logger;
+import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class MaterialNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
-	private static final transient Logger logger = Logger.getLogger(Material.class);
 
 	@Override
 	public boolean handles(Object obj)
 	{
-		return obj.getClass().equals(Material.class);
+		return obj instanceof MediaPickupNotification;
 	}
 
 	@Override
@@ -21,11 +19,11 @@ public class MaterialNotificationEmailTemplate extends MailTemplate implements E
 	{
 		MailTemplate t = new MailTemplate();
 
-		Material m = (Material)obj;
+		MediaPickupNotification m = (MediaPickupNotification)obj;
 
 		t.setBody(getBody());
 		t.setEmailaddresses(getEmailaddresses());
-		t.setSubject(String.format(getSubject(), m.getTitle()));
+		t.setSubject(String.format(getSubject(), m.getMaterialId()));
 
 		return t;
 	}

@@ -10,7 +10,7 @@ public class ArdomeFailureEmailTemplate extends MailTemplate implements EmailTem
 	@Override
 	public boolean handles(Object obj)
 	{
-		return obj.getClass().equals(ArdomeJobFailure.class);
+		return obj instanceof ArdomeJobFailure;
 	}
 
 	@Override

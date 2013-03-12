@@ -8,8 +8,8 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.mediasmiths.foxtel.ip.mayam.pdp.FoxtelGroups;
 import com.mediasmiths.foxtel.ip.mayam.pdp.MayamPDP;
+import com.mediasmiths.foxtel.ip.mayam.pdp.MayamPDPImpl;
 import com.mediasmiths.foxtel.ip.mayam.pdp.PrivilegedOperations;
-import com.mediasmiths.foxtel.ip.mayam.pdp.Stub;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class MayamPDPSetUp extends AbstractModule
 	@Override
 	protected void configure()
 	{
-		bind(MayamPDP.class).to(Stub.class);
+		bind(MayamPDP.class).to(MayamPDPImpl.class);
 		RestResourceRegistry.register(MayamPDP.class);
 	}
 

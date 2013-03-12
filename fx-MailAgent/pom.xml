@@ -27,6 +27,7 @@
             <artifactId>fx-Common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>com.mediasmiths.foxtel</groupId>
             <artifactId>fx-MaterialExchange</artifactId>
@@ -36,7 +37,7 @@
             <groupId>au.com.foxtel.cf.mam</groupId>
             <artifactId>fx-PlaceholderManagementSchema</artifactId>
             <version>${project.version}</version>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>com.mediasmiths.foxtel</groupId>
             <artifactId>fx-MailAgentClient</artifactId>
