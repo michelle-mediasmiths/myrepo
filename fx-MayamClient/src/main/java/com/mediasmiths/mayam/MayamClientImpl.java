@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+
 import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
@@ -23,16 +24,14 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.CommentLog;
-import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.attributes.shared.type.MediaStatus;
-import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -42,9 +41,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
-import com.mediasmiths.foxtel.pathresolver.PathResolver;
-import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
-import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -423,11 +419,24 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public String pathToMaterial(String materialID) throws MayamClientException
 	{
+		log.debug(String.format("Requesting pathTo material for materialID %s", materialID));
 		
+		String assetPath = null;
 		AttributeMap material = materialController.getMaterialAttributes(materialID);
 		
-		String assetID = material.getAttribute(Attribute.ASSET_ID);
-		return materialController.getAssetPath(assetID);
+		if(null != material)
+		{
+			String assetID = material.getAttribute(Attribute.ASSET_ID);
+			assetPath = materialController.getAssetPath(assetID);
+		}
+		else
+		{
+			log.error(String.format("No attribute map was returned for materialID %s; unalbe to retrieve asset path.", materialID));
+			throw new MayamClientException(MayamClientErrorCode.FAILURE);
+		}
+		
+		log.debug(String.format("Asset path returned %s for materialID %s.", assetPath, materialID));
+		return assetPath;
 	}
 
 	@Override
