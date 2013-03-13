@@ -19,7 +19,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 
 public class MaterialUpdateHandler extends UpdateAttributeHandler
 {
-	private static final String ARCHIVE_POLICIY_MANUAL = "M";
+	private static final String ARCHIVE_POLICY_MANUAL = "M";
 	private static final String ARCHIVE_POLICY_STANDARD = "1";
 	private static final String ARCHIVE_POLICY_CRITICAL = "2";
 	private static final String ARCHIVE_POLICY_AO = "R";
@@ -28,7 +28,25 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 
 	//the attributes that affect what the archive flag for a given asset should be
 	private final static Attribute[] ARCHIVE_FLAG_CHANGE_TRIGGERS = new Attribute[] {Attribute.PURGE_PROTECTED,Attribute.CONT_RESTRICTED_MATERIAL, Attribute.QC_PREVIEW_RESULT};
-	
+
+
+	/**
+	 * The policy
+	 AO material shouldn't be set to R until passing preview (I think that's implied but just wanted to double check?)
+	 My understanding is that Ardome defaults all items to a manual policy.
+
+	 Once preview pass has been set then it uses the rules above to check which archive policy it should use -
+	 if asset is marked as AO, use R
+	 if asset is marked as being protected (at time of preview pass), then use critical (2)
+	 else use standard (1)
+	 AO assets should not be marked as protected, but if they are then it should still use the AO policy.
+	 Once the item has been archived, then it is pointless updating the archive policy as it does not get reflected in TSM (Woody can you confirm?)..
+	 i.e. If someone decides that an item should be protected after preview pass, and updates the item (either from the BMS or on the item page),
+	 then even if the archive policy is changed on the AGL, the asset will not be moved into the 'critical' TSM pool.
+	 * @param currentAttributes
+	 * @param before
+	 * @param after
+	 */
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
 		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
@@ -54,25 +72,39 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 				boolean isAO = AssetProperties.isAO(currentAttributes);
 				boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) currentAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT));
 
-				if (isAO && isPreviewPass)
+				if (isAO)
 				{
-					log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_AO));
-					currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO); // always set the ao policy for ao material
-				}
-				else if (isProtected && isPreviewPass)
-				{
-					log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_CRITICAL));
-					currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_CRITICAL); // set to critical for assets that are both protected and have passed preview
+					if (isProtected)
+						log.warn("Material " + materialID + " set to AO and Protected. This should not happen.");
+
+					if (isPreviewPass)
+					{
+						log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_AO));
+						currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO); // always set the ao policy for ao material
+					}
+					else
+					{
+                        // I assume we do nothing.
+					}
 				}
 				else if (isPreviewPass)
 				{
-					log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_STANDARD));
-					currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_STANDARD); // set to standard for assets that are both protected or have passed preview
+					if (isProtected)
+					{
+						log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_CRITICAL));
+						currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_CRITICAL); // set to critical for assets that are both protected and have passed preview
+					}
+					else
+					{
+						log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_STANDARD));
+						currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_STANDARD); // set to standard for assets  have passed preview
+					}
+
 				}
 				else
 				{
-					log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICIY_MANUAL));
-					currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICIY_MANUAL); // set to manual if content has just been unprotected and hasn't yet passed preview
+					log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_MANUAL));
+					currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_MANUAL); // set to manual if content has just been unprotected and hasn't yet passed preview
 				}
 
 				try
