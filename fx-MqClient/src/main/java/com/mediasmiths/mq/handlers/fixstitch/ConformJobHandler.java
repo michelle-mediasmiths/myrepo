@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.mortbay.log.Log;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Job;
-import com.mayam.wf.attributes.shared.type.RevisionState;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.SegmentList;

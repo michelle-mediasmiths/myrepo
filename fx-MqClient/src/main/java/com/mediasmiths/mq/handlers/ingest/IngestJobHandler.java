@@ -3,7 +3,6 @@ package com.mediasmiths.mq.handlers.ingest;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -19,13 +18,11 @@ import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
-import com.mediasmiths.foxtel.ip.common.events.IPEvent;
-import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
+import com.mediasmiths.foxtel.ip.common.events.report.CreationComplete;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import com.mediasmiths.foxtel.ip.common.events.report.CreationComplete;
 
 public class IngestJobHandler extends JobHandler
 {
@@ -99,6 +96,12 @@ public class IngestJobHandler extends JobHandler
 							
 							try {
 								GregorianCalendar c = new GregorianCalendar();
+								Date dateUpdated = jobMessage.getJobUpdated();
+								if(null == dateUpdated)
+								{
+									log.debug("Job message had no jobUpdated date set; setting it to now.");
+									dateUpdated = new Date();
+								}
 								c.setTime(jobMessage.getJobUpdated());
 								XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 								sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);

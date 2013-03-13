@@ -431,7 +431,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		else
 		{
-			log.error(String.format("No attribute map was returned for materialID %s; unalbe to retrieve asset path.", materialID));
+			log.error(String.format("No attribute map was returned for materialID %s; unable to retrieve asset path.", materialID));
 			throw new MayamClientException(MayamClientErrorCode.FAILURE);
 		}
 		

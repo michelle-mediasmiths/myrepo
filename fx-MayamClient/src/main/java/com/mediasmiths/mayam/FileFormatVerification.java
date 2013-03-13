@@ -205,14 +205,17 @@ public class FileFormatVerification
 
 		if (requiredFormatKnown)
 		{
+			log.debug("Asset format is known");
 			if (sd)
 			{
+				log.debug("Format is sd asset");
 				boolean pass = performTests(sb, sdTests);
 				log.info(sb.toString());
 				return pass;
 			}
 			else
 			{
+				log.debug("Format is hd asset");
 				boolean pass = performTests(sb, hdTests);
 				log.info(sb.toString());
 				return pass;
@@ -249,29 +252,23 @@ public class FileFormatVerification
 			{
 				log.debug("hd test format failed");
 			}
+			
+			log.debug("Tests failed for both asset as both hd and sd; throwning FileFormatVerificationValidationException");
 			throw new FileFormatVerificationFailureException(sb.toString());
-
 		}
-
 	}
 
 	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests) throws FileFormatVerificationFailureException
 	{
-		boolean allPass = true;
-
 		for (FileFormatTest fileFormatTest : tests)
 		{
 			if (!(fileFormatTest.check(sb)))
 			{
-				allPass = false;
+				throw new FileFormatVerificationFailureException(sb.toString());
 			}
 		}
 
-		if (!allPass)
-		{
-			throw new FileFormatVerificationFailureException(sb.toString());
-		}
-		return allPass;
+		return true;
 	}
 
 	class FileFormatTest
