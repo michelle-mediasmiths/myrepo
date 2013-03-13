@@ -217,7 +217,7 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			return getErrorStatus("A technical fault has occurred while verifying the segemntation complete rules");
 		}
 	}
 
