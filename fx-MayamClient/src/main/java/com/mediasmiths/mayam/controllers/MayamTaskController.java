@@ -1,14 +1,5 @@
 package com.mediasmiths.mayam.controllers;
 
-import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -30,6 +21,14 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
+import org.apache.log4j.Logger;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.List;
+
+import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTaskController extends MayamController
 {
@@ -226,6 +225,7 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_POSITION,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION));
 		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_COLOR,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR));
 		initialAttributes.setAttribute(Attribute.OP_TYPE, jobType);
+		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY,exportButtonAttributes.getAttribute(Attribute.TASK_CREATED_BY));
 		
 		MayamAssetType assetType = MayamAssetType.fromString(exportButtonAttributes.getAttribute(Attribute.ASSET_TYPE).toString());
 		return createTask(materialID,assetType, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
