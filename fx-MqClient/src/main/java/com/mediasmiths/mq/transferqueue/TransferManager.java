@@ -14,6 +14,7 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
@@ -44,7 +45,7 @@ public class TransferManager extends Daemon implements StoppableService
 	@Inject
 	public TransferManager(ShutdownManager shutdownManager,
 	                       TransferQueue queue,
-	                       TasksClient tasksClient,
+	                       @Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient tasksClient,
 	                       MayamTaskController taskController,
 	                       @Named("ff.sd.video.imagex") int sdVideoX)
 	{
