@@ -151,6 +151,15 @@ public class TransferManager extends Daemon implements StoppableService
 	{
 		// TODO any special actions for a new item
 		log.info("Transfer " + item.id + " for " + item.assetId + " with peer " + item.assetPeerId + " added");
+		try {
+			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
+			        item.assetId);
+			attributes.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+			taskController.updateMapForTask(attributes);
+		} catch (MayamClientException e) {
+			log.error("Mayam Exception thrown while updating state of unmatched task for asset :" + item.assetId, e);
+			e.printStackTrace();
+		}
 	}
 
 
@@ -210,8 +219,17 @@ public class TransferManager extends Daemon implements StoppableService
 	protected void failed(TransferItem item)
 	{
 		log.warn("Transfer item failed: " + item.id);
-
-		// TODO any actions for a failed transfer
+		try
+		{
+			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
+			        item.assetId);
+			long taskID = attributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskID, "Error while performing media transfer for asset " + item.assetId);
+		} 
+		catch (MayamClientException e) {
+			log.error("Mayam Exception thrown while setting error state of unmatched task for :" + item.assetId, e);
+			e.printStackTrace();
+		}
 	}
 
 
