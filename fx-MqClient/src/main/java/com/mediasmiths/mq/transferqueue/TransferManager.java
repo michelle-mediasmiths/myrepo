@@ -10,13 +10,10 @@ import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
@@ -25,20 +22,23 @@ import org.apache.log4j.Logger;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Keeps track of active transfers, polling until they complete. The transfers are backed by a file queue
+ */
 @Singleton
 public class TransferManager extends Daemon implements StoppableService
 {
 	private static final Logger log = Logger.getLogger(TransferManager.class);
 
 	private final int sdVideoX;
-	private final EventService eventsService;
-	private final MayamClientImpl mayamClient;
 	private final MayamTaskController taskController;
 	private final TasksClient tasksClient;
 	private final TransferQueue queue;
 
-
-	private final Timeout sleepTime = new Timeout(60, TimeUnit.SECONDS);
+	/**
+	 * The time to sleep between polling
+	 */
+	private final Timeout sleepTime = new Timeout(2, TimeUnit.MINUTES);
 
 
 	@Inject
@@ -46,15 +46,11 @@ public class TransferManager extends Daemon implements StoppableService
 	                       TransferQueue queue,
 	                       TasksClient tasksClient,
 	                       MayamTaskController taskController,
-	                       @Named(MayamClientModule.SETUP_TASKS_CLIENT) MayamClientImpl mayamClient,
-	                       EventService eventsService,
 	                       @Named("ff.sd.video.imagex") int sdVideoX)
 	{
 		this.queue = queue;
 		this.tasksClient = tasksClient;
 		this.taskController = taskController;
-		this.mayamClient = mayamClient;
-		this.eventsService = eventsService;
 		this.sdVideoX = sdVideoX;
 
 		shutdownManager.register(this);
@@ -83,13 +79,21 @@ public class TransferManager extends Daemon implements StoppableService
 				// Process each item individually, logging errors (and continuing) in the event of an Exception
 				for (TransferItem item : queue.getItems())
 				{
+					if (!isRunning())
+						break;
+
 					try
 					{
 						process(item);
 					}
 					catch (Throwable e)
 					{
-						log.error("TransferManager error processing " + item.id, e);
+						log.error("TransferManager error processing " +
+						          item.id +
+						          " for asset " +
+						          item.assetId +
+						          " and peer " +
+						          item.assetPeerId, e);
 					}
 				}
 			}
@@ -109,6 +113,7 @@ public class TransferManager extends Daemon implements StoppableService
 	 * Called periodically for each item
 	 *
 	 * @param item
+	 * 		the transfer item
 	 */
 	public void process(TransferItem item)
 	{
@@ -125,10 +130,12 @@ public class TransferManager extends Daemon implements StoppableService
 		// If the item has reached a terminal state then we should take a finalisation action
 		if (state == TransferState.COMPLETE)
 		{
+			queue.remove(item);
 			complete(item);
 		}
 		else if (state == TransferState.FAILED)
 		{
+			queue.remove(item);
 			failed(item);
 		}
 	}
@@ -138,10 +145,12 @@ public class TransferManager extends Daemon implements StoppableService
 	 * Called once when the transfer is new
 	 *
 	 * @param item
+	 * 		the transfer item
 	 */
 	protected void added(TransferItem item)
 	{
 		// TODO any special actions for a new item
+		log.info("Transfer " + item.id + " for " + item.assetId + " with peer " + item.assetPeerId + " added");
 	}
 
 
@@ -149,18 +158,15 @@ public class TransferManager extends Daemon implements StoppableService
 	 * Called once when the transfer completes successfully
 	 *
 	 * @param item
+	 * 		the transfer item
 	 */
 	protected void complete(TransferItem item)
 	{
 		log.info("Transfer item completed: " + item.id);
 
-		queue.remove(item);
-
-		// Get the item format (or fail)
-
 		try
 		{
-			// Retrieve asset info
+			// Retrieve task info
 			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
 			                                                                          item.assetId);
 
@@ -178,21 +184,7 @@ public class TransferManager extends Daemon implements StoppableService
 			// close open ingest task for the target asset
 			closeIngestTaskForAsset(peerID, attributes);
 		}
-		catch (MayamClientException e)
-		{
-			log.error("Error completing item " +
-			          item.id +
-			          " for " +
-			          item.assetId +
-			          " to " +
-			          item.assetPeerId +
-			          " failed. Failing task.");
-
-			failed(item);
-
-			throw new RuntimeException(e);
-		}
-		catch (RemoteException e)
+		catch (MayamClientException | RemoteException e)
 		{
 			log.error("Error completing item " +
 			          item.id +
@@ -213,13 +205,13 @@ public class TransferManager extends Daemon implements StoppableService
 	 * Called once when the transfer fails
 	 *
 	 * @param item
+	 * 		the transfer item
 	 */
-
-
 	protected void failed(TransferItem item)
 	{
-		log.info("Transfer item failed: " + item.id);
-		queue.remove(item);
+		log.warn("Transfer item failed: " + item.id);
+
+		// TODO any actions for a failed transfer
 	}
 
 
@@ -234,8 +226,9 @@ public class TransferManager extends Daemon implements StoppableService
 	 * thrown to indicate an error</p>
 	 *
 	 * @param item
+	 * 		the transfer item
 	 *
-	 * @return
+	 * @return the determined transfer state (success, failure, in progress)
 	 */
 	private TransferState getTransferState(final TransferItem item)
 	{
