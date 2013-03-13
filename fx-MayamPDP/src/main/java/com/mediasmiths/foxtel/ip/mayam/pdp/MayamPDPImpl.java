@@ -15,6 +15,8 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.util.AssetProperties;
+
 import org.apache.log4j.Logger;
 
 import javax.xml.ws.WebServiceException;
@@ -198,6 +200,19 @@ public class MayamPDPImpl implements MayamPDP
 				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 			}
 
+			// QC Parallel Check
+			// if QC parallel has been enabled, and the QC status has not been set, then it will inform the user that the content has not 
+			// finished auto QC yet and allow them to continue if they wish.
+			Boolean qcParallel = attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+			boolean isQcPassed = AssetProperties.isQCPassed(attributeMap);
+			if (qcParallel != null && qcParallel.equals(Boolean.TRUE) && !isQcPassed)
+			{
+				returnMap.clear();
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
+				returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "QC Parallel has been set but Autop QC has not yet been passed. Are you sure you wish to proceed?");
+				logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + mapper.serialize(returnMap));
+			}
+			
 			return  mapper.serialize(returnMap);
 		}
 		catch (Exception e)
