@@ -116,46 +116,73 @@ public class MediaExchangeProgrammeOutputBuilder
 		Programme.Detail programmeDetail = new Programme.Detail();
 
 		programmeDetail.setEXTCLIPUMID(pack.getPackageId());
-		programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
-		programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
-		programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
 		
-		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT).toString()));
-		programmeDetail.setAspectRatio(pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO).toString());
-		
-		String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
-		Supplier supplier = new Supplier();
-		supplier.setSupplierID(supplierId);
-		programmeDetail.setSUPPLIER(supplier.toString());
-		
-		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
-		if (audioTracks == null || audioTracks.size() == 0)
+		if (pack.getTitleAttributes() != null)
 		{
-			log.error("no audio tracks found when processing package " + pack.getPackageId());
-		}
-		else
-		{
-			EncodingType encoding = audioTracks.get(0).getEncoding();
-	
-			if (encoding != null)
+			programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
+			programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
+			programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
+			
+			StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
+
+			if (channels != null && channels.size() > 0)
 			{
-				switch (encoding)
-				{
-					case DOLBY_E:
-						programmeDetail.setAudioType(AudioListType.DIGITAL);
-						break;
-					case LINEAR:
-						programmeDetail.setAudioType(AudioListType.STEREO);
-						break;
-					default:
-						break;
-	
-				}
+				programmeDetail.setMARKET(channels.get(0));
 			}
 			else
 			{
-				log.error("null encoding on audio track information!");
+				log.warn("Producing Programme type for package with empty channels list! package " +pack.getPackageId());
 			}
+		}
+		else
+		{
+			log.warn("Producing Programme output with empty title details. Package : " + pack.getPackageId());
+		}
+		
+		if (pack.getMaterialAttributes() != null)
+		{
+			programmeDetail.setAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+			
+			String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
+			Supplier supplier = new Supplier();
+			supplier.setSupplierID(supplierId);
+			programmeDetail.setSUPPLIER(supplier.toString());
+			
+			AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+			if (audioTracks == null || audioTracks.size() == 0)
+			{
+				log.error("no audio tracks found when processing package " + pack.getPackageId());
+			}
+			else
+			{
+				EncodingType encoding = audioTracks.get(0).getEncoding();
+		
+				if (encoding != null)
+				{
+					switch (encoding)
+					{
+						case DOLBY_E:
+							programmeDetail.setAudioType(AudioListType.DIGITAL);
+							break;
+						case LINEAR:
+							programmeDetail.setAudioType(AudioListType.STEREO);
+							break;
+						default:
+							break;
+		
+					}
+				}
+				else
+				{
+					log.error("null encoding on audio track information!");
+				}
+			}
+			
+			programmeDetail.setSUPPLIER(pack.getMaterialAttributes().getAttributeAsString(Attribute.DIST_NAME));
+		}
+		else
+		{
+			log.warn("Producing Programme output with empty material details. Package : " + pack.getPackageId());
 		}
 		
 		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
@@ -169,18 +196,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
 		}
 
-		programmeDetail.setSUPPLIER(pack.getMaterialAttributes().getAttributeAsString(Attribute.DIST_NAME));
-		StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
-
-		if (channels != null && channels.size() > 0)
-		{
-			programmeDetail.setMARKET(channels.get(0));
-		}
-		else
-		{
-			log.warn("Producing Programme type for package with empty channels list! package " +pack.getPackageId());
-		}
-
+		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT).toString()));
 		Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_NEXT);
 
 		if (targetDate != null)
