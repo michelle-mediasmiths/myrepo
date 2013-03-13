@@ -142,7 +142,7 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 	@Override
-	public String segmentMismatch(final String attributeMapStr)
+	public String segmentationComplete(final String attributeMapStr)
 	{
 		try
 		{
@@ -189,7 +189,16 @@ public class MayamPDPImpl implements MayamPDP
 				logger.info("Unable to retrieve Segment List. Return Map : " + mapper.serialize(returnMap));
 			}
 
-			return okStatus;
+			// Classification Check
+			String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
+			if (classification == null || classification.equals(""))
+			{
+				returnMap.clear();
+				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+			}
+
+			return  mapper.serialize(returnMap);
 		}
 		catch (Exception e)
 		{
@@ -198,7 +207,7 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 	@Override
-	public String segmentClassificationCheck(final String attributeMapStr)
+	public String segmentation(final String attributeMapStr)
 	{
 		try
 		{
@@ -209,14 +218,16 @@ public class MayamPDPImpl implements MayamPDP
 			AttributeMap returnMap = client.createAttributeMap();
 			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 
-			String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
-			if (classification == null || classification.equals(""))
+			String assetId = attributeMap.getAttributeAsString(Attribute.ASSET_ID);
+			AttributeMap existingTask = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.SEGMENTATION, assetId);
+
+			if (existingTask != null)
 			{
 				String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
 				returnMap.clear();
 				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+				returnMap.setAttribute(Attribute.ERROR_MSG, "An open segmentation task already exists for asset :" + presentationID);
 			}
 
 			return  mapper.serialize(returnMap);

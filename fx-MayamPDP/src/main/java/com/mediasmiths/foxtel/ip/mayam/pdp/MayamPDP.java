@@ -33,17 +33,17 @@ public interface MayamPDP
 	 * @return a result packet that indicates that a user can overide the number of defined segments.
 	 *
 	 */
-	@Path("segmentMismatch")
+	@Path("segmentationComplete")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String segmentMismatch(String attributeMapStr);
+	public String segmentationComplete(String attributeMapStr);
 
-	@Path("segmentClassificationCheck")
+	@Path("segmentation")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public String segmentClassificationCheck(String attributeMapStr);
+	public String segmentation(String attributeMapStr);
 
 	@Path("uningest")
 	@POST()
