@@ -359,13 +359,7 @@ public class MayamPDPImpl implements MayamPDP
 		}
 	}
 
-	private String getConfirmStatus(String message)
-	{
-		AttributeMap attributeMap = client.createAttributeMap();
-		attributeMap.setAttribute(Attribute.OP_STAT, "confirm");
-		attributeMap.setAttribute(Attribute.FORM_MSG_NOTE, message);
-		return mapper.serialize(attributeMap);
-	}
+
 
 	@Override
 	public String proxyfileCheck(final String attributeMapStr)
@@ -692,18 +686,14 @@ public class MayamPDPImpl implements MayamPDP
 
 				if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
 				{
-					return okStatus;
+					return getConfirmStatus("Send to TX?");
 				}
 
 				boolean qcParallel = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED).toString());
 
 				if (qcParallel)
 				{
-					AttributeMap confirm = new AttributeMap();
-					confirm.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
-					confirm.setAttribute(Attribute.FORM_MSG_ERROR, "QC Parallel is set. QC is not Passed. Do you wish to create a Tx task?");
-
-					return mapper.serialize(confirm);
+					return getConfirmStatus("QC Parallel is set. QC is not Passed. Do you wish to create a Tx task?");
 				}
 
 				boolean qcRequired = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_STATUS).toString());
@@ -714,7 +704,7 @@ public class MayamPDPImpl implements MayamPDP
 				}
 				else
 				{
-					return okStatus;
+					return getConfirmStatus("Send to TX?");
 				}
 
 			}
@@ -728,6 +718,8 @@ public class MayamPDPImpl implements MayamPDP
 			return getErrorStatus(e.getMessage());
 		}
 	}
+
+
 
 	@Override
 	public String exportMarkers(final String attributeMapStr)
@@ -1052,6 +1044,15 @@ public class MayamPDPImpl implements MayamPDP
 		logger.info("Return Map : " + mapper.serialize(errorStatus));
 		return mapper.serialize(errorStatus);
 
+	}
+
+
+	private String getConfirmStatus(String message)
+	{
+		AttributeMap attributeMap = client.createAttributeMap();
+		attributeMap.setAttribute(Attribute.OP_STAT, "confirm");
+		attributeMap.setAttribute(Attribute.FORM_MSG_NOTE, message);
+		return mapper.serialize(attributeMap);
 	}
 
 
