@@ -21,6 +21,7 @@ import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.threading.Timeout;
 import org.apache.log4j.Logger;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -45,7 +46,7 @@ public class TransferManager extends Daemon implements StoppableService
 	@Inject
 	public TransferManager(ShutdownManager shutdownManager,
 	                       TransferQueue queue,
-	                       @Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient tasksClient,
+	                       @Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient,
 	                       MayamTaskController taskController,
 	                       @Named("ff.sd.video.imagex") int sdVideoX)
 	{
@@ -152,14 +153,54 @@ public class TransferManager extends Daemon implements StoppableService
 	{
 		// TODO any special actions for a new item
 		log.info("Transfer " + item.id + " for " + item.assetId + " with peer " + item.assetPeerId + " added");
-		try {
-			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
-			        item.assetId);
-			attributes.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
-			taskController.updateMapForTask(attributes);
-		} catch (MayamClientException e) {
-			log.error("Mayam Exception thrown while updating state of unmatched task for asset :" + item.assetId, e);
-			e.printStackTrace();
+
+
+		log.info("Trying to move task for transfer into SYS_WAIT state");
+
+		try
+		{
+			List<AttributeMap> allUnmatchedTasks = taskController.getTasksForAsset(MayamTaskListType.UNMATCHED_MEDIA,
+			                                                                       MayamAssetType.MATERIAL.getAssetType(),
+			                                                                       Attribute.ASSET_ID,
+			                                                                       item.assetId);
+
+			// Log all the unmatched tasks for debug purposes
+			for (AttributeMap task : allUnmatchedTasks)
+			{
+
+				// log the task info
+				log.info("Task " +
+				         task.getAttribute(Attribute.TASK_ID) +
+				         " found for " +
+				         item.assetId +
+				         ". It is in state " +
+				         task.getAttribute(Attribute.TASK_STATE));
+			}
+
+			if (allUnmatchedTasks.size() != 1)
+				log.warn("Found " + allUnmatchedTasks.size() + " unmatched tasks but expected 1. This is likely a problem.");
+
+
+			// Now try to put the task(s) in SYS_WAIT
+			for (AttributeMap task : allUnmatchedTasks)
+			{
+				TaskState state = task.getAttribute(Attribute.TASK_STATE);
+
+				// if the task state is in MayamTaskController.END_STATE then warn, otherwise...
+				if (!MayamTaskController.END_STATES.contains(state))
+				{
+					task.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+					taskController.updateMapForTask(task);
+				}
+				else
+				{
+					log.warn("Task " + task.getAttribute(Attribute.TASK_ID) + " is in terminal state: " + state);
+				}
+			}
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Mayam Exception thrown while updating state of unmatched task for asset " + item.assetId, e);
 		}
 	}
 
@@ -223,11 +264,12 @@ public class TransferManager extends Daemon implements StoppableService
 		try
 		{
 			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
-			        item.assetId);
+			                                                                          item.assetId);
 			long taskID = attributes.getAttribute(Attribute.TASK_ID);
 			taskController.setTaskToErrorWithMessage(taskID, "Error while performing media transfer for asset " + item.assetId);
-		} 
-		catch (MayamClientException e) {
+		}
+		catch (MayamClientException e)
+		{
 			log.error("Mayam Exception thrown while setting error state of unmatched task for :" + item.assetId, e);
 			e.printStackTrace();
 		}

@@ -32,6 +32,14 @@ import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTaskController extends MayamController
 {
+	private final Logger log = Logger.getLogger(MayamTaskController.class);
+
+	public static final EnumSet<TaskState> END_STATES = EnumSet.of(TaskState.FINISHED,
+	                                                               TaskState.FINISHED_FAILED,
+	                                                               TaskState.REJECTED,
+	                                                               TaskState.REMOVED);
+
+
 	private final TasksClient client;
 
 	public TasksClient getTasksClient()
@@ -41,8 +49,6 @@ public class MayamTaskController extends MayamController
 
 	@Inject
 	private final MayamAccessRightsController accessRightsController;
-
-	private final Logger log = Logger.getLogger(MayamTaskController.class);
 
 	@Inject
 	public MayamTaskController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController)
@@ -666,13 +672,6 @@ public class MayamTaskController extends MayamController
 		}
 	}
 
-	 final EnumSet<TaskState> END_STATES = EnumSet.of(
-				TaskState.FINISHED,
-				TaskState.FINISHED_FAILED,
-				TaskState.REJECTED,
-				TaskState.REMOVED
-			);
-	
 	/**
 	 * returns all tasks for an asset that are not in end states
 	 * @return
