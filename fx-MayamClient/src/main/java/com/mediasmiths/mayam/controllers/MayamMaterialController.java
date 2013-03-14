@@ -1489,7 +1489,7 @@ public class MayamMaterialController extends MayamController
 				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
 			}
 		}
-		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED,e);
+		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 	}
 	
 }
