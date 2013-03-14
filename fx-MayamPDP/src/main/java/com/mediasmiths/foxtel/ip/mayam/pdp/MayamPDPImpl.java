@@ -223,7 +223,7 @@ public class MayamPDPImpl implements MayamPDP
 			// if QC parallel has been enabled, and the QC status has not been set, then it will inform the user that the content has not 
 			// finished auto QC yet and allow them to continue if they wish.
 
-			AttributeMap parentAsset = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), attributeMap.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+			AttributeMap parentAsset = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 			boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
 
 			if (isQcPassed)
@@ -233,15 +233,18 @@ public class MayamPDPImpl implements MayamPDP
 				return getConfirmStatus(warnings+"Do you wish to send to Tx?");
 			}
 
-			String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-
-			if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
+			if (parentAsset != null)
 			{
-
-				logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
-
-				return getConfirmStatus(warnings+"QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
-
+				String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+	
+				if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
+				{
+	
+					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
+	
+					return getConfirmStatus(warnings+"QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
+	
+				}
 			}
 			
 			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
