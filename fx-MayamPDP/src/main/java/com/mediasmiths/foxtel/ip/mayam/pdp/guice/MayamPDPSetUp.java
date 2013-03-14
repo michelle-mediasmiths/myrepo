@@ -67,6 +67,10 @@ public class MayamPDPSetUp extends AbstractModule
 		                                                                                                  Names.named("groups.publicityProxy.nonao")))));
 		securityGroups.put(PrivilegedOperations.FILEVERIFYOVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                  Names.named("groups.files.verifyOverride.nonao")))));
+
+		securityGroups.put(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
+		                                                                                                     Names.named("groups.segments.override.nonao")))));
+
 		return securityGroups;
 
 	}
@@ -113,6 +117,9 @@ public class MayamPDPSetUp extends AbstractModule
 
 		securityGroups.put(PrivilegedOperations.FILEVERIFYOVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
 		                                                                                                     Names.named("groups.files.verifyOverride.ao")))));
+		securityGroups.put(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, getGroupSet(injector.getInstance(Key.get(String.class,
+		                                                                                                            Names.named("groups.segments.override.ao")))));
+
 		return securityGroups;
 
 	}

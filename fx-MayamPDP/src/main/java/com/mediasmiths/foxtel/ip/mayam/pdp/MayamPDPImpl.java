@@ -44,6 +44,10 @@ public class MayamPDPImpl implements MayamPDP
 	String messageTaskPermission;
 
 	@Inject
+	@Named("message.segment.mismatch.notoverride")
+	String messageSegmentMismatchRefuseOverride;
+
+	@Inject
 	@Named("message.segment.mismatch.override")
 	String messageSegmentMismatchOverride;
 
@@ -148,15 +152,14 @@ public class MayamPDPImpl implements MayamPDP
 	{
 		try
 		{
+			String warnings="";
+
 			logger.info("Segment Mismatch.");
 
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 
 			defaultValidation(attributeMap);
 			dumpPayload(attributeMap);
-
-			AttributeMap returnMap = client.createAttributeMap();
-			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
 
 			//Segmentation check
 			String requestedNumber = attributeMap.getAttributeAsString(Attribute.REQ_NUMBER);
@@ -175,45 +178,72 @@ public class MayamPDPImpl implements MayamPDP
 			if (segmentList != null && segmentList.getEntries() != null)
 			{
 				int segmentsSize = segmentList.getEntries().size();
+
 				logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
+
+
 				if (numberOfSegmentsRequested != segmentsSize)
 				{
-					returnMap.clear();
-					returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
-					returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "The number of segments submitted does not match that requested by the channel. Are you sure you wish to proceed?");
-					logger.info("Number of Segments Mismatch discovered. Return Map : " + mapper.serialize(returnMap));
+					logger.info("Number of Segments Mismatch discovered. For Presentation ID : " + presentationID);
+
+					boolean permission = userCanPerformOperation(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, attributeMap);
+
+					if (permission)
+					{
+						logger.debug("User can override a segment mismatch for " + presentationID);
+
+						warnings = messageSegmentMismatchOverride;
+					}
+					else
+					{
+						logger.debug("User cannot override a segment mismatch for " + presentationID);
+
+						return getErrorStatus(messageSegmentMismatchRefuseOverride);
+					}
 				}
 			}
-			else {
-				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-				returnMap.setAttribute(Attribute.ERROR_MSG, "A technical fault has occurred while retrieving segemnt list");
-				logger.info("Unable to retrieve Segment List. Return Map : " + mapper.serialize(returnMap));
+			else
+			{
+				logger.info("Unable to retrieve Segment List. Return Map for  " + presentationID);
+
+				return getErrorStatus("A technical fault has occurred while retrieving segemnt list");
+
 			}
 
 			// Classification Check
 			String classification = attributeMap.getAttributeAsString(Attribute.CONT_CLASSIFICATION);
 			if (classification == null || classification.equals(""))
 			{
-				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-				returnMap.setAttribute(Attribute.ERROR_MSG, "The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+				logger.debug("The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+
+				return getErrorStatus("The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 			}
 
 			// QC Parallel Check
 			// if QC parallel has been enabled, and the QC status has not been set, then it will inform the user that the content has not 
 			// finished auto QC yet and allow them to continue if they wish.
-			Boolean qcParallel = attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+
 			boolean isQcPassed = AssetProperties.isQCPassed(attributeMap);
-			if (qcParallel != null && qcParallel.equals(Boolean.TRUE) && !isQcPassed)
+
+			if (isQcPassed)
 			{
-				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
-				returnMap.setAttribute(Attribute.FORM_MSG_ERROR, "QC Parallel has been set but Autop QC has not yet been passed. Are you sure you wish to proceed?");
-				logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + mapper.serialize(returnMap));
+				logger.info("QC is Passed on Presentation Id " + presentationID);
+
+				return getConfirmStatus(warnings+"Do you wish to send to Tx?");
+			}
+
+			String qcParallelAttribute = attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+
+			if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
+			{
+
+				logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
+
+				return getConfirmStatus(warnings+"QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
+
 			}
 			
-			return  mapper.serialize(returnMap);
+			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
 		}
 		catch (Exception e)
 		{
@@ -1076,10 +1106,13 @@ public class MayamPDPImpl implements MayamPDP
 	private String getConfirmStatus(String message)
 	{
 		AttributeMap attributeMap = client.createAttributeMap();
-		attributeMap.setAttribute(Attribute.OP_STAT, "confirm");
+		attributeMap.setAttribute(Attribute.OP_STAT, StatusCodes.CONFIRM.toString());
 		attributeMap.setAttribute(Attribute.FORM_MSG_NOTE, message);
 		return mapper.serialize(attributeMap);
 	}
+
+
+
 
 
 }
