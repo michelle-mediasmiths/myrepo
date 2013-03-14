@@ -73,17 +73,30 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					taskController.saveTask(currentAttributes);
 					return;
 				}
+				
 				removeUnmatchedAssetFromTaskLists(assetID);
-
-
-				final String assetId = currentAttributes.getAttribute(Attribute.ASSET_ID).toString();
-				final String assetPeerId = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
-
-				// We're only willing to wait this long until we assume the transfer has timed out
-				Date timeout = transferTimeout.start().getDate();
-
-
-				transferManager.add(new TransferItem(assetId, assetPeerId, timeout));
+				log.info("Unmatched task removed for asset : " + assetID);
+				
+				if (isAssociated)
+				{
+					// Content matched as associated media should not be added as a revision of the item. 
+					// It should be attached as a new associated item to the subprogram
+					// If possible, the title of this media should be set to the filename, 
+					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
+					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
+					
+				}
+				else {
+					log.info("Match found for asset, attempting to create new revision");
+					
+					final String assetId = currentAttributes.getAttribute(Attribute.ASSET_ID).toString();
+					final String assetPeerId = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+	
+					// We're only willing to wait this long until we assume the transfer has timed out
+					Date timeout = transferTimeout.start().getDate();
+	
+					transferManager.add(new TransferItem(assetId, assetPeerId, timeout));
+				}
 			}
 		}
 		catch (Exception e)
