@@ -12,14 +12,12 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocation;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationNotFoundException;
 import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.ControlJob;
-import com.tektronix.www.cerify.soap.client.ControlJobResponse;
 import com.tektronix.www.cerify.soap.client.CreateJob;
 import com.tektronix.www.cerify.soap.client.CreateMediaSet;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
@@ -62,25 +60,34 @@ public class CerifyClient
 	 * @throws RemoteException
 	 * @throws MediaLocationNotFoundException 
 	 */
-	public String startQcForFile(String file, String ident, String profileName, MediaLocation location, String priority) throws MalformedURIException, RemoteException, MediaLocationNotFoundException
+	public String startQcForFile(final String file, final String ident, final String profileName, final MediaLocation location, final String priority)
+			throws MalformedURIException, 
+			RemoteException, 
+			MediaLocationNotFoundException
 	{
 		log.info("QC start request for " + file);
 		
-		String mediaSetName = mediasetName(file, ident);
-
+		if(log.isDebugEnabled())
+		{
+			log.debug(String.format("QC start request for file %s; ident %s; profileName %s; mediaLocation %s; priority %s", file, ident, profileName, location.getPath(), priority));
+		}
+		
 		// if the media set name specified is already in use then a new media set name may be returned
-		mediaSetName = createMediaSet(file, ident, mediaSetName,location,0);
+		final String mediaSetName = createMediaSet(file, ident, mediasetName(file, ident), location, 0);
+		
+		log.debug(String.format("mediaSetName is %s", mediaSetName));
 
-		String jobName = jobName(profileName, mediaSetName);
-		PriorityType priorityType = PriorityType.fromString(priority);
+		final String jobName = jobName(profileName, mediaSetName);
+		
+		final PriorityType priorityType = PriorityType.fromString(priority);
 
-		log.info(String.format("Creating a job %s", jobName));
+		log.info(String.format("Creating a job %s with priority %s", jobName, priority));
 		CreateJob createJob = new CreateJob(jobName, mediaSetName, profileName, priorityType);
+		
 		log.debug("Sending CreateJobRequest");
 		service.createJob(createJob);
 
 		return jobName;
-
 	}
 
 	/**
@@ -111,12 +118,11 @@ public class CerifyClient
 	 * @throws BaseCeritalkFault
 	 * @throws RemoteException
 	 */
-	public GetJobStatusResponse getStatus(String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException
+	public GetJobStatusResponse getStatus(final String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException
 	{
 		log.info(String.format("Getting status of job %s", jobName));
 		GetJobStatus request = new GetJobStatus(jobName);
-		GetJobStatusResponse jobStatus = service.getJobStatus(request);
-		return jobStatus;
+		return service.getJobStatus(request);
 	}
 
 	/**
@@ -130,12 +136,11 @@ public class CerifyClient
 	 * @throws BaseCeritalkFault
 	 * @throws RemoteException
 	 */
-	public GetJobResultsResponse getJobResult(String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException
+	public GetJobResultsResponse getJobResult(final String jobName) throws JobDoesntExistFault, BaseCeritalkFault, RemoteException
 	{
 		log.info(String.format("Getting results of job %s", jobName));
 		GetJobResults request = new GetJobResults(jobName);
-		GetJobResultsResponse jobResults = service.getJobResults(request);
-		return jobResults;
+		return service.getJobResults(request);
 	}
 
 	/**
@@ -150,7 +155,7 @@ public class CerifyClient
 	 * @throws JobDoesntExistFault
 	 * @throws MediaLocationNotFoundException 
 	 */
-	public GetMediaFileResultsResponse getMediaResult(String filePath, String jobName, MediaLocation mediaLocation, int runNumber)
+	public GetMediaFileResultsResponse getMediaResult(final String filePath, final String jobName, final MediaLocation mediaLocation, final int runNumber)
 			throws MalformedURIException,
 			JobDoesntExistFault,
 			MediaFileNotInJobFault,
@@ -159,10 +164,16 @@ public class CerifyClient
 	{
 		log.info(String.format("Getting results of media %s in job %s", filePath, jobName));
 
+		if(log.isDebugEnabled())
+		{
+			log.debug(String.format("Getting results of media %s in job %s; mediaLocation %s; runNumber %d", 
+					filePath, jobName, mediaLocation.getPath(), runNumber));
+		}
+		
 		URI url = mediaLocation.resolveUriForFile(filePath);
 		GetMediaFileResults request = new GetMediaFileResults(jobName, url, 0);
-		GetMediaFileResultsResponse mediaFileResults = service.getMediaFileResults(request);
-		return mediaFileResults;
+		log.debug("Calling service to getMediaFileResults");
+		return service.getMediaFileResults(request);
 	}
 
 	/**
@@ -173,23 +184,22 @@ public class CerifyClient
 	 * @throws BaseCeritalkFault
 	 * @throws RemoteException
 	 */
-	public void cancelJob(String jobName) throws JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException{
-		
+	public void cancelJob(final String jobName) 
+			throws JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException
+	{	
 			log.info(String.format("Cancelling job %s",jobName));
 			ControlJob control = new ControlJob(jobName, JobActionType.stopnow);
 			service.controlJob(control);					
 	}
 	
-	private String jobName(String profileName, String mediaSetName)
+	private String jobName(final String profileName, final String mediaSetName)
 	{
-		String jobName = mediaSetName + "_" + profileName;
-		return jobName;
+		return new StringBuilder(mediaSetName).append("_").append(profileName).toString();
 	}
 
-	private String mediasetName(String file, String ident)
+	private String mediasetName(final String file, final String ident)
 	{
-		String mediaSetName = FilenameUtils.getBaseName(file) + "_" + ident;
-		return mediaSetName;
+		return FilenameUtils.getBaseName(file) + "_" + ident;
 	}
 
 	private String createMediaSet(final String file, final String ident, final String mediaSetName, final MediaLocation mediaLocation, final int mediaSetNameSuffix)
@@ -201,21 +211,21 @@ public class CerifyClient
 			BaseCeritalkFault,
 			RemoteException
 	{
-
 		log.info(String.format("Creating a mediaset %s", resolveMediaSetName(mediaSetName, mediaSetNameSuffix)));
-
 		
-		URI media = mediaLocation.resolveUriForFile(file);
+		if(log.isDebugEnabled())
+		{
+			log.debug(String.format("Creating a mediaset for file %s; ident %s; mediaSetName %s; mediaLocation %s; mediaSetNameSuffix %d", 
+					file, ident, mediaSetName, mediaLocation.getPath(), mediaSetNameSuffix));
+		}
 
-		CreateMediaSet cms;
-		if (mediaSetNameSuffix == 0) // mediaSetNameSuffix > 0 implies the suffix should be used to try and create and unique media set name
-		{
-			cms = new CreateMediaSet(mediaSetName, mediaLocation.getName(), media);
-		}
-		else
-		{
-			cms = new CreateMediaSet(mediaSetName + "_" + mediaSetNameSuffix, mediaLocation.getName(), media);
-		}
+		final URI media = mediaLocation.resolveUriForFile(file);	
+		
+		final String resolvedMediaSetName = resolveMediaSetName(mediaSetName, mediaSetNameSuffix);
+		
+		final CreateMediaSet cms = 
+				new CreateMediaSet(resolvedMediaSetName, mediaLocation.getName(), media);
+		
 		log.debug("Sending CreateMediaSetRequest");
 		try
 		{
@@ -224,7 +234,7 @@ public class CerifyClient
 		catch (MediaSetNameInUseFault e)
 		{
 			log.info("Media set name already in use", e);
-			return createMediaSet(file, ident, mediaSetName,mediaLocation, mediaSetNameSuffix + 1);
+			return createMediaSet(file, ident, mediaSetName, mediaLocation, mediaSetNameSuffix + 1);
 		}
 		catch (URLNotInMediaLocationFault e)
 		{
@@ -252,23 +262,18 @@ public class CerifyClient
 			throw e;
 		}
 		
-		return resolveMediaSetName(mediaSetName, mediaSetNameSuffix);
+		return resolvedMediaSetName;
 		
 	}
 
 	private String resolveMediaSetName(String mediaSetName, int mediaSetNameSuffix)
 	{
-		if (mediaSetNameSuffix == 0)
-		{
-			return mediaSetName; //the specified mediaset name was available
-		}
-		else
-		{
-			//a suffix was required to generate a unique mediaset name
-			return mediaSetName + "_" + mediaSetNameSuffix;
-		}
+		log.debug(String.format("Resolving mediaSetName %s; suffix %d", mediaSetName, mediaSetNameSuffix));
+		
+		final String mediaName = (mediaSetNameSuffix == 0) ? mediaSetName : 
+			new StringBuilder(mediaSetName).append("_").append(mediaSetNameSuffix).toString();
+		
+		log.debug(String.format("Returning resolvedMediaSetName of %s", mediaName));
+		return mediaName;
 	}
-
-	
-
 }
