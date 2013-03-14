@@ -153,8 +153,6 @@ public class TransferManager extends Daemon implements StoppableService
 	{
 		// TODO any special actions for a new item
 		log.info("Transfer " + item.id + " for " + item.assetId + " with peer " + item.assetPeerId + " added");
-
-
 		log.info("Trying to move task for transfer into SYS_WAIT state");
 
 		try
@@ -211,42 +209,40 @@ public class TransferManager extends Daemon implements StoppableService
 	 * @param item
 	 * 		the transfer item
 	 */
-	protected void complete(TransferItem item)
+	protected void complete(final TransferItem item)
 	{
 		log.info("Transfer item completed: " + item.id);
 
+		final String assetId = item.assetId;
 		try
 		{
+			log.debug(String.format("Retrieving attributes for item with assetId %s", assetId));
 			// Retrieve task info
-			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
-			                                                                          item.assetId);
-
+			AttributeMap attributes = 
+					taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetId);
+			
 			final String format = getFormat(attributes);
+			log.debug(String.format("Format returned was %s; now closing task", format));
 
 			// close unmatched task
 			closeTask(attributes);
 
 			//get the id of the asset being matched to
 			final String peerID = attributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+			
+			log.debug(String.format("PeerId returned %s, now setting format.", peerID));
 
 			//set the format (hd/sd, don't have a way of detecting 3d)
 			setFormat(peerID, format);
 
 			// close open ingest task for the target asset
+			log.debug(String.format("Closing task for asset with assetId %s", assetId));
 			closeIngestTaskForAsset(peerID, attributes);
 		}
 		catch (MayamClientException | RemoteException e)
 		{
-			log.error("Error completing item " +
-			          item.id +
-			          " for " +
-			          item.assetId +
-			          " to " +
-			          item.assetPeerId +
-			          " failed. Failing task.");
-
+			log.error(String.format("Error completing item %s for %s to %s failed. Failing task.", item.id, assetId, item.assetPeerId));
 			failed(item);
-
 			throw new RuntimeException(e);
 		}
 	}
@@ -266,6 +262,7 @@ public class TransferManager extends Daemon implements StoppableService
 			AttributeMap attributes = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA,
 			                                                                          item.assetId);
 			long taskID = attributes.getAttribute(Attribute.TASK_ID);
+			log.debug("Failing task with taskId " + taskID);
 			taskController.setTaskToErrorWithMessage(taskID, "Error while performing media transfer for asset " + item.assetId);
 		}
 		catch (MayamClientException e)
@@ -346,14 +343,14 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	private void setFormat(String peerID, String format)
+	private void setFormat(final String peerID, final String format)
 	{
-		AttributeMap peer;
+		log.debug(String.format("Setting format for peerId %s to %s", peerID, format));
 		try
 		{
-			peer = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), peerID);
+			final AttributeMap peer = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), peerID);
 
-			AttributeMap updateMap = taskController.updateMapForAsset(peer);
+			final AttributeMap updateMap = taskController.updateMapForAsset(peer);
 			updateMap.setAttribute(Attribute.CONT_FMT, format);
 			tasksClient.assetApi().updateAsset(updateMap);
 		}
@@ -396,20 +393,28 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	private void copyUnmatchedAttribtes(AttributeMap ingestTaskAttributes, AttributeMap unmatchedAttributes)
+	private void copyUnmatchedAttributes(AttributeMap ingestTaskAttributes, AttributeMap unmatchedAttributes)
 	{
-		String assetId = ingestTaskAttributes.getAttribute(Attribute.ASSET_ID);
-		AssetType assetType = ingestTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
+		final String assetId = ingestTaskAttributes.getAttribute(Attribute.ASSET_ID);
+		log.debug(String.format("Copying unmatched attributes for assetId %s", assetId));
+		
 		try
 		{
-			AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
+			final AssetType assetType = ingestTaskAttributes.getAttribute(Attribute.ASSET_TYPE);
+			final AttributeMap asset = tasksClient.assetApi().getAsset(assetType, assetId);
 			for (Attribute attribute : unmatchedAttributes.getAttributeSet())
 			{
 				if (asset.getAttribute(attribute) == null)
 				{
+					log.debug(String.format("Asset does not have attribute value set for attribute %s; will be setting this.", attribute.toString()));
 					asset.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
 				}
+				else
+				{
+					log.debug(String.format("Asset already has attribute set for attribute %s; not overwriting this.", attribute.toString()));
+				}
 			}
+			log.debug("Now updating the asset");
 			tasksClient.assetApi().updateAsset(asset);
 		}
 		catch (RemoteException e)
@@ -421,21 +426,22 @@ public class TransferManager extends Daemon implements StoppableService
 
 	private void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
 	{
-		AttributeMap task;
+		log.debug(String.format("Closing ingest task for asset with assetID %s", peerID));
+
 		try
 		{
-			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
-
-			copyUnmatchedAttribtes(task, unmatchedAttributes);
+			final AttributeMap task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
 
 			if (task == null)
 			{
-				log.warn("no ingest task found for assetID " + peerID);
+				log.warn("No ingest task found for assetID " + peerID);
 				return;
 			}
-
-			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-
+			
+			log.debug("Starting copy of unmatched attributes");
+			copyUnmatchedAttributes(task, unmatchedAttributes);
+			
+			final TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
 			if (TaskState.CLOSED_STATES.contains(currentState))
 			{
 				log.warn("Ingest task for asset is already in a closed state  " + currentState);
@@ -457,6 +463,7 @@ public class TransferManager extends Daemon implements StoppableService
 
 	protected void closeTask(AttributeMap messageAttributes)
 	{
+		log.debug("Closing task");
 		try
 		{
 			messageAttributes.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
@@ -466,6 +473,7 @@ public class TransferManager extends Daemon implements StoppableService
 		{
 			log.error("Exception removing task " + messageAttributes.getAttributeAsString(Attribute.TASK_ID), e);
 		}
+		log.debug("Task closed without throwing exception");
 	}
 
 

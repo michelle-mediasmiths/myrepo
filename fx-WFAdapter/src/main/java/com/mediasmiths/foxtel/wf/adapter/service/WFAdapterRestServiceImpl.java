@@ -38,14 +38,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
@@ -58,11 +50,8 @@ import java.util.List;
 
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
-
 	private static final String TC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/tc";
-
 	private static final String QC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/qc";
-
 	private static final String TX_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/delivery";
 
 	private final static Logger log = Logger.getLogger(WFAdapterRestServiceImpl.class);
@@ -102,11 +91,44 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("cerify.report.attatch")
 	private boolean attachQcReports;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.host")	
+	private String aoFTPProxyHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.user")
+	private String aoFTPProxyUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.proxy.pass")
+	private String aoFTPProxyPass;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.host")
+	private String aoGXFFTPDestinationHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.user")
+	private String aoGXFFTPDestinationUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.pass")
+	private String aoGXFFTPDestinationPass;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.path")
+	private String aoGXFFTPDestinationPath;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.host")
+	private String aoXMLFTPDestinationHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.user")
+	private String aoXMLFTPDestinationUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.pass")
+	private String aoXMLFTPDestinationPass;
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.path")
+	private String aoXMLFTPDestinationPath;
 
 	@Override
-	@GET
-	@Path("/ping")
-	@Produces("text/plain")
 	public String ping()
 	{
 		log.info("Ping request receivied");
@@ -114,19 +136,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/material/transferforqc")
-	@Produces("application/xml")
-	public AssetTransferForQCResponse transferMaterialForQC(AssetTransferForQCRequest req) throws MayamClientException
+	public AssetTransferForQCResponse transferMaterialForQC(final AssetTransferForQCRequest req) throws MayamClientException
 	{
 		// doesnt actually do a transfer! just returns location (method needs renamed)
-
 		log.info("Received AssetTransferForQCRequest " + req.toString());
 		final String id = req.getAssetId();
 		File destinationFile;
 
 		if (req.isForTXDelivery())
 		{
+			log.debug("Material is for TX delivery");
 			boolean packageAO = mayamClient.isPackageAO(id);
 			String tcoutputlocation = TxUtil.deliveryLocationForPackage(
 					id,
@@ -141,7 +160,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		else
 		{
-			String destination = mayamClient.pathToMaterial(id);
+			log.debug("Material is NOT for TX delivery");
+			final String destination = mayamClient.pathToMaterial(id);
+			log.debug(String.format("Material destination set to %s", destination));
 			destinationFile = new File(destination);
 		}
 
@@ -149,12 +170,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/qc/profile")
-	@Produces("application/xml")
 	public GetQCProfileResponse getProfileForQc(
-			@QueryParam("assetID") String assetID,
-			@QueryParam("isForTX") boolean isForTXDelivery) throws MayamClientException
+			final String assetID,
+			final boolean isForTXDelivery) throws MayamClientException
 	{
 		GetQCProfileResponse resp = new GetQCProfileResponse();
 		String profile = qcProfileSelector.getProfileFor(assetID, isForTXDelivery);
@@ -163,8 +181,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/qc/autoQcFailed")
 	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
@@ -199,9 +215,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tc/transferfortc")
-	@Produces("application/xml")
 	public MaterialTransferForTCResponse transferMaterialForTC(MaterialTransferForTCRequest req) throws MayamClientException
 	{
 		log.info("Received MaterialTransferForTCRequest " + req.toString());
@@ -224,8 +237,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/qc/autoQcPassed")
 	public void notifyAutoQCPassed(AutoQCPassNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
@@ -295,8 +306,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/qc/autoQcError")
 	public void notifyAutoQCError(AutoQCErrorNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
@@ -326,8 +335,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tc/tcFailedTotal")
 	public void notifyTCFailedTotal(TCTotalFailure notification) throws MayamClientException
 	{
 		log.info(String.format(
@@ -359,8 +366,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tc/tcFailed")
 	public void notifyTCFailed(TCFailureNotification notification) throws MayamClientException
 	{
 
@@ -389,8 +394,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tc/tcPassed")
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
@@ -425,10 +428,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 
 	@Override
-	@GET
-	@Path("/tx/autoQCRequired")
-	@Produces("text/plain")
-	public Boolean autoQCRequiredForTxTask(@QueryParam("taskID") Long taskID) throws MayamClientException
+	public Boolean autoQCRequiredForTxTask(final Long taskID) throws MayamClientException
 	{
 
 		return Boolean.valueOf(mayamClient.autoQcRequiredForTXTask(taskID));
@@ -436,9 +436,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tx/failed")
-	@Consumes("application/xml")
 	public void notifyTXDeliveryFailed(TXDeliveryFailure notification) throws MayamClientException
 	{
 		log.fatal(String.format(
@@ -452,10 +449,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/tx/deliveryLocation")
-	@Produces("text/plain")
-	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException
+	public String deliveryLocationForPackage(final String packageID) throws MayamClientException
 	{
 
 		boolean packageAO = mayamClient.isPackageAO(packageID);
@@ -463,10 +457,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/tx/delivery/writeSegmentXML")
-	@Produces("text/plain")
-	public boolean writeSegmentXML(@QueryParam("packageID") String packageID)
+	public boolean writeSegmentXML(final String packageID)
 			throws MayamClientException,
 			IOException,
 			JAXBException
@@ -513,41 +504,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	@Inject
-	@Named("ao.tx.delivery.ftp.proxy.host")	
-	private String aoFTPProxyHost;
-	@Inject
-	@Named("ao.tx.delivery.ftp.proxy.user")
-	private String aoFTPProxyUser;
-	@Inject
-	@Named("ao.tx.delivery.ftp.proxy.pass")
-	private String aoFTPProxyPass;
-	
-	@Inject
-	@Named("ao.tx.delivery.ftp.gxf.host")
-	private String aoGXFFTPDestinationHost;
-	@Inject
-	@Named("ao.tx.delivery.ftp.gxf.user")
-	private String aoGXFFTPDestinationUser;
-	@Inject
-	@Named("ao.tx.delivery.ftp.gxf.pass")
-	private String aoGXFFTPDestinationPass;
-	@Inject
-	@Named("ao.tx.delivery.ftp.gxf.path")
-	private String aoGXFFTPDestinationPath;
-	
-	@Inject
-	@Named("ao.tx.delivery.ftp.xml.host")
-	private String aoXMLFTPDestinationHost;
-	@Inject
-	@Named("ao.tx.delivery.ftp.xml.user")
-	private String aoXMLFTPDestinationUser;
-	@Inject
-	@Named("ao.tx.delivery.ftp.xml.pass")
-	private String aoXMLFTPDestinationPass;
-	@Inject
-	@Named("ao.tx.delivery.ftp.xml.path")
-	private String aoXMLFTPDestinationPath;
 	
 	private boolean aoFXPtransfer(File segmentXmlFile, File gxfFile)
 	{
@@ -585,10 +541,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	
 
 	@Override
-	@GET
-	@Path("/tx/delivery/getAOSegmentXML")
-	@Produces("application/xml")
-	public String getAOSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	public String getAOSegmentXML(final String packageID) throws MayamClientException, JAXBException
 	{
 
 		RuzzIF ruzzProgramme = mayamClient.getRuzzProgramme(packageID);
@@ -600,10 +553,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/tx/delivery/getSegmentXML")
-	@Produces("application/xml")
-	public String getSegmentXML(@QueryParam("packageID") String packageID) throws MayamClientException, JAXBException
+	public String getSegmentXML(final String packageID) throws MayamClientException, JAXBException
 	{
 
 		Programme programme = mayamClient.getProgramme(packageID);
@@ -615,10 +565,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@PUT
-	@Path("/tx/delivered")
-	@Consumes("application/xml")
-	public void notifiyTXDelivered(TXDeliveryFinished deliveryFinished) throws MayamClientException
+	public void notifiyTXDelivered(final TXDeliveryFinished deliveryFinished) throws MayamClientException
 	{
 		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
 
@@ -630,20 +577,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/task/{taskid}/cancelled")
-	@Produces("text/plain")
-	public boolean isTaskCancelled(@PathParam("taskid") long taskid) throws MayamClientException
+	public boolean isTaskCancelled(final long taskid) throws MayamClientException
 	{
 		TaskState state = mayamClient.getTaskState(taskid);
 		return state == TaskState.REJECTED || state == TaskState.REMOVED;
 	}
 
 	@Override
-	@GET
-	@Path("/mex/{materialid}/deliveryversion")
-	@Produces("text/plain")
-	public Integer deliveryVersionForMaterial(@PathParam("materialid") String materialID) throws MayamClientException
+	public Integer deliveryVersionForMaterial(final String materialID) throws MayamClientException
 	{
 
 		if (mayamClient.materialExists(materialID))
@@ -656,9 +597,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@GET
-	@Path("/purge/list")
-	@Produces("text/plain")
 	public String getPurgePendingList() throws MayamClientException
 	{
 		List<AttributeMap> purgeTasks = mayamClient.getAllPurgeCandidatesPendingDeletion();
@@ -682,15 +620,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	@POST
-	@Path("/purge/perform")
-	@Produces("text/plain")
 	public boolean performPendingPerges() throws MayamClientException
 	{
 		return mayamClient.deletePurgeCandidates();
 	}
-
-
 
 
 	////// -------------------- Eventing
@@ -815,7 +748,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	// TX Delivery
-
 	protected void saveEvent(String name, TXDeliveryFailure payload, String nameSpace)
 	{
 		try
@@ -831,7 +763,4 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.error("Events unable to serialise message", e);
 		}
 	}
-
-
-
 }
