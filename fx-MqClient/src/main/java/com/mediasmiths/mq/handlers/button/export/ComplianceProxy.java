@@ -6,9 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.StringList;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.mayam.MayamButtonType;
 
@@ -102,7 +100,7 @@ public class ComplianceProxy extends ExportProxyButton
 	@Override
 	protected String getJobType()
 	{
-		return "compliance";
+		return "Compliance Proxy";
 	}
 
 }
