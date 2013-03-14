@@ -1,22 +1,12 @@
 package com.mediasmiths.mayam.util;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.Duration;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
+import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
+import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
@@ -24,10 +14,17 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTracks;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class MediaExchangeProgrammeOutputBuilder
 {
@@ -79,14 +76,22 @@ public class MediaExchangeProgrammeOutputBuilder
 		{
 
 			Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
+
+			if (log.isDebugEnabled()) log.debug("Setting the number of channels: " + track.getNumber());
+
 			pmat.setNumber(track.getNumber());
-			
-			if(track.getEncoding() != null){
-			AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(track.getEncoding());
-			pmat.setType(att);
+
+			if (track.getEncoding() != null)
+			{
+				AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(track.getEncoding());
+
+				log.debug("Setting encoding to: " + att.toString());
+
+				pmat.setType(att);
 			}
-			else{
-				log.warn("null encoding on audio track!");
+			else
+			{
+				log.warn("Audio track is null");
 			}
 
 			ats.getTrack().add(pmat);
@@ -106,7 +111,7 @@ public class MediaExchangeProgrammeOutputBuilder
 				return AudioTrackType.STEREO; // no idea if this is right
 		}
 
-		log.error("unknown encoding type");
+		log.error("unknown encoding type: " + encoding.toString());
 
 		return AudioTrackType.STEREO;
 	}
@@ -116,17 +121,22 @@ public class MediaExchangeProgrammeOutputBuilder
 		Programme.Detail programmeDetail = new Programme.Detail();
 
 		programmeDetail.setEXTCLIPUMID(pack.getPackageId());
-		
+
+		log.debug("Setting PackageId: " + pack.getPackageId());
+
 		if (pack.getTitleAttributes() != null)
 		{
 			programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
 			programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
 			programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
-			
+
+			log.debug("Title: " + programmeDetail.getTitle() + " : " + programmeDetail.getEpisodeNumber());
+
 			StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
 
 			if (channels != null && channels.size() > 0)
 			{
+				log.debug("Market: " + channels.get(0));
 				programmeDetail.setMARKET(channels.get(0));
 			}
 			else
@@ -142,11 +152,15 @@ public class MediaExchangeProgrammeOutputBuilder
 		if (pack.getMaterialAttributes() != null)
 		{
 			programmeDetail.setAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+
+			log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
 			
 			String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
 			Supplier supplier = new Supplier();
 			supplier.setSupplierID(supplierId);
-			programmeDetail.setSUPPLIER(supplier.toString());
+			programmeDetail.setSUPPLIER(supplier.getSupplierID());
+
+			log.debug("Supplier id: " + supplier.getSupplierID());
 			
 			AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 			if (audioTracks == null || audioTracks.size() == 0)
@@ -156,7 +170,9 @@ public class MediaExchangeProgrammeOutputBuilder
 			else
 			{
 				EncodingType encoding = audioTracks.get(0).getEncoding();
-		
+
+		        log.debug("Audio encoding: " + encoding);
+
 				if (encoding != null)
 				{
 					switch (encoding)
@@ -168,9 +184,11 @@ public class MediaExchangeProgrammeOutputBuilder
 							programmeDetail.setAudioType(AudioListType.STEREO);
 							break;
 						default:
+							log.error("Encoding is not known:  " + encoding);
 							break;
 		
 					}
+					log.debug("Audio set to: " + programmeDetail.getAudioType());
 				}
 				else
 				{
@@ -190,30 +208,38 @@ public class MediaExchangeProgrammeOutputBuilder
 			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
 			programmeDetail.setEOM(SegmentUtil.calculateEOM(pack.getSegmentList().getEntries().get(0).getDuration().toSmpte(), Timecode.getInstance(pack.getSegmentList().getEntries().get(0).getIn().toSmpte(), Framerate.HZ_25)));
 			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
+
+			log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," + programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
 		}
 		else
 		{
 			log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
 		}
 
-		programmeDetail.setResolution(ResolutionType.fromValue(pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT).toString()));
+		programmeDetail.setResolution(getResolution(pack));
+
+		log.debug("Resolution: " + programmeDetail.getResolution());
+
 		Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_NEXT);
+
+		log.debug(" Date set to: " + targetDate);
 
 		if (targetDate != null)
 		{
-			GregorianCalendar c = new GregorianCalendar();
-			c.setTime(targetDate);
-			XMLGregorianCalendar xmlDate;
+
 			try
 			{
-				xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+				GregorianCalendar c = new GregorianCalendar();
+				c.setTime(targetDate);
+				XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+				
 				programmeDetail.setDueDate(xmlDate);
 				xmlDate.setYear(xmlDate.getYear() + 3);
 				programmeDetail.setPurgeDate(xmlDate);
 			}
 			catch (DatatypeConfigurationException e)
 			{
-				log.error("error settign target date on programme detail for package " + pack.getPackageId(), e);
+				log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
 			}
 		}
 		else
@@ -230,5 +256,27 @@ public class MediaExchangeProgrammeOutputBuilder
 			log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
 		}
 		return programmeDetail;
+	}
+
+	private static ResolutionType getResolution(final FullProgrammePackageInfo pack)
+	{
+		String resolutionStr = pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT);
+		if (resolutionStr == null)
+		{
+			log.error("Error: resolution is null, setting to " + ResolutionType.SD);
+			return ResolutionType.SD;
+		}
+		else
+		{
+			try
+			{
+				return ResolutionType.fromValue(resolutionStr);
+			}
+			catch (Exception e)
+			{
+				log.error("Error: resolution is unknown, " +  resolutionStr + " setting to " + ResolutionType.SD);
+				return ResolutionType.SD;
+			}
+		}
 	}
 }
