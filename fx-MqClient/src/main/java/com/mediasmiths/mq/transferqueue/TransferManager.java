@@ -295,6 +295,32 @@ public class TransferManager extends Daemon implements StoppableService
 	{
 		try
 		{
+			log.info("Query for all UNMATCHED_MEDIA tasks for MATERIAL where ASSET_ID = " + item.assetId);
+			List<AttributeMap> allUnmatchedTasks = taskController.getTasksForAsset(MayamTaskListType.UNMATCHED_MEDIA,
+			                                                                       MayamAssetType.MATERIAL.getAssetType(),
+			                                                                       Attribute.ASSET_ID,
+			                                                                       item.assetId);
+
+			// Log all the unmatched tasks for debug purposes
+			for (AttributeMap task : allUnmatchedTasks)
+			{
+
+				// log the task info
+				log.info("Task " +
+				         task.getAttribute(Attribute.TASK_ID) +
+				         " found for " +
+				         item.assetId +
+				         ". It is in state " +
+				         task.getAttribute(Attribute.TASK_STATE));
+			}
+		}
+		catch (Throwable e)
+		{
+			log.error("Error asking Mayam about tasks for asset " + item.assetId, e);
+		}
+
+		try
+		{
 			// Beware: "moveMediaEssence" doesn't do what you think - see above javadoc
 			tasksClient.assetApi().moveMediaEssence(MayamAssetType.MATERIAL.getAssetType(),
 			                                        item.assetId,
