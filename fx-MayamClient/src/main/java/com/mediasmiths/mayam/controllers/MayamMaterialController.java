@@ -1473,18 +1473,23 @@ public class MayamMaterialController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 		}
 		
-		String url = urls.get(0);
-		String nixPath;
-		try
+	
+		String nixPath = null;
+		log.info("No of URLs returned is :" + urls.size());
+		for (String url: urls)
 		{
-			nixPath = pathResolver.nixPath(PathType.FTP, url);
-			return nixPath;
+			log.info("Attempting to resolve path for url :" + url);
+			try
+			{
+				nixPath = pathResolver.nixPath(PathType.FTP, url);
+				return nixPath;
+			}
+			catch (UnknownPathException e)
+			{
+				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
+			}
 		}
-		catch (UnknownPathException e)
-		{
-			log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
-			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED,e);
-		}
+		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 	}
 	
 }
