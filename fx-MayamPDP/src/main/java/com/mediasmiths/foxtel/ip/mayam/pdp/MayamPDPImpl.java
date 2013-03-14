@@ -12,6 +12,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
@@ -222,7 +223,8 @@ public class MayamPDPImpl implements MayamPDP
 			// if QC parallel has been enabled, and the QC status has not been set, then it will inform the user that the content has not 
 			// finished auto QC yet and allow them to continue if they wish.
 
-			boolean isQcPassed = AssetProperties.isQCPassed(attributeMap);
+			AttributeMap parentAsset = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), attributeMap.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+			boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
 
 			if (isQcPassed)
 			{
@@ -231,7 +233,7 @@ public class MayamPDPImpl implements MayamPDP
 				return getConfirmStatus(warnings+"Do you wish to send to Tx?");
 			}
 
-			String qcParallelAttribute = attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+			String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 
 			if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
 			{
