@@ -102,7 +102,7 @@ public class PublicityProxy extends ExportProxyButton
 	@Override
 	protected String getJobType()
 	{
-		return "publicity";
+		return "Publicity Proxy";
 	}
 	
 }
