@@ -84,7 +84,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// If possible, the title of this media should be set to the filename, 
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
-					
+					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetID);
+					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+					tasksClient.assetApi().updateAsset(associatedMaterial);
 				}
 				else {
 					log.info("Match found for asset, attempting to create new revision");
