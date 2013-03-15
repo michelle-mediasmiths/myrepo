@@ -743,21 +743,30 @@ public class MayamPDPImpl implements MayamPDP
 
 				}
 
-				QcStatus qcStatus = attributeMap.getAttribute(Attribute.QC_STATUS);
-
-				if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
+				String parentID = attributeMap.getAttribute(Attribute.PARENT_HOUSE_ID).toString();
+				AttributeMap parentAsset = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), parentID);
+				
+				if (parentAsset != null)
 				{
-					return getConfirmStatus("Send to TX?");
+					QcStatus qcStatus = parentAsset.getAttribute(Attribute.QC_STATUS);
+	
+					if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
+					{
+						return getConfirmStatus("Send to TX?");
+					}
+	
+					boolean qcParallel = Boolean.getBoolean(parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED).toString());
+	
+					if (qcParallel)
+					{
+						return getConfirmStatus("QC Parallel is set. QC is not Passed. Do you wish to create a Tx task?");
+					}
 				}
-
-				boolean qcParallel = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_PARALLEL_ALLOWED).toString());
-
-				if (qcParallel)
-				{
-					return getConfirmStatus("QC Parallel is set. QC is not Passed. Do you wish to create a Tx task?");
+				else {
+					return getConfirmStatus("Unable to locate parent asset. Do you wish to create a Tx task?");
 				}
-
-				boolean qcRequired = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_STATUS).toString());
+				
+				boolean qcRequired = Boolean.getBoolean(attributeMap.getAttribute(Attribute.QC_REQUIRED).toString());
 
 				if (qcRequired)
 				{
