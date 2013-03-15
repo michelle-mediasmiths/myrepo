@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Programme xmlns="http://foxtel.tv/engineering/broadcast/schemas/1/2/mediaExchange">
+	<Detail>
+		<EXT_CLIP_UMID>e2e-2262234</EXT_CLIP_UMID>
+		<Title>Bill Oddie</Title>
+		<EpisodeNumber>1</EpisodeNumber>
+		<Description>Who Do You Think You Are?</Description>
+		<SOM>01:00:00:00</SOM>
+		<Duration>00:30:00:00</Duration>
+		<SUPPLIER>FX-MAM</SUPPLIER>
+		<MARKET>COM</MARKET>
+		<DueDate>2013-03-15T10:00:00+11:00</DueDate>
+		<PurgeDate>2016-03-15T10:00:00+11:00</PurgeDate>
+		<Classification>M</Classification>
+		<Captioned>false</Captioned>
+		<Resolution>HD</Resolution>
+		<AspectRatio>16x9</AspectRatio>
+		<AudioType>surround</AudioType>
+	</Detail>
+	<Media id="e2e-2262234" filename="e2e-2262234.gxf">
+		<Segments>
+			<Segment number="1">
+				<Title>Segment 01</Title>
+				<SOM>01:00:00:00</SOM>
+				<EOM>01:14:59:24</EOM>
+				<Duration>00:15:00:00</Duration>
+			</Segment>
+			<Segment number="2">
+				<Title>Segment 02</Title>
+				<SOM>01:15:00:00</SOM>
+				<EOM>01:29:59:24</EOM>
+				<Duration>00:15:00:00</Duration>
+			</Segment>
+		</Segments>
+		<AudioTracks>
+			<Track number="1" type="Left"/>
+			<Track number="2" type="Right"/>
+			<Track number="3" type="Dolby E"/>
+			<Track number="4" type="Dolby E"/>
+		</AudioTracks>
+	</Media>
+</Programme>

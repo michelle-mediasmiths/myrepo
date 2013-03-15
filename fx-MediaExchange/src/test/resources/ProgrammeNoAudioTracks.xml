@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Programme xmlns="http://foxtel.tv/engineering/broadcast/schemas/1/2/mediaExchange">
+    <Detail>
+        <EXT_CLIP_UMID>e2e-3671973</EXT_CLIP_UMID>
+        <Title>Mary-Ann</Title>
+        <EpisodeNumber>20</EpisodeNumber>
+        <Description>Come Dine With Me Australia</Description>
+        <MARKET>LST</MARKET>
+        <Classification>M</Classification>
+        <Captioned>false</Captioned>
+        <Resolution>SD</Resolution>
+    </Detail>
+    <Media id="e2e-3671973" filename="e2e-3671973.gxf">
+        <Segments/>
+        <AudioTracks>
+            <Track number="1"/>
+            <Track number="2"/>
+        </AudioTracks>
+    </Media>
+</Programme>
