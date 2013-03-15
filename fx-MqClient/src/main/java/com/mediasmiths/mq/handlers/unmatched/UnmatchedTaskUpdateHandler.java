@@ -88,10 +88,25 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					
 					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
 					AttributeMap parent = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), parentID);
+					
+					
 					String parentHouseID = "";
 					if (parent != null)
 					{
 						parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
+						log.info("Fourn parent material :" + parentHouseID);
+					}
+					else {
+						log.info("Unable to locate parent material, trying to locate parent title");
+						parent = tasksClient.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), parentID);
+						if (parent != null)
+						{
+							parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
+							log.info("Fourn parent title :" + parentHouseID);
+						}
+						else {
+							log.info("Unable to locate any parent");
+						}
 					}
 					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
 					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
