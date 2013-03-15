@@ -19,7 +19,10 @@ else
     echo "PrograTron Folder  " $pgt " does not exist "
 fi
 
-for p in /storage/mam/hires01/drop1/technicolor /storage/mam/hires03/drop3/redbee /storage/mam/hires02/drop2/adults /storage/mam/hires04/drop4/batch/hd /storage/mam/hires04/drop4/batch/sd
+for p in /storage/mam/hires01/drop1/technicolor /storage/mam/hires03/drop3/redbee /storage/mam/hires02/drop2/adults /storage/mam/hires04/drop4/batch/hd /storage/mam/hires04/drop4/batch/sd ; do
+
+
+	echo "Processing $p"
 
 	if [ -d "$p" ] ; then
 
