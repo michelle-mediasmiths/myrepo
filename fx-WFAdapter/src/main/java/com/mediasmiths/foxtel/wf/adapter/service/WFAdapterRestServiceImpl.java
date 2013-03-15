@@ -573,12 +573,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		Programme programme = mayamClient.getProgramme(packageID);
 		
 		// Validate the programme type returned from mayam information against the schema and log errors
+/*
 		log.debug(String.format("Validating programme information against the schema for programme with packageId %s", packageID));
 		if(!validateProgrammeInformation(programme))
 		{
 			//TODO - could stop the xml being written / stop task processing here...
 			log.error(String.format("The information being written about the programme with packageId %s is not valid according to the schema.", packageID));
 		}
+		*/
 		
 		StringWriter sw = new StringWriter();
 		mexMarshaller.marshal(programme, sw);
