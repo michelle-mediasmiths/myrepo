@@ -8,6 +8,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
+import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -22,6 +23,7 @@ import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
@@ -274,6 +276,18 @@ public class Importer extends Daemon implements StoppableService {
 			} catch (IOException e) {
 				logger.fatal(String.format("Error moving file from %s to %s",
 						src, dst), e);
+			}
+
+			try
+			{
+				MediaPickupNotification n = new MediaPickupNotification();
+				n.setFilelocation(dst.getAbsolutePath());
+				n.setTime((new Date()).toString());
+				eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
+			}
+			catch (Exception e)
+			{
+                logger.error("Unable to send Quarantine event ", e);
 			}
 		} finally {
 
