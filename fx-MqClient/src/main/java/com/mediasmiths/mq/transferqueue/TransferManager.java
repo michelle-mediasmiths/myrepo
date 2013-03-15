@@ -218,26 +218,58 @@ public class TransferManager extends Daemon implements StoppableService
 		{
 			log.debug(String.format("Retrieving attributes for item with assetId %s", assetId));
 			// Retrieve task info
-			AttributeMap attributes = 
-					taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetId);
+			List <AttributeMap> allUnmatchedTasks = 
+					taskController.getTasksForAsset(MayamTaskListType.UNMATCHED_MEDIA, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetId);
 			
-			final String format = getFormat(attributes);
-			log.debug(String.format("Format returned was %s; now closing task", format));
-
-			// close unmatched task
-			closeTask(attributes);
-
-			//get the id of the asset being matched to
-			final String peerID = attributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+			AttributeMap attributes = null;
 			
-			log.debug(String.format("PeerId returned %s, now setting format.", peerID));
+			if (allUnmatchedTasks != null && allUnmatchedTasks.size() == 1)
+			{
+				attributes = allUnmatchedTasks.get(0);
+				log.debug("Only one unmatched task found for asset : " + assetId);
+				log.debug("Unmatched task found is in State : " + attributes.getAttributeAsString(Attribute.TASK_STATE));
+			}
+			else if (allUnmatchedTasks != null && allUnmatchedTasks.size() > 1) {
+				log.debug(allUnmatchedTasks.size() + " unmatched tasks found for asset : " + assetId);
+				log.debug("Searching for an open task");
+				for (AttributeMap task: allUnmatchedTasks)
+				{
+					TaskState state = task.getAttribute(Attribute.TASK_STATE);
+					if (state != null && state.equals(TaskState.OPEN))
+					{
+						attributes = task;
+						log.debug("Open task found : " + task.getAttribute(Attribute.TASK_ID));
+						break;
+					}
+				}
+				if (attributes == null)
+				{
+					attributes = allUnmatchedTasks.get(0);
+					log.debug("No open tasks found, using first task in list : " + attributes.getAttributeAsString(Attribute.TASK_ID));
+				}
+			}
 
-			//set the format (hd/sd, don't have a way of detecting 3d)
-			setFormat(peerID, format);
-
-			// close open ingest task for the target asset
-			log.debug(String.format("Closing task for asset with assetId %s", assetId));
-			closeIngestTaskForAsset(peerID, attributes);
+			if (attributes != null)
+			{
+				final String format = getFormat(attributes);
+				log.debug(String.format("Format returned was %s; now closing task", format));
+	
+				// close unmatched task
+				closeTask(attributes);
+	
+				//get the id of the asset being matched to
+				final String peerID = attributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+				
+				log.debug(String.format("PeerId returned %s, now setting format.", peerID));
+	
+				//set the format (hd/sd, don't have a way of detecting 3d)
+				setFormat(peerID, format);
+	
+				// close open ingest task for the target asset
+				log.debug(String.format("Closing task for asset with assetId %s", assetId));
+				closeIngestTaskForAsset(peerID, attributes);
+			}
+			
 		}
 		catch (MayamClientException | RemoteException e)
 		{

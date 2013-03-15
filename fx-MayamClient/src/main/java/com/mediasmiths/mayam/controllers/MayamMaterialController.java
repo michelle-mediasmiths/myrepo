@@ -115,7 +115,7 @@ public class MayamMaterialController extends MayamController
 		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
 		{
 			// setting parent_house_id is an unsupported operation
-			// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 			try
 			{
 				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
@@ -152,7 +152,7 @@ public class MayamMaterialController extends MayamController
 				return MayamClientErrorCode.TASK_SEARCH_FAILED;
 			}
 
-			// attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
+			attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, titleID);
 
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
 			attributesValid &= attributes.setAttribute(Attribute.HOUSE_ID, material.getMaterialID());

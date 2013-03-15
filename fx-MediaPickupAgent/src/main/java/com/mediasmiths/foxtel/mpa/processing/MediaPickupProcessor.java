@@ -1,18 +1,6 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -22,6 +10,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -29,6 +18,17 @@ import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Locale;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
@@ -69,8 +69,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	protected Logger logger = Logger.getLogger(MediaPickupProcessor.class);
 	
 	@Override
-	protected void messageValidationFailed(String filePath,
-			MessageValidationResult result) {
+	protected void messageValidationFailed(String filePath, MessageValidationResult result)
+	{
 
 		logger.warn(String.format(
 				"Validation of Material message %s failed for reason %s",
@@ -93,21 +93,37 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		{
 			logger.error("Failed to create wfe error task",e);
 		}
-		
-		if (result == MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER)
+
+		try
 		{
-			eventService.saveEvent("PlaceholderAlreadyHasMedia", message);
+			// send the event recording the issue.
+
+			MediaPickupNotification pickupNotification = new MediaPickupNotification();
+			pickupNotification.setFilelocation(FilenameUtils.getName(filePath));
+			pickupNotification.setTime((new Date()).toString());
+
+			switch (result)
+			{
+				case MATERIAL_IS_NOT_PLACEHOLDER:
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
+					break;
+				case TITLE_DOES_NOT_EXIST:
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
+					break;
+				case MATERIAL_DOES_NOT_EXIST:
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+					break;
+				case UNEXPECTED_DELIVERY_VERSION:
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "OutOfOrder", pickupNotification);
+					break;
+				default:
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+					break;
+			}
 		}
-		else if(result == MessageValidationResult.TITLE_DOES_NOT_EXIST || result == MessageValidationResult.MATERIAL_DOES_NOT_EXIST)
+		catch (Exception e)
 		{
-			eventService.saveEvent("PlaceHolderCannotBeIdentified", message);
-		}
-		else if(result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
-			eventService.saveEvent("OutOfOrder", message);
-		}
-		else
-		{
-			eventService.saveEvent("Failed", message);
+			logger.error("Unable to send events: ", e);
 		}
 	}
 	
@@ -163,10 +179,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	 * If the media has not been seen then the xml file is added to a list of
 	 * xml files awaiting media
 	 * 
-	 * 
-	 * @param programme
-	 *            - the unmarshalled xml
-	 * @param xml
+	 *
+	 * @param envelope
 	 *            - the delivered xmlfile
 	 */
 	@Override

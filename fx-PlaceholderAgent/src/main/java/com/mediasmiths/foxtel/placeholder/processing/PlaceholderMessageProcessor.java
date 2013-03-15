@@ -21,6 +21,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
@@ -94,7 +95,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			}
 
-			checkResult(result);
+			checkResult(result, action.getClass().getName(),  action.getMaterial().getMaterialID(), action.getTitleID());
 
 		}
 		catch (MayamClientException e)
@@ -126,7 +127,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			}
 
-			checkResult(result);
+			checkResult(result, action.getClass().getName(), action.getPackage().getPresentationID(), action.getTitleID());
 
 		}
 		catch (MayamClientException e)
@@ -145,7 +146,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	 * @throws MessageProcessingFailedException
 	 *             if result != MayamClientErrorCode.SUCCESS
 	 */
-	private void checkResult(MayamClientErrorCode result) throws MessageProcessingFailedException
+	private void checkResult(MayamClientErrorCode result, String opName, String mediaId, String title) throws MessageProcessingFailedException
 	{
 		logger.trace("checkResult(" + result + ")");
 
@@ -156,6 +157,22 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		}
 		else
 		{
+			ErrorReport errorReport = new ErrorReport();
+			errorReport.setBmsOp(opName);
+			errorReport.setMediaId(mediaId);
+			errorReport.setStatus(result.toString());
+
+			if (title==null)
+			{
+				errorReport.setTitle("Unknown in this context.");
+			}
+			else
+			{
+				errorReport.setTitle(title);
+
+			}
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "BMSFailure", errorReport);
+
 			logger.error(String.format("Failed to process action, result was %s", result));
 			throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
 		}
@@ -181,7 +198,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			}
 
-			checkResult(result);
+			checkResult(result, action.getClass().getName(), action.getTitleID(), action.getTitleDescription().getProgrammeTitle());
 		}
 		catch (MayamClientException e)
 		{
@@ -316,7 +333,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 		MayamClientErrorCode result = mayamClient.deleteMaterial(action);
 		sendPurgeMaterial(result, action);
-		checkResult(result);
+		checkResult(result, action.getClass().getName(), action.getMaterial().getMaterialID(), action.getTitleID());
 
 	}
 
@@ -325,7 +342,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 		MayamClientErrorCode result = mayamClient.deletePackage(action);
 		sendPurgePackage(result, action);
-		checkResult(result);
+		checkResult(result, action.getClass().getName(), action.getPackage().getPresentationID(), action.getTitleID());
 
 	}
 
@@ -390,7 +407,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	{
 		logger.trace("mayamClient.purgeTitle(...)");
 		MayamClientErrorCode result = mayamClient.purgeTitle(action);
-		checkResult(result);
+		checkResult(result, action.getClass().getName(), action.getTitleID(), null);
 	}
 
 	@Override

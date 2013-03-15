@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
-public class MaterialNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class MediaPickUpNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
 
@@ -23,7 +23,7 @@ public class MaterialNotificationEmailTemplate extends MailTemplate implements E
 
 		t.setBody(getBody());
 		t.setEmailaddresses(getEmailaddresses());
-		t.setSubject(String.format(getSubject(), m.getMaterialId()));
+		t.setSubject(String.format(getSubject(), m.getFilelocation()));
 
 		return t;
 	}
