@@ -154,7 +154,7 @@ public class MayamPDPImpl implements MayamPDP
 		{
 			String warnings="";
 
-			logger.info("Segment Mismatch.");
+			logger.info("Segment Mismatch Check.");
 
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 
@@ -167,10 +167,12 @@ public class MayamPDPImpl implements MayamPDP
 			String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
 			SegmentList segmentList = null;
-			try {
+			try 
+			{
 				segmentList = client.segmentApi().getSegmentListBySiteId(presentationID);
 			}
-			catch (Throwable e) {
+			catch (Throwable e) 
+			{
 				logger.error("Caught throwable: ", e);
 				segmentList = null;
 			}
@@ -180,7 +182,6 @@ public class MayamPDPImpl implements MayamPDP
 				int segmentsSize = segmentList.getEntries().size();
 
 				logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
-
 
 				if (numberOfSegmentsRequested != segmentsSize)
 				{
@@ -205,9 +206,7 @@ public class MayamPDPImpl implements MayamPDP
 			else
 			{
 				logger.info("Unable to retrieve Segment List. Return Map for  " + presentationID);
-
-				return getErrorStatus("A technical fault has occurred while retrieving segemnt list");
-
+				return getErrorStatus("A technical fault has occurred while retrieving segment list");
 			}
 
 			// Classification Check
@@ -245,33 +244,29 @@ public class MayamPDPImpl implements MayamPDP
 				if (isQcPassed)
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
-	
+
 					return getConfirmStatus(warnings+" Do you wish to send to Tx?");
 				}
 
-
 				String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-	
 				if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
 				{
-	
 					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
 	
 					return getConfirmStatus(warnings+" QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
-	
 				}
 			}
-			else {
+			else 
+			{
 				logger.info("Unable to locate parent asset for : " + presentationID);
-				
-				return getConfirmStatus(warnings+"Unable to locate parent asset to check QC status. Are you sure you wish to proceed?");
+				return getConfirmStatus(warnings+" Unable to locate parent asset to check QC status. Are you sure you wish to proceed?");
 			}
 			
 			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus("A technical fault has occurred while verifying the segemntation complete rules");
+			return getErrorStatus("A technical fault has occurred while verifying the segmentation complete rules");
 		}
 	}
 
@@ -281,7 +276,6 @@ public class MayamPDPImpl implements MayamPDP
 		try
 		{
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
-
 
 			defaultValidation(attributeMap);
 
