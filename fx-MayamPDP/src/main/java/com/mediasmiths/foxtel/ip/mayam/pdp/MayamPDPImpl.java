@@ -223,16 +223,30 @@ public class MayamPDPImpl implements MayamPDP
 			// if QC parallel has been enabled, and the QC status has not been set, then it will inform the user that the content has not 
 			// finished auto QC yet and allow them to continue if they wish.
 
-			AttributeMap parentAsset = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+			AttributeMap parentAsset = null;
+			try
+			{
+				parentAsset = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(),
+				                                                              attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+			}
+			catch (RemoteException e)
+			{
+				logger.error("Unable to find: " +  attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID), e);
+
+				throw e;
+			}
+
 			if (parentAsset != null)
 			{
 				boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
-	
+
+				logger.debug("Is QC passed");
+
 				if (isQcPassed)
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
 	
-					return getConfirmStatus(warnings+"Do you wish to send to Tx?");
+					return getConfirmStatus(warnings+" Do you wish to send to Tx?");
 				}
 
 
@@ -243,7 +257,7 @@ public class MayamPDPImpl implements MayamPDP
 	
 					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
 	
-					return getConfirmStatus(warnings+"QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
+					return getConfirmStatus(warnings+" QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
 	
 				}
 			}
@@ -497,24 +511,24 @@ public class MayamPDPImpl implements MayamPDP
 					{
 						if (sourceHouseID == null || sourceHouseID.equals(""))
 						{
-							returnMap.clear();
-							returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-							returnMap.setAttribute(
-									Attribute.ERROR_MSG,
-									String.format(messageComplianceEditNone, houseID));
+							return getErrorStatus(String.format(messageComplianceEditNone, houseID));
 						}
 						else
 						{
 							logger.debug("parent house id was not null or empty");
+							return okStatus;
 						}
 					}
 					else
 					{
 						logger.debug("returned status was not ok");
+						return getErrorStatus("Internal technical error: search fails for houseId: " + houseID);
 					}
 				}
-
-				return mapper.serialize(returnMap);
+				else
+				{
+					return getErrorStatus("Internal technical error: cannot find house id: " + houseID);
+				}
 			}
 			else
 			{
@@ -552,24 +566,25 @@ public class MayamPDPImpl implements MayamPDP
 					{
 						if (sourceHouseID == null || sourceHouseID.equals(""))
 						{
-							returnMap.clear();
-							returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-							returnMap.setAttribute(
-									Attribute.ERROR_MSG,
-									String.format(messageComplianceLoggingNone, houseID));
+							return getErrorStatus(String.format(messageComplianceLoggingNone, houseID));
 						}
 						else
 						{
 							logger.debug("parent house id was not null or empty");
+							return okStatus;
 						}
 					}
 					else
 					{
-						logger.debug("returned status was not ok");
+						logger.debug("returned status was not ok: finding " + sourceHouseID);
+						return getErrorStatus("Unable to find " + sourceHouseID + " system fault.");
 					}
 				}
+				else
+				{
+					return okStatus;
+				}
 
-				return  mapper.serialize(returnMap);
 			}
 			else
 			{
@@ -1059,22 +1074,54 @@ public class MayamPDPImpl implements MayamPDP
 
 	private Set<FoxtelGroups> getUserGroups(String user) throws RemoteException // remote exception will be from mayam, I see no harm in throwing it back to them
 	{
-		Set<String> userGroups = client.userApi().getUserGroups(user);
-		Set<FoxtelGroups> groups = new HashSet<FoxtelGroups>();
 
-		for (String userGroup : userGroups)
+		Set<String> userGroups = null;
+		try
 		{
-			try
-			{
-				groups.add(FoxtelGroups.fromString(userGroup));
-			}
-			catch (Exception e)
-			{
-				logger.debug(String.format("Unknown group %s", userGroup));
-			}
+			userGroups = client.userApi().getUserGroups(user);
+		}
+		catch (RemoteException e)
+		{
+			logger.error("Mayam failed to return any groups for " + user, e);
+
+			return new HashSet<FoxtelGroups>();
 		}
 
-		return groups;
+		if (userGroups == null)
+		{
+			logger.error("Null set of user Groups  for " + user);
+
+			return new HashSet<FoxtelGroups>();
+
+		}
+
+		Set<FoxtelGroups> groups = null;
+		try
+		{
+			groups = new HashSet<FoxtelGroups>();
+
+			for (String userGroup : userGroups)
+			{
+				try
+				{
+					groups.add(FoxtelGroups.fromString(userGroup));
+				}
+				catch (Exception e)
+				{
+					logger.debug(String.format("Unknown group %s", userGroup));
+				}
+			}
+
+			return groups;
+
+		}
+		catch (Exception e)
+		{
+            logger.error("Problem forming the collection of groups: ", e);
+
+			return new HashSet<FoxtelGroups>();
+		}
+
 
 	}
 
