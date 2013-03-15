@@ -405,6 +405,17 @@
 		</MailTemplate>
 	</MailData>
     <MailData>
+        <namespace>http://www.foxtel.com.au/ip/content</namespace>
+        <eventname>Quarantine</eventname>
+        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
+            <subject>A material exchange message has been quarantined File(%s)</subject>
+            <body>A material exchange has arrived to the wrong location: it has been quarantined to %s. </body>
+            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+                <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+            </emailaddresses>
+        </MailTemplate>
+    </MailData>
+    <MailData>
         <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
         <eventname>BMSFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
