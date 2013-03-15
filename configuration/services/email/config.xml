@@ -197,7 +197,7 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
 		<eventname>ManualPurge</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates..content.PurgeEmailTemplate">
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.PurgeEmailTemplate">
 			<subject>MediaId(%s) Title(%s) Manual Purge Actioned.</subject>
 			<body><b>Item will be deleted from MAM in %d days. Please resolve this issue.</b></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
