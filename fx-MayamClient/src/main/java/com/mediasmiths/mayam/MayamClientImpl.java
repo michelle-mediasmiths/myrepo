@@ -574,7 +574,6 @@ public class MayamClientImpl implements MayamClient
 		}
 
 		materialController.updateMaterial(details,materialID);
-		
 	}
 
 	@Override
@@ -604,11 +603,9 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isPackageAO(String packageID) throws MayamClientException
 	{
-		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);	
 		
-		boolean adult = AssetProperties.isAO(info.getTitleAttributes());
-
-		return adult;
+		return AssetProperties.isAO(info.getTitleAttributes());
 	}
 
 	@Override
@@ -621,24 +618,57 @@ public class MayamClientImpl implements MayamClient
 	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
 		tasksController.autoQcPassedForMaterial(materialId,taskID);
-		
 	}
 
 	@Override
-	public void attachFileToMaterial(String materialID, String absolutePath, String serviceHandle) throws MayamClientException
+	public void attachFileToMaterial(final String houseID, final String absolutePath, final String serviceHandle) throws MayamClientException
 	{
-		log.info(String.format("Attatching file {%s} to material {%s}", absolutePath, materialID));
-		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
-		String assetID = materialAttributes.getAttributeAsString(Attribute.ASSET_ID);
+		log.info(String.format("Attatching file {%s} to material {%s}", absolutePath, houseID));
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(houseID);
+		
+		if (null == materialAttributes)
+		{
+			log.debug(String.format("Material attributes returned null for id %s; " +
+					"trying to get attributes using parent house id from segments.", houseID));
+			try
+			{
+				SegmentList segList = client.segmentApi().getSegmentListBySiteId(houseID);
+				
+				if(null != segList)
+				{
+					log.debug("SegmentList not null; getting material attributes using parent house id");
+					String materialID = segList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
+					materialAttributes = materialController.getMaterialAttributes(materialID);
+					
+					if(null == materialAttributes)
+					{
+						log.error("Unable to retrieve material attributes from either material nor segments.");
+						throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED);
+					}
+				}
+				else
+				{
+					log.error(String.format("Segment list returned null for asset with id %s", houseID));
+					throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED);
+				}
+			}
+			catch (RemoteException e)
+			{
+				log.error("Error attatching file to material " + houseID, e);
+				throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED, e);
+			}
+		}
+		
+		final String assetID = materialAttributes.getAttributeAsString(Attribute.ASSET_ID);
 		try
 		{
 			client.assetApi().importFile(AssetType.ITEM, assetID, serviceHandle, absolutePath);
 		}
 		catch (RemoteException e)
 		{
-			log.error("error attatching file to material "+materialID, e);
+			log.error("Error attatching file to material " + houseID, e);
 			throw new MayamClientException(MayamClientErrorCode.IMPORT_FILE_FAILED, e);
-		}		
+		}
 	}
 
 	@Override
@@ -853,8 +883,9 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException
+	public void txDeliveryFailed(final String packageID, final long taskID, final String stage) throws MayamClientException
 	{
+		log.debug(String.format("TX delivery failed for packageId %s, taskId %s, stage %s. Setting task to ERROR", packageID, taskID, stage));
 		try
 		{
 			AttributeMap txTask = tasksController.getTask(taskID);
