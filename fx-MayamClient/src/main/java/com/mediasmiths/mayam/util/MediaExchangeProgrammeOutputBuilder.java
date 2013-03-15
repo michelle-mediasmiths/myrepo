@@ -5,7 +5,6 @@ import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
@@ -156,11 +155,9 @@ public class MediaExchangeProgrammeOutputBuilder
 			log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
 			
 			String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
-			Supplier supplier = new Supplier();
-			supplier.setSupplierID(supplierId);
-			programmeDetail.setSUPPLIER(supplier.getSupplierID());
+			programmeDetail.setSUPPLIER(supplierId);
 
-			log.debug("Supplier id: " + supplier.getSupplierID());
+			log.debug("Supplier id: " + supplierId);
 			
 			AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 			if (audioTracks == null || audioTracks.size() == 0)
@@ -195,8 +192,6 @@ public class MediaExchangeProgrammeOutputBuilder
 					log.error("null encoding on audio track information!");
 				}
 			}
-			
-			programmeDetail.setSUPPLIER(pack.getMaterialAttributes().getAttributeAsString(Attribute.DIST_NAME));
 		}
 		else
 		{
