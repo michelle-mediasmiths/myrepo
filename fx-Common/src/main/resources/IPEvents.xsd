@@ -372,8 +372,19 @@
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
-                    <xs:element name="materialId" type="xs:string"/>
                     <xs:element name="filelocation" type="xs:string"/>
+                    <xs:element name="time" type="xs:string"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="mediaPickupQuarantineNotification">
+        <xs:complexContent>
+            <xs:extension base="IPEvent">
+                <xs:sequence>
+                    <xs:element name="source" type="xs:string"/>
+                    <xs:element name="target" type="xs:string"/>
                     <xs:element name="time" type="xs:string"/>
                 </xs:sequence>
             </xs:extension>
@@ -488,6 +499,22 @@
             <xs:enumeration value="Media"/>
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:element name="ErrorReport">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="bmsOp" type="xs:string"/>
+                        <xs:element name="status" type="xs:string"/>
+                        <xs:element name="mediaId" type="xs:string"/>
+                        <xs:element name="title" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
 
     <xs:element name="OrderStatus">
         <xs:complexType>
