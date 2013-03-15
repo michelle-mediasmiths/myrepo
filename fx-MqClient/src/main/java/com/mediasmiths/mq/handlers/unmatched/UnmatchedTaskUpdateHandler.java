@@ -111,6 +111,23 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
 					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
 					tasksClient.assetApi().updateAsset(associatedMaterial);
+					
+					
+					String format = transferManager.getFormat(currentAttributes);
+					log.debug(String.format("Format returned was %s; now closing task", format));
+		
+					// close unmatched task
+					transferManager.closeTask(currentAttributes);
+		
+					log.debug(String.format("PeerId returned %s, now setting format.", parentID));
+		
+					//set the format (hd/sd, don't have a way of detecting 3d)
+					transferManager.setFormat(parentID, format);
+		
+					// close open ingest task for the target asset
+					log.debug(String.format("Closing task for asset with assetId %s", assetID));
+					transferManager.closeIngestTaskForAsset(parentID, currentAttributes);
+					
 				}
 				else {
 					log.info("Match found for asset, attempting to create new revision");
