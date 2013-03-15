@@ -248,8 +248,8 @@ public class MayamPDPImpl implements MayamPDP
 					return getConfirmStatus(warnings+" Do you wish to send to Tx?");
 				}
 
-				String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-				if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
+				Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+				if (qcParallelAttribute != null && qcParallelAttribute)
 				{
 					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
 	
