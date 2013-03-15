@@ -34,7 +34,7 @@ public class ConformJobHandler extends JobHandler
 
 		if (StringUtils.isEmpty(assetID))
 		{
-			log.error("asset id is null or empty in CONFORM job message, I cant do anything");
+			log.error("Asset id is null or empty in CONFORM job message, I can't do anything");
 			return;
 		}
 
@@ -51,7 +51,6 @@ public class ConformJobHandler extends JobHandler
 				item = materialController.getMaterialByAssetId(assetID);
 				materialID = item.getAttributeAsString(Attribute.HOUSE_ID);
 				log.info(String.format("Found item with house id %s", materialID));
-
 			}
 			catch (MayamClientException mce)
 			{
@@ -66,13 +65,13 @@ public class ConformJobHandler extends JobHandler
 			}
 			catch (RemoteException e)
 			{
-				log.error("error fetching revisions for item, will not try to reassociate tx packages or remove any revisions", e);
+				log.error("Error fetching revisions for item, will not try to reassociate tx packages or remove any revisions", e);
 				return;
 			}
 
 			if (allRevisions == null)
 			{
-				log.error("no revisions found for asset that has just had a conform finished against it, this doesnt seem right");
+				log.error("No revisions found for asset that has just had a conform finished against it, this doesnt seem right");
 				return;
 			}
 
@@ -82,11 +81,11 @@ public class ConformJobHandler extends JobHandler
 
 			if (numRevisions == 0)
 			{
-				log.error("no revisions found for asset that has just had a conform finished against it, this doesnt seem right");
+				log.error("No revisions found for asset that has just had a conform finished against it, this doesn't seem right");
 			}
 			else if (numRevisions == 1)
 			{
-				log.info("Only one revision for this asset, I dont need to mark any old ones for deletion");				
+				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
 			else
 			{
@@ -113,9 +112,9 @@ public class ConformJobHandler extends JobHandler
 					log.error("Exception getting segment lists for item", e);
 				}
 
-				boolean segmentReasociationErrors = reasociateSegments(highestRevisionID, allSegments);
+				boolean segmentReassociationErrors = reassociateSegments(highestRevisionID, allSegments);
 
-				if (!segmentReasociationErrors)
+				if (!segmentReassociationErrors)
 				{
 					deleteOldRevisions(allRevisionsExceptHighest);
 				}
@@ -159,9 +158,9 @@ public class ConformJobHandler extends JobHandler
 		}
 	}
 
-	private boolean reasociateSegments(String highestRevisionID, SegmentListList allSegments)
+	private boolean reassociateSegments(String highestRevisionID, SegmentListList allSegments)
 	{
-		boolean segmentReasociationErrors = false;
+		boolean segmentReassociationErrors = false;
 
 		if (allSegments != null)
 		{
@@ -173,20 +172,23 @@ public class ConformJobHandler extends JobHandler
 				{
 					try
 					{
-						reasociateSementToHighestRevision(highestRevisionID, segmentList);
+						reassociateSegmentToHighestRevision(highestRevisionID, segmentList);
 					}
 					catch (RemoteException e)
 					{
 						log.error("error reasociating segment to highest revision", e);
-						segmentReasociationErrors = true;
+						if(!segmentReassociationErrors)
+						{
+							segmentReassociationErrors = true;
+						}
 					}
 				}
 			}
 		}
-		return segmentReasociationErrors; // returns true if there were any errors reasociating segments
+		return segmentReassociationErrors; // returns true if there were any errors reasociating segments
 	}
 
-	private void reasociateSementToHighestRevision(String highestRevisionID, SegmentList segmentList) throws RemoteException
+	private void reassociateSegmentToHighestRevision(String highestRevisionID, SegmentList segmentList) throws RemoteException
 	{
 		log.info(String.format("going to try to reassociate segment %s with revision %s", segmentList.getId(), highestRevisionID));
 
