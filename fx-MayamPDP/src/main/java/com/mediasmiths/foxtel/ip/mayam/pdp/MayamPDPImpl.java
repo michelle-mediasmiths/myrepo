@@ -224,17 +224,18 @@ public class MayamPDPImpl implements MayamPDP
 			// finished auto QC yet and allow them to continue if they wish.
 
 			AttributeMap parentAsset = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), attributeMap.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-			boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
-
-			if (isQcPassed)
-			{
-				logger.info("QC is Passed on Presentation Id " + presentationID);
-
-				return getConfirmStatus(warnings+"Do you wish to send to Tx?");
-			}
-
 			if (parentAsset != null)
 			{
+				boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
+	
+				if (isQcPassed)
+				{
+					logger.info("QC is Passed on Presentation Id " + presentationID);
+	
+					return getConfirmStatus(warnings+"Do you wish to send to Tx?");
+				}
+
+
 				String qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 	
 				if (qcParallelAttribute != null && Boolean.parseBoolean(qcParallelAttribute))
@@ -245,6 +246,11 @@ public class MayamPDPImpl implements MayamPDP
 					return getConfirmStatus(warnings+"QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
 	
 				}
+			}
+			else {
+				logger.info("Unable to locate parent asset for : " + presentationID);
+				
+				return getConfirmStatus(warnings+"Unable to locate parent asset to check QC status. Are you sure you wish to proceed?");
 			}
 			
 			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
