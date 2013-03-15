@@ -37,9 +37,18 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.log4j.Logger;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.util.JAXBSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -69,6 +78,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.location")
 	private String aoTxDeliveryLocation;
+	
+	@Inject
+	@Named("mex.context")
+	private JAXBContext mexContext;
 	@Inject
 	@Named("mex.marshaller")
 	private Marshaller mexMarshaller;
@@ -181,7 +194,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	public void notifyAutoQCFailed(AutoQCFailureNotification notification) throws MayamClientException
+	public void notifyAutoQCFailed(final AutoQCFailureNotification notification) throws MayamClientException
 	{
 		log.info(String.format(
 				"Received notification of Auto QC failure ID %s isTX %b",
@@ -204,7 +217,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				saveEvent("AutoQCFailed", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(), notification.getJobName());
-
 			}
 		}
 		catch (MayamClientException e)
@@ -470,10 +482,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		if (ao)
 		{
+			log.debug(String.format("Getting AO xml for packageId %s", packageID));
 			companion = getAOSegmentXML(packageID);
 		}
 		else
 		{
+			log.debug(String.format("Getting xml for packageId %s", packageID));
 			companion = getSegmentXML(packageID);
 		}
 		String deliveryLocation = deliveryLocationForPackage(packageID);
@@ -555,14 +569,22 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	public String getSegmentXML(final String packageID) throws MayamClientException, JAXBException
 	{
-
+		log.debug(">>>getSegmentXML");
 		Programme programme = mayamClient.getProgramme(packageID);
-
+		
+		// Validate the programme type returned from mayam information against the schema and log errors
+		log.debug(String.format("Validating programme information against the schema for programme with packageId %s", packageID));
+		if(!validateProgrammeInformation(programme))
+		{
+			//TODO - could stop the xml being written / stop task processing here...
+			log.error(String.format("The information being written about the programme with packageId %s is not valid according to the schema.", packageID));
+		}
+		
 		StringWriter sw = new StringWriter();
 		mexMarshaller.marshal(programme, sw);
 		return sw.toString();
-
 	}
+
 
 	@Override
 	public void notifiyTXDelivered(final TXDeliveryFinished deliveryFinished) throws MayamClientException
@@ -761,6 +783,58 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		catch (Exception e)
 		{
 			log.error("Events unable to serialise message", e);
+		}
+	}
+	
+	private boolean validateProgrammeInformation(Programme programme)
+	{
+		boolean isValidProgramme = false;
+		try 
+		{
+			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+			Schema schema = factory.newSchema(WFAdapterRestServiceImpl.class.getClassLoader().getResource("MediaExchange_V1.2.xsd"));
+			mexMarshaller.setSchema(schema);
+			
+			JAXBSource source = new JAXBSource(mexContext, programme);
+			Validator validator = schema.newValidator();
+			validator.setErrorHandler(new MediaExchangeErrorHandler());
+			validator.validate(source);
+			isValidProgramme = true;
+		} 
+		catch (SAXException e) 
+		{
+			log.error("A SAXException was thrown whilst validating the returned programme against the schema: " + e.getMessage());
+			e.printStackTrace();
+		} 
+		catch (IOException | JAXBException e) 
+		{
+			log.error("An exception was thrown whilst validating the programme against the schema: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return isValidProgramme;
+	}
+	
+	static class MediaExchangeErrorHandler implements ErrorHandler
+	{
+		@Override
+		public void warning(SAXParseException exception) throws SAXException
+		{
+			System.out.println("\nWARNING");
+			exception.printStackTrace();
+		}
+
+		@Override
+		public void error(SAXParseException exception) throws SAXException
+		{
+			System.out.println("\nERROR");
+			exception.printStackTrace();
+		}
+
+		@Override
+		public void fatalError(SAXParseException exception) throws SAXException
+		{
+			System.out.println("\nFATAL ERROR");
+			exception.printStackTrace();
 		}
 	}
 }
