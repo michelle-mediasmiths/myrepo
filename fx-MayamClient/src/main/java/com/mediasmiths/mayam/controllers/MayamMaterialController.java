@@ -417,8 +417,9 @@ public class MayamMaterialController extends MayamController
 				if (titleAttributes != null)
 				{
 					String assetId = titleAttributes.getAttribute(Attribute.ASSET_ID);
+					String houseId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-
+					attributesValid &= attributes.setAttribute(Attribute.PARENT_HOUSE_ID, houseId);
 					updateMaterialAttributesFromTitle(attributes, titleAttributes);
 				}
 			}

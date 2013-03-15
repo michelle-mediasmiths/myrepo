@@ -266,7 +266,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus("A technical fault has occurred while verifying the segmentation complete rules");
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete Segmentation operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete Segmentation operation");
 		}
 	}
 
@@ -298,7 +300,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete Segmentation operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete Segmentation operation");
 		}
 	}
 
@@ -332,7 +336,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete uningest operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete uningest operation");
 		}
 	}
 
@@ -348,7 +354,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete uningestProtected operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete uningestProtected operation");
 		}
 	}
 
@@ -375,7 +383,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete protect operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete protect operation");
 		}
 	}
 
@@ -402,7 +413,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete unprotect operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete unprotect operation");
 		}
 	}
 
@@ -430,7 +444,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete delete operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete delete operation");
 		}
 	}
 
@@ -448,7 +465,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete proxyfileCheck operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete proxyfileCheck operation");
 		}
 	}
 
@@ -476,7 +496,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (RemoteException e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete ingest operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete ingest operation");
 		}
 	}
 
@@ -531,7 +554,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete complianceEdit operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete complianceEdit operation");
 		}
 	}
 
@@ -587,7 +613,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete complianceLogging operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete complianceLogging operation");
 		}
 	}
 
@@ -615,7 +644,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete unmatched operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete unmatched operation");
 		}
 	}
 
@@ -643,7 +675,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete preview operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete preview operation");
 		}
 	}
 
@@ -671,7 +706,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete autoQC operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete autoQC operation");
 		}
 	}
 	
@@ -699,7 +737,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete qcParallel operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete qcParallel operation");
 		}
 	}
 
@@ -726,7 +767,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete fileHeaderVerify operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete fileheaderVerify operation");
 		}
 
 	}
@@ -800,7 +843,11 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (RemoteException e)
 		{
-			return getErrorStatus(e.getMessage());
+
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete TXDelivery operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete TXDelivery operation");
 		}
 	}
 
@@ -829,7 +876,9 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete exportMarkers operation", e);
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete exportMarkers operation");
 		}
 	}
 
@@ -856,7 +905,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete complianceProxy operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete complianceProxy operation");
 		}
 	}
 
@@ -883,7 +935,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete captionsProxy operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete captionsProxy operation");
 		}
 	}
 
@@ -910,7 +965,10 @@ public class MayamPDPImpl implements MayamPDP
 		}
 		catch (Exception e)
 		{
-			return getErrorStatus(e.getMessage());
+			logger.error("Mayam Comms Error:  unable to retrieve required data to complete PublicityProxy operation", e);
+
+
+			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete publicityProxy operation");
 		}
 	}
 
