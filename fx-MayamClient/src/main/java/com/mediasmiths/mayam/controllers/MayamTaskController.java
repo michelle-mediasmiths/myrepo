@@ -518,18 +518,9 @@ public class MayamTaskController extends MayamController
 		return client.taskApi().getTask(taskId);
 	}
 
-	public void autoQcFailedForMaterial(String materialId, long taskID) throws MayamClientException
+	public void autoQcFailedForMaterial(final String materialId, final long taskID) throws MayamClientException
 	{
-		setAutoQcStatus(QcStatus.FAIL, materialId,taskID);
-	}
-
-
-	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
-	{
-		setAutoQcStatus(QcStatus.PASS, materialId, taskID);		
-	}
-	
-	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID) throws MayamClientException{
+		log.debug(String.format("Auto QC task failed for materialId %s; setting task state to fail", materialId));
 		AttributeMap qcTask;
 		try
 		{
@@ -541,7 +532,43 @@ public class MayamTaskController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 		
+		qcTask.setAttribute(Attribute.ERROR_MSG, String.format("Auto QC failed for material with id %s", materialId));
+		qcTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.FAIL);
+		
+		try
+		{
+			log.debug("Saving failedQcTask");
+			saveTask(qcTask);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error updating qc task for material "+ materialId, e);
+			throw e;
+		}		
+	}
+
+
+	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
+	{
+		setAutoQcStatus(QcStatus.PASS, materialId, taskID);		
+	}
+	
+	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID) throws MayamClientException
+	{
+		AttributeMap qcTask;
+		try
+		{
+			qcTask = getTask(taskID);
+		}
+		catch (RemoteException e)
+		{
+			log.error(String.format("Error fetching qc task %d for material %s ",taskID,materialId,e));
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
+		}
+
 		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
+		
 		try
 		{
 			saveTask(qcTask);

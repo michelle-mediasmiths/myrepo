@@ -85,8 +85,49 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
 					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetID);
-					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+					
+					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
+					AttributeMap parent = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), parentID);
+					
+					
+					String parentHouseID = "";
+					if (parent != null)
+					{
+						parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
+						log.info("Fourn parent material :" + parentHouseID);
+					}
+					else {
+						log.info("Unable to locate parent material, trying to locate parent title");
+						parent = tasksClient.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), parentID);
+						if (parent != null)
+						{
+							parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
+							log.info("Fourn parent title :" + parentHouseID);
+						}
+						else {
+							log.info("Unable to locate any parent");
+						}
+					}
+					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
+					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
 					tasksClient.assetApi().updateAsset(associatedMaterial);
+					
+					
+					String format = transferManager.getFormat(currentAttributes);
+					log.debug(String.format("Format returned was %s; now closing task", format));
+		
+					// close unmatched task
+					transferManager.closeTask(currentAttributes);
+		
+					log.debug(String.format("PeerId returned %s, now setting format.", parentID));
+		
+					//set the format (hd/sd, don't have a way of detecting 3d)
+					transferManager.setFormat(parentID, format);
+		
+					// close open ingest task for the target asset
+					log.debug(String.format("Closing task for asset with assetId %s", assetID));
+					transferManager.closeIngestTaskForAsset(parentID, currentAttributes);
+					
 				}
 				else {
 					log.info("Match found for asset, attempting to create new revision");

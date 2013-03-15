@@ -375,7 +375,7 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	private void setFormat(final String peerID, final String format)
+	public void setFormat(final String peerID, final String format)
 	{
 		log.debug(String.format("Setting format for peerId %s to %s", peerID, format));
 		try
@@ -393,7 +393,7 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	private String getFormat(AttributeMap currentAttributes) throws RemoteException
+	public String getFormat(AttributeMap currentAttributes) throws RemoteException
 	{
 		String format = "HD";
 		try
@@ -456,7 +456,7 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	private void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
+	public void closeIngestTaskForAsset(String peerID, AttributeMap unmatchedAttributes)
 	{
 		log.debug(String.format("Closing ingest task for asset with assetID %s", peerID));
 
@@ -493,7 +493,7 @@ public class TransferManager extends Daemon implements StoppableService
 	}
 
 
-	protected void closeTask(AttributeMap messageAttributes)
+	public void closeTask(AttributeMap messageAttributes)
 	{
 		log.debug("Closing task");
 		try
