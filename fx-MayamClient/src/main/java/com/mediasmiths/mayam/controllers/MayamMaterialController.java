@@ -416,6 +416,7 @@ public class MayamMaterialController extends MayamController
 				AttributeMap titleAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				if (titleAttributes != null)
 				{
+					//Terry - Update the attribute with the correct parent
 					String assetId = titleAttributes.getAttribute(Attribute.ASSET_ID);
 					String houseId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);

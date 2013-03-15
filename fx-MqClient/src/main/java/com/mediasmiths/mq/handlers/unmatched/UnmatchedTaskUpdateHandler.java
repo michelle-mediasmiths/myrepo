@@ -108,6 +108,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 							log.info("Unable to locate any parent");
 						}
 					}
+					
+					//Terry - Update the attribute with the correct parent
 					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
 					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
 					associatedMaterial.setAttribute(Attribute.SOURCE_HOUSE_ID, parentHouseID);
