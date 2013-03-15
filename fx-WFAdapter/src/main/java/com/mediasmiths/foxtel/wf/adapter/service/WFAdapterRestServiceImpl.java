@@ -806,7 +806,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.error("A SAXException was thrown whilst validating the returned programme against the schema: " + e.getMessage());
 			e.printStackTrace();
 		} 
-		catch (IOException | JAXBException e) 
+		catch (Throwable e) 
 		{
 			log.error("An exception was thrown whilst validating the programme against the schema: " + e.getMessage());
 			e.printStackTrace();
