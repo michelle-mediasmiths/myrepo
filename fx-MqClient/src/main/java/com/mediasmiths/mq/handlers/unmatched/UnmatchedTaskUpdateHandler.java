@@ -110,6 +110,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					}
 					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
 					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
+					associatedMaterial.setAttribute(Attribute.SOURCE_HOUSE_ID, parentHouseID);
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 					
 					
