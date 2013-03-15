@@ -85,7 +85,16 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
 					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetID);
-					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+					
+					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
+					AttributeMap parent = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), parentID);
+					String parentHouseID = "";
+					if (parent != null)
+					{
+						parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
+					}
+					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
+					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 				}
 				else {
