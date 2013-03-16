@@ -259,7 +259,7 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>DeliveryFailed</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliverNotificationEmailTemplate">
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
 			<subject> MediaId(%s) Title(%s). Delivery Failed
 			</subject>
 			<body>Item is located %s.</body>
@@ -271,7 +271,7 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>Delivered</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliverNotificationEmailTemplate">
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
 			<subject> MediaId(%s) Title(%s). Delivered
 			</subject>
 			<body>Item is located %s.</body>
