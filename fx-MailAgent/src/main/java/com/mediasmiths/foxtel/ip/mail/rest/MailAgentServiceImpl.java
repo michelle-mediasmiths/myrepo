@@ -142,7 +142,7 @@ public class MailAgentServiceImpl implements MailAgentService
 		MailTemplate t = new MailTemplate();
 		t.setEmailaddresses(mailTemplate.getEmailaddresses());
 		t.setSubject(mailTemplate.getSubject());
-		t.setBody(t.getBody() + payload);
+		t.setBody(t.getBody()  + "<p/> <textarea rows=\"12\" cols=\"70\">" + payload + "</textarea><p/>");
 		return t;
 	}
 
