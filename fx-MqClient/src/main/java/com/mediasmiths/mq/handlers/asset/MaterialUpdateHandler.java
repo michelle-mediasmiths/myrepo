@@ -71,6 +71,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 				boolean isProtected = AssetProperties.isPurgeProtected(currentAttributes);
 				boolean isAO = AssetProperties.isAO(currentAttributes);
 				boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) currentAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT));
+				String classification = currentAttributes.getAttribute(Attribute.CONT_CLASSIFICATION);
 
 				if (isAO)
 				{
@@ -79,8 +80,15 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 
 					if (isPreviewPass)
 					{
-						log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_AO));
-						currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO); // always set the ao policy for ao material
+						if (classification != null)
+						{
+							log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_AO));
+							currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO); // always set the ao policy for ao material
+						}
+						else
+						{
+							// do nothing
+						}
 					}
 					else
 					{
