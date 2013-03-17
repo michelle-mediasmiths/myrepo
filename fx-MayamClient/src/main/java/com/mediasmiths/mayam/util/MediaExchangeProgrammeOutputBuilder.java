@@ -82,19 +82,26 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			pmat.setNumber(track.getNumber());
 
-			String audioTrackName = track.getName();
-
-			if (audioTrackName != null)
+			if (track.getNumber() > 2)
 			{
-				AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(audioTrackName);
-
-				log.debug("Setting track name to: " + att.toString());
-
-				pmat.setType(att);
+				pmat.setType(AudioTrackType.DOLBY_E);
 			}
 			else
 			{
-				log.warn("Audio track is null");
+				String audioTrackName = track.getName();
+
+				if (audioTrackName != null)
+				{
+					AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(audioTrackName);
+
+					log.debug("Setting track name to: " + att.toString());
+
+					pmat.setType(att);
+				}
+				else
+				{
+					log.warn("Audio track is null");
+				}
 			}
 
 			ats.getTrack().add(pmat);
