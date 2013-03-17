@@ -48,12 +48,10 @@ import javax.xml.bind.util.JAXBSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 
@@ -595,8 +593,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		TxDelivered txDelivered = new TxDelivered();
 		txDelivered.setPackageID(deliveryFinished.getPackageID());
-		txDelivered.setTaskID(deliveryFinished.getTaskID()+"");
-		txDelivered.setTime((new Date()).toString());
+		txDelivered.setJobName(deliveryFinished.getTaskID()+"");
 		events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
 	}
 
@@ -780,7 +777,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			deliveryFailure.setPackageID(payload.getPackageID());
 			deliveryFailure.setStage(payload.getStage());
 			deliveryFailure.setJobName(payload.getTaskID() + "");
-			events.saveEvent(name, JAXB.serialise(deliveryFailure), nameSpace);
+			events.saveEvent(nameSpace, name, deliveryFailure);
 		}
 		catch (Exception e)
 		{

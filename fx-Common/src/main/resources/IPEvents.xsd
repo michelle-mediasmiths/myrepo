@@ -84,8 +84,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="DeliveryDetails">
-        <xs:complexType>
+    <xs:complexType name="deliveryDetails">
             <xs:complexContent>
                 <xs:annotation>
                     <xs:documentation>The definition a delivery (successful or not)
@@ -94,7 +93,9 @@
                 <xs:extension base="fns:IPEvent">
                     <xs:sequence>
                         <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="packageID" type="xs:string"/>
                         <xs:element name="assetID" type="xs:string"/>
+                        <xs:element name="stage" type="xs:string"/>
                         <xs:element name="jobName" type="xs:string"/>
                         <xs:element name="title" type="xs:string"/>
                         <xs:element name="fileLocation" type="xs:string"/>
@@ -106,8 +107,7 @@
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
+    </xs:complexType>
 
     <xs:element name="PreviewEventDetail">
         <xs:complexType>
@@ -442,11 +442,11 @@
     </xs:element>
 
     <xs:complexType name="txDeliveryFailure">
-        <xs:sequence>
-            <xs:element minOccurs="0" name="packageID" type="xs:string"/>
-            <xs:element minOccurs="0" name="stage" type="xs:string"/>
-            <xs:element minOccurs="0" name="jobName" type="xs:string"/>
-        </xs:sequence>
+            <xs:complexContent>
+                <xs:extension base="deliveryDetails">
+                    <xs:sequence/>
+                </xs:extension>
+            </xs:complexContent>
     </xs:complexType>
 
     <xs:element name="txMoveFailure">
@@ -463,19 +463,12 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="txDelivered">
-        <xs:complexType>
+    <xs:complexType name="txDelivered">
             <xs:complexContent>
-                <xs:extension base="IPEvent">
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="taskID" type="xs:string"/>
-                        <xs:element minOccurs="0" name="packageID" type="xs:string"/>
-                        <xs:element minOccurs="0" name="time" type="xs:string"/>
-                    </xs:sequence>
+                <xs:extension base="deliveryDetails">
                 </xs:extension>
             </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
+    </xs:complexType>
 
     <xs:simpleType name="PreviewStatus">
         <xs:annotation>
