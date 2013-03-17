@@ -389,15 +389,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("CaptionProxyFailed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("CaptionProxyFailure", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("ClassificationProxyFailed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ClassificationProxyFailure", notification, TC_EVENT_NAMESPACE);
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("ComplianceProxyFailed", notification, TC_EVENT_NAMESPACE);
+			saveEvent("ComplianceProxyFailure", notification, TC_EVENT_NAMESPACE);
 		}
 		else
 		{
