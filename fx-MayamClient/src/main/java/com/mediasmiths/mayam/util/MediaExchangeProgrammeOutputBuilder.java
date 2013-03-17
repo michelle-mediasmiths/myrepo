@@ -24,6 +24,8 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MediaExchangeProgrammeOutputBuilder
 {
@@ -80,11 +82,13 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			pmat.setNumber(track.getNumber());
 
-			if (track.getEncoding() != null)
-			{
-				AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(track.getEncoding());
+			String audioTrackName = track.getName();
 
-				log.debug("Setting encoding to: " + att.toString());
+			if (audioTrackName != null)
+			{
+				AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(audioTrackName);
+
+				log.debug("Setting track name to: " + att.toString());
 
 				pmat.setType(att);
 			}
@@ -100,19 +104,51 @@ public class MediaExchangeProgrammeOutputBuilder
 		return ats;
 	}
 
-	private static AudioTrackType mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(EncodingType encoding)
+
+	/** for simplicity create a MAP from internal Ardome names to the external exchange names. */
+
+	private static  Map<String, AudioTrackType> mayamChannelMapping = new HashMap<String,AudioTrackType>();
+
+	/**
+	 *
+	 * As Per MAM-202 Jonas states that
+	 *
+	 * from example  data we can see STEREO_LEFT, STEREO_RIGHT, FRONT_LEFT, FRONT_RIGHT, CENTER, LFE, SURROUND_LEFT and SURROUND_RIGHT
+	 *
+	 */
+	static
 	{
-		switch (encoding)
+		mayamChannelMapping.put("STEREO_LEFT", AudioTrackType.LEFT);
+		mayamChannelMapping.put("STEREO_RIGHT", AudioTrackType.RIGHT);
+		mayamChannelMapping.put("FRONT_LEFT", AudioTrackType.LEFT);
+		mayamChannelMapping.put("FRONT_RIGHT", AudioTrackType.RIGHT);
+		mayamChannelMapping.put("CENTER", AudioTrackType.MONO);
+		mayamChannelMapping.put("LFE", AudioTrackType.MONO);
+		mayamChannelMapping.put("SURROUND_LEFT", AudioTrackType.LEFT);
+		mayamChannelMapping.put("SURROUND_RIGHT", AudioTrackType.RIGHT);
+
+	}
+
+	/**
+	 *
+	 * As Per MAM-202 Jonas states that
+	 *
+	 * from example  data we can see STEREO_LEFT, STEREO_RIGHT, FRONT_LEFT, FRONT_RIGHT, CENTER, LFE, SURROUND_LEFT and SURROUND_RIGHT
+	 *
+	 * @param audioTrackName
+	 * @return
+	 */
+	private static AudioTrackType mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(String audioTrackName)
+	{
+        AudioTrackType type = mayamChannelMapping.get(audioTrackName);
+
+		if (type == null)
 		{
-			case DOLBY_E:
-				return AudioTrackType.DOLBY_E;
-			case LINEAR:
-				return AudioTrackType.STEREO; // no idea if this is right
+			log.error("Do not have a mapping for channel name" + audioTrackName);
+			type = AudioTrackType.MONO;
 		}
 
-		log.error("unknown encoding type: " + encoding.toString());
-
-		return AudioTrackType.STEREO;
+		return type;
 	}
 
 	private static Programme.Detail getProgrammeDetail(FullProgrammePackageInfo pack)
