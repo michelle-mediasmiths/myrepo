@@ -85,10 +85,14 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
 					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetID);
-					
-					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
+
+					// MAM-196 Jonas states we need to use the target's ASSET_PARENT_ID and make the association with that.
+
+					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PARENT_ID);
+
+					log.debug("Use Asset_Parent_ID= " + parentID + " (for the association)");
+
 					AttributeMap parent = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), parentID);
-					
 					
 					String parentHouseID = "";
 					if (parent != null)
