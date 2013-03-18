@@ -1,24 +1,22 @@
 package com.mediasmiths.mayam.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
+import org.apache.log4j.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SegmentUtil
 {
@@ -228,6 +226,25 @@ public class SegmentUtil
 		rzSeg.setTitle(s.getTitle());
 		
 		return rzSeg;
+	}
+
+	public static Segment convertRuzzSegmentToMayamSegment(com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment ruzzSeg) throws InvalidTimecodeException
+	{
+		return Segment.create().in(new com.mayam.wf.attributes.shared.type.Timecode(ruzzSeg.getSOM())).duration(new com.mayam.wf.attributes.shared.type.Timecode(ruzzSeg.getEOM())).number(ruzzSeg.getSegmentNumber()).title(ruzzSeg.getSegmentTitle()).build();
+	}
+
+	public static SegmentList convertRuzzSegmentTypeToMayamSegmentList(com.mediasmiths.foxtel.generated.ruzz.SegmentationType seglist) throws InvalidTimecodeException
+	{
+
+		SegmentList.SegmentListBuilder listbuilder = SegmentList.create();
+
+		for (com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment seg : seglist.getSegment())
+		{
+		     listbuilder.segment(convertRuzzSegmentToMayamSegment(seg));
+		}
+
+		return listbuilder.build();
+
 	}
 
 	public static String originalConformToHumanString(SegmentationType originalConform)

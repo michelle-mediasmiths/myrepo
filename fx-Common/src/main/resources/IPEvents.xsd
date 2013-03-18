@@ -244,7 +244,7 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType abstract="true" name="autoQCResultNotification">
+    <xs:complexType name="autoQCResultNotification">
         <xs:complexContent>
             <xs:annotation>
                 <xs:documentation>A type to represent an ArdomeJobFailure event
@@ -306,31 +306,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-    <xs:element name="tcPassedNotification">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="fns:tcNotification"/>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="tcFailureNotification">
-        <xs:complexType>
-            <xs:complexContent>
-            <xs:extension base="fns:tcNotification"/>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
-
-
-    <xs:element name="tcTotalFailure">
-        <xs:complexType>
-            <xs:complexContent>
-                <xs:extension base="fns:tcNotification"/>
-            </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
 
 
     <xs:complexType name="materialTransferForTCResponse">
@@ -441,14 +416,6 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="txDeliveryFailure">
-            <xs:complexContent>
-                <xs:extension base="deliveryDetails">
-                    <xs:sequence/>
-                </xs:extension>
-            </xs:complexContent>
-    </xs:complexType>
-
     <xs:element name="txMoveFailure">
         <xs:complexType>
             <xs:complexContent>
@@ -465,7 +432,12 @@
 
     <xs:complexType name="txDelivered">
             <xs:complexContent>
-                <xs:extension base="deliveryDetails">
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="packageId" type="xs:string"/>
+                        <xs:element name="stage" type="xs:string"/>
+                        <xs:element name="taskId" type="xs:string"/>
+                    </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
     </xs:complexType>
