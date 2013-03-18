@@ -1,16 +1,5 @@
 package com.mediasmiths.mayam.util;
 
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.UUID;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
@@ -31,6 +20,15 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.SegmentListType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import org.apache.log4j.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.UUID;
 
 public class RuzzProgrammeOutputBuilder
 {
@@ -140,8 +138,8 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setMARKET("Online");
 
-		titleController.getRightsStart(titleAttributes);
-		titleController.getRightsEnd(titleAttributes);
+
+
 
 		ret.setCensorshipSystem("");
 
@@ -158,6 +156,10 @@ public class RuzzProgrammeOutputBuilder
 		ret.setCaptioned(false);
 		ret.setAspectRatio("16x9");
 		ret.setColour(ColourType.COLOUR);
+		ret.setAudioType(AudioListType.STEREO);
+		ret.setMARKET("Online");
+		ret.setRightsStartDate(getDateFromXMLString(titleController.getRightsStart(titleAttributes)));
+		ret.setRightsEndDate(getDateFromXMLString(titleController.getRightsEnd(titleAttributes)));
 
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		if (audioTracks == null || audioTracks.size() == 0)
@@ -192,5 +194,22 @@ public class RuzzProgrammeOutputBuilder
 		}
 		return ret;
 	}
+
+	private static XMLGregorianCalendar getDateFromXMLString(String xml)
+	{
+		try
+		{
+			GregorianCalendar c = new GregorianCalendar();
+			c.setTime(new Date());
+			XMLGregorianCalendar xmlDate;
+			return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+		}
+		catch (DatatypeConfigurationException e)
+		{
+			log.error("error setting target date on programme detail for package " + xml, e);
+		}
+		return null;
+	}
+
 
 }
