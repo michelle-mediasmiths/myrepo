@@ -84,41 +84,39 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// If possible, the title of this media should be set to the filename, 
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
 					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
+					log.info("Match Peer: " + currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to " + targetAsset);
+
 					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetID);
 
 					// MAM-196 Jonas states we need to use the target's ASSET_PARENT_ID and make the association with that.
 
-					String parentID = currentAttributes.getAttributeAsString(Attribute.ASSET_PARENT_ID);
+					// this is the matching material - need to fetch its attributes to use its parent/parent house id
+					String matchId = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
 
-					log.debug("Use Asset_Parent_ID= " + parentID + " (for the association)");
+					log.debug("Use Asset_Peer_ID= " + matchId + " (for the association)");
 
-					AttributeMap parent = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), parentID);
-					
-					String parentHouseID = "";
-					if (parent != null)
+					AttributeMap materialMatch = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), matchId);
+
+					if (materialMatch == null)
 					{
-						parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
-						log.info("Fourn parent material :" + parentHouseID);
+						log.debug("Peer map is null: unable to deduce parent. Peer:" + matchId);
+						throw new Exception("unable to find peer asset " + matchId + " to link to " + targetAsset);
 					}
-					else {
-						log.info("Unable to locate parent material, trying to locate parent title");
-						parent = tasksClient.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), parentID);
-						if (parent != null)
-						{
-							parentHouseID = parent.getAttributeAsString(Attribute.HOUSE_ID);
-							log.info("Fourn parent title :" + parentHouseID);
-						}
-						else {
-							log.info("Unable to locate any parent");
-						}
+					else
+					{
+						log.debug("Associate via parent: " + materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID) +
+						          " parentHouseId: " + materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 					}
 					
 					//Terry - Update the attribute with the correct parent
-					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID, parentID);
-					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID, parentHouseID);
-					associatedMaterial.setAttribute(Attribute.SOURCE_HOUSE_ID, parentHouseID);
+					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID,
+					                                materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID,
+					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+					associatedMaterial.setAttribute(Attribute.SOURCE_HOUSE_ID,
+					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+
 					tasksClient.assetApi().updateAsset(associatedMaterial);
-					
 					
 					String format = transferManager.getFormat(currentAttributes);
 					log.debug(String.format("Format returned was %s; now closing task", format));
@@ -126,14 +124,14 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// close unmatched task
 					transferManager.closeTask(currentAttributes);
 		
-					log.debug(String.format("PeerId returned %s, now setting format.", parentID));
+					log.debug(String.format("PeerId returned %s, now setting format.", matchId));
 		
 					//set the format (hd/sd, don't have a way of detecting 3d)
-					transferManager.setFormat(parentID, format);
+					transferManager.setFormat(matchId, format);
 		
 					// close open ingest task for the target asset
 					log.debug(String.format("Closing task for asset with assetId %s", assetID));
-					transferManager.closeIngestTaskForAsset(parentID, currentAttributes);
+					transferManager.closeIngestTaskForAsset(matchId, currentAttributes);
 					
 				}
 				else {
