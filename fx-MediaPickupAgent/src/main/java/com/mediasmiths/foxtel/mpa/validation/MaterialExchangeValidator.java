@@ -211,13 +211,12 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 				return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 			}
 
-			/*  Removed to satisfy MAM-105
 
 			if (mayamClient.materialHasPassedPreview(materialID))
 			{
 				return MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW;
 			}
-			*/
+
 
 			int deliveryVersion = details.getDeliveryVersion().intValue();
 			int itemDeliveryVersion = mayamClient.getLastDeliveryVersionForMaterial(materialID);
