@@ -63,13 +63,12 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 			return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
 		}
 
-		/* Remove to satisfy MAM-105
-
+		/*
 		if(mayamClient.materialHasPassedPreview(materialID)){
 			return MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW;
 		}
 		*/
-
+		
 		log.info("validating message for material"+materialID);
 		
 		MessageValidationResult detailsValid = validateDetails(material.getDetails(), materialID);
