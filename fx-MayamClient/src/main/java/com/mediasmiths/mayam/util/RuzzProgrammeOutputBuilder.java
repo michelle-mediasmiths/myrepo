@@ -199,12 +199,12 @@ public class RuzzProgrammeOutputBuilder
 	{
 		try
 		{
-			GregorianCalendar c = new GregorianCalendar();
-			c.setTime(new Date());
-			XMLGregorianCalendar xmlDate;
-			return DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+			if (xml == null)
+				throw new Exception("Null XML field as date");
+
+			return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
 		}
-		catch (DatatypeConfigurationException e)
+		catch (Throwable e)
 		{
 			log.error("error setting target date on programme detail for package " + xml, e);
 		}
