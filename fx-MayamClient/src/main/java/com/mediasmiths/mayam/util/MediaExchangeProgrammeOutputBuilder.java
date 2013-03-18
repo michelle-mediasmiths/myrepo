@@ -24,8 +24,6 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MediaExchangeProgrammeOutputBuilder
 {
@@ -73,38 +71,37 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 		Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
 
+		log.warn("Tracks defined: " + audioTracks.size());
+
 		for (AudioTrack track : audioTracks)
 		{
-
-			Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
-
 			if (log.isDebugEnabled()) log.debug("Setting the number of channels: " + track.getNumber());
 
-			pmat.setNumber(track.getNumber());
-
-			if (track.getNumber() > 2)
+			if (track.getNumber() <= TRACK_MAX)
 			{
-				pmat.setType(AudioTrackType.DOLBY_E);
-			}
-			else
-			{
-				String audioTrackName = track.getName();
+				Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
 
-				if (audioTrackName != null)
+				AudioTrackType t = mayamChannelMapping[track.getNumber()-1];
+
+				if (t != null) // there is a valid track name mapping.
 				{
-					AudioTrackType att = mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(audioTrackName);
+					pmat.setNumber(track.getNumber());
 
-					log.debug("Setting track name to: " + att.toString());
+					pmat.setType(t);
 
-					pmat.setType(att);
+					ats.getTrack().add(pmat);
+
+					log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
 				}
 				else
 				{
-					log.warn("Audio track is null");
+					log.warn("Ignoring track number: " + track.getNumber());
 				}
 			}
-
-			ats.getTrack().add(pmat);
+			else
+			{
+				log.warn("Ignoring track number: " + track.getNumber());
+			}
 
 		}
 
@@ -113,50 +110,32 @@ public class MediaExchangeProgrammeOutputBuilder
 
 
 	/** for simplicity create a MAP from internal Ardome names to the external exchange names. */
+	private static final int TRACK_MAX = 8;
 
-	private static  Map<String, AudioTrackType> mayamChannelMapping = new HashMap<String,AudioTrackType>();
+	private static  AudioTrackType[] mayamChannelMapping = new AudioTrackType[TRACK_MAX];
+
 
 	/**
 	 *
-	 * As Per MAM-202 Jonas states that
-	 *
-	 * from example  data we can see STEREO_LEFT, STEREO_RIGHT, FRONT_LEFT, FRONT_RIGHT, CENTER, LFE, SURROUND_LEFT and SURROUND_RIGHT
+	 * As Per MAM-202 Ben wants a mapping from channels to track type.
 	 *
 	 */
 	static
 	{
-		mayamChannelMapping.put("STEREO_LEFT", AudioTrackType.LEFT);
-		mayamChannelMapping.put("STEREO_RIGHT", AudioTrackType.RIGHT);
-		mayamChannelMapping.put("FRONT_LEFT", AudioTrackType.LEFT);
-		mayamChannelMapping.put("FRONT_RIGHT", AudioTrackType.RIGHT);
-		mayamChannelMapping.put("CENTER", AudioTrackType.MONO);
-		mayamChannelMapping.put("LFE", AudioTrackType.MONO);
-		mayamChannelMapping.put("SURROUND_LEFT", AudioTrackType.LEFT);
-		mayamChannelMapping.put("SURROUND_RIGHT", AudioTrackType.RIGHT);
+
+		mayamChannelMapping[0] = AudioTrackType.LEFT;
+		mayamChannelMapping[1] = AudioTrackType.RIGHT;
+		mayamChannelMapping[2] = AudioTrackType.DOLBY_E;
+		mayamChannelMapping[3] = AudioTrackType.DOLBY_E;
+		mayamChannelMapping[4] = null;
+		mayamChannelMapping[5] = null;
+		mayamChannelMapping[6] = null;
+		mayamChannelMapping[7] = null;
+
+
 
 	}
 
-	/**
-	 *
-	 * As Per MAM-202 Jonas states that
-	 *
-	 * from example  data we can see STEREO_LEFT, STEREO_RIGHT, FRONT_LEFT, FRONT_RIGHT, CENTER, LFE, SURROUND_LEFT and SURROUND_RIGHT
-	 *
-	 * @param audioTrackName
-	 * @return
-	 */
-	private static AudioTrackType mapMayamAudioTrackEncodingtoMediaExhchangeEncoding(String audioTrackName)
-	{
-        AudioTrackType type = mayamChannelMapping.get(audioTrackName);
-
-		if (type == null)
-		{
-			log.error("Do not have a mapping for channel name" + audioTrackName);
-			type = AudioTrackType.MONO;
-		}
-
-		return type;
-	}
 
 	private static Programme.Detail getProgrammeDetail(FullProgrammePackageInfo pack)
 	{
