@@ -1,7 +1,7 @@
 package com.mediasmiths.foxtel.ip.mail;
 
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
-import com.mediasmiths.foxtel.ip.common.events.TcFailureNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -38,7 +38,7 @@ public class TestConfigImport
 	{
 		EmailTemplateGenerator t = conf.getTemplate(e, ns);
 
-		TcFailureNotification tc= new TcFailureNotification();
+		TcNotification tc= new TcNotification();
 		tc.setPackageID("77777");
 
 
