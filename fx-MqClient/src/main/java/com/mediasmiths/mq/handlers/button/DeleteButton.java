@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.button;
 
+import java.util.Date;
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
@@ -99,6 +100,7 @@ public class DeleteButton extends ButtonClickHandler
 		manualPurge.setMaterialId(materialId);
 		manualPurge.setTitle(assetTitle);
 		manualPurge.setTitleID(titleId);
+		manualPurge.setTime(((new Date()).toString()));
 
 		String eventName = MANUAL_PURGE;
 		String namespace = bmsEventsNamespace;
