@@ -549,7 +549,8 @@ public class MayamTitleController extends MayamController{
  					}
 					
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, Boolean.valueOf(titleIsPurgeProtected));
-					boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) attributes.getAttributes().getAttribute(Attribute.QC_PREVIEW_RESULT));
+
+ 					boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) attributes.getAttributes().getAttribute(Attribute.QC_PREVIEW_RESULT));
 					
 					if (isProtected != titleIsPurgeProtected){
 						
@@ -561,10 +562,12 @@ public class MayamTitleController extends MayamController{
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, titleIsPurgeProtected);
-								if (ao && isPreviewPass) {
-									material.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
+								if (ao && isPreviewPass && isClassificationPassed)
+                                {
+									// material.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 								}
-								else if (titleIsPurgeProtected && isPreviewPass) {
+								else if (titleIsPurgeProtected && isPreviewPass)
+                                {
 									material.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 								}
 								client.assetApi().updateAsset(material);
@@ -574,8 +577,9 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					
-					if (ao && isPreviewPass) {
-						attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");	
+					if (ao && isPreviewPass && isClassificationPassed)
+                    {
+						// attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 					}
 					
 					if (!attributesValid) {
