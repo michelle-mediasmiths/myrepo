@@ -5,6 +5,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
@@ -23,6 +24,7 @@ import javax.xml.ws.WebServiceException;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -281,22 +283,24 @@ public class MayamPDPImpl implements MayamPDP
 
 			defaultValidation(attributeMap);
 
-			AttributeMap returnMap = client.createAttributeMap();
-			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.OK.toString());
-
 			String assetId = attributeMap.getAttributeAsString(Attribute.ASSET_ID);
-			AttributeMap existingTask = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.SEGMENTATION, assetId);
+			AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
 
-			if (existingTask != null)
+			List<AttributeMap> existingTasks = taskController.getAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetId);
+
+			if (existingTasks != null && existingTasks.size() > 0)
 			{
 				String presentationID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
 
-				returnMap.clear();
-				returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-				returnMap.setAttribute(Attribute.ERROR_MSG, "An open segmentation task already exists for asset :" + presentationID);
+				logger.error(String.format("%d open tasks for asset Id = %s", existingTasks.size(), assetId));
+
+				return getErrorStatus("An open segmentation task already exists for asset :" + presentationID);
+			}
+			else
+			{
+				return okStatus;
 			}
 
-			return  mapper.serialize(returnMap);
 		}
 		catch (Exception e)
 		{
