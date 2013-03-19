@@ -415,7 +415,7 @@ public class TransferManager extends Daemon implements StoppableService
 				                                 currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
 				                                 "Error determining content format during unmatched asset workflow");
 			}
-			catch (MayamClientException e1)
+			catch (Exception e1)
 			{
 				log.error("error creating error task!", e1);
 			}
