@@ -401,7 +401,7 @@ public class TransferManager extends Daemon implements StoppableService
 			FileFormatInfo formatInfo = tasksClient.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(),
 			                                                                 (String) currentAttributes.getAttribute(Attribute.ASSET_ID));
 
-			if (formatInfo.getImageSizeX() <= sdVideoX)
+			if (formatInfo != null && formatInfo.getImageSizeX() <= sdVideoX)
 			{
 				format = "SD";
 			}
