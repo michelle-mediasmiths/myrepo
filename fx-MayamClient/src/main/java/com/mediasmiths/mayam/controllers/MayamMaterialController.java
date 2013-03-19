@@ -1,36 +1,27 @@
 package com.mediasmiths.mayam.controllers;
 
 
-import java.io.File;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
 import au.com.foxtel.cf.mam.pms.Compile;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
-
 import au.com.foxtel.cf.mam.pms.Source;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.*;
-import com.mayam.wf.attributes.shared.type.Marker.Type;
-import com.mayam.wf.ws.client.TasksClient;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.AudioTrack;
+import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.FileFormatInfo;
+import com.mayam.wf.attributes.shared.type.MarkerList;
+import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
@@ -43,8 +34,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
-import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
+import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.mayam.FileFormatVerification;
 import com.mediasmiths.mayam.FileFormatVerificationFailureException;
 import com.mediasmiths.mayam.MayamAspectRatios;
@@ -52,7 +43,6 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamClientImpl;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
@@ -60,6 +50,18 @@ import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.std.io.PropertyFile;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.namespace.QName;
+import java.io.File;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.List;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -390,7 +392,7 @@ public class MayamMaterialController extends MayamController
 	 * Creates a material, returns the id of the created material
 	 * 
 	 * @param material
-	 * @param title2
+	 * @param title
 	 * @param details
 	 * @return
 	 * @throws MayamClientException
@@ -422,8 +424,14 @@ public class MayamMaterialController extends MayamController
 					String associatingHouseId = titleAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 					log.debug("Associating asset with id=" + associatingAssetId + ", houseId = " + associatingHouseId);
 					attributes.setAttribute(Attribute.ASSET_PARENT_ID, associatingAssetId);
-					attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
+					//attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
 					updateMaterialAttributesFromTitle(attributes, titleAttributes);
+				}
+				else
+				{
+					// ok what do we do.
+					log.error("Expect to get attributes for title: " + titleID + " Failed.");
+					throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
 				}
 			}
 			catch (RemoteException e)
