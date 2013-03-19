@@ -20,6 +20,9 @@ public class Fxp
 	
 	public static boolean ftpProxyTransfer(String sourceFileName,String proxyHost,String proxyUser, String proxyPass, String targetPath, String targetHost, String targetUser, String targetPass)
 	{
+		
+		log.debug(String.format("sourceFileName : {%s},\nproxyHost : {%s},\nproxyUser : {%s},\nproxyPass : {%s},\ntargetPath : {%s},\ntargetHost : {%s},\ntargetUser : {%s},\ntargetPass : {%s},\n",sourceFileName,proxyHost,proxyUser,proxyPass,targetPath,targetHost,targetUser,targetPass));
+		
 		ProtocolCommandListener listener = new PrintCommandListener(new PrintWriter(System.out), true);
 		FTPClient proxy = new FTPClient();
 		proxy.addProtocolCommandListener(listener);
@@ -105,6 +108,9 @@ public class Fxp
 			target.enterRemotePassiveMode();
 			proxy.enterRemoteActiveMode(InetAddress.getByName(target.getPassiveHost()), target.getPassivePort());
 
+			log.debug("remoteRetreive: "+sourceFileName);
+			log.debug("remoteStore: "+targetPath);
+			
 			if (proxy.remoteRetrieve(sourceFileName)
 					&& proxy.remoteStore(targetPath))
 			{
