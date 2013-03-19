@@ -11,6 +11,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.ArgumentMatcher;
@@ -52,7 +53,7 @@ public abstract class MaterialProcessingTest {
 	String emergencyImportPath;
 	File media;
 	File materialxml;
-	Thread processorThread;
+	File materialXmlProcessingFile;
 	MediaCheck mediaCheck;
 	String materialXMLPath;
 	EventService eventService;
@@ -89,20 +90,20 @@ public abstract class MaterialProcessingTest {
 
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
-
+	
+		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
 				mayamClient, matchMaker, mediaCheck,eventService);
 
+		materialXmlProcessingFile = new File(processor.getProcessingPathForFile(materialxml.getAbsolutePath()) + FilenameUtils.getName(materialxml.getAbsolutePath()));
 		
-		processorThread = new Thread(processor);
-		processorThread.start();
-
+		processor.startThread();
 	}
 
 	@After
 	public void after() {
-		processorThread.interrupt();
+		processor.shutdown();
 	}
 
 	protected ArgumentMatcher<Title> titleIDMatcher = new ArgumentMatcher<Title>() {
@@ -128,8 +129,8 @@ public abstract class MaterialProcessingTest {
 		@Override
 		public boolean matches(Object argument) {
 			return argument != null
-					&& ((MediaEnvelope) argument).getFile().equals(
-							materialxml);
+					&& ((MediaEnvelope) argument).getFile().getAbsolutePath().equals(
+							materialXmlProcessingFile.getAbsolutePath());
 		}
 	};
 

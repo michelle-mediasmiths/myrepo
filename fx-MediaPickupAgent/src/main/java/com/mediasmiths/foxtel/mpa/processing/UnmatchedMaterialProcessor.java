@@ -164,13 +164,13 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 			}
 			catch (IOException e)
 			{
-				logger.error("IOException moving umatched mxf to emergency import folder", e);
+				logger.error("IOException moving umatched mxf to import folder", e);
 
 				// send out alert that material could not be transferd to
 				// emergency import folder
 				StringBuilder sb = new StringBuilder();
 				sb.append(String.format(
-						"There has been a failure to deliver unmatched material %s to the Viz Ardome emergency import folder",
+						"There has been a failure to deliver unmatched material %s to the Viz Ardome import folder",
 						FilenameUtils.getName(mxf.getFilePath())));
 				events.saveEvent("error", sb.toString());
 			}

@@ -28,7 +28,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@Ignore
 public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	
 	private static Logger logger = Logger.getLogger(ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4.class);
@@ -39,7 +38,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	private String archivePath;
 	private String failurePath;
 	private String ardomeImportPath;
-	private Thread importerThread;
 	private Importer toTest;
 	private File media;
 	private File materialxml;
@@ -70,9 +68,8 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		toTest = new Importer(pendingImports, watchFolders,
 				""+deliveryAttemptsToMake,event);
 		
-		importerThread = new Thread(toTest);
-		importerThread.start();
-
+		toTest.startThread();
+		
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		TestUtil.writeBytesToFile(100, media);
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
@@ -94,7 +91,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 	@After
 	public void after() {
-		importerThread.interrupt(); // kill importer thread
+		toTest.shutdown(); // kill importer thread
 	}
 
 	@Test

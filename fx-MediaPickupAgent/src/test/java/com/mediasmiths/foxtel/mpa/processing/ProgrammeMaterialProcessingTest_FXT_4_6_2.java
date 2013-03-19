@@ -18,6 +18,7 @@ import java.util.Arrays;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,10 +34,10 @@ import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ProgrammeMaterialTest;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-@Ignore
 public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessingTest {
 	
 	private static Logger logger = Logger.getLogger(ProgrammeMaterialProcessingTest_FXT_4_6_2.class);
@@ -61,14 +62,13 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		TestUtil.writeMaterialToFile(material, materialXMLPath);
-
+		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
+		
 		// prepare mocks
-		when(validator.validateFile(materialXMLPath)).thenReturn(
-				MessageValidationResult.FAILED_TO_UNMARSHALL);
-
-		// queue file for processing
-		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		when(validator.validateFile(processingPath)).thenReturn(
+						MessageValidationResult.FAILED_TO_UNMARSHALL);
+		
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
@@ -81,7 +81,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 
 	@Test
 	@Ignore
-	//todo:readd
 	public void testValidMessageValidMediaMediaFirst_FXT_4_6_2_1()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
@@ -95,7 +94,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 
 	@Test
 	@Ignore
-	//todo:readd
 	public void testValidMessageValidMediaMessageFirst_FXT_4_6_2_1()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
@@ -110,7 +108,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 
 	@Test
 	@Ignore
-	//todo:readd
 	public void testValidMessageInValidMediaMediaFirst()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
@@ -120,7 +117,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 
 	@Test
 	@Ignore
-	//todo:readd
 	public void testValidMessageInValidMediaMessageFirst()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
@@ -144,15 +140,16 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
 		// prepare files
-		TestUtil.writeBytesToFile(100, media);
 		material = ProgrammeMaterialTest.getMaterialWithPackages(TITLE_ID,
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		TestUtil.writeMaterialToFile(material, materialXMLPath);
+
+		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
+		String mediaProcessingPath = processor.getProcessingPathForFile(media.getAbsolutePath()) + FilenameUtils.getName(media.getAbsolutePath());
 
 		// prepare mocks
-		when(validator.validateFile(materialXMLPath)).thenReturn(
+		when(validator.validateFile(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
@@ -160,6 +157,15 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				.thenReturn(false);
 		when(mayamClient.materialHasPassedPreview(anyString())).thenReturn(false);
 		when(mayamClient.getLastDeliveryVersionForMaterial(anyString())).thenReturn(-1);
+		
+		if (mediaFirst) {
+			TestUtil.writeBytesToFile(100, media);
+			TestUtil.writeMaterialToFile(material, materialXMLPath);
+		}
+		else{
+			TestUtil.writeMaterialToFile(material, materialXMLPath);
+			TestUtil.writeBytesToFile(100, media);
+		}
 		
 //		when(mayamClient.updatePackage(argThat(matchByPackageID1))).thenReturn(
 //				MayamClientErrorCode.SUCCESS);
@@ -169,34 +175,24 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 //				MayamClientErrorCode.SUCCESS);
 
 		if (mediaFirst) {
-			when(matchMaker.matchMXF(media)).thenReturn(null);
-			when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(
-					media.getAbsolutePath());
+			when(matchMaker.matchMXF(new File(mediaProcessingPath))).thenReturn(null);
+			when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(mediaProcessingPath);
 
 		} else {
 			when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(
 					null);
-			when(matchMaker.matchMXF(media)).thenReturn(
-					new MediaEnvelope(materialxml, material));
+			when(matchMaker.matchMXF(new File(mediaProcessingPath))).thenReturn(
+					new MediaEnvelope(new File(processingPath), material));
 		}
 
 		when(mediaCheck.mediaCheck(eq(media), argThat(matchEnvelopeByFile)))
 				.thenReturn(mediaValid);
 
-		// add pending files to queue
-		if (mediaFirst) {
-			filesPendingProcessingQueue.add(media.getAbsolutePath());
-			filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
-		} else {
-			filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
-			filesPendingProcessingQueue.add(media.getAbsolutePath());
-		}
-
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
 
 		// verfiy mocks
-		verify(validator).validateFile(materialxml.getAbsolutePath());
+		verify(validator).validateFile(processingPath);
 		verify(mayamClient).updateTitle(argThat(titleIDMatcher));
 		verify(mayamClient).updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class));
 
@@ -208,11 +204,11 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 												// processed in same order they
 												// were placed in queue
 		if (mediaFirst) {
-			inOrder.verify(matchMaker).matchMXF(media);
+			inOrder.verify(matchMaker).matchMXF(new File(mediaProcessingPath));
 			inOrder.verify(matchMaker).matchXML(argThat(matchEnvelopeByFile));
 		} else {
 			inOrder.verify(matchMaker).matchXML(argThat(matchEnvelopeByFile));
-			inOrder.verify(matchMaker).matchMXF(media);
+			inOrder.verify(matchMaker).matchMXF(new File(mediaProcessingPath));
 		}
 
 		verify(mediaCheck).mediaCheck(eq(media), argThat(matchEnvelopeByFile));
@@ -283,16 +279,15 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		TestUtil.writeMaterialToFile(material, materialXMLPath);
-
+		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
+		
 		// prepare mocks
-		when(validator.validateFile(materialXMLPath)).thenReturn(
+		when(validator.validateFile(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.FAILURE);
 		
-		//queue file for processing
-		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
@@ -313,18 +308,17 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 				MATERIAL_ID, Arrays.asList(PACKAGE_IDS));
 
 		materialXMLPath = materialxml.getAbsolutePath();
-		TestUtil.writeMaterialToFile(material, materialXMLPath);
-
+		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
+		
 		// prepare mocks
-		when(validator.validateFile(materialXMLPath)).thenReturn(
+		when(validator.validateFile(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
 		when(mayamClient.updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class)))
 		.thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
-				
-		//queue file for processing
-		filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
@@ -364,7 +358,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
 		
-		//check queu is now empty
+		//check queue is now empty
 		assertTrue(pendingImportQueue.size() == 0);
 		
 		// check message gets moved to failure folder
@@ -372,6 +366,5 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(
 				materialxml, new File(failurePath)).exists());
 	}
-	
 	
 }

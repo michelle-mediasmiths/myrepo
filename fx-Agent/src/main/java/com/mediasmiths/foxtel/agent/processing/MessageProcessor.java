@@ -175,7 +175,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 					logger.error(String.format("uncaught exception processing file %s", filePath), e);
 					moveFileToFailureFolder(new File(filePath));
 				}
-
 			}
 			else
 			{
@@ -184,6 +183,9 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				
 				if(result==MessageValidationResult.AO_MISMATCH){
 					aoMismatch(new File(filePath));					
+				}
+				else if(result == MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER || result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
+					failMediaOnArrival(new File(filePath));
 				}
 				else{
 					moveFileToFailureFolder(new File(filePath));
@@ -195,6 +197,12 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	protected void aoMismatch(File file)
 	{
+		moveFileToFailureFolder(file);
+	}
+	
+	protected void failMediaOnArrival(File file)
+	{
+		//should really only be in media pickup agent
 		moveFileToFailureFolder(file);
 	}
 
@@ -310,7 +318,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	}
 
-	private String getProcessingPathForFile(String pathToFile)
+	public String getProcessingPathForFile(String pathToFile)
 	{
 		
 		String processingPath = FilenameUtils.getFullPath(pathToFile) + PROCESSINGFOLDERNAME + IOUtils.DIR_SEPARATOR;
