@@ -102,7 +102,7 @@ public class IngestJobHandler extends JobHandler
 									log.debug("Job message had no jobUpdated date set; setting it to now.");
 									dateUpdated = new Date();
 								}
-								c.setTime(jobMessage.getJobUpdated());
+								c.setTime(dateUpdated);
 								XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 								sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
 							}

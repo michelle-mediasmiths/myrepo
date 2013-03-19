@@ -252,7 +252,7 @@ public class MayamTaskController extends MayamController
 	
 	public long createWFEErorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
 	{
-		AttributeMap asset;
+		AttributeMap asset = null;
 		try
 		{
 			asset = client.assetApi().getAssetBySiteId(type.getAssetType(), siteId);
@@ -262,6 +262,13 @@ public class MayamTaskController extends MayamController
 			log.error("error fetching asset",e1);
 			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED,e1);
 		}
+		
+		if (asset == null)
+		{
+			log.error("error fetching asset " + siteId);
+			throw new MayamClientException(MayamClientErrorCode.ASSET_FIND_FAILED);
+		}
+		
 		String assetID = asset.getAttribute(Attribute.ASSET_ID);
 		
 		AttributeMap initialAttributes = client.createAttributeMap();

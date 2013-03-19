@@ -401,7 +401,7 @@ public class TransferManager extends Daemon implements StoppableService
 			FileFormatInfo formatInfo = tasksClient.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(),
 			                                                                 (String) currentAttributes.getAttribute(Attribute.ASSET_ID));
 
-			if (formatInfo.getImageSizeX() <= sdVideoX)
+			if (formatInfo != null && formatInfo.getImageSizeX() <= sdVideoX)
 			{
 				format = "SD";
 			}
@@ -415,7 +415,7 @@ public class TransferManager extends Daemon implements StoppableService
 				                                 currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
 				                                 "Error determining content format during unmatched asset workflow");
 			}
-			catch (MayamClientException e1)
+			catch (Exception e1)
 			{
 				log.error("error creating error task!", e1);
 			}
