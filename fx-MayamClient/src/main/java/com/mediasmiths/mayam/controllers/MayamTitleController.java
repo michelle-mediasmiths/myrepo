@@ -562,7 +562,7 @@ public class MayamTitleController extends MayamController{
 							for (int i = 0; i < materials.size(); i++) {
 								AttributeMap material = materials.get(i);
 								material.setAttribute(Attribute.PURGE_PROTECTED, titleIsPurgeProtected);
-								if (ao && isPreviewPass && isClassificationPassed)
+								if (ao && isPreviewPass)
                                 {
 									// material.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 								}
@@ -577,7 +577,7 @@ public class MayamTitleController extends MayamController{
 						}
 					}
 					
-					if (ao && isPreviewPass && isClassificationPassed)
+					if (ao && isPreviewPass)
                     {
 						// attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 					}
