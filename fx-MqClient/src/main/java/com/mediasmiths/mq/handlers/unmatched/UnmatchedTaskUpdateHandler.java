@@ -44,7 +44,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 	@Override
 	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
-		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
+		boolean taskFailure = false;
+		
+		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists		
 		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 
@@ -74,9 +76,6 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					return;
 				}
 				
-				removeUnmatchedAssetFromTaskLists(assetID);
-				log.info("Unmatched task removed for asset : " + assetID);
-				
 				if (isAssociated)
 				{
 					// Content matched as associated media should not be added as a revision of the item. 
@@ -93,13 +92,27 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// this is the matching material - need to fetch its attributes to use its parent/parent house id
 					String matchId = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
 
+					if (matchId == null)
+					{
+						taskFailure = true;
+						log.debug("Peer id is null: unable to deduce parent");
+						currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+						currentAttributes.setAttribute(Attribute.ERROR_MSG, "Cannot match asset as peer id is null");
+						taskController.saveTask(currentAttributes);
+						throw new Exception("Peer id is null: unable to deduce parent");
+					}
+					
 					log.debug("Use Asset_Peer_ID= " + matchId + " (for the association)");
 
 					AttributeMap materialMatch = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), matchId);
 
 					if (materialMatch == null)
 					{
+						taskFailure = true;
 						log.debug("Peer map is null: unable to deduce parent. Peer:" + matchId);
+						currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+						currentAttributes.setAttribute(Attribute.ERROR_MSG, "Cannot match asset as unable to find peer asset " + matchId + " to link to " + targetAsset);
+						taskController.saveTask(currentAttributes);
 						throw new Exception("unable to find peer asset " + matchId + " to link to " + targetAsset);
 					}
 					else
@@ -145,6 +158,13 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 	
 					transferManager.add(new TransferItem(assetId, assetPeerId, timeout));
 				}
+				
+				if (!taskFailure)
+				{
+					removeUnmatchedAssetFromTaskLists(assetID);
+					log.info("Unmatched task removed for asset : " + assetID);
+				}
+				
 			}
 		}
 		catch (Exception e)
