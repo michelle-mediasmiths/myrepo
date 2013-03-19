@@ -13,9 +13,11 @@ import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mq.handlers.JobHandler;
 
@@ -51,6 +53,21 @@ public class ConformJobHandler extends JobHandler
 				item = materialController.getMaterialByAssetId(assetID);
 				materialID = item.getAttributeAsString(Attribute.HOUSE_ID);
 				log.info(String.format("Found item with house id %s", materialID));
+				
+				// Retrieve and close the Fix and Stitch task
+				List<AttributeMap> fixAndStitchTasks = taskController.getOpenTasksForAsset(MayamTaskListType.FIX_STITCH_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
+				if (fixAndStitchTasks != null && fixAndStitchTasks.size() > 0)
+				{
+					for (AttributeMap task: fixAndStitchTasks)
+					{
+						TaskState state = task.getAttribute(Attribute.TASK_STATE);
+						if (state != null && state.equals(TaskState.SYS_WAIT))
+						{
+							task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+							taskController.updateMapForTask(task);
+						}
+					}
+				}
 			}
 			catch (MayamClientException mce)
 			{
