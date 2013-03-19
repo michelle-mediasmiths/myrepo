@@ -420,8 +420,8 @@ public class MayamMaterialController extends MayamController
 				{
 					//Terry - Update the attribute with the correct parent
 					// MAM-196 Jonas states that we must associate with the title's parent and not the title.
-					String associatingAssetId = titleAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
-					String associatingHouseId = titleAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+					String associatingAssetId = titleAttributes.getAttribute(Attribute.ASSET_ID);
+					String associatingHouseId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
 					log.debug("Associating asset with id=" + associatingAssetId + ", houseId = " + associatingHouseId);
 					attributes.setAttribute(Attribute.ASSET_PARENT_ID, associatingAssetId);
 					//attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
