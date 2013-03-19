@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
@@ -27,6 +28,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.button.ButtonClickHandler;
@@ -59,8 +61,28 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	protected ChannelProperties channelProperties;
 	
 	@Override
-	protected void buttonClicked(AttributeMap materialAttributes)
+	protected void buttonClicked(AttributeMap assetAttributes)
 	{
+		
+		//asset could be an item, could be a segmentlist
+		AssetType assetType = assetAttributes.getAttribute(Attribute.ASSET_TYPE);
+		
+		log.debug("Asset type is " + assetType.toString());
+		
+		AttributeMap materialAttributes;
+		
+		if(assetType.equals(MayamAssetType.MATERIAL.getAssetType())){
+			materialAttributes = assetAttributes;
+		}
+		else if(assetType.equals(MayamAssetType.PACKAGE.getAssetType())){
+			String materialID = (String) assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+			materialAttributes = materialController.getMaterialAttributes(materialID); 
+		}
+		else {
+			log.error("unexpected asset type");
+			throw new IllegalArgumentException("can only export items or packages");
+		}
+		
 		boolean isAO = AssetProperties.isAO(materialAttributes);
 
 		if (!isAO)
