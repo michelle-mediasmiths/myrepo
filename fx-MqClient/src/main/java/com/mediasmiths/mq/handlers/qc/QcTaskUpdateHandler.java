@@ -198,7 +198,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			try
 			{
 				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 				taskController.saveTask(updateMap);
 			}
 			catch (MayamClientException e)
