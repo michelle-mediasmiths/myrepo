@@ -1,7 +1,9 @@
 package com.mediasmiths.mq.handlers.qc;
 
 import java.util.Date;
+import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -11,6 +13,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -153,8 +156,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 		if (autoQc.equals(QcStatus.PASS) || autoQc.equals(QcStatus.PASS_MANUAL))
 		{
-
-			// kick off channel condition monitoring once that has been implemented
+			displayChannelConditions(currentAttributes);			
 			finishWithPass(currentAttributes, autoQc);
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
@@ -173,6 +175,40 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 	}
 
+	private void displayChannelConditions(AttributeMap currentAttributes)
+	{
+		try
+		{
+			String assetID = (String) currentAttributes.getAttribute(Attribute.ASSET_ID);
+			log.debug("searching for channel conditions for assset " + assetID);
+			List<String> conditions = tasksClient.assetApi().getQcMessages(
+					(AssetType) currentAttributes.getAttribute(Attribute.ASSET_TYPE),
+					assetID);
+
+			if (conditions != null && !conditions.isEmpty())
+			{
+				log.info(String.format("%d conditions returned for asset", conditions.size()));
+				String stConditions = StringUtils.join(conditions, '\n');
+				log.info("Channel conditions for asset are: " + stConditions);
+				log.info("attaching conditions to qc task");
+				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+				updateMap.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, stConditions);
+			}
+			else
+			{
+				log.info("No channel conditions returned for asset");
+			}
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error fetching channel conditions for asset", e);
+		}
+		catch (Exception e)
+		{
+			log.error("Error processing channel conditions", e);
+		}
+	}
+
 	private void fileFormatVerificationStatusChanged(AttributeMap currentAttributes, AttributeMap after)
 	{
 		// file format verification status updated
@@ -181,7 +217,6 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		if (fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL))
 		{
 			boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(currentAttributes);
-//			boolean isAutoQcRunOrRunning = materialController.isAutoQcRunOrRunningForMaterial(currentAttributes);
 
 			if (autoQcRequired)
 			{
@@ -189,7 +224,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			}
 			else
 			{
-				// kick off channel condition monitoring once that has been implemented
+				displayChannelConditions(currentAttributes);
 				finishWithPass(currentAttributes,fileFormat);
 			}
 		}
