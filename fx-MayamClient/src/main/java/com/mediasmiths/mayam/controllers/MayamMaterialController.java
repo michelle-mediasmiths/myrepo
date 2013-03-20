@@ -1227,7 +1227,29 @@ public class MayamMaterialController extends MayamController
 
 	public void verifyFileMaterialFileFormat(AttributeMap qcTaskAttributes) throws MayamClientException
 	{
+
 		log.info("Starting File format verification for asset " + qcTaskAttributes.getAttribute(Attribute.HOUSE_ID));
+
+		// begin retry specific behavior
+
+		log.debug("Checking existing file format status for asset");
+
+		// if file format verification is being rerun and it previously passed then there will be no 'change' detected from PASS->PASS
+		// so if it has already run and this is a retry the state is first set to TBD then once it passes or fails the next step can
+		// proceed based on the change from TBD->PASS or TBD->FAIL
+		QcStatus currentStatus = qcTaskAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
+		if (currentStatus != null && currentStatus != QcStatus.TBD)
+		{
+			log.debug("FFV has run before, setting substatus 1 to TBD");
+			// file format verification has already been run, set sub status to TBD before proceeding
+			{
+				AttributeMap update = taskController.updateMapForTask(qcTaskAttributes);
+				update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
+				update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
+				taskController.saveTask(update);
+			}
+		}
+		// end retry specific behavior
 
 		FileFormatInfo formatInfo = null;
 
@@ -1244,7 +1266,7 @@ public class MayamMaterialController extends MayamController
 		}
 
 		AttributeMap update = taskController.updateMapForTask(qcTaskAttributes);
-		
+
 		try
 		{
 			fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
