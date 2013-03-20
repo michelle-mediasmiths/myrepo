@@ -184,7 +184,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				if(result==MessageValidationResult.AO_MISMATCH){
 					aoMismatch(new File(filePath));					
 				}
-				else if(result == MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER || result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
+				else if(result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
 					failMediaOnArrival(new File(filePath));
 				}
 				else{
