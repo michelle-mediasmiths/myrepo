@@ -131,7 +131,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 					
-					String format = transferManager.getFormat(currentAttributes);
+					String format = transferManager.getFormat(associatedMaterial);
 					log.debug(String.format("Format returned was %s; now closing task", format));
 		
 					// close unmatched task
