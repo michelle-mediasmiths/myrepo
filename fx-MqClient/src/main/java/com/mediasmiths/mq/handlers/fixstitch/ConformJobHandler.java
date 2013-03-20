@@ -61,7 +61,7 @@ public class ConformJobHandler extends JobHandler
 					for (AttributeMap task: fixAndStitchTasks)
 					{
 						TaskState state = task.getAttribute(Attribute.TASK_STATE);
-						if (state != null && state.equals(TaskState.SYS_WAIT))
+						if (state != null && (state.equals(TaskState.SYS_WAIT) || state.equals(TaskState.ACTIVE) || state.equals(TaskState.OPEN)))
 						{
 							task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 							taskController.updateMapForTask(task);
