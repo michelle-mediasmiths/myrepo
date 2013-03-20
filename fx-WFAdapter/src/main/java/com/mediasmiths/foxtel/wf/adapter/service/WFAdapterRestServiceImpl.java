@@ -426,7 +426,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		else
 		{
-			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
+//			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 
 		if (!notification.isForTXDelivery())
