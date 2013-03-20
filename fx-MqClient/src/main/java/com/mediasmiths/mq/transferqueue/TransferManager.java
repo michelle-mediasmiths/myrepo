@@ -205,12 +205,18 @@ public class TransferManager extends Daemon implements StoppableService
 					if (format != null)
 					{
 						//get the id of the asset being matched to
-						final String peerID = task.getAttribute(Attribute.ASSET_PEER_ID).toString();
+						String peerID = task.getAttribute(Attribute.ASSET_PEER_ID);
 						
 						log.debug(String.format("PeerId returned %s, now setting format.", peerID));
 	
-						//set the format (hd/sd, don't have a way of detecting 3d)
-						setFormat(peerID, format);
+						if (peerID == null)
+						{
+							//set the format (hd/sd, don't have a way of detecting 3d)
+							setFormat(peerID, format);
+						}
+						else {
+							log.warn("Peer ID was null, unable to update format");
+						}
 					}
 				}
 				else
