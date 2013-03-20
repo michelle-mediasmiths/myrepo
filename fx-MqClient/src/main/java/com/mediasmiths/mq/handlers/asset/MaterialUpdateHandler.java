@@ -28,7 +28,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 	private final static Logger log = Logger.getLogger(MaterialUpdateHandler.class);
 
 	//the attributes that affect what the archive flag for a given asset should be
-	private final static Attribute[] ARCHIVE_FLAG_CHANGE_TRIGGERS = new Attribute[] {Attribute.PURGE_PROTECTED,Attribute.CONT_RESTRICTED_MATERIAL, Attribute.QC_PREVIEW_RESULT};
+	private final static Attribute[] ARCHIVE_FLAG_CHANGE_TRIGGERS = new Attribute[] {Attribute.PURGE_PROTECTED,Attribute.CONT_RESTRICTED_MATERIAL, Attribute.QC_PREVIEW_RESULT, Attribute.CONT_CLASSIFICATION};
 
 
 	/**
