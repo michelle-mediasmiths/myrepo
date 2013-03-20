@@ -1,24 +1,35 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import au.com.foxtel.cf.mam.pms.ChannelType;
 import au.com.foxtel.cf.mam.pms.Channels;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.LicenseHolderType;
 import au.com.foxtel.cf.mam.pms.LicensePeriodType;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.GenericTable;
 import com.mayam.wf.attributes.shared.type.GenericTable.Row;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -31,12 +42,8 @@ import com.mediasmiths.mayam.MayamAudioEncoding;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
-import org.apache.log4j.Logger;
-
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -544,51 +551,36 @@ public class MayamTitleController extends MayamController{
 					attributesValid &= attributes.setAttribute(Attribute.PURGE_PROTECTED, Boolean.valueOf(titleIsPurgeProtected));
 
  					boolean isPreviewPass = MayamPreviewResults.isPreviewPass((String) attributes.getAttributes().getAttribute(Attribute.QC_PREVIEW_RESULT));
-
-					if (ao)
-					{
-						if (isProtected)
-						{
-							log.warn("AO Title is Protected this does not affect it Archive policy: " + title.getTitleID());
+					
+					if (isProtected != titleIsPurgeProtected){
+						
+						if (titleIsPurgeProtected && isPreviewPass) {
+							attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
 						}
-						// do nothing - placeholder for future changes.
-					}
-					else
-					{
-						if (isProtected != titleIsPurgeProtected)
-						{
-							if (titleIsPurgeProtected && isPreviewPass)
-							{
-								attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "2");
-							}
-							try
-							{
-								List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(),
-								                                                                  assetID,
-								                                                                  MayamAssetType.MATERIAL.getAssetType());
-								for (int i = 0; i < materials.size(); i++)
-								{
-									AttributeMap material = materials.get(i);
-									material.setAttribute(Attribute.PURGE_PROTECTED, titleIsPurgeProtected);
-									if (ao)
-									{
-										// do nothing but this may change in the future - placeholder.
-									}
-									else if (titleIsPurgeProtected && isPreviewPass)
-									{
-										material.setAttribute(Attribute.ARCHIVE_POLICY, "2");
-									}
-									client.assetApi().updateAsset(material);
+						try {
+							List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.MATERIAL.getAssetType());
+							for (int i = 0; i < materials.size(); i++) {
+								AttributeMap material = materials.get(i);
+								material.setAttribute(Attribute.PURGE_PROTECTED, titleIsPurgeProtected);
+								if (ao && isPreviewPass)
+                                {
+									// material.setAttribute(Attribute.ARCHIVE_POLICY, "R");
 								}
-							}
-							catch (RemoteException e)
-							{
-								log.error("Exception thrown by Mayam while retrieving child assets of title : " +
-								          title.getTitleID(), e);
-							}
+								else if (titleIsPurgeProtected && isPreviewPass)
+                                {
+									material.setAttribute(Attribute.ARCHIVE_POLICY, "2");	
+								}
+								client.assetApi().updateAsset(material);
+							}							
+						} catch (RemoteException e) {
+							log.error("Exception thrown by Mayam while retrieving child assets of title : " + title.getTitleID(),e);
 						}
 					}
-
+					
+					if (ao && isPreviewPass)
+                    {
+						// attributesValid &= attributes.setAttribute(Attribute.ARCHIVE_POLICY, "R");
+					}
 					
 					if (!attributesValid) {
 						log.warn("Title updated but one or more attributes were invalid");
