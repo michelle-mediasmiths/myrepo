@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -103,12 +104,16 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 				createFixStitchTask(materialID, requiredByDate);
 			}
 
-			if (reorder)
+			if (passed && reorder)
 			{
-				// TODO: An email notification is sent to the channel owner advising the content needs to be reordered. The fault comments entered by the user are included in the message body
+				String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
+				PreviewFailed pf = new PreviewFailed();
+				pf.setDate((new Date()).toString());
+				pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
+				pf.setAssetId(assetId);
+				
+				eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewPassedReorder", pf);
 			}
-			
-
 		}
 
 	}

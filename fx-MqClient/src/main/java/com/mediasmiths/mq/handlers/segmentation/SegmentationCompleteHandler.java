@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -18,15 +19,15 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
 
+		log.info("segmentation complete");
+
+		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		String parentHouseID = messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+
+		log.info(String.format("segmentation complelete houseid = %s parentHouseID = %s", houseID, parentHouseID));
+		
 		try
 		{
-			log.info("segmentation complete");
-
-			String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-			String parentHouseID = messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-
-			log.info(String.format("segmentation complelete houseid = %s parentHouseID = %s", houseID, parentHouseID));
-
 			AttributeMap material = materialController.getMaterialAttributes(parentHouseID);
 
 			if (AssetProperties.isAO(material))
@@ -63,6 +64,17 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 		catch (Exception e)
 		{
 			log.error("exception in segmentation complete handler", e);
+			
+			String title = messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
+			String taskID = messageAttributes.getAttributeAsString(Attribute.TASK_ID);
+			TcNotification tx = new TcNotification();
+			tx.setPackageID(houseID);
+			tx.setAssetID(parentHouseID);
+			tx.setTitle(title);
+			tx.setTaskID(taskID);
+			
+			// send email regarding failed to send to TX
+			eventsService.saveEvent("http://www.foxtel.com.au/ip/tc", "FailedInSendtoTX", tx);
 		}
 	}
 

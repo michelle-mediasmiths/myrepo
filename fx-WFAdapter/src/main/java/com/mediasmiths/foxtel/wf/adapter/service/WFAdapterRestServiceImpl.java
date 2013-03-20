@@ -209,7 +209,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// id is an item id
-				saveEvent("AutoQCFailed", notification, QC_EVENT_NAMESPACE);
+				saveEvent("QcFailedReOrder", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(), notification.getJobName());
 			}
@@ -251,7 +251,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 
-		saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
+// 		comment out as version 7 220213		
+//		saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
 
 		if (notification.isForTXDelivery())
 		{
@@ -349,7 +350,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetID(),
 				notification.isForTXDelivery()));
 
-		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
+//		based on email notifications version 7 220213		
+//		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
 
 		try
 		{
@@ -384,19 +386,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("CaptionProxyFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("CaptionProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("ClassificationProxyFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("ClassificationProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("ComplianceProxyFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("ComplianceProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else
 		{
-			saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 	}
 
@@ -412,19 +414,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("CaptionProxySuccess", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("CaptionProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("ClassificationProxySuccess", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("ClassificationProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("ComplianceProxySuccess", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("ComplianceProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 		else
 		{
-			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new TcNotification());
+			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 
 		if (!notification.isForTXDelivery())
@@ -594,10 +596,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
 
-		TxDelivered txDelivered = new TxDelivered();
-		txDelivered.setPackageId(deliveryFinished.getPackageID());
-		txDelivered.setTaskId(deliveryFinished.getTaskID() + "");
-		events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
+//		TxDelivered txDelivered = new TxDelivered();
+//		txDelivered.setPackageId(deliveryFinished.getPackageID());
+//		txDelivered.setTaskId(deliveryFinished.getTaskID() + "");
+//		events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
 	}
 
 	@Override
@@ -659,7 +661,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	// TC Events
 
-	protected void saveEvent(String name, TCNotification payload, String nameSpace, TcNotification eventNotify)
+	protected void saveEvent(String name, TCNotification payload, String nameSpace, com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify)
 	{
 		try
 		{

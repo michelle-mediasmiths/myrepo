@@ -12,6 +12,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
+import au.com.foxtel.cf.mam.pms.Actions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -39,6 +40,7 @@ import org.apache.log4j.Logger;
 
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -498,15 +500,52 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		}
 		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
 		{
-			ProtectedPurgeFail ppf = new ProtectedPurgeFail();
-            ppf.setTitle(result.name());
-			ppf.setTime((new Date()).toString());
+			ProtectedPurgeFail ppf = createPurgeFailedMessage();
+			
+			try
+			{
+				File deleteFile = new File(filePath);
+				Object unmarshalled = unmarhsaller.unmarshal(deleteFile);
+				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
+				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+				
+				
+				if (action instanceof PurgeTitle)
+				{
+					ppf.setTitleID(((PurgeTitle) action).getTitleID());
+				}
+				else if (action instanceof DeleteMaterial)
+				{
+					ppf.setTitleID(((DeleteMaterial) action).getTitleID());
+					ppf.setMaterialId(((DeleteMaterial) action).getMaterial().getMaterialID());
+				}
+				else if (action instanceof DeletePackage)
+				{
+					ppf.setTitleID(((DeletePackage) action).getTitleID());
+				}
+				
+			}
+			catch (JAXBException e)
+			{
+				logger.fatal("error unmarshall the filepath " + filePath, e);
+			}
+			catch (ClassCastException cce)
+			{
+				logger.fatal("error in cast the file " + filePath, cce);
+			}
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
 		else{
 			eventService.saveEvent("failed",message);
 		}
+	}
+	
+	private ProtectedPurgeFail createPurgeFailedMessage ()
+	{
+		ProtectedPurgeFail purgeMessage = new ProtectedPurgeFail();
+		purgeMessage.setTime((new Date()).toString());
+		return purgeMessage;
 	}
 
 }

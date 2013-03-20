@@ -112,6 +112,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					log.debug("User requested uningest, uningesting media");
 					materialController.uningest(currentAttributes);
 					
+					// send email about QC failed event
+					sendQcFailedReorderEvent(currentAttributes);
+					
 				}
 			}
 		}
