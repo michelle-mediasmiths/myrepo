@@ -135,6 +135,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.path")
 	private String aoXMLFTPDestinationPath;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.source.path")
+	private String aoXMLFTPSourcePath = "ready/";
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.source.path")
+	private String aoGXFFTPSourcePath = "ready/";
 
 	@Override
 	public String ping()
@@ -530,11 +537,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		
 		// first upload xml
-		boolean xmlUpload =	ftpProxyTransfer(segmentFileName,String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
+		boolean xmlUpload =	ftpProxyTransfer(String.format("%s%s",aoXMLFTPSourcePath,segmentFileName),String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
 
 		if(xmlUpload){
 			// next upload gxf
-			boolean gxfUpload = ftpProxyTransfer(segmentFileName,String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
+			boolean gxfUpload = ftpProxyTransfer(String.format("%s%s",aoGXFFTPSourcePath,gxfFileName),String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
 			
 			if(gxfUpload){
 				log.info("gxf upload complete");
