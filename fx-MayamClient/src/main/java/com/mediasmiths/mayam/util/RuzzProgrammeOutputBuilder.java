@@ -96,9 +96,24 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setEXTCLIPUMID("");
 		ret.setCATALOGCODE("");
-		ret.setTitle(titleAttributes.getAttributeAsString(Attribute.EPISODE_TITLE));
+
+		String title = titleAttributes.getAttributeAsString(Attribute.EPISODE_TITLE);
+		if (title == null)
+			ret.setTitle("");
+		else
+			ret.setTitle(title);
+
 		ret.setEpisodeNumber(titleAttributes.getAttributeAsString(Attribute.EPISODE_NUMBER));
-		ret.setDescription(titleAttributes.getAttributeAsString(Attribute.EPISODE_DESC));
+
+		String desc = titleAttributes.getAttributeAsString(Attribute.EPISODE_DESC);
+		if (desc == null)
+		{
+			ret.setDescription("");
+		}
+		else
+		{
+			ret.setDescription(desc);
+		}
 
 		try
 		{
