@@ -287,6 +287,7 @@ public class TransferManager extends Daemon implements StoppableService
 				if (state != null && !MayamTaskController.END_STATES.contains(state))
 				{
 					// close unmatched task
+					log.debug(String.format("Closing unmatched task for asset with assetId %s", assetId));
 					closeTask(attributes);
 				}
 				
@@ -294,7 +295,7 @@ public class TransferManager extends Daemon implements StoppableService
 				final String peerID = attributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
 				
 				// close open ingest task for the target asset
-				log.debug(String.format("Closing task for asset with assetId %s", assetId));
+				log.debug(String.format("Closing ingest task for asset with assetId %s", assetId));
 				closeIngestTaskForAsset(peerID, attributes);
 			}
 			
