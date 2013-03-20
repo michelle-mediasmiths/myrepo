@@ -178,11 +178,18 @@ public class TransferManager extends Daemon implements StoppableService
 			if (allUnmatchedTasks.size() != 1)
 				log.warn("Found " + allUnmatchedTasks.size() + " unmatched tasks but expected 1. This is likely a problem.");
 
-
-			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), item.assetId);
-			
-			final String format = getFormat(assetAttributes);
-			log.debug(String.format("Format returned was %s;", format));
+			String format = null;
+			try
+			{
+				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), item.assetId);
+				
+				format = getFormat(assetAttributes);
+				log.debug(String.format("Format returned was %s;", format));
+			}
+			catch (RemoteException e)
+			{
+				log.error("Mayam Exception thrown while retrieving format information for asset " + item.assetId, e);
+			}
 			
 			// Now try to put the task(s) in SYS_WAIT
 			for (AttributeMap task : allUnmatchedTasks)
@@ -195,13 +202,16 @@ public class TransferManager extends Daemon implements StoppableService
 					task.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
 					taskController.updateMapForTask(task);
 					
-					//get the id of the asset being matched to
-					final String peerID = task.getAttribute(Attribute.ASSET_PEER_ID).toString();
-					
-					log.debug(String.format("PeerId returned %s, now setting format.", peerID));
-
-					//set the format (hd/sd, don't have a way of detecting 3d)
-					setFormat(peerID, format);
+					if (format != null)
+					{
+						//get the id of the asset being matched to
+						final String peerID = task.getAttribute(Attribute.ASSET_PEER_ID).toString();
+						
+						log.debug(String.format("PeerId returned %s, now setting format.", peerID));
+	
+						//set the format (hd/sd, don't have a way of detecting 3d)
+						setFormat(peerID, format);
+					}
 				}
 				else
 				{
