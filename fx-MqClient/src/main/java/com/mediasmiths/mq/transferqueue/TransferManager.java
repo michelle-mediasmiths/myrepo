@@ -249,6 +249,11 @@ public class TransferManager extends Daemon implements StoppableService
 					log.debug("No open tasks found, using first task in list : " + attributes.getAttributeAsString(Attribute.TASK_ID));
 				}
 			}
+			
+			if (assetAttributes == null)
+			{
+				log.warn("Asset Attributes were null for material : " + assetId);
+			}
 
 			if (attributes != null && assetAttributes != null)
 			{
