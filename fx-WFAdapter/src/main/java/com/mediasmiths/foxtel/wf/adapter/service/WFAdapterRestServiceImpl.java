@@ -689,7 +689,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		try
 		{
-			com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification qcErrorNotification = new com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification();
+			com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification qcErrorNotification = new com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification();
 			qcErrorNotification.setAssetId(payload.getAssetId());
 			qcErrorNotification.setForTXDelivery(payload.isForTXDelivery());
 			qcErrorNotification.setJobId(payload.getTaskID()+"");
