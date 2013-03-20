@@ -61,21 +61,21 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	protected ChannelProperties channelProperties;
 	
 	@Override
-	protected void buttonClicked(AttributeMap assetAttributes)
+	protected void buttonClicked(AttributeMap requestAttributes)
 	{
 		
 		//asset could be an item, could be a segmentlist
-		AssetType assetType = assetAttributes.getAttribute(Attribute.ASSET_TYPE);
+		AssetType assetType = requestAttributes.getAttribute(Attribute.ASSET_TYPE);
 		
 		log.debug("Asset type is " + assetType.toString());
 		
 		AttributeMap materialAttributes;
 		
 		if(assetType.equals(MayamAssetType.MATERIAL.getAssetType())){
-			materialAttributes = assetAttributes;
+			materialAttributes = requestAttributes;
 		}
 		else if(assetType.equals(MayamAssetType.PACKAGE.getAssetType())){
-			String materialID = (String) assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			materialAttributes = materialController.getMaterialAttributes(materialID); 
 		}
 		else {
@@ -88,10 +88,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		if (!isAO)
 		{
 
-			String outputFileName = (String) materialAttributes.getAttribute(Attribute.OP_FILENAME);
-			String buglocation = (String) materialAttributes.getAttribute(Attribute.VISUAL_BUG);
-			String timecodePosition = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
-			String timecodeColour = (String) materialAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
+			String outputFileName = (String) requestAttributes.getAttribute(Attribute.OP_FILENAME);
+			String buglocation = (String) requestAttributes.getAttribute(Attribute.VISUAL_BUG);
+			String timecodePosition = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
+			String timecodeColour = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
+			
 			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
@@ -103,7 +104,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			long taskID;
 			try
 			{
-				taskID = createExportTask(materialID, materialAttributes,getJobType());
+				taskID = createExportTask(materialID, requestAttributes,getJobType());
 			}
 			catch (MayamClientException e1)
 			{
@@ -166,7 +167,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			//set task to active state
 			try
 			{
-				AttributeMap task;task = taskController.getTask(taskID);
+				AttributeMap task;
+				task = taskController.getTask(taskID);
 				AttributeMap updateMap = taskController.updateMapForTask(task);
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
 				taskController.saveTask(updateMap);
@@ -203,10 +205,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		mule.initiateExportWorkflow(ie);
 	}
 
-	private long createExportTask(String materialID, AttributeMap materialAttributes, String jobType)
+	private long createExportTask(String materialID, AttributeMap requestAttributes, String jobType)
 			throws MayamClientException
 	{
-		return taskController.createExportTask(materialID, materialAttributes,jobType);
+		return taskController.createExportTask(materialID, requestAttributes,jobType);
 	}
 
 	private TCJobParameters jobParams(
