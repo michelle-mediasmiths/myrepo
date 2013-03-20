@@ -1,21 +1,22 @@
 package com.mediasmiths.mq.handlers.asset;
 
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamPreviewResults;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
-import com.mayam.wf.attributes.shared.type.TaskState;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class MaterialUpdateHandler extends UpdateAttributeHandler
 {
@@ -84,6 +85,11 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 						{
 							log.debug(String.format("Setting Archive Policy to %s", ARCHIVE_POLICY_AO));
 							currentAttributes.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO); // always set the ao policy for ao material
+
+							// now need to set the policy for the children.
+							String assetId = currentAttributes.getAttribute(Attribute.ASSET_ID);
+
+							updateMaterialAOChildren(assetType, assetId);
 						}
 						else
 						{
@@ -179,7 +185,34 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 			}
 		}
 	}
-	
+
+	private void updateMaterialAOChildren(final AssetType assetType, final String assetID)
+	{
+		try
+		{
+			log.debug("Update the children for " + assetType + " id: " + assetID);
+
+			List<AttributeMap> materials = tasksClient.assetApi().getAssetChildren(assetType, assetID, MayamAssetType.MATERIAL.getAssetType());
+
+			if (materials != null && materials.size() > 0)
+			{
+				for (AttributeMap material : materials)
+				{
+                    log.debug("Update AO Policy for " + material.getAttribute(Attribute.ASSET_ID));
+
+					material.setAttribute(Attribute.ARCHIVE_POLICY, ARCHIVE_POLICY_AO);
+
+					tasksClient.assetApi().updateAsset(material);
+				}
+				log.debug("Updated the children for " + assetType + " id: " + assetID);
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Unable to update child assets.");
+		}
+	}
+
 	@Inject
 	@Named("purge.presentation.flag.removed.days.default")
 	private int defaultPurgeTime;
