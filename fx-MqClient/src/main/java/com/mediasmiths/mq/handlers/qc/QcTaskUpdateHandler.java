@@ -133,6 +133,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			aen.setForTXDelivery(false);
 			aen.setJobName("");
 			Long taskId = (Long) currentAttributes.getAttribute(Attribute.TASK_ID);
+			aen.setTitle(currentAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 
 			if (taskId != null)
 			{
@@ -238,6 +239,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 				taskController.saveTask(updateMap);
+				sendQcFailedReorderEvent(currentAttributes);
 			}
 			catch (MayamClientException e)
 			{
