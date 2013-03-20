@@ -37,8 +37,8 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QCproblemwithTCMedia</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>URGENT ISSUE: Quarantined item in MAM JobId(%s), TitleId(%s), Title(%s)</subject>
-			<body>Cerify has found an issue with AssetId(%s) so MAM has quarantined it. Please resolve urgently.</body>
+			<subject>URGENT ISSUE: Quarantined item in MAM MaterID(%s), Title(%s)</subject>
+			<body>Cerify has found an issue with Title (%s), AssetId(%s) so MAM has quarantined it. Please resolve urgently.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
@@ -50,8 +50,10 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>An item has failed QC and requires re ordering JobId(%s), TitleId(%s), Title(%s)</subject>
-			<body>An item has been marked as requiring reorder ID: %s</body>
+			<subject>Auto QC Fail in MAM: Master ID (%s), Title(%s)</subject>
+			<body>Item called Title(%s), Master ID(%s) is on the Auto QC Fail worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.                                                                                                                                                                                                  
+			Dear Promo Producer, please check whether this failed item impacts your promo production work.
+			</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -214,6 +216,25 @@
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
 		<eventname>PreviewFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
+			<subject>Preview Fail Item in MAM: MediaId(%s) Title(%s)</subject>
+			<body>There is a new item on the Preview Fail worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
+			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
+		<eventname>PreviewPassedReorder</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Pass-Reorder Item in MAM: MediaId(%s) Title(%s)</subject>
 			<body>There is a new item on the Pass-Reorder worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
@@ -225,7 +246,6 @@
 				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -245,7 +265,7 @@
 				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>

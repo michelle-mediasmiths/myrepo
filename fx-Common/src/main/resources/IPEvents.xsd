@@ -294,7 +294,8 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:complexType name="tcNotification">
+	<xs:element name="tcNotification">
+    <xs:complexType>
         <xs:complexContent>
             <xs:extension base="fns:IPEvent">
                 <xs:sequence>
@@ -306,7 +307,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
+	</xs:element>
 
     <xs:complexType name="materialTransferForTCResponse">
         <xs:sequence>
@@ -342,8 +343,8 @@
         </xs:sequence>
     </xs:complexType>
 
-
-    <xs:complexType name="mediaPickupNotification">
+	<xs:element name="mediaPickupNotification">
+    <xs:complexType>
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
@@ -353,8 +354,10 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
-    <xs:complexType name="mediaPickupQuarantineNotification">
+	<xs:element name="mediaPickupQuarantineNotification">
+    <xs:complexType>
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
@@ -365,7 +368,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
+	</xs:element>
 
     <xs:complexType name="purgeNotification">
         <xs:complexContent>
@@ -397,14 +400,15 @@
             </xs:complexType>
     </xs:element>
 
-
-    <xs:complexType name="autoQCFailureNotification">
+	<xs:element name="autoQCFailureNotification">
+    <xs:complexType >
         <xs:complexContent>
             <xs:extension base="autoQCResultNotification">
                 <xs:sequence />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
     <xs:element name="autoQCPassNotification">
         <xs:complexType>
