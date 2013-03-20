@@ -222,7 +222,7 @@ public class MayamTaskController extends MayamController
 	}
 
 	
-	public long createExportTask(String materialID,AttributeMap exportButtonAttributes, String jobType) throws MayamClientException
+	public long createExportTask(String materialID,AttributeMap exportButtonAttributes, AttributeMap materialAttributes, String jobType) throws MayamClientException
 	{
 			
 		AttributeMap initialAttributes = client.createAttributeMap();
@@ -233,7 +233,7 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.OP_TYPE, jobType);
 		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY,exportButtonAttributes.getAttribute(Attribute.TASK_CREATED_BY));
 		
-		MayamAssetType assetType = MayamAssetType.fromString(exportButtonAttributes.getAttribute(Attribute.ASSET_TYPE).toString());
+		MayamAssetType assetType = MayamAssetType.MATERIAL;
 		return createTask(materialID,assetType, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
 	}
 	

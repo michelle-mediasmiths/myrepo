@@ -104,7 +104,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			long taskID;
 			try
 			{
-				taskID = createExportTask(materialID, requestAttributes,getJobType());
+				taskID = createExportTask(materialID, requestAttributes, materialAttributes,getJobType());
 			}
 			catch (MayamClientException e1)
 			{
@@ -205,10 +205,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		mule.initiateExportWorkflow(ie);
 	}
 
-	private long createExportTask(String materialID, AttributeMap requestAttributes, String jobType)
+	private long createExportTask(String materialID, AttributeMap requestAttributes, AttributeMap materialAttributes, String jobType)
 			throws MayamClientException
 	{
-		return taskController.createExportTask(materialID, requestAttributes,jobType);
+		return taskController.createExportTask(materialID, requestAttributes,materialAttributes,jobType);
 	}
 
 	private TCJobParameters jobParams(
