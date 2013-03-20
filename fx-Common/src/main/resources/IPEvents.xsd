@@ -370,8 +370,7 @@
     </xs:complexType>
 	</xs:element>
 
-	<xs:element name="purgeNotification">
-    <xs:complexType>
+    <xs:complexType name="purgeNotification">
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
@@ -383,7 +382,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    </xs:element>
 
     <xs:element name="manualPurge">
         <xs:complexType>
