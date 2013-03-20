@@ -1129,7 +1129,7 @@ public class MayamMaterialController extends MayamController
 				
 				client.assetApi().deleteAsset(
 						MayamAssetType.MATERIAL.getAssetType(),
-						assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
+						assetAttributes.getAttributeAsString(Attribute.ASSET_ID),gracePeriod);
 				
 				if (parentId != null) {
 					AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), parentId);
