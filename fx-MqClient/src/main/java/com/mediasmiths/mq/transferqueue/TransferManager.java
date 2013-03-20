@@ -222,6 +222,7 @@ public class TransferManager extends Daemon implements StoppableService
 					taskController.getTasksForAsset(MayamTaskListType.UNMATCHED_MEDIA, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetId);
 			
 			AttributeMap attributes = null;
+			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetId);;
 			
 			if (allUnmatchedTasks != null && allUnmatchedTasks.size() == 1)
 			{
@@ -249,14 +250,19 @@ public class TransferManager extends Daemon implements StoppableService
 				}
 			}
 
-			if (attributes != null)
+			if (attributes != null && assetAttributes != null)
 			{
-				final String format = getFormat(attributes);
+				final String format = getFormat(assetAttributes);
 				log.debug(String.format("Format returned was %s; now closing task", format));
 	
-				// close unmatched task
-				closeTask(attributes);
-	
+				TaskState state =  attributes.getAttribute(Attribute.TASK_STATE);
+				
+				if (state != null && !MayamTaskController.END_STATES.contains(state))
+				{
+					// close unmatched task
+					closeTask(attributes);
+				}
+				
 				//get the id of the asset being matched to
 				final String peerID = attributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
 				
