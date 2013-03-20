@@ -529,7 +529,7 @@ public class MayamPackageController extends MayamController
 		return returnCode;
 	}
 
-	public MayamClientErrorCode deletePackage(String presentationID)
+	public MayamClientErrorCode deletePackage(String presentationID, int gracePeriod)
 	{
 		SegmentList segmentList = null;
 		try
@@ -558,6 +558,7 @@ public class MayamPackageController extends MayamController
 				
 				try
 				{
+					log.warn("no grace period for segment lists");
 					client.segmentApi().deleteSegmentList(segmentList.getId());
 				}
 				catch (RemoteException e)

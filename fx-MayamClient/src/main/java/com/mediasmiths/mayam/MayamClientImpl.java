@@ -157,7 +157,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		else
 		{
-			return titleController.purgeTitle(title.getTitleID());
+			return titleController.purgeTitle(title.getTitleID(),0);
 		}
 	}
 
@@ -211,7 +211,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deleteMaterial(DeleteMaterial deleteMaterial)
 	{
-		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID());
+		return materialController.deleteMaterial(deleteMaterial.getMaterial().getMaterialID(),0);
 	}
 
 	/*
@@ -255,7 +255,7 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
 	{
-		return packageController.deletePackage(deletePackage.getPackage().getPresentationID());
+		return packageController.deletePackage(deletePackage.getPackage().getPresentationID(),0);
 	}
 
 	/**
@@ -1024,12 +1024,12 @@ public class MayamClientImpl implements MayamClient
 				if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
 				{
 					log.debug("purge title " + houseID);
-					titleController.purgeTitle(houseID);
+					titleController.purgeTitle(houseID,0);
 				}
 				else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 				{
 					log.debug("delete item " + houseID);
-					MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID);
+					MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID,0);
 					if (deleteMaterial == MayamClientErrorCode.MATERIAL_FIND_FAILED)
 					{
 						log.info("failed to find material for deletion, it may have already been deleted, closing purge candidate task");
@@ -1041,7 +1041,7 @@ public class MayamClientImpl implements MayamClient
 				else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 				{
 					log.debug("delete package " + houseID);
-					packageController.deletePackage(houseID);
+					packageController.deletePackage(houseID,0);
 				}
 				else
 				{

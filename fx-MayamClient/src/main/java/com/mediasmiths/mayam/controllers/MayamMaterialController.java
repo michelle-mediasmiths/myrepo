@@ -1098,7 +1098,7 @@ public class MayamMaterialController extends MayamController
 		return material;
 	}
 
-	public MayamClientErrorCode deleteMaterial(String materialID)
+	public MayamClientErrorCode deleteMaterial(String materialID, int gracePeriod)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		if (! isProtected(materialID))
@@ -1114,7 +1114,7 @@ public class MayamMaterialController extends MayamController
 					return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 				}
 				
-				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID);
+				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID,gracePeriod);
 				
 				String parentId = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 				
@@ -1138,7 +1138,7 @@ public class MayamMaterialController extends MayamController
 						List<AttributeMap> childAssets = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetId, MayamAssetType.MATERIAL.getAssetType());
 						if (childAssets == null || childAssets.isEmpty())
 						{
-							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId);
+							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId,gracePeriod);
 							log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
 						}
 						else if (childAssets.size() == 1)
@@ -1147,7 +1147,7 @@ public class MayamMaterialController extends MayamController
 							String childId = childAsset.getAttribute(Attribute.ASSET_ID);
 							if (childId != null && childId.equals(assetAttributes.getAttributeAsString(Attribute.ASSET_ID)))
 							{
-								client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId);
+								client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId,gracePeriod);
 								log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
 							}
 						}
@@ -1386,7 +1386,7 @@ public class MayamMaterialController extends MayamController
 				throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED, e);
 			}
 
-			deleteAssetsPackages(assetType, assetID, houseID);
+			deleteAssetsPackages(assetType, assetID, houseID,0);
 			
 			try
 			{
@@ -1404,7 +1404,7 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	private void deleteAssetsPackages(AssetType assetType, String assetID, String houseID)
+	private void deleteAssetsPackages(AssetType assetType, String assetID, String houseID, int gracePeriod)
 	{
 		try
 		{
@@ -1431,6 +1431,7 @@ public class MayamMaterialController extends MayamController
 				log.debug(String.format("Deleting segment %s", segmentList.getId()));
 				try
 				{
+					log.warn("no grace period for segment lists");
 					client.segmentApi().deleteSegmentList(segmentList.getId());
 				}
 				catch (RemoteException e)

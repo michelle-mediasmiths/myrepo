@@ -280,14 +280,14 @@ public class MayamMaterialControllerTest {
 		} catch (RemoteException e) {
 			fail();
 		}
-		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID");
+		MayamClientErrorCode returnCode = controller.deleteMaterial("materialID",0);
 		assertEquals(returnCode, MayamClientErrorCode.MATERIAL_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deleteMaterialSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.deleteMaterial(MATERIALID);
+		MayamClientErrorCode returnCode = controller.deleteMaterial(MATERIALID,0);
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

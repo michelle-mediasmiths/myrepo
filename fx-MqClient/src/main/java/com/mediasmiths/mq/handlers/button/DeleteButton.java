@@ -31,22 +31,27 @@ public class DeleteButton extends ButtonClickHandler
 	@Named("placeholderManagement.serialiser")
 	private JAXBSerialiser serialiser;
 	
+	@Inject
+	@Named("manual.delete.grace.period.seconds")
+	private int gracePeriod = 86400;
+	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
 	{
 		String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		AssetType type = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
 		log.info(String.format("Delete Requested for asset %s of type %s",houseID,type.toString()));
+		log.info(String.format("Grace Period is %d seconds",gracePeriod));
 		
 		if(type==MayamAssetType.MATERIAL.getAssetType()){
-			materialController.deleteMaterial(houseID);
+			materialController.deleteMaterial(houseID, gracePeriod);
 			sendManualItemPurgeEvent(messageAttributes);
 		}
 		else if(type==MayamAssetType.TITLE.getAssetType()){
-			titlecontroller.purgeTitle(houseID);			
+			titlecontroller.purgeTitle(houseID, gracePeriod);			
 		}
 		else if(type==MayamAssetType.PACKAGE.getAssetType()){		
-			packageController.deletePackage(houseID);
+			packageController.deletePackage(houseID, gracePeriod);
 		}
 		
 	}

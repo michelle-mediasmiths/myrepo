@@ -345,21 +345,21 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 		} catch (RemoteException e) {
 			fail();
 		}
-		MayamClientErrorCode returnCode = controller.purgeTitle("titleid");
+		MayamClientErrorCode returnCode = controller.purgeTitle("titleid",0);
 		assertEquals(returnCode, MayamClientErrorCode.TITLE_DELETE_FAILED);
 	}
 	
 	@Test
 	public void deleteTitleNull() 
 	{
-		MayamClientErrorCode returnCode = controller.purgeTitle(null);
+		MayamClientErrorCode returnCode = controller.purgeTitle(null,0);
 		assertEquals(returnCode, MayamClientErrorCode.TITLE_UNAVAILABLE);
 	}
 	
 	@Test
 	public void deletePackageSuccess() 
 	{
-		MayamClientErrorCode returnCode = controller.purgeTitle("titleid");
+		MayamClientErrorCode returnCode = controller.purgeTitle("titleid",0);
 		assertEquals(returnCode, MayamClientErrorCode.SUCCESS);
 	}
 }

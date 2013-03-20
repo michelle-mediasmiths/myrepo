@@ -617,7 +617,7 @@ public class MayamTitleController extends MayamController{
 		return returnCode;
 	}
 	
-	public MayamClientErrorCode purgeTitle(String titleID)
+	public MayamClientErrorCode purgeTitle(String titleID, int gracePeriod)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		
@@ -625,15 +625,7 @@ public class MayamTitleController extends MayamController{
 		
 		if (isProtected(titleID)) 
 		{
-//			try
-//			{
-//				taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.TITLE,titleID, 30);
-//			}
-//			catch (MayamClientException e)
-//			{
-//				log.error("error creating purage candidate task",e);
-//				returnCode = e.getErrorcode();
-//			}
+			log.warn("ignoring delete request for protected title "+titleID);
 		}
 		else {
 			try {
@@ -652,7 +644,7 @@ public class MayamTitleController extends MayamController{
 				}
 								
 				//Delete the asset
-				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID);
+				client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetID, gracePeriod);
 				
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ titleID,e);
