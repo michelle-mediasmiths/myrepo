@@ -53,21 +53,7 @@ public class ConformJobHandler extends JobHandler
 				item = materialController.getMaterialByAssetId(assetID);
 				materialID = item.getAttributeAsString(Attribute.HOUSE_ID);
 				log.info(String.format("Found item with house id %s", materialID));
-				
-				// Retrieve and close the Fix and Stitch task
-				List<AttributeMap> fixAndStitchTasks = taskController.getOpenTasksForAsset(MayamTaskListType.FIX_STITCH_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
-				if (fixAndStitchTasks != null && fixAndStitchTasks.size() > 0)
-				{
-					for (AttributeMap task: fixAndStitchTasks)
-					{
-						TaskState state = task.getAttribute(Attribute.TASK_STATE);
-						if (state != null && (state.equals(TaskState.SYS_WAIT) || state.equals(TaskState.ACTIVE) || state.equals(TaskState.OPEN)))
-						{
-							task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-							taskController.updateMapForTask(task);
-						}
-					}
-				}
+			
 			}
 			catch (MayamClientException mce)
 			{
@@ -98,10 +84,12 @@ public class ConformJobHandler extends JobHandler
 
 			if (numRevisions == 0)
 			{
+				closeFixAndStitch(materialID);
 				log.error("No revisions found for asset that has just had a conform finished against it, this doesn't seem right");
 			}
 			else if (numRevisions == 1)
 			{
+				closeFixAndStitch(materialID);
 				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
 			else
@@ -134,6 +122,7 @@ public class ConformJobHandler extends JobHandler
 				if (!segmentReassociationErrors)
 				{
 					deleteOldRevisions(allRevisionsExceptHighest);
+					closeFixAndStitch(materialID);
 				}
 				else
 				{
@@ -153,6 +142,31 @@ public class ConformJobHandler extends JobHandler
 				}
 			}
 
+		}
+	}
+	
+	private void closeFixAndStitch(String materialID)
+	{
+		// Retrieve and close the Fix and Stitch task
+		try {
+			List<AttributeMap> fixAndStitchTasks = taskController.getOpenTasksForAsset(MayamTaskListType.FIX_STITCH_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
+	
+			if (fixAndStitchTasks != null && fixAndStitchTasks.size() > 0)
+			{
+				for (AttributeMap task: fixAndStitchTasks)
+				{
+					TaskState state = task.getAttribute(Attribute.TASK_STATE);
+					if (state != null && (state.equals(TaskState.SYS_WAIT) || state.equals(TaskState.ACTIVE) || state.equals(TaskState.OPEN)))
+					{
+						AttributeMap updateMap = taskController.updateMapForTask(task);
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+						taskController.saveTask(updateMap);
+					}
+				}
+			}
+		} catch (MayamClientException e) {
+			log.error("error closing fix and stitch task for task : " + materialID, e);
+			e.printStackTrace();
 		}
 	}
 
