@@ -2,8 +2,8 @@ package com.mediasmiths.mayam.util;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
-import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
@@ -188,31 +188,12 @@ public class MediaExchangeProgrammeOutputBuilder
 			}
 			else
 			{
-				EncodingType encoding = audioTracks.get(0).getEncoding();
+		        AudioListType encoding = getAudioEncoding(audioTracks);
 
 		        log.debug("Audio encoding: " + encoding);
 
-				if (encoding != null)
-				{
-					switch (encoding)
-					{
-						case DOLBY_E:
-							programmeDetail.setAudioType(AudioListType.DIGITAL);
-							break;
-						case LINEAR:
-							programmeDetail.setAudioType(AudioListType.STEREO);
-							break;
-						default:
-							log.error("Encoding is not known:  " + encoding);
-							break;
-		
-					}
-					log.debug("Audio set to: " + programmeDetail.getAudioType());
-				}
-				else
-				{
-					log.error("null encoding on audio track information!");
-				}
+				programmeDetail.setAudioType(encoding);
+
 			}
 		}
 		else
@@ -223,7 +204,11 @@ public class MediaExchangeProgrammeOutputBuilder
 		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
 		{
 			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
-			programmeDetail.setEOM(SegmentUtil.calculateEOM(pack.getSegmentList().getEntries().get(0).getDuration().toSmpte(), Timecode.getInstance(pack.getSegmentList().getEntries().get(0).getIn().toSmpte(), Framerate.HZ_25)));
+			Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
+			programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
+			                                                Timecode.getInstance(lastSegment.getIn().toSmpte(),
+			                                                                     Framerate.HZ_25)));
+
 			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
 
 			log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," + programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
@@ -251,8 +236,7 @@ public class MediaExchangeProgrammeOutputBuilder
 				XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 				
 				programmeDetail.setDueDate(xmlDate);
-				xmlDate.setYear(xmlDate.getYear() + 3);
-				programmeDetail.setPurgeDate(xmlDate);
+				xmlDate.setYear(xmlDate.getMonth() + 3);
 			}
 			catch (DatatypeConfigurationException e)
 			{
@@ -296,4 +280,40 @@ public class MediaExchangeProgrammeOutputBuilder
 			}
 		}
 	}
+
+
+	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
+	{
+		if (audioTracks.size()==1)
+		{
+			return AudioListType.MONO;
+		}
+		else if (audioTracks.size() == 2)
+		{
+			return AudioListType.STEREO;
+		}
+		else
+		{
+			return AudioListType.SURROUND;
+		}
+
+	}
+
+
+	private static XMLGregorianCalendar getDateFromXMLString(String xml)
+	{
+		try
+		{
+			if (xml == null)
+				throw new Exception("Null XML field as date");
+
+			return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
+		}
+		catch (Throwable e)
+		{
+			log.error("error setting target date on programme detail for package " + xml, e);
+		}
+		return null;
+	}
+
 }
