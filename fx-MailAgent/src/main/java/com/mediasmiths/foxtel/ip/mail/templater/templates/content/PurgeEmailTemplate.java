@@ -20,7 +20,7 @@ public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGen
 		PurgeNotification ajf = (PurgeNotification) obj;
 		MailTemplate t = new MailTemplate();
 
-		t.setSubject(String.format(getSubject(),ajf.getMaterialId(), ajf.getTitleID()));
+		t.setSubject(String.format(getSubject(), ajf.getTitleID()));
 		t.setBody(getBody() + " at " + ajf.getTime().toString());
 		t.setEmailaddresses(getEmailaddresses());
 		return t;

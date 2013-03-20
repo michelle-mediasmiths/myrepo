@@ -370,7 +370,8 @@
     </xs:complexType>
 	</xs:element>
 
-    <xs:complexType name="purgeNotification">
+	<xs:element name="purgeNotification">
+    <xs:complexType>
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
@@ -382,6 +383,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
     <xs:element name="manualPurge">
         <xs:complexType>
@@ -434,7 +436,8 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="txDelivered">
+	<xs:element name="txDelivered">
+    <xs:complexType>
             <xs:complexContent>
                 <xs:extension base="IPEvent">
                     <xs:sequence>
@@ -445,6 +448,7 @@
                 </xs:extension>
             </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
     <xs:simpleType name="PreviewStatus">
         <xs:annotation>

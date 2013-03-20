@@ -24,7 +24,7 @@ public class MediaPickUpNotificationEmailTemplate extends MailTemplate implement
 		t.setBody(getBody());
 		t.setEmailaddresses(getEmailaddresses());
 		t.setSubject(String.format(getSubject(), m.getFilelocation()));
-
+		t.setBody(String.format(getBody(), m.getFilelocation()));
 		return t;
 	}
 

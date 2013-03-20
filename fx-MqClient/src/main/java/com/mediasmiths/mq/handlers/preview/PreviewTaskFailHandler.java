@@ -58,7 +58,7 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 			pf.setAssetId(assetId);
 
-			eventsService.saveEvent("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", pf);
+			eventsService.saveEvent("http://www.foxtel.com.au/ip/qc", "PreviewFailed", pf);
 
 		}
 	}

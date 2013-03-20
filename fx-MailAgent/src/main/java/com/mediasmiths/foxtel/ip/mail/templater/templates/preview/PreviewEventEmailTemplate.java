@@ -23,8 +23,10 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 		PreviewEventDetail pe = (PreviewEventDetail)obj;
 
 		t.setEmailaddresses(getEmailaddresses());
-		t.setBody(getBody());
+		
 		t.setSubject(String.format(getSubject(), pe.getMasterId(), pe.getTitle()));
+		
+		t.setBody(getBody());
 
 		return t;
 

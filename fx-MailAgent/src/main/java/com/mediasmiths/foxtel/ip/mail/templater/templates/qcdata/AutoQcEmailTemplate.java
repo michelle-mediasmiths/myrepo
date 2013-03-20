@@ -22,8 +22,8 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 		AutoQCFailureNotification aqce = (AutoQCFailureNotification) obj;
 
 		t.setEmailaddresses(getEmailaddresses());
-		t.setSubject(String.format(getSubject(), aqce.getJobId(), aqce.getAssetId(), aqce.getTitle()));
-		t.setBody(String.format(getBody(),  aqce.getAssetId()));
+		t.setSubject(String.format(getSubject(), aqce.getAssetId(), aqce.getTitle()));
+		t.setBody(String.format(getBody(), aqce.getTitle(), aqce.getAssetId()));
 
 		return t;
 

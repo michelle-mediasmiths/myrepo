@@ -108,16 +108,16 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
 					break;
 				case TITLE_DOES_NOT_EXIST:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
+//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
 					break;
 				case MATERIAL_DOES_NOT_EXIST:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 				case UNEXPECTED_DELIVERY_VERSION:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "OutOfOrder", pickupNotification);
+//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "OutOfOrder", pickupNotification);
 					break;
 				default:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 			}
 		}
