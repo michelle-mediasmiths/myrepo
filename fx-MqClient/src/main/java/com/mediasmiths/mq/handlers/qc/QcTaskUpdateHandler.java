@@ -131,15 +131,6 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			AutoQCFailureNotification aen = new AutoQCFailureNotification();
 			aen.setAssetId(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			aen.setForTXDelivery(false);
-			aen.setJobName("");
-			Long taskId = (Long) currentAttributes.getAttribute(Attribute.TASK_ID);
-			aen.setTitle(currentAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
-
-			if (taskId != null)
-			{
-				aen.setTaskID(taskId.longValue());
-			}
-
 			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 
 			String eventName = QC_FAILED_RE_ORDER;
