@@ -118,26 +118,20 @@ public class ConformJobHandler extends JobHandler
 							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()))
 							{
 								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
-								long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
-								
-								AttributeMap newTask = taskController.getTask(taskID);
-								newTask.putAll(item);
-								Calendar date = Calendar.getInstance();
+								int numberOfDays = 100;
+	
 								if (contentType.equals(MayamContentTypes.EPK.toString())) 
 								{
 									log.info("Attempting to set purge time for associated content of " + associatedPurgeTime);
-									date.add(Calendar.DAY_OF_MONTH, associatedPurgeTime);
-									newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-									newTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+									numberOfDays = associatedPurgeTime;
 								}
 								else if (contentType.equals(MayamContentTypes.EDIT_CLIPS.toString())) 
 								{
 									log.info("Attempting to set purge time for edit clips content of " + associatedPurgeTime);
-									date.add(Calendar.DAY_OF_MONTH,editClipsPurgeTime);
-									newTask.setAttribute(Attribute.OP_DATE, date.getTime());
-									newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+									numberOfDays = editClipsPurgeTime;
+		
 								}
-								taskController.saveTask(newTask);
+								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
 								log.info("New Purge Candidate Task created");
 							}
 							else {
