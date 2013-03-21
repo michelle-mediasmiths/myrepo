@@ -150,6 +150,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			if (pack.getTitleAttributes() != null)
 			{
 				programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
+
 				programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
 
 				String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
@@ -158,6 +159,13 @@ public class MediaExchangeProgrammeOutputBuilder
 					programmeDetail.setDescription("");
 				else
 				    programmeDetail.setDescription(StringUtils.left(desc, 127));
+
+				if (programmeDetail.getTitle() == null)
+				{
+					log.warn("There is not episode title - using series title " + desc);
+
+					programmeDetail.setTitle(desc);
+				}
 
 				log.debug("Title: " + programmeDetail.getTitle() + " : " + desc);
 
@@ -363,9 +371,17 @@ public class MediaExchangeProgrammeOutputBuilder
 		try
 		{
 			if (xml == null)
-				throw new Exception("Null XML field as date " + xml);
+			{
+				log.error("Null XML field as date " + xml + " ..setting as today");
 
-			return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
+				return DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+
+			}
+			else
+			{
+
+				return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
+			}
 		}
 		catch (Throwable e)
 		{

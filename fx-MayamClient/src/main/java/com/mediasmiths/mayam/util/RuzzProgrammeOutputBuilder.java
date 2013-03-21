@@ -191,12 +191,19 @@ public class RuzzProgrammeOutputBuilder
 
 	private static XMLGregorianCalendar getDateFromXMLString(String xml)
 	{
+
 		try
 		{
 			if (xml == null)
-				throw new Exception("Null XML field as date " + xml);
+			{
+				log.error("Null XML field as date - using today" + xml);
 
-			return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
+				return DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			}
+			else
+			{
+				return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
+			}
 		}
 		catch (Throwable e)
 		{
