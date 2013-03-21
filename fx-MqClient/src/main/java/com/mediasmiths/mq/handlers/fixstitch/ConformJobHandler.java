@@ -42,6 +42,10 @@ public class ConformJobHandler extends JobHandler
 	@Named("purge.content.type.change.days.publicity")
 	private int publicityPurgeTime;
 	
+	@Inject
+	@Named("purge.presentation.flag.removed.days.default")
+	private int defaultPurgeTime;
+	
 	@Override
 	public void process(Job jobMessage)
 	{
@@ -121,7 +125,7 @@ public class ConformJobHandler extends JobHandler
 							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()) || contentType.equals(MayamContentTypes.PUBLICITY.toString()))
 							{
 								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
-								int numberOfDays = 100;
+								int numberOfDays = defaultPurgeTime;
 	
 								if (contentType.equals(MayamContentTypes.EPK.toString())) 
 								{

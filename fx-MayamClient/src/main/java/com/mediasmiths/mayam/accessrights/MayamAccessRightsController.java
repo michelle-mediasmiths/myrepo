@@ -200,6 +200,10 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			{
 				contentType = "Unmatched";
 			}
+			else if (contentFormat.toUpperCase().equals(MayamContentTypes.PUBLICITY))
+			{
+				contentType = "Publicity";
+			}
 		}
 		else if (contentCategory != null)
 		{
