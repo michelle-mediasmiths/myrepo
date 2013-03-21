@@ -363,7 +363,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		try
 		{
 			if (xml == null)
-				throw new Exception("Null XML field as date");
+				throw new Exception("Null XML field as date " + xml);
 
 			return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
 		}
