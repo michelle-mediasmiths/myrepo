@@ -40,7 +40,7 @@ public class ConformJobHandler extends JobHandler
 	
 	@Inject
 	@Named("purge.content.type.change.days.publicity")
-	private int publictyPurgeTime;
+	private int publicityPurgeTime;
 	
 	@Override
 	public void process(Job jobMessage)
@@ -136,8 +136,8 @@ public class ConformJobHandler extends JobHandler
 								}
 								else if (contentType.equals(MayamContentTypes.PUBLICITY.toString())) 
 								{
-									log.info("Attempting to set purge time for publicity content of " + publictyPurgeTime);
-									numberOfDays = publictyPurgeTime;
+									log.info("Attempting to set purge time for publicity content of " + publicityPurgeTime);
+									numberOfDays = publicityPurgeTime;
 								}
 								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
 								log.info("New Purge Candidate Task created");
@@ -157,7 +157,6 @@ public class ConformJobHandler extends JobHandler
 				{
 					log.error("Exception thrown while creating new Purge Candidate Task", e);
 				}
-						
 				closeFixAndStitch(materialID);
 				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
