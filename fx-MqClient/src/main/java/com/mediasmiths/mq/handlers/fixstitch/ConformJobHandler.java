@@ -1,10 +1,13 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
+import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -17,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mq.handlers.JobHandler;
@@ -25,7 +29,15 @@ public class ConformJobHandler extends JobHandler
 {
 
 	private final static Logger log = Logger.getLogger(ConformJobHandler.class);
-
+	
+	@Inject
+	@Named("purge.content.type.change.days.editclips")
+	private int editClipsPurgeTime;
+	
+	@Inject
+	@Named("purge.content.type.change.days.associated")
+	private int associatedPurgeTime;
+	
 	@Override
 	public void process(Job jobMessage)
 	{
@@ -89,6 +101,59 @@ public class ConformJobHandler extends JobHandler
 			}
 			else if (numRevisions == 1)
 			{
+				try
+				{
+					// If this is the first revision and not a compliance item then create
+					// purge candidate list for associated and edit clips
+					if (item != null)
+					{
+						String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
+						String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
+						List<AttributeMap> complianceEditTasks = taskController.getTasksForAsset(MayamTaskListType.COMPLIANCE_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetID);
+						List<AttributeMap> complianceLoggingTasks = taskController.getTasksForAsset(MayamTaskListType.COMPLIANCE_LOGGING, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetID);
+						
+						if ((complianceEditTasks == null || complianceEditTasks.isEmpty()) && (complianceLoggingTasks == null || complianceLoggingTasks.isEmpty()))
+						{
+							log.info("No compliance tasks found for asset, checking content type to see if Purge Candidate required");
+							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()))
+							{
+								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
+								int numberOfDays = 100;
+	
+								if (contentType.equals(MayamContentTypes.EPK.toString())) 
+								{
+									log.info("Attempting to set purge time for associated content of " + associatedPurgeTime);
+									numberOfDays = associatedPurgeTime;
+								}
+								else if (contentType.equals(MayamContentTypes.EDIT_CLIPS.toString())) 
+								{
+									log.info("Attempting to set purge time for edit clips content of " + associatedPurgeTime);
+									numberOfDays = editClipsPurgeTime;
+		
+								}
+								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
+								log.info("New Purge Candidate Task created");
+							}
+							else {
+								log.info("Content not of type edit clips or associated, no purge candidate task required. Content Type = " + contentType);
+							}
+						}
+						else {
+							log.info("Compliance tasks found for asset, no purge candidate task required.");
+							log.info("No of Compliance Edit tasks : " + complianceEditTasks.size());
+							log.info("No of Compliance Logging tasks : " + complianceLoggingTasks.size());
+						}
+					}
+				}
+				catch (MayamClientException e)
+				{
+					log.error("Exception thrown while creating new Purge Candidate Task", e);
+				}
+				catch (RemoteException re)
+				{
+					log.error("Exception thrown while retrieving new Purge Candidate Task", re);
+				}
+				
 				closeFixAndStitch(materialID);
 				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
