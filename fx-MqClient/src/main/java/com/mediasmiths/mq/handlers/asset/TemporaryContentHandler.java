@@ -37,7 +37,7 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 				// - Content Type changed to “Associated” - Item added to Purge candidate if not already, expiry date set as 90 days
 				// - Content Type set to "Edit Clips" - Item added to purge list if not already there and expiry set for 7 days
 				String contentType = currentAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-				if (contentType.equals(MayamContentTypes.EPK) || contentType.equals(MayamContentTypes.EDIT_CLIPS)) 
+				if (contentType.equals(MayamContentTypes.EPK) || contentType.equals(MayamContentTypes.EDIT_CLIPS) || contentType.equals(MayamContentTypes.PUBLICITY)) 
 				{
 					AttributeMap filterEqualities = tasksClient.createAttributeMap();
 					filterEqualities.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.toString());
@@ -65,6 +65,12 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 								task.setAttribute(Attribute.OP_DATE, date.getTime());
 								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							}
+							else if (contentType.equals(MayamContentTypes.PUBLICITY)) 
+							{
+								date.add(Calendar.DAY_OF_MONTH, publicityPurgeTime);
+								task.setAttribute(Attribute.OP_DATE, date.getTime());
+								task.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+							}
 							taskController.saveTask(task);
 						}
 					}
@@ -86,6 +92,12 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 						}
+						else if (contentType.equals(MayamContentTypes.PUBLICITY)) 
+						{
+							date.add(Calendar.DAY_OF_MONTH,publicityPurgeTime);
+							newTask.setAttribute(Attribute.OP_DATE, date.getTime());
+							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+						}
 						taskController.saveTask(newTask);
 					}
 				}
@@ -97,12 +109,17 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 		}
 	}
 
+	@Inject
 	@Named("purge.content.type.change.days.editclips")
 	private int editClipsPurgeTime;
 	
 	@Inject
 	@Named("purge.content.type.change.days.associated")
 	private int associatedPurgeTime;
+	
+	@Inject
+	@Named("purge.content.type.change.days.associated")
+	private int publicityPurgeTime;
 	
 	@Override
 	public String getName()

@@ -175,6 +175,10 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 							{
 								numberOfDays = editClipsPurgeTime;
 							}
+							else if (contentType.equals(MayamContentTypes.PUBLICITY))
+							{
+								numberOfDays = publicityPurgeTime;
+							}
 						}
 						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);	
 					}
@@ -224,6 +228,10 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 	@Inject
 	@Named("purge.presentation.flag.removed.days.associated")
 	private int associatedPurgeTime;
+	
+	@Inject
+	@Named("purge.presentation.flag.removed.days.publicity")
+	private int publicityPurgeTime;
 
 	@Override
 	public String getName()
