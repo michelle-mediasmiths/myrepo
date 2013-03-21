@@ -24,7 +24,7 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>CerifyQCError</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>QC Server Issue: MaterID(%s), Title(%s)</subject>
+			<subject>QC Server Issue: MasterID(%s), Title(%s)</subject>
 			<body>Cerify has not processed this item. Please resolve the cause of issue.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
@@ -37,7 +37,7 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QCproblemwithTCMedia</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>URGENT ISSUE: Quarantined item in MAM MaterID(%s), Title(%s)</subject>
+			<subject>URGENT ISSUE: Quarantined item in MAM MasterID(%s), Title(%s)</subject>
 			<body>Cerify has found an issue with Title (%s), AssetId(%s) so MAM has quarantined it. Please resolve urgently.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
@@ -108,7 +108,7 @@
 		<eventname>CaptionProxySuccess</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
 			<subject>MasterId(%s) TitleId(%s). Caption proxy item sent to external location</subject>
-			<body>Item is located at the export folder.</body>
+			<body>Item is located %s.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -130,7 +130,7 @@
         <eventname>ComplianceProxySuccess</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
             <subject>MasterId(%s) Title(%s). Compliance proxy item sent to external location</subject>
-            <body>Item is located at the export folder.</body>
+            <body>Item is located %s.</body>
             <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
@@ -152,7 +152,7 @@
 		<eventname>ClassificationProxySuccess</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
 			<subject>MasterId(%s) Title(%s). Classification proxy item sent to external location</subject>
-			<body>Item is located at the export folder.</body>
+			<body>Item is located %s.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -184,8 +184,8 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>TCFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>TC Server Issue: MediaId(%s) Title(%s)</subject>
-			<body>Rhozet has not processed this item. Please resolve the cause of issue.</body>
+			<subject>TX transcode failed: MasterId(%s) Title(%s)</subject>
+			<body>Item remains on "send to TX" list and has not transcoded and has not transfered to play out. Please resolve URGENTLY.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>

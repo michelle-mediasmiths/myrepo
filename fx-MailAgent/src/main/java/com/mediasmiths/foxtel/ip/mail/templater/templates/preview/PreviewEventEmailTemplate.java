@@ -2,7 +2,7 @@ package com.mediasmiths.foxtel.ip.mail.templater.templates.preview;
 
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
-import com.mediasmiths.foxtel.ip.common.events.PreviewEventDetail;
+import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 
 public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -11,7 +11,7 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 	public boolean handles(Object obj)
 	{
 
-		return obj instanceof PreviewEventDetail;
+		return obj instanceof PreviewFailed;
 	}
 
 	@Override
@@ -20,11 +20,11 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 
 		MailTemplate t = new MailTemplate();
 
-		PreviewEventDetail pe = (PreviewEventDetail)obj;
+		PreviewFailed pe = (PreviewFailed)obj;
 
 		t.setEmailaddresses(getEmailaddresses());
 		
-		t.setSubject(String.format(getSubject(), pe.getMasterId(), pe.getTitle()));
+		t.setSubject(String.format(getSubject(), pe.getAssetId(), pe.getTitle()));
 		
 		t.setBody(getBody());
 

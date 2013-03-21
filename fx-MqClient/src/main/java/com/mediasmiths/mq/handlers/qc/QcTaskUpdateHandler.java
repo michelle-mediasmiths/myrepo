@@ -14,7 +14,7 @@ import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamAssetType;
@@ -128,17 +128,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	{
 		try
 		{
-			AutoQCErrorNotification aen = new AutoQCErrorNotification();
+			AutoQCFailureNotification aen = new AutoQCFailureNotification();
 			aen.setAssetId(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			aen.setForTXDelivery(false);
-			aen.setJobName("");
-			Long taskId = (Long) currentAttributes.getAttribute(Attribute.TASK_ID);
-
-			if (taskId != null)
-			{
-				aen.setTaskID(taskId.longValue());
-			}
-
 			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 
 			String eventName = QC_FAILED_RE_ORDER;
@@ -238,6 +230,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 				taskController.saveTask(updateMap);
+				sendQcFailedReorderEvent(currentAttributes);
 			}
 			catch (MayamClientException e)
 			{
