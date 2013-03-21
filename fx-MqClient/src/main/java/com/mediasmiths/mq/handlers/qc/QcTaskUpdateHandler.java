@@ -14,7 +14,7 @@ import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
-import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.MayamAssetType;
