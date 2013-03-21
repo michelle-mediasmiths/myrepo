@@ -149,9 +149,15 @@ public class MediaExchangeProgrammeOutputBuilder
 		{
 			programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
 			programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
-			programmeDetail.setDescription(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE), 127));
 
-			log.debug("Title: " + programmeDetail.getTitle() + " : " + programmeDetail.getEpisodeNumber());
+			String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+
+			if (desc == null)
+				programmeDetail.setDescription("");
+			else
+			    programmeDetail.setDescription(StringUtils.left(desc, 127));
+
+			log.debug("Title: " + programmeDetail.getTitle() + " : " + desc);
 
 			StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
 
@@ -222,7 +228,7 @@ public class MediaExchangeProgrammeOutputBuilder
 
 		log.debug("Resolution: " + programmeDetail.getResolution());
 
-		Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_NEXT);
+		Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
 
 		log.debug(" Date set to: " + targetDate);
 
@@ -236,7 +242,7 @@ public class MediaExchangeProgrammeOutputBuilder
 				XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 				
 				programmeDetail.setDueDate(xmlDate);
-				xmlDate.setYear(xmlDate.getMonth() + 3);
+				xmlDate.setMonth(xmlDate.getMonth() + 3);
 			}
 			catch (DatatypeConfigurationException e)
 			{
