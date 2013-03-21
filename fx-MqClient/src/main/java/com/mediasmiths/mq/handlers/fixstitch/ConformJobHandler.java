@@ -40,7 +40,7 @@ public class ConformJobHandler extends JobHandler
 	
 	@Inject
 	@Named("purge.content.type.change.days.publicity")
-	private int publicityPurgeTime;
+	private int publictyPurgeTime;
 	
 	@Override
 	public void process(Job jobMessage)
@@ -156,6 +156,10 @@ public class ConformJobHandler extends JobHandler
 				catch (MayamClientException e)
 				{
 					log.error("Exception thrown while creating new Purge Candidate Task", e);
+				}
+				catch (RemoteException re)
+				{
+					log.error("Exception thrown while retrieving new Purge Candidate Task", re);
 				}
 				
 				closeFixAndStitch(materialID);
