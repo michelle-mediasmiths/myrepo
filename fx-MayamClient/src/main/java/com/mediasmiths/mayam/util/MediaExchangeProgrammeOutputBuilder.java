@@ -14,6 +14,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTrack
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
+import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.commons.lang.StringUtils;
@@ -139,130 +140,140 @@ public class MediaExchangeProgrammeOutputBuilder
 
 	private static Programme.Detail getProgrammeDetail(FullProgrammePackageInfo pack)
 	{
-		Programme.Detail programmeDetail = new Programme.Detail();
-
-		programmeDetail.setEXTCLIPUMID(pack.getPackageId());
-
-		log.debug("Setting PackageId: " + pack.getPackageId());
-
-		if (pack.getTitleAttributes() != null)
+		try
 		{
-			programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
-			programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
+			Programme.Detail programmeDetail = new Programme.Detail();
 
-			String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+			programmeDetail.setEXTCLIPUMID(pack.getPackageId());
 
-			if (desc == null)
-				programmeDetail.setDescription("");
-			else
-			    programmeDetail.setDescription(StringUtils.left(desc, 127));
+			log.debug("Setting PackageId: " + pack.getPackageId());
 
-			log.debug("Title: " + programmeDetail.getTitle() + " : " + desc);
-
-			StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
-
-			if (channels != null && channels.size() > 0)
+			if (pack.getTitleAttributes() != null)
 			{
-				log.debug("Market: " + channels.get(0));
-				programmeDetail.setMARKET(channels.get(0));
+				programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
+				programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
+
+				String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+
+				if (desc == null)
+					programmeDetail.setDescription("");
+				else
+				    programmeDetail.setDescription(StringUtils.left(desc, 127));
+
+				log.debug("Title: " + programmeDetail.getTitle() + " : " + desc);
+
+				StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
+
+				if (channels != null && channels.size() > 0)
+				{
+					log.debug("Market: " + channels.get(0));
+					programmeDetail.setMARKET(channels.get(0));
+				}
+				else
+				{
+					log.warn("Producing Programme type for package with empty channels list! package " +pack.getPackageId());
+				}
 			}
 			else
 			{
-				log.warn("Producing Programme type for package with empty channels list! package " +pack.getPackageId());
+				log.warn("Producing Programme output with empty title details. Package : " + pack.getPackageId());
 			}
-		}
-		else
-		{
-			log.warn("Producing Programme output with empty title details. Package : " + pack.getPackageId());
-		}
-		
-		if (pack.getMaterialAttributes() != null)
-		{
-			programmeDetail.setAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
 
-			log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
-			
-			String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
-			programmeDetail.setSUPPLIER(supplierId);
-
-			log.debug("Supplier id: " + supplierId);
-			
-			AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
-			if (audioTracks == null || audioTracks.size() == 0)
+			if (pack.getMaterialAttributes() != null)
 			{
-				log.error("no audio tracks found when processing package " + pack.getPackageId());
+				MayamAspectRatios aspectRatio = pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO);
+
+				programmeDetail.setAspectRatio(aspectRatio.toString());
+
+				log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+
+				String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
+				programmeDetail.setSUPPLIER(supplierId);
+
+				log.debug("Supplier id: " + supplierId);
+
+				AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+				if (audioTracks == null || audioTracks.size() == 0)
+				{
+					log.error("no audio tracks found when processing package " + pack.getPackageId());
+				}
+				else
+				{
+			        AudioListType encoding = getAudioEncoding(audioTracks);
+
+			        log.debug("Audio encoding: " + encoding);
+
+					programmeDetail.setAudioType(encoding);
+
+				}
 			}
 			else
 			{
-		        AudioListType encoding = getAudioEncoding(audioTracks);
-
-		        log.debug("Audio encoding: " + encoding);
-
-				programmeDetail.setAudioType(encoding);
-
+				log.warn("Producing Programme output with empty material details. Package : " + pack.getPackageId());
 			}
-		}
-		else
-		{
-			log.warn("Producing Programme output with empty material details. Package : " + pack.getPackageId());
-		}
-		
-		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
-		{
-			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
-			Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
-			programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
-			                                                Timecode.getInstance(lastSegment.getIn().toSmpte(),
-			                                                                     Framerate.HZ_25)));
 
-			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
+			if (pack.getSegments() != null && !pack.getSegments().isEmpty())
+			{
+				programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
+				Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
+				programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
+				                                                Timecode.getInstance(lastSegment.getIn().toSmpte(), Framerate.HZ_25)));
 
-			log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," + programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
-		}
-		else
-		{
-			log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
-		}
+				programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
 
-		programmeDetail.setResolution(getResolution(pack));
+				log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," + programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
+			}
+			else
+			{
+				log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
+			}
 
-		log.debug("Resolution: " + programmeDetail.getResolution());
+			programmeDetail.setResolution(getResolution(pack));
 
-		Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
+			log.debug("Resolution: " + programmeDetail.getResolution());
 
-		log.debug(" Date set to: " + targetDate);
+			Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
 
-		if (targetDate != null)
-		{
+			log.debug(" Date set to: " + targetDate);
+
+			if (targetDate != null)
+			{
+
+				try
+				{
+					GregorianCalendar c = new GregorianCalendar();
+					c.setTime(targetDate);
+					XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+
+					programmeDetail.setDueDate(xmlDate);
+
+					xmlDate.setMonth(xmlDate.getMonth() + 3);
+				}
+				catch (DatatypeConfigurationException e)
+				{
+					log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
+				}
+			}
+			else
+			{
+				log.warn("Producing Programme type for package with no target date! pacakge " + pack.getPackageId());
+			}
 
 			try
 			{
-				GregorianCalendar c = new GregorianCalendar();
-				c.setTime(targetDate);
-				XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-				
-				programmeDetail.setDueDate(xmlDate);
-				xmlDate.setMonth(xmlDate.getMonth() + 3);
+				programmeDetail.setClassification(ClassificationType.fromValue(((String) pack.getPackageAttributes().getAttributeAsString(Attribute.CONT_CLASSIFICATION)).toUpperCase()));
 			}
-			catch (DatatypeConfigurationException e)
+			catch (Exception e)
 			{
-				log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
+				log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
 			}
-		}
-		else
-		{
-			log.warn("Producing Programme type for package with no target date! pacakge " + pack.getPackageId());
-		}
-
-		try
-		{
-			programmeDetail.setClassification(ClassificationType.fromValue(((String) pack.getPackageAttributes().getAttributeAsString(Attribute.CONT_CLASSIFICATION)).toUpperCase()));
+			return programmeDetail;
 		}
 		catch (Exception e)
 		{
-			log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
+			log.error("Problem marshall mayam data to XML.", e);
+			throw e;
 		}
-		return programmeDetail;
 	}
 
 	private static ResolutionType getResolution(final FullProgrammePackageInfo pack)
