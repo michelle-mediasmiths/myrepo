@@ -201,6 +201,28 @@ public class MayamTaskController extends MayamController
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
+	public List<AttributeMap> getUmatchedTasksForItem(String assetID) throws MayamClientException
+	{
+		log.debug(String.format("Getting umatched tasks for asset : %s", assetID));
+		
+		List<AttributeMap> allUnmatchedTasks = this.getTasksForAsset(
+				MayamTaskListType.UNMATCHED_MEDIA,
+				MayamAssetType.MATERIAL.getAssetType(),
+				Attribute.ASSET_ID,
+				assetID);
+		log.debug(String.format("%s unmatched tasks for asset", allUnmatchedTasks.size()));
+		
+		// Log all the unmatched tasks for debug purposes
+		for (AttributeMap task : allUnmatchedTasks)
+		{
+			// log the task info
+			log.debug("Task " + task.getAttribute(Attribute.TASK_ID) + " found for " + assetID
+					+ ". It is in state " + task.getAttribute(Attribute.TASK_STATE));
+		}
+
+		return allUnmatchedTasks;
+	}
+	
 	public long createErrorTXDeliveryTaskForPackage(String presentationID, String errorMessage) throws MayamClientException{
 		log.info(String.format("Creating tx delivery task task for package "+presentationID));
 		AttributeMap initialAttributes = client.createAttributeMap();
@@ -587,7 +609,13 @@ public class MayamTaskController extends MayamController
 		}		
 	}
 
-
+	/**
+	 * returns a minimal attribute map for making updates based on the supplied asses attributes, does NOT perform a save,
+	 * simply returns the smalled map that can be used to update a given asset (contains asset_type, asset_id)
+	 * 
+	 * @param assetAttributes
+	 * @return
+	 */
 	public AttributeMap updateMapForAsset(AttributeMap assetAttributes){
 		AttributeMap updateMap = client.createAttributeMap();
 		updateMap.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
@@ -595,6 +623,13 @@ public class MayamTaskController extends MayamController
 		return updateMap;
 	}	
 	
+	/**
+	 * Returns a minimal attribute map for making updates based on the supplied tasks attributes, does NOT perform a save,
+	 * simply returns the smallest map that can be used to update a given task (contains asset_type, asset_id, task_id)
+	 * 
+	 * @param taskAttributes
+	 * @return
+	 */
 	public AttributeMap updateMapForTask(AttributeMap taskAttributes){
 		AttributeMap updateMap = client.createAttributeMap();
 		updateMap.setAttribute(Attribute.ASSET_TYPE, taskAttributes.getAttribute(Attribute.ASSET_TYPE));
@@ -618,7 +653,14 @@ public class MayamTaskController extends MayamController
 			log.error("error fetching tasks to with intent of marking it as failed",e);
 			return;
 		}
-		AttributeMap updateMapForTask = updateMapForTask(task);
+		setTaskToErrorWithMessage(task, message);
+	}	
+	
+	public void setTaskToErrorWithMessage(AttributeMap taskAttributes, String message){
+		
+		log.info(String.format("Failing task with error message {%s}",message));
+		
+		AttributeMap updateMapForTask = updateMapForTask(taskAttributes);
 		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		updateMapForTask.setAttribute(Attribute.ERROR_MSG, message);
 		try
@@ -630,7 +672,7 @@ public class MayamTaskController extends MayamController
 			log.error("error setting task to failed state",e);
 			return;
 		}
-	}	
+	}
 	
 	/**
 	 * Returns tasks for item
@@ -770,5 +812,23 @@ public class MayamTaskController extends MayamController
 		}
 		return false;
 	}
+	
+	public void changeStatus(AttributeMap task, TaskState newState) throws MayamClientException
+	{
+		TaskState state = task.getAttribute(Attribute.TASK_STATE);
+		if (state != null && !MayamTaskController.END_STATES.contains(state))
+		{
+			AttributeMap taskUpdateMap = updateMapForTask(task);
+			taskUpdateMap.setAttribute(Attribute.TASK_STATE, newState);
+			saveTask(taskUpdateMap);
+		}
+		else
+		{
+			log.warn(String.format(
+					"current state of task is null or already in an end state task %s",
+					task.getAttributeAsString(Attribute.TASK_ID)));
+		}
+	}
+
 	
 }

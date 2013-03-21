@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.MembersInjector;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mq.MqListeners;
-import com.mediasmiths.mq.transferqueue.TransferManager;
+import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
 
 import javax.xml.bind.Marshaller;
 
@@ -20,6 +20,6 @@ public class MqListenersModule extends AbstractModule
 		bind(Marshaller.class).toProvider(MarshallerProvider.class);
 
 		bind(MqListeners.class).asEagerSingleton();
-		bind(TransferManager.class).asEagerSingleton();
+		bind(UnmatchedTransferManager.class).asEagerSingleton();
 	}
 }
