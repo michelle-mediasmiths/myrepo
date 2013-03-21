@@ -2,7 +2,6 @@ package com.mediasmiths.mayam.util;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
@@ -88,6 +87,8 @@ public class RuzzProgrammeOutputBuilder
 		return ret;
 	}
 
+
+
 	private static Detail buildDetail(FullProgrammePackageInfo pack, MayamTitleController titleController)
 	{
 		Detail ret = new Detail();
@@ -122,10 +123,11 @@ public class RuzzProgrammeOutputBuilder
 			XMLGregorianCalendar xmlDate;
 			xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 			ret.setCreationDate(xmlDate);
+
 		}
 		catch (DatatypeConfigurationException e)
 		{
-			log.error("error settign target date on programme detail for package " + pack.getPackageId(), e);
+			log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
 		}
 
 		if (!pack.getSegments().isEmpty())
@@ -153,9 +155,6 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setMARKET("Online");
 
-
-
-
 		ret.setCensorshipSystem("");
 
 		try
@@ -169,44 +168,21 @@ public class RuzzProgrammeOutputBuilder
 		}
 
 		ret.setCaptioned(false);
-		ret.setAspectRatio("16x9");
+
 		ret.setColour(ColourType.COLOUR);
-		ret.setAudioType(AudioListType.STEREO);
+
+		ret.setAspectRatio(pack.getPackageAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+
+		AudioTrackList audioTracks = pack.getPackageAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+
+		ret.setAudioType(getAudioEncoding(audioTracks));
+
 		ret.setMARKET("Online");
-		ret.setRightsStartDate(getDateFromXMLString(titleController.getRightsStart(titleAttributes)));
-		ret.setRightsEndDate(getDateFromXMLString(titleController.getRightsEnd(titleAttributes)));
 
-		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
-		if (audioTracks == null || audioTracks.size() == 0)
-		{
-			log.error("no audio tracks found when processing package " + pack.getPackageId());
-		}
-		else
-		{
+		ret.setRightsStartDate(getDateFromXMLString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_START)));
+		ret.setRightsEndDate(getDateFromXMLString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_END)));
 
-			EncodingType encoding = audioTracks.get(0).getEncoding();
 
-			if (encoding != null)
-			{
-				switch (encoding)
-				{
-					case DOLBY_E:
-						ret.setAudioType(AudioListType.DIGITAL);
-						break;
-					case LINEAR:
-						ret.setAudioType(AudioListType.STEREO);
-						break;
-					default:
-						break;
-
-				}
-			}
-			else
-			{
-				log.error("null encoding on audio track information!");
-			}
-
-		}
 		return ret;
 	}
 
@@ -225,6 +201,24 @@ public class RuzzProgrammeOutputBuilder
 		}
 		return null;
 	}
+
+	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
+	{
+		if (audioTracks.size()==1)
+		{
+			return AudioListType.MONO;
+		}
+		else if (audioTracks.size() == 2)
+		{
+			return AudioListType.STEREO;
+		}
+		else
+		{
+			return AudioListType.SURROUND;
+		}
+
+	}
+
 
 
 }

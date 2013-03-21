@@ -142,7 +142,7 @@ public class SegmentUtil
 		final String eom;
 		Timecode durationTimecode =  Timecode.getInstance(duration, Framerate.HZ_25);
 
-		return start.add(durationTimecode.getSampleCount()).toSMPTEString();
+		return start.add(durationTimecode.getSampleCount().subtract(new SampleCount(1, start.getFramerate()))).toSMPTEString();
 
 	}
 	

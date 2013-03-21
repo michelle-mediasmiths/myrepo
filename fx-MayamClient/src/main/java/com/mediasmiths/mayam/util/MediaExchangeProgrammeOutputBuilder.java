@@ -241,13 +241,18 @@ public class MediaExchangeProgrammeOutputBuilder
 
 				try
 				{
+					// set the due date
 					GregorianCalendar c = new GregorianCalendar();
 					c.setTime(targetDate);
-					XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 
+					XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 					programmeDetail.setDueDate(xmlDate);
 
-					xmlDate.setMonth(xmlDate.getMonth() + 3);
+					// set the purge date
+					XMLGregorianCalendar pDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+					c.setTime(targetDate);
+					pDate.setMonth(xmlDate.getMonth() + 3);
+					programmeDetail.setPurgeDate(pDate);
 				}
 				catch (DatatypeConfigurationException e)
 				{
