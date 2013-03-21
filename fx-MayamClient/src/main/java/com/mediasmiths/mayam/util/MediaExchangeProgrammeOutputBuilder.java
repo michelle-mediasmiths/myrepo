@@ -14,7 +14,6 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTrack
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
-import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.commons.lang.StringUtils;
@@ -182,8 +181,6 @@ public class MediaExchangeProgrammeOutputBuilder
 			if (pack.getMaterialAttributes() != null)
 			{
 				String aspectRatio = getAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO));
-
-                MayamAspectRatios s;
 
 				programmeDetail.setAspectRatio(aspectRatio);
 
