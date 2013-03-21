@@ -264,11 +264,15 @@ public class MediaExchangeProgrammeOutputBuilder
 				}
 				catch (DatatypeConfigurationException e)
 				{
+					programmeDetail.setDueDate(getDateFromXMLString(null));
+					programmeDetail.setPurgeDate(getDateFromXMLString(null));
 					log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
 				}
 			}
 			else
 			{
+				programmeDetail.setDueDate(getDateFromXMLString(null));
+				programmeDetail.setPurgeDate(getDateFromXMLString(null));
 				log.warn("Producing Programme type for package with no target date! pacakge " + pack.getPackageId());
 			}
 
