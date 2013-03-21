@@ -195,7 +195,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					}
 
 					// copy metadata from unmatched asset to peer
-					copyUnmatchedAttributes(houseID, assetPeerId);
+					copyUnmatchedAttributes(unmatchedAssetID, assetPeerId);
 
 					// We're only willing to wait this long until we assume the transfer has timed out
 					Date timeout = transferTimeout.start().getDate();
