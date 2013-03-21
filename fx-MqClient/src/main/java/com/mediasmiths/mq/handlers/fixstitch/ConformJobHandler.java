@@ -113,12 +113,11 @@ public class ConformJobHandler extends JobHandler
 					{
 						String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
 						String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
-						List<AttributeMap> complianceEditTasks = taskController.getTasksForAsset(MayamTaskListType.COMPLIANCE_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetID);
-						List<AttributeMap> complianceLoggingTasks = taskController.getTasksForAsset(MayamTaskListType.COMPLIANCE_LOGGING, MayamAssetType.MATERIAL.getAssetType(), Attribute.ASSET_ID, assetID);
+						String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 						
-						if ((complianceEditTasks == null || complianceEditTasks.isEmpty()) && (complianceLoggingTasks == null || complianceLoggingTasks.isEmpty()))
+						if (sourceHouseID == null) //item is not a compliance item
 						{
-							log.info("No compliance tasks found for asset, checking content type to see if Purge Candidate required");
+							log.info("asset is not a compliance item, checking content type to see if Purge Candidate required");
 							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()) || contentType.equals(MayamContentTypes.PUBLICITY.toString()))
 							{
 								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
@@ -147,9 +146,7 @@ public class ConformJobHandler extends JobHandler
 							}
 						}
 						else {
-							log.info("Compliance tasks found for asset, no purge candidate task required.");
-							log.info("No of Compliance Edit tasks : " + complianceEditTasks.size());
-							log.info("No of Compliance Logging tasks : " + complianceLoggingTasks.size());
+							log.info("asset is a compliance item, no purge candidate task required.");
 						}
 					}
 				}
