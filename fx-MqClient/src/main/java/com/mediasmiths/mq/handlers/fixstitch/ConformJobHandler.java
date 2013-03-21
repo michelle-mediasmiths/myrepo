@@ -38,6 +38,10 @@ public class ConformJobHandler extends JobHandler
 	@Named("purge.content.type.change.days.associated")
 	private int associatedPurgeTime;
 	
+	@Inject
+	@Named("purge.content.type.change.days.publicity")
+	private int publictyPurgeTime;
+	
 	@Override
 	public void process(Job jobMessage)
 	{
@@ -115,7 +119,7 @@ public class ConformJobHandler extends JobHandler
 						if ((complianceEditTasks == null || complianceEditTasks.isEmpty()) && (complianceLoggingTasks == null || complianceLoggingTasks.isEmpty()))
 						{
 							log.info("No compliance tasks found for asset, checking content type to see if Purge Candidate required");
-							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()))
+							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()) || contentType.equals(MayamContentTypes.PUBLICITY.toString()))
 							{
 								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
 								int numberOfDays = 100;
@@ -129,13 +133,17 @@ public class ConformJobHandler extends JobHandler
 								{
 									log.info("Attempting to set purge time for edit clips content of " + associatedPurgeTime);
 									numberOfDays = editClipsPurgeTime;
-		
+								}
+								else if (contentType.equals(MayamContentTypes.PUBLICITY.toString())) 
+								{
+									log.info("Attempting to set purge time for publicity content of " + publicityPurgeTime);
+									numberOfDays = publicityPurgeTime;
 								}
 								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
 								log.info("New Purge Candidate Task created");
 							}
 							else {
-								log.info("Content not of type edit clips or associated, no purge candidate task required. Content Type = " + contentType);
+								log.info("Content not of type edit clips, publicity or associated, no purge candidate task required. Content Type = " + contentType);
 							}
 						}
 						else {
