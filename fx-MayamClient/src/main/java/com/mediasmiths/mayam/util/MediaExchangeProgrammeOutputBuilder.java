@@ -240,15 +240,15 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			log.debug("Resolution: " + programmeDetail.getResolution());
 
-			Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
+			log.debug(" Date set to: " + pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST));
 
-			log.debug(" Date set to: " + targetDate);
-
-			if (targetDate != null)
+			if (pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST) != null)
 			{
 
 				try
 				{
+					Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
+
 					// set the due date
 					GregorianCalendar c = new GregorianCalendar();
 					c.setTime(targetDate);
