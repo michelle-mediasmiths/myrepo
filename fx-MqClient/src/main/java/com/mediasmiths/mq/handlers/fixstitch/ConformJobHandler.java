@@ -136,8 +136,8 @@ public class ConformJobHandler extends JobHandler
 								}
 								else if (contentType.equals(MayamContentTypes.PUBLICITY.toString())) 
 								{
-									log.info("Attempting to set purge time for publicity content of " + publicityPurgeTime);
-									numberOfDays = publicityPurgeTime;
+									log.info("Attempting to set purge time for publicity content of " + publictyPurgeTime);
+									numberOfDays = publictyPurgeTime;
 								}
 								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
 								log.info("New Purge Candidate Task created");
@@ -157,11 +157,7 @@ public class ConformJobHandler extends JobHandler
 				{
 					log.error("Exception thrown while creating new Purge Candidate Task", e);
 				}
-				catch (RemoteException re)
-				{
-					log.error("Exception thrown while retrieving new Purge Candidate Task", re);
-				}
-				
+						
 				closeFixAndStitch(materialID);
 				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
