@@ -1,16 +1,16 @@
 package com.mediasmiths.mayam.util;
 
-import static org.junit.Assert.assertEquals;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Test;
-
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class SegmentUtilTest
 {
@@ -91,7 +91,7 @@ public class SegmentUtilTest
 			s.setSegmentNumber(1);
 			s.setSegmentTitle("title");		
 			
-			String expected = "00:04:01:18";			
+			String expected = "00:04:01:17";
 			String actual = SegmentUtil.fillEomAndDurationOfSegment(s).getEOM();
 			assertEquals(expected, actual);
 		}

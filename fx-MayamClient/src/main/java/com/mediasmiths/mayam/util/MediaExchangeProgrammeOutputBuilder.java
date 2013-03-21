@@ -181,11 +181,14 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			if (pack.getMaterialAttributes() != null)
 			{
-				MayamAspectRatios aspectRatio = pack.getMaterialAttributes().getAttribute(Attribute.ASPECT_RATIO);
+				String aspectRatio = getAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO));
 
-				programmeDetail.setAspectRatio(aspectRatio.toString());
+                MayamAspectRatios s;
 
-				log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+				programmeDetail.setAspectRatio(aspectRatio);
+
+
+				log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO));
 
 				String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
 				programmeDetail.setSUPPLIER(supplierId);
@@ -280,6 +283,42 @@ public class MediaExchangeProgrammeOutputBuilder
 			throw e;
 		}
 	}
+
+	private static String getAspectRatio(final String aspectRatioStr)
+	{
+		if (aspectRatioStr == null || aspectRatioStr.length() == 0)
+		{
+			log.error("Aspect ratio is set to null - defaulting to 16x9");
+			return "16x9";
+		}
+	    else if (aspectRatioStr.equalsIgnoreCase("ff"))
+		{
+			return "16x9";
+		}
+		else if (aspectRatioStr.equals("pb"))
+		{
+			return "16x9";
+
+		}
+		else if (aspectRatioStr.equals("rz"))
+		{
+			return "16x9";
+
+		} else if (aspectRatioStr.equals("cc"))
+		{
+			return "16x9";
+
+		} else if (aspectRatioStr.equals("lb"))
+		{
+			return "16x9";
+		}
+		else
+		{
+			log.warn("Setting aspect ration to default to 16x9");
+			return "16x9";
+		}
+
+    }
 
 	private static ResolutionType getResolution(final FullProgrammePackageInfo pack)
 	{

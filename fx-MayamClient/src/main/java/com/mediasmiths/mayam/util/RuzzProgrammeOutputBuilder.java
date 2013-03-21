@@ -171,9 +171,12 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setColour(ColourType.COLOUR);
 
-		ret.setAspectRatio(pack.getPackageAttributes().getAttributeAsString(Attribute.ASPECT_RATIO));
+		ret.setAspectRatio(getAspectRatio(pack.getPackageAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO)));
 
 		AudioTrackList audioTracks = pack.getPackageAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+
+		if (audioTracks == null)
+			log.error("No audio track list returned from Mayam");
 
 		ret.setAudioType(getAudioEncoding(audioTracks));
 
@@ -204,7 +207,11 @@ public class RuzzProgrammeOutputBuilder
 
 	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
 	{
-		if (audioTracks.size()==1)
+		if (audioTracks == null)
+		{
+            return AudioListType.STEREO; // it does not matter..there are none.
+		}
+		else if (audioTracks.size() == 1)
 		{
 			return AudioListType.MONO;
 		}
@@ -217,8 +224,44 @@ public class RuzzProgrammeOutputBuilder
 			return AudioListType.SURROUND;
 		}
 
+
 	}
 
+	private static String getAspectRatio(final String aspectRatioStr)
+	{
+		if (aspectRatioStr == null || aspectRatioStr.length() == 0)
+		{
+			log.error("Aspect ratio is set to null - defaulting to 16x9");
+			return "16x9";
+		}
+		else if (aspectRatioStr.equalsIgnoreCase("ff"))
+		{
+			return "16x9";
+		}
+		else if (aspectRatioStr.equals("pb"))
+		{
+			return "16x9";
+
+		}
+		else if (aspectRatioStr.equals("rz"))
+		{
+			return "16x9";
+
+		} else if (aspectRatioStr.equals("cc"))
+		{
+			return "16x9";
+
+		} else if (aspectRatioStr.equals("lb"))
+		{
+			return "16x9";
+		}
+		else
+		{
+			log.warn("Setting aspect ration to default to 16x9");
+			return "16x9";
+		}
+
+	}
 
 
 }
