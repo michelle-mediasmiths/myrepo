@@ -25,8 +25,17 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 	{
 		String houseID = (String) messageAttributes.getAttribute(Attribute.HOUSE_ID);
 
+		String parentAssetID = messageAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+
+		boolean noParent = false; // assume that items have a parent
+		if (parentAssetID == null)
+		{
+			log.debug("Asset has not parent asset");
+			noParent = true; // item does not have a parent, might be unmatched
+		}
+		
 		String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-		if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
+		if (noParent)
 		{
 			unmatched(houseID);
 		}
