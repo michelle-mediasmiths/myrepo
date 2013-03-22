@@ -766,11 +766,26 @@ public class MayamPackageController extends MayamController
 	private SegmentList getPendingTxPackage(String presentationID, String materialID) throws MayamClientException
 	{
 		AttributeMap task = getPendingTxPackageTask(presentationID, materialID);
-		SegmentList seglist = task.getAttribute(Attribute.SEGMENTATION_LIST);
-
-		if (seglist == null)
-		{
-			log.warn("pending tx package task with null SEGMENTATION_LIST !");
+		SegmentList seglist = null;
+		
+		try {
+		//Due to requiring detail fields we must refetch (Mayam searches dont return detail fields)
+			if (task != null)
+			{
+				long taskId = task.getAttribute(Attribute.TASK_ID);
+				AttributeMap pendingTxTask = taskController.getTask(taskId);
+				
+				seglist = pendingTxTask.getAttribute(Attribute.SEGMENTATION_LIST);
+		
+				if (seglist == null)
+				{
+					log.warn("pending tx package task with null SEGMENTATION_LIST !");
+				}
+				
+			}
+		} catch (RemoteException e) {
+			log.error("Exception thrown by Mayam while retrieving pending tx task", e);
+			e.printStackTrace();
 		}
 
 		return seglist;
