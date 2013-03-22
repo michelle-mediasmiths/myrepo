@@ -297,7 +297,9 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getPurgeContentCSV()
 	{
-		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeContentReport", MAX));
+		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX));
+		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)));
+		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)));
 		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
 	}
 

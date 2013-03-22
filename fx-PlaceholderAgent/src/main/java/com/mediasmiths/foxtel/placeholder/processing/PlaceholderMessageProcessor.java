@@ -12,7 +12,6 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
-import au.com.foxtel.cf.mam.pms.Actions;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -24,23 +23,22 @@ import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
-import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
-import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
+import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
+import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -93,9 +91,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			{
 				result = mayamClient.createMaterial(action.getMaterial(), action.getTitleID());
 
-				// sendMaterialOrderStatus(action);
 
 			}
+			sendMaterialOrderStatus(action);
 
 			checkResult(result, action.getClass().getName(),  action.getMaterial().getMaterialID(), action.getTitleID());
 
@@ -124,10 +122,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createPackage(action.getPackage());
-
-				// sendPackageOrderStatus(action);
-
 			}
+			sendPackageOrderStatus(action);
 
 			checkResult(result, action.getClass().getName(), action.getPackage().getPresentationID(), action.getTitleID());
 
@@ -194,11 +190,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			else
 			{
 				result = mayamClient.createTitle(action);
-				
-
-				// sendTitleOrderStatus(action);
-
 			}
+			sendTitleOrderStatus(action);
 
 			checkResult(result, action.getClass().getName(), action.getTitleID(), action.getTitleDescription().getProgrammeTitle());
 		}
@@ -209,45 +202,51 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		}
 	}
 
-	private void sendMaterialOrderStatus(AddOrUpdateMaterial action){
-		OrderStatus os = new OrderStatus();
+	private void sendMaterialOrderStatus(AddOrUpdateMaterial action)
+	{
+		com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
 		
 		Source source = action.getMaterial().getSource();
 		if(source.getAggregation() != null && source.getAggregation().getAggregator() != null){
-			os.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
+			addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
 		}
-		if(source.getAggregation().getOrder() != null){
-			os.setOrderRef(source.getAggregation().getOrder().getOrderReference());
-		}
-		os.setTitle("");
-		os.setRequiredBy(action.getMaterial().getRequiredBy());
-		os.setMaterialID(action.getMaterial().getMaterialID());
-		os.setTaskType(MayamTaskListType.INGEST.getText());
-		
-		String osString = reportSerialiser.serialise(os);
-		
+
+		addOrUpdateMaterial.setCompletionDate(action.getMaterial().getRequiredBy());
+		addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
+
 		//send event
-		eventService.saveEvent("OrderStatusReport", osString);
+		eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
 	}
 	
 	private void sendTitleOrderStatus(CreateOrUpdateTitle action)
 	{
-	
-		OrderStatus os = new OrderStatus();
+
+		com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle createOrUpdateTitle = new com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle();
 
 		List<String> channelsList = getChannels(action.getRights());
 		
 		String channelsString = StringUtils.join(channelsList, ',');
-		os.setChannels(channelsString);
-		os.setMaterialID(action.getTitleID());
-		os.setTitle(action.getTitleDescription().getProgrammeTitle());
-		
-		String osString = reportSerialiser.serialise(os);
-		
+		createOrUpdateTitle.setChannels(channelsString);
+		createOrUpdateTitle.setTitle(action.getTitleDescription().getProgrammeTitle());
+		createOrUpdateTitle.setTitleID(action.getTitleID());
+
 		//send event
-		eventService.saveEvent("OrderStatusReport", osString);
+		eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", createOrUpdateTitle);
 		
 	}
+
+
+
+	private void sendPurgeTitle(final PurgeTitle action)
+	{
+		com.mediasmiths.foxtel.ip.common.events.PurgeTitle pt = new com.mediasmiths.foxtel.ip.common.events.PurgeTitle();
+
+		pt.setTitleID(action.getTitleID());
+
+		eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "PurgeTitle", pt);
+
+	}
+
 
 	private List<String> getChannels(final RightsType rights)
 	{
@@ -274,35 +273,32 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		return channelsList;
 	}
 
+
 	private void sendPackageOrderStatus(AddOrUpdatePackage action){
-		
-		OrderStatus os = new OrderStatus();
-		os.setMaterialID(action.getPackage().getMaterialID());
-		String osString = reportSerialiser.serialise(os);
-		
+
+		com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage addOrUpdatePackage = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage();
+
+		addOrUpdatePackage.setTitleID(action.getTitleID());
+		addOrUpdatePackage.setMaterialID(action.getPackage().getMaterialID());
+		addOrUpdatePackage.setPackageID(action.getPackage().getPresentationID());
+		addOrUpdatePackage.setRequiredBy(action.getPackage().getTargetDate());
+
 		//send event
-		eventService.saveEvent("OrderStatusReport", osString);
+		eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage", addOrUpdatePackage);
 	}
+
 
 	private void sendPurgePackage(MayamClientErrorCode opCode, DeletePackage action)
 	{
 
 		if (opCode == MayamClientErrorCode.SUCCESS)
 		{
-			PurgeContent pc = new PurgeContent();
-			pc.setMaterialID(action.getPackage().getPresentationID());
+			PurgePackage pc = new PurgePackage();
+			pc.setPackageID(action.getPackage().getPresentationID());
+			pc.setTitleID(action.getTitleID());
 
-			//send event
-			try
-			{
-				String osString = reportSerialiser.serialise(pc);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeletePackage", pc);
 
-				eventService.saveEvent("PurgeContentReport", osString);
-			}
-			catch (Throwable e)
-			{
-				logger.info("Unable to send PurgeContentReport for Delete Package", e);
-			}
 		}
 	}
 
@@ -312,20 +308,11 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 		if (opCode == MayamClientErrorCode.SUCCESS)
 		{
-			PurgeContent pc = new PurgeContent();
+			PurgeMaterial pc = new PurgeMaterial();
 			pc.setMaterialID(action.getMaterial().getMaterialID());
+			pc.setTitleID(action.getTitleID());
 
-			//send event
-			try
-			{
-				String osString = reportSerialiser.serialise(pc);
-
-				eventService.saveEvent("PurgeContentReport", osString);
-			}
-			catch (Exception e)
-			{
-				logger.info("Unable to send PurgeContentReport for DeleteMaterial", e);
-			}
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", pc);
 		}
 	}
 
@@ -372,32 +359,26 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		if (isCreateOrUpdateTitle)
 		{
 			createOrUpdateTitle((CreateOrUpdateTitle) action);
-			eventService.saveEvent("CreateOrUpdateTitle", message);
 		}
 		else if (isPurgeTitle)
 		{
 			purgeTitle((PurgeTitle) action);
-			eventService.saveEvent("PurgeTitle", message);
 		}
 		else if (isAddOrUpdateMaterial)
 		{
 			addOrUpdateMaterial((AddOrUpdateMaterial) action);
-			eventService.saveEvent("AddOrUpdateMaterial", message);
 		}
 		else if (isDeleteMaterial)
 		{
 			deleteMaterial((DeleteMaterial) action);
-			eventService.saveEvent("DeleteMaterial", message);
 		}
 		else if (isAddOrUpdatePackage)
 		{
 			addOrUpdatePackage((AddOrUpdatePackage) action);
-			eventService.saveEvent("AddOrUpdatePackage", message);
 		}
 		else if (isDeletePackage)
 		{
 			deletePackage((DeletePackage) action);
-			eventService.saveEvent("DeletePackage", message);
 		}
 		else
 		{
@@ -410,7 +391,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		logger.trace("mayamClient.purgeTitle(...)");
 		MayamClientErrorCode result = mayamClient.purgeTitle(action);
 		checkResult(result, action.getClass().getName(), action.getTitleID(), null);
+		if (result == MayamClientErrorCode.SUCCESS)
+		{
+			sendPurgeTitle(action);
+		}
 	}
+
 
 	@Override
 	protected String getIDFromMessage(MessageEnvelope<PlaceholderMessage> envelope)
