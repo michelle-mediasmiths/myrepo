@@ -51,7 +51,6 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
 
-
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
 	private static final String TC_EVENT_NAMESPACE = "http://www.foxtel.com.au/ip/tc";
@@ -73,7 +72,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.location")
 	private String aoTxDeliveryLocation;
-	
+
 	@Inject
 	@Named("mex.context")
 	private JAXBContext mexContext;
@@ -99,9 +98,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("cerify.report.attatch")
 	private boolean attachQcReports;
-	
+
 	@Inject
-	@Named("ao.tx.delivery.ftp.proxy.host")	
+	@Named("ao.tx.delivery.ftp.proxy.host")
 	private String aoFTPProxyHost;
 	@Inject
 	@Named("ao.tx.delivery.ftp.proxy.user")
@@ -109,7 +108,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.proxy.pass")
 	private String aoFTPProxyPass;
-	
+
 	@Inject
 	@Named("ao.tx.delivery.ftp.gxf.host")
 	private String aoGXFFTPDestinationHost;
@@ -122,7 +121,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.gxf.path")
 	private String aoGXFFTPDestinationPath;
-	
+
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.host")
 	private String aoXMLFTPDestinationHost;
@@ -135,7 +134,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.path")
 	private String aoXMLFTPDestinationPath;
-	
+
 	@Inject
 	@Named("ao.tx.delivery.ftp.xml.source.path")
 	private String aoXMLFTPSourcePath = "ready/";
@@ -185,9 +184,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	public GetQCProfileResponse getProfileForQc(
-			final String assetID,
-			final boolean isForTXDelivery) throws MayamClientException
+	public GetQCProfileResponse getProfileForQc(final String assetID, final boolean isForTXDelivery) throws MayamClientException
 	{
 		GetQCProfileResponse resp = new GetQCProfileResponse();
 		String profile = qcProfileSelector.getProfileFor(assetID, isForTXDelivery);
@@ -258,8 +255,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetId(),
 				notification.isForTXDelivery()));
 
-// 		comment out as version 7 220213		
-//		saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
+		// comment out as version 7 220213
+		// saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
 
 		if (notification.isForTXDelivery())
 		{
@@ -357,8 +354,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetID(),
 				notification.isForTXDelivery()));
 
-//		based on email notifications version 7 220213		
-//		saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
+		// based on email notifications version 7 220213
+		// saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
 
 		try
 		{
@@ -388,24 +385,44 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
 		long taskId = notification.getTaskID();
 		AttributeMap task = mayamClient.getTask(taskId);
-		
+
 		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
-		
+
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("CaptionProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), false);
+			saveEvent(
+					"CaptionProxyFailure",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					false);
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("ClassificationProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), false);
+			saveEvent(
+					"ClassificationProxyFailure",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					false);
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("ComplianceProxyFailure", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), false);
+			saveEvent(
+					"ComplianceProxyFailure",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					false);
 		}
 		else
 		{
-			saveEvent("TCFailed", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), false);
+			saveEvent(
+					"TCFailed",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					false);
 		}
 	}
 
@@ -413,27 +430,42 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
-		
+
 		long taskId = notification.getTaskID();
 		AttributeMap task = mayamClient.getTask(taskId);
-		
+
 		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
-		
+
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
-			saveEvent("CaptionProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), true);
+			saveEvent(
+					"CaptionProxySuccess",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					true);
 		}
 		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
 		{
-			saveEvent("ClassificationProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), true);
+			saveEvent(
+					"ClassificationProxySuccess",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					true);
 		}
 		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
 		{
-			saveEvent("ComplianceProxySuccess", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification(), true);
+			saveEvent(
+					"ComplianceProxySuccess",
+					notification,
+					TC_EVENT_NAMESPACE,
+					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					true);
 		}
 		else
 		{
-//			saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
+			// saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
 
 		if (!notification.isForTXDelivery())
@@ -441,7 +473,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
 	}
-
 
 	@Override
 	public Boolean autoQCRequiredForTxTask(final Long taskID) throws MayamClientException
@@ -466,7 +497,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		d.setStage(notification.getStage());
 		d.setTaskId(notification.getTaskID() + "");
 
-//		events.saveEvent(TX_EVENT_NAMESPACE, "DeliveryFailed", d);
+		// events.saveEvent(TX_EVENT_NAMESPACE, "DeliveryFailed", d);
 
 	}
 
@@ -479,16 +510,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	}
 
 	@Override
-	public boolean writeSegmentXML(final String packageID)
-			throws MayamClientException,
-			IOException,
-			JAXBException
+	public boolean writeSegmentXML(final String packageID) throws MayamClientException, IOException, JAXBException
 	{
 		log.debug(String.format("Writing segment xml for package %s", packageID));
 
 		String companion;
-		
-		boolean ao =mayamClient.isPackageAO(packageID);
+
+		boolean ao = mayamClient.isPackageAO(packageID);
 
 		if (ao)
 		{
@@ -506,18 +534,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		deliveryLocationFile.mkdirs();
 
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
-		File gxfFile =  new File(String.format("%s/%s.gxf", deliveryLocation, packageID));
+		File gxfFile = new File(String.format("%s/%s.gxf", deliveryLocation, packageID));
 		try
 		{
 			log.debug("Writing segmentinfo to " + segmentXmlFile);
 			log.debug("Segment info is " + companion);
 			FileUtils.writeStringToFile(segmentXmlFile, companion);
-			
-			if(ao){
-				//should probably be its own intalio workflow step but doing it here for now
-				return aoFXPtransfer(segmentXmlFile,gxfFile);
+
+			if (ao)
+			{
+				// should probably be its own intalio workflow step but doing it here for now
+				return aoFXPtransfer(segmentXmlFile, gxfFile);
 			}
-			
+
 			return true;
 		}
 		catch (IOException e)
@@ -528,41 +557,73 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	
 	private boolean aoFXPtransfer(File segmentXmlFile, File gxfFile)
 	{
 
 		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
 		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
 
-		
 		// first upload xml
-		boolean xmlUpload =	ftpProxyTransfer(aoXMLFTPSourcePath,segmentFileName,String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
+		boolean xmlUpload = ftpProxyTransfer(
+				aoXMLFTPSourcePath,
+				segmentFileName,
+				aoXMLFTPDestinationPath,
+				segmentFileName,
+				aoXMLFTPDestinationHost,
+				aoXMLFTPDestinationUser,
+				aoXMLFTPDestinationPass);
 
-		if(xmlUpload){
+		if (xmlUpload)
+		{
 			// next upload gxf
-			boolean gxfUpload = ftpProxyTransfer(aoGXFFTPSourcePath,gxfFileName,String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
-			
-			if(gxfUpload){
+			boolean gxfUpload = ftpProxyTransfer(
+					aoGXFFTPSourcePath,
+					gxfFileName,
+					aoGXFFTPDestinationPath,
+					gxfFileName,
+					aoGXFFTPDestinationHost,
+					aoGXFFTPDestinationUser,
+					aoGXFFTPDestinationPass);
+
+			if (gxfUpload)
+			{
 				log.info("gxf upload complete");
 				return true;
 			}
-			else{
+			else
+			{
 				log.error("gxf upload failed");
 				return false;
 			}
 		}
-		else{
+		else
+		{
 			log.error("xml segment upload failed");
 			return false;
 		}
 	}
 
-	private boolean ftpProxyTransfer(String sourcePath, String sourceFileName,String targetPath, String targetHost, String targetUser, String targetPass){
-		return Fxp.ftpProxyTransfer(sourcePath,sourceFileName, aoFTPProxyHost, aoFTPProxyUser, aoFTPProxyPass, targetPath, targetHost, targetUser, targetPass);
+	private boolean ftpProxyTransfer(
+			String sourcePath,
+			String sourceFileName,
+			String targetPath,
+			String targetHost,
+			String targetFile,
+			String targetUser,
+			String targetPass)
+	{
+		return Fxp.ftpProxyTransfer(
+				sourcePath,
+				sourceFileName,
+				aoFTPProxyHost,
+				aoFTPProxyUser,
+				aoFTPProxyPass,
+				targetPath,
+				targetFile,
+				targetHost,
+				targetUser,
+				targetPass);
 	}
-	
-	
 
 	@Override
 	public String getAOSegmentXML(final String packageID) throws MayamClientException, JAXBException
@@ -581,32 +642,28 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.debug(">>>getSegmentXML");
 		Programme programme = mayamClient.getProgramme(packageID);
-		
+
 		// Validate the programme type returned from mayam information against the schema and log errors
-/*
-		log.debug(String.format("Validating programme information against the schema for programme with packageId %s", packageID));
-		if(!validateProgrammeInformation(programme))
-		{
-			//TODO - could stop the xml being written / stop task processing here...
-			log.error(String.format("The information being written about the programme with packageId %s is not valid according to the schema.", packageID));
-		}
-		*/
-		
+		/*
+		 * log.debug(String.format("Validating programme information against the schema for programme with packageId %s", packageID)); if(!validateProgrammeInformation(programme)) { //TODO - could
+		 * stop the xml being written / stop task processing here...
+		 * log.error(String.format("The information being written about the programme with packageId %s is not valid according to the schema.", packageID)); }
+		 */
+
 		StringWriter sw = new StringWriter();
 		mexMarshaller.marshal(programme, sw);
 		return sw.toString();
 	}
-
 
 	@Override
 	public void notifiyTXDelivered(final TXDeliveryFinished deliveryFinished) throws MayamClientException
 	{
 		mayamClient.txDeliveryCompleted(deliveryFinished.getPackageID(), deliveryFinished.getTaskID());
 
-//		TxDelivered txDelivered = new TxDelivered();
-//		txDelivered.setPackageId(deliveryFinished.getPackageID());
-//		txDelivered.setTaskId(deliveryFinished.getTaskID() + "");
-//		events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
+		// TxDelivered txDelivered = new TxDelivered();
+		// txDelivered.setPackageId(deliveryFinished.getPackageID());
+		// txDelivered.setTaskId(deliveryFinished.getTaskID() + "");
+		// events.saveEvent("http://www.foxtel.com.au/ip/delivery", "Delivered", txDelivered);
 	}
 
 	@Override
@@ -658,17 +715,20 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		return mayamClient.deletePurgeCandidates();
 	}
 
-
-	////// -------------------- Eventing
+	// //// -------------------- Eventing
 
 	// temporary serialiser until moved within event service.
 
 	private static JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
 
-
 	// TC Events
 
-	protected void saveEvent(String name, TCNotification payload, String nameSpace, com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify, boolean success)
+	protected void saveEvent(
+			String name,
+			TCNotification payload,
+			String nameSpace,
+			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
+			boolean success)
 	{
 		try
 		{
@@ -680,8 +740,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				String deliveryLocation = deliveryLocationForPackage(payload.getTaskID() + "");
 				eventNotify.setDeliveryLocation(deliveryLocation);
 			}
-			events.saveEvent(nameSpace,  name, eventNotify);
-			
+			events.saveEvent(nameSpace, name, eventNotify);
+
 		}
 		catch (Exception e)
 		{
@@ -699,43 +759,43 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			qcErrorNotification.setAssetId(payload.getAssetId());
 			qcErrorNotification.setForTXDelivery(payload.isForTXDelivery());
 			qcErrorNotification.setTitle(payload.getTitle());
-			events.saveEvent(nameSpace,  name, qcErrorNotification);
+			events.saveEvent(nameSpace, name, qcErrorNotification);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
 		}
 	}
 
-	
 	private boolean validateProgrammeInformation(Programme programme)
 	{
 		boolean isValidProgramme = false;
-		try 
+		try
 		{
 			SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-			Schema schema = factory.newSchema(WFAdapterRestServiceImpl.class.getClassLoader().getResource("MediaExchange_V1.2.xsd"));
+			Schema schema = factory.newSchema(WFAdapterRestServiceImpl.class.getClassLoader().getResource(
+					"MediaExchange_V1.2.xsd"));
 			mexMarshaller.setSchema(schema);
-			
+
 			JAXBSource source = new JAXBSource(mexContext, programme);
 			Validator validator = schema.newValidator();
 			validator.setErrorHandler(new MediaExchangeErrorHandler());
 			validator.validate(source);
 			isValidProgramme = true;
-		} 
-		catch (SAXException e) 
+		}
+		catch (SAXException e)
 		{
 			log.error("A SAXException was thrown whilst validating the returned programme against the schema: " + e.getMessage());
 			e.printStackTrace();
-		} 
-		catch (Throwable e) 
+		}
+		catch (Throwable e)
 		{
 			log.error("An exception was thrown whilst validating the programme against the schema: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return isValidProgramme;
 	}
-	
+
 	static class MediaExchangeErrorHandler implements ErrorHandler
 	{
 		@Override
