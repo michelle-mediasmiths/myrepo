@@ -267,13 +267,17 @@ public class MediaExchangeProgrammeOutputBuilder
 
 	        log.debug("Audio encoding: " + encoding);
 
-
 		}
 	}
 
 	private static void setSupplier(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
-		programmeDetail.setSUPPLIER(pack.getMaterialAttributes().getAttributeAsString(Attribute.AGGREGATOR));
+		String supplier = pack.getMaterialAttributes().getAttributeAsString(Attribute.AGGREGATOR);
+		if (supplier == null)
+			programmeDetail.setSUPPLIER("No Supplier set in metadata.");
+		else
+			programmeDetail.setSUPPLIER(supplier);
+
 	}
 
 	private static void setMarket(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
