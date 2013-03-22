@@ -163,7 +163,7 @@ public class Fxp
 			log.debug("remoteStore: " + targetPath);
 
 			boolean proxyRetreive = proxy.remoteRetrieve(sourceFileName);
-			boolean proxyStore = proxy.remoteStore(targetPath);
+			boolean proxyStore = proxy.remoteStore(targetFile);
 
 			log.debug(String.format("proxy retreive %b", proxyRetreive));
 			log.debug(String.format("proxy store %b", proxyStore));
