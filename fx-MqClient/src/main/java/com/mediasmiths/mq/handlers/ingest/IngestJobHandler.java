@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
 import com.mediasmiths.foxtel.ip.common.events.report.CreationComplete;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -53,10 +54,13 @@ public class IngestJobHandler extends JobHandler
 				
 				if (task != null)
 				{
+					log.info("ingest task found for assetId : " + assetId);
 					itemHasIngestTask(jobMessage, assetId, jobStatus, task);
 				}
 				else {
-					log.warn("Unable to find Ingest task for assetId : " + assetId);	
+					log.info("Unable to find Ingest task for assetId : " + assetId);
+					itemHasNoIngestTask(jobMessage, assetId, jobStatus);
+					
 				}
 			} catch (MayamClientException e) {
 				log.error("Mayam exception thrown while retrieving Ingest task for asset : " + assetId, e);
@@ -91,6 +95,38 @@ public class IngestJobHandler extends JobHandler
 			log.info("Items ingest task was already finished, I am making no updates");
 		}
 	}
+	
+	private void itemHasNoIngestTask(Job jobMessage, String assetId, JobStatus jobStatus)
+			throws MayamClientException{
+	
+		if ( ! jobStatus.equals(JobStatus.FINISHED)){ //if there is no ingest task we not interested in jobs that have not finished
+			log.info("Job has not finished and there is no ingest task, no action taken");
+			return;
+		}
+		
+		AttributeMap material;
+		try
+		{
+			material = materialController.getMaterialByAssetId(assetId);
+		}
+		catch (MayamClientException e1)
+		{
+			log.error("error fetching asset "+ assetId,e1);
+			return;
+		}
+
+		String contentMaterialType = material.getAttribute(Attribute.CONT_MAT_TYPE);
+		
+		if(contentMaterialType == null){
+			log.warn("No content type set on asset "+assetId);
+		}
+		else if (contentMaterialType.equals(MayamContentTypes.UNMATCHED)) //check if content type is unmatched
+		{
+			log.info("An ingest job has finished for some unmatched content");
+		}
+		
+	}
+	
 
 	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
 	{
