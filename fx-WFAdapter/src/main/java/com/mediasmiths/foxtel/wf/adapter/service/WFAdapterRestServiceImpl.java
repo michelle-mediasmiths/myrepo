@@ -537,11 +537,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		
 		// first upload xml
-		boolean xmlUpload =	ftpProxyTransfer(String.format("%s%s",aoXMLFTPSourcePath,segmentFileName),String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
+		boolean xmlUpload =	ftpProxyTransfer(aoXMLFTPSourcePath,segmentFileName,String.format("%s%s", aoXMLFTPDestinationPath, segmentFileName), aoXMLFTPDestinationHost, aoXMLFTPDestinationUser, aoXMLFTPDestinationPass);
 
 		if(xmlUpload){
 			// next upload gxf
-			boolean gxfUpload = ftpProxyTransfer(String.format("%s%s",aoGXFFTPSourcePath,gxfFileName),String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
+			boolean gxfUpload = ftpProxyTransfer(aoGXFFTPSourcePath,gxfFileName,String.format("%s%s", aoGXFFTPDestinationPath, gxfFileName), aoGXFFTPDestinationHost, aoGXFFTPDestinationUser, aoGXFFTPDestinationPass);
 			
 			if(gxfUpload){
 				log.info("gxf upload complete");
@@ -558,8 +558,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 	}
 
-	private boolean ftpProxyTransfer(String sourceFileName,String targetPath, String targetHost, String targetUser, String targetPass){
-		return Fxp.ftpProxyTransfer(sourceFileName, aoFTPProxyHost, aoFTPProxyUser, aoFTPProxyPass, targetPath, targetHost, targetUser, targetPass);
+	private boolean ftpProxyTransfer(String sourcePath, String sourceFileName,String targetPath, String targetHost, String targetUser, String targetPass){
+		return Fxp.ftpProxyTransfer(sourcePath,sourceFileName, aoFTPProxyHost, aoFTPProxyUser, aoFTPProxyPass, targetPath, targetHost, targetUser, targetPass);
 	}
 	
 	

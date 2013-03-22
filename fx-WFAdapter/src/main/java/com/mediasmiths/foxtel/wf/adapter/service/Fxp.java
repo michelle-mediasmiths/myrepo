@@ -12,17 +12,37 @@ import org.apache.log4j.Logger;
 
 public class Fxp
 {
-	public static void main(String [] args){
-		System.out.println(ftpProxyTransfer(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]));
-	}
-	
-	private final static Logger log = Logger.getLogger(Fxp.class);
-	
-	public static boolean ftpProxyTransfer(String sourceFileName,String proxyHost,String proxyUser, String proxyPass, String targetPath, String targetHost, String targetUser, String targetPass)
+	public static void main(String[] args)
 	{
-		
-		log.debug(String.format("sourceFileName : {%s},\nproxyHost : {%s},\nproxyUser : {%s},\nproxyPass : {%s},\ntargetPath : {%s},\ntargetHost : {%s},\ntargetUser : {%s},\ntargetPass : {%s},\n",sourceFileName,proxyHost,proxyUser,proxyPass,targetPath,targetHost,targetUser,targetPass));
-		
+		System.out.println(ftpProxyTransfer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]));
+	}
+
+	private final static Logger log = Logger.getLogger(Fxp.class);
+
+	public static boolean ftpProxyTransfer(
+			String sourcePath,
+			String sourceFileName,
+			String proxyHost,
+			String proxyUser,
+			String proxyPass,
+			String targetPath,
+			String targetHost,
+			String targetUser,
+			String targetPass)
+	{
+
+		log.debug(String.format(
+				"sourcePath : {%s}, sourceFileName : {%s},\nproxyHost : {%s},\nproxyUser : {%s},\nproxyPass : {%s},\ntargetPath : {%s},\ntargetHost : {%s},\ntargetUser : {%s},\ntargetPass : {%s},\n",
+				sourcePath,
+				sourceFileName,
+				proxyHost,
+				proxyUser,
+				proxyPass,
+				targetPath,
+				targetHost,
+				targetUser,
+				targetPass));
+
 		ProtocolCommandListener listener = new PrintCommandListener(new PrintWriter(System.out), true);
 		FTPClient proxy = new FTPClient();
 		proxy.addProtocolCommandListener(listener);
@@ -93,7 +113,7 @@ public class Fxp
 
 		try
 		{
-			if (!proxy.login(proxyUser,proxyPass))
+			if (!proxy.login(proxyUser, proxyPass))
 			{
 				log.error("Could not login to " + proxyHost);
 				return false;
@@ -105,14 +125,34 @@ public class Fxp
 				return false;
 			}
 
+			log.debug("Changing to source directory on proxy");
+			boolean changeWorkingDirectory = proxy.changeWorkingDirectory(sourcePath);
+
+			if (changeWorkingDirectory)
+			{
+				log.debug("Successfully changed working directory on proxy");
+			}
+			else
+			{
+				log.error("failed to chagne to source directory on proxy");
+				return false;
+			}
+
+			log.debug("Entering Remote Passive Mode on target");
 			target.enterRemotePassiveMode();
+			log.debug("Entering remote active mode on proxy");
 			proxy.enterRemoteActiveMode(InetAddress.getByName(target.getPassiveHost()), target.getPassivePort());
 
-			log.debug("remoteRetreive: "+sourceFileName);
-			log.debug("remoteStore: "+targetPath);
-			
-			if (proxy.remoteRetrieve(sourceFileName)
-					&& proxy.remoteStore(targetPath))
+			log.debug("remoteRetreive: " + sourceFileName);
+			log.debug("remoteStore: " + targetPath);
+
+			boolean proxyRetreive = proxy.remoteRetrieve(sourceFileName);
+			boolean proxyStore = proxy.remoteStore(targetPath);
+
+			log.debug(String.format("proxy retreive %b", proxyRetreive));
+			log.debug(String.format("proxy store %b", proxyStore));
+
+			if (proxyRetreive && proxyStore)
 			{
 				proxy.completePendingCommand();
 				target.completePendingCommand();
