@@ -31,6 +31,7 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 		}
 
 		String titleID = messageAttributes.getAttribute(Attribute.AUX_VAL);
+		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 
 		if (titleID == null) // not interested in assets that do not have AUX_VAL populated
 		{
@@ -56,9 +57,13 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 				String titleAssetID = title.getAttribute(Attribute.ASSET_ID);
 				AttributeMap updateMap = taskController.updateMapForAsset(messageAttributes);
 				updateMap.setAttribute(Attribute.ASSET_PARENT_ID, titleAssetID);
+				
+				log.debug(String.format("Setting ASSET_PARENT_ID to %s on asset %s", titleAssetID, assetID));
+				
 				try
 				{
 					tasksClient.assetApi().updateAsset(updateMap);
+					log.debug("update complete");
 				}
 				catch (RemoteException e)
 				{
@@ -89,7 +94,7 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 		{
 			taskController.createWFEErorTask(
 					MayamAssetType.MATERIAL,
-					messageAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+					messageAttributes.getAttributeAsString(Attribute.HOUSE_ID),
 					error);
 		}
 		catch (Exception e1)
