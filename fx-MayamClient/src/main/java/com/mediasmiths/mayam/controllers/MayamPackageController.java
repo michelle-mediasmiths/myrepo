@@ -394,8 +394,9 @@ public class MayamPackageController extends MayamController
 
 				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 
-				segmentList.getAttributeMap().putAll(attributes.getAttributes());
-
+				AttributeMap existingAttributes = segmentList.getAttributeMap();
+				existingAttributes.putAll(attributes.getAttributes());
+				segmentList.setAttributeMap(existingAttributes);
 				try
 				{
 					log.info("updating tx package with id :" + txPackage.getPresentationID());
