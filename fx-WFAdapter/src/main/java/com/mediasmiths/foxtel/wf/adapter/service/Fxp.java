@@ -166,7 +166,7 @@ public class Fxp
 			boolean targetStore = target.remoteStore(targetFile);
 
 			log.debug(String.format("proxy retreive %b", proxyRetreive));
-			log.debug(String.format("proxy store %b", targetStore));
+			log.debug(String.format("target store %b", targetStore));
 
 			if (proxyRetreive && targetStore)
 			{
