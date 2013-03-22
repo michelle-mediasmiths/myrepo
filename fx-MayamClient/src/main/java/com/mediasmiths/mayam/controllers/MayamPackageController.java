@@ -820,14 +820,14 @@ public class MayamPackageController extends MayamController
 		}
 		criteria.getFilterEqualities().setAttribute(Attribute.AUX_EXTIDSTR, presentationID);
 		log.info("Returning all tx packages regardless of what state they are in");
-		//criteria.getFilterAlternatives().addAsInclusions(Attribute.TASK_STATE, TaskState.OPEN, TaskState.ERROR);
+		criteria.getFilterAlternatives().addAsInclusions(Attribute.TASK_STATE, TaskState.OPEN, TaskState.ERROR);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
 		FilterResult result;
 		try
 		{
 			result = client.taskApi().getTasks(criteria, 100, 0);
-		
+			log.info("Found " + result.getTotalMatches() + " pending tx-Package tasks");
 			if(result.getTotalMatches() > 1){
 				log.warn("multiple pending tx package tasks for the same package detected, using the first. Total number of tasks : " + result.getTotalMatches());
 				List<AttributeMap> allMatches = result.getMatches();
