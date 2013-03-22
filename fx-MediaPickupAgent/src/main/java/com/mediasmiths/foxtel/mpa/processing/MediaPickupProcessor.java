@@ -308,6 +308,12 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		try
 		{
 			moveFileToFolder(f, aoQuarrentineFolder, true);
+
+			MediaPickupNotification pickupNotification = new MediaPickupNotification();
+			pickupNotification.setTime((new Date()).toString());
+			pickupNotification.setFilelocation(file);
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
 		}
 		catch (IOException e)
 		{
