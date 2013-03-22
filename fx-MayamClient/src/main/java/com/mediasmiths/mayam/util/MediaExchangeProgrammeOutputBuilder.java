@@ -18,11 +18,14 @@ import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class MediaExchangeProgrammeOutputBuilder
@@ -66,46 +69,50 @@ public class MediaExchangeProgrammeOutputBuilder
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		if (audioTracks == null || audioTracks.size() == 0)
 		{
-			log.error("no audio tracks found when processing package " + pack.getPackageId());
-			audioTracks = new AudioTrackList();
+			log.error("No audio tracks found when processing package " + pack.getPackageId());
+			return new Programme.Media.AudioTracks();
 		}
-		Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
-
-		log.warn("Tracks defined: " + audioTracks.size());
-
-		for (AudioTrack track : audioTracks)
+		else
 		{
-			if (log.isDebugEnabled()) log.debug("Setting the number of channels: " + track.getNumber());
+			Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
 
-			if (track.getNumber() <= TRACK_MAX)
+			log.warn("Tracks defined: " + audioTracks.size());
+
+			for (AudioTrack track : audioTracks)
 			{
-				Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
+				if (log.isDebugEnabled())
+					log.debug("Setting the number of channels: " + track.getNumber());
 
-				AudioTrackType t = mayamChannelMapping[track.getNumber()-1];
-
-				if (t != null) // there is a valid track name mapping.
+				if (track.getNumber() <= TRACK_MAX)
 				{
-					pmat.setNumber(track.getNumber());
+					Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
 
-					pmat.setType(t);
+					AudioTrackType t = mayamChannelMapping[track.getNumber() - 1];
 
-					ats.getTrack().add(pmat);
+					if (t != null) // there is a valid track name mapping.
+					{
+						pmat.setNumber(track.getNumber());
 
-					log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
+						pmat.setType(t);
+
+						ats.getTrack().add(pmat);
+
+						log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
+					}
+					else
+					{
+						log.warn("Ignoring track number: " + track.getNumber());
+					}
 				}
 				else
 				{
 					log.warn("Ignoring track number: " + track.getNumber());
 				}
-			}
-			else
-			{
-				log.warn("Ignoring track number: " + track.getNumber());
-			}
 
+			}
+			return ats;
 		}
 
-		return ats;
 	}
 
 
@@ -133,7 +140,6 @@ public class MediaExchangeProgrammeOutputBuilder
 		mayamChannelMapping[7] = null;
 
 
-
 	}
 
 
@@ -145,145 +151,31 @@ public class MediaExchangeProgrammeOutputBuilder
 
 			programmeDetail.setEXTCLIPUMID(pack.getPackageId());
 
-			log.debug("Setting PackageId: " + pack.getPackageId());
+			setTitle(programmeDetail, pack);
 
-			if (pack.getTitleAttributes() != null)
-			{
-				programmeDetail.setTitle(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_TITLE), 127));
+			setEpisodeNumber(programmeDetail, pack);
 
-				programmeDetail.setEpisodeNumber(StringUtils.left(pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER), 32));
+			setDescription(programmeDetail, pack);
 
-				String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+			setCreationDate(programmeDetail, pack);
 
-				if (desc == null)
-					programmeDetail.setDescription("");
-				else
-				    programmeDetail.setDescription(StringUtils.left(desc, 127));
+			setMarket(programmeDetail, pack);
 
-				if (programmeDetail.getTitle() == null)
-				{
-					log.warn("There is not episode title - using series title " + desc);
+		    setAspectRatio(programmeDetail, pack);
 
-					programmeDetail.setTitle(desc);
-				}
+		    setSupplier(programmeDetail, pack);
 
-				log.debug("Title: " + programmeDetail.getTitle() + " : " + desc);
+			setAudioType(programmeDetail, pack);
 
-				StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
+		    setSOMAndEOM(programmeDetail, pack);
 
-				if (channels != null && channels.size() > 0)
-				{
-					log.debug("Market: " + channels.get(0));
-					programmeDetail.setMARKET(channels.get(0));
-				}
-				else
-				{
-					log.warn("Producing Programme type for package with empty channels list! package " +pack.getPackageId());
-				}
-			}
-			else
-			{
-				log.warn("Producing Programme output with empty title details. Package : " + pack.getPackageId());
-			}
+			setResolution(programmeDetail, pack);
 
-			if (pack.getMaterialAttributes() != null)
-			{
-				String aspectRatio = getAspectRatio(pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO));
+			setDueAndPurgeDate(programmeDetail, pack);
 
-				programmeDetail.setAspectRatio(aspectRatio);
+			programmeDetail.setClassification(getClassification(pack));
 
 
-				log.debug("Aspect Ratio: " + pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO));
-
-				String supplierId = pack.getMaterialAttributes().getAttribute(Attribute.AGGREGATOR);
-				programmeDetail.setSUPPLIER(supplierId);
-
-				log.debug("Supplier id: " + supplierId);
-
-				AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
-				if (audioTracks == null || audioTracks.size() == 0)
-				{
-					log.error("no audio tracks found when processing package " + pack.getPackageId());
-				}
-				else
-				{
-			        AudioListType encoding = getAudioEncoding(audioTracks);
-
-			        log.debug("Audio encoding: " + encoding);
-
-					programmeDetail.setAudioType(encoding);
-
-				}
-			}
-			else
-			{
-				log.warn("Producing Programme output with empty material details. Package : " + pack.getPackageId());
-			}
-
-			if (pack.getSegments() != null && !pack.getSegments().isEmpty())
-			{
-				programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
-				Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
-				programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
-				                                                Timecode.getInstance(lastSegment.getIn().toSmpte(), Framerate.HZ_25)));
-
-				programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
-
-				log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," + programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
-			}
-			else
-			{
-				log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
-			}
-
-			programmeDetail.setResolution(getResolution(pack));
-
-			log.debug("Resolution: " + programmeDetail.getResolution());
-
-			log.debug(" Date set to: " + pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST));
-
-			if (pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST) != null)
-			{
-
-				try
-				{
-					Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
-
-					// set the due date
-					GregorianCalendar c = new GregorianCalendar();
-					c.setTime(targetDate);
-
-					XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-					programmeDetail.setDueDate(xmlDate);
-
-					// set the purge date
-					XMLGregorianCalendar pDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-					c.setTime(targetDate);
-					pDate.setMonth(xmlDate.getMonth() + 3);
-					programmeDetail.setPurgeDate(pDate);
-				}
-				catch (DatatypeConfigurationException e)
-				{
-					programmeDetail.setDueDate(getDateFromXMLString(null));
-					programmeDetail.setPurgeDate(getDateFromXMLString(null));
-					log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
-				}
-			}
-			else
-			{
-				programmeDetail.setDueDate(getDateFromXMLString(null));
-				programmeDetail.setPurgeDate(getDateFromXMLString(null));
-				log.warn("Producing Programme type for package with no target date! pacakge " + pack.getPackageId());
-			}
-
-			try
-			{
-				programmeDetail.setClassification(ClassificationType.fromValue(((String) pack.getPackageAttributes().getAttributeAsString(Attribute.CONT_CLASSIFICATION)).toUpperCase()));
-			}
-			catch (Exception e)
-			{
-				log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
-			}
 			return programmeDetail;
 		}
 		catch (Exception e)
@@ -293,60 +185,220 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 	}
 
-	private static String getAspectRatio(final String aspectRatioStr)
+
+	private static ClassificationType getClassification(final FullProgrammePackageInfo pack)
 	{
+		try
+		{
+			return ClassificationType.fromValue(((String) pack.getPackageAttributes()
+			                                                  .getAttributeAsString(Attribute.CONT_CLASSIFICATION)).toUpperCase());
+		}
+		catch (Exception e)
+		{
+			log.error("Cannot set classification: " + pack.getPackageAttributes().getAttributeAsString(Attribute.CONT_CLASSIFICATION), e);
+			return ClassificationType.NC;
+		}
+	}
+
+
+	private static void setDueAndPurgeDate(final Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+         String targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
+		 DateTime txDate;
+		 if (targetDate == null)
+		 {
+			 txDate = lastCentury;
+		 }
+	     else
+		 {
+			 try
+			 {
+				 txDate = DEFAULT_DATE_FORMAT.parseDateTime(targetDate);
+			 }
+			 catch (Exception e)
+			 {
+				 log.error("Unable to parse date " + targetDate);
+				 txDate = lastCentury;
+			 }
+		 }
+		programmeDetail.setDueDate(getGregorian(txDate));
+		programmeDetail.setPurgeDate(getPurgeDateFor(txDate));
+	}
+
+	private static void setCreationDate(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		programmeDetail.setCreationDate(getNowDate());
+	}
+
+	private static void setSOMAndEOM(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
+		{
+			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
+			Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
+			programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
+			                                                Timecode.getInstance(lastSegment.getIn().toSmpte(), Framerate.HZ_25)));
+
+			programmeDetail.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
+
+			log.debug("Segment Timings: (in,out,duration) " + programmeDetail.getSOM() + "," +
+			           programmeDetail.getEOM() + ", " + programmeDetail.getDuration());
+		}
+		else
+		{
+			programmeDetail.setSOM("0:0:0:0");
+			programmeDetail.setEOM("0:0:0:0");
+			programmeDetail.setDuration("0:0:0:0");
+			log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
+		}
+	}
+
+
+	private static void getAudioEncoding(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+		if (audioTracks == null || audioTracks.size() == 0)
+		{
+			log.error("no audio tracks found when processing package " + pack.getPackageId());
+		}
+		else
+		{
+	        AudioListType encoding = getAudioEncoding(audioTracks);
+
+	        log.debug("Audio encoding: " + encoding);
+
+
+		}
+	}
+
+	private static void setSupplier(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		programmeDetail.setSUPPLIER(pack.getMaterialAttributes().getAttributeAsString(Attribute.AGGREGATOR));
+	}
+
+	private static void setMarket(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
+
+		if (channels != null && channels.size() > 0)
+		{
+            String channel = channels.get(0);
+			if (channel == null)
+				programmeDetail.setMARKET("No Market is set in metadata");
+			else
+				programmeDetail.setMARKET(channel);
+		}
+		else
+		{
+			programmeDetail.setMARKET("No Market is set in metadata");
+
+		}
+	}
+
+	private static void setAudioType(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
+    {
+
+	    AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+	    if (audioTracks == null || audioTracks.size() == 0)
+	    {
+		    log.error("No audio tracks found when processing package " + pack.getPackageId());
+	    }
+	    else
+	    {
+		    programmeDetail.setAudioType(getAudioEncoding(audioTracks));
+	    }
+    }
+
+	private static void setDescription(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.CONT_DESC);
+		if (desc == null)
+			programmeDetail.setDescription("No description defined in metadata");
+		else
+			programmeDetail.setDescription(StringUtils.left(desc, 127));
+	}
+
+	private static void setEpisodeNumber(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String episode = pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER);
+		if (episode == null)
+			programmeDetail.setEpisodeNumber("No Episode set in metadata");
+		else
+			programmeDetail.setEpisodeNumber(StringUtils.left(episode, 32));
+	}
+
+	private static void setTitle(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+		if (title == null)
+		{
+			//
+ 		}
+		else
+		{
+			programmeDetail.setTitle(StringUtils.left(title, 127));
+		}
+	}
+
+	private static void setAspectRatio(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
+	{
+		String aspectRatioStr = pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO);
+		String setAR;
+
 		if (aspectRatioStr == null || aspectRatioStr.length() == 0)
 		{
 			log.error("Aspect ratio is set to null - defaulting to 16x9");
-			return "16x9";
+			setAR =  "16x9";
 		}
 	    else if (aspectRatioStr.equalsIgnoreCase("ff"))
 		{
-			return "16x9";
+			setAR =  "16x9";
 		}
 		else if (aspectRatioStr.equals("pb"))
 		{
-			return "16x9";
+			setAR =  "16x9";
 
 		}
 		else if (aspectRatioStr.equals("rz"))
 		{
-			return "16x9";
+			setAR =  "16x9";
 
 		} else if (aspectRatioStr.equals("cc"))
 		{
-			return "16x9";
+			setAR =  "16x9";
 
 		} else if (aspectRatioStr.equals("lb"))
 		{
-			return "16x9";
+			setAR =  "16x9";
 		}
 		else
 		{
 			log.warn("Setting aspect ration to default to 16x9");
-			return "16x9";
+			setAR =  "16x9";
 		}
+
+		programmeDetail.setAspectRatio(setAR);
 
     }
 
-	private static ResolutionType getResolution(final FullProgrammePackageInfo pack)
+	private static void setResolution(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String resolutionStr = pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT);
 		if (resolutionStr == null)
 		{
 			log.error("Error: resolution is null, setting to " + ResolutionType.SD);
-			return ResolutionType.SD;
+			programmeDetail.setResolution(ResolutionType.SD);
 		}
 		else
 		{
 			try
 			{
-				return ResolutionType.fromValue(resolutionStr);
+				programmeDetail.setResolution(ResolutionType.fromValue(resolutionStr));
 			}
 			catch (Exception e)
 			{
 				log.error("Error: resolution is unknown, " +  resolutionStr + " setting to " + ResolutionType.SD);
-				return ResolutionType.SD;
+				programmeDetail.setResolution(ResolutionType.SD);
 			}
 		}
 	}
@@ -370,28 +422,58 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static XMLGregorianCalendar getDateFromXMLString(String xml)
+	private static XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
+	{
+
+		try
+		{
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			cal.setYear(dateTime.getYear());
+			cal.setDay(dateTime.getDayOfMonth());
+			cal.setMonth(dateTime.getMonthOfYear());
+			cal.setHour(dateTime.getHourOfDay());
+			cal.setMinute(dateTime.getMinuteOfHour());
+			cal.setSecond(dateTime.getSecondOfMinute());
+			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			return cal;
+		}
+		catch (DatatypeConfigurationException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static XMLGregorianCalendar getNowDate()
 	{
 		try
 		{
-			if (xml == null)
-			{
-				log.error("Null XML field as date " + xml + " ..setting as today");
-
-				return DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
-
-			}
-			else
-			{
-
-				return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
-			}
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			return cal;
 		}
 		catch (Throwable e)
 		{
-			log.error("error setting target date on programme detail for package " + xml, e);
+			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
+
+	private static XMLGregorianCalendar getPurgeDateFor(org.joda.time.DateTime dateTime)
+	{
+
+		org.joda.time.DateTime pTime = new org.joda.time.DateTime(dateTime);
+
+		return getGregorian(pTime.plusMonths(3));
+
+	}
+
+
+	private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
+
+	private static final org.joda.time.DateTime lastCentury = DEFAULT_DATE_FORMAT.parseDateTime("1900-01-01 00:00:00");
+
 
 }
