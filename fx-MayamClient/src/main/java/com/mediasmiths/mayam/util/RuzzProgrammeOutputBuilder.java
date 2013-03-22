@@ -19,12 +19,15 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.SegmentListType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
@@ -98,47 +101,15 @@ public class RuzzProgrammeOutputBuilder
 		ret.setEXTCLIPUMID("");
 		ret.setCATALOGCODE("");
 
-		String title = titleAttributes.getAttributeAsString(Attribute.EPISODE_TITLE);
-		if (title == null)
-			ret.setTitle("");
-		else
-			ret.setTitle(title);
+		setTitle(ret, pack);
 
-		ret.setEpisodeNumber(titleAttributes.getAttributeAsString(Attribute.EPISODE_NUMBER));
+		setEpisodeNumber(ret, pack);
 
-		String desc = titleAttributes.getAttributeAsString(Attribute.EPISODE_DESC);
-		if (desc == null)
-		{
-			ret.setDescription("");
-		}
-		else
-		{
-			ret.setDescription(desc);
-		}
+		setDescription(ret, pack);
 
-		try
-		{
-			GregorianCalendar c = new GregorianCalendar();
-			c.setTime(new Date());
-			XMLGregorianCalendar xmlDate;
-			xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-			ret.setCreationDate(xmlDate);
+        setCreationDate(ret, pack);
 
-		}
-		catch (DatatypeConfigurationException e)
-		{
-			log.error("error setting target date on programme detail for package " + pack.getPackageId(), e);
-		}
-
-		if (!pack.getSegments().isEmpty())
-		{
-			ret.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
-			ret.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
-		}
-		else
-		{
-			log.warn("Producing Ruzz Programme type for empty segment list! package" + pack.getPackageId());
-		}
+		setSOMAndDuration(pack, ret);
 
 		StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
 
@@ -151,21 +122,13 @@ public class RuzzProgrammeOutputBuilder
 		else
 		{
 			log.warn("Producing Ruzz type for package with empty channels list! package " + pack.getPackageId());
+			ret.setCOPYRIGHT("No Channel owner set in metadata");
 		}
 
 		ret.setMARKET("Online");
 
 		ret.setCensorshipSystem("");
 
-		try
-		{
-			ret.setClassification(ClassificationType.fromValue(((String) pack.getPackageAttributes().getAttributeAsString(
-					Attribute.CONT_CLASSIFICATION)).toUpperCase()));
-		}
-		catch (Exception e)
-		{
-			log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
-		}
 
 		ret.setCaptioned(false);
 
@@ -180,36 +143,95 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setAudioType(getAudioEncoding(audioTracks));
 
-		ret.setMARKET("Online");
-
-		ret.setRightsStartDate(getDateFromXMLString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_START)));
-		ret.setRightsEndDate(getDateFromXMLString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_END)));
+		ret.setRightsStartDate(getDateFromMayamString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_START)));
+		ret.setRightsEndDate(getDateFromMayamString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_END)));
 
 
 		return ret;
 	}
 
-	private static XMLGregorianCalendar getDateFromXMLString(String xml)
+
+	private static void setClassification(final FullProgrammePackageInfo pack, final Detail ret)
+	{
+		try
+		{
+			ret.setClassification(ClassificationType.fromValue(((String) pack.getPackageAttributes()
+			                                                                 .getAttributeAsString(Attribute.CONT_CLASSIFICATION))
+					                                                   .toUpperCase()));
+		}
+		catch (Exception e)
+		{
+			log.error("error setting classification on programme detail for package " + pack.getPackageId(), e);
+			ret.setClassification(ClassificationType.NC);
+		}
+	}
+
+	private static void setSOMAndDuration(final FullProgrammePackageInfo pack, final Detail ret)
+	{
+		if (!pack.getSegments().isEmpty())
+		{
+			ret.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
+			ret.setDuration(SegmentUtil.totalDuration(pack.getSegments()));
+		}
+		else
+		{
+			ret.setSOM("0:0:0:0");
+			ret.setDuration("0:0:0:0");
+		}
+	}
+
+	private static void setCreationDate(Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		programmeDetail.setCreationDate(getNowDate());
+	}
+
+
+	private static void setDescription(Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.CONT_DESC);
+		if (desc == null)
+			programmeDetail.setDescription("No description defined in metadata");
+		else
+			programmeDetail.setDescription(StringUtils.left(desc, 127));
+	}
+
+	private static void setEpisodeNumber(Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String episode = pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER);
+		if (episode == null)
+			programmeDetail.setEpisodeNumber("No Episode set in metadata");
+		else
+			programmeDetail.setEpisodeNumber(StringUtils.left(episode, 32));
+	}
+
+	private static void setTitle(Detail programmeDetail, final FullProgrammePackageInfo pack)
+	{
+		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+		if (title == null)
+		{
+			programmeDetail.setTitle("No Title set in Metadata.");
+		}
+		else
+		{
+			programmeDetail.setTitle(StringUtils.left(title, 127));
+		}
+	}
+
+	private static XMLGregorianCalendar getDateFromMayamString(String mayamValue)
 	{
 
 		try
 		{
-			if (xml == null)
-			{
-				log.error("Null XML field as date - using today" + xml);
+			org.joda.time.DateTime dt = DEFAULT_DATE_FORMAT.parseDateTime(mayamValue);
 
-				return DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
-			}
-			else
-			{
-				return DatatypeFactory.newInstance().newXMLGregorianCalendar(xml);
-			}
+			return getGregorian(dt);
+
 		}
 		catch (Throwable e)
 		{
-			log.error("error setting target date on programme detail for package " + xml, e);
+			log.error("error setting target date on programme detail for package " + mayamValue, e);
+			return getGregorian(lastCentury);
 		}
-		return null;
 	}
 
 	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
@@ -269,6 +291,61 @@ public class RuzzProgrammeOutputBuilder
 		}
 
 	}
+
+
+	private static XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
+	{
+
+		try
+		{
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			cal.setYear(dateTime.getYear());
+			cal.setDay(dateTime.getDayOfMonth());
+			cal.setMonth(dateTime.getMonthOfYear());
+			cal.setHour(dateTime.getHourOfDay());
+			cal.setMinute(dateTime.getMinuteOfHour());
+			cal.setSecond(dateTime.getSecondOfMinute());
+			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			return cal;
+		}
+		catch (DatatypeConfigurationException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static XMLGregorianCalendar getNowDate()
+	{
+		try
+		{
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			return cal;
+		}
+		catch (Throwable e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static XMLGregorianCalendar getPurgeDateFor(org.joda.time.DateTime dateTime)
+	{
+
+		org.joda.time.DateTime pTime = new org.joda.time.DateTime(dateTime);
+
+		return getGregorian(pTime.plusMonths(3));
+
+	}
+
+
+	private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
+
+	private static final org.joda.time.DateTime lastCentury = DEFAULT_DATE_FORMAT.parseDateTime("1900-01-01 00:00:00");
+
 
 
 }
