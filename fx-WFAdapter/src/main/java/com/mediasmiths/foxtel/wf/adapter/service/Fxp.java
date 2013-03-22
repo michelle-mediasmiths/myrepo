@@ -163,12 +163,12 @@ public class Fxp
 			log.debug("remoteStore: " + targetFile);
 
 			boolean proxyRetreive = proxy.remoteRetrieve(sourceFileName);
-			boolean proxyStore = proxy.remoteStore(targetFile);
+			boolean targetStore = target.remoteStore(targetFile);
 
 			log.debug(String.format("proxy retreive %b", proxyRetreive));
-			log.debug(String.format("proxy store %b", proxyStore));
+			log.debug(String.format("proxy store %b", targetStore));
 
-			if (proxyRetreive && proxyStore)
+			if (proxyRetreive && targetStore)
 			{
 				proxy.completePendingCommand();
 				target.completePendingCommand();
