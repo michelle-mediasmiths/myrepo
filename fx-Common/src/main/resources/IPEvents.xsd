@@ -540,6 +540,18 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="purgeTitle">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="titleID" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
     <xs:element name="AddOrUpdateMaterial">
         <xs:complexType>
             <xs:complexContent>
@@ -548,6 +560,19 @@
                         <xs:element name="materialID" type="xs:string"/>
                         <xs:element name="aggregatorID" type="xs:string"/>
                         <xs:element name="completionDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="purgeMaterial">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="titleID" type="xs:string"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
@@ -563,6 +588,19 @@
                         <xs:element name="materialID" type="xs:string"/>
                         <xs:element name="packageID" type="xs:string"/>
                         <xs:element name="requiredBy" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="purgePackage">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="titleID" type="xs:string"/>
+                        <xs:element name="packageID" type="xs:string"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
