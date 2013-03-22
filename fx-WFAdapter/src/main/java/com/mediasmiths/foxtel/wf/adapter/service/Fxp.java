@@ -160,7 +160,7 @@ public class Fxp
 			proxy.enterRemoteActiveMode(InetAddress.getByName(target.getPassiveHost()), target.getPassivePort());
 
 			log.debug("remoteRetreive: " + sourceFileName);
-			log.debug("remoteStore: " + targetPath);
+			log.debug("remoteStore: " + targetFile);
 
 			boolean proxyRetreive = proxy.remoteRetrieve(sourceFileName);
 			boolean proxyStore = proxy.remoteStore(targetFile);

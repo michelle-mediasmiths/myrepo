@@ -563,44 +563,27 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
 		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
 
-		// first upload xml
-		boolean xmlUpload = ftpProxyTransfer(
-				aoXMLFTPSourcePath,
-				segmentFileName,
-				aoXMLFTPDestinationPath,
-				segmentFileName,
-				aoXMLFTPDestinationHost,
-				aoXMLFTPDestinationUser,
-				aoXMLFTPDestinationPass);
+		// upload gxf
+		boolean gxfUpload = ftpProxyTransfer(
+				aoGXFFTPSourcePath,
+				gxfFileName,
+				aoGXFFTPDestinationPath,
+				gxfFileName,
+				aoGXFFTPDestinationHost,
+				aoGXFFTPDestinationUser,
+				aoGXFFTPDestinationPass);
 
-		if (xmlUpload)
+		if (gxfUpload)
 		{
-			// next upload gxf
-			boolean gxfUpload = ftpProxyTransfer(
-					aoGXFFTPSourcePath,
-					gxfFileName,
-					aoGXFFTPDestinationPath,
-					gxfFileName,
-					aoGXFFTPDestinationHost,
-					aoGXFFTPDestinationUser,
-					aoGXFFTPDestinationPass);
-
-			if (gxfUpload)
-			{
-				log.info("gxf upload complete");
-				return true;
-			}
-			else
-			{
-				log.error("gxf upload failed");
-				return false;
-			}
+			log.info("gxf upload complete");
+			return true;
 		}
 		else
 		{
-			log.error("xml segment upload failed");
+			log.error("gxf upload failed");
 			return false;
 		}
+
 	}
 
 	private boolean ftpProxyTransfer(
