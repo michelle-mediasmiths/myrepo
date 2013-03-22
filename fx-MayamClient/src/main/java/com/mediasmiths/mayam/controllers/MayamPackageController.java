@@ -820,7 +820,7 @@ public class MayamPackageController extends MayamController
 		}
 		criteria.getFilterEqualities().setAttribute(Attribute.AUX_EXTIDSTR, presentationID);
 		log.info("Returning all tx packages regardless of what state they are in");
-		criteria.getFilterAlternatives().addAsInclusions(Attribute.TASK_STATE, TaskState.OPEN, TaskState.ERROR);
+		//criteria.getFilterAlternatives().addAsInclusions(Attribute.TASK_STATE, TaskState.OPEN, TaskState.ERROR);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
 		FilterResult result;
