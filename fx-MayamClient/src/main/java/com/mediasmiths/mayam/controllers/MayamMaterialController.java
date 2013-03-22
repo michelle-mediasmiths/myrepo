@@ -60,6 +60,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.StringWriter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -83,6 +84,10 @@ public class MayamMaterialController extends MayamController
 	@Inject
 	@Named("material.exchange.marshaller")
 	private Marshaller materialExchangeMarshaller;
+	
+	@Inject
+	@Named("preferred.storage.locations")
+	private String allPreferredPaths;
 
 	@Inject
 	private FileFormatVerification fileformatVerification;
@@ -1510,19 +1515,34 @@ public class MayamMaterialController extends MayamController
 		
 	
 		String nixPath = null;
+		List <String> preferredLocations = Arrays.asList(allPreferredPaths.split(","));
+		
 		log.info("No of URLs returned is :" + urls.size());
+		
 		for (String url: urls)
 		{
 			log.info("Attempting to resolve path for url :" + url);
 			try
 			{
 				nixPath = pathResolver.nixPath(PathType.FTP, url);
-				return nixPath;
+				for (String preferredLoc: preferredLocations)
+				{
+					if (nixPath.contains(preferredLoc))
+					{
+						log.info("Preferred location found:" + nixPath);
+						return nixPath;
+					}
+				}
 			}
 			catch (UnknownPathException e)
 			{
 				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
 			}
+		}
+		if (nixPath != null) 
+		{
+			log.info("No preferred location found, using :" + nixPath);
+			return nixPath;
 		}
 		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 	}
