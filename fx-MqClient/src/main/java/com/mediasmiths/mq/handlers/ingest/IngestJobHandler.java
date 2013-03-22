@@ -53,71 +53,7 @@ public class IngestJobHandler extends JobHandler
 				
 				if (task != null)
 				{
-					
-					TaskState taskState = (TaskState) task.getAttribute(Attribute.TASK_STATE);
-					
-					if(taskState != TaskState.FINISHED){
-					
-						AttributeMap updateMap = taskController.updateMapForTask(task);
-						
-						if (jobStatus.equals(JobStatus.STARTED))
-						{
-							log.info(String.format("Import started for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-							taskController.saveTask(updateMap);
-						}
-						else if (jobStatus.equals(JobStatus.FAILED))
-						{
-							log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
-		
-							String jobID = jobMessage.getJobId();
-							JobType jobType = jobMessage.getJobType();
-							
-							try
-							{
-								String ingestNotes = String.format("Job %s of type %s failed", jobID, jobType.toString());
-								updateMap.setAttribute(Attribute.INGEST_NOTES, ingestNotes);
-								taskController.saveTask(updateMap);	
-							}
-							catch (Exception e)
-							{
-								log.error("Error setting failure reason on ingest task", e);
-							}
-							
-							sendImportFailureEvent(assetId, jobID);
-						}
-						else if (jobStatus.equals(JobStatus.FINISHED))
-						{
-							log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-							updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
-							taskController.saveTask(updateMap);
-							
-							try {
-								GregorianCalendar c = new GregorianCalendar();
-								Date dateUpdated = jobMessage.getJobUpdated();
-								if(null == dateUpdated)
-								{
-									log.debug("Job message had no jobUpdated date set; setting it to now.");
-									dateUpdated = new Date();
-								}
-								c.setTime(dateUpdated);
-								XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-								sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
-							}
-							catch(DatatypeConfigurationException e)
-							{
-								log.error("Datatype Configuration exception thrown while converting update time for %s : " + assetId, e);
-							}
-						}
-						else {
-							log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
-						}
-					}
-					else{
-						log.info("Items ingest task was already finished, I am making no updates");
-					}
+					itemHasIngestTask(jobMessage, assetId, jobStatus, task);
 				}
 				else {
 					log.warn("Unable to find Ingest task for assetId : " + assetId);	
@@ -126,6 +62,91 @@ public class IngestJobHandler extends JobHandler
 				log.error("Mayam exception thrown while retrieving Ingest task for asset : " + assetId, e);
 			}
 		}
+	}
+
+	private void itemHasIngestTask(Job jobMessage, String assetId, JobStatus jobStatus, AttributeMap task)
+			throws MayamClientException
+	{
+		TaskState taskState = (TaskState) task.getAttribute(Attribute.TASK_STATE);
+		
+		if(taskState != TaskState.FINISHED){
+		
+			if (jobStatus.equals(JobStatus.STARTED))
+			{
+				itemHasIngestTaskJobStarted(assetId, task);
+			}
+			else if (jobStatus.equals(JobStatus.FAILED))
+			{
+				itemHasIngestTaskJobFailed(jobMessage, assetId, task);
+			}
+			else if (jobStatus.equals(JobStatus.FINISHED))
+			{
+				itemHasIngestTaskJobFinished(jobMessage, assetId, task);
+			}
+			else {
+				log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
+			}
+		}
+		else{
+			log.info("Items ingest task was already finished, I am making no updates");
+		}
+	}
+
+	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
+	{
+		log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+		AttributeMap updateMap = taskController.updateMapForTask(task);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+		updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
+		taskController.saveTask(updateMap);
+		
+		try {
+			GregorianCalendar c = new GregorianCalendar();
+			Date dateUpdated = jobMessage.getJobUpdated();
+			if(null == dateUpdated)
+			{
+				log.debug("Job message had no jobUpdated date set; setting it to now.");
+				dateUpdated = new Date();
+			}
+			c.setTime(dateUpdated);
+			XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+			sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
+		}
+		catch(DatatypeConfigurationException e)
+		{
+			log.error("Datatype Configuration exception thrown while converting update time for %s : " + assetId, e);
+		}
+	}
+
+	private void itemHasIngestTaskJobFailed(Job jobMessage, String assetId, AttributeMap task)
+	{
+		log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+		AttributeMap updateMap = taskController.updateMapForTask(task);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+
+		String jobID = jobMessage.getJobId();
+		JobType jobType = jobMessage.getJobType();
+		
+		try
+		{
+			String ingestNotes = String.format("Job %s of type %s failed", jobID, jobType.toString());
+			updateMap.setAttribute(Attribute.INGEST_NOTES, ingestNotes);
+			taskController.saveTask(updateMap);	
+		}
+		catch (Exception e)
+		{
+			log.error("Error setting failure reason on ingest task", e);
+		}
+		
+		sendImportFailureEvent(assetId, jobID);
+	}
+
+	private void itemHasIngestTaskJobStarted(String assetId, AttributeMap task) throws MayamClientException
+	{
+		log.info(String.format("Import started for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
+		AttributeMap updateMap = taskController.updateMapForTask(task);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
+		taskController.saveTask(updateMap);
 	}
 
 	private void sendImportFailureEvent(String assetId, String jobID)
