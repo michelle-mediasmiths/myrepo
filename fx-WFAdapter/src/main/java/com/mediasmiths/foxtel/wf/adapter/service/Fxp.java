@@ -14,7 +14,7 @@ public class Fxp
 {
 	public static void main(String[] args)
 	{
-		System.out.println(ftpProxyTransfer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8]));
+		System.out.println(ftpProxyTransfer(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]));
 	}
 
 	private final static Logger log = Logger.getLogger(Fxp.class);
@@ -26,19 +26,21 @@ public class Fxp
 			String proxyUser,
 			String proxyPass,
 			String targetPath,
+			String targetFile,
 			String targetHost,
 			String targetUser,
 			String targetPass)
 	{
 
 		log.debug(String.format(
-				"sourcePath : {%s}, sourceFileName : {%s},\nproxyHost : {%s},\nproxyUser : {%s},\nproxyPass : {%s},\ntargetPath : {%s},\ntargetHost : {%s},\ntargetUser : {%s},\ntargetPass : {%s},\n",
+				"sourcePath : {%s}, sourceFileName : {%s},\nproxyHost : {%s},\nproxyUser : {%s},\nproxyPass : {%s},\ntargetPath : {%s},\ntargetFile : {%s}\ntargetHost : {%s},\ntargetUser : {%s},\ntargetPass : {%s},\n",
 				sourcePath,
 				sourceFileName,
 				proxyHost,
 				proxyUser,
 				proxyPass,
 				targetPath,
+				targetFile,
 				targetHost,
 				targetUser,
 				targetPass));
@@ -137,7 +139,21 @@ public class Fxp
 				log.error("failed to chagne to source directory on proxy");
 				return false;
 			}
+			
+			log.debug("Changing to destination directory on target");
+			
+			changeWorkingDirectory = target.changeWorkingDirectory(targetPath);
 
+			if (changeWorkingDirectory)
+			{
+				log.debug("Successfully changed working directory on target");
+			}
+			else
+			{
+				log.error("failed to chagne to source directory on target");
+				return false;
+			}
+			
 			log.debug("Entering Remote Passive Mode on target");
 			target.enterRemotePassiveMode();
 			log.debug("Entering remote active mode on proxy");
