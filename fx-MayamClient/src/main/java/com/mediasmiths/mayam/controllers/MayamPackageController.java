@@ -820,6 +820,12 @@ public class MayamPackageController extends MayamController
 			log.debug("real tx package");
 			try
 			{
+				log.debug("Updating segment list with the below attributes:");
+				for (Attribute attribute: segmentList.getAttributeMap().getAttributeSet())
+				{
+					log.debug(attribute.toString() + " : " + segmentList.getAttributeMap().getAttributeAsString(attribute));
+				}
+				client.assetApi().updateAsset(segmentList.getAttributeMap());
 				client.segmentApi().updateSegmentList(segmentList.getId(), segmentList);
 			}
 			catch (RemoteException e)
