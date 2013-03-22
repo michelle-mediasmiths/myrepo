@@ -111,7 +111,10 @@ public class OrderStatusRpt
 			order.setMaterialID(pack.getMaterialID());
 			order.setChannels(title.getChannels());
 			order.setRequiredBy(pack.getRequiredBy());
-			order.setTaskType("Ingest");
+			if (event.getEventName().equals("UnmatchedContentAvailable"))
+				order.setTaskType("Unmatched");
+			else
+				order.setTaskType("Ingest");
 			order.setCompletionDate(material.getCompletionDate());
 			
 			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
