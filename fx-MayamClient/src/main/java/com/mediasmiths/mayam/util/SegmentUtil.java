@@ -23,10 +23,14 @@ public class SegmentUtil
 	private static Logger log = Logger.getLogger(SegmentUtil.class);
 	
 	
-	public static String segmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
+	public static String materialExchangeSegmentToString(com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s)
 	{
 		s = fillEomAndDurationOfSegment(s);		
-		return String.format("%d_%s_%s_%s_%s\n",s.getSegmentNumber(),s.getSOM(),s.getDuration(),s.getEOM(),s.getSegmentTitle());
+		return segmenttoString(s.getSegmentNumber(),s.getSOM(),s.getDuration(),s.getEOM(),s.getSegmentTitle());
+	}
+	
+	public static String segmenttoString(int segmentNumber, String som, String duration, String eom, String title){
+		return String.format("%d_%s_%s_%s_%s\n",segmentNumber,som,duration,eom,title);
 	}
 
 	private static Pattern stringToSeg = Pattern.compile("([0-9]*)_(.*)_(.*)_(.*)_(.*)\n");
@@ -121,9 +125,7 @@ public class SegmentUtil
 		}
 		if(duration == null){
 			Timecode end =  Timecode.getInstance(eom, Framerate.HZ_25);
-			long durationSamples = (end.getSampleCount().getSamples() - start.getSampleCount().getSamples());
-			Timecode durationTimecode = Timecode.getInstance(new SampleCount(durationSamples, Framerate.HZ_25));
-			duration = durationTimecode.toSMPTEString();
+			duration = getDurationSMTPE(start,end);
 		}
 		
 		//filled will hae some, eom and duration populated, should not be written to file as it will no longer be schema conforming (duration and eom are an xs:choice at the same level);
@@ -243,6 +245,42 @@ public class SegmentUtil
 		return listbuilder.build();
 
 	}
+	
+	public static String ruzzSegmentTypeToHumanString(com.mediasmiths.foxtel.generated.ruzz.SegmentationType seglist)
+	{
+		
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("N____SOM_______DURATION_____EOM_______TITLE\n");
+		
+		for (com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment seg : seglist.getSegment())
+		{
+			sb.append(ruzzSegmentToString(seg));
+		}
+		
+		return sb.toString();
+	}
+
+	protected static String ruzzSegmentToString(com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment seg)
+	{
+		
+		int segmentNumber = seg.getSegmentNumber();
+		String som = seg.getSOM();
+		String eom = seg.getEOM();
+		String title = seg.getSegmentTitle();
+		Timecode start =  Timecode.getInstance(som, Framerate.HZ_25); 
+		Timecode end =  Timecode.getInstance(eom, Framerate.HZ_25);
+		String duration = getDurationSMTPE(start,end);
+		
+		return segmenttoString(segmentNumber,som,duration,eom,title);
+	}
+	
+	private static String getDurationSMTPE(Timecode start, Timecode end){
+		long durationSamples = (end.getSampleCount().getSamples() - start.getSampleCount().getSamples());
+		Timecode durationTimecode = Timecode.getInstance(new SampleCount(durationSamples, Framerate.HZ_25));
+		String duration = durationTimecode.toSMPTEString();
+		return duration;
+	}
 
 	public static String originalConformToHumanString(SegmentationType originalConform)
 	{
@@ -254,7 +292,7 @@ public class SegmentUtil
 		
 		for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment s: segment)
 		{
-			sb.append(segmentToString(s));
+			sb.append(materialExchangeSegmentToString(s));
 		}
 		
 		return sb.toString();
@@ -276,7 +314,7 @@ public class SegmentUtil
 			
 			for (com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment segment : segments)
 			{
-				sb.append(segmentToString(segment));
+				sb.append(materialExchangeSegmentToString(segment));
 			}
 			
 			sb.append("\n");

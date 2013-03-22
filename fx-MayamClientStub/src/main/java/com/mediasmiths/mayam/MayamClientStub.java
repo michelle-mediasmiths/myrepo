@@ -1017,4 +1017,16 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException
+	{
+		if(materialID.equals(NEW_MATERIAL_ID)){
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+		else if(materialID.equals(ERROR_MATERIAL_ID)){
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+		}
+		
+	}
+
 }

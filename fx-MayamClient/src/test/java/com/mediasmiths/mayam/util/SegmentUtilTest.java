@@ -26,7 +26,7 @@ public class SegmentUtilTest
 			s.setSegmentTitle("title");		
 			
 			String expected = "1_00:00:00:00_00:00:01:00_00:00:01:00_title\n";
-			String actual = SegmentUtil.segmentToString(s);
+			String actual = SegmentUtil.materialExchangeSegmentToString(s);
 			System.out.println(actual);
 			assertEquals(expected, actual);
 			
@@ -41,6 +41,23 @@ public class SegmentUtilTest
 			assertEquals(1, actual.getSegmentNumber());
 			assertEquals("title", actual.getSegmentTitle());
 			assertEquals("00:00:01:00", actual.getEOM());
+			
+		}
+		
+		@Test
+		public void testRuzzSegmentToString(){
+			com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment s= new com.mediasmiths.foxtel.generated.ruzz.SegmentationType.Segment();
+			
+			s.setSOM("00:00:00:00");
+			s.setEOM("00:00:01:00");
+			s.setSegmentNumber(1);
+			s.setSegmentTitle("title");		
+			
+			String expected = "1_00:00:00:00_00:00:01:00_00:00:01:00_title\n";
+			String actual = SegmentUtil.ruzzSegmentToString(s);
+			System.out.println(actual);
+			assertEquals(expected, actual);
+			
 			
 		}
 		
@@ -185,8 +202,9 @@ public class SegmentUtilTest
 			String actual = SegmentUtil.presentationToHumanString(presentation);
 			System.out.println(actual);
 			
-			String expected = "PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:18_title1\n2_00:04:00:01_00:03:10:16_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:16_pack2title1\n2_00:04:01:16_00:01:09:01_00:05:10:17_pack2title2\n\n";
+			String expected = "PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:16_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:15_pack2title1\n2_00:04:01:16_00:01:09:01_00:05:10:17_pack2title2\n\n";
 			
+			System.out.println(expected);
 			//if this test is failing the following may be uncommented to see where the first differnece in the expected and actual strings are
 			/*
 			char[] actualChar = actual.toCharArray();
@@ -197,12 +215,17 @@ public class SegmentUtilTest
 			for(int i=0;i<expectedChar.length;i++){
 				
 				if(expectedChar[i] != actualChar[i]){
-					System.out.println("first difference at char "+i);
+					System.out.println(String.format("first difference at char %d expected %c actual %c",i, expectedChar[i], actualChar[i]));
+					System.out.println(actual.substring(0,  i));
+					System.out.println(actualChar[i]);
+					if(i<expectedChar.length-1){
+					System.out.println(actual.substring(i));
+					}
 					break;
 				}
 			}
-			*/
 			
+			*/
 			assertEquals(expected, actual);			
 		}
 

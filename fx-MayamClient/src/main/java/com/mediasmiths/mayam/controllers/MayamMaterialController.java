@@ -1526,5 +1526,30 @@ public class MayamMaterialController extends MayamController
 		}
 		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 	}
+
+	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException
+	{
+		log.info(String.format("Setting natural breaks string {%s} on material {%s}", naturalBreaks,materialID));
+		
+		AttributeMap materialAttributes = getMaterialAttributes(materialID);
+		if(materialAttributes==null){
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+		
+		AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
+		updateMap.setAttribute(Attribute.SEGMENTATION_NOTES,naturalBreaks);
+		
+		try
+		{
+			client.assetApi().updateAsset(updateMap);
+			log.info("Natural breaks updated");
+		}
+		catch (RemoteException e)
+		{
+			log.error("error setting natual breaks on material",e);
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
+		}
+		
+	}
 	
 }

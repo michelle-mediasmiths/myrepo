@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -23,12 +22,13 @@ import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.util.SegmentUtil;
 
 public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 {
 
 	protected final static Logger logger = Logger.getLogger(RuzzPickupProcessor.class);
-	
+
 	@Inject
 	public RuzzPickupProcessor(
 			RuzzFilesPendingProcessingQueue filePathsPendingProcessing,
@@ -42,7 +42,17 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			MediaCheck mediaCheck,
 			EventService eventService)
 	{
-		super(filePathsPendingProcessing,filesPendingImport,messageValidator,receiptWriter,unmarhsaller,marshaller,mayamClient,matchMaker,mediaCheck,eventService);
+		super(
+				filePathsPendingProcessing,
+				filesPendingImport,
+				messageValidator,
+				receiptWriter,
+				unmarhsaller,
+				marshaller,
+				mayamClient,
+				matchMaker,
+				mediaCheck,
+				eventService);
 	}
 
 	@Override
@@ -63,64 +73,78 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	@Override
 	protected MamUpdateResult updateMamWithMaterialInformation(RuzzIngestRecord message) throws MessageProcessingFailedException
 	{
-		
+
 		Material material = message.getMaterial();
 		String materialID = material.getMaterialID();
-		logger.info(String.format("Received ruzz ingest message for material %s",materialID));
-		
+		logger.info(String.format("Received ruzz ingest message for material %s", materialID));
+
 		DetailType details = material.getDetails();
-		if(details == null){
+		if (details == null)
+		{
 			logger.warn(String.format("Received null details for material %s", materialID));
 		}
-		else{
+		else
+		{
 			try
 			{
-				updateDetails(details,materialID);
+				updateDetails(details, materialID);
 			}
 			catch (MayamClientException e)
 			{
-				logger.error("Error updating detail infromation for materialID "+materialID,e);
-				throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION,e);
+				logger.error("Error updating detail infromation for materialID " + materialID, e);
+				throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
 			}
 		}
-		
+
 		IngestRecords ingestRecords = material.getIngestRecords();
-		if(ingestRecords==null){
+		if (ingestRecords == null)
+		{
 			logger.warn(String.format("Null ingest records for material %s", materialID));
 		}
-		else{
-			updateIngestRecord(ingestRecords,materialID);
+		else
+		{
+			updateIngestRecord(ingestRecords, materialID);
 		}
-		
+
 		SegmentationType segments = material.getSegments();
-		if(segments==null){
+		if (segments == null)
+		{
 			logger.warn(String.format("Null segmentation information for material %s", materialID));
 		}
-		else{
-			updateSegmentationInfo(segments,materialID);
+		else
+		{
+			try
+			{
+				updateSegmentationInfo(segments, materialID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error("Error setting natural breaks information on materialID " + materialID, e);
+				throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
+			}
 		}
-		
-		return new MamUpdateResult(materialID,true);
+
+		return new MamUpdateResult(materialID, true);
 	}
 
-	private void updateSegmentationInfo(SegmentationType segments, String materialID)
+	private void updateSegmentationInfo(SegmentationType segments, String materialID) throws MayamClientException
 	{
-		logger.debug(String.format("updateSegmentationInfo for material %s",materialID));
-		//TODO update segmentation info
-		logger.warn("no attempt made to save segmentation information");
+		logger.debug(String.format("updateSegmentationInfo for material %s", materialID));
+		String naturalBreaks = SegmentUtil.ruzzSegmentTypeToHumanString(segments);
+		mayamClient.setNaturalBreaks(materialID, naturalBreaks);
 	}
 
 	private void updateIngestRecord(IngestRecords ingestRecords, String materialID)
 	{
-		logger.debug(String.format("updateIngestRecord for material %s",materialID));
-		//TODO : update channel conditions \ ingest records
+		logger.debug(String.format("updateIngestRecord for material %s", materialID));
+		// TODO : update channel conditions \ ingest records
 		logger.warn("no attempt made to save channel conditions");
 	}
 
-	private void updateDetails(DetailType details,String materialID) throws MayamClientException
+	private void updateDetails(DetailType details, String materialID) throws MayamClientException
 	{
-		logger.debug(String.format("updateDetails for material %s",materialID));
-		mayamClient.updateMaterial(details,materialID);
+		logger.debug(String.format("updateDetails for material %s", materialID));
+		mayamClient.updateMaterial(details, materialID);
 	}
 
 }

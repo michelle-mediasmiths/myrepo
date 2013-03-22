@@ -1072,4 +1072,10 @@ public class MayamClientImpl implements MayamClient
 		return returnMap;
 	}
 
+	@Override
+	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException
+	{
+		materialController.setNaturalBreaks(materialID,naturalBreaks);
+	}
+
 }

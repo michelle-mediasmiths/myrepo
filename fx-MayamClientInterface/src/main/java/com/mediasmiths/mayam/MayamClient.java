@@ -342,5 +342,7 @@ public interface MayamClient
 	public boolean deletePurgeCandidates()throws MayamClientException;
 	
 	public AttributeMap getTask(long taskId);
+
+	public void setNaturalBreaks(String materialID, String naturalBreaks)throws MayamClientException;
 	
 }
