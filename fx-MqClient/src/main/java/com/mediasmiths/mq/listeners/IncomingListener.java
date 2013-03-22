@@ -19,6 +19,7 @@ import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.handlers.asset.AssetDeletionHandler;
 import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
+import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
@@ -88,6 +89,8 @@ public class IncomingListener extends MqClientListener
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
 	UnmatchedAssetCreateHandler unmatchedAssetCreateHandler;
+	@Inject
+	DartRecordingTitleAssociationHandler dartRecordingTitleAssociationHandler;
 	@Inject
 	TitleUpdateHandler titleUpdateHandler;
 	@Inject
@@ -341,16 +344,12 @@ public class IncomingListener extends MqClientListener
 		try
 		{
 			passEventToHandler(unmatchedAssetCreateHandler, messageAttributes);
+			passEventToHandler(dartRecordingTitleAssociationHandler, messageAttributes);
 		}
 		catch (Exception e)
 		{
 			logger.error("error onAssetCreate");
 		}
-
-		// passEventToHandler(assetDeletionHandler, messageAttributes);
-		// passEventToHandler(assetPurgeHandler, messageAttributes);
-		// passEventToHandler(emergencyIngestHandler, messageAttributes);
-		// passEventToHandler(packageUpdateHandler, messageAttributes);
 	}
 
 	private void onAssetUpdate(MqMessage msg)
