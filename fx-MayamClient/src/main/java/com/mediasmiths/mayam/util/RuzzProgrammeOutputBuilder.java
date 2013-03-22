@@ -129,6 +129,7 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setCensorshipSystem("");
 
+		setClassification(pack, ret);
 
 		ret.setCaptioned(false);
 
