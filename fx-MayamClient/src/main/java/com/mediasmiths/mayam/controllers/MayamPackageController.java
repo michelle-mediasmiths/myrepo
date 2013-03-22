@@ -338,15 +338,27 @@ public class MayamPackageController extends MayamController
 
 			AttributeMap material = materialController.getMaterialAttributes(txPackage.getMaterialID());
 
-			try
+			if (material != null)
 			{
-				segmentList = getTxPackage(txPackage.getPresentationID(), txPackage.getMaterialID(), material);
-				assetAttributes = segmentList.getAttributeMap();
+				try
+				{
+					segmentList = getTxPackage(txPackage.getPresentationID(), txPackage.getMaterialID(), material);
+					if (segmentList != null)
+					{
+						assetAttributes = segmentList.getAttributeMap();
+					}
+					else {
+						log.warn("Unable to locate segment list for package " + txPackage.getPresentationID());
+					}
+				}
+				catch (MayamClientException e1)
+				{
+					log.error("unable to fetch package for update", e1);
+					return e1.getErrorcode();
+				}
 			}
-			catch (MayamClientException e1)
-			{
-				log.error("unable to fetch package for update", e1);
-				return e1.getErrorcode();
+			else {
+				log.warn("Unable to locate material " + txPackage.getMaterialID() + " for package");
 			}
 
 			if (assetAttributes != null)
