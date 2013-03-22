@@ -607,8 +607,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String sourcePath,
 			String sourceFileName,
 			String targetPath,
-			String targetHost,
 			String targetFile,
+			String targetHost,
 			String targetUser,
 			String targetPass)
 	{
