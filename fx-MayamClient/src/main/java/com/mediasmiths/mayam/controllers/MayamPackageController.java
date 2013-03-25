@@ -398,15 +398,21 @@ public class MayamPackageController extends MayamController
 				{
 					attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					
+					
 					if (pendingTxTask != null)
 					{
+						log.info("Attempting to set target date on pending tx task");
 						pendingTxTask.setAttribute(Attribute.EVENT_DATE, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+						log.info("Setting target date on pending tx task to " + txPackage.getTargetDate().toString());
 						try {
 							taskController.saveTask(pendingTxTask);
 						} catch (MayamClientException e) {
 							log.warn("Exception thrown by Mayam while updating event date of task " + pendingTxTask.getAttributeAsString(Attribute.TASK_ID) + " to " + txPackage.getTargetDate().toString());
 							e.printStackTrace();
 						}
+					}
+					else {
+						log.info("No pending tx task found, unable to set target date on pending tx task");
 					}
 				}
 
