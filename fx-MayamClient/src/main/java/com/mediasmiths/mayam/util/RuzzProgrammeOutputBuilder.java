@@ -154,8 +154,8 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setAudioType(getAudioEncoding(audioTracks));
 
-		ret.setRightsStartDate(getDateFromMayamString((java.util.Date)pack.getPackageAttributes().getAttribute(Attribute.LICENSE_START)));
-		ret.setRightsEndDate(getDateFromMayamString((java.util.Date)pack.getPackageAttributes().getAttribute(Attribute.LICENSE_END)));
+		ret.setRightsStartDate(getDateFromMayamString((java.util.Date)pack.getTitleAttributes().getAttribute(Attribute.LICENSE_START)));
+		ret.setRightsEndDate(getDateFromMayamString((java.util.Date)pack.getTitleAttributes().getAttribute(Attribute.LICENSE_END)));
 
 
 		return ret;
