@@ -154,8 +154,8 @@ public class RuzzProgrammeOutputBuilder
 
 		ret.setAudioType(getAudioEncoding(audioTracks));
 
-		ret.setRightsStartDate(getDateFromMayamString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_START)));
-		ret.setRightsEndDate(getDateFromMayamString(pack.getPackageAttributes().getAttributeAsString(Attribute.LICENSE_END)));
+		ret.setRightsStartDate(getDateFromMayamString((java.util.Date)pack.getPackageAttributes().getAttribute(Attribute.LICENSE_START)));
+		ret.setRightsEndDate(getDateFromMayamString((java.util.Date)pack.getPackageAttributes().getAttribute(Attribute.LICENSE_END)));
 
 
 		return ret;
@@ -201,7 +201,7 @@ public class RuzzProgrammeOutputBuilder
 	{
 		String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.CONT_DESC);
 		if (desc == null)
-			programmeDetail.setDescription("No description defined in metadata");
+			programmeDetail.setDescription("No description supplied.");
 		else
 			programmeDetail.setDescription(StringUtils.left(desc, 127));
 	}
@@ -228,14 +228,13 @@ public class RuzzProgrammeOutputBuilder
 		}
 	}
 
-	private static XMLGregorianCalendar getDateFromMayamString(String mayamValue)
+	private static XMLGregorianCalendar getDateFromMayamString(java.util.Date mayamValue)
 	{
 
 		try
 		{
-			org.joda.time.DateTime dt = DEFAULT_DATE_FORMAT.parseDateTime(mayamValue);
 
-			return getGregorian(dt);
+			return getGregorian(mayamValue);
 
 		}
 		catch (Throwable e)
@@ -304,18 +303,14 @@ public class RuzzProgrammeOutputBuilder
 	}
 
 
-	private static XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
+	private static XMLGregorianCalendar getGregorian(java.util.Date dateTime)
 	{
 
 		try
 		{
-			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
-			cal.setYear(dateTime.getYear());
-			cal.setDay(dateTime.getDayOfMonth());
-			cal.setMonth(dateTime.getMonthOfYear());
-			cal.setHour(dateTime.getHourOfDay());
-			cal.setMinute(dateTime.getMinuteOfHour());
-			cal.setSecond(dateTime.getSecondOfMinute());
+			GregorianCalendar c = new GregorianCalendar();
+			c.setTime(dateTime);
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
 			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
 			return cal;
@@ -343,7 +338,30 @@ public class RuzzProgrammeOutputBuilder
 		}
 	}
 
-	private static XMLGregorianCalendar getPurgeDateFor(org.joda.time.DateTime dateTime)
+	private static XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
+	{
+
+		try
+		{
+			XMLGregorianCalendar cal = DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar());
+			cal.setYear(dateTime.getYear());
+			cal.setDay(dateTime.getDayOfMonth());
+			cal.setMonth(dateTime.getMonthOfYear());
+			cal.setHour(dateTime.getHourOfDay());
+			cal.setMinute(dateTime.getMinuteOfHour());
+			cal.setSecond(dateTime.getSecondOfMinute());
+			cal.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+			cal.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+			return cal;
+		}
+		catch (DatatypeConfigurationException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	private static XMLGregorianCalendar getPurgeDateFor(java.util.Date dateTime)
 	{
 
 		org.joda.time.DateTime pTime = new org.joda.time.DateTime(dateTime);

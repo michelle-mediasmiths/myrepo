@@ -203,7 +203,7 @@ public class MediaExchangeProgrammeOutputBuilder
 
 	private static void setDueAndPurgeDate(final Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
-         String targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
+         java.util.Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
 		 DateTime txDate;
 		 if (targetDate == null)
 		 {
@@ -213,7 +213,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		 {
 			 try
 			 {
-				 txDate = DEFAULT_DATE_FORMAT.parseDateTime(targetDate);
+				 txDate = new DateTime(targetDate);
 			 }
 			 catch (Exception e)
 			 {
@@ -317,7 +317,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	{
 		String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.CONT_DESC);
 		if (desc == null)
-			programmeDetail.setDescription("No description defined in metadata");
+			programmeDetail.setDescription("No description supplied.");
 		else
 			programmeDetail.setDescription(StringUtils.left(desc, 127));
 	}
