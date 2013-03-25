@@ -247,7 +247,7 @@ public class MayamPDPImpl implements MayamPDP
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
 
-					return getConfirmStatus(warnings+" Pressing OK will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
+					return getConfirmStatus(warnings+" Pressing CONFIRM will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
 				}
 
 				Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
@@ -814,7 +814,7 @@ public class MayamPDPImpl implements MayamPDP
 	
 					if (qcStatus == QcStatus.PASS || qcStatus == QcStatus.PASS_MANUAL)
 					{
-						return getConfirmStatus("'Pressing OK will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
+						return getConfirmStatus("'Pressing CONFIRM will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
 					}
 	
 					boolean qcParallel = Boolean.getBoolean(parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED).toString());
@@ -836,7 +836,7 @@ public class MayamPDPImpl implements MayamPDP
 				}
 				else
 				{
-					return getConfirmStatus("'Pressing OK will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
+					return getConfirmStatus("'Pressing CONFIRM will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
 				}
 
 			}
