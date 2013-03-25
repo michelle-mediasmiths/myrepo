@@ -6,6 +6,7 @@ import java.net.InetAddress;
 
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ProtocolCommandListener;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
@@ -153,6 +154,12 @@ public class Fxp
 				log.error("failed to chagne to source directory on target");
 				return false;
 			}
+			
+			log.debug("Setting type binary on proxy");
+			proxy.setFileType(FTP.BINARY_FILE_TYPE);
+			
+			log.debug("Setting type binary on target");
+			target.setFileType(FTP.BINARY_FILE_TYPE);
 			
 			log.debug("Entering Remote Passive Mode on target");
 			target.enterRemotePassiveMode();
