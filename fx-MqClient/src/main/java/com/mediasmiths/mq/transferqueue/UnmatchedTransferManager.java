@@ -79,9 +79,13 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 			List<AttributeMap> allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetID);
 
 			// close open ingest task for the target asset
-			log.debug(String.format("Closing ingest task for asset with assetId %s", unmatchedAssetID));
+			log.debug(String.format("Closing ingest task for asset with assetId %s", assetPeerID));
 			closeIngestTaskForAsset(assetPeerID);
 
+			// close purge candidate task for unmatched asset
+			log.debug(String.format("Closing purge candidate task for asset with assetId %s", unmatchedAssetID));
+			closePurgeCandidateTaskForAsset(unmatchedAssetID);
+				
 			// finish any unmatched task for asset
 			for (AttributeMap unmatchedTask : allUnmatchedTasks)
 			{
@@ -127,6 +131,37 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 		}
 	}
 
+	public void closePurgeCandidateTaskForAsset(String assetID)
+	{
+		AttributeMap task;
+		try
+		{
+			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.PURGE_CANDIDATE_LIST, assetID);
+
+			if (task == null)
+			{
+				log.warn("no purge candidate task found for assetID " + assetID);
+				return;
+			}
+
+			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
+
+			if (MayamTaskController.END_STATES.contains(currentState))
+			{
+				log.warn("Purge Candidate task for asset is already in a closed state  " + currentState);
+				return;
+			}
+
+			AttributeMap updateMap = taskController.updateMapForTask(task);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			taskController.saveTask(updateMap);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error closing purge candidate task for asset " + assetID, e);
+		}
+	}
+	
 	public void closeIngestTaskForAsset(String peerID)
 	{
 		AttributeMap task;
