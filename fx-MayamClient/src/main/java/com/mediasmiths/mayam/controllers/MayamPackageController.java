@@ -339,9 +339,9 @@ public class MayamPackageController extends MayamController
 			AttributeMap material = materialController.getMaterialAttributes(txPackage.getMaterialID());
 			AttributeMap pendingTxTask = null;
 			try {
-				pendingTxTask = taskController.getOnlyOpenTaskForAssetBySiteID(MayamTaskListType.PENDING_TX_PACKAGE, txPackage.getPresentationID());
+				pendingTxTask = taskController.getOnlyOpenTaskForAssetBySiteID(MayamTaskListType.PENDING_TX_PACKAGE, txPackage.getMaterialID());
 			} catch (MayamClientException e2) {
-				log.warn("Unable to location pending Tx Task for package : " + txPackage.getPresentationID());
+				log.warn("Unable to locate pending Tx Task for package : " + txPackage.getPresentationID());
 				e2.printStackTrace();
 			}
 			
