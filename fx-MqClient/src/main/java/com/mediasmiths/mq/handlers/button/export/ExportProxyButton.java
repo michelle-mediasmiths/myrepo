@@ -97,6 +97,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
+
+			// If 'No Bug' has been selected then ignore any text in the bug location field
+			if (materialAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG)) 
+			{
+				buglocation = null;
+			}
+			
 			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
 			Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
 
@@ -235,7 +242,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			throw new IllegalArgumentException("no channels in asset metadata");
 		}
 		
-		if (buglocation != null)
+		if (buglocation != null && !buglocation.equals("--"))
 		{
 			TCBugOptions bug = bug(buglocation, channel);
 			jobParams.bug = bug;
@@ -396,7 +403,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			return TCLocation.BOTTOM;
 		}
 
-		throw new IllegalArgumentException("unrecognised bug locaiton");
+		throw new IllegalArgumentException("unrecognised bug location");
 	}
 	
 	protected String getExportLocationForFirstChannel(AttributeMap materialAttributes){
