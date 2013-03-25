@@ -99,7 +99,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
 
 			// If 'No Bug' has been selected then ignore any text in the bug location field
-			if (materialAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG)) 
+			Boolean noBug = materialAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
+			if (noBug != null && noBug.booleanValue()==true); 
 			{
 				buglocation = null;
 			}
