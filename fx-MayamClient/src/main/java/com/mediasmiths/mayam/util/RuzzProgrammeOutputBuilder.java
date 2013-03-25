@@ -1,5 +1,7 @@
 package com.mediasmiths.mayam.util;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
@@ -36,6 +38,10 @@ public class RuzzProgrammeOutputBuilder
 {
 
 	private final static Logger log = Logger.getLogger(RuzzProgrammeOutputBuilder.class);
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.xml.supplier")
+	private static String supplierInXml = "FX-MAM";
 
 	public static RuzzIF buildProgramme(FullProgrammePackageInfo pack, MayamTitleController titleController)
 	{
@@ -110,14 +116,18 @@ public class RuzzProgrammeOutputBuilder
         setCreationDate(ret, pack);
 
 		setSOMAndDuration(pack, ret);
+		
+		ret.setSUPPLIER(supplierInXml);
 
 		StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
 
 		if (channels != null && channels.size() > 0)
 		{
 			String channel = channels.get(0);
-			ret.setSUPPLIER(channel);
+			
 			ret.setCOPYRIGHT(channel);
+			
+			ret.setMARKET(channel);
 		}
 		else
 		{
@@ -125,7 +135,7 @@ public class RuzzProgrammeOutputBuilder
 			ret.setCOPYRIGHT("No Channel owner set in metadata");
 		}
 
-		ret.setMARKET("Online");
+		
 
 		ret.setCensorshipSystem("");
 
