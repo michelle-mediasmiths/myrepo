@@ -97,6 +97,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
+
+			// If 'No Bug' has been selected then ignore any text in the bug location field
+			if (materialAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG)) 
+			{
+				buglocation = null;
+			}
+			
 			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
 			Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
 
