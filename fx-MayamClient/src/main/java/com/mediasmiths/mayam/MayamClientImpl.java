@@ -1,23 +1,11 @@
 package com.mediasmiths.mayam;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -52,6 +40,15 @@ import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
+import org.apache.log4j.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class MayamClientImpl implements MayamClient
 {
@@ -477,9 +474,9 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public Programme getProgramme(String packageID) throws MayamClientException
 	{
-		
+
 		//fetch the packages information		
-		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController, client.assetApi());
 		//build the Programme Object
 		return MediaExchangeProgrammeOutputBuilder.buildProgramme(pack);
 	}
@@ -488,7 +485,7 @@ public class MayamClientImpl implements MayamClient
 	public RuzzIF getRuzzProgramme(String packageID) throws MayamClientException
 	{
 		//fetch the packages information		
-		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController, client.assetApi());
 		return RuzzProgrammeOutputBuilder.buildProgramme(pack, titleController);
 				
 	}
@@ -603,7 +600,8 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean isPackageAO(String packageID) throws MayamClientException
 	{
-		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController);	
+		FullProgrammePackageInfo info = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController,
+		                                                             client.assetApi());
 		
 		return AssetProperties.isAO(info.getTitleAttributes());
 	}

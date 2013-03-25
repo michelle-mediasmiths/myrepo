@@ -1,16 +1,18 @@
 package com.mediasmiths.mayam;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.AssetApi;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class FullProgrammePackageInfo
 {
@@ -26,11 +28,11 @@ public class FullProgrammePackageInfo
 	String titleID;
 	AttributeMap titleAttributes;
 
-	public FullProgrammePackageInfo(
-			String packageId,
-			MayamPackageController packageController,
-			MayamMaterialController materialController,
-			MayamTitleController titleController) throws MayamClientException
+	public FullProgrammePackageInfo(String packageId,
+	                                MayamPackageController packageController,
+	                                MayamMaterialController materialController,
+	                                MayamTitleController titleController,
+	                                final AssetApi assetApi) throws MayamClientException
 	{
 
 		this.packageId = packageId;
@@ -61,9 +63,22 @@ public class FullProgrammePackageInfo
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
 
+
 		// get the title
-		titleID = materialAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-		titleAttributes = titleController.getTitle(titleID);
+		String titleId = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+		String titleAssetID = materialAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+		try
+		{
+			titleAttributes = assetApi.getAsset(AssetType.ITEM, titleAssetID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("Unable to locate asset with ID: " + titleAssetID, e);
+
+			titleAttributes = titleController.getTitle(titleId);
+
+			log.error("Using the parent house id title as a fall back: " + titleId);
+		}
 	}
 	
 	public SegmentList getSegmentList()
