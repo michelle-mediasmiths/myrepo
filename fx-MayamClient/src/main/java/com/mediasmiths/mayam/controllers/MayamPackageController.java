@@ -337,7 +337,14 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 
 			AttributeMap material = materialController.getMaterialAttributes(txPackage.getMaterialID());
-
+			AttributeMap pendingTxTask = null;
+			try {
+				pendingTxTask = taskController.getOnlyOpenTaskForAssetBySiteID(MayamTaskListType.PENDING_TX_PACKAGE, txPackage.getPresentationID());
+			} catch (MayamClientException e2) {
+				log.warn("Unable to location pending Tx Task for package : " + txPackage.getPresentationID());
+				e2.printStackTrace();
+			}
+			
 			if (material != null)
 			{
 				try
@@ -390,6 +397,17 @@ public class MayamPackageController extends MayamController
 				if (txPackage.getTargetDate() != null)
 				{
 					attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+					
+					if (pendingTxTask != null)
+					{
+						pendingTxTask.setAttribute(Attribute.EVENT_DATE, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+						try {
+							taskController.saveTask(pendingTxTask);
+						} catch (MayamClientException e) {
+							log.warn("Exception thrown by Mayam while updating event date of task " + pendingTxTask.getAttributeAsString(Attribute.TASK_ID) + " to " + txPackage.getTargetDate().toString());
+							e.printStackTrace();
+						}
+					}
 				}
 
 				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
