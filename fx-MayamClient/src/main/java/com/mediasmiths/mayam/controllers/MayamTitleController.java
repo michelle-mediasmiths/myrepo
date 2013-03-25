@@ -25,6 +25,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title.Distributor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
@@ -36,6 +37,7 @@ import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.xml.datatype.DatatypeConstants;
@@ -49,6 +51,9 @@ public class MayamTitleController extends MayamController{
 	private final static Logger log = Logger.getLogger(MayamTitleController.class);
 	
 	private final static String AO_CHANNEL_TAG = "AO";
+	
+	@Inject
+	private DateUtil dateUtil;
 	
 	@Inject
 	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
@@ -379,8 +384,11 @@ public class MayamTitleController extends MayamController{
 			/* Earliest start and latest end date end */
 		}
 		
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_START, earliestStart);
-		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_END, latestEnd);
+		Date earliestStartDate = dateUtil.fromXMLGregorianCalendar(earliestStart);
+		Date latestEndDate = dateUtil.fromXMLGregorianCalendar(latestEnd);
+		
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_START, earliestStartDate);
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_END, latestEndDate);
 		return attributesValid;
 	}
 
