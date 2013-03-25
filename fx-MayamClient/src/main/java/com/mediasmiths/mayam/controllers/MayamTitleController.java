@@ -38,6 +38,9 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamTitleController extends MayamController{
@@ -191,10 +194,16 @@ public class MayamTitleController extends MayamController{
 
 					List<License> licenses = titleRights.getLicense();
 					
+					XMLGregorianCalendar earliestStart = null;
+					XMLGregorianCalendar latestEnd = null;
+					
+					attributesValid = updateLicenceStartAndEnd(attributes, attributesValid, licenses, earliestStart, latestEnd);
+						
 					int rowCounter = 0;
 					for(License license : licenses){
 						LicenseHolderType holder = license.getLicenseHolder();
 						LicensePeriodType period = license.getLicensePeriod();
+						
 						
 						Channels channels = license.getChannels();
 						if (channels != null) {
@@ -225,6 +234,8 @@ public class MayamTitleController extends MayamController{
 							}
 						}
 					}
+					
+
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.MEDIA_RIGHTS, rightsTable);
 					
 					attributesValid = attributesValid && attributes.setAttribute(Attribute.CHANNELS, channelStringList);
@@ -307,6 +318,70 @@ public class MayamTitleController extends MayamController{
 		}
 		
 		return returnCode;
+	}
+
+	/**
+	 * called when creating or updating titles based on placeholder management messages
+	 * @param attributes   - an attribute map we are building (performs validation as items are added to map, not strictly necessary)
+	 * @param attributesValid - records if attributes were valid at the start of method call
+	 * @param licenses - licence information from placeholder management message
+	 * @param earliestStart - value to use as current earliest start (could be null)
+	 * @param latestEnd - value to use as current latest end (coult be null)
+	 * @return
+	 */
+	private boolean updateLicenceStartAndEnd(
+			MayamAttributeController attributes,
+			boolean attributesValid,
+			List<License> licenses,
+			XMLGregorianCalendar earliestStart,
+			XMLGregorianCalendar latestEnd)
+	{
+		for(License license : licenses){
+			LicensePeriodType period = license.getLicensePeriod();
+			
+			/* Earliest start and latest end date start */
+			XMLGregorianCalendar start = period.getStartDate();
+			XMLGregorianCalendar end = period.getEndDate();
+
+			if (start != null)
+			{
+				if (earliestStart == null)
+				{
+					earliestStart = start;
+				}
+				else
+				{
+					int compare = earliestStart.toGregorianCalendar().compareTo(start.toGregorianCalendar());
+					if (compare > 0)
+					{
+						log.debug(start.toString() + " earlier than " + earliestStart.toString());
+						earliestStart = start;
+					}
+				}
+			}
+
+			if (end != null)
+			{
+				if (latestEnd == null)
+				{
+					latestEnd = end;
+				}
+				else
+				{
+					int compare = latestEnd.toGregorianCalendar().compareTo(end.toGregorianCalendar());
+					if (compare < 0)
+					{
+						log.debug(end.toString() + " later than " + latestEnd.toString());
+						latestEnd = end;
+					}
+				}
+			}
+			/* Earliest start and latest end date end */
+		}
+		
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_START, earliestStart);
+		attributesValid = attributesValid && attributes.setAttribute(Attribute.LICENSE_END, latestEnd);
+		return attributesValid;
 	}
 
 	private String buildAssetTitle(String programmeTitle, BigInteger seriesNumber, BigInteger episodeNumber, String episodeTitle)
@@ -452,6 +527,13 @@ public class MayamTitleController extends MayamController{
 					
 					boolean ao = false;
 					RightsType titleRights = title.getRights();
+					List<License> licenses = titleRights.getLicense();
+					
+					XMLGregorianCalendar earliestStart = null;
+					XMLGregorianCalendar latestEnd = null;
+					
+					attributesValid = updateLicenceStartAndEnd(attributes, attributesValid, licenses, earliestStart, latestEnd);						
+										
 					if (titleRights != null) {
 						List<String> columnNames = new ArrayList<String>();
 						columnNames.add("Organization ID");
@@ -462,7 +544,7 @@ public class MayamTitleController extends MayamController{
 							
 						GenericTable rightsTable = new GenericTable(columnNames);
 						StringList channelStringList = new StringList();
-						List<License> licenses = titleRights.getLicense();
+
 						
 						int rowCounter = 0;
 						for(License license : licenses){

@@ -339,7 +339,7 @@ public class MayamMaterialController extends MayamController
 	public static Attribute[] materialsAttributesInheritedFromTitle = new Attribute[] { Attribute.ASSET_TITLE,
 			Attribute.CONT_RESTRICTED_MATERIAL,Attribute.CONT_RESTRICTED_ACCESS, Attribute.SERIES_TITLE, Attribute.SERIES_TITLE, Attribute.SHOW,
 			Attribute.SEASON_NUMBER, Attribute.EPISODE_NUMBER, Attribute.EPISODE_TITLE, Attribute.LOCATION,
-			Attribute.PRODUCTION_NUMBER, Attribute.SERIES_YEAR, Attribute.CONT_CATEGORY, Attribute.CHANNELS, Attribute.CHANNEL_GROUPS, Attribute.PURGE_PROTECTED };
+			Attribute.PRODUCTION_NUMBER, Attribute.SERIES_YEAR, Attribute.CONT_CATEGORY, Attribute.CHANNELS, Attribute.CHANNEL_GROUPS, Attribute.PURGE_PROTECTED, Attribute.LICENSE_START, Attribute.LICENSE_END };
 
 	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title)
 	{
