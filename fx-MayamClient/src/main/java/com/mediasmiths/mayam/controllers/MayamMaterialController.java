@@ -1178,7 +1178,15 @@ public class MayamMaterialController extends MayamController
 			material = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), materialID);
 			if (material != null)
 			{
-				isProtected = material.getAttribute(Attribute.PURGE_PROTECTED);
+				Boolean prot = material.getAttribute(Attribute.PURGE_PROTECTED);
+				if (prot != null)
+				{
+					isProtected = prot.booleanValue();
+				}
+				else
+				{
+					isProtected = false;
+				}
 			}
 		}
 		catch (RemoteException e)
