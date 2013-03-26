@@ -259,6 +259,12 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			boolean isConditions = false;
 			
 			if(conditions!=null && !conditions.isEmpty()){
+				
+				for (String condition : conditions)
+				{
+					log.debug(String.format("condition {%s}", condition));
+				}
+				
 				if(conditions.size() > 0){
 					if(! (( conditions.size()==1) && conditions.get(0).equals(""))){ //sometimes getQCMessages returns a single empty string, assume that means no channel conditions
 						isConditions=true;
