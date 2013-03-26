@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers.asset;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -9,6 +10,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mq.handlers.AttributeHandler;
+import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
 
 /***
  * When an asset is created through DART a title id may be specified, if so this will be included in the AUX_VAL attribute in the asset create message if this is present attempt to associate the asst
@@ -19,6 +21,9 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 {
 
 	private final static Logger log = Logger.getLogger(DartRecordingTitleAssociationHandler.class);
+	
+	@Inject
+	UnmatchedTransferManager transferManager;
 
 	@Override
 	public void process(AttributeMap messageAttributes)
@@ -63,6 +68,9 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 				try
 				{
 					tasksClient.assetApi().updateAsset(updateMap);
+					
+					// close the purge candidate task for the asset.
+					transferManager.closePurgeCandidateTaskForAsset(assetID);
 					log.debug("update complete");
 				}
 				catch (RemoteException e)

@@ -337,11 +337,11 @@ public class MayamPackageController extends MayamController
 			MayamAttributeController attributes = null;
 
 			AttributeMap material = materialController.getMaterialAttributes(txPackage.getMaterialID());
-			AttributeMap pendingTxTask = null;
+			List<AttributeMap> pendingTxTasks = null;
 			try {
-				pendingTxTask = taskController.getOnlyOpenTaskForAssetBySiteID(MayamTaskListType.PENDING_TX_PACKAGE, txPackage.getPresentationID());
+				pendingTxTasks = taskController.getOpenTasksForAsset(MayamTaskListType.PENDING_TX_PACKAGE, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, txPackage.getMaterialID());
 			} catch (MayamClientException e2) {
-				log.warn("Unable to location pending Tx Task for package : " + txPackage.getPresentationID());
+				log.warn("Unable to locate pending Tx Task for package : " + txPackage.getPresentationID());
 				e2.printStackTrace();
 			}
 			
@@ -399,16 +399,19 @@ public class MayamPackageController extends MayamController
 					attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
 					
 					
-					if (pendingTxTask != null)
+					if (pendingTxTasks != null && !pendingTxTasks.isEmpty())
 					{
-						log.info("Attempting to set target date on pending tx task");
-						pendingTxTask.setAttribute(Attribute.EVENT_DATE, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
-						log.info("Setting target date on pending tx task to " + txPackage.getTargetDate().toString());
-						try {
-							taskController.saveTask(pendingTxTask);
-						} catch (MayamClientException e) {
-							log.warn("Exception thrown by Mayam while updating event date of task " + pendingTxTask.getAttributeAsString(Attribute.TASK_ID) + " to " + txPackage.getTargetDate().toString());
-							e.printStackTrace();
+						for (AttributeMap pendingTxTask: pendingTxTasks)
+						{
+							log.info("Attempting to set target date on pending tx task");
+							pendingTxTask.setAttribute(Attribute.EVENT_DATE, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+							log.info("Setting target date on pending tx task to " + txPackage.getTargetDate().toString());
+							try {
+								taskController.saveTask(pendingTxTask);
+							} catch (MayamClientException e) {
+								log.warn("Exception thrown by Mayam while updating event date of task " + pendingTxTask.getAttributeAsString(Attribute.TASK_ID) + " to " + txPackage.getTargetDate().toString());
+								e.printStackTrace();
+							}
 						}
 					}
 					else {

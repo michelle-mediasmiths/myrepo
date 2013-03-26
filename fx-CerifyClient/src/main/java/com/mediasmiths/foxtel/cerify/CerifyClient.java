@@ -4,6 +4,8 @@ package com.mediasmiths.foxtel.cerify;
 import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Date;
+import java.util.Calendar;
 
 import org.apache.axis.types.URI;
 import org.apache.axis.types.URI.MalformedURIException;
@@ -18,7 +20,12 @@ import com.mediasmiths.foxtel.cerify.medialocation.MediaLocationService;
 import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.ControlJob;
+import com.tektronix.www.cerify.soap.client.ControlMediaSet;
+import com.tektronix.www.cerify.soap.client.ControlJob;
+import com.tektronix.www.cerify.soap.client.ControlJobResponse;
+import com.tektronix.www.cerify.soap.client.ControlMediaSetResponse;
 import com.tektronix.www.cerify.soap.client.CreateJob;
+import com.tektronix.www.cerify.soap.client.GetJobs;
 import com.tektronix.www.cerify.soap.client.CreateMediaSet;
 import com.tektronix.www.cerify.soap.client.GetJobResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetJobStatus;
@@ -26,13 +33,19 @@ import com.tektronix.www.cerify.soap.client.GetJobStatusResponse;
 import com.tektronix.www.cerify.soap.client.GetMediaFileResultsResponse;
 import com.tektronix.www.cerify.soap.client.GetProfiles;
 import com.tektronix.www.cerify.soap.client.GetProfilesResponse;
+import com.tektronix.www.cerify.soap.client.GetJobsResponse;
 import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
+import com.tektronix.www.cerify.soap.client.JobStatusType;
+import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 import com.tektronix.www.cerify.soap.client.MediaLocationDoesntExistFault;
+import com.tektronix.www.cerify.soap.client.MediaSetActionType;
 import com.tektronix.www.cerify.soap.client.MediaSetNameInUseFault;
+import com.tektronix.www.cerify.soap.client.InvalidRangeFault;
 import com.tektronix.www.cerify.soap.client.PriorityType;
+import com.tektronix.www.cerify.soap.client.MediaSetDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.URLNotAccessibleFault;
 import com.tektronix.www.cerify.soap.client.URLNotInMediaLocationFault;
 import com.tektronix.www.cerify.soap.client._20101220.GetJobResults;
@@ -191,6 +204,194 @@ public class CerifyClient
 			ControlJob control = new ControlJob(jobName, JobActionType.stopnow);
 			service.controlJob(control);					
 	}
+	
+	/**
+	 * Get all jobs based on status and date range (optional)
+	 * 
+	 * @param status
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 * @throws InvalidRangeFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public GetJobsResponse getJobs(String status, Calendar fromDate, Calendar toDate) throws InvalidRangeFault, BaseCeritalkFault, RemoteException
+	{
+		log.info("Start getJobs");
+		
+		GetJobs request = new GetJobs();
+		JobStatusType requiredStatus = JobStatusType.fromValue(status);
+		request.setStatus(requiredStatus);
+		Calendar todayDate = Calendar.getInstance();
+		
+		fromDate = (fromDate==null)? todayDate: fromDate;
+		toDate = (toDate==null)? todayDate: toDate;
+		request.setCreateTimeRangeFrom(fromDate);
+		request.setCreateTimeRangeTo(toDate);
+		
+		GetJobsResponse response = null;
+		try
+		{
+			response = service.getJobs(request);
+		}
+		catch (InvalidRangeFault e)
+		{
+			log.error("Invalid date range error, e");
+			throw e;
+		}
+		catch (BaseCeritalkFault e)
+		{
+			log.error("Error getting cerify jobs", e);
+			throw e;
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error getting cerify jobs", e);
+			throw e;
+		}
+		
+		return response;
+		
+	}
+
+	
+	/**
+	 * Delete the mediaset name provided in the parameter
+	 * 
+	 * @param mediasetName
+	 * @return
+	 * @throws MediaSetDoesntExistFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public ControlMediaSetResponse deleteMediaset(String mediasetName) throws MediaSetDoesntExistFault, BaseCeritalkFault, RemoteException
+	{
+		log.info(String.format("Start delete mediaset %s" + mediasetName));
+		ControlMediaSet request = new ControlMediaSet();
+		request.setMediaSetName(mediasetName);
+		request.setAction(MediaSetActionType.delete);
+		ControlMediaSetResponse response = null;
+		
+		try
+		{
+			response = service.controlMediaSet(request);
+		
+		}
+		catch (MediaSetDoesntExistFault e)
+		{
+			log.error("Error deleting mediaset: mediaset does not exsit " + mediasetName, e);
+			throw e;
+		}
+		catch (BaseCeritalkFault e)
+		{
+			log.error("Error deleting mediaset", e);
+			throw e;
+		}
+		catch (RemoteException e)
+		{
+			log.error("Error deleting mediaset", e);
+			throw e;
+		}
+		return response;
+	}
+	
+	/**
+	 * Delete the job name provided in parameter
+	 * @param jobName
+	 * @return
+	 * @throws JobDoesntExistFault
+	 * @throws JobIsArchivedFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public ControlJobResponse deleteJob(String jobName) throws JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException 
+	{
+		ControlJob request = new ControlJob();
+		request.setJobName(jobName);
+		request.setAction(JobActionType.delete);
+		
+		ControlJobResponse response = null;
+		try
+		{
+			response = service.controlJob(request);
+		}
+		catch (JobDoesntExistFault e)
+		{
+			log.fatal("error in deleting job, jos does not exist " + jobName, e);
+			throw e;
+		}
+		catch (JobIsArchivedFault e)
+		{
+			log.fatal("error in deleting job, job is in archive " + jobName, e);
+			throw e;
+		}
+		catch (BaseCeritalkFault e)
+		{
+			log.fatal("error in deleting job " + jobName, e);
+			throw e;
+		}
+		catch (RemoteException e)
+		{
+			log.fatal("error in deleting job " + jobName, e);
+			throw e;
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Cleanup jobs and mediasets retrieved based on parameters provided.
+	 * 
+	 * @param status
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 * @throws InvalidRangeFault
+	 * @throws MediaSetDoesntExistFault
+	 * @throws JobDoesntExistFault
+	 * @throws JobIsArchivedFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public int cleanupJobsAndMediasets(String status, Calendar fromDate, Calendar toDate) 
+			throws InvalidRangeFault, MediaSetDoesntExistFault, JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException     
+	{
+			log.info("Start cleanup jobs and mediasets");
+		
+			GetJobsResponse response = getJobs(status, fromDate, toDate);
+			String[] listOfJobs = response.getListOfJobs();
+			
+			if (listOfJobs.length <= 0)
+			{
+				log.info("Retrieving jobs returns empty list of jobs");
+				
+			}
+			
+			int n = listOfJobs.length;
+			
+			log.info("There are jobs to be deleted " + n);
+				
+			// for each job delete the media set and the job.
+			for (String jobName: listOfJobs)
+			{
+				GetJobResultsResponse jobResult = getJobResult(jobName);
+				
+				String mediasetName = jobResult.getMediaset();
+				
+				ControlMediaSetResponse deleteMediaset = deleteMediaset(mediasetName);
+				
+				log.info(String.format("Mediaset %s is deleted", mediasetName ));
+				
+				ControlJobResponse deleteJob = deleteJob(jobName);
+				
+				log.info(String.format("Job name %s is deleted", jobName ));
+				
+			}
+			
+			return n;
+	}
+	
 	
 	private String jobName(final String profileName, final String mediaSetName)
 	{
