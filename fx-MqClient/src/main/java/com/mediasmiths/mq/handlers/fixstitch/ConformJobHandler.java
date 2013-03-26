@@ -109,55 +109,63 @@ public class ConformJobHandler extends JobHandler
 			}
 			else if (numRevisions == 1)
 			{
-				try
+				// If this is the first revision and not a compliance item then create
+				// purge candidate list for associated and edit clips
+				if (item != null)
 				{
-					// If this is the first revision and not a compliance item then create
-					// purge candidate list for associated and edit clips
-					if (item != null)
+					String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
+					String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
+					String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+					
+					if (sourceHouseID == null) //item is not a compliance item
 					{
-						String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
-						String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
-						String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
-						
-						if (sourceHouseID == null) //item is not a compliance item
+						log.info("asset is not a compliance item, checking content type to see if Purge Candidate required");
+						if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()) || contentType.equals(MayamContentTypes.PUBLICITY.toString()))
 						{
-							log.info("asset is not a compliance item, checking content type to see if Purge Candidate required");
-							if (contentType.equals(MayamContentTypes.EPK.toString()) || contentType.equals(MayamContentTypes.EDIT_CLIPS.toString()) || contentType.equals(MayamContentTypes.PUBLICITY.toString()))
+							log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
+							int numberOfDays = defaultPurgeTime;
+
+							if (contentType.equals(MayamContentTypes.EPK.toString())) 
 							{
-								log.info("Content Type is :" + contentType + ", attempting to create new Purge Candidate task");
-								int numberOfDays = defaultPurgeTime;
+								log.info("Attempting to set purge time for associated content of " + associatedPurgeTime);
+								numberOfDays = associatedPurgeTime;
+							}
+							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS.toString())) 
+							{
+								log.info("Attempting to set purge time for edit clips content of " + associatedPurgeTime);
+								numberOfDays = editClipsPurgeTime;
+							}
+							else if (contentType.equals(MayamContentTypes.PUBLICITY.toString())) 
+							{
+								log.info("Attempting to set purge time for publicity content of " + publicityPurgeTime);
+								numberOfDays = publicityPurgeTime;
+							}
+						
+							try
+							{
+								AttributeMap purgeTask = tasksClient.createAttributeMap();
+								purgeTask.setAttribute(Attribute.OP_DATE, numberOfDays);
+								purgeTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
+								purgeTask.setAttribute(Attribute.ASSET_ID, assetID);
+								purgeTask.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST);
+								tasksClient.taskApi().createTask(purgeTask);
 	
-								if (contentType.equals(MayamContentTypes.EPK.toString())) 
-								{
-									log.info("Attempting to set purge time for associated content of " + associatedPurgeTime);
-									numberOfDays = associatedPurgeTime;
-								}
-								else if (contentType.equals(MayamContentTypes.EDIT_CLIPS.toString())) 
-								{
-									log.info("Attempting to set purge time for edit clips content of " + associatedPurgeTime);
-									numberOfDays = editClipsPurgeTime;
-								}
-								else if (contentType.equals(MayamContentTypes.PUBLICITY.toString())) 
-								{
-									log.info("Attempting to set purge time for publicity content of " + publicityPurgeTime);
-									numberOfDays = publicityPurgeTime;
-								}
-								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);
 								log.info("New Purge Candidate Task created");
 							}
-							else {
-								log.info("Content not of type edit clips, publicity or associated, no purge candidate task required. Content Type = " + contentType);
+							catch (RemoteException e)
+							{
+								log.error("Error creating Purge Candidate task for new conform", e);
 							}
 						}
 						else {
-							log.info("asset is a compliance item, no purge candidate task required.");
+							log.info("Content not of type edit clips, publicity or associated, no purge candidate task required. Content Type = " + contentType);
 						}
 					}
+					else {
+						log.info("asset is a compliance item, no purge candidate task required.");
+					}
 				}
-				catch (MayamClientException e)
-				{
-					log.error("Exception thrown while creating new Purge Candidate Task", e);
-				}
+
 				closeFixAndStitch(materialID);
 				log.info("Only one revision for this asset, I don't need to mark any old ones for deletion");				
 			}
