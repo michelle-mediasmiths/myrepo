@@ -21,6 +21,8 @@ import com.tektronix.www.cerify.soap.client.BaseCeritalkFault;
 import com.tektronix.www.cerify.soap.client.CeriTalk_PortType;
 import com.tektronix.www.cerify.soap.client.ControlJob;
 import com.tektronix.www.cerify.soap.client.ControlMediaSet;
+import com.tektronix.www.cerify.soap.client.ControlJob;
+import com.tektronix.www.cerify.soap.client.ControlJobResponse;
 import com.tektronix.www.cerify.soap.client.ControlMediaSetResponse;
 import com.tektronix.www.cerify.soap.client.CreateJob;
 import com.tektronix.www.cerify.soap.client.GetJobs;
@@ -36,6 +38,7 @@ import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.JobDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.JobIsArchivedFault;
 import com.tektronix.www.cerify.soap.client.JobStatusType;
+import com.tektronix.www.cerify.soap.client.JobActionType;
 import com.tektronix.www.cerify.soap.client.MediaFileNotInJobFault;
 import com.tektronix.www.cerify.soap.client.MediaLocationDoesntExistFault;
 import com.tektronix.www.cerify.soap.client.MediaSetActionType;
@@ -204,6 +207,7 @@ public class CerifyClient
 	
 	/**
 	 * Get all jobs based on status and date range (optional)
+	 * 
 	 * @param status
 	 * @param fromDate
 	 * @param toDate
@@ -250,9 +254,11 @@ public class CerifyClient
 		return response;
 		
 	}
+
 	
 	/**
 	 * Delete the mediaset name provided in the parameter
+	 * 
 	 * @param mediasetName
 	 * @return
 	 * @throws MediaSetDoesntExistFault
@@ -289,6 +295,103 @@ public class CerifyClient
 		}
 		return response;
 	}
+	
+	/**
+	 * Delete the job name provided in parameter
+	 * @param jobName
+	 * @return
+	 * @throws JobDoesntExistFault
+	 * @throws JobIsArchivedFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public ControlJobResponse deleteJob(String jobName) throws JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException 
+	{
+		ControlJob request = new ControlJob();
+		request.setJobName(jobName);
+		request.setAction(JobActionType.delete);
+		
+		ControlJobResponse response = null;
+		try
+		{
+			response = service.controlJob(request);
+		}
+		catch (JobDoesntExistFault e)
+		{
+			log.fatal("error in deleting job, jos does not exist " + jobName, e);
+			throw e;
+		}
+		catch (JobIsArchivedFault e)
+		{
+			log.fatal("error in deleting job, job is in archive " + jobName, e);
+			throw e;
+		}
+		catch (BaseCeritalkFault e)
+		{
+			log.fatal("error in deleting job " + jobName, e);
+			throw e;
+		}
+		catch (RemoteException e)
+		{
+			log.fatal("error in deleting job " + jobName, e);
+			throw e;
+		}
+		
+		return response;
+	}
+	
+	/**
+	 * Cleanup jobs and mediasets retrieved based on parameters provided.
+	 * 
+	 * @param status
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 * @throws InvalidRangeFault
+	 * @throws MediaSetDoesntExistFault
+	 * @throws JobDoesntExistFault
+	 * @throws JobIsArchivedFault
+	 * @throws BaseCeritalkFault
+	 * @throws RemoteException
+	 */
+	public int cleanupJobsAndMediasets(String status, Calendar fromDate, Calendar toDate) 
+			throws InvalidRangeFault, MediaSetDoesntExistFault, JobDoesntExistFault, JobIsArchivedFault, BaseCeritalkFault, RemoteException     
+	{
+			log.info("Start cleanup jobs and mediasets");
+		
+			GetJobsResponse response = getJobs(status, fromDate, toDate);
+			String[] listOfJobs = response.getListOfJobs();
+			
+			if (listOfJobs.length <= 0)
+			{
+				log.info("Retrieving jobs returns empty list of jobs");
+				
+			}
+			
+			int n = listOfJobs.length;
+			
+			log.info("There are jobs to be deleted " + n);
+				
+			// for each job delete the media set and the job.
+			for (String jobName: listOfJobs)
+			{
+				GetJobResultsResponse jobResult = getJobResult(jobName);
+				
+				String mediasetName = jobResult.getMediaset();
+				
+				ControlMediaSetResponse deleteMediaset = deleteMediaset(mediasetName);
+				
+				log.info(String.format("Mediaset %s is deleted", mediasetName ));
+				
+				ControlJobResponse deleteJob = deleteJob(jobName);
+				
+				log.info(String.format("Job name %s is deleted", jobName ));
+				
+			}
+			
+			return n;
+	}
+	
 	
 	private String jobName(final String profileName, final String mediaSetName)
 	{
