@@ -6,7 +6,7 @@
 		<eventname>AutoQCFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>Auto QC Fail in MAM: TaksId(%s), TitleId(%s), Title(%s)</subject>
-			<body>Item is on the Auto QC Fail worklist. Asset(%s). Please resolve this matter within 90-days otherwise item will be purged without further notification. </body>
+			<body><cdata>Item is on the Auto QC Fail worklist. Asset(%s).<p/>Please resolve this matter within 90-days otherwise item will be purged without further notification.</cdata></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -266,7 +266,7 @@
 		<eventname>PreviewFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Preview Fail Item in MAM: MediaId(%s) Title(%s)</subject>
-			<body>There is a new item on the Preview Fail worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
+			<body><cdata>There is a new item on the Preview Fail worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.</cdata></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -292,7 +292,7 @@
 		<eventname>PreviewPassedReorder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Pass-Reorder Item in MAM: MediaId(%s) Title(%s)</subject>
-			<body>There is a new item on the Pass-Reorder worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
+			<body><cdata>There is a new item on the Pass-Reorder worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.</cdata></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -336,8 +336,7 @@
 		<namespace>http://www.foxtel.com.au/ip/delivery</namespace>
 		<eventname>DeliveryFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
-			<subject>PackageId(%s) TaskId(%s). Delivery Failed
-			</subject>
+			<subject>PackageId(%s) TaskId(%s). Delivery Failed</subject>
 			<body>Item has failed 3rd Party transcode, therefore has not been created or sent to external location.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -373,7 +372,7 @@
 		<eventname>ComplianceLoggingMarker</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.ComplianceLoggingMarkerEmailTemplate">
 			<subject>MediaId(%s) Title(%s). Extract of Marked Up item</subject>
-			<body>Marked up item details can be found below:\n%s</body>
+			<body><cdata>Marked up item details can be found below:<p/> %s</cdata></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>

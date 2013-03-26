@@ -25,7 +25,6 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
-import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import org.apache.commons.io.FileUtils;
@@ -384,9 +383,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		long taskId = notification.getTaskID();
 		AttributeMap task = mayamClient.getTask(taskId);
 
-		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
+		String taskListID = task.getAttribute(Attribute.OP_TYPE);
 
-		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
+		if (taskListID.equals("Caption Proxy"))
 		{
 			saveEvent(
 					"CaptionProxyFailure",
@@ -395,16 +394,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 					false);
 		}
-		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
+		else if (taskListID.equals("Publicity Proxy"))
 		{
 			saveEvent(
-					"ClassificationProxyFailure",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					false);
+					         "PublicityFailure",
+					         notification,
+					         TC_EVENT_NAMESPACE,
+					         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+					         false);
 		}
-		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
+		else if (taskListID.equals("Compliance Proxy"))
 		{
 			saveEvent(
 					"ComplianceProxyFailure",
@@ -432,10 +431,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		long taskId = notification.getTaskID();
 		AttributeMap task = mayamClient.getTask(taskId);
 
-		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
+		String taskListID = task.getAttribute(Attribute.OP_TYPE);
 
 		log.debug("Task Button: " + taskListID);
-		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
+		if (taskListID.equals("Caption Proxy"))
 		{
 			saveEvent(
 					"CaptionProxySuccess",
@@ -444,7 +443,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 					true);
 		}
-		else if (taskListID.equals(MayamButtonType.PUBLICITY_PROXY.getText()))
+		else if (taskListID.equals("Classification Proxy"))
 		{
 			saveEvent(
 					"ClassificationProxySuccess",
@@ -453,7 +452,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 					true);
 		}
-		else if (taskListID.equals(MayamButtonType.COMPLIANCE_PROXY.getText()))
+		else if (taskListID.equals("Compliance Proxy"))
 		{
 			saveEvent(
 					"ComplianceProxySuccess",

@@ -20,7 +20,7 @@ public abstract class TaskStateChangeHandler extends AttributeHandler
 	public final void process(AttributeMap messageAttributes)
 	{
 		String taskListID = messageAttributes.getAttribute(Attribute.TASK_LIST_ID);
-		if (taskListID.equals(getTaskType().getText()))
+		if (taskListID.equals(getTaskType().getText()) || getTaskType() == null)
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
 			if (taskState == getTaskState())

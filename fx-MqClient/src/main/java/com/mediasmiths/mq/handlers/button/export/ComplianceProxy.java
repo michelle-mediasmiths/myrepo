@@ -1,14 +1,13 @@
 package com.mediasmiths.mq.handlers.button.export;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.mayam.MayamButtonType;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class ComplianceProxy extends ExportProxyButton
 {
@@ -33,10 +32,12 @@ public class ComplianceProxy extends ExportProxyButton
 		return MayamButtonType.COMPLIANCE_PROXY;
 	}
 
+	public static final String buttonName = "Compliance Proxy";
+
 	@Override
 	public String getName()
 	{
-		return "Compliance Proxy";
+		return buttonName;
 	}
 
 	@Override
