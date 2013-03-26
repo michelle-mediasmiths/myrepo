@@ -718,7 +718,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			eventNotify.setTaskID(payload.getTaskID() + "");
 			if (success)
 			{
-				String deliveryLocation = deliveryLocationForPackage(payload.getTaskID() + "");
+				String deliveryLocation = "TDB";
 				eventNotify.setDeliveryLocation(deliveryLocation);
 			}
 			events.saveEvent(nameSpace, name, eventNotify);
