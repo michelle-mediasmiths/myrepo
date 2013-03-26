@@ -167,7 +167,7 @@ public class MailAgentServiceImpl implements MailAgentService
 				}
 				else
 				{
-					emailService.createMimeEmail(emailAddress, m.getSubject(), m.getBody());
+					emailService.createMimeEmail(emailAddress, m.getSubject(),  getFormattedXML(m.getBody()));
 
 					// emailService.createEmail(email, m.getSubject(), m.getBody());
 				}
@@ -189,6 +189,11 @@ public class MailAgentServiceImpl implements MailAgentService
 			}
 
 		}
+	}
+
+	private String getFormattedXML(final String body)
+	{
+		return "<p/><b>" + body + "</b><p/>";
 	}
 
 	/**

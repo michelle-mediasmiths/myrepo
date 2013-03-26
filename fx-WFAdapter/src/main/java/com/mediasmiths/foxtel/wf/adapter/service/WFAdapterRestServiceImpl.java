@@ -7,7 +7,6 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
-import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -29,7 +28,6 @@ import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -436,6 +434,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		String taskListID = task.getAttribute(Attribute.TASK_LIST_ID);
 
+		log.debug("Task Button: " + taskListID);
 		if (taskListID.equals(MayamButtonType.CAPTION_PROXY.getText()))
 		{
 			saveEvent(
@@ -702,7 +701,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	// temporary serialiser until moved within event service.
 
-	private static JAXBSerialiser JAXB = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events");
 
 	// TC Events
 
@@ -715,6 +713,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		try
 		{
+			log.debug("Save event: " + nameSpace + ":" + name);
 			eventNotify.setAssetID(payload.getAssetID());
 			eventNotify.setTitle(payload.getTitle());
 			eventNotify.setTaskID(payload.getTaskID() + "");
