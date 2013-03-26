@@ -1,17 +1,21 @@
 package com.mediasmiths.mq.handlers.unmatched;
 
+import java.util.List;
+
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 
 public class UnmatchedJobHandler extends JobHandler
@@ -72,16 +76,25 @@ public class UnmatchedJobHandler extends JobHandler
 					{
 						log.error("Error setting OP_TYPE on unmatched material",e);
 					}
-
-					//create qc task for material
+					
+					// create qc task for material if there hasnt been one before
 					String houseID = material.getAttributeAsString(Attribute.HOUSE_ID);
 					try
 					{
-						taskController.createQCTaskForMaterial(houseID, null,null, material);
+						List<AttributeMap> tasksForAsset = taskController.getTasksForAsset(
+								MayamTaskListType.QC_VIEW,
+								AssetType.ITEM,
+								Attribute.ASSET_ID,
+								assetId);
+
+						if (tasksForAsset == null || tasksForAsset.isEmpty())
+						{
+							taskController.createQCTaskForMaterial(houseID, null, null, material);
+						}
 					}
 					catch (MayamClientException e)
 					{
-						log.error("Error creating qc task for asset " + assetId,e);
+						log.error("Error searching for or  creating qc task for asset " + assetId, e);
 					}
 				}
 			}
