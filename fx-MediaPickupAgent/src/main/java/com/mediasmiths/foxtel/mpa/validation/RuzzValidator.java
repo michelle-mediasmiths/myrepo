@@ -54,12 +54,12 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 		String materialID = material.getMaterialID();
 		
 		if(! mayamClient.materialExists(materialID)){
-			log.error(String.format("material %s does not exist"));
+			log.error(String.format("material %s does not exist",materialID));
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 		}
 		
 		if(! mayamClient.isMaterialPlaceholder(materialID)){
-			log.error(String.format("material %s not a placeholder"));
+			log.error(String.format("material %s not a placeholder",materialID));
 			return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
 		}
 
