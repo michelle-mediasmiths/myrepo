@@ -53,10 +53,17 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 	@Override
 	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
+			
 		boolean taskFailure = false;
 
 		// Title ID of temporary material updated - add to source ids of title, remove material from any purge lists
 		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+		
+		if(assetType==null){
+			log.debug("task has been unassociated from its asset, ignoring");
+			return;
+		}
+		
 		String houseID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 
 		try
