@@ -288,8 +288,9 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-    <xs:complexType name="channelConditionsFound">
+    
+  <xs:element name="channelConditionsFound">
+        <xs:complexType>
         <xs:complexContent>
             <xs:annotation>
                 <xs:documentation>A type to represent a channel conditions found event
@@ -302,6 +303,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element>
 
     <xs:complexType name="getQCProfileResponse">
         <xs:sequence>
