@@ -24,7 +24,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 		if (mediaStatus.equals(MediaStatus.MISSING))
 		{
 			log.info(String.format(
-					"A qc task was created for an item %s with no media, cancelling",
+					"QC : A qc task was created for an item %s with no media, cancelling",
 					messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
 			cancelTask(messageAttributes, "No media attatched to item");
 		}
@@ -33,14 +33,14 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 			if (AssetProperties.isQCPassed(messageAttributes))
 			{
 				log.info(String.format(
-						"A qc task was created for an item %s but it has already passed qc, cancelling",
+						"QC : A qc task was created for an item %s but it has already passed qc, cancelling",
 						messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
 				cancelTask(messageAttributes, "Item has already passed qc");
 			}
 			else if (MayamPreviewResults.isPreviewPass((String)messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT)))
 			{
 				log.info(String.format(
-						"A qc task was created for an item %s but it has already passed preview, cancelling",
+						"QC : A qc task was created for an item %s but it has already passed preview, cancelling",
 						messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
 				cancelTask(messageAttributes, "Item has already passed preview");
 			}
@@ -61,7 +61,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 		catch (MayamClientException e)
 		{
 			log.error(
-					"MayamClient exception while performing file format verification for asset"
+					"QC : MayamClient exception while performing file format verification for asset"
 							+ messageAttributes.getAttributeAsString(Attribute.ASSET_ID),
 					e);
 
@@ -74,7 +74,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 			}
 			catch (MayamClientException e1)
 			{
-				log.error("error setting task to error state", e1);
+				log.error("QC : error setting task to error state", e1);
 			}
 		}
 	}
@@ -92,7 +92,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 		}
 		catch (MayamClientException e)
 		{
-			log.error("error cancelling task", e);
+			log.error("QC : error cancelling task", e);
 		}
 	}
 

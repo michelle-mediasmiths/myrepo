@@ -1,6 +1,5 @@
 package com.mediasmiths.mq.handlers.qc;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -10,14 +9,12 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
@@ -35,15 +32,14 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 	@Inject
 	MuleWorkflowController mule;
-	
-	@Inject(optional=false)
+
+	@Inject(optional = false)
 	@Named("qc.events.namespace")
 	private String qcEventNamespace;
-	
+
 	@Inject
 	@Named("wfe.serialiser")
 	private JAXBSerialiser serialiser;
-	
 
 	@Override
 	public String getName()
@@ -54,24 +50,66 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	@Override
 	protected void onTaskUpdate(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
+
+		// QC Performed in the order
+		//
+		// 1. File format verification - A check of the technical metadata returned by ardome against preconfigured profiles (set in environment properties)
+		// 2. Channel Conditions check - A check of VTR channel conditions, if any are present the asset will be marked as requiring auto qc
+		// 3. Auto QC - Cerify, performed if there are channel conditions or the assets qc_required metadata is set. Note VTR is not the only source of channel conditions, assets coming from ruzz may
+		// have them also
+
+		// QC_SUBSTATUS1 - File format verification status
+		// QC_SUBSTATUS2 - auto qc status
+		// QC_SUBSTATUS3 - channel condition status
+
+		// Yes these numbers are in a different order, yes its annoying, be careful!
+
 		// if update was to change substatus for file format verification
 		if (after.containsAttribute(Attribute.QC_SUBSTATUS1))
 		{
-			fileFormatVerificationStatusChanged(currentAttributes, after);
+			try
+			{
+				fileFormatVerificationStatusChanged(currentAttributes, after);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("QC : Error processing file format verification status change", e);
+			}
+		}
+
+		// channel conditions status changed
+		if (after.containsAttribute(Attribute.QC_SUBSTATUS3))
+		{
+			try
+			{
+				channelConditionStatusChanged(currentAttributes, after);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("QC : Error processing channel condition status change", e);
+			}
 		}
 
 		// autoqc status changed
 		if (after.containsAttribute(Attribute.QC_SUBSTATUS2))
 		{
-			autoQcStatusChanged(currentAttributes, after);
+			try
+			{
+
+				autoQcStatusChanged(currentAttributes, after);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("QC : Error processing file  channel condition status change", e);
+			}
 		}
 
 		// qc state set manually
 		if (after.containsAttribute(Attribute.QC_RESULT))
 		{
 			qcResultSetManually(currentAttributes, after);
-		}				
-		
+		}
+
 	}
 
 	private void qcResultSetManually(AttributeMap currentAttributes, AttributeMap after)
@@ -80,26 +118,26 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		try
 		{
 			AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-			
+
 			if (result.equals(MANUAL_QC_PASS))
 			{
+				log.info("QC : Setting QC_STATUS to PASS_MANUAL and TASL_STATE to FINISHED");
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
 				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.PASS_MANUAL);
 				taskController.saveTask(updateMap);
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REORDER))
 			{
+				sendQcFailedReorderEvent(currentAttributes);
+				log.info("QC : Setting QC_STATUS to FAIL and TASL_STATE to FINISHED_FAILED");
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(updateMap);
-				
-				sendQcFailedReorderEvent(currentAttributes);
-				
 			}
 			else if (result.equals(MANUAL_QC_FAIL_WITH_REINGEST))
 			{
 				// user has requested reingest, fail the qc task
-				log.debug("User requested uningest, failing qc task");
+				log.debug("QC : User requested uningest, failing qc task");
 				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED_FAILED);
 				updateMap.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
 				taskController.saveTask(updateMap);
@@ -107,20 +145,19 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				if (AssetProperties.isMaterialProgramme(currentAttributes)
 						|| AssetProperties.isMaterialAssociated(currentAttributes))
 				{
-					log.debug("Asset is programme or associated content");
+					log.debug("QC : Asset is programme or associated content");
 					// uningest the media
-					log.debug("User requested uningest, uningesting media");
+					log.debug("QC : User requested uningest, uningesting media");
 					materialController.uningest(currentAttributes);
-					
+
 					// send email about QC failed event
 					sendQcFailedReorderEvent(currentAttributes);
-					
 				}
 			}
 		}
 		catch (MayamClientException e)
 		{
-			log.error("error updating task status", e);
+			log.error("QC : error updating task status", e);
 		}
 	}
 
@@ -141,126 +178,149 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		catch (Exception e)
 		{
-			log.error("error sending "+QC_FAILED_RE_ORDER+" event",e);
+			log.error("QC : error sending " + QC_FAILED_RE_ORDER + " event", e);
 		}
 	}
 
-	private void autoQcStatusChanged(AttributeMap currentAttributes, AttributeMap after)
+	private void fileFormatVerificationStatusChanged(AttributeMap currentAttributes, AttributeMap after)
+			throws MayamClientException
 	{
-		QcStatus autoQc = after.getAttribute(Attribute.QC_SUBSTATUS2);
+		// file format verification status updated
+		QcStatus fileFormat = currentAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
+
+		// log the change
+		logQcStatusChange(currentAttributes, fileFormat, "file format verification");
+
+		if (fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL))
+		{
+			processChannelConditions(currentAttributes);
+		}
+		else if (fileFormat.equals(QcStatus.FAIL))
+		{
+			finishWithWarning(currentAttributes);
+		}
+	}
+
+	private void channelConditionStatusChanged(AttributeMap currentAttributes, AttributeMap after) throws MayamClientException
+	{
+		// channel condition status updated
+		QcStatus channelConditionStatus = currentAttributes.getAttribute(Attribute.QC_SUBSTATUS3);// it's sub status 3 but it's the second stage of qc (!)
+		// log the change
+		logQcStatusChange(currentAttributes, channelConditionStatus, "channel condition");
+
+		if (channelConditionStatus.equals(QcStatus.PASS) || channelConditionStatus.equals(QcStatus.PASS_MANUAL))
+		{
+			boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(currentAttributes);
+
+			if (autoQcRequired)
+			{
+				log.info("QC : Asset flagged as requiring autoqc");
+				initiateAutoQc(currentAttributes);
+			}
+			else
+			{
+				log.info("QC : Asset not flagged as requiring autoqc, finishing qc");
+				finishWithPass(currentAttributes, channelConditionStatus);
+			}
+		}
+		else if (channelConditionStatus.equals(QcStatus.FAIL))
+		{
+			log.info("QC : channel condition step failed, autoqc required");
+			initiateAutoQc(currentAttributes);
+		}
+	}
+
+	private void autoQcStatusChanged(AttributeMap currentAttributes, AttributeMap after) throws MayamClientException
+	{
+		QcStatus autoQc = after.getAttribute(Attribute.QC_SUBSTATUS2); // it's sub status 2 but it's the third stage of qc (!)
+		// log the change
+		logQcStatusChange(currentAttributes, autoQc, "autoqc");
 
 		if (autoQc.equals(QcStatus.PASS) || autoQc.equals(QcStatus.PASS_MANUAL))
 		{
-			displayChannelConditions(currentAttributes);			
 			finishWithPass(currentAttributes, autoQc);
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
 		{
-			try
-			{
-				
-				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-				taskController.saveTask(updateMap);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error settign qc task to finished state", e);
-			}
+			finishWithWarning(currentAttributes);
 		}
 	}
 
-	private void displayChannelConditions(AttributeMap currentAttributes)
+	private void processChannelConditions(AttributeMap currentAttributes)
 	{
 		try
 		{
 			String assetID = (String) currentAttributes.getAttribute(Attribute.ASSET_ID);
-			log.debug("searching for channel conditions for assset " + assetID);
+			log.debug("QC : searching for channel conditions for assset " + assetID);
 			List<String> conditions = tasksClient.assetApi().getQcMessages(
 					(AssetType) currentAttributes.getAttribute(Attribute.ASSET_TYPE),
 					assetID);
 
 			if (conditions != null && !conditions.isEmpty())
 			{
-				log.info(String.format("%d conditions returned for asset", conditions.size()));
+				log.info(String.format("QC : %d conditions returned for asset", conditions.size()));
 				String stConditions = StringUtils.join(conditions, '\n');
-				log.info("Channel conditions for asset are: " + stConditions);
-				log.info("attaching conditions to qc task");
+				log.info("QC : Channel conditions for asset are: " + stConditions);
+				log.debug("QC : Updating qc substatus and notes for channel conditions");
+				
 				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-				updateMap.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, stConditions);
+				updateMap.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.FAIL);
+				updateMap.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "Channel conditions detected, sending to auto QC");
+				taskController.saveTask(updateMap);
+				// TODO: send channel conditions event for email
 			}
 			else
 			{
-				log.info("No channel conditions returned for asset");
+				log.info("QC : No channel conditions returned for asset");
+				log.debug("QC : Updating qc substatus and notes for channel conditions");
+				
+				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+				updateMap.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.PASS);
+				updateMap.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
+				taskController.saveTask(updateMap);
 			}
-		}
-		catch (RemoteException e)
-		{
-			log.error("Error fetching channel conditions for asset", e);
 		}
 		catch (Exception e)
 		{
-			log.error("Error processing channel conditions", e);
+			log.error("QC : Error processing channel conditions", e);
+			taskController.setTaskToErrorWithMessage(currentAttributes, "Error processing channel conditions");
 		}
 	}
 
-	private void fileFormatVerificationStatusChanged(AttributeMap currentAttributes, AttributeMap after)
+	private void logQcStatusChange(AttributeMap currentAttributes, QcStatus autoQc, String description)
 	{
-		// file format verification status updated
-		QcStatus fileFormat = currentAttributes.getAttribute(Attribute.QC_SUBSTATUS1);
-
-		if (fileFormat.equals(QcStatus.PASS) || fileFormat.equals(QcStatus.PASS_MANUAL))
-		{
-			boolean autoQcRequired = materialController.isAutoQcRequiredForMaterial(currentAttributes);
-
-			if (autoQcRequired)
-			{
-				initiateAutoQc(currentAttributes);
-			}
-			else
-			{
-				displayChannelConditions(currentAttributes);
-				finishWithPass(currentAttributes,fileFormat);
-			}
-		}
-		else if (fileFormat.equals(QcStatus.FAIL))
-		{
-			try
-			{
-				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-				taskController.saveTask(updateMap);
-				sendQcFailedReorderEvent(currentAttributes);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error settign qc task to warning state", e);
-			}
-		}
+		String houseID = currentAttributes.getAttributeAsString(Attribute.HOUSE_ID);
+		String assetID = currentAttributes.getAttributeAsString(Attribute.ASSET_ID);
+		log.info(String.format("QC : Asset %s (%s) %s status has changed to %s", houseID, assetID, description, autoQc.toString()));
 	}
 
-	private void finishWithPass(AttributeMap currentAttributes, QcStatus passStatus)
+	private void finishWithPass(AttributeMap currentAttributes, QcStatus passStatus) throws MayamClientException
 	{
-		try
-		{
-			AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			updateMap.setAttribute(Attribute.QC_STATUS, passStatus);
-			taskController.saveTask(updateMap);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("error settign qc task to finished state", e);
-		}
+		log.info("QC : About to try to update qc task state to FINISHED");
+		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+		updateMap.setAttribute(Attribute.QC_STATUS, passStatus);
+		taskController.saveTask(updateMap);
+	}
+
+	private void finishWithWarning(AttributeMap currentAttributes) throws MayamClientException
+	{
+		log.info("QC : About to try to update qc task state to WARNING");
+		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+		taskController.saveTask(updateMap);
+		sendQcFailedReorderEvent(currentAttributes);
 	}
 
 	private void initiateAutoQc(AttributeMap messageAttributes)
 	{
 		Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
-		
+
+		String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		log.info("QC : Initiating qc workflow for asset " + assetID);
+
 		try
 		{
-
 			try
 			{
 				AttributeMap updateMap = taskController.updateMapForTask(messageAttributes);
@@ -269,21 +329,17 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			}
 			catch (Exception e)
 			{
-				log.error("error updating task state", e);
+				log.error("QC : error updating task state", e);
 			}
 
-			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-
-			log.info("Initiating qc workflow for asset " + assetID);
-			
 			String assetTitle = messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
-			
-			mule.initiateQcWorkflow(assetID, false, taskID.longValue(),assetTitle);
+
+			mule.initiateQcWorkflow(assetID, false, taskID.longValue(), assetTitle);
 		}
 		catch (Exception e)
 		{
-			log.error("Error initiating auto qc : ", e);
-			taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+			log.error("QC : Error initiating auto qc : ", e);
+			taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 		}
 	}
 
