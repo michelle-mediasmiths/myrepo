@@ -1,5 +1,7 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
+import java.util.List;
+
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -10,6 +12,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
+import com.mediasmiths.foxtel.generated.ruzz.ChannelConditionEventType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material;
@@ -137,8 +140,26 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	private void updateIngestRecord(IngestRecords ingestRecords, String materialID)
 	{
 		logger.debug(String.format("updateIngestRecord for material %s", materialID));
-		// TODO : update channel conditions \ ingest records
-		logger.warn("no attempt made to save channel conditions");
+		
+		List<ChannelConditionEventType> channelConditionEvent = ingestRecords.getChannelConditionEvent();
+		
+		if (channelConditionEvent == null || channelConditionEvent.isEmpty())
+		{
+			logger.info("no channel condition events present in ruzz xml");
+		}
+		else
+		{
+			logger.info("channel conditions present in ruzz xml, marking asset as requiring autoqc");
+			// TODO send event for channel conditions email
+			try
+			{
+				mayamClient.requireAutoQCForMaterial(materialID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error("error marking item " + materialID + "as requiring autoqc");
+			}
+		}
 	}
 
 	private void updateDetails(DetailType details, String materialID) throws MayamClientException

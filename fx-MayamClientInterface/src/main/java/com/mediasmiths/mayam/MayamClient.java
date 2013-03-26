@@ -344,5 +344,7 @@ public interface MayamClient
 	public AttributeMap getTask(long taskId);
 
 	public void setNaturalBreaks(String materialID, String naturalBreaks)throws MayamClientException;
+
+	public void requireAutoQCForMaterial(String materialID)throws MayamClientException;
 	
 }

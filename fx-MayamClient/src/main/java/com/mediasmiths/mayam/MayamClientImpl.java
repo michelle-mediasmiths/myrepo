@@ -1076,4 +1076,22 @@ public class MayamClientImpl implements MayamClient
 		materialController.setNaturalBreaks(materialID,naturalBreaks);
 	}
 
+	@Override
+	public void requireAutoQCForMaterial(String materialID) throws MayamClientException
+	{
+		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
+		AttributeMap updateMapForAsset = tasksController.updateMapForAsset(materialAttributes);
+		updateMapForAsset.setAttribute(Attribute.QC_REQUIRED, Boolean.TRUE);
+		try
+		{
+			client.assetApi().updateAsset(updateMapForAsset);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error updating qc required attribute on material " + materialID, e);
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED, e);
+		}
+
+	}
+
 }
