@@ -193,7 +193,7 @@ public class MailAgentServiceImpl implements MailAgentService
 
 	private String getFormattedXML(final String body)
 	{
-		return "<p/><b>" + body + "</b><p/>";
+		return "<p/>" + body + "<p/>";
 	}
 
 	/**
