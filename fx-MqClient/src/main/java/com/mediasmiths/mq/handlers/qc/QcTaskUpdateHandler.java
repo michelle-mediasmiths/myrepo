@@ -256,7 +256,17 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					(AssetType) currentAttributes.getAttribute(Attribute.ASSET_TYPE),
 					assetID);
 
-			if (conditions != null && !conditions.isEmpty())
+			boolean isConditions = false;
+			
+			if(conditions!=null && !conditions.isEmpty()){
+				if(conditions.size() > 0){
+					if(! (( conditions.size()==1) && conditions.get(0).equals(""))){
+						isConditions=true;
+					}
+				}
+			}
+			
+			if (isConditions)
 			{
 				log.info(String.format("QC : %d conditions returned for asset", conditions.size()));
 				String stConditions = StringUtils.join(conditions, '\n');
