@@ -260,7 +260,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			
 			if(conditions!=null && !conditions.isEmpty()){
 				if(conditions.size() > 0){
-					if(! (( conditions.size()==1) && conditions.get(0).equals(""))){
+					if(! (( conditions.size()==1) && conditions.get(0).equals(""))){ //sometimes getQCMessages returns a single empty string, assume that means no channel conditions
 						isConditions=true;
 					}
 				}
