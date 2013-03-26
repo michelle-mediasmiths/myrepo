@@ -38,7 +38,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	private String qcEventNamespace;
 
 	@Inject
-	@Named("wfe.serialiser")
+	@Named("fxcommon.serialiser")
 	private JAXBSerialiser serialiser;
 
 	@Override
@@ -197,7 +197,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		else if (fileFormat.equals(QcStatus.FAIL))
 		{
-			finishWithWarning(currentAttributes);
+			finishWithError(currentAttributes);
 		}
 	}
 
@@ -242,7 +242,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
 		{
-			finishWithWarning(currentAttributes);
+			finishWithError(currentAttributes);
 		}
 	}
 
@@ -319,11 +319,11 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void finishWithWarning(AttributeMap currentAttributes) throws MayamClientException
+	private void finishWithError(AttributeMap currentAttributes) throws MayamClientException
 	{
-		log.info("QC : About to try to update qc task state to WARNING");
+		log.info("QC : About to try to update qc task state to ERROR"); //should be warning really, but there is no option to retry when in WARNING state
 		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		taskController.saveTask(updateMap);
 		sendQcFailedReorderEvent(currentAttributes);
 	}
