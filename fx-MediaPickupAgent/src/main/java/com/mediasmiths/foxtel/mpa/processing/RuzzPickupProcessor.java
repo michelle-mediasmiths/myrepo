@@ -18,6 +18,7 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material.IngestRecords;
 import com.mediasmiths.foxtel.generated.ruzz.SegmentationType;
+import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
@@ -32,6 +33,12 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 
 	protected final static Logger logger = Logger.getLogger(RuzzPickupProcessor.class);
 
+	private final static String CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML = "ChannelConditionsFoundInRuzzXml";
+	
+	@Inject(optional = false)
+	@Named("qc.events.namespace")
+	private String qcEventNamespace;
+	
 	@Inject
 	public RuzzPickupProcessor(
 			RuzzFilesPendingProcessingQueue filePathsPendingProcessing,
@@ -154,6 +161,12 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			try
 			{
 				mayamClient.requireAutoQCForMaterial(materialID);
+				
+				//create channel conditions found in ruzz xml event
+				ChannelConditionsFound ccf = new ChannelConditionsFound();
+				ccf.setMaterialID(materialID);
+				logger.debug("saving event "+CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML);
+				eventService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML, ccf);
 			}
 			catch (MayamClientException e)
 			{

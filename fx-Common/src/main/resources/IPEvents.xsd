@@ -289,6 +289,20 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="channelConditionsFound">
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:documentation>A type to represent a channel conditions found event
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="fns:IPEvent">
+                <xs:sequence>
+                    <xs:element name="materialID" type="xs:string"/>                    
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="getQCProfileResponse">
         <xs:sequence>
             <xs:element minOccurs="0" name="profile" type="xs:string" />

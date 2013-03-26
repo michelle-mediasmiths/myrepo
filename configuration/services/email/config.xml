@@ -67,6 +67,44 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
+	<MailData>
+			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
+			<eventname>ChannelConditionsFoundDuringQC</eventname>
+			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
+				<subject>Channel conditions found during qc for material %s</subject>
+				<body>Channel conditions were reported for this material during QC, it will be sent to Cerify</body>
+				<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+					<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				</emailaddresses>
+			</MailTemplate>
+	</MailData>
+	<MailData>
+			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
+			<eventname>ChannelConditionsFoundInRuzzXml</eventname>
+			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
+				<subject>Channel conditions found in companion xml for material %s</subject>
+				<body>Channel conditions were present in this material's ruzz companion xml, it has been marked as requiring auto qc once ingest completes</body>
+				<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+					<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+					<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				</emailaddresses>
+			</MailTemplate>
+	</MailData>
 	<!-- TC -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>

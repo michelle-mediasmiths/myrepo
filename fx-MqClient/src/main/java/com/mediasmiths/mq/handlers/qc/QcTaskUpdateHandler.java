@@ -13,6 +13,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
+import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -24,6 +25,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 {
 
 	private static final String QC_FAILED_RE_ORDER = "QcFailedReOrder";
+	private static final String CHANNEL_CONDITIONS_FOUND_DURING_QC = "ChannelConditionsFoundDuringQC";
 	private static final String MANUAL_QC_PASS = "pass";
 	private final static String MANUAL_QC_FAIL_WITH_REINGEST = "reingest";
 	private final static String MANUAL_QC_FAIL_WITH_REORDER = "reorder";
@@ -283,7 +285,12 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				updateMap.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.FAIL);
 				updateMap.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "Channel conditions detected, sending to auto QC");
 				taskController.saveTask(updateMap);
-				// TODO: send channel conditions event for email
+				
+				//create channel conditions found during qc event
+				ChannelConditionsFound ccf = new ChannelConditionsFound();
+				ccf.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+				log.debug("saving event "+CHANNEL_CONDITIONS_FOUND_DURING_QC);
+				eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);				
 			}
 			else
 			{
