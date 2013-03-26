@@ -233,6 +233,8 @@ public class RuzzProgrammeOutputBuilder
 
 		try
 		{
+            if (mayamValue == null)
+	            return getGregorian(lastCentury);
 
 			return getGregorian(mayamValue);
 
