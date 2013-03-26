@@ -338,8 +338,9 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 					
 				accessRights.getMedia().add(mediaEntry);
 				accessRights.getStandard().add(entry);
+				log.info("Adding the following entry to access rights : " + allKeys[i] + " r:" + rights.a + " w:" + rights.b + " m:" + rights.c);
 			}
-			
+
 			log.info("Access Rights for " + houseId + " updated to : " + accessRights.toString());
 			attributeMap.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 		}
