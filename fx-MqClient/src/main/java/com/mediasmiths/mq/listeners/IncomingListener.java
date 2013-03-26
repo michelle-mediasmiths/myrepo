@@ -25,6 +25,7 @@ import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.ProtectButton;
@@ -113,6 +114,8 @@ public class IncomingListener extends MqClientListener
 	InitiateQcHandler initiateQcHandler;
 	@Inject
 	PreviewTaskCreateHandler previewTaskCreateHandler;
+	@Inject
+	TaskCreateHandler taskCreateHandler;
 	@Inject
 	PreviewTaskFinishHandler previewTaskFinishHandler;
 	@Inject
@@ -225,7 +228,7 @@ public class IncomingListener extends MqClientListener
 	{
 		log.trace("onTaskCreate");
 		AttributeMap messageAttributes = msg.getSubject();
- 
+		passEventToHandler(taskCreateHandler, messageAttributes);
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
 		passEventToHandler(previewTaskCreateHandler, messageAttributes);
