@@ -21,6 +21,7 @@ import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.threading.Timeout;
 import org.apache.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,6 +70,7 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 		log.info("Transfer item completed: " + item.id);
 
 		final String unmatchedAssetID = item.assetId;
+		final String unmatchedAssetHouseID = item.assetHouseId;
 		final String assetPeerID = item.assetPeerId;
 
 		try
@@ -76,7 +78,15 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 			// move media essence has finished for matching of unmatched asset to placeholder
 
 			// get all the unmatched tasks for the affected asset (there will usually only be one but there could potentially be more)
-			List<AttributeMap> allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetID);
+			List<AttributeMap> allUnmatchedTasks;
+			
+			if(unmatchedAssetHouseID == null){
+				log.warn("house id null for transfer item, will not be abe to complete unmatched tasks");
+				allUnmatchedTasks = Collections.emptyList();
+			}
+			else{
+				allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetHouseID);
+			}
 
 			// close open ingest task for the target asset
 			log.debug(String.format("Closing ingest task for asset with assetId %s", assetPeerID));
@@ -115,10 +125,18 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 		log.warn("Transfer item failed: " + item.id);
 		try
 		{
-			final String unmatchedAssetID = item.assetId;
+			final String unmatchedAssetHouseID = item.assetHouseId;
 
 			// find and fail any unmatched tasks for unmatched asset
-			List<AttributeMap> allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetID);
+			List<AttributeMap> allUnmatchedTasks;
+			
+			if(unmatchedAssetHouseID == null){
+				log.warn("house id null for transfer item, will not be abe to complete unmatched tasks");
+				allUnmatchedTasks = Collections.emptyList();
+			}
+			else{
+				allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetHouseID);
+			}
 
 			for (AttributeMap task : allUnmatchedTasks)
 			{

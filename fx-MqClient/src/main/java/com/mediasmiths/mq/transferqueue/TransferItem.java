@@ -13,6 +13,8 @@ public class TransferItem
 	@XmlElement
 	public String assetId;
 	@XmlElement
+	public String assetHouseId;
+	@XmlElement
 	public String assetPeerId;
 	@XmlElement
 	public Date timeout;
@@ -27,16 +29,17 @@ public class TransferItem
 	}
 
 
-	public TransferItem(final String assetId, final String assetPeerId, Date timeout)
+	public TransferItem(final String assetId,final String assetHouseId,final String assetPeerId, Date timeout)
 	{
-		this(UUID.randomUUID().toString(), assetId, assetPeerId, timeout);
+		this(UUID.randomUUID().toString(), assetId, assetHouseId,assetPeerId, timeout);
 	}
 
 
-	public TransferItem(String id, final String assetId, final String assetPeerId, Date timeout)
+	public TransferItem(String id, final String assetId, final String assetHouseId,final String assetPeerId, Date timeout)
 	{
 		this.id = id;
 		this.assetId = assetId;
+		this.assetHouseId=assetHouseId;
 		this.assetPeerId = assetPeerId;
 		this.timeout = timeout;
 	}

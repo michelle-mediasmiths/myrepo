@@ -171,19 +171,32 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					log.info("Match found for asset, attempting to create new revision");
 
 					final String unmatchedAssetID = currentAttributes.getAttribute(Attribute.ASSET_ID).toString();
+					final String unmatchedAssetHouseID = currentAttributes.getAttribute(Attribute.HOUSE_ID).toString();
 					final String assetPeerId = currentAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
 
-					log.info("Trying to move task for transfer into SYS_WAIT state");
+					
+					// copy metadata from unmatched asset to peer
+					copyUnmatchedAttributes(unmatchedAssetID, assetPeerId);
+					
 
 					try
 					{
-						List<AttributeMap> allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetID);
+						log.info("Trying to move task for transfer into SYS_WAIT state");
+						List<AttributeMap> allUnmatchedTasks = taskController.getUmatchedTasksForItem(unmatchedAssetHouseID);
 						setContentFormatOnUmatchedAssetsPeer(unmatchedAssetID, assetPeerId);
 
 						// Now try to put the task(s) in SYS_WAIT
 						for (AttributeMap task : allUnmatchedTasks)
 						{
-							taskController.changeStatus(task, TaskState.SYS_WAIT);
+							AttributeMap updateMapForTask = taskController.updateMapForTask(task);
+							updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+							
+							//MAM-297 mayam instruct us to clear the assocation from the unmatched task to the unmatched asset
+							updateMapForTask.setAttribute(Attribute.ASSET_ID, null);
+							updateMapForTask.setAttribute(Attribute.ASSET_PARENT_ID, null);
+							updateMapForTask.setAttribute(Attribute.ASSET_TYPE, null);
+													
+							taskController.saveTask(updateMapForTask);
 						}
 
 					}
@@ -194,13 +207,10 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 								e);
 					}
 
-					// copy metadata from unmatched asset to peer
-					copyUnmatchedAttributes(unmatchedAssetID, assetPeerId);
-
 					// We're only willing to wait this long until we assume the transfer has timed out
 					Date timeout = transferTimeout.start().getDate();
 					// queue transfer
-					transferManager.add(new TransferItem(unmatchedAssetID, assetPeerId, timeout));
+					transferManager.add(new TransferItem(unmatchedAssetID,unmatchedAssetHouseID, assetPeerId, timeout));
 				}
 			}
 		}

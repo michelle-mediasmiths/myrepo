@@ -201,22 +201,22 @@ public class MayamTaskController extends MayamController
 		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
 	}
 	
-	public List<AttributeMap> getUmatchedTasksForItem(String assetID) throws MayamClientException
+	public List<AttributeMap> getUmatchedTasksForItem(String houseID) throws MayamClientException
 	{
-		log.debug(String.format("Getting umatched tasks for asset : %s", assetID));
+		log.debug(String.format("Getting umatched tasks for asset : %s", houseID));
 		
 		List<AttributeMap> allUnmatchedTasks = this.getTasksForAsset(
 				MayamTaskListType.UNMATCHED_MEDIA,
 				MayamAssetType.MATERIAL.getAssetType(),
-				Attribute.ASSET_ID,
-				assetID);
+				Attribute.HOUSE_ID,
+				houseID);
 		log.debug(String.format("%s unmatched tasks for asset", allUnmatchedTasks.size()));
 		
 		// Log all the unmatched tasks for debug purposes
 		for (AttributeMap task : allUnmatchedTasks)
 		{
 			// log the task info
-			log.debug("Task " + task.getAttribute(Attribute.TASK_ID) + " found for " + assetID
+			log.debug("Task " + task.getAttribute(Attribute.TASK_ID) + " found for " + houseID
 					+ ". It is in state " + task.getAttribute(Attribute.TASK_STATE));
 		}
 
