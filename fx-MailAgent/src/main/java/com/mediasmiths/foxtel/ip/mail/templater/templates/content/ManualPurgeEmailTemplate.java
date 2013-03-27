@@ -5,7 +5,7 @@ import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.PurgeNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
-public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class ManualPurgeEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
 	@Override
@@ -21,7 +21,7 @@ public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGen
 		MailTemplate t = new MailTemplate();
 
 		t.setSubject(String.format(getSubject(), ajf.getAssetType(), ajf.getHouseId()));
-		t.setBody(getBody() + ", at " + ajf.getTime());
+		t.setBody(String.format(getBody(), ajf.getTime()));
 		t.setEmailaddresses(getEmailaddresses());
 		return t;
 	}
