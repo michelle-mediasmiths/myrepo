@@ -242,6 +242,13 @@
 				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
