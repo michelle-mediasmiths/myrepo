@@ -106,11 +106,11 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 
 			if (passed && reorder)
 			{
-				String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
+				String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 				PreviewFailed pf = new PreviewFailed();
 				pf.setDate((new Date()).toString());
 				pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
-				pf.setAssetId(assetId);
+				pf.setAssetId(houseID);
 				
 				eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewPassedReorder", pf);
 			}

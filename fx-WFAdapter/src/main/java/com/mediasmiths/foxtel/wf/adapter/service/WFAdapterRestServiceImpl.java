@@ -380,46 +380,49 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 
 		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
-		long taskId = notification.getTaskID();
-		AttributeMap task = mayamClient.getTask(taskId);
 
-		String taskListID = task.getAttribute(Attribute.OP_TYPE);
-
-		if (taskListID.equals("Caption Proxy"))
+		if (! notification.isForTXDelivery())
 		{
-			saveEvent(
-					"CaptionProxyFailure",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					false);
-		}
-		else if (taskListID.equals("Publicity Proxy"))
-		{
-			saveEvent(
-					         "PublicityFailure",
-					         notification,
-					         TC_EVENT_NAMESPACE,
-					         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					         false);
-		}
-		else if (taskListID.equals("Compliance Proxy"))
-		{
-			saveEvent(
-					"ComplianceProxyFailure",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					false);
-		}
-		else
-		{
-			saveEvent(
-					"TCFailed",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					false);
+			long taskId = notification.getTaskID();
+			AttributeMap task = mayamClient.getTask(taskId);
+			String taskListID = task.getAttribute(Attribute.OP_TYPE);
+	
+			if (taskListID.equals("Caption Proxy"))
+			{
+				saveEvent(
+						"CaptionProxyFailure",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						false);
+			}
+			else if (taskListID.equals("Publicity Proxy"))
+			{
+				saveEvent(
+						         "PublicityFailure",
+						         notification,
+						         TC_EVENT_NAMESPACE,
+						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						         false);
+			}
+			else if (taskListID.equals("Compliance Proxy"))
+			{
+				saveEvent(
+						"ComplianceProxyFailure",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						false);
+			}
+			else
+			{
+				saveEvent(
+						"TCFailed",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						false);
+			}
 		}
 	}
 

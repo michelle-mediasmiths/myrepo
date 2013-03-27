@@ -424,10 +424,13 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 			} catch (Exception e) {
 				logger.fatal(
-						"Uncaught exception almost killed MessageProcessor thread, this is very bad",
+						"Uncaught exception almost killed MessageProcessor thread, if there was not a shutdown in progress then this is very bad",
 						e);
 				
-				eventService.saveEvent("error", "Uncaught exception almost killed MessageProcessor");
+				if (isRunning())
+				{
+					eventService.saveEvent("error", "Uncaught exception almost killed MessageProcessor");
+				}
 			}
 		}
 
