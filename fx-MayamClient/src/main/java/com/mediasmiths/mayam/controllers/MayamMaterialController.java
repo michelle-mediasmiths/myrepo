@@ -221,6 +221,9 @@ public class MayamMaterialController extends MayamController
 						createCompLoggingTask = true;
 						parentAssetID = parentMaterial.getAttributeAsString(Attribute.ASSET_ID);
 
+						// If the item is a compliance placeholder then automatically set qc status to true (MAM-316)
+						attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
+						
 					}
 					catch (RemoteException e)
 					{
