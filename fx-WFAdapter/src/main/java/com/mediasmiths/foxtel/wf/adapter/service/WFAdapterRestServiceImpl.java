@@ -427,47 +427,44 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
-
-		long taskId = notification.getTaskID();
-		AttributeMap task = mayamClient.getTask(taskId);
-
-		String taskListID = task.getAttribute(Attribute.OP_TYPE);
-
-		log.debug("Task Button: " + taskListID);
-		if (taskListID.equals("Caption Proxy"))
-		{
-			saveEvent(
-					"CaptionProxySuccess",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					true);
-		}
-		else if (taskListID.equals("Classification Proxy"))
-		{
-			saveEvent(
-					"ClassificationProxySuccess",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					true);
-		}
-		else if (taskListID.equals("Compliance Proxy"))
-		{
-			saveEvent(
-					"ComplianceProxySuccess",
-					notification,
-					TC_EVENT_NAMESPACE,
-					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-					true);
-		}
-		else
+		
+		if (notification.isForTXDelivery())
 		{
 			// saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
-
-		if (!notification.isForTXDelivery())
+		else //extended publishing		
 		{
+			long taskId = notification.getTaskID();
+			AttributeMap task = mayamClient.getTask(taskId);
+			String taskListID = task.getAttribute(Attribute.OP_TYPE);
+			log.debug("Task Button: " + taskListID);
+			if (taskListID.equals("Caption Proxy"))
+			{
+				saveEvent(
+						"CaptionProxySuccess",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						true);
+			}
+			else if (taskListID.equals("Classification Proxy"))
+			{
+				saveEvent(
+						"ClassificationProxySuccess",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						true);
+			}
+			else if (taskListID.equals("Compliance Proxy"))
+			{
+				saveEvent(
+						"ComplianceProxySuccess",
+						notification,
+						TC_EVENT_NAMESPACE,
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						true);
+			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
 	}
