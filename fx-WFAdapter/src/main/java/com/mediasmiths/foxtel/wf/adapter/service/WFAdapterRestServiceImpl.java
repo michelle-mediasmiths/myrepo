@@ -385,7 +385,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		String taskListID = task.getAttribute(Attribute.OP_TYPE);
 
-		if (taskListID != null && taskListID.equals("Caption Proxy"))
+		if (taskListID.equals("Caption Proxy"))
 		{
 			saveEvent(
 					"CaptionProxyFailure",
@@ -394,7 +394,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 					false);
 		}
-		else if (taskListID != null && taskListID.equals("Publicity Proxy"))
+		else if (taskListID.equals("Publicity Proxy"))
 		{
 			saveEvent(
 					         "PublicityFailure",
@@ -403,7 +403,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 					         false);
 		}
-		else if (taskListID != null && taskListID.equals("Compliance Proxy"))
+		else if (taskListID.equals("Compliance Proxy"))
 		{
 			saveEvent(
 					"ComplianceProxyFailure",
