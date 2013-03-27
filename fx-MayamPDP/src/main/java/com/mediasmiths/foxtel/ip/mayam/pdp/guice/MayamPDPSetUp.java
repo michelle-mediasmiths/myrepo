@@ -140,7 +140,7 @@ public class MayamPDPSetUp extends AbstractModule
 			grps.add(grp);
 		}
 
-		grps.add(FoxtelGroups.GC_MAM_FULL_SysAdmin);
+		grps.add(FoxtelGroups.GS_MAM_FULL_SysAdmin);
 		grps.add(FoxtelGroups.admin);
 		grps.add(FoxtelGroups.ardendo);
 
