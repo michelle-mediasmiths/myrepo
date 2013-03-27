@@ -27,7 +27,7 @@ public enum FoxtelGroups
 	GS_MAM_OD_Promo("GS-MAM_OD_Promo"),
 	GS_MAM_MV_Promo("GS-MAM_MV_Promo"),
 	GS_MAM_ME_Promo("GS-MAM_ME_Promo"),
-	GS_MAM_FULL_Preview("GS-MAM_FULL_Preview"),
+	GS_MAM_FULL_PREVIEW("GS-MAM_FULL_Preview"),
 	GS_MAM_FULL_Classification("GS-MAM_FULL_Classification"),
 	GS_MAM_FULL_BOPS("GS-MAM_FULL_BOPS"),
 	GS_MAM_FULL_Editing("GS-MAM_FULL_Editing"),
@@ -43,7 +43,7 @@ public enum FoxtelGroups
 	GS_MAM_AO_Editing("GS-MAM_AO_Editing"),
 	GS_MAM_AO_Conforming("GS-MAM_AO_Conforming"),
 	GS_MAM_AO_Publicity("GS-MAM_AO_Publicity"),
-	GC_MAM_FULL_SysAdmin("GS-MAM_FULL_SysAdmin"),
+	GS_MAM_FULL_SysAdmin("GS-MAM_FULL_SysAdmin"),
 	admin("admin"),
 	ardendo("ardendo"),
 	Test_Full_Class("Test_Full_Class");
