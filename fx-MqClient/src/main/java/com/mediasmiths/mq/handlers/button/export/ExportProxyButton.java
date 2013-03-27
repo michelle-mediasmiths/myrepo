@@ -99,9 +99,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
 
 			// If 'No Bug' has been selected then ignore any text in the bug location field
-			Boolean noBug = materialAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
+			Boolean noBug = requestAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
 			if (noBug != null && noBug.booleanValue()==true); 
 			{
+				log.debug("'no bug' option was selected");
 				buglocation = null;
 			}
 			
@@ -243,6 +244,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			throw new IllegalArgumentException("no channels in asset metadata");
 		}
 		
+		log.debug("buglocation: "+buglocation);
 		if (buglocation != null && !buglocation.equals("--"))
 		{
 			TCBugOptions bug = bug(buglocation, channel);
