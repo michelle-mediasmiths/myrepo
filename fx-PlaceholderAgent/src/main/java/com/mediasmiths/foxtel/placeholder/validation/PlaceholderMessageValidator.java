@@ -13,6 +13,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import com.google.inject.Inject;
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
@@ -403,8 +405,10 @@ public class PlaceholderMessageValidator extends
 
 		logger.info("Validating an AddOrUpdateMaterial");
 
+		String materialID = null;
+		
 		if(action.getMaterial()!=null){
-			final String materialID = action.getMaterial().getMaterialID();
+			materialID = action.getMaterial().getMaterialID();
 			
 			//reject empty materialIDs		
 			if(StringUtils.isEmpty(materialID)){
@@ -427,25 +431,30 @@ public class PlaceholderMessageValidator extends
 			throw e;
 		}
 
-		if (titleExists) {
-
-//			if (action.getMaterial().getSource().getAggregation() != null) {
-//				XMLGregorianCalendar orderCreated = action.getMaterial()
-//						.getSource().getAggregation().getOrder()
-//						.getOrderCreated();
-//				XMLGregorianCalendar requiredBy = action.getMaterial()
-//						.getRequiredBy();
-//
-//				if (orderCreated.compare(requiredBy) == DatatypeConstants.GREATER) {
-//					logger.warn("Required by date is before order created date!");
-//					logger.error("ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER");
-//					return MessageValidationResult.ORDER_CREATED_AND_REQUIREDBY_DATES_NOT_IN_ORDER;
-//				}
-//			}
-		} else {
+		if (! titleExists ){
 			logger.warn("Title for material does not exist");
 			logger.error("NO_EXISTING_TITLE_FOR_MATERIAL");
 			return MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
+		}
+		
+		
+		//check that if the material does exist then the title id matches the one specified
+		AttributeMap materialAttributes = mayamClient.getMaterialAttributes(materialID);
+		
+		if (materialAttributes != null)
+		{
+			// if material already exists check that the title id matches
+			String parentHouseID = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+
+			logger.info(String.format("material with id %s exists with parent %s", materialID, parentHouseID));
+
+			if (!titleID.equals(parentHouseID))
+			{
+				logger.debug(String.format("{%s} ne {%s}", titleID, parentHouseID));
+				logger.error("Material exists but under a different title than specified");
+				return MessageValidationResult.MATERIAL_EXISTS_UNDER_DIFFERENT_TITLE;
+			}
+
 		}
 
 		return MessageValidationResult.IS_VALID;
