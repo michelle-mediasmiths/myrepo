@@ -101,7 +101,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			// If 'No Bug' has been selected then ignore any text in the bug location field
 			Boolean noBug = requestAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
 			log.debug("visual bug flag: "+requestAttributes.getAttributeAsString(Attribute.VISUAL_BUG_FLAG));
-			if (noBug != null && (noBug.booleanValue()==true)); 
+			log.debug("buglocation : "+buglocation);
+			if (noBug != null && (noBug.booleanValue()==true)) 
 			{
 				log.debug("'no bug' option was selected");
 				buglocation = null;
