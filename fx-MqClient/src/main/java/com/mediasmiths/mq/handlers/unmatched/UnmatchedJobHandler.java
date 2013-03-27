@@ -47,8 +47,24 @@ public class UnmatchedJobHandler extends JobHandler
 
 				String contentMaterialType = material.getAttribute(Attribute.CONT_MAT_TYPE);
 				
+				boolean isUnmatched = contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED);
+				boolean isUnmatchedDart = false;
+				if (jobSubType.equals(JobSubType.DART))
+				{
+					AttributeMap task = null;
+					try {
+						task = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
+					} catch (MayamClientException e) {
+						log.info("Mayam exception thrown while retrieving Ingest task for asset : " + assetId, e);
+					}
+					if (task == null) {
+						// No ingest task exists for the asset
+						isUnmatchedDart = true;
+					}
+				}
+				
 				//check content type is unmatched 
-				if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
+				if (isUnmatched || isUnmatchedDart)
 				{
 					//attempt to set the source as import or ingest
 					AttributeMap updateMap = taskController.updateMapForAsset(material);
