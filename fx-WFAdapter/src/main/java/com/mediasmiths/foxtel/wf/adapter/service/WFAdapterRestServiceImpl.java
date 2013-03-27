@@ -381,7 +381,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
 
-		if (notification.isForTXDelivery())
+		if (! notification.isForTXDelivery())
 		{
 			long taskId = notification.getTaskID();
 			AttributeMap task = mayamClient.getTask(taskId);
