@@ -48,10 +48,16 @@ public class IngestJobHandler extends JobHandler
 		
 		log.trace(String.format("assetId %s jobStatus %s", assetId, jobStatus.toString()));
 		
-		if(assetId!=null){
-				try {
-				AttributeMap task = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
-				
+		if(assetId!=null)
+		{
+			AttributeMap task = null;
+			try {
+				task = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.INGEST, assetId);
+			} catch (MayamClientException e) {
+				log.info("Mayam exception thrown while retrieving Ingest task for asset : " + assetId, e);
+			}
+			
+			try {
 				if (task != null)
 				{
 					log.info("ingest task found for assetId : " + assetId);
@@ -59,11 +65,11 @@ public class IngestJobHandler extends JobHandler
 				}
 				else {
 					log.info("Unable to find Ingest task for assetId : " + assetId);
-					itemHasNoIngestTask(jobMessage, assetId, jobStatus);
-					
+					itemHasNoIngestTask(jobMessage, assetId, jobStatus);	
 				}
-			} catch (MayamClientException e) {
-				log.error("Mayam exception thrown while retrieving Ingest task for asset : " + assetId, e);
+			}
+			catch (MayamClientException e) {
+				log.warn("Mayam exception thrown while updating Ingest task for asset : " + assetId, e);
 			}
 		}
 	}
