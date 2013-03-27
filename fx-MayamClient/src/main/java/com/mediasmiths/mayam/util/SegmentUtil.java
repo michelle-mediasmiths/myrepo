@@ -11,6 +11,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
+import com.mediasmiths.std.types.TimecodeRange;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -275,11 +276,15 @@ public class SegmentUtil
 		return segmenttoString(segmentNumber,som,duration,eom,title);
 	}
 	
-	private static String getDurationSMTPE(Timecode start, Timecode end){
-		long durationSamples = (end.getSampleCount().getSamples() - start.getSampleCount().getSamples());
-		Timecode durationTimecode = Timecode.getInstance(new SampleCount(durationSamples, Framerate.HZ_25));
-		String duration = durationTimecode.toSMPTEString();
-		return duration;
+	private static String getDurationSMTPE(Timecode start, Timecode end)
+	{
+		TimecodeRange range = new TimecodeRange(start,end);
+
+		final SampleCount duration = range.getDuration().add(new SampleCount(1, Framerate.HZ_25));
+
+		Timecode durationTimecode = Timecode.getInstance(duration);
+
+		return durationTimecode.toSMPTEString();
 	}
 
 	public static String originalConformToHumanString(SegmentationType originalConform)
