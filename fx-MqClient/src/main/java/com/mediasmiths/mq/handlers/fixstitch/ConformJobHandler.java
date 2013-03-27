@@ -115,6 +115,7 @@ public class ConformJobHandler extends JobHandler
 				{
 					String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
 					String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
+					String houseID = item.getAttributeAsString(Attribute.HOUSE_ID);
 					String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 					
 					if (sourceHouseID == null) //item is not a compliance item
@@ -143,16 +144,10 @@ public class ConformJobHandler extends JobHandler
 						
 							try
 							{
-								AttributeMap purgeTask = tasksClient.createAttributeMap();
-								purgeTask.setAttribute(Attribute.OP_DATE, numberOfDays);
-								purgeTask.setAttribute(Attribute.TASK_STATE, TaskState.PENDING);
-								purgeTask.setAttribute(Attribute.ASSET_ID, assetID);
-								purgeTask.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST);
-								tasksClient.taskApi().createTask(purgeTask);
-	
+								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromString(assetType), houseID, numberOfDays);
 								log.info("New Purge Candidate Task created");
-							}
-							catch (RemoteException e)
+							}						
+							catch (Exception e)
 							{
 								log.error("Error creating Purge Candidate task for new conform", e);
 							}
