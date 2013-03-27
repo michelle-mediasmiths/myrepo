@@ -234,7 +234,7 @@
 		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
 		<eventname>ProtectedPurgeFail</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.PurgeEmailTemplate">
-			<subject>TitleID (%s) Purge Not Processed</subject>
+			<subject>%s (%s) Purge Not Processed</subject>
 			<body>Purge request not processed, as item is "MAM Protected"</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
@@ -255,9 +255,9 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/bms</namespace>
 		<eventname>ManualPurge</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.PurgeEmailTemplate">
-			<subject>Title(%s) Manual Purge Actioned.</subject>
-			<body>Item will be deleted from MAM in 2 days. Please resolve this issue.</body>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ManualPurgeEmailTemplate">
+			<subject>%s (%s) Manual Purge Actioned.</subject>
+			<body>Item will be deleted from MAM in 24 hours. Purge was initiated on %s.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>

@@ -45,18 +45,20 @@ public class DeleteButton extends ButtonClickHandler
 		
 		if(type==MayamAssetType.MATERIAL.getAssetType()){
 			materialController.deleteMaterial(houseID, gracePeriod);
-			sendManualItemPurgeEvent(messageAttributes);
+			sendManualItemPurgeEvent(messageAttributes, MayamAssetType.MATERIAL.getText());
 		}
 		else if(type==MayamAssetType.TITLE.getAssetType()){
-			titlecontroller.purgeTitle(houseID, gracePeriod);			
+			titlecontroller.purgeTitle(houseID, gracePeriod);
+			sendManualItemPurgeEvent(messageAttributes, MayamAssetType.TITLE.getText());
 		}
 		else if(type==MayamAssetType.PACKAGE.getAssetType()){		
 			packageController.deletePackage(houseID, gracePeriod);
+			sendManualItemPurgeEvent(messageAttributes, MayamAssetType.PACKAGE.getText());
 		}
 		
 	}
 
-	private void sendManualItemPurgeEvent(AttributeMap messageAttributes)
+	private void sendManualItemPurgeEvent(AttributeMap messageAttributes, String assetType)
 	{
 		try
 		{
@@ -72,9 +74,7 @@ public class DeleteButton extends ButtonClickHandler
 			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
 			ph.setActions(a);
 
-			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID),
-			                     (String) messageAttributes.getAttribute(Attribute.PARENT_HOUSE_ID),
-			                     (String) messageAttributes.getAttribute(Attribute.ASSET_TITLE));
+			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType);
 			
 		}
 		catch (Exception e)
@@ -99,12 +99,11 @@ public class DeleteButton extends ButtonClickHandler
 	}
 
 
-	private void sendManualPurgeEvent(String materialId, String titleId, String assetTitle)
+	private void sendManualPurgeEvent(String houseId, String assetType)
 	{
 		ManualPurge manualPurge = new ManualPurge();
-		manualPurge.setMaterialId(materialId);
-		manualPurge.setTitle(assetTitle);
-		manualPurge.setTitleID(titleId);
+		manualPurge.setHouseId(houseId);
+		manualPurge.setAssetType(assetType);
 		manualPurge.setTime(((new Date()).toString()));
 
 		String eventName = MANUAL_PURGE;

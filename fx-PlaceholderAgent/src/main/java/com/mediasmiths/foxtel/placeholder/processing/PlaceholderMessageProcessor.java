@@ -498,16 +498,18 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 				
 				if (action instanceof PurgeTitle)
 				{
-					ppf.setTitleID(((PurgeTitle) action).getTitleID());
+					ppf.setAssetType("EPISODE");
+					ppf.setHouseId(((PurgeTitle) action).getTitleID());
 				}
 				else if (action instanceof DeleteMaterial)
 				{
-					ppf.setTitleID(((DeleteMaterial) action).getTitleID());
-					ppf.setMaterialId(((DeleteMaterial) action).getMaterial().getMaterialID());
+					ppf.setAssetType("ITEM");
+					ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
 				}
 				else if (action instanceof DeletePackage)
 				{
-					ppf.setTitleID(((DeletePackage) action).getTitleID());
+					ppf.setAssetType("SEGMENT_LIST");
+					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
 				}
 				
 			}
