@@ -49,7 +49,6 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			@Named("ruzz.marshaller") Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
-			MediaCheck mediaCheck,
 			EventService eventService)
 	{
 		super(
@@ -61,7 +60,6 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 				marshaller,
 				mayamClient,
 				matchMaker,
-				mediaCheck,
 				eventService);
 	}
 

@@ -414,8 +414,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	}
 
-	protected abstract void processNonMessageFile(String filePath);
-
 	protected abstract boolean shouldArchiveMessages();
 
 	protected boolean isMessage(String filePath) {

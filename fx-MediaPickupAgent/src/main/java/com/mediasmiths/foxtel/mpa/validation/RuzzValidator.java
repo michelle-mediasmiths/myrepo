@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.mpa.validation;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -36,7 +37,7 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 	}
 
 	@Override
-	protected MessageValidationResult validateMessage(String messagePath, RuzzIngestRecord message)
+	protected MessageValidationResult validateMessage(PickupPackage pp, RuzzIngestRecord message)
 	{
 		try
 		{

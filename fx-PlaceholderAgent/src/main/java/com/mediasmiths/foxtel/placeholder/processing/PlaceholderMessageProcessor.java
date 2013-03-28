@@ -421,13 +421,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 
 	@Override
-	protected void processNonMessageFile(String filePath)
-	{
-		logger.error("Placeholder Agent does not expect non message files, moving to failure folder");
-		moveFileToFailureFolder(new File(filePath));
-	}
-
-	@Override
 	protected boolean shouldArchiveMessages()
 	{
 		return true;
