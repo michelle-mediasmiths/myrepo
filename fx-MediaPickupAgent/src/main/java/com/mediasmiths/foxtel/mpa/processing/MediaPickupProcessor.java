@@ -25,10 +25,15 @@ import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -201,7 +206,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		// add masterid into a more detailed envelope
 		MediaEnvelope<T> materialEnvelope = new MediaEnvelope<T>(envelope,result.getMasterID());
 			
-		PickupPackage pickupPackage = envelope.getPickupPackage();
+		final PickupPackage pickupPackage = envelope.getPickupPackage();
 		
 		if (pickupPackage.isComplete())
 		{
@@ -209,12 +214,35 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 		else
 		{
-			moveMessageToArchiveFolder(pickupPackage.getPickUp(FileExtensions.XML));
+			boolean autoMatched=false;
+			AutoMatchInfo ami = getSiteIDForAutomatch(materialEnvelope);
 			
-			//TODO : attempt automatch!
+			if (ami != null)
+			{
+				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
+			}
+			
+			if (autoMatched)
+			{
+				moveMessageToArchiveFolder(pickupPackage.getPickUp(FileExtensions.XML));
+			}
+			else
+			{
+				moveFileToFailureFolder(pickupPackage.getPickUp(FileExtensions.XML));
+			}
+
+			// send out alert that no material arrived with this xml file
+			eventService.saveEvent("warning", String
+					.format("There has been been no media received for Material message %s with MasterID %s ",
+							pickupPackage.getPickUp(FileExtensions.XML).getAbsolutePath(), materialEnvelope.getMasterID()));
 		}
 	}
-
+	
+	protected void processPickupPackageNoXML(PickupPackage pp)
+	{
+		logger.info("received a pickup package with no xml "+pp.getRootName());
+		importMediaAsUnmatched(pp.getPickUp(FileExtensions.MXF));
+	}
 	
 	/**
 	 * updates the mam with the material information contained in the message, returns the materials ID
@@ -304,79 +332,12 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 	}
 	
-//	@Override
-//	protected void aoMismatch(File file)
-//	{
-//		Object unmarshalled = null;
-//		try
-//		{
-//			unmarshalled = unmarhsaller.unmarshal(file);
-//		}
-//		catch (JAXBException e)
-//		{
-//			logger.error("unmarshalling failed", e);
-//		}
-//
-//		if (unmarshalled != null)
-//		{
-//			@SuppressWarnings("unchecked")
-//			T message = (T) unmarshalled;
-//
-//			// wait for or find mxf to allow files to be quarrentined together
-//
-//			@SuppressWarnings("rawtypes")
-//			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", true,false);
-//			// try to get the mxf file for this xml
-//			String mxfFile = matchMaker.matchXML(materialEnvelope);
-//
-//			if (mxfFile != null)
-//			{
-//				logger.info(String.format("found mxf %s for material", mxfFile));
-//				moveToAOFolder(mxfFile);
-//				moveToAOFolder(file.getAbsolutePath());
-//			}
-//			else
-//			{
-//				logger.debug("No matching media found");
-//			}
-//		}
-//	}
-//	
-//	@Override
-//	protected void failMediaOnArrival(File file){
-//		Object unmarshalled = null;
-//		try
-//		{
-//			unmarshalled = unmarhsaller.unmarshal(file);
-//		}
-//		catch (JAXBException e)
-//		{
-//			logger.error("unmarshalling failed", e);
-//		}
-//
-//		if (unmarshalled != null)
-//		{
-//			@SuppressWarnings("unchecked")
-//			T message = (T) unmarshalled;
-//
-//			// wait for or find mxf to allow files to be failed together
-//
-//			@SuppressWarnings("rawtypes")
-//			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", false,true);
-//			// try to get the mxf file for this xml
-//			String mxfFile = matchMaker.matchXML(materialEnvelope);
-//
-//			if (mxfFile != null)
-//			{
-//				logger.info(String.format("found mxf %s for material", mxfFile));
-//				moveFileToFailureFolder(new File(mxfFile));
-//				moveFileToFailureFolder(file);
-//			}
-//			else
-//			{
-//				logger.debug("No matching media found");
-//			}
-//		}	
-//	}
-//	
+	protected abstract AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<T> unmatchedMessage);
+	
+	class AutoMatchInfo{
+		String siteID;
+		String fileName;
+	}
+
+	
 }

@@ -11,16 +11,16 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
@@ -40,8 +40,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			MatchMaker matchMaker,
-			MediaCheck mediaCheck,
 			EventService eventService){
 		super(filePathsPendingProcessing,
 			filesPendingImport,
@@ -50,8 +48,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			unmarhsaller,
 			marshaller,
 			mayamClient,
-			matchMaker,
-			mediaCheck,
 			eventService);
 	}
 
@@ -89,7 +85,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			updateTitle(message.getTitle());
 			String materialID = message.getTitle().getProgrammeMaterial().getMaterialID();
 			boolean waitForMedia = updateProgrammeMaterial(message.getTitle().getProgrammeMaterial(), message.getDetails(), message.getTitle());
-			return new MamUpdateResult(materialID, waitForMedia);
+			return new MamUpdateResult(materialID);
 		} else {
 			// marketing material
 			try {
@@ -118,7 +114,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 
 				}
 
-				return new MamUpdateResult(masterID, true);
+				return new MamUpdateResult(masterID);
 			} catch (MayamClientException e) {
 				logger.error(
 						"MayamClientException update mam with marketing material information",
@@ -247,4 +243,23 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 //	}
 
 
+	
+
+	protected AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<Material> unmatchedMessage)
+	{
+		if (Util.isProgramme(unmatchedMessage.getMessage()))
+		{
+
+			AutoMatchInfo ret = new AutoMatchInfo();
+			ret.siteID = unmatchedMessage.getMessage().getTitle().getProgrammeMaterial().getMaterialID();
+			ret.fileName = ((FileMediaType) unmatchedMessage.getMessage().getTitle().getProgrammeMaterial().getMedia()).getFilename();
+			logger.debug("attempt to automatch on filename from programme material xml");
+			return ret;
+		}
+		else
+		{
+			logger.debug("cannot automatch marketing material");
+			return null;
+		}	
+	}
 }

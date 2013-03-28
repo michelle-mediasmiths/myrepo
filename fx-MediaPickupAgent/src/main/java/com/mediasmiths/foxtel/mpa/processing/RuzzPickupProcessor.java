@@ -12,6 +12,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.generated.ruzz.ChannelConditionEventType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
@@ -20,6 +21,7 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material.IngestRec
 import com.mediasmiths.foxtel.generated.ruzz.SegmentationType;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
@@ -47,7 +49,6 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			@Named("ruzz.unmarshaller") Unmarshaller unmarhsaller,
 			@Named("ruzz.marshaller") Marshaller marshaller,
 			MayamClient mayamClient,
-			MatchMaker matchMaker,
 			EventService eventService)
 	{
 		super(
@@ -58,7 +59,6 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 				unmarhsaller,
 				marshaller,
 				mayamClient,
-				matchMaker,
 				eventService);
 	}
 
@@ -131,7 +131,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			}
 		}
 
-		return new MamUpdateResult(materialID, true);
+		return new MamUpdateResult(materialID);
 	}
 
 	private void updateSegmentationInfo(SegmentationType segments, String materialID) throws MayamClientException
@@ -177,4 +177,13 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 		mayamClient.updateMaterial(details, materialID);
 	}
 
+	@Override
+	protected AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<RuzzIngestRecord> unmatchedMessage)
+	{
+		AutoMatchInfo ret = new AutoMatchInfo();
+		ret.siteID = unmatchedMessage.getMessage().getMaterial().getMaterialID();
+		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp(FileExtensions.MXF).getName();
+		return ret;
+	}
+	
 }
