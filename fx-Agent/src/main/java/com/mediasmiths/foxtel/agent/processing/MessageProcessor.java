@@ -152,33 +152,11 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 			{
 				logger.warn(String.format("Message at %s did not validate", pp.getRootPath()));
 				messageValidationFailed(resultPackage);
-				
-//				if(result==MessageValidationResult.AO_MISMATCH){
-//					aoMismatch(pp);					
-//				}
-//				else if(result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
-//					failMediaAndMessage(pp);
-//				}
-//				else{
-//					moveFileToFailureFolder(pp);
-//				}
 			}
 		}
 		}
 
-
-//	protected void aoMismatch(PickupPackage pp)
-//	{
-////		moveFileToFailureFolder(pp);
-//	}
-//	
-//	protected void failMediaAndMessage(PickupPackage pp)
-//	{
-//		//should really only be in media pickup agent
-////		moveFileToFailureFolder(file);
-//	}
-
-	private void processingError(PickupPackage pp)
+	protected void processingError(PickupPackage pp)
 	{
 		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
 	}
@@ -187,7 +165,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	{
 		if (shouldArchiveMessages())
 		{
-			moveMessageToArchiveFolder(pp);
+			moveMessageToArchiveFolder(pp.getPickUp(FileExtensions.XML));
 		}
 	}
 
@@ -230,102 +208,40 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	public static String getFailureFolderForFile(File file) {
 		
 		String pathToFile = file.getAbsolutePath();		
-		
-		boolean fileInProcessingFolder = fileIsInProcessingFolder(pathToFile);
-		
-		String failurePath;
-		
-		if(fileInProcessingFolder){
-			failurePath = FilenameUtils.getFullPath(pathToFile) + "../" + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;
-		}
-		else{
-			failurePath = FilenameUtils.getFullPath(pathToFile) + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;
-		}
+		String failurePath = FilenameUtils.getFullPath(pathToFile) + FAILUREFOLDERNAME + IOUtils.DIR_SEPARATOR;
 		logger.debug(String.format("returning failure folder %s for file %s ", failurePath,pathToFile));
 		
 		return failurePath;
 	}
-
-	public static boolean fileIsInProcessingFolder(String pathToFile)
-	{
 	
-		String folder = FilenameUtils.getBaseName(FilenameUtils.getFullPathNoEndSeparator(pathToFile));
-		logger.debug("folder : "+folder);
-		if(folder.equals(PROCESSINGFOLDERNAME)){
-			logger.debug("file is in processing folder");
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
 	/**
 	 * Moves messages which have been processed, to the archive path
 	 * 
-	 * @param pp
+	 * @param file
 	 */
-	private void moveMessageToArchiveFolder(PickupPackage pp) {
+	protected void moveMessageToArchiveFolder(File file) {
 		logger.info(String.format(
 				"Message %s is complete, sending to archive folder",
-				pp));
-		String archivePath = getArchivePathForFile(pp.getPickUp(FileExtensions.XML).getAbsolutePath());
+				file));
+		String archivePath = getArchivePathForFile(file.getAbsolutePath());
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
-			moveFileToFolder(pp.getPickUp(FileExtensions.XML), archivePath, true);
+			moveFileToFolder(file, archivePath, true);
 		} catch (IOException e) {
 
 			logger.warn(String.format(
-					"IOException moving message %s to archive %s", pp,
+					"IOException moving message %s to archive %s", file,
 					archivePath), e);
 		}
 
 	}
-	
-//	private String moveMessageToProcessingFolder(String messagePath) throws IOException {
-//		logger.info(String.format(
-//				"Message %s has arrived, moving to processing folder",
-//				messagePath));
-//		String processingPath = getProcessingPathForFile(messagePath);
-//		logger.debug(String.format("processing folder is: %s ", processingPath));
-//
-//		try {
-//			return moveFileToFolder(new File(messagePath), processingPath, false);
-//		} catch (IOException e) {
-//
-//			logger.warn(String.format(
-//					"IOException moving message %s to archive %s", messagePath,
-//					processingPath), e);
-//			throw e;
-//		}
-//
-//	}
-
-//	public String getProcessingPathForFile(String pathToFile)
-//	{
-//		
-//		String processingPath = FilenameUtils.getFullPath(pathToFile) + PROCESSINGFOLDERNAME + IOUtils.DIR_SEPARATOR;
-//		logger.debug(String.format("returning processing path %s for file %s ", processingPath,pathToFile));
-//		
-//		return processingPath;
-//	}
 
 	public static String getArchivePathForFile(String messagePath) {
 		
 		String pathToFile = messagePath;		
 		
-		boolean fileInProcessingFolder = fileIsInProcessingFolder(pathToFile);
-		
-		String archivePath;
-		
-		if(fileInProcessingFolder){
-			archivePath = FilenameUtils.getFullPath(pathToFile) + "../" + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;
-		}
-		else{
-			archivePath = FilenameUtils.getFullPath(pathToFile) + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;
-		}
-		
+		String archivePath = FilenameUtils.getFullPath(pathToFile) + ARCHIVEFOLDERNAME + IOUtils.DIR_SEPARATOR;
 		logger.debug(String.format("returning archivePath folder %s for file %s ", archivePath,pathToFile));
 		
 		return archivePath;

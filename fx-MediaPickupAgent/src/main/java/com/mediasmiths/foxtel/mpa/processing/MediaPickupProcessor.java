@@ -35,19 +35,13 @@ import com.mediasmiths.mayam.MayamClientException;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
-
-
 	protected final MayamClient mayamClient;
-
 	private final PendingImportQueue filesPendingImport;
 
 	@Inject
 	@Named("ao.quarrentine.folder")
 	private String aoQuarrentineFolder;
 	
-	// matches mxf and xml files together
-	private final MatchMaker matchMaker;
-
 	public MediaPickupProcessor(
 			FilePickUpProcessingQueue filePathsPendingProcessing,
 			PendingImportQueue filesPendingImport,
@@ -56,13 +50,11 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			MatchMaker matchMaker,
 			EventService eventService)
 	{
 		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
-		this.matchMaker = matchMaker;
 	}
 
 	protected Logger logger = Logger.getLogger(MediaPickupProcessor.class);
@@ -139,53 +131,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.error("Unable to send events: ", e);
 		}
 	}
-	
-//	/**
-//	 * Called when an mxf has arrived
-//	 * 
-//	 * Looks for the medias sidecar xml, if the xml has been seen then the pair
-//	 * are added to a list of pending imports
-//	 * 
-//	 * If the sidecar xml has not been seen then the mxf file is added to a list
-//	 * of mxfs awaiting xml files
-//	 * 
-//	 * @param filePath
-//	 */
-//	@Override
-//	protected void processNonMessageFile(String filePath) {
-//		logger.info(String.format("a non xml file has arrived %s", filePath));
-//
-//		if (!FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
-//				.equals("mxf")) {
-//			logger.warn("a non mxf has arrived, moving it to the failure folders"); 
-//			moveFileToFailureFolder(new File(filePath));
-//			return;
-//		}
-//
-//		File mxf = new File(filePath);
-//		// try to get materialenvelop for this xml file
-//		MediaEnvelope materialEnvelope = matchMaker.matchMXF(mxf);
-//
-//		if (materialEnvelope != null) {
-//			logger.info(String.format("found material description %s for mxf",
-//					materialEnvelope.getFile().getAbsolutePath()));
-//			if(materialEnvelope.isQuarrentineOnMatch()){
-//				logger.info("mxf detected as requiring quarrentine with its xml");
-//				moveToAOFolder(materialEnvelope.getFile().getAbsolutePath());
-//				moveToAOFolder(filePath);
-//			}
-//			else if(materialEnvelope.isFailOnMatch()){
-//				logger.info("mxf deteced as requiring move to failure folder with its xml");
-//				moveFileToFailureFolder(materialEnvelope.getFile());
-//				moveFileToFailureFolder(new File(filePath));
-//			}
-//			else{
-//				createPendingImportIfValid(mxf, materialEnvelope);
-//			}
-//		} else {
-//			logger.debug("No matching xml file \\ material envelope found");
-//		}
-//	}
 
 	private void failMessageImportMediaAsUnmatched(PickupPackage pp)
 	{
@@ -201,15 +146,35 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		moveFileToFailureFolder(pp.getPickUp(FileExtensions.MXF));
 	}
 	
-	private void importMediaAsUnmatched(File mediaFile){
-		//TODO !
-	}
-
 	private void aoMismatch(PickupPackage pp)
 	{
 		logger.info("XML and media will both be moved to ao quarrentine location");
 		moveToAOFolder(pp.getPickUp(FileExtensions.XML));
 		moveToAOFolder(pp.getPickUp(FileExtensions.MXF));
+	}
+	
+	@Override
+	protected void processingError(PickupPackage pp)
+	{
+		logger.info("processing failed for package, importing media as unmatched");
+		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
+		importMediaAsUnmatched(pp.getPickUp(FileExtensions.MXF));
+	}
+
+	private void importMediaCompleteMessage(MediaEnvelope<T> materialEnvelope){
+		// we have an xml and an mxf, add pending import
+		PendingImport pendingImport = new PendingImport(materialEnvelope);
+		filesPendingImport.add(pendingImport);
+	}
+	
+	@Override
+	protected void postProcessing(PickupPackage pp)
+	{
+		logger.trace("no post processing required in this agent");
+	}
+	
+	private void importMediaAsUnmatched(File mediaFile){
+		//TODO 
 	}
 
 	/**
@@ -232,21 +197,21 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 		MamUpdateResult result = updateMamWithMaterialInformation(envelope
 				.getMessage());
-
-		if(result.isWaitForMedia()){
 		
-			// add masterid into a more detailed envelope
-			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(envelope,
-					result.getMasterID());
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(materialEnvelope);
-	
-			if (mxfFile != null) {
-				logger.info(String.format("found mxf %s for material", mxfFile));
-				createPendingImport(new File(mxfFile), materialEnvelope);
-			} else {
-				logger.debug("No matching media found");
-			}
+		// add masterid into a more detailed envelope
+		MediaEnvelope<T> materialEnvelope = new MediaEnvelope<T>(envelope,result.getMasterID());
+			
+		PickupPackage pickupPackage = envelope.getPickupPackage();
+		
+		if (pickupPackage.isComplete())
+		{
+			importMediaCompleteMessage(materialEnvelope);
+		}
+		else
+		{
+			moveMessageToArchiveFolder(pickupPackage.getPickUp(FileExtensions.XML));
+			
+			//TODO : attempt automatch!
 		}
 	}
 
@@ -267,36 +232,20 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 //	 * A media file will not be expected if an item already has media attatched
 //	 */
 	  
-	 class MamUpdateResult{
+	class MamUpdateResult
+	{
 		private String masterID;
-		private boolean waitForMedia;
-		
-		public MamUpdateResult(String masterID, boolean waitForMedia){
+
+		public MamUpdateResult(String masterID)
+		{
 			this.masterID = masterID;
-			this.waitForMedia = waitForMedia;
 		}
-		
+
 		public String getMasterID()
 		{
 			return masterID;
 		}
-		
-		public boolean isWaitForMedia()
-		{
-			return waitForMedia;
-		}
-		
-	}
-	
-	
-	private void createPendingImport(File mxf,
-			MediaEnvelope materialEnvelope) {
 
-			// we have an xml and an mxf, add pending import
-			PendingImport pendingImport = new PendingImport(mxf,
-					materialEnvelope);
-
-			filesPendingImport.add(pendingImport);
 	}
 	
 	protected String getIDFromMessage(MessageEnvelope<T> envelope) {

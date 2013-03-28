@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -67,8 +68,7 @@ public class Importer extends Daemon implements StoppableService {
 					deliver(pi, 1);
 				} catch (Exception e) {
 					logger.error(String.format(
-							"Error delivering pending file %s", pi
-									.getMediaFile().getAbsolutePath()), e);
+							"Error delivering pending file %s", pi.getMaterialEnvelope().getPickupPackage().getRootName()), e);
 				}
 
 				logger.info("Finished with import");
@@ -93,14 +93,17 @@ public class Importer extends Daemon implements StoppableService {
 	 */
 	protected void deliver(PendingImport pi, int attempt) {
 
+
 		if (pi.getMaterialEnvelope().getMasterID() == null
 				|| pi.getMaterialEnvelope().getMasterID().equals("null")) {
 			logger.error("Missing masterID in PendingImport");
 		}
 
-		File src = pi.getMediaFile();
+		File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.MXF);
+
+		final long fileSize = src.length();
 		
-		String targetFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(pi.getMediaFile().getAbsolutePath()));
+		String targetFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(src.getAbsolutePath()));
 		File dst = new File(targetFolder, pi.getMaterialEnvelope()
 				.getMasterID() + ".mxf");
 
@@ -125,7 +128,7 @@ public class Importer extends Daemon implements StoppableService {
 			return;
 		}
 
-		src = pi.getMaterialEnvelope().getFile();
+		src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.XML);
 		dst = new File(MessageProcessor.getArchivePathForFile(src
 				.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
@@ -161,18 +164,17 @@ public class Importer extends Daemon implements StoppableService {
 
 			return;
 		}
-
-		saveEvent(pi);
-
+		saveEvent(pi,fileSize);
 	}
 
 
-	private void saveEvent(PendingImport pi)
+	private void saveEvent(PendingImport pi, long fileSize)
 	{
 		try
 		{
 			Acquisition payload = new Acquisition();
 
+			@SuppressWarnings("rawtypes")
 			MediaEnvelope materialEnvelope = pi.getMaterialEnvelope();
 			Object message = materialEnvelope.getMessage();
 
@@ -190,7 +192,7 @@ public class Importer extends Daemon implements StoppableService {
 						payload.setFormat(p.getFormat());
 						payload.setFileDelivery(true);
 						payload.setTapeDelivery(false);
-						payload.setFilesize(pi.getMediaFile().length()+"");
+						payload.setFilesize(fileSize+"");
 						payload.setTitleLength(p.getDuration());
 
 						eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
@@ -205,7 +207,7 @@ public class Importer extends Daemon implements StoppableService {
 						payload.setFormat(marketingMaterial.getFormat());
 						payload.setTapeDelivery(false);
 						payload.setFileDelivery(true);
-						payload.setFilesize(pi.getMediaFile().length()+"");
+						payload.setFilesize(fileSize+"");
 						payload.setTitleLength(marketingMaterial.getDuration());
 
 
@@ -224,7 +226,7 @@ public class Importer extends Daemon implements StoppableService {
 				payload.setFormat(r.getMaterial().getDetails().getFormat());
 				payload.setTapeDelivery(false);
 				payload.setFileDelivery(true);
-				payload.setFilesize(pi.getMediaFile().length()+"");
+				payload.setFilesize(fileSize+"");
 				payload.setTitleLength(r.getMaterial().getDetails().getDuration());
 
 				eventService.saveEvent("ProgrammeContentAvailable", JAXB_SERIALISER.serialise(payload));
@@ -251,7 +253,7 @@ public class Importer extends Daemon implements StoppableService {
 	 */
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
-			File src = pi.getMediaFile();
+			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.MXF);
 			String quarrentineFolder = MessageProcessor
 					.getFailureFolderForFile(src);
 			File baseDestination = new File(quarrentineFolder, pi
@@ -267,7 +269,7 @@ public class Importer extends Daemon implements StoppableService {
 						src, dst), e);
 			}
 
-			src = pi.getMaterialEnvelope().getFile();
+			src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.XML);
 			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
 					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "xml");
 
