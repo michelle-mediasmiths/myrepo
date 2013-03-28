@@ -409,34 +409,29 @@ public class MayamPDPImpl implements MayamPDP
 			if (permission)
 			{
 				String assetID=null;
-				try
+
+				AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
+
+				if (assetType == MayamAssetType.MATERIAL.getAssetType())
 				{
-					AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
-					if (assetType == MayamAssetType.TITLE.getAssetType())
+
+					assetID = attributeMap.getAttribute(Attribute.ASSET_ID);
+					String parentAssetID = attributeMap.getAttributeAsString(Attribute.ASSET_PARENT_ID);
+
+					if (parentAssetID != null)
 					{
-						assetID = attributeMap.getAttribute(Attribute.ASSET_ID);
-						List<AttributeMap> materials = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(),
-						                                                                  assetID,
-						                                                                  MayamAssetType.MATERIAL.getAssetType());
-						if (materials != null && materials.size() > 0)
+						logger.debug("loading parent asset : "+parentAssetID);
+						AttributeMap title = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), parentAssetID);
+						if (AssetProperties.isPurgeProtected(title))
 						{
-							for (AttributeMap amap : materials)
-							{
-								boolean isProtected = amap.getAttribute(Attribute.PURGE_PROTECTED);
-								if (isProtected)
-								{
-									logger.warn("Rejecting unprotect because child protected: " + amap.getAttributeAsString(Attribute.HOUSE_ID));
-									return getErrorStatus("Child item " + amap.getAttributeAsString(Attribute.HOUSE_ID) +
-									                      " is Protected");
-								}
-							}
+							logger.warn("Rejecting unprotect because parent is protected: "
+									+ attributeMap.getAttributeAsString(Attribute.HOUSE_ID));
+							return getErrorStatus("Parent title " + title.getAttributeAsString(Attribute.HOUSE_ID)
+									+ " is Protected");
 						}
 					}
 				}
-				catch (Exception e)
-				{
-                    logger.error("Could not find children of asset: " + assetID, e);
-				}
+
 				return okStatus;
 			}
 			else
