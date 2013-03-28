@@ -549,41 +549,17 @@ public class MayamTaskController extends MayamController
 
 	public void autoQcFailedForMaterial(final String materialId, final long taskID) throws MayamClientException
 	{
-		log.debug(String.format("Auto QC task failed for materialId %s; setting task state to fail", materialId));
-		AttributeMap qcTask;
-		try
-		{
-			qcTask = getTask(taskID);
-		}
-		catch (RemoteException e)
-		{
-			log.error(String.format("Error fetching qc task %d for material %s ",taskID,materialId,e));
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
-		}
-		
-		qcTask.setAttribute(Attribute.ERROR_MSG, String.format("Auto QC failed for material with id %s", materialId));
-		qcTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.FAIL);
-		
-		try
-		{
-			log.debug("Saving failedQcTask");
-			saveTask(qcTask);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Error updating qc task for material "+ materialId, e);
-			throw e;
-		}		
+		log.debug(String.format("Auto QC task failed for materialId %s; setting qc substatus 2 to fail", materialId));
+		setAutoQcStatus(QcStatus.FAIL, materialId, taskID, "Auto QC failed");
 	}
 
 
 	public void autoQcPassedForMaterial(String materialId, long taskID) throws MayamClientException
 	{
-		setAutoQcStatus(QcStatus.PASS, materialId, taskID);		
+		setAutoQcStatus(QcStatus.PASS, materialId, taskID, "Pass");		
 	}
 	
-	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID) throws MayamClientException
+	private void setAutoQcStatus(QcStatus newStatus, String materialId, long taskID, String notes) throws MayamClientException
 	{
 		AttributeMap qcTask;
 		try
@@ -596,17 +572,11 @@ public class MayamTaskController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 
-		qcTask.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
-		
-		try
-		{
-			saveTask(qcTask);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("error updating qc task for material "+materialId,e);
-			throw e;
-		}		
+		AttributeMap updateMap = updateMapForTask(qcTask);
+		updateMap.setAttribute(Attribute.QC_SUBSTATUS2, newStatus);
+		updateMap.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, notes);
+		saveTask(updateMap);
+				
 	}
 
 	/**
