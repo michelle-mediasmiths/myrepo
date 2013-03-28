@@ -1455,7 +1455,36 @@ public class MayamMaterialController extends MayamController
 					log.error(String.format("error deleting segment %s", segmentList.getId()), e);
 				}
 			}
-
+			
+			List<AttributeMap> packageAssets = client.assetApi().getAssetChildren(MayamAssetType.MATERIAL.getAssetType(), assetID, MayamAssetType.PACKAGE.getAssetType());
+			log.info(String.format("Found %d packages for asset %s",packageAssets.size(), houseID));
+			for (AttributeMap packageAsset : packageAssets)
+			{
+				
+				log.debug(String.format("Removing tasks of package %s", packageAsset.getAttribute(Attribute.HOUSE_ID)));
+				try
+				{
+					taskController.cancelAllOpenTasksForAsset(
+							MayamAssetType.PACKAGE.getAssetType(),
+							Attribute.ASSET_ID,
+							packageAsset.getAttributeAsString(Attribute.ASSET_ID));
+				}
+				catch (MayamClientException e)
+				{
+					log.error("error closing open tasks for asset", e);
+					// dont rethrow, we still want the delete to go ahead;
+				}
+				
+				try
+				{
+					log.warn("no grace period for segment lists");
+					client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), packageAsset.getAttributeAsString(Attribute.ASSET_ID));
+				}
+				catch (RemoteException e)
+				{
+					log.error(String.format("error deleting package %s", packageAsset.getAttribute(Attribute.HOUSE_ID)), e);
+				}
+			}
 		}
 		catch (RemoteException e)
 		{
