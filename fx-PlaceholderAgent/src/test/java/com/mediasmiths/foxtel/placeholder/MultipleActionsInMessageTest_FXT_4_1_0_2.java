@@ -45,7 +45,7 @@ public class MultipleActionsInMessageTest_FXT_4_1_0_2 extends PlaceHolderMessage
 		
 		//test that the correct validation result is returned
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS ==validateFile)
 			resultLogger.info("FXT 4.1.0.2 – Multiple Actions in Message --Passed");
 		else

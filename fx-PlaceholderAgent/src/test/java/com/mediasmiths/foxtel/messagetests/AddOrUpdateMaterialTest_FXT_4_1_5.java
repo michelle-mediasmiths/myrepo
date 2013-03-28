@@ -76,7 +76,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		//File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidAddMaterial", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.5.2 - Non XSD compliance --Passed");
@@ -98,7 +98,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 			resultLogger.info("FXT  4.1.5.3/4/5 - XSD Compliance/ Valid AddOrUpdateMaterial message/ No matching ID exists --Passed");
 		else
@@ -158,7 +158,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		
 		when(mayamClient.titleExists(NOT_EXISTING_TITLE)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL ==validateFile)
 			resultLogger.info("FXT 4.1.5.7 - No existing title --Passed");
 		else

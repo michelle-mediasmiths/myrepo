@@ -62,7 +62,7 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		when(receiptWriter.receiptPathForMessageID(eq(filePath),anyString())).thenReturn(receiptPath);
 		mockValidCalls(message);
 		//test that the generated placeholder message is valid
-		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(filePath));
 		
 		Util.deleteFiles(filePath,receiptPath);
 	}

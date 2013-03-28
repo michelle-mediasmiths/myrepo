@@ -43,7 +43,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -126,7 +126,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		// correct reason
 		assertEquals(
 				MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -145,7 +145,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		// correct reason
 		assertEquals(
 				MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
@@ -161,7 +161,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		//dont fail messages for dates out of order
 		assertEquals(
 				MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
@@ -178,7 +178,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		// try to call validation, expect a mayam client error
 		assertEquals(
 				MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 

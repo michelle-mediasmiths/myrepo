@@ -48,7 +48,7 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
 		File file = getFilePathsPending().take();
 		String filePath = file.getAbsolutePath();
-		validateThenProcessFile(filePath);
+		validateThenProcessPickupPackage(filePath);
 
 		logger.trace("SingleMessageProcessor.run() exit");
 

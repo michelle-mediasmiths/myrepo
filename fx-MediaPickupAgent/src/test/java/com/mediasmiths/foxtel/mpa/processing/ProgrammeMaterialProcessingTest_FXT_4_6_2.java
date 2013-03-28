@@ -62,7 +62,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
 		
 		// prepare mocks
-		when(validator.validateFile(processingPath)).thenReturn(
+		when(validator.validatePickupPackage(processingPath)).thenReturn(
 						MessageValidationResult.FAILED_TO_UNMARSHALL);
 		
 		TestUtil.writeMaterialToFile(material, materialXMLPath);
@@ -146,7 +146,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		String mediaProcessingPath = processor.getProcessingPathForFile(media.getAbsolutePath()) + FilenameUtils.getName(media.getAbsolutePath());
 
 		// prepare mocks
-		when(validator.validateFile(processingPath)).thenReturn(
+		when(validator.validatePickupPackage(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
@@ -189,7 +189,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		Thread.sleep(500l);
 
 		// verfiy mocks
-		verify(validator).validateFile(processingPath);
+		verify(validator).validatePickupPackage(processingPath);
 		verify(mayamClient).updateTitle(argThat(titleIDMatcher));
 		verify(mayamClient).updateMaterial(argThat(materialIDMatcher),any(Details.class),any(Material.Title.class));
 
@@ -279,7 +279,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
 		
 		// prepare mocks
-		when(validator.validateFile(processingPath)).thenReturn(
+		when(validator.validatePickupPackage(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.FAILURE);
@@ -308,7 +308,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		String processingPath = processor.getProcessingPathForFile(materialXMLPath) + FilenameUtils.getName(materialXMLPath);
 		
 		// prepare mocks
-		when(validator.validateFile(processingPath)).thenReturn(
+		when(validator.validatePickupPackage(processingPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);
@@ -340,7 +340,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
 		// prepare mocks
-		when(validator.validateFile(materialXMLPath)).thenReturn(
+		when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
 				MessageValidationResult.IS_VALID);
 		when(mayamClient.updateTitle((Title) argThat(titleIDMatcher)))
 				.thenReturn(MayamClientErrorCode.SUCCESS);

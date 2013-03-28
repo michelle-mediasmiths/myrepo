@@ -12,6 +12,8 @@ import org.xml.sax.SAXException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 
 public abstract class MessageValidator<T> {
 
@@ -41,51 +43,58 @@ public abstract class MessageValidator<T> {
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 */
-	protected boolean againstXSD(String filepath)
+	protected boolean againstXSD(File xmlFile)
 	{
-		return schemaValidator.isValid(new File(filepath));
+		return schemaValidator.isValid(xmlFile);
 	}
 
 	/**
 	 * Validates an xml file according to the rules
 	 * 
-	 * @param filepath
+	 * @param pp
 	 * @throws SAXException
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws MayamClientException
 	 */
 	@SuppressWarnings("unchecked")
-	public MessageValidationResult validateFile(String filepath)
-	 {
-		logger.debug("Validating file "+filepath);
+	public MessageValidationResultPackage<T> validatePickupPackage(PickupPackage pp)
+	{
+		logger.debug("Validating file " + pp);
 		// first check the xml file conforms to the schema
-		boolean againstXSD = againstXSD(filepath);
+		boolean againstXSD = againstXSD(pp.getPickUp(FileExtensions.XML));
 
-		if (!againstXSD) {
-			return MessageValidationResult.FAILS_XSD_CHECK;
+		if (!againstXSD)
+		{
+			return new MessageValidationResultPackage<T>(pp, MessageValidationResult.FAILS_XSD_CHECK);
 		}
 
 		// xml file has valid schema, unmarshall then continue validation
 		T message = null;
 
-		try {
-			message = (T) unmarshallFile(new File(filepath));
+		try
+		{
 			
-		} catch (JAXBException e) {
-			logger.fatal("Failed to unmarshall file " + filepath
-					+ " that had validated against schema",e);
-			return MessageValidationResult.FAILED_TO_UNMARSHALL;
-		} catch (ClassCastException cce) {
-			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type",cce);
-			return MessageValidationResult.UNEXPECTED_TYPE;
-		} 
+			message = (T) unmarshallFile(pp.getPickUp(FileExtensions.XML));
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Failed to unmarshall file " + pp + " that had validated against schema", e);
+			return new MessageValidationResultPackage<T>(pp, MessageValidationResult.FAILED_TO_UNMARSHALL);
+		}
+		catch (ClassCastException cce)
+		{
+			logger.fatal("Unmarshalled file that conformed to schema that did not have the expected type", cce);
+			return new MessageValidationResultPackage<T>(pp, MessageValidationResult.UNEXPECTED_TYPE);
+		}
+
+		MessageValidationResult validationResult = validateMessage(pp, message);
 		
-		return validateMessage(filepath, message);
+		return new MessageValidationResultPackage<T>(pp, message, validationResult);
 
 	}
 
-	protected abstract MessageValidationResult validateMessage(String messagePath, T message);
+	protected abstract MessageValidationResult validateMessage(PickupPackage pp, T message);
 
 
 	protected Object unmarshallFile(File xml) throws JAXBException {

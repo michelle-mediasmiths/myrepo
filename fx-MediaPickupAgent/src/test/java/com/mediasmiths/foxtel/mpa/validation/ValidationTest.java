@@ -64,7 +64,7 @@ public abstract class ValidationTest {
 		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR +"MessageValidationResult"+ RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
 		TestUtil.writeMaterialToFile(material,messageXmlPath);		
 		prepareMocks();
-		return validator.validateFile(messageXmlPath);
+		return validator.validatePickupPackage(messageXmlPath);
 	}
 	
 	protected void prepareMocks() throws MayamClientException{

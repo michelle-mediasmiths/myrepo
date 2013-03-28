@@ -84,7 +84,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidCreateTitle", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.1.2 - Non XSD compliance --Passed");
 		else
@@ -105,7 +105,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
 		File temp = createTempXMLFile(message, "validCreateTitle");
 
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.1.3/4 - XSD Compliance/ Non-existing ID --Passed");
@@ -164,7 +164,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		
 		File temp = createTempXMLFile (message, "createTitleInvalidDates");
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.0.4/5 - Invalid license dates --Passed");
@@ -198,7 +198,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		
 		File temp = createTempXMLFile (message, "createTitleUnknownChannel");
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.UNKOWN_CHANNEL ==validateFile)
 			resultLogger.info("FXT 4.1.0.6 - CreateOrUpdateTitle message has unknown channel --Passed");
 		else
@@ -225,7 +225,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		File temp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 
 		
-		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validatePickupPackage(temp.getAbsolutePath()));
 	}
 	
 	@Test
@@ -243,7 +243,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		File temp = createTempXMLFile (message, "createTitleTitleIdEmpty", false);
 
 		
-		assertEquals(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY, validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY, validator.validatePickupPackage(temp.getAbsolutePath()));
 	}
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {

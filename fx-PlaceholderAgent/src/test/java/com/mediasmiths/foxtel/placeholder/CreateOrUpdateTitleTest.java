@@ -57,7 +57,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
@@ -167,7 +167,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 
 		//dont reject based on licence dates
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 

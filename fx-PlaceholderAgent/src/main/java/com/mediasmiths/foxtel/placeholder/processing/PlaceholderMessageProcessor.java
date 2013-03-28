@@ -19,8 +19,11 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
@@ -344,9 +347,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	@Override
 	public void processMessage(MessageEnvelope<PlaceholderMessage> envelope) throws MessageProcessingFailedException
 	{
-
 		PlaceholderMessage message = envelope.getMessage();
-
 		Object action = message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
 		boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
@@ -459,43 +460,36 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 	
 	@Override
-	protected void messageValidationFailed(String filePath, MessageValidationResult result)
+	protected void messageValidationFailed(MessageValidationResultPackage<PlaceholderMessage> resultPackage)
 	{
 
 		logger.warn(String.format(
 				"Validation of Placeholder management message %s failed for reason %s",
-				FilenameUtils.getName(filePath),
-				result.toString()));
-		
-		String message;
-		try{
-			message = FileUtils.readFileToString(new File(filePath));
-		}
-		catch(IOException e){
-			logger.warn("IOException reading "+filePath,e);
-			message = filePath;
-		}
-		
+				resultPackage.getPp().getRootName(),
+				resultPackage.getResult().toString()));
 		try
 		{
-			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Placeholder Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+			mayamClient.createWFEErrorTaskNoAsset(
+					resultPackage.getPp().getRootName(),
+					"Invalid Placeholder Message Received",
+					String.format(
+							"Failed to validate %s for reason %s",
+							resultPackage.getPp().getPickUp(FileExtensions.XML).getAbsolutePath(),
+							resultPackage.getResult()));
 		}
 		catch (MayamClientException e)
 		{
-			logger.error("Failed to create wfe error task",e);
+			logger.error("Failed to create wfe error task", e);
 		}
-		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
+		if (resultPackage.getResult() == MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
 		{
 			ProtectedPurgeFail ppf = createPurgeFailedMessage();
-			
+
 			try
 			{
-				File deleteFile = new File(filePath);
-				Object unmarshalled = unmarhsaller.unmarshal(deleteFile);
-				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
-				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-				
-				
+				Object action = resultPackage.getMessage().getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(
+						0);
+
 				if (action instanceof PurgeTitle)
 				{
 					ppf.setAssetType("EPISODE");
@@ -511,24 +505,21 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					ppf.setAssetType("SEGMENT_LIST");
 					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
 				}
-				
+
+				eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail", ppf);
 			}
-			catch (JAXBException e)
+			catch (Exception e)
 			{
-				logger.fatal("error unmarshall the filepath " + filePath, e);
-			}
-			catch (ClassCastException cce)
-			{
-				logger.fatal("error in cast the file " + filePath, cce);
+				logger.fatal("error constructing purge protected fail event" + resultPackage.getPp().getRootName(), e);
 			}
 
-			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
-		else{
-			eventService.saveEvent("failed",message);
+		else
+		{
+			eventService.saveEvent("failed", resultPackage.getMessage());
 		}
 	}
-	
+
 	private ProtectedPurgeFail createPurgeFailedMessage ()
 	{
 		ProtectedPurgeFail purgeMessage = new ProtectedPurgeFail();

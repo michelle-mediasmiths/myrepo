@@ -36,7 +36,7 @@ public class NonXSDConformingTest_FXT_4_1_0_1 extends PlaceHolderMessageShortTes
 		File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 
 		IOUtils.write(loremIpsum, new FileOutputStream(temp));		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.0.1  - Non XSD Compliance --Passed");

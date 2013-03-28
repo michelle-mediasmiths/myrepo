@@ -5,8 +5,11 @@ package com.mediasmiths.foxtel.agent.processing;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
@@ -70,53 +73,24 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	 * @throws MessageProcessingFailedException
 	 * @returns the messageID of the message at filePath
 	 */
-	public String processFile(String filePath)
-			throws MessageProcessingFailedException {
+	public String processPickupPackage(PickupPackage pp, T message) throws MessageProcessingFailedException
+	{
 
-		try {
-            File fileLoc = new File(filePath);
-			Object unmarshalled = unmarhsaller.unmarshal(fileLoc);
-
-
-            if (logger.isDebugEnabled())
-                logger.debug(String.format("unmarshalled object of type %s", unmarshalled.getClass().toString()));
-
-			typeCheck(unmarshalled);
-
-			@SuppressWarnings("unchecked")
-			T message = (T) unmarshalled;
-			MessageEnvelope<T> envelope = new MessageEnvelope<T>(fileLoc, message);
-			try {
-				processMessage(envelope);
-			} catch (MessageProcessingFailedException e) {
-				logger.error(String.format(
-						"Message processing failed for %s and reason %s",
-						filePath, e.getReason()), e);
-				
-				//TODO send failure reason along with xml
-				eventService.saveEvent("Error", message);
-				
-				throw e;
-			}
-
-			return getIDFromMessage(envelope);
-
-		} catch (JAXBException e) {
-			logger.error("A previously validated file did not unmarshall sucessfully, this is very bad");
-			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.UNMARSHALL_FAILED, e);
-		} catch (ClassCastException cce) {
-			logger.error(
-					"A prevously validated file did not have an action of one of the expected types or a mayam attribute was not of the expected type",
-					cce);
-			throw new MessageProcessingFailedException(
-					MessageProcessingFailureReason.UNKNOWN_ACTION, cce);
+		MessageEnvelope<T> envelope = new MessageEnvelope<T>(pp, message);
+		try
+		{
+			processMessage(envelope);
 		}
-		
+		catch (MessageProcessingFailedException e)
+		{
+			logger.error(String.format("Message processing failed for %s and reason %s", pp.getRootName(), e.getReason()), e);
 
+			eventService.saveEvent("Error", message);
+			throw e;
+		}
+		//TODO: getidfromemessage!
+		return getIDFromMessage(envelope);
 	}
-
-
 
 
     /**
@@ -132,89 +106,89 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	protected abstract String getIDFromMessage(MessageEnvelope<T> envelope);
 
-	protected final void validateThenProcessFile(String filePath) {
+	protected final void validateThenProcessPickupPackage(PickupPackage pp) {
 
-		if (!new File(filePath).exists())
-		{
-			logger.warn("file path passed for validation does not exist, usually this means it has already been processed :"
-					+ filePath);
-		}
-		else
-		{
-			MessageValidationResult result;
+		//TODO: assuming package is complete here
+				
+		MessageValidationResultPackage<T> resultPackage;
+		MessageValidationResult result;
+		
 			try
 			{
-				logger.debug("Asking for validation of " + filePath);
-				result = messageValidator.validateFile(filePath);
+				logger.debug("Asking for validation of pickup package " + pp.getRootName());
+				resultPackage = messageValidator.validatePickupPackage(pp);				
 			}
 			catch (Exception e)
 			{
 				logger.error("uncaught exception validating file", e);
-				result = MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
+				resultPackage =new MessageValidationResultPackage<>(pp, MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
 			}
 
+			result = resultPackage.getResult();
+			
 			if (result == MessageValidationResult.IS_VALID)
 			{
-				logger.info(String.format("Message at %s validates", filePath));
+				logger.info(String.format("Message at %s validates", pp.getRootName()));
 				try
 				{
-					String messageID = processFile(filePath);
-					writeReceipt(filePath, messageID);
-					if (shouldArchiveMessages())
-					{
-						moveMessageToArchiveFolder(filePath);
-					}
+					String messageID = processPickupPackage(pp, resultPackage.getMessage());
+					writeReceipt(pp.getPickUp(FileExtensions.XML), messageID);
+					//TODO archive messages
+//					if (shouldArchiveMessages())
+//					{
+//						moveMessageToArchiveFolder(filePath);
+//					}
 				}
 				catch (MessageProcessingFailedException e)
 				{
-					logger.error(String.format("Error processing %s", filePath), e);
-					moveFileToFailureFolder(new File(filePath));
+					logger.error(String.format("Error processing %s", pp.getRootName()), e);
+					//TODO : move to failure folder
+//					moveFileToFailureFolder(new File(filePath));
 				}
 				catch (Exception e)
 				{
-					logger.error(String.format("uncaught exception processing file %s", filePath), e);
-					moveFileToFailureFolder(new File(filePath));
+					logger.error(String.format("uncaught exception processing file %s",pp.getRootName()), e);
+					//TODO : move to failure folder
+//					moveFileToFailureFolder(new File(filePath));
 				}
 			}
 			else
 			{
-				logger.warn(String.format("Message at %s did not validate", filePath));
-				messageValidationFailed(filePath, result);
+				logger.warn(String.format("Message at %s did not validate", pp.getRootPath()));
+				messageValidationFailed(resultPackage);
 				
-				if(result==MessageValidationResult.AO_MISMATCH){
-					aoMismatch(new File(filePath));					
-				}
-				else if(result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
-					failMediaOnArrival(new File(filePath));
-				}
-				else{
-					moveFileToFailureFolder(new File(filePath));
-				}
+//				if(result==MessageValidationResult.AO_MISMATCH){
+//					aoMismatch(pp);					
+//				}
+//				else if(result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW || result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION){
+//					failMediaAndMessage(pp);
+//				}
+//				else{
+//					moveFileToFailureFolder(pp);
+//				}
 			}
 		}
 
-	}
 
-	protected void aoMismatch(File file)
-	{
-		moveFileToFailureFolder(file);
-	}
-	
-	protected void failMediaOnArrival(File file)
-	{
-		//should really only be in media pickup agent
-		moveFileToFailureFolder(file);
-	}
+//	protected void aoMismatch(PickupPackage pp)
+//	{
+////		moveFileToFailureFolder(pp);
+//	}
+//	
+//	protected void failMediaAndMessage(PickupPackage pp)
+//	{
+//		//should really only be in media pickup agent
+////		moveFileToFailureFolder(file);
+//	}
 
 	/**
 	 * informs MessageProcesors of a message validation failure, does not move
 	 * messages to the failure folder
 	 * 
-	 * @param filePath
+	 * @param pp
 	 * @param result
 	 */
-	protected abstract void messageValidationFailed(String filePath,
-			MessageValidationResult result);
+	protected abstract void messageValidationFailed(MessageValidationResultPackage<T> resultPackage);
 
 	protected abstract void processMessage(MessageEnvelope<T> envelope)
 			throws MessageProcessingFailedException;
@@ -397,9 +371,9 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		return destination;
 	}
 
-	private void writeReceipt(String filePath, String messageID) {
+	private void writeReceipt(File file, String messageID) {
 		try {
-			receiptWriter.writeRecipet(filePath, messageID);
+			receiptWriter.writeRecipet(file.getAbsolutePath(), messageID);
 		} catch (IOException e) {
 			logger.error("Failed to write receipt for message" + messageID);
 		}
@@ -410,17 +384,21 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 		while (isRunning()) {
 			try {
-				File file = getFilePathsPending().take();
-				String filePath = file.getAbsolutePath();
+			
+				//TODO call something to get this PickupPackage
+				PickupPackage pp=null;
+				
+//				File file = getFilePathsPending().take();
+//				String filePath = file.getAbsolutePath();
 
 				logger.debug("moving file to processing folder");
-				String processingPath = moveMessageToProcessingFolder(filePath);
+//				String processingPath = moveMessageToProcessingFolder(filePath);
 				
-				if (isMessage(processingPath)) {
-					validateThenProcessFile(processingPath);
-				} else {
-					processNonMessageFile(processingPath);
-				}
+//				if (isMessage(processingPath)) {
+					validateThenProcessPickupPackage(pp);
+//				} else {
+//					processNonMessageFile(processingPath);
+//				}
 
 			} catch (Exception e) {
 				logger.fatal(

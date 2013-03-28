@@ -52,7 +52,7 @@ public class UnmarshallFailureTest {
 				
 		when(unmarshaller.unmarshal(temp)).thenThrow(new JAXBException("test jaxbexception"));
 			
-		assertEquals(MessageValidationResult.FAILED_TO_UNMARSHALL, toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.FAILED_TO_UNMARSHALL, toTest.validatePickupPackage(temp.getAbsolutePath()));
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class UnmarshallFailureTest {
 		when(unmarshaller.unmarshal(temp)).thenReturn(new String("not a placeholder message"));
 		
 		
-		assertEquals(MessageValidationResult.UNEXPECTED_TYPE, toTest.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.UNEXPECTED_TYPE, toTest.validatePickupPackage(temp.getAbsolutePath()));
 	}
 	
 	

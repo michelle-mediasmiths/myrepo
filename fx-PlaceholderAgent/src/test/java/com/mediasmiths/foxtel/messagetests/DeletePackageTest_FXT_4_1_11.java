@@ -62,7 +62,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 		
 		IOUtils.write("InvalidDeletePackage", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.11.2 - Non XSD compliance --Passed");
 		else
@@ -85,7 +85,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(new Boolean(false));
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 			resultLogger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists--Passed");
 		else
@@ -106,7 +106,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.packageExists(NOT_EXISTING_PACKAGE)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validateFile)
 			resultLogger.info("FXT 4.1.11.6 - No matching ID --Passed");
 		else
@@ -128,7 +128,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validateFile)
 			resultLogger.info("FXT 4.1.11.7 - Package is protected --Passed");
 		else

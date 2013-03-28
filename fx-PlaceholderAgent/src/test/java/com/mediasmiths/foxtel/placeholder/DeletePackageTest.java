@@ -43,7 +43,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(temp.getAbsolutePath()));
 		verify(mayamClient).isMaterialForPackageProtected(EXISTING_PACKAGE_ID);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
@@ -57,7 +57,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		when(mayamClient.packageExists(PROTECTED_PACKAGE)).thenReturn(true);
 		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
 		
-		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validatePickupPackage(temp.getAbsolutePath()));
 		verify(mayamClient).isMaterialForPackageProtected(PROTECTED_PACKAGE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
@@ -111,7 +111,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		// try to call validation, expect a mayam client error
 		assertEquals(
 				MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	

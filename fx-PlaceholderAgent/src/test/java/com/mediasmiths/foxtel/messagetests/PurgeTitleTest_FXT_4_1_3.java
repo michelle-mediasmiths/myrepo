@@ -66,7 +66,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidPurgeTitle", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.3.2 - Non XSD compliance --Passed");
 		else
@@ -88,7 +88,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.3.3/4/5 - XSD Compliance/ Valid PurgeTitle message/ Matching ID exists --Passed");
@@ -115,7 +115,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		
 		when(mayamClient.titleExists(NOT_EXISTING_TITLE)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE ==validateFile)
 			resultLogger.info("FXT 4.1.3.6 - No matching ID exists --Passed");
 		else
@@ -134,7 +134,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest{
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
 		{
 			resultLogger.info("FXT 4.1.3.7 - Title is protected --Passed");

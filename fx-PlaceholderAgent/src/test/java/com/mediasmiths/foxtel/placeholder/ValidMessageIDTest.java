@@ -54,7 +54,7 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 		
 		assertEquals(
 				MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	

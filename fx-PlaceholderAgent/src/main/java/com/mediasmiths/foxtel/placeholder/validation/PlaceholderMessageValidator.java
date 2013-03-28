@@ -16,6 +16,8 @@ import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.FileExtensions;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -55,14 +57,14 @@ public class PlaceholderMessageValidator extends
 	}
 
 	@Override
-	protected MessageValidationResult validateMessage(String messagePath,PlaceholderMessage message) {
+	protected MessageValidationResult validateMessage(PickupPackage pp, PlaceholderMessage message){
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
 		String senderID = message.getSenderID();
 		Object privateMessageData = message.getPrivateMessageData();
 
-		if (!validateMesageID(messagePath, messageID)) {
+		if (!validateMesageID(pp.getPickUp(FileExtensions.XML).getAbsolutePath(), messageID)) {
 			return MessageValidationResult.INVALID_MESSAGE_ID;
 		}
 
@@ -190,31 +192,6 @@ public class PlaceholderMessageValidator extends
 			logger.error("NO_EXISTING_MATERIAL_FOR_PACKAGE");
 			return MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE;
 		}
-
-//		String presentationFormat = action.getPackage().getPresentationFormat()
-//				.toString();
-//		ArrayList<String> channelTags = mayamClient
-//				.getChannelLicenseTagsForMaterial(materialID);
-//
-//		for (String channelTag : channelTags) {
-//
-//			// TODO read this check once we have aversion of mayam that will
-//			// persist things!
-//
-//			// if (!channelValidator.isValidFormatForTag(channelTag,
-//			// presentationFormat)) {
-//			// logger.error("Presentation Format of package does not match that of associated channel");
-//			// return MessageValidationResult.PACKAGE_INVALID_FORMAT;
-//			// }
-//		}
-
-		// TODO read once mayam persists things
-		// XMLGregorianCalendar targetDate =
-		// action.getPackage().getTargetDate();
-		// if (!mayamValidator.validateMaterialBroadcastDate(targetDate,
-		// materialID)) {
-		// logger.error("Intended target date of package "+action.getPackage().getPresentationID()+" is not within valid licensed dates");
-		// }
 
 		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action
 				.getPackage().getConsumerAdvice());

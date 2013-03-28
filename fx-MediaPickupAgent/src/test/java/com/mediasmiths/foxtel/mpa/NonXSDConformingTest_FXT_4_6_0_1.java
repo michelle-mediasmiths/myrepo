@@ -49,7 +49,7 @@ public class NonXSDConformingTest_FXT_4_6_0_1{
 		SchemaValidator sv = new SchemaValidator("MaterialExchange_V2.0.xsd");
 		
 		MaterialExchangeValidator validator = new MaterialExchangeValidator(um, mc, rw, sv);
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.6.0.1  - Non XSD Compliance --Passed");

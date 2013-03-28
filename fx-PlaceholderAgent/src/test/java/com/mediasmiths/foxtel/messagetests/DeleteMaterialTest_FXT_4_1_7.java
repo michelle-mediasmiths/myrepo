@@ -67,7 +67,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 
 		IOUtils.write("InvalidDeleteMaterial", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.1.7.2 - Non XSD compliance --Passed");
 		else
@@ -88,7 +88,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)
 			resultLogger.info("FXT 4.1.7.3/4/5  - XSD Compliance/ Valid DeleteMaterialMessage/ Matching ID exists --Passed");
 		else
@@ -108,7 +108,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.MATERIAL_DOES_NOT_EXIST ==validateFile)
 			resultLogger.info("FXT 4.1.7.6 - No matching ID --Passed");
 		else
@@ -128,7 +128,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
 			resultLogger.info("FXT 4.1.7.7 - Material is protected --Passed");
 		else

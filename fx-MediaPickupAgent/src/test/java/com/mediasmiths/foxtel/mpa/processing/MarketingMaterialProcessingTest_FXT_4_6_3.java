@@ -138,7 +138,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                 TestUtil.writeMaterialToFile(material, materialXMLPath);
 
                 // prepare mocks
-                when(validator.validateFile(materialXMLPath)).thenReturn(
+                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
                                 MessageValidationResult.IS_VALID);
                 when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
                 when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(
@@ -170,7 +170,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                 TestUtil.writeMaterialToFile(material, materialXMLPath);
 
                 // prepare mocks
-                when(validator.validateFile(materialXMLPath)).thenReturn(
+                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
                                 MessageValidationResult.IS_VALID);
                 when(mayamClient.titleExists(TITLE_ID)).thenThrow(
                                 new MayamClientException(MayamClientErrorCode.FAILURE));
@@ -229,7 +229,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
                 TestUtil.writeMaterialToFile(material, materialXMLPath);
 
                 // prepare mocks
-                when(validator.validateFile(materialXMLPath)).thenReturn(
+                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
                                 MessageValidationResult.IS_VALID);
                 when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
                 when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(

@@ -48,7 +48,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(temp.getAbsolutePath()));
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());
@@ -65,7 +65,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
 		{
 		resultLogger.info("FXT 4.1.27/28/29 --Passed");
@@ -91,7 +91,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
-		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validatePickupPackage(temp.getAbsolutePath()));
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());

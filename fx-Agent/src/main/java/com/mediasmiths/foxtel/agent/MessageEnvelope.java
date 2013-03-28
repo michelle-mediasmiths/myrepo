@@ -1,27 +1,32 @@
 package com.mediasmiths.foxtel.agent;
 
-import java.io.File;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 
-public class MessageEnvelope<T> {
+public class MessageEnvelope<T>
+{
 
-	private final File file;
+	private final PickupPackage pickupPackage;
 	private final T message;
-		
-	public MessageEnvelope(File file, T message){
-		this.file=file;
-		this.message=message;
-	}
-	
-	public MessageEnvelope<T> getInstance(File file, T message){
-		return new MessageEnvelope<T>(file,message);
-	}
-	
-	public File getFile() {
-		return file;
+
+	public MessageEnvelope(PickupPackage pickupPackage, T message)
+	{
+		this.pickupPackage = pickupPackage;
+		this.message = message;
 	}
 
-	public T getMessage() {
+	public MessageEnvelope<T> getInstance(PickupPackage pickupPackage, T Message)
+	{
+		return new MessageEnvelope<T>(pickupPackage, message);
+	}
+
+	public T getMessage()
+	{
 		return message;
 	}
-	
+
+	public PickupPackage getPickupPackage()
+	{
+		return pickupPackage;
+	}
+
 }

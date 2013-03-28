@@ -50,7 +50,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		assertEquals(MessageValidationResult.IS_VALID,validateFile);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
@@ -68,7 +68,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
 		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
 		{
 		resultLogger.info("FXT 4.1.24/25/26 --Passed");
@@ -140,7 +140,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		// try to call validation, expect a mayam client error
 		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(temp.getAbsolutePath()));
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 
