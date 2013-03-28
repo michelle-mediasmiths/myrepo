@@ -63,7 +63,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
 		this.eventService = eventService;
-       // this.pickUpEventTimer = pickupEventTimer;
 	}
 
 	/**
@@ -88,7 +87,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 			eventService.saveEvent("Error", message);
 			throw e;
 		}
-		//TODO: getidfromemessage!
 		return getIDFromMessage(envelope);
 	}
 
@@ -108,8 +106,10 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	protected final void validateThenProcessPickupPackage(PickupPackage pp) {
 
-		//TODO: assuming package is complete here
-				
+		
+		if(pp.isComplete() || pp.isPickedUpSuffix(FileExtensions.XML)){
+		logger.info("package is complete or contains xml");
+		
 		MessageValidationResultPackage<T> resultPackage;
 		MessageValidationResult result;
 		
@@ -133,23 +133,19 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				{
 					String messageID = processPickupPackage(pp, resultPackage.getMessage());
 					writeReceipt(pp.getPickUp(FileExtensions.XML), messageID);
-					//TODO archive messages
-//					if (shouldArchiveMessages())
-//					{
-//						moveMessageToArchiveFolder(filePath);
-//					}
+					postProcessing(pp);
+
 				}
 				catch (MessageProcessingFailedException e)
 				{
 					logger.error(String.format("Error processing %s", pp.getRootName()), e);
-					//TODO : move to failure folder
-//					moveFileToFailureFolder(new File(filePath));
+					processingError(pp);
+
 				}
 				catch (Exception e)
 				{
 					logger.error(String.format("uncaught exception processing file %s",pp.getRootName()), e);
-					//TODO : move to failure folder
-//					moveFileToFailureFolder(new File(filePath));
+					processingError(pp);
 				}
 			}
 			else
@@ -168,6 +164,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 //				}
 			}
 		}
+		}
 
 
 //	protected void aoMismatch(PickupPackage pp)
@@ -180,6 +177,19 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 //		//should really only be in media pickup agent
 ////		moveFileToFailureFolder(file);
 //	}
+
+	private void processingError(PickupPackage pp)
+	{
+		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
+	}
+
+	protected void postProcessing(PickupPackage pp)
+	{
+		if (shouldArchiveMessages())
+		{
+			moveMessageToArchiveFolder(pp);
+		}
+	}
 
 	/**
 	 * informs MessageProcesors of a message validation failure, does not move
@@ -253,53 +263,53 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	/**
 	 * Moves messages which have been processed, to the archive path
 	 * 
-	 * @param messagePath
+	 * @param pp
 	 */
-	private void moveMessageToArchiveFolder(String messagePath) {
+	private void moveMessageToArchiveFolder(PickupPackage pp) {
 		logger.info(String.format(
 				"Message %s is complete, sending to archive folder",
-				messagePath));
-		String archivePath = getArchivePathForFile(messagePath);
+				pp));
+		String archivePath = getArchivePathForFile(pp.getPickUp(FileExtensions.XML).getAbsolutePath());
 		logger.debug(String.format("Archive folder is: %s ", archivePath));
 
 		try {
-			moveFileToFolder(new File(messagePath), archivePath, true);
+			moveFileToFolder(pp.getPickUp(FileExtensions.XML), archivePath, true);
 		} catch (IOException e) {
 
 			logger.warn(String.format(
-					"IOException moving message %s to archive %s", messagePath,
+					"IOException moving message %s to archive %s", pp,
 					archivePath), e);
 		}
 
 	}
 	
-	private String moveMessageToProcessingFolder(String messagePath) throws IOException {
-		logger.info(String.format(
-				"Message %s has arrived, moving to processing folder",
-				messagePath));
-		String processingPath = getProcessingPathForFile(messagePath);
-		logger.debug(String.format("processing folder is: %s ", processingPath));
+//	private String moveMessageToProcessingFolder(String messagePath) throws IOException {
+//		logger.info(String.format(
+//				"Message %s has arrived, moving to processing folder",
+//				messagePath));
+//		String processingPath = getProcessingPathForFile(messagePath);
+//		logger.debug(String.format("processing folder is: %s ", processingPath));
+//
+//		try {
+//			return moveFileToFolder(new File(messagePath), processingPath, false);
+//		} catch (IOException e) {
+//
+//			logger.warn(String.format(
+//					"IOException moving message %s to archive %s", messagePath,
+//					processingPath), e);
+//			throw e;
+//		}
+//
+//	}
 
-		try {
-			return moveFileToFolder(new File(messagePath), processingPath, false);
-		} catch (IOException e) {
-
-			logger.warn(String.format(
-					"IOException moving message %s to archive %s", messagePath,
-					processingPath), e);
-			throw e;
-		}
-
-	}
-
-	public String getProcessingPathForFile(String pathToFile)
-	{
-		
-		String processingPath = FilenameUtils.getFullPath(pathToFile) + PROCESSINGFOLDERNAME + IOUtils.DIR_SEPARATOR;
-		logger.debug(String.format("returning processing path %s for file %s ", processingPath,pathToFile));
-		
-		return processingPath;
-	}
+//	public String getProcessingPathForFile(String pathToFile)
+//	{
+//		
+//		String processingPath = FilenameUtils.getFullPath(pathToFile) + PROCESSINGFOLDERNAME + IOUtils.DIR_SEPARATOR;
+//		logger.debug(String.format("returning processing path %s for file %s ", processingPath,pathToFile));
+//		
+//		return processingPath;
+//	}
 
 	public static String getArchivePathForFile(String messagePath) {
 		
@@ -387,18 +397,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 			
 				//TODO call something to get this PickupPackage
 				PickupPackage pp=null;
-				
-//				File file = getFilePathsPending().take();
-//				String filePath = file.getAbsolutePath();
-
-				logger.debug("moving file to processing folder");
-//				String processingPath = moveMessageToProcessingFolder(filePath);
-				
-//				if (isMessage(processingPath)) {
-					validateThenProcessPickupPackage(pp);
-//				} else {
-//					processNonMessageFile(processingPath);
-//				}
+				validateThenProcessPickupPackage(pp);
 
 			} catch (Exception e) {
 				logger.fatal(

@@ -10,6 +10,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -21,6 +22,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
@@ -74,6 +76,22 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 				"Validation of Material message %s failed for reason %s",
 				pp.getRootName(), resultPackage.getResult().toString()));
 		
+		MessageValidationResult result = resultPackage.getResult();
+		
+		if (result == MessageValidationResult.AO_MISMATCH)
+		{
+			aoMismatch(pp);
+		}
+		else if (result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW
+				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION)
+		{
+			failMediaAndMessage(pp);
+		}
+		else
+		{
+			failMessageImportMediaAsUnmatched(pp);
+		}
+
 		try
 		{
 			mayamClient.createWFEErrorTaskNoAsset(
@@ -169,6 +187,31 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 //		}
 //	}
 
+	private void failMessageImportMediaAsUnmatched(PickupPackage pp)
+	{
+		logger.info("XML considered failed, media will be imported as unmatched");
+		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
+		importMediaAsUnmatched(pp.getPickUp(FileExtensions.MXF));
+	}
+
+	private void failMediaAndMessage(PickupPackage pp)
+	{
+		logger.info("XML and media will both be considered failed");
+		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
+		moveFileToFailureFolder(pp.getPickUp(FileExtensions.MXF));
+	}
+	
+	private void importMediaAsUnmatched(File mediaFile){
+		
+	}
+
+	private void aoMismatch(PickupPackage pp)
+	{
+		logger.info("XML and media will both be moved to ao quarrentine location");
+		moveToAOFolder(pp.getPickUp(FileExtensions.XML));
+		moveToAOFolder(pp.getPickUp(FileExtensions.MXF));
+	}
+
 	/**
 	 * Called when a validated Material is ready for processing
 	 * 
@@ -257,9 +300,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	}
 	
 	protected String getIDFromMessage(MessageEnvelope<T> envelope) {
-		// TODO this is just returning the xmls file name which may not be
-		// unique at all (but lets hope it is for now!)
-		
+		//this is just returning the xmls file name which may not be unique at all
 		//we cant just pick out a material id as the envelope could contain marketing material
 		String id = envelope.getPickupPackage().getRootName();
 		logger.debug(String.format("getIDFromMessage = %s", id));
@@ -296,22 +337,21 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		super.moveFileToFailureFolder(file);
 	}
 	
-	private void moveToAOFolder(String file)
+	private void moveToAOFolder(File f)
 	{
-		File f = new File(file);
 		try
 		{
 			moveFileToFolder(f, aoQuarrentineFolder, true);
 
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
 			pickupNotification.setTime((new Date()).toString());
-			pickupNotification.setFilelocation(file);
+			pickupNotification.setFilelocation(aoQuarrentineFolder + IOUtils.DIR_SEPARATOR + f.getName());
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
 		}
 		catch (IOException e)
 		{
-			logger.warn("IOException moving file to quarrentine fodler " + file, e);
+			logger.warn("IOException moving file to quarrentine fodler " + f.getAbsolutePath(), e);
 		}
 	}
 	

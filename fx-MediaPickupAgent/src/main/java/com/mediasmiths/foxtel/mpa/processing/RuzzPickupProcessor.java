@@ -22,7 +22,6 @@ import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -34,11 +33,11 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	protected final static Logger logger = Logger.getLogger(RuzzPickupProcessor.class);
 
 	private final static String CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML = "ChannelConditionsFoundInRuzzXml";
-	
+
 	@Inject(optional = false)
 	@Named("qc.events.namespace")
 	private String qcEventNamespace;
-	
+
 	@Inject
 	public RuzzPickupProcessor(
 			RuzzFilesPendingProcessingQueue filePathsPendingProcessing,
@@ -145,9 +144,9 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	private void updateIngestRecord(IngestRecords ingestRecords, String materialID)
 	{
 		logger.debug(String.format("updateIngestRecord for material %s", materialID));
-		
+
 		List<ChannelConditionEventType> channelConditionEvent = ingestRecords.getChannelConditionEvent();
-		
+
 		if (channelConditionEvent == null || channelConditionEvent.isEmpty())
 		{
 			logger.info("no channel condition events present in ruzz xml");
@@ -155,15 +154,14 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 		else
 		{
 			logger.info("channel conditions present in ruzz xml, marking asset as requiring autoqc");
-			// TODO send event for channel conditions email
 			try
 			{
 				mayamClient.requireAutoQCForMaterial(materialID);
-				
-				//create channel conditions found in ruzz xml event
+
+				// create channel conditions found in ruzz xml event
 				ChannelConditionsFound ccf = new ChannelConditionsFound();
 				ccf.setMaterialID(materialID);
-				logger.debug("saving event "+CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML);
+				logger.debug("saving event " + CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML);
 				eventService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_IN_RUZZ_XML, ccf);
 			}
 			catch (MayamClientException e)
