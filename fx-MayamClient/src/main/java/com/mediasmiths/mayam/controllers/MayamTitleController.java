@@ -759,24 +759,23 @@ public class MayamTitleController extends MayamController{
 						log.error("error closing open tasks for titles child asset " + childAssetID + " before deletion",e);
 					}
 					client.assetApi().deleteAsset(MayamAssetType.MATERIAL.getAssetType(), childAssetID, gracePeriod);
-				}
-				
-				//Delete child packages and close open tasklists
-				List<AttributeMap> childPackages = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetID, MayamAssetType.PACKAGE.getAssetType());
-				for (AttributeMap childPackage: childPackages)
-				{
-					String packageAssetID = childPackage.getAttributeAsString(Attribute.ASSET_ID);
-					try
+					
+					//Delete child packages and close open tasklists
+					List<AttributeMap> childPackages = client.assetApi().getAssetChildren(MayamAssetType.MATERIAL.getAssetType(), childAssetID, MayamAssetType.PACKAGE.getAssetType());
+					for (AttributeMap childPackage: childPackages)
 					{
-						taskController.cancelAllOpenTasksForAsset(MayamAssetType.PACKAGE.getAssetType(), Attribute.ASSET_ID,packageAssetID);
+						String packageAssetID = childPackage.getAttributeAsString(Attribute.ASSET_ID);
+						try
+						{
+							taskController.cancelAllOpenTasksForAsset(MayamAssetType.PACKAGE.getAssetType(), Attribute.ASSET_ID,packageAssetID);
+						}
+						catch (MayamClientException e)
+						{
+							log.error("error closing open tasks for titles child asset " + packageAssetID + " before deletion",e);
+						}
+						client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), packageAssetID, gracePeriod);
 					}
-					catch (MayamClientException e)
-					{
-						log.error("error closing open tasks for titles child asset " + packageAssetID + " before deletion",e);
-					}
-					client.assetApi().deleteAsset(MayamAssetType.PACKAGE.getAssetType(), packageAssetID, gracePeriod);
 				}
-				
 			} catch (RemoteException e) {
 				log.error("Error deleting title : "+ titleID,e);
 				returnCode = MayamClientErrorCode.TITLE_DELETE_FAILED;
