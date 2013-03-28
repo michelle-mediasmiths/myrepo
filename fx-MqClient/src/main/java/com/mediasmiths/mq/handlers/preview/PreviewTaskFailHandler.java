@@ -56,7 +56,7 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			PreviewFailed pf = new PreviewFailed();
 			pf.setDate((new Date()).toString());
 			pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
-			pf.setAssetId(assetId);
+			pf.setAssetId(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)); 
 
 			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewFailed", pf);
 
