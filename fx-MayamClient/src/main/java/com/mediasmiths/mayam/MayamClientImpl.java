@@ -583,18 +583,23 @@ public class MayamClientImpl implements MayamClient
 	public boolean isTitleAO(String titleID) throws MayamClientException
 	{
 
+		boolean isAO = false;
 		AttributeMap title = titleController.getTitle(titleID);
-		Boolean adult = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-
-		if (adult != null)
+		if (title != null)
 		{
-			return adult.booleanValue();
+			Boolean adult = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
+	
+			if (adult != null)
+			{
+				isAO = adult.booleanValue();
+			}
+			else
+			{
+				log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + titleID);
+				throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
+			}
 		}
-		else
-		{
-			log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + titleID);
-			throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
-		}
+		return isAO;
 	}
 
 	@Override
@@ -930,8 +935,15 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public boolean titleIsAO(String titleID) throws MayamClientException
 	{
+		boolean isAO = false;
+		
 		AttributeMap title = titleController.getTitle(titleID);
-		return AssetProperties.isAO(title);
+		if (title != null)
+		{
+			isAO = AssetProperties.isAO(title);
+		}
+		
+		return isAO;
 	}
 
 	@Override
