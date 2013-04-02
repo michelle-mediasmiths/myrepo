@@ -355,6 +355,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			else
 			{
 				logger.debug("No matching media found");
+				moveToAOFolder(file.getAbsolutePath());
 			}
 		}
 	}
