@@ -795,6 +795,27 @@ public class MayamTitleController extends MayamController{
 		return assetAttributes;
 	}
 	
+	/**
+	 * loads title by its ardome asset_id (not the titleid\houseid)
+	 * @param assetID 
+	 * @return
+	 * @throws MayamClientException
+	 */
+	public AttributeMap getTitleByArdomeId(String assetID) throws MayamClientException
+	{
+		AttributeMap assetAttributes = null;
+		try
+		{
+			assetAttributes = client.assetApi().getAsset(MayamAssetType.TITLE.getAssetType(), assetID);
+		}
+		catch (RemoteException e1)
+		{
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + assetID, e1);
+			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
+		}
+		return assetAttributes;
+	}
+	
 	public boolean isProtected(String titleID)
 	{
 		boolean isProtected = false;
