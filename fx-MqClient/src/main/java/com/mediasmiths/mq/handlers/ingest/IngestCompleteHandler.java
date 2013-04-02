@@ -29,14 +29,13 @@ public class IngestCompleteHandler extends TaskStateChangeHandler
 		try
 		{
 			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-			Date requiredby = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
 			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
 			
-			taskController.createQCTaskForMaterial(assetID, requiredby, previewStatus,messageAttributes);
+			taskController.createQCTaskForMaterial(assetID, previewStatus,messageAttributes);
 			
 			if (AssetProperties.isQCParallel(messageAttributes)) {
 				log.info(String.format("QC Parallel is set for item with house id %s, creating preview task for it", assetID));
-				taskController.createPreviewTaskForMaterial(assetID, requiredby);
+				taskController.createPreviewTaskForMaterial(assetID);
 			}
 			
 		}

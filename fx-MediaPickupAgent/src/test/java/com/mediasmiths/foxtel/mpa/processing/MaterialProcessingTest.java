@@ -94,7 +94,7 @@ public abstract class MaterialProcessingTest {
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, mediaCheck,eventService);
+				mayamClient, matchMaker, eventService);
 
 		materialXmlProcessingFile = new File(processor.getProcessingPathForFile(materialxml.getAbsolutePath()) + FilenameUtils.getName(materialxml.getAbsolutePath()));
 		

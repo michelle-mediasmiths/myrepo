@@ -332,7 +332,48 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 	}
 	
+<<<<<<< HEAD
 	protected abstract AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<T> unmatchedMessage);
+=======
+	@Override
+	protected void aoMismatch(File file)
+	{
+		Object unmarshalled = null;
+		try
+		{
+			unmarshalled = unmarhsaller.unmarshal(file);
+		}
+		catch (JAXBException e)
+		{
+			logger.error("unmarshalling failed", e);
+		}
+
+		if (unmarshalled != null)
+		{
+			@SuppressWarnings("unchecked")
+			T message = (T) unmarshalled;
+
+			// wait for or find mxf to allow files to be quarrentined together
+
+			@SuppressWarnings("rawtypes")
+			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", true,false);
+			// try to get the mxf file for this xml
+			String mxfFile = matchMaker.matchXML(materialEnvelope);
+
+			if (mxfFile != null)
+			{
+				logger.info(String.format("found mxf %s for material", mxfFile));
+				moveToAOFolder(mxfFile);
+				moveToAOFolder(file.getAbsolutePath());
+			}
+			else
+			{
+				logger.debug("No matching media found");
+				moveToAOFolder(file.getAbsolutePath());
+			}
+		}
+	}
+>>>>>>> 8df966cd38b8e651758708e68662ffbd6d4a58f2
 	
 	class AutoMatchInfo{
 		String siteID;

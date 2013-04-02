@@ -165,9 +165,9 @@
 	</MailData>
     <MailData>
         <namespace>http://www.foxtel.com.au/ip/tc</namespace>
-        <eventname>ComplianceProxySuccess</eventname>
+        <eventname>PublicityProxySuccess</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-            <subject>MasterId(%s) Title(%s). Compliance proxy item sent to external location</subject>
+            <subject>MasterId(%s) Title(%s). Publicity proxy item sent to external location</subject>
             <body>Item is located %s.</body>
             <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -176,9 +176,9 @@
     </MailData>
     <MailData>
         <namespace>http://www.foxtel.com.au/ip/tc</namespace>
-        <eventname>ComplianceProxyFailure</eventname>
+        <eventname>PublicityProxyFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-            <subject>URGENT: MasterId(%s) Title(%s). Compliance proxy transcode failed in MAM.</subject>
+            <subject>URGENT: MasterId(%s) Title(%s). Publicity proxy transcode failed in MAM.</subject>
             <body>Item has failed Compliance proxy transcode, therefore has not been created or sent to external location.</body>
             <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -237,11 +237,6 @@
 			<subject>%s (%s) Purge Not Processed</subject>
 			<body>Purge request not processed, as item is "MAM Protected"</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>

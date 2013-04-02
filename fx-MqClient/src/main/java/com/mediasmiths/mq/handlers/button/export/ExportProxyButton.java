@@ -1,6 +1,5 @@
 package com.mediasmiths.mq.handlers.button.export;
 
-
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -40,7 +39,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	@Inject
 	private MuleWorkflowController mule;
-	
+
 	@Inject
 	@Named("export.ftp.user")
 	private String exportFTPUser;
@@ -54,35 +53,39 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	private String exportFTPServer;
 
 	@Inject
-	@Named("export.transient.tc.output.location") //where transcoded files go before ftp upload + deletion
+	@Named("export.transient.tc.output.location")
+	// where transcoded files go before ftp upload + deletion
 	private String exportOutputLocation;
-	
+
 	@Inject
 	protected ChannelProperties channelProperties;
-	
+
 	@Override
 	protected void buttonClicked(AttributeMap requestAttributes)
 	{
-		
-		//asset could be an item, could be a segmentlist
+
+		// asset could be an item, could be a segmentlist
 		AssetType assetType = requestAttributes.getAttribute(Attribute.ASSET_TYPE);
-		
+
 		log.debug("Asset type is " + assetType.toString());
-		
+
 		AttributeMap materialAttributes;
-		
-		if(assetType.equals(MayamAssetType.MATERIAL.getAssetType())){
+
+		if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
+		{
 			materialAttributes = requestAttributes;
 		}
-		else if(assetType.equals(MayamAssetType.PACKAGE.getAssetType())){
+		else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
+		{
 			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-			materialAttributes = materialController.getMaterialAttributes(materialID); 
+			materialAttributes = materialController.getMaterialAttributes(materialID);
 		}
-		else {
+		else
+		{
 			log.error("unexpected asset type");
 			throw new IllegalArgumentException("can only export items or packages");
 		}
-		
+
 		boolean isAO = AssetProperties.isAO(materialAttributes);
 
 		if (!isAO)
@@ -92,7 +95,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String buglocation = (String) requestAttributes.getAttribute(Attribute.VISUAL_BUG);
 			String timecodePosition = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
 			String timecodeColour = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
-			
+
 			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
@@ -100,23 +103,28 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 			// If 'No Bug' has been selected then ignore any text in the bug location field
 			Boolean noBug = requestAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
-			log.debug("visual bug flag: "+requestAttributes.getAttributeAsString(Attribute.VISUAL_BUG_FLAG));
-			log.debug("buglocation : "+buglocation);
-			if (noBug != null && (noBug.booleanValue()==true)) 
+			log.debug("visual bug flag: " + requestAttributes.getAttributeAsString(Attribute.VISUAL_BUG_FLAG));
+			log.debug("buglocation : " + buglocation);
+			if (noBug != null && (noBug.booleanValue() == true))
 			{
 				log.debug("'no bug' option was selected");
 				buglocation = null;
 			}
-			log.debug("buglocation : "+buglocation);
-			
+			log.debug("buglocation : " + buglocation);
+
 			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
-			Date firstTX = (Date) materialAttributes.getAttribute(Attribute.TX_FIRST);
+
+			Date firstTX = (Date) requestAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
+			if (firstTX == null)
+			{
+				log.warn("null firstTX date!");
+			}
 
 			// create export task
 			long taskID;
 			try
 			{
-				taskID = createExportTask(materialID, requestAttributes, materialAttributes,getJobType());
+				taskID = createExportTask(materialID, requestAttributes, materialAttributes, getJobType());
 			}
 			catch (MayamClientException e1)
 			{
@@ -124,7 +132,6 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				return;
 			}
 
-			
 			// construct transcode job parameters
 			TCJobParameters jobParams;
 			try
@@ -138,7 +145,9 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 						timecodeColour,
 						channels,
 						materialID,
-						materialAttributes, taskID);
+						materialAttributes,
+						taskID,
+						firstTX);
 			}
 			catch (MayamClientException e)
 			{
@@ -146,7 +155,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				taskController.setTaskToErrorWithMessage(taskID, "Error constructing transcode paramters");
 				return;
 			}
-			catch(Exception e){
+			catch (Exception e)
+			{
 				log.error("error constructing job params for export proxy", e);
 				taskController.setTaskToErrorWithMessage(taskID, e.getMessage());
 				return;
@@ -175,8 +185,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
 				return;
 			}
-			
-			//set task to active state
+
+			// set task to active state
 			try
 			{
 				AttributeMap task;
@@ -187,15 +197,16 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			}
 			catch (RemoteException e)
 			{
-				log.error("error setting task "+ taskID + " to state ACTIVE",e);
+				log.error("error setting task " + taskID + " to state ACTIVE", e);
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error setting task "+ taskID + " to state ACTIVE",e);
+				log.error("error setting task " + taskID + " to state ACTIVE", e);
 			}
-			
+
 		}
-		else{
+		else
+		{
 			log.info("Item is ao, will not attempt to export");
 		}
 
@@ -205,7 +216,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,
-			JAXBException, MuleException
+			JAXBException,
+			MuleException
 	{
 		InvokeExport ie = new InvokeExport();
 		ie.setAssetID(materialID);
@@ -217,10 +229,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		mule.initiateExportWorkflow(ie);
 	}
 
-	private long createExportTask(String materialID, AttributeMap requestAttributes, AttributeMap materialAttributes, String jobType)
-			throws MayamClientException
+	private long createExportTask(
+			String materialID,
+			AttributeMap requestAttributes,
+			AttributeMap materialAttributes,
+			String jobType) throws MayamClientException
 	{
-		return taskController.createExportTask(materialID, requestAttributes,materialAttributes,jobType);
+		return taskController.createExportTask(materialID, requestAttributes, materialAttributes, jobType);
 	}
 
 	private TCJobParameters jobParams(
@@ -232,22 +247,25 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String timecodeColour,
 			StringList channels,
 			String materialID,
-			AttributeMap materialAttributes, long taskID) throws MayamClientException
+			AttributeMap materialAttributes,
+			long taskID,
+			Date firstTX) throws MayamClientException
 	{
 		TCJobParameters jobParams = new TCJobParameters();
-		String channel=null;
-		
+		String channel = null;
+
 		// get the first channel
 		if (channels != null && channels.get(0) != null)
 		{
 			String firstChannel = channels.get(0);
 			channel = firstChannel;
 		}
-		else{
+		else
+		{
 			throw new IllegalArgumentException("no channels in asset metadata");
 		}
-		
-		log.debug("buglocation: "+buglocation);
+
+		log.debug("buglocation: " + buglocation);
 		if (buglocation != null && !buglocation.equals("--"))
 		{
 			TCBugOptions bug = bug(buglocation, channel);
@@ -273,8 +291,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		}
 
 		String separatorAndExtension = getOutputFileExtension();
-		
-		if (outputFileName != null) 
+
+		if (outputFileName != null)
 		{
 			jobParams.outputFileBasename = outputFileName + separatorAndExtension;
 		}
@@ -285,34 +303,29 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		jobParams.timecode = timecode(timecodeColour, timecodePosition);
 		jobParams.purpose = getPurpose();
-		
-		Date materialFirstTX = materialAttributes.getAttribute(Attribute.TX_FIRST);
-		
-		if(materialFirstTX == null){
-			log.warn("no first tx date set on material! will assume that first tx is > 7 days aways");
-		}
-		
-		jobParams.priority = getPriority(materialFirstTX);
+
+		jobParams.priority = getPriority(firstTX);
 
 		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
 		jobParams.outputFolder = exportOutputLocation + "/" + taskID;
-		
+
 		jobParams.ftpupload = new TCFTPUpload();
-		jobParams.ftpupload.filename=jobParams.outputFileBasename;
-		jobParams.ftpupload.folder=getTranscodeDestination(materialAttributes);
-		jobParams.ftpupload.user=exportFTPUser;
-		jobParams.ftpupload.password=exportFTPPassword;
-		jobParams.ftpupload.server=exportFTPServer;
-				
+		jobParams.ftpupload.filename = jobParams.outputFileBasename;
+		jobParams.ftpupload.folder = getTranscodeDestination(materialAttributes);
+		jobParams.ftpupload.user = exportFTPUser;
+		jobParams.ftpupload.password = exportFTPPassword;
+		jobParams.ftpupload.server = exportFTPServer;
+
 		return jobParams;
 	}
 
 	/**
 	 * returns a string to be added to the end of output file name, eg .mpg
+	 * 
 	 * @return
 	 */
 	protected abstract String getOutputFileExtension();
-	
+
 	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
 
 	protected abstract int getPriority(Date firstTx);
@@ -411,19 +424,21 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		throw new IllegalArgumentException("unrecognised bug location");
 	}
-	
-	protected String getExportLocationForFirstChannel(AttributeMap materialAttributes){
+
+	protected String getExportLocationForFirstChannel(AttributeMap materialAttributes)
+	{
 		StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
-		
-		if(channels.size()==0){
+
+		if (channels.size() == 0)
+		{
 			throw new IllegalArgumentException("no channels found for material, cannot pick export location");
 		}
-		
+
 		String channelTag = channels.get(0);
 		String channelGroup = channelProperties.channelGroupForChannel(channelTag);
 		String exportLocation = channelProperties.exportPathForChannelGroup(channelGroup);
 		return exportLocation;
-		
+
 	}
 
 	protected final static long ONE_DAY = 1000l * 3600l * 24;
@@ -431,5 +446,5 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	protected final static long THREE_DAYS = ONE_DAY * 3;
 	protected final static long SEVEN_DAYS = ONE_DAY * 7;
 	protected final static long EIGHT_DAYS = ONE_DAY * 8;
-	
+
 }

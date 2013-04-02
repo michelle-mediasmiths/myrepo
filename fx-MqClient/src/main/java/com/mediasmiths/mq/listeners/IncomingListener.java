@@ -17,8 +17,6 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
-import com.mediasmiths.mq.handlers.asset.AssetDeletionHandler;
-import com.mediasmiths.mq.handlers.asset.AssetPurgeHandler;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
@@ -76,14 +74,7 @@ public class IncomingListener extends MqClientListener
 	private MayamTaskController taskController;
 	@Inject
 	private MayamAccessRightsController accessRightsController;
-	
-	//needs a marshaller before this will inject
-//	@Inject
-//	EventService eventService;
-	@Inject
-	AssetDeletionHandler assetDeletionHandler;
-	@Inject
-	AssetPurgeHandler assetPurgeHandler;
+
 	@Inject
 	PackageUpdateHandler packageUpdateHandler;
 	@Inject

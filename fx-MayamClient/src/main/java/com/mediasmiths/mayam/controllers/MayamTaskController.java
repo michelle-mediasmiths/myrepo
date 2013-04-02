@@ -58,7 +58,7 @@ public class MayamTaskController extends MayamController
 	}
 	
 	
-	public void createIngestTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException
+	public void createIngestTaskForMaterial(String materialID) throws MayamClientException
 	{
 		log.info(String.format("Creating ingest task for asset " + materialID));
 
@@ -72,33 +72,22 @@ public class MayamTaskController extends MayamController
 			log.debug("no unclosed ingest tasks for asset");
 
 			AttributeMap initialAttributes = client.createAttributeMap();
-			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.INGEST, initialAttributes);
 		}
 		else
 		{
 			log.info("There is already at least one unclosed ingest task for asset, will not create another");
-
-			if (requiredByDate != null)
-			{
-				log.info("updating requiredby date on existing task(s)");
-				for (AttributeMap task : openTasksForAsset)
-				{
-					AttributeMap updateMapForTask = updateMapForTask(task);
-					updateMapForTask.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-					saveTask(updateMapForTask);
-				}
-			}
 		}
 	}
 	
-	public void createQCTaskForMaterial(String materialID, Date requiredByDate, String previewStatus, AttributeMap material) throws MayamClientException
+	public void createQCTaskForMaterial(String materialID, String previewStatus, AttributeMap material) throws MayamClientException
 	{
-		if(!MayamPreviewResults.isPreviewPass(previewStatus) && ! AssetProperties.isQCPassed(material)){
-		
-			log.info(String.format("Creating qc task for asset "+materialID));
-		
+		if (!MayamPreviewResults.isPreviewPass(previewStatus) && !AssetProperties.isQCPassed(material))
+		{
+
+			log.info(String.format("Creating qc task for asset " + materialID));
+
 			AttributeMap initialAttributes = client.createAttributeMap();
 			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
 			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
@@ -106,55 +95,40 @@ public class MayamTaskController extends MayamController
 			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
 			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
-			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); //reset qc status when creating new task
-			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); // reset qc status when creating new task
 			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
-			
-//			if(AssetProperties.isQCParallel(material)){
-//				log.info("Item was marked as qc parallel, creating preview task");
-//				createPreviewTaskForMaterial(materialID);
-//			}
-//			
 		}
-		else{
-			log.info(String.format("Did not create qc task for asset %s as preview already passed or qc already passed",materialID));
+		else
+		{
+			log.info(String.format(
+					"Did not create qc task for asset %s as preview already passed or qc already passed",
+					materialID));
 		}
 	}
 	
-	public long createComplianceLoggingTaskForMaterial(String materialID,String parentAssetID, Date requiredByDate) throws MayamClientException
+	public long createComplianceLoggingTaskForMaterial(String materialID,String parentAssetID) throws MayamClientException
 	{
 		
 		log.info(String.format("Creating compliance logging task for asset "+materialID+" whose source material has asset id "+parentAssetID));
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.ASSET_PEER_ID, parentAssetID);
-		initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.COMPLIANCE_LOGGING, initialAttributes);
 
 	}
 	
-	public long createPreviewTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException{
+	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
 		
 		log.info(String.format("Creating preview task for asset "+materialID));		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
-		
-		if(requiredByDate != null){
-			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-		}
-		
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW,initialAttributes);
 	}
 	
-	public long createFixStictchTaskForMaterial(String materialID, Date requiredByDate) throws MayamClientException{
+	public long createFixStictchTaskForMaterial(String materialID) throws MayamClientException{
 		
 		log.info(String.format("Creating preview task for asset "+materialID));		
 		AttributeMap initialAttributes = client.createAttributeMap();
-		
-		if(requiredByDate != null){
-			initialAttributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-		}
-		
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.FIX_STITCH_EDIT,initialAttributes);
 	}
 	

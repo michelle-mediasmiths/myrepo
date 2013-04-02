@@ -399,7 +399,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else if (taskListID.equals("Publicity Proxy"))
 			{
 				saveEvent(
-						         "PublicityFailure",
+						         "PublicityProxyFailure",
 						         notification,
 						         TC_EVENT_NAMESPACE,
 						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
@@ -408,7 +408,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else if (taskListID.equals("Compliance Proxy"))
 			{
 				saveEvent(
-						"ComplianceProxyFailure",
+						"ClassificationProxyFailure",
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
@@ -459,10 +459,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true);
 			}
-			else if (taskListID.equals("Compliance Proxy"))
+			else if (taskListID.equals("Publicity Proxy"))
 			{
 				saveEvent(
-						"ComplianceProxySuccess",
+						"PublicityProxySuccess",
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),

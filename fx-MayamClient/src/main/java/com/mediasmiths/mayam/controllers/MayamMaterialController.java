@@ -36,6 +36,7 @@ import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
 import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.FileFormatVerification;
 import com.mediasmiths.mayam.FileFormatVerificationFailureException;
 import com.mediasmiths.mayam.MayamAspectRatios;
@@ -97,6 +98,9 @@ public class MayamMaterialController extends MayamController
 	
 	@Inject
 	private PathResolver pathResolver;
+	
+	@Inject
+	private DateUtil dateUtil;
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
@@ -237,7 +241,17 @@ public class MayamMaterialController extends MayamController
 				 * No longer supported Library library = source.getLibrary(); if (library != null) { List<TapeType> tapeList = library.getTape(); if (tapeList != null) { IdSet tapeIds = new IdSet();
 				 * for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
 				 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
+				 * 
 				 */
+				
+				//required by \ complete by date					
+				if (material.getRequiredBy() != null)
+				{
+					Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
+					log.debug("Setting required by date: "+requiredByDate);						
+					attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+				}
+				
 			}
 
 			if (!attributesValid)
@@ -266,50 +280,7 @@ public class MayamMaterialController extends MayamController
 				}
 				else
 				{
-					if (createCompLoggingTask)
-					{
-						try
-						{
-							Date requiredBy = null;
-
-							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
-							{
-								requiredBy = material.getRequiredBy().toGregorianCalendar().getTime();
-							}
-
-							long taskID = taskController.createComplianceLoggingTaskForMaterial(
-									material.getMaterialID(),parentAssetID,
-									requiredBy);
-							log.debug("created task with id : " + taskID);
-						}
-						catch (MayamClientException e)
-						{
-							log.error("Exception thrown in Mayam while creating Compliance Logging task for Material : "
-									+ material.getMaterialID(), e);
-						}
-					}
-					else
-					{
-						try
-						{
-							Date requiredBy = null;
-
-							if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
-							{
-								requiredBy = material.getRequiredBy().toGregorianCalendar().getTime();
-							}
-
-							taskController.createIngestTaskForMaterial(material.getMaterialID(), requiredBy);
-							log.debug("created ingest task");
-						}
-						catch (MayamClientException e)
-						{
-							log.error(
-									"Exception thrown in Mayam while creating Ingest task for Material : "
-											+ material.getMaterialID(),
-									e);
-						}
-					}
+					log.debug("create asset call complete");
 				}
 			}
 			catch (RemoteException e)
@@ -593,7 +564,7 @@ public class MayamMaterialController extends MayamController
 			try
 			{
 				log.debug("trying to create ingest task");
-				taskController.createIngestTaskForMaterial(siteID, null);
+				taskController.createIngestTaskForMaterial(siteID);
 			}
 			catch (Exception e)
 			{
@@ -885,7 +856,6 @@ public class MayamMaterialController extends MayamController
 						{
 							// Aggregator Name will not be stored, only ID
 							attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, aggregator.getAggregatorID());
-							// attributesValid &= attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 						}
 						if (order != null)
 						{
@@ -924,6 +894,15 @@ public class MayamMaterialController extends MayamController
 					 * IdSet(); for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
 					 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
 					 */
+					
+					//required by \ complete by date					
+					if (material.getRequiredBy() != null)
+					{
+						Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
+						log.debug("Setting required by date: "+requiredByDate);						
+						attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+					}
+					
 				}
 
 				if (!attributesValid)
@@ -1415,8 +1394,7 @@ public class MayamMaterialController extends MayamController
 			
 			// create ingest task
 			log.debug("creating new ingest task");
-			taskController.createIngestTaskForMaterial(houseID,
-					(Date) materialAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
+			taskController.createIngestTaskForMaterial(houseID);
 		}
 	}
 

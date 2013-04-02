@@ -7,6 +7,7 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TI
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.xml.bind.JAXBElement;
 
@@ -30,6 +31,7 @@ import com.mediasmiths.foxtel.mpa.queue.FilesPendingUnmatchImport;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
+import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 
 public class UnmatchedMaterialProcessor extends Daemon implements StoppableService {
 
@@ -148,6 +150,21 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 				
 				//send event
 				events.saveEvent("UnmatchedContentAvailable", destination);
+				
+				if (destinationFolder.equals(aoQuarrentineFolder))
+				{
+					try
+					{
+						MediaPickupNotification n = new MediaPickupNotification();
+						n.setFilelocation(aoQuarrentineFolder);
+						n.setTime((new Date()).toString());
+						events.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
+					}
+					catch (Exception e)
+					{
+		                logger.error("Unable to send Quarantine event ", e);
+					}
+				}
 				
 			}
 			catch (IOException e)
