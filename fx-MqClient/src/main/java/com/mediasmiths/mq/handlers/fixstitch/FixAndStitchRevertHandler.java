@@ -30,10 +30,9 @@ public class FixAndStitchRevertHandler  extends TaskStateChangeHandler
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
 		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-		Date requiredByDate = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
 		try
 		{
-			taskController.createPreviewTaskForMaterial(houseID, requiredByDate);
+			taskController.createPreviewTaskForMaterial(houseID);
 		}
 		catch (MayamClientException e)
 		{

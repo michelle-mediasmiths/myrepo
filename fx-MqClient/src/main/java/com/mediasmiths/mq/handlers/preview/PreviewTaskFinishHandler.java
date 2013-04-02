@@ -100,8 +100,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 			if (fixeditrequired || stitcheditrequired)
 			{
 				String materialID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				Date requiredByDate = messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
-				createFixStitchTask(materialID, requiredByDate);
+				createFixStitchTask(materialID);
 			}
 
 			if (passed && reorder)
@@ -118,9 +117,9 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 
 	}
 	
-	private void createFixStitchTask(String materialID, Date requiredByDate) throws MayamClientException, RemoteException
+	private void createFixStitchTask(String materialID) throws MayamClientException, RemoteException
 	{		
-		taskController.createFixStictchTaskForMaterial(materialID, requiredByDate);
+		taskController.createFixStictchTaskForMaterial(materialID);
 	}
 
 	private void createSegmentationTask(String assetID, AssetType assetType) throws MayamClientException, RemoteException

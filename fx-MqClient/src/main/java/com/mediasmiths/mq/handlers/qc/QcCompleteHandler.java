@@ -44,7 +44,7 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 			if (!AssetProperties.isQCParallel(messageAttributes))
 			{
 				log.info("Asset has not been marked as qc parallel, creating preview task");
-				preview(houseID, (Date) messageAttributes.getAttribute(Attribute.COMPLETE_BY_DATE));
+				preview(houseID);
 			}
 			else
 			{
@@ -58,11 +58,11 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 
 	}
 
-	private void preview(String houseID, Date requiredByDate)
+	private void preview(String houseID)
 	{
 		try
 		{
-			taskController.createPreviewTaskForMaterial(houseID, requiredByDate);
+			taskController.createPreviewTaskForMaterial(houseID);
 		}
 		catch (Exception e)
 		{
