@@ -31,11 +31,10 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
-			MediaCheck mediaCheck,
 			EventService eventService){
 		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
 				receiptWriter, unmarhsaller,marshaller, mayamClient, matchMaker,
-				mediaCheck, eventService);
+				 eventService);
 	}
 
 	protected static Logger logger = Logger

@@ -41,7 +41,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
-			MediaCheck mediaCheck,
 			EventService eventService){
 		super(filePathsPendingProcessing,
 			filesPendingImport,
@@ -51,7 +50,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			marshaller,
 			mayamClient,
 			matchMaker,
-			mediaCheck,
 			eventService);
 	}
 

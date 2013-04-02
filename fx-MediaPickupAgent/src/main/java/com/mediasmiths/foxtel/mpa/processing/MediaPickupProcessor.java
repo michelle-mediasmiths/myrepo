@@ -15,7 +15,6 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import org.apache.commons.io.FileUtils;
@@ -38,7 +37,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 	private final PendingImportQueue filesPendingImport;
 
-	private final MediaCheck mediaCheck;
 
 	@Inject
 	@Named("ao.quarrentine.folder")
@@ -56,14 +54,12 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			Marshaller marshaller,
 			MayamClient mayamClient,
 			MatchMaker matchMaker,
-			MediaCheck mediaCheck,
 			EventService eventService)
 	{
 		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 		this.matchMaker = matchMaker;
-		this.mediaCheck = mediaCheck;
 	}
 
 	protected Logger logger = Logger.getLogger(MediaPickupProcessor.class);
