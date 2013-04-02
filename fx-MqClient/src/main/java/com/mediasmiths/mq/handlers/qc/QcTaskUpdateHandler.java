@@ -199,7 +199,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		else if (fileFormat.equals(QcStatus.FAIL))
 		{
-			finishWithError(currentAttributes);
+			finishWithWarning(currentAttributes);
 		}
 	}
 
@@ -244,7 +244,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 		else if (autoQc.equals(QcStatus.FAIL))
 		{
-			finishWithError(currentAttributes);
+			finishWithWarning(currentAttributes);
 		}
 	}
 
@@ -326,11 +326,11 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void finishWithError(AttributeMap currentAttributes) throws MayamClientException
+	private void finishWithWarning(AttributeMap currentAttributes) throws MayamClientException
 	{
-		log.info("QC : About to try to update qc task state to ERROR"); //should be warning really, but there is no option to retry when in WARNING state
+		log.info("QC : About to try to update qc task state to WARNING");
 		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
-		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
 		taskController.saveTask(updateMap);
 		sendQcFailedReorderEvent(currentAttributes);
 	}
