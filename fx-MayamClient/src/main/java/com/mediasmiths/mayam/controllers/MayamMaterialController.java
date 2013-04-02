@@ -280,7 +280,37 @@ public class MayamMaterialController extends MayamController
 				}
 				else
 				{
-					log.debug("create asset call complete");
+					if (createCompLoggingTask)
+					{
+						try
+						{
+							long taskID = taskController.createComplianceLoggingTaskForMaterial(
+									material.getMaterialID(),
+									parentAssetID);
+							log.debug("created task with id : " + taskID);
+						}
+						catch (MayamClientException e)
+						{
+							log.error("Exception thrown in Mayam while creating Compliance Logging task for Material : "
+									+ material.getMaterialID(), e);
+						}
+					}
+					else
+					{
+						try
+						{
+
+							taskController.createIngestTaskForMaterial(material.getMaterialID());
+							log.debug("created ingest task");
+						}
+						catch (MayamClientException e)
+						{
+							log.error(
+									"Exception thrown in Mayam while creating Ingest task for Material : "
+											+ material.getMaterialID(),
+									e);
+						}
+					}
 				}
 			}
 			catch (RemoteException e)

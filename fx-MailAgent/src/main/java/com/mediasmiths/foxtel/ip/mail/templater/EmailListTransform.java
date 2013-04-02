@@ -8,7 +8,11 @@ import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
 
 public class EmailListTransform
 {
-
+	/**
+	 * Takes a list of Strings and returns a corresponding List<Emailaddress> 
+	 * @param emails
+	 * @return
+	 */
 	public static List<Emailaddress> toEmailAddressList(List<String> emails)
 	{
 
