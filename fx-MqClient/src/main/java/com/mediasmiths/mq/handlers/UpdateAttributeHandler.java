@@ -10,18 +10,12 @@ import com.mediasmiths.mayam.MayamAssetType;
 public abstract class UpdateAttributeHandler extends AttributeHandler
 {
 	private final static Logger log = Logger.getLogger(UpdateAttributeHandler.class);
-	
+
 	@Override
 	public final void process(AttributeMap messageAttributes)
 	{
-		log.error("process(AttributeMap a) called on an UpdateAttributeHandler "+getName());
-		
-		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-		MayamAssetType iHandle = handlesOnly();
-		
-		if(iHandle == null || iHandle.getAssetType().equals(assetType)){
-			process(messageAttributes, new AttributeMap(), new AttributeMap());
-		}
+		log.error("process(AttributeMap a) called on an UpdateAttributeHandler " + getName());
+		process(messageAttributes, new AttributeMap(), new AttributeMap());
 	}
 
 	public abstract void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after);
@@ -30,19 +24,19 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 	{
 		Object b = before.getAttribute(att);
 		Object c = current.getAttribute(att);
-		
-		boolean inCurrent = c!=null;
-		boolean inBefore = b!=null;
+
+		boolean inCurrent = c != null;
+		boolean inBefore = b != null;
 
 		boolean ret = false;
-		
+
 		if (inCurrent != inBefore)
 		{
 			ret = true;
 		}
 		else if (inCurrent && inBefore)
-		{	
-			ret= ! b.equals(c);
+		{
+			ret = !b.equals(c);
 		}
 		else
 		{
@@ -51,13 +45,4 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 
 		return ret;
 	}
-	
-	/**
-	 * Declares the type of asset that this UpdateAttributeHandler is interested in, a null value signifies interest in all asset types
-	 * @return
-	 */
-	public MayamAssetType handlesOnly(){
-		return null;
-	}
-	
 }

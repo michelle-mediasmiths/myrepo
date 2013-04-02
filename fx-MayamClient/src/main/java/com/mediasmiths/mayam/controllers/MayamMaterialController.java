@@ -953,42 +953,7 @@ public class MayamMaterialController extends MayamController
 					}
 					else
 					{
-						try
-						{
-							AttributeMap compLoggingTask = taskController.getOnlyTaskForAssetBySiteID(
-									MayamTaskListType.COMPLIANCE_LOGGING,
-									material.getMaterialID());
-							if (compLoggingTask != null)
-							{
-								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
-								{
-									compLoggingTask.setAttribute(
-											Attribute.REQ_BY,
-											material.getRequiredBy().toGregorianCalendar().getTime().toString());
-									taskController.saveTask(compLoggingTask);
-								}
-							}
-
-							AttributeMap ingestTask = taskController.getOnlyTaskForAssetBySiteID(
-									MayamTaskListType.INGEST,
-									material.getMaterialID());
-							if (ingestTask != null)
-							{
-								if (material.getRequiredBy() != null && material.getRequiredBy().toGregorianCalendar() != null)
-								{
-									ingestTask.setAttribute(
-											Attribute.REQ_BY,
-											material.getRequiredBy().toGregorianCalendar().getTime().toString());
-									taskController.saveTask(ingestTask);
-								}
-							}
-						}
-						catch (MayamClientException e)
-						{
-							log.error(
-									"Exception thrown by Mayam while updating tasks for Material : " + material.getMaterialID(),
-									e);
-						}
+						log.info("material updated");
 					}
 				}
 				catch (RemoteException e)

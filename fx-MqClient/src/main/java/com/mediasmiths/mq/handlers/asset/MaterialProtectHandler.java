@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -21,6 +22,13 @@ public class MaterialProtectHandler extends UpdateAttributeHandler
 	@Override
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
+		
+		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+		
+		if(! MayamAssetType.MATERIAL.getAssetType().equals(assetType)){
+			return;
+		}
+		
 		String houseID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
 		String assetID = currentAttributes.getAttribute(Attribute.ASSET_ID);
 
@@ -101,11 +109,4 @@ public class MaterialProtectHandler extends UpdateAttributeHandler
 	{
 		return "Material Protect";
 	}
-
-	@Override
-	public MayamAssetType handlesOnly()
-	{
-		return MayamAssetType.MATERIAL;
-	}
-
 }
