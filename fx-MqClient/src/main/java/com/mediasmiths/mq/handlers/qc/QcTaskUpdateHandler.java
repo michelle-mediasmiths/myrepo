@@ -306,7 +306,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		catch (Exception e)
 		{
 			log.error("QC : Error processing channel conditions", e);
-			taskController.setTaskToErrorWithMessage(currentAttributes, "Error processing channel conditions");
+			taskController.setTaskToWarningWithMessage(currentAttributes, "Error processing channel conditions");
 		}
 	}
 
@@ -362,7 +362,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		catch (Exception e)
 		{
 			log.error("QC : Error initiating auto qc : ", e);
-			taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
+			taskController.setTaskToWarningWithMessage(messageAttributes, "Error initiating tx workflow");
 		}
 	}
 

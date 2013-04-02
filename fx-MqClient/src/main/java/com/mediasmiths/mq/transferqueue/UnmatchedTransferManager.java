@@ -140,7 +140,7 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 
 			for (AttributeMap task : allUnmatchedTasks)
 			{
-				taskController.setTaskToErrorWithMessage(task, "Error while performing media transfer for asset " + item.assetId);
+				taskController.setTaskToWarningWithMessage(task, "Error while performing media transfer for asset " + item.assetId);
 			}
 		}
 		catch (MayamClientException e)

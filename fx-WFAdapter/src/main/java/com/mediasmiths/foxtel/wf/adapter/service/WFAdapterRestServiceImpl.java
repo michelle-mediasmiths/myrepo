@@ -333,7 +333,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// auto qc was for qc task
 				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
-				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
+				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
 			}
 		}
 		catch (MayamClientException e)

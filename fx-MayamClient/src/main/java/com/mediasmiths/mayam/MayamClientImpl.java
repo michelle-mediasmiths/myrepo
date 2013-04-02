@@ -1106,4 +1106,10 @@ public class MayamClientImpl implements MayamClient
 
 	}
 
+	@Override
+	public void autoQcErrorForMaterial(String assetId, long taskID) throws MayamClientException
+	{
+		tasksController.autoQcErrorForMaterial(assetId,taskID);
+	}
+
 }
