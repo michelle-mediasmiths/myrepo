@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mediasmiths.mayam.MayamAssetType;
 
 public abstract class UpdateAttributeHandler extends AttributeHandler
 {
@@ -13,11 +15,16 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 	public final void process(AttributeMap messageAttributes)
 	{
 		log.error("process(AttributeMap a) called on an UpdateAttributeHandler "+getName());
-		process(messageAttributes, new AttributeMap(), new AttributeMap());
+		
+		AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+		MayamAssetType iHandle = handlesOnly();
+		
+		if(iHandle == null || iHandle.getAssetType().equals(assetType)){
+			process(messageAttributes, new AttributeMap(), new AttributeMap());
+		}
 	}
 
 	public abstract void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after);
-	
 
 	protected boolean attributeChanged(Attribute att, AttributeMap before, AttributeMap after, AttributeMap current)
 	{
@@ -44,4 +51,13 @@ public abstract class UpdateAttributeHandler extends AttributeHandler
 
 		return ret;
 	}
+	
+	/**
+	 * Declares the type of asset that this UpdateAttributeHandler is interested in, a null value signifies interest in all asset types
+	 * @return
+	 */
+	public MayamAssetType handlesOnly(){
+		return null;
+	}
+	
 }
