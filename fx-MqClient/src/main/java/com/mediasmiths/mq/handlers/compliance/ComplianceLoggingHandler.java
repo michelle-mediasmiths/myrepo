@@ -37,7 +37,7 @@ public class ComplianceLoggingHandler extends TaskStateChangeHandler
 		AttributeMap map = tasksClient.createAttributeMap();
 		map.setAttribute(Attribute.COMPLIANCE_NOTES, complianceNotes);
 		map.setAttribute(Attribute.ASSET_PEER_ID, assetPeerID);
-		taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.COMPLIANCE_EDIT,map);
+		taskController.createTask(assetID, MayamAssetType.fromAssetType(assetType), MayamTaskListType.COMPLIANCE_EDIT,map);
 	}
 
 

@@ -88,7 +88,7 @@ public class PackageUpdateHandler  extends AttributeHandler
 						
 						if (requiresSegTask) {
 							//Create new segmentation task for this asset
-							long taskID = taskController.createTask(houseID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.SEGMENTATION);
+							long taskID = taskController.createTask(houseID, MayamAssetType.fromAssetType(assetType), MayamTaskListType.SEGMENTATION);
 							AttributeMap newTask = taskController.getTask(taskID);
 							newTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 							taskController.saveTask(newTask);

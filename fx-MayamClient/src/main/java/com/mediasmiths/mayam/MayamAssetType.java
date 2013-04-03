@@ -21,9 +21,11 @@ public enum MayamAssetType {
 		  return AssetType.valueOf(this.text);
 	  }
 	  
-	  public static MayamAssetType fromString(String text) {
-	    if (text != null) {
-	      for (MayamAssetType b : MayamAssetType.values()) {
+	  public static MayamAssetType fromAssetType(AssetType type) {
+		if (type != null) {
+		  String text = type.toString();
+	      
+		  for (MayamAssetType b : MayamAssetType.values()) {
 	        if (text.equalsIgnoreCase(b.text)) {
 	          return b;
 	        }

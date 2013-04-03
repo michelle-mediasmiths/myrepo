@@ -75,7 +75,7 @@ public class TemporaryContentHandler extends UpdateAttributeHandler
 						}
 					}
 					else {
-						long taskID = taskController.createTask(assetID, MayamAssetType.fromString(assetType.toString()), MayamTaskListType.PURGE_CANDIDATE_LIST);
+						long taskID = taskController.createTask(assetID, MayamAssetType.fromAssetType(assetType), MayamTaskListType.PURGE_CANDIDATE_LIST);
 						
 						AttributeMap newTask = taskController.getTask(taskID);
 						newTask.putAll(currentAttributes);
