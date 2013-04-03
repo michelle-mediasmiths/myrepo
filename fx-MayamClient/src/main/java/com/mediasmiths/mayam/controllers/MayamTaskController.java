@@ -597,15 +597,15 @@ public class MayamTaskController extends MayamController
 			log.error("error fetching tasks to with intent of marking it as failed",e);
 			return;
 		}
-		setTaskToErrorWithMessage(task, message);
+		setTaskToWarningWithMessage(task, message);
 	}	
 	
-	public void setTaskToErrorWithMessage(AttributeMap taskAttributes, String message){
+	public void setTaskToWarningWithMessage(AttributeMap taskAttributes, String message){
 		
 		log.info(String.format("Failing task with error message {%s}",message));
 		
 		AttributeMap updateMapForTask = updateMapForTask(taskAttributes);
-		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
 		updateMapForTask.setAttribute(Attribute.ERROR_MSG, message);
 		try
 		{
@@ -772,6 +772,28 @@ public class MayamTaskController extends MayamController
 					"current state of task is null or already in an end state task %s",
 					task.getAttributeAsString(Attribute.TASK_ID)));
 		}
+	}
+
+
+	public void autoQcErrorForMaterial(String materialID, long taskID) throws MayamClientException
+	{
+		log.debug(String.format("Auto QC error for materialId %s", materialID));
+		
+		AttributeMap task;
+		try
+		{
+			task = getTask(taskID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error fetching task",e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
+		}
+		AttributeMap updateMapForTask = updateMapForTask(task);
+		updateMapForTask.setAttribute(Attribute.ERROR_MSG, "Autoqc Error");
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);		
+		saveTask(updateMapForTask);
+		
 	}
 
 	

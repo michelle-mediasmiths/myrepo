@@ -1034,4 +1034,11 @@ public class MayamClientStub implements MayamClient
 	{
 	}
 
+	@Override
+	public void autoQcErrorForMaterial(String assetId, long taskID)throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }

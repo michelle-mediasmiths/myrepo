@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -21,7 +22,15 @@ public class MaterialProtectHandler extends UpdateAttributeHandler
 	@Override
 	public void process(AttributeMap currentAttributes, AttributeMap before, AttributeMap after)
 	{
+		
+		AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+		
+		if(! MayamAssetType.MATERIAL.getAssetType().equals(assetType)){
+			return;
+		}
+		
 		String houseID = currentAttributes.getAttribute(Attribute.HOUSE_ID);
+		String assetID = currentAttributes.getAttribute(Attribute.ASSET_ID);
 
 		if (attributeChanged(Attribute.PURGE_PROTECTED, before, after, currentAttributes))
 		{
@@ -33,9 +42,21 @@ public class MaterialProtectHandler extends UpdateAttributeHandler
 				return;
 			}
 
+			log.info("Fetching materials attributes (parent information is not included in asset update message from mayam");
+			AttributeMap materialAttributes;
+			try
+			{
+				materialAttributes = materialController.getMaterialByAssetId(assetID);
+			}
+			catch (MayamClientException e)
+			{
+				log.fatal("error loading asset, was it recently deleted?"+assetID,e);//logs as fatal because this really shouldn't happen unless the asset was deleted while the message we are responding to was deleted
+				return;
+			}
+			
 			log.debug("Material marked as purge protected, will attempt to mark title as purge protected if it isn't already");
-			String parentAssetID = (String) currentAttributes.getAttribute(Attribute.ASSET_ID);
-			String parentHouseID = (String) currentAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
+			String parentAssetID = (String) materialAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
+			String parentHouseID = (String) materialAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			log.debug(String.format("Parent asset is %s (%s), loading by ASSET_ID", parentHouseID, parentAssetID));
 
 			if (parentAssetID == null)
@@ -88,11 +109,4 @@ public class MaterialProtectHandler extends UpdateAttributeHandler
 	{
 		return "Material Protect";
 	}
-
-	@Override
-	public MayamAssetType handlesOnly()
-	{
-		return MayamAssetType.MATERIAL;
-	}
-
 }

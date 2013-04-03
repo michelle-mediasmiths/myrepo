@@ -4,6 +4,7 @@ import com.foxtel.ip.mailclient.MailAgentService;
 import com.foxtel.ip.mailclient.ServiceCallerEntity;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
@@ -149,7 +150,7 @@ public class MailAgentServiceImpl implements MailAgentService
 	private void sendEmailsForEvent(final MailTemplate m) throws EmailException, MessagingException
 	{
 
-		for (String emailAddress : m.getEmailaddresses().getEmailaddress())
+		for (Emailaddress emailAddress : m.getEmailaddresses().getEmailaddress())
 		{
 			if (logger.isDebugEnabled())
 				logger.debug("Preparing to send mail to: " + emailAddress);
@@ -163,11 +164,11 @@ public class MailAgentServiceImpl implements MailAgentService
 					// Sending normal email so unprocessed xml can be viewed
 					logger.info("Could not find generator, sending normal email.");
 
-					emailService.createEmail(emailAddress, m.getSubject(), m.getBody());
+					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody());
 				}
 				else
 				{
-					emailService.createMimeEmail(emailAddress, m.getSubject(),  getFormattedXML(m.getBody()));
+					emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()));
 
 					// emailService.createEmail(email, m.getSubject(), m.getBody());
 				}

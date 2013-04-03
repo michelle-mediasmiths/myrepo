@@ -105,7 +105,7 @@ public class UnmatchedJobHandler extends JobHandler
 
 						if (tasksForAsset == null || tasksForAsset.isEmpty())
 						{
-							taskController.createQCTaskForMaterial(houseID, null, null, material);
+							taskController.createQCTaskForMaterial(houseID, null, material);
 						}
 					}
 					catch (MayamClientException e)

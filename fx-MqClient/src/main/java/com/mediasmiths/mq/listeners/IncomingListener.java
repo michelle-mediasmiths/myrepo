@@ -18,6 +18,7 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
+import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
@@ -151,6 +152,8 @@ public class IncomingListener extends MqClientListener
 	ConformJobHandler conformJobHandler;
 	@Inject
 	PendingTxUpdateHandler pendingTxUpdate;
+	@Inject
+	MaterialProtectHandler materialProtected;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -359,6 +362,7 @@ public class IncomingListener extends MqClientListener
 		try
 		{
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(materialProtected, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(temporaryContentHandler, currentAttributes, beforeAttributes, afterAttributes);	
 			passEventToUpdateHandler(accessUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);	

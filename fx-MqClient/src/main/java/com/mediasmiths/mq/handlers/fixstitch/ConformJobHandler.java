@@ -113,7 +113,7 @@ public class ConformJobHandler extends JobHandler
 				// purge candidate list for associated and edit clips
 				if (item != null)
 				{
-					String assetType = item.getAttributeAsString(Attribute.ASSET_TYPE);
+					AssetType assetType = item.getAttribute(Attribute.ASSET_TYPE);
 					String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
 					String houseID = item.getAttributeAsString(Attribute.HOUSE_ID);
 					String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
@@ -144,7 +144,8 @@ public class ConformJobHandler extends JobHandler
 						
 							try
 							{
-								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromString(assetType), houseID, numberOfDays);
+								log.debug(String.format("Asset Type: %s houseID %s numberOfDays %d",assetType,houseID,numberOfDays));
+								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType), houseID, numberOfDays);
 								log.info("New Purge Candidate Task created");
 							}						
 							catch (Exception e)

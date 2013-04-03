@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://thisdiagram" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://thisdiagram" xmlns:qcadapter="http://thisdiagram/qcadapter" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
@@ -8,17 +8,18 @@
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" bpdm:prefix="autoQcError" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcError.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" bpdm:prefix="autoQcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcPassed.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="AutoQC" bpdm:comment="contrib=&apos;partner-pool:///_kq5JsHHTEeKzdrjGTgFYAA"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qcadapter" bpdm:prefix="qcadapter" bpdm:comment="contrib=&apos;partner-pool:///_X_P2IHHWEeKzdrjGTgFYAA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" bpdm:prefix="assetTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/assetTransferForQC.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" bpdm:prefix="qcJobCancel" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcJobCancel.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" bpdm:prefix="getProfileForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/getProfileForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" bpdm:prefix="autoQcFailed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcFailed.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
             <wsdl:portType name="Forcaller">
@@ -95,6 +96,7 @@
                 </bpel:from>
             </bpel:variable>
             <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output" binding="autoQcError:restBinding" operation="autoQcError" opMsgType="1" bpdm:id="_-5cShXHZEeKzdrjGTgFYAA" bpdm:messageIds="inc:_-5CC0HHZEeKzdrjGTgFYAA"/>
+            <bpel:variable name="QCFail" type="xs:boolean"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="callerAndWorkflowPlkVar" portType="this:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_jysWYHHTEeKzdrjGTgFYAA">
@@ -104,7 +106,13 @@
                 <bpdm:linkset bpdm:type="assignments">
                     <bpel:copy>
                         <bpel:from>false()</bpel:from>
-                        <bpel:to>$QCFinished</bpel:to><mapper:mapperLink><mapper:vertice id="170763" targetPath="$QCFinished" targetedBy="13146364-arg0"></mapper:vertice><mapper:vertice id="13146364" dimension="78x24" location="516,144"><mapper:value>false()</mapper:value></mapper:vertice></mapper:mapperLink>
+                        <bpel:to>$QCFinished</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="21066177" targetPath="$QCFinished" targetedBy="31273344-arg0"></mapper:vertice>
+  <mapper:vertice id="31273344" dimension="78x24" location="516,132">
+    <mapper:value>false()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>false()</bpel:from>
@@ -120,7 +128,23 @@
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>""</bpel:from>
-                        <bpel:to>$QCJobID</bpel:to><mapper:mapperLink><mapper:vertice id="18378544" targetPath="$QCJobID" targetedBy="22930045-arg0"></mapper:vertice><mapper:vertice id="22930045" dimension="78x24" location="468,180"><mapper:value>""</mapper:value></mapper:vertice></mapper:mapperLink>
+                        <bpel:to>$QCJobID</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="26758243" targetPath="$QCJobID" targetedBy="30585593-arg0"></mapper:vertice>
+  <mapper:vertice id="30585593" dimension="78x24" location="516,156">
+    <mapper:value>""</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>false()</bpel:from>
+                        <bpel:to>$QCFail</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="25157859" targetPath="$QCFail" targetedBy="31593628-arg0"></mapper:vertice>
+  <mapper:vertice id="31593628" dimension="78x24" location="516,180">
+    <mapper:value>false()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
@@ -452,6 +476,20 @@
                                                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="autoQcFailedAutoQcFailedResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQcFailed:autoQcFailed_output" bpdm:binding="autoQcFailed:restBinding" bpdm:ID="_h-8HgHHYEeKzdrjGTgFYAA"></bpdm:linkset>
                                                 <bpdm:thrownFault msgFaultNcName="autoQcFailedFault" msgFaultTypeQname="autoQcFailed:autoQcFailed_fault"/>
                                             </bpdm:messagingtask>
+                                            <bpdm:messagingtask bpdm:label="set fail variable" bpdm:ID="_Ej__wJuWEeKQL81S1EiAtA">
+                                                <bpdm:linkset bpdm:type="assignments">
+                                                    <bpel:copy>
+                                                        <bpel:from>true()</bpel:from>
+                                                        <bpel:to>$QCFail</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="33342290" targetPath="$QCFail" targetedBy="754141-arg0"></mapper:vertice>
+  <mapper:vertice id="754141" dimension="49x25" location="528,144">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink>
+                                                    </bpel:copy>
+                                                </bpdm:linkset>
+                                            </bpdm:messagingtask>
                                         </bpel:sequence>
                                     </bpdm:gateway>
                                 </bpel:sequence>
@@ -470,6 +508,19 @@
                 <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_Xiv80HHVEeKzdrjGTgFYAA" bpdm:targetDisplayName="default"></bpdm:linkset>
                 <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_X3D_8HHVEeKzdrjGTgFYAA" bpdm:targetDisplayName="[check result - cancelled]">
                     <bpel:condition>$TaskIsCancelled = true()<mapper:mapperLink><mapper:vertice id="30014439" targetPath="$condition" targetedBy="18736263-arg2"></mapper:vertice><mapper:vertice id="18736263" dimension="78x24" location="542,68"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="29577581" sourcePath="$TaskIsCancelled" targetedBy="18736263-arg0"></mapper:vertice><mapper:vertice id="15360612" dimension="78x24" location="396,120" targetedBy="18736263-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
+                </bpdm:linkset>
+                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_XmdkEJuWEeKQL81S1EiAtA" bpdm:targetDisplayName="[check result - fail]">
+                    <bpel:condition>$QCFail = true()
+<mapper:mapperLink>
+  <mapper:vertice id="20550975" targetPath="$condition" targetedBy="30635541-arg2"></mapper:vertice>
+  <mapper:vertice id="30635541" dimension="78x24" location="624,48">
+    <mapper:value>=</mapper:value>
+  </mapper:vertice>
+  <mapper:vertice id="32865492" sourcePath="$QCFail" targetedBy="30635541-arg0"></mapper:vertice>
+  <mapper:vertice id="28397795" dimension="78x24" location="448,116" targetedBy="30635541-arg1">
+    <mapper:value>true()</mapper:value>
+  </mapper:vertice>
+</mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:sequence>
                     <bpdm:messagingtask bpdm:label="success" bpdm:ID="_SFd0wHHVEeKzdrjGTgFYAA"></bpdm:messagingtask>
@@ -506,6 +557,9 @@
                 </bpel:sequence>
                 <bpel:sequence>
                     <bpdm:messagingtask bpdm:label="cancelled" bpdm:ID="_T5608HHVEeKzdrjGTgFYAA"></bpdm:messagingtask>
+                </bpel:sequence>
+                <bpel:sequence>
+                    <bpdm:messagingtask bpdm:label="fail" bpdm:ID="_Wulg4JuWEeKQL81S1EiAtA"></bpdm:messagingtask>
                 </bpel:sequence>
             </bpdm:gateway>
             <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_WcdqMHHVEeKzdrjGTgFYAA"></bpdm:messagingtask>
