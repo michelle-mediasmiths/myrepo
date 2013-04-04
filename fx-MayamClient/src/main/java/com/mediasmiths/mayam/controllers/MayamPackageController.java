@@ -266,8 +266,7 @@ public class MayamPackageController extends MayamController
 		}
 		catch (RemoteException e1)
 		{
-			log.warn("error searching for segment list");
-			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED);
+			log.warn("exception thrown searching for package, assuming it doesnt exist",e1);
 		}
 		
 		try
