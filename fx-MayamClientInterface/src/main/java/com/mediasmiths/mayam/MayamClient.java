@@ -2,6 +2,7 @@ package com.mediasmiths.mayam;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
@@ -192,6 +193,8 @@ public interface MayamClient
 	 */
 	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException;
 
+	public Set<String> getChannelGroupsForTitle(String titleID) throws MayamClientException;
+	
 	/**
 	 * 
 	 * Returns the file path to the high resolution media attatched to a material 

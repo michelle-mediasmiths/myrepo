@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -495,21 +496,31 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
 				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 				
-				
+				String titleID = null;
 				if (action instanceof PurgeTitle)
 				{
 					ppf.setAssetType("EPISODE");
-					ppf.setHouseId(((PurgeTitle) action).getTitleID());
+					
+					titleID = ((PurgeTitle) action).getTitleID(); 
+					
+					ppf.setHouseId(titleID);
 				}
 				else if (action instanceof DeleteMaterial)
 				{
 					ppf.setAssetType("ITEM");
+					titleID = ((DeleteMaterial) action).getTitleID();
 					ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
 				}
 				else if (action instanceof DeletePackage)
 				{
 					ppf.setAssetType("SEGMENT_LIST");
+					titleID = ((DeletePackage) action).getTitleID();
 					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
+				}
+				
+				if(titleID != null){
+					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
+					ppf.getChannelGroup().addAll(channelsForTitle);
 				}
 				
 			}
@@ -520,6 +531,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			catch (ClassCastException cce)
 			{
 				logger.fatal("error in cast the file " + filePath, cce);
+			}
+			catch(MayamClientException e){
+				logger.error("error getting channel groups for title",e);
 			}
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);

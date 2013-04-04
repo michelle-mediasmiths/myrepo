@@ -179,34 +179,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			aen.setForTXDelivery(false);
 			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 
-
 			try
 			{
 				String titleId = currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-
-				if (titleId != null)
-				{
-					AttributeMap title = titlecontroller.getTitle(titleId);
-					StringList channels = title.getAttribute(Attribute.CHANNELS);
-
-					Set<String> groups = new HashSet<String>();
-
-					for (String channel : channels)
-					{
-
-						String group = channelProperties.channelGroupForChannel(channel);
-						log.trace(String.format("channel %s group %s", channel, group));
-
-						if (group != null)
-						{
-							groups.add(group);
-						}
-
-					}
-					//add groups to the event
-					aen.getChannelGroup().addAll(groups);
-				}
-
+				aen.getChannelGroup().addAll(mayamClient.getChannelGroupsForTitle(titleId));
 			}
 			catch (Exception e)
 			{

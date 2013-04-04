@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -48,7 +49,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MayamClientImpl implements MayamClient
 {
@@ -69,7 +72,9 @@ public class MayamClientImpl implements MayamClient
 	MayamTaskController tasksController;
 	@Inject
 	MayamValidator validator;
-
+	
+	@Inject
+	protected ChannelProperties channelProperties;
 
 	@Inject
 	public MayamClientImpl() throws MalformedURLException, IOException
@@ -1110,6 +1115,34 @@ public class MayamClientImpl implements MayamClient
 	public void autoQcErrorForMaterial(String assetId, long taskID) throws MayamClientException
 	{
 		tasksController.autoQcErrorForMaterial(assetId,taskID);
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForTitle(String titleId) throws MayamClientException
+	{
+		Set<String> groups = new HashSet<String>();
+		
+		if (titleId != null)
+		{
+			AttributeMap title = titleController.getTitle(titleId);
+			StringList channels = title.getAttribute(Attribute.CHANNELS);
+
+			
+
+			for (String channel : channels)
+			{
+
+				String group = channelProperties.channelGroupForChannel(channel);
+				log.trace(String.format("channel %s group %s", channel, group));
+
+				if (group != null)
+				{
+					groups.add(group);
+				}
+
+			}
+		}
+		return groups;
 	}
 
 }
