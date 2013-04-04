@@ -16,35 +16,34 @@ public class FileFormatVerification
 {
 	@Inject
 	@Named("ff.sd.wrapper.format")
-	private String sdWrapperFormat = "mxf";
+	private String sdWrapperFormat;
 	@Inject
 	@Named("ff.sd.wrapper.mime")
-	private String sdWrapperMime = "video/x-mxf";
-
+	private String sdWrapperMime;
 	@Inject
 	@Named("ff.sd.video.aspect")
 	private String sdVideoAspect;
 	@Inject
 	@Named("ff.sd.video.imagex")
-	private int sdVideoX = 720;
+	private String sdVideoX;
 	@Inject
 	@Named("ff.sd.video.imagey")
-	private int sdVideoY = 608;
+	private String sdVideoY;
 	@Inject
 	@Named("ff.sd.video.chroma")
-	private String sdVideoChroma = "4:2:2";
+	private String sdVideoChroma;
 	@Inject
 	@Named("ff.sd.video.encoding")
-	private String sdVideoEncoding = "mpeg2";
+	private String sdVideoEncoding;
 	@Inject
 	@Named("ff.sd.video.gopL")
-	private int sdVideoGopL;
+	private String sdVideoGopL;
 	@Inject
 	@Named("ff.sd.video.bitrate")
-	private int sdVideoBitrate = 50000000; // 50 Mbps (CBR)
+	private String sdVideoBitrate;
 	@Inject
 	@Named("ff.sd.video.frameratex100")
-	private int sdVideoFrameRate100 = 2500;
+	private String sdVideoFrameRate100;
 
 	@Inject
 	@Named("ff.sd.audio.encoding")
@@ -57,11 +56,10 @@ public class FileFormatVerification
 	private String sdAudioMime = "audio/x-aes";
 	@Inject
 	@Named("ff.sd.audio.samplerate")
-	private int sdAudioSampleRate = 48000;
+	private String sdAudioSampleRate;
 	@Inject
 	@Named("ff.sd.audio.samplewidth")
-	private int sdSampleWidth = 24;
-
+	private String sdSampleWidth;
 	@Inject
 	@Named("ff.hd.wrapper.format")
 	private String hdWrapperFormat;
@@ -74,10 +72,10 @@ public class FileFormatVerification
 	private String hdVideoAspect;
 	@Inject
 	@Named("ff.hd.video.imagex")
-	private int hdVideoX;
+	private String hdVideoX;
 	@Inject
 	@Named("ff.hd.video.imagey")
-	private int hdVideoY;
+	private String hdVideoY;
 	@Inject
 	@Named("ff.hd.video.chroma")
 	private String hdVideoChroma;
@@ -86,13 +84,13 @@ public class FileFormatVerification
 	private String hdVideoEncoding;
 	@Inject
 	@Named("ff.hd.video.gopL")
-	private int hdVideoGopL;
+	private String hdVideoGopL;
 	@Inject
 	@Named("ff.hd.video.bitrate")
-	private int hdVideoBitrate;
+	private String hdVideoBitrate;
 	@Inject
 	@Named("ff.hd.video.frameratex100")
-	private int hdVideoFrameRate100;
+	private String hdVideoFrameRate100;
 
 	@Inject
 	@Named("ff.hd.audio.encoding")
@@ -105,14 +103,14 @@ public class FileFormatVerification
 	private String hdAudioMime;
 	@Inject
 	@Named("ff.hd.audio.samplerate")
-	private int hdAudioSampleRate;
+	private String hdAudioSampleRate;
 	@Inject
 	@Named("ff.hd.audio.samplewidth")
-	private int hdSampleWidth;
+	private String hdSampleWidth;
 
 	private final static Logger log = Logger.getLogger(FileFormatVerification.class);
 
-	public FileFormatVerificationResult verifyFileFormat(FileFormatInfo fileInfo, AttributeMap materialAttributes)			
+	public FileFormatVerificationResult verifyFileFormat(FileFormatInfo fileInfo, AttributeMap materialAttributes)
 	{
 		log.info(String.format(
 				"File format verification for asset %s",
@@ -261,12 +259,12 @@ public class FileFormatVerification
 	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests)
 	{
 		boolean allPass = true;
-		
+
 		for (FileFormatTest fileFormatTest : tests)
 		{
 			if (!(fileFormatTest.check(sb)))
 			{
-				allPass=false;
+				allPass = false;
 			}
 		}
 
@@ -275,18 +273,18 @@ public class FileFormatVerification
 
 	class FileFormatTest
 	{
-		Object expected;
-		Object actual;
+		String expected;
+		String actual;
 		String description;
 
-		public FileFormatTest(int expected, Integer actual, String description)
+		public FileFormatTest(String expected, Integer actual, String description)
 		{
-			this.expected = Integer.valueOf(expected);
-			this.actual = actual;
+			this.expected = expected;
+			this.actual = actual.toString();
 			this.description = description;
 		}
 
-		public FileFormatTest(Object expected, Object actual, String description)
+		public FileFormatTest(String expected, String actual, String description)
 		{
 			this.expected = expected;
 			this.actual = actual;
