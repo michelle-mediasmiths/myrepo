@@ -436,7 +436,7 @@
 		<eventname>ProgrammeFileIngestFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome import has failed, for AssetId(%s), JobId(%s)</subject>
-			<body>ProgrammeFileIngestFailure</body>
+			<body>Item has failed to successfully auto-import to Ardome</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
