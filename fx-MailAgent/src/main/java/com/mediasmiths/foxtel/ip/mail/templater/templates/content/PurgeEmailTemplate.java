@@ -31,7 +31,6 @@ public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGen
 		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
 		t.setSubject(String.format(getSubject(), ajf.getAssetType(), ajf.getHouseId()));
 		t.setBody(getBody() + ", at " + ajf.getTime());
-		t.setEmailaddresses(getEmailaddresses());
 		return t;
 	}
 
