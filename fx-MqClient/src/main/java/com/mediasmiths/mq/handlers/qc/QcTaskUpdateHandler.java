@@ -179,9 +179,6 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			aen.setForTXDelivery(false);
 			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 
-			String eventName = QC_FAILED_RE_ORDER;
-			String event = serialiser.serialise(aen);
-			String namespace = qcEventNamespace;
 
 			try
 			{
@@ -216,6 +213,11 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				log.error("error determinging channel groups for event", e);
 			}
 
+
+			String eventName = QC_FAILED_RE_ORDER;
+			String event = serialiser.serialise(aen);
+			String namespace = qcEventNamespace;
+			
 			eventsService.saveEvent(eventName, event, namespace);
 		}
 		catch (Exception e)

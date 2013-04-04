@@ -27,8 +27,8 @@ import com.mediasmiths.std.io.PropertyFile;
 public class PreviewTxJobs
 {
 
-	static String inputFileLocation = "/Volumes/foxtel/tcinput/input.mxf";
-	static String transcodeBaseOutputLocation = "/Volumes/foxtel/tcoutput/";
+	static String inputFileLocation = "/storage/mam/hires01/hr/hr01/input.mxf";
+	static String transcodeBaseOutputLocation = "/storage/mam/hires01/output";
 	
 	static TCRestService svc;
 	
