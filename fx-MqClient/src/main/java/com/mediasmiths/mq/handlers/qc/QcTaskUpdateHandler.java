@@ -1,6 +1,8 @@
 package com.mediasmiths.mq.handlers.qc;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -11,7 +13,9 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.mayam.MayamClientException;
@@ -32,6 +36,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
 
+	@Inject
+	protected ChannelProperties channelProperties;
+	
 	@Inject
 	MuleWorkflowController mule;
 
@@ -175,6 +182,39 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			String eventName = QC_FAILED_RE_ORDER;
 			String event = serialiser.serialise(aen);
 			String namespace = qcEventNamespace;
+
+			try
+			{
+				String titleId = currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+
+				if (titleId != null)
+				{
+					AttributeMap title = titlecontroller.getTitle(titleId);
+					StringList channels = title.getAttribute(Attribute.CHANNELS);
+
+					Set<String> groups = new HashSet<String>();
+
+					for (String channel : channels)
+					{
+
+						String group = channelProperties.channelGroupForChannel(channel);
+						log.trace(String.format("channel %s group %s", channel, group));
+
+						if (group != null)
+						{
+							groups.add(group);
+						}
+
+					}
+					//add groups to the event
+					aen.getChannelGroup().addAll(groups);
+				}
+
+			}
+			catch (Exception e)
+			{
+				log.error("error determinging channel groups for event", e);
+			}
 
 			eventsService.saveEvent(eventName, event, namespace);
 		}
