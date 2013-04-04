@@ -63,5 +63,10 @@ public interface QueryAPI
 	@Produces("text/plain")
 	public List<EventEntity> getEventsWindow (@PathParam("namespace")String namespace, @PathParam("eventname")String eventName, @PathParam("max")int max);
 	
+	@GET
+	@Path("/getbyeventnamewindow/{eventname}/{max}")
+	@Produces("text/plain")
+	public List<EventEntity> getByEventNameWindow (@PathParam("eventname")String eventName, @PathParam("max")int max);
+	
 	
 }

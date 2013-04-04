@@ -178,11 +178,11 @@ public class ReportUIImpl implements ReportUI
 	public boolean checkDate(Long eventTime)
 	{
 		boolean within = false;
-		logger.info("getting valid " + eventTime + " " + startLong);
+		//logger.info("getting valid " + eventTime + " " + startLong);
 		
 		int startComp = eventTime.compareTo(startLong);
 		int endComp = eventTime.compareTo(endLong);
-		logger.info("Start compare: " + startComp + " End compare: " + endComp);
+		//logger.info("Start compare: " + startComp + " End compare: " + endComp);
 		if ((startComp > 0) && (endComp < 0))
 		{
 			within = true;
@@ -230,7 +230,8 @@ public class ReportUIImpl implements ReportUI
 	public void getOrderStatusCSV()
 	{
  		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
- 		List<EventEntity> orders = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle", MAX));
+ 		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
+ 		logger.info("List size: " + orders.size());
 		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
 	}
 

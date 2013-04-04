@@ -149,5 +149,17 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		return getList(criteria);
 	}
 
+	@Override
+	public List<EventEntity> eventnamePaginated(String eventname, int start, int max)
+	{
+		logger.info("Finding events from " + start + " eventname: " + eventname + " max: " + max);
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("eventName", eventname));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		logger.info("Finished search");
+		return getList(criteria);
+	}
+
 
 }

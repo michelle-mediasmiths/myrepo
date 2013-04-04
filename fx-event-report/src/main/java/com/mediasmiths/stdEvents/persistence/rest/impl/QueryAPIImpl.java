@@ -13,7 +13,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.xml.bind.DatatypeConverter;
 
 public class QueryAPIImpl implements QueryAPI
@@ -75,6 +78,24 @@ public class QueryAPIImpl implements QueryAPI
 			logger.info("start: " + start + " Size: " + events.size());
 			logger.info("Results: " + events);
 		}
+		return all;
+	}
+	
+	@Transactional
+	public List<EventEntity> getByEventNameWindow(@PathParam("eventname") String eventname, @PathParam("max") int max)
+	{
+		List<EventEntity> events = eventDao.eventnamePaginated(eventname, 0, max);
+		logger.info("List size: " + events.size());
+		List<EventEntity> all = events;
+		int start = 0;
+		while (events.size()==max) {
+			events = eventDao.eventnamePaginated(eventname, start, max);
+			start = start + max;
+			all.addAll(events);
+			logger.info("start: " + start + " Size: " + events.size());
+			logger.info("Results: " + events);
+		}
+		logger.info("List size (all): " + all.size());
 		return all;
 	}
 	
