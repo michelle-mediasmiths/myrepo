@@ -210,7 +210,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// id is an item id
-				saveEvent("QcFailedReOrder", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(), notification.getJobName());
 			}
