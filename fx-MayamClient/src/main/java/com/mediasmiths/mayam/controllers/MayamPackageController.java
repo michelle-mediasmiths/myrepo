@@ -257,7 +257,7 @@ public class MayamPackageController extends MayamController
 			log.debug("searching for segment list before trying to create it");
 			SegmentList s = client.segmentApi().getSegmentListBySiteId(presentationID);
 
-			if (segmentList != null)
+			if (s != null)
 			{
 				//segment list already exists!
 				log.error("segment list with id "+presentationID+" already exits!");
