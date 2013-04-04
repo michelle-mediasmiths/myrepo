@@ -50,6 +50,6 @@ public class FixAndStitchRevertHandler  extends TaskStateChangeHandler
 	@Override
 	public TaskState getTaskState()
 	{
-		return TaskState.FINISHED_FAILED;
+		return TaskState.FINISHED_RETURNED;
 	}
 }

@@ -112,11 +112,12 @@ public class FileFormatVerification
 
 	private final static Logger log = Logger.getLogger(FileFormatVerification.class);
 
-	public boolean verifyFileFormat(FileFormatInfo fileInfo, AttributeMap materialAttributes)
-			throws FileFormatVerificationFailureException
+	public FileFormatVerificationResult verifyFileFormat(FileFormatInfo fileInfo, AttributeMap materialAttributes)			
 	{
-		log.info(String.format("File format verification for asset %s",materialAttributes.getAttributeAsString(Attribute.ASSET_ID)));
-		
+		log.info(String.format(
+				"File format verification for asset %s",
+				materialAttributes.getAttributeAsString(Attribute.ASSET_ID)));
+
 		String reqfmt = materialAttributes.getAttribute(Attribute.REQ_FMT);
 		boolean requiredFormatKnown = false;
 		boolean sd = false;
@@ -161,8 +162,8 @@ public class FileFormatVerification
 		List<FileFormatTest> sdTests = new ArrayList<FileFormatTest>();
 		List<FileFormatTest> hdTests = new ArrayList<FileFormatTest>();
 
-		//hd tests
-		
+		// hd tests
+
 		// video codec
 		hdTests.add(new FileFormatTest(hdVideoChroma, videoChroma, "Chroma"));
 		hdTests.add(new FileFormatTest(hdVideoEncoding, videoEncoding, "Encoding"));
@@ -182,8 +183,8 @@ public class FileFormatVerification
 		hdTests.add(new FileFormatTest(hdWrapperFormat, wrapperFormat, "Wrapper format"));
 		hdTests.add(new FileFormatTest(hdWrapperMime, wrapperMime, "Wrapper format mime type"));
 
-		//sd tests
-		
+		// sd tests
+
 		// video codec
 		sdTests.add(new FileFormatTest(sdVideoChroma, videoChroma, "Chroma"));
 		sdTests.add(new FileFormatTest(sdVideoEncoding, videoEncoding, "Encoding"));
@@ -210,65 +211,66 @@ public class FileFormatVerification
 			{
 				log.debug("Format is sd asset");
 				boolean pass = performTests(sb, sdTests);
-				log.info(sb.toString());
-				return pass;
+				String detail = sb.toString();
+				log.info(detail);
+				return new FileFormatVerificationResult(pass, detail);
 			}
 			else
 			{
 				log.debug("Format is hd asset");
 				boolean pass = performTests(sb, hdTests);
-				log.info(sb.toString());
-				return pass;
+				String detail = sb.toString();
+				log.info(detail);
+				return new FileFormatVerificationResult(pass, detail);
 			}
 		}
 		else
 		{
 			// try sd first
 			log.debug("required format unknown, testing as both");
-			try
+
+			if (performTests(sb, sdTests))
 			{
-				if (performTests(sb, sdTests))
-				{
-					log.debug("format validated as sd");
-					log.info(sb.toString());
-					return true;
-				}
+				log.debug("format validated as sd");
+				String detail = sb.toString();
+				log.info(detail);
+				return new FileFormatVerificationResult(true, detail);
 			}
-			catch (FileFormatVerificationFailureException e)
+			else
 			{
 				log.debug("sd test format failed");
 			}
 
-			try
+			if (performTests(sb, hdTests))
 			{
-				if (performTests(sb, hdTests))
-				{
-					log.debug("format validated as hd");
-					log.info(sb.toString());
-					return true;
-				}
+				log.debug("format validated as hd");
+				String detail = sb.toString();
+				log.info(detail);
+				return new FileFormatVerificationResult(true, detail);
 			}
-			catch (FileFormatVerificationFailureException e)
+			else
 			{
 				log.debug("hd test format failed");
 			}
-			
-			log.debug("Tests failed for both asset as both hd and sd; throwning FileFormatVerificationValidationException");
-			throw new FileFormatVerificationFailureException(sb.toString());
+
+			log.debug("Tests failed for both asset as both hd and sd");
+			return new FileFormatVerificationResult(false, sb.toString());
 		}
 	}
 
-	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests) throws FileFormatVerificationFailureException
+	private boolean performTests(StringBuilder sb, List<FileFormatTest> tests)
 	{
+		boolean allPass = true;
+		
 		for (FileFormatTest fileFormatTest : tests)
 		{
 			if (!(fileFormatTest.check(sb)))
 			{
-				throw new FileFormatVerificationFailureException(sb.toString());
+				allPass=false;
 			}
 		}
 
-		return true;
+		return allPass;
 	}
 
 	class FileFormatTest
@@ -315,17 +317,20 @@ public class FileFormatVerification
 				sb.append("\n");
 				return true;
 			}
-			else if(expected instanceof String){ //allows multiple comma separated values to be specified for string values
-				
+			else if (expected instanceof String)
+			{ // allows multiple comma separated values to be specified for string values
+
 				String exp = (String) expected;
 				String[] split = exp.split(",");
 				List<String> asList = Arrays.asList(split);
-				
-				if(asList.contains(actual)){
+
+				if (asList.contains(actual))
+				{
 					sb.append("\n");
 					return true;
 				}
-				else{
+				else
+				{
 					sb.append("*\n");
 					return false;
 				}
@@ -337,5 +342,29 @@ public class FileFormatVerification
 			}
 		}
 	}
+
+	public class FileFormatVerificationResult
+	{
+
+		private boolean pass;
+		private String detail;
+
+		public FileFormatVerificationResult(boolean pass, String detail)
+		{
+			this.pass = pass;
+			this.detail = detail;
+		}
+
+		public boolean isPass()
+		{
+			return pass;
+		}
+
+		public String getDetail()
+		{
+			return detail;
+		}
+
+	};
 
 }

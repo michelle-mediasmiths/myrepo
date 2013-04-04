@@ -38,7 +38,7 @@ import com.mediasmiths.foxtel.pathresolver.PathResolver.PathType;
 import com.mediasmiths.foxtel.pathresolver.UnknownPathException;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.FileFormatVerification;
-import com.mediasmiths.mayam.FileFormatVerificationFailureException;
+import com.mediasmiths.mayam.FileFormatVerification.FileFormatVerificationResult;
 import com.mediasmiths.mayam.MayamAspectRatios;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamAudioEncoding;
@@ -1257,21 +1257,22 @@ public class MayamMaterialController extends MayamController
 
 		AttributeMap update = taskController.updateMapForTask(qcTaskAttributes);
 
-		try
-		{
-			fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
+		FileFormatVerificationResult ffvResult = fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
+		
+		if(ffvResult.isPass()){
+			log.info("ffv passed");
 			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
 			update.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
 			update.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 		}
-		catch (FileFormatVerificationFailureException ffve)
+		else
 		{
-			log.warn("file format verification failed", ffve);
+			log.warn("file format verification failed");
 			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.FAIL);
 			update.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
 			update.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
 			update.setAttribute(Attribute.QC_STATUS, QcStatus.FAIL);
-			update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffve.getMessage());
+			update.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, ffvResult.getDetail());
 		}
 
 		taskController.saveTask(update);
