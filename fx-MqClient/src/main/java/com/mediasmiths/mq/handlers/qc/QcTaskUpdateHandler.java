@@ -307,6 +307,18 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				//create channel conditions found during qc event
 				ChannelConditionsFound ccf = new ChannelConditionsFound();
 				ccf.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+				
+				try
+				{
+					String titleId = currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+					ccf.getChannelGroup().addAll(mayamClient.getChannelGroupsForTitle(titleId));
+				}
+				catch (Exception e)
+				{
+					log.error("error determinging channel groups for event", e);
+				}
+
+				
 				log.debug("saving event "+CHANNEL_CONDITIONS_FOUND_DURING_QC);
 				eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);				
 			}
