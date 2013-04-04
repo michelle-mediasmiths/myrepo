@@ -57,14 +57,15 @@ public class EventAPIImpl implements EventAPI
 			logger.trace("Saving event...");
 
 			// Save event to the all events table.
+		logger.info("Saving to Event table EVENT_NAME: " + event.getEventName() + " NAMESPACE: " + event.getNamespace());
 		eventDao.saveOrUpdate(event);
 		
-		logger.info("Saving to Eventing table");
+		
 		EventingEntity eventingEntity = new EventingEntity();
 		logger.info("Created correctly");
 
 		eventingEntity.setEventId(event.id);
-		logger.info("Saveing to Eventing table");
+		logger.info("Saving to Eventing table");
 		eventingDao.save(eventingEntity);
 
 		logger.info("Event saved");
