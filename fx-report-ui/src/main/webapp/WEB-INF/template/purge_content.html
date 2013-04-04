@@ -17,32 +17,28 @@
 	<table id="purgedTable" class="table table-striped tablesorter">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
+				<th>DateRange</th>
+				<th>EntityType</th>
+				<th>Title</th>
+				<th>MaterialID</th>
+				<th>Channels</th>
+				<th>Protected</th>
+				<th>Extended</th>
+				<th>Purged</th>
+				<th>Expires</th>
 				</tr>
 		</thead>
 		<tbody>
-			<tr th:each="event: ${purged}">
-					<td th:text="${event.id}">id</td>
-					<td th:text="${event.time}">time</td>
-					<td th:text="${event.namespace}">namespaceEx</td>
-					<td th:text="${event.eventName}">eventNameEx</td>
-					<td th:text="${event.payload}">payloadEx</td>
-				</tr>
-				<tr>
-					<td>Amount purged:</td>
-					<td th:text="${amtPurged}"></td>
-				</tr>
-				<tr>
-					<td>Amount expired:</td>
-					<td th:text="${amtExpired}"></td>
-				</tr>
-				<tr>
-					<td>Amount protected:</td>
-					<td th:text="${amtProtected}"></td>
+			<tr th:each="purge: ${purged}">
+					<td th:text="${purge.dateRange}"></td>
+					<td th:text="${purge.entityType}"></td>
+					<td th:text="${purge.title}"></td>
+					<td th:text="${purge.materialID}"></td>
+					<td th:text="${purge.channels}"></td>
+					<td th:text="${purge.protected}"></td>
+					<td th:text="${purge.extended}"></td>
+					<td th:text="${purge.purged}"></td>
+					<td th:text="${purge.expires}"></td>
 				</tr>
 		</tbody>
 	</table>

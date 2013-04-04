@@ -18,12 +18,10 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
 import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
-import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.PurgeRT;
 
 public class PurgeContentRpt
 {

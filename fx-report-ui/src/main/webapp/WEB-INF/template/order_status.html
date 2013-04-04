@@ -17,103 +17,33 @@
 	<table id="deliveredTable" class="table table-striped tablesorter">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				</tr>
+				<th>DateRange</th>
+				<th>Title</th>
+				<th>MaterialID</th>
+				<th>Channels</th>
+				<th>OrderRef</th>
+				<th>RequiredBy</th>
+				<th>CompletedInDateRange</th>
+				<th>OverdueInDateRange</th>
+				<th>AggregatorID</th>
+				<th>TaskType</th>
+				<th>CompletionDate</th>
+			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="event: ${delivered}">
-					<td th:text="${event.id}">id</td>
-					<td th:text="${event.time}">time</td>
-					<td th:text="${event.namespace}">namespaceEx</td>
-					<td th:text="${event.eventName}">eventNameEx</td>
-					<td th:text="${event.payload}">payloadEx</td>
+			<tr th:each="order: ${orders}">
+					<td th:text="${order.dateRange}"></td>
+					<td th:text="${order.title}"></td>
+					<td th:text="${order.materialID}"></td>
+					<td th:text="${order.channels}"></td>
+					<td th:text="${order.orderRef}"></td>
+					<td th:text="${order.requiredBy}"></td>
+					<td th:text="${order.completedInDateRange}"></td>
+					<td th:text="${order.overdueInDateRange}"></td>
+					<td th:text="${order.aggregatorID}"></td>
+					<td th:text="${order.taskType}"></td>
+					<td th:text="${order.completionDate}"></td>
 				</tr>
-				<tr>
-					<td>Quantity:</td>
-					<td th:text="${deliveredQ}"></td>
-				</tr>
-		</tbody>
-	</table>
-
-	<h4>List of titles not yet delivered</h4>
-	<table id="notDeliveredTable" class="table table-striped tablesorter">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				</tr>
-		</thead>
-		<tbody>
-			<tr th:each="event: ${notDelivered}">
-				<td th:text="${event.id}">id</td>
-				<td th:text="${event.time}">time</td>
-				<td th:text="${event.namespace}">namespaceEx</td>
-				<td th:text="${event.eventName}">eventNameEx</td>
-				<td th:text="${event.payload}">payloadEx</td>
-			</tr>
-			<tr>
-				<td>Quantity:</td>
-				<td th:text="${notDeliveredQ}"></td>
-			</tr>
-		</tbody>
-	</table>
-
-	<h4>List of titles overdue</h4>
-	<table id="overdueTable" class="table table-striped tablesorter">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				</tr>
-		</thead>
-		<tbody>
-			<tr th:each="event: ${overdue}">
-				<td th:text="${event.id}">id</td>
-				<td th:text="${event.time}">time</td>
-				<td th:text="${event.namespace}">namespaceEx</td>
-				<td th:text="${event.eventName}">eventNameEx</td>
-				<td th:text="${event.payload}">payloadEx</td>
-			</tr>
-			<tr>
-				<td>Quantity:</td>
-				<td th:text="${overdueQ}"></td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<h4>Unmatched content</h4>
-	<table id="outstandingTable" class="table table-striped tablesorter">
-		<thead>
-			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				</tr>
-		</thead>
-		<tbody>
-			<tr th:each="event: ${outstanding}">
-				<td th:text="${event.id}">id</td>
-				<td th:text="${event.time}">time</td>
-				<td th:text="${event.namespace}">namespaceEx</td>
-				<td th:text="${event.eventName}">eventNameEx</td>
-				<td th:text="${event.payload}">payloadEx</td>
-			</tr>
-			<tr>
-				<td>Quantity:</td>
-				<td th:text="${outstandingQ}"></td>
-			</tr>
 		</tbody>
 	</table>
 </body>

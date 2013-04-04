@@ -39,10 +39,10 @@ public class OrderStatusRpt
 	@Named("windowMax")
 	public int MAX;
 	
-	private int delivered=0;
-	private int outstanding=0;
-	private int overdue=0;
-	private int unmatched=0;
+	public int delivered=0;
+	public int outstanding=0;
+	public int overdue=0;
+	public int unmatched=0;
 		
 	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
@@ -82,12 +82,14 @@ public class OrderStatusRpt
 	}
 		
 	 
-	private List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
+	public List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating orderStatus list");
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
 		
 		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+		logger.info("MAX: " + MAX);
+		logger.info("PACKAGELIST: " + queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX));
 		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
 			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
 			packages.add(currentPack);
@@ -208,7 +210,7 @@ public class OrderStatusRpt
 		return processors;
 	}
 	
-	private void setStats (List<OrderStatus> events)
+	public void setStats (List<OrderStatus> events)
 	{
 		for (OrderStatus event : events)
 		{
