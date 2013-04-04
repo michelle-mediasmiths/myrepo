@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -1039,6 +1040,13 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForTitle(String titleID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
