@@ -65,12 +65,16 @@ public class IngestCompleteHandler extends UpdateAttributeHandler
 			return; // not ready for qc after the attribute update, nothing more to do.
 		}
 
-		if ((!readyForQCBefore) && readyForQCAfter)
+		if ((!readyForQCBefore) && readyForQCAfter) // ought to always be true if we have got this far but put in anyway to made the conditions explicit
 		{
 			log.info(String.format("Asset %s (%s) was not ready for qc and now is", houseID, assetID));
 
 			// finish any ingest tasks or other on ingest logic
 
+		}
+		else
+		{
+			log.error("did not expect to reach this line, check logic in IngestCompleteHandler.process");
 		}
 
 	}
@@ -118,7 +122,7 @@ public class IngestCompleteHandler extends UpdateAttributeHandler
 
 			try
 			{
-				//get file location, do not accept paths not on hires (preferred locations)
+				// get file location, do not accept paths not on hires (preferred locations)
 				String assetPath = materialController.getAssetPath(assetID, false);
 				log.debug(String.format("asset is at %s material is ready for qc", assetPath));
 				return true;
