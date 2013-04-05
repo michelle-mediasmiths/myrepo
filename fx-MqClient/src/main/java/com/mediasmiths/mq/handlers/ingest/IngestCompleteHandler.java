@@ -118,6 +118,7 @@ public class IngestCompleteHandler extends UpdateAttributeHandler
 
 			try
 			{
+				//get file location, do not accept paths not on hires (preferred locations)
 				String assetPath = materialController.getAssetPath(assetID, false);
 				log.debug(String.format("asset is at %s material is ready for qc", assetPath));
 				return true;
