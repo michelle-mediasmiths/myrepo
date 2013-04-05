@@ -1,28 +1,26 @@
 package com.mediasmiths.mayam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
-
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.MayamApiException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.ruzz.DetailType; 
-import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.mayam.validation.MayamValidator;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public interface MayamClient
 {

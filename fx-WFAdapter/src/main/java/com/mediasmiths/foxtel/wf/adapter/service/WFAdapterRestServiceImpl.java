@@ -6,7 +6,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -353,22 +353,34 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		// based on email notifications version 7 220213
 		// saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
 
+		com.mediasmiths.foxtel.ip.common.events.TcNotification tcFailure = new com.mediasmiths.foxtel.ip.common.events.TcNotification();
+
 		try
 		{
+            tcFailure.setAssetID(notification.getAssetID());
+			tcFailure.setTaskID(notification.getTaskID()+"");
+			tcFailure.setTitle(notification.getTitle());
+
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
 				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
+
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
 			}
 			else
 			{
 				// auto qc was for export task
 				mayamClient.exportFailed(notification.getTaskID());
+
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
 			}
 		}
 		catch (MayamClientException e)
 		{
 			log.error("Failed to fail task!", e);
+			events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+
 			throw e;
 		}
 
