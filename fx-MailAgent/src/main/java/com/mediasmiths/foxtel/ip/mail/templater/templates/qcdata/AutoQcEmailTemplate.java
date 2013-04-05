@@ -31,8 +31,8 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 
 		Emailaddresses emailaddresses = getEmailaddresses();
 		List<String> channelGroups = aqce.getChannelGroup();
-
 		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
+		
 		t.setSubject(String.format(getSubject(), aqce.getAssetId(), aqce.getTitle()));
 		t.setBody(String.format(getBody(), aqce.getTitle(), aqce.getAssetId()));
 

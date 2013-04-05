@@ -186,7 +186,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			}
 			catch (Exception e)
 			{
-				log.error("error determinging channel groups for event", e);
+				log.error("error determining channel groups for event", e);
 			}
 
 
