@@ -29,8 +29,8 @@ public class ChannelConditionEmailTemplater extends MailTemplate implements Emai
 
 		Emailaddresses emailaddresses = getEmailaddresses();
 		List<String> channelGroups = ccf.getChannelGroup();
-		
 		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
+		
 		t.setSubject(String.format(getSubject(), ccf.getMaterialID()));
 		t.setBody(String.format(getBody()));
 
