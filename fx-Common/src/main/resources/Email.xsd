@@ -35,6 +35,7 @@
 				minOccurs="1" />
 			<xs:element name="emailaddresses" type="fns:emailaddresses"
 				maxOccurs="1" />
+            <xs:element name="fileAttachments" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
 		</xs:sequence>
 		<xs:attribute name="class" type="xs:string" />
 	</xs:complexType>

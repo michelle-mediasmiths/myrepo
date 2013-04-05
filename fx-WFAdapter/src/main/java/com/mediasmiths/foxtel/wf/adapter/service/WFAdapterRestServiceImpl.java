@@ -295,7 +295,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	 *
 	 * @param jobName
 	 * @return the list of cerify QC report files defines for the jobname.
-	 * 
+	 *
 	 */
 	private Collection<File> getQCFiles(final String jobName)
 	{
