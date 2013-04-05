@@ -268,7 +268,36 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 	}
 
-	private void attachQcReports(final String assetID, final String jobName) throws MayamClientException
+	private Collection<File> attachQcReports(final String assetID, final String jobName) throws MayamClientException
+	{
+		Collection<File> reports = getQCFiles(jobName);
+
+		// attach report(s) to item
+
+		for (File file : reports)
+		{
+			if (attachQcReports)
+			{
+				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
+
+				log.info(String.format(
+						"attach file {%s} to material using ardome path {%s}",
+						file.getAbsolutePath(),
+						ardomeFilePath));
+				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
+			}
+		}
+
+		return reports;
+	}
+
+	/**
+	 *
+	 * @param jobName
+	 * @return the list of cerify QC report files defines for the jobname.
+	 * 
+	 */
+	private Collection<File> getQCFiles(final String jobName)
 	{
 		// find report pdfs
 		IOFileFilter reportPDFAcceptor = new IOFileFilter()
@@ -295,22 +324,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 		};
 
-		Collection<File> reports = FileUtils.listFiles(new File(cerifyReportLocation), reportPDFAcceptor, reportPDFAcceptor);
-		// attach report(s) to item
-
-		for (File file : reports)
-		{
-			if (attachQcReports)
-			{
-				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
-
-				log.info(String.format(
-						"attach file {%s} to material using ardome path {%s}",
-						file.getAbsolutePath(),
-						ardomeFilePath));
-				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
-			}
-		}
+		return FileUtils.listFiles(new File(cerifyReportLocation), reportPDFAcceptor, reportPDFAcceptor);
 	}
 
 	@Override
@@ -751,11 +765,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			qcErrorNotification.setAssetId(payload.getAssetId());
 			qcErrorNotification.setForTXDelivery(payload.isForTXDelivery());
 			qcErrorNotification.setTitle(payload.getTitle());
+			for (File qcFile : getQCFiles(payload.getJobName()))
+			{
+                qcErrorNotification.getQcReportFilePath().add(qcFile.getAbsolutePath());
+			}
 			events.saveEvent(nameSpace, name, qcErrorNotification);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+			log.error("Event serialisation issue: ", e);
 		}
 	}
 
