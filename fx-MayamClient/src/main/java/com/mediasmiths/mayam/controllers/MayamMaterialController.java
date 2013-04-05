@@ -1478,6 +1478,10 @@ public class MayamMaterialController extends MayamController
 	}
 	
 	public String getAssetPath(String assetID) throws MayamClientException{
+		return getAssetPath(assetID,true);
+	}
+	
+	public String getAssetPath(String assetID, boolean acceptNonPreferredLocations) throws MayamClientException{
 
 		FileFormatInfo fileinfo;
 		try
@@ -1524,12 +1528,20 @@ public class MayamMaterialController extends MayamController
 				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
 			}
 		}
-		if (nixPath != null) 
+		if (acceptNonPreferredLocations)
 		{
-			log.info("No preferred location found, using :" + nixPath);
-			return nixPath;
+			if (nixPath != null)
+			{
+				log.info("No preferred location found, using :" + nixPath);
+				return nixPath;
+			}
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 		}
-		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION);
+		}
+		
 	}
 
 	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException

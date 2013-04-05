@@ -40,6 +40,7 @@ import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
@@ -154,6 +155,8 @@ public class IncomingListener extends MqClientListener
 	PendingTxUpdateHandler pendingTxUpdate;
 	@Inject
 	MaterialProtectHandler materialProtected;
+	@Inject
+	IngestCompleteHandler ingestCompleteHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -361,6 +364,7 @@ public class IncomingListener extends MqClientListener
 		
 		try
 		{
+			passEventToUpdateHandler(ingestCompleteHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialProtected, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
