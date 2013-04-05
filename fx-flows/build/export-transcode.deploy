@@ -5,28 +5,28 @@
   <dd:provide partnerLink="transcodeAndCallerPlkVar">
     <dd:service name="this:CanonicServiceForcaller" port="canonicPort"></dd:service>
   </dd:provide>
-  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk1Var">
-    <dd:service name="deleteJob:restService" port="httpPort"/>
-  </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk2Var">
-    <dd:service name="queryJob:restService" port="httpPort"/>
+  <dd:invoke partnerLink="transcodeAndPoolForHttpPortPlkVar">
+    <dd:service name="delete:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk0Var">
     <dd:service name="createJob:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk1Var">
-    <dd:service name="tcFailure:restService" port="httpPort"/>
+  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk2Var">
+    <dd:service name="queryJob:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk0Var">
     <dd:service name="isTaskCancelled:restService" port="httpPort"/>
   </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk1Var">
+    <dd:service name="deleteJob:restService" port="httpPort"/>
+  </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk2Var">
     <dd:service name="tcPassed:restService" port="httpPort"/>
   </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk1Var">
+    <dd:service name="tcFailure:restService" port="httpPort"/>
+  </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var">
     <dd:service name="tcTotalFailure:restService" port="httpPort"/>
-  </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndPoolForHttpPortPlkVar">
-    <dd:service name="delete:restService" port="httpPort"/>
   </dd:invoke>
 </dd:process>

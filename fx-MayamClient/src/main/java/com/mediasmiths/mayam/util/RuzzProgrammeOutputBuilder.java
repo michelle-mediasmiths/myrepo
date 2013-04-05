@@ -105,8 +105,6 @@ public class RuzzProgrammeOutputBuilder
 		AttributeMap titleAttributes = pack.getTitleAttributes();
 
 		ret.setEXTCLIPUMID(pack.getPackageId());
-		log.info("Ruzz programme output builder: EXTCLIPUMID is set to " + ret.getEXTCLIPUMID());
-		
 		ret.setCATALOGCODE("");
 
 		setTitle(ret, pack);
