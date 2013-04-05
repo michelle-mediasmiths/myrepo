@@ -1056,4 +1056,11 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

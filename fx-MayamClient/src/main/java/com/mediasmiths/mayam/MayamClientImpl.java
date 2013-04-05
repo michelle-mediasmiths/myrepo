@@ -1158,4 +1158,16 @@ public class MayamClientImpl implements MayamClient
 		return channelGroups;		
 	}
 
+	@Override
+	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
+	{
+		AttributeMap materialAttributes = getMaterialAttributes(materialId);
+		if (materialAttributes == null)
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+
+		return getChannelGroupsForItem(materialAttributes);
+	}
+
 }

@@ -179,4 +179,10 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 		mayamClient.updateMaterial(details, materialID);
 	}
 
+	@Override
+	protected String getMaterialIDFromMessage(RuzzIngestRecord message)
+	{
+		return message.getMaterial().getMaterialID();
+	}
+
 }

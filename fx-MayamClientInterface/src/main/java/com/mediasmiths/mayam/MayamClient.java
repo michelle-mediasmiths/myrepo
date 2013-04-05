@@ -352,4 +352,6 @@ public interface MayamClient
 
 	Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException;
 	
+	Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException;
+	
 }

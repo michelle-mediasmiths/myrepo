@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
@@ -100,9 +101,35 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 			switch (result)
 			{
-				case MATERIAL_IS_NOT_PLACEHOLDER:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
-					break;
+				case MATERIAL_IS_NOT_PLACEHOLDER:{
+						try
+						{
+							try
+							{
+								//associate this email with channel groups
+								
+								@SuppressWarnings("unchecked")
+								T unmarshalled = (T) unmarhsaller.unmarshal(new File(filePath));
+								String materialID = getMaterialIDFromMessage(unmarshalled);
+								Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+								pickupNotification.getChannelGroup().addAll(channelGroups);
+							}
+							catch (Exception e)
+							{
+								logger.error("error determining channel groups for event", e);
+							}
+
+							eventService.saveEvent(
+									"http://www.foxtel.com.au/ip/content",
+									"PlaceholderAlreadyHasMedia",
+									pickupNotification);
+						}
+						catch (Exception e)
+						{
+							logger.error("exception sending PlaceholderAlreadyHasMedia event");
+						}
+						break;
+				}
 				case TITLE_DOES_NOT_EXIST:
 //					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
 					break;
@@ -122,6 +149,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.error("Unable to send events: ", e);
 		}
 	}
+	
+	protected abstract String getMaterialIDFromMessage(T message);
 	
 	/**
 	 * Called when an mxf has arrived

@@ -35,13 +35,24 @@ public class EmailListGroupFilter
 			List<Emailaddress> emails = original.getEmailaddress();
 			Emailaddresses sendto = new Emailaddresses();
 
+			boolean hasAO = channelGroups.contains("AO");
+			
+			log.debug("has ao group:"+hasAO);
+			
 			for (Emailaddress email : emails)
 			{
 				log.debug(String.format("email {%s} group {%s}", email.getValue(),email.getChannelGroup()));
 				
 				if (StringUtils.isEmpty(email.getChannelGroup()))
-				{ // if email address is not associated with a group then always use it
-					sendto.getEmailaddress().add(email);
+				{ // if email address is not associated with a group then always use it, unless the AO group is present
+					
+					if(!hasAO){
+						log.trace("adding "+email.getValue());
+						sendto.getEmailaddress().add(email);
+					}
+					else{
+						log.debug("not sending ao related email to "+email.getValue());
+					}
 				}
 				else if (channelGroups.contains(email.getChannelGroup()))
 				{
