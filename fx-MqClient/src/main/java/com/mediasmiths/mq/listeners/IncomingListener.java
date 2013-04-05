@@ -40,7 +40,7 @@ import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
-import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
@@ -101,7 +101,7 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	FixAndStitchCancelHandler fixAndStitchCancelHandler;
 	@Inject
-	IngestCompleteHandler ingestCompleteHandler;
+	IngestTaskCompleteHandler ingestTaskCompleteHandler;
 	@Inject
 	InitiateQcHandler initiateQcHandler;
 	@Inject
@@ -256,7 +256,7 @@ public class IncomingListener extends MqClientListener
 				
 				
 				//tasks
-				passEventToHandler(ingestCompleteHandler,currentAttributes);
+				passEventToHandler(ingestTaskCompleteHandler,currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
