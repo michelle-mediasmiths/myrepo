@@ -104,7 +104,7 @@ public class RuzzProgrammeOutputBuilder
 
 		AttributeMap titleAttributes = pack.getTitleAttributes();
 
-		ret.setEXTCLIPUMID("");
+		ret.setEXTCLIPUMID(pack.getPackageId());
 		ret.setCATALOGCODE("");
 
 		setTitle(ret, pack);
