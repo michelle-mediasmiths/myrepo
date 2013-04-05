@@ -31,7 +31,15 @@ import java.util.Set;
 public class MayamPDPImpl implements MayamPDP
 {
 
-	// Error Messages
+	// Messages
+
+	@Inject
+	@Named("message.txsend")
+	String messageTXSend;
+
+	@Inject
+	@Named("message.qcparallel.warning")
+	String messageQCParallelWarning;
 
 	@Inject
 	@Named("message.task.technical")
@@ -154,9 +162,9 @@ public class MayamPDPImpl implements MayamPDP
 	{
 		try
 		{
-			String warnings="";
+			String warnings = "";
 
-			logger.info("Segment Mismatch Check.");
+			logger.debug("Segment Mismatch Check.");
 
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
 
@@ -195,7 +203,7 @@ public class MayamPDPImpl implements MayamPDP
 					{
 						logger.debug("User can override a segment mismatch for " + presentationID);
 
-						warnings = messageSegmentMismatchOverride;
+						warnings += messageSegmentMismatchOverride;
 					}
 					else
 					{
@@ -247,7 +255,7 @@ public class MayamPDPImpl implements MayamPDP
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
 
-					return getConfirmStatus(warnings+" Pressing CONFIRM will send this media into the TX domain. Please ensure this material is segmented correctly and ready for transmission before proceeding.");
+					return getConfirmStatus(formHTMLList(warnings, messageTXSend));
 				}
 
 				Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
@@ -255,13 +263,13 @@ public class MayamPDPImpl implements MayamPDP
 				{
 					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
 	
-					return getConfirmStatus(warnings+" QC Parallel has been set but Auto QC has not yet been passed. Are you sure you wish to proceed?");
+					return getConfirmStatus(formHTMLList(warnings, messageQCParallelWarning, messageTXSend));
 				}
 			}
 			else 
 			{
 				logger.info("Unable to locate parent asset for : " + presentationID);
-				return getConfirmStatus(warnings+" Unable to locate parent asset to check QC status. Are you sure you wish to proceed?");
+				return getConfirmStatus(formHTMLList(warnings, " Unable to locate parent asset to check QC status", messageTXSend));
 			}
 			
 			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
@@ -273,6 +281,7 @@ public class MayamPDPImpl implements MayamPDP
 			return getErrorStatus("Mayam Comms Error:  unable to retrieve required data to complete Segmentation operation");
 		}
 	}
+
 
 	@Override
 	public String segmentation(final String attributeMapStr)
@@ -1260,6 +1269,16 @@ public class MayamPDPImpl implements MayamPDP
 
 
 
+	private String formHTMLList(final String... warnings)
+	{
+		String composite="<ul>";
+
+		for (String s : warnings)
+		   if (s != null && s.length() != 0)
+               composite += "<li>" + s + "</li>";
+
+		return composite + "</ul>";
+	}
 
 
 }

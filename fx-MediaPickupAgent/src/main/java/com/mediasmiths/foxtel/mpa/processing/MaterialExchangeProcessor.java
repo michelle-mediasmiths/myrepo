@@ -14,6 +14,7 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
+import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -243,8 +244,6 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 //	}
 
 
-	
-
 	protected AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<Material> unmatchedMessage)
 	{
 		if (Util.isProgramme(unmatchedMessage.getMessage()))
@@ -262,4 +261,17 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material> {
 			return null;
 		}	
 	}
+
+	@Override
+	protected String getMaterialIDFromMessage(Material message)
+	{
+		if(! Util.isProgramme(message)){
+			logger.error("cannot return a material id for marketing material");
+			throw new IllegalArgumentException("Marketing material message does not have a material ID");
+		}
+		
+		return message.getTitle().getProgrammeMaterial().getMaterialID();  
+	}
+
+
 }

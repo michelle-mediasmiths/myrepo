@@ -1,6 +1,7 @@
 package com.mediasmiths.mq.handlers.preview;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 
@@ -110,6 +111,16 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 				pf.setDate((new Date()).toString());
 				pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 				pf.setAssetId(houseID);
+				
+				try
+				{
+					Set<String> channelGroups = mayamClient.getChannelGroupsForItem(messageAttributes);
+					pf.getChannelGroup().addAll(channelGroups);
+				}
+				catch (Exception e)
+				{
+					log.error("error determining channel groups for event", e);
+				}
 				
 				eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewPassedReorder", pf);
 			}

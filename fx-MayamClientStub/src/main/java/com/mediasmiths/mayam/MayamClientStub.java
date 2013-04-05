@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -42,7 +43,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.mayam.validation.MayamValidator;
  
 public class MayamClientStub implements MayamClient
@@ -1039,6 +1040,27 @@ public class MayamClientStub implements MayamClient
 	{
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForTitle(String titleID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

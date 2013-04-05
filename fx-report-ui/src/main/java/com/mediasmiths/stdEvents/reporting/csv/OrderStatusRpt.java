@@ -35,13 +35,18 @@ public class OrderStatusRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	private int delivered=0;
-	private int outstanding=0;
-	private int overdue=0;
-	private int unmatched=0;
+	@Inject
+	@Named("windowMax")
+	public int MAX;
+	
+	public int delivered=0;
+	public int outstanding=0;
+	public int overdue=0;
+	public int unmatched=0;
 		
 	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
+		logger.info("List size: " + events.size());
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
 		setStats(orders);
 		OrderStatus del = addStats("Total Delivered", Integer.toString(delivered));
@@ -77,30 +82,45 @@ public class OrderStatusRpt
 	}
 		
 	 
-	private List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
+	public List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating orderStatus list");
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
+		
+		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+		logger.info("MAX: " + MAX);
+		logger.info("PACKAGELIST: " + queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX));
+		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
+			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
+			packages.add(currentPack);
+		}
+		logger.info("AddOrUpdatePackage messages deserialised, total: " + packages.size());
+		
+		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
+		for (EventEntity material : queryApi.getByEventNameWindow("AddOrUpdateMaterial", MAX)) {
+			AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(material);
+			materials.add(currentMaterial);
+		}
+		logger.info("AddOrUpdateMaterial messages deserialised, total: " + materials.size());
+		
 		for (EventEntity event : events)
 		{
 			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
 			
-			AddOrUpdatePackage pack = new AddOrUpdatePackage();
-			for (EventEntity packEvent : queryApi.getByEventName("AddOrUpdatePackage"))
+			AddOrUpdatePackage matchingPack = new AddOrUpdatePackage();
+			for (AddOrUpdatePackage pack : packages) 
 			{
-				AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(packEvent);
-				if (currentPack.getTitleID().equals(title.getTitleID())) {
-					pack = currentPack;
+				if (pack.getTitleID().equals(title.getTitleID())) {
+					matchingPack = pack;
 					logger.info("package found");
 				}
 			}
 			
-			AddOrUpdateMaterial material = new AddOrUpdateMaterial();
-			for (EventEntity materialEvent : queryApi.getByEventName("AddOrUpdateMaterial"))
+			AddOrUpdateMaterial matchingMaterial = new AddOrUpdateMaterial();
+			for (AddOrUpdateMaterial material : materials)
 			{
-				AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(materialEvent);
-				if (currentMaterial.getMaterialID().equals(pack.getMaterialID())) {
-					material = currentMaterial;
+				if (material.getMaterialID().equals(matchingPack.getMaterialID())) {
+					matchingMaterial = material;
 					logger.info("material found");
 				}
 			}
@@ -108,14 +128,14 @@ public class OrderStatusRpt
 			OrderStatus order = new OrderStatus();
 			order.setDateRange(startDate + " - " + endDate);
 			order.setTitle(title.getTitle());
-			order.setMaterialID(pack.getMaterialID());
+			order.setMaterialID(matchingPack.getMaterialID());
 			order.setChannels(title.getChannels());
-			order.setRequiredBy(pack.getRequiredBy());
+			order.setRequiredBy(matchingPack.getRequiredBy());
 			if (event.getEventName().equals("UnmatchedContentAvailable"))
 				order.setTaskType("Unmatched");
 			else
 				order.setTaskType("Ingest");
-			order.setCompletionDate(material.getCompletionDate());
+			order.setCompletionDate(matchingMaterial.getCompletionDate());
 			
 			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
 			{
@@ -190,7 +210,7 @@ public class OrderStatusRpt
 		return processors;
 	}
 	
-	private void setStats (List<OrderStatus> events)
+	public void setStats (List<OrderStatus> events)
 	{
 		for (OrderStatus event : events)
 		{

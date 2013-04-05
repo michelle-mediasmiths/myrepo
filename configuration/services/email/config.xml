@@ -8,15 +8,15 @@
 			<subject>Auto QC Fail in MAM: TaksId(%s), TitleId(%s), Title(%s)</subject>
 			<body><![CDATA[Item is on the Auto QC Fail worklist. Asset(%s).<p/>Please resolve this matter within 90-days otherwise item will be purged without further notification.]]></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -55,15 +55,15 @@
 			Dear Promo Producer, please check whether this failed item impacts your promo production work.
 			</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -74,15 +74,15 @@
 				<subject>Channel conditions found during qc for material %s</subject>
 				<body>Channel conditions were reported for this material during QC, it will be sent to Cerify</body>
 				<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-					<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-					<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+					<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 				</emailaddresses>
 			</MailTemplate>
 	</MailData>
@@ -237,13 +237,13 @@
 			<subject>%s (%s) Purge Not Processed</subject>
 			<body>Purge request not processed, as item is "MAM Protected"</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -270,22 +270,22 @@
 			<subject>Preview Fail Item in MAM: MediaId(%s) Title(%s)</subject>
 			<body><![CDATA[There is a new item on the Preview Fail worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -296,14 +296,14 @@
 			<subject>Pass-Reorder Item in MAM: MediaId(%s) Title(%s)</subject>
 			<body><![CDATA[There is a new item on the Pass-Reorder worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -413,8 +413,10 @@
 			<subject>Placeholder File(%s) already has media</subject>
 			<body>Media already exists for this placeholder (%s). Check item and contact ESS.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_Preview@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -436,7 +438,7 @@
 		<eventname>ProgrammeFileIngestFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome import has failed, for AssetId(%s), JobId(%s)</subject>
-			<body>ProgrammeFileIngestFailure</body>
+			<body>Item has failed to successfully auto-import to Ardome</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>

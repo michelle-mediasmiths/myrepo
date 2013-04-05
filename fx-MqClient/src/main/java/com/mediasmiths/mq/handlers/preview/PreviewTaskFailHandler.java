@@ -14,6 +14,7 @@ import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
+import java.util.Set;
 
 public class PreviewTaskFailHandler extends TaskStateChangeHandler
 {
@@ -58,6 +59,16 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 			pf.setAssetId(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)); 
 
+			try
+			{
+				Set<String> channelGroups = mayamClient.getChannelGroupsForItem(messageAttributes);
+				pf.getChannelGroup().addAll(channelGroups);
+			}
+			catch (Exception e)
+			{
+				log.error("error determining channel groups for event", e);
+			}
+			
 			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewFailed", pf);
 
 		}

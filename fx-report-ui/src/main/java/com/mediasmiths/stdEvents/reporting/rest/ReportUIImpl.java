@@ -5,19 +5,21 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
+import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
+import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
+import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.TemplateCall;
 import com.mediasmiths.std.guice.thymeleaf.Templater;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -178,24 +180,16 @@ public class ReportUIImpl implements ReportUI
 	public boolean checkDate(Long eventTime)
 	{
 		boolean within = false;
-		logger.info("getting valid " + eventTime + " " + startLong);
+		//logger.info("getting valid " + eventTime + " " + startLong);
 		
 		int startComp = eventTime.compareTo(startLong);
 		int endComp = eventTime.compareTo(endLong);
-		logger.info("Start compare: " + startComp + " End compare: " + endComp);
+		//logger.info("Start compare: " + startComp + " End compare: " + endComp);
 		if ((startComp > 0) && (endComp < 0))
 		{
 			within = true;
 		}
 		return within;
-	}
-	
-	public Date longToCal(Long longDate)
-	{
-		Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(longDate);
-		Date date = cal.getTime();
-		return date;
 	}
 	
 	private List<EventEntity> getInDate(List<EventEntity> events)
@@ -230,8 +224,88 @@ public class ReportUIImpl implements ReportUI
 	public void getOrderStatusCSV()
 	{
  		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
- 		List<EventEntity> orders = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateOrUpdateTitle", MAX));
+ 		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
+ 		logger.info("List size: " + orders.size());
 		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
+	}
+	
+	private List<OrderStatus> getReportList(List<EventEntity> events)
+	{
+		List<OrderStatus> orders = new ArrayList<OrderStatus>();
+		
+		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
+			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
+			packages.add(currentPack);
+		}
+		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
+		for (EventEntity material : queryApi.getByEventNameWindow("AddOrUpdateMaterial", MAX)) {
+			AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(material); 
+			materials.add(currentMaterial);
+		}
+		
+		for (EventEntity event : events)
+		{
+			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+			
+			AddOrUpdatePackage matchingPack = new AddOrUpdatePackage();
+			for (AddOrUpdatePackage pack : packages) {
+				if (pack.getTitleID().equals(title.getTitleID())) {
+					matchingPack = pack;
+				}
+			}
+			AddOrUpdateMaterial matchingMaterial = new AddOrUpdateMaterial();
+			for (AddOrUpdateMaterial material : materials) {
+				if (material.getMaterialID().equals(matchingPack.getMaterialID())) {
+					matchingMaterial = material;
+				}
+			}
+			
+			OrderStatus order = new OrderStatus();
+			order.setDateRange(startDate + " - " + endDate);
+			order.setTitle(title.getTitle());
+			order.setMaterialID(matchingPack.getMaterialID());
+			order.setChannels(title.getChannels());
+			order.setRequiredBy(matchingPack.getRequiredBy());
+			if (event.getEventName().equals("UnmatchedContentAvailable"))
+				order.setTaskType("Unmatched");
+			else
+				order.setTaskType("Ingest");
+			order.setCompletionDate(matchingMaterial.getCompletionDate());
+			
+			orders.add(order);
+		}
+		logger.info("Orders length: " + orders.size());
+		return orders;
+	}
+	
+	private Object unmarshall(EventEntity event)
+	{
+		Object placeholder = null;
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload " + payload);
+
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
+			logger.info("Deserialising payload");
+			placeholder = JAXB_SERIALISER.deserialise(payload);
+			logger.info("Object created");
+		}
+		catch (Exception e)		
+		{
+			e.printStackTrace();
+		}	
+		return placeholder;
+	}
+	
+	@Transactional
+	public String getOrderStatusUI()
+	{
+		final TemplateCall call = templater.template("order_status");
+		List<OrderStatus> orders = getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", MAX)));
+		call.set("orders", orders);
+		return call.process();
 	}
 
 	@Transactional
@@ -302,6 +376,18 @@ public class ReportUIImpl implements ReportUI
 		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)));
 		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
 	}
+	
+	@Transactional
+	public String getPurgeContentUI()
+	{
+		TemplateCall call = templater.template("purge_content");
+		PurgeContentRpt report = new PurgeContentRpt();
+		List<PurgeContent> purged = report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX)), startDate, endDate);
+		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)), startDate, endDate));
+		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)), startDate, endDate));
+		call.set("purged", purged);
+		return call.process();
+	}
 
 	@Transactional
 	public void getComplianceEditCSV()
@@ -345,8 +431,7 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
-
-
+	
 //	@Transactional
 //	public String getOrderStatusUI()
 //	{

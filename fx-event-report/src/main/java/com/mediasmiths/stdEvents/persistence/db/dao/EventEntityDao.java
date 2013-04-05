@@ -20,6 +20,8 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 	
 	public List<EventEntity> namespacePaginated(String namespace, int start, int max);
 	
+	public List<EventEntity> eventnamePaginated(String eventname, int start, int max);	
+	
 	public List<EventEntity> findUniquePaginated(String namespace, String eventName, int start, int max);
 
 }

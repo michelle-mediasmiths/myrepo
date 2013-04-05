@@ -251,6 +251,24 @@ public class MayamPackageController extends MayamController
 
 	public void createSegmentList(String presentationID, String materialAssetID, SegmentList segmentList) throws MayamClientException
 	{
+		
+		try
+		{
+			log.debug("searching for segment list before trying to create it");
+			SegmentList s = client.segmentApi().getSegmentListBySiteId(presentationID);
+
+			if (s != null)
+			{
+				//segment list already exists!
+				log.error("segment list with id "+presentationID+" already exits!");
+				throw new MayamClientException(MayamClientErrorCode.PACKAGE_ALREADY_EXISTS);
+			}
+		}
+		catch (RemoteException e1)
+		{
+			log.warn("exception thrown searching for package, assuming it doesnt exist",e1);
+		}
+		
 		try
 		{
 			String revisionID = RevisionUtil.findHighestRevision(materialAssetID, client);

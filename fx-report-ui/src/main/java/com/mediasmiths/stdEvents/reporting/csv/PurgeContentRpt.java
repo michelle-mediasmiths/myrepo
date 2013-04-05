@@ -18,12 +18,10 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
 import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
-import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.PurgeRT;
 
 public class PurgeContentRpt
 {
@@ -51,7 +49,7 @@ public class PurgeContentRpt
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
 			purge = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
@@ -71,22 +69,26 @@ public class PurgeContentRpt
 		{
 			PurgeContent purge = new PurgeContent();
 			purge.setDateRange(startDate + " - " + endDate);
+			
 			if (event.getEventName().equals("PurgeTitle"))
 			{
 				PurgeTitle title = (PurgeTitle) unmarshall(event);
+				purge.setEntityType("Item");
 				purge.setMaterialID(title.getTitleID());
 			}
 			
 			if (event.getEventName().equals("DeleteMaterial"))
 			{
 				PurgeMaterial material = (PurgeMaterial) unmarshall(event);
+				purge.setEntityType("Subprogramme");
 				purge.setMaterialID(material.getMaterialID());
 			}
 			
 			if (event.getEventName().equals("DeletePackage"))
 			{
 				PurgePackage pack = (PurgePackage) unmarshall(event);
-				purge.setMaterialID(pack.getTitleID());
+				purge.setEntityType("TX Package");
+				purge.setMaterialID(pack.getPackageID());
 			}
 
 			purgeList.add(purge);

@@ -52,8 +52,8 @@ public class WFAdapterModule extends AbstractModule
 	}
 
 	@Provides
-	@Named("ruzz.marshaller")
-	Marshaller provideRuzzMarshaller(@Named("ruzz.context") JAXBContext jc) throws JAXBException, SAXException
+	@Named("outputruzz.marshaller")
+	Marshaller provideRuzzMarshaller(@Named("outputruzz.context") JAXBContext jc) throws JAXBException, SAXException
 	{
 		Marshaller marshaller = null;
 		try
@@ -108,13 +108,13 @@ public class WFAdapterModule extends AbstractModule
 	}
 
 	@Provides
-	@Named("ruzz.context")
+	@Named("outputruzz.context")
 	JAXBContext provideRuzzJAXBContext() throws JAXBException
 	{
 		JAXBContext jc = null;
 		try
 		{
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.ruzz");
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.outputruzz");
 		}
 		catch (JAXBException e)
 		{

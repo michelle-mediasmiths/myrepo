@@ -1,11 +1,8 @@
 package com.mediasmiths.stdEvents.reporting.rest;
 
-import java.util.Date;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
@@ -60,11 +57,6 @@ public interface ReportUI
 	public void saveEndDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
 	
 	@GET
-	@Path("/long_to_cal/date")
-	@Produces("text/html")
-	public Date longToCal(@QueryParam("date")Long date);
-	
-	@GET
 	@Path("/report_name/name")
 	@Produces("text/html")
 	public void saveReportName(@QueryParam("name")String name);
@@ -73,6 +65,11 @@ public interface ReportUI
 	@Path("/order_status_csv")
 	@Produces("text/html")
 	public void getOrderStatusCSV();
+	
+	@GET
+	@Path("/order_status_ui")
+	@Produces("text/html")
+	public String getOrderStatusUI();
 	
 	@GET
 	@Path("/acquisition_report_csv")
@@ -98,6 +95,11 @@ public interface ReportUI
 	@Path("/purge_content_csv")
 	@Produces("text/html")
 	public void getPurgeContentCSV();
+	
+	@GET
+	@Path("/purge_content_ui")
+	@Produces("text/html")
+	public String getPurgeContentUI();
 
 	@GET
 	@Path("/compliance_edit_csv")
@@ -124,10 +126,7 @@ public interface ReportUI
 	@Produces("text/html")
 	public String displayPath(@QueryParam("path")String path);
 	
-//	@GET
-//	@Path("/order_status_ui")
-//	@Produces("text/html")
-//	public String getOrderStatusUI();
+
 //	
 //	@GET
 //	@Path("/order_status_pdf")
@@ -185,10 +184,6 @@ public interface ReportUI
 //	@Produces("text/html")
 //	public void getAutoQCPDF();
 //	
-//	@GET
-//	@Path("/purge_content_ui")
-//	@Produces("text/html")
-//	public String getPurgeContentUI();
 //	
 //	@GET
 //	@Path("/purge_content_pdf")

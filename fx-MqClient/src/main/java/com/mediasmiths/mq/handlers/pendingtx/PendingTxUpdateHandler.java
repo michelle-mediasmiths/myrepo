@@ -63,7 +63,7 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 				{
 					log.error("error creating segment list", e);
 					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-					updateMap.setAttribute(Attribute.ERROR_MSG, "Error creating segmentlist");
+					updateMap.setAttribute(Attribute.ERROR_MSG, "Error creating segmentlist "+e.getErrorcode().toString());
 					try
 					{
 						taskController.saveTask(updateMap);

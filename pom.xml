@@ -47,6 +47,7 @@
 		<module>fx-PlaceholderAgent</module>
 		<module>fx-PlaceholderManagementSchema</module>
 		<module>fx-Ruzz</module>
+		<module>fx-OutputRuzz</module>
 		<module>fx-TcAdapter</module>
 		<module>fx-TcAdapterAPI</module>
 		<module>fx-WFAdapter</module>

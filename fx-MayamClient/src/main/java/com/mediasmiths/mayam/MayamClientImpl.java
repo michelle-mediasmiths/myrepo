@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -28,7 +29,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -47,8 +48,11 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MayamClientImpl implements MayamClient
 {
@@ -69,7 +73,9 @@ public class MayamClientImpl implements MayamClient
 	MayamTaskController tasksController;
 	@Inject
 	MayamValidator validator;
-
+	
+	@Inject
+	protected ChannelProperties channelProperties;
 
 	@Inject
 	public MayamClientImpl() throws MalformedURLException, IOException
@@ -1110,6 +1116,58 @@ public class MayamClientImpl implements MayamClient
 	public void autoQcErrorForMaterial(String assetId, long taskID) throws MayamClientException
 	{
 		tasksController.autoQcErrorForMaterial(assetId,taskID);
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForTitle(String titleId) throws MayamClientException
+	{
+		if (titleId == null)
+		{
+			log.warn("null titleid passed to getChannelGroupsForTitle");
+			return Collections.<String> emptySet();
+		}
+		else
+
+		{
+			AttributeMap title = titleController.getTitle(titleId);
+			StringList channels = title.getAttribute(Attribute.CHANNELS);
+
+			return channelProperties.groupsForChannels(channels);
+		}
+
+	}
+	
+	@Override
+	public Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException
+	{
+		
+		StringList channels = itemAttributes.getAttribute(Attribute.CHANNELS);
+		Set<String> channelGroups;
+		if (channels == null || channels.isEmpty())
+		{
+			log.debug("no channels found on item, looking for channels on parent title");
+			String titleId = itemAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+			channelGroups = getChannelGroupsForTitle(titleId);
+		}
+		else
+		{
+			log.debug("using channels on item");
+			channelGroups = channelProperties.groupsForChannels(channels);
+		}
+		
+		return channelGroups;		
+	}
+
+	@Override
+	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
+	{
+		AttributeMap materialAttributes = getMaterialAttributes(materialId);
+		if (materialAttributes == null)
+		{
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+		}
+
+		return getChannelGroupsForItem(materialAttributes);
 	}
 
 }

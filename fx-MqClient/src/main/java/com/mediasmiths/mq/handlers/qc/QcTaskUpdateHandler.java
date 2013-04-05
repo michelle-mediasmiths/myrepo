@@ -1,6 +1,8 @@
 package com.mediasmiths.mq.handlers.qc;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -11,7 +13,9 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.mayam.MayamClientException;
@@ -32,6 +36,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 	private final static Logger log = Logger.getLogger(QcTaskUpdateHandler.class);
 
+	@Inject
+	protected ChannelProperties channelProperties;
+	
 	@Inject
 	MuleWorkflowController mule;
 
@@ -172,10 +179,21 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 			aen.setForTXDelivery(false);
 			aen.setTitle(currentAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 
+			try
+			{
+				Set<String> channelGroups = mayamClient.getChannelGroupsForItem(currentAttributes);
+				aen.getChannelGroup().addAll(channelGroups);
+			}
+			catch (Exception e)
+			{
+				log.error("error determining channel groups for event", e);
+			}
+
+
 			String eventName = QC_FAILED_RE_ORDER;
 			String event = serialiser.serialise(aen);
 			String namespace = qcEventNamespace;
-
+			
 			eventsService.saveEvent(eventName, event, namespace);
 		}
 		catch (Exception e)
@@ -289,6 +307,18 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				//create channel conditions found during qc event
 				ChannelConditionsFound ccf = new ChannelConditionsFound();
 				ccf.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+				
+				try
+				{
+					Set<String> channelGroups = mayamClient.getChannelGroupsForItem(currentAttributes);
+					ccf.getChannelGroup().addAll(channelGroups);
+				}
+				catch (Exception e)
+				{
+					log.error("error determinging channel groups for event", e);
+				}
+
+				
 				log.debug("saving event "+CHANNEL_CONDITIONS_FOUND_DURING_QC);
 				eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);				
 			}

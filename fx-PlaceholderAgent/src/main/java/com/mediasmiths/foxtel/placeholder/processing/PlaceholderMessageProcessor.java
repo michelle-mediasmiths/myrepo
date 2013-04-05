@@ -48,6 +48,20 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -475,38 +489,58 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		{
 			logger.error("Failed to create wfe error task", e);
 		}
-		if (resultPackage.getResult() == MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
+		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED)
 		{
 			ProtectedPurgeFail ppf = createPurgeFailedMessage();
 
 			try
 			{
-				Object action = resultPackage.getMessage().getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(
-						0);
+				File deleteFile = new File(filePath);
+				Object unmarshalled = unmarhsaller.unmarshal(deleteFile);
+				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
+				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
+				String titleID = null;
 				if (action instanceof PurgeTitle)
 				{
 					ppf.setAssetType("EPISODE");
-					ppf.setHouseId(((PurgeTitle) action).getTitleID());
+
+					titleID = ((PurgeTitle) action).getTitleID(); 
+
+					ppf.setHouseId(titleID);
 				}
 				else if (action instanceof DeleteMaterial)
 				{
 					ppf.setAssetType("ITEM");
+					titleID = ((DeleteMaterial) action).getTitleID();
 					ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
 				}
 				else if (action instanceof DeletePackage)
 				{
 					ppf.setAssetType("SEGMENT_LIST");
+					titleID = ((DeletePackage) action).getTitleID();
 					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
 				}
 
-				eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail", ppf);
+				if(titleID != null){
+					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
+					ppf.getChannelGroup().addAll(channelsForTitle);
+				}
+
 			}
-			catch (Exception e)
+			catch (JAXBException e)
 			{
-				logger.fatal("error constructing purge protected fail event" + resultPackage.getPp().getRootName(), e);
+				logger.fatal("error unmarshall the filepath " + filePath, e);
+			}
+			catch (ClassCastException cce)
+			{
+				logger.fatal("error in cast the file " + filePath, cce);
+			}
+			catch(MayamClientException e){
+				logger.error("error getting channel groups for title",e);
 			}
 
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
 		else
 		{

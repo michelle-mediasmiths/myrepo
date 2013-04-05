@@ -210,9 +210,9 @@ public class SegmentUtil
 		return ret;
 	}
 	
-	public static com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment convertMayamSegmentToRuzzSegment(Segment s){
+	public static com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment convertMayamSegmentToRuzzSegment(Segment s){
 		
-		com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment rzSeg = new com.mediasmiths.foxtel.generated.ruzz.SegmentListType.Segment();
+		com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment rzSeg = new com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment();
 		
 		String som = s.getIn().toSmpte();
 		String duration = s.getDuration().toSmpte();

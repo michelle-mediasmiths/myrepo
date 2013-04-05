@@ -185,5 +185,10 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp(FileExtensions.MXF).getName();
 		return ret;
 	}
-	
+
+	protected String getMaterialIDFromMessage(RuzzIngestRecord message)
+	{
+		return message.getMaterial().getMaterialID();
+	}
+
 }

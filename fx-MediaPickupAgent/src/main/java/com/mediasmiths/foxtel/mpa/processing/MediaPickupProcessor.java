@@ -37,6 +37,19 @@ import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Set;
+
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
@@ -114,9 +127,35 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 			switch (resultPackage.getResult())
 			{
-				case MATERIAL_IS_NOT_PLACEHOLDER:
-					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
-					break;
+				case MATERIAL_IS_NOT_PLACEHOLDER:{
+						try
+						{
+							try
+							{
+								//associate this email with channel groups
+								
+								@SuppressWarnings("unchecked")
+								T unmarshalled = (T) unmarhsaller.unmarshal(new File(filePath));
+								String materialID = getMaterialIDFromMessage(unmarshalled);
+								Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+								pickupNotification.getChannelGroup().addAll(channelGroups);
+							}
+							catch (Exception e)
+							{
+								logger.error("error determining channel groups for event", e);
+							}
+
+							eventService.saveEvent(
+									"http://www.foxtel.com.au/ip/content",
+									"PlaceholderAlreadyHasMedia",
+									pickupNotification);
+						}
+						catch (Exception e)
+						{
+							logger.error("exception sending PlaceholderAlreadyHasMedia event");
+						}
+						break;
+				}
 				case TITLE_DOES_NOT_EXIST:
 //					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
 					break;
@@ -136,7 +175,9 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.error("Unable to send events: ", e);
 		}
 	}
-
+	
+	protected abstract String getMaterialIDFromMessage(T message);
+	
 	private void failMessageImportMediaAsUnmatched(PickupPackage pp)
 	{
 		logger.info("XML considered failed, media will be imported as unmatched");
@@ -332,48 +373,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 	}
 	
-<<<<<<< HEAD
 	protected abstract AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<T> unmatchedMessage);
-=======
-	@Override
-	protected void aoMismatch(File file)
-	{
-		Object unmarshalled = null;
-		try
-		{
-			unmarshalled = unmarhsaller.unmarshal(file);
-		}
-		catch (JAXBException e)
-		{
-			logger.error("unmarshalling failed", e);
-		}
-
-		if (unmarshalled != null)
-		{
-			@SuppressWarnings("unchecked")
-			T message = (T) unmarshalled;
-
-			// wait for or find mxf to allow files to be quarrentined together
-
-			@SuppressWarnings("rawtypes")
-			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", true,false);
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(materialEnvelope);
-
-			if (mxfFile != null)
-			{
-				logger.info(String.format("found mxf %s for material", mxfFile));
-				moveToAOFolder(mxfFile);
-				moveToAOFolder(file.getAbsolutePath());
-			}
-			else
-			{
-				logger.debug("No matching media found");
-				moveToAOFolder(file.getAbsolutePath());
-			}
-		}
-	}
->>>>>>> 8df966cd38b8e651758708e68662ffbd6d4a58f2
 	
 	class AutoMatchInfo{
 		String siteID;

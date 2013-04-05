@@ -6,7 +6,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
@@ -77,7 +77,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("mex.marshaller")
 	private Marshaller mexMarshaller;
 	@Inject
-	@Named("ruzz.marshaller")
+	@Named("outputruzz.marshaller")
 	private Marshaller ruzzMarshaller;
 	@Inject
 	@Named("wfe.marshaller")
@@ -210,7 +210,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			else
 			{
 				// id is an item id
-				saveEvent("QcFailedReOrder", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcFailedForMaterial(notification.getAssetId(), notification.getTaskID());
 				attachQcReports(notification.getAssetId(), notification.getJobName());
 			}
@@ -269,7 +268,36 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 	}
 
-	private void attachQcReports(final String assetID, final String jobName) throws MayamClientException
+	private Collection<File> attachQcReports(final String assetID, final String jobName) throws MayamClientException
+	{
+		Collection<File> reports = getQCFiles(jobName);
+
+		// attach report(s) to item
+
+		for (File file : reports)
+		{
+			if (attachQcReports)
+			{
+				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
+
+				log.info(String.format(
+						"attach file {%s} to material using ardome path {%s}",
+						file.getAbsolutePath(),
+						ardomeFilePath));
+				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
+			}
+		}
+
+		return reports;
+	}
+
+	/**
+	 *
+	 * @param jobName
+	 * @return the list of cerify QC report files defines for the jobname.
+	 * 
+	 */
+	private Collection<File> getQCFiles(final String jobName)
 	{
 		// find report pdfs
 		IOFileFilter reportPDFAcceptor = new IOFileFilter()
@@ -296,22 +324,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 		};
 
-		Collection<File> reports = FileUtils.listFiles(new File(cerifyReportLocation), reportPDFAcceptor, reportPDFAcceptor);
-		// attach report(s) to item
-
-		for (File file : reports)
-		{
-			if (attachQcReports)
-			{
-				String ardomeFilePath = ardomeCerifyReportLocation + file.getName();
-
-				log.info(String.format(
-						"attach file {%s} to material using ardome path {%s}",
-						file.getAbsolutePath(),
-						ardomeFilePath));
-				mayamClient.attachFileToMaterial(assetID, ardomeFilePath, cerifyReportArdomeserviceHandle);
-			}
-		}
+		return FileUtils.listFiles(new File(cerifyReportLocation), reportPDFAcceptor, reportPDFAcceptor);
 	}
 
 	@Override
@@ -354,22 +367,34 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		// based on email notifications version 7 220213
 		// saveEvent("PersistentFailure", notification, TC_EVENT_NAMESPACE, new TcNotification());
 
+		com.mediasmiths.foxtel.ip.common.events.TcNotification tcFailure = new com.mediasmiths.foxtel.ip.common.events.TcNotification();
+
 		try
 		{
+            tcFailure.setAssetID(notification.getAssetID());
+			tcFailure.setTaskID(notification.getTaskID()+"");
+			tcFailure.setTitle(notification.getTitle());
+
 			if (notification.isForTXDelivery())
 			{
 				// auto qc was for tx delivery
 				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
+
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
 			}
 			else
 			{
 				// auto qc was for export task
 				mayamClient.exportFailed(notification.getTaskID());
+
+				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
 			}
 		}
 		catch (MayamClientException e)
 		{
 			log.error("Failed to fail task!", e);
+			events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
+
 			throw e;
 		}
 
@@ -740,11 +765,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			qcErrorNotification.setAssetId(payload.getAssetId());
 			qcErrorNotification.setForTXDelivery(payload.isForTXDelivery());
 			qcErrorNotification.setTitle(payload.getTitle());
+			for (File qcFile : getQCFiles(payload.getJobName()))
+			{
+                qcErrorNotification.getQcReportFilePath().add(qcFile.getAbsolutePath());
+			}
 			events.saveEvent(nameSpace, name, qcErrorNotification);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+			log.error("Event serialisation issue: ", e);
 		}
 	}
 

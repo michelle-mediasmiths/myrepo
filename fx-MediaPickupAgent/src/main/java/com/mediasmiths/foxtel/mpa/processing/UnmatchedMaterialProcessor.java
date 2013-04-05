@@ -22,7 +22,6 @@ import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -185,6 +184,122 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 		}
 	}
 
+/*
+	private void processUnmatchedMessages() {
+		Collection<MediaEnvelope> unmatchedMessages = matchMaker
+				.purgeUnmatchedMessages(timeout.longValue());
+
+		if (unmatchedMessages.size() > 0) {
+			logger.info(String.format("Found %d unmatched material messages",
+					unmatchedMessages.size()));
+		} else {
+			logger.debug(String.format("Found %d unmatched material messages",
+					unmatchedMessages.size()));
+		}
+
+		for (MediaEnvelope me : unmatchedMessages) {
+			logger.info(String.format("no mxf for %s", me.getFile()
+					.getAbsolutePath()));
+
+			boolean autoMatched = false;
+			
+			AutoMatchInfo ami = getSiteIDForAutomatch(me);
+			
+			if(ami != null){
+				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
+			}
+			
+			if (autoMatched)
+			{
+				//move to completed folder
+				try{
+					String completedMessagesFolder = MessageProcessor.getArchivePathForFile(me.getFile().getAbsolutePath());
+					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), completedMessagesFolder, true));
+					FileUtils.moveFile(me.getFile(), dst);
+				}
+				catch (IOException e)
+				{
+					logger.error("IOException moving umatched xml to the completed messages folder", e);
+				}
+			}
+			else
+			{
+				// move message to failure folder
+				try
+				{
+					String failedMessagesFolder = MessageProcessor.getFailureFolderForFile(me.getFile());
+					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), failedMessagesFolder, true));
+					FileUtils.moveFile(me.getFile(), dst);
+				}
+				catch (IOException e)
+				{
+					logger.error("IOException moving umatched xml to the failed messages folder", e);
+				}
+			}
+			
+
+			// send out alert that no material arrived with this xml file
+			StringBuilder sb = new StringBuilder();
+			sb.append(String
+					.format("There has been been no media received for Material message %s with MasterID %s ",
+							FilenameUtils.getName(me.getFile()
+									.getAbsolutePath()), me.getMasterID()));
+			events.saveEvent("warning", sb.toString());
+		}
+	}
+
+	class AutoMatchInfo{
+		String siteID;
+		String fileName;
+	}
+	
+	private AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope unmatchedMessage)
+	{
+		try
+		{
+
+			Object message = unmatchedMessage.getMessage();
+			if (message instanceof Material)
+			{
+
+				if (Util.isProgramme((Material) message))
+				{
+
+					AutoMatchInfo ret = new AutoMatchInfo();
+					ret.siteID = ((Material) message).getTitle().getProgrammeMaterial().getMaterialID();
+					ret.fileName = ((FileMediaType) ((Material) message).getTitle().getProgrammeMaterial().getMedia()).getFilename();
+					logger.debug("attempt to automatch on filename from programme material xml");
+					return ret;
+				}
+				else
+				{
+					logger.debug("cannot automatch marketing material");
+					return null;
+				}
+			}
+			else if (message instanceof RuzzIngestRecord)
+			{
+
+				AutoMatchInfo ret = new AutoMatchInfo();
+				ret.siteID = ((RuzzIngestRecord) message).getMaterial().getMaterialID();
+				ret.fileName = unmatchedMessage.getFile().getName();
+
+				return ret;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("error determining automatch info for message " + unmatchedMessage.getFile().getAbsolutePath());
+			return null;
+		}
+	}
+	
+	*/
+	
 	@Override
 	protected boolean shouldStartAsDaemon()
 	{
