@@ -12,14 +12,14 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/export/transcode" location="export-transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
     <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="diag:transcodeAndCaller" myRole="transcode_for_caller"/>
-    <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" initializePartnerRole="yes" partnerRole="Pool_for_transcode"/>
-    <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk0Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
-    <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk2Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
-    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk0Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk0" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk1Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
-    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk2Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk2Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
+    <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk0Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk1Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk0Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk0" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk2Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk3Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" initializePartnerRole="yes" partnerRole="Pool_for_transcode"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
@@ -148,6 +148,13 @@
     <tcAdapter:foreground></tcAdapter:foreground>
   </tcAdapter:timecode>
   <tcAdapter:priority></tcAdapter:priority>
+  <tcAdapter:ftpupload>
+    <tcAdapter:filename></tcAdapter:filename>
+    <tcAdapter:folder></tcAdapter:folder>
+    <tcAdapter:server></tcAdapter:server>
+    <tcAdapter:user></tcAdapter:user>
+    <tcAdapter:password></tcAdapter:password>
+  </tcAdapter:ftpupload>
 </tcAdapter:TCJob></bpel:literal>
                 </bpel:from>
                 <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
@@ -160,6 +167,13 @@
   <tns:forTXDelivery></tns:forTXDelivery>
   <tns:taskID></tns:taskID>
   <tns:title></tns:title>
+  <tns:ftpupload>
+    <tcAdapter:filename></tcAdapter:filename>
+    <tcAdapter:folder></tcAdapter:folder>
+    <tcAdapter:server></tcAdapter:server>
+    <tcAdapter:user></tcAdapter:user>
+    <tcAdapter:password></tcAdapter:password>
+  </tns:ftpupload>
 </tns:tcPassedNotification></bpel:literal>
                 </bpel:from>
                 <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>
@@ -324,6 +338,10 @@
                         <bpel:copy>
                           <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
                           <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
+                          <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
                         </bpel:copy>
                       </bpel:assign>
                       <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk2Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="send success message" name="send_success_message-1" bpmn:id="_qeWgsHEQEeKgV8mGUipbQA"></bpel:invoke>

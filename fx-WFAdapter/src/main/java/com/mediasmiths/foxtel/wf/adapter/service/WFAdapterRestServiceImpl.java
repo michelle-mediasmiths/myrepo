@@ -392,7 +392,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						"CaptionProxyFailure",
 						notification,
 						TC_EVENT_NAMESPACE,
-						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(), "",
 						false);
 			}
 			else if (taskListID.equals("Publicity Proxy"))
@@ -401,7 +401,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						         "PublicityProxyFailure",
 						         notification,
 						         TC_EVENT_NAMESPACE,
-						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(), "",
 						         false);
 			}
 			else if (taskListID.equals("Compliance Proxy"))
@@ -410,7 +410,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						"ClassificationProxyFailure",
 						notification,
 						TC_EVENT_NAMESPACE,
-						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(), "",
 						false);
 			}
 			else
@@ -419,7 +419,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						"TCFailed",
 						notification,
 						TC_EVENT_NAMESPACE,
-						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						new com.mediasmiths.foxtel.ip.common.events.TcNotification(), "",
 						false);
 			}
 		}
@@ -429,12 +429,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
+		log.info("TCPassedNotification " + notification.toString());
 		
-		if (notification.isForTXDelivery())
-		{
-			// saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
-		}
-		else //extended publishing		
+		if (!notification.isForTXDelivery())
 		{
 			long taskId = notification.getTaskID();
 			AttributeMap task = mayamClient.getTask(taskId);
@@ -447,6 +444,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						getOutputDetailsForExport(notification),
 						true);
 			}
 			else if (taskListID.equals("Classification Proxy"))
@@ -456,6 +454,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						getOutputDetailsForExport(notification),
 						true);
 			}
 			else if (taskListID.equals("Publicity Proxy"))
@@ -465,6 +464,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+						getOutputDetailsForExport(notification),
 						true);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
@@ -707,6 +707,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TCNotification payload,
 			String nameSpace,
 			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
+			String fileLocation,
 			boolean success)
 	{
 		try
@@ -775,6 +776,25 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		return isValidProgramme;
 	}
+	
+	private String getOutputDetailsForExport(TCPassedNotification notification)
+    {
+	    if (null != notification.getFtpupload())
+	    {
+	    	String outputFilename = notification.getFtpupload().filename;
+	    	String outputServer = notification.getFtpupload().server;
+	    	String outputFolder = notification.getFtpupload().folder;
+	
+	    	StringBuilder temp = new StringBuilder();
+	    	temp.append("Filename: ").append(outputFilename).append(", server: ").append(outputServer).append(", folder: ").append(outputFolder);
+	
+	    	return temp.toString();
+	    }
+	    else
+	    {
+	    	return "";
+	    }
+    }
 
 	static class MediaExchangeErrorHandler implements ErrorHandler
 	{

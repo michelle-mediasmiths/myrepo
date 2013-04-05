@@ -12,6 +12,16 @@
       <xs:element name="opacity" type="xs:double"/>
     </xs:sequence>
   </xs:complexType>
+  
+  <xs:complexType name="tcftpUpload">
+    <xs:sequence>
+      <xs:element name="filename" type="xs:string"/>
+      <xs:element name="folder" type="xs:string"/>
+      <xs:element name="server" type="xs:string"/>
+      <xs:element name="user" type="xs:string"/>
+      <xs:element name="password" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
 
   <xs:complexType name="tcJobParameters">
     <xs:sequence>
@@ -25,6 +35,7 @@
       <xs:element minOccurs="0" name="bug" type="tns:tcBugOptions"/>
       <xs:element minOccurs="0" name="timecode" type="tns:tcTimecodeOptions"/>
       <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="ftpupload" type="tns:tcftpUpload"/>
     </xs:sequence>
   </xs:complexType>
 

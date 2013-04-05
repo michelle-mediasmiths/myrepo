@@ -83,7 +83,9 @@
   <xs:complexType name="tcPassedNotification">
     <xs:complexContent>
       <xs:extension base="tns:tcNotification">
-        <xs:sequence/>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ftpupload" type="ns1:tcftpUpload"/>
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

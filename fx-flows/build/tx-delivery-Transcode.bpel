@@ -96,6 +96,13 @@
       <tns:foreground></tns:foreground>
     </tns:timecode>
     <tns:priority></tns:priority>
+    <tns:ftpupload>
+      <tns:filename></tns:filename>
+      <tns:folder></tns:folder>
+      <tns:server></tns:server>
+      <tns:user></tns:user>
+      <tns:password></tns:password>
+    </tns:ftpupload>
   </wfAdapter:tcParams>
   <wfAdapter:title></wfAdapter:title>
 </Delivery:EventStartMessageRequest></bpel:literal>
@@ -130,6 +137,13 @@
       <tns:foreground></tns:foreground>
     </tns:timecode>
     <tns:priority></tns:priority>
+    <tns:ftpupload>
+      <tns:filename></tns:filename>
+      <tns:folder></tns:folder>
+      <tns:server></tns:server>
+      <tns:user></tns:user>
+      <tns:password></tns:password>
+    </tns:ftpupload>
   </wfAdapter:tcParams>
   <wfAdapter:title></wfAdapter:title>
 </Auto_QC:EventStartMessageRequest></bpel:literal>
@@ -190,6 +204,13 @@
   <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
+  <wfAdapter:ftpupload>
+    <tns:filename></tns:filename>
+    <tns:folder></tns:folder>
+    <tns:server></tns:server>
+    <tns:user></tns:user>
+    <tns:password></tns:password>
+  </wfAdapter:ftpupload>
 </wfAdapter:tcPassedNotification></bpel:literal>
               </bpel:from>
               <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>
@@ -254,6 +275,13 @@
     <tns:foreground></tns:foreground>
   </tns:timecode>
   <tns:priority></tns:priority>
+  <tns:ftpupload>
+    <tns:filename></tns:filename>
+    <tns:folder></tns:folder>
+    <tns:server></tns:server>
+    <tns:user></tns:user>
+    <tns:password></tns:password>
+  </tns:ftpupload>
 </tns:TCJob></bpel:literal>
                   </bpel:from>
                   <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
