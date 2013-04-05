@@ -4,7 +4,10 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -79,6 +82,12 @@ public abstract class PlaceHolderMessageShortTest
 		public String exportPathForChannelGroup(String channelGroupName)
 		{
 			return "path";
+		}
+
+		@Override
+		public Set<String> groupsForChannels(List<String> channelTags)
+		{
+			return Collections.<String>emptySet();
 		}
 	};
 	protected final AlertInterface alert = mock(AlertInterface.class);

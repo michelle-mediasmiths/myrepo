@@ -413,8 +413,10 @@
 			<subject>Placeholder File(%s) already has media</subject>
 			<body>Media already exists for this placeholder (%s). Check item and contact ESS.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_Preview@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
