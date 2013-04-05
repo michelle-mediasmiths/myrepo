@@ -43,7 +43,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.mayam.validation.MayamValidator;
  
 public class MayamClientStub implements MayamClient

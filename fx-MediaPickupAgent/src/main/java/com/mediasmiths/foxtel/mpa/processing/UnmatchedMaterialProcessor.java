@@ -22,7 +22,6 @@ import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -289,7 +288,7 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 					return null;
 				}
 			}
-			else if (message instanceof RuzzIF)
+			else if (message instanceof RuzzIngestRecord)
 			{
 
 				AutoMatchInfo ret = new AutoMatchInfo();
