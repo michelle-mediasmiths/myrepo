@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -1120,29 +1121,41 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public Set<String> getChannelGroupsForTitle(String titleId) throws MayamClientException
 	{
-		Set<String> groups = new HashSet<String>();
-		
-		if (titleId != null)
+		if (titleId == null)
+		{
+			log.warn("null titleid passed to getChannelGroupsForTitle");
+			return Collections.<String> emptySet();
+		}
+		else
+
 		{
 			AttributeMap title = titleController.getTitle(titleId);
 			StringList channels = title.getAttribute(Attribute.CHANNELS);
 
-			
-
-			for (String channel : channels)
-			{
-
-				String group = channelProperties.channelGroupForChannel(channel);
-				log.trace(String.format("channel %s group %s", channel, group));
-
-				if (group != null)
-				{
-					groups.add(group);
-				}
-
-			}
+			return channelProperties.groupsForChannels(channels);
 		}
-		return groups;
+
+	}
+	
+	@Override
+	public Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException
+	{
+		
+		StringList channels = itemAttributes.getAttribute(Attribute.CHANNELS);
+		Set<String> channelGroups;
+		if (channels == null || channels.isEmpty())
+		{
+			log.debug("no channels found on item, looking for channels on parent title");
+			String titleId = itemAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+			channelGroups = getChannelGroupsForTitle(titleId);
+		}
+		else
+		{
+			log.debug("using channels on item");
+			channelGroups = channelProperties.groupsForChannels(channels);
+		}
+		
+		return channelGroups;		
 	}
 
 }

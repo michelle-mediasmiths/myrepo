@@ -349,5 +349,7 @@ public interface MayamClient
 	public void requireAutoQCForMaterial(String materialID)throws MayamClientException;
 
 	public void autoQcErrorForMaterial(String assetId, long taskID) throws MayamClientException;
+
+	Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException;
 	
 }

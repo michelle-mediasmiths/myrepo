@@ -181,8 +181,8 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 			try
 			{
-				String titleId = currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-				aen.getChannelGroup().addAll(mayamClient.getChannelGroupsForTitle(titleId));
+				Set<String> channelGroups = mayamClient.getChannelGroupsForItem(currentAttributes);
+				aen.getChannelGroup().addAll(channelGroups);
 			}
 			catch (Exception e)
 			{
@@ -310,8 +310,8 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				
 				try
 				{
-					String titleId = currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
-					ccf.getChannelGroup().addAll(mayamClient.getChannelGroupsForTitle(titleId));
+					Set<String> channelGroups = mayamClient.getChannelGroupsForItem(currentAttributes);
+					ccf.getChannelGroup().addAll(channelGroups);
 				}
 				catch (Exception e)
 				{
