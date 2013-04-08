@@ -666,6 +666,21 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+    <xs:element name="ExportStart">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="IPEvent">
+    				<xs:sequence>
+    					<xs:element name="title" type="xs:string"/>
+    					<xs:element name="materialID" type="xs:string"/>
+    					<xs:element name="channels" type="xs:string"/>
+    					<xs:element name="titleLength" type="xs:string"/>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">
@@ -673,16 +688,10 @@
 		</xs:restriction>
 	</xs:simpleType>
 
-
-
-
     <xs:complexType name="emailaddresses">
         <xs:sequence>
             <xs:element type="xs:string" name="emailaddress"
                         maxOccurs="unbounded" minOccurs="1" />
         </xs:sequence>
-    </xs:complexType>
-
-
-	
+    </xs:complexType>	
 </xs:schema>

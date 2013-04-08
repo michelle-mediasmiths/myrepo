@@ -322,18 +322,6 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
 		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
 		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
-		
-//		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-//		int perByFile = 0;
-//		int perByTape = 0;
-//		if (total != 0)
-//		{
-//			perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
-//			perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
-//		}
-//
-//		perByTape = perByTape * 100;
-//		perByFile = perByFile * 100;
 	}
 
 	@Transactional
@@ -399,7 +387,9 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getExportCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/delivery", "ExportReport", MAX));
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
 		export.writeExport(events, startDate, endDate, REPORT_NAME);
 	}
 	
