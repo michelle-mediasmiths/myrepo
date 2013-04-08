@@ -63,7 +63,9 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -1381,7 +1383,9 @@ public class MayamMaterialController extends MayamController
 			
 			try
 			{
-				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID);
+				Set<MayamTaskListType> taskTypesToKeepOpen = new HashSet<MayamTaskListType>();
+				taskTypesToKeepOpen.add(MayamTaskListType.PENDING_TX_PACKAGE);
+				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID,taskTypesToKeepOpen);
 			}
 			catch (MayamClientException e)
 			{

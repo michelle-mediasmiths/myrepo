@@ -24,9 +24,12 @@ import com.mediasmiths.mayam.util.AssetProperties;
 import org.apache.log4j.Logger;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -694,9 +697,15 @@ public class MayamTaskController extends MayamController
 
 	/**
 	 * returns all tasks for an asset that are not in end states
+	 * 
+	 * @param assetType  
+	 * @param idAttribute - the id attribute to search on eg ASSET_ID or HOUSE_ID
+	 * @param id - the id to search for
+	 * @param excludedTaskTypes - task list types to exclude from this search (for example, pending tx package)
 	 * @return
+	 * @throws MayamClientException
 	 */
-	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id, Set<MayamTaskListType> excludedTaskTypes) throws MayamClientException{
 		
 		log.info(String.format(
 				"Searching for non closed tasks of for asset %s using id attribute %s",
@@ -705,8 +714,20 @@ public class MayamTaskController extends MayamController
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
-		criteria.getFilterAlternatives()
-	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
+		criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
+		
+		//allow exclusion of particular task lists from this search
+		if(excludedTaskTypes.size() > 0){
+			
+			Set<String> taskListIds = new HashSet<String>();
+			
+			for(MayamTaskListType t : excludedTaskTypes){
+				log.trace("excluding task list from search ;"+t.getText());
+				taskListIds.add(t.getText());
+			}
+			
+			criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_LIST_ID, taskListIds);
+		}
 		
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
@@ -726,8 +747,24 @@ public class MayamTaskController extends MayamController
 	
 	public void cancelAllOpenTasksForAsset(AssetType assetType, Attribute idAttribute, String id) throws MayamClientException
 	{
+		cancelAllOpenTasksForAsset(assetType,idAttribute,id, Collections.<MayamTaskListType>emptySet());
+	}
+	
+	/**
+	 * Cancel all the open tasks for an asset
+	 * 
+	 * A set of task list types to exlude can be specified
+	 * 
+	 * @param assetType	
+	 * @param idAttribute	- ID attribute to search on (ASSET_ID, HOUSE_ID)
+	 * @param id			- The id to search for
+	 * @param excludedTaskTypes - Set of tasks lists to exlude
+	 * @throws MayamClientException
+	 */
+	public void cancelAllOpenTasksForAsset(AssetType assetType, Attribute idAttribute, String id, Set<MayamTaskListType> excludedTaskTypes) throws MayamClientException
+	{
 
-		List<AttributeMap> tasksForAsset = getAllOpenTasksForAsset(assetType, idAttribute, id);
+		List<AttributeMap> tasksForAsset = getAllOpenTasksForAsset(assetType, idAttribute, id, excludedTaskTypes);
 
 		for (AttributeMap task : tasksForAsset)
 		{
