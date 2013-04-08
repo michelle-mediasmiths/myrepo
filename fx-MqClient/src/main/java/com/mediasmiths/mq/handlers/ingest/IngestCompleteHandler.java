@@ -12,6 +12,9 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.UpdateAttributeHandler;
 
+//NOTE: it appears that the MEDST_LR and MEDST_HR attributes required for this logic are not included in asset update notifications
+//The required attributes are on task update messages so this listener needs changed to act as a guard on qc task processing, but not creation.
+
 /**
  * 
  * Monitors for the conditions required to consider in ingest complete. One would think it would be an 'ingest' job finishing for a given item but its not
