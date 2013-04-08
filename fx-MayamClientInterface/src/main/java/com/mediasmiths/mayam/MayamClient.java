@@ -177,8 +177,6 @@ public interface MayamClient
 	 */
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
-
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
 	public MayamValidator getValidator();

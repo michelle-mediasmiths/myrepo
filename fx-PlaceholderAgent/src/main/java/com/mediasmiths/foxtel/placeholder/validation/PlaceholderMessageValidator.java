@@ -250,10 +250,14 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 		}
 
+		//reject empty title IDs
+		if(StringUtils.isEmpty(action.getTitleID())){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+		
 		boolean packageProtected = false;
 		try {
-			packageProtected = mayamClient
-					.isMaterialForPackageProtected(packageID);
+			packageProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(

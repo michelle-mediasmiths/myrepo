@@ -41,10 +41,10 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialNotProtected");
 		
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
-		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
+		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
 		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
-		verify(mayamClient).isMaterialForPackageProtected(EXISTING_PACKAGE_ID);
+		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -55,10 +55,10 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		File temp = createTempXMLFile(pm, "validDeletePackageMaterialProtected");
 		
 		when(mayamClient.packageExists(PROTECTED_PACKAGE)).thenReturn(true);
-		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
-		verify(mayamClient).isMaterialForPackageProtected(PROTECTED_PACKAGE);
+		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
 		Util.deleteFiles(temp.getAbsolutePath());
 	}
 	
@@ -106,7 +106,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,ERROR_PACKAGE_ID);
 		File temp = createTempXMLFile(pm, "validDeletePackageRequestFailure");
 		
-		when(mayamClient.isMaterialForPackageProtected(ERROR_PACKAGE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		when(mayamClient.isTitleOrDescendentsProtected(ERROR_TITLE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
 		// try to call validation, expect a mayam client error
 		assertEquals(

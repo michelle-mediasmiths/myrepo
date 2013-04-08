@@ -82,7 +82,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
 		File temp = createTempXMLFile(message, "validDeletePackageNotProtected");
 		
-		when(mayamClient.isMaterialForPackageProtected(EXISTING_PACKAGE_ID)).thenReturn(new Boolean(false));
+		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(new Boolean(false));
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
@@ -123,10 +123,10 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		
 		logger.info("Starting FXT 4.1.11.7 - Package is protected");
 		
-		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, PROTECTED_PACKAGE);
+		PlaceholderMessage message = buildDeletePackage(false, PROTECTED_TITLE, PROTECTED_PACKAGE);
 		File temp = createTempXMLFile(message, "validDeletePackageProtected");
 		
-		when(mayamClient.isMaterialForPackageProtected(PROTECTED_PACKAGE)).thenReturn(true);
+		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validateFile)

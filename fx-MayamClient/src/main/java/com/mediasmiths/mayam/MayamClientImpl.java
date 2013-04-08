@@ -277,25 +277,6 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
-	{
-		
-		boolean isProtected = false;
-		
-		SegmentList segmentList = packageController.getSegmentList(packageID);
-		String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
-		
-		log.debug(String.format("material id %s found for package %s", materialID, packageID));
-		
-		if (materialID != null)
-		{
-			isProtected = materialController.isProtected(materialID);
-		}
-		
-		return isProtected;
-	}
-
-	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException
 	{
 		Boolean isProtected = false;

@@ -415,20 +415,6 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
-	{
-		if (packageID.equals(PROTECTED_PACKAGE_ID))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-
-	}
-
-	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException
 	{
 		if (titleID.equals(PROTECTED_TITLE_ID))
