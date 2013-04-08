@@ -31,6 +31,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
@@ -103,6 +105,9 @@ public class MayamMaterialController extends MayamController
 	
 	@Inject
 	private DateUtil dateUtil;
+	
+	@Inject
+	private MayamPackageController packageController; //dont know if guice will let this inject or not (mutual dependency... but one is constructer injection, the other has member injection, it might be ok)
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
@@ -613,15 +618,15 @@ public class MayamMaterialController extends MayamController
 	}
 
 
-	@Inject
-	@Named("segmentation.data.stash.folder")
-	private String segmentationDataStashPath;
-	
-	public String segdataFilePathForMaterial(String materialId)
-	{
-		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
-	}
-	
+//	@Inject
+//	@Named("segmentation.data.stash.folder")
+//	private String segmentationDataStashPath;
+//	
+//	public String segdataFilePathForMaterial(String materialId)
+//	{
+//		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
+//	}
+//	
 	
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
@@ -683,25 +688,55 @@ public class MayamMaterialController extends MayamController
 				}
 				else if (material.getPresentation() != null)
 				{
-
 					Presentation presentation = material.getPresentation();
-				
-					//stash to file for populating segmentation information later on
 					
-					//stashing to file will be replaced by stashing in pending tx pacakge list
-					try
-					{
-						String presentationString = presentationToString(presentation);
-						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
-					}
-					catch (JAXBException e)
-					{
-						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
-					}
-					catch(Exception e){
-						log.error("error saving presentation info for material",e);
-					}
+//					//stash to file for populating segmentation information later on  (if bms sends tx pacakge creation *after* material exchange happens)
+//					try
+//					{
+//						String presentationString = presentationToString(presentation);
+//						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
+//					}
+//					catch (JAXBException e)
+//					{
+//						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
+//					}
+//					catch(Exception e){
+//						log.error("error saving presentation info for material",e);
+//					}
 					
+					List<Package> presentationInfo = presentation.getPackage();
+
+					for (Package pack : presentationInfo)
+					{
+						String packageID = pack.getPresentationID();
+						Segmentation segmentation = pack.getSegmentation();
+
+						try
+						{
+							packageController.createOrUpdatePendingTxPackagesSegmentInfo(
+									assetAttributes,
+									material.getMaterialID(),
+									packageID,
+									segmentation);
+						}
+						catch (Exception e)
+						{
+							log.error("error creation or updating pending tx package with segmentation information", e);
+							// something has gone wrong populating the pending tx package task allow processing to continue so at least the natural breaks field gets populated
+							try
+							{
+								taskController.createWFEErorTask(
+										MayamAssetType.MATERIAL,
+										material.getMaterialID(),
+										"Error processing segmentation information in material exchange message");
+							}
+							catch (MayamClientException mce)
+							{
+								log.error("error creating error task", mce);
+							}
+						}
+					}
+
 					// save the segmentation information to the natural breaks string
 					try
 					{
@@ -710,7 +745,7 @@ public class MayamMaterialController extends MayamController
 					}
 					catch (Exception e)
 					{
-						log.error("error converting segmentation informatio to human string for natual breaks field", e);
+						log.error("error converting segmentation information to human string for natual breaks field", e);
 					}
 					
 				}
@@ -799,16 +834,16 @@ public class MayamMaterialController extends MayamController
 		return isPlaceholder;
 	}
 
-	private String presentationToString(Presentation p) throws JAXBException
-	{
-		JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(
-				new QName("", "Presentation"),
-				Presentation.class,
-				p);
-		StringWriter sw = new StringWriter();
-		materialExchangeMarshaller.marshal(j, sw);
-		return sw.toString();
-	}
+//	private String presentationToString(Presentation p) throws JAXBException
+//	{
+//		JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(
+//				new QName("", "Presentation"),
+//				Presentation.class,
+//				p);
+//		StringWriter sw = new StringWriter();
+//		materialExchangeMarshaller.marshal(j, sw);
+//		return sw.toString();
+//	}
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{

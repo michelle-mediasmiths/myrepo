@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.cfg.annotations.ListBinder;
 
 import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.PackageType;
@@ -124,19 +125,20 @@ public class MayamPackageController extends MayamController
 					materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
 					materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
 
-					try
-					{
-						segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
-					}
-					catch (Exception e)
-					{
-						log.error("error finding existing segment info for tx package", e);
-					}
-
-					if (segmentation == null)
-					{
-						log.info("no existing segmentation information for this tx package");
-					}
+// MAM-375 MAM-367 if segmentation information is included in material exchange message then the pending tx package will already have been created
+//					try
+//					{
+//						segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
+//					}
+//					catch (Exception e)
+//					{
+//						log.error("error finding existing segment info for tx package", e);
+//					}
+//
+//					if (segmentation == null)
+//					{
+//						log.info("no existing segmentation information for this tx package");
+//					}
 
 				}
 			}
@@ -290,56 +292,57 @@ public class MayamPackageController extends MayamController
 		log.info("Segmentation task created with id :" + taskID);
 	
 	}
-	
-	/**
-	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
-	 * 
-	 * Once preview has passed and bms is issuing tx package create messages then we fetch this segment info from the material
-	 * to populated tx packages being created. (We couldn't just create them when the material comes in for some foxtel operational reason)
-	 * 
-	 * @param txPackage
-	 * @param material
-	 * @return
-	 */
-	private Segmentation findExistingSegmentInfoForTxPackage(PackageType txPackage, AttributeMap material)
-	{
-		Presentation p = null;
-		String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
-		
-		try
-		{
-			final FileReader reader = new FileReader(new File(materialController.segdataFilePathForMaterial(materialId)));
-			final StreamSource source = new StreamSource(reader);
-			
-			JAXBElement<Presentation> j = (JAXBElement<Presentation>) materialExchangeUnMarshaller.unmarshal(source,Presentation.class);
-			p = j.getValue();
-		}
-		catch (JAXBException je)
-		{
-			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", je);
-		}
-		catch (Exception e)
-		{
-			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", e);
-		}
 
-		if (p != null)
-		{
-			List<Package> packages = p.getPackage();
-			
-			log.debug(String.format("Found %d segment lists for material %s",packages.size(),materialId));
-			
-			for (Package pc : packages)
-			{
-				if (pc.getPresentationID().equals(txPackage.getPresentationID()))
-				{
-					log.debug("Found segmentation info");
-					return pc.getSegmentation();
-				}
-			}
-		}
-		return null;
-	}
+//MAM-375 MAM-367 no longer using segdata stashing	
+//	/**
+//	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
+//	 * 
+//	 * Once preview has passed and bms is issuing tx package create messages then we fetch this segment info from the material
+//	 * to populated tx packages being created. (We couldn't just create them when the material comes in for some foxtel operational reason)
+//	 * 
+//	 * @param txPackage
+//	 * @param material
+//	 * @return
+//	 */
+//	private Segmentation findExistingSegmentInfoForTxPackage(PackageType txPackage, AttributeMap material)
+//	{
+//		Presentation p = null;
+//		String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
+//		
+//		try
+//		{
+//			final FileReader reader = new FileReader(new File(materialController.segdataFilePathForMaterial(materialId)));
+//			final StreamSource source = new StreamSource(reader);
+//			
+//			JAXBElement<Presentation> j = (JAXBElement<Presentation>) materialExchangeUnMarshaller.unmarshal(source,Presentation.class);
+//			p = j.getValue();
+//		}
+//		catch (JAXBException je)
+//		{
+//			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", je);
+//		}
+//		catch (Exception e)
+//		{
+//			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", e);
+//		}
+//
+//		if (p != null)
+//		{
+//			List<Package> packages = p.getPackage();
+//			
+//			log.debug(String.format("Found %d segment lists for material %s",packages.size(),materialId));
+//			
+//			for (Package pc : packages)
+//			{
+//				if (pc.getPresentationID().equals(txPackage.getPresentationID()))
+//				{
+//					log.debug("Found segmentation info");
+//					return pc.getSegmentation();
+//				}
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * called when bms updates a package
@@ -941,6 +944,101 @@ public class MayamPackageController extends MayamController
 		}
 		
 		return false;
+	}
+
+	/**
+	 * Called when presentation information with an automation id is included in a material exchagne message
+	 * 
+	 * The package with the given id may or may not exist on the pending tx package list
+	 * 
+	 * If it is on the pending tx package list then update its segmentation information
+	 * 
+	 * If it is not on the pending tx package list then create an entry.
+	 * @throws MayamClientException 
+	 * 
+	 */
+	public void createOrUpdatePendingTxPackagesSegmentInfo(
+			AttributeMap materialAttributes,
+			String materialID,
+			String packageID,
+			Segmentation segmentation) throws MayamClientException
+	{
+		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(materialAttributes);
+
+		if (pendingPackage)
+		{
+			log.debug("pending tx package");
+
+			SegmentListBuilder listbuilder = SegmentList.create();
+			addMaterialExchangeSegmentInfoToSegmentListBuilder(segmentation, listbuilder);
+
+			AttributeMap packageAttributes;
+			boolean existingPendingTxPackageTask = false;
+
+			// there may or may not be a pending tx package for this presentation id at the moment
+			try
+			{
+				SegmentList pendingTxPackageTask = getPendingTxPackage(packageID, materialID);
+				packageAttributes = pendingTxPackageTask.getAttributeMap();
+				existingPendingTxPackageTask = true;
+			}
+			catch (PackageNotFoundException pnfe)
+			{
+				log.info("No pending tx package for this presentation id yet, will create one");
+
+				packageAttributes = client.createAttributeMap();
+				packageAttributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.PACKAGE.getAssetType());
+				packageAttributes.setAttribute(Attribute.HOUSE_ID, packageID);
+				packageAttributes.setAttribute(Attribute.ASSET_TITLE, packageID);
+				packageAttributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+				packageAttributes.setAttribute(Attribute.PARENT_HOUSE_ID, materialID);
+				packageAttributes.setAttribute(Attribute.HOUSE_ID, packageID);
+				packageAttributes.setAttribute(Attribute.METADATA_FORM, VERSION_AGL_NAME);
+				existingPendingTxPackageTask = false;
+			}
+
+			listbuilder.attributeMap(packageAttributes);
+			SegmentList seglist = listbuilder.build();
+
+			if (existingPendingTxPackageTask)
+			{
+				//if there was already a task then update
+				updateTxPackage(seglist, packageID, materialID, materialAttributes);
+			}
+			else
+			{
+				//create pending tx package if there wasnt already one
+				taskController.createPendingTxPackage(materialID, packageID, null, seglist);
+			}
+		}
+		else
+		{
+			log.error("Expected a pending package, but conditions imply it should be real, will not attempt segmentation info update in case segmentation workflow has already started");
+		}
+	}
+
+	private void addMaterialExchangeSegmentInfoToSegmentListBuilder(
+			Segmentation segmentation,
+			SegmentListBuilder listbuilder) throws MayamClientException
+	{
+		try
+		{
+			for (Segment s : segmentation.getSegment())
+			{
+				com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
+				listbuilder = listbuilder.segment(converted);
+			}
+		}
+		catch (InvalidTimecodeException e)
+		{
+			log.error("could not convert segmentation info", e);
+			throw new MayamClientException(MayamClientErrorCode.SEGMENT_INFO_CONVERSION_FAILED);
+		}
+		catch (Exception e)
+		{
+			log.error("could not convert segmentation info", e);
+			throw new MayamClientException(MayamClientErrorCode.SEGMENT_INFO_CONVERSION_FAILED);
+		}
 	}
 
 }

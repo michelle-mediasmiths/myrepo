@@ -379,14 +379,14 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				{ // dont want to set a peer id on our peer!
 					if (asset.getAttribute(attribute) == null)
 					{
-						log.debug(String.format(
+						log.trace(String.format(
 								"Asset does not have attribute value set for attribute %s; will be setting this.",
 								attribute.toString()));
 						updateMap.setAttribute(attribute, unmatchedAttributes.getAttribute(attribute));
 					}
 					else
 					{
-						log.debug(String.format(
+						log.trace(String.format(
 								"Asset already has attribute set for attribute %s; not overwriting this.",
 								attribute.toString()));
 					}
