@@ -56,7 +56,7 @@ import com.mediasmiths.std.types.Framerate;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
-public class MayamPackageController extends MayamController
+public class MayamPackageController extends MayamController implements PackageController
 {
 	private static final String VERSION_AGL_NAME = "version";
 
@@ -946,17 +946,10 @@ public class MayamPackageController extends MayamController
 		return false;
 	}
 
-	/**
-	 * Called when presentation information with an automation id is included in a material exchagne message
-	 * 
-	 * The package with the given id may or may not exist on the pending tx package list
-	 * 
-	 * If it is on the pending tx package list then update its segmentation information
-	 * 
-	 * If it is not on the pending tx package list then create an entry.
-	 * @throws MayamClientException 
-	 * 
+	/* (non-Javadoc)
+	 * @see com.mediasmiths.mayam.controllers.PackageController#createOrUpdatePendingTxPackagesSegmentInfo(com.mayam.wf.attributes.shared.AttributeMap, java.lang.String, java.lang.String, com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation)
 	 */
+	@Override
 	public void createOrUpdatePendingTxPackagesSegmentInfo(
 			AttributeMap materialAttributes,
 			String materialID,

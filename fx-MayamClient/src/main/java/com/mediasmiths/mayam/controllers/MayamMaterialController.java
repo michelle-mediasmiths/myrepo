@@ -107,7 +107,7 @@ public class MayamMaterialController extends MayamController
 	private DateUtil dateUtil;
 	
 	@Inject
-	private MayamPackageController packageController; //dont know if guice will let this inject or not (mutual dependency... but one is constructer injection, the other has member injection, it might be ok)
+	private PackageController packageController; //dont know if guice will let this inject or not (mutual dependency... but one is constructer injection, the other has member injection, it might be ok)
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
