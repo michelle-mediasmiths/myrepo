@@ -870,7 +870,6 @@ public class MayamTaskController extends MayamController
 
 				final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 				criteria.getFilterAlternatives().addAsInclusions(Attribute.ASSET_ID, associatedMaterialAssetIds);
-				criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
 				criteria.getFilterEqualities().setAttribute(
 						Attribute.TASK_LIST_ID,
 						MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
@@ -884,9 +883,15 @@ public class MayamTaskController extends MayamController
 
 				for (AttributeMap task : tasks)
 				{
-					AttributeMap updateMap = updateMapForTask(task);
-					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-					client.taskApi().updateTask(updateMap);
+					TaskState state = task.getAttribute(Attribute.TASK_STATE);
+
+					if (!END_STATES.contains(state))
+					{
+						AttributeMap updateMap = updateMapForTask(task);
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						client.taskApi().updateTask(updateMap);
+					}
+
 				}
 
 			}
