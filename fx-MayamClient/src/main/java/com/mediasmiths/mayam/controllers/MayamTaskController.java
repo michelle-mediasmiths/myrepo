@@ -694,6 +694,10 @@ public class MayamTaskController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 	}
+	
+	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		return getAllOpenTasksForAsset(assetType, idAttribute, id, Collections.<MayamTaskListType>emptySet());
+	}
 
 	/**
 	 * returns all tasks for an asset that are not in end states
