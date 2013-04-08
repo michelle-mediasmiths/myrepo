@@ -732,7 +732,7 @@ public class MayamTaskController extends MayamController
 				taskListIds.add(t.getText());
 			}
 			
-			criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_LIST_ID, taskListIds);
+			criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_LIST_ID, taskListIds);
 		}
 		
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
