@@ -33,6 +33,9 @@ import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.button.ButtonClickHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 
+import com.mediasmiths.foxtel.ip.common.events.ExportStart;
+import com.mediasmiths.foxtel.ip.event.EventService; 
+
 public abstract class ExportProxyButton extends ButtonClickHandler
 {
 	private final static Logger log = Logger.getLogger(ExportProxyButton.class);
@@ -59,7 +62,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	@Inject
 	protected ChannelProperties channelProperties;
-
+	
+	@Inject
+	private EventService eventService;
+	
 	@Override
 	protected void buttonClicked(AttributeMap requestAttributes)
 	{
@@ -166,6 +172,10 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			try
 			{
 				initiateWorkflow(title, firstTX, materialID, jobParams, taskID);
+				ExportStart export = new ExportStart();
+				export.setMaterialID(materialID);
+				export.setChannels(channels.toString());
+				eventService.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportStart", export);
 			}
 			catch (UnsupportedEncodingException e)
 			{
