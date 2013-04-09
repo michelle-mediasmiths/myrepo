@@ -202,7 +202,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
+				saveEvent("QCProblemWithTCMedia", notification, QC_EVENT_NAMESPACE);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -252,7 +252,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.isForTXDelivery()));
 
 		// comment out as version 7 220213
-		// saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
+		
+		com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification qcPass = new com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification();
+		qcPass.setAssetId(notification.getAssetId());
+		qcPass.setForTXDelivery(notification.isForTXDelivery());
+		qcPass.setMaterialID(String.valueOf(notification.getTaskID()));
+		qcPass.setTitle(notification.getTitle());
+		events.saveEvent(QC_EVENT_NAMESPACE, "AutoQCPassed", qcPass);
 
 		if (notification.isForTXDelivery())
 		{

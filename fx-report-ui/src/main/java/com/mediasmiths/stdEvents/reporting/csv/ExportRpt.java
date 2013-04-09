@@ -18,6 +18,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.ExportStart;
+import com.mediasmiths.foxtel.ip.common.events.TcPassedNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
@@ -45,7 +46,7 @@ public class ExportRpt
 	
 	private Object unmarshall(EventEntity event)
 	{
-		Object title = new Object();
+		Object title = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
@@ -63,41 +64,59 @@ public class ExportRpt
 		return title;
 	}
 	
+	private Object unmarshallBMS(EventEntity event) 
+	{
+		Object title = null;
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload: " + payload);
+		
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
+			title = JAXB_SERIALISER.deserialise(payload);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return title;
+	}
+	
 	private List<Export> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating export list");
 		List<Export> exports = new ArrayList<Export>();
 		
-		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
+//		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
 		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-		for (EventEntity event : packageEvents) {
-			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
-			packages.add(pack);
-		}
-		
-		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
+//		for (EventEntity event : packageEvents) {
+//			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshallBMS(event);
+//			packages.add(pack);
+//		}
+//		
+//		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
 		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
-		for (EventEntity event : titleEvents) {
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			titles.add(title);
-		}
-		
-		List <EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
-		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
+//		for (EventEntity event : titleEvents) {
+//			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshallBMS(event);
+//			titles.add(title);
+//		}
+//		
+//		List <EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
+//		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		for (EventEntity event : acqEvents) {
-			Acquisition acq = (Acquisition) unmarshall(event);
-			acqs.add(acq);
-		}
+//		for (EventEntity event : acqEvents) {
+//			Acquisition acq = (Acquisition) unmarshall(event);
+//			acqs.add(acq);
+//		}
 		
 		for (EventEntity event : events)
 		{
-			ExportStart exportStart = (ExportStart) unmarshall(event);
 			Export export = new Export();
+			TcPassedNotification tcNotification = (TcPassedNotification) unmarshall(event);
 			
 			export.setDateRange(startDate + " - " + endDate);
-			export.setMaterialID(exportStart.getMaterialID());
-			export.setChannels(exportStart.getChannels());
+			export.setMaterialID(tcNotification.getAssetID());
+			export.setChannels(tcNotification.getChannelGroup().toString());
 			
 			if(event.getEventName().equals("CaptionProxySuccess")) {
 				export.setExportType("Caption");

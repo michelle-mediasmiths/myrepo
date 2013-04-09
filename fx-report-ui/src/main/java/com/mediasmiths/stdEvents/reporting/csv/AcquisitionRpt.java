@@ -3,7 +3,6 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -19,12 +18,10 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.AcquisitionRT;
-import com.mediasmiths.stdEvents.report.entity.OrderStatusRT;
+
 import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 
 public class AcquisitionRpt
@@ -105,7 +102,7 @@ public class AcquisitionRpt
 		return title;
 	}
 	
-	private List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating acquisition list");
 		
@@ -128,9 +125,9 @@ public class AcquisitionRpt
 		{
 			Acquisition content = (Acquisition) unmarshall(event);
 			content.setDateRange(startDate + " - " + endDate);
-			if (content.isTapeDelivery() != null)
+			if (content.isTapeDelivery())
 				content.setTapeDel("1");
-			if (content.isFileDelivery() != null)
+			if (content.isFileDelivery())
 				content.setFileDel("1");
 			
 			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();

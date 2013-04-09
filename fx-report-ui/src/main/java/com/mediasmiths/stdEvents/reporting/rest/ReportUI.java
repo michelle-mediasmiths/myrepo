@@ -85,6 +85,11 @@ public interface ReportUI
 	@Path("/auto_qc_csv")
 	@Produces("text/html")
 	public void getAutoQCCSV();
+	
+	@GET
+	@Path("/auto_qc_ui")
+	@Produces("text/html")
+	public String getAutoQCUI();
 
 	@GET
 	@Path("/task_list_csv")
@@ -150,11 +155,6 @@ public interface ReportUI
 //	public void getLateOrderStatusPDF();
 //	
 //	@GET
-//	@Path("/acquisition_report_ui")
-//	@Produces("text/html")
-//	public String getAquisitionReportUI();
-//	
-//	@GET
 //	@Path("/acquisition_report_pdf")
 //	@Produces("text/html")
 //	public void getAquisitionReportPDF();
@@ -173,11 +173,6 @@ public interface ReportUI
 //	@Path("/file_tape_ingest_pdf")
 //	@Produces("text/html")
 //	public void getFileTapeIngestPDF();	
-//	
-//	@GET
-//	@Path("/auto_qc_ui")
-//	@Produces("text/html")
-//	public String getAutoQCUI();
 //	
 //	@GET
 //	@Path("/auto_qc_pdf")
