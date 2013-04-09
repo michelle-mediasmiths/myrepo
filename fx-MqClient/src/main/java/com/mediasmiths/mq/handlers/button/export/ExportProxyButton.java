@@ -456,5 +456,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	protected final static long THREE_DAYS = ONE_DAY * 3;
 	protected final static long SEVEN_DAYS = ONE_DAY * 7;
 	protected final static long EIGHT_DAYS = ONE_DAY * 8;
+	protected final static long TWENTY_THREE_HOURS = 1000l * 3600l * 23;
+	protected final static long FORTY_SEVEN_HOURS = 1000l * 3600l * 47;
 
 }

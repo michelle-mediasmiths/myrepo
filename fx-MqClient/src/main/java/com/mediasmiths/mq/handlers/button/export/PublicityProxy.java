@@ -68,8 +68,18 @@ public class PublicityProxy extends ExportProxyButton
 			
 			if (difference > 0)
 			{
-				// tx date is in the future
-				priority = 1; 
+				if (difference > FORTY_SEVEN_HOURS)
+				{
+					priority = 5; 
+				}
+				else if (difference > TWENTY_THREE_HOURS)
+				{
+					priority = 3; 
+				}
+				else
+				{
+					priority = 1; 
+				}
 			}
 			else
 			{
