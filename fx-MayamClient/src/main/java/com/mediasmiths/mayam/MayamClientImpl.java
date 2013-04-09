@@ -395,12 +395,6 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public PackageType getPackage(String packageID) throws MayamClientException
-	{
-		return packageController.getPackageType(packageID);
-	}
-
-	@Override
 	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException
 	{
 		log.debug(String.format("Requesting pathTo material for materialID %s", materialID));
@@ -424,12 +418,6 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public MaterialType getMaterial(String materialID) throws MayamClientException
-	{
-		return materialController.getPHMaterialType(materialID);
-	}
-
-	@Override
 	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
 	{
 		return tasksController.getOnlyTaskForAssetBySiteID(type, id);
@@ -450,12 +438,6 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap task = this.getOnlyTaskForAsset(type, id);
 		task.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
 		this.saveTask(task);
-	}
-
-	@Override
-	public Package getPresentationPackage(String packageID) throws MayamClientException
-	{
-		return packageController.getPresentationPackage(packageID);
 	}
 
 	@Override
@@ -661,10 +643,39 @@ public class MayamClientImpl implements MayamClient
 		}
 	}
 
+	/**
+	 * only ever returns attributes for 'real'tx packages, not 'pending' oones
+	 */
 	@Override
 	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException
 	{
 		return packageController.getSegmentList(packageID).getAttributeMap();
+	}
+	
+	/**
+	 * returned package is 'real' or 'pending' depending on the materialid passed in
+	 */
+	@Override
+	public SegmentList getTxPackage(String presentationID, String materialID) throws PackageNotFoundException, MayamClientException{
+		return packageController.getTxPackage(presentationID, materialID);
+	}
+	
+	@Override
+	public SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException{
+		
+		log.debug("looking for tx package "+ presentationID);
+		
+		try
+		{
+			SegmentList segmentList = packageController.getSegmentList(presentationID);
+			return segmentList;
+		}
+		catch (PackageNotFoundException pnfe)
+		{
+			log.debug(String.format("Real tx package with id %s not found, will look for a pending one", presentationID));
+		}
+
+		return packageController.getPendingTxPackage(presentationID, null);
 	}
 	
 	@Override

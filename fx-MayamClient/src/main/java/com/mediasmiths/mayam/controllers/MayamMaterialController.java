@@ -1069,54 +1069,6 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public MaterialType getPHMaterialType(String materialID)
-	{ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
-		AttributeMap attributes = getMaterialAttributes(materialID);
-		MaterialType material = new MaterialType();
-
-		material.setMaterialID((String) attributes.getAttribute(Attribute.HOUSE_ID));
-		Boolean qc = (Boolean) attributes.getAttribute(Attribute.QC_REQUIRED);
-
-		if (qc != null)
-		{
-			if (qc.booleanValue())
-			{
-				material.setQualityCheckTask(QualityCheckEnumType.AUTOMATIC_ON_INGEST);
-			}
-
-		}
-		else
-		{
-			log.warn(String.format("material %s had null QualityCheck attribute", materialID));
-		}
-
-		material.setRequiredFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
-
-		Source source = new Source();
-		material.setSource(source);
-		Aggregation aggregation = new Aggregation();
-		source.setAggregation(aggregation);
-		Aggregator aggregator = new Aggregator();
-		aggregation.setAggregator(aggregator);
-		Order order = new Order();
-		aggregation.setOrder(order);
-
-		aggregator.setAggregatorID("" + attributes.getAttribute(Attribute.AGGREGATOR));
-		order.setOrderReference("" + attributes.getAttribute(Attribute.OP_ID));
-
-		Compile compile = new Compile();
-		source.setCompile(compile);
-		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
-
-		/*
-		 * Library library = new Library(); IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS); String[] tapeIdsArrays = (String[]) tapeIds.toArray(); ArrayList<TapeType> tapeList = new
-		 * ArrayList<TapeType>(); for (int i = 0; i < tapeIdsArrays.length; i++) { TapeType tape = new TapeType(); tape.setLibraryID(tapeIdsArrays[i]); tapeList.add(tape); }
-		 * library.withTape(tapeList); source.setLibrary(library);
-		 */
-
-		return material;
-	}
-
 	public MayamClientErrorCode deleteMaterial(String materialID, int gracePeriod)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;

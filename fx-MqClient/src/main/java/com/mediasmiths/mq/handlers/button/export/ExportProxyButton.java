@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.button.ButtonClickHandler;
@@ -157,8 +158,23 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error constructing job params for export proxy", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error constructing transcode paramters");
+				if (MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED.equals(e.getErrorcode()))
+				{
+					log.error("Error getting material's location", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Error getting material's location");
+				}
+				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
+						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
+				{
+					log.error("Material unavailable or not found on hires storage", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Material unavailable or not on Hires storage");
+				}
+				else
+				{
+					log.error("error constructing job params for export proxy", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Error constructing transcode paramters");
+				}
+	
 				return;
 			}
 			catch (Exception e)
@@ -316,7 +332,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		jobParams.priority = getPriority(firstTX);
 
-		jobParams.inputFile = mayamClient.pathToMaterial(materialID);
+		jobParams.inputFile = mayamClient.pathToMaterial(materialID,false);
 		jobParams.outputFolder = exportOutputLocation + "/" + taskID;
 
 		jobParams.ftpupload = new TCFTPUpload();

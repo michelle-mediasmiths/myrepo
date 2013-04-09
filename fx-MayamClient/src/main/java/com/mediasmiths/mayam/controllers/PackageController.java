@@ -13,7 +13,7 @@ public interface PackageController
 {
 
 	/**
-	 * Called when presentation information with an automation id is included in a material exchagne message
+	 * Called when presentation information with an automation id is included in a material exchange message
 	 * 
 	 * The package with the given id may or may not exist on the pending tx package list
 	 * 
