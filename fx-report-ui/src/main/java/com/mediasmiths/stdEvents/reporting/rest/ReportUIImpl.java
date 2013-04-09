@@ -19,8 +19,8 @@ import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
-import com.mediasmiths.std.guice.thymeleaf.TemplateCall;
-import com.mediasmiths.std.guice.thymeleaf.Templater;
+import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
@@ -40,7 +40,7 @@ import com.mediasmiths.stdEvents.reporting.csv.WatchFolderRpt;
 public class ReportUIImpl implements ReportUI
 {
 	@Inject
-	private Templater templater;
+	private ThymeleafTemplater templater;
 	
 	@Inject
 	private QueryAPI queryApi;

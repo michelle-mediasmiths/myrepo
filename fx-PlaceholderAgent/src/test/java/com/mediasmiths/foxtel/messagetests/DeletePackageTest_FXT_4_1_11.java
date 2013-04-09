@@ -21,6 +21,9 @@ import au.com.foxtel.cf.mam.pms.DeletePackage;
 import au.com.foxtel.cf.mam.pms.Package;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mayam.wf.attributes.shared.Attribute;
+import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -84,6 +87,13 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(new Boolean(false));
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
+		
+		SegmentList sl = new SegmentList();
+		AttributeMap am = new AttributeMap();
+		am.setAttribute(Attribute.PARENT_HOUSE_ID,EXISTING_MATERIAL_ID);
+		sl.setAttributeMap(am);
+		
+		when(mayamClient.getTxPackage(EXISTING_PACKAGE_ID)).thenReturn(sl);
 		
 		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
 		if (MessageValidationResult.IS_VALID ==validateFile)

@@ -31,6 +31,7 @@ import au.com.foxtel.cf.mam.pms.Source;
 import au.com.foxtel.cf.mam.pms.TapeType;
 
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -451,144 +452,13 @@ public class MayamClientStub implements MayamClient
 
 
 	@Override
-	public String pathToMaterial(String materialID) throws MayamClientException
+	public String pathToMaterial(String materialID, boolean acceptNonPreffered) throws MayamClientException
 	{
 		// TODO implement!
 		
 		return "/storage/mam/hires01/mediasmithstemp/input/TestMedia.mxf";
 	}
-	
-	@Override
-	public PackageType getPackage(String packageID) throws MayamClientException
-	{
 
-		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
-		{
-			PackageType pack = new PackageType();
-			pack.setMaterialID(EXISTING_MATERIAL_ID);
-			PresentationFormatType format = buildPresentationFormat("SD");
-			pack.setPresentationFormat(format);
-			ClassificationEnumType classification = buildClassification("PG");
-			pack.setClassification(classification);
-			pack.setConsumerAdvice("Generally suitable for all");
-			pack.setNumberOfSegments(new BigInteger("4"));
-			XMLGregorianCalendar xmlCal;
-
-			try
-			{
-				xmlCal = getValidDate();
-				pack.setTargetDate(xmlCal);
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				log.error("error in mayam client stub", e);
-			}
-
-			pack.setNotes("none");
-			pack.setPresentationID(packageID);
-
-			return pack;
-		}
-		else if (packageID.equals(ERROR_PACKAGE_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED);
-		}
-	}
-
-	private PresentationFormatType buildPresentationFormat(String v)
-	{
-		PresentationFormatType format = null;
-		format = format.fromValue(v);
-		return format;
-	}
-
-	private ClassificationEnumType buildClassification(String v)
-	{
-		ClassificationEnumType classification = null;
-		classification = ClassificationEnumType.fromValue(v);
-		return classification;
-	}
-
-	private XMLGregorianCalendar getValidDate() throws DatatypeConfigurationException
-	{
-
-		Calendar calDate = new GregorianCalendar();
-		int numberOfDaysToAdd = (int) (Math.random() * 730 + 1);
-		calDate.add(Calendar.DAY_OF_YEAR, numberOfDaysToAdd);
-
-		GregorianCalendar gregDate = new GregorianCalendar();
-		gregDate.setTimeInMillis(calDate.getTimeInMillis());
-
-		XMLGregorianCalendar xmlDate = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregDate);
-		return xmlDate;
-	}
-
-	@Override
-	public MaterialType getMaterial(String materialID) throws MayamClientException
-	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
-		{
-
-			MaterialType m = new MaterialType();
-			Order order = new Order();
-			// build request
-			try
-			{
-				XMLGregorianCalendar orderCreated = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-						new GregorianCalendar(2013, 1, 1, 0, 0, 1));
-				XMLGregorianCalendar requiredBy = DatatypeFactory.newInstance().newXMLGregorianCalendar(
-						new GregorianCalendar(2013, 1, 10, 0, 0, 1));
-				order.setOrderCreated(orderCreated);
-				m.setRequiredBy(requiredBy);
-
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				log.error("error in mayam client stub", e);
-			}
-
-			order.setOrderReference("abc123");
-
-			Aggregator aggregator = new Aggregator();
-			aggregator.setAggregatorID("def456");
-			aggregator.setAggregatorName("aggregator");
-
-			Aggregation aggregation = new Aggregation();
-			aggregation.setOrder(order);
-			aggregation.setAggregator(aggregator);
-
-			TapeType tape = new TapeType();
-			tape.setPresentationID("def456");
-			tape.setLibraryID("ghi789");
-
-			Library library = new Library();
-			library.getTape().add(tape);
-
-			Source s = new Source();
-			s.setAggregation(aggregation);
-
-			m.setMaterialID(materialID);
-			m.setRequiredFormat("SD");
-			QualityCheckEnumType qualityCheck = null;
-			qualityCheck = qualityCheck.fromValue("AutomaticOnIngest");
-			m.setQualityCheckTask(qualityCheck);
-			m.setSource(s);
-
-			return m;
-		}
-		else if (materialID.equals(ERROR_MATERIAL_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		}
-	}
 
 	@Override
 	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String id) throws MayamClientException
@@ -673,37 +543,6 @@ public class MayamClientStub implements MayamClient
 //		}
 //	}
 
-	@Override
-	public Package getPresentationPackage(String packageID) throws MayamClientException
-	{
-
-		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
-		{
-			Package p = new Package();
-			Segment s = new Segment();
-			s.setSegmentNumber(1);
-			s.setSegmentTitle("Segment title");
-			s.setSOM("00:00:00:00");
-			s.setEOM("00:00:00:00");
-
-			Segmentation seg = new Segmentation();
-			seg.getSegment().add(s);
-
-			p.setPresentationID(packageID);
-			p.setSegmentation(seg);
-			return p;
-
-		}
-		else if (packageID.equals(ERROR_PACKAGE_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		}
-
-	}
 
 	@Override
 	public String getMaterialIDofPackageID(String packageID) throws MayamClientException
@@ -1044,6 +883,23 @@ public class MayamClientStub implements MayamClient
 
 	@Override
 	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public SegmentList getTxPackage(String presentationID, String materialID)
+			throws PackageNotFoundException,
+			MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException
 	{
 		// TODO Auto-generated method stub
 		return null;

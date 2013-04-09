@@ -172,7 +172,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			log.debug("Material is NOT for TX delivery");
-			final String destination = mayamClient.pathToMaterial(id);
+			final String destination = mayamClient.pathToMaterial(id,false);
 			log.debug(String.format("Material destination set to %s", destination));
 			destinationFile = new File(destination);
 		}
@@ -238,7 +238,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		String path = mayamClient.pathToMaterial(materialID);
+		String path = mayamClient.pathToMaterial(materialID,false);
 
 		return new MaterialTransferForTCResponse(path);
 	}
