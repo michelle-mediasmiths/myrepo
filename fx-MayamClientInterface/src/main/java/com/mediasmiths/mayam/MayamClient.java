@@ -199,7 +199,7 @@ public interface MayamClient
 	 * @param location
 	 * @return 
 	 */
-	public String pathToMaterial(String materialID) throws MayamClientException;
+	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException;
 
 	/**
 	 * Return the placeholder management system representation of a package

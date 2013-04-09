@@ -401,7 +401,7 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public String pathToMaterial(String materialID) throws MayamClientException
+	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException
 	{
 		log.debug(String.format("Requesting pathTo material for materialID %s", materialID));
 		
@@ -411,7 +411,7 @@ public class MayamClientImpl implements MayamClient
 		if(null != material)
 		{
 			String assetID = material.getAttribute(Attribute.ASSET_ID);
-			assetPath = materialController.getAssetPath(assetID);
+			assetPath = materialController.getAssetPath(assetID,acceptNonPreferredLocations);
 		}
 		else
 		{

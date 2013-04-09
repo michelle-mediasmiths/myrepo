@@ -1538,7 +1538,7 @@ public class MayamMaterialController extends MayamController
 		
 		if(urls == null || urls.size()==0){
 			log.error("no urls for media found!");
-			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE);
 		}
 		
 	
