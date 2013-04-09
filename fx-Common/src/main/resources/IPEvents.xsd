@@ -681,6 +681,58 @@
     		</xs:complexContent>
     	</xs:complexType>
     </xs:element>
+    
+    <xs:element name="ContentAvailable">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="IPEvent">
+    				<xs:sequence>
+						<xs:element name="materialID" type="xs:string"/>
+						<xs:element name="title" type="xs:string"/>
+						<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
+						<xs:element name="tapeDelivery" type="xs:boolean" minOccurs="0"/>
+						<xs:element name="fileDelivery" type="xs:boolean" minOccurs="0"/>
+						<xs:element name="format" type="xs:string" minOccurs="0"/>
+						<xs:element name="filesize" type="xs:string" minOccurs="0"/>
+						<xs:element name="titleLength" type="xs:string" minOccurs="0"/>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="AutoQCNotification">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="IPEvent">
+    				<xs:sequence>
+    					<xs:element name="assetID" type="xs:string"/>
+    					<xs:element name="forTXDelivery" type="xs:boolean"/>
+    					<xs:element name="taskID" type="xs:string"/>
+						<xs:element name="title" type="xs:string"/>
+						<xs:element name="taskStatus" type="xs:string"/>
+						<xs:element name="qcStatus" type="xs:string"/>
+     				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="tcPassedNotification">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="IPEvent">
+    				<xs:sequence>
+    					<xs:element minOccurs="0" name="taskID" type="xs:string"/>
+                  	  	<xs:element minOccurs="0" name="assetID" type="xs:string"/>
+                   	 	<xs:element minOccurs="0" name="title" type="xs:string"/>
+                   	 	<xs:element minOccurs="0" name="packageID" type="xs:string"/>
+                   	 	<xs:element minOccurs="0" name="deliveryLocation" type="xs:string"/>
+    				</xs:sequence>
+    			</xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">
