@@ -841,67 +841,54 @@ public class MayamTaskController extends MayamController
 
 	public void removePurgeCandidateTasksForTilesAssociatedMaterial(String titleAssetID)
 	{
-		//TODO : fix the task search in this method, its returning far too many tasks
-		
-//		try
-//		{
-//			// If a title was created as a result of marketing material arriving referring to a non existant title then that asset will be on the purge candidate list
-//			// This method is called during update title in response to a bms message, search for an remove any purge candiate tasks for this titles associated items
-//			List<AttributeMap> assetChildren = client.assetApi().getAssetChildren(
-//					MayamAssetType.TITLE.getAssetType(),
-//					titleAssetID,
-//					MayamAssetType.MATERIAL.getAssetType());
+		try
+		{
+			// If a title was created as a result of marketing material arriving referring to a non existant title then that asset will be on the purge candidate list
+			// This method is called during update title in response to a bms message, search for an remove any purge candiate tasks for this titles associated items
+			List<AttributeMap> assetChildren = client.assetApi().getAssetChildren(
+					MayamAssetType.TITLE.getAssetType(),
+					titleAssetID,
+					MayamAssetType.MATERIAL.getAssetType());
+
+			for (AttributeMap child : assetChildren)
+			{
+				String contMatType = child.getAttribute(Attribute.CONT_MAT_TYPE);
+
+				if (MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contMatType))
+				{
+					String childAssetID = child.getAttributeAsString(Attribute.ASSET_ID);
+					
+					log.debug("Searching for purge candidate tasks for asset "+childAssetID);
+
+					final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+					criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
+					criteria.getFilterEqualities().setAttribute(
+							Attribute.TASK_LIST_ID,
+							MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
+					criteria.getFilterEqualities().setAttribute(
+							Attribute.ASSET_ID,childAssetID);
+
+					FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
+
+					log.debug(String.format("%d tasks returned, not trying to close any just yet", result.getMatches().size()));
+
+//					List<AttributeMap> tasks = result.getMatches();
 //
-//			Set<String> associatedMaterialAssetIds = new HashSet<String>();
-//
-//			for (AttributeMap child : assetChildren)
-//			{
-//				String contMatType = child.getAttribute(Attribute.CONT_MAT_TYPE);
-//
-//				if (MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contMatType))
-//				{
-//					String childAssetID = child.getAttributeAsString(Attribute.ASSET_ID);
-//					associatedMaterialAssetIds.add(childAssetID);
-//				}
-//			}
-//		
-//			if (associatedMaterialAssetIds.size() > 0)
-//			{
-//
-//				log.debug("Searching for purge candidate tasks for assets " + StringUtils.join(associatedMaterialAssetIds, ','));
-//
-//				final FilterCriteria criteria = client.taskApi().createFilterCriteria();
-//				criteria.getFilterAlternatives().addAsInclusions(Attribute.ASSET_ID, associatedMaterialAssetIds);
-//				criteria.getFilterEqualities().setAttribute(
-//						Attribute.TASK_LIST_ID,
-//						MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
-//				criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
-//
-//				FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
-//
-//				log.debug(String.format("%d tasks returned", result.getMatches().size()));
-//
-//				List<AttributeMap> tasks = result.getMatches();
-//
-//				for (AttributeMap task : tasks)
-//				{
-//					TaskState state = task.getAttribute(Attribute.TASK_STATE);
-//
-//					if (!END_STATES.contains(state))
+//					for (AttributeMap task : tasks)
 //					{
-//						AttributeMap updateMap = updateMapForTask(task);
-//						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-//						client.taskApi().updateTask(updateMap);
+//						TaskState state = task.getAttribute(Attribute.TASK_STATE);
+//
+//							AttributeMap updateMap = updateMapForTask(task);
+//							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+//							client.taskApi().updateTask(updateMap);
 //					}
-//
-//				}
-//
-//			}
-//		}
-//		catch (Exception e)
-//		{
-//			log.error("error searching for or closing purge candidate tasks for titles child associated materials", e);
-//		}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error searching for or closing purge candidate tasks for titles child associated materials", e);
+		}
 	}
 	
 }

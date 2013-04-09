@@ -661,23 +661,33 @@ public class MayamClientImpl implements MayamClient
 	}
 	
 	@Override
-	public SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException{
-		
-		log.debug("looking for tx package "+ presentationID);
-		
+	public SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException
+	{
+
+		log.debug("looking for tx package " + presentationID);
+
+		SegmentList segmentList = null;
+
 		try
 		{
-			SegmentList segmentList = packageController.getSegmentList(presentationID);
-			return segmentList;
+			segmentList = packageController.getSegmentList(presentationID);
+
 		}
 		catch (PackageNotFoundException pnfe)
 		{
 			log.debug(String.format("Real tx package with id %s not found, will look for a pending one", presentationID));
 		}
 
-		return packageController.getPendingTxPackage(presentationID, null);
+		if (segmentList != null)
+		{
+			return segmentList;
+		}
+		else
+		{	
+			return packageController.getPendingTxPackage(presentationID, null);
+		}
 	}
-	
+
 	@Override
 	public int getLastDeliveryVersionForMaterial(String materialID)
 	{
