@@ -61,14 +61,25 @@ public abstract class ValidationTest {
 	}
 	
 	protected MessageValidationResult validationForMaterial(Material material) throws Exception{
+		return validationForMaterial(material,false);
+	}
+	
+	protected MessageValidationResult validationForMaterial(Material material, boolean withMedia) throws Exception{
 	
 		String importFolderPath =  TestUtil.prepareTempFolder("INCOMING");
-		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR +"MessageValidationResult"+ RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
+		String messageXmlPathnoext = importFolderPath+ IOUtils.DIR_SEPARATOR +"MessageValidationResult"+ RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR;
+		String messageXmlPath = messageXmlPathnoext + "xml";
+		String mxfPath =  messageXmlPathnoext + "mxf";
+		
 		TestUtil.writeMaterialToFile(material,messageXmlPath);		
 		prepareMocks();
 		
 		PickupPackage pp = new PickupPackage("xml", "mxf");
 		pp.addPickUp(new File(messageXmlPath));
+		
+		if(withMedia){
+			pp.addPickUp(new File(mxfPath));
+		}
 		
 		return validator.validatePickupPackage(pp).getResult();
 	}

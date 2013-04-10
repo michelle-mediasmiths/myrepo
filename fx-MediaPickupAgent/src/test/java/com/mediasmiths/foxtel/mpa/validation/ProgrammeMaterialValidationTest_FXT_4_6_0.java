@@ -33,7 +33,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 	public void testMaterialNoPackages() throws Exception{
 		
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER);
-		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material));
+		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material,true));
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
@@ -78,7 +78,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_NOT_PLACEHOLDER);
 				
-		MessageValidationResult validateFile = validationForMaterial(material);
+		MessageValidationResult validateFile = validationForMaterial(material,true);
 		if (MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER==validateFile)
 		{
 			resultLogger.info("FXT 4.6.0.5  - Programme material message references non placeholder item --Passed");
@@ -102,7 +102,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		packageids.add(EXISTING_PACKAGE2);
 		
 		Material material = ProgrammeMaterialTest.getMaterialWithPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER, packageids);
-		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material));
+		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material,true));
 		
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
