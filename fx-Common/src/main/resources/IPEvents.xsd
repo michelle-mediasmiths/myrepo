@@ -136,7 +136,7 @@
     <xs:element name="PreviewFailed">
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="fns:IPEvent">
+                <xs:extension base="autoQCResultNotification">
                     <xs:sequence>
                         <xs:element name="assetId" type="xs:string"/>
                         <xs:element name="title" type="xs:string"/>
@@ -160,27 +160,6 @@
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
-    </xs:element>
-
-    <xs:element name="ComplianceLogging">
-	<xs:complexType>
-		<xs:complexContent>
-			<xs:annotation>
-				<xs:documentation>The ComplianceLogging report type
-				</xs:documentation>
-			</xs:annotation>
-			<xs:extension base="fns:IPEvent">
-				<xs:sequence>
-					<xs:element name="title" type="xs:string" />
-					<xs:element name="materialID" type="xs:string"/>
-					<xs:element name="channels" type="xs:string"/>
-					<xs:element name="taskStatus" type="xs:string"/>
-					<xs:element name="taskFinish" type="xs:date"/>
-					<xs:element name="externalCompliance" type="xs:string"/>
-				</xs:sequence>
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
     </xs:element>
 
     <xs:element name="Export">
@@ -333,8 +312,7 @@
         </xs:complexContent>
     </xs:complexType>
 
-	<xs:element name="tcNotification">
-    <xs:complexType>
+	<xs:complexType name="tcEvent">
         <xs:complexContent>
             <xs:extension base="fns:IPEvent">
                 <xs:sequence>
@@ -347,8 +325,23 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-	</xs:element>
 
+	<xs:element name="tcPassedNotification">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="tcEvent"/>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
+    
+    <xs:element name="tcNotification">
+    	<xs:complexType>
+    		<xs:complexContent>
+    			<xs:extension base="tcEvent"></xs:extension>
+    		</xs:complexContent>
+    	</xs:complexType>
+    </xs:element>
+    
     <xs:complexType name="materialTransferForTCResponse">
         <xs:sequence>
             <xs:element minOccurs="0" name="destination" type="xs:string" />
@@ -718,21 +711,7 @@
     	</xs:complexType>
     </xs:element>
     
-    <xs:element name="tcPassedNotification">
-    	<xs:complexType>
-    		<xs:complexContent>
-    			<xs:extension base="IPEvent">
-    				<xs:sequence>
-    					<xs:element minOccurs="0" name="taskID" type="xs:string"/>
-                  	  	<xs:element minOccurs="0" name="assetID" type="xs:string"/>
-                   	 	<xs:element minOccurs="0" name="title" type="xs:string"/>
-                   	 	<xs:element minOccurs="0" name="packageID" type="xs:string"/>
-                   	 	<xs:element minOccurs="0" name="deliveryLocation" type="xs:string"/>
-    				</xs:sequence>
-    			</xs:extension>
-    		</xs:complexContent>
-    	</xs:complexType>
-    </xs:element>
+    
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
 		<xs:restriction base="xs:string">

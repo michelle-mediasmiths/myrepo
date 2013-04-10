@@ -12,25 +12,41 @@
 <body>
 	<span th:substituteby="includes :: navbar" />
 	<h1>Auto QC Report</h1>
-
-	<h4>Titles QC'd</h4>
+	
 	<table id="qcTable" class="table table-striped tablesorter">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				</tr>
+				<th>DateRange</th>
+				<th>Title</th>
+				<th>MaterialID</th>
+				<th>Channels</th>
+				<th>ContentType</th>
+				<th>Operator</th>
+				<th>TaskStatus</th>
+				<th>QcStatus</th>
+				<th>TaskStart</th>
+				<th>TaskFinish</th>
+				<th>WarningTime</th>
+				<th>ManualOverride</th>
+				<th>FailureParameter</th>
+				<th>TitleLength</th>
+			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="event: ${autoQCd}">
-				<td th:text="${event.id}">id</td>
-				<td th:text="${event.time}">time</td>
-				<td th:text="${event.namespace}">namespaceEx</td>
-				<td th:text="${event.eventName}">eventNameEx</td>
-				<td th:text="${event.payload}">payloadEx</td>			
+			<tr th:each="qc: ${qcs}">
+				<td th:text="${qc.dateRange}"></td>
+				<td th:text="${qc.title}"></td>
+				<td th:text="${qc.materialID}"></td>
+				<td th:text="${qc.channels}"></td>
+				<td th:text="${qc.contentType}"></td>
+				<td th:text="${qc.operator}"></td>
+				<td th:text="${qc.qcStatus}"></td>
+				<td th:text="${qc.taskStart}"></td>
+				<td th:text="${qc.taskFinish}"></td>
+				<td th:text="${qc.warningTime}"></td>
+				<td th:text="${qc.manualOverride}"></td>
+				<td th:text="${qc.failurePrameter}"></td>
+				<td th:text="${qc.titleLength}"></td>
 			</tr>
 		</tbody>
 	</table>

@@ -4,7 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
@@ -15,6 +20,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.events.report.ComplianceLogging;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -39,15 +45,15 @@ public class ComplianceRpt
 		createCsv(comps, reportName);
 	}
 	
-	private ComplianceLogging unmarshall(EventEntity event)
+	private Object unmarshall(EventEntity event)
 	{
-		Object title = new ComplianceLogging();
+		Object title = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
 			title = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
@@ -56,7 +62,7 @@ public class ComplianceRpt
 		{
 			e.printStackTrace();
 		}
-		return (ComplianceLogging)title;
+		return title;
 	}
 	
 	private List<ComplianceLogging> getReportList(List<EventEntity> events, Date startDate, Date endDate)
@@ -65,10 +71,22 @@ public class ComplianceRpt
 		List<ComplianceLogging> comps = new ArrayList<ComplianceLogging>();
 		for (EventEntity event : events)
 		{
-			ComplianceLogging comp = unmarshall(event);
-			comp.setDateRange(startDate + " - " + endDate);
-			
-			comps.add(comp);
+			ComplianceLoggingMarker comp = (ComplianceLoggingMarker) unmarshall(event);
+			ComplianceLogging rpt = new ComplianceLogging();
+			rpt.setDateRange(startDate + " - " + endDate);
+			rpt.setTitle(comp.getTitleField());
+			rpt.setMaterialID(comp.getMasterID());
+			GregorianCalendar taskFinish = new GregorianCalendar();
+			taskFinish.setTimeInMillis(event.getTime());
+			try
+			{
+				rpt.setTaskFinish(DatatypeFactory.newInstance().newXMLGregorianCalendar(taskFinish));
+			}
+			catch (DatatypeConfigurationException e)
+			{
+				e.printStackTrace();
+			}
+			comps.add(rpt);
 		}
 		return comps;
 	}

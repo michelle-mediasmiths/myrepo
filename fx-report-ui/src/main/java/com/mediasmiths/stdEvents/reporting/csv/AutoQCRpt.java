@@ -4,9 +4,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.xml.bind.DatatypeConverter;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
@@ -47,6 +50,8 @@ public class AutoQCRpt
 	{
 		Object title = null;
 		String payload = event.getPayload();
+		logger.info("event.eventName: " + event.getEventName());
+		logger.info("event.id: " + event.getId());
 		logger.info("Unmarshalling payload " + payload);
 
 		try
@@ -75,22 +80,31 @@ public class AutoQCRpt
 			autoQc.setMaterialID(result.getAssetId());
 			autoQc.setTitle(result.getTitle());
 			autoQc.setContentType("Programme");
+			GregorianCalendar taskFinish = new GregorianCalendar();
+			taskFinish.setTimeInMillis(event.getTime());
+			try
+			{
+				autoQc.setTaskFinish(DatatypeFactory.newInstance().newXMLGregorianCalendar(taskFinish));
+			}
+			catch (DatatypeConfigurationException e)
+			{
+				e.printStackTrace();
+			}
 			
-			logger.info("event.eventName: " + event.getEventName());
 			if(event.getEventName().equals("AutoQCPassed")) {
 				autoQc.setQcStatus("QC_PASS");
 				autoQc.setTaskStatus("FINISHED");
 			}
-			if(event.getEventName().equals("QcFailedReorder")) {
+			if(event.getEventName().equals("QcFailedReOrder")) {
 				autoQc.setQcStatus("QC_FAILED_REORDER");
 				autoQc.setTaskStatus("FINISHED_FAILED");
 			}
-			else if(event.getEventName().equals("QcProblemWithTCMedia")) {
-				autoQc.setQcStatus("UNKNOWN");
+			else if(event.getEventName().equals("QcProblemwithTCMedia")) {
+				autoQc.setQcStatus("QC_PROBLEM_WITH_TC_MEDIA");
 				autoQc.setTaskStatus("FINISHED_FAILED");
 			}
-			else if(event.getEventName().equals("CerifyQcError")) {
-				autoQc.setQcStatus("UNKNOWN");
+			else if(event.getEventName().equals("CerifyQCError")) {
+				autoQc.setQcStatus("CERIFY_QC_ERROR");
 				autoQc.setTaskStatus("FINISHED_FAILED");
 			}
 			

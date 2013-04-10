@@ -1,24 +1,22 @@
 package com.mediasmiths.mq.handlers.preview;
 
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
+import java.util.Set;
 
 public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 {
@@ -104,30 +102,41 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 				createFixStitchTask(materialID);
 			}
 
-			if (passed && reorder)
+			if (reorder)
 			{
-				String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-				PreviewFailed pf = new PreviewFailed();
-				pf.setDate((new Date()).toString());
-				pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
-				pf.setAssetId(houseID);
-				
-				try
+				if (passed)
 				{
-					Set<String> channelGroups = mayamClient.getChannelGroupsForItem(messageAttributes);
-					pf.getChannelGroup().addAll(channelGroups);
+					sendReorderEvent(messageAttributes, "PreviewPassedReorder");
 				}
-				catch (Exception e)
+				else if (fixeditrequired)
 				{
-					log.error("error determining channel groups for event", e);
+					sendReorderEvent(messageAttributes, "PreviewFixReorder");
 				}
-				
-				eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewPassedReorder", pf);
 			}
 		}
 
 	}
-	
+
+	private void sendReorderEvent(final AttributeMap messageAttributes, String reorderEventName)
+	{
+		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+		PreviewFailed pf = new PreviewFailed();
+		//pf.setDate((new Date()).toString());
+		pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
+		pf.setAssetId(houseID);
+
+		try
+		{
+			Set<String> channelGroups = mayamClient.getChannelGroupsForItem(messageAttributes);
+			pf.getChannelGroup().addAll(channelGroups);
+		}
+		catch (Exception e)
+		{
+			log.error("error determining channel groups for event", e);
+		}
+		eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", reorderEventName, pf);
+	}
+
 	private void createFixStitchTask(String materialID) throws MayamClientException, RemoteException
 	{		
 		taskController.createFixStictchTaskForMaterial(materialID);

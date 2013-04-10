@@ -194,7 +194,7 @@
 				<td><label>21. Extended Publishing and File Export: </label></td>
 				<td><button class="btn-primary" id="rpt21Btn" type="submit">CSV</button></td>
 			</form>			
-			<form class="form-search">
+			<form class="form-search" method="GET" th:action="@{/rest/query/export_ui}">
 				<td><button class="btn-primary" id="rpt2UI" type="submit">NULL</button></td>
 			</form>
 		</tr>
@@ -204,12 +204,12 @@
 				<td><label>10b. Auto QC: </label></td>
 				<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
 			</form>	
-			<form class="form-search" method="GET" th:action="@{rest/query/auto_qc/ui}">
+			<form class="form-search" method="GET" th:action="@{rest/query/auto_qc_ui}">
 				<td><button class="btn-primary" id="rpt2UI" type="submit">On Screen</button></td>
 			</form>
 			
 			<form class="form-search" method="GET" th:action="@{/rest/query/watch_folder_storage_csv}">
-				<td><label>24. Watch Folder Storage: </label></td>
+				<td><label>24. Watch Folder Storage: (IGNORING)</label></td>
 				<td><button class="btn-primary" id="rpt24Btn" type="submit">CSV</button></td>
 			</form>
 			<form class="form-search">
@@ -219,7 +219,7 @@
 		
 		<tr>
 			<form class="form-search" method="GET" th:action="@{/rest/query/task_list_csv}">
-				<td><label>12. Task List Status: </label></td>
+				<td><label>12. Task List Status: (IGNORING)</label></td>
 				<td><button class="btn-primary" id="rpt12Btn" type="submit">CSV</button></td>
 			</form>
 			<form class="form-search">
@@ -227,7 +227,7 @@
 			</form>
 			
 			<form class="form-search" method="GET" th:action="@{/rest/query/transcoder_load_csv}">
-				<td><label>26. Transcoder Load: </label></td>
+				<td><label>26. Transcoder Load: (IGNORING)</label></td>
 				<td><button class="btn-primary" id="rpt26Btn" type="submit">CSV</button></td>
 			</form>
 			<form class="form-search">
