@@ -47,7 +47,6 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		String archivePath =	TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		String failurePath = TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.FAILUREFOLDERNAME);
 		String deliveryPath =  TestUtil.prepareTempFolder("DELIVERY");
-//		String emergencyFolderPath = TestUtil.prepareTempFolder("ARDOMEEMERGENCYIMPORT");
 		
 		WatchFolders wfs = new WatchFolders();
 		WatchFolder wf = new WatchFolder(incomingFolderPath);
@@ -67,20 +66,13 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		IOUtils.write(RandomStringUtils.random(20), new FileOutputStream(new File(unmatchedMXFPath)));
 		
 		//prepare mock matchmatcher
-		MatchMaker mm = mock(MatchMaker.class);
 		UnmatchedFile um = new UnmatchedFile(timeout+1, unmatchedMXFPath);
-		when(mm.purgeUnmatchedMessages(timeout)).
-			thenReturn(Collections.<MediaEnvelope>singletonList(new MediaEnvelope(new File(unmatchedXMLPath), null))).
-			thenReturn(Collections.<MediaEnvelope>emptyList());
-		when(mm.purgeUnmatchedMXFs(timeout)).
-			thenReturn(Collections.<UnmatchedFile>singletonList(um)).
-			thenReturn(Collections.<UnmatchedFile>emptyList());
-		
+	
 		//mock alert interface
 		EventService events = mock(EventService.class);
 				
 		//run object being tested
-		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,mm,events);
+		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,events);
 		Thread unmatcherThread = new Thread(toTest);
 		unmatcherThread.start();
 		
@@ -88,10 +80,6 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		Thread.sleep(500l);
 		//stop the unmatched material processor
 		unmatcherThread.interrupt();
-		
-		//check results		
-		verify(mm, atLeastOnce()).purgeUnmatchedMessages(timeout);
-		verify(mm, atLeastOnce()).purgeUnmatchedMXFs(timeout);
 		
 		Boolean xmlExists=new File(unmatchedXMLPath).exists();
 		assertFalse(xmlExists); //message should have been moved to the failed folder

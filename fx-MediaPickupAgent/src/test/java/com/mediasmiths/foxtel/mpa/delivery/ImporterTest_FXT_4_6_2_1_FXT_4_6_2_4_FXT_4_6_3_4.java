@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.mpa.delivery;
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
@@ -76,8 +77,12 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		TestUtil.writeBytesToFile(100, materialxml);
 		masterID = "MASTERID";
 
-		envelope = new MediaEnvelope(materialxml, new Material(), masterID);
-		pendingImport = new PendingImport(media, envelope);
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		
+		envelope = new MediaEnvelope(pp, new Material(), masterID);
+		pendingImport = new PendingImport(envelope);
 
 		//Check if can write
 			//Change from read only

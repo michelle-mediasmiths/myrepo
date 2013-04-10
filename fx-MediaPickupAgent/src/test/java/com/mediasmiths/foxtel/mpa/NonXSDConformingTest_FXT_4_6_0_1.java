@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
@@ -49,7 +50,12 @@ public class NonXSDConformingTest_FXT_4_6_0_1{
 		SchemaValidator sv = new SchemaValidator("MaterialExchange_V2.0.xsd");
 		
 		MaterialExchangeValidator validator = new MaterialExchangeValidator(um, mc, rw, sv);
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
+		
+		PickupPackage pp = new PickupPackage("xml", "mxf");
+		pp.addPickUp(temp);
+		
+		
+		MessageValidationResult validateFile = validator.validatePickupPackage(pp).getResult();
 		
 		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
 			resultLogger.info("FXT 4.6.0.1  - Non XSD Compliance --Passed");

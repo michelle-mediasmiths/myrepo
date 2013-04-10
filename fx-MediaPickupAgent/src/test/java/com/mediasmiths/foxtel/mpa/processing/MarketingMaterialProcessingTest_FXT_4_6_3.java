@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.mpa.processing;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.inOrder;
@@ -21,7 +22,10 @@ import org.junit.Test;
 import org.mockito.InOrder;
 import org.xml.sax.SAXException;
 
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MarketingMaterialTest;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
@@ -30,314 +34,308 @@ import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 
-@Ignore
-public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessingTest {
-	
+public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessingTest
+{
+
 	private static Logger logger = Logger.getLogger(MarketingMaterialProcessingTest_FXT_4_6_3.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-        @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid_FXT_4_6_3_2_3()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-    		String testName="FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
-    		logger.info("Starting" +testName);
-    		
-    		testProcessMessageValidMessageAndMedia(true, true, true, testName);
-        }
+	@Test
+	public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid_FXT_4_6_3_2_3()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
+		logger.info("Starting" + testName);
 
-        @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaInValid_FXT_4_6_2()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-        	
-    		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
-    		logger.info("Starting" +testName);
-    		
-        	
-                testProcessMessageValidMessageAndMedia(true, true, false, testName);
-        }
+		testProcessMessageValidMessageAndMedia(true, testName);
+	}
 
-        @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaValid_FXT_4_6_3_2_3()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-    			String testName="FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
-    			logger.info("Starting" +testName);
-    			
-                testProcessMessageValidMessageAndMedia(true, false, true, testName);
-        }
+	@Test
+	public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaInValid_FXT_4_6_2()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
 
-        @Test
-        public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaInvalid_FXT_4_6_3_2()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-        		String testName="FXT 4.6.3.2  - Marketing material message references existing title";
-    			logger.info("Starting" +testName);
-    		
-                testProcessMessageValidMessageAndMedia(true, false, false, testName);
-        }
+		String testName = "FXT 4.6.3.2  - Marketing material message references existing title";
+		logger.info("Starting" + testName);
 
-        @Test
-        public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaValid_FXT_4_6_3_1()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-        	
-    		String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
-    		logger.info("Starting" +testName);
-    		
-                testProcessMessageValidMessageAndMedia(false, true, true, testName);
-        }
+		testProcessMessageValidMessageAndMedia(true, testName);
+	}
 
-        @Test
-        public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaInvalid_FXT_4_6_3_1()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {       		
-    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
-    			logger.info("Starting" +testName);
-    			
-                testProcessMessageValidMessageAndMedia(false, true, false, testName);
-        }
+	@Test
+	public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaValid_FXT_4_6_3_2_3()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
+		logger.info("Starting" + testName);
 
-        @Test
-        public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaValid_FXT_4_6_3_1()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
-    			logger.info("Starting" +testName);
-    		
-                testProcessMessageValidMessageAndMedia(false, false, true, testName);
-        }
+		testProcessMessageValidMessageAndMedia(true, testName);
+	}
 
-        @Test
-        public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaInValid_FXT_4_6_3_1()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
-    			String testName="FXT 4.6.3.1  - Marketing material message references non existing title";
-    			logger.info("Starting" +testName);
-    		
-                testProcessMessageValidMessageAndMedia(false, false, false, testName);
-        }
+	@Test
+	public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaInvalid_FXT_4_6_3_2()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.2  - Marketing material message references existing title";
+		logger.info("Starting" + testName);
 
-        public void testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(
-                        boolean titleExists) throws DatatypeConfigurationException,
-                        FileNotFoundException, IOException, MayamClientException,
-                        JAXBException, SAXException, InterruptedException {
-                // prepare files
-                material = MarketingMaterialTest.getMaterial(TITLE_ID);
+		testProcessMessageValidMessageAndMedia(true, testName);
+	}
 
-                materialXMLPath = materialxml.getAbsolutePath();
-                TestUtil.writeMaterialToFile(material, materialXMLPath);
+	@Test
+	public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaValid_FXT_4_6_3_1()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
 
-                // prepare mocks
-                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
-                                MessageValidationResult.IS_VALID);
-                when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
-                when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(
-                                MayamClientErrorCode.FAILURE);
-                when(mayamClient.createTitle(argThat(titleIDMatcher))).thenReturn(
-                                MayamClientErrorCode.FAILURE);
+		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
+		logger.info("Starting" + testName);
 
-                // add file to queue for processing
-                filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+		testProcessMessageValidMessageAndMedia(false, testName);
+	}
 
-                // wait for some time to allow processing to take place
-                Thread.sleep(500l);
+	@Test
+	public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaInvalid_FXT_4_6_3_1()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
+		logger.info("Starting" + testName);
 
-                // check message gets moved to failure folder
-                assertFalse(materialxml.exists());
-                assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
-                                new File(failurePath)).exists());
-        }
+		testProcessMessageValidMessageAndMedia(false, testName);
+	}
 
-        @Test
-        public void testProcessingFailsWhenErrorQueryingTitleExistance()
-                        throws DatatypeConfigurationException, MayamClientException,
-                        InterruptedException, FileNotFoundException, JAXBException,
-                        SAXException {
-                // prepare files
-                material = MarketingMaterialTest.getMaterial(TITLE_ID);
+	@Test
+	public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaValid_FXT_4_6_3_1()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
+		logger.info("Starting" + testName);
 
-                materialXMLPath = materialxml.getAbsolutePath();
-                TestUtil.writeMaterialToFile(material, materialXMLPath);
+		testProcessMessageValidMessageAndMedia(false, testName);
+	}
 
-                // prepare mocks
-                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
-                                MessageValidationResult.IS_VALID);
-                when(mayamClient.titleExists(TITLE_ID)).thenThrow(
-                                new MayamClientException(MayamClientErrorCode.FAILURE));
-                // add file to queue for processing
-                filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
+	@Test
+	public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaInValid_FXT_4_6_3_1()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
+		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
+		logger.info("Starting" + testName);
 
-                // wait for some time to allow processing to take place
-                Thread.sleep(500l);
+		testProcessMessageValidMessageAndMedia(false, testName);
+	}
 
-                // check message gets moved to failure folder
-                assertFalse(materialxml.exists());
-                assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml,
-                                new File(failurePath)).exists());
-        }
+	public void testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(boolean titleExists)
+			throws DatatypeConfigurationException,
+			FileNotFoundException,
+			IOException,
+			MayamClientException,
+			JAXBException,
+			SAXException,
+			InterruptedException
+	{
+		// prepare files
+		material = MarketingMaterialTest.getMaterial(TITLE_ID);
 
-        @Test
-        public void testProcessFailsOnMayamExceptionUpdatingTitle()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, MayamClientException, JAXBException, SAXException,
-                        InterruptedException {
-                testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(true);
-        }
+		materialXMLPath = materialxml.getAbsolutePath();
 
-        @Test
-        public void testProcessFailsOnMayamExceptionCreatingTitle()
-                        throws FileNotFoundException, DatatypeConfigurationException,
-                        IOException, MayamClientException, JAXBException, SAXException,
-                        InterruptedException {
-                testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(false);
+		// prepare mocks
+		MessageValidationResultPackage<Material> validresult = new MessageValidationResultPackage<>(
+				new PickupPackage("xml"),
+				MessageValidationResult.IS_VALID);
+		when(validator.validatePickupPackage(any(PickupPackage.class))).thenReturn(validresult);
+		when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
+		when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(MayamClientErrorCode.FAILURE);
+		when(mayamClient.createTitle(argThat(titleIDMatcher))).thenReturn(MayamClientErrorCode.FAILURE);
 
-        }
+		// write file
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
+		
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
 
-        /**
-         * Test that a valid message is processed correctly
-         * 
-         * @throws DatatypeConfigurationException
-         * @throws IOException
-         * @throws FileNotFoundException
-         * @throws SAXException
-         * @throws JAXBException
-         * @throws InterruptedException
-         * @throws MayamClientException
-         * 
-         */
-        public void testProcessMessageValidMessageAndMedia(boolean titleExists,
-                        boolean mediaFirst, boolean validMedia, String testName)
-                        throws DatatypeConfigurationException, FileNotFoundException,
-                        IOException, JAXBException, SAXException, InterruptedException,
-                        MayamClientException {
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml, new File(failurePath)).exists());
+	}
 
-                // prepare files
-                TestUtil.writeBytesToFile(100, media);
-                material = MarketingMaterialTest.getMaterial(TITLE_ID);
+	@Test
+	public void testProcessingFailsWhenErrorQueryingTitleExistance()
+			throws DatatypeConfigurationException,
+			MayamClientException,
+			InterruptedException,
+			FileNotFoundException,
+			JAXBException,
+			SAXException
+	{
+		// prepare files
+		material = MarketingMaterialTest.getMaterial(TITLE_ID);
 
-                materialXMLPath = materialxml.getAbsolutePath();
-                TestUtil.writeMaterialToFile(material, materialXMLPath);
+		materialXMLPath = materialxml.getAbsolutePath();
+	
 
-                // prepare mocks
-                when(validator.validatePickupPackage(materialXMLPath)).thenReturn(
-                                MessageValidationResult.IS_VALID);
-                when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
-                when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(
-                                MayamClientErrorCode.SUCCESS);
-                when(mayamClient.createTitle(argThat(titleIDMatcher))).thenReturn(
-                                MayamClientErrorCode.SUCCESS);
+		// prepare mocks
+		MessageValidationResultPackage<Material> validresult = new MessageValidationResultPackage<>(
+				new PickupPackage("xml"),
+				MessageValidationResult.IS_VALID);
+		when(validator.validatePickupPackage(any(PickupPackage.class))).thenReturn(validresult);
+		when(mayamClient.titleExists(TITLE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
+		// write file
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
-                if (mediaFirst) {
-                        when(matchMaker.matchMXF(media)).thenReturn(null);
-                        when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(
-                                        media.getAbsolutePath());
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
 
-                } else {
-                        when(matchMaker.matchXML(argThat(matchEnvelopeByFile))).thenReturn(
-                                        null);
-                        when(matchMaker.matchMXF(media)).thenReturn(
-                                        new MediaEnvelope(materialxml, material));
-                }
-                when(mediaCheck.mediaCheck(eq(media), argThat(matchEnvelopeByFile)))
-                                .thenReturn(validMedia);
+		// check message gets moved to failure folder
+		assertFalse(materialxml.exists());
+		assertTrue(TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml, new File(failurePath)).exists());
+	}
 
-                // add pending files to queue
-                if (mediaFirst) {
-                        filesPendingProcessingQueue.add(media.getAbsolutePath());
-                        filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
-                } else {
-                        filesPendingProcessingQueue.add(materialxml.getAbsolutePath());
-                        filesPendingProcessingQueue.add(media.getAbsolutePath());
-                }
+	@Test
+	public void testProcessFailsOnMayamExceptionUpdatingTitle()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			MayamClientException,
+			JAXBException,
+			SAXException,
+			InterruptedException
+	{
+		testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(true);
+	}
 
-                // wait for some time to allow processing to take place
-                Thread.sleep(500l);
+	@Test
+	public void testProcessFailsOnMayamExceptionCreatingTitle()
+			throws FileNotFoundException,
+			DatatypeConfigurationException,
+			IOException,
+			MayamClientException,
+			JAXBException,
+			SAXException,
+			InterruptedException
+	{
+		testProcessFailsOnMayamExceptionCreatingOrUpdatingTitle(false);
 
-                if (titleExists) {
-                        verify(mayamClient).updateTitle(argThat(titleIDMatcher));
-                } else {
-                        verify(mayamClient).createTitle(argThat(titleIDMatcher));
-                }
+	}
 
-                InOrder inOrder = inOrder(matchMaker); // check that mxf and xml
-                // processed in same order they
-                // were placed in queue
-                if (mediaFirst) {
-                        inOrder.verify(matchMaker).matchMXF(media);
-                        inOrder.verify(matchMaker).matchXML(argThat(matchEnvelopeByFile));
-                } else {
-                        inOrder.verify(matchMaker).matchXML(argThat(matchEnvelopeByFile));
-                        inOrder.verify(matchMaker).matchMXF(media);
-                }
+	/**
+	 * Test that a valid message is processed correctly
+	 * 
+	 * @throws DatatypeConfigurationException
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws SAXException
+	 * @throws JAXBException
+	 * @throws InterruptedException
+	 * @throws MayamClientException
+	 * 
+	 */
+	public void testProcessMessageValidMessageAndMedia(boolean titleExists, String testName)
+			throws DatatypeConfigurationException,
+			FileNotFoundException,
+			IOException,
+			JAXBException,
+			SAXException,
+			InterruptedException,
+			MayamClientException
+	{
 
-                verify(mediaCheck).mediaCheck(eq(media), argThat(matchEnvelopeByFile));
+		// prepare files
+		TestUtil.writeBytesToFile(100, media);
+		material = MarketingMaterialTest.getMaterial(TITLE_ID);
 
-                // check the files pending processing queue has been consumed
-                assertTrue(filesPendingProcessingQueue.size() == 0);
+		materialXMLPath = materialxml.getAbsolutePath();
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
+		MessageValidationResultPackage<Material> validresult = new MessageValidationResultPackage<>(
+				new PickupPackage("xml"),
+				MessageValidationResult.IS_VALID);
+		// prepare mocks
+		when(validator.validatePickupPackage(any(PickupPackage.class))).thenReturn(validresult);
+		when(mayamClient.titleExists(TITLE_ID)).thenReturn(titleExists);
+		when(mayamClient.updateTitle(argThat(titleIDMatcher))).thenReturn(MayamClientErrorCode.SUCCESS);
+		when(mayamClient.createTitle(argThat(titleIDMatcher))).thenReturn(MayamClientErrorCode.SUCCESS);
 
-                if (validMedia) {
-                        // check there is a pending import on the queue
-                        assertTrue(pendingImportQueue.size() == 1);
-                        PendingImport pi = pendingImportQueue.take();
-                        Boolean piMediaTest=pi.getMediaFile().equals(media);
-                        assertTrue(piMediaTest);
-                        Boolean piMaterialTest=pi.getMaterialEnvelope().getFile().equals(materialxml);
-                        assertTrue(piMaterialTest);
-                        
-                        
-                        if (testName!=null)
-                       {
-                        	if (piMediaTest && piMaterialTest)
-                        	{
-                        		resultLogger.info(testName+ "-- Passed");
-                        	}
-                        	else
-                        	{
-                        		resultLogger.info(testName+"-- FAILED");
-                        	}
-                        }
-                } else {
-                        // check message gets moved to failure folder and media gets moved to viz ardome emergency import folder
-                		Boolean materialExist=materialxml.exists();
-                        assertFalse(materialExist);
-                        
-                        Boolean mediaExist=media.exists();
-                        assertFalse(mediaExist);
-                        
-                        Boolean failurePathExist=TestUtil.getPathToThisFileIfItWasInThisFolder(materialxml, new File(failurePath)).exists();
-                        assertTrue(failurePathExist);
-                        
-                        Boolean importPathExist=TestUtil.getPathToThisFileIfItWasInThisFolder(media, new File(emergencyImportPath)).exists();
-                        assertTrue(importPathExist);
-                        
-                        
-                       if (testName!=null)
-                       {
-                        	if (!mediaExist && !materialExist && failurePathExist && importPathExist)
-                        	{
-                        		resultLogger.info(testName+ "-- Passed");
-                        	}
-                        	else
-                        	{
-                        		resultLogger.info(testName+"-- FAILED");
-                        	}
-                        }
-                        
-                        
+		// write file
+		TestUtil.writeMaterialToFile(material, materialXMLPath);
 
-                }
+		// wait for some time to allow processing to take place
+		Thread.sleep(500l);
 
-        }
+		if (titleExists)
+		{
+			verify(mayamClient).updateTitle(argThat(titleIDMatcher));
+		}
+		else
+		{
+			verify(mayamClient).createTitle(argThat(titleIDMatcher));
+		}
+
+		// check the files pending processing queue has been consumed
+		assertTrue(filesPendingProcessingQueue.size() == 0);
+
+		// check there is a pending import on the queue
+		assertTrue(pendingImportQueue.size() == 1);
+		PendingImport pi = pendingImportQueue.take();
+		Boolean piMaterialTest = pi.getMaterialEnvelope().getPickupPackage().getPickUp("xml").getAbsolutePath().equals(materialxml);
+		assertTrue(piMaterialTest);
+
+		if (testName != null)
+		{
+			if (piMaterialTest)
+			{
+				resultLogger.info(testName + "-- Passed");
+			}
+			else
+			{
+				resultLogger.info(testName + "-- FAILED");
+			}
+		}
+	}
 
 }

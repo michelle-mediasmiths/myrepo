@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Matchers.anyString;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBContext;
@@ -18,7 +19,9 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.TestUtil;
@@ -64,7 +67,11 @@ public abstract class ValidationTest {
 		String messageXmlPath = importFolderPath+ IOUtils.DIR_SEPARATOR +"MessageValidationResult"+ RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml"; 
 		TestUtil.writeMaterialToFile(material,messageXmlPath);		
 		prepareMocks();
-		return validator.validatePickupPackage(messageXmlPath);
+		
+		PickupPackage pp = new PickupPackage("xml", "mxf");
+		pp.addPickUp(new File(messageXmlPath));
+		
+		return validator.validatePickupPackage(pp).getResult();
 	}
 	
 	protected void prepareMocks() throws MayamClientException{

@@ -33,7 +33,6 @@ import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class MaterialProcessingTest {
@@ -46,7 +45,6 @@ public abstract class MaterialProcessingTest {
 	Unmarshaller unmarshaller;
 	Marshaller marshaller;
 	MayamClient mayamClient;
-	MatchMaker matchMaker;
 	String failurePath;
 	String archivePath;
 	String incomingPath;
@@ -54,7 +52,6 @@ public abstract class MaterialProcessingTest {
 	File media;
 	File materialxml;
 	File materialXmlProcessingFile;
-	MediaCheck mediaCheck;
 	String materialXMLPath;
 	EventService eventService;
 	FilePickUpKinds pickUpKind = FilePickUpKinds.MEDIA;
@@ -79,8 +76,6 @@ public abstract class MaterialProcessingTest {
 		unmarshaller = new MediaPickupModule().provideUnmarshaller(jc);
 		marshaller = new MediaPickupModule().provideMarshaller(jc,"MaterialExchange_V2.0.xsd");
 		mayamClient = mock(MayamClient.class);
-		matchMaker = mock(MatchMaker.class);
-		mediaCheck = mock(MediaCheck.class);
 		eventService = mock(EventService.class);
 
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
@@ -94,10 +89,8 @@ public abstract class MaterialProcessingTest {
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, eventService);
+				mayamClient, eventService);
 
-		materialXmlProcessingFile = new File(processor.getProcessingPathForFile(materialxml.getAbsolutePath()) + FilenameUtils.getName(materialxml.getAbsolutePath()));
-		
 		processor.startThread();
 	}
 
@@ -129,8 +122,8 @@ public abstract class MaterialProcessingTest {
 		@Override
 		public boolean matches(Object argument) {
 			return argument != null
-					&& ((MediaEnvelope) argument).getFile().getAbsolutePath().equals(
-							materialXmlProcessingFile.getAbsolutePath());
+					&& ((MediaEnvelope) argument).getPickupPackage().getPickUp("xml").getAbsolutePath().equals(
+							materialXMLPath);
 		}
 	};
 
