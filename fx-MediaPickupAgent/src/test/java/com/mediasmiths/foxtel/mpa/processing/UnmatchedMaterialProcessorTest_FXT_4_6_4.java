@@ -20,6 +20,8 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
+import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 
@@ -50,10 +52,6 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		
 		String failedMessagesPath = TestUtil.createSubFolder(incomingFolderPath, MessageProcessor.FAILUREFOLDERNAME); 
 		
-		String unmatchedXMlFileName = "UnmatchedProcesserTest"+RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "xml";
-		String unmatchedXMLPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName;
-		logger.debug("Using "+unmatchedXMLPath);		
-		IOUtils.write(RandomStringUtils.random(20), new FileOutputStream(new File(unmatchedXMLPath)));
 		
 		String unmatchedMXFFileName = "UnmatchedProcesserTest"+RandomStringUtils.randomAlphabetic(10) + FilenameUtils.EXTENSION_SEPARATOR + "mxf";
 		String unmatchedMXFPath = incomingFolderPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName;
@@ -68,23 +66,17 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 				
 		//run object being tested
 		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,events);
+		toTest.setMayamClient(mock(MayamClient.class));
 		toTest.processUnmatchedMXF(new File(unmatchedMXFPath));
-		
-		//stop the unmatched material processor
-		Boolean xmlExists=new File(unmatchedXMLPath).exists();
-		assertFalse(xmlExists); //message should have been moved to the failed folder
 		
 		Boolean mxfExists=new File(unmatchedMXFPath).exists();
 		assertFalse(mxfExists); //mxf should have moved to ardome emergencey import folder
-		
-		Boolean fileMovedToFailed=new File(failedMessagesPath + IOUtils.DIR_SEPARATOR + unmatchedXMlFileName).exists();
-		assertTrue(fileMovedToFailed);
 		
 		Boolean fileMovedToDeliveryLocation=new File(deliveryPath + IOUtils.DIR_SEPARATOR + unmatchedMXFFileName).exists();
 		assertTrue(fileMovedToDeliveryLocation);
 		
 		
-		if (!mxfExists && !xmlExists && fileMovedToDeliveryLocation && fileMovedToFailed)
+		if (!mxfExists && fileMovedToDeliveryLocation)
 		{
 			resultLogger.info("FXT 4.6.4.1  - Media with no xml is moved to Viz Ardome emergency import folder --Passed");
 		}

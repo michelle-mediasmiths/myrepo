@@ -32,6 +32,16 @@ public class UnmatchedMaterialProcessor
 	@Inject
 	private MayamClient mayamClient;
 
+	public MayamClient getMayamClient()
+	{
+		return mayamClient;
+	}
+
+	public void setMayamClient(MayamClient mayamClient)
+	{
+		this.mayamClient = mayamClient;
+	}
+
 	@Inject
 	@Named("ao.quarrentine.folder")
 	private String aoQuarrentineFolder;
@@ -40,7 +50,7 @@ public class UnmatchedMaterialProcessor
 	public UnmatchedMaterialProcessor(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
-			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
+			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders, 
 			EventService events)
 	{
 		this.watchFolders = watchFolders;
