@@ -105,7 +105,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -126,7 +126,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialProcessingFails() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

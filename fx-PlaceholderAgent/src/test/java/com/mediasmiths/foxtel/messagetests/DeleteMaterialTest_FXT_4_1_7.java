@@ -49,7 +49,7 @@ public class DeleteMaterialTest_FXT_4_1_7 extends PlaceHolderMessageShortTest{
 		
 		logger.info("Delete material processing test");
 		PlaceholderMessage message = buildDeleteMaterial(false, EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		DeleteMaterial dm = (DeleteMaterial) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

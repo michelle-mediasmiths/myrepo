@@ -62,7 +62,7 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		
 		logger.info("Add package processing test");
 		PlaceholderMessage message = buildAddPackage(NEW_PACKAGE, EXISTING_MATERIAL, EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -121,7 +121,7 @@ public class AddOrUpdatePackageTest_FXT_4_1_9 extends PlaceHolderMessageShortTes
 		
 		logger.info("Starting FXT 4.1.9.6 - Matching ID exists");
 		PlaceholderMessage message = buildAddPackage(EXISTING_PACKAGE_ID, EXISTING_MATERIAL, EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

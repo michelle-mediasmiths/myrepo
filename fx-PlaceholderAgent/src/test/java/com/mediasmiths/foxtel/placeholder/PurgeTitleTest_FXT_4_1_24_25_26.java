@@ -91,7 +91,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
-				new PickupPackage(), pm);
+				new PickupPackage("xml"), pm);
 
 		PurgeTitle pt = (PurgeTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -116,7 +116,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
-				new PickupPackage(), pm);
+				new PickupPackage("xml"), pm);
 
 		PurgeTitle pt = (PurgeTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()

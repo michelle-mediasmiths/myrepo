@@ -67,7 +67,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -88,7 +88,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		logger.info("Starting FXT 4.1.1.5 - ID already exists");
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -119,7 +119,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 			throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 
 		// prepare mock mayamClient
 		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
@@ -133,7 +133,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessingFailesOnCreateTitle()
 			throws Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()

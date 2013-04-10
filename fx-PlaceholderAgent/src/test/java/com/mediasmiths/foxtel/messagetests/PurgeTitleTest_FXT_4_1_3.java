@@ -49,7 +49,7 @@ public class PurgeTitleTest_FXT_4_1_3 extends PlaceHolderMessageShortTest
 
 		logger.info("Processing test");
 		PlaceholderMessage message = buildPurgeTitle(false, EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 
 		PurgeTitle pt = (PurgeTitle) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 

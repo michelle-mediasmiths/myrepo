@@ -65,7 +65,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		
 		logger.info("Processing validation");
 		PlaceholderMessage message = buildCreateTitle(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) message.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -131,7 +131,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		
 		logger.info("Starting FXT 4.1.25  - CreateorUpdateTitle error handling");
 		PlaceholderMessage message = buildCreateTitle(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenThrow(

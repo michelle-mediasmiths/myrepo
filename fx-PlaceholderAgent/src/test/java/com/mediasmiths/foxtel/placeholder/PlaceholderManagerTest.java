@@ -32,7 +32,10 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.queue.SingleFilePickUp;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
+import com.mediasmiths.foxtel.channels.config.ChannelConfigModule;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.channels.config.ChannelPropertiesImpl;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
@@ -183,6 +186,7 @@ public abstract class PlaceholderManagerTest {
 
 		@Override
 		protected void configure() {
+			install(new ChannelConfigModule());
 			bind(MayamClient.class).toInstance(mc);
 			bind(MayamValidator.class).toInstance(mv);
 			bind(EventService.class).toInstance(events);
@@ -193,6 +197,7 @@ public abstract class PlaceholderManagerTest {
 			// only picking up a single file for this test
 			bind(FilePickUpProcessingQueue.class).to(FilePickUpFromDirectories.class);
 			bind(ChannelProperties.class).to(ChannelPropertiesImpl.class);
+			bind(IFilePickup.class).to(SingleFilePickUp.class);
 		}
 		@Provides
 		protected EventAPI getEventService(
@@ -220,6 +225,18 @@ public abstract class PlaceholderManagerTest {
 		@Named("filepickup.watched.directories")
 		public File[] providePickupDirectories(){
 			return new File[] { new File(inputPath)};
+		}
+		
+		@Provides
+		@Named("filepickup.watched.directories.max_file_size_bytes")
+		public long provideMaxFileSize(){
+			return 1024l * 1024l * 1024l;
+		}
+		
+		@Provides
+		@Named("filepickup.file.partial_pickup_timeout_interval")
+		public long unmatchedTimeout(){
+			return 1024l * 1024l * 1024l;
 		}
 
 	}

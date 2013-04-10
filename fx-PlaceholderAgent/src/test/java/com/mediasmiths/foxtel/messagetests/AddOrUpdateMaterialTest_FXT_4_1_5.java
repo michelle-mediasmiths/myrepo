@@ -59,7 +59,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		logger.info("Add material processing");
 		
 		PlaceholderMessage message = buildAddMaterial(EXISTING_TITLE, NEW_MATERIAL_ID);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -140,7 +140,7 @@ public class AddOrUpdateMaterialTest_FXT_4_1_5 extends PlaceHolderMessageShortTe
 		logger.info("Starting FXT 4.1.5.6 - Matching ID exists");
 		PlaceholderMessage message = buildAddMaterial(EXISTING_TITLE, EXISTING_MATERIAL_ID);
 		PickupPackage pp = createTempXMLFile (message, "validUpdateMaterial");
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), message);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), message);
 		
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

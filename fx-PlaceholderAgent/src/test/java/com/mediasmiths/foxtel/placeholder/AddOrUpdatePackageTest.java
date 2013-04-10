@@ -67,7 +67,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -86,7 +86,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(EXISTING_PACKAGE_ID,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -107,7 +107,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		//prepare mock mayamClient
 		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
@@ -122,7 +122,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient

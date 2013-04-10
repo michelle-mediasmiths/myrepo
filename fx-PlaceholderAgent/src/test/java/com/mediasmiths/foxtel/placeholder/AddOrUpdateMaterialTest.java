@@ -53,7 +53,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 	public void testValidAddMaterialProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
@@ -71,7 +71,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 	public void testValidUpdateMaterialProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
@@ -91,7 +91,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 		//test that we get a MessageProcessingFailedException when the query on existing material failes
 		
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.MAYAM_EXCEPTION));
 		//the call we are testing
@@ -103,7 +103,7 @@ public class AddOrUpdateMaterialTest extends PlaceHolderMessageShortTest {
 	public void testValidAddMaterialProcessingFailesOnCreateMaterial() throws Exception {
 
 		PlaceholderMessage pm = buildAddMaterialRequest(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		AddOrUpdateMaterial aoum = (AddOrUpdateMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		// prepare mock mayamClient
 		when(mayamClient.materialExists(NEW_MATERIAL_ID)).thenReturn(false);

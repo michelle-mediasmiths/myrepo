@@ -52,11 +52,6 @@ public class SingleFilePickUp implements IFilePickup
 	@Named("filepickup.file.stability_time")
 	long STABILITY_TIME;
 
-	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */
-	@Inject
-	@Named("filepickup.file.partial_pickup_timeout_interval")
-	long PICKUP_TIME_OUT_INTERVAL;
-
 	/** The time in milliseconds that an active agent should sleep between file arrive check intervals */
 	@Inject
 	@Named("filepickup.sleep_time")
@@ -119,7 +114,7 @@ public class SingleFilePickUp implements IFilePickup
 	 * @param pickupDirectories File object referencing the pick up areas
 	 * @param extensions the collection of extensions (strings) that are valid for files.
 	 */
-	public SingleFilePickUp(File[] pickupDirectories, String extension)
+	public SingleFilePickUp(@Named("filepickup.watched.directories") File[] pickupDirectories, String extension)
 	{
 
 		if (extension == null)
@@ -338,23 +333,6 @@ public class SingleFilePickUp implements IFilePickup
 
 		return res;
 
-	}
-
-
-
-
-	/**
-	 *
-	 * @param f a valid file that is a candidate for pickup
-	 * @return true if the file has been stable long enough to be considered part of a timed out pick up...and false otherwise.
-	 *
-	 */
-	private boolean withinTimeoutPeriod(final File f)
-	{
-		long now = System.currentTimeMillis();
-		long then = f.lastModified();
-
-		return now-then < PICKUP_TIME_OUT_INTERVAL;
 	}
 
 	/**
