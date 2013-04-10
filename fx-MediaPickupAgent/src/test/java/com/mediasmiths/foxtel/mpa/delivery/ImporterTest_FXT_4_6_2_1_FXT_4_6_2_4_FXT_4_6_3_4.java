@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
@@ -66,9 +67,10 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		toTest = new Importer(watchFolders,
 				""+deliveryAttemptsToMake,event);
 		
-		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
+		String rString = RandomStringUtils.randomAlphabetic(6);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath,rString);
 		TestUtil.writeBytesToFile(100, media);
-		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath,rString);
 		TestUtil.writeBytesToFile(100, materialxml);
 		masterID = "MASTERID";
 

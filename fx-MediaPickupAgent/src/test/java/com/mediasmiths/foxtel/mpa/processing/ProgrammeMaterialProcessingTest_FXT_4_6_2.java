@@ -76,8 +76,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 	}
 
 	@Test
-	@Ignore
-	public void testValidMessageValidMediaMediaFirst_FXT_4_6_2_1()
+	public void testValidMessageValidMediaMedi_FXT_4_6_2_1()
 			throws FileNotFoundException, InterruptedException, IOException,
 			DatatypeConfigurationException, JAXBException, SAXException,
 			MayamClientException {
