@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -99,7 +98,7 @@ public class Importer extends Daemon implements StoppableService {
 			logger.error("Missing masterID in PendingImport");
 		}
 
-		File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.MXF);
+		File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
 
 		final long fileSize = src.length();
 		
@@ -128,7 +127,7 @@ public class Importer extends Daemon implements StoppableService {
 			return;
 		}
 
-		src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.XML);
+		src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("xml");
 		dst = new File(MessageProcessor.getArchivePathForFile(src
 				.getAbsolutePath()), pi.getMaterialEnvelope().getMasterID()
 				+ ".xml");
@@ -253,7 +252,7 @@ public class Importer extends Daemon implements StoppableService {
 	 */
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
-			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.MXF);
+			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
 			String quarrentineFolder = MessageProcessor
 					.getFailureFolderForFile(src);
 			File baseDestination = new File(quarrentineFolder, pi
@@ -269,7 +268,7 @@ public class Importer extends Daemon implements StoppableService {
 						src, dst), e);
 			}
 
-			src = pi.getMaterialEnvelope().getPickupPackage().getPickUp(FileExtensions.XML);
+			src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("xml");
 			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
 					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "xml");
 

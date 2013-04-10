@@ -3,8 +3,7 @@ package com.mediasmiths.foxtel.agent.processing;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
@@ -35,8 +34,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	private static Logger logger = Logger.getLogger(MessageProcessor.class);
 
-	private final FilePickUpProcessingQueue filePathsPending;
-
 	protected final Unmarshaller unmarhsaller;
 	protected final Marshaller marshaller;
 
@@ -48,16 +45,23 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	private final ReceiptWriter receiptWriter;
 	protected final com.mediasmiths.foxtel.ip.event.EventService eventService;
 
+	private IFilePickup filePickup;
+
+	public IFilePickup getFilePickup()
+	{
+		return filePickup;
+	}
+
 	@Inject
 	public MessageProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			IFilePickup filePickup,
 			MessageValidator<T> messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarshaller,
 			Marshaller marshaller,
 			com.mediasmiths.foxtel.ip.event.EventService eventService)
 	{
-		this.filePathsPending = filePathsPendingProcessing;
+		this.filePickup = filePickup;
 		this.unmarhsaller = unmarshaller;
 		this.marshaller = marshaller;
 		this.messageValidator = messageValidator;
@@ -104,7 +108,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	protected final void validateThenProcessPickupPackage(PickupPackage pp)
 	{
 
-		if (pp.isComplete() || pp.isPickedUpSuffix(FileExtensions.XML))
+		if (pp.isComplete() || pp.isPickedUpSuffix("xml"))
 		{
 			logger.info("package is complete or contains xml");
 
@@ -130,7 +134,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 				try
 				{
 					String messageID = processPickupPackage(pp, resultPackage.getMessage());
-					writeReceipt(pp.getPickUp(FileExtensions.XML), messageID);
+					writeReceipt(pp.getPickUp("xml"), messageID);
 					postProcessing(pp);
 
 				}
@@ -165,14 +169,14 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 
 	protected void processingError(PickupPackage pp)
 	{
-		moveFileToFailureFolder(pp.getPickUp(FileExtensions.XML));
+		moveFileToFailureFolder(pp.getPickUp("xml"));
 	}
 
 	protected void postProcessing(PickupPackage pp)
 	{
 		if (shouldArchiveMessages())
 		{
-			moveMessageToArchiveFolder(pp.getPickUp(FileExtensions.XML));
+			moveMessageToArchiveFolder(pp.getPickUp("xml"));
 		}
 	}
 
@@ -324,11 +328,8 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		{
 			try
 			{
-
-				// TODO call something to get this PickupPackage
-				PickupPackage pp = null;
+				PickupPackage pp = filePickup.take();
 				validateThenProcessPickupPackage(pp);
-
 			}
 			catch (Exception e)
 			{
@@ -352,11 +353,6 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		return FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH).equals("xml");
 	}
 
-	public FilePickUpProcessingQueue getFilePathsPending()
-	{
-		return filePathsPending;
-	}
-
 	@Override
 	protected boolean shouldStartAsDaemon()
 	{
@@ -367,7 +363,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	public void shutdown()
 	{
 		stopThread();
-		filePathsPending.shutdown();
+		filePickup.shutdown();
 	}
 
 }

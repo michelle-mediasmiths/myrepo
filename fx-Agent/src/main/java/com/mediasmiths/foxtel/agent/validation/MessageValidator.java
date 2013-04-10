@@ -12,7 +12,6 @@ import org.xml.sax.SAXException;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 
 public abstract class MessageValidator<T> {
@@ -62,7 +61,7 @@ public abstract class MessageValidator<T> {
 	{
 		logger.debug("Validating file " + pp);
 		// first check the xml file conforms to the schema
-		boolean againstXSD = againstXSD(pp.getPickUp(FileExtensions.XML));
+		boolean againstXSD = againstXSD(pp.getPickUp("xml"));
 
 		if (!againstXSD)
 		{
@@ -75,7 +74,7 @@ public abstract class MessageValidator<T> {
 		try
 		{
 			
-			message = (T) unmarshallFile(pp.getPickUp(FileExtensions.XML));
+			message = (T) unmarshallFile(pp.getPickUp("xml"));
 		}
 		catch (JAXBException e)
 		{

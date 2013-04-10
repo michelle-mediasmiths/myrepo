@@ -34,8 +34,8 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
@@ -83,7 +83,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	
 	@Inject
 	public PlaceholderMessageProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			IFilePickup filePickup,
 			PlaceholderMessageValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
@@ -91,7 +91,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			MayamClient mayamClient,
 			EventService eventService)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
+		super(filePickup, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
 		this.mayamClient = mayamClient;
 	}
 
@@ -470,6 +470,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	@Override
 	protected void messageValidationFailed(MessageValidationResultPackage<PlaceholderMessage> resultPackage)
 	{
+		
+		MessageValidationResult result = resultPackage.getResult();
 
 		logger.warn(String.format(
 				"Validation of Placeholder management message %s failed for reason %s",
@@ -482,7 +484,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					"Invalid Placeholder Message Received",
 					String.format(
 							"Failed to validate %s for reason %s",
-							resultPackage.getPp().getPickUp(FileExtensions.XML).getAbsolutePath(),
+							resultPackage.getPp().getPickUp("xml").getAbsolutePath(),
 							resultPackage.getResult()));
 		}
 		catch (MayamClientException e)
@@ -495,9 +497,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			try
 			{
-				File deleteFile = new File(filePath);
-				Object unmarshalled = unmarhsaller.unmarshal(deleteFile);
-				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
+				PlaceholderMessage message = resultPackage.getMessage();
+				PlaceholderMessage deleteMessage = message;
 				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
 				String titleID = null;
@@ -527,14 +528,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					ppf.getChannelGroup().addAll(channelsForTitle);
 				}
 
-			}
-			catch (JAXBException e)
-			{
-				logger.fatal("error unmarshall the filepath " + filePath, e);
-			}
-			catch (ClassCastException cce)
-			{
-				logger.fatal("error in cast the file " + filePath, cce);
 			}
 			catch(MayamClientException e){
 				logger.error("error getting channel groups for title",e);

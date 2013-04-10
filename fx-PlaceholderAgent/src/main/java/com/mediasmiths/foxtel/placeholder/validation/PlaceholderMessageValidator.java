@@ -17,7 +17,6 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
@@ -66,7 +65,7 @@ public class PlaceholderMessageValidator extends
 		String senderID = message.getSenderID();
 		Object privateMessageData = message.getPrivateMessageData();
 
-		if (!validateMesageID(pp.getPickUp(FileExtensions.XML).getAbsolutePath(), messageID)) {
+		if (!validateMesageID(pp.getPickUp("xml").getAbsolutePath(), messageID)) {
 			return MessageValidationResult.INVALID_MESSAGE_ID;
 		}
 

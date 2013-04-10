@@ -22,7 +22,9 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
@@ -43,15 +45,15 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialNotProtected() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeleteMaterialTitleNotProtected");
 		
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(pp));
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
@@ -60,13 +62,13 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		logger.info("Starting FXT 4.1.27/28/29 ");
 
 		PlaceholderMessage pm = buildDeleteMaterialRequest(true,PROTECTED_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleIsProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeleteMaterialTitleIsProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
 		
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult = validator.validatePickupPackage(pp);
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validationResult.getResult())
 		{
 		resultLogger.info("FXT 4.1.27/28/29 --Passed");
 		}
@@ -74,11 +76,11 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		{
 		resultLogger.info("FXT 4.1.27/28/29  --Failed");
 		}
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validateFile);
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validationResult.getResult());
 		
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 	
 
@@ -87,14 +89,14 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialProtectedCheckFails() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteMaterialTitleNotProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeleteMaterialTitleNotProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
-		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validatePickupPackage(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validatePickupPackage(pp));
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 	
 
@@ -103,7 +105,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialProcessing() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -124,7 +126,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 	public void testDeleteMaterialProcessingFails() throws DatatypeConfigurationException, MessageProcessingFailedException{
 		
 		PlaceholderMessage pm = buildDeleteMaterialRequest(false,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 		
 		DeleteMaterial dm = (DeleteMaterial) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		

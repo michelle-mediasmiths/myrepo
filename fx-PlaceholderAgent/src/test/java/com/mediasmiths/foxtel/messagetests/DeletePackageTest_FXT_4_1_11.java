@@ -26,7 +26,9 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
@@ -64,15 +66,18 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		//File temp = File.createTempFile("NonXSDConformingFile", ".xml");
 		File temp = new File("/tmp/placeHolderTestData/NonXSDConformingFile__"+RandomStringUtils.randomAlphabetic(6)+ ".xml");
 		
+		PickupPackage pp = new PickupPackage("xml");
+		pp.addPickUp(temp);
+		
 		IOUtils.write("InvalidDeletePackage", new FileOutputStream(temp));
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		if (MessageValidationResult.FAILS_XSD_CHECK ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
+		if (MessageValidationResult.FAILS_XSD_CHECK ==validationResult.getResult())
 			resultLogger.info("FXT 4.1.11.2 - Non XSD compliance --Passed");
 		else
 			resultLogger.info("FXT 4.1.11.2 - Non XSD compliance --Failed");
 		
-		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validateFile);	
-		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validationResult.getResult());	
+		Util.deleteFiles(pp);
 		
 	}
 	
@@ -83,7 +88,7 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		logger.info("Starting FXT 4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, EXISTING_PACKAGE_ID);
-		File temp = createTempXMLFile(message, "validDeletePackageNotProtected");
+		PickupPackage pp = createTempXMLFile (message, "validDeletePackageNotProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(new Boolean(false));
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
@@ -95,15 +100,15 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		
 		when(mayamClient.getTxPackage(EXISTING_PACKAGE_ID)).thenReturn(sl);
 		
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
 
-		if (MessageValidationResult.IS_VALID ==validateFile)
+		if (MessageValidationResult.IS_VALID ==validationResult.getResult())
 			resultLogger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists--Passed");
 		else
 			resultLogger.info("FXT  4.1.11.3/4/5 - XSD Compliance/ Valid DeletePackage message/ Matching ID exists --Failed");
 		
-		assertEquals(MessageValidationResult.IS_VALID, validateFile);	
-		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.IS_VALID, validationResult.getResult());	
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
@@ -113,18 +118,18 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		logger.info("Starting FXT 4.1.11.6 - No matching ID");
 		
 		PlaceholderMessage message = buildDeletePackage(false, EXISTING_TITLE, NOT_EXISTING_PACKAGE);
-		File temp = createTempXMLFile (message, "deletePackageDoesntExist");
+		PickupPackage pp = createTempXMLFile (message, "deletePackageDoesntExist");
 		
 		when(mayamClient.packageExists(NOT_EXISTING_PACKAGE)).thenReturn(false);
 		
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
+		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST ==validationResult.getResult())
 			resultLogger.info("FXT 4.1.11.6 - No matching ID --Passed");
 		else
 			resultLogger.info("FXT 4.1.11.6 - No matching ID --Failed");
 		
-		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST, validateFile);	
-		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST, validationResult.getResult());	
+		Util.deleteFiles(pp);
 		
 	}
 
@@ -135,18 +140,18 @@ public class DeletePackageTest_FXT_4_1_11 extends PlaceHolderMessageShortTest {
 		logger.info("Starting FXT 4.1.11.7 - Package is protected");
 		
 		PlaceholderMessage message = buildDeletePackage(false, PROTECTED_TITLE, PROTECTED_PACKAGE);
-		File temp = createTempXMLFile(message, "validDeletePackageProtected");
+		PickupPackage pp = createTempXMLFile (message, "validDeletePackageProtected");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
 		
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
+		if (MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED ==validationResult.getResult())
 			resultLogger.info("FXT 4.1.11.7 - Package is protected --Passed");
 		else
 			resultLogger.info("FXT 4.1.11.7 - Package is protected --Failed");
 		
-		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED, validateFile);	
-		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED, validationResult.getResult());	
+		Util.deleteFiles(pp);
 	}
 
 	public PlaceholderMessage buildDeletePackage (boolean b, String titleID, String packageID) {

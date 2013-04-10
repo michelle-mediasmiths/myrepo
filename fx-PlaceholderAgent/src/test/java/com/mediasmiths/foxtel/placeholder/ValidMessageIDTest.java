@@ -16,6 +16,7 @@ import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 
@@ -48,14 +49,14 @@ public class ValidMessageIDTest extends PlaceHolderMessageShortTest {
 		pm.setSenderID(createSenderID());
 		pm.setActions(actions);
 		
-		File temp = createTempXMLFile(pm, "receiptExists");
+		PickupPackage pp = createTempXMLFile (pm, "receiptExists");
 		
-		FileUtils.copyFile(temp, new File(receiptFolderPath + IOUtils.DIR_SEPARATOR +EXISTING_MESSAGE_ID + ".txt"));
+		FileUtils.copyFile(pp.getPickUp("xml"), new File(receiptFolderPath + IOUtils.DIR_SEPARATOR +EXISTING_MESSAGE_ID + ".txt"));
 		
 		assertEquals(
 				MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE,
-				validator.validatePickupPackage(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+				validator.validatePickupPackage(pp));
+		Util.deleteFiles(pp);
 	}
 	
 }

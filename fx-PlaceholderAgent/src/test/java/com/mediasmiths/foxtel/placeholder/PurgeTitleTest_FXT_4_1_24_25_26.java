@@ -20,7 +20,9 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
@@ -42,7 +44,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
-		File temp = createTempXMLFile(pm,
+		PickupPackage pp = createTempXMLFile (pm,
 				"validDeleteTitleMaterialNotProtected");
 
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
@@ -50,9 +52,9 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 		
 		when(mayamClient.titleExists(EXISTING_TITLE)).thenReturn(true);
 
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		assertEquals(MessageValidationResult.IS_VALID,validateFile);
-		Util.deleteFiles(temp.getAbsolutePath());
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
+		assertEquals(MessageValidationResult.IS_VALID,validationResult.getResult());
+		Util.deleteFiles(pp);
 	}
 
 	@Test
@@ -61,15 +63,15 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 		logger.info("Starting FXT 4.1.24/25/26 ");
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, PROTECTED_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteTitleMaterialProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeleteTitleMaterialProtected");
 
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE))
 				.thenReturn(true);
 
 		
 		
-		MessageValidationResult validateFile = validator.validatePickupPackage(temp.getAbsolutePath());
-		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult= validator.validatePickupPackage(pp);
+		if (MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED ==validationResult.getResult())
 		{
 		resultLogger.info("FXT 4.1.24/25/26 --Passed");
 		}
@@ -77,9 +79,9 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 		{
 		resultLogger.info("FXT 4.1.24/25/26  --Failed");
 		}
-		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validateFile);
+		assertEquals(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED,validationResult.getResult());
 
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 
 	@Test
@@ -89,7 +91,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
-				new File("/dev/null"), pm);
+				new PickupPackage(), pm);
 
 		PurgeTitle pt = (PurgeTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -114,7 +116,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
 		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(
-				new File("/dev/null"), pm);
+				new PickupPackage(), pm);
 
 		PurgeTitle pt = (PurgeTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -132,7 +134,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 	@Category(ValidationTests.class)
 	public void testDeleteTitleRequestFail() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeleteTitleRequest(false, EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validDeleteTitleRequestFailure");
+		PickupPackage pp = createTempXMLFile (pm, "validDeleteTitleRequestFailure");
 
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE))
 				.thenThrow(
@@ -140,8 +142,8 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		// try to call validation, expect a mayam client error
 		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validatePickupPackage(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+				validator.validatePickupPackage(pp));
+		Util.deleteFiles(pp);
 	}
 
 	private PlaceholderMessage buildDeleteTitleRequest(boolean b, String titleID) {

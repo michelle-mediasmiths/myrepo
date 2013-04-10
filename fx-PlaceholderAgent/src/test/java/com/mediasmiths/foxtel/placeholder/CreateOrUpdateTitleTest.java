@@ -31,6 +31,7 @@ import au.com.foxtel.cf.mam.pms.TitleDescriptionType;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
@@ -53,12 +54,12 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testValidCreateTitle() throws Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		File temp = createTempXMLFile(pm, "validCreateTitle");
+		PickupPackage pp = createTempXMLFile (pm, "validCreateTitle");
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validatePickupPackage(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+				validator.validatePickupPackage(pp).getResult());
+		Util.deleteFiles(pp);
 	}
 
 	@Test
@@ -66,7 +67,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessing() throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -87,7 +88,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		logger.info("Starting FXT 4.1.1.5 - ID already exists");
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -118,7 +119,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 			throws Exception {
 
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 
 		// prepare mock mayamClient
 		when(mayamClient.titleExists(NEW_TITLE)).thenThrow(
@@ -132,7 +133,7 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 	public void testValidAddTitleProcessingFailesOnCreateTitle()
 			throws Exception {
 		PlaceholderMessage pm = buildCreateTitleRequestSingleLicence(NEW_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage(), pm);
 
 		CreateOrUpdateTitle coup = (CreateOrUpdateTitle) pm.getActions()
 				.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()
@@ -163,12 +164,12 @@ public class CreateOrUpdateTitleTest extends PlaceHolderMessageShortTest {
 		license.get(0).getLicensePeriod().setStartDate(endDate);
 		license.get(0).getLicensePeriod().setEndDate(startDate);
 
-		File temp = createTempXMLFile(pm, "createTitleInvalidDates");
+		PickupPackage pp = createTempXMLFile (pm, "createTitleInvalidDates");
 
 		//dont reject based on licence dates
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validatePickupPackage(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+				validator.validatePickupPackage(pp));
+		Util.deleteFiles(pp);
 	}
 
 	private PlaceholderMessage buildCreateTitleRequestSingleLicence(

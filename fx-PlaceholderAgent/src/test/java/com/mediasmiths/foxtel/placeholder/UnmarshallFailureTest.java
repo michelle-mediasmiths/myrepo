@@ -20,6 +20,7 @@ import org.xml.sax.SAXException;
 
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
@@ -49,10 +50,13 @@ public class UnmarshallFailureTest {
 	
 		PlaceholderMessage pm = createMessage();		
 		File temp = writeFile("UnmarshallFailure",pm);
-				
+			
+		PickupPackage pp = new PickupPackage("xml");
+		pp.addPickUp(temp);
+		
 		when(unmarshaller.unmarshal(temp)).thenThrow(new JAXBException("test jaxbexception"));
 			
-		assertEquals(MessageValidationResult.FAILED_TO_UNMARSHALL, toTest.validatePickupPackage(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.FAILED_TO_UNMARSHALL, toTest.validatePickupPackage(pp));
 	}
 
 	@Test
@@ -62,12 +66,13 @@ public class UnmarshallFailureTest {
 		PlaceholderMessage pm = createMessage();		
 		File temp = writeFile("UnexpectedTypeAfterMarshalling",pm);
 		
-		
+		PickupPackage pp = new PickupPackage("xml");
+		pp.addPickUp(temp);
 				
 		when(unmarshaller.unmarshal(temp)).thenReturn(new String("not a placeholder message"));
 		
 		
-		assertEquals(MessageValidationResult.UNEXPECTED_TYPE, toTest.validatePickupPackage(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.UNEXPECTED_TYPE, toTest.validatePickupPackage(pp));
 	}
 	
 	
