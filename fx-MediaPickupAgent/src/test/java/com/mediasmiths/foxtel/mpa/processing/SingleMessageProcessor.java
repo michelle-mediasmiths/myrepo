@@ -29,11 +29,9 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			MatchMaker matchMaker,
 			EventService eventService){
 		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
-				receiptWriter, unmarhsaller,marshaller, mayamClient, matchMaker,
-				 eventService);
+				receiptWriter, unmarhsaller,marshaller, mayamClient, eventService);
 	}
 
 	protected static Logger logger = Logger
@@ -44,9 +42,7 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 
 		logger.trace("SingleMessageProcessor.run() enter");
 
-		File file = getFilePathsPending().take();
-		String filePath = file.getAbsolutePath();
-		validateThenProcessPickupPackage(filePath);
+		validateThenProcessPickupPackage(getFilePickup().take());
 
 		logger.trace("SingleMessageProcessor.run() exit");
 

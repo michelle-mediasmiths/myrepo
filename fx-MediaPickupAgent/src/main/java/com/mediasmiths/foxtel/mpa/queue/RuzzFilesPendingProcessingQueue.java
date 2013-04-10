@@ -4,14 +4,14 @@ import java.io.File;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
+import com.mediasmiths.foxtel.agent.queue.MultiFilePickUp;
 
-public class RuzzFilesPendingProcessingQueue extends FilePickUpFromDirectories{
+public class RuzzFilesPendingProcessingQueue extends MultiFilePickUp{
 
 	@Inject
 	public RuzzFilesPendingProcessingQueue(@Named("ruzz.watched.directories") File[] pickupDirectories)
 	{
-		super(pickupDirectories);
+		super(pickupDirectories, "xml","mxf");
 	}
 
 }

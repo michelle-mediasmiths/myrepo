@@ -20,6 +20,7 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
@@ -29,6 +30,7 @@ import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.queue.FilesPendingUnmatchImport;
 import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
@@ -40,13 +42,16 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
 	protected final MayamClient mayamClient;
 	private final PendingImportQueue filesPendingImport;
+	
+	@Inject
+	private FilesPendingUnmatchImport unmatchedImportQueue;
 
 	@Inject
 	@Named("ao.quarrentine.folder")
 	private String aoQuarrentineFolder;
 	
 	public MediaPickupProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			IFilePickup filePickup,
 			PendingImportQueue filesPendingImport,
 			MessageValidator<T> messageValidator,
 			ReceiptWriter receiptWriter,
@@ -55,7 +60,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			MayamClient mayamClient,
 			EventService eventService)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
+		super(filePickup, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
 		this.mayamClient = mayamClient;
 		this.filesPendingImport = filesPendingImport;
 	}
@@ -205,7 +210,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	}
 	
 	private void importMediaAsUnmatched(File mediaFile){
-		//TODO 
+		logger.debug("Queueing file for unmatched import : "+mediaFile.getAbsolutePath());
+		unmatchedImportQueue.add(mediaFile);
 	}
 
 	/**

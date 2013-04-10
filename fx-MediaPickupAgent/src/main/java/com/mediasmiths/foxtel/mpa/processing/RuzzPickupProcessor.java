@@ -12,7 +12,6 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
-import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.generated.ruzz.ChannelConditionEventType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
@@ -182,7 +181,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	{
 		AutoMatchInfo ret = new AutoMatchInfo();
 		ret.siteID = unmatchedMessage.getMessage().getMaterial().getMaterialID();
-		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp(FileExtensions.MXF).getName();
+		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp("mxf").getName();
 		return ret;
 	}
 

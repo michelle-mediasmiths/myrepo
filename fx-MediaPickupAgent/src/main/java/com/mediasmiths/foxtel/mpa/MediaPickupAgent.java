@@ -29,11 +29,11 @@ public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Media pickup agent starting\n");
 		sb.append("Material exchange directories : ");
-		for(File f : messageProcessor.getFilePathsPending().getWatchedDirectories()){
+		for(File f : messageProcessor.getFilePickup().getWatchedDirectories()){
 			sb.append(f.getAbsolutePath() + "\n");
 		}
 		sb.append("Ruzz directories : ");
-		for(File f : ruzzPickupProcessor.getFilePathsPending().getWatchedDirectories()){
+		for(File f : ruzzPickupProcessor.getFilePickup().getWatchedDirectories()){
 			sb.append(f.getAbsolutePath() + "\n");
 		}
 		log.info(sb.toString());
