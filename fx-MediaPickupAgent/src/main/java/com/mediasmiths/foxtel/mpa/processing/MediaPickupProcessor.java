@@ -318,6 +318,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 	}
 
+	@Override
 	protected void processPickupPackageNoXML(PickupPackage pp)
 	{
 		logger.info("received a pickup package with no xml " + pp.getRootName());

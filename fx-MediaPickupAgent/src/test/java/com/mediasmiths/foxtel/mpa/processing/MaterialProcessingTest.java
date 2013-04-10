@@ -11,12 +11,15 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.ArgumentMatcher;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
@@ -76,11 +79,22 @@ public abstract class MaterialProcessingTest {
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath =	TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
-		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
-
-		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
-		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
 	
+		String rString = RandomStringUtils.randomAlphabetic(6);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath,rString);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath,rString);
+	
+		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
+		filesPendingProcessingQueue.setStabilityTime(100l);
+		
+		WatchFolders wf = new WatchFolders();
+		WatchFolder w = new WatchFolder(incomingPath);
+		w.setAO(false);
+		w.setDelivery(archivePath);
+		w.setRuzz(false);
+		wf.add(w); 
+		
+		unmatchedProcessor = new UnmatchedMaterialProcessor(100l, 0l, wf, eventService);
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				 validator, receiptWriter, unmarshaller, marshaller,

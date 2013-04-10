@@ -53,6 +53,7 @@ public class MultiFilePickUp implements IFilePickup
 	/** the time in milliseconds that a file must not grow before being passed for processing */
 	@Inject
 	@Named("filepickup.file.stability_time")
+	protected
 	long STABILITY_TIME;
 
 	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */
