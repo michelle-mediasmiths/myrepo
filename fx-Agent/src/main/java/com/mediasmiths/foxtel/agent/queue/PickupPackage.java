@@ -14,25 +14,66 @@ import java.util.Set;
 public class PickupPackage
 {
 
-    private Set<FileExtensions> suffixes = new HashSet<FileExtensions>();
-	private Map<FileExtensions, File> files;
+	/*
+	  Internally - all suffixes are lower case.
+	 */
+    private Set<String> suffixes = new HashSet<String>();
+	private Map<String, File> files = new HashMap<String, File>();
+
+	private boolean isSuspectPickup = false;
+
+	private String suspectReason;
 
 	private String rootPath = null;
 	private String rootName = null;
 
-	public PickupPackage(FileExtensions... suffixes)
+	public PickupPackage(String... suffixes)
 	{
 		 if (suffixes == null || suffixes.length == 0)
 			 throw new IllegalArgumentException("No suffixes designated for a pickup collection.");
 
-		 this.files = new HashMap<FileExtensions, File>();
-
-		 for (FileExtensions e: suffixes)
+		 for (String e: suffixes)
 		 {
-			 if (e != null)
-			    this.suffixes.add(e);
+			 if (e == null || e.length() == 0)
+				 throw new IllegalArgumentException("Empty extension is not permitted - fatal");
+
+			 this.suffixes.add(e.toLowerCase());
 		 }
 
+	}
+
+	/**
+	 *
+	 * @return true if this pickup packet has been marked as suspect.
+	 */
+	public boolean isSuspectPickup()
+	{
+		return this.isSuspectPickup;
+	}
+
+	/**
+	 * set this pick up as being suspicious and add a comment that explains why.
+	 *
+	 * @param comment a description as to why this pick up is suspect.
+	 */
+	public void setIsSuspectPickup(String comment)
+	{
+		this.isSuspectPickup = true;
+		this.suspectReason = comment;
+	}
+
+	public String getSuspectReason()
+	{
+		return this.suspectReason;
+	}
+
+
+	public String getNameForExtension(String ext)
+	{
+		if (ext == null || !suffixes.contains(ext.toLowerCase()))
+			throw new IllegalArgumentException("Not a known suffix for this package: " + ext);
+
+	     return getRootName() + "." + ext;
 	}
 
 	public String getRootPath()
@@ -61,17 +102,17 @@ public class PickupPackage
 		return count() == expectedPickUpCount();
 	}
 
-	public boolean isExpectedSuffix(FileExtensions suffix)
+	public boolean isExpectedSuffix(String suffix)
 	{
 		if (suffix == null)
-			throw new IllegalArgumentException("Null suffix no permitted");
+			throw new IllegalArgumentException("Null suffix not permitted");
 
-       return this.suffixes.contains(suffix);
+       return this.suffixes.contains(suffix.toLowerCase());
 	}
 
-	public boolean isPickedUpSuffix(FileExtensions suffix)
+	public boolean isPickedUpSuffix(String suffix)
 	{
-       return files.keySet().contains(suffix);
+       return files.keySet().contains(suffix.toLowerCase());
 	}
 
 	public void addPickUp(String path)
@@ -89,7 +130,18 @@ public class PickupPackage
 	        throw new IllegalArgumentException("Pick up path cannot be null");
 
 		String fName = path.getAbsolutePath();
-		FileExtensions ext = FileExtensions.fromString(FilenameUtils.getExtension(fName));
+		String ext = FilenameUtils.getExtension(fName).toLowerCase();
+		if (ext == null || ext.length() == 0)
+			throw new IllegalArgumentException("Empty extension - not permitted");
+
+		if (!suffixes.contains(ext))
+		{
+			if (suffixes.contains(ext.toLowerCase()))
+				ext = ext.toLowerCase();
+		    else
+			    throw new IllegalArgumentException("Not a recognised suffix for this pickup");
+		}
+
 		String cRootPath = FilenameUtils.getFullPathNoEndSeparator(fName);
 		String cRootName = FilenameUtils.getBaseName(fName);
 		if (rootPath == null)
@@ -103,16 +155,16 @@ public class PickupPackage
 				throw new IllegalArgumentException("Root Path mismatch. Expected: " + rootPath + ":" + rootName
 				                                   + " trying to add " + cRootPath + ":" + cRootName);
 		}
-		this.files.put(ext, path);
+		this.files.put(ext.toLowerCase(), path);
 
 	}
 
-	public File getPickUp(FileExtensions extension)
+	public File getPickUp(String extension)
 	{
 		if (extension == null)
 			throw new IllegalArgumentException("Empty extension");
 
-		return this.files.get(extension);
+		return this.files.get(extension.toLowerCase());
 	}
 
 }
