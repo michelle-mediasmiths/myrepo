@@ -21,7 +21,6 @@ import com.mediasmiths.foxtel.generated.ruzz.SegmentationType;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.queue.RuzzFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.RuzzValidator;
 import com.mediasmiths.mayam.MayamClient;
@@ -42,23 +41,23 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	@Inject
 	public RuzzPickupProcessor(
 			RuzzFilesPendingProcessingQueue filePathsPendingProcessing,
-			PendingImportQueue filesPendingImport,
 			RuzzValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			@Named("ruzz.unmarshaller") Unmarshaller unmarhsaller,
 			@Named("ruzz.marshaller") Marshaller marshaller,
 			MayamClient mayamClient,
-			EventService eventService)
+			EventService eventService,
+			@Named("ruzz.unmatched.processor") UnmatchedMaterialProcessor unmatchedMaterialProcessor)
 	{
 		super(
 				filePathsPendingProcessing,
-				filesPendingImport,
 				messageValidator,
 				receiptWriter,
 				unmarhsaller,
 				marshaller,
 				mayamClient,
-				eventService);
+				eventService,
+				unmatchedMaterialProcessor);
 	}
 
 	@Override

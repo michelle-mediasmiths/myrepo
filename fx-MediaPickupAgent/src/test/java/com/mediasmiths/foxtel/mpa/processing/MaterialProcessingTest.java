@@ -19,8 +19,6 @@ import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -31,7 +29,6 @@ import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.mayam.MayamClient;
 
@@ -39,7 +36,6 @@ public abstract class MaterialProcessingTest {
 
 	MaterialExchangeProcessor processor;
 	MaterialExchangeFilesPendingProcessingQueue filesPendingProcessingQueue;
-	PendingImportQueue pendingImportQueue;
 	MaterialExchangeValidator validator;
 	ReceiptWriter receiptWriter;
 	Unmarshaller unmarshaller;
@@ -55,6 +51,7 @@ public abstract class MaterialProcessingTest {
 	String materialXMLPath;
 	EventService eventService;
 	FilePickUpKinds pickUpKind = FilePickUpKinds.MEDIA;
+	UnmatchedMaterialProcessor unmatchedProcessor;
 
 	final String TITLE_ID = "TITLE_ID";
 	final String MATERIAL_ID = "MATERIAL_ID";
@@ -69,7 +66,6 @@ public abstract class MaterialProcessingTest {
 			DatatypeConfigurationException, SAXException {
 
 		
-		pendingImportQueue = new PendingImportQueue();
 		validator = mock(MaterialExchangeValidator.class);
 		receiptWriter = mock(ReceiptWriter.class);
 		JAXBContext jc = new MediaPickupModule().provideJAXBContext();
@@ -88,8 +84,8 @@ public abstract class MaterialProcessingTest {
 	
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
-				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, eventService);
+				 validator, receiptWriter, unmarshaller, marshaller,
+				mayamClient, eventService,unmatchedProcessor);
 
 		processor.startThread();
 	}

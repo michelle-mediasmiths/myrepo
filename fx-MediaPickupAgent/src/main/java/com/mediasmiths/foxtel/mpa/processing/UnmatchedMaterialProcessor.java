@@ -6,10 +6,7 @@ import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TI
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
-
-import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -19,24 +16,13 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.foxtel.mpa.MediaEnvelope;
-import com.mediasmiths.foxtel.mpa.Util;
-import com.mediasmiths.foxtel.mpa.queue.FilesPendingUnmatchImport;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
-import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.mayam.MayamClient;
 
-public class UnmatchedMaterialProcessor extends Daemon implements StoppableService
+public class UnmatchedMaterialProcessor
 {
 
-	private final Long timeout;
-	private final long sleepTime;
 	private final WatchFolders watchFolders;
 
 	private final EventService events;
@@ -51,59 +37,17 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 	private String aoQuarrentineFolder;
 
 	@Inject
-	private FilesPendingUnmatchImport pendingUnmatchImports;
-
-	@Inject
 	public UnmatchedMaterialProcessor(
 			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
 			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			EventService events)
 	{
-		this.timeout = timeout;
 		this.watchFolders = watchFolders;
-		this.sleepTime = sleepTime.longValue();
 		this.events = events;
 	}
 
-	@Override
-	public void run()
-	{
-		while (!Thread.interrupted())
-		{
-
-			try
-			{
-				process();
-			}
-			catch (InterruptedException e)
-			{
-				logger.info("Interrupted", e);
-				return;
-			}
-			catch (Exception e)
-			{
-				logger.fatal("Something went badly wrong in UnmatchedMaterialProcessor.process()", e);
-			}
-		}
-	}
-
-	protected void process() throws InterruptedException
-	{
-
-		File mxf = pendingUnmatchImports.take();
-		try
-		{
-
-			processUnmatchedMXF(mxf);
-		}
-		catch (Exception e)
-		{
-			logger.error("error importing file as unmatched : " + mxf.getAbsolutePath(), e);
-		}
-	}
-
-	private void processUnmatchedMXF(File mxf)
+	public void processUnmatchedMXF(File mxf) throws IOException
 	{
 
 		logger.info(String.format("importing mxf as unmatched  %s", mxf.getAbsolutePath()));
@@ -191,22 +135,8 @@ public class UnmatchedMaterialProcessor extends Daemon implements StoppableServi
 					"There has been a failure to deliver unmatched material %s to the Viz Ardome import folder",
 					FilenameUtils.getName(mxf.getAbsolutePath())));
 			events.saveEvent("error", sb.toString());
-		}
-		catch (Exception e)
-		{
-			logger.error("Unhandled exception processing unmatched mxf", e);
-		}
+			throw e;
+		}		
 	}
 
-	@Override
-	protected boolean shouldStartAsDaemon()
-	{
-		return true;
-	}
-
-	@Override
-	public void shutdown()
-	{
-		stopThread();
-	}
 }

@@ -14,7 +14,6 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.mayam.MayamClient;
 
@@ -23,15 +22,14 @@ public class SingleMessageProcessor extends MaterialExchangeProcessor {
 	@Inject
 	public SingleMessageProcessor(
 			MaterialExchangeFilesPendingProcessingQueue filePathsPendingProcessing,
-			PendingImportQueue filesPendingImport,
 			MaterialExchangeValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			EventService eventService){
-		super(filePathsPendingProcessing, filesPendingImport, messageValidator,
-				receiptWriter, unmarhsaller,marshaller, mayamClient, eventService);
+			EventService eventService, UnmatchedMaterialProcessor unmatchedProcessor){
+		super(filePathsPendingProcessing, messageValidator,
+				receiptWriter, unmarhsaller,marshaller, mayamClient, eventService,unmatchedProcessor);
 	}
 
 	protected static Logger logger = Logger

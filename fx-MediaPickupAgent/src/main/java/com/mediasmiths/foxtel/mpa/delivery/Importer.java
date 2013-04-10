@@ -13,9 +13,6 @@ import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
-import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -28,11 +25,10 @@ import java.util.Date;
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 
-public class Importer extends Daemon implements StoppableService {
+public class Importer {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
 
-	private final PendingImportQueue pendingImports;
 
 	// private final String targetFolder;
 	private final WatchFolders watchFolders; // contains source to destination
@@ -44,39 +40,13 @@ public class Importer extends Daemon implements StoppableService {
 	public static final JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events.report");
 
 	@Inject
-	public Importer(PendingImportQueue pendingImports,
+	public Importer(
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 			com.mediasmiths.foxtel.ip.event.EventService eventService) {
-		this.pendingImports = pendingImports;
 		this.watchFolders = watchFolders;
 		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
 		this.eventService = eventService;
-	}
-
-	@Override
-	public void run() {
-		logger.debug("Importer start");
-
-		while (isRunning()) {
-			try {
-				PendingImport pi = pendingImports.take();
-				logger.info("Picked up an import");
-
-				try {
-					deliver(pi, 1);
-				} catch (Exception e) {
-					logger.error(String.format(
-							"Error delivering pending file %s", pi.getMaterialEnvelope().getPickupPackage().getRootName()), e);
-				}
-
-				logger.info("Finished with import");
-			} catch (InterruptedException e) {
-				logger.info("Interruped!", e);
-			}
-		}
-
-		logger.debug("Importer stop");
 	}
 
 	/**
@@ -90,12 +60,13 @@ public class Importer extends Daemon implements StoppableService {
 	 * 
 	 * @param pi
 	 */
-	protected void deliver(PendingImport pi, int attempt) {
+	public void deliver(PendingImport pi, int attempt) {
 
 
 		if (pi.getMaterialEnvelope().getMasterID() == null
 				|| pi.getMaterialEnvelope().getMasterID().equals("null")) {
 			logger.error("Missing masterID in PendingImport");
+			throw new IllegalArgumentException("masterid/materialid or equivalent required to deliver to ardome import folder");
 		}
 
 		File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
@@ -253,13 +224,13 @@ public class Importer extends Daemon implements StoppableService {
 	private void onDeliveryFailure(PendingImport pi) {
 		try {
 			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
-			String quarrentineFolder = MessageProcessor
+			String failureFolder = MessageProcessor
 					.getFailureFolderForFile(src);
-			File baseDestination = new File(quarrentineFolder, pi
+			File baseDestination = new File(failureFolder, pi
 					.getMaterialEnvelope().getMasterID()
 					+ FilenameUtils.EXTENSION_SEPARATOR + "mxf");
 			File dst = new File(MessageProcessor.getDestinationPathForFileMove(
-					baseDestination, quarrentineFolder, true));
+					baseDestination, failureFolder, true));
 
 			try {
 				FileUtils.moveFile(src, dst);
@@ -269,7 +240,7 @@ public class Importer extends Daemon implements StoppableService {
 			}
 
 			src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("xml");
-			dst = new File(quarrentineFolder, pi.getMaterialEnvelope()
+			dst = new File(failureFolder, pi.getMaterialEnvelope()
 					.getMasterID() + FilenameUtils.EXTENSION_SEPARATOR + "xml");
 
 			try {
@@ -304,20 +275,5 @@ public class Importer extends Daemon implements StoppableService {
 		}
 
 	}
-
-	protected PendingImportQueue getPendingImports() {
-		return pendingImports;
-	}
 	
-	@Override
-	protected boolean shouldStartAsDaemon()
-	{
-		return true;
-	}
-
-	@Override
-	public void shutdown()
-	{
-		stopThread();
-	}
 }

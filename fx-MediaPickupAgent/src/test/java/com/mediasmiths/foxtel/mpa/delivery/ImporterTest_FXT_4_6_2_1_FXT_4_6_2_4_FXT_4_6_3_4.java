@@ -10,7 +10,6 @@ import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -34,7 +33,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	private static Logger logger = Logger.getLogger(ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-	private PendingImportQueue pendingImports;
 	private String incomingPath;
 	private String archivePath;
 	private String failurePath;
@@ -53,7 +51,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	@Before
 	@SuppressWarnings("unchecked")
 	public void before() throws IOException {
-		pendingImports = new PendingImportQueue();
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
@@ -66,10 +63,8 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		
 		event=mock(EventService.class);
 		
-		toTest = new Importer(pendingImports, watchFolders,
+		toTest = new Importer(watchFolders,
 				""+deliveryAttemptsToMake,event);
-		
-		toTest.startThread();
 		
 		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
 		TestUtil.writeBytesToFile(100, media);
@@ -96,7 +91,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 	@After
 	public void after() {
-		toTest.shutdown(); // kill importer thread
 	}
 
 	@Test
@@ -104,12 +98,11 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 		logger.info("Starting FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived");
 		// add pending import to the queue
-		pendingImports.add(pendingImport);
+		//TODO call the imported!
+		
+		
 		// wait for some time to allow processing to take place
 		Thread.sleep(1000l);
-
-		// check the queue is now empty
-		assertTrue(pendingImports.size() == 0);
 
 		// check the files have been delivered to the expected folders
 		Boolean mxfExists=new File(ardomeImportPath + IOUtils.DIR_SEPARATOR + masterID+ FilenameUtils.EXTENSION_SEPARATOR + "mxf").exists();
@@ -143,12 +136,11 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		new File(ardomeImportPath).setReadOnly();
 
 		// add pending import to the queue
-		pendingImports.add(pendingImport);
+		//TODO : call the importer!
+		
 		// wait for some time to allow processing to take place
 		Thread.sleep(1000l);
 
-		// check the queue is now empty
-		assertTrue(pendingImports.size() == 0);
 
 		// check the files have been delivered to the expected folders
 		assertTrue(new File(failurePath + IOUtils.DIR_SEPARATOR + masterID

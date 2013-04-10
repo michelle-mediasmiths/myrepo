@@ -39,11 +39,5 @@ public class MediaPickupAgent extends XmlWatchingAgent<Material> {
 		log.info(sb.toString());
 		
 		this.addMessageProcessor(ruzzPickupProcessor);
-		
-		importer.startThread();
-		registerService(importer);
-		
-		unmatchedMaterialProcessor.startThread();
-		registerService(unmatchedMaterialProcessor);		
 	}	
 }

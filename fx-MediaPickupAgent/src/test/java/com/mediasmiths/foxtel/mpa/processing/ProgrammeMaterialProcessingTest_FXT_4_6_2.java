@@ -62,7 +62,9 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 
 		materialXMLPath = materialxml.getAbsolutePath();
 		
-		MessageValidationResultPackage<Material> failedToUnmarshallResult = new MessageValidationResultPackage<>(new PickupPackage("xml"), MessageValidationResult.FAILED_TO_UNMARSHALL);
+		PickupPackage pp = new PickupPackage("xml", "mxf");
+		pp.addPickUp(materialXMLPath);
+		MessageValidationResultPackage<Material> failedToUnmarshallResult = new MessageValidationResultPackage<Material>(pp, MessageValidationResult.FAILED_TO_UNMARSHALL);
 		
 		// prepare mocks
 		when(validator.validatePickupPackage(any(PickupPackage.class))).thenReturn(failedToUnmarshallResult);
@@ -134,12 +136,7 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		assertTrue(filesPendingProcessingQueue.size() == 0);
 
 			
-			// check there is a pending import on the queue
-			assertTrue(pendingImportQueue.size() == 1);
-			PendingImport pi = pendingImportQueue.take();
-			
-			Boolean materialTest=pi.getMaterialEnvelope().getPickupPackage().getPickUp("xml").equals(materialxml);
-			assertTrue(materialTest);
+		//TODO: check files are in the right place
 	}
 	
 	@Test
@@ -161,9 +158,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(500l);
-		
-		//check queu is now empty
-		assertTrue(pendingImportQueue.size() == 0);
 		
 		// check message gets moved to failure folder
 		assertFalse(materialxml.exists());
@@ -192,9 +186,6 @@ public class ProgrammeMaterialProcessingTest_FXT_4_6_2 extends MaterialProcessin
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(1000l);
-		
-		//check queu is now empty
-		assertTrue(pendingImportQueue.size() == 0);
 		
 		// check message gets moved to failure folder
 		assertFalse(materialxml.exists());

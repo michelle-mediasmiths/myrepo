@@ -19,9 +19,5 @@ public class DoNothingUnmatchedMaterial extends UnmatchedMaterialProcessor {
 		super(timeout, sleepTime, watchFolders, event);
 	}
 
-	@Override
-	public void run() {
-
-	}
 
 }

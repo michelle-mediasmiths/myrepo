@@ -73,14 +73,9 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 				
 		//run object being tested
 		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,events);
-		Thread unmatcherThread = new Thread(toTest);
-		unmatcherThread.start();
+		toTest.processUnmatchedMXF(new File(unmatchedMXFPath));
 		
-		//wait a while for processing to take place
-		Thread.sleep(500l);
 		//stop the unmatched material processor
-		unmatcherThread.interrupt();
-		
 		Boolean xmlExists=new File(unmatchedXMLPath).exists();
 		assertFalse(xmlExists); //message should have been moved to the failed folder
 		
