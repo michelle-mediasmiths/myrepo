@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.mail.data.EmailProperties;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
+import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.log4j.Logger;
 
@@ -46,7 +47,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		if (logger.isTraceEnabled())
 			logger.info("Creating mail message");
 
-		MultiPartEmail email = new MultiPartEmail();
+		HtmlEmail email = new HtmlEmail();
 
 		email.setHostName(emailProperties.hostName);
 		email.addTo(to);
@@ -78,7 +79,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
 		
 		email.setSubject(subject);
-		email.setMsg(body);
+		email.setHtmlMsg(body);
 
 		if (logger.isTraceEnabled())
 			logger.info("Sending mail message to... " + to);
