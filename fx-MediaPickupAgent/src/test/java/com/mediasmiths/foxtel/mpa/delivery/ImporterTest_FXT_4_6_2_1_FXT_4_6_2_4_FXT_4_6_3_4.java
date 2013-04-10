@@ -100,8 +100,13 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 		logger.info("Starting FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived");
 		// add pending import to the queue
-		//TODO call the imported!
 		
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		MediaEnvelope<Material> me = new MediaEnvelope<Material>(pp, new Material(),"masterid");
+		PendingImport pi = new PendingImport(me);
+		toTest.deliver(pi, 1);
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(1000l);
@@ -137,12 +142,15 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		// make ardome import folder read only so delivery will fail
 		new File(ardomeImportPath).setReadOnly();
 
-		// add pending import to the queue
-		//TODO : call the importer!
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		MediaEnvelope<Material> me = new MediaEnvelope<Material>(pp, new Material(),"masterid");
+		PendingImport pi = new PendingImport(me);
+		toTest.deliver(pi, 1);
 		
 		// wait for some time to allow processing to take place
 		Thread.sleep(1000l);
-
 
 		// check the files have been delivered to the expected folders
 		assertTrue(new File(failurePath + IOUtils.DIR_SEPARATOR + masterID
