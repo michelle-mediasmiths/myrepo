@@ -50,7 +50,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		when(mayamClient.materialExists(EXISTING_MATERIAL_ID)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(pp));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(pp).getResult());
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 		Util.deleteFiles(pp);
@@ -93,7 +93,7 @@ public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShort
 		
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_TITLE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
-		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validatePickupPackage(pp));
+		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validator.validatePickupPackage(pp).getResult());
 		
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
 		Util.deleteFiles(pp);

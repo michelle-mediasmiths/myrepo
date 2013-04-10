@@ -229,7 +229,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		PickupPackage pp = createTempXMLFile (message, "createTitleTitleIdNull", false);
 
 		
-		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validatePickupPackage(pp));
+		assertEquals(MessageValidationResult.FAILS_XSD_CHECK, validator.validatePickupPackage(pp).getResult());
 	}
 	
 	@Test
@@ -247,7 +247,7 @@ public class CreateOrUpdateTitleTest_FXT_4_1_1 extends PlaceHolderMessageShortTe
 		PickupPackage pp = createTempXMLFile (message, "createTitleTitleIdEmpty", false);
 
 		
-		assertEquals(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY, validator.validatePickupPackage(pp));
+		assertEquals(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY, validator.validatePickupPackage(pp).getResult());
 	}
 	
 	private PlaceholderMessage buildCreateTitle (String titleID) throws DatatypeConfigurationException {

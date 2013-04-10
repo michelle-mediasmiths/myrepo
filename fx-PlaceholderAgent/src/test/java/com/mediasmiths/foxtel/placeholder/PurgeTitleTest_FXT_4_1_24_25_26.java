@@ -142,7 +142,7 @@ public class PurgeTitleTest_FXT_4_1_24_25_26 extends PlaceHolderMessageShortTest
 
 		// try to call validation, expect a mayam client error
 		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validatePickupPackage(pp));
+				validator.validatePickupPackage(pp).getResult());
 		Util.deleteFiles(pp);
 	}
 
