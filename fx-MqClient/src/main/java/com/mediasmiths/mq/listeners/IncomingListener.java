@@ -41,6 +41,7 @@ import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
@@ -101,7 +102,7 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	FixAndStitchCancelHandler fixAndStitchCancelHandler;
 	@Inject
-	IngestCompleteHandler ingestCompleteHandler;
+	IngestTaskCompleteHandler ingestTaskCompleteHandler;
 	@Inject
 	InitiateQcHandler initiateQcHandler;
 	@Inject
@@ -154,6 +155,8 @@ public class IncomingListener extends MqClientListener
 	PendingTxUpdateHandler pendingTxUpdate;
 	@Inject
 	MaterialProtectHandler materialProtected;
+	@Inject
+	IngestCompleteHandler ingestCompleteHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -256,7 +259,7 @@ public class IncomingListener extends MqClientListener
 				
 				
 				//tasks
-				passEventToHandler(ingestCompleteHandler,currentAttributes);
+				passEventToHandler(ingestTaskCompleteHandler,currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
@@ -361,6 +364,7 @@ public class IncomingListener extends MqClientListener
 		
 		try
 		{
+			passEventToUpdateHandler(ingestCompleteHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialProtected, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);

@@ -15,6 +15,7 @@ import au.com.foxtel.cf.mam.pms.RightsType;
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.queue.FileExtensions;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
@@ -24,6 +25,7 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -157,6 +159,13 @@ public class PlaceholderMessageValidator extends
 
 		logger.info("Validating an AddOrUpdatePackage");
 		
+		final String titleID = action.getTitleID();
+
+		//reject empty titleIDs		
+		if(StringUtils.isEmpty(titleID)){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+		
 		if(action.getPackage() != null){
 			final String packageID = action.getPackage().getPresentationID();
 		
@@ -204,8 +213,17 @@ public class PlaceholderMessageValidator extends
 			return consumerAdviceValid;
 		}
 
-		return MessageValidationResult.IS_VALID;
+		MessageValidationResult materialIDTitleIDMatch = validateMaterialIsForGivenTitle(materialID, titleID);
+
+		if(materialIDTitleIDMatch!= MessageValidationResult.IS_VALID){
+			return materialIDTitleIDMatch;
+		}
+
+		MessageValidationResult materialIDPackageIDMatch = validatePackageIsForGivenMaterial(materialID,action.getPackage().getPresentationID());
+		
+		return materialIDPackageIDMatch;
 	}
+
 
 	private MessageValidationResult validateConsumerAdvice(String consumerAdvice) {
 
@@ -227,10 +245,14 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY;
 		}
 
+		//reject empty title IDs
+		if(StringUtils.isEmpty(action.getTitleID())){
+			return MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY;
+		}
+		
 		boolean packageProtected = false;
 		try {
-			packageProtected = mayamClient
-					.isMaterialForPackageProtected(packageID);
+			packageProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
 		} catch (MayamClientException e) {
 			logger.error(
 					String.format(
@@ -260,8 +282,9 @@ public class PlaceholderMessageValidator extends
 			return MessageValidationResult.PACKAGE_DOES_NOT_EXIST;
 		}
 
-		return MessageValidationResult.IS_VALID;
+		return validatePackageIDisForTitleID(packageID,action.getTitleID());
 	}
+
 
 	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action)
 			throws MayamClientException {
@@ -313,8 +336,8 @@ public class PlaceholderMessageValidator extends
 			logger.error("MATERIAL_DOES_NOT_EXIST");
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 		}
-
-		return MessageValidationResult.IS_VALID;
+		
+		return validateMaterialIsForGivenTitle(materialID, titleID);
 
 	}
 
@@ -413,7 +436,14 @@ public class PlaceholderMessageValidator extends
 			logger.error("NO_EXISTING_TITLE_FOR_MATERIAL");
 			return MessageValidationResult.NO_EXISTING_TITLE_FOR_MATERIAL;
 		}
+
+		return validateMaterialIsForGivenTitle(materialID, titleID);
+	}
+
+	private MessageValidationResult validateMaterialIsForGivenTitle(String materialID, String titleID) throws MayamClientException
+	{
 		
+		logger.debug(String.format("Checking that materialID %s is for title %s",materialID,titleID));
 		
 		//check that if the material does exist then the title id matches the one specified
 		AttributeMap materialAttributes = mayamClient.getMaterialAttributes(materialID);
@@ -431,12 +461,63 @@ public class PlaceholderMessageValidator extends
 				logger.error("Material exists but under a different title than specified");
 				return MessageValidationResult.MATERIAL_EXISTS_UNDER_DIFFERENT_TITLE;
 			}
-
 		}
-
 		return MessageValidationResult.IS_VALID;
 	}
 
+	private MessageValidationResult validatePackageIsForGivenMaterial(String materialID, String packageID)
+			throws MayamClientException
+	{
+		logger.debug(String.format("Checking that packageid %s is for material %s", packageID, materialID));
+
+		try
+		{
+			SegmentList txpackage = mayamClient.getTxPackage(packageID, materialID);
+
+			if (txpackage != null)
+			{
+				AttributeMap packageAttributes = txpackage.getAttributeMap();
+
+				// if package already exists, check the materialid matches
+				String parentHouseID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+
+				if (! packageID.equals(parentHouseID))
+				{
+					logger.debug(String.format("{%s} ne {%s}", packageID, parentHouseID));
+					logger.error("Package exists but under a different material than specified");
+					return MessageValidationResult.PACKAGE_EXISTS_UNDER_DIFFERENT_MATERIAL;
+				}
+			}
+
+			return MessageValidationResult.IS_VALID;
+		}
+		catch (PackageNotFoundException pnfe)
+		{
+			// package doesnt exist
+			return MessageValidationResult.IS_VALID;
+		}
+
+	}
+	
+	private MessageValidationResult validatePackageIDisForTitleID(String packageID, String titleID) throws PackageNotFoundException, MayamClientException
+	{
+		try{
+		//find the package, and take its materialid		
+		SegmentList txPackage = mayamClient.getTxPackage(packageID);
+		String materialID = txPackage.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
+		logger.debug(String.format("found material id %s for package %s",materialID,packageID));
+		
+		return validateMaterialIsForGivenTitle(materialID, titleID);
+		}
+		catch(PackageNotFoundException pnfe) 
+		{
+			logger.trace("package not found");
+			return MessageValidationResult.IS_VALID;
+		}
+		
+	}
+
+	
 	/**
 	 * Validates a CreateOrUpdateTitle request
 	 * 

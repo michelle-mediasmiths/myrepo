@@ -1,16 +1,17 @@
 package com.mediasmiths.foxtel.ip.mail.rest;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.AddressException;
-
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
+import java.util.List;
+
 public interface EmailSenderService
 {
 
-	public MultiPartEmail createEmail(String to, String subject, String path) throws EmailException;
+	public MultiPartEmail createEmail(String to, String subject, String body, List<String> attachmentFilePaths) throws EmailException;
 
 	public EmailAttachment createAttachment(String path);
 

@@ -21,6 +21,8 @@ import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientImpl;
+import com.mediasmiths.mayam.controllers.MayamPackageController;
+import com.mediasmiths.mayam.controllers.PackageController;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 
@@ -38,6 +40,7 @@ public class MayamClientModule extends AbstractModule
 		install(new AttributesModule());
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(MayamValidator.class).to(MayamValidatorImpl.class);
+		bind(PackageController.class).to(MayamPackageController.class);
 		
 	}
 

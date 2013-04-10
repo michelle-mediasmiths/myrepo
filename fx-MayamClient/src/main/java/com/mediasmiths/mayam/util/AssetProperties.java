@@ -212,4 +212,25 @@ public class AssetProperties
 		return pendingPackage;				
 	}
 
+	public static boolean hasQCStatus(AttributeMap material)
+	{
+		QcStatus qcStatus = material.getAttribute(Attribute.QC_STATUS);
+
+		if (qcStatus == null)
+		{
+			return false;
+		}
+		else
+		{
+			if (qcStatus.equals(QcStatus.TBD))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
 }

@@ -26,6 +26,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -102,7 +103,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 					log.info("Using required date " + requiredDate);
 				}
 
-				String materialPath = mayamClient.pathToMaterial(materialID);				
+				String materialPath = mayamClient.pathToMaterial(materialID,false);				
 				String outputLocation = TxUtil.deliveryLocationForPackage(packageID, mayamClient, txDeliveryLocation, aoDeliveryLocation, isAO);
 
 				TCJobParameters tcParams = createTCParamsForTxDelivery(
@@ -156,8 +157,23 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error getting materials location or fetching delivery location for package", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				
+				if (MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED.equals(e.getErrorcode()))
+				{
+					log.error("Error getting material's location", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Error getting material's location");
+				}
+				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
+						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
+				{
+					log.error("Material unavailable or not found on hires storage", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Material unavailable or not on Hires storage");
+				}
+				else
+				{
+					log.error("error initiating tx delivery", e);
+					taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				}
 			}
 			catch (MuleException e)
 			{

@@ -7,6 +7,7 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -177,8 +178,6 @@ public interface MayamClient
 	 */
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException;
-
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
 
 	public MayamValidator getValidator();
@@ -201,31 +200,7 @@ public interface MayamClient
 	 * @param location
 	 * @return 
 	 */
-	public String pathToMaterial(String materialID) throws MayamClientException;
-
-	/**
-	 * Return the placeholder management system representation of a package
-	 * @param packageID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	PackageType getPackage(String packageID) throws MayamClientException;
-
-	/**
-	 * Return the material exchange representation of a package
-	 * @param packageID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	ProgrammeMaterialType.Presentation.Package getPresentationPackage(String packageID) throws MayamClientException;
-
-	/**
-	 * Returns the MaterialType representation of a given material
-	 * @param materialID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	MaterialType getMaterial(String materialID) throws MayamClientException;
+	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException;
 
 	/**
 	 * Return a single task of a given type for the specified asset
@@ -353,5 +328,9 @@ public interface MayamClient
 	Set<String> getChannelGroupsForItem(AttributeMap itemAttributes) throws MayamClientException;
 	
 	Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException;
+
+	SegmentList getTxPackage(String presentationID, String materialID) throws PackageNotFoundException, MayamClientException;
+
+	SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException;
 	
 }

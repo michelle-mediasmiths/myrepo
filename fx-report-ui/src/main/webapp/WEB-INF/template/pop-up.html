@@ -168,8 +168,8 @@
 				<td><label>2. Acquisition Delivery Report: </label></td>
 				<td><button class="btn-primary" id="rpt2bBtn" type="submit">CSV</button></td>
 			</form>
-			<form class="form-search">
-				<td><button class="btn-primary" id="rpt2UI" type="submit">NULL</button></td>
+			<form class="form-search" method="GET" th:action="@{rest/query/acquisition_report_ui}">
+				<td><button class="btn-primary" id="rpt2UI" type="submit">On Screen</button></td>
 			</form>
 			
 			<form class="form-search" method="GET" th:action="@{/rest/query/compliance_edit_csv}">
@@ -204,8 +204,8 @@
 				<td><label>10b. Auto QC: </label></td>
 				<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
 			</form>	
-			<form class="form-search">
-				<td><button class="btn-primary" id="rpt2UI" type="submit">NULL</button></td>
+			<form class="form-search" method="GET" th:action="@{rest/query/auto_qc/ui}">
+				<td><button class="btn-primary" id="rpt2UI" type="submit">On Screen</button></td>
 			</form>
 			
 			<form class="form-search" method="GET" th:action="@{/rest/query/watch_folder_storage_csv}">
@@ -236,6 +236,8 @@
 		</tr>
  	</tbody>
  	</table>
+ 	
+ 	<a href="http://www.google.com" target="_blank">Window</a>
 	</div>	
 </body>
 

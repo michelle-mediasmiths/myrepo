@@ -172,7 +172,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			log.debug("Material is NOT for TX delivery");
-			final String destination = mayamClient.pathToMaterial(id);
+			final String destination = mayamClient.pathToMaterial(id,false);
 			log.debug(String.format("Material destination set to %s", destination));
 			destinationFile = new File(destination);
 		}
@@ -202,7 +202,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (notification.isForTXDelivery())
 			{
 				// id is a package id
-				saveEvent("QCProblemwithTCMedia", notification, QC_EVENT_NAMESPACE);
+				saveEvent("QCProblemWithTCMedia", notification, QC_EVENT_NAMESPACE);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
@@ -238,7 +238,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			materialID = assetID;
 		}
 
-		String path = mayamClient.pathToMaterial(materialID);
+		String path = mayamClient.pathToMaterial(materialID,false);
 
 		return new MaterialTransferForTCResponse(path);
 	}
@@ -252,7 +252,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.isForTXDelivery()));
 
 		// comment out as version 7 220213
-		// saveEvent("AutoQCPassed", notification, QC_EVENT_NAMESPACE);
+		
+		com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification qcPass = new com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification();
+		qcPass.setAssetId(notification.getAssetId());
+		qcPass.setForTXDelivery(notification.isForTXDelivery());
+		qcPass.setMaterialID(String.valueOf(notification.getTaskID()));
+		qcPass.setTitle(notification.getTitle());
+		events.saveEvent(QC_EVENT_NAMESPACE, "AutoQCPassed", qcPass);
 
 		if (notification.isForTXDelivery())
 		{
@@ -295,7 +301,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	 *
 	 * @param jobName
 	 * @return the list of cerify QC report files defines for the jobname.
-	 * 
+	 *
 	 */
 	private Collection<File> getQCFiles(final String jobName)
 	{

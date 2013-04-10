@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
@@ -15,6 +17,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -40,15 +43,15 @@ public class AutoQCRpt
 		createCsv(autoQcs, reportName);
 	}
 	
-	private AutoQC unmarshall(EventEntity event)
+	private Object unmarshall(EventEntity event)
 	{
-		Object title = new AutoQC();
+		Object title = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
 			title = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
@@ -57,18 +60,40 @@ public class AutoQCRpt
 		{
 			e.printStackTrace();
 		}
-		return (AutoQC)title;
+		return title;
 	}
 	
-	private List<AutoQC> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<AutoQC> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating autoQC list");
 		List<AutoQC> autoQcs = new ArrayList<AutoQC>();
 		for (EventEntity event : events)
 		{
-			AutoQC autoQc = unmarshall(event);
+			AutoQCResultNotification result = (AutoQCResultNotification) unmarshall(event);
+			AutoQC autoQc = new AutoQC();
 			autoQc.setDateRange(startDate + " - " + endDate);
-
+			autoQc.setMaterialID(result.getAssetId());
+			autoQc.setTitle(result.getTitle());
+			autoQc.setContentType("Programme");
+			
+			logger.info("event.eventName: " + event.getEventName());
+			if(event.getEventName().equals("AutoQCPassed")) {
+				autoQc.setQcStatus("QC_PASS");
+				autoQc.setTaskStatus("FINISHED");
+			}
+			if(event.getEventName().equals("QcFailedReorder")) {
+				autoQc.setQcStatus("QC_FAILED_REORDER");
+				autoQc.setTaskStatus("FINISHED_FAILED");
+			}
+			else if(event.getEventName().equals("QcProblemWithTCMedia")) {
+				autoQc.setQcStatus("UNKNOWN");
+				autoQc.setTaskStatus("FINISHED_FAILED");
+			}
+			else if(event.getEventName().equals("CerifyQcError")) {
+				autoQc.setQcStatus("UNKNOWN");
+				autoQc.setTaskStatus("FINISHED_FAILED");
+			}
+			
 			autoQcs.add(autoQc);
 		}	
 		return autoQcs;

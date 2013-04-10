@@ -1,7 +1,7 @@
 package com.mediasmiths.foxtel.ip.mail.rest;
 
-import com.mediasmiths.foxtel.ip.mail.data.EmailProperties;
 import com.google.inject.Inject;
+import com.mediasmiths.foxtel.ip.mail.data.EmailProperties;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
@@ -13,6 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 import java.util.Properties;
 
 public class EmailSenderServiceImpl implements EmailSenderService
@@ -40,7 +41,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 	 * @return email
 	 */
 	@Override
-	public MultiPartEmail createEmail(String to, String subject, String body) throws EmailException
+	public MultiPartEmail createEmail(String to, String subject, String body, List<String> attachmentFilePaths) throws EmailException
 	{
 		if (logger.isTraceEnabled())
 			logger.info("Creating mail message");
@@ -52,6 +53,25 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		email.setFrom(emailProperties.emailAddress);
 		email.setSmtpPort(emailProperties.smtpPort);
 
+		if (attachmentFilePaths != null && attachmentFilePaths.size() != 0)
+		{
+			for (String path: attachmentFilePaths)
+			{
+				try
+				{
+					logger.debug("Attaching report at: " + path);
+					EmailAttachment a = new EmailAttachment();
+					a.setName("Cerify report: " + path);
+					a.setPath(path);
+					email.attach(a);
+				}
+				catch (EmailException e)
+				{
+					logger.error("Attachment of " + path + " failed.", e);
+				}
+			}
+		}
+
 		//If sending through gmail (not on foxtel)
 		//email.setAuthentication(emailProperties.emailAddress, emailProperties.password);
 		//email.setTLS(true);
@@ -59,10 +79,12 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		
 		email.setSubject(subject);
 		email.setMsg(body);
+
 		if (logger.isTraceEnabled())
 			logger.info("Sending mail message to... " + to);
 
 		sendEmail(email);
+
 		return email;
 	}
 
@@ -105,6 +127,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
 		message.setSubject(subject);
 		message.setContent(body, "text/html");
+
 		Transport transport = session.getTransport("smtp");
 		transport.connect(emailProperties.hostName, emailProperties.emailAddress, emailProperties.password);
 		transport.sendMessage(message, message.getAllRecipients());

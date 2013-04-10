@@ -15,6 +15,11 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
+import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
+import com.mediasmiths.foxtel.ip.common.events.ExportStart;
+import com.mediasmiths.foxtel.ip.common.events.TcPassedNotification;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -39,9 +44,9 @@ public class ExportRpt
 		createCsv(exports, reportName);
 	}
 	
-	private Export unmarshall(EventEntity event)
+	private Object unmarshall(EventEntity event)
 	{
-		Object title = new Export();
+		Object title = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
@@ -56,17 +61,91 @@ public class ExportRpt
 		{
 			e.printStackTrace();
 		}
-		return (Export)title;
+		return title;
+	}
+	
+	private Object unmarshallBMS(EventEntity event) 
+	{
+		Object title = null;
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload: " + payload);
+		
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
+			title = JAXB_SERIALISER.deserialise(payload);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return title;
 	}
 	
 	private List<Export> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating export list");
 		List<Export> exports = new ArrayList<Export>();
+		
+//		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
+		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+//		for (EventEntity event : packageEvents) {
+//			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshallBMS(event);
+//			packages.add(pack);
+//		}
+//		
+//		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
+		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
+//		for (EventEntity event : titleEvents) {
+//			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshallBMS(event);
+//			titles.add(title);
+//		}
+//		
+//		List <EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
+//		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
+		List<Acquisition> acqs = new ArrayList<Acquisition>();
+//		for (EventEntity event : acqEvents) {
+//			Acquisition acq = (Acquisition) unmarshall(event);
+//			acqs.add(acq);
+//		}
+		
 		for (EventEntity event : events)
 		{
-			Export export = unmarshall(event);
+			Export export = new Export();
+			TcPassedNotification tcNotification = (TcPassedNotification) unmarshall(event);
+			
 			export.setDateRange(startDate + " - " + endDate);
+			export.setMaterialID(tcNotification.getAssetID());
+			export.setChannels(tcNotification.getChannelGroup().toString());
+			
+			if(event.getEventName().equals("CaptionProxySuccess")) {
+				export.setExportType("Caption");
+			}
+			if (event.getEventName().equals("ComplianceProxySuccess")) {
+				export.setExportType("Compliance");
+			}
+			if (event.getEventName().equals("ClassificationProxySuccess")) {
+				export.setExportType("Classification");
+			}
+			
+			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
+			for (AddOrUpdatePackage pack : packages) {
+				if (pack.getMaterialID().equals(export.getMaterialID())) {
+					matchingPackage = pack;
+				}
+			}
+			
+			for (CreateOrUpdateTitle title : titles) {
+				if (title.getTitleID().equals(matchingPackage.getTitleID())) {
+					export.setTitle(title.getTitle());
+				}
+			}
+			
+			for (Acquisition acq : acqs) {
+				if (acq.getMaterialID().equals(matchingPackage.getMaterialID())) {
+					export.setTitleLength(acq.getTitleLength());
+				}
+			}
 			
 			exports.add(export);
 		}		

@@ -21,12 +21,17 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -691,12 +696,22 @@ public class MayamTaskController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
 	}
+	
+	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		return getAllOpenTasksForAsset(assetType, idAttribute, id, Collections.<MayamTaskListType>emptySet());
+	}
 
 	/**
 	 * returns all tasks for an asset that are not in end states
+	 * 
+	 * @param assetType  
+	 * @param idAttribute - the id attribute to search on eg ASSET_ID or HOUSE_ID
+	 * @param id - the id to search for
+	 * @param excludedTaskTypes - task list types to exclude from this search (for example, pending tx package)
 	 * @return
+	 * @throws MayamClientException
 	 */
-	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id, Set<MayamTaskListType> excludedTaskTypes) throws MayamClientException{
 		
 		log.info(String.format(
 				"Searching for non closed tasks of for asset %s using id attribute %s",
@@ -705,8 +720,20 @@ public class MayamTaskController extends MayamController
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
-		criteria.getFilterAlternatives()
-	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
+		criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
+		
+		//allow exclusion of particular task lists from this search
+		if(excludedTaskTypes.size() > 0){
+			
+			Set<String> taskListIds = new HashSet<String>();
+			
+			for(MayamTaskListType t : excludedTaskTypes){
+				log.trace("excluding task list from search ;"+t.getText());
+				taskListIds.add(t.getText());
+			}
+			
+			criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_LIST_ID, taskListIds);
+		}
 		
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		
@@ -726,8 +753,24 @@ public class MayamTaskController extends MayamController
 	
 	public void cancelAllOpenTasksForAsset(AssetType assetType, Attribute idAttribute, String id) throws MayamClientException
 	{
+		cancelAllOpenTasksForAsset(assetType,idAttribute,id, Collections.<MayamTaskListType>emptySet());
+	}
+	
+	/**
+	 * Cancel all the open tasks for an asset
+	 * 
+	 * A set of task list types to exlude can be specified
+	 * 
+	 * @param assetType	
+	 * @param idAttribute	- ID attribute to search on (ASSET_ID, HOUSE_ID)
+	 * @param id			- The id to search for
+	 * @param excludedTaskTypes - Set of tasks lists to exlude
+	 * @throws MayamClientException
+	 */
+	public void cancelAllOpenTasksForAsset(AssetType assetType, Attribute idAttribute, String id, Set<MayamTaskListType> excludedTaskTypes) throws MayamClientException
+	{
 
-		List<AttributeMap> tasksForAsset = getAllOpenTasksForAsset(assetType, idAttribute, id);
+		List<AttributeMap> tasksForAsset = getAllOpenTasksForAsset(assetType, idAttribute, id, excludedTaskTypes);
 
 		for (AttributeMap task : tasksForAsset)
 		{
@@ -796,5 +839,56 @@ public class MayamTaskController extends MayamController
 		
 	}
 
+	public void removePurgeCandidateTasksForTilesAssociatedMaterial(String titleAssetID)
+	{
+		try
+		{
+			// If a title was created as a result of marketing material arriving referring to a non existant title then that asset will be on the purge candidate list
+			// This method is called during update title in response to a bms message, search for an remove any purge candiate tasks for this titles associated items
+			List<AttributeMap> assetChildren = client.assetApi().getAssetChildren(
+					MayamAssetType.TITLE.getAssetType(),
+					titleAssetID,
+					MayamAssetType.MATERIAL.getAssetType());
+
+			for (AttributeMap child : assetChildren)
+			{
+				String contMatType = child.getAttribute(Attribute.CONT_MAT_TYPE);
+
+				if (MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contMatType))
+				{
+					String childAssetID = child.getAttributeAsString(Attribute.ASSET_ID);
+					
+					log.debug("Searching for purge candidate tasks for asset "+childAssetID);
+
+					final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+					criteria.getFilterAlternatives().addAsExclusions(Attribute.TASK_STATE, END_STATES);
+					criteria.getFilterEqualities().setAttribute(
+							Attribute.TASK_LIST_ID,
+							MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
+					criteria.getFilterEqualities().setAttribute(
+							Attribute.ASSET_ID,childAssetID);
+
+					FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
+
+					log.debug(String.format("%d tasks returned, not trying to close any just yet", result.getMatches().size()));
+
+//					List<AttributeMap> tasks = result.getMatches();
+//
+//					for (AttributeMap task : tasks)
+//					{
+//						TaskState state = task.getAttribute(Attribute.TASK_STATE);
+//
+//							AttributeMap updateMap = updateMapForTask(task);
+//							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+//							client.taskApi().updateTask(updateMap);
+//					}
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error searching for or closing purge candidate tasks for titles child associated materials", e);
+		}
+	}
 	
 }

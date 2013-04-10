@@ -14,11 +14,13 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
+import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
-import com.mediasmiths.std.guice.thymeleaf.TemplateCall;
-import com.mediasmiths.std.guice.thymeleaf.Templater;
+import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
@@ -38,7 +40,7 @@ import com.mediasmiths.stdEvents.reporting.csv.WatchFolderRpt;
 public class ReportUIImpl implements ReportUI
 {
 	@Inject
-	private Templater templater;
+	private ThymeleafTemplater templater;
 	
 	@Inject
 	private QueryAPI queryApi;
@@ -312,7 +314,11 @@ public class ReportUIImpl implements ReportUI
 	public String getAquisitionReportUI()
 	{
 		final TemplateCall call = templater.template("acquisition_delivery");
-		
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
+		AcquisitionRpt report = new AcquisitionRpt();
+		List<Acquisition> materials = report.getReportList(events, startDate, endDate);
+		call.set("materials", materials);
 		return call.process();
 	}
 	
@@ -322,43 +328,37 @@ public class ReportUIImpl implements ReportUI
 		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
 		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
 		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
-		
-//		int total = (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape"))) + (queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")));
-//		int perByFile = 0;
-//		int perByTape = 0;
-//		if (total != 0)
-//		{
-//			perByTape = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "Tape")) / total;
-//			perByFile = queryApi.getTotal(queryApi.getByMedia("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", "File")) / total;
-//		}
-//
-//		perByTape = perByTape * 100;
-//		perByFile = perByFile * 100;
 	}
 
 	@Transactional
 	public void getManualQACSV()
 	{
 		List<EventEntity> preview = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQAReport", MAX));
-//		List<EventEntity> manualQA = new ArrayList<EventEntity>();
-//		for (EventEntity event : qc) 
-//		{
-//			String payload = event.getPayload();
-//			String qcStatus = payload.substring(payload.indexOf("QCStatus")+9, payload.indexOf("</QCStatus"));
-//			if (qcStatus.equals("QCFail(Overridden)")) {
-//				boolean within = checkDate(event.getTime());
-//				if (within)
-//					manualQA.add(event);
-//			}
-//		}
 		manualQa.writeManualQA(preview, startDate, endDate, REPORT_NAME);
 	}
 
 	@Transactional
 	public void getAutoQCCSV()
 	{
-		List<EventEntity> passed = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCReport", MAX));
-		autoQc.writeAutoQc(passed, startDate, endDate, REPORT_NAME);
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReorder", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemWithTcMedia", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQcError", MAX)));
+		autoQc.writeAutoQc(events, startDate, endDate, REPORT_NAME);
+	}
+	
+	@Transactional
+	public String getAutoQCUI()
+	{
+		final TemplateCall call = templater.template("auto_qc");
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX)));
+		AutoQCRpt report = new AutoQCRpt();
+		List<AutoQC> qcs = report.getReportList(events, startDate, endDate);
+		call.set("qcs", qcs);
+		return call.process();
 	}
 
 	@Transactional
@@ -399,7 +399,9 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getExportCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/delivery", "ExportReport", MAX));
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
 		export.writeExport(events, startDate, endDate, REPORT_NAME);
 	}
 	
@@ -553,21 +555,7 @@ public class ReportUIImpl implements ReportUI
 //		
 //		jasperApi.createFileTapeIngest(rptList);
 //	}
-//	
-//
-//	@Transactional
-//	public String getAutoQCUI()
-//	{
-//		final TemplateCall call = templater.template("auto_qc");
-//
-//		call.set("autoQCd", queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed"));
-//		call.set("totalQCd", queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "AutoQCPassed")));
-//		call.set("QCFailed", queryApi.getLength(queryApi.getEvents("http://www.foxtel.com.au/ip/qc", "autoqcfailed")));
-//
-//		return call.process();
-//	}
-//	
-//	
+//		
 //	@Transactional
 //	public void getAutoQCPDF()
 //	{

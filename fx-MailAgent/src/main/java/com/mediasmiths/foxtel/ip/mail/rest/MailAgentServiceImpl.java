@@ -164,11 +164,18 @@ public class MailAgentServiceImpl implements MailAgentService
 					// Sending normal email so unprocessed xml can be viewed
 					logger.info("Could not find generator, sending normal email.");
 
-					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody());
+					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null);
 				}
 				else
 				{
-					emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()));
+					if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
+					{
+					     emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()));
+					}
+					else
+					{
+						emailService.createEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()), m.getFileAttachments());
+					}
 
 					// emailService.createEmail(email, m.getSubject(), m.getBody());
 				}

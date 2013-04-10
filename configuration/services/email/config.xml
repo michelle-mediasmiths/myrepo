@@ -35,7 +35,7 @@
 	</MailData>
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
-		<eventname>QCproblemwithTCMedia</eventname>
+		<eventname>QCProblemwithTCMedia</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>URGENT ISSUE: Quarantined item in MAM MasterID(%s), Title(%s)</subject>
 			<body>Cerify has found an issue with Title (%s), AssetId(%s) so MAM has quarantined it. Please resolve urgently.</body>

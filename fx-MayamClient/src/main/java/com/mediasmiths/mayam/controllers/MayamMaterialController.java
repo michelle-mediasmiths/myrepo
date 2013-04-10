@@ -31,6 +31,8 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTrack
 import com.mediasmiths.foxtel.generated.MaterialExchange.MaterialType.AudioTracks.Track;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.pathresolver.PathResolver;
@@ -63,7 +65,9 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
@@ -101,6 +105,9 @@ public class MayamMaterialController extends MayamController
 	
 	@Inject
 	private DateUtil dateUtil;
+	
+	@Inject
+	private PackageController packageController; //dont know if guice will let this inject or not (mutual dependency... but one is constructer injection, the other has member injection, it might be ok)
 	
 	@Inject
 	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
@@ -611,15 +618,15 @@ public class MayamMaterialController extends MayamController
 	}
 
 
-	@Inject
-	@Named("segmentation.data.stash.folder")
-	private String segmentationDataStashPath;
-	
-	public String segdataFilePathForMaterial(String materialId)
-	{
-		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
-	}
-	
+//	@Inject
+//	@Named("segmentation.data.stash.folder")
+//	private String segmentationDataStashPath;
+//	
+//	public String segdataFilePathForMaterial(String materialId)
+//	{
+//		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
+//	}
+//	
 	
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
@@ -681,25 +688,55 @@ public class MayamMaterialController extends MayamController
 				}
 				else if (material.getPresentation() != null)
 				{
-
 					Presentation presentation = material.getPresentation();
-				
-					//stash to file for populating segmentation information later on
 					
-					//stashing to file will be replaced by stashing in pending tx pacakge list
-					try
-					{
-						String presentationString = presentationToString(presentation);
-						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
-					}
-					catch (JAXBException e)
-					{
-						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
-					}
-					catch(Exception e){
-						log.error("error saving presentation info for material",e);
-					}
+//					//stash to file for populating segmentation information later on  (if bms sends tx pacakge creation *after* material exchange happens)
+//					try
+//					{
+//						String presentationString = presentationToString(presentation);
+//						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
+//					}
+//					catch (JAXBException e)
+//					{
+//						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
+//					}
+//					catch(Exception e){
+//						log.error("error saving presentation info for material",e);
+//					}
 					
+					List<Package> presentationInfo = presentation.getPackage();
+
+					for (Package pack : presentationInfo)
+					{
+						String packageID = pack.getPresentationID();
+						Segmentation segmentation = pack.getSegmentation();
+
+						try
+						{
+							packageController.createOrUpdatePendingTxPackagesSegmentInfo(
+									assetAttributes,
+									material.getMaterialID(),
+									packageID,
+									segmentation);
+						}
+						catch (Exception e)
+						{
+							log.error("error creation or updating pending tx package with segmentation information", e);
+							// something has gone wrong populating the pending tx package task allow processing to continue so at least the natural breaks field gets populated
+							try
+							{
+								taskController.createWFEErorTask(
+										MayamAssetType.MATERIAL,
+										material.getMaterialID(),
+										"Error processing segmentation information in material exchange message");
+							}
+							catch (MayamClientException mce)
+							{
+								log.error("error creating error task", mce);
+							}
+						}
+					}
+
 					// save the segmentation information to the natural breaks string
 					try
 					{
@@ -708,7 +745,7 @@ public class MayamMaterialController extends MayamController
 					}
 					catch (Exception e)
 					{
-						log.error("error converting segmentation informatio to human string for natual breaks field", e);
+						log.error("error converting segmentation information to human string for natual breaks field", e);
 					}
 					
 				}
@@ -797,16 +834,16 @@ public class MayamMaterialController extends MayamController
 		return isPlaceholder;
 	}
 
-	private String presentationToString(Presentation p) throws JAXBException
-	{
-		JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(
-				new QName("", "Presentation"),
-				Presentation.class,
-				p);
-		StringWriter sw = new StringWriter();
-		materialExchangeMarshaller.marshal(j, sw);
-		return sw.toString();
-	}
+//	private String presentationToString(Presentation p) throws JAXBException
+//	{
+//		JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(
+//				new QName("", "Presentation"),
+//				Presentation.class,
+//				p);
+//		StringWriter sw = new StringWriter();
+//		materialExchangeMarshaller.marshal(j, sw);
+//		return sw.toString();
+//	}
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
@@ -1030,54 +1067,6 @@ public class MayamMaterialController extends MayamController
 			log.debug(String.format("remote expcetion getting material by asset id", e));
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED, e);
 		}
-	}
-
-	public MaterialType getPHMaterialType(String materialID)
-	{ // this is the placeholder material type, we also need the material exchange one to get info about audio tracks etc
-		AttributeMap attributes = getMaterialAttributes(materialID);
-		MaterialType material = new MaterialType();
-
-		material.setMaterialID((String) attributes.getAttribute(Attribute.HOUSE_ID));
-		Boolean qc = (Boolean) attributes.getAttribute(Attribute.QC_REQUIRED);
-
-		if (qc != null)
-		{
-			if (qc.booleanValue())
-			{
-				material.setQualityCheckTask(QualityCheckEnumType.AUTOMATIC_ON_INGEST);
-			}
-
-		}
-		else
-		{
-			log.warn(String.format("material %s had null QualityCheck attribute", materialID));
-		}
-
-		material.setRequiredFormat((String) attributes.getAttribute(Attribute.CONT_FMT));
-
-		Source source = new Source();
-		material.setSource(source);
-		Aggregation aggregation = new Aggregation();
-		source.setAggregation(aggregation);
-		Aggregator aggregator = new Aggregator();
-		aggregation.setAggregator(aggregator);
-		Order order = new Order();
-		aggregation.setOrder(order);
-
-		aggregator.setAggregatorID("" + attributes.getAttribute(Attribute.AGGREGATOR));
-		order.setOrderReference("" + attributes.getAttribute(Attribute.OP_ID));
-
-		Compile compile = new Compile();
-		source.setCompile(compile);
-		compile.setParentMaterialID("" + attributes.getAttribute(Attribute.PARENT_HOUSE_ID));
-
-		/*
-		 * Library library = new Library(); IdSet tapeIds = attributes.getAttribute(Attribute.SOURCE_IDS); String[] tapeIdsArrays = (String[]) tapeIds.toArray(); ArrayList<TapeType> tapeList = new
-		 * ArrayList<TapeType>(); for (int i = 0; i < tapeIdsArrays.length; i++) { TapeType tape = new TapeType(); tape.setLibraryID(tapeIdsArrays[i]); tapeList.add(tape); }
-		 * library.withTape(tapeList); source.setLibrary(library);
-		 */
-
-		return material;
 	}
 
 	public MayamClientErrorCode deleteMaterial(String materialID, int gracePeriod)
@@ -1381,7 +1370,9 @@ public class MayamMaterialController extends MayamController
 			
 			try
 			{
-				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID);
+				Set<MayamTaskListType> taskTypesToKeepOpen = new HashSet<MayamTaskListType>();
+				taskTypesToKeepOpen.add(MayamTaskListType.PENDING_TX_PACKAGE);
+				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID,taskTypesToKeepOpen);
 			}
 			catch (MayamClientException e)
 			{
@@ -1478,6 +1469,10 @@ public class MayamMaterialController extends MayamController
 	}
 	
 	public String getAssetPath(String assetID) throws MayamClientException{
+		return getAssetPath(assetID,true);
+	}
+	
+	public String getAssetPath(String assetID, boolean acceptNonPreferredLocations) throws MayamClientException{
 
 		FileFormatInfo fileinfo;
 		try
@@ -1495,7 +1490,7 @@ public class MayamMaterialController extends MayamController
 		
 		if(urls == null || urls.size()==0){
 			log.error("no urls for media found!");
-			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE);
 		}
 		
 	
@@ -1524,12 +1519,20 @@ public class MayamMaterialController extends MayamController
 				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
 			}
 		}
-		if (nixPath != null) 
+		if (acceptNonPreferredLocations)
 		{
-			log.info("No preferred location found, using :" + nixPath);
-			return nixPath;
+			if (nixPath != null)
+			{
+				log.info("No preferred location found, using :" + nixPath);
+				return nixPath;
+			}
+			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
 		}
-		throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED);
+		else
+		{
+			throw new MayamClientException(MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION);
+		}
+		
 	}
 
 	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException

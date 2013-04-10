@@ -277,25 +277,6 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public boolean isMaterialForPackageProtected(String packageID) throws MayamClientException
-	{
-		
-		boolean isProtected = false;
-		
-		SegmentList segmentList = packageController.getSegmentList(packageID);
-		String materialID = segmentList.getAttributeMap().getAttribute(Attribute.PARENT_HOUSE_ID);
-		
-		log.debug(String.format("material id %s found for package %s", materialID, packageID));
-		
-		if (materialID != null)
-		{
-			isProtected = materialController.isProtected(materialID);
-		}
-		
-		return isProtected;
-	}
-
-	@Override
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException
 	{
 		Boolean isProtected = false;
@@ -414,13 +395,7 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public PackageType getPackage(String packageID) throws MayamClientException
-	{
-		return packageController.getPackageType(packageID);
-	}
-
-	@Override
-	public String pathToMaterial(String materialID) throws MayamClientException
+	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException
 	{
 		log.debug(String.format("Requesting pathTo material for materialID %s", materialID));
 		
@@ -430,7 +405,7 @@ public class MayamClientImpl implements MayamClient
 		if(null != material)
 		{
 			String assetID = material.getAttribute(Attribute.ASSET_ID);
-			assetPath = materialController.getAssetPath(assetID);
+			assetPath = materialController.getAssetPath(assetID,acceptNonPreferredLocations);
 		}
 		else
 		{
@@ -440,12 +415,6 @@ public class MayamClientImpl implements MayamClient
 		
 		log.debug(String.format("Asset path returned %s for materialID %s.", assetPath, materialID));
 		return assetPath;
-	}
-
-	@Override
-	public MaterialType getMaterial(String materialID) throws MayamClientException
-	{
-		return materialController.getPHMaterialType(materialID);
 	}
 
 	@Override
@@ -469,12 +438,6 @@ public class MayamClientImpl implements MayamClient
 		AttributeMap task = this.getOnlyTaskForAsset(type, id);
 		task.setAttribute(Attribute.TASK_STATE, TaskState.REJECTED);
 		this.saveTask(task);
-	}
-
-	@Override
-	public Package getPresentationPackage(String packageID) throws MayamClientException
-	{
-		return packageController.getPresentationPackage(packageID);
 	}
 
 	@Override
@@ -680,12 +643,51 @@ public class MayamClientImpl implements MayamClient
 		}
 	}
 
+	/**
+	 * only ever returns attributes for 'real'tx packages, not 'pending' oones
+	 */
 	@Override
 	public AttributeMap getPackageAttributes(String packageID) throws MayamClientException
 	{
 		return packageController.getSegmentList(packageID).getAttributeMap();
 	}
 	
+	/**
+	 * returned package is 'real' or 'pending' depending on the materialid passed in
+	 */
+	@Override
+	public SegmentList getTxPackage(String presentationID, String materialID) throws PackageNotFoundException, MayamClientException{
+		return packageController.getTxPackage(presentationID, materialID);
+	}
+	
+	@Override
+	public SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException
+	{
+
+		log.debug("looking for tx package " + presentationID);
+
+		SegmentList segmentList = null;
+
+		try
+		{
+			segmentList = packageController.getSegmentList(presentationID);
+
+		}
+		catch (PackageNotFoundException pnfe)
+		{
+			log.debug(String.format("Real tx package with id %s not found, will look for a pending one", presentationID));
+		}
+
+		if (segmentList != null)
+		{
+			return segmentList;
+		}
+		else
+		{	
+			return packageController.getPendingTxPackage(presentationID, null);
+		}
+	}
+
 	@Override
 	public int getLastDeliveryVersionForMaterial(String materialID)
 	{

@@ -310,8 +310,7 @@ public class MayamTitleController extends MayamController{
 						returnCode = MayamClientErrorCode.TITLE_CREATION_FAILED;
 					} else {
 						log.info("Created Title with Title ID:"+title.getTitleID());
-						log.debug("asset id is " + result.getAttributeAsString(Attribute.ASSET_ID));
-						
+						log.debug("asset id is " + result.getAttributeAsString(Attribute.ASSET_ID));						
 					}
 				} catch (RemoteException e) {
 					log.error("Exception thrown by Mayam while creating new Title assset",e);
@@ -699,6 +698,9 @@ public class MayamTitleController extends MayamController{
 							log.warn("Mayam failed to update title: " + title.getTitleID());
 							returnCode = MayamClientErrorCode.TITLE_UPDATE_FAILED;
 						}
+						
+						taskController.removePurgeCandidateTasksForTilesAssociatedMaterial(assetAttributes.getAttributeAsString(Attribute.ASSET_ID));
+						
 					} catch (RemoteException e) {
 						log.error("Exception thrown by Mayam while updating title: " + title.getTitleID(),e);
 						returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;

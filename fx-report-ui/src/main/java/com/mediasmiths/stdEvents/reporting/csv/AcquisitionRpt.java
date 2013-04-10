@@ -3,7 +3,6 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -16,13 +15,13 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
+import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.AcquisitionRT;
-import com.mediasmiths.stdEvents.report.entity.OrderStatusRT;
+
 import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 
 public class AcquisitionRpt
@@ -84,19 +83,71 @@ public class AcquisitionRpt
 		return (Acquisition) title;
 	}
 	
-	private List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	private Object unmarshallBMS (EventEntity event) 
+	{
+		Object title = null;
+		String payload = event.getPayload();
+		logger.info("Unmarshalling payload " + payload);
+		
+		try{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
+			logger.info("Deserialising payload");
+			title = JAXB_SERIALISER.deserialise(payload);
+			logger.info("Object created");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return title;
+	}
+	
+	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating acquisition list");
+		
+		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
+		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+		for (EventEntity event : packageEvents) {
+			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshallBMS(event);
+			packages.add(pack);
+		}
+		
+		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
+		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
+		for (EventEntity event : titleEvents) {
+			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshallBMS(event);
+			titles.add(title);
+		}
+		
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		for (EventEntity event : events)
 		{
-			Acquisition title = unmarshall(event);
-			title.setDateRange(startDate + " - " + endDate);
-			if (title.isTapeDelivery() != null)
-				title.setTapeDel("1");
-			if (title.isFileDelivery() != null)
-				title.setFileDel("1");
-			acqs.add(title);
+			Acquisition content = (Acquisition) unmarshall(event);
+			content.setDateRange(startDate + " - " + endDate);
+			if (content.isTapeDelivery())
+				content.setTapeDel("1");
+			if (content.isFileDelivery())
+				content.setFileDel("1");
+			
+			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
+			for(AddOrUpdatePackage pack : packages) {
+				if ((pack.getMaterialID() != null) && (content.getMaterialID() != null)) {
+					if (pack.getMaterialID().equals(content.getMaterialID())) {
+						matchingPackage = pack;
+					}
+				}
+			}
+			
+			for (CreateOrUpdateTitle title : titles) {
+				if ((title.getTitleID() != null) && (matchingPackage.getTitleID() != null)) {
+					if (title.getTitleID().equals(matchingPackage.getTitleID())) {
+						content.setChannels(title.getChannels());
+					}
+				}
+			}
+			
+			acqs.add(content);
 		}
 		return acqs;
 	}
