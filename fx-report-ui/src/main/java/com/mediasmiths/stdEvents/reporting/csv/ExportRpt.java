@@ -113,6 +113,7 @@ public class ExportRpt
 		{
 			Export export = new Export();
 			TcPassedNotification tcNotification = (TcPassedNotification) unmarshall(event);
+			logger.info("Messages unmarshalled");
 			
 			export.setDateRange(startDate + " - " + endDate);
 			export.setMaterialID(tcNotification.getAssetID());

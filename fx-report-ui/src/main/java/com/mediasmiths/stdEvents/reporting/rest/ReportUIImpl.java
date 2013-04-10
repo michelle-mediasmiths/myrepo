@@ -341,9 +341,9 @@ public class ReportUIImpl implements ReportUI
 	public void getAutoQCCSV()
 	{
 		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReorder", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemWithTcMedia", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQcError", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX)));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX)));
 		autoQc.writeAutoQc(events, startDate, endDate, REPORT_NAME);
 	}
 	

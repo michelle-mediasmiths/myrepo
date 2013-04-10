@@ -47,6 +47,8 @@ public class AutoQCRpt
 	{
 		Object title = null;
 		String payload = event.getPayload();
+		logger.info("event.eventName: " + event.getEventName());
+		logger.info("event.id: " + event.getId());
 		logger.info("Unmarshalling payload " + payload);
 
 		try
@@ -76,7 +78,6 @@ public class AutoQCRpt
 			autoQc.setTitle(result.getTitle());
 			autoQc.setContentType("Programme");
 			
-			logger.info("event.eventName: " + event.getEventName());
 			if(event.getEventName().equals("AutoQCPassed")) {
 				autoQc.setQcStatus("QC_PASS");
 				autoQc.setTaskStatus("FINISHED");
