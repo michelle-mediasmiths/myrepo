@@ -1,5 +1,10 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -13,10 +18,6 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material.IngestRecords;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.Unmarshaller;
 
 public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 {

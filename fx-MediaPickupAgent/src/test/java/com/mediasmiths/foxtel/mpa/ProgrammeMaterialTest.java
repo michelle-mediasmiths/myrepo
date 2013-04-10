@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 
 import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.mediasmiths.foxtel.agent.queue.DirectoryWatchingQueuer;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioEncodingEnumType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.AudioTrackEnumType;

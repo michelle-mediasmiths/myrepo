@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.MultiFilePickUp;
 
 public class MaterialExchangeFilesPendingProcessingQueue extends MultiFilePickUp{

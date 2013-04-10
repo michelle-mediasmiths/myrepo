@@ -4,8 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,9 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.InOrder;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
@@ -27,8 +23,6 @@ import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MarketingMaterialTest;
-import com.mediasmiths.foxtel.mpa.MediaEnvelope;
-import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -41,7 +35,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
 	@Test
-	public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaValid_FXT_4_6_3_2_3()
+	public void testProcessMessageValidMessageAndMediaTitleExists_FXT_4_6_3_2_3()
 			throws FileNotFoundException,
 			DatatypeConfigurationException,
 			IOException,
@@ -57,7 +51,7 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
 	}
 
 	@Test
-	public void testProcessMessageValidMessageAndMediaTitleExistsMediaFirstMediaInValid_FXT_4_6_2()
+	public void testProcessMessageValidMessageAndMediatitleDoesntExist_FXT_4_6_3_1()
 			throws FileNotFoundException,
 			DatatypeConfigurationException,
 			IOException,
@@ -67,103 +61,6 @@ public class MarketingMaterialProcessingTest_FXT_4_6_3 extends MaterialProcessin
 			MayamClientException
 	{
 
-		String testName = "FXT 4.6.3.2  - Marketing material message references existing title";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(true, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaValid_FXT_4_6_3_2_3()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
-		String testName = "FXT 4.6.3.2/3  - Marketing material message references existing title/Mayam ingest task for item is updated ";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(true, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediaTitleExistsMessageFirstMediaInvalid_FXT_4_6_3_2()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
-		String testName = "FXT 4.6.3.2  - Marketing material message references existing title";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(true, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaValid_FXT_4_6_3_1()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
-
-		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(false, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediatitleDoesntExistMediaFirstMediaInvalid_FXT_4_6_3_1()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
-		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(false, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaValid_FXT_4_6_3_1()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
-		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
-		logger.info("Starting" + testName);
-
-		testProcessMessageValidMessageAndMedia(false, testName);
-	}
-
-	@Test
-	public void testProcessMessageValidMessageAndMediatitleDoesntExistMessageFirstMediaInValid_FXT_4_6_3_1()
-			throws FileNotFoundException,
-			DatatypeConfigurationException,
-			IOException,
-			JAXBException,
-			SAXException,
-			InterruptedException,
-			MayamClientException
-	{
 		String testName = "FXT 4.6.3.1  - Marketing material message references non existing title";
 		logger.info("Starting" + testName);
 

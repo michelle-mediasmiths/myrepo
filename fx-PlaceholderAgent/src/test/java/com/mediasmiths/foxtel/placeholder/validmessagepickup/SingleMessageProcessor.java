@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import java.io.File;
-
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -9,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.ip.event.EventService;
