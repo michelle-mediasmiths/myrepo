@@ -121,7 +121,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 	{
 		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 		PreviewFailed pf = new PreviewFailed();
-		pf.setDate((new Date()).toString());
+		//pf.setDate((new Date()).toString());
 		pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 		pf.setAssetId(houseID);
 
