@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.apache.log4j.Logger;
@@ -16,6 +19,7 @@ import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
+import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
@@ -392,7 +396,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getComplianceEditCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ComplianceLoggingReport", MAX));
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLogging", MAX));
 		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
 	}
 	
@@ -403,6 +407,19 @@ public class ReportUIImpl implements ReportUI
 		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
 		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
 		export.writeExport(events, startDate, endDate, REPORT_NAME);
+	}
+	
+	@Transactional
+	public String getExportUI()
+	{
+		TemplateCall call = templater.template("export");
+		ExportRpt report = new ExportRpt();
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
+		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
+		List<Export> exports = report.getReportList(events, startDate, endDate);
+		call.set("exports", exports);
+		return call.process();
 	}
 	
 	@Transactional

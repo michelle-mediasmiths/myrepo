@@ -117,6 +117,11 @@ public interface ReportUI
 	public void getExportCSV();
 	
 	@GET
+	@Path("/export_ui")
+	@Produces("text/html")
+	public String getExportUI();
+	
+	@GET
 	@Path("/watch_folder_storage_csv")
 	@Produces("text/html")
 	public void getWatchFolderStorageCSV();
