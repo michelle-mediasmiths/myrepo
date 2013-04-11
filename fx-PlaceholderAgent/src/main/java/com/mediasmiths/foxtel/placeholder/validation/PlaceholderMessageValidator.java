@@ -479,7 +479,7 @@ public class PlaceholderMessageValidator extends
 				// if package already exists, check the materialid matches
 				String parentHouseID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 
-				if (! packageID.equals(parentHouseID))
+				if (! materialID.equals(parentHouseID))
 				{
 					logger.debug(String.format("{%s} ne {%s}", packageID, parentHouseID));
 					logger.error("Package exists but under a different material than specified");
