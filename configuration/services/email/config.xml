@@ -525,4 +525,26 @@
             </emailaddresses>
         </MailTemplate>
     </MailData>
+    <MailData>
+        <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
+        <eventname>IBMSRollBackDeleteMaterialFails</eventname>
+        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
+            <subject>IBMS Transaction could not delete material with ID MaterialId(%s)</subject>
+            <body>IBMS Placeholder message rollback failure. It is URGENT this material is deleted manually as automated delete has failed.</body>
+            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+                <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+            </emailaddresses>
+        </MailTemplate>
+    </MailData>
+    <MailData>
+        <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
+        <eventname>IBMSRollBackDeleteTitleFails</eventname>
+        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
+            <subject>IBMS Transaction could not delete title with ID titleId(%s)</subject>
+            <body>IBMS Placeholder message rollback failure. It is URGENT this title is deleted manually as automated delete has failed.</body>
+            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+                <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+            </emailaddresses>
+        </MailTemplate>
+    </MailData>
 </FoxtelEmailConfiguration>
