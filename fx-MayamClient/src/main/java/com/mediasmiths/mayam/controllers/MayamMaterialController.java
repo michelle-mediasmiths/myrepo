@@ -1560,4 +1560,41 @@ public class MayamMaterialController extends MayamController
 		
 	}
 	
+	@Inject
+	@Named("ff.sd.video.imagex")
+	private int sdVideoX;
+	
+	public String getFormat(AttributeMap currentAttributes) throws RemoteException
+	{
+		String format = "HD";
+		try
+		{
+			FileFormatInfo formatInfo = client.assetApi().getFormatInfo(
+					MayamAssetType.MATERIAL.getAssetType(),
+					(String) currentAttributes.getAttribute(Attribute.ASSET_ID));
+
+			if (formatInfo != null && formatInfo.getImageSizeX() <= sdVideoX)
+			{
+				format = "SD";
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error determining format for asset", e);
+			try
+			{
+				taskController.createWFEErorTask(
+						MayamAssetType.MATERIAL,
+						currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						"Error determining content format");
+			}
+			catch (Exception e1)
+			{
+				log.error("error creating error task!", e1);
+			}
+		}
+
+		return format;
+	}
+	
 }

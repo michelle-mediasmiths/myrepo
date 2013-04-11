@@ -700,6 +700,8 @@
     
     <xs:element name="ManualQANotification">
 		<xs:complexType>
+		  <xs:complexContent>
+                <xs:extension base="IPEvent">
 			<xs:sequence>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
@@ -715,6 +717,8 @@
 				<xs:element name="titleLength" type="xs:string"/>
 				<xs:element name="reordered" type="xs:string" minOccurs="0"/>
 			</xs:sequence>
+			   </xs:extension>
+            </xs:complexContent>
 		</xs:complexType>
 	</xs:element>
     
