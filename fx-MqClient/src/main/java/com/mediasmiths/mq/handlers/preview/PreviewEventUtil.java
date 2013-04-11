@@ -25,6 +25,11 @@ public class PreviewEventUtil
 
 	public void sendManualQANotification(AttributeMap messageAttributes, TaskState taskState, boolean reorder, String previewResult)
 	{
+		sendManualQANotification(messageAttributes, taskState, reorder, previewResult,null);
+	}
+	
+	public void sendManualQANotification(AttributeMap messageAttributes, TaskState taskState, boolean reorder, String previewResult, String operator)
+	{
 		try
 		{
 			ManualQANotification qa = new ManualQANotification();
@@ -50,6 +55,9 @@ public class PreviewEventUtil
 			qa.setTaskStatus(taskState.toString());
 			qa.setTitle(messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE));
 			qa.setTitleLength(messageAttributes.getAttributeAsString(Attribute.MEDIA_DURATION));
+			
+			qa.setOperator(operator);
+			
 			eventsService.saveEvent(qaEventNamespace, "ManualQA", qa);
 
 		}

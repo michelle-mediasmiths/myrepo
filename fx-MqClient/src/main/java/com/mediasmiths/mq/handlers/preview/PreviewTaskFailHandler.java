@@ -76,9 +76,8 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			}
 			
 			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewFailed", pf);
-
 			
-			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),true,MayamPreviewResults.PREVIEW_FAIL);
+			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),true,MayamPreviewResults.PREVIEW_FAIL,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));
 		}
 	}
 

@@ -129,7 +129,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 					sendReorderEvent(messageAttributes, "PreviewFixReorder");
 				}
 			}
-			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),reorder,previewResult);
+			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),reorder,previewResult,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));
 		}
 
 	}
