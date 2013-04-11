@@ -487,7 +487,12 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         return purgeMessage;
     }
 
-
+    /**
+     *
+     * @param action  a single placeholder message.
+     * @throws MessageProcessingFailedException if item cannot be added.
+     * Perform the individual placeholder message operaton.
+     */
     private void processAPlaceholderAction(Object action) throws MessageProcessingFailedException
     {
         boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
@@ -530,6 +535,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     /**
      *
      * @param message IBMS or BMS placeholder message
+     * Process messages as indivual placeholder messages.  no individual failure stops the processng.
      */
     private void processAsIndividualPlaceholderActions(PlaceholderMessage message)
     {
@@ -550,6 +556,8 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     /**
      *
      * @param message IBMS placeholder message.
+     * Process an IBMS placeholder message consisting of a title and list of addMaterial message
+     * If any fails ... roll back deleting all previouslu added actions.
      */
     private void processAsIBMSTransaction(PlaceholderMessage message) throws MessageProcessingFailedException
     {
