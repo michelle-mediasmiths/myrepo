@@ -113,6 +113,8 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 					sendReorderEvent(messageAttributes, "PreviewFixReorder");
 				}
 			}
+			
+			//TODO : send manual qc event
 		}
 
 	}

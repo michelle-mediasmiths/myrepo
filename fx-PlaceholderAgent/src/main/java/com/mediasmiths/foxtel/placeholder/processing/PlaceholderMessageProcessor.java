@@ -477,6 +477,9 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		{
 			logger.error("Failed to create wfe error task", e);
 		}
+		
+		moveFileToFailureFolder(resultPackage.getPp().getPickUp("xml"));
+				
 		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED || result==MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
 		{
 			ProtectedPurgeFail ppf = createPurgeFailedMessage();

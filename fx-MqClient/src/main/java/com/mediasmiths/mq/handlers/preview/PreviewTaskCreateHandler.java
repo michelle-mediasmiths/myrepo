@@ -36,6 +36,8 @@ public class PreviewTaskCreateHandler extends TaskStateChangeHandler
 				log.error("Error removing preview task whose item had not passed qc",e);
 			}
 		}
+		
+		//TODO: send manual qc event
 
 	}
 
