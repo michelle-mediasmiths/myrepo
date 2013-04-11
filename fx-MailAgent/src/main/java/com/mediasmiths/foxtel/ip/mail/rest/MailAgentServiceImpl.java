@@ -54,7 +54,7 @@ public class MailAgentServiceImpl implements MailAgentService
 	}
 
 	/**
-	 * Takes in service caller entity and processes
+	 * Takes in service caller entity and processes, checks if anything matches namespace and eventname with present email address
 	 */
 	@Override
 	public void sendMail(ServiceCallerEntity caller) throws Exception
@@ -68,8 +68,6 @@ public class MailAgentServiceImpl implements MailAgentService
 		if (mailTemplate != null)
 		{
 			logger.info("Email event registered for: " + caller.eventName);
-
-
 			caller.setPayload(objXMLFor(caller));
 
 			MailTemplate m = getMailTemplate(caller, mailTemplate);
@@ -114,11 +112,12 @@ public class MailAgentServiceImpl implements MailAgentService
 
 			if (mailTemplate.handles(payloadObj))
 			{
-			    return mailTemplate.customiseTemplate(payloadObj, caller.comment);
+				//eventname is name of template. This may need changed to include namespace
+			    return mailTemplate.customiseTemplate(payloadObj, caller.comment, caller.eventName);
 			}
 			else
 			{
-				logger.error("Template does not handle type .. sending reduced functionality email." + caller.eventName);
+				logger.error("Template does not handle type... sending reduced functionality email." + caller.eventName);
 
 				return defaultTemplate(caller.payload, (MailTemplate)mailTemplate);
 			}
@@ -126,7 +125,7 @@ public class MailAgentServiceImpl implements MailAgentService
 		catch (Exception e)
 		{
 
-			logger.error("Unable to deserialise obj .. sendind reduced functionality email.", e);
+			logger.error("Unable to deserialise obj .. sending reduced functionality email.", e);
 			logger.info(caller.payload);
 			return defaultTemplate(caller.payload, (MailTemplate)mailTemplate);
 		}

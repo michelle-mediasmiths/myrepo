@@ -7,7 +7,6 @@ public interface EmailTemplateGenerator
 {
 	public boolean handles(Object obj);
 
-	public MailTemplate customiseTemplate(Object obj, String comment);
-
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName);
 
 }

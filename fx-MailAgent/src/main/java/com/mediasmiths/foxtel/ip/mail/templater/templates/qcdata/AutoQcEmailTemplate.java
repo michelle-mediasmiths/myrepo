@@ -1,16 +1,21 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
+import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 import java.util.List;
 
 public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
-
+	@Inject
+	private ThymeleafTemplater templater;
+	
 	@Override
 	public boolean handles(Object obj)
 	{
@@ -18,7 +23,7 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
 	{
 
 		MailTemplate t = new MailTemplate();
@@ -41,6 +46,12 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 
 		t.setBody(String.format(getBody(), aqce.getTitle(), aqce.getAssetId()));
 
+		TemplateCall call = templater.template(templateName);
+		call.set("AssetID", aqce.getAssetId());
+		call.set("Title", aqce.getTitle());
+
+		t.setBody(call.process());
+		
 		return t;
 
 	}

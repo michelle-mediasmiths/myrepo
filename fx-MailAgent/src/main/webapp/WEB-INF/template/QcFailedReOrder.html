@@ -1,0 +1,21 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<head>
+<title>QcFailedReOrder</title>
+</head>
+<body th:with="page='manualResult'">
+	<div class="container">
+		<p>
+		Item called <span th:text="${Title}" />, <span th:text="${MasterID}"/>, is on the Auto QC Fail worklist. 
+		Please resolve this matter within 90-days otherwise item will be purged without further notification.                                                                                                                                                                                                  
+			
+		Dear Promo Producer, please check whether this failed item impacts your promo production work.</p>
+		
+	</div>
+</body>
+</html>
