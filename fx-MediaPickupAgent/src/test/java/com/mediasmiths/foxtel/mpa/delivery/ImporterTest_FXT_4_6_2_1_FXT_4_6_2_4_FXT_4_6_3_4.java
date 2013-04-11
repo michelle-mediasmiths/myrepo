@@ -109,7 +109,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		toTest.deliver(pi, 1);
 		
 		// wait for some time to allow processing to take place
-		Thread.sleep(1000l);
+		Thread.sleep(2000l);
 
 		// check the files have been delivered to the expected folders
 		Boolean mxfExists=new File(ardomeImportPath + IOUtils.DIR_SEPARATOR + masterID+ FilenameUtils.EXTENSION_SEPARATOR + "mxf").exists();
@@ -150,7 +150,7 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		toTest.deliver(pi, 1);
 		
 		// wait for some time to allow processing to take place
-		Thread.sleep(1000l);
+		Thread.sleep(2000l);
 
 		// check the files have been delivered to the expected folders
 		assertTrue(new File(failurePath + IOUtils.DIR_SEPARATOR + masterID
