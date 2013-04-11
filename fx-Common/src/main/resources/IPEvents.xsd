@@ -710,6 +710,18 @@
     		</xs:complexContent>
     	</xs:complexType>
     </xs:element>
+
+    <xs:element name="IBMSDeleteItemFailure">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="mediaID" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
     
     
 
