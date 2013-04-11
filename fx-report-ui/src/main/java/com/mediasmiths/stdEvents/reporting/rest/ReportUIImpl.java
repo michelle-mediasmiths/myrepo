@@ -22,6 +22,7 @@ import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
+import com.mediasmiths.foxtel.ip.common.events.report.ComplianceLogging;
 import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
@@ -244,23 +245,46 @@ public class ReportUIImpl implements ReportUI
 			ui = true;
 		logger.info("csv=" + csv + " ui=" + ui);
 		
-		if (rpt.equals("OrderStatus"))
-		{
+		if (rpt.equals("OrderStatus")) {
 			logger.info("generating OrderStatus__");
 			if (csv)
 				getOrderStatusCSV();
 			if (ui)
 				getOrderStatusUI();
 		}
-		else if (rpt.equals("AcquisitionDelivery"))
-		{
+		else if (rpt.equals("AcquisitionDelivery")) {
 			logger.info("generating AcquisitionDelivery__");
 			if (csv)
 				getAquisitionReportCSV();
 			if (ui)
 				getAquisitionReportUI();
 		}
-		
+		else if (rpt.equals("AutoQC")) {
+			logger.info("generating AutoQC__");
+			if (csv)
+				getAutoQCCSV();
+			if (ui)
+				getAutoQCUI();
+		}
+		else if (rpt.equals("PurgeContent")) {
+			logger.info("generating PurgeContent__");
+			if (csv)
+				getPurgeContentCSV();
+			if (ui)
+				getPurgeContentUI();
+		}
+		else if (rpt.equals("ComplianceEdits")) {
+			logger.info("generating ComplianceEdits__");
+			if (csv)
+				getComplianceEditCSV();
+		}
+		else if (rpt.equals("Export")) {
+			logger.info("generating Export");
+			if (csv)
+				getExportCSV();
+			if (ui)
+				getExportUI();
+		}		
 	}
 
 	@Transactional
@@ -349,6 +373,7 @@ public class ReportUIImpl implements ReportUI
 		final TemplateCall call = templater.template("order_status");
 		List<OrderStatus> orders = getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", MAX)));
 		call.set("orders", orders);
+		logger.info("OrderStatusUI complete");
 		return call.process();
 	}
 
@@ -439,6 +464,16 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional
+	public String getComplianceEditsUI()
+	{
+		TemplateCall call = templater.template("compliance_edit");
+		ComplianceRpt report = new ComplianceRpt();
+		List<ComplianceLogging> compliance = report.getReportList(getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX)), startDate, endDate);
+		call.set("comps", compliance);
+		return call.process();
+	}
+	
+	@Transactional
 	public void getExportCSV()
 	{
 		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
@@ -488,7 +523,7 @@ public class ReportUIImpl implements ReportUI
 		call.set("path", path);
 		return call.process();
 	}
-	
+
 //	@Transactional
 //	public String getOrderStatusUI()
 //	{

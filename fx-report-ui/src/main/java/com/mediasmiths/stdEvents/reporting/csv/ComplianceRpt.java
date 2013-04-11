@@ -65,7 +65,7 @@ public class ComplianceRpt
 		return title;
 	}
 	
-	private List<ComplianceLogging> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ComplianceLogging> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating complianceLogging report");
 		List<ComplianceLogging> comps = new ArrayList<ComplianceLogging>();

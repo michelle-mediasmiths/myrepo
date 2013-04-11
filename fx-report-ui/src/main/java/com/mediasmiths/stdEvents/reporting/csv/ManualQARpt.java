@@ -15,6 +15,7 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
 import com.mediasmiths.foxtel.ip.common.events.report.ManualQA;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -62,15 +63,15 @@ public class ManualQARpt
 		createCsv(manualQAs, reportName);
 	}
 	
-	private ManualQA unmarshall(EventEntity event)
+	private Object unmarshall(EventEntity event)
 	{
-		Object title = new ManualQA();
+		Object title = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
 
 		try
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
 			title = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
@@ -79,7 +80,7 @@ public class ManualQARpt
 		{
 			e.printStackTrace();
 		}
-		return (ManualQA)title;
+		return title;
 	}
 	
 	private List<ManualQA> getReportList(List<EventEntity> events, Date startDate, Date endDate)
@@ -88,7 +89,9 @@ public class ManualQARpt
 		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
 		for (EventEntity event : events)
 		{
-			ManualQA manualQA = unmarshall(event);
+			ManualQANotification notification = (ManualQANotification) unmarshall(event);
+			ManualQA manualQA = new ManualQA();
+			
 			manualQA.setDateRange(startDate + " - " + endDate);
 			
 			logger.info("timeEscalated: " + manualQA.getTimeEscalated());

@@ -15,6 +15,9 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
+import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
+import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
 import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
@@ -63,6 +66,27 @@ public class PurgeContentRpt
 	
 	public List<PurgeContent> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
+		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
+		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
+		for (EventEntity event : titleEvents) {
+			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+			titles.add(title);
+		}
+		
+//		List<EventEntity> materialEvents = queryApi.getByEventName("AddOrUpdateMaterial");
+//		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
+//		for (EventEntity event : materialEvents) {
+//			AddOrUpdateMaterial material = (AddOrUpdateMaterial) unmarshall(event);
+//			materials.add(material);
+//		}
+//		
+//		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
+//		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+//		for (EventEntity event : packageEvents) {
+//			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
+//			packages.add(pack);
+//		}
+		
 		logger.info("Creating purgeContent list");
 		List<PurgeContent> purgeList = new ArrayList<PurgeContent>();
 		for (EventEntity event : events)
@@ -75,6 +99,10 @@ public class PurgeContentRpt
 				PurgeTitle title = (PurgeTitle) unmarshall(event);
 				purge.setEntityType("Item");
 				purge.setMaterialID(title.getTitleID());
+				for (CreateOrUpdateTitle createTitle : titles) {
+					if (purge.getMaterialID().equals(createTitle.getTitleID()))
+						purge.setTitle(createTitle.getTitle());
+				}
 			}
 			
 			if (event.getEventName().equals("DeleteMaterial"))
@@ -88,7 +116,7 @@ public class PurgeContentRpt
 			{
 				PurgePackage pack = (PurgePackage) unmarshall(event);
 				purge.setEntityType("TX Package");
-				purge.setMaterialID(pack.getPackageID());
+				purge.setMaterialID(pack.getPackageID());						
 			}
 
 			purgeList.add(purge);

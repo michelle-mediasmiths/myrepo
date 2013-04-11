@@ -119,6 +119,11 @@ public interface ReportUI
 	public void getComplianceEditCSV();
 	
 	@GET
+	@Path("/compliance_edits_ui")
+	@Produces("text/html")
+	public String getComplianceEditsUI();
+	
+	@GET
 	@Path("/export_csv")
 	@Produces("text/csv")
 	public void getExportCSV();
@@ -195,11 +200,5 @@ public interface ReportUI
 //	@GET
 //	@Path("/purge_content_pdf")
 //	@Produces("text/html")
-//	public void getPurgeContentPDF();
-//	
-//	@GET
-//	@Path("/compliance_edits_ui")
-//	@Produces("text/html")
-//	public String getComplianceEditsUI();
-//	
+//	public void getPurgeContentPDF();	
 }
