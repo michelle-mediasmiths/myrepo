@@ -1,5 +1,17 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Set;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -7,88 +19,88 @@ import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
+import com.mediasmiths.foxtel.mpa.delivery.Importer;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Set;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
-
-
 	protected final MayamClient mayamClient;
-
-	private final PendingImportQueue filesPendingImport;
-
 
 	@Inject
 	@Named("ao.quarrentine.folder")
 	private String aoQuarrentineFolder;
 	
-	// matches mxf and xml files together
-	private final MatchMaker matchMaker;
+	@Inject
+	private Importer importer;
+	
+	private UnmatchedMaterialProcessor unmatchedMaterialProcessor;
 
 	public MediaPickupProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
-			PendingImportQueue filesPendingImport,
+			IFilePickup filePickup,
 			MessageValidator<T> messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
-			MatchMaker matchMaker,
-			EventService eventService)
+			EventService eventService,
+			UnmatchedMaterialProcessor unmatchedMaterialProcessor)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
+		super(filePickup, messageValidator, receiptWriter, unmarhsaller, marshaller, eventService);
 		this.mayamClient = mayamClient;
-		this.filesPendingImport = filesPendingImport;
-		this.matchMaker = matchMaker;
+		this.unmatchedMaterialProcessor = unmatchedMaterialProcessor;
 	}
 
 	protected Logger logger = Logger.getLogger(MediaPickupProcessor.class);
-	
+
 	@Override
-	protected void messageValidationFailed(String filePath, MessageValidationResult result)
+	protected void messageValidationFailed(MessageValidationResultPackage<T> resultPackage)
 	{
+		final PickupPackage pp = resultPackage.getPp();
 
 		logger.warn(String.format(
 				"Validation of Material message %s failed for reason %s",
-				FilenameUtils.getName(filePath), result.toString()));
-		
-		String message;
-		try{
-			message = FileUtils.readFileToString(new File(filePath));
+				pp.getRootName(),
+				resultPackage.getResult().toString()));
+
+		MessageValidationResult result = resultPackage.getResult();
+
+		if (result == MessageValidationResult.AO_MISMATCH)
+		{
+			aoMismatch(pp);
 		}
-		catch(IOException e){
-			logger.warn("IOException reading "+filePath,e);
-			message = filePath;
+		else if (result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW
+				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION || result== MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER)
+		{
+			failMediaAndMessage(pp);
 		}
-		
+		else
+		{
+			failMessageImportMediaAsUnmatched(pp);
+		}
+
 		try
 		{
-			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Media Pickup Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+			mayamClient.createWFEErrorTaskNoAsset(
+					pp.getRootName(),
+					"Invalid Media Pickup Message Received",
+					String.format(
+							"Failed to validate %s for reason %s",
+							pp.getPickUp("xml").getAbsolutePath(),
+							resultPackage.getResult()));
 		}
 		catch (MayamClientException e)
 		{
-			logger.error("Failed to create wfe error task",e);
+			logger.error("Failed to create wfe error task", e);
 		}
 
 		try
@@ -96,51 +108,42 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			// send the event recording the issue.
 
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
-			pickupNotification.setFilelocation(FilenameUtils.getName(filePath));
+			pickupNotification.setFilelocation(pp.getPickUp("xml").getAbsolutePath());
 			pickupNotification.setTime((new Date()).toString());
 
-			switch (result)
+			T message = resultPackage.getMessage();
+			
+			switch (resultPackage.getResult())
 			{
-				case MATERIAL_IS_NOT_PLACEHOLDER:{
-						try
+				case MATERIAL_IS_NOT_PLACEHOLDER:
+					{
+						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
+						break;
+					}
+				case TITLE_DOES_NOT_EXIST:
+					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
+					break;
+				case MATERIAL_HAS_ALREADY_PASSED_PREVIEW :
+				{
+						if (pp.isComplete())
 						{
-							try
-							{
-								//associate this email with channel groups
-								
-								@SuppressWarnings("unchecked")
-								T unmarshalled = (T) unmarhsaller.unmarshal(new File(filePath));
-								String materialID = getMaterialIDFromMessage(unmarshalled);
-								Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
-								pickupNotification.getChannelGroup().addAll(channelGroups);
-							}
-							catch (Exception e)
-							{
-								logger.error("error determining channel groups for event", e);
-							}
-
-							eventService.saveEvent(
-									"http://www.foxtel.com.au/ip/content",
-									"PlaceholderAlreadyHasMedia",
-									pickupNotification);
-						}
-						catch (Exception e)
-						{
-							logger.error("exception sending PlaceholderAlreadyHasMedia event");
+							// media arrived for a material that already passed preview and therefore already had media
+							sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
 						}
 						break;
 				}
-				case TITLE_DOES_NOT_EXIST:
-//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
-					break;
 				case MATERIAL_DOES_NOT_EXIST:
-//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 				case UNEXPECTED_DELIVERY_VERSION:
-//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "OutOfOrder", pickupNotification);
+					if (pp.isComplete())
+					{
+						// media arrived for a material that already passed preview and therefore already had media
+						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
+					}
 					break;
 				default:
-//					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
+					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 			}
 		}
@@ -149,53 +152,132 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			logger.error("Unable to send events: ", e);
 		}
 	}
-	
-	protected abstract String getMaterialIDFromMessage(T message);
-	
-	/**
-	 * Called when an mxf has arrived
-	 * 
-	 * Looks for the medias sidecar xml, if the xml has been seen then the pair
-	 * are added to a list of pending imports
-	 * 
-	 * If the sidecar xml has not been seen then the mxf file is added to a list
-	 * of mxfs awaiting xml files
-	 * 
-	 * @param filePath
-	 */
-	@Override
-	protected void processNonMessageFile(String filePath) {
-		logger.info(String.format("a non xml file has arrived %s", filePath));
 
-		if (!FilenameUtils.getExtension(filePath).toLowerCase(Locale.ENGLISH)
-				.equals("mxf")) {
-			logger.warn("a non mxf has arrived, moving it to the failure folders"); 
-			moveFileToFailureFolder(new File(filePath));
-			return;
+	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
+	{
+		try
+		{
+			try
+			{
+				// associate this email with channel groups
+				String materialID = getMaterialIDFromMessage(message);
+				Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+				pickupNotification.getChannelGroup().addAll(channelGroups);
+			}
+			catch (Exception e)
+			{
+				logger.error("error determining channel groups for event", e);
+			}
+
+			eventService.saveEvent(
+					"http://www.foxtel.com.au/ip/content",
+					"PlaceholderAlreadyHasMedia",
+					pickupNotification);
+		}
+		catch (Exception e)
+		{
+			logger.error("exception sending PlaceholderAlreadyHasMedia event");
+		}
+	}
+
+	protected abstract String getMaterialIDFromMessage(T message);
+
+	private void failMessageImportMediaAsUnmatched(PickupPackage pp)
+	{
+		logger.info("XML considered failed, media will be imported as unmatched");
+		if (pp.isPickedUpSuffix("xml"))
+		{
+			moveFileToFailureFolder(pp.getPickUp("xml"));
+		}
+		if (pp.isPickedUpSuffix("mxf"))
+		{
+			importMediaAsUnmatched(pp.getPickUp("mxf"));
+		}
+	}
+
+	private void failMediaAndMessage(PickupPackage pp)
+	{
+		logger.info("XML and media will both be considered failed");
+
+		if (pp.isPickedUpSuffix("xml"))
+		{
+			logger.trace("xml was picked up");
+			moveFileToFailureFolder(pp.getPickUp("xml"));
 		}
 
-		File mxf = new File(filePath);
-		// try to get materialenvelop for this xml file
-		MediaEnvelope materialEnvelope = matchMaker.matchMXF(mxf);
+		if (pp.isPickedUpSuffix("mxf"))
+		{
+			logger.trace("mxf was picked up");
+			moveFileToFailureFolder(pp.getPickUp("mxf"));
+		}
 
-		if (materialEnvelope != null) {
-			logger.info(String.format("found material description %s for mxf",
-					materialEnvelope.getFile().getAbsolutePath()));
-			if(materialEnvelope.isQuarrentineOnMatch()){
-				logger.info("mxf detected as requiring quarrentine with its xml");
-				moveToAOFolder(materialEnvelope.getFile().getAbsolutePath());
-				moveToAOFolder(filePath);
-			}
-			else if(materialEnvelope.isFailOnMatch()){
-				logger.info("mxf deteced as requiring move to failure folder with its xml");
-				moveFileToFailureFolder(materialEnvelope.getFile());
-				moveFileToFailureFolder(new File(filePath));
-			}
-			else{
-				createPendingImportIfValid(mxf, materialEnvelope);
-			}
-		} else {
-			logger.debug("No matching xml file \\ material envelope found");
+	}
+
+	private void aoMismatch(PickupPackage pp)
+	{
+		logger.info("XML and media will both be moved to ao quarrentine location");
+		if (pp.isPickedUpSuffix("xml"))
+		{
+			logger.trace("xml was picked up");
+			moveToAOFolder(pp.getPickUp("xml"));
+		}
+		if (pp.isPickedUpSuffix("mxf"))
+		{
+			logger.trace("mxf was picked up");
+			moveToAOFolder(pp.getPickUp("mxf"));
+		}
+	}
+
+	@Override
+	protected void processingError(PickupPackage pp)
+	{
+		logger.info("processing failed for package, importing media as unmatched");
+		if (pp.isPickedUpSuffix("xml"))
+		{
+			logger.trace("xml was picked up");
+			moveFileToFailureFolder(pp.getPickUp("xml"));
+		}
+		if (pp.isPickedUpSuffix("mxf"))
+		{
+			logger.trace("mxf was picked up");
+			importMediaAsUnmatched(pp.getPickUp("mxf"));
+		}
+	}
+
+	private void importMediaCompleteMessage(MediaEnvelope<T> materialEnvelope)
+	{
+		// we have an xml and an mxf, add pending import
+		PendingImport pendingImport = new PendingImport(materialEnvelope);
+		
+		logger.info("Going to attempt an import");
+
+		try
+		{
+			importer.deliver(pendingImport, 1); //importer is responsible for moving both media and xml
+			logger.info("Finished with import");
+		}
+		catch (Exception e)
+		{
+			logger.error("Error delivering file", e);
+		}		
+	}
+
+	@Override
+	protected void postProcessing(PickupPackage pp)
+	{
+		logger.trace("no post processing required in this agent");
+	}
+
+	private void importMediaAsUnmatched(File mediaFile)
+	{
+		logger.debug("Queueing file for unmatched import : " + mediaFile.getAbsolutePath());
+		try
+		{
+			unmatchedMaterialProcessor.processUnmatchedMXF(mediaFile);
+		}
+		catch (IOException e)
+		{
+			moveFileToFailureFolder(mediaFile);
 		}
 	}
 
@@ -203,108 +285,116 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	 * Called when a validated Material is ready for processing
 	 * 
 	 * 
-	 * Looks for the media file described by an xml file, if the media has been
-	 * seen then the pair are added to a list of pending imports
+	 * Looks for the media file described by an xml file, if the media has been seen then the pair are added to a list of pending imports
 	 * 
-	 * If the media has not been seen then the xml file is added to a list of
-	 * xml files awaiting media
+	 * If the media has not been seen then the xml file is added to a list of xml files awaiting media
 	 * 
-	 *
+	 * 
 	 * @param envelope
 	 *            - the delivered xmlfile
 	 */
 	@Override
-	protected void processMessage(MessageEnvelope<T> envelope)
-			throws MessageProcessingFailedException {
+	protected void processMessage(MessageEnvelope<T> envelope) throws MessageProcessingFailedException
+	{
 
-		MamUpdateResult result = updateMamWithMaterialInformation(envelope
-				.getMessage());
+		MamUpdateResult result = updateMamWithMaterialInformation(envelope.getMessage());
 
-		if(result.isWaitForMedia()){
-		
-			// add masterid into a more detailed envelope
-			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(envelope,
-					result.getMasterID());
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(materialEnvelope);
-	
-			if (mxfFile != null) {
-				logger.info(String.format("found mxf %s for material", mxfFile));
-				createPendingImportIfValid(new File(mxfFile), materialEnvelope);
-			} else {
-				logger.debug("No matching media found");
+		// add masterid into a more detailed envelope
+		MediaEnvelope<T> materialEnvelope = new MediaEnvelope<T>(envelope, result.getMasterID());
+
+		final PickupPackage pickupPackage = envelope.getPickupPackage();
+
+		if (pickupPackage.isComplete())
+		{
+			importMediaCompleteMessage(materialEnvelope);
+		}
+		else
+		{
+			try
+			{
+				AutoMatchInfo ami = getSiteIDForAutomatch(materialEnvelope);
+
+				if (ami != null)
+				{
+					boolean autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
+				}
+				
+				moveMessageToArchiveFolder(pickupPackage.getPickUp("xml"));
 			}
+			catch (Exception e)
+			{
+				logger.error("error attempting automatch for unaccompanied xml", e);
+				moveFileToFailureFolder(pickupPackage.getPickUp("xml"));
+			}
+
+			// send out alert that no material arrived with this xml file
+			eventService.saveEvent("warning", String.format(
+					"There has been been no media received for Material message %s with MasterID %s ",
+					pickupPackage.getPickUp("xml").getAbsolutePath(),
+					materialEnvelope.getMasterID()));
 		}
 	}
 
-	
+	@Override
+	protected void processPickupPackageNoXML(PickupPackage pp)
+	{
+		logger.info("received a pickup package with no xml " + pp.getRootName());
+		importMediaAsUnmatched(pp.getPickUp("mxf"));
+	}
+
 	/**
 	 * updates the mam with the material information contained in the message, returns the materials ID
+	 * 
 	 * @param message
 	 * @return
 	 */
-	protected abstract MamUpdateResult updateMamWithMaterialInformation(T message)throws MessageProcessingFailedException;
-//
-//	/**
-//	 * Returned when updating mam with information from a media pickup xml. 
-//	 * field MasterID holds the material\siteid of the created or updated asset
-//	 *  
-//	 * field waitformedia indiciates if the media pickup processor should wait for a media file or not
-//	 * 
-//	 * A media file will not be expected if an item already has media attatched
-//	 */
-	  
-	 class MamUpdateResult{
+	protected abstract MamUpdateResult updateMamWithMaterialInformation(T message) throws MessageProcessingFailedException;
+
+	//
+	// /**
+	// * Returned when updating mam with information from a media pickup xml.
+	// * field MasterID holds the material\siteid of the created or updated asset
+	// *
+	// * field waitformedia indiciates if the media pickup processor should wait for a media file or not
+	// *
+	// * A media file will not be expected if an item already has media attatched
+	// */
+
+	class MamUpdateResult
+	{
 		private String masterID;
-		private boolean waitForMedia;
-		
-		public MamUpdateResult(String masterID, boolean waitForMedia){
+
+		public MamUpdateResult(String masterID)
+		{
 			this.masterID = masterID;
-			this.waitForMedia = waitForMedia;
 		}
-		
+
 		public String getMasterID()
 		{
 			return masterID;
 		}
-		
-		public boolean isWaitForMedia()
-		{
-			return waitForMedia;
-		}
-		
-	}
-	
-	
-	private void createPendingImportIfValid(File mxf,
-			MediaEnvelope materialEnvelope) {
 
-			// we have an xml and an mxf, add pending import
-			PendingImport pendingImport = new PendingImport(mxf,
-					materialEnvelope);
-
-			filesPendingImport.add(pendingImport);
 	}
-	
-	protected String getIDFromMessage(MessageEnvelope<T> envelope) {
-		// TODO this is just returning the xmls file name which may not be
-		// unique at all (but lets hope it is for now!)
-		
-		//we cant just pick out a material id as the envelope could contain marketing material
-		String id = FilenameUtils.getBaseName(envelope.getFile()
-				.getAbsolutePath());
+
+	protected String getIDFromMessage(MessageEnvelope<T> envelope)
+	{
+		// this is just returning the xmls file name which may not be unique at all
+		// we cant just pick out a material id as the envelope could contain marketing material
+		String id = envelope.getPickupPackage().getRootName();
 		logger.debug(String.format("getIDFromMessage = %s", id));
 		return id;
 	}
-	
+
 	@Override
-	protected boolean shouldArchiveMessages() {
+	protected boolean shouldArchiveMessages()
+	{
 		return false; // messages will be archived by Importer
 	}
-	
+
 	@Override
-	protected void moveFileToFailureFolder(File file){
-		
+	protected void moveFileToFailureFolder(File file)
+	{
+
 		String message;
 		try
 		{
@@ -326,100 +416,31 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 
 		super.moveFileToFailureFolder(file);
 	}
-	
-	private void moveToAOFolder(String file)
+
+	private void moveToAOFolder(File f)
 	{
-		File f = new File(file);
 		try
 		{
 			moveFileToFolder(f, aoQuarrentineFolder, true);
 
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
 			pickupNotification.setTime((new Date()).toString());
-			pickupNotification.setFilelocation(file);
+			pickupNotification.setFilelocation(aoQuarrentineFolder + IOUtils.DIR_SEPARATOR + f.getName());
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
 		}
 		catch (IOException e)
 		{
-			logger.warn("IOException moving file to quarrentine fodler " + file, e);
+			logger.warn("IOException moving file to quarrentine fodler " + f.getAbsolutePath(), e);
 		}
 	}
-	
-	@Override
-	protected void aoMismatch(File file)
+
+	protected abstract AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope<T> unmatchedMessage);
+
+	class AutoMatchInfo
 	{
-		Object unmarshalled = null;
-		try
-		{
-			unmarshalled = unmarhsaller.unmarshal(file);
-		}
-		catch (JAXBException e)
-		{
-			logger.error("unmarshalling failed", e);
-		}
-
-		if (unmarshalled != null)
-		{
-			@SuppressWarnings("unchecked")
-			T message = (T) unmarshalled;
-
-			// wait for or find mxf to allow files to be quarrentined together
-
-			@SuppressWarnings("rawtypes")
-			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", true,false);
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(materialEnvelope);
-
-			if (mxfFile != null)
-			{
-				logger.info(String.format("found mxf %s for material", mxfFile));
-				moveToAOFolder(mxfFile);
-				moveToAOFolder(file.getAbsolutePath());
-			}
-			else
-			{
-				logger.debug("No matching media found");
-				moveToAOFolder(file.getAbsolutePath());
-			}
-		}
+		String siteID;
+		String fileName;
 	}
-	
-	@Override
-	protected void failMediaOnArrival(File file){
-		Object unmarshalled = null;
-		try
-		{
-			unmarshalled = unmarhsaller.unmarshal(file);
-		}
-		catch (JAXBException e)
-		{
-			logger.error("unmarshalling failed", e);
-		}
 
-		if (unmarshalled != null)
-		{
-			@SuppressWarnings("unchecked")
-			T message = (T) unmarshalled;
-
-			// wait for or find mxf to allow files to be failed together
-
-			@SuppressWarnings("rawtypes")
-			MediaEnvelope materialEnvelope = new MediaEnvelope<T>(file, message, "na", false,true);
-			// try to get the mxf file for this xml
-			String mxfFile = matchMaker.matchXML(materialEnvelope);
-
-			if (mxfFile != null)
-			{
-				logger.info(String.format("found mxf %s for material", mxfFile));
-				moveFileToFailureFolder(new File(mxfFile));
-				moveFileToFailureFolder(file);
-			}
-			else
-			{
-				logger.debug("No matching media found");
-			}
-		}	
-	}
-	
 }

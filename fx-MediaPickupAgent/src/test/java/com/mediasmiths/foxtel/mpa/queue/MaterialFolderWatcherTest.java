@@ -1,26 +1,5 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Collections;
-
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
-import com.mediasmiths.foxtel.mpa.TestUtil;
 /**
 @Ignore
 public class MaterialFolderWatcherTest {

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -23,6 +22,7 @@ import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
@@ -47,16 +47,16 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	public void testAddValidPackage() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validAddPackage");
+		PickupPackage pp = createTempXMLFile (pm, "validAddPackage");
 
 		when(mayamClient.materialExists(EXISTING_MATERIAL)).thenReturn(
 				new Boolean(true));
 
 		// test that the generated placeholder message is valid
 		assertEquals(MessageValidationResult.IS_VALID,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(pp));
 		
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -85,7 +85,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(EXISTING_PACKAGE_ID,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -106,7 +106,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		//prepare mock mayamClient
 		when(mayamClient.packageExists(NEW_PACKAGE)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
@@ -121,7 +121,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		AddOrUpdatePackage aoup = (AddOrUpdatePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		//prepare mock mayamClient
@@ -138,7 +138,7 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	public void testAddPackageRequestFails() throws IOException, Exception {
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				EXISTING_MATERIAL,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "validAddPackage");
+		PickupPackage pp = createTempXMLFile (pm, "validAddPackage");
 
 		when(mayamClient.materialExists(EXISTING_MATERIAL)).thenThrow(
 				new MayamClientException(MayamClientErrorCode.FAILURE));
@@ -146,9 +146,9 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 		// try to call validation, expect a mayam client error
 		assertEquals(
 				MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(pp));
 		
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
@@ -156,16 +156,16 @@ public class AddOrUpdatePackageTest extends PlaceHolderMessageShortTest {
 	public void testAddPackageInvalidMaterial() throws IOException, Exception{
 		PlaceholderMessage pm = buildCreatePackage(NEW_PACKAGE,
 				NOT_EXISTING_MATERIAL,EXISTING_TITLE);
-		File temp = createTempXMLFile(pm, "addPackageInvalidMaterialID");
+		PickupPackage pp = createTempXMLFile (pm, "addPackageInvalidMaterialID");
 
 		when(mayamClient.materialExists(NOT_EXISTING_MATERIAL)).thenReturn(
 				new Boolean(false));
 
 		// test that the validation result is correct
 		assertEquals(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE,
-				validator.validateFile(temp.getAbsolutePath()));
+				validator.validatePickupPackage(pp));
 		
-		Util.deleteFiles(temp.getAbsolutePath());
+		Util.deleteFiles(pp);
 	}
 
 	private PlaceholderMessage buildCreatePackage(String packageid,

@@ -9,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 
 public class ReceiptWriter {
 
@@ -26,16 +25,7 @@ public class ReceiptWriter {
 		
 		String pathToFile = messagePath;	
 		
-		boolean fileInProcessingFolder = MessageProcessor.fileIsInProcessingFolder(pathToFile);
-		
-		String receiptPath;
-		
-		if(fileInProcessingFolder){
-			receiptPath = FilenameUtils.getFullPath(pathToFile) + "../" + receiptFolderName + IOUtils.DIR_SEPARATOR;
-		}
-		else{
-			receiptPath = FilenameUtils.getFullPath(pathToFile) + receiptFolderName + IOUtils.DIR_SEPARATOR;
-		}
+		String receiptPath = FilenameUtils.getFullPath(pathToFile) + receiptFolderName + IOUtils.DIR_SEPARATOR;
 		
 		logger.debug(String.format("returning receipt folder %s for file %s ", receiptPath,pathToFile));
 		

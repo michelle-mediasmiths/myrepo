@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.mpa.validation;
 
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.DELIVERY_ATTEMPT_COUNT;
 import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 import org.apache.log4j.Logger;
 
@@ -20,7 +19,6 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 	@Inject
 	public MediaPickupAgentConfigValidator(
 			@Named(MEDIA_COMPANION_TIMEOUT) String companionTimeout,
-			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) String timeBetweenPurges,
 			@Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptCount
 			)
 			throws ConfigValidationFailureException {
@@ -34,25 +32,16 @@ public class MediaPickupAgentConfigValidator extends ConfigValidator {
 			anyFailures = true;
 			configValidationFails(MEDIA_COMPANION_TIMEOUT, companionTimeout);
 		}
+		
+		if (isValidLong(deliveryAttemptCount)) {
+			configValidationPasses(DELIVERY_ATTEMPT_COUNT, companionTimeout);
+		} else {
+			anyFailures = true;
+			configValidationFails(DELIVERY_ATTEMPT_COUNT, companionTimeout);
+		}
 
-		if (isValidLong(timeBetweenPurges)) {
-			configValidationPasses(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
-					timeBetweenPurges);
-		} else {
-			anyFailures = true;
-			configValidationFails(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
-					timeBetweenPurges);
-		}
-		
-		if (isValidLong(timeBetweenPurges)) {
-			configValidationPasses(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
-					timeBetweenPurges);
-		} else {
-			anyFailures = true;
-			configValidationFails(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES,
-					timeBetweenPurges);
-		}
-		
+
+
 
 		if (anyFailures) {
 			onFailure();

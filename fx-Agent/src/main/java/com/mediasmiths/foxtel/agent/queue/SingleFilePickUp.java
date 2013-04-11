@@ -1,17 +1,18 @@
 package com.mediasmiths.foxtel.agent.queue;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.Comparator;
+
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
 import com.mediasmiths.foxtel.ip.common.events.FilePickup;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
-import org.apache.log4j.Logger;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -51,11 +52,6 @@ public class SingleFilePickUp implements IFilePickup
 	@Inject
 	@Named("filepickup.file.stability_time")
 	long STABILITY_TIME;
-
-	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */
-	@Inject
-	@Named("filepickup.file.partial_pickup_timeout_interval")
-	long PICKUP_TIME_OUT_INTERVAL;
 
 	/** The time in milliseconds that an active agent should sleep between file arrive check intervals */
 	@Inject
@@ -119,7 +115,7 @@ public class SingleFilePickUp implements IFilePickup
 	 * @param pickupDirectories File object referencing the pick up areas
 	 * @param extensions the collection of extensions (strings) that are valid for files.
 	 */
-	public SingleFilePickUp(File[] pickupDirectories, String extension)
+	public SingleFilePickUp(@Named("filepickup.watched.directories") File[] pickupDirectories, @Named("filepickup.single.extension") String extension)
 	{
 
 		if (extension == null)
@@ -338,23 +334,6 @@ public class SingleFilePickUp implements IFilePickup
 
 		return res;
 
-	}
-
-
-
-
-	/**
-	 *
-	 * @param f a valid file that is a candidate for pickup
-	 * @return true if the file has been stable long enough to be considered part of a timed out pick up...and false otherwise.
-	 *
-	 */
-	private boolean withinTimeoutPeriod(final File f)
-	{
-		long now = System.currentTimeMillis();
-		long then = f.lastModified();
-
-		return now-then < PICKUP_TIME_OUT_INTERVAL;
 	}
 
 	/**

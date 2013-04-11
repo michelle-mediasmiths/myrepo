@@ -23,6 +23,7 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.PlaceholderManagerTest;
 import com.mediasmiths.foxtel.placeholder.TestUtil;
@@ -58,11 +59,15 @@ public abstract class ValidMessagePickTest extends PlaceholderManagerTest {
 		String filePath = getFilePath();
 		PlaceholderMessage message = this.generatePlaceholderMessage();
 		writePlaceHolderMessage(message,filePath);
+		
+		PickupPackage pp = new PickupPackage("xml");
+		pp.addPickUp(new File(filePath));
+		
 		String receiptPath = "/tmp/placeHolderTestData/"+RandomStringUtils.randomAlphabetic(30);
 		when(receiptWriter.receiptPathForMessageID(eq(filePath),anyString())).thenReturn(receiptPath);
 		mockValidCalls(message);
 		//test that the generated placeholder message is valid
-		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(filePath));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(pp).getResult());
 		
 		Util.deleteFiles(filePath,receiptPath);
 	}

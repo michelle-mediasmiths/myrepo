@@ -1,9 +1,16 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -15,12 +22,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.Unmarshaller;
 
 public class MaterialExchangeValidator extends MessageValidator<Material>
 {
@@ -59,19 +60,20 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 	private static Logger logger = Logger.getLogger(MaterialExchangeValidator.class);
 
 	@Override
-	protected MessageValidationResult validateMessage(String messagePath, Material message)
+	protected MessageValidationResult validateMessage(PickupPackage pp, Material message)
 	{
 		logger.trace("validateMessage enter");
 
-		boolean folderIsAO = watchFolders.isAo(FilenameUtils.getFullPathNoEndSeparator(messagePath));
+		boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
 		boolean materialIsAO = isMaterialAO(message);
 		boolean isAggregatorAO = isAggregatorAO(message);
+		boolean withMedia = pp.isComplete();
 		
 		if((folderIsAO != materialIsAO) || (folderIsAO != isAggregatorAO)){
 				return MessageValidationResult.AO_MISMATCH; 
 		}
 		
-		return validateTitle(message.getTitle(), message.getDetails(), folderIsAO);
+		return validateTitle(message.getTitle(), message.getDetails(), folderIsAO,withMedia);
 	}
 
 	private boolean isAggregatorAO(Material message)
@@ -95,7 +97,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 
 	}
 
-	private MessageValidationResult validateTitle(Title title, Details details, boolean expectAOPlaceholder)
+	private MessageValidationResult validateTitle(Title title, Details details, boolean expectAOPlaceholder, boolean withMedia)
 	{
 
 		final String titleID = title.getTitleID();
@@ -146,7 +148,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 				return MessageValidationResult.MAYAM_CLIENT_ERROR;
 			}
 
-			return validateProgrammeMaterial(title.getProgrammeMaterial(), details);
+			return validateProgrammeMaterial(title.getProgrammeMaterial(), details, withMedia);
 		}
 		else
 		{
@@ -193,7 +195,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 
 	}
 
-	private MessageValidationResult validateProgrammeMaterial(ProgrammeMaterialType programmeMaterial, Details details)
+	private MessageValidationResult validateProgrammeMaterial(ProgrammeMaterialType programmeMaterial, Details details, boolean withMedia)
 	{
 
 		String materialID = programmeMaterial.getMaterialID();
@@ -216,20 +218,12 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 			{
 				return MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW;
 			}
-
-
+			
 			int deliveryVersion = details.getDeliveryVersion().intValue();
 			int itemDeliveryVersion = mayamClient.getLastDeliveryVersionForMaterial(materialID);
 
-			if (itemDeliveryVersion == -1)
-			{
-				// item has never been updated by a material exchange message, check if it is a placeholder
-				if (!mayamClient.isMaterialPlaceholder(materialID))
-				{
-					return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
-				}
-			}
-			else
+		
+			if (itemDeliveryVersion != -1)
 			{
 				if (itemDeliveryVersion != (deliveryVersion - 1))
 				{
@@ -238,6 +232,13 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 				}
 			}
 
+			if(withMedia){
+				// item has never been updated by a material exchange message, check if it is a placeholder
+				if (!mayamClient.isMaterialPlaceholder(materialID))
+				{
+					return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+				}
+			}
 		}
 		catch (MayamClientException e)
 		{

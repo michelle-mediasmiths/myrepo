@@ -32,6 +32,8 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		{
 			log.error("Exception in the Mayam client while handling Preview Task failure : ", e);
 		}
+		
+		//TODO send manual qa event
 	}
 
 	private void onPreviewFailure(AttributeMap messageAttributes) throws MayamClientException

@@ -31,8 +31,8 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import com.mediasmiths.foxtel.agent.queue.SingleFilePickUp;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -135,7 +135,8 @@ public abstract class PlaceHolderMessageShortTest
 		Marshaller marshaller = jc.createMarshaller();
 		EventService events = mock(EventService.class);
 		validator = new PlaceholderMessageValidator(unmarhsaller, mayamClient, mayamValidator, new ReceiptWriter(), new SchemaValidator("PlaceholderManagement.xsd"), ChannelProperties);
-		processor = new PlaceholderMessageProcessor(new FilePickUpFromDirectories(new File[] {File.createTempFile("test", "test")}), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
+		
+		processor = new PlaceholderMessageProcessor(new SingleFilePickUp(new File[] {File.createTempFile("test", "test")}, "xml"), validator, new ReceiptWriter(), unmarhsaller, marshaller, mayamClient, events);
 
 	}
 
@@ -145,19 +146,21 @@ public abstract class PlaceHolderMessageShortTest
 		Util.deleteFiles(receiptFolderPath);
 	}
 
-	protected File createTempXMLFile(PlaceholderMessage pm, String description) throws IOException, Exception
+	protected PickupPackage createTempXMLFile(PlaceholderMessage pm, String description) throws IOException, Exception
 	{
 		return createTempXMLFile(pm, description, true);
 	}
 
-	protected File createTempXMLFile(PlaceholderMessage pm, String description, boolean validate) throws IOException, Exception
+	protected PickupPackage createTempXMLFile(PlaceholderMessage pm, String description, boolean validate) throws IOException, Exception
 	{
 		// marshall and write to file
 		FileWriter writer = new FileWriter();
 		File temp = new File("/tmp/placeHolderTestData/" + description + "__" + RandomStringUtils.randomAlphabetic(6) + ".xml");
 
 		writer.writeObjectToFile(pm, temp.getAbsolutePath(), validate);
-		return temp;
+		PickupPackage pp = new PickupPackage("xml");
+		pp.addPickUp(temp);
+		return pp;
 	}
 
 	protected static PlaceholderMessage buildAddMaterialRequest(
