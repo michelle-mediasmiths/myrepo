@@ -333,6 +333,13 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 			{
 				PickupPackage pp = filePickup.take();
 				validateThenProcessPickupPackage(pp);
+				
+				for (File f : pp.getAllFiles())
+				{
+					if(f.exists()){
+						logger.warn(String.format("%s still exists after processing!",f.getAbsolutePath()));
+					}
+				}
 			}
 			catch (Exception e)
 			{
