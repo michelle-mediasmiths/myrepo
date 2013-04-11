@@ -136,7 +136,11 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 				case UNEXPECTED_DELIVERY_VERSION:
-					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "OutOfOrder", pickupNotification);
+					if (pp.isComplete())
+					{
+						// media arrived for a material that already passed preview and therefore already had media
+						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
+					}
 					break;
 				default:
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
