@@ -121,6 +121,7 @@ public class ExportRpt
 			export.setDateRange(startDate + " - " + endDate);
 			export.setMaterialID(tcNotification.getAssetID());
 			export.setChannels(tcNotification.getChannelGroup().toString());
+			export.setTaskStatus("FINISHED");
 			
 			if(event.getEventName().equals("CaptionProxySuccess")) {
 				export.setExportType("Caption");

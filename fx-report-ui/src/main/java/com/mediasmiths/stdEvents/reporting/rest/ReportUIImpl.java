@@ -1,5 +1,7 @@
 package com.mediasmiths.stdEvents.reporting.rest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,6 +9,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
@@ -149,38 +152,34 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional
-	public void saveStartDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
+	public void saveStartDate(@QueryParam("start") String start)
 	{
-		startDay = Integer.parseInt(date);
-		startMonth = Integer.parseInt(month);
-		startYear = Integer.parseInt(year);
+		try
+		{
+			startDate = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
 		
-		Calendar startCal = Calendar.getInstance();
-		startCal.set(startCal.SECOND, 00);
-		startCal.set(startYear, startMonth, startDay, 00, 00);
-		
-		startLong = startCal.getTimeInMillis();
-		
-		startDate = new Date(startLong);
-				
-		logger.info("Start date: " + startCal + " Start long: " + startLong);
+		startLong = startDate.getTime();						
+		logger.info("Start date: " + startDate + " Start long: " + startLong);
 	}
 	
 	@Transactional
-	public void saveEndDate(@QueryParam("date") String date, @QueryParam("month") String month, @QueryParam("year") String year)
+	public void saveEndDate(@QueryParam("end") String end)
 	{
-		endDay = Integer.parseInt(date);
-		endMonth = Integer.parseInt(month);
-		endYear = Integer.parseInt(year);
-		
-		Calendar endCal = Calendar.getInstance();
-		endCal.set(endYear, endMonth, endDay, 00, 00);
-		endCal.set(endCal.SECOND, 00);
-		endLong = endCal.getTimeInMillis();
-		
-		endDate = new Date(endLong);
-
-		logger.info("End date: " + endCal + " End long: " + endLong);
+		try
+		{
+			endDate = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+		}
+		endLong = endDate.getTime();
+		logger.info("End date: " + endDate + " End long: " + endLong);
 	}
 	
 	public boolean checkDate(Long eventTime)
@@ -225,10 +224,49 @@ public class ReportUIImpl implements ReportUI
 		call.set("events", queryApi.getById(id));
 		return call.process();
 	}
+	
+	@Transactional
+	public void chooseReport(@QueryParam("start")String start, @QueryParam("end")String end, @QueryParam("name")String name, @QueryParam("rpt")String rpt, @QueryParam("type") String type)
+	{
+		logger.info("start: " + start + " end: " + end);
+		logger.info("name: " + name + " rpt: " + rpt);
+		logger.info("type: " + type);
+		
+		saveStartDate(start);
+		saveEndDate(end);
+		saveReportName(name);
+		
+		boolean csv = false;
+		boolean ui = false;
+		if (type.equals("csv"))
+			csv = true;
+		else if (type.equals("ui"))
+			ui = true;
+		logger.info("csv=" + csv + " ui=" + ui);
+		
+		if (rpt.equals("OrderStatus"))
+		{
+			logger.info("generating OrderStatus__");
+			if (csv)
+				getOrderStatusCSV();
+			if (ui)
+				getOrderStatusUI();
+		}
+		else if (rpt.equals("AcquisitionDelivery"))
+		{
+			logger.info("generating AcquisitionDelivery__");
+			if (csv)
+				getAquisitionReportCSV();
+			if (ui)
+				getAquisitionReportUI();
+		}
+		
+	}
 
 	@Transactional
 	public void getOrderStatusCSV()
 	{
+		
  		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
  		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
  		logger.info("List size: " + orders.size());
@@ -396,7 +434,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional
 	public void getComplianceEditCSV()
 	{
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLogging", MAX));
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX));
 		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
 	}
 	

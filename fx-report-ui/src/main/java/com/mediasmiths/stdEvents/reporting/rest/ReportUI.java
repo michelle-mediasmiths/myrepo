@@ -3,6 +3,7 @@ package com.mediasmiths.stdEvents.reporting.rest;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
@@ -15,6 +16,7 @@ public interface ReportUI
 	
 	@GET
 	@Path("/popup")
+	@Produces("text/html")
 	public String getPopup();
 	
 	@GET
@@ -47,14 +49,14 @@ public interface ReportUI
 	public String getById(@QueryParam("id")Long id);
 	
 	@GET
-	@Path("/start_date/date/month/year")
+	@Path("/start_date/start")
 	@Produces("text/html")
-	public void saveStartDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
+	public void saveStartDate(@QueryParam("start")String start);
 	
 	@GET
-	@Path("/end_date/date/month/year")
+	@Path("/end_date/end")
 	@Produces("text/html")
-	public void saveEndDate(@QueryParam("date")String date, @QueryParam("month")String month, @QueryParam("year")String year);
+	public void saveEndDate(@QueryParam("end")String end);
 	
 	@GET
 	@Path("/report_name/name")
@@ -62,8 +64,13 @@ public interface ReportUI
 	public void saveReportName(@QueryParam("name")String name);
 	
 	@GET
-	@Path("/order_status_csv")
+	@Path("/choose_report/start/end/name/rpt/type")
 	@Produces("text/html")
+	public void chooseReport(@QueryParam("start")String start, @QueryParam("end")String end, @QueryParam("name")String name, @QueryParam("rpt")String rpt, @QueryParam("type") String type);
+	
+	@GET
+	@Path("/order_status_csv")
+	@Produces("text/csv")
 	public void getOrderStatusCSV();
 	
 	@GET
@@ -73,17 +80,17 @@ public interface ReportUI
 	
 	@GET
 	@Path("/acquisition_report_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getAquisitionReportCSV();
 
 	@GET
 	@Path("/manual_qa_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getManualQACSV();
 	
 	@GET
 	@Path("/auto_qc_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getAutoQCCSV();
 	
 	@GET
@@ -93,12 +100,12 @@ public interface ReportUI
 
 	@GET
 	@Path("/task_list_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getTaskListCSV();
 	
 	@GET
 	@Path("/purge_content_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getPurgeContentCSV();
 	
 	@GET
@@ -108,12 +115,12 @@ public interface ReportUI
 
 	@GET
 	@Path("/compliance_edit_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getComplianceEditCSV();
 	
 	@GET
 	@Path("/export_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getExportCSV();
 	
 	@GET
@@ -123,7 +130,7 @@ public interface ReportUI
 	
 	@GET
 	@Path("/watch_folder_storage_csv")
-	@Produces("text/html")
+	@Produces("text/csv")
 	public void getWatchFolderStorageCSV();
 	
 	@GET

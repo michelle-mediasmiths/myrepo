@@ -13,13 +13,46 @@
 
 <body>
 	<div>
-		<table id="inputTable" class="table table-striped tablesorter">
+		
+ 	
+ 	<form class="form-search" method="GET" th:action="@{/rest/query/choose_report/start/end/name/rpt/type}">
+ 		<table id="reportFormTbl" class="table table-striped tablesorter">
+ 			<tbody>
+ 				<tr><td><label>StartDate: </label></td> <td><input id="startDate" name="start" type="date" /></td><td></td></tr>
+				<tr><td><label>EndDate: </label></td> <td><input id="endDate" name="end" type="date" /></td><td></td></tr>
+				
+				<tr>
+					<td><label>ReportName: </label></td> <td><input name="name" type="text" class="input-small search-query" value="REPORT_NAME"/></td><td></td>
+				</tr>				
+			
+				<tr>				
+					<td>
+						<select name="rpt">
+							<option value="OrderStatus">1. Order Status</option>
+							<option value="AcquisitionDelivery">2. Acquisition Delivery Report</option>
+							<option value="AutoQC">10b. Auto QC</option>
+							<option value="PurgeContent">16. Purge Content</option>
+							<option value="ComplianceEdits">20. Compliance Edits</option>
+							<option value="Export">21. Extended Publishing and File Export</option>
+						</select>
+					</td>
+				
+					<td><label>CSV </label><input type="radio" name="type" value="csv"></input>
+					<label>/     On Screen </label><input type="radio" name="type" value="ui"></input></td>
+				
+					<td><button class="btn-primary" id="rptBtn" type="submit">GenerateReport</button></td>
+				</tr>
+ 			</tbody>
+ 		</table>
+ 	</form>
+ 	
+ 	<!-- <table id="inputTable" class="table table-striped tablesorter">
 			<tbody> 
 				<tr>
 					<form class="form-search" method="GET" th:action="@{/rest/query/start_date/date/month/year}">
 						<td><label>Start Date: </label></td>
 						<td>
-							<select name="date">
+							<select name="date" id="startDate">
 						<option>1</option>
 						<option>2</option>
 						<option>3</option>
@@ -54,7 +87,7 @@
 					</select>
 				</td>
 				<td>
-					<select name="month">
+					<select name="month" id="startMonth">
 						<option value="0">January</option>
 						<option value="1">February</option>
 						<option value="2">March</option>
@@ -69,7 +102,7 @@
 						<option value="11">December</option>
 					</select>
 				</td>
-				<td><input name="year" type="text" class="input-small search-query" placeholder="year"/></td>
+				<td><input name="year" id="startYear" type="text" class="input-small search-query" placeholder="year"/></td>
 				<td><button class="btn-primary" id="saveStartDateBtn" type="submit">Save Start Date</button></td>
 			</form>
 		</tr>
@@ -142,16 +175,16 @@
  		</tr>
  	</tbody>
  	</table>
+ 	
  		
  	<table id="reportTable" class="table table-striped tablesorter">
  	<tbody>	
  		<tr>
-			<form class="form-search" method="GET" th:action="@{/rest/query/order_status_csv}">
+			<form class="form-search" method="GET" th:action="@{/rest/query/choose_report/rpt}">
 				<td><label>1. Order Status: </label></td>
-				<td><button class="btn-primary" id="rpt1Btn" type="submit">CSV</button></td>
-			</form>
-			<form class="form-search" method="GET" th:action="@{/rest/query/order_status_ui}">
-				<td><button class="btn-primary" id="rpt1UI" type="submit">On Screen</button></td>
+				<td><button class="btn-primary" id="rpt1Btn" type="submit" name="rpt" value="OrderStatusCSV">CSV</button></td>
+			
+				<td><button class="btn-primary" id="rpt1UI" type="submit" name="OrderStatusUI">On Screen</button></td>
 			</form>
 			
 			<form class="form-search" method="GET" th:action="@{/rest/query/purge_content_csv}">
@@ -204,7 +237,7 @@
 				<td><label>10b. Auto QC: </label></td>
 				<td><button class="btn-primary" id="rpt10bBtn" type="submit">CSV</button></td>
 			</form>	
-			<form class="form-search" method="GET" th:action="@{rest/query/auto_qc_ui}">
+			<form class="form-search" method="GET" th:action="@{/rest/query/auto_qc_ui}">
 				<td><button class="btn-primary" id="rpt2UI" type="submit">On Screen</button></td>
 			</form>
 			
@@ -235,9 +268,10 @@
 			</form>
 		</tr>
  	</tbody>
- 	</table>
+ 	</table> -->
  	
  	<a href="http://www.google.com" target="_blank">Window</a>
+ 	
 	</div>	
 </body>
 
