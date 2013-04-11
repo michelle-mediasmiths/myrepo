@@ -117,34 +117,21 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			{
 				case MATERIAL_IS_NOT_PLACEHOLDER:
 					{
-						try
-						{
-							try
-							{
-								// associate this email with channel groups
-								String materialID = getMaterialIDFromMessage(message);
-								Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
-								pickupNotification.getChannelGroup().addAll(channelGroups);
-							}
-							catch (Exception e)
-							{
-								logger.error("error determining channel groups for event", e);
-							}
-
-							eventService.saveEvent(
-									"http://www.foxtel.com.au/ip/content",
-									"PlaceholderAlreadyHasMedia",
-									pickupNotification);
-						}
-						catch (Exception e)
-						{
-							logger.error("exception sending PlaceholderAlreadyHasMedia event");
-						}
+						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
 						break;
 					}
 				case TITLE_DOES_NOT_EXIST:
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
 					break;
+				case MATERIAL_HAS_ALREADY_PASSED_PREVIEW :
+				{
+						if (pp.isComplete())
+						{
+							// media arrived for a material that already passed preview and therefore already had media
+							sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
+						}
+						break;
+				}
 				case MATERIAL_DOES_NOT_EXIST:
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
@@ -159,6 +146,33 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		catch (Exception e)
 		{
 			logger.error("Unable to send events: ", e);
+		}
+	}
+
+	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
+	{
+		try
+		{
+			try
+			{
+				// associate this email with channel groups
+				String materialID = getMaterialIDFromMessage(message);
+				Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+				pickupNotification.getChannelGroup().addAll(channelGroups);
+			}
+			catch (Exception e)
+			{
+				logger.error("error determining channel groups for event", e);
+			}
+
+			eventService.saveEvent(
+					"http://www.foxtel.com.au/ip/content",
+					"PlaceholderAlreadyHasMedia",
+					pickupNotification);
+		}
+		catch (Exception e)
+		{
+			logger.error("exception sending PlaceholderAlreadyHasMedia event");
 		}
 	}
 
