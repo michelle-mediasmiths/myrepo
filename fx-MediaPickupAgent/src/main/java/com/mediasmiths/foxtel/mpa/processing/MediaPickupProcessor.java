@@ -79,7 +79,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			aoMismatch(pp);
 		}
 		else if (result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW
-				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION)
+				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION || result== MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER)
 		{
 			failMediaAndMessage(pp);
 		}
@@ -111,6 +111,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			pickupNotification.setFilelocation(pp.getPickUp("xml").getAbsolutePath());
 			pickupNotification.setTime((new Date()).toString());
 
+			T message = resultPackage.getMessage();
+			
 			switch (resultPackage.getResult())
 			{
 				case MATERIAL_IS_NOT_PLACEHOLDER:
@@ -120,10 +122,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 							try
 							{
 								// associate this email with channel groups
-
-								@SuppressWarnings("unchecked")
-								T unmarshalled = (T) unmarhsaller.unmarshal(pp.getPickUp("xml"));
-								String materialID = getMaterialIDFromMessage(unmarshalled);
+								String materialID = getMaterialIDFromMessage(message);
 								Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
 								pickupNotification.getChannelGroup().addAll(channelGroups);
 							}
@@ -293,20 +292,20 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 		else
 		{
-			boolean autoMatched = false;
-			AutoMatchInfo ami = getSiteIDForAutomatch(materialEnvelope);
-
-			if (ami != null)
+			try
 			{
-				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
-			}
+				AutoMatchInfo ami = getSiteIDForAutomatch(materialEnvelope);
 
-			if (autoMatched)
-			{
+				if (ami != null)
+				{
+					boolean autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
+				}
+				
 				moveMessageToArchiveFolder(pickupPackage.getPickUp("xml"));
 			}
-			else
+			catch (Exception e)
 			{
+				logger.error("error attempting automatch for unaccompanied xml", e);
 				moveFileToFailureFolder(pickupPackage.getPickUp("xml"));
 			}
 

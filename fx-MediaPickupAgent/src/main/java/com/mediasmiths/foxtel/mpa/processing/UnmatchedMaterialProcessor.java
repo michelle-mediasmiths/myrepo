@@ -1,8 +1,6 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,8 +46,6 @@ public class UnmatchedMaterialProcessor
 
 	@Inject
 	public UnmatchedMaterialProcessor(
-			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
-			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders, 
 			EventService events)
 	{

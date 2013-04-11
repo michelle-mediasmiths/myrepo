@@ -94,7 +94,7 @@ public abstract class MaterialProcessingTest {
 		w.setRuzz(false);
 		wf.add(w); 
 		
-		unmatchedProcessor = new UnmatchedMaterialProcessor(100l, 0l, wf, eventService);
+		unmatchedProcessor = new UnmatchedMaterialProcessor(wf, eventService);
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				 validator, receiptWriter, unmarshaller, marshaller,

@@ -47,7 +47,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			@Named("ruzz.marshaller") Marshaller marshaller,
 			MayamClient mayamClient,
 			EventService eventService,
-			@Named("ruzz.unmatched.processor") UnmatchedMaterialProcessor unmatchedMaterialProcessor)
+			UnmatchedMaterialProcessor unmatchedMaterialProcessor)
 	{
 		super(
 				filePathsPendingProcessing,
@@ -180,7 +180,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 	{
 		AutoMatchInfo ret = new AutoMatchInfo();
 		ret.siteID = unmatchedMessage.getMessage().getMaterial().getMaterialID();
-		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp("mxf").getName();
+		ret.fileName = unmatchedMessage.getPickupPackage().getPickUp("xml").getName();
 		return ret;
 	}
 

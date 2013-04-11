@@ -21,7 +21,6 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.ResultLogger;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 
 public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 
@@ -65,7 +64,7 @@ public class UnmatchedMaterialProcessorTest_FXT_4_6_4 {
 		EventService events = mock(EventService.class);
 				
 		//run object being tested
-		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(timeout,timebetweenpurges,wfs,events);
+		UnmatchedMaterialProcessor toTest = new UnmatchedMaterialProcessor(wfs,events);
 		toTest.setMayamClient(mock(MayamClient.class));
 		toTest.processUnmatchedMXF(new File(unmatchedMXFPath));
 		

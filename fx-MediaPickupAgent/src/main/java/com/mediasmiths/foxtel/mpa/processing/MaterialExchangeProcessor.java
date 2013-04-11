@@ -39,7 +39,7 @@ public class MaterialExchangeProcessor extends MediaPickupProcessor<Material>
 			Marshaller marshaller,
 			MayamClient mayamClient,
 			EventService eventService,
-			@Named("mex.unmatched.processor") UnmatchedMaterialProcessor unmatchedMaterialProcessor)
+			UnmatchedMaterialProcessor unmatchedMaterialProcessor)
 	{
 		super(
 				filePathsPendingProcessing,

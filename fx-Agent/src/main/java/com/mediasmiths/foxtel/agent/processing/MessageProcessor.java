@@ -199,7 +199,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	protected void moveFileToFailureFolder(File file)
 	{
 
-		logger.info(String.format("File %s is invalid, sending to failure folder", file.getAbsolutePath()));
+		logger.info(String.format("File %s, sending to failure folder", file.getAbsolutePath()));
 		String failurePath = getFailureFolderForFile(file);
 
 		logger.debug(String.format("Failure folder is: %s ", failurePath));

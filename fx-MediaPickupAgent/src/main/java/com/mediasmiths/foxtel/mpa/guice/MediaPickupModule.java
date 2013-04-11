@@ -202,6 +202,7 @@ public class MediaPickupModule extends AbstractModule {
 		return watchedPaths.toArray(new File[watchedPaths.size()]);
 	}
 
+	
 	/**
 	 *
 	 * @param fileRef of the file being considered
