@@ -723,6 +723,26 @@
         </xs:complexType>
     </xs:element>
     
+    <xs:element name="ManualQANotification">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="title" type="xs:string" />
+				<xs:element name="materialID" type="xs:string"/>
+				<xs:element name="channels" type="xs:string"/>
+				<xs:element name="operator" type="xs:string"/>
+				<xs:element name="aggregatorID" type="xs:string"/>
+				<xs:element name="taskStatus" type="xs:string"/>
+				<xs:element name="previewStatus" type="xs:string"/>
+				<xs:element name="hrPreview" type="xs:string"/>
+				<xs:element name="hrPreviewRequested" type="xs:string"/>
+				<xs:element name="escalated" type="xs:string" minOccurs="0"/>
+				<xs:element name="timeEscalated" type="xs:string"/>
+				<xs:element name="titleLength" type="xs:string"/>
+				<xs:element name="reordered" type="xs:string" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    
     
 
 	<xs:simpleType name="smpteTimecode" final="restriction">
