@@ -115,7 +115,7 @@ public class SingleFilePickUp implements IFilePickup
 	 * @param pickupDirectories File object referencing the pick up areas
 	 * @param extensions the collection of extensions (strings) that are valid for files.
 	 */
-	public SingleFilePickUp(@Named("filepickup.watched.directories") File[] pickupDirectories, String extension)
+	public SingleFilePickUp(@Named("filepickup.watched.directories") File[] pickupDirectories, @Named("filepickup.single.extension") String extension)
 	{
 
 		if (extension == null)

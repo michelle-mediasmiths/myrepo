@@ -325,6 +325,8 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	public void run()
 	{
 
+		logger.info("MessageProcessor run");
+		
 		while (isRunning())
 		{
 			try
