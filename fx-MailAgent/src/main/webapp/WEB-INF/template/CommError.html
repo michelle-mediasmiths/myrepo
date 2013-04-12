@@ -8,7 +8,7 @@
 <head>
 <title>CommError</title>
 </head>
-<body>
+<body th:with="page='manualResult'">
 	<div class="container">
 		<p>
 			MAM is trying to communicate with an interfacing system. no response has been since   <span th:text="${CommErrorTime}" />period

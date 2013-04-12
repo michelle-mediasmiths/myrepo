@@ -8,7 +8,7 @@
 <head>
 <title>Quarantine</title>
 </head>
-<body>
+<body th:with="page='manualResult'">
 	<div class="container">
 		<p>
 			A material exchange has arrived to the wrong location: it has been quarantined to <span th:text="${QuarantinedLocation}" />.

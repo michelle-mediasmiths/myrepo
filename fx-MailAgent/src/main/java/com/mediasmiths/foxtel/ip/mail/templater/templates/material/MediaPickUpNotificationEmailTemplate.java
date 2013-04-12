@@ -35,8 +35,6 @@ public class MediaPickUpNotificationEmailTemplate extends MailTemplate implement
 		
 		TemplateCall call = templater.template(templateName);
 		call.set("Placeholder", m.getFilelocation());
-		call.set("QuarantinedLocation", m.getFilelocation());
-		call.set("Material", m.getFilelocation());
 
 		t.setBody(call.process());
 		return t;

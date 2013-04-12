@@ -8,7 +8,7 @@
 <head>
 <title>ProtectedPurgeFail</title>
 </head>
-<body>
+<body th:with="page='manualResult'">
 	<div class="container">
 		<p>
 			Purge request not processed, as item is "MAM Protected", at <span th:text="${PurgeTime}" />.	

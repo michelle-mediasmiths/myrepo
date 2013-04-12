@@ -14,7 +14,6 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
-import com.mediasmiths.foxtel.ip.mail.rest.EmailSenderService;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class ThymeleafServiceSample
@@ -27,11 +26,8 @@ public class ThymeleafServiceSample
 	EventMailConfiguration emailConfig;
 
 	@Inject
-	protected EmailSenderService emailService;
-
-	@Inject
 	private ThymeleafTemplater templater;
-
+	
 	public ThymeleafServiceSample() throws Exception
 	{
 		try
@@ -46,11 +42,11 @@ public class ThymeleafServiceSample
 		}
 	}
 
-	// Creates mail template for given servicecallerentity
+	//Creates mail template for given servicecallerentity
 	public void createMailTemplate(ServiceCallerEntity caller, EmailTemplateGenerator emailTemplateGenerator) throws Exception
 	{
-
-		logger.info("createMailTemplate called, checking for MailTemplate");
+		
+		logger.info("createMailTemplate called, checking for templater");
 
 		MailTemplate m = getMailTemplate(caller, emailTemplateGenerator);
 
@@ -64,6 +60,7 @@ public class ThymeleafServiceSample
 		}
 	}
 
+	
 	private MailTemplate getMailTemplate(final ServiceCallerEntity caller, final EmailTemplateGenerator mailTemplate)
 	{
 		try
@@ -72,7 +69,7 @@ public class ThymeleafServiceSample
 
 			if (mailTemplate.handles(payloadObj))
 			{
-				// Eventname corresponds to the name of the template.
+				//Eventname corresponds to the name of the template.
 				return mailTemplate.customiseTemplate(payloadObj, caller.comment, caller.eventName, templater);
 			}
 			else
@@ -97,51 +94,43 @@ public class ThymeleafServiceSample
 				logger.debug("Preparing to send mail to: " + emailAddress);
 
 			logger.info("Sending email to: " + emailAddress + " with Subject: " + m.getSubject());
-			try
+			// try
+			// {
+
+			if (m.getSubject().equals("Email Error: Could not find generator"))
 			{
+				// Sending normal email so unprocessed xml can be viewed
+				logger.info("Could not find generator, sending normal email.");
 
-				if (m.getSubject().equals("Email Error: Could not find generator"))
+				// emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null);
+			}
+			else
+			{
+				if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
 				{
-					// Sending normal email so unprocessed xml can be viewed
-					logger.info("Could not find generator, sending normal email.");
+					logger.info("Using ThymeleafEmailSender.");
 
-					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null);
+					// TODO Remove
+					ThymeleafEmailSender thymeleafEmailSender = new ThymeleafEmailSender();
+					thymeleafEmailSender.sendThymeleafEmail(emailAddress.getValue(), m.getSubject(), m.getBody());
 				}
 				else
 				{
-					if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
-					{
-						logger.info("Using ThymeleafEmailSender.");
-
-						emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(), m.getBody());
-					}
-					else
-					{
-						emailService.createEmail(
-								emailAddress.getValue(),
-								m.getSubject(),
-								getFormattedXML(m.getBody()),
-								m.getFileAttachments());
-					}
-
-					// emailService.createEmail(email, m.getSubject(), m.getBody());
+					// emailService.createEmail(emailAddress.getValue(), m.getSubject(), getFormattedXML(m.getBody()), m.getFileAttachments());
 				}
-				if (logger.isInfoEnabled())
-					logger.info("Sent email to: " + emailAddress);
 
+				// emailService.createEmail(email, m.getSubject(), m.getBody());
 			}
+			if (logger.isInfoEnabled())
+				logger.info("Sent email to: " + emailAddress);
 
-			catch (EmailException e)
-			{
-				logger.error("EmailException: " + e);
-				throw e;
+			// }
 
-			}
-			catch (MessagingException e)
-			{
-				logger.error("MessagingException (is your configuration right?): " + e);
-				throw e;
-			}
+			/*
+			 * catch (EmailException e) { logger.error("EmailException: " + e); throw e;
+			 * 
+			 * } catch (MessagingException e) { logger.error("MessagingException (is your configuration right?): " + e); throw e; }
+			 */
 
 		}
 	}
