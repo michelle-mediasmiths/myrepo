@@ -373,6 +373,29 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		log.info("QC : Initiating qc workflow for asset " + assetID);
 
 		try
+		{ // check if content format is set or not to ensure correct cerfiy profile is use during autoqc
+			String contentFormat = messageAttributes.getAttribute(Attribute.CONT_FMT);
+
+			if (contentFormat == null)
+			{
+				log.warn("QC : CNT_FMT is null, will attempt to determine from resolution");
+				String format = materialController.getFormat(messageAttributes);
+				log.info("QC : format determined as " + format);
+				AttributeMap updateMapForAsset = taskController.updateMapForAsset(messageAttributes);
+				updateMapForAsset.setAttribute(Attribute.CONT_FMT, format);
+				tasksClient.assetApi().updateAsset(updateMapForAsset);
+			}
+			else
+			{
+				log.debug("QC : CNT_FMT=" + contentFormat);
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error determining or storing content format", e);
+		}
+
+		try
 		{
 			try
 			{

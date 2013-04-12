@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -59,6 +60,7 @@ public class MayamClientStub implements MayamClient
 
 	public final static String NEW_MATERIAL_ID = "NEW_MATERIAL";
 	public final static String EXISTING_MATERIAL_ID = "EXISTING_MATERIAL";
+	public final static String PASSED_PREVIEW_MATERIAL_ID = "PASSED_PREVIEW";
 	public final static String ERROR_MATERIAL_ID = "ERROR_MATERIAL";
 
 	public final static String PLACEHOLDER_MATERIAL = "PLACEHOLDER_MATERIAL";
@@ -287,7 +289,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return false;
 		}
-		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
+		else if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL) || materialID.startsWith(PASSED_PREVIEW_MATERIAL_ID))
 		{
 			return true;
 		}
@@ -724,6 +726,11 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public boolean materialHasPassedPreview(String materialID)
 	{
+		
+		if(materialID.startsWith(PASSED_PREVIEW_MATERIAL_ID)){
+			return true;
+		}
+		
 		return false;
 	}
 
@@ -751,8 +758,12 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public boolean attemptAutoMatch(String siteID, String fileName)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if(siteID.equals(PLACEHOLDER_MATERIAL)){
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 
 	@Override
@@ -884,8 +895,9 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Set<String> groups = new HashSet<String>();
+		groups.add("GE");
+		return groups;
 	}
 
 

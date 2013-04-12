@@ -59,9 +59,13 @@ public class TestUtil {
 		return path;	
 		
 	}
-	
 	public static File getFileOfTypeInFolder(String extension, String folder){
-		return new File(folder + IOUtils.DIR_SEPARATOR + "CreateFileInfolder"+RandomStringUtils.randomAlphabetic(6) + FilenameUtils.EXTENSION_SEPARATOR + extension);
+		return getFileOfTypeInFolder(extension, folder,RandomStringUtils.randomAlphabetic(6));
+	}
+	
+	
+	public static File getFileOfTypeInFolder(String extension, String folder, String uniq){
+		return new File(folder + IOUtils.DIR_SEPARATOR + "CreateFileInfolder"+uniq + FilenameUtils.EXTENSION_SEPARATOR + extension);
 	}
 	
 	public static File getPathToThisFileIfItWasInThisFolder(File file, File folder){

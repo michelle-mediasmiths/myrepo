@@ -2,7 +2,6 @@ package com.mediasmiths.foxtel.messagetests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -15,7 +14,9 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.placeholder.PlaceHolderMessageShortTest;
 import com.mediasmiths.foxtel.placeholder.util.Util;
 
@@ -41,17 +42,17 @@ public class MultipleActionsInMessageTest extends PlaceHolderMessageShortTest{
 		
 		createOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial.add(purge);
 		
-		File temp = createTempXMLFile(pm,"multipleActions");
+		PickupPackage pp = createTempXMLFile (pm,"multipleActions");
 		
 		//test that the correct validation result is returned
-		MessageValidationResult validateFile = validator.validateFile(temp.getAbsolutePath());
-		if (MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS ==validateFile)
+		MessageValidationResultPackage<PlaceholderMessage> validationResult=	 validator.validatePickupPackage(pp);
+		if (MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS ==validationResult.getResult())
 			resultLogger.info("FXT 4.1.0.2 – Multiple Actions in Message --Passed");
 		else
 			resultLogger.info("FXT 4.1.0.2 – Multiple Actions in Message--Failed");
 		
-		assertEquals(MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS, validateFile);
-		Util.deleteFiles(temp.getAbsolutePath());
+		assertEquals(MessageValidationResult.ACTIONS_ELEMENT_CONTAINED_MUTIPLE_ACTIONS, validationResult.getResult());
+		Util.deleteFiles(pp);
 	}
 	
 }

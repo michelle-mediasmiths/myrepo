@@ -1,20 +1,21 @@
 package com.mediasmiths.foxtel.agent.queue;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
-import com.mediasmiths.foxtel.ip.common.events.FilePickup;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
+import com.mediasmiths.foxtel.ip.common.events.FilePickup;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -52,6 +53,7 @@ public class MultiFilePickUp implements IFilePickup
 	/** the time in milliseconds that a file must not grow before being passed for processing */
 	@Inject
 	@Named("filepickup.file.stability_time")
+	protected
 	long STABILITY_TIME;
 
 	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */

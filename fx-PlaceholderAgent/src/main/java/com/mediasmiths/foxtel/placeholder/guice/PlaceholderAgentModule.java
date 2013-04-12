@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.guice;
 
-import java.net.URI;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -14,7 +13,6 @@ import org.xml.sax.SAXException;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.TypeLiteral;
@@ -22,11 +20,11 @@ import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
 import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.queue.SingleFilePickUp;
 import com.mediasmiths.foxtel.placeholder.PlaceholderAgent;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
-import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class PlaceholderAgentModule extends AbstractModule {
 
@@ -37,8 +35,8 @@ public class PlaceholderAgentModule extends AbstractModule {
 	protected void configure() {
 		
 		bind(PLACEHOLDERPROCESSOR_LITERAL).to(PlaceholderMessageProcessor.class);
-		bind(FilePickUpProcessingQueue.class).to(FilePickUpFromDirectories.class);
 		bind(PlaceholderAgent.class).asEagerSingleton();
+		bind(IFilePickup.class).to(SingleFilePickUp.class);
 		
 	}
 	protected static final TypeLiteral<MessageProcessor<PlaceholderMessage>> PLACEHOLDERPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<PlaceholderMessage>>(){};

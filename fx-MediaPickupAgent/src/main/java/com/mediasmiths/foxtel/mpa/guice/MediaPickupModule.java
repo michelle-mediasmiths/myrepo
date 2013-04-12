@@ -3,7 +3,6 @@ package com.mediasmiths.foxtel.mpa.guice;
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +31,6 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
-import com.mediasmiths.std.guice.restclient.JAXRSProxyClientFactory;
-import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 
 public class MediaPickupModule extends AbstractModule {
 
@@ -205,6 +202,7 @@ public class MediaPickupModule extends AbstractModule {
 		return watchedPaths.toArray(new File[watchedPaths.size()]);
 	}
 
+	
 	/**
 	 *
 	 * @param fileRef of the file being considered

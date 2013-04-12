@@ -1,15 +1,10 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.MEDIA_COMPANION_TIMEOUT;
-import static com.mediasmiths.foxtel.mpa.MediaPickupConfig.UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
-
-import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -19,305 +14,135 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.generated.MaterialExchange.FileMediaType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.foxtel.mpa.MediaEnvelope;
-import com.mediasmiths.foxtel.mpa.Util;
-import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
-import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.mayam.MayamClient;
 
-public class UnmatchedMaterialProcessor extends Daemon implements StoppableService {
+public class UnmatchedMaterialProcessor
+{
 
-	private final Long timeout;
-	private final MatchMaker matchMaker;
-	private final long sleepTime;
 	private final WatchFolders watchFolders;
 
 	private final EventService events;
 
-	private static Logger logger = Logger
-			.getLogger(UnmatchedMaterialProcessor.class);
+	private static Logger logger = Logger.getLogger(UnmatchedMaterialProcessor.class);
 
 	@Inject
 	private MayamClient mayamClient;
-	
+
+	public MayamClient getMayamClient()
+	{
+		return mayamClient;
+	}
+
+	public void setMayamClient(MayamClient mayamClient)
+	{
+		this.mayamClient = mayamClient;
+	}
+
 	@Inject
 	@Named("ao.quarrentine.folder")
 	private String aoQuarrentineFolder;
-	
+
 	@Inject
 	public UnmatchedMaterialProcessor(
-			@Named(MEDIA_COMPANION_TIMEOUT) Long timeout,
-			@Named(UNMATCHED_MATERIAL_TIME_BETWEEN_PURGES) Long sleepTime,
-			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
-			MatchMaker matchMaker, EventService events) {
-		this.timeout = timeout;
-		this.matchMaker = matchMaker;
+			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders, 
+			EventService events)
+	{
 		this.watchFolders = watchFolders;
-		this.sleepTime = sleepTime.longValue();
 		this.events = events;
 	}
 
-	@Override
-	public void run() {
-		while (!Thread.interrupted()) {
-
-			try {
-				logger.trace("going to sleep");
-				Thread.sleep(sleepTime);
-				logger.trace("woke up");
-				process();
-			} catch (InterruptedException e) {
-				logger.info("Interrupted", e);
-				return;
-			} catch (Exception e){
-				logger.fatal("Something went badly wrong in UnmatchedMaterialProcessor.process()",e);
-			}
-		}
-	}
-
-	protected void process() {
-
-		processUnmatchedMessages();
-		processUnmatchedMXFs();
-
-	}
-
-	private void processUnmatchedMXFs()
+	public void processUnmatchedMXF(File mxf) throws IOException
 	{
-		Collection<UnmatchedFile> unmatchedMXFs = matchMaker.purgeUnmatchedMXFs(timeout.longValue());
 
-		if (unmatchedMXFs.size() > 0)
+		logger.info(String.format("importing mxf as unmatched  %s", mxf.getAbsolutePath()));
+		/*
+		 * 2.1.2.2 Media file is delivered without the companion XML file (or with a corrupt XML file) If a media file is delivered without the companion XML file (file has been not been modified in a
+		 * configurable amount of time without the XML file appearing or is the XML file is not readable), the WFE shall move the media file to the emergency programme file auto import location
+		 * described in section 2.3 “Emergency programme file ingest”.
+		 */
+
+		String sourceFolder = FilenameUtils.getFullPathNoEndSeparator(mxf.getAbsolutePath());
+
+		String destinationFolder;
+
+		if (watchFolders.isAo(sourceFolder))
 		{
-			logger.info(String.format("Found %d unmatched material mxfs", unmatchedMXFs.size()));
+			destinationFolder = aoQuarrentineFolder;
 		}
 		else
 		{
-			logger.debug(String.format("Found %d unmatched material mxfs", unmatchedMXFs.size()));
+			destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getAbsolutePath()));
 		}
 
-		for (UnmatchedFile mxf : unmatchedMXFs)
-		{
-			logger.info(String.format("no material message found for %s", mxf.getFilePath()));
-			/*
-			 * 2.1.2.2 Media file is delivered without the companion XML file (or with a corrupt XML file) If a media file is delivered without the companion XML file (file has been not been modified
-			 * in a configurable amount of time without the XML file appearing or is the XML file is not readable), the WFE shall move the media file to the emergency programme file auto import
-			 * location described in section 2.3 “Emergency programme file ingest”.
-			 */
-
-			
-			String sourceFolder = FilenameUtils.getFullPathNoEndSeparator(mxf.getFilePath());
-			
-			String destinationFolder;
-			
-			if(watchFolders.isAo(sourceFolder)){
-				destinationFolder = aoQuarrentineFolder;
-			}
-			else{
-				destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getFilePath()));
-			}
-			
-			
-			try
-			{
-
-				StringBuilder sb = new StringBuilder(destinationFolder);
-				sb.append(IOUtils.DIR_SEPARATOR);
-				sb.append(FilenameUtils.getName(mxf.getFilePath()));
-
-				String destination = sb.toString();
-
-				File dest = new File(destination);
-
-				int i = 1;
-
-				while (dest.exists())
-				{
-					logger.warn(String.format("Destination file %s already exists", destination));
-
-					sb = new StringBuilder(destinationFolder);
-					sb.append(IOUtils.DIR_SEPARATOR);
-					sb.append(FilenameUtils.getBaseName(mxf.getFilePath()));
-					sb.append("_");
-					sb.append(i);
-					sb.append(FilenameUtils.EXTENSION_SEPARATOR);
-					sb.append(FilenameUtils.getExtension(mxf.getFilePath()));
-					destination = sb.toString();
-					dest = new File(destination);
-					i++;
-				}
-
-				logger.info(String.format("Trying to move file %s to %s", mxf.getFilePath(), destination));
-				FileUtils.moveFile(new File(mxf.getFilePath()), dest);
-				
-				String path = FilenameUtils.separatorsToUnix(FilenameUtils.getPathNoEndSeparator(mxf.getFilePath()));
-				String aggregator = path.substring(path.lastIndexOf("/"));
-				mayamClient.createWFEErrorTaskForUnmatched(aggregator, FilenameUtils.getBaseName(mxf.getFilePath()));
-				
-				//send event
-				events.saveEvent("UnmatchedContentAvailable", destination);
-				
-				if (destinationFolder.equals(aoQuarrentineFolder))
-				{
-					try
-					{
-						MediaPickupNotification n = new MediaPickupNotification();
-						n.setFilelocation(aoQuarrentineFolder);
-						n.setTime((new Date()).toString());
-						events.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
-					}
-					catch (Exception e)
-					{
-		                logger.error("Unable to send Quarantine event ", e);
-					}
-				}
-				
-			}
-			catch (IOException e)
-			{
-				logger.error("IOException moving umatched mxf to import folder", e);
-
-				// send out alert that material could not be transferd to
-				// emergency import folder
-				StringBuilder sb = new StringBuilder();
-				sb.append(String.format(
-						"There has been a failure to deliver unmatched material %s to the Viz Ardome import folder",
-						FilenameUtils.getName(mxf.getFilePath())));
-				events.saveEvent("error", sb.toString());
-			}
-			catch(Exception e){
-				logger.error("Unhandled exception processing unmatched mxf",e);
-			}
-		}
-	}
-
-	private void processUnmatchedMessages() {
-		Collection<MediaEnvelope> unmatchedMessages = matchMaker
-				.purgeUnmatchedMessages(timeout.longValue());
-
-		if (unmatchedMessages.size() > 0) {
-			logger.info(String.format("Found %d unmatched material messages",
-					unmatchedMessages.size()));
-		} else {
-			logger.debug(String.format("Found %d unmatched material messages",
-					unmatchedMessages.size()));
-		}
-
-		for (MediaEnvelope me : unmatchedMessages) {
-			logger.info(String.format("no mxf for %s", me.getFile()
-					.getAbsolutePath()));
-
-			boolean autoMatched = false;
-			
-			AutoMatchInfo ami = getSiteIDForAutomatch(me);
-			
-			if(ami != null){
-				autoMatched = mayamClient.attemptAutoMatch(ami.siteID, FilenameUtils.getBaseName(ami.fileName));
-			}
-			
-			if (autoMatched)
-			{
-				//move to completed folder
-				try{
-					String completedMessagesFolder = MessageProcessor.getArchivePathForFile(me.getFile().getAbsolutePath());
-					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), completedMessagesFolder, true));
-					FileUtils.moveFile(me.getFile(), dst);
-				}
-				catch (IOException e)
-				{
-					logger.error("IOException moving umatched xml to the completed messages folder", e);
-				}
-			}
-			else
-			{
-				// move message to failure folder
-				try
-				{
-					String failedMessagesFolder = MessageProcessor.getFailureFolderForFile(me.getFile());
-					File dst = new File(MessageProcessor.getDestinationPathForFileMove(me.getFile(), failedMessagesFolder, true));
-					FileUtils.moveFile(me.getFile(), dst);
-				}
-				catch (IOException e)
-				{
-					logger.error("IOException moving umatched xml to the failed messages folder", e);
-				}
-			}
-			
-
-			// send out alert that no material arrived with this xml file
-			StringBuilder sb = new StringBuilder();
-			sb.append(String
-					.format("There has been been no media received for Material message %s with MasterID %s ",
-							FilenameUtils.getName(me.getFile()
-									.getAbsolutePath()), me.getMasterID()));
-			events.saveEvent("warning", sb.toString());
-		}
-	}
-
-	class AutoMatchInfo{
-		String siteID;
-		String fileName;
-	}
-	
-	private AutoMatchInfo getSiteIDForAutomatch(MediaEnvelope unmatchedMessage)
-	{
 		try
 		{
+			StringBuilder sb = new StringBuilder(destinationFolder);
+			sb.append(IOUtils.DIR_SEPARATOR);
+			sb.append(FilenameUtils.getName(mxf.getAbsolutePath()));
 
-			Object message = unmatchedMessage.getMessage();
-			if (message instanceof Material)
+			String destination = sb.toString();
+
+			File dest = new File(destination);
+
+			int i = 1;
+
+			while (dest.exists())
 			{
+				logger.warn(String.format("Destination file %s already exists", destination));
 
-				if (Util.isProgramme((Material) message))
+				sb = new StringBuilder(destinationFolder);
+				sb.append(IOUtils.DIR_SEPARATOR);
+				sb.append(FilenameUtils.getBaseName(mxf.getAbsolutePath()));
+				sb.append("_");
+				sb.append(i);
+				sb.append(FilenameUtils.EXTENSION_SEPARATOR);
+				sb.append(FilenameUtils.getExtension(mxf.getAbsolutePath()));
+				destination = sb.toString();
+				dest = new File(destination);
+				i++;
+			}
+
+			logger.info(String.format("Trying to move file %s to %s", mxf.getAbsolutePath(), destination));
+			FileUtils.moveFile(mxf, dest);
+
+			String path = FilenameUtils.separatorsToUnix(FilenameUtils.getPathNoEndSeparator(mxf.getAbsolutePath()));
+			String aggregator = path.substring(path.lastIndexOf("/"));
+			mayamClient.createWFEErrorTaskForUnmatched(aggregator, FilenameUtils.getBaseName(mxf.getAbsolutePath()));
+
+			// send event
+			events.saveEvent("UnmatchedContentAvailable", destination);
+
+			if (destinationFolder.equals(aoQuarrentineFolder))
+			{
+				try
 				{
-
-					AutoMatchInfo ret = new AutoMatchInfo();
-					ret.siteID = ((Material) message).getTitle().getProgrammeMaterial().getMaterialID();
-					ret.fileName = ((FileMediaType) ((Material) message).getTitle().getProgrammeMaterial().getMedia()).getFilename();
-					logger.debug("attempt to automatch on filename from programme material xml");
-					return ret;
+					MediaPickupNotification n = new MediaPickupNotification();
+					n.setFilelocation(aoQuarrentineFolder);
+					n.setTime((new Date()).toString());
+					events.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
 				}
-				else
+				catch (Exception e)
 				{
-					logger.debug("cannot automatch marketing material");
-					return null;
+					logger.error("Unable to send Quarantine event ", e);
 				}
 			}
-			else if (message instanceof RuzzIngestRecord)
-			{
 
-				AutoMatchInfo ret = new AutoMatchInfo();
-				ret.siteID = ((RuzzIngestRecord) message).getMaterial().getMaterialID();
-				ret.fileName = unmatchedMessage.getFile().getName();
-
-				return ret;
-			}
-			else
-			{
-				return null;
-			}
 		}
-		catch (Exception e)
+		catch (IOException e)
 		{
-			logger.error("error determining automatch info for message " + unmatchedMessage.getFile().getAbsolutePath());
-			return null;
-		}
+			logger.error("IOException moving umatched mxf to import folder", e);
+
+			// send out alert that material could not be transferd to
+			// emergency import folder
+			StringBuilder sb = new StringBuilder();
+			sb.append(String.format(
+					"There has been a failure to deliver unmatched material %s to the Viz Ardome import folder",
+					FilenameUtils.getName(mxf.getAbsolutePath())));
+			events.saveEvent("error", sb.toString());
+			throw e;
+		}		
 	}
 
-	@Override
-	protected boolean shouldStartAsDaemon()
-	{
-		return true;
-	}
-	
-	@Override
-	public void shutdown()
-	{
-		stopThread();		
-	}
 }

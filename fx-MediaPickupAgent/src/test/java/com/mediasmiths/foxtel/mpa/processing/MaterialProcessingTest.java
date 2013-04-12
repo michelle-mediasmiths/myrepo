@@ -11,16 +11,16 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.mockito.ArgumentMatcher;
 import org.xml.sax.SAXException;
 
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpFromDirectories;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -31,22 +31,18 @@ import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.TestUtil;
 import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
-import com.mediasmiths.foxtel.mpa.validation.MediaCheck;
 import com.mediasmiths.mayam.MayamClient;
 
 public abstract class MaterialProcessingTest {
 
 	MaterialExchangeProcessor processor;
 	MaterialExchangeFilesPendingProcessingQueue filesPendingProcessingQueue;
-	PendingImportQueue pendingImportQueue;
 	MaterialExchangeValidator validator;
 	ReceiptWriter receiptWriter;
 	Unmarshaller unmarshaller;
 	Marshaller marshaller;
 	MayamClient mayamClient;
-	MatchMaker matchMaker;
 	String failurePath;
 	String archivePath;
 	String incomingPath;
@@ -54,10 +50,10 @@ public abstract class MaterialProcessingTest {
 	File media;
 	File materialxml;
 	File materialXmlProcessingFile;
-	MediaCheck mediaCheck;
 	String materialXMLPath;
 	EventService eventService;
 	FilePickUpKinds pickUpKind = FilePickUpKinds.MEDIA;
+	UnmatchedMaterialProcessor unmatchedProcessor;
 
 	final String TITLE_ID = "TITLE_ID";
 	final String MATERIAL_ID = "MATERIAL_ID";
@@ -72,32 +68,38 @@ public abstract class MaterialProcessingTest {
 			DatatypeConfigurationException, SAXException {
 
 		
-		pendingImportQueue = new PendingImportQueue();
 		validator = mock(MaterialExchangeValidator.class);
 		receiptWriter = mock(ReceiptWriter.class);
 		JAXBContext jc = new MediaPickupModule().provideJAXBContext();
 		unmarshaller = new MediaPickupModule().provideUnmarshaller(jc);
 		marshaller = new MediaPickupModule().provideMarshaller(jc,"MaterialExchange_V2.0.xsd");
 		mayamClient = mock(MayamClient.class);
-		matchMaker = mock(MatchMaker.class);
-		mediaCheck = mock(MediaCheck.class);
 		eventService = mock(EventService.class);
 
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath =	TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
-		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
-
-		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
-		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
 	
+		String rString = RandomStringUtils.randomAlphabetic(6);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath,rString);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath,rString);
+	
+		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
+		filesPendingProcessingQueue.setStabilityTime(100l);
+		
+		WatchFolders wf = new WatchFolders();
+		WatchFolder w = new WatchFolder(incomingPath);
+		w.setAO(false);
+		w.setDelivery(archivePath);
+		w.setRuzz(false);
+		wf.add(w); 
+		
+		unmatchedProcessor = new UnmatchedMaterialProcessor(wf, eventService);
 		
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
-				pendingImportQueue, validator, receiptWriter, unmarshaller, marshaller,
-				mayamClient, matchMaker, eventService);
+				 validator, receiptWriter, unmarshaller, marshaller,
+				mayamClient, eventService,unmatchedProcessor);
 
-		materialXmlProcessingFile = new File(processor.getProcessingPathForFile(materialxml.getAbsolutePath()) + FilenameUtils.getName(materialxml.getAbsolutePath()));
-		
 		processor.startThread();
 	}
 
@@ -129,8 +131,8 @@ public abstract class MaterialProcessingTest {
 		@Override
 		public boolean matches(Object argument) {
 			return argument != null
-					&& ((MediaEnvelope) argument).getFile().getAbsolutePath().equals(
-							materialXmlProcessingFile.getAbsolutePath());
+					&& ((MediaEnvelope) argument).getPickupPackage().getPickUp("xml").getAbsolutePath().equals(
+							materialXMLPath);
 		}
 	};
 

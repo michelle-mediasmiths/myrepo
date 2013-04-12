@@ -1,5 +1,16 @@
 package com.mediasmiths.foxtel.placeholder.validation;
 
+import java.io.File;
+import java.util.List;
+
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConstants;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
@@ -12,11 +23,13 @@ import au.com.foxtel.cf.mam.pms.License;
 import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
+
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -25,15 +38,6 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.validation.MayamValidator;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConstants;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.File;
-import java.util.List;
 
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
@@ -57,14 +61,14 @@ public class PlaceholderMessageValidator extends
 	}
 
 	@Override
-	protected MessageValidationResult validateMessage(String messagePath,PlaceholderMessage message) {
+	protected MessageValidationResult validateMessage(PickupPackage pp, PlaceholderMessage message){
 
 		Actions actions = message.getActions();
 		String messageID = message.getMessageID();
 		String senderID = message.getSenderID();
 		Object privateMessageData = message.getPrivateMessageData();
 
-		if (!validateMesageID(messagePath, messageID)) {
+		if (!validateMesageID(pp.getPickUp("xml").getAbsolutePath(), messageID)) {
 			return MessageValidationResult.INVALID_MESSAGE_ID;
 		}
 
@@ -479,7 +483,7 @@ public class PlaceholderMessageValidator extends
 				// if package already exists, check the materialid matches
 				String parentHouseID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 
-				if (! packageID.equals(parentHouseID))
+				if (! materialID.equals(parentHouseID))
 				{
 					logger.debug(String.format("{%s} ne {%s}", packageID, parentHouseID));
 					logger.error("Package exists but under a different material than specified");
