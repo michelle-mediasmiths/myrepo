@@ -14,8 +14,6 @@ import com.mediasmiths.foxtel.ip.mail.rest.MailAgentServiceImpl;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.DeleteItemsIntable;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.EventMapperThreadManager;
 import com.mediasmiths.foxtel.ip.mail.threadmanager.ReadAndProcessEventingTable;
-import com.mediasmiths.foxtel.ip.mail.thymeleaf.ThymeleafSample;
-import com.mediasmiths.foxtel.ip.mail.thymeleaf.ThymeleafSampleImpl;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
@@ -34,10 +32,6 @@ public class MailAgentModule extends AbstractModule
 		bind(MailAgentService.class).to(MailAgentServiceImpl.class);
 		RestResourceRegistry.register(MailAgentService.class);
 		bind(EmailSenderService.class).to(EmailSenderServiceImpl.class);
-		
-		bind(ThymeleafSample.class).to(ThymeleafSampleImpl.class);
-		RestResourceRegistry.register(ThymeleafSample.class);
-
 
 		// Table Data
 		bind(EventTableDao.class).to(EventTableDaoImpl.class);

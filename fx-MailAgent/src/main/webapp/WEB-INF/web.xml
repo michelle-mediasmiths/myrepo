@@ -3,9 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>fx-mailagent</display-name>
-
+	
 	<!-- REST services -->
-
+	
 	<listener>
 		<listener-class>org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap</listener-class>
 	</listener>
@@ -34,7 +34,7 @@
 
 
 	<!-- Generic Config -->
-
+	
 	<session-config>
 		<!-- Default to 5 minute session timeouts -->
 		<session-timeout>5</session-timeout>
