@@ -3,7 +3,6 @@ package com.mediasmiths.foxtel.ip.mail.templater.templates.content;
 
 import java.util.List;
 
-import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.PurgeNotification;
@@ -14,8 +13,6 @@ import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
-	@Inject
-	private ThymeleafTemplater templater;
 
 	@Override
 	public boolean handles(Object obj)
@@ -24,7 +21,7 @@ public class PurgeEmailTemplate extends MailTemplate implements EmailTemplateGen
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
 		PurgeNotification ajf = (PurgeNotification) obj;
 		MailTemplate t = new MailTemplate();

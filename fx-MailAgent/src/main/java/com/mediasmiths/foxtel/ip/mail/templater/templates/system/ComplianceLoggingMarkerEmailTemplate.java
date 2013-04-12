@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.system;
 
-import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
@@ -10,9 +9,6 @@ import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implements EmailTemplateGenerator
 {
-	@Inject
-	private ThymeleafTemplater templater;
-
 	@Override
 	public boolean handles(Object obj)
 	{
@@ -21,7 +17,7 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
         MailTemplate t = new MailTemplate();
 		ComplianceLoggingMarker clm = (ComplianceLoggingMarker)obj;

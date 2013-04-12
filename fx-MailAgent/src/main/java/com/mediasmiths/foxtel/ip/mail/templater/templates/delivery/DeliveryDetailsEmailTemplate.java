@@ -1,6 +1,5 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.delivery;
 
-import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
@@ -9,8 +8,6 @@ import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class DeliveryDetailsEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
-	@Inject
-	private ThymeleafTemplater templater;
 
 	@Override
 	public boolean handles(Object obj)
@@ -20,7 +17,7 @@ public class DeliveryDetailsEmailTemplate extends MailTemplate implements EmailT
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
          MailTemplate t = new MailTemplate();
 
