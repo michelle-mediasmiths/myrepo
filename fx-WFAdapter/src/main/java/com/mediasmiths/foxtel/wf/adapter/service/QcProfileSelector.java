@@ -67,7 +67,12 @@ public class QcProfileSelector
 	{
 		boolean isMaterialSD = AssetProperties.isMaterialSD(materialAttributes);
 		boolean isMaterialSurround = AssetProperties.isMaterialSurround(materialAttributes);
-
+		boolean isFromDartOrVizCapture = AssetProperties.isFromDARTorVizCapture(materialAttributes);
+		
+		if(isFromDartOrVizCapture){
+			log.info("this content is from dart or vizcap, once we know what they are we can start using the qc profiles that are less strict about audio tracks (MAM-358)");
+		}
+		
 		final String profile;
 
 		if (isMaterialSD)

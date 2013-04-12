@@ -31,6 +31,32 @@ public class AssetProperties
 			return false;
 		}
 	}
+	
+	public static boolean isFromDARTorVizCapture(AttributeMap map)
+	{
+
+		String agg = map.getAttribute(Attribute.AGGREGATOR);
+
+		if (agg == null)
+		{
+			return false;
+		}
+
+		agg = agg.toLowerCase();
+
+		if ("dart".equals(agg))
+		{
+			return true;
+		}
+
+		if ("vizcapture".equals(agg))
+		{
+			return true;
+		}
+
+		return false;
+
+	}
 
 	public static boolean isMaterialSurround(AttributeMap map)
 	{
