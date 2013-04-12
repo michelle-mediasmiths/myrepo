@@ -17,27 +17,39 @@ import org.apache.log4j.Logger;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.std.guice.web.rest.templating.Templater;
 
-public class ThymeleafEmailSender
+
+
+public class EmailWorker implements Runnable
 {
-	public static final Logger log = Logger.getLogger(ThymeleafEmailSender.class);
+	public static final Logger log = Logger.getLogger(EmailWorker.class);
 
+	private final String subject;
 	private final Templater templater;
+	private final String templateName;
 
-	public ThymeleafEmailSender(Templater templater)
+	public EmailWorker(
+			String subject,
+			Templater templater,
+			String templateName)
 	{
+		this.subject = subject;
 		this.templater = templater;
+		this.templateName = templateName;
 	}
 
-	public void run(String templateName, String subject)
+	@Override
+	public void run()
 	{
 		try
 		{
 			TemplateCall call = templater.template(templateName);
-			call.set("job", "testID");
-
 			log.info("Sending email...");
 			String plainEmailText = "";
 			String htmlEmailText = "Not successfully generated";
+
+
+			call.set("job", "testID");
+
 			htmlEmailText = call.process();
 			log.trace("HTML Email:\n" + htmlEmailText);
 
@@ -79,7 +91,7 @@ public class ThymeleafEmailSender
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("matthew.mcparland@mediasmiths.com"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("matthew.mcparland@mediasmiths.com"));
-			
+
 			message.setSubject(subject);
 
 			// message.setText(body);

@@ -1,18 +1,13 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata;
 
-import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
-import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 
 
 public class TcNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
-	@Inject
-	private ThymeleafTemplater templater;
 
 	public TcNotificationEmailTemplate()
 	{
@@ -26,20 +21,20 @@ public class TcNotificationEmailTemplate extends MailTemplate implements EmailTe
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
+	public MailTemplate customiseTemplate(Object obj, String comment)
 	{
 
-		TcNotification tcn = (TcNotification)obj;
+		return getTemplate((TcNotification) obj);
+	}
 
+	MailTemplate getTemplate(TcNotification obj)
+	{
 		MailTemplate t = new MailTemplate();
 
-		t.setSubject(String.format(getSubject(), tcn.getAssetID(), tcn.getTitle()));
+		t.setSubject(String.format(getSubject(), obj.getAssetID(), obj.getTitle()));
+		t.setBody(String.format(getBody(), obj.getDeliveryLocation()));
 		t.setEmailaddresses(getEmailaddresses());
 
-		TemplateCall call = templater.template(templateName);
-		call.set("DeliveryLocation", tcn.getDeliveryLocation());
-
-		t.setBody(call.process());
 		return t;
 	}
 

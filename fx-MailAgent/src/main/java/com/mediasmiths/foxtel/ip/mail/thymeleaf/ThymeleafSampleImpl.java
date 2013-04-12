@@ -14,14 +14,15 @@ public class ThymeleafSampleImpl implements ThymeleafSample
 	{
 		TemplateCall call = templater.template("ThymeleafSampleMail");
 		return call.process();
+	
 	}
 
 	@Override
 	public String sendMail()
 	{
 
-		ThymeleafEmailSender testEmailWorker= new ThymeleafEmailSender(templater);
-		testEmailWorker.run("ThymeleafSampleMail", "ThymeleafSampleMail");
+		EmailWorker testEmailWorker= new EmailWorker("SampleThymeleafSubject", templater, "ThymeleafSampleMail");
+		testEmailWorker.run();
 		return "Check Mail!";
 		
 	}

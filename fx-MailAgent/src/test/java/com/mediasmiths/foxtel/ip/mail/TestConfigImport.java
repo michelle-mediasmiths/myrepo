@@ -45,7 +45,7 @@ public class TestConfigImport
 			//System.out.println(jaxb.serialise(etg));
 			System.out.println(t.getClass().getName());
 
-			MailTemplate temp = t.customiseTemplate(tc, "Hello cruel world", "transcoded");
+			MailTemplate temp = t.customiseTemplate(tc, "Hello cruel world");
 
 			System.out.println(temp.getEmailaddresses());
 			System.out.println(temp.getBody());
