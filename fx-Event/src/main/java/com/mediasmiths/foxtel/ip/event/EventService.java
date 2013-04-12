@@ -10,8 +10,6 @@ import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import org.apache.log4j.Logger;
 
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 
 /**
@@ -29,7 +27,7 @@ public class EventService implements EventHandler
 	protected EventAPI events;
 
 	@Inject
-	protected Marshaller marshaller;
+	protected JAXBSerialiser serialiser;
 
 	@Inject
 	@Named("service.events.namespace")
@@ -140,9 +138,7 @@ public class EventService implements EventHandler
 	 */
 	protected String getSerialisationOf(Object payload) throws JAXBException, UnsupportedEncodingException
 	{
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		marshaller.marshal(payload, baos);
-		return baos.toString("UTF-8");
+		return serialiser.serialise(payload);
 	}
 
 

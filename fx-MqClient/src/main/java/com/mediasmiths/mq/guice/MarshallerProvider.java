@@ -5,18 +5,20 @@ import javax.xml.bind.Marshaller;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
-public class MarshallerProvider implements Provider<Marshaller>
+public class MarshallerProvider implements Provider<JAXBSerialiser>
 {
 
 	@Inject
-	@Named("wfe.marshaller")
-	private Marshaller wfeMarshaller;
+	@Named("wfe.serialiser")
+	private JAXBSerialiser serialiser;
 
 	@Override
-	public Marshaller get()
+	public JAXBSerialiser get()
 	{
-		return wfeMarshaller;
+		return serialiser;
 	}
 
 }
+

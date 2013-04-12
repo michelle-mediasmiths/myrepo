@@ -452,7 +452,7 @@ public class SingleFilePickUp implements IFilePickup
 		pickUpStats.setFilePath(fileRef.getAbsolutePath());
 		pickUpStats.setWaitTime(System.currentTimeMillis() -  fileRef.lastModified());
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,pickUpStats,eventNamespace);
+		if (eventsEnabled) pickUpEventTimer.saveEvent(eventNamespace,eventName,pickUpStats);
 	}
 
 	public File[] getWatchedDirectories()

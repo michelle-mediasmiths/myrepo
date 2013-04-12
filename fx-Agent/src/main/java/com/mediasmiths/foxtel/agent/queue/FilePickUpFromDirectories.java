@@ -380,7 +380,7 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 		pickUpStats.setFilePath(fileRef.getAbsolutePath());
 		pickUpStats.setWaitTime(System.currentTimeMillis() -  fileRef.lastModified());
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,pickUpStats,eventNamespace);
+		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,eventNamespace,pickUpStats);
 	}
 
 	@Override
