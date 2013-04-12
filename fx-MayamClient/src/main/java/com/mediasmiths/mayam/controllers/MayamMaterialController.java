@@ -1382,6 +1382,20 @@ public class MayamMaterialController extends MayamController
 			// create ingest task
 			log.debug("creating new ingest task");
 			taskController.createIngestTaskForMaterial(houseID);
+			
+			try
+			{
+				AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
+				updateMap.setAttribute(Attribute.SEGMENTATION_NOTES, "");
+				log.debug("clearing segmentation notes");
+				client.assetApi().updateAsset(updateMap);
+			}
+			catch (RemoteException e)
+			{
+				log.error("error clearing segmentation notes during uningest", e);
+				//segmentation notes are only for reference, just going to catch this exception
+			}
+
 		}
 	}
 
