@@ -14,7 +14,7 @@ public class TestConfigImport
 	static EventMailConfiguration conf;
 	static JAXBSerialiser jaxb;
 
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		String configFilePath = "/tmp/config.xml";
 
@@ -45,13 +45,13 @@ public class TestConfigImport
 			//System.out.println(jaxb.serialise(etg));
 			System.out.println(t.getClass().getName());
 
-			MailTemplate temp = t.customiseTemplate(tc, "Hello cruel world");
+			MailTemplate temp = t.customiseTemplate(tc, "Hello cruel world", "transcoded");
 
 			System.out.println(temp.getEmailaddresses());
 			System.out.println(temp.getBody());
 
 			System.out.println(temp.getSubject());
 
-		}
+		}*/
 
 }
