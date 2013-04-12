@@ -1,8 +1,14 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
@@ -12,10 +18,6 @@ import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord.Material.IngestRecords;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
-import javax.xml.bind.Unmarshaller;
 
 public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 {
@@ -23,7 +25,7 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 	private final static Logger log = Logger.getLogger(RuzzValidator.class);
 
 	private final MayamClient mayamClient;
-	
+
 	@Inject
 	public RuzzValidator(
 			@Named("ruzz.unmarshaller") Unmarshaller unmarshaller,
@@ -32,11 +34,11 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 			@Named("ruzz.schema.validator") SchemaValidator schemaValidator) throws SAXException
 	{
 		super(unmarshaller, receiptWriter, schemaValidator);
-		this.mayamClient=mayamClient;
+		this.mayamClient = mayamClient;
 	}
 
 	@Override
-	protected MessageValidationResult validateMessage(String messagePath, RuzzIngestRecord message)
+	protected MessageValidationResult validateMessage(PickupPackage pp, RuzzIngestRecord message)
 	{
 		try
 		{
@@ -52,24 +54,26 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 	private MessageValidationResult validateMaterial(Material material) throws MayamClientException
 	{
 		String materialID = material.getMaterialID();
-		
-		if(! mayamClient.materialExists(materialID)){
-			log.error(String.format("material %s does not exist",materialID));
+
+		if (!mayamClient.materialExists(materialID))
+		{
+			log.error(String.format("material %s does not exist", materialID));
 			return MessageValidationResult.MATERIAL_DOES_NOT_EXIST;
 		}
-		
-		if(! mayamClient.isMaterialPlaceholder(materialID)){
-			log.error(String.format("material %s not a placeholder",materialID));
+
+		if (!mayamClient.isMaterialPlaceholder(materialID))
+		{
+			log.error(String.format("material %s not a placeholder", materialID));
 			return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
 		}
 
-
-		if(mayamClient.materialHasPassedPreview(materialID)){
+		if (mayamClient.materialHasPassedPreview(materialID))
+		{
 			return MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW;
 		}
 
-		log.info("validating message for material"+materialID);
-		
+		log.info("validating message for material" + materialID);
+
 		MessageValidationResult detailsValid = validateDetails(material.getDetails(), materialID);
 
 		if (!detailsValid.equals(MessageValidationResult.IS_VALID))
@@ -78,13 +82,13 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 			return detailsValid;
 		}
 
-		MessageValidationResult ingestRecordValid = validateIngestRecord(material.getIngestRecords(),materialID);
+		MessageValidationResult ingestRecordValid = validateIngestRecord(material.getIngestRecords(), materialID);
 		if (!ingestRecordValid.equals(MessageValidationResult.IS_VALID))
 		{
 			log.error("ingest record did not validate");
 			return ingestRecordValid;
 		}
-		
+
 		MessageValidationResult segmentDataValid = validateSegmentInfo(material.getIngestRecords(), materialID);
 
 		if (!segmentDataValid.equals(MessageValidationResult.IS_VALID))
@@ -92,21 +96,19 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 			log.error("segmentation data did not validate");
 			return segmentDataValid;
 		}
-		
+
 		return MessageValidationResult.IS_VALID;
 	}
 
 	private MessageValidationResult validateSegmentInfo(IngestRecords ingestRecords, String materialID)
 	{
-		// TODO validate segment info
-		log.warn("no attempt made to validate segmentation information");
+		log.info("no attempt made to validate segmentation information beyond xsd compliance");
 		return MessageValidationResult.IS_VALID;
 	}
 
 	private MessageValidationResult validateIngestRecord(IngestRecords ingestRecords, String materialID)
 	{
-		// TODO validate ingest record
-		log.warn("no attempt made to validate ingest record");
+		log.info("no attempt made to validate ingest record beyond xsd compliance");
 		return MessageValidationResult.IS_VALID;
 	}
 

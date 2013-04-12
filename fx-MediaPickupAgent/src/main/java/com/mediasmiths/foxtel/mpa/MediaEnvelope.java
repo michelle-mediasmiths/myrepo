@@ -1,49 +1,27 @@
 package com.mediasmiths.foxtel.mpa;
 
-import java.io.File;
-
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 
 public class MediaEnvelope<T> extends MessageEnvelope<T>
 {
 
 	private String masterID;
 
-	private final boolean quarrentineOnMatch;
-	private final boolean failOnMatch;
-
-	public MediaEnvelope(File file, T message)
+	public MediaEnvelope(PickupPackage p, T message)
 	{
-		this(file, message, false,false);
-	}
-
-	public MediaEnvelope(File file, T message, boolean quarrentineOnMatch, boolean failOnMatch)
-	{
-		super(file, message);
-		this.quarrentineOnMatch = quarrentineOnMatch;
-		this.failOnMatch = failOnMatch;
-	}
-
-	public MediaEnvelope(File file, T message, String masterID)
-	{
-		this(file, message, masterID, false, false);
-	}
-
-	public MediaEnvelope(File file, T message, String masterID, boolean quarrentineOnMatch, boolean failOnMatch)
-	{
-		this(file, message, quarrentineOnMatch,failOnMatch);
-		setMasterID(masterID);
+		super(p, message);
 	}
 
 	public MediaEnvelope(MessageEnvelope<T> envelope, String masterID)
 	{
-		this(envelope.getFile(), envelope.getMessage(), masterID, false,false);
+		this(envelope.getPickupPackage(), envelope.getMessage(), masterID);
 	}
 
-	public MediaEnvelope(MessageEnvelope<T> envelope, String masterID, boolean quarrentineOnMatch, boolean failOnMatch)
+	public MediaEnvelope(PickupPackage p, T message, String masterID)
 	{
-		this(envelope.getFile(), envelope.getMessage(), masterID, quarrentineOnMatch, failOnMatch);
+		this(p, message);
+		setMasterID(masterID);
 	}
 
 	public String getMasterID()
@@ -51,17 +29,8 @@ public class MediaEnvelope<T> extends MessageEnvelope<T>
 		return masterID;
 	}
 
-	public final void setMasterID(String masterID)
+	public void setMasterID(String masterid)
 	{
-		this.masterID = masterID;
-	}
-
-	public boolean isQuarrentineOnMatch()
-	{
-		return quarrentineOnMatch;
-	}
-	
-	public boolean isFailOnMatch(){
-		return failOnMatch;
+		this.masterID = masterid;
 	}
 }

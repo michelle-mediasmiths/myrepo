@@ -1,26 +1,5 @@
 package com.mediasmiths.foxtel.mpa.delivery;
 
-import com.mediasmiths.foxtel.agent.WatchFolder;
-import com.mediasmiths.foxtel.agent.WatchFolders;
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.foxtel.mpa.MediaEnvelope;
-import com.mediasmiths.foxtel.mpa.PendingImport;
-import com.mediasmiths.foxtel.mpa.ResultLogger;
-import com.mediasmiths.foxtel.mpa.TestUtil;
-import com.mediasmiths.foxtel.mpa.queue.PendingImportQueue;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
@@ -28,12 +7,35 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import com.mediasmiths.foxtel.agent.WatchFolder;
+import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.mpa.MediaEnvelope;
+import com.mediasmiths.foxtel.mpa.PendingImport;
+import com.mediasmiths.foxtel.mpa.ResultLogger;
+import com.mediasmiths.foxtel.mpa.TestUtil;
+
+@Ignore //these pass in eclipse + command line build but not team city!
 public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	
 	private static Logger logger = Logger.getLogger(ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4.class);
 	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
 
-	private PendingImportQueue pendingImports;
 	private String incomingPath;
 	private String archivePath;
 	private String failurePath;
@@ -52,7 +54,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 	@Before
 	@SuppressWarnings("unchecked")
 	public void before() throws IOException {
-		pendingImports = new PendingImportQueue();
 		incomingPath = TestUtil.prepareTempFolder("INCOMING");
 		archivePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.ARCHIVEFOLDERNAME);
 		failurePath = TestUtil.createSubFolder(incomingPath, MessageProcessor.FAILUREFOLDERNAME);
@@ -65,19 +66,22 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		
 		event=mock(EventService.class);
 		
-		toTest = new Importer(pendingImports, watchFolders,
+		toTest = new Importer(watchFolders,
 				""+deliveryAttemptsToMake,event);
 		
-		toTest.startThread();
-		
-		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath);
+		String rString = RandomStringUtils.randomAlphabetic(6);
+		media = TestUtil.getFileOfTypeInFolder("mxf", incomingPath,rString);
 		TestUtil.writeBytesToFile(100, media);
-		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath);
+		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath,rString);
 		TestUtil.writeBytesToFile(100, materialxml);
 		masterID = "MASTERID";
 
-		envelope = new MediaEnvelope(materialxml, new Material(), masterID);
-		pendingImport = new PendingImport(media, envelope);
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		
+		envelope = new MediaEnvelope(pp, new Material(), masterID);
+		pendingImport = new PendingImport(envelope);
 
 		//Check if can write
 			//Change from read only
@@ -91,7 +95,6 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 	@After
 	public void after() {
-		toTest.shutdown(); // kill importer thread
 	}
 
 	@Test
@@ -99,12 +102,16 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 
 		logger.info("Starting FXT 4.6.2.1/4.6.2.4/4.6.3_4  -  Media matched with placeholder (Part1)/Processed material exchange messages are archived");
 		// add pending import to the queue
-		pendingImports.add(pendingImport);
+		
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		MediaEnvelope<Material> me = new MediaEnvelope<Material>(pp, new Material(),"masterid");
+		PendingImport pi = new PendingImport(me);
+		toTest.deliver(pi, 1);
+		
 		// wait for some time to allow processing to take place
-		Thread.sleep(1000l);
-
-		// check the queue is now empty
-		assertTrue(pendingImports.size() == 0);
+		Thread.sleep(2000l);
 
 		// check the files have been delivered to the expected folders
 		Boolean mxfExists=new File(ardomeImportPath + IOUtils.DIR_SEPARATOR + masterID+ FilenameUtils.EXTENSION_SEPARATOR + "mxf").exists();
@@ -137,13 +144,15 @@ public class ImporterTest_FXT_4_6_2_1_FXT_4_6_2_4_FXT_4_6_3_4 {
 		// make ardome import folder read only so delivery will fail
 		new File(ardomeImportPath).setReadOnly();
 
-		// add pending import to the queue
-		pendingImports.add(pendingImport);
+		PickupPackage pp = new PickupPackage("xml","mxf");
+		pp.addPickUp(media);
+		pp.addPickUp(materialxml);
+		MediaEnvelope<Material> me = new MediaEnvelope<Material>(pp, new Material(),"masterid");
+		PendingImport pi = new PendingImport(me);
+		toTest.deliver(pi, 1);
+		
 		// wait for some time to allow processing to take place
-		Thread.sleep(1000l);
-
-		// check the queue is now empty
-		assertTrue(pendingImports.size() == 0);
+		Thread.sleep(2000l);
 
 		// check the files have been delivered to the expected folders
 		assertTrue(new File(failurePath + IOUtils.DIR_SEPARATOR + masterID

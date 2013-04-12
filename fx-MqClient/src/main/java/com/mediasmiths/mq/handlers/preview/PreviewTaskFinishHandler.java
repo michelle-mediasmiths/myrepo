@@ -1,18 +1,24 @@
 package com.mediasmiths.mq.handlers.preview;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
 import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -21,6 +27,13 @@ import java.util.Set;
 public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 {
 
+	@Inject
+	private PreviewEventUtil previewEvent;
+	
+	@Inject(optional = false)
+	@Named("preview.events.namespace")
+	private String qaEventNamespace;
+	
 	private final static Logger log = Logger.getLogger(PreviewTaskFinishHandler.class);
 
 	@Override
@@ -34,6 +47,9 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 		{
 			log.error("Exception in the Mayam client while handling Preview Task Finish : ", e);
 		}
+		
+		
+		
 	}
 	
 	private void onPreviewFinished(AttributeMap messageAttributes) throws MayamClientException, RemoteException
@@ -113,6 +129,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 					sendReorderEvent(messageAttributes, "PreviewFixReorder");
 				}
 			}
+			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),reorder,previewResult,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));
 		}
 
 	}

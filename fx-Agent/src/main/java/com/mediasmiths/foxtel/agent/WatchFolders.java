@@ -3,10 +3,7 @@ package com.mediasmiths.foxtel.agent;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
-
-import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 
 public class WatchFolders extends ArrayList<WatchFolder>
 {

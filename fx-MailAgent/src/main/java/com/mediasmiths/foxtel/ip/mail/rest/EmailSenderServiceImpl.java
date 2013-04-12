@@ -115,7 +115,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		props.put("mail.smtp.password", emailProperties.password);
 		props.put("mail.smtp.port", emailProperties.smtpPort);
 		props.put("mail.smtp.auth", "false");
-
+		
 		logger.info("Creating Mime mail message to... " + to);
 
 		Session session = Session.getDefaultInstance(props, null);

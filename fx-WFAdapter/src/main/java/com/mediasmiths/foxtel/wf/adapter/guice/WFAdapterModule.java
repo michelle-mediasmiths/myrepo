@@ -2,20 +2,18 @@ package com.mediasmiths.foxtel.wf.adapter.guice;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.MembersInjector;
-import com.google.inject.Provider;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestService;
 import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestServiceImpl;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 public class WFAdapterModule extends AbstractModule
 {
@@ -29,82 +27,7 @@ public class WFAdapterModule extends AbstractModule
 		MembersInjector<EventService> membersInjector = getMembersInjector(EventService.class);
 		// make the wfe types marshaler the default instance
 		// the marshaler in events service is not named and we have multiple marshalers used for different schemas
-		bind(Marshaller.class).toProvider(WfeMarshallerProvider.class);
-	}
-
-	@Provides
-	@Named("mex.marshaller")
-	Marshaller provideMexMarshaller(@Named("mex.context") JAXBContext jc) throws JAXBException, SAXException
-	{
-		Marshaller marshaller = null;
-		try
-		{
-			marshaller = jc.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-		}
-		catch (JAXBException e)
-		{
-			logger.fatal("Could not create marshaller", e);
-			throw e;
-		}
-		return marshaller;
-	}
-
-	@Provides
-	@Named("outputruzz.marshaller")
-	Marshaller provideRuzzMarshaller(@Named("outputruzz.context") JAXBContext jc) throws JAXBException, SAXException
-	{
-		Marshaller marshaller = null;
-		try
-		{
-			marshaller = jc.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-		}
-		catch (JAXBException e)
-		{
-			logger.fatal("Could not create marshaller", e);
-			throw e;
-		}
-		return marshaller;
-	}
-
-	
-	@Provides
-	@Named("wfe.marshaller")
-	Marshaller provideWFEMarshaller(@Named("wfe.context") JAXBContext jc) throws JAXBException, SAXException
-	{
-		Marshaller marshaller = null;
-		try
-		{
-			marshaller = jc.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-		}
-		catch (JAXBException e)
-		{
-			logger.fatal("Could not create marshaller", e);
-			throw e;
-		}
-		return marshaller;
-	}
-
-	@Provides
-	@Named("mex.context")
-	JAXBContext provideMEXJAXBContext() throws JAXBException
-	{
-		JAXBContext jc = null;
-		try
-		{
-			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.mediaexchange");
-		}
-		catch (JAXBException e)
-		{
-			logger.fatal("Could not create jaxb context", e);
-			throw e;
-		}
-		return jc;
+		bind(JAXBSerialiser.class).toProvider(WfeSerialiserProvider.class);
 	}
 
 	@Provides
@@ -125,6 +48,43 @@ public class WFAdapterModule extends AbstractModule
 	}
 
 	@Provides
+	@Singleton
+	@Named("outputruzz.serialiser")
+	JAXBSerialiser provideRUZZJAXBSerialiser(@Named("outputruzz.context") JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
+	}
+
+	@Provides
+	@Named("mex.context")
+	JAXBContext provideMEXJAXBContext() throws JAXBException
+	{
+		JAXBContext jc = null;
+		try
+		{
+			jc = JAXBContext.newInstance("com.mediasmiths.foxtel.generated.mediaexchange");
+		}
+		catch (JAXBException e)
+		{
+			logger.fatal("Could not create jaxb context", e);
+			throw e;
+		}
+		return jc;
+	}
+
+	@Provides
+	@Singleton
+	@Named("mex.serialiser")
+	JAXBSerialiser provideMEXJAXBSerialiser(@Named("mex.context") JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
+	}
+	
+	@Provides
 	@Named("wfe.context")
 	JAXBContext provideWFEJAXBContext() throws JAXBException
 	{
@@ -139,6 +99,16 @@ public class WFAdapterModule extends AbstractModule
 			throw e;
 		}
 		return jc;
+	}
+	
+	@Provides
+	@Singleton
+	@Named("wfe.serialiser")
+	JAXBSerialiser provideWFEJAXBSerialiser(@Named("wfe.context") JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
 	}
 
 }

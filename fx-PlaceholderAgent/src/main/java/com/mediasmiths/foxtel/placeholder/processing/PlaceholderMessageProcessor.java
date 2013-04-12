@@ -1,5 +1,20 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ChannelType;
@@ -12,6 +27,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -19,8 +35,9 @@ import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
@@ -31,20 +48,6 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -66,7 +69,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	
 	@Inject
 	public PlaceholderMessageProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			IFilePickup filePickup,
 			PlaceholderMessageValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
@@ -74,7 +77,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			MayamClient mayamClient,
 			EventService eventService)
 	{
-		super(filePathsPendingProcessing, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
+		super(filePickup, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
 		this.mayamClient = mayamClient;
 	}
 
@@ -345,9 +348,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	@Override
 	public void processMessage(MessageEnvelope<PlaceholderMessage> envelope) throws MessageProcessingFailedException
 	{
-
 		PlaceholderMessage message = envelope.getMessage();
-
 		Object action = message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
 		boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
@@ -421,13 +422,6 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 
 	@Override
-	protected void processNonMessageFile(String filePath)
-	{
-		logger.error("Placeholder Agent does not expect non message files, moving to failure folder");
-		moveFileToFailureFolder(new File(filePath));
-	}
-
-	@Override
 	protected boolean shouldArchiveMessages()
 	{
 		return true;
@@ -460,49 +454,49 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	}
 	
 	@Override
-	protected void messageValidationFailed(String filePath, MessageValidationResult result)
+	protected void messageValidationFailed(MessageValidationResultPackage<PlaceholderMessage> resultPackage)
 	{
+		
+		MessageValidationResult result = resultPackage.getResult();
 
 		logger.warn(String.format(
 				"Validation of Placeholder management message %s failed for reason %s",
-				FilenameUtils.getName(filePath),
-				result.toString()));
-		
-		String message;
-		try{
-			message = FileUtils.readFileToString(new File(filePath));
-		}
-		catch(IOException e){
-			logger.warn("IOException reading "+filePath,e);
-			message = filePath;
-		}
-		
+				resultPackage.getPp().getRootName(),
+				resultPackage.getResult().toString()));
 		try
 		{
-			mayamClient.createWFEErrorTaskNoAsset(FilenameUtils.getName(filePath), "Invalid Placeholder Message Received", String.format("Failed to validate %s for reason %s",filePath,result.toString()));
+			mayamClient.createWFEErrorTaskNoAsset(
+					resultPackage.getPp().getRootName(),
+					"Invalid Placeholder Message Received",
+					String.format(
+							"Failed to validate %s for reason %s",
+							resultPackage.getPp().getPickUp("xml").getAbsolutePath(),
+							resultPackage.getResult()));
 		}
 		catch (MayamClientException e)
 		{
-			logger.error("Failed to create wfe error task",e);
+			logger.error("Failed to create wfe error task", e);
 		}
+		
+		moveFileToFailureFolder(resultPackage.getPp().getPickUp("xml"));
+				
 		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED || result==MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
 		{
 			ProtectedPurgeFail ppf = createPurgeFailedMessage();
-			
+
 			try
 			{
-				File deleteFile = new File(filePath);
-				Object unmarshalled = unmarhsaller.unmarshal(deleteFile);
-				PlaceholderMessage deleteMessage = (PlaceholderMessage) unmarshalled;
+				PlaceholderMessage message = resultPackage.getMessage();
+				PlaceholderMessage deleteMessage = message;
 				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
-				
+
 				String titleID = null;
 				if (action instanceof PurgeTitle)
 				{
 					ppf.setAssetType("EPISODE");
-					
+
 					titleID = ((PurgeTitle) action).getTitleID(); 
-					
+
 					ppf.setHouseId(titleID);
 				}
 				else if (action instanceof DeleteMaterial)
@@ -517,20 +511,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					titleID = ((DeletePackage) action).getTitleID();
 					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
 				}
-				
+
 				if(titleID != null){
 					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
 					ppf.getChannelGroup().addAll(channelsForTitle);
 				}
-				
-			}
-			catch (JAXBException e)
-			{
-				logger.fatal("error unmarshall the filepath " + filePath, e);
-			}
-			catch (ClassCastException cce)
-			{
-				logger.fatal("error in cast the file " + filePath, cce);
+
 			}
 			catch(MayamClientException e){
 				logger.error("error getting channel groups for title",e);
@@ -538,11 +524,12 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
-		else{
-			eventService.saveEvent("failed",message);
+		else
+		{
+			eventService.saveEvent("failed", resultPackage.getMessage());
 		}
 	}
-	
+
 	private ProtectedPurgeFail createPurgeFailedMessage ()
 	{
 		ProtectedPurgeFail purgeMessage = new ProtectedPurgeFail();

@@ -1,19 +1,19 @@
 package com.mediasmiths.foxtel.agent.queue;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
-import com.mediasmiths.foxtel.ip.common.events.FilePickup;
-import com.mediasmiths.foxtel.ip.event.EventService;
-
-import org.apache.log4j.Logger;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
+import com.mediasmiths.foxtel.ip.common.events.FilePickup;
+import com.mediasmiths.foxtel.ip.event.EventService;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -380,7 +380,7 @@ public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 		pickUpStats.setFilePath(fileRef.getAbsolutePath());
 		pickUpStats.setWaitTime(System.currentTimeMillis() -  fileRef.lastModified());
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,pickUpStats,eventNamespace);
+		if (eventsEnabled) pickUpEventTimer.saveEvent(eventName,eventNamespace,pickUpStats);
 	}
 
 	@Override

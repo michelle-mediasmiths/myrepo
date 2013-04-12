@@ -1,7 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.validmessagepickup;
 
-import java.io.File;
-
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
@@ -9,7 +7,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
-import com.mediasmiths.foxtel.agent.queue.FilePickUpProcessingQueue;
+import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.placeholder.processing.PlaceholderMessageProcessor;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
@@ -25,14 +24,14 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 
 	@Inject
 	public SingleMessageProcessor(
-			FilePickUpProcessingQueue filePathsPendingProcessing,
+			IFilePickup filePickup,
 			PlaceholderMessageValidator messageValidator,
 			ReceiptWriter receiptWriter,
 			Unmarshaller unmarhsaller,
 			Marshaller marshaller,
 			MayamClient mayamClient,
 			EventService eventService) {
-		super(filePathsPendingProcessing, messageValidator, receiptWriter,
+		super(filePickup, messageValidator, receiptWriter,
 				unmarhsaller,marshaller, mayamClient, eventService);
 	}
 
@@ -46,9 +45,8 @@ public class SingleMessageProcessor extends PlaceholderMessageProcessor {
 
 		logger.trace("SingleMessageProcessor.run() enter");
 
-		File file = getFilePathsPending().take();
-		String filePath = file.getAbsolutePath();
-		validateThenProcessFile(filePath);
+		PickupPackage pp = getFilePickup().take();
+		validateThenProcessPickupPackage(pp);
 
 		logger.trace("SingleMessageProcessor.run() exit");
 

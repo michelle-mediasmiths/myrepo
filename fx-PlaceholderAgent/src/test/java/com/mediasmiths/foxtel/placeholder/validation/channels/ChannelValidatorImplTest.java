@@ -6,8 +6,6 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Properties;
-
 import org.junit.Before;
 import org.junit.Test;
 

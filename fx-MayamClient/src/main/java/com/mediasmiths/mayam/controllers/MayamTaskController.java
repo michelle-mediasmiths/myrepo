@@ -868,20 +868,26 @@ public class MayamTaskController extends MayamController
 					criteria.getFilterEqualities().setAttribute(
 							Attribute.ASSET_ID,childAssetID);
 
-					FilterResult result = client.taskApi().getTasks(criteria, 100, 0);
+					FilterResult result = client.taskApi().getTasks(criteria, 10, 0);
 
-					log.debug(String.format("%d tasks returned, not trying to close any just yet", result.getMatches().size()));
+					log.debug(String.format("%d tasks returned", result.getMatches().size()));
 
-//					List<AttributeMap> tasks = result.getMatches();
-//
-//					for (AttributeMap task : tasks)
-//					{
-//						TaskState state = task.getAttribute(Attribute.TASK_STATE);
-//
-//							AttributeMap updateMap = updateMapForTask(task);
-//							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-//							client.taskApi().updateTask(updateMap);
-//					}
+					List<AttributeMap> tasks = result.getMatches();
+
+					for (AttributeMap task : tasks)
+					{
+						try
+						{
+							AttributeMap updateMap = updateMapForTask(task);
+							updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+							log.debug("removing task "+task.getAttributeAsString(Attribute.TASK_ID));
+							client.taskApi().updateTask(updateMap);
+						}
+						catch (RemoteException re)
+						{
+							log.error("error closing purge candidate task ", re);
+						}
+					}
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.preview;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
@@ -19,6 +20,9 @@ import java.util.Set;
 public class PreviewTaskFailHandler extends TaskStateChangeHandler
 {
 
+	@Inject
+	private PreviewEventUtil previewEvent;
+	
 	private final static Logger log = Logger.getLogger(PreviewTaskFailHandler.class);
 
 	@Override
@@ -32,6 +36,8 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		{
 			log.error("Exception in the Mayam client while handling Preview Task failure : ", e);
 		}
+		
+		//TODO send manual qa event
 	}
 
 	private void onPreviewFailure(AttributeMap messageAttributes) throws MayamClientException
@@ -70,7 +76,8 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			}
 			
 			eventsService.saveEvent("http://www.foxtel.com.au/ip/preview", "PreviewFailed", pf);
-
+			
+			previewEvent.sendManualQANotification(messageAttributes,getTaskState(),true,MayamPreviewResults.PREVIEW_FAIL,(String) messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY));
 		}
 	}
 

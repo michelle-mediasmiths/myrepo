@@ -7,6 +7,8 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
+import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -19,7 +21,7 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
 
 		MailTemplate t = new MailTemplate();
@@ -33,10 +35,10 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 		
 		t.setSubject(String.format(getSubject(), pe.getAssetId(), pe.getTitle()));
 		
-		t.setBody(getBody());
+		TemplateCall call = templater.template(templateName);
+		t.setBody(call.process());
 
 		return t;
-
 	}
 
 }

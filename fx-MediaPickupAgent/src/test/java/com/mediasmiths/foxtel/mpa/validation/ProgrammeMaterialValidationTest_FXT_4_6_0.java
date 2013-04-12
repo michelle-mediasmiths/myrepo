@@ -10,7 +10,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -34,7 +33,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 	public void testMaterialNoPackages() throws Exception{
 		
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER);
-		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material));
+		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material,true));
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
 		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
@@ -79,7 +78,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 
 		Material material = ProgrammeMaterialTest.getMaterialNoPackages(EXISTING_TITLE, EXISTING_MATERIAL_NOT_PLACEHOLDER);
 				
-		MessageValidationResult validateFile = validationForMaterial(material);
+		MessageValidationResult validateFile = validationForMaterial(material,true);
 		if (MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER==validateFile)
 		{
 			resultLogger.info("FXT 4.6.0.5  - Programme material message references non placeholder item --Passed");
@@ -103,7 +102,7 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		packageids.add(EXISTING_PACKAGE2);
 		
 		Material material = ProgrammeMaterialTest.getMaterialWithPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER, packageids);
-		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material));
+		assertEquals(MessageValidationResult.IS_VALID,validationForMaterial(material,true));
 		
 		
 		verify(mayamClient).titleExists(EXISTING_TITLE);
@@ -112,53 +111,6 @@ public class ProgrammeMaterialValidationTest_FXT_4_6_0 extends ValidationTest {
 		
 	}
 	
-	@Test
-	@Ignore //CR018
-	public void testPackageDoesntExist_FXT_4_6_0_4() throws Exception{
-		logger.info("Starting FXT 4.6.0.4  - Programme material message references non existant package(s)");
-		List<String> packageids = new ArrayList<String>();
-		packageids.add(EXISTING_PACKAGE);
-		packageids.add(NOT_EXISTING_PACKAGE);
-		
-		Material material = ProgrammeMaterialTest.getMaterialWithPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER, packageids);
-		
-		
-		MessageValidationResult validateFile = validationForMaterial(material);
-		if (MessageValidationResult.PACKAGE_DOES_NOT_EXIST==validateFile)
-		{
-			resultLogger.info("FXT 4.6.0.4  - Programme material message references non existant package(s) --Passed");
-		}
-		else
-		{
-			resultLogger.info("FXT 4.6.0.4  - Programme material message references non existant package(s) --Failed");
-		}
-		assertEquals(MessageValidationResult.PACKAGE_DOES_NOT_EXIST,validateFile);
-		
-		
-		
-		verify(mayamClient).titleExists(EXISTING_TITLE);
-		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-	}
-	
-	@Test
-	@Ignore //CR018	
-	public void testPackageCheckFails() throws Exception {
-		List<String> packageids = new ArrayList<String>();
-		packageids.add(EXISTING_PACKAGE);
-		packageids.add(EXISTING_PACKAGE_CHECK_FAILS);
-		
-		Material material = ProgrammeMaterialTest.getMaterialWithPackages(EXISTING_TITLE, EXISTING_MATERIAL_IS_PLACEHOLDER, packageids);
-		assertEquals(MessageValidationResult.MAYAM_CLIENT_ERROR,validationForMaterial(material));
-		
-		
-		verify(mayamClient).titleExists(EXISTING_TITLE);
-		verify(mayamClient).materialExists(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).isMaterialPlaceholder(EXISTING_MATERIAL_IS_PLACEHOLDER);
-		verify(mayamClient).packageExists(EXISTING_PACKAGE);
-		verify(mayamClient).packageExists(EXISTING_PACKAGE_CHECK_FAILS);
-	}
-
 	@Test
 	public void testMaterialDoesntExist_FXT_4_6_0_3() throws Exception {
 		logger.info("Starting FXT 4.6.0.3  - Programme material message references unknown material");

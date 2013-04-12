@@ -7,11 +7,11 @@ import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
+import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class MediaPickUpNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
-{
-
-
+{	
 	@Override
 	public boolean handles(Object obj)
 	{
@@ -19,7 +19,7 @@ public class MediaPickUpNotificationEmailTemplate extends MailTemplate implement
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
 		MailTemplate t = new MailTemplate();
 
@@ -32,6 +32,13 @@ public class MediaPickUpNotificationEmailTemplate extends MailTemplate implement
 		t.setBody(getBody());
 		t.setSubject(String.format(getSubject(), m.getFilelocation()));
 		t.setBody(String.format(getBody(), m.getFilelocation()));
+		
+		TemplateCall call = templater.template(templateName);
+		call.set("Placeholder", m.getFilelocation());
+		call.set("QuarantinedLocation", m.getFilelocation());
+		call.set("Material", m.getFilelocation());
+
+		t.setBody(call.process());
 		return t;
 	}
 

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
@@ -20,6 +19,7 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
@@ -38,28 +38,30 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageNotProtected() throws IOException, Exception {
 		
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
-		File temp = createTempXMLFile(pm, "validDeletePackageMaterialNotProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeletePackageMaterialNotProtected");
 		
 		when(mayamClient.packageExists(EXISTING_PACKAGE_ID)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(EXISTING_PACKAGE_ID)).thenReturn(false);
 		
-		assertEquals(MessageValidationResult.IS_VALID,validator.validateFile(temp.getAbsolutePath()));
+		assertEquals(MessageValidationResult.IS_VALID,validator.validatePickupPackage(pp).getResult());
 		verify(mayamClient).isTitleOrDescendentsProtected(EXISTING_TITLE);
-		Util.deleteFiles(temp.getAbsolutePath());
+
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
 	@Category(ValidationTests.class)
 	public void testDeletePackageIsProected() throws IOException, Exception {
 		PlaceholderMessage pm = buildDeletePackageRequest(false,PROTECTED_TITLE,PROTECTED_PACKAGE); 
-		File temp = createTempXMLFile(pm, "validDeletePackageMaterialProtected");
+		PickupPackage pp = createTempXMLFile (pm, "validDeletePackageMaterialProtected");
 		
 		when(mayamClient.packageExists(PROTECTED_PACKAGE)).thenReturn(true);
 		when(mayamClient.isTitleOrDescendentsProtected(PROTECTED_TITLE)).thenReturn(true);
-		
-		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validateFile(temp.getAbsolutePath()));
+
+		assertEquals(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED,validator.validatePickupPackage(pp).getResult());
 		verify(mayamClient).isTitleOrDescendentsProtected(PROTECTED_TITLE);
-		Util.deleteFiles(temp.getAbsolutePath());
+
+		Util.deleteFiles(pp);
 	}
 	
 	@Test
@@ -67,7 +69,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageProcessing() throws MessageProcessingFailedException{
 		
 		PlaceholderMessage pm =buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
-		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);
+		MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);
 		
 		DeletePackage dp = (DeletePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -88,7 +90,7 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	public void testDeletePackageProcessingFails() throws MessageProcessingFailedException{
 		
 	PlaceholderMessage pm =buildDeletePackageRequest(false,EXISTING_TITLE,EXISTING_PACKAGE_ID);
-	MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new File("/dev/null"), pm);	
+	MessageEnvelope<PlaceholderMessage> envelope = new MessageEnvelope<PlaceholderMessage>(new PickupPackage("xml"), pm);	
 	
 		DeletePackage dp = (DeletePackage) pm.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 		
@@ -104,15 +106,15 @@ public class DeletePackageTest extends PlaceHolderMessageShortTest {
 	@Category(ValidationTests.class)
 	public void testDeletePackageRequestFail() throws IOException, Exception{
 		PlaceholderMessage pm = buildDeletePackageRequest(false,EXISTING_TITLE,ERROR_PACKAGE_ID);
-		File temp = createTempXMLFile(pm, "validDeletePackageRequestFailure");
+		PickupPackage pp = createTempXMLFile (pm, "validDeletePackageRequestFailure");
 		
 		when(mayamClient.isTitleOrDescendentsProtected(ERROR_TITLE_ID)).thenThrow(new MayamClientException(MayamClientErrorCode.FAILURE));
 		
 		// try to call validation, expect a mayam client error
 		assertEquals(
 				MessageValidationResult.MAYAM_CLIENT_ERROR,
-				validator.validateFile(temp.getAbsolutePath()));
-		Util.deleteFiles(temp.getAbsolutePath());
+				validator.validatePickupPackage(pp).getResult());
+		Util.deleteFiles(pp);
 	}
 	
 	private PlaceholderMessage buildDeletePackageRequest(boolean b,

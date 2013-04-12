@@ -15,6 +15,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
+import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
@@ -137,10 +138,14 @@ public class IngestJobHandler extends JobHandler
 	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
 	{
 		log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-		AttributeMap updateMap = taskController.updateMapForTask(task);
-		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-		updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
-		taskController.saveTask(updateMap);
+		JobSubType jobSubType = jobMessage.getJobSubType();
+		if (null == jobSubType || (!jobSubType.equals(JobSubType.DART)))
+		{
+			AttributeMap updateMap = taskController.updateMapForTask(task);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+			updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
+			taskController.saveTask(updateMap);
+		}
 		
 		try {
 			GregorianCalendar c = new GregorianCalendar();
