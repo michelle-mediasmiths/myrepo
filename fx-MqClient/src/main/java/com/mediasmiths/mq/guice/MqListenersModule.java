@@ -18,7 +18,7 @@ public class MqListenersModule extends AbstractModule
 		MembersInjector<EventService> membersInjector = getMembersInjector(EventService.class);
 		// make the wfe types marshaler the default instance
 		// the marshaler in events service is not named and we have multiple marshalers used for different schemas
-		bind(JAXBSerialiser.class).toProvider(MarshallerProvider.class);
+		bind(JAXBSerialiser.class).toProvider(SerialiserProvider.class);
 
 		bind(MqListeners.class).asEagerSingleton();
 		bind(UnmatchedTransferManager.class).asEagerSingleton();
