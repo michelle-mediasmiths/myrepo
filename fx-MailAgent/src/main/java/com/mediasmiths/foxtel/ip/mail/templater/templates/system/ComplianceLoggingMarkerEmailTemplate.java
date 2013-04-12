@@ -20,7 +20,7 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
 	{
         MailTemplate t = new MailTemplate();
-		ComplianceLoggingMarker clm = (ComplianceLoggingMarker)obj;
+		ComplianceLoggingMarker clm = (ComplianceLoggingMarker) obj;
 
 		t.setEmailaddresses(getEmailaddresses());
 		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(clm.getEmailaddresses().getEmailaddress()));
@@ -35,7 +35,6 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 		t.setBody(call.process());
 
 		return t;
-
 	}
 
 

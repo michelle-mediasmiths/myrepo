@@ -8,10 +8,10 @@
 <head>
 <title>AutoQCFailed</title>
 </head>
-<body th:with="page='manualResult'">
+<body>
 	<div class="container">
-	<label> Item is on the Auto QC Fail worklist. Asset: </label> <span th:text="${Asset}" />
-	<p>Please resolve this matter within 90-days otherwise item will be purged without further notification.</p>
+		<label> Item is on the Auto QC Fail worklist. Asset: </label> <span th:text="${AssetID}" />
+		<p>Please resolve this matter within 90-days otherwise item will be purged without further notification.</p>
 	</div>
 </body>
 </html>

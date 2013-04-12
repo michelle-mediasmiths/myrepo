@@ -20,6 +20,7 @@ public class CommErrorNotificationEmailTemplate extends MailTemplate implements 
 	{
         MailTemplate t = new MailTemplate();
 
+        
 		t.setBody(getBody());
 		t.setEmailaddresses(getEmailaddresses());
 		t.setSubject(getSubject());
