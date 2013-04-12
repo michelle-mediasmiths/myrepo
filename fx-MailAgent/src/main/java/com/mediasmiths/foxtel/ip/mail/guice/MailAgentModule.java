@@ -34,12 +34,11 @@ public class MailAgentModule extends AbstractModule
 		bind(MailAgentService.class).to(MailAgentServiceImpl.class);
 		RestResourceRegistry.register(MailAgentService.class);
 		bind(EmailSenderService.class).to(EmailSenderServiceImpl.class);
-
 		
-		RestResourceRegistry.register(ThymeleafSample.class);
 		bind(ThymeleafSample.class).to(ThymeleafSampleImpl.class);
-		
-		
+		RestResourceRegistry.register(ThymeleafSample.class);
+
+
 		// Table Data
 		bind(EventTableDao.class).to(EventTableDaoImpl.class);
 		bind(EventingTableDao.class).to(EventingTableDaoImpl.class);

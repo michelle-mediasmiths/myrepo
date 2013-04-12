@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.system;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
@@ -8,6 +9,9 @@ import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class BMSErrorEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
+	@Inject
+	private ThymeleafTemplater templater;
+
 	@Override
 	public boolean handles(Object obj)
 	{
@@ -16,7 +20,7 @@ public class BMSErrorEmailTemplate extends MailTemplate implements EmailTemplate
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
 	{
 		MailTemplate t = new MailTemplate();
 		ErrorReport cf = (ErrorReport)obj;

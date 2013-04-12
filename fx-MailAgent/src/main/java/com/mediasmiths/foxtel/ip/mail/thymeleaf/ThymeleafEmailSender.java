@@ -14,26 +14,45 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
+import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
+import com.mediasmiths.std.guice.web.rest.templating.Templater;
 
 public class ThymeleafEmailSender
 {
 	public static final Logger log = Logger.getLogger(ThymeleafEmailSender.class);
 
+	private final Templater templater;
 
-	@Inject
-	private ThymeleafTemplater templater;
-
-	public void sendThymeleafEmail(String to, String subject, String body)
+	public ThymeleafEmailSender(Templater templater)
 	{
-		log.info("Sending sendThymeleafEmail email...");
-		
-		log.info("Sending message, body is "+body);
+		this.templater = templater;
+	}
 
-		String plainEmailText = "Not successfully generated";
+	public void run(String templateName, String subject)
+	{
+		try
+		{
+			TemplateCall call = templater.template(templateName);
+			call.set("job", "testID");
 
+			log.info("Sending email...");
+			String plainEmailText = "";
+			String htmlEmailText = "Not successfully generated";
+			htmlEmailText = call.process();
+			log.trace("HTML Email:\n" + htmlEmailText);
+
+			sendEmail(subject, plainEmailText, htmlEmailText);
+			log.info("Email sent.");
+		}
+		catch (Throwable t)
+		{
+			log.fatal(t.getMessage(), t);
+			throw new RuntimeException(t);
+		}
+	}
+	
+	public void sendEmail(String subject, String textBody, String htmlBody)
+	{
 		
 		final String username = "matthew.mcparland@mediasmiths.com";
 		final String password = "warmaster!123";
@@ -60,24 +79,23 @@ public class ThymeleafEmailSender
 			Message message = new MimeMessage(session);
 			message.setFrom(new InternetAddress("matthew.mcparland@mediasmiths.com"));
 			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("matthew.mcparland@mediasmiths.com"));
-		
-			log.info("Sending message...");
-
+			
 			message.setSubject(subject);
 
 			// message.setText(body);
 			Multipart multipart = new MimeMultipart("alternative");
 
 			MimeBodyPart textPart = new MimeBodyPart();
-			textPart.setText(plainEmailText);
+			textPart.setText(textBody);
 			multipart.addBodyPart(textPart);
 
 			MimeBodyPart htmlPart = new MimeBodyPart();
-			htmlPart.setContent(body, "text/html");
+			htmlPart.setContent(htmlBody, "text/html");
 			multipart.addBodyPart(htmlPart);
 
 			message.setContent(multipart);
 
+			log.info("Sending message...");
 			Transport.send(message);
 			log.info("Successfully sent message");
 		}

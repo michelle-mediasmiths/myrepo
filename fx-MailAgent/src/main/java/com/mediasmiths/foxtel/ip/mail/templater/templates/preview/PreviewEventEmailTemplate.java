@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.ip.mail.templater.templates.preview;
 
 import java.util.List;
 
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
@@ -12,6 +13,8 @@ import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 
 public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
+	@Inject
+	private ThymeleafTemplater templater;
 
 	@Override
 	public boolean handles(Object obj)
@@ -21,7 +24,7 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 	}
 
 	@Override
-	public MailTemplate customiseTemplate(Object obj, String comment, String templateName, ThymeleafTemplater templater)
+	public MailTemplate customiseTemplate(Object obj, String comment, String templateName)
 	{
 
 		MailTemplate t = new MailTemplate();

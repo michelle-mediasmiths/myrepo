@@ -14,7 +14,7 @@ public class TestConfigImport
 	static EventMailConfiguration conf;
 	static JAXBSerialiser jaxb;
 
-	/*public static void main(String[] args)
+	public static void main(String[] args)
 	{
 		String configFilePath = "/tmp/config.xml";
 
@@ -52,6 +52,6 @@ public class TestConfigImport
 
 			System.out.println(temp.getSubject());
 
-		}*/
+		}
 
 }

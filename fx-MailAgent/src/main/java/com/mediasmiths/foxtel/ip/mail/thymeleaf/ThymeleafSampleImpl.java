@@ -20,9 +20,8 @@ public class ThymeleafSampleImpl implements ThymeleafSample
 	public String sendMail()
 	{
 
-		TemplateCall call = templater.template("ThymeleafSampleMail");
-		ThymeleafEmailSender testEmailWorker= new ThymeleafEmailSender();
-		testEmailWorker.sendThymeleafEmail("matthew.mcparland@mediasmiths.com", "ThymeleafSampleMailtester",call.process());
+		ThymeleafEmailSender testEmailWorker= new ThymeleafEmailSender(templater);
+		testEmailWorker.run("ThymeleafSampleMail", "ThymeleafSampleMail");
 		return "Check Mail!";
 		
 	}
