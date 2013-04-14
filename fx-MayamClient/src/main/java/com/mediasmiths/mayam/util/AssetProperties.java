@@ -63,12 +63,14 @@ public class AssetProperties
 
 		AudioTrackList audioTracks = map.getAttribute(Attribute.AUDIO_TRACKS);
 
-		if(audioTracks != null && audioTracks.size() > 2)
+		if(audioTracks != null && audioTracks.size() >= 8)
 		{
 			return true;
 		}
-
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
 	public static boolean isPackageSD(AttributeMap packageAttributes)
