@@ -36,10 +36,16 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 			return; // only interested in materials\items
 		}
 
+		String sourceHouseID = messageAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+		
+		if (sourceHouseID != null) //item is a compliance item
+		{
+			return;
+		}
+		
 		String titleID = messageAttributes.getAttribute(Attribute.AUX_VAL);
 		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-		
 		// create ingest task for the material	
  		try
  		{
