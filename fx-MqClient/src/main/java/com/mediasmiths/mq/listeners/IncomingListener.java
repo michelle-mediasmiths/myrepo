@@ -43,6 +43,7 @@ import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
+import com.mediasmiths.mq.handlers.ingest.PurgeTaskUpdateForUnmatchedHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
@@ -157,6 +158,8 @@ public class IncomingListener extends MqClientListener
 	MaterialProtectHandler materialProtected;
 	@Inject
 	IngestCompleteHandler ingestCompleteHandler;
+	@Inject
+	PurgeTaskUpdateForUnmatchedHandler purgeTaskUpdateForUnmatchedHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -249,9 +252,12 @@ public class IncomingListener extends MqClientListener
 			TaskState initialState = beforeAttributes.getAttribute(Attribute.TASK_STATE);
 			TaskState newState = currentAttributes.getAttribute(Attribute.TASK_STATE);
 
+			
 			passEventToUpdateHandler(qcTaskUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(pendingTxUpdate,currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(unmatchedTaskUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(purgeTaskUpdateForUnmatchedHandler,currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(ingestCompleteHandler,currentAttributes, beforeAttributes, afterAttributes);
 			
 			if (!initialState.equals(newState))
 			{
@@ -364,7 +370,7 @@ public class IncomingListener extends MqClientListener
 		
 		try
 		{
-			passEventToUpdateHandler(ingestCompleteHandler, currentAttributes, beforeAttributes, afterAttributes);
+//			passEventToUpdateHandler(ingestCompleteHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(titleUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialProtected, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(materialUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);

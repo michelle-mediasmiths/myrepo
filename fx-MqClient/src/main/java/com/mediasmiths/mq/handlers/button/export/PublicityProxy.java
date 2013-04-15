@@ -65,7 +65,7 @@ public class PublicityProxy extends ExportProxyButton
 			long difference = txTime - now;
 
 			log.debug("String now: "+now+" txtime: "+txTime+ " difference: "+difference);
-			
+
 			if (difference > 0)
 			{
 				// tx date is in the future
@@ -74,13 +74,9 @@ public class PublicityProxy extends ExportProxyButton
 			else
 			{
 				// tx date is in the past
-				if (Math.abs(difference) > FORTY_SEVEN_HOURS)
+				if (Math.abs(difference) <= SEVEN_DAYS)
 				{
-					priority = 5;
-				}
-				else if (Math.abs(difference) > TWENTY_THREE_HOURS)
-				{
-					priority = 3;
+					priority = 5; // go to the highest priority for this destination if the target date is no more than 7 days in the past
 				}
 				else
 				{

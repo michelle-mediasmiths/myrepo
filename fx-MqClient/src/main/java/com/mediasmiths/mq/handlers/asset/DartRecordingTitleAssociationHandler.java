@@ -32,9 +32,10 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 
 		if (!assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 		{
+			log.debug("asset type is not of material, so just return.");
 			return; // only interested in materials\items
 		}
-
+		
 		String titleID = messageAttributes.getAttribute(Attribute.AUX_VAL);
 		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
 

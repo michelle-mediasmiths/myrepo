@@ -90,6 +90,15 @@ public class PlaceholderAgentModule extends AbstractModule {
 	
 	@Provides
 	@Singleton
+	JAXBSerialiser provideJAXBSerialiser(JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
+	}
+	
+	@Provides
+	@Singleton
 	@Named("fxreportcontext")
 	JAXBContext providefxreportJAXBContext() throws JAXBException
 	{

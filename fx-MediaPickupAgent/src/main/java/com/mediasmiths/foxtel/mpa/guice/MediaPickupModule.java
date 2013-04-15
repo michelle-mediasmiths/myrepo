@@ -31,6 +31,7 @@ import com.mediasmiths.foxtel.agent.validation.SchemaValidator;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.mpa.MediaPickupAgent;
 import com.mediasmiths.foxtel.mpa.validation.MediaPickupAgentConfigValidator;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
 public class MediaPickupModule extends AbstractModule {
 
@@ -92,6 +93,15 @@ public class MediaPickupModule extends AbstractModule {
 			throw e;
 		}
 		return marshaller;
+	}
+	
+	@Provides
+	@Singleton
+	JAXBSerialiser provideJAXBSerialiser(JAXBContext context)
+	{
+
+		return JAXBSerialiser.getInstance(context);
+
 	}
 	
 	@Provides

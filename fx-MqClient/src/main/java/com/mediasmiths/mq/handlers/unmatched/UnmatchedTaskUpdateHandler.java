@@ -156,7 +156,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 
-					String format = getFormat(associatedMaterial);
+					String format = materialController.getFormat(associatedMaterial);
 					log.debug(String.format("Format returned was %s; now closing task", format));
 
 					// close unmatched task
@@ -238,7 +238,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					MayamAssetType.MATERIAL.getAssetType(),
 					unmatchedAssetID);
 			// get the format (hd/sd, don't have a way of detecting 3d)
-			format = getFormat(assetAttributes);
+			format =materialController.getFormat(assetAttributes);
 			log.debug(String.format("Format returned was %s;", format));
 		}
 		catch (RemoteException e)
@@ -284,38 +284,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		}
 	}
 
-	public String getFormat(AttributeMap currentAttributes) throws RemoteException
-	{
-		String format = "HD";
-		try
-		{
-			FileFormatInfo formatInfo = tasksClient.assetApi().getFormatInfo(
-					MayamAssetType.MATERIAL.getAssetType(),
-					(String) currentAttributes.getAttribute(Attribute.ASSET_ID));
-
-			if (formatInfo != null && formatInfo.getImageSizeX() <= sdVideoX)
-			{
-				format = "SD";
-			}
-		}
-		catch (Exception e)
-		{
-			log.error("error determining format for asset", e);
-			try
-			{
-				taskController.createWFEErorTask(
-						MayamAssetType.MATERIAL,
-						currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
-						"Error determining content format during unmatched asset workflow");
-			}
-			catch (Exception e1)
-			{
-				log.error("error creating error task!", e1);
-			}
-		}
-
-		return format;
-	}
+	
 
 	private void removeUnmatchedAssetFromTaskLists(String assetID)
 	{

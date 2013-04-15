@@ -1382,6 +1382,20 @@ public class MayamMaterialController extends MayamController
 			// create ingest task
 			log.debug("creating new ingest task");
 			taskController.createIngestTaskForMaterial(houseID);
+			
+			try
+			{
+				AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
+				updateMap.setAttribute(Attribute.SEGMENTATION_NOTES, "");
+				log.debug("clearing segmentation notes");
+				client.assetApi().updateAsset(updateMap);
+			}
+			catch (RemoteException e)
+			{
+				log.error("error clearing segmentation notes during uningest", e);
+				//segmentation notes are only for reference, just going to catch this exception
+			}
+
 		}
 	}
 
@@ -1558,6 +1572,43 @@ public class MayamMaterialController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 		}
 		
+	}
+	
+	@Inject
+	@Named("ff.sd.video.imagex")
+	private int sdVideoX;
+	
+	public String getFormat(AttributeMap currentAttributes) throws RemoteException
+	{
+		String format = "HD";
+		try
+		{
+			FileFormatInfo formatInfo = client.assetApi().getFormatInfo(
+					MayamAssetType.MATERIAL.getAssetType(),
+					(String) currentAttributes.getAttribute(Attribute.ASSET_ID));
+
+			if (formatInfo != null && formatInfo.getImageSizeX() <= sdVideoX)
+			{
+				format = "SD";
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("error determining format for asset", e);
+			try
+			{
+				taskController.createWFEErorTask(
+						MayamAssetType.MATERIAL,
+						currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						"Error determining content format");
+			}
+			catch (Exception e1)
+			{
+				log.error("error creating error task!", e1);
+			}
+		}
+
+		return format;
 	}
 	
 }

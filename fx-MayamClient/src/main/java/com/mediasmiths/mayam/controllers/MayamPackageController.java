@@ -362,8 +362,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 			try {
 				pendingTxTasks = taskController.getOpenTasksForAsset(MayamTaskListType.PENDING_TX_PACKAGE, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, txPackage.getMaterialID());
 			} catch (MayamClientException e2) {
-				log.warn("Unable to locate pending Tx Task for package : " + txPackage.getPresentationID());
-				e2.printStackTrace();
+				log.warn("Unable to locate pending Tx Task for package : " + txPackage.getPresentationID(),e2);
 			}
 			
 			if (material != null)
@@ -663,6 +662,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 
 			if (segmentList != null)
 			{
+				log.debug("Segment list returned");
 				return true;
 			}
 			else
@@ -672,6 +672,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 					AttributeMap pendingTxPackageTask = getPendingTxPackageTask(presentationID);
 					if (pendingTxPackageTask != null)
 					{
+						log.debug("Pending tx package returned");
 						return true;
 					}
 					else

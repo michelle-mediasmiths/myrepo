@@ -20,10 +20,14 @@ public class QcProfileSelector
 	private String incomingSDStereo;
 	@Inject @Named("qc.profile.incoming.sd.surround")
 	private String incomingSDSurround;
+	@Inject @Named("qc.profile.incoming.sd.internal")
+	private String incomingSDInternal;
 	@Inject @Named("qc.profile.incoming.hd.stereo")
 	private String incomingHDStereo;
 	@Inject @Named("qc.profile.incoming.hd.surround")
 	private String incomingHDSurround;
+	@Inject @Named("qc.profile.incoming.hd.internal")
+	private String incomingHDInternal;
 
 	@Inject @Named("qc.profile.tx.sd.stereo")
 	private String txSDStereo;
@@ -67,12 +71,22 @@ public class QcProfileSelector
 	{
 		boolean isMaterialSD = AssetProperties.isMaterialSD(materialAttributes);
 		boolean isMaterialSurround = AssetProperties.isMaterialSurround(materialAttributes);
+		boolean isFromDartOrVizCapture = AssetProperties.isFromDARTorVizCapture(materialAttributes);
+		
+		if (isFromDartOrVizCapture)
+		{
+			log.info("this content is from dart or vizcap, will consider to be internal content and disregard audio tracks metadata");
+		}
 
 		final String profile;
 
 		if (isMaterialSD)
 		{
-			if (isMaterialSurround)
+			if (isFromDartOrVizCapture)
+			{
+				profile = incomingSDInternal;
+			}
+			else if (isMaterialSurround)
 			{
 				profile = incomingSDSurround;
 			}
@@ -83,7 +97,11 @@ public class QcProfileSelector
 		}
 		else
 		{
-			if (isMaterialSurround)
+			if (isFromDartOrVizCapture)
+			{
+				profile = incomingHDInternal;
+			}
+			else if (isMaterialSurround)
 			{
 				profile = incomingHDSurround;
 			}

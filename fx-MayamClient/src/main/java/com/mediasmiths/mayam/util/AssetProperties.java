@@ -31,18 +31,46 @@ public class AssetProperties
 			return false;
 		}
 	}
+	
+	public static boolean isFromDARTorVizCapture(AttributeMap map)
+	{
+
+		String agg = map.getAttribute(Attribute.AGGREGATOR);
+
+		if (agg == null)
+		{
+			return false;
+		}
+
+		agg = agg.toLowerCase();
+
+		if ("dart".equals(agg))
+		{
+			return true;
+		}
+
+		if ("vizcapture".equals(agg))
+		{
+			return true;
+		}
+
+		return false;
+
+	}
 
 	public static boolean isMaterialSurround(AttributeMap map)
 	{
 
 		AudioTrackList audioTracks = map.getAttribute(Attribute.AUDIO_TRACKS);
 
-		if(audioTracks != null && audioTracks.size() > 2)
+		if(audioTracks != null && audioTracks.size() >= 8)
 		{
 			return true;
 		}
-
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
 	public static boolean isPackageSD(AttributeMap packageAttributes)

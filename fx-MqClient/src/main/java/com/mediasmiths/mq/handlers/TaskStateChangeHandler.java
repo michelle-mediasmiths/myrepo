@@ -2,9 +2,11 @@ package com.mediasmiths.mq.handlers;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamTaskListType;
 
 /**
