@@ -600,7 +600,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 	
 	public SegmentList getTxPackage(String presentationID, String materialID, AttributeMap material) throws PackageNotFoundException, MayamClientException{
 	
-		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(material);
+		boolean pendingPackage = AssetProperties.shouldPackagesForMaterialBeConsideredPending(material);
 		
 		if(pendingPackage){
 			log.debug("looking for pending tx package");
@@ -795,7 +795,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 			String packageID,
 			Segmentation segmentation) throws MayamClientException
 	{
-		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(materialAttributes);
+		boolean pendingPackage = AssetProperties.shouldPackagesForMaterialBeConsideredPending(materialAttributes);
 
 		if (pendingPackage)
 		{

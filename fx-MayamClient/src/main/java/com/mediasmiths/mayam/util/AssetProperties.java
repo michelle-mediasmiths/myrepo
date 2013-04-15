@@ -232,7 +232,7 @@ public class AssetProperties
 		
 	}
 	
-	public static boolean isMaterialsReadyForPackages(AttributeMap material){
+	public static boolean shouldPackagesForMaterialBeConsideredPending(AttributeMap material){
 		boolean materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
 		boolean materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
 		boolean pendingPackage = ! ( materialHasPreviewPass && materialHasMedia);
