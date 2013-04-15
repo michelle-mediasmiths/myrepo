@@ -30,7 +30,8 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 		if (OPEN_STATES.contains(taskState))
 		{
 
-			boolean packagesConsideredPendingBefore = AssetProperties.shouldPackagesForMaterialBeConsideredPending(before);			
+			boolean packagesConsideredPendingBefore = AssetProperties.shouldPackagesForMaterialBeConsideredPending(before);	
+			
 			boolean fromAuthSourceBefore =  packageSeenFromAuthoritativeSource(before);
 			
 			boolean packagesConsideredPendingAfter = AssetProperties.shouldPackagesForMaterialBeConsideredPending(currentAttributes);			
@@ -38,6 +39,16 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 
 			boolean shouldPackageBeCreatedBefore = (!packagesConsideredPendingBefore) && fromAuthSourceBefore;
 			boolean shouldPackageBeCreatedAfter = (!packagesConsideredPendingAfter) && fromAuthSourceAfter ;
+			
+
+			log.debug(String.format(
+					"packagesConsideredPendingBefore %b, fromAuthSourceBefore %b, packagesConsideredPendingAfter %b, fromAuthSourceAfter %b, shouldPackageBeCreatedBefore %b, shouldPackageBeCreatedAfter %b",
+					packagesConsideredPendingBefore,
+					fromAuthSourceBefore,
+					packagesConsideredPendingAfter,
+					fromAuthSourceAfter,
+					shouldPackageBeCreatedBefore,
+					shouldPackageBeCreatedAfter));
 			
 			
 			boolean pendingStateChanges = (!shouldPackageBeCreatedBefore) && shouldPackageBeCreatedAfter; 
@@ -113,7 +124,7 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 	{
 		String auxSrc = currentAttributes.getAttribute(Attribute.AUX_SRC);
 		
-		log.debug("AUX_SRC is"+auxSrc);
+		log.info("AUX_SRC is"+auxSrc);
 		
 		if(auxSrc!=null && auxSrc.equals(MayamPackageController.PENDING_TX_PACKAGE_SOURCE_BMS)){
 			return true;
