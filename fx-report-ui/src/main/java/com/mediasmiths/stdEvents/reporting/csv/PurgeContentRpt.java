@@ -38,9 +38,19 @@ public class PurgeContentRpt
 	@Inject
 	private QueryAPI queryApi;
 	
+	private int protect=0;
+	private int posponed=0;
+	private int purgedAmt=0;
+	
 	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<PurgeContent> purged = getReportList(events, startDate, endDate);
+		setStats(purged);
+		
+		purged.add(addStats("Amount Protected", Integer.toString(protect)));
+		purged.add(addStats("Amount Posponed", Integer.toString(posponed)));
+		purged.add(addStats("AmountPurged", Integer.toString(purgedAmt)));
+		
 		createCsv(purged, reportName);
 	}
 	
@@ -93,6 +103,7 @@ public class PurgeContentRpt
 		{
 			PurgeContent purge = new PurgeContent();
 			purge.setDateRange(startDate + " - " + endDate);
+			purge.setPurged("1");
 			
 			if (event.getEventName().equals("PurgeTitle"))
 			{
@@ -174,6 +185,29 @@ public class PurgeContentRpt
 				new Optional()
 		};
 		return processors;
+	}
+	
+	private void setStats(List<PurgeContent> purged)
+	{
+		for(PurgeContent purge : purged) {
+			if (purge.getProtected() != null)
+				if (purge.getProtected().equals("1"))
+					protect ++;
+			if (purge.getExtended() != null)
+				if(purge.getExtended().equals("1"))
+					posponed ++;
+			if (purge.getPurged() != null)
+				if (purge.getPurged().equals("1"))
+					purgedAmt ++;
+		}
+	}
+	
+	private PurgeContent addStats(String name, String value)
+	{
+		PurgeContent purge = new PurgeContent();
+		purge.setTitle(name);
+		purge.setMaterialID(value);
+		return purge;
 	}
 }
 

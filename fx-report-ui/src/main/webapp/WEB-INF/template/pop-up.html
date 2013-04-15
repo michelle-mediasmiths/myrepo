@@ -9,7 +9,7 @@
 <head>
 <title>Report</title>
 <link th:substituteby="includes :: htmlhead" />
-<img id="foxtelLogo" src="../../img/foxtelLogoTrans.png" width="173" height="33"/>
+<img id="foxtelLogo" src="../../img/foxtelLogoTrans.png" width="173" height="33" align="right" style="opacity:0.6"/>
 </head>
 
 <body>
@@ -29,7 +29,8 @@
 					<td>
 						<select name="rpt">
 							<option value="OrderStatus">1. Order Status</option>
-							<option value="AcquisitionDelivery">2. Acquisition Delivery Report</option>
+							<option value="AcquisitionDelivery">2. Acquisition Delivery</option>
+							<option value="ManualQA">10a. ManualQA</option>
 							<option value="AutoQC">10b. Auto QC</option>
 							<option value="PurgeContent">16. Purge Content</option>
 							<option value="ComplianceEdits">20. Compliance Edits</option>
@@ -38,7 +39,7 @@
 					</td>
 				
 					<td><label>CSV </label><input type="radio" name="type" value="csv"></input>
-					<label>/     On Screen </label><input type="radio" name="type" value="ui"></input></td>
+					<label>/ On Screen </label><input type="radio" name="type" value="ui"></input></td>
 				
 					<td><button class="btn-primary" id="rptBtn" type="submit">GenerateReport</button></td>
 				</tr>

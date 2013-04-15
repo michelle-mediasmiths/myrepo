@@ -42,6 +42,8 @@ public class ComplianceRpt
 	public void writeCompliance(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<ComplianceLogging> comps = getReportList(events, startDate, endDate);
+		comps.add(addStats("No. of Titles", Integer.toString(comps.size())));
+		
 		createCsv(comps, reportName);
 	}
 	
@@ -140,6 +142,14 @@ public class ComplianceRpt
 				new Optional()
 		};
 		return processors;
+	}
+	
+	private ComplianceLogging addStats(String name, String value)
+	{
+		ComplianceLogging comp = new ComplianceLogging();
+		comp.setTitle(name);
+		comp.setMaterialID(value);
+		return comp;
 	}
 }
 

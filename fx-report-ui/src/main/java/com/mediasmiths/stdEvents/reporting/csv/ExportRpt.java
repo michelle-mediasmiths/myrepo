@@ -28,6 +28,7 @@ import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.ExportRT;
+import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
 public class ExportRpt
 {
@@ -40,9 +41,21 @@ public class ExportRpt
 	@Inject
 	private QueryAPI queryApi;
 	
+	private ReportUIImpl report = new ReportUIImpl();
+	
+	private int compliance=0;
+	private int captioning=0;
+	private int publicity=0;
+	
 	public void writeExport(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<Export> exports = getReportList(events, startDate , endDate);
+		setStats(exports);
+		
+		exports.add(addStats("No. of Compliance", Integer.toString(compliance)));
+		exports.add(addStats("No. of Captioning", Integer.toString(captioning)));
+		exports.add(addStats("No. of Publicity", Integer.toString(publicity)));
+		
 		createCsv(exports, reportName);
 	}
 	
@@ -91,27 +104,9 @@ public class ExportRpt
 		logger.info("Creating export list");
 		List<Export> exports = new ArrayList<Export>();
 		
-		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
-		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-		for (EventEntity event : packageEvents) {
-			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
-			packages.add(pack);
-		}
-		
-		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
-		for (EventEntity event : titleEvents) {
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			titles.add(title);
-		}
-		
-		List <EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
-		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
-		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		for (EventEntity event : acqEvents) {
-			Acquisition acq = (Acquisition) unmarshallRpt(event);
-			acqs.add(acq);
-		}
+		List<CreateOrUpdateTitle> titles = report.titles;
+		List<AddOrUpdatePackage> packages = report.packages;
+		List<Acquisition> acqs = report.acqs;
 		
 		for (EventEntity event : events)
 		{
@@ -206,6 +201,26 @@ public class ExportRpt
 				new Optional()
 		};
 		return processors;
+	}
+	
+	private void setStats(List<Export> exports)
+	{
+		for (Export export : exports) {
+			if (export.getExportType().equals("Caption"))
+				captioning ++;
+			if (export.getExportType().equals("Compliance"))
+				compliance ++;
+			if (export.getExportType().equals("Classification"))
+				publicity ++;
+		}
+	}
+	
+	private Export addStats (String name, String value)
+	{
+		Export export = new Export();
+		export.setTitle(name);
+		export.setMaterialID(value);
+		return export;
 	}
 }
 

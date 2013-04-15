@@ -66,7 +66,7 @@ public interface ReportUI
 	@GET
 	@Path("/choose_report/start/end/name/rpt/type")
 	@Produces("text/html")
-	public void chooseReport(@QueryParam("start")String start, @QueryParam("end")String end, @QueryParam("name")String name, @QueryParam("rpt")String rpt, @QueryParam("type") String type);
+	public String chooseReport(@QueryParam("start")String start, @QueryParam("end")String end, @QueryParam("name")String name, @QueryParam("rpt")String rpt, @QueryParam("type") String type);
 	
 	@GET
 	@Path("/order_status_csv")
@@ -87,6 +87,11 @@ public interface ReportUI
 	@Path("/manual_qa_csv")
 	@Produces("text/csv")
 	public void getManualQACSV();
+	
+	@GET
+	@Path("/manual_qa_ui")
+	@Produces("text/csv")
+	public String getManualQAUI();
 	
 	@GET
 	@Path("/auto_qc_csv")

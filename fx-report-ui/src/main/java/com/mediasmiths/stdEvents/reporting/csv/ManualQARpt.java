@@ -16,12 +16,14 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.common.events.report.ManualQA;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.report.entity.ManualQART;
+import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
 public class ManualQARpt
 {
@@ -35,6 +37,8 @@ public class ManualQARpt
 	@Inject
 	private QueryAPI queryApi;
 	
+	private ReportUIImpl report = new ReportUIImpl();
+	
 	private List<String> channels = new ArrayList<String>();
 	
 	private int total=0;
@@ -46,19 +50,13 @@ public class ManualQARpt
 	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate, String reportName)
 	{
 		List<ManualQA> manualQAs = getReportList(events, startDate, endDate);
-		setStats(manualQAs);
+		//setStats(manualQAs);
 		
-		ManualQA totalS = addStats("Total QA'd", Integer.toString(total));
-		ManualQA escalatedS = addStats("Total Escalated", Integer.toString(escalated));
-		ManualQA failedS = addStats("Total Failed QA", Integer.toString(failed));
-		ManualQA reorderedS = addStats("Total Needs Reordered", Integer.toString(reordered));
-		ManualQA hrS = addStats("Total QA'd HR", Integer.toString(hr));
-		
-		manualQAs.add(totalS);
-		manualQAs.add(escalatedS);
-		manualQAs.add(failedS);
-		manualQAs.add(reorderedS);
-		manualQAs.add(hrS);
+		manualQAs.add(addStats("Total QA'd", Integer.toString(total)));
+		manualQAs.add(addStats("Total Escalated", Integer.toString(escalated)));
+		manualQAs.add(addStats("Total Failed QA", Integer.toString(failed)));
+		manualQAs.add(addStats("Total Needs Reordered", Integer.toString(reordered)));
+		manualQAs.add(addStats("Total QA'd HR", Integer.toString(hr)));
 		
 		createCsv(manualQAs, reportName);
 	}
@@ -83,27 +81,32 @@ public class ManualQARpt
 		return title;
 	}
 	
-	private List<ManualQA> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ManualQA> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
 		logger.info("Creating manualQA list");
 		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
+		
+		List<Acquisition> acqs = report.acqs;
+		
 		for (EventEntity event : events)
 		{
 			ManualQANotification notification = (ManualQANotification) unmarshall(event);
 			ManualQA manualQA = new ManualQA();
 			
 			manualQA.setDateRange(startDate + " - " + endDate);
+			manualQA.setTitle(notification.getTitle());
+			manualQA.setMaterialID(notification.getMaterialID());
+			manualQA.setChannels(notification.getChannels());
+			manualQA.setAggregatorID(notification.getAggregatorID());
+			manualQA.setTaskStatus(notification.getTaskStatus());
+			manualQA.setPreviewStatus(notification.getPreviewStatus());
+			manualQA.setEscalated(notification.getEscalated());
+			manualQA.setReordered(notification.getReordered());
 			
-			logger.info("timeEscalated: " + manualQA.getTimeEscalated());
-			if ((manualQA.getTimeEscalated()==null) || (manualQA.getTimeEscalated().equals("")))
-				manualQA.setEscalated(null);
-			
-			if (manualQA.getTimeEscalated().length()>1) 
-				manualQA.setEscalated("1");
-			logger.info("escalated: " + manualQA.getEscalated());
-			
-			if (manualQA.getPreviewStatus().contains("reorder"))
-				manualQA.setReordered("1");
+			for (Acquisition acq : acqs) {
+				if (acq.getMaterialID().equals(manualQA.getMaterialID()))
+					manualQA.setTitleLength(acq.getTitleLength());
+			}
 			
 			manualQAList.add(manualQA);
 		}		

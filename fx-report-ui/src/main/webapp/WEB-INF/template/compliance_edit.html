@@ -13,34 +13,28 @@
 <span th:substituteby="includes :: navbar" />
 	<h1>Compliance Edit Report</h1>
 
-	<h4>Compliance Edited Titles</h4>
 	<table id="complianceTable" class="table table-striped tablesorter">
 		<thead>
 			<tr>
-				<th>ID</th>
-				<th>Time</th>
-				<th>Namespace</th>
-				<th>EventName</th>
-				<th>Payload</th>
-				<th>Format</th>
-				</tr>
+				<th>DateRange</th>
+				<th>Title</th>
+				<th>MaterialID</th>
+				<th>Channels</th>
+				<th>TaskStatus</th>
+				<th>TaskStart</th>
+				<th>TaskFinish</th>
+				<th>ExternalCompliance</th>
+			</tr>
 		</thead>
 		<tbody>	
-			<tr th:each="event: ${compliance}">
-				<td th:text="${event.id}">id</td>
-				<td th:text="${event.time}">time</td>
-				<td th:text="${event.namespace}">namespaceEx</td>
-				<td th:text="${event.eventName}">eventNameEx</td>
-				<td th:text="${event.payload}">payloadEx</td>
-			</tr>
-		</tbody>
-	</table>
-	
-	<table>
-		<tbody>
-			<tr>
-				<td>No of compliance edits:</td>
-				<td th:text="${complianceQ}"></td>
+			<tr th:each="comp: ${compliance}">
+				<td th:text="${comp.dateRange}"></td>
+				<td th:text="${comp.title}"></td>
+				<td th:text="${comp.channels}"></td>
+				<td th:text="${comp.taskStatus}"></td>
+				<td th:text="${comp.taskStart}"></td>
+				<td th:text="${comp.taskFinish}"></td>
+				<td th:text="${comp.externalCompliance}"></td>
 			</tr>
 		</tbody>
 	</table>

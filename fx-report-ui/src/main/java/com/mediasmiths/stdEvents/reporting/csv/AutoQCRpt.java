@@ -40,9 +40,23 @@ public class AutoQCRpt
 	@Inject
 	private QueryAPI queryApi;
 	
+	private int total=0;
+	private int average=0;
+	private int max=0;
+	private int failed=0;
+	private int overridden=0;
+	
 	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate, String reportName)
 	{
 		List<AutoQC> autoQcs = getReportList(passed, startDate, endDate);
+		setStats(autoQcs);
+		
+		autoQcs.add(addStats("Total QC'd", Integer.toString(total)));
+		autoQcs.add(addStats("Average Concurrent", Integer.toString(average)));
+		autoQcs.add(addStats("Maximum Concurrent", Integer.toString(max)));
+		autoQcs.add(addStats("No Failed", Integer.toString(failed)));
+		autoQcs.add(addStats("No Overridden", Integer.toString(overridden)));
+		
 		createCsv(autoQcs, reportName);
 	}
 	
@@ -168,6 +182,26 @@ public class AutoQCRpt
 				new Optional()
 		};
 		return processors;
+	}
+	
+	private void setStats(List<AutoQC> autoQcs)
+	{
+		for (AutoQC autoQc : autoQcs) {
+			if (autoQc.getTaskStatus().contains("FINISHED"))
+				total ++;
+			if (autoQc.getTaskStatus().contains("FAILED"))
+				failed ++;
+			if (autoQc.getManualOverride() != null)
+				overridden ++;
+		}
+	}
+	
+	private AutoQC addStats(String name, String value)
+	{
+		AutoQC autoQc = new AutoQC();
+		autoQc.setTitle(name);
+		autoQc.setMaterialID(value);
+		return autoQc;
 	}
 }
 

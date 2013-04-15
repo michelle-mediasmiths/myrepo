@@ -1,0 +1,55 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-3.dtd"> 
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+<head>
+<title>Manual QA</title>
+<link th:substituteby="includes :: htmlhead" />
+</head>
+
+<body>
+	<span th:substituteby="includes :: navbar" />
+	<h1>Manual QA Report</h1>
+	
+	<table id="qaTable" class="table table-striped tablesorter">
+		<thead>
+			<tr>
+				<th>DateRange</th>
+				<th>Title</th>
+				<th>MaterialID</th>
+				<th>Channels</th>
+				<th>Operator</th>
+				<th>AggregatorID</th>
+				<th>TaskStatus</th>
+				<th>PreviewStatus</th>
+				<th>HrPreview</th>
+				<th>HrPreviewRequested</th>
+				<th>Escalated</th>
+				<th>TimeEscalated</th>
+				<th>TitleLength</th>
+				<th>Reordered</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="qa: ${qas}">
+				<td th:text="${qa.dateRange}"></td>
+				<td th:text="${qa.title}"></td>
+				<td th:text="${qa.materialID}"></td>
+				<td th:text="${qa.channels}"></td>
+				<td th:text="${qa.operator}"></td>
+				<td th:text="${qa.aggregatorID}"></td>
+				<td th:text="${qa.taskStatus}"></td>
+				<td th:text="${qa.previewStatus}"></td>
+				<td th:text="${qa.hrPreview}"></td>
+				<td th:text="${qa.hrPreviewRequested}"></td>
+				<td th:text="${qa.escalated}"></td>
+				<td th:text="${qa.timeEscalated}"></td>
+				<td th:text="${qa.titleLength}"></td>
+				<td th:text="${qa.reordered}"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
