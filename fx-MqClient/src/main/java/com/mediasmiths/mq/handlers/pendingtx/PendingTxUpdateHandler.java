@@ -30,7 +30,7 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 		if (OPEN_STATES.contains(taskState))
 		{
 
-			boolean pendingBefore = AssetProperties.isMaterialsReadyForPackages(before) && packageSeenFromAuthoritativeSource(currentAttributes);
+			boolean pendingBefore = AssetProperties.isMaterialsReadyForPackages(before) && packageSeenFromAuthoritativeSource(before);
 			boolean pendingAfter = AssetProperties.isMaterialsReadyForPackages(currentAttributes) && packageSeenFromAuthoritativeSource(currentAttributes);
 
 			boolean pendingStateChanges = pendingBefore && !pendingAfter; 
