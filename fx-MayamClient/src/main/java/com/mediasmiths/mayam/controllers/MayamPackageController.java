@@ -68,6 +68,9 @@ public class MayamPackageController extends MayamController implements PackageCo
 	private final MayamMaterialController materialController;
 	private final MayamTaskController taskController;
 	
+	public final static String PENDING_TX_PACKAGE_SOURCE_BMS = "BMS";
+	public final static String PENDING_TX_PACKAGE_SOURCE_AGGREGATOR = "AGGREGATOR";
+	
 	@Inject @Named("material.exchange.unmarshaller")
 	private Unmarshaller materialExchangeUnMarshaller;
 	
@@ -98,7 +101,6 @@ public class MayamPackageController extends MayamController implements PackageCo
 			attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
 
 			AttributeMap material = null;
-			Segmentation segmentation = null; // segmentation information that arrived with the media as part of material exchange
 
 			boolean materialHasPreviewPass = false;
 			boolean materialHasMedia = false;
@@ -124,22 +126,6 @@ public class MayamPackageController extends MayamController implements PackageCo
 					// the following determine if segmentation tasks need created and if package should be created in ardome or saved to the pending tx package list
 					materialHasPreviewPass = AssetProperties.isMaterialPreviewPassed(material);
 					materialHasMedia = !AssetProperties.isMaterialPlaceholder(material);
-
-// MAM-375 MAM-367 if segmentation information is included in material exchange message then the pending tx package will already have been created
-//					try
-//					{
-//						segmentation = findExistingSegmentInfoForTxPackage(txPackage, material);
-//					}
-//					catch (Exception e)
-//					{
-//						log.error("error finding existing segment info for tx package", e);
-//					}
-//
-//					if (segmentation == null)
-//					{
-//						log.info("no existing segmentation information for this tx package");
-//					}
-
 				}
 			}
 			catch (RemoteException e1)
@@ -168,47 +154,8 @@ public class MayamPackageController extends MayamController implements PackageCo
 			String materialAssetID = materialController.getMaterialAttributes(txPackage.getMaterialID()).getAttributeAsString(
 					Attribute.ASSET_ID);
 
-			boolean fixAndStitchItem = true;
-
-			try
-			{
-				fixAndStitchItem = taskController.fixAndStitchTaskExistsForItem(materialAssetID);
-			}
-			catch (MayamClientException e)
-			{
-				log.error(
-						"error searching for fix and stitch tasks, will not populate segmentation info but will still try to create package",
-						e);
-			}
-
 			SegmentListBuilder listbuilder = SegmentList.create();
 			listbuilder.attributeMap(attributes.getAttributes());
-
-			// attempt to populate segmentlist with information supplied by aggregators only if fix stitch task has never been created for item
-			if (!fixAndStitchItem)
-			{
-				try
-				{
-					if (segmentation != null)
-					{
-
-						for (Segment s : segmentation.getSegment())
-						{
-							com.mayam.wf.attributes.shared.type.Segment converted = SegmentUtil.convertMaterialExchangeSegmentToMayamSegment(s);
-							listbuilder = listbuilder.segment(converted);
-						}
-
-					}
-				}
-				catch (InvalidTimecodeException e)
-				{
-					log.error("could not convert segmentation info stored against item", e);
-				}
-				catch (Exception e)
-				{
-					log.error("could not convert segmentation info stored against item", e);
-				}
-			}
 
 			SegmentList segmentList = listbuilder.build();
 
@@ -233,7 +180,8 @@ public class MayamPackageController extends MayamController implements PackageCo
 							txPackage.getMaterialID(),
 							txPackage.getPresentationID(),
 							firstTx,
-							segmentList);
+							segmentList,
+							PENDING_TX_PACKAGE_SOURCE_BMS);
 
 				}
 				catch (MayamClientException e)
@@ -293,57 +241,6 @@ public class MayamPackageController extends MayamController implements PackageCo
 	
 	}
 
-//MAM-375 MAM-367 no longer using segdata stashing	
-//	/**
-//	 * This is used to find any segmentation info that might have been saved against a material as natural breaks
-//	 * 
-//	 * Once preview has passed and bms is issuing tx package create messages then we fetch this segment info from the material
-//	 * to populated tx packages being created. (We couldn't just create them when the material comes in for some foxtel operational reason)
-//	 * 
-//	 * @param txPackage
-//	 * @param material
-//	 * @return
-//	 */
-//	private Segmentation findExistingSegmentInfoForTxPackage(PackageType txPackage, AttributeMap material)
-//	{
-//		Presentation p = null;
-//		String materialId = (String) material.getAttribute(Attribute.HOUSE_ID);
-//		
-//		try
-//		{
-//			final FileReader reader = new FileReader(new File(materialController.segdataFilePathForMaterial(materialId)));
-//			final StreamSource source = new StreamSource(reader);
-//			
-//			JAXBElement<Presentation> j = (JAXBElement<Presentation>) materialExchangeUnMarshaller.unmarshal(source,Presentation.class);
-//			p = j.getValue();
-//		}
-//		catch (JAXBException je)
-//		{
-//			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", je);
-//		}
-//		catch (Exception e)
-//		{
-//			log.error("error unmarshalling presentation information from SEGMENTATION_DATA", e);
-//		}
-//
-//		if (p != null)
-//		{
-//			List<Package> packages = p.getPackage();
-//			
-//			log.debug(String.format("Found %d segment lists for material %s",packages.size(),materialId));
-//			
-//			for (Package pc : packages)
-//			{
-//				if (pc.getPresentationID().equals(txPackage.getPresentationID()))
-//				{
-//					log.debug("Found segmentation info");
-//					return pc.getSegmentation();
-//				}
-//			}
-//		}
-//		return null;
-//	}
-
 	/**
 	 * called when bms updates a package
 	 * @param txPackage
@@ -358,24 +255,42 @@ public class MayamPackageController extends MayamController implements PackageCo
 			MayamAttributeController attributes = null;
 
 			AttributeMap material = materialController.getMaterialAttributes(txPackage.getMaterialID());
-			List<AttributeMap> pendingTxTasks = null;
-			try {
-				pendingTxTasks = taskController.getOpenTasksForAsset(MayamTaskListType.PENDING_TX_PACKAGE, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, txPackage.getMaterialID());
-			} catch (MayamClientException e2) {
-				log.warn("Unable to locate pending Tx Task for package : " + txPackage.getPresentationID(),e2);
-			}
 			
+			boolean isPending = false;
+
 			if (material != null)
 			{
 				try
 				{
-					segmentList = getTxPackage(txPackage.getPresentationID(), txPackage.getMaterialID(), material);
-					if (segmentList != null)
+					try
 					{
-						assetAttributes = segmentList.getAttributeMap();
+						log.debug("looking for pending tx package");
+						segmentList = getPendingTxPackage(txPackage.getPresentationID(), txPackage.getMaterialID());
+
+						if (segmentList != null)
+						{
+							isPending = true;
+						}
 					}
-					else {
-						log.warn("Unable to locate segment list for package " + txPackage.getPresentationID());
+					catch (PackageNotFoundException pnfe)
+					{
+						log.debug("pending tx package not found for package " + txPackage.getPresentationID(), pnfe);
+					}
+
+					if (segmentList == null)
+					{
+
+						log.debug("looking for real tx package");
+						segmentList = getSegmentList(txPackage.getPresentationID());
+
+						if (segmentList != null)
+						{
+							assetAttributes = segmentList.getAttributeMap();
+						}
+						else
+						{
+							log.warn("Unable to locate segment list for package " + txPackage.getPresentationID());
+						}
 					}
 				}
 				catch (MayamClientException e1)
@@ -417,26 +332,6 @@ public class MayamPackageController extends MayamController implements PackageCo
 				if (txPackage.getTargetDate() != null)
 				{
 					attributes.setAttribute(Attribute.TX_FIRST, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
-					
-					
-					if (pendingTxTasks != null && !pendingTxTasks.isEmpty())
-					{
-						for (AttributeMap pendingTxTask: pendingTxTasks)
-						{
-							log.info("Attempting to set target date on pending tx task");
-							pendingTxTask.setAttribute(Attribute.EVENT_DATE, dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
-							log.info("Setting target date on pending tx task to " + txPackage.getTargetDate().toString());
-							try {
-								taskController.saveTask(pendingTxTask);
-							} catch (MayamClientException e) {
-								log.warn("Exception thrown by Mayam while updating event date of task " + pendingTxTask.getAttributeAsString(Attribute.TASK_ID) + " to " + txPackage.getTargetDate().toString());
-								e.printStackTrace();
-							}
-						}
-					}
-					else {
-						log.info("No pending tx task found, unable to set target date on pending tx task");
-					}
 				}
 
 				attributes.setAttribute(Attribute.PARENT_HOUSE_ID, txPackage.getMaterialID());
@@ -444,10 +339,11 @@ public class MayamPackageController extends MayamController implements PackageCo
 				AttributeMap existingAttributes = segmentList.getAttributeMap();
 				existingAttributes.putAll(attributes.getAttributes());
 				segmentList.setAttributeMap(existingAttributes);
+				
 				try
 				{
 					log.info("updating tx package with id :" + txPackage.getPresentationID());
-					updateTxPackage(segmentList, txPackage.getPresentationID(), txPackage.getMaterialID(), material);
+					updateTxPackage(segmentList, txPackage.getPresentationID(), txPackage.getMaterialID(), material, PENDING_TX_PACKAGE_SOURCE_BMS,isPending);
 					log.info("updated tx package with id :" + txPackage.getPresentationID());
 					return MayamClientErrorCode.SUCCESS;
 				}
@@ -736,7 +632,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 			}
 		} catch (RemoteException e) {
 			log.error("Exception thrown by Mayam while retrieving pending tx task", e);
-			e.printStackTrace();
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e);
 		}
 
 		return seglist;
@@ -763,24 +659,31 @@ public class MayamPackageController extends MayamController implements PackageCo
 	
 	/**
 	 * Updates a tx package
-	 * 
-	 * Determines if the tx package to be updated is real or pending based on the passed materials attributes
-	 * 
 	 * @param segmentList
 	 * @param presentationID
 	 * @param materialID
 	 * @param material
 	 * @throws MayamClientException
 	 */
-	public void updateTxPackage(SegmentList segmentList, String presentationID, String materialID, AttributeMap material) throws MayamClientException{
+	public void updateTxPackage(SegmentList segmentList, String presentationID, String materialID, AttributeMap material, String source, boolean pendingPackage) throws MayamClientException{
 	
-		boolean pendingPackage = AssetProperties.isMaterialsReadyForPackages(material);
-		
 		if(pendingPackage){
 			log.debug("pending tx package");
 			AttributeMap pendingTxPackageTask = getPendingTxPackageTask(presentationID,materialID);
 			AttributeMap updateMap = taskController.updateMapForTask(pendingTxPackageTask);
 			updateMap.setAttribute(Attribute.SEGMENTATION_LIST, segmentList);
+			
+			if(source.equals(PENDING_TX_PACKAGE_SOURCE_BMS)){
+				//only set the source if it is BMS as once package info has been seen coming from BMS then 
+				//it is ok to consider creating it once preview passes
+				updateMap.setAttribute(Attribute.AUX_SRC, source); 
+			}
+			
+			//update EVENT_DATE on pending task with the first tx date
+			if(segmentList.getAttributeMap() != null && segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST) != null){
+				updateMap.setAttribute(Attribute.EVENT_DATE, segmentList.getAttributeMap().getAttribute(Attribute.TX_FIRST));
+			}
+			
 			taskController.saveTask(updateMap);
 		}
 		else{
@@ -931,12 +834,12 @@ public class MayamPackageController extends MayamController implements PackageCo
 			if (existingPendingTxPackageTask)
 			{
 				//if there was already a task then update
-				updateTxPackage(seglist, packageID, materialID, materialAttributes);
+				updateTxPackage(seglist, packageID, materialID, materialAttributes, PENDING_TX_PACKAGE_SOURCE_AGGREGATOR,true);
 			}
 			else
 			{
 				//create pending tx package if there wasnt already one
-				taskController.createPendingTxPackage(materialID, packageID, null, seglist);
+				taskController.createPendingTxPackage(materialID, packageID, null, seglist, PENDING_TX_PACKAGE_SOURCE_AGGREGATOR);
 			}
 		}
 		else

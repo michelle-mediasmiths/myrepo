@@ -11,6 +11,8 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
+import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 
@@ -28,18 +30,37 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 		if (OPEN_STATES.contains(taskState))
 		{
 
-			boolean pendingBefore = AssetProperties.isMaterialsReadyForPackages(before);
-			boolean pendingAfter = AssetProperties.isMaterialsReadyForPackages(currentAttributes);
+			boolean pendingBefore = AssetProperties.isMaterialsReadyForPackages(before) && packageSeenFromAuthoritativeSource(currentAttributes);
+			boolean pendingAfter = AssetProperties.isMaterialsReadyForPackages(currentAttributes) && packageSeenFromAuthoritativeSource(currentAttributes);
 
 			boolean pendingStateChanges = pendingBefore && !pendingAfter; 
 			
 			if (pendingStateChanges)
 			{
-				log.info("item is now ready for tx packages to be created");
+				log.info("item is now ready for tx packages to be created (package has been seen coming from bms)");
 
 				AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
 
 				SegmentList segmentList = currentAttributes.getAttribute(Attribute.SEGMENTATION_LIST);
+				
+				
+
+				try
+				{
+					// check if there has ever been a fix and stitch task for this asset
+					boolean fixAndStitchItem = taskController.fixAndStitchTaskExistsForItem(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+
+					if (fixAndStitchItem)
+					{
+						segmentList.getEntries().clear(); // clear segmentation information if there was ever a fix and stitch task for this item
+					}
+
+				}
+				catch (Exception e)
+				{
+					log.error("error searching for fix and stitch tasks, segmentation information will be populated", e);
+				}
+				
 				try
 				{
 					packageController.createSegmentList(
@@ -76,6 +97,20 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 
 			}
 		}
+	}
+
+	/*
+	 * if pending package information has only come from an aggregator a real tx package should not be created.
+	 */
+	private boolean packageSeenFromAuthoritativeSource(AttributeMap currentAttributes)
+	{
+		String auxSrc = currentAttributes.getAttribute(Attribute.AUX_SRC);
+		
+		if(auxSrc!=null && auxSrc.equals(MayamPackageController.PENDING_TX_PACKAGE_SOURCE_BMS)){
+			return true;
+		}
+		
+		return false;
 	}
 
 	@Override
