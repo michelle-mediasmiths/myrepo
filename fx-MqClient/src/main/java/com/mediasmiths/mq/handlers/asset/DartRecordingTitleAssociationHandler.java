@@ -35,28 +35,9 @@ public class DartRecordingTitleAssociationHandler extends AttributeHandler
 			log.debug("asset type is not of material, so just return.");
 			return; // only interested in materials\items
 		}
-
-		String sourceHouseID = messageAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
-		
-		if (sourceHouseID != null) //item is a compliance item
-		{
-			return;
-		}
 		
 		String titleID = messageAttributes.getAttribute(Attribute.AUX_VAL);
 		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
-		String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
-		// create ingest task for the material	
- 		try
- 		{
- 			log.debug("create ingest task for the material " + houseID);
- 			taskController.createIngestTaskForMaterial(houseID);
- 		} 		
- 		catch (MayamClientException e)
- 		{
- 			log.error("Exception caught in creating inmgest task for assetID" + assetID, e); 		
- 		}
-
 
 		if (titleID == null) // not interested in assets that do not have AUX_VAL populated
 		{

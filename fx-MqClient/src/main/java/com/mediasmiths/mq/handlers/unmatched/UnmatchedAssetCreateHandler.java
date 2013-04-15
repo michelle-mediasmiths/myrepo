@@ -21,9 +21,32 @@ public class UnmatchedAssetCreateHandler extends AttributeHandler
 	private int purgeTimeForUmatchedMaterial;
 	
 	public void process(AttributeMap messageAttributes)
-	{
+	{	
+		// create ingest task for MAM-79
 		String contentMaterialType = messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
-		if (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
+		if (
+			(contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED))
+			|| (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.EDIT_CLIPS))
+			|| (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.EPK))
+			|| (contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.PUBLICITY))
+			)
+		{
+			String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+			String houseID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
+			// create ingest task for the material	
+	 		try
+	 		{
+	 			log.debug("create ingest task for the material " + houseID);
+	 			taskController.createIngestTaskForMaterial(houseID);
+	 		} 		
+	 		catch (MayamClientException e)
+	 		{
+	 			log.error("Exception caught in creating inmgest task for assetID" + assetID, e); 		
+	 		}
+		}
+		
+		
+		if((contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED)))
 		{
 			try
 			{

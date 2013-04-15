@@ -22,7 +22,7 @@ public class PurgeTaskUpdateForUnmatchedHandler extends TaskUpdateHandler
 	@Override
 	public String getName()
 	{
-		return "IngestTaskUpdate";
+		return "PurgeTaskUpdateForUnmatchedHandler";
 	}
 
 	@Override
@@ -74,6 +74,7 @@ public class PurgeTaskUpdateForUnmatchedHandler extends TaskUpdateHandler
 				{
 					log.info(String.format("Ingest task is set to finished status for asset %s", assetID));
 					task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+					task.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
 					taskController.saveTask(task);
 				}
 				else

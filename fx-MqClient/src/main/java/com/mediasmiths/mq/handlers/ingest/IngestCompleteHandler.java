@@ -24,7 +24,7 @@ public class IngestCompleteHandler extends TaskUpdateHandler
 	@Override
 	public String getName()
 	{
-		return "IngestTaskUpdate";
+		return "IngestCompleteHandler";
 	}
 
 
@@ -79,6 +79,7 @@ public class IngestCompleteHandler extends TaskUpdateHandler
 					{
 						log.info(String.format("Ingest task is set to finished status for asset %s", assetID));
                         task.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+                        task.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
                         taskController.saveTask(task);
 					}
                         
@@ -90,7 +91,7 @@ public class IngestCompleteHandler extends TaskUpdateHandler
             }
             catch (MayamClientException e)
             {
-                    log.error("Exception thrown while trying to get Ingest Task for asset " + assetID, e);
+                    log.error("Exception thrown while trying to get / update Ingest Task for asset " + assetID, e);
             }
 
 		}
