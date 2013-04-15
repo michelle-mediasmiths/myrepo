@@ -524,6 +524,7 @@ public class MayamTaskController extends MayamController
 
 	public AttributeMap getTask(long taskId) throws RemoteException
 	{
+		log.debug("fetching task with id "+taskId);
 		return client.taskApi().getTask(taskId);
 	}
 

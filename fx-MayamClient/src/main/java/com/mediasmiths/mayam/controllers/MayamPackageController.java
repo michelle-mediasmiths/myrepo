@@ -159,7 +159,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 
 			SegmentList segmentList = listbuilder.build();
 
-			if (materialHasMedia && materialHasPreviewPass)
+			if (materialHasMedia && materialHasPreviewPass) //should we check for a pending tx package task here? could get really unlucky with timing and have segmentation information from an aggregator arrive between the check for package existing (<2seconds ago) and now
 			{
 				try
 				{
@@ -270,6 +270,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 						if (segmentList != null)
 						{
 							isPending = true;
+							assetAttributes = segmentList.getAttributeMap();
 						}
 					}
 					catch (PackageNotFoundException pnfe)
@@ -616,7 +617,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 		SegmentList seglist = null;
 		
 		try {
-		//Due to requiring detail fields we must refetch (Mayam searches dont return detail fields)
+			//Due to requiring detail fields we must refetch (Mayam searches dont return detail fields)
 			if (task != null)
 			{
 				long taskId = task.getAttribute(Attribute.TASK_ID);
