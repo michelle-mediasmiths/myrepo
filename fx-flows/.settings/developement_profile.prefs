@@ -1,11 +1,15 @@
 
 behind_proxy=false
-bundleExportPath=/Users/minhpham/code2002/foxtel/fx-flows
-deploy.fileRuntimeSelection=complexvar.xsd\:complexvarQC.xsd\:export.bpm\:fsAdapter\:fsAdapter/FSAdapter.xsd\:fsAdapter/delete.rest\:fsAdapter/move.rest\:qc.bpm\:qcAdapterRest\:qcAdapterRest/qcAdapter.xsd\:qcAdapterRest/qcFinished.rest\:qcAdapterRest/qcJobCancel.rest\:qcAdapterRest/qcJobResult.rest\:qcAdapterRest/qcResult.rest\:qcAdapterRest/qcStart.rest\:tcAdapter\:tcAdapter/createJob.rest\:tcAdapter/deleteJob.rest\:tcAdapter/queryJob.rest\:tcAdapter/tcAdapter.xsd\:tx-delivery.bpm\:tx-delivery.bpm/_C9DIkG6-EeKvjs-uExigJg.bptl\:wfAdapter\:wfAdapter/assetTransferForQC.rest\:wfAdapter/autoQCRequiredForTX.rest\:wfAdapter/autoQcError.rest\:wfAdapter/autoQcFailed.rest\:wfAdapter/autoQcPassed.rest\:wfAdapter/getDeliveryLocation.rest\:wfAdapter/getProfileForQC.rest\:wfAdapter/isTaskCancelled.rest\:wfAdapter/materialTransferForTC.rest\:wfAdapter/tcFailure.rest\:wfAdapter/tcPassed.rest\:wfAdapter/tcTotalFailure.rest\:wfAdapter/txDeliveryComplete.rest\:wfAdapter/txDeliveryFailure.rest\:wfAdapter/txDeliveryFinished.rest\:wfAdapter/wfAdapter.xsd\:wfAdapter/writeSegmentXML.rest\:
+bundleExportPath=/Users/bmcleod/git_checkouts/foxtel/fx-flows
+deploy.fileRuntimeSelection=qc.bpm\:complexvar.xsd\:export.bpm\:complexvarQC.xsd\:tx-delivery.bpm\:fsAdapter/FSAdapter.xsd\:fsAdapter/move.rest\:fsAdapter/delete.rest\:qcAdapterRest/qcFinished.rest\:qcAdapterRest/qcAdapter.xsd\:qcAdapterRest/qcResult.rest\:qcAdapterRest/qcJobCancel.rest\:qcAdapterRest/qcStart.rest\:qcAdapterRest/qcJobResult.rest\:tcAdapter/tcAdapter.xsd\:tcAdapter/createJob.rest\:tcAdapter/deleteJob.rest\:tcAdapter/setPriority.rest\:tcAdapter/queryJob.rest\:wfAdapter/materialTransferForTC.rest\:wfAdapter/autoQcPassed.rest\:wfAdapter/autoQcFailed.rest\:wfAdapter/wfAdapter.xsd\:wfAdapter/tcTotalFailure.rest\:wfAdapter/writeSegmentXML.rest\:wfAdapter/getProfileForQC.rest\:wfAdapter/tcPassed.rest\:wfAdapter/txDeliveryFailure.rest\:wfAdapter/assetTransferForQC.rest\:wfAdapter/txDeliveryFinished.rest\:wfAdapter/autoQcError.rest\:wfAdapter/tcGetPriority.rest\:wfAdapter/tcFailure.rest\:wfAdapter/txDeliveryComplete.rest\:wfAdapter/isTaskCancelled.rest\:wfAdapter/autoQCRequiredForTX.rest\:wfAdapter/getDeliveryLocation.rest\:
+deploy_bundleArchiveName=/fx-flows/fsAdapter/fx-flows.zip
 deploy_bundleShouldBeArchived=true
 deploy_bundleShouldBeDeployed=false
 deploy_gi_serverUrl=http\://10.111.224.101\:8081/gi
 deploy_serverUrl=http\://10.111.224.101\:8081/ode
+deploy_workflow_serverUrl=http\://localhost\:8080/wds
+deploy_workflowbundleShouldBeArchived=false
+deploy_workflowbundleShouldBeDeployed=true
 deploymenttimeout=120
 diagram_baseUri=http\://ns.mediasmithsforge.com/foxtel
 eclipse.preferences.version=1
