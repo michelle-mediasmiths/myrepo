@@ -67,6 +67,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	private static Programme.Media.AudioTracks getProgrammeMediaAudioTracks(FullProgrammePackageInfo pack)
 	{
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+		
 		if (audioTracks == null || audioTracks.size() == 0)
 		{
 			log.error("No audio tracks found when processing package " + pack.getPackageId());
@@ -74,41 +75,45 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 		else
 		{
+			AudioListType audioListType = getAudioEncoding(pack);
+			
 			Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
 
 			log.warn("Tracks defined: " + audioTracks.size());
-
-			for (AudioTrack track : audioTracks)
+			
+			if (audioListType == AudioListType.MONO)
 			{
-				if (log.isDebugEnabled())
-					log.debug("Setting the number of channels: " + track.getNumber());
-
-				if (track.getNumber() <= TRACK_MAX)
+				Programme.Media.AudioTracks.Track pmat = mappingAudioTrack(audioTracks, 0);
+				
+				ats.getTrack().add(pmat);
+				
+			}
+			else if (audioListType == AudioListType.STEREO)
+			{
+				Programme.Media.AudioTracks.Track pmat = mappingAudioTrack(audioTracks, 0);
+				ats.getTrack().add(pmat);
+				pmat = mappingAudioTrack(audioTracks, 1);
+				ats.getTrack().add(pmat);
+				
+			}
+			else if (audioListType == AudioListType.SURROUND)
+			{
+				for (AudioTrack track : audioTracks)
 				{
-					Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
-
-					AudioTrackType t = mayamChannelMapping[track.getNumber() - 1];
-
-					if (t != null) // there is a valid track name mapping.
+					if (track.getNumber() <= TRACK_MAX)
 					{
-						pmat.setNumber(track.getNumber());
-
-						pmat.setType(t);
-
-						ats.getTrack().add(pmat);
-
-						log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
+						Programme.Media.AudioTracks.Track pmat = mappingAudioTrack(audioTracks, track.getNumber() - 1);
+						if (pmat != null)
+						{
+							ats.getTrack().add(pmat);
+						}
 					}
 					else
 					{
 						log.warn("Ignoring track number: " + track.getNumber());
 					}
 				}
-				else
-				{
-					log.warn("Ignoring track number: " + track.getNumber());
-				}
-
+				
 			}
 			return ats;
 		}
@@ -140,6 +145,28 @@ public class MediaExchangeProgrammeOutputBuilder
 		mayamChannelMapping[7] = null;
 
 
+	}
+	
+	private static Programme.Media.AudioTracks.Track mappingAudioTrack(AudioTrackList audioTracks, int i)
+	{
+		AudioTrack track = audioTracks.get(i);
+		if (log.isDebugEnabled())
+			log.debug("Setting the number of channels: " + track.getNumber());
+		
+		Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
+		if (mayamChannelMapping[i] != null)
+		{
+			AudioTrackType t = mayamChannelMapping[i];
+			pmat.setNumber(track.getNumber());
+			pmat.setType(t);
+			log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
+			return pmat;
+		}
+		else
+		{
+			log.warn("Ignoring track number: " + track.getNumber());
+			return null;
+		}
 	}
 
 
@@ -254,8 +281,9 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static void getAudioEncoding(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private static AudioListType getAudioEncoding(final FullProgrammePackageInfo pack)
 	{
+		AudioListType audioListType = null;
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		if (audioTracks == null || audioTracks.size() == 0)
 		{
@@ -263,11 +291,11 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 		else
 		{
-	        AudioListType encoding = getAudioEncoding(audioTracks);
+			audioListType = getAudioEncoding(audioTracks);
 
-	        log.debug("Audio encoding: " + encoding);
-
+	        log.debug("Audio encoding: " + audioListType.toString());
 		}
+		return audioListType;
 	}
 
 	private static void setSupplier(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
@@ -410,17 +438,17 @@ public class MediaExchangeProgrammeOutputBuilder
 
 	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
 	{
-		if (audioTracks.size()==1)
+		if (audioTracks.size() == 1)
 		{
 			return AudioListType.MONO;
 		}
-		else if (audioTracks.size() == 2)
+		else if (audioTracks.size() >= 8)
 		{
-			return AudioListType.STEREO;
+			return AudioListType.SURROUND;
 		}
 		else
 		{
-			return AudioListType.SURROUND;
+			return AudioListType.STEREO;
 		}
 
 	}
