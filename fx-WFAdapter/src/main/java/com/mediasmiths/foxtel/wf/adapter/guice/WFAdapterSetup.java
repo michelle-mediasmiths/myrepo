@@ -6,6 +6,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.mediasmiths.foxtel.channels.config.ChannelConfigModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
+import com.mediasmiths.foxtel.tc.priorities.guice.TranscodePrioritiesModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.web.rest.setup.AbstractRESTGuiceSetup;
@@ -29,6 +30,8 @@ public class WFAdapterSetup extends AbstractRESTGuiceSetup
 		{
 			modules.add(new MayamClientModule());
 		}
+		
+		modules.add(new TranscodePrioritiesModule());
 	}
 
 	@Override

@@ -15,4 +15,14 @@ public enum TranscodeJobType
 	{
 		return text;
 	}
+	
+	public static TranscodeJobType fromText(String text){
+		for(TranscodeJobType type : TranscodeJobType.values()){
+			if(type.getText().equals(text)){
+				return type;
+			}
+		}
+		
+		throw new IllegalArgumentException("unknown job type");
+	}
 }
