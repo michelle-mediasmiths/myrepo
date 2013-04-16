@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
+import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.MayamClient;
 
