@@ -138,14 +138,15 @@ public class IngestJobHandler extends JobHandler
 	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
 	{
 		log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-		JobSubType jobSubType = jobMessage.getJobSubType();
-		if (null == jobSubType || (!jobSubType.equals(JobSubType.DART)))
-		{
-			AttributeMap updateMap = taskController.updateMapForTask(task);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
-			taskController.saveTask(updateMap);
-		}
+		log.debug("Pending updating ingest to FINISHED");
+//		JobSubType jobSubType = jobMessage.getJobSubType();
+//		if (null == jobSubType || (!jobSubType.equals(JobSubType.DART)))
+//		{
+//			AttributeMap updateMap = taskController.updateMapForTask(task);
+//			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+//			updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
+//			taskController.saveTask(updateMap);
+//		}
 		
 		try {
 			GregorianCalendar c = new GregorianCalendar();
