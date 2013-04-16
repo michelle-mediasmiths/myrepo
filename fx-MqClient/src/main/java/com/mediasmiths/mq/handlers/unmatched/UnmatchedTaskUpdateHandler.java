@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
@@ -218,6 +219,37 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					Date timeout = transferTimeout.start().getDate();
 					// queue transfer
 					transferManager.add(new TransferItem(unmatchedAssetID,unmatchedAssetHouseID, assetPeerId, timeout));
+				}
+			}
+			
+			// MAM-309: If media has moved after being accidentally attached then reopen Ingest task and remove Preview task
+			if (attributeChanged(Attribute.MEDST_HR, before, after, currentAttributes)
+					&& currentAttributes.getAttribute(Attribute.MEDST_HR) != null
+					&& currentAttributes.getAttribute(Attribute.MEDST_HR).equals(MediaStatus.MISSING))
+			{
+				String assetID = currentAttributes.getAttribute(Attribute.ASSET_ID);
+				List<AttributeMap> ingestTasks = taskController.getTasksForAsset(MayamTaskListType.INGEST, assetType, Attribute.ASSET_ID, assetID);
+				for (AttributeMap ingestTask: ingestTasks)
+				{
+					ingestTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+					taskController.saveTask(ingestTask);
+				}
+				
+				if (ingestTasks.size() > 1)
+				{
+					log.warn("More than 1 ingest task found for asset : " + assetID + ", " + ingestTasks.size() + "tasks found.");
+				}
+				
+				List<AttributeMap> previewTasks = taskController.getTasksForAsset(MayamTaskListType.PREVIEW, assetType, Attribute.ASSET_ID, assetID);
+				for (AttributeMap previewTask: previewTasks)
+				{
+					previewTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+					taskController.saveTask(previewTask);
+				}
+				
+				if (previewTasks.size() > 1)
+				{
+					log.warn("More than 1 preview task found for asset : " + assetID + ", " + previewTasks.size() + "tasks found.");
 				}
 			}
 		}

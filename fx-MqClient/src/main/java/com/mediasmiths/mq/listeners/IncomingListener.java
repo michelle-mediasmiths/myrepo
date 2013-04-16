@@ -1,5 +1,7 @@
 package com.mediasmiths.mq.listeners;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -7,13 +9,16 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
+import com.mayam.wf.mq.property.ChangeType;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
@@ -64,6 +69,8 @@ public class IncomingListener extends MqClientListener
 {
 	private static final String CREATE_CHANGE_TYPE = "create";
 	private static final String UPDATE_CHANGE_TYPE = "update";
+	private static final String MEDIA_MOVE_CHANGE_TYPE = "media_move";
+	
 	private static final String MAYAM_CHANGE_TYPE_PROPERTY = "MayamChangeType";
 	protected final static Logger logger = Logger.getLogger(IncomingListener.class);
 	public static final String ATTRIBUTE_MESSAGE_TYPE = "mayam#attributes";
@@ -185,6 +192,10 @@ public class IncomingListener extends MqClientListener
 					{
 						onAssetCreate(msg);
 					}
+					if (isAttributes(type) && isAsset(origin) && isMediaMove(changeType))
+					{
+						onMediaMove(msg);
+					}
 					else if (isAttributePair(type) && isAsset(origin) && isUpdate(changeType))
 					{
 						onAssetUpdate(msg);
@@ -261,9 +272,6 @@ public class IncomingListener extends MqClientListener
 			
 			if (!initialState.equals(newState))
 			{
-				
-				
-				
 				//tasks
 				passEventToHandler(ingestTaskCompleteHandler,currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
@@ -383,6 +391,51 @@ public class IncomingListener extends MqClientListener
 		}
 	
 	}
+	
+	private void onMediaMove(MqMessage msg)
+	{
+		//MAM-309: Dealing with new media_move change type. Behaviour is the same as an unmatched media attach but similar 
+		//asset update is not received, as such we are fabricating the update and using the existing handler
+		
+		logger.trace("onMediaMove");
+		AttributeMap messageAttributes = msg.getSubject();
+
+		try
+		{
+			String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			
+			List<AttributeMap> unmatchedTasks = taskController.getTasksForAsset(MayamTaskListType.UNMATCHED_MEDIA, assetType, Attribute.ASSET_ID, assetID);
+			
+			if (unmatchedTasks != null && !unmatchedTasks.isEmpty())
+			{
+				if (unmatchedTasks.size() > 1)
+				{
+					log.warn("More than 1 Unmatched Task for asset " + assetID + ", " + unmatchedTasks.size() + "tasks found.");
+				}
+				
+				AttributeMap beforeAttributes = unmatchedTasks.get(0);
+				
+				AttributeMap afterAttributes = client.createAttributeMap();
+				AttributeMap currentAttributes = client.createAttributeMap();
+				
+				afterAttributes.putAll(beforeAttributes);
+				currentAttributes.putAll(beforeAttributes);
+				
+				afterAttributes.setAttribute(Attribute.ASSET_PEER_ID, messageAttributes.getAttribute(Attribute.ASSET_PEER_ID));
+				currentAttributes.setAttribute(Attribute.ASSET_PEER_ID, messageAttributes.getAttribute(Attribute.ASSET_PEER_ID));
+				
+				passEventToUpdateHandler(unmatchedTaskUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
+			}
+			else {
+				log.warn("Unable to locate Unmatched Task for asset " + assetID);
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("error onMediaMove");
+		}
+	}
 
 	private boolean isTask(String origin)
 	{
@@ -402,6 +455,11 @@ public class IncomingListener extends MqClientListener
 	private boolean isCreate(String changeType)
 	{
 		return changeType.equals(CREATE_CHANGE_TYPE);
+	}
+	
+	private boolean isMediaMove(String changeType)
+	{
+		return changeType.equals(MEDIA_MOVE_CHANGE_TYPE);
 	}
 
 	private boolean isAsset(String origin)
