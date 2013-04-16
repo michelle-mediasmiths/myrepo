@@ -182,6 +182,9 @@ public class MultiFilePickUp implements IFilePickup
 					else
 					{
 						System.out.println("print - " + candidate.getRootName());
+
+						sendPickUpTimingEvent(candidate);
+
 						return candidate;
 					}
 				}
@@ -540,18 +543,26 @@ public class MultiFilePickUp implements IFilePickup
 
 	/**
 	 *
-	 * @param fileRef a file reference for an existing file that whose timings should be reported to the event system.
+	 * @param pp a pickup reference for an existing file that whose timings should be reported to the event system.
 	 */
-	private void sendPickUpTimingEvent(final File fileRef)
+	private void sendPickUpTimingEvent(final PickupPackage pp)
 	{
 
-		FilePickup pickUpStats = new FilePickup();
-		pickUpStats.setPickUpKind(pickUpKind);
-		pickUpStats.setFilePath(fileRef.getAbsolutePath());
-		pickUpStats.setWaitTime(System.currentTimeMillis() -  fileRef.lastModified());
+		PickupNotification pickUpStats = new PickupNotification();
+		for (String ext: pp.suffixes)
+		{
+			File f = pp.getPickUp(ext);
+			FilePickupDetails pd = new FilePickupDetails();
+			pd.setFilename(f.getName());
+			pd.setFilePath(pp.getRootPath());
+			pd.setTimeDiscovered(f.lastModified());
+			pd.setTimeProcessed(System.currentTimeMillis());
+			pickUpStats.getDetails().add(pd);
+		}
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent(eventNamespace,eventName,pickUpStats);
+		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure","FilePickUp",pickUpStats);
 	}
+
 
 	public File[] getWatchedDirectories()
 	{
