@@ -25,6 +25,7 @@ import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
 public class PurgeContentRpt
 {
@@ -37,6 +38,8 @@ public class PurgeContentRpt
 	
 	@Inject
 	private QueryAPI queryApi;
+	
+	private ReportUIImpl report = new ReportUIImpl();
 	
 	private int protect=0;
 	private int posponed=0;
@@ -76,12 +79,7 @@ public class PurgeContentRpt
 	
 	public List<PurgeContent> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
-		for (EventEntity event : titleEvents) {
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			titles.add(title);
-		}
+		List<CreateOrUpdateTitle> titles = report.titles;
 		
 //		List<EventEntity> materialEvents = queryApi.getByEventName("AddOrUpdateMaterial");
 //		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();

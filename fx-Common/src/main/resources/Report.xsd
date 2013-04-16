@@ -163,6 +163,18 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+	
+	<xs:element name="Watchfolder">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string"/>
+				<xs:element name="filename" type="xs:string"/>
+				<xs:element name="discovered" type="xs:string"/>
+				<xs:element name="processed" type="xs:string"/>
+				<xs:element name="aggregator" type="xs:string"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
 		
 	<xs:simpleType name="timecode">
 		<xs:restriction base="xs:string">

@@ -519,6 +519,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly=true)
 	public void getPurgeContentCSV()
 	{
+		populateTitles();
 		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX));
 		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)));
 		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)));
@@ -528,6 +529,7 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly=true)
 	public String getPurgeContentUI()
 	{
+		populateTitles();
 		TemplateCall call = templater.template("purge_content");
 		PurgeContentRpt report = new PurgeContentRpt();
 		List<PurgeContent> purged = report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX)), startDate, endDate);

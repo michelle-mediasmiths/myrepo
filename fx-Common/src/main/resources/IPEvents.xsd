@@ -23,8 +23,7 @@
 	</xs:complexType>
 
 
-    <xs:element name="FilePickup">
-        <xs:complexType>
+    <xs:complexType name="FilePickupDetails">
             <xs:complexContent>
                 <xs:annotation>
                     <xs:documentation>The definition for File Pickup Details.
@@ -32,18 +31,14 @@
                 </xs:annotation>
                 <xs:extension base="fns:IPEvent">
                     <xs:sequence>
-                        <xs:element name="pickUpKind" type="FilePickUpKinds"/>
                         <xs:element name="filePath" type="xs:string"/>
                         <xs:element name="filename" type="xs:string"/>
                         <xs:element name="timeDiscovered" type="xs:dateTime"/>
                         <xs:element name="timeProcessed" type="xs:dateTime"/>
-                        <xs:element name="aggregator" type="xs:string"/>
-                        <xs:element name="waitTime" type="xs:long"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
-        </xs:complexType>
-    </xs:element>
+    </xs:complexType>
 
 
     <xs:element name="CommFailure">
@@ -376,13 +371,12 @@
         </xs:sequence>
     </xs:complexType>
 
-	<xs:element name="mediaPickupNotification">
+	<xs:element name="PickupNotification">
     <xs:complexType>
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
-                    <xs:element name="filelocation" type="xs:string"/>
-                    <xs:element name="time" type="xs:string"/>
+                    <xs:element name="time" type="FilePickupDetails" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
