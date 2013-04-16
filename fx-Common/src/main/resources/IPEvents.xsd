@@ -383,6 +383,20 @@
     </xs:complexType>
     </xs:element>
 
+    <xs:element name="mediaPickupNotification">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="IPEvent">
+                    <xs:sequence>
+                        <xs:element name="filelocation" type="xs:string"/>
+                        <xs:element name="time" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+
 	<xs:element name="mediaPickupQuarantineNotification">
     <xs:complexType>
         <xs:complexContent>
