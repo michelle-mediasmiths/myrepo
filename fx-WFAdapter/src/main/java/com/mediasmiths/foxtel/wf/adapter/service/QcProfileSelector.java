@@ -28,6 +28,10 @@ public class QcProfileSelector
 	private String incomingHDSurround;
 	@Inject @Named("qc.profile.incoming.hd.internal")
 	private String incomingHDInternal;
+	@Inject @Named("qc.profile.incoming.sd.8audiotrack")
+	private String dartSDInternal;
+	@Inject @Named("qc.profile.incoming.hd.8audiotrack")
+	private String dartHDInternal;
 
 	@Inject @Named("qc.profile.tx.sd.stereo")
 	private String txSDStereo;
@@ -37,6 +41,7 @@ public class QcProfileSelector
 	private String txHDStereo;
 	@Inject @Named("qc.profile.tx.hd.surround")
 	private String txHDSurround;
+	
 	
 	private static final Logger log = Logger.getLogger(QcProfileSelector.class);
 	
@@ -75,7 +80,8 @@ public class QcProfileSelector
 		
 		if (isFromDartOrVizCapture)
 		{
-			log.info("this content is from dart or vizcap, will consider to be internal content and disregard audio tracks metadata");
+			log.info("this content is from dart or vizcap, will apply the 8 audio trac profile.");
+			
 		}
 
 		final String profile;
@@ -84,7 +90,7 @@ public class QcProfileSelector
 		{
 			if (isFromDartOrVizCapture)
 			{
-				profile = incomingSDInternal;
+				profile = dartSDInternal;
 			}
 			else if (isMaterialSurround)
 			{
@@ -99,7 +105,7 @@ public class QcProfileSelector
 		{
 			if (isFromDartOrVizCapture)
 			{
-				profile = incomingHDInternal;
+				profile = dartHDInternal;
 			}
 			else if (isMaterialSurround)
 			{
