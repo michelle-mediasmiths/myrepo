@@ -43,6 +43,13 @@
 			<artifactId>fx-Agent</artifactId>
 			<version>3.0-SNAPSHOT</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TranscodePriorities</artifactId>
+			<version>3.0-SNAPSHOT</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>wf-siteconfig</artifactId>
@@ -54,6 +61,8 @@
 		  <version>${worklists.version}</version>
 		  <classifier>dependencies</classifier>
 		</dependency>
+		
+		
 		
 		<dependency>
 			<groupId>commons-lang</groupId>

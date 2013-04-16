@@ -20,6 +20,8 @@ import com.mayam.wf.attributes.shared.DateUtil;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
+import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
@@ -50,6 +52,9 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Inject
 	@Named("ao.tx.delivery.location")
 	private String aoDeliveryLocation;
+
+	@Inject
+	private TranscodePriorities transcodePriorities;
 	
 	@Override
 	public String getName()
@@ -273,52 +278,9 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	public int getPriorityForTXJob(Date txDate)
 	{
 		log.debug(String.format("determining prority for job for asset tx date is %s", txDate.toString()));
-
-		int priority = 1;
-
-		long now = System.currentTimeMillis();
-		long txTime = txDate.getTime();
-		long difference = txTime - now;
-
-		if (difference > 0)
-		{
-			// tx date is in the future
-			if (difference < TWELVE_HOURS)
-			{
-				priority = 8;
-			}
-			else if (difference < ONE_DAY)
-			{
-				priority = 7;
-			}
-			else if (difference < THREE_DAYS)
-			{
-				priority = 6;
-			}
-			else if (difference < EIGHT_DAYS)
-			{
-				priority = 4;
-			}
-			else
-			{
-				priority = 2;
-			}
-		}
-		else
-		{
-			// tx date is in the past
-			if (Math.abs(difference) <= SEVEN_DAYS)
-			{
-				priority = 8; // go to the highest priority for this destination if the target date is no more than 7 days in the past
-			}
-			else
-			{
-				priority = 2;// else content goes to the lowest priority queue for that destination
-			}
-		}
-
-		log.debug("returning prority " + priority);
-		return priority;
+		Integer priority = transcodePriorities.getPriorityForNewTranscodeJob(TranscodeJobType.TX, txDate);
+		log.debug("priority is "+priority.intValue());
+		return priority.intValue();
 	}
 
 }

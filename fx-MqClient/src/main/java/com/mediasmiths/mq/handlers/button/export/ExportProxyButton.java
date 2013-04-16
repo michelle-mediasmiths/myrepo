@@ -17,6 +17,8 @@ import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
+import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
 import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
@@ -66,6 +68,9 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	
 	@Inject
 	private EventService eventService;
+	
+	@Inject
+	private TranscodePriorities transcodePriorities;
 	
 	@Override
 	protected void buttonClicked(AttributeMap requestAttributes)
@@ -238,7 +243,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	}
 
-	protected abstract String getJobType();
+	protected abstract TranscodeJobType getJobType();
 
 	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,
@@ -259,9 +264,9 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			String materialID,
 			AttributeMap requestAttributes,
 			AttributeMap materialAttributes,
-			String jobType) throws MayamClientException
+			TranscodeJobType transcodeJobType) throws MayamClientException
 	{
-		return taskController.createExportTask(materialID, requestAttributes, materialAttributes, jobType);
+		return taskController.createExportTask(materialID, requestAttributes, materialAttributes, transcodeJobType.getText());
 	}
 
 	private TCJobParameters jobParams(
@@ -354,7 +359,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
 
-	protected abstract int getPriority(Date firstTx);
+	private int getPriority(Date firstTx){
+		Integer priority = transcodePriorities.getPriorityForNewTranscodeJob(getJobType(),firstTx).intValue();
+		log.debug("priority is "+priority.intValue());
+		return priority.intValue();
+	}
 
 	protected abstract TCOutputPurpose getPurpose();
 

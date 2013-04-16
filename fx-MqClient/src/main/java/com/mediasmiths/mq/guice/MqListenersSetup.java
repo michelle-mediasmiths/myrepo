@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.server.AttributesModule;
 import com.mayam.wf.mq.MqModule;
 import com.mediasmiths.foxtel.channels.config.ChannelConfigModule;
 import com.mediasmiths.foxtel.ip.event.guice.EventServiceModule;
+import com.mediasmiths.foxtel.tc.priorities.guice.TranscodePrioritiesModule;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
@@ -23,6 +24,7 @@ public class MqListenersSetup implements GuiceSetup {
 		modules.add(new JaxModule());
 		modules.add(new ChannelConfigModule());
 		modules.add(new MqModule("fxMqListners"));
+		modules.add(new TranscodePrioritiesModule());
 	}
 
 	@Override
