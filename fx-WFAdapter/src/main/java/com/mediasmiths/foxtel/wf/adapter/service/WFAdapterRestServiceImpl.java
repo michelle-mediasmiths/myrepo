@@ -3,8 +3,13 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
@@ -24,12 +29,16 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
+import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCResultNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
@@ -129,6 +138,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Named("ao.tx.delivery.ftp.gxf.source.path")
 	private String aoGXFFTPSourcePath = "ready/";
 
+	@Inject
+	private TranscodePriorities transcodePriorities;
+	
 	@Override
 	public String ping()
 	{
@@ -783,5 +795,39 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			System.out.println("\nFATAL ERROR");
 			exception.printStackTrace();
 		}
+	}
+
+
+	@Override
+	@POST
+	@Path("/tc/priority")
+	@Produces("application/xml")
+	@Consumes("application/xml")
+	public GetPriorityResponse getTCPriority(GetPriorityRequest request)
+	{
+		Date created = request.getCreated();
+		Date txDate = request.getTxDate();
+		Integer currentPriority = request.getCurrentPriority();
+		String strJobType = request.getJobType();
+		TranscodeJobType jobType = TranscodeJobType.fromText(strJobType);
+
+		Integer newPriority = transcodePriorities.getPriorityForTranscodeJob(jobType, txDate, created, currentPriority);
+		log.debug("priority returned : " + newPriority);
+
+		GetPriorityResponse ret = new GetPriorityResponse();
+		ret.setPriority(newPriority);
+		ret.setChanged(false);
+
+		if (!newPriority.equals(currentPriority))
+		{
+			log.info("priority change for transcode job " + jobType);
+			ret.setChanged(true);
+		}
+		else
+		{
+			ret.setChanged(false);
+		}
+
+		return ret;
 	}
 }

@@ -18,6 +18,8 @@ import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
@@ -234,6 +236,17 @@ public interface WFAdapterRestService
 	@Path("/purge/perform")
 	@Produces("text/plain")
 	public boolean performPendingPerges() throws MayamClientException;
+	
+	/**
+	 * Returns the transcode priority a job should have
+	 * @param request
+	 * @return
+	 */
+	@POST
+	@Path("/tc/priority")
+	@Produces("application/xml")
+	@Consumes("application/xml")
+	public GetPriorityResponse getTCPriority(GetPriorityRequest request);
 	
 }
 
