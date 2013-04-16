@@ -257,6 +257,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
 		ie.setCreated(new Date());
+		ie.setJobType(getJobType().getText());
 
 		mule.initiateExportWorkflow(ie);
 	}
