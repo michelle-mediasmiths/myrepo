@@ -1,13 +1,13 @@
 package com.mediasmiths.foxtel.agent.queue;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import org.apache.commons.io.FilenameUtils;
 
 /**
  * The data for items that have been picked up
@@ -18,7 +18,7 @@ public class PickupPackage
 	/*
 	  Internally - all suffixes are lower case.
 	 */
-    private Set<String> suffixes = new HashSet<String>();
+    public final Set<String> suffixes = new HashSet<String>();
 	private Map<String, File> files = new HashMap<String, File>();
 
 	private boolean isSuspectPickup = false;

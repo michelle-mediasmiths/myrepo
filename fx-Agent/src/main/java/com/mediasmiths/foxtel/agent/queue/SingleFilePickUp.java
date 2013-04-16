@@ -1,18 +1,18 @@
 package com.mediasmiths.foxtel.agent.queue;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
+import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
+import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import org.apache.log4j.Logger;
-
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.FilePickUpKinds;
-import com.mediasmiths.foxtel.ip.common.events.FilePickup;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -168,6 +168,7 @@ public class SingleFilePickUp implements IFilePickup
 					}
 					else
 					{
+						sendPickUpTimingEvent(candidate);
 						return candidate;
 					}
 				}
@@ -442,17 +443,24 @@ public class SingleFilePickUp implements IFilePickup
 
 	/**
 	 *
-	 * @param fileRef a file reference for an existing file that whose timings should be reported to the event system.
+	 * @param pp a pickup reference for an existing file that whose timings should be reported to the event system.
 	 */
-	private void sendPickUpTimingEvent(final File fileRef)
+	private void sendPickUpTimingEvent(final PickupPackage pp)
 	{
 
-		FilePickup pickUpStats = new FilePickup();
-		pickUpStats.setPickUpKind(pickUpKind);
-		pickUpStats.setFilePath(fileRef.getAbsolutePath());
-		pickUpStats.setWaitTime(System.currentTimeMillis() -  fileRef.lastModified());
+		PickupNotification pickUpStats = new PickupNotification();
+		for (String ext: pp.suffixes)
+		{
+             File f = pp.getPickUp(ext);
+			 FilePickupDetails pd = new FilePickupDetails();
+			 pd.setFilename(f.getName());
+			 pd.setFilePath(pp.getRootPath());
+			 pd.setTimeDiscovered(f.lastModified());
+			 pd.setTimeProcessed(System.currentTimeMillis());
+			 pickUpStats.getDetails().add(pd);
+		}
 
-		if (eventsEnabled) pickUpEventTimer.saveEvent(eventNamespace,eventName,pickUpStats);
+		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure","FilePickUp",pickUpStats);
 	}
 
 	public File[] getWatchedDirectories()
