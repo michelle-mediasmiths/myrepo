@@ -19,7 +19,6 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
-import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.mpa.MediaEnvelope;
