@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.mule.api.MuleException;
 
 import com.google.inject.Inject;
@@ -252,6 +253,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 	{
 		InvokeExport ie = new InvokeExport();
 		ie.setAssetID(materialID);
+		
+		if(firstTX==null){
+			DateTime dtF = new DateTime();
+			dtF.minusMonths(1);
+			firstTX=dtF.toDate(); //ensure first tx isnt null, if none specified use a date > 7 days in the past
+		}
+		
 		ie.setRequiredDate(firstTX);
 		ie.setTaskID(taskID);
 		ie.setTcParams(jobParams);
