@@ -49,15 +49,11 @@ public class OrderStatusRpt
 		logger.info("List size: " + events.size());
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
 		setStats(orders);
-		OrderStatus del = addStats("Total Delivered", Integer.toString(delivered));
-		OrderStatus out = addStats("Total Outstanding", Integer.toString(outstanding));
-		OrderStatus ove = addStats("Total Overdue", Integer.toString(overdue));
-		OrderStatus unm = addStats("Total Unmatched", Integer.toString(unmatched));
+		orders.add(addStats("Total Delivered", Integer.toString(delivered)));
+		orders.add(addStats("Total Outstanding", Integer.toString(outstanding)));
+		orders.add(addStats("Total Overdue", Integer.toString(overdue)));
+		orders.add(addStats("Total Unmatched", Integer.toString(unmatched)));
 		
-		orders.add(del);
-		orders.add(out);
-		orders.add(ove);
-		orders.add(unm);
 		createCsv(orders, reportName);
 	}
 	
@@ -88,8 +84,6 @@ public class OrderStatusRpt
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
 		
 		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-		logger.info("MAX: " + MAX);
-		logger.info("PACKAGELIST: " + queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX));
 		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
 			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
 			packages.add(currentPack);
