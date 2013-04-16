@@ -33,8 +33,8 @@
                     <xs:sequence>
                         <xs:element name="filePath" type="xs:string"/>
                         <xs:element name="filename" type="xs:string"/>
-                        <xs:element name="timeDiscovered" type="xs:dateTime"/>
-                        <xs:element name="timeProcessed" type="xs:dateTime"/>
+                        <xs:element name="timeDiscovered" type="xs:long"/>
+                        <xs:element name="timeProcessed" type="xs:long"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
@@ -376,7 +376,7 @@
         <xs:complexContent>
             <xs:extension base="IPEvent">
                 <xs:sequence>
-                    <xs:element name="time" type="FilePickupDetails" minOccurs="1" maxOccurs="unbounded"/>
+                    <xs:element name="details" type="FilePickupDetails" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
