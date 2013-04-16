@@ -25,6 +25,7 @@
       <xs:element minOccurs="0" name="bug" type="tns:tcBugOptions"/>
       <xs:element minOccurs="0" name="timecode" type="tns:tcTimecodeOptions"/>
       <xs:element name="priority" type="xs:int"/>
+      <xs:element minOccurs="0" name="ftpupload" type="tns:tcftpUpload"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -34,6 +35,16 @@
       <xs:element name="size" type="tns:tcTimecodeSize"/>
       <xs:element name="background" type="tns:tcTimecodeColour"/>
       <xs:element name="foreground" type="tns:tcTimecodeColour"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcftpUpload">
+    <xs:sequence>
+      <xs:element name="filename" type="xs:string"/>
+      <xs:element name="folder" type="xs:string"/>
+      <xs:element name="server" type="xs:string"/>
+      <xs:element name="user" type="xs:string"/>
+      <xs:element name="password" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -71,6 +82,7 @@
       <xs:enumeration value="TX_SD"/>
       <xs:enumeration value="DVD"/>
       <xs:enumeration value="CAPTIONING"/>
+      <xs:enumeration value="MPG4"/>
     </xs:restriction>
   </xs:simpleType>
 
@@ -83,6 +95,7 @@
 
   <xs:simpleType name="tcTimecodeSize">
     <xs:restriction base="xs:string">
+      <xs:enumeration value="SMALL"/>
       <xs:enumeration value="MEDIUM"/>
       <xs:enumeration value="LARGE"/>
     </xs:restriction>

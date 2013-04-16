@@ -41,7 +41,7 @@ public interface TCRestService
 	@Produces("application/xml")
 	public TCJobInfo queryJob(@PathParam("guid") String guid) throws Exception;
 
-	@PUT
+	@GET //yes changing state with a GET I don't like this but intalio wont allow a PUT/POST without a request body
 	@Path("/job/{guid}/priority")
 	public void setJobPriority(@PathParam("guid") String guid, @QueryParam("priority") Integer newPriority) throws Exception;
 	

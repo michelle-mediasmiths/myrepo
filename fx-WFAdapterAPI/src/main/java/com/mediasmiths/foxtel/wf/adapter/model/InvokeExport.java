@@ -12,9 +12,13 @@ public class InvokeExport
 {
 	private String assetID;
 	private Date requiredDate;
+	private Date created;
 	private long taskID;
 	private TCJobParameters tcParams;
-		
+	private String jobType;
+	
+
+
 	public TCJobParameters getTcParams()
 	{
 		return tcParams;
@@ -71,5 +75,26 @@ public class InvokeExport
 		this.title = title;
 	}
 
+	@XmlElement
+	public String getJobType()
+	{
+		return jobType;
+	}
+
+	public void setJobType(String jobType)
+	{
+		this.jobType = jobType;
+	}
+	
+	@XmlElement
+	public Date getCreated()
+	{
+		return created;
+	}
+
+	public void setCreated(Date created)
+	{
+		this.created = created;
+	}
 	
 }

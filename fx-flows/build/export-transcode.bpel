@@ -148,6 +148,13 @@
     <tcAdapter:foreground></tcAdapter:foreground>
   </tcAdapter:timecode>
   <tcAdapter:priority></tcAdapter:priority>
+  <tcAdapter:ftpupload>
+    <tcAdapter:filename></tcAdapter:filename>
+    <tcAdapter:folder></tcAdapter:folder>
+    <tcAdapter:server></tcAdapter:server>
+    <tcAdapter:user></tcAdapter:user>
+    <tcAdapter:password></tcAdapter:password>
+  </tcAdapter:ftpupload>
 </tcAdapter:TCJob></bpel:literal>
                 </bpel:from>
                 <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
@@ -160,6 +167,13 @@
   <tns:forTXDelivery></tns:forTXDelivery>
   <tns:taskID></tns:taskID>
   <tns:title></tns:title>
+  <tns:ftpupload>
+    <tcAdapter:filename></tcAdapter:filename>
+    <tcAdapter:folder></tcAdapter:folder>
+    <tcAdapter:server></tcAdapter:server>
+    <tcAdapter:user></tcAdapter:user>
+    <tcAdapter:password></tcAdapter:password>
+  </tns:ftpupload>
 </tns:tcPassedNotification></bpel:literal>
                 </bpel:from>
                 <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>

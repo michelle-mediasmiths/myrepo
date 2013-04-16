@@ -251,6 +251,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		startMessage.setTaskID(taskID);
 		startMessage.setTcParams(tcParams);
 		startMessage.setTitle(title);
+		startMessage.setCreated(new Date());
 
 		mule.initiateTxDeliveryWorkflow(startMessage);
 
