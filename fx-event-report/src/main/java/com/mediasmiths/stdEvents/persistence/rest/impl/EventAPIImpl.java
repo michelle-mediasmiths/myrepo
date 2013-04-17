@@ -8,6 +8,7 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
@@ -26,6 +27,9 @@ public class EventAPIImpl implements EventAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
+	
+	@Inject
+	protected AggregatedBMSDao bmsDao;
 	
 	private final EventingDao eventingDao;
 
@@ -58,8 +62,13 @@ public class EventAPIImpl implements EventAPI
 
 			// Save event to the all events table.
 		logger.info("Saving to Event table EVENT_NAME: " + event.getEventName() + " NAMESPACE: " + event.getNamespace());
-		eventDao.saveOrUpdate(event);
 		
+		if ((event.getEventName().equals("CreateOrUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
+			logger.info("BMS message detected");
+			bmsDao.updateBMS(event);
+		}
+		
+		eventDao.saveOrUpdate(event);
 		
 		EventingEntity eventingEntity = new EventingEntity();
 		logger.info("Created correctly");

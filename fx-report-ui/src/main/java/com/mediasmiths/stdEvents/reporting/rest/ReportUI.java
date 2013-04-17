@@ -144,6 +144,11 @@ public interface ReportUI
 	public void getWatchFolderStorageCSV();
 	
 	@GET
+	@Path("/watch_folder_storage_ui")
+	@Produces("text/html")
+	public String getWatchFolderStorageUI();
+	
+	@GET
 	@Path("/transcoder_load_csv")
 	@Produces("text/html")
 	public void getTranscoderLoadCSV();

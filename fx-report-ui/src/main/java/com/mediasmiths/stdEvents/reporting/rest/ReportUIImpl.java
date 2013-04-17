@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.ManualQA;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
+import com.mediasmiths.foxtel.ip.common.events.report.Watchfolder;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
@@ -330,6 +331,13 @@ public class ReportUIImpl implements ReportUI
 			if (ui)
 				return getExportUI();
 		}
+		else if (rpt.equals("Watchfolder")) {
+			logger.info("generating Watchfolder__");
+			if (csv)
+				getWatchFolderStorageCSV();
+			if (ui)
+				return getWatchFolderStorageUI();
+		}
 		return null;		
 	}
 
@@ -571,11 +579,10 @@ public class ReportUIImpl implements ReportUI
 	public String getExportUI()
 	{
 		TemplateCall call = templater.template("export");
-		ExportRpt report = new ExportRpt();
 		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
 		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
 		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
-		List<Export> exports = report.getReportList(events, startDate, endDate);
+		List<Export> exports = export.getReportList(events, startDate, endDate);
 		call.set("exports", exports);
 		return call.process();
 	}
@@ -583,9 +590,18 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly=true)
 	public void getWatchFolderStorageCSV()
 	{
-		List<EventEntity> events = new ArrayList<EventEntity>();
-		//NEED TEST DATA TO SEND REPORT
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
 		watchFolder.writeWatchFolder(events, startDate, endDate, REPORT_NAME);
+	}
+	
+	@Transactional(readOnly=true)
+	public String getWatchFolderStorageUI()
+	{
+		TemplateCall call = templater.template("watch_folder");
+		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
+		List<Watchfolder> files = watchFolder.getWatchFolderList(events, startDate, endDate);
+		call.set("files", files);
+		return call.process();
 	}
 	
 	@Transactional(readOnly=true)
