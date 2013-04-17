@@ -560,7 +560,7 @@ public class MultiFilePickUp implements IFilePickup
 			pickUpStats.getDetails().add(pd);
 		}
 
-		pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", "FilePickUp", pickUpStats);
+		if (eventsEnabled) pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", "FilePickUp", pickUpStats);
 	}
 
 
