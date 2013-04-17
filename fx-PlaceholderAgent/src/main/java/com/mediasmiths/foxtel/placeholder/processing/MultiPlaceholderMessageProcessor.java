@@ -23,7 +23,6 @@ import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
-import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.IBMSDeleteItemFailure;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
@@ -545,7 +544,6 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 	{
 		if (errorActions != null && !errorActions.isEmpty())
 		{
-			processingError(envelope.getPickupPackage());
 		}
 
 	}
@@ -697,7 +695,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
 	        ibmsTransactionRollback(title, addMaterialMsgs);
 
-	        messageValidationFailed(new MessageValidationResultPackage<PlaceholderMessage>(envelope.getPickupPackage(), e.result));
+	        messageValidationFailed(new MessageValidationResultPackage<PlaceholderMessage>(envelope.getPickupPackage(), message, e.result));
 
         }
         catch (MessageProcessingFailedException e)
@@ -706,9 +704,6 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             logger.error("IBMS: Placeholder Processing error.", e);
 
             ibmsTransactionRollback(title, addMaterialMsgs);
-
-	        processingError(envelope.getPickupPackage());
-
 
         }
 
@@ -733,7 +728,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
      * Roll back by removing the title and addMaterial messages added.
      *
      */
-    private void ibmsTransactionRollback(CreateOrUpdateTitle title, List<AddOrUpdateMaterial> addMaterialMsgs)
+    private void ibmsTransactionRollback(CreateOrUpdateTitle title, List<AddOrUpdateMaterial> addMaterialMsgs) throws MessageProcessingFailedException
     {
         if (title != null)
         {
@@ -780,6 +775,8 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         {
             logger.debug("IBMS Rollback - Nothing to roll back.");
         }
+
+	    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_ACTION);
     }
 
     /**
