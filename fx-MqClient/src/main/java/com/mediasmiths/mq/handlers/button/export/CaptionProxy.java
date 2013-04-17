@@ -55,7 +55,7 @@ public class CaptionProxy extends ExportProxyButton
 	@Override
 	protected TranscodeJobType getJobType()
 	{
-		return TranscodeJobType.COMPLIANCE_PROXY;
+		return TranscodeJobType.CAPTION_PROXY;
 	}
 
 }
