@@ -540,10 +540,12 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 	 * Post the collection of error messages in processing the list of argument options.
 	 *
 	 */
-	private void messageProcessingFailed(final MessageEnvelope<PlaceholderMessage> envelope, final List<Object> errorActions)
+	private void messageProcessingFailed(final MessageEnvelope<PlaceholderMessage> envelope, final List<Object> errorActions) throws MessageProcessingFailedException
 	{
 		if (errorActions != null && !errorActions.isEmpty())
 		{
+			throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_ACTION);
+
 		}
 
 	}
@@ -606,7 +608,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
      * @param envelope
      * @param message IBMS or BMS placeholder message
      */
-    private void processAsIndividualPlaceholderActions(final MessageEnvelope<PlaceholderMessage> envelope, PlaceholderMessage message)
+    private void processAsIndividualPlaceholderActions(final MessageEnvelope<PlaceholderMessage> envelope, PlaceholderMessage message) throws MessageProcessingFailedException
     {
 
 	    List<Object> errorActions = new ArrayList<Object>();
