@@ -31,12 +31,10 @@ public class PublicityProxy extends ExportProxyButton
 		return MayamButtonType.PUBLICITY_PROXY;
 	}
 
-	public static final String buttonName = "Publicity Proxy";
-
 	@Override
 	public String getName()
 	{
-		return buttonName;
+		return getJobType().getText();
 	}
 
 	@Override

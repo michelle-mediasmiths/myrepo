@@ -421,7 +421,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			AttributeMap task = mayamClient.getTask(taskId);
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
 	
-			if (taskListID.equals("Caption Proxy"))
+			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				saveEvent(
 						"CaptionProxyFailure",
@@ -430,7 +430,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						false);
 			}
-			else if (taskListID.equals("Publicity Proxy"))
+			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
 				saveEvent(
 						         "PublicityProxyFailure",
@@ -439,7 +439,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						         false);
 			}
-			else if (taskListID.equals("Compliance Proxy"))
+			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
 				saveEvent(
 						"ClassificationProxyFailure",
@@ -484,7 +484,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			AttributeMap task = mayamClient.getTask(taskId);
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
 			log.debug("Task Button: " + taskListID);
-			if (taskListID.equals("Caption Proxy"))
+			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				saveEvent(
 						"CaptionProxySuccess",
@@ -494,7 +494,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						true,
 						deliveryLocation);
 			}
-			else if (taskListID.equals("Classification Proxy"))
+			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
 				saveEvent(
 						"ClassificationProxySuccess",
@@ -504,7 +504,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						true,
 						deliveryLocation);
 			}
-			else if (taskListID.equals("Publicity Proxy"))
+			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
 				saveEvent(
 						"PublicityProxySuccess",
