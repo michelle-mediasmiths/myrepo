@@ -33,14 +33,11 @@ public class PlaceholderAgentModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		
-		bind(PLACEHOLDERPROCESSOR_LITERAL).to(PlaceholderMessageProcessor.class);
+
 		bind(PlaceholderAgent.class).asEagerSingleton();
 		bind(IFilePickup.class).to(SingleFilePickUp.class);
 		
 	}
-	protected static final TypeLiteral<MessageProcessor<PlaceholderMessage>> PLACEHOLDERPROCESSOR_LITERAL =  new TypeLiteral<MessageProcessor<PlaceholderMessage>>(){};
-	
 	
 	@Provides
 	JAXBContext provideJAXBContext() throws JAXBException{
