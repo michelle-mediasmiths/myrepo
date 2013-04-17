@@ -476,8 +476,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (notification.getFtpupload() != null)
 			{
+				log.debug("destination received from TCPassedNotification");
 				TCFTPUpload ftpupload = notification.getFtpupload();
 				deliveryLocation = String.format("%s/%s", ftpupload.folder, ftpupload.filename);
+				log.debug("delivery location :"+deliveryLocation);
 			}
 
 			long taskId = notification.getTaskID();
