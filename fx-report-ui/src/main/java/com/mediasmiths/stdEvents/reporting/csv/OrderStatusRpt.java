@@ -62,16 +62,13 @@ public class OrderStatusRpt
 		Object placeholder = null;
 		String payload = event.getPayload();
 		logger.info("Unmarshalling payload " + payload);
-
-		try
-		{
+		try {
 			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
 			logger.info("Deserialising payload");
 			placeholder = JAXB_SERIALISER.deserialise(payload);
 			logger.info("Object created");
 		}
-		catch (Exception e)		
-		{
+		catch (Exception e)	{
 			e.printStackTrace();
 		}	
 		return placeholder;
