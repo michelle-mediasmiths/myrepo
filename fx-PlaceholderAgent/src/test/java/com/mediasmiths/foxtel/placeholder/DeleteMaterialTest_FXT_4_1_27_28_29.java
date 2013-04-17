@@ -9,7 +9,6 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
-import com.mediasmiths.foxtel.multiplaceholder.foxtel.messagetests.ResultLogger;
 import com.mediasmiths.foxtel.placeholder.categories.ProcessingTests;
 import com.mediasmiths.foxtel.placeholder.categories.ValidationTests;
 import com.mediasmiths.foxtel.placeholder.util.Util;
@@ -30,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 public class DeleteMaterialTest_FXT_4_1_27_28_29 extends PlaceHolderMessageShortTest {
 	private static Logger logger = Logger.getLogger(DeleteMaterialTest_FXT_4_1_27_28_29.class);
-	private static Logger resultLogger = Logger.getLogger(ResultLogger.class);
+	private static Logger resultLogger = Logger.getLogger(DeleteMaterial.class);
 
 	public DeleteMaterialTest_FXT_4_1_27_28_29() throws JAXBException, SAXException, IOException {
 		super();
