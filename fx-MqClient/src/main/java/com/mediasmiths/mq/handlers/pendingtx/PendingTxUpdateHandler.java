@@ -66,7 +66,7 @@ public class PendingTxUpdateHandler extends TaskUpdateHandler
 				try
 				{
 					// check if there has ever been a fix and stitch task for this asset
-					boolean fixAndStitchItem = taskController.fixAndStitchTaskExistsForItem(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+					boolean fixAndStitchItem = taskController.fixAndStitchTaskExistsForItem(currentAttributes.getAttributeAsString(Attribute.ASSET_ID));
 
 					if (fixAndStitchItem && segmentList != null && segmentList.getEntries() != null)
 					{

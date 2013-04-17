@@ -26,12 +26,11 @@ public class CaptionProxy extends ExportProxyButton
 		return MayamButtonType.CAPTION_PROXY;
 	}
 
-	public static final String buttonName = "Caption Proxy";
 
 	@Override
 	public String getName()
 	{
-		return buttonName;
+		return getJobType().getText();
 	}
 
 	@Override
@@ -55,7 +54,7 @@ public class CaptionProxy extends ExportProxyButton
 	@Override
 	protected TranscodeJobType getJobType()
 	{
-		return TranscodeJobType.COMPLIANCE_PROXY;
+		return TranscodeJobType.CAPTION_PROXY;
 	}
 
 }

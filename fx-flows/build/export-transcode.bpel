@@ -422,6 +422,14 @@
                           <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
                           <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
                         </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:filename/text()</bpel:from>
+                          <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:filename</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:folder/text()</bpel:from>
+                          <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:folder</bpel:to>
+                        </bpel:copy>
                       </bpel:assign>
                       <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="send success message" name="send_success_message-1" bpmn:id="_qeWgsHEQEeKgV8mGUipbQA"></bpel:invoke>
                     </bpel:sequence>
