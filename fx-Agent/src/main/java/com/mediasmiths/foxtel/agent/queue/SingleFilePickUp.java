@@ -449,7 +449,7 @@ public class SingleFilePickUp implements IFilePickup
 	{
 
 		PickupNotification pickUpStats = new PickupNotification();
-		for (String ext: pp.suffixes)
+		for (String ext: pp.getFoundSuffixes())
 		{
              File f = pp.getPickUp(ext);
 			 FilePickupDetails pd = new FilePickupDetails();
