@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.mule.api.MuleException;
 
 import com.google.inject.Inject;
@@ -83,11 +84,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		AttributeMap materialAttributes;
 
-		if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
-		{
-			materialAttributes = requestAttributes;
-		}
-		else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
+		if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 		{
 			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			materialAttributes = materialController.getMaterialAttributes(materialID);
@@ -110,6 +107,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
+			String packageID = (String ) requestAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
 
@@ -192,7 +190,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			// invoke export flow
 			try
 			{
-				initiateWorkflow(title, firstTX, materialID, jobParams, taskID);
+				initiateWorkflow(title, materialID,packageID, jobParams, taskID);
 				ExportStart export = new ExportStart();
 				export.setMaterialID(materialID);
 				export.setChannels(channels.toString());
@@ -245,17 +243,19 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	protected abstract TranscodeJobType getJobType();
 
-	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
+	private void initiateWorkflow(String assetTitle, String materialID, String packageID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,
 			JAXBException,
 			MuleException
 	{
 		InvokeExport ie = new InvokeExport();
 		ie.setAssetID(materialID);
-		ie.setRequiredDate(firstTX);
 		ie.setTaskID(taskID);
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
+		ie.setCreated(new Date());
+		ie.setJobType(getJobType().getText());
+		ie.setPackageID(packageID);
 
 		mule.initiateExportWorkflow(ie);
 	}

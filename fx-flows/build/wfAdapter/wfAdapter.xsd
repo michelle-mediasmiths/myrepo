@@ -13,6 +13,10 @@
 
   <xs:element name="autoQCPassNotification" type="tns:autoQCPassNotification"/>
 
+  <xs:element name="getPriorityRequest" type="tns:getPriorityRequest"/>
+
+  <xs:element name="getPriorityResponse" type="tns:getPriorityResponse"/>
+
   <xs:element name="getQCProfileResponse" type="tns:getQCProfileResponse"/>
 
   <xs:element name="getTCJobParametersReq" type="tns:getTCJobParametersReq"/>
@@ -83,7 +87,9 @@
   <xs:complexType name="tcPassedNotification">
     <xs:complexContent>
       <xs:extension base="tns:tcNotification">
-        <xs:sequence/>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ftpupload" type="ns1:tcftpUpload"/>
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -115,6 +121,15 @@
     </xs:sequence>
   </xs:complexType>
 
+  <xs:complexType name="getPriorityRequest">
+    <xs:sequence>
+      <xs:element name="created" type="xs:dateTime"/>
+      <xs:element name="currentPriority" type="xs:int"/>
+      <xs:element name="jobType" type="xs:string"/>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="assetTransferForQCRequest">
     <xs:complexContent>
       <xs:extension base="tns:autoQCRequest">
@@ -140,7 +155,9 @@
   <xs:complexType name="invokeExport">
     <xs:sequence>
       <xs:element name="assetID" type="xs:string"/>
-      <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="jobType" type="xs:string"/>
+      <xs:element name="packageID" type="xs:string"/>
       <xs:element name="taskID" type="xs:long"/>
       <xs:element name="tcParams" type="ns1:tcJobParameters"/>
       <xs:element name="title" type="xs:string"/>
@@ -161,9 +178,17 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="getPriorityResponse">
+    <xs:sequence>
+      <xs:element name="changed" type="xs:boolean"/>
+      <xs:element name="priority" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="invokeIntalioTXFlow">
     <xs:sequence>
       <xs:element name="AO" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
       <xs:element name="packageID" type="xs:string"/>
       <xs:element name="requiredDate" type="xs:dateTime"/>
       <xs:element name="taskID" type="xs:long"/>
@@ -172,17 +197,17 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="autoQCPassNotification">
+  <xs:complexType name="invokeIntalioQCFlow">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCResultNotification">
+      <xs:extension base="tns:autoQCRequest">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="invokeIntalioQCFlow">
+  <xs:complexType name="autoQCPassNotification">
     <xs:complexContent>
-      <xs:extension base="tns:autoQCRequest">
+      <xs:extension base="tns:autoQCResultNotification">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>

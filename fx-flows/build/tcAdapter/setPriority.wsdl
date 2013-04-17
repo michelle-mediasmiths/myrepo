@@ -1,0 +1,41 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:string" name="guid_urlType"/>
+      <xs:element type="xs:int" name="priority_urlType"/>
+      <xs:element type="xs:anyType" name="response_setPriority_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="setPriority_input">
+    <wsdl:part name="guid" element="setPriority:guid_urlType"/>
+    <wsdl:part name="priority" element="setPriority:priority_urlType"/>
+  </wsdl:message>
+  <wsdl:message name="setPriority_output">
+    <wsdl:part name="response" element="setPriority:response_setPriority_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="setPriority">
+      <wsdl:input message="setPriority:setPriority_input"/>
+      <wsdl:output message="setPriority:setPriority_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="setPriority:restInterface">
+    <wsdl:operation name="setPriority">
+      <ode:binding verb="GET"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/xml" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="setPriority:restBinding">
+      <http:address location="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}/priority?priority={priority}"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

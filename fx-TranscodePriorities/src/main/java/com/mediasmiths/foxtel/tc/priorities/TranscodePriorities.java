@@ -57,7 +57,7 @@ public class TranscodePriorities
 
 		if (txDatePassed)
 		{
-			// tx date is passed return either highest or lowests priority for the given job type
+			// tx date is passed return either highest or lowest priority for the given job type
 			return priorityForTxDatePassedJob(type, txDate);
 		}
 

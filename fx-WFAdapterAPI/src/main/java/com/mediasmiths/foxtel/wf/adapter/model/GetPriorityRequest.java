@@ -8,15 +8,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GetPriorityRequest
 {
-	@XmlElement(required=true)
+
 	private String jobType;
-	@XmlElement(required=true)
-	private Date txDate;
-	@XmlElement(required=true)
+	
+	private String packageID;
+
 	private Date created;
-	@XmlElement(required=true)
+
 	private Integer currentPriority;
 	
+	@XmlElement(required = true)
 	public String getJobType()
 	{
 		return jobType;
@@ -25,14 +26,16 @@ public class GetPriorityRequest
 	{
 		this.jobType = jobType;
 	}
-	public Date getTxDate()
+	@XmlElement(required = true)
+	public String getPackageID()
 	{
-		return txDate;
+		return packageID;
 	}
-	public void setTxDate(Date txDate)
+	public void setPackageID(String packageID)
 	{
-		this.txDate = txDate;
+		this.packageID = packageID;
 	}
+	@XmlElement(required=true)
 	public Date getCreated()
 	{
 		return created;
@@ -41,6 +44,7 @@ public class GetPriorityRequest
 	{
 		this.created = created;
 	}
+	@XmlElement(required=true)
 	public Integer getCurrentPriority()
 	{
 		return currentPriority;

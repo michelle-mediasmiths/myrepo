@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" location="tcAdapter/setPriority.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" location="wfAdapter/autoQCRequiredForTX.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" location="wfAdapter/isTaskCancelled.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" location="wfAdapter/tcFailure.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" location="wfAdapter/tcGetPriority.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" location="wfAdapter/tcPassed.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" location="wfAdapter/tcTotalFailure.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -18,14 +20,16 @@
     <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndFsForHttpPortPlkVar" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk" initializePartnerRole="yes" partnerRole="fs_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
     <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" initializePartnerRole="yes" partnerRole="Auto_QC_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Transcode"/>
-    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
+    <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk5Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk5" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
   </bpel:partnerLinks>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
@@ -45,6 +49,7 @@
     <bpel:variable name="deliveryEventStartMessageResponse" messageType="Delivery:EventStartMessageResponse"/>
     <bpel:variable name="TCFilePath" type="xs:string"/>
     <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse"/>
+    <bpel:variable name="tcPriority" type="xs:int"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
@@ -73,6 +78,7 @@
           <bpel:literal>
 <Delivery:EventStartMessageRequest>
   <wfAdapter:AO></wfAdapter:AO>
+  <wfAdapter:created></wfAdapter:created>
   <wfAdapter:packageID></wfAdapter:packageID>
   <wfAdapter:requiredDate></wfAdapter:requiredDate>
   <wfAdapter:taskID></wfAdapter:taskID>
@@ -96,6 +102,13 @@
       <tns:foreground></tns:foreground>
     </tns:timecode>
     <tns:priority></tns:priority>
+    <tns:ftpupload>
+      <tns:filename></tns:filename>
+      <tns:folder></tns:folder>
+      <tns:server></tns:server>
+      <tns:user></tns:user>
+      <tns:password></tns:password>
+    </tns:ftpupload>
   </wfAdapter:tcParams>
   <wfAdapter:title></wfAdapter:title>
 </Delivery:EventStartMessageRequest></bpel:literal>
@@ -107,6 +120,7 @@
           <bpel:literal>
 <Auto_QC:EventStartMessageRequest>
   <wfAdapter:AO></wfAdapter:AO>
+  <wfAdapter:created></wfAdapter:created>
   <wfAdapter:packageID></wfAdapter:packageID>
   <wfAdapter:requiredDate></wfAdapter:requiredDate>
   <wfAdapter:taskID></wfAdapter:taskID>
@@ -130,6 +144,13 @@
       <tns:foreground></tns:foreground>
     </tns:timecode>
     <tns:priority></tns:priority>
+    <tns:ftpupload>
+      <tns:filename></tns:filename>
+      <tns:folder></tns:folder>
+      <tns:server></tns:server>
+      <tns:user></tns:user>
+      <tns:password></tns:password>
+    </tns:ftpupload>
   </wfAdapter:tcParams>
   <wfAdapter:title></wfAdapter:title>
 </Auto_QC:EventStartMessageRequest></bpel:literal>
@@ -169,6 +190,10 @@
         <bpel:from>""</bpel:from>
         <bpel:to>$TranscodeJobID</bpel:to>
       </bpel:copy>
+      <bpel:copy>
+        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:priority/text()</bpel:from>
+        <bpel:to>$tcPriority</bpel:to>
+      </bpel:copy>
     </bpel:assign>
     <bpel:scope bpmn:label="Attempt Transcode three Times" name="Attempt_Transcode_three_Times" bpmn:id="_CaKEsGuOEeK7FdvgH5F2kQ">
       <bpel:variables>
@@ -190,6 +215,13 @@
   <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
   <wfAdapter:taskID></wfAdapter:taskID>
   <wfAdapter:title></wfAdapter:title>
+  <wfAdapter:ftpupload>
+    <tns:filename></tns:filename>
+    <tns:folder></tns:folder>
+    <tns:server></tns:server>
+    <tns:user></tns:user>
+    <tns:password></tns:password>
+  </wfAdapter:ftpupload>
 </wfAdapter:tcPassedNotification></bpel:literal>
               </bpel:from>
               <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>
@@ -254,6 +286,13 @@
     <tns:foreground></tns:foreground>
   </tns:timecode>
   <tns:priority></tns:priority>
+  <tns:ftpupload>
+    <tns:filename></tns:filename>
+    <tns:folder></tns:folder>
+    <tns:server></tns:server>
+    <tns:user></tns:user>
+    <tns:password></tns:password>
+  </tns:ftpupload>
 </tns:TCJob></bpel:literal>
                   </bpel:from>
                   <bpel:to>$createJobCreateJobRequestMsg.body</bpel:to>
@@ -285,6 +324,10 @@
               <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
               <bpel:variable name="deleteJobDeleteJobRequestMsg" messageType="deleteJob:deleteJob_input"/>
               <bpel:variable name="deleteJobDeleteJobResponseMsg" messageType="deleteJob:deleteJob_output"/>
+              <bpel:variable name="tcGetPriorityGetpriorityRequestMsg" messageType="tcGetPriority:getpriority_input"/>
+              <bpel:variable name="tcGetPriorityGetpriorityResponseMsg" messageType="tcGetPriority:getpriority_output"/>
+              <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input"/>
+              <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output"/>
             </bpel:variables>
             <bpel:faultHandlers>
               <bpel:catchAll>
@@ -315,6 +358,32 @@
                     </bpel:from>
                     <bpel:to>$deleteJobDeleteJobRequestMsg.guid</bpel:to>
                   </bpel:copy>
+                  <bpel:copy bpmn:label="$tcGetPriorityGetpriorityRequestMsg">
+                    <bpel:from>
+                      <bpel:literal>
+<wfAdapter:getPriorityRequest>
+  <wfAdapter:created></wfAdapter:created>
+  <wfAdapter:currentPriority></wfAdapter:currentPriority>
+  <wfAdapter:jobType></wfAdapter:jobType>
+  <wfAdapter:packageID></wfAdapter:packageID>
+</wfAdapter:getPriorityRequest></bpel:literal>
+                    </bpel:from>
+                    <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body</bpel:to>
+                  </bpel:copy>
+                  <bpel:copy bpmn:label="$setPrioritySetPriorityRequestMsg">
+                    <bpel:from>
+                      <bpel:literal>
+<setPriority:guid_urlType></setPriority:guid_urlType></bpel:literal>
+                    </bpel:from>
+                    <bpel:to>$setPrioritySetPriorityRequestMsg.guid</bpel:to>
+                  </bpel:copy>
+                  <bpel:copy bpmn:label="$setPrioritySetPriorityRequestMsg">
+                    <bpel:from>
+                      <bpel:literal>
+<setPriority:priority_urlType></setPriority:priority_urlType></bpel:literal>
+                    </bpel:from>
+                    <bpel:to>$setPrioritySetPriorityRequestMsg.priority</bpel:to>
+                  </bpel:copy>
                 </bpel:assign>
                 <bpel:wait bpmn:label="Timer_Intermediate_Event" name="Timer_Intermediate_Event" bpmn:id="_f8z00GuPEeK7FdvgH5F2kQ">
                   <bpel:for>"PT30S"</bpel:for>
@@ -333,10 +402,14 @@
                   </bpel:copy>
                 </bpel:assign>
                 <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="check if cancelled" name="check_if_cancelled-1" bpmn:id="_PNbR4G66EeKvjs-uExigJg"></bpel:invoke>
-                <bpel:assign bpmn:label="map cancelled result to variable" name="map_cancelled_result_to_variable" bpmn:id="_DzHVQG67EeKvjs-uExigJg">
+                <bpel:assign bpmn:label="map cancelled result to variable and priority" name="map_cancelled_result_to_variable_and_priority" bpmn:id="_DzHVQG67EeKvjs-uExigJg">
                   <bpel:copy>
                     <bpel:from>$isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:from>
                     <bpel:to>$TaskIsCancelled</bpel:to>
+                  </bpel:copy>
+                  <bpel:copy>
+                    <bpel:from>$queryJobQueryJobResponseMsg.response/tns:priority/text()</bpel:from>
+                    <bpel:to>$tcPriority</bpel:to>
                   </bpel:copy>
                 </bpel:assign>
                 <bpel:if>
@@ -353,6 +426,42 @@
                   <bpel:else>
                     <bpel:sequence>
                       <bpel:empty bpmn:label="not cancelled" name="not_cancelled" bpmn:id="_M8BSIG7JEeKkE6ll_3FDMA"/>
+                      <bpel:assign bpmn:label="query priority" name="query_priority" bpmn:id="_LRJukKaqEeKMKJRBWwHUjA">
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:created/text()</bpel:from>
+                          <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:created</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$tcPriority</bpel:from>
+                          <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:currentPriority</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>"TX"</bpel:from>
+                          <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:jobType</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
+                          <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:packageID</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcGetPriority:restInterface" operation="getpriority" inputVariable="tcGetPriorityGetpriorityRequestMsg" outputVariable="tcGetPriorityGetpriorityResponseMsg" bpmn:label="query priority" name="query_priority-1" bpmn:id="_LRJukKaqEeKMKJRBWwHUjA"></bpel:invoke>
+                      <bpel:assign bpmn:label="update var" name="update_var" bpmn:id="_NERSAKaqEeKMKJRBWwHUjA">
+                        <bpel:copy>
+                          <bpel:from>$tcGetPriorityGetpriorityResponseMsg.response/wfAdapter:priority/text()</bpel:from>
+                          <bpel:to>$tcPriority</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:assign bpmn:label="set priority" name="set_priority" bpmn:id="_Oa8KAKaqEeKMKJRBWwHUjA">
+                        <bpel:copy>
+                          <bpel:from>$TranscodeJobID</bpel:from>
+                          <bpel:to>$setPrioritySetPriorityRequestMsg.guid</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$tcPriority</bpel:from>
+                          <bpel:to>$setPrioritySetPriorityRequestMsg.priority</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk3Var" portType="setPriority:restInterface" operation="setPriority" inputVariable="setPrioritySetPriorityRequestMsg" outputVariable="setPrioritySetPriorityResponseMsg" bpmn:label="set priority" name="set_priority-1" bpmn:id="_Oa8KAKaqEeKMKJRBWwHUjA"></bpel:invoke>
                     </bpel:sequence>
                   </bpel:else>
                 </bpel:if>
@@ -440,7 +549,7 @@
                         <bpel:to>$tcPassedTcPassedRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
                       </bpel:copy>
                     </bpel:assign>
-                    <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"></bpel:invoke>
+                    <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_-knPIGuQEeK7FdvgH5F2kQ"></bpel:invoke>
                   </bpel:sequence>
                   <bpel:else>
                     <bpel:sequence>
@@ -596,7 +705,7 @@
               <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
             </bpel:copy>
           </bpel:assign>
-          <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcTotalFailure:restInterface" operation="tcTotalFailure" inputVariable="tcTotalFailureTcTotalFailureRequestMsg" outputVariable="tcTotalFailureTcTotalFailureResponseMsg" bpmn:label="Transcode Failed" name="Transcode_Failed-1" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ"></bpel:invoke><bpel:throw faultName="this:Error_End_Event"/>
+          <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk5Var" portType="tcTotalFailure:restInterface" operation="tcTotalFailure" inputVariable="tcTotalFailureTcTotalFailureRequestMsg" outputVariable="tcTotalFailureTcTotalFailureResponseMsg" bpmn:label="Transcode Failed" name="Transcode_Failed-1" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ"></bpel:invoke><bpel:throw faultName="this:Error_End_Event"/>
           
         </bpel:sequence>
       </bpel:else>

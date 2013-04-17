@@ -11,10 +11,24 @@ import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 public class InvokeExport
 {
 	private String assetID;
-	private Date requiredDate;
+	private Date created;
 	private long taskID;
 	private TCJobParameters tcParams;
-		
+	private String jobType;
+	private String packageID;
+	
+
+	@XmlElement(required = true)
+	public String getPackageID()
+	{
+		return packageID;
+	}
+
+	public void setPackageID(String packageID)
+	{
+		this.packageID = packageID;
+	}
+
 	public TCJobParameters getTcParams()
 	{
 		return tcParams;
@@ -46,18 +60,7 @@ public class InvokeExport
 	{
 		this.assetID = assetID;
 	}
-	
-	@XmlElement(required = false)
-	public Date getRequiredDate()
-	{
-		return requiredDate;
-	}
-	
-	public void setRequiredDate(Date requiredDate)
-	{
-		this.requiredDate = requiredDate;
-	}
-	
+		
 	private String title;
 
 	@XmlElement(required=true)
@@ -71,5 +74,26 @@ public class InvokeExport
 		this.title = title;
 	}
 
+	@XmlElement
+	public String getJobType()
+	{
+		return jobType;
+	}
+
+	public void setJobType(String jobType)
+	{
+		this.jobType = jobType;
+	}
+	
+	@XmlElement
+	public Date getCreated()
+	{
+		return created;
+	}
+
+	public void setCreated(Date created)
+	{
+		this.created = created;
+	}
 	
 }

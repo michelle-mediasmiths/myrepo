@@ -6,12 +6,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class GetPriorityResponse
 {
-	@XmlElement(required=true)
+
 	private Integer priority;
 	
-	@XmlElement(required=true)
+
 	private boolean changed;
 
+	@XmlElement(required=true)
 	public Integer getPriority()
 	{
 		return priority;
@@ -22,6 +23,7 @@ public class GetPriorityResponse
 		this.priority = priority;
 	}
 
+	@XmlElement(required=true)
 	public boolean isChanged()
 	{
 		return changed;

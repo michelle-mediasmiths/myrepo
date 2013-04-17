@@ -1,25 +1,27 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:diag="http://thisdiagram" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:WFAdapter="http://thisdiagram/WFAdapter" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://thisdiagram/WFAdapter" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" bpdm:prefix="deleteJob" bpdm:comment="contrib=&apos;project:///tcAdapter/deleteJob.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="wfAdapter" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" bpdm:prefix="autoQCRequiredForTX" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequiredForTX.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" bpdm:prefix="createJob" bpdm:comment="contrib=&apos;project:///tcAdapter/createJob.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" bpdm:prefix="queryJob" bpdm:comment="contrib=&apos;project:///tcAdapter/queryJob.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" bpdm:prefix="setPriority" bpdm:comment="contrib=&apos;project:///tcAdapter/setPriority.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="wfAdapter" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" bpdm:prefix="createJob" bpdm:comment="contrib=&apos;project:///tcAdapter/createJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" bpdm:prefix="autoQCRequiredForTX" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequiredForTX.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" bpdm:prefix="queryJob" bpdm:comment="contrib=&apos;project:///tcAdapter/queryJob.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" bpdm:prefix="tcGetPriority" bpdm:comment="contrib=&apos;project:///wfAdapter/tcGetPriority.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter" bpdm:prefix="WFAdapter" bpdm:comment="contrib=&apos;partner-pool:///_-kFOMGuREeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Auto_QC" bpdm:prefix="Auto_QC" bpdm:comment="contrib=&apos;partner-pool:///_mbM9EGxqEeKv3LhB37uiLw"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Delivery" bpdm:prefix="Delivery" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
             <vprop:property name="packageid" type="xs:string"/>
             <wsdl:portType name="ForCaller">
@@ -51,6 +53,8 @@
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_YutRgHFEEeKXOL1w3D1sTw" bpdm:label="fs"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/delete.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///fsAdapter/FSAdapter.xsd"/>
+        <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcGetPriority.wsdl"/>
+        <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/setPriority.wsdl"/>
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Transcode" bpdm:ID="_i0TRQGuNEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
@@ -60,12 +64,14 @@
             <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="autoQCRequiredForTX:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_ULatkGuTEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Transcode" bpdm:invokedService="Delivery:CanonicServiceForTranscode" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Delivery/Transcode" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_xcqdQGuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" initializePartnerRole="yes" partnerRole="Auto_QC_for_Transcode" bpdm:invokedService="Auto_QC:CanonicServiceForTranscode" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Auto_QC/Transcode" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_0ciuwGuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_SNxnEGuREeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcPassed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_CaKEsGuOEeK7FdvgH5F2kQ:_-knPIGuQEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcPassed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_CaKEsGuOEeK7FdvgH5F2kQ:_-knPIGuQEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcGetPriority:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/priority" bpdm:invokedIsDefault="true" bpdm:clientTasks="_a0OKYGuPEeK7FdvgH5F2kQ:_LRJukKaqEeKMKJRBWwHUjA" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="createJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/jobs" bpdm:invokedIsDefault="true" bpdm:clientTasks="_wzKgIG6_EeKvjs-uExigJg:_wzNjcG6_EeKvjs-uExigJg" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="deleteJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_a0OKYGuPEeK7FdvgH5F2kQ:_K0I_oG7JEeKkE6ll_3FDMA" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="queryJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_N9MxYG7AEeKvjs-uExigJg:_GnToQG7IEeKkE6ll_3FDMA, _a0OKYGuPEeK7FdvgH5F2kQ:_a0QmoGuPEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndFsForHttpPortPlkVar" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk" initializePartnerRole="yes" partnerRole="fs_for_Transcode" bpdm:invokedService="delete:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:invokedIsDefault="true" bpdm:clientTasks="_k3Ic4G7IEeKkE6ll_3FDMA:_EIFy0HFEEeKXOL1w3D1sTw, _CaKEsGuOEeK7FdvgH5F2kQ:_IPTy0GuREeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_YutRgHFEEeKXOL1w3D1sTw"/>
+            <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="setPriority:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}/priority?priority={priority}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_a0OKYGuPEeK7FdvgH5F2kQ:_Oa8KAKaqEeKMKJRBWwHUjA" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk5Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk5" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_SNxnEGuREeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_nN9ZIGuNEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_nN35kGuNEeK7FdvgH5F2kQ"/>
@@ -105,6 +111,7 @@
             <bpel:variable name="deliveryEventStartMessageResponse" messageType="Delivery:EventStartMessageResponse" bpdm:id="_yKf9JW7YEeKkE6ll_3FDMA" bpdm:messageIds="inc:_yKHioG7YEeKkE6ll_3FDMA"/>
             <bpel:variable name="TCFilePath" type="xs:string"/>
             <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse" bpdm:id="_Y6VuNWxsEeKv3LhB37uiLw" bpdm:messageIds="inc:_Y6L9MGxsEeKv3LhB37uiLw"/>
+            <bpel:variable name="tcPriority" type="xs:int"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_lpG7MGuNEeK7FdvgH5F2kQ">
@@ -134,13 +141,11 @@
                     </bpel:copy>
                     <bpel:copy>
                         <bpel:from>""</bpel:from>
-                        <bpel:to>$TranscodeJobID</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="18619622" targetPath="$TranscodeJobID" targetedBy="25272819-arg0"></mapper:vertice>
-  <mapper:vertice id="25272819" dimension="78x24" location="429,99">
-    <mapper:value>""</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink>
+                        <bpel:to>$TranscodeJobID</bpel:to><mapper:mapperLink><mapper:vertice id="18619622" targetPath="$TranscodeJobID" targetedBy="25272819-arg0"></mapper:vertice><mapper:vertice id="25272819" dimension="78x24" location="429,99"><mapper:value>""</mapper:value></mapper:vertice></mapper:mapperLink>
+                    </bpel:copy>
+                    <bpel:copy>
+                        <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:priority/text()</bpel:from>
+                        <bpel:to>$tcPriority</bpel:to><mapper:mapperLink><mapper:vertice id="12222676" targetPath="$tcPriority" targetedBy="3682822-arg0"></mapper:vertice><mapper:vertice id="3682822" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams/tns:priority/text()"></mapper:vertice></mapper:mapperLink>
                     </bpel:copy>
                 </bpdm:linkset>
             </bpdm:messagingtask>
@@ -227,6 +232,21 @@
                                 </bpel:from>
                             </bpel:variable>
                             <bpel:variable name="deleteJobDeleteJobResponseMsg" messageType="deleteJob:deleteJob_output" binding="deleteJob:restBinding" operation="deleteJob" opMsgType="1" bpdm:id="_X5OUoG7LEeKkE6ll_3FDMA" bpdm:messageIds="inc:_X4yPwG7LEeKkE6ll_3FDMA"/>
+                            <bpel:variable name="tcGetPriorityGetpriorityRequestMsg" messageType="tcGetPriority:getpriority_input" binding="tcGetPriority:restBinding" operation="getpriority" opMsgType="0" bpdm:id="_aaRp0KaqEeKMKJRBWwHUjA" bpdm:messageIds=" out:_aaDnYKaqEeKMKJRBWwHUjA">
+                                <bpel:from bpdm:toPart="body">
+                                    <bpel:literal bpdm:linkedMessageType="tcGetPriority:getpriority_input" bpdm:linkedPart="body" bpdm:binding="tcGetPriority:restBinding" bpdm:opMsgType="0" bpdm:operation="getpriority"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="tcGetPriorityGetpriorityResponseMsg" messageType="tcGetPriority:getpriority_output" binding="tcGetPriority:restBinding" operation="getpriority" opMsgType="1" bpdm:id="_bRSKUKaqEeKMKJRBWwHUjA" bpdm:messageIds="inc:_bQmN0KaqEeKMKJRBWwHUjA"/>
+                            <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input" binding="setPriority:restBinding" operation="setPriority" opMsgType="0" bpdm:id="_nO7oEKaqEeKMKJRBWwHUjA" bpdm:messageIds=" out:_nOwB4KaqEeKMKJRBWwHUjA">
+                                <bpel:from bpdm:toPart="guid">
+                                    <bpel:literal bpdm:linkedMessageType="setPriority:setPriority_input" bpdm:linkedPart="guid" bpdm:binding="setPriority:restBinding" bpdm:opMsgType="0" bpdm:operation="setPriority"></bpel:literal>
+                                </bpel:from>
+                                <bpel:from bpdm:toPart="priority">
+                                    <bpel:literal bpdm:linkedMessageType="setPriority:setPriority_input" bpdm:linkedPart="priority" bpdm:binding="setPriority:restBinding" bpdm:opMsgType="0" bpdm:operation="setPriority"></bpel:literal>
+                                </bpel:from>
+                            </bpel:variable>
+                            <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output" binding="setPriority:restBinding" operation="setPriority" opMsgType="1" bpdm:id="_nkfoYKaqEeKMKJRBWwHUjA" bpdm:messageIds="inc:_nkHN4KaqEeKMKJRBWwHUjA"/>
                         </bpel:variables>
                         <bpel:faultHandlers>
                             <bpel:catchAll>
@@ -260,11 +280,15 @@
                                 <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="isTaskCancelledIsCancelledResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="isTaskCancelled:isCancelled_output" bpdm:binding="isTaskCancelled:restBinding" bpdm:ID="_vfaLgG66EeKvjs-uExigJg"></bpdm:linkset>
                                 <bpdm:thrownFault msgFaultNcName="isCancelledFault" msgFaultTypeQname="isTaskCancelled:isCancelled_fault"/>
                             </bpdm:messagingtask>
-                            <bpdm:messagingtask bpdm:label="map cancelled result to variable" bpdm:ID="_DzHVQG67EeKvjs-uExigJg">
+                            <bpdm:messagingtask bpdm:label="map cancelled result to variable and priority" bpdm:ID="_DzHVQG67EeKvjs-uExigJg">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:from>
                                         <bpel:to>$TaskIsCancelled</bpel:to><mapper:mapperLink><mapper:vertice id="11450782" targetPath="$TaskIsCancelled" targetedBy="22866161-arg0"></mapper:vertice><mapper:vertice id="22866161" sourcePath="$isTaskCancelledIsCancelledResponseMsg.response/text()"></mapper:vertice></mapper:mapperLink>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                        <bpel:from>$queryJobQueryJobResponseMsg.response/tns:priority/text()</bpel:from>
+                                        <bpel:to>$tcPriority</bpel:to><mapper:mapperLink><mapper:vertice id="29747176" targetPath="$tcPriority" targetedBy="2807940-arg0"></mapper:vertice><mapper:vertice id="2807940" sourcePath="$queryJobQueryJobResponseMsg.response/tns:priority/text()"></mapper:vertice></mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
                             </bpdm:messagingtask>
@@ -275,6 +299,54 @@
                                 </bpdm:linkset>
                                 <bpel:sequence>
                                     <bpdm:messagingtask bpdm:label="not cancelled" bpdm:ID="_M8BSIG7JEeKkE6ll_3FDMA"></bpdm:messagingtask>
+                                    <bpdm:messagingtask operation="getpriority" partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcGetPriority:restInterface" isMyRole="false" enableSharing="false" bpdm:label="query priority" bpdm:ID="_LRJukKaqEeKMKJRBWwHUjA">
+                                        <bpdm:linkset bpdm:type="assignments">
+                                            <bpel:copy>
+                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:created/text()</bpel:from>
+                                                <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:created/text()</bpel:to><mapper:mapperLink><mapper:vertice id="32514455" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:created/text()" targetedBy="382104-arg0"></mapper:vertice><mapper:vertice id="382104" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:created/text()"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                            <bpel:copy>
+                                                <bpel:from>$tcPriority</bpel:from>
+                                                <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:currentPriority/text()</bpel:to><mapper:mapperLink><mapper:vertice id="32598659" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:currentPriority/text()" targetedBy="31643524-arg0"></mapper:vertice><mapper:vertice id="31643524" sourcePath="$tcPriority"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                            <bpel:copy>
+                                                <bpel:from>"TX"</bpel:from>
+                                                <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:jobType/text()</bpel:to><mapper:mapperLink><mapper:vertice id="29787932" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:jobType/text()" targetedBy="18468744-arg0"></mapper:vertice><mapper:vertice id="18468744" dimension="78x24" location="540,327"><mapper:value>"TX"</mapper:value></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                            <bpel:copy>
+                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
+                                                <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:packageID/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="25455135" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/wfAdapter:packageID/text()" targetedBy="12718804-arg0"></mapper:vertice>
+  <mapper:vertice id="12718804" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                            </bpel:copy>
+                                        </bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcGetPriorityGetpriorityRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcGetPriority:getpriority_input" bpdm:binding="tcGetPriority:restBinding" bpdm:ID="_aaDnYKaqEeKMKJRBWwHUjA"></bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="tcGetPriorityGetpriorityResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcGetPriority:getpriority_output" bpdm:binding="tcGetPriority:restBinding" bpdm:ID="_bQmN0KaqEeKMKJRBWwHUjA"></bpdm:linkset>
+                                    </bpdm:messagingtask>
+                                    <bpdm:messagingtask bpdm:label="update var" bpdm:ID="_NERSAKaqEeKMKJRBWwHUjA">
+                                        <bpdm:linkset bpdm:type="assignments">
+                                            <bpel:copy>
+                                                <bpel:from>$tcGetPriorityGetpriorityResponseMsg.response/wfAdapter:priority/text()</bpel:from>
+                                                <bpel:to>$tcPriority</bpel:to><mapper:mapperLink><mapper:vertice id="2168816" targetPath="$tcPriority" targetedBy="17648150-arg0"></mapper:vertice><mapper:vertice id="17648150" sourcePath="$tcGetPriorityGetpriorityResponseMsg.response/wfAdapter:priority/text()"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                        </bpdm:linkset>
+                                    </bpdm:messagingtask>
+                                    <bpdm:messagingtask operation="setPriority" partnerLink="transcodeAndTCAdapterForHttpPortPlk3Var" portType="setPriority:restInterface" isMyRole="false" enableSharing="false" bpdm:label="set priority" bpdm:ID="_Oa8KAKaqEeKMKJRBWwHUjA">
+                                        <bpdm:linkset bpdm:type="assignments">
+                                            <bpel:copy>
+                                                <bpel:from>$TranscodeJobID</bpel:from>
+                                                <bpel:to>$setPrioritySetPriorityRequestMsg.guid/text()</bpel:to><mapper:mapperLink><mapper:vertice id="8336860" targetPath="$setPrioritySetPriorityRequestMsg.guid/text()" targetedBy="19927372-arg0"></mapper:vertice><mapper:vertice id="19927372" sourcePath="$TranscodeJobID"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                            <bpel:copy>
+                                                <bpel:from>$tcPriority</bpel:from>
+                                                <bpel:to>$setPrioritySetPriorityRequestMsg.priority/text()</bpel:to><mapper:mapperLink><mapper:vertice id="2091781" targetPath="$setPrioritySetPriorityRequestMsg.priority/text()" targetedBy="7682780-arg0"></mapper:vertice><mapper:vertice id="7682780" sourcePath="$tcPriority"></mapper:vertice></mapper:mapperLink>
+                                            </bpel:copy>
+                                        </bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="setPrioritySetPriorityRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_input" bpdm:binding="setPriority:restBinding" bpdm:ID="_nOwB4KaqEeKMKJRBWwHUjA"></bpdm:linkset>
+                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="setPrioritySetPriorityResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_output" bpdm:binding="setPriority:restBinding" bpdm:ID="_nkHN4KaqEeKMKJRBWwHUjA"></bpdm:linkset>
+                                    </bpdm:messagingtask>
                                 </bpel:sequence>
                                 <bpel:sequence>
                                     <bpdm:messagingtask operation="deleteJob" partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var" portType="deleteJob:restInterface" isMyRole="false" enableSharing="false" bpdm:label="cancelled, stop transcode job" bpdm:ID="_K0I_oG7JEeKkE6ll_3FDMA">
@@ -347,7 +419,7 @@
                                             </bpel:copy>
                                         </bpdm:linkset>
                                     </bpdm:messagingtask>
-                                    <bpdm:messagingtask operation="tcPassed" partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success Message" bpdm:ID="_-knPIGuQEeK7FdvgH5F2kQ">
+                                    <bpdm:messagingtask operation="tcPassed" partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success Message" bpdm:ID="_-knPIGuQEeK7FdvgH5F2kQ">
                                         <bpdm:linkset bpdm:type="assignments">
                                             <bpel:copy>
                                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
@@ -537,7 +609,7 @@
                     </bpdm:gateway>
                 </bpel:sequence>
                 <bpel:sequence>
-                    <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Transcode Failed" bpdm:ID="_SNxnEGuREeK7FdvgH5F2kQ">
+                    <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk5Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Transcode Failed" bpdm:ID="_SNxnEGuREeK7FdvgH5F2kQ">
                         <bpdm:linkset bpdm:type="assignments">
                             <bpel:copy>
                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>

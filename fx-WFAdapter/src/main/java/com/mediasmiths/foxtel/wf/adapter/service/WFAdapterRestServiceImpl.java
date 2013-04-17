@@ -31,6 +31,7 @@ import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
+import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -463,13 +464,22 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
-		
+
 		if (notification.isForTXDelivery())
 		{
 			// saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
 		}
-		else //extended publishing		
+		else
+		// extended publishing
 		{
+			String deliveryLocation = "";
+
+			if (notification.getFtpupload() != null)
+			{
+				TCFTPUpload ftpupload = notification.getFtpupload();
+				deliveryLocation = String.format("%s/%s", ftpupload.folder, ftpupload.filename);
+			}
+
 			long taskId = notification.getTaskID();
 			AttributeMap task = mayamClient.getTask(taskId);
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
@@ -481,7 +491,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						true);
+						true,
+						deliveryLocation);
 			}
 			else if (taskListID.equals("Classification Proxy"))
 			{
@@ -490,7 +501,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						true);
+						true,
+						deliveryLocation);
 			}
 			else if (taskListID.equals("Publicity Proxy"))
 			{
@@ -499,7 +511,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						true);
+						true,
+						deliveryLocation);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
@@ -728,7 +741,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TCNotification payload,
 			String nameSpace,
 			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
-			boolean success)
+			boolean success){
+		saveEvent(name, payload, nameSpace, eventNotify, success, null);
+	}
+	
+	protected void saveEvent(
+			String name,
+			TCNotification payload,
+			String nameSpace,
+			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
+			boolean success, String deliveryLocation)
 	{
 		try
 		{
@@ -738,7 +760,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			eventNotify.setTaskID(payload.getTaskID() + "");
 			if (success)
 			{
-				String deliveryLocation = "TDB";
 				eventNotify.setDeliveryLocation(deliveryLocation);
 			}
 			events.saveEvent(nameSpace, name, eventNotify);
@@ -803,15 +824,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/tc/priority")
 	@Produces("application/xml")
 	@Consumes("application/xml")
-	public GetPriorityResponse getTCPriority(GetPriorityRequest request)
+	public GetPriorityResponse getTCPriority(GetPriorityRequest request) throws MayamClientException
 	{
-		Date created = request.getCreated();
-		Date txDate = request.getTxDate();
+		Date created = request.getCreated();		
+		String packageID = request.getPackageID();
+		
+		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+		Date firstTX = (Date) packageAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
+	
 		Integer currentPriority = request.getCurrentPriority();
 		String strJobType = request.getJobType();
 		TranscodeJobType jobType = TranscodeJobType.fromText(strJobType);
 
-		Integer newPriority = transcodePriorities.getPriorityForTranscodeJob(jobType, txDate, created, currentPriority);
+		Integer newPriority = transcodePriorities.getPriorityForTranscodeJob(jobType, firstTX, created, currentPriority);
 		log.debug("priority returned : " + newPriority);
 
 		GetPriorityResponse ret = new GetPriorityResponse();

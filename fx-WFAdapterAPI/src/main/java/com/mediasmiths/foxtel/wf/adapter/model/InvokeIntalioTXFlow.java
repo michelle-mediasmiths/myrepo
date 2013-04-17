@@ -21,6 +21,8 @@ public class InvokeIntalioTXFlow
 	private TCJobParameters tcParams;
 
 	private String title;
+	
+	private Date created;
 
 	@XmlElement(required = true)
 	public String getPackageID()
@@ -84,6 +86,17 @@ public class InvokeIntalioTXFlow
 	public void setTitle(String title)
 	{
 		this.title = title;
+	}
+	
+	@XmlElement
+	public Date getCreated()
+	{
+		return created;
+	}
+
+	public void setCreated(Date created)
+	{
+		this.created = created;
 	}
 
 }
