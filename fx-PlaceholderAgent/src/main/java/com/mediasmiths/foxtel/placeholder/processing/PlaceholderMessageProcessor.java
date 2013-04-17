@@ -29,7 +29,6 @@ import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
 
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
@@ -62,11 +61,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 	private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
 
 	private final MayamClient mayamClient;
-	
-	@Inject
-	@Named("fxreportserialiser")
-	private JAXBSerialiser reportSerialiser;
-	
+		
 	@Inject
 	public PlaceholderMessageProcessor(
 			IFilePickup filePickup,
