@@ -175,7 +175,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 		}
 	}
 
-	private void createOrUpdateTitle(CreateOrUpdateTitle action) throws MessageProcessingFailedException
+	public void createOrUpdateTitle(CreateOrUpdateTitle action) throws MessageProcessingFailedException
 	{
 
 		try

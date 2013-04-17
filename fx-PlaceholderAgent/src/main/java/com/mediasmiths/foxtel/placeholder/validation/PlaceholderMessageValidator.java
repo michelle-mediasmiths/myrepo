@@ -156,7 +156,7 @@ public class PlaceholderMessageValidator extends
 
 	}
 
-	private MessageValidationResult validateAddOrUpdatePackage(
+	public MessageValidationResult validateAddOrUpdatePackage(
 			AddOrUpdatePackage action) throws MayamClientException {
 
 		logger.info("Validating an AddOrUpdatePackage");
@@ -235,7 +235,7 @@ public class PlaceholderMessageValidator extends
 
 	}
 
-	private MessageValidationResult validateDeletePackage(DeletePackage action)
+	public MessageValidationResult validateDeletePackage(DeletePackage action)
 			throws MayamClientException {
 
 		logger.info("Validating a DeletePackage");
@@ -288,7 +288,7 @@ public class PlaceholderMessageValidator extends
 	}
 
 
-	private MessageValidationResult validateDeleteMaterial(DeleteMaterial action)
+	public MessageValidationResult validateDeleteMaterial(DeleteMaterial action)
 			throws MayamClientException {
 
 		logger.info("Validationg a DeleteMaterial");
@@ -343,7 +343,7 @@ public class PlaceholderMessageValidator extends
 
 	}
 
-	private MessageValidationResult validatePurgeTitle(PurgeTitle action)
+	public MessageValidationResult validatePurgeTitle(PurgeTitle action)
 			throws MayamClientException {
 
 		logger.info("Validating a PurgeTitle");
@@ -402,7 +402,7 @@ public class PlaceholderMessageValidator extends
 	 * @param action
 	 * @return
 	 */
-	private MessageValidationResult validateAddOrUpdateMaterial(
+	public MessageValidationResult validateAddOrUpdateMaterial(
 			AddOrUpdateMaterial action) throws MayamClientException {
 
 		logger.info("Validating an AddOrUpdateMaterial");
@@ -528,7 +528,7 @@ public class PlaceholderMessageValidator extends
 	 * @param action
 	 * @return
 	 */
-	private MessageValidationResult validateCreateOrUpdateTitle(
+	public MessageValidationResult validateCreateOrUpdateTitle(
 			CreateOrUpdateTitle action) {
 		logger.debug("Validating CreateOrUpdateTitle");
 
