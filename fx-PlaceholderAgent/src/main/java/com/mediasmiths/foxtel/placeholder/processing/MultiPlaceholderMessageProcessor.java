@@ -69,7 +69,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     @Inject
     public MultiPlaceholderMessageProcessor(
     		IFilePickup filePickup,
-            MessageValidator<PlaceholderMessage> messageValidator,
+    		MultiPlaceholderMessageValidator messageValidator,
             ReceiptWriter receiptWriter,
             Unmarshaller unmarhsaller,
             Marshaller marshaller,

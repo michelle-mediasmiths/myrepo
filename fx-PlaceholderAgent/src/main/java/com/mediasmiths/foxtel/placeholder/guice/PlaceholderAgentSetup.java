@@ -13,15 +13,17 @@ import com.mediasmiths.mayam.guice.MayamClientStubModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.io.PropertyFile;
 
-public class PlaceholderAgentSetup implements GuiceSetup {
+public class PlaceholderAgentSetup implements GuiceSetup
+{
 
 	@Override
-	public void registerModules(List<Module> modules, PropertyFile config) {
+	public void registerModules(List<Module> modules, PropertyFile config)
+	{
 		modules.add(new PlaceholderAgentModule());
 		modules.add(new ChannelConfigModule());
 		modules.add(new WatchFolderLocationsModule());
 		modules.add(new WatchedFilesConfigModule());
-		
+
 		if (config.getBoolean("stub.out.mayam", false))
 		{
 			modules.add(new MayamClientStubModule());
@@ -30,12 +32,22 @@ public class PlaceholderAgentSetup implements GuiceSetup {
 		{
 			modules.add(new MayamClientModule());
 		}
-		
+
+		if (config.getBoolean("placeholder.multimessage.disabled", false))
+		{
+			modules.add(new SinglePlaceholderMessageModule());
+		}
+		else
+		{
+			modules.add(new MultiPlaceholderMessageModule());
+		}
+
 		modules.add(new EventServiceModule());
 	}
 
 	@Override
-	public void injectorCreated(Injector injector) {
+	public void injectorCreated(Injector injector)
+	{
 	}
 
 }
