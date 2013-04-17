@@ -84,11 +84,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		AttributeMap materialAttributes;
 
-		if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
-		{
-			materialAttributes = requestAttributes;
-		}
-		else if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
+		if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 		{
 			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			materialAttributes = materialController.getMaterialAttributes(materialID);
@@ -111,6 +107,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
+			String packageID = (String ) requestAttributes.getAttribute(Attribute.HOUSE_ID);
 			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
 			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
 
@@ -193,7 +190,7 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 			// invoke export flow
 			try
 			{
-				initiateWorkflow(title, firstTX, materialID, jobParams, taskID);
+				initiateWorkflow(title, materialID,packageID, jobParams, taskID);
 				ExportStart export = new ExportStart();
 				export.setMaterialID(materialID);
 				export.setChannels(channels.toString());
@@ -246,26 +243,19 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	protected abstract TranscodeJobType getJobType();
 
-	private void initiateWorkflow(String assetTitle, Date firstTX, String materialID, TCJobParameters jobParams, long taskID)
+	private void initiateWorkflow(String assetTitle, String materialID, String packageID, TCJobParameters jobParams, long taskID)
 			throws UnsupportedEncodingException,
 			JAXBException,
 			MuleException
 	{
 		InvokeExport ie = new InvokeExport();
 		ie.setAssetID(materialID);
-		
-		if(firstTX==null){
-			DateTime dtF = new DateTime();
-			dtF = dtF.plusYears(1);
-			firstTX=dtF.toDate(); //ensure first tx isnt null, if none specified use a year in the future (inelegant but saves having to handle an null value in intalio work flows)
-		}
-		
-		ie.setRequiredDate(firstTX);
 		ie.setTaskID(taskID);
 		ie.setTcParams(jobParams);
 		ie.setTitle(assetTitle);
 		ie.setCreated(new Date());
 		ie.setJobType(getJobType().getText());
+		ie.setPackageID(packageID);
 
 		mule.initiateExportWorkflow(ie);
 	}

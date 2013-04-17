@@ -241,12 +241,13 @@ public interface WFAdapterRestService
 	 * Returns the transcode priority a job should have
 	 * @param request
 	 * @return
+	 * @throws MayamClientException 
 	 */
 	@POST
 	@Path("/tc/priority")
 	@Produces("application/xml")
 	@Consumes("application/xml")
-	public GetPriorityResponse getTCPriority(GetPriorityRequest request);
+	public GetPriorityResponse getTCPriority(GetPriorityRequest request) throws MayamClientException;
 	
 }
 

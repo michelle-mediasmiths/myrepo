@@ -126,7 +126,7 @@
       <xs:element name="created" type="xs:dateTime"/>
       <xs:element name="currentPriority" type="xs:int"/>
       <xs:element name="jobType" type="xs:string"/>
-      <xs:element minOccurs="0" name="txDate" type="xs:dateTime"/>
+      <xs:element name="packageID" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -157,7 +157,7 @@
       <xs:element name="assetID" type="xs:string"/>
       <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
       <xs:element minOccurs="0" name="jobType" type="xs:string"/>
-      <xs:element minOccurs="0" name="requiredDate" type="xs:dateTime"/>
+      <xs:element name="packageID" type="xs:string"/>
       <xs:element name="taskID" type="xs:long"/>
       <xs:element name="tcParams" type="ns1:tcJobParameters"/>
       <xs:element name="title" type="xs:string"/>

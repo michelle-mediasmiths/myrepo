@@ -11,7 +11,7 @@ public class GetPriorityRequest
 
 	private String jobType;
 	
-	private Date txDate;
+	private String packageID;
 
 	private Date created;
 
@@ -26,14 +26,14 @@ public class GetPriorityRequest
 	{
 		this.jobType = jobType;
 	}
-	@XmlElement
-	public Date getTxDate()
+	@XmlElement(required = true)
+	public String getPackageID()
 	{
-		return txDate;
+		return packageID;
 	}
-	public void setTxDate(Date txDate)
+	public void setPackageID(String packageID)
 	{
-		this.txDate = txDate;
+		this.packageID = packageID;
 	}
 	@XmlElement(required=true)
 	public Date getCreated()

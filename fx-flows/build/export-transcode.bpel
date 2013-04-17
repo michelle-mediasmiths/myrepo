@@ -266,7 +266,7 @@
   <tns:created></tns:created>
   <tns:currentPriority></tns:currentPriority>
   <tns:jobType></tns:jobType>
-  <tns:txDate></tns:txDate>
+  <tns:packageID></tns:packageID>
 </tns:getPriorityRequest></bpel:literal>
                       </bpel:from>
                       <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body</bpel:to>
@@ -347,8 +347,8 @@
                             <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/tns:jobType</bpel:to>
                           </bpel:copy>
                           <bpel:copy>
-                            <bpel:from>$thisEventStartMessageRequest.body/tns:requiredDate/text()</bpel:from>
-                            <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/tns:txDate</bpel:to>
+                            <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                            <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/tns:packageID</bpel:to>
                           </bpel:copy>
                         </bpel:assign>
                         <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk2Var" portType="tcGetPriority:restInterface" operation="getpriority" inputVariable="tcGetPriorityGetpriorityRequestMsg" outputVariable="tcGetPriorityGetpriorityResponseMsg" bpmn:label="query priorty" name="query_priorty-1" bpmn:id="_j7lS4KaoEeKMKJRBWwHUjA"></bpel:invoke>
@@ -417,6 +417,10 @@
                         <bpel:copy>
                           <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
                           <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
+                          <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
                         </bpel:copy>
                       </bpel:assign>
                       <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="send success message" name="send_success_message-1" bpmn:id="_qeWgsHEQEeKgV8mGUipbQA"></bpel:invoke>
