@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.util;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
@@ -32,7 +33,10 @@ public class MediaExchangeProgrammeOutputBuilder
 {
 	private static Logger log = Logger.getLogger(MediaExchangeProgrammeOutputBuilder.class);
 
-	public static Programme buildProgramme(FullProgrammePackageInfo pack)
+	@Inject
+	ChannelPropertiesConfiguration channelProperties;
+
+	public Programme buildProgramme(FullProgrammePackageInfo pack)
 	{
 		Programme ret = new Programme();
 
@@ -49,7 +53,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		return ret;
 	}
 
-	private static Media getProgrammeMedia(FullProgrammePackageInfo pack)
+	private Media getProgrammeMedia(FullProgrammePackageInfo pack)
 	{
 		Programme.Media programmeMedia = new Programme.Media();
 		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(pack.getSegmentList());
@@ -64,7 +68,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		return programmeMedia;
 	}
 
-	private static Programme.Media.AudioTracks getProgrammeMediaAudioTracks(FullProgrammePackageInfo pack)
+	private  Programme.Media.AudioTracks getProgrammeMediaAudioTracks(FullProgrammePackageInfo pack)
 	{
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
 		
@@ -100,7 +104,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			{
 				for (AudioTrack track : audioTracks)
 				{
-					if (track.getNumber() <= TRACK_MAX)
+					if (track.getNumber() <= channelProperties.audioTrackLayout.length)
 					{
 						Programme.Media.AudioTracks.Track pmat = mappingAudioTrack(audioTracks, track.getNumber() - 1);
 						if (pmat != null)
@@ -121,42 +125,17 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	/** for simplicity create a MAP from internal Ardome names to the external exchange names. */
-	private static final int TRACK_MAX = 8;
-
-	private static  AudioTrackType[] mayamChannelMapping = new AudioTrackType[TRACK_MAX];
-
-
-	/**
-	 *
-	 * As Per MAM-202 Ben wants a mapping from channels to track type.
-	 *
-	 */
-	static
-	{
-
-		mayamChannelMapping[0] = AudioTrackType.LEFT;
-		mayamChannelMapping[1] = AudioTrackType.RIGHT;
-		mayamChannelMapping[2] = AudioTrackType.DOLBY_E;
-		mayamChannelMapping[3] = AudioTrackType.DOLBY_E;
-		mayamChannelMapping[4] = null;
-		mayamChannelMapping[5] = null;
-		mayamChannelMapping[6] = null;
-		mayamChannelMapping[7] = null;
-
-
-	}
 	
-	private static Programme.Media.AudioTracks.Track mappingAudioTrack(AudioTrackList audioTracks, int i)
+	private  Programme.Media.AudioTracks.Track mappingAudioTrack(AudioTrackList audioTracks, int i)
 	{
 		AudioTrack track = audioTracks.get(i);
 		if (log.isDebugEnabled())
 			log.debug("Setting the number of channels: " + track.getNumber());
 		
 		Programme.Media.AudioTracks.Track pmat = new Programme.Media.AudioTracks.Track();
-		if (mayamChannelMapping[i] != null)
+		if (channelProperties.audioTrackLayout[i] != null)
 		{
-			AudioTrackType t = mayamChannelMapping[i];
+			AudioTrackType t = channelProperties.audioTrackLayout[i];
 			pmat.setNumber(track.getNumber());
 			pmat.setType(t);
 			log.debug(String.format("Track %d set to %s.", track.getNumber(), t.toString()));
@@ -170,7 +149,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static Programme.Detail getProgrammeDetail(FullProgrammePackageInfo pack)
+	private  Programme.Detail getProgrammeDetail(FullProgrammePackageInfo pack)
 	{
 		try
 		{
@@ -213,7 +192,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static ClassificationType getClassification(final FullProgrammePackageInfo pack)
+	private  ClassificationType getClassification(final FullProgrammePackageInfo pack)
 	{
 		try
 		{
@@ -228,7 +207,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static void setDueAndPurgeDate(final Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setDueAndPurgeDate(final Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
          java.util.Date targetDate = pack.getPackageAttributes().getAttribute(Attribute.TX_FIRST);
 		 DateTime txDate;
@@ -252,12 +231,12 @@ public class MediaExchangeProgrammeOutputBuilder
 		programmeDetail.setPurgeDate(getPurgeDateFor(txDate));
 	}
 
-	private static void setCreationDate(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setCreationDate(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		programmeDetail.setCreationDate(getNowDate());
 	}
 
-	private static void setSOMAndEOM(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setSOMAndEOM(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
 		{
@@ -281,7 +260,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static AudioListType getAudioEncoding(final FullProgrammePackageInfo pack)
+	private  AudioListType getAudioEncoding(final FullProgrammePackageInfo pack)
 	{
 		AudioListType audioListType = null;
 		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
@@ -298,7 +277,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		return audioListType;
 	}
 
-	private static void setSupplier(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setSupplier(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String supplier = pack.getMaterialAttributes().getAttributeAsString(Attribute.AGGREGATOR);
 		if (supplier == null)
@@ -308,7 +287,7 @@ public class MediaExchangeProgrammeOutputBuilder
 
 	}
 
-	private static void setMarket(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setMarket(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		StringList channels = pack.getTitleAttributes().getAttribute(Attribute.CHANNELS);
 
@@ -327,7 +306,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 	}
 
-	private static void setAudioType(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
+	private  void setAudioType(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
     {
 
 	    AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
@@ -341,7 +320,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	    }
     }
 
-	private static void setDescription(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setDescription(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String desc = pack.getTitleAttributes().getAttributeAsString(Attribute.CONT_DESC);
 		if (desc == null)
@@ -350,7 +329,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			programmeDetail.setDescription(StringUtils.left(desc, 127));
 	}
 
-	private static void setEpisodeNumber(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setEpisodeNumber(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String episode = pack.getTitleAttributes().getAttributeAsString(Attribute.EPISODE_NUMBER);
 		if (episode == null)
@@ -359,7 +338,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			programmeDetail.setEpisodeNumber(StringUtils.left(episode, 32));
 	}
 
-	private static void setTitle(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setTitle(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
 		if (title == null)
@@ -372,7 +351,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 	}
 
-	private static void setAspectRatio(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
+	private  void setAspectRatio(Programme.Detail programmeDetail, FullProgrammePackageInfo pack)
 	{
 		String aspectRatioStr = pack.getMaterialAttributes().getAttributeAsString(Attribute.CONT_ASPECT_RATIO);
 		String setAR;
@@ -413,7 +392,7 @@ public class MediaExchangeProgrammeOutputBuilder
 
     }
 
-	private static void setResolution(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
+	private  void setResolution(Programme.Detail programmeDetail, final FullProgrammePackageInfo pack)
 	{
 		String resolutionStr = pack.getPackageAttributes().getAttribute(Attribute.REQ_FMT);
 		if (resolutionStr == null)
@@ -436,7 +415,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static AudioListType getAudioEncoding(final AudioTrackList audioTracks)
+	private  AudioListType getAudioEncoding(final AudioTrackList audioTracks)
 	{
 		if (audioTracks.size() == 1)
 		{
@@ -454,7 +433,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	}
 
 
-	private static XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
+	private  XMLGregorianCalendar getGregorian(org.joda.time.DateTime dateTime)
 	{
 
 		try
@@ -477,7 +456,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 	}
 
-	private static XMLGregorianCalendar getNowDate()
+	private  XMLGregorianCalendar getNowDate()
 	{
 		try
 		{
@@ -493,7 +472,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 	}
 
-	private static XMLGregorianCalendar getPurgeDateFor(org.joda.time.DateTime dateTime)
+	private  XMLGregorianCalendar getPurgeDateFor(org.joda.time.DateTime dateTime)
 	{
 
 		org.joda.time.DateTime pTime = new org.joda.time.DateTime(dateTime);
