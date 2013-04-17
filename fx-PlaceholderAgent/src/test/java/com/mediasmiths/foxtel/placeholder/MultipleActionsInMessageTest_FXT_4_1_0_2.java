@@ -1,24 +1,21 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import static org.junit.Assert.assertEquals;
-
-import java.io.IOException;
-import java.util.List;
-
-import javax.xml.bind.JAXBException;
-
+import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
+import au.com.foxtel.cf.mam.pms.PurgeTitle;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
+import com.mediasmiths.foxtel.multiplaceholder.foxtel.messagetests.ResultLogger;
+import com.mediasmiths.foxtel.placeholder.util.Util;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
-import au.com.foxtel.cf.mam.pms.PurgeTitle;
+import javax.xml.bind.JAXBException;
+import java.io.IOException;
+import java.util.List;
 
-import com.mediasmiths.foxtel.agent.queue.PickupPackage;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
-import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
-import com.mediasmiths.foxtel.messagetests.ResultLogger;
-import com.mediasmiths.foxtel.placeholder.util.Util;
+import static org.junit.Assert.assertEquals;
 
 public class MultipleActionsInMessageTest_FXT_4_1_0_2 extends PlaceHolderMessageShortTest{
 

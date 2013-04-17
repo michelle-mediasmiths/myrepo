@@ -1,10 +1,6 @@
 package com.mediasmiths.foxtel.placeholder;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
+import com.mediasmiths.foxtel.multiplaceholder.foxtel.messagetests.ResultLogger;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.RandomStringUtils;
@@ -13,7 +9,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.mediasmiths.foxtel.messagetests.ResultLogger;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class IncomingFolderWatcherTest_FXT_4_1_x_1 {
 
