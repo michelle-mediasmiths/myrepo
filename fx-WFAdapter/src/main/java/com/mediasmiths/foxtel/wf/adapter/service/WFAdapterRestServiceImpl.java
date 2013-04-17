@@ -479,7 +479,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				log.debug("destination received from TCPassedNotification");
 				TCFTPUpload ftpupload = notification.getFtpupload();
 				deliveryLocation = String.format("%s/%s", ftpupload.folder, ftpupload.filename);
-				log.debug("delivery location :"+deliveryLocation);
+				log.debug("delivery location :" + deliveryLocation);
+			}
+			else
+			{
+				log.debug("no destination received");
 			}
 
 			long taskId = notification.getTaskID();
