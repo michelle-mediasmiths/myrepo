@@ -36,9 +36,7 @@ public class WatchFolderRpt
 	{
 		List<Watchfolder> watched = getWatchFolderList(events, startDate, endDate);
 		
-		createCsv(watched, reportName);
-			
-			
+		createCsv(watched, reportName);	
 	}
 	
 	private Object unmarshall(EventEntity event)
