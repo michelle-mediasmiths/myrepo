@@ -549,17 +549,16 @@ public class MultiFilePickUp implements IFilePickup
 	{
 
 		PickupNotification pickUpStats = new PickupNotification();
-		for (String ext: pp.suffixes)
+		for (String ext : pp.getFoundSuffixes())
 		{
 			File f = pp.getPickUp(ext);
-			if(f!=null){ //pickup can be incomplete
-				FilePickupDetails pd = new FilePickupDetails();
-				pd.setFilename(f.getName());
-				pd.setFilePath(pp.getRootPath());
-				pd.setTimeDiscovered(f.lastModified());
-				pd.setTimeProcessed(System.currentTimeMillis());
-				pickUpStats.getDetails().add(pd);
-			}
+			FilePickupDetails pd = new FilePickupDetails();
+			pd.setFilename(f.getName());
+			pd.setFilePath(pp.getRootPath());
+			pd.setTimeDiscovered(f.lastModified());
+			pd.setTimeProcessed(System.currentTimeMillis());
+			pickUpStats.getDetails().add(pd);
+
 		}
 
 		if (eventsEnabled) pickUpEventTimer.saveEvent("http://www.foxtel.com.au/ip/infrastructure", "FilePickUp", pickUpStats);
