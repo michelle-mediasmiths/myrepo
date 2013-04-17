@@ -64,7 +64,7 @@ public class RuzzValidator extends MessageValidator<RuzzIngestRecord>
 		if (!mayamClient.isMaterialPlaceholder(materialID))
 		{
 			log.error(String.format("material %s not a placeholder", materialID));
-			return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+			return MessageValidationResult.PLACEHOLDER_ALREADY_HAS_MEDIA;
 		}
 
 		if (mayamClient.materialHasPassedPreview(materialID))

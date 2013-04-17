@@ -79,7 +79,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			aoMismatch(pp);
 		}
 		else if (result == MessageValidationResult.MATERIAL_HAS_ALREADY_PASSED_PREVIEW
-				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION || result== MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER)
+				|| result == MessageValidationResult.UNEXPECTED_DELIVERY_VERSION || result== MessageValidationResult.PLACEHOLDER_ALREADY_HAS_MEDIA)
 		{
 			failMediaAndMessage(pp);
 		}
@@ -115,7 +115,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			
 			switch (resultPackage.getResult())
 			{
-				case MATERIAL_IS_NOT_PLACEHOLDER:
+				case PLACEHOLDER_ALREADY_HAS_MEDIA:
 					{
 						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
 						break;
