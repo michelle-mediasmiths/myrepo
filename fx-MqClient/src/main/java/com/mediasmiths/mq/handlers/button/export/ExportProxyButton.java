@@ -256,8 +256,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		
 		if(firstTX==null){
 			DateTime dtF = new DateTime();
-			dtF.minusMonths(1);
-			firstTX=dtF.toDate(); //ensure first tx isnt null, if none specified use a date > 7 days in the past
+			dtF = dtF.plusYears(1);
+			firstTX=dtF.toDate(); //ensure first tx isnt null, if none specified use a year in the future (inelegant but saves having to handle an null value in intalio work flows)
 		}
 		
 		ie.setRequiredDate(firstTX);
