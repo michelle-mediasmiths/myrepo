@@ -172,4 +172,13 @@ public class PickupPackage
 		return this.files.values();
 	}
 
+	/**
+	 *
+	 * @return the collection of suffixes that have been found.
+	 */
+	public Set<String> getFoundSuffixes()
+	{
+		return files.keySet();
+	}
+
 }

@@ -26,10 +26,9 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
@@ -50,7 +49,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -76,6 +74,10 @@ public class MayamClientImpl implements MayamClient
 	
 	@Inject
 	protected ChannelProperties channelProperties;
+
+	@Inject
+	MediaExchangeProgrammeOutputBuilder mediaExchangeBuilder;
+
 
 	@Inject
 	public MayamClientImpl() throws MalformedURLException, IOException
@@ -447,7 +449,7 @@ public class MayamClientImpl implements MayamClient
 		//fetch the packages information		
 		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController, client.assetApi());
 		//build the Programme Object
-		return MediaExchangeProgrammeOutputBuilder.buildProgramme(pack);
+		return mediaExchangeBuilder.buildProgramme(pack);
 	}
 	
 	@Override

@@ -236,7 +236,7 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 				// item has never been updated by a material exchange message, check if it is a placeholder
 				if (!mayamClient.isMaterialPlaceholder(materialID))
 				{
-					return MessageValidationResult.MATERIAL_IS_NOT_PLACEHOLDER;
+					return MessageValidationResult.PLACEHOLDER_ALREADY_HAS_MEDIA;
 				}
 			}
 		}

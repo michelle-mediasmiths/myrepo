@@ -1,20 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ChannelType;
@@ -28,7 +13,6 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -36,18 +20,34 @@ import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailureReason;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.IFilePickup;
+import com.mediasmiths.foxtel.agent.validation.MessageValidationException;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResultPackage;
+import com.mediasmiths.foxtel.agent.validation.MessageValidator;
 import com.mediasmiths.foxtel.ip.common.events.ErrorReport;
 import com.mediasmiths.foxtel.ip.common.events.IBMSDeleteItemFailure;
 import com.mediasmiths.foxtel.ip.common.events.ProtectedPurgeFail;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
 import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.placeholder.validation.MultiPlaceholderMessageValidator;
 import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -56,6 +56,7 @@ import com.mediasmiths.mayam.MayamClientException;
  * @see PlaceholderMessageValidator
  *
  */
+
 public class MultiPlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage>
 {
 
@@ -63,10 +64,12 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
     private final MayamClient mayamClient;
 
+	private final MultiPlaceholderMessageValidator messageValidator;
+
     @Inject
     public MultiPlaceholderMessageProcessor(
     		IFilePickup filePickup,
-            PlaceholderMessageValidator messageValidator,
+            MessageValidator<PlaceholderMessage> messageValidator,
             ReceiptWriter receiptWriter,
             Unmarshaller unmarhsaller,
             Marshaller marshaller,
@@ -75,13 +78,16 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     {
         super(filePickup, messageValidator, receiptWriter, unmarhsaller, marshaller,eventService);
         this.mayamClient = mayamClient;
+	    this.messageValidator = (MultiPlaceholderMessageValidator)messageValidator;
     }
 
-    private void addOrUpdateMaterial(AddOrUpdateMaterial action) throws MessageProcessingFailedException
+    public void addOrUpdateMaterial(AddOrUpdateMaterial action) throws MessageProcessingFailedException, MessageValidationException
     {
-        try
+	    messageValidator.validateAddOrUpdateMaterial(action);
+
+	    try
         {
-            MayamClientErrorCode result;
+	        MayamClientErrorCode result;
 
             if (mayamClient.materialExists(action.getMaterial().getMaterialID()))
             {
@@ -90,8 +96,6 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             else
             {
                 result = mayamClient.createMaterial(action.getMaterial(), action.getTitleID());
-
-
             }
             sendMaterialOrderStatus(action);
 
@@ -100,15 +104,16 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         }
         catch (MayamClientException e)
         {
-            logger.error(
-                    String.format("MayamClientException querying if material %s exists", action.getMaterial().getMaterialID()),
-                    e);
+            logger.error(String.format("MayamClientException querying if material %s exists",
+                                       action.getMaterial().getMaterialID()), e);
             throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
         }
     }
 
-    private void addOrUpdatePackage(AddOrUpdatePackage action) throws MessageProcessingFailedException
+    public void addOrUpdatePackage(AddOrUpdatePackage action) throws MessageProcessingFailedException, MessageValidationException
     {
+
+	    messageValidator.validateAddOrUpdatePackage(action);
 
         try
         {
@@ -172,12 +177,15 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "BMSFailure", errorReport);
 
             logger.error(String.format("Failed to process action, result was %s", result));
-            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_ERRORCODE);
+
+            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
         }
     }
 
-    private void createOrUpdateTitle(CreateOrUpdateTitle action) throws MessageProcessingFailedException
+    public void createOrUpdateTitle(CreateOrUpdateTitle action) throws MessageValidationException, MessageProcessingFailedException
     {
+
+        messageValidator.validateCreateOrUpdateTitle(action);
 
         try
         {
@@ -317,17 +325,21 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     }
 
 
-    private void deleteMaterial(DeleteMaterial action) throws MessageProcessingFailedException
+    public void deleteMaterial(DeleteMaterial action) throws MessageProcessingFailedException, MessageValidationException
     {
+        messageValidator.validateDeleteMaterial(action);
 
         MayamClientErrorCode result = mayamClient.deleteMaterial(action);
+
         sendPurgeMaterial(result, action);
+
         checkResult(result, action.getClass().getName(), action.getMaterial().getMaterialID(), action.getTitleID());
 
     }
 
-    private void deletePackage(DeletePackage action) throws MessageProcessingFailedException
+    public void deletePackage(DeletePackage action) throws MessageProcessingFailedException, MessageValidationException
     {
+	    messageValidator.validateDeletePackage(action);
 
         MayamClientErrorCode result = mayamClient.deletePackage(action);
         sendPurgePackage(result, action);
@@ -337,11 +349,14 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
 
 
-    private void purgeTitle(PurgeTitle action) throws MessageProcessingFailedException
+    public void purgeTitle(PurgeTitle action) throws MessageProcessingFailedException, MessageValidationException
     {
-        logger.trace("mayamClient.purgeTitle(...)");
+	    messageValidator.validatePurgeTitle(action);
+
         MayamClientErrorCode result = mayamClient.purgeTitle(action);
+
         checkResult(result, action.getClass().getName(), action.getTitleID(), null);
+
         if (result == MayamClientErrorCode.SUCCESS)
         {
             sendPurgeTitle(action);
@@ -402,11 +417,62 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         super.moveFileToFailureFolder(file);
     }
 
-    @Override
-    protected void messageValidationFailed(MessageValidationResultPackage<PlaceholderMessage> resultPackage)
-    {
-    	MessageValidationResult result = resultPackage.getResult();
 
+
+	private void sendErrorEvent(final MessageValidationResultPackage<PlaceholderMessage> resultPackage,
+	                            final MessageValidationResult result)
+	{
+		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED || result==MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
+		{
+		    ProtectedPurgeFail ppf = createPurgeFailedMessage();
+
+		    try
+		    {
+			    PlaceholderMessage message = resultPackage.getMessage();
+						PlaceholderMessage deleteMessage = message;
+						Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+
+						String titleID = null;
+		        if (action instanceof PurgeTitle)
+		        {
+		            ppf.setAssetType("EPISODE");
+
+		            titleID = ((PurgeTitle) action).getTitleID();
+
+		            ppf.setHouseId(titleID);
+		        }
+		        else if (action instanceof DeleteMaterial)
+		        {
+		            ppf.setAssetType("ITEM");
+		            titleID = ((DeleteMaterial) action).getTitleID();
+		            ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
+		        }
+		        else if (action instanceof DeletePackage)
+		        {
+		            ppf.setAssetType("SEGMENT_LIST");
+		            titleID = ((DeletePackage) action).getTitleID();
+		            ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
+		        }
+
+		        if(titleID != null){
+		            Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
+		            ppf.getChannelGroup().addAll(channelsForTitle);
+		        }
+
+		    }
+		    catch(MayamClientException e){
+		        logger.error("error getting channel groups for title",e);
+		    }
+
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
+		}
+		else{
+		    eventService.saveEvent("failed",resultPackage.getMessage());
+		}
+	}
+
+	private void createErrorTask(final MessageValidationResultPackage<PlaceholderMessage> resultPackage)
+	{
 		logger.warn(String.format(
 				"Validation of Placeholder management message %s failed for reason %s",
 				resultPackage.getPp().getRootName(),
@@ -426,59 +492,66 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		{
 			logger.error("Failed to create wfe error task", e);
 		}
-		
+	}
+
+	/**
+	 *
+	 * @param resultPackage a validation result for a placeholder
+	 *
+	 *
+	 */
+	@Override
+	protected void messageValidationFailed(MessageValidationResultPackage<PlaceholderMessage> resultPackage)
+	{
+		MessageValidationResult result = resultPackage.getResult();
+
+		createErrorTask(resultPackage);
+
 		moveFileToFailureFolder(resultPackage.getPp().getPickUp("xml"));
-		
-        if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED || result==MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
-        {
-            ProtectedPurgeFail ppf = createPurgeFailedMessage();
 
-            try
-            {
-            	PlaceholderMessage message = resultPackage.getMessage();
-				PlaceholderMessage deleteMessage = message;
-				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+		sendErrorEvent(resultPackage, result);
+	}
 
-				String titleID = null;
-                if (action instanceof PurgeTitle)
-                {
-                    ppf.setAssetType("EPISODE");
 
-                    titleID = ((PurgeTitle) action).getTitleID();
+	/**
+	 *
+	 * @param envelope orginal pickup placeholder and pickup
+	 * @param results a collection (possibly empty) of failed processing results
+	 */
+	private void messageValidationFailed(MessageEnvelope<PlaceholderMessage> envelope, List<MessageValidationResultPackage<PlaceholderMessage>> results)
+	{
+		if (results != null && !results.isEmpty())
+		{
+			for (MessageValidationResultPackage<PlaceholderMessage> result : results)
+			{
+				createErrorTask(result);
+				sendErrorEvent(result, result.getResult());
 
-                    ppf.setHouseId(titleID);
-                }
-                else if (action instanceof DeleteMaterial)
-                {
-                    ppf.setAssetType("ITEM");
-                    titleID = ((DeleteMaterial) action).getTitleID();
-                    ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
-                }
-                else if (action instanceof DeletePackage)
-                {
-                    ppf.setAssetType("SEGMENT_LIST");
-                    titleID = ((DeletePackage) action).getTitleID();
-                    ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
-                }
+			}
 
-                if(titleID != null){
-                    Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
-                    ppf.getChannelGroup().addAll(channelsForTitle);
-                }
+			moveFileToFailureFolder(envelope.getPickupPackage().getPickUp("xml"));
+		}
+	}
 
-            }
-            catch(MayamClientException e){
-                logger.error("error getting channel groups for title",e);
-            }
+	/**
+	 *
+	 * @param envelope the processing envelope
+	 * @param errorActions the list (potentially empty) of processing failures
+	 *
+	 * Post the collection of error messages in processing the list of argument options.
+	 *
+	 */
+	private void messageProcessingFailed(final MessageEnvelope<PlaceholderMessage> envelope, final List<Object> errorActions)
+	{
+		if (errorActions != null && !errorActions.isEmpty())
+		{
+			processingError(envelope.getPickupPackage());
+		}
 
-            eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
-        }
-        else{
-            eventService.saveEvent("failed",resultPackage.getMessage());
-        }
-    }
+	}
 
-    private ProtectedPurgeFail createPurgeFailedMessage ()
+
+	private ProtectedPurgeFail createPurgeFailedMessage ()
     {
         ProtectedPurgeFail purgeMessage = new ProtectedPurgeFail();
         purgeMessage.setTime((new Date()).toString());
@@ -491,7 +564,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
      * @throws MessageProcessingFailedException if item cannot be added.
      * Perform the individual placeholder message operaton.
      */
-    private void processAPlaceholderAction(Object action) throws MessageProcessingFailedException
+    private void processAPlaceholderAction(Object action) throws MessageValidationException, MessageProcessingFailedException
     {
         boolean isCreateOrUpdateTitle = (action instanceof CreateOrUpdateTitle);
         boolean isPurgeTitle = (action instanceof PurgeTitle);
@@ -532,11 +605,15 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
     /**
      *
+     * @param envelope
      * @param message IBMS or BMS placeholder message
-     * Process messages as indivual placeholder messages.  no individual failure stops the processng.
      */
-    private void processAsIndividualPlaceholderActions(PlaceholderMessage message)
+    private void processAsIndividualPlaceholderActions(final MessageEnvelope<PlaceholderMessage> envelope, PlaceholderMessage message)
     {
+
+	    List<Object> errorActions = new ArrayList<Object>();
+
+	    List<MessageValidationResultPackage<PlaceholderMessage>> validationExceptions = new ArrayList<MessageValidationResultPackage<PlaceholderMessage>>();
 
         for (Object action : message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial())
         {
@@ -544,27 +621,45 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             {
                 processAPlaceholderAction(action);
             }
+            catch (MessageValidationException e)
+            {
+	            logger.error("Placeholder validation error: " + e.result, e);
+
+	            validationExceptions.add(new MessageValidationResultPackage(envelope.getPickupPackage(), e.result));
+
+            }
             catch (MessageProcessingFailedException e)
             {
                 logger.error("Placeholder Processing error.", e);
+
+	            errorActions.add(action);
             }
         }
+
+	     // process all the validation failed messages if there are any.
+	    messageValidationFailed(envelope, validationExceptions);
+
+	     // process all processing exceptions if there are any.
+	    messageProcessingFailed(envelope, errorActions);
+
+
     }
 
-    /**
+	/**
      *
+     * @param envelope
      * @param message IBMS placeholder message.
      * Process an IBMS placeholder message consisting of a title and list of addMaterial message
-     * If any fails ... roll back deleting all previouslu added actions.
      */
-    private void processAsIBMSTransaction(PlaceholderMessage message) throws MessageProcessingFailedException
+    private void processAsIBMSTransaction(final MessageEnvelope<PlaceholderMessage> envelope, PlaceholderMessage message) throws MessageProcessingFailedException
     {
         CreateOrUpdateTitle title = null;
         List<AddOrUpdateMaterial> addMaterialMsgs = new ArrayList<AddOrUpdateMaterial>();
 
         try
         {
-            for (Object action : message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial()) {
+            for (Object action : message.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial())
+            {
 
                 if (action instanceof CreateOrUpdateTitle)
                 {
@@ -574,14 +669,18 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
                     title = (CreateOrUpdateTitle) action;
 
+	                logger.debug("IBMS Title Id: " + title.getTitleID());
+
                     createOrUpdateTitle(title);
                 }
                 else if (action instanceof AddOrUpdateMaterial)
                 {
-                    if (title == null || !((AddOrUpdateMaterial)action).getTitleID().equals(title.getTitleID()))
+                    if (title == null || isTitleMaterialMismatch(title, (AddOrUpdateMaterial) action))
                         throw new IllegalArgumentException("Title ID Mismatch between CreateTitle and AddMaterial Placeholder Actions.");
 
-                    addOrUpdateMaterial((AddOrUpdateMaterial) action);
+	                logger.debug("IBMS Material Id: " + ((AddOrUpdateMaterial) action).getMaterial().getMaterialID());
+
+	                addOrUpdateMaterial((AddOrUpdateMaterial) action);
 
                     addMaterialMsgs.add((AddOrUpdateMaterial) action);
                 }
@@ -592,15 +691,23 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
             }
         }
-        catch (Exception e)
+        catch (MessageValidationException e)
         {
-            // need to roll things back. This IBMS transaction is broken.
+	        logger.error("IBMS: Placeholder validation error", e);
 
-            logger.error("Placeholder Processing error.", e);
+	        ibmsTransactionRollback(title, addMaterialMsgs);
+
+	        messageValidationFailed(new MessageValidationResultPackage<PlaceholderMessage>(envelope.getPickupPackage(), e.result));
+
+        }
+        catch (MessageProcessingFailedException e)
+        {
+
+            logger.error("IBMS: Placeholder Processing error.", e);
 
             ibmsTransactionRollback(title, addMaterialMsgs);
 
-            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION) ;
+	        processingError(envelope.getPickupPackage());
 
 
         }
@@ -608,10 +715,21 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
     }
 
-    /**
+	private boolean isTitleMaterialMismatch(final CreateOrUpdateTitle title, final AddOrUpdateMaterial action)
+	{
+		if (title == null)
+			throw new IllegalArgumentException("Title is null - internal system error");
+
+		if (action == null)
+			throw new IllegalArgumentException("Material is null - internal system error");
+
+		return !action.getTitleID().equals(title.getTitleID());
+	}
+
+	/**
      *
      * @param title of the IBMS message (potentially null)
-     * @param addMaterialMsgs  list (potentially empty) of addMaterial messages
+     * @param addMaterialMsgs  non null list (potentially empty) of addMaterial messages
      * Roll back by removing the title and addMaterial messages added.
      *
      */
@@ -660,7 +778,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         }
         else
         {
-            logger.debug("Nothing to roll back.");
+            logger.debug("IBMS Rollback - Nothing to roll back.");
         }
     }
 
@@ -713,11 +831,11 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
         if (isIBMSTransactionalMessage(message))
         {
-            processAsIBMSTransaction(message);
+            processAsIBMSTransaction(envelope, message);
         }
         else
         {
-            processAsIndividualPlaceholderActions(message);
+            processAsIndividualPlaceholderActions(envelope, message);
         }
 
 

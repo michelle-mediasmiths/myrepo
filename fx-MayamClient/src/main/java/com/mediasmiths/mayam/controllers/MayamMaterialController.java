@@ -65,6 +65,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -150,7 +151,7 @@ public class MayamMaterialController extends MayamController
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 
-					updateMaterialAttributesFromTitle(attributes, title);
+					updateMaterialAttributesFromTitle(attributes, title,false);
 					
 					Boolean isAO = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
 
@@ -347,17 +348,36 @@ public class MayamMaterialController extends MayamController
 	// Production Year
 	// Style
 	// Channels
-	public static Attribute[] materialsAttributesInheritedFromTitle = new Attribute[] { Attribute.ASSET_TITLE,
-			Attribute.CONT_RESTRICTED_MATERIAL,Attribute.CONT_RESTRICTED_ACCESS, Attribute.SERIES_TITLE, Attribute.SERIES_TITLE, Attribute.SHOW,
-			Attribute.SEASON_NUMBER, Attribute.EPISODE_NUMBER, Attribute.EPISODE_TITLE, Attribute.LOCATION,
-			Attribute.PRODUCTION_NUMBER, Attribute.SERIES_YEAR, Attribute.CONT_CATEGORY, Attribute.CHANNELS, Attribute.CHANNEL_GROUPS, Attribute.PURGE_PROTECTED, Attribute.LICENSE_START, Attribute.LICENSE_END };
+	public static EnumSet<Attribute> materialsAttributesInheritedFromTitle = EnumSet.of(
+			Attribute.ASSET_TITLE,
+			Attribute.CONT_RESTRICTED_MATERIAL,
+			Attribute.CONT_RESTRICTED_ACCESS,
+			Attribute.SERIES_TITLE,
+			Attribute.SERIES_TITLE,
+			Attribute.SHOW,
+			Attribute.SEASON_NUMBER,
+			Attribute.EPISODE_NUMBER,
+			Attribute.EPISODE_TITLE,
+			Attribute.LOCATION,
+			Attribute.PRODUCTION_NUMBER,
+			Attribute.SERIES_YEAR,
+			Attribute.CONT_CATEGORY,
+			Attribute.CHANNELS,
+			Attribute.CHANNEL_GROUPS,
+			Attribute.PURGE_PROTECTED,
+			Attribute.LICENSE_START,
+			Attribute.LICENSE_END);
 
-	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title)
+	public static EnumSet<Attribute> associatedMaterialsAttributesNotInheritedFromTitle = EnumSet.of(Attribute.ASSET_TITLE);
+
+	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title, boolean associated)
 	{
 		// copy metadata from title onto material
 		for (Attribute a : materialsAttributesInheritedFromTitle)
 		{
-			attributes.copyAttribute(a, title);
+			if((! associated) || (! associatedMaterialsAttributesNotInheritedFromTitle.contains(a))){
+				attributes.copyAttribute(a, title);
+			}			
 		}
 
 	}
@@ -385,11 +405,20 @@ public class MayamMaterialController extends MayamController
 		for (AttributeMap material : materials)
 		{
 
+			String type = (String) material.getAttribute(Attribute.CONT_MAT_TYPE);
+			boolean associated = false;
+			
+			if(ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(type)){
+				associated=true;
+			}
+						
 			AttributeMap update = taskController.updateMapForAsset(material);
 			
 			for (Attribute a : materialsAttributesInheritedFromTitle)
 			{
-				update.setAttribute(a, title.getAttribute(a));
+				if((! associated) || (! associatedMaterialsAttributesNotInheritedFromTitle.contains(a))){
+					update.setAttribute(a, title.getAttribute(a));
+				}
 			}
 
 			try
@@ -441,7 +470,7 @@ public class MayamMaterialController extends MayamController
 					log.debug("Associating asset with id=" + associatingAssetId + ", houseId = " + associatingHouseId);
 					attributes.setAttribute(Attribute.ASSET_PARENT_ID, associatingAssetId);
 					//attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
-					updateMaterialAttributesFromTitle(attributes, titleAttributes);
+					updateMaterialAttributesFromTitle(attributes, titleAttributes, true);
 				}
 				else
 				{
@@ -462,6 +491,8 @@ public class MayamMaterialController extends MayamController
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, QcStatus.TBD);
 
+			attributes.setAttribute(Attribute.ASSET_TITLE, title.getProgrammeTitle());
+			
 			attributesValid &= attributes.setAttribute(
 					Attribute.CONT_ASPECT_RATIO,
 					MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
@@ -883,7 +914,7 @@ public class MayamMaterialController extends MayamController
 							titleID);
 					if (titleAttributes != null)
 					{
-						updateMaterialAttributesFromTitle(attributes, titleAttributes);
+						updateMaterialAttributesFromTitle(attributes, titleAttributes,false);
 					}
 				}
 				catch (RemoteException e)

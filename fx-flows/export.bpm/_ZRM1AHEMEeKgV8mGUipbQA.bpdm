@@ -325,11 +325,7 @@
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                                        <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/tns:packageID/text()</bpel:to>
-<mapper:mapperLink>
-  <mapper:vertice id="17309514" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/tns:packageID/text()" targetedBy="14020073-arg0"></mapper:vertice>
-  <mapper:vertice id="14020073" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice>
-</mapper:mapperLink>
+                                                        <bpel:to>$tcGetPriorityGetpriorityRequestMsg.body/tns:packageID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="17309514" targetPath="$tcGetPriorityGetpriorityRequestMsg.body/tns:packageID/text()" targetedBy="14020073-arg0"></mapper:vertice><mapper:vertice id="14020073" sourcePath="$thisEventStartMessageRequest.body/tns:packageID/text()"></mapper:vertice></mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                                 <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="tcGetPriorityGetpriorityRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="tcGetPriority:getpriority_input" bpdm:binding="tcGetPriority:restBinding" bpdm:ID="_3TSHYKaoEeKMKJRBWwHUjA"></bpdm:linkset>
@@ -403,10 +399,38 @@
                                                     </bpel:copy>
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
-                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to><mapper:mapperLink><mapper:vertice id="4580879" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload" targetedBy="684467-arg0"></mapper:vertice><mapper:vertice id="684467" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload"></mapper:vertice></mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:filename/text()</bpel:from>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:filename/text()</bpel:to><mapper:mapperLink><mapper:vertice id="19479216" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:filename/text()" targetedBy="25619051-arg0"></mapper:vertice><mapper:vertice id="25619051" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:filename/text()"></mapper:vertice></mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:folder/text()</bpel:from>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:folder/text()</bpel:to><mapper:mapperLink><mapper:vertice id="616278" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:folder/text()" targetedBy="16747683-arg0"></mapper:vertice><mapper:vertice id="16747683" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:folder/text()"></mapper:vertice></mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:server/text()</bpel:from>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:server/text()</bpel:to>
 <mapper:mapperLink>
-  <mapper:vertice id="4580879" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload" targetedBy="684467-arg0"></mapper:vertice>
-  <mapper:vertice id="684467" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload"></mapper:vertice>
+  <mapper:vertice id="22933587" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:server/text()" targetedBy="14281262-arg0"></mapper:vertice>
+  <mapper:vertice id="14281262" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:server/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:user/text()</bpel:from>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:user/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="30678564" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:user/text()" targetedBy="27553635-arg0"></mapper:vertice>
+  <mapper:vertice id="27553635" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:user/text()"></mapper:vertice>
+</mapper:mapperLink>
+                                                    </bpel:copy>
+                                                    <bpel:copy>
+                                                        <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:password/text()</bpel:from>
+                                                        <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:password/text()</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="15245233" targetPath="$tcPassedTcPassedRequestMsg.body/tns:ftpupload/tcAdapter:password/text()" targetedBy="13245779-arg0"></mapper:vertice>
+  <mapper:vertice id="13245779" sourcePath="$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload/tcAdapter:password/text()"></mapper:vertice>
 </mapper:mapperLink>
                                                     </bpel:copy>
                                                 </bpdm:linkset>

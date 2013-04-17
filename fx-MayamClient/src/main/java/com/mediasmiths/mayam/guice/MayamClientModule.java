@@ -1,18 +1,5 @@
 package com.mediasmiths.mayam.guice;
 
-import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_AUTH_TOKEN;
-import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_ENDPOINT;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -25,6 +12,17 @@ import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.PackageController;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_AUTH_TOKEN;
+import static com.mediasmiths.mayam.MayamClientConfig.MAYAM_ENDPOINT;
 
 public class MayamClientModule extends AbstractModule
 {
@@ -38,6 +36,7 @@ public class MayamClientModule extends AbstractModule
 	{
 		install(new SecurityModule());
 		install(new AttributesModule());
+		install(new MayamAudioVisualModule());
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(MayamValidator.class).to(MayamValidatorImpl.class);
 		bind(PackageController.class).to(MayamPackageController.class);

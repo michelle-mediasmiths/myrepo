@@ -31,12 +31,10 @@ public class ComplianceProxy extends ExportProxyButton
 		return MayamButtonType.COMPLIANCE_PROXY;
 	}
 
-	public static final String buttonName = "Compliance Proxy";
-
 	@Override
 	public String getName()
 	{
-		return buttonName;
+		return getJobType().getText();
 	}
 
 	@Override

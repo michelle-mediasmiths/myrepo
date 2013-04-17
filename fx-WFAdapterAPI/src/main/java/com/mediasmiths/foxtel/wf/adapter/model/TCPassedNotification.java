@@ -16,7 +16,7 @@ public class TCPassedNotification extends TCNotification
             return this.ftpupload;
     }
 
-    public void getFtpupload(TCFTPUpload upload)
+    public void setFtpupload(TCFTPUpload upload)
     {
             this.ftpupload = upload;
     }
