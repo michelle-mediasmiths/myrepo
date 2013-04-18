@@ -6,6 +6,7 @@ import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
@@ -273,7 +274,7 @@ public class MayamPDPImpl implements MayamPDP
 				throw e;
 			}
 
-			String audioTracks = parentAsset.getAttributeAsString(Attribute.AUDIO_TRACKS);
+			AudioTrackList audioTracks = parentAsset.getAttribute(Attribute.AUDIO_TRACKS);
 
 			if (audioTracks == null) // add a no audio track warning.
 			{
