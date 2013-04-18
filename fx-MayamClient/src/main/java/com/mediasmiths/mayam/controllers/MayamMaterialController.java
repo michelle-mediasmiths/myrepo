@@ -64,6 +64,7 @@ import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -1642,18 +1643,35 @@ public class MayamMaterialController extends MayamController
 		return format;
 	}
 	
-	public boolean materialHasTXPackages(String houseID, String materialAssetID) throws RemoteException
+	public boolean materialHasTXPackages(String houseID, String materialAssetID) throws RemoteException, MayamClientException
 	{
-		boolean hasTXpackages = false;
-		
 		log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, materialAssetID));
 		List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, materialAssetID);
 		log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
 		if (packages.size() > 0)
 		{
-			hasTXpackages = true;
+			return true;
 		}
-		return hasTXpackages;
+		else{
+			log.info("found no segment lists for asset, searching for pending tx package tasks");
+			//check if there are any pending tx package tasks with bms information
+			List<AttributeMap> pendingTxTasks = taskController.getOpenTasksForAsset(
+					MayamTaskListType.PENDING_TX_PACKAGE,
+					AssetType.ITEM,
+					Attribute.ASSET_ID,
+					materialAssetID,
+					Collections.<Attribute, Object> singletonMap(
+							Attribute.AUX_SRC,
+							MayamPackageController.PENDING_TX_PACKAGE_SOURCE_BMS));
+			
+			if(! pendingTxTasks.isEmpty()){
+				log.info("open pending tx package with bms information found");
+				return true;
+			}
+			log.info("no pending tx package tasks with bms info found");
+		}		
+		
+		return false;
 	}
 
 

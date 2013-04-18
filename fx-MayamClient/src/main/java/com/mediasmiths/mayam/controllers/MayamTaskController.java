@@ -31,6 +31,8 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
@@ -662,16 +664,16 @@ public class MayamTaskController extends MayamController
 	}
 	
 	/**
-	 * Returns all tasks of the specified type that are not in end states
+	 *  Returns all tasks of the specified type that are not in end states
 	 * @param taskList
 	 * @param assetType
 	 * @param idAttribute
 	 * @param id
+	 * @param equalities - extra equalities to filter on
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
-		
+	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id, Map<Attribute, Object> equalities) throws MayamClientException{
 		log.info(String.format(
 				"Searching for task of type %s for asset %s using id attribute %s",
 				taskList.getText(),
@@ -681,6 +683,18 @@ public class MayamTaskController extends MayamController
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, taskList.getText());
 		criteria.getFilterEqualities().setAttribute(idAttribute, id);
+		
+		if (equalities != null)
+		{
+
+			Set<Entry<Attribute, Object>> entrySet = equalities.entrySet();
+			//add any extra supplied equalities to filter on
+			for (Entry<Attribute, Object> entry : entrySet)
+			{
+				criteria.getFilterEqualities().setAttribute(entry.getKey(), entry.getValue());
+			}
+
+		}
 		criteria.getFilterAlternatives()
 	   		.addAsExclusions(Attribute.TASK_STATE, END_STATES);
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
@@ -697,6 +711,18 @@ public class MayamTaskController extends MayamController
 			log.error("remote exception searching for task", e);
 			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED);
 		}
+	}
+	/**
+	 * Returns all tasks of the specified type that are not in end states
+	 * @param taskList
+	 * @param assetType
+	 * @param idAttribute
+	 * @param id
+	 * @return
+	 * @throws MayamClientException
+	 */
+	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
+		return getOpenTasksForAsset(taskList, assetType, idAttribute, id, Collections.<Attribute, Object>emptyMap());
 	}
 	
 	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
