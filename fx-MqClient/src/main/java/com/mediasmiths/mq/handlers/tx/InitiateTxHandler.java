@@ -21,6 +21,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
 import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
@@ -176,19 +177,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
 				{
 					log.warn("Material unavailable or not found on hires storage", e);
-					
-					String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
-					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-					String jobNum = tasksClient.assetApi().requestHighresXfer(assetType, assetId, highResTransferLocation);
-				
-					log.warn("Requesting High Res Transfer. Job : " + jobNum);
-					
-					Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
-					AttributeMap existingTask = taskController.getTask(taskId);
-					existingTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
-					taskController.saveTask(existingTask);
-					
-					log.warn("Setting task to Sys Wait state : " + taskId);
+					initiateHighResTransfer(messageAttributes);
 				}
 				else
 				{
@@ -202,6 +191,37 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
 			}
 
+		}
+	}
+	
+	private void initiateHighResTransfer(AttributeMap messageAttributes)
+	{
+		try
+		{
+			String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			String jobNum = tasksClient.assetApi().requestHighresXfer(assetType, assetId, highResTransferLocation);
+		
+			log.warn("Requesting High Res Transfer. Job : " + jobNum);
+			
+			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+			AttributeMap existingTask = taskController.getTask(taskId);
+			existingTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+			taskController.saveTask(existingTask);
+			
+			log.warn("Setting task to Sys Wait state : " + taskId);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error initiating high res transfer", e);
+			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskId, "Error initiating high res transfer");
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error saving task to sys wait state", e);
+			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskId, "Error saving task to sys wait state");
 		}
 	}
 
