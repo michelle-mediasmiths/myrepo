@@ -492,6 +492,8 @@ public class MayamPDPImpl implements MayamPDP
 			AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
 			boolean hasTXpackages = false;
 			
+			logger.debug("asset type is :"+assetType);
+			
 			AttributeMap assetAttribute = null;
 			try
 			{
@@ -508,11 +510,11 @@ public class MayamPDPImpl implements MayamPDP
 			
 			String assetID = assetAttribute.getAttributeAsString(Attribute.ASSET_ID);
 			
-			if (MayamAssetType.MATERIAL.equals(assetType))
+			if (MayamAssetType.MATERIAL.getAssetType().equals(assetType))
 			{
 				hasTXpackages = materialController.materialHasTXPackages(houseID, assetID);
 			}
-			else if (MayamAssetType.TITLE.equals(assetType))
+			else if (MayamAssetType.TITLE.getAssetType().equals(assetType))
 			{
 				List<AttributeMap> materialsFortitle = titleController.getMaterialsFortitle(houseID, assetID);
 
@@ -528,7 +530,7 @@ public class MayamPDPImpl implements MayamPDP
 					}
 				}
 			}
-			else if (MayamAssetType.PACKAGE.equals(assetType))
+			else if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
 			{
 				hasTXpackages = true; // asset is a tx package
 			}
