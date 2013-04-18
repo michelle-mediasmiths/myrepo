@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.GenericTable;
@@ -868,6 +869,14 @@ public class MayamTitleController extends MayamController{
 		}
 		log.warn("could not find licence for title");
 		return "";
+	}
+	
+	public List<AttributeMap> getMaterialsFortitle(String titleId, String titleAssetID) throws RemoteException{
+		
+		log.debug(String.format("Searching for materials of title %s (%s)", titleId, titleAssetID));
+		List<AttributeMap> assetChildren = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), titleAssetID, MayamAssetType.MATERIAL.getAssetType());
+		log.info(String.format("Found %d packages for asset %s",assetChildren.size(), titleId));
+		return assetChildren;
 	}
 
 }

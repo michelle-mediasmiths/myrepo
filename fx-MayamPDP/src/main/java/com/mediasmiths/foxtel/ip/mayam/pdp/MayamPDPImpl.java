@@ -15,7 +15,9 @@ import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
+import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
 import org.apache.log4j.Logger;
@@ -132,6 +134,12 @@ public class MayamPDPImpl implements MayamPDP
 	private final TasksClient client;
 	private final MayamTaskController taskController;
 
+	@Inject
+	private MayamMaterialController materialController;
+	
+	@Inject
+	private MayamTitleController titleController;
+	
 	@Inject
 	@Named("foxtel.groups.nonao")
 	Map<PrivilegedOperations, Set<FoxtelGroups>> permissionsNonAO;
@@ -498,26 +506,31 @@ public class MayamPDPImpl implements MayamPDP
 				throw e;
 			}
 			
-			if (null != assetAttribute)
+			String assetID = assetAttribute.getAttributeAsString(Attribute.ASSET_ID);
+			
+			if (MayamAssetType.MATERIAL.equals(assetType))
 			{
-				String assetID = assetAttribute.getAttributeAsString(Attribute.ASSET_ID);
-				
-				try
+				hasTXpackages = materialController.materialHasTXPackages(houseID, assetID);
+			}
+			else if (MayamAssetType.TITLE.equals(assetType))
+			{
+				List<AttributeMap> materialsFortitle = titleController.getMaterialsFortitle(houseID, assetID);
+
+				for (AttributeMap material : materialsFortitle)
 				{
-					logger.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, assetID));
-					List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(assetType, assetID);
-					logger.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
-					if (packages.size() > 0)
+					String materialID = material.getAttributeAsString(Attribute.HOUSE_ID);
+					String materialAssetID = material.getAttributeAsString(Attribute.ASSET_ID);
+
+					if (materialController.materialHasTXPackages(materialID, materialAssetID))
 					{
 						hasTXpackages = true;
+						break;
 					}
-				
 				}
-				catch (Exception e)
-				{
-					logger.error("exception in finding packages for asset " + assetID, e);
-				}
-				
+			}
+			else if (MayamAssetType.PACKAGE.equals(assetType))
+			{
+				hasTXpackages = true; // asset is a tx package
 			}
 			
 			boolean permission = userCanPerformOperation(operation, attributeMap);
@@ -548,7 +561,7 @@ public class MayamPDPImpl implements MayamPDP
 		}
 	}
 
-
+	
 
 	@Override
 	public String proxyfileCheck(final String attributeMapStr)

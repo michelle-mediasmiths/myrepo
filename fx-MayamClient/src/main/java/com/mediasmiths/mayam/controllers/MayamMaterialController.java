@@ -1642,4 +1642,20 @@ public class MayamMaterialController extends MayamController
 		return format;
 	}
 	
+	public boolean materialHasTXPackages(String houseID, String materialAssetID) throws RemoteException
+	{
+		boolean hasTXpackages = false;
+		
+		log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, materialAssetID));
+		List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, materialAssetID);
+		log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
+		if (packages.size() > 0)
+		{
+			hasTXpackages = true;
+		}
+		return hasTXpackages;
+	}
+
+
+	
 }

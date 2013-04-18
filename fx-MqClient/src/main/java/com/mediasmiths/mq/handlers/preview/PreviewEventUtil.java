@@ -42,7 +42,13 @@ public class PreviewEventUtil
 				qa.setChannels(StringUtils.join(channels, ','));
 			}
 
-			qa.setEscalated("0");
+			String escalationLevel = messageAttributes.getAttributeAsString(Attribute.ESCALATION_LEVEL);
+					
+			if(escalationLevel==null){
+				escalationLevel="0";
+			}
+			
+			qa.setEscalated(escalationLevel);
 			qa.setMaterialID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			qa.setPreviewStatus(previewResult);
 			qa.setReordered("0");

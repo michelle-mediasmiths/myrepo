@@ -124,7 +124,7 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 				{
 					sendReorderEvent(messageAttributes, "PreviewPassedReorder");
 				}
-				else if (fixeditrequired)
+				else if (fixeditrequired || stitcheditrequired)
 				{
 					sendReorderEvent(messageAttributes, "PreviewFixReorder");
 				}
