@@ -23,6 +23,7 @@ import com.mediasmiths.mayam.util.AssetProperties;
 import org.apache.log4j.Logger;
 
 import javax.xml.ws.WebServiceException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -127,6 +128,11 @@ public class MayamPDPImpl implements MayamPDP
 	@Named("message.delete.prevention")
 	String messageDeletePrevention;
 
+	@Inject
+	@Named("message.audio.notracks")
+	String messageNoAudioTracks;
+
+
 	// ---------------
 
 	private Logger logger = Logger.getLogger(MayamPDP.class);
@@ -178,7 +184,7 @@ public class MayamPDPImpl implements MayamPDP
 	{
 		try
 		{
-			String warnings = "";
+			List<String> warnings = new ArrayList<String>();
 
 			logger.debug("Segment Mismatch Check.");
 
@@ -225,7 +231,7 @@ public class MayamPDPImpl implements MayamPDP
 					{
 						logger.debug("User can override a segment mismatch for " + presentationID);
 
-						warnings += messageSegmentMismatchOverride;
+						warnings.add(messageSegmentMismatchOverride);
 					}
 					else
 					{
@@ -267,6 +273,13 @@ public class MayamPDPImpl implements MayamPDP
 				throw e;
 			}
 
+			String audioTracks = parentAsset.getAttributeAsString(Attribute.AUDIO_TRACKS);
+
+			if (audioTracks == null) // add a no audio track warning.
+			{
+				warnings.add(messageNoAudioTracks);
+			}
+
 			if (parentAsset != null)
 			{
 				boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
@@ -277,21 +290,29 @@ public class MayamPDPImpl implements MayamPDP
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
 
-					return getConfirmStatus(formHTMLList(warnings, messageTXSend));
+					warnings.add(messageTXSend);
+					return getConfirmStatus(formHTMLList(warnings));
 				}
 
 				Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
 				if (qcParallelAttribute != null && qcParallelAttribute)
 				{
 					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
-	
-					return getConfirmStatus(formHTMLList(warnings, messageQCParallelWarning, messageTXSend));
+
+					warnings.add(messageQCParallelWarning);
+					warnings.add(messageTXSend);
+
+					return getConfirmStatus(formHTMLList(warnings));
 				}
 			}
 			else 
 			{
 				logger.info("Unable to locate parent asset for : " + presentationID);
-				return getConfirmStatus(formHTMLList(warnings, " Unable to locate parent asset to check QC status", messageTXSend));
+
+				warnings.add("Unable to locate parent asset to check QC status");
+				warnings.add(messageTXSend);
+
+				return getConfirmStatus(formHTMLList(warnings));
 			}
 			
 			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
@@ -1353,13 +1374,14 @@ public class MayamPDPImpl implements MayamPDP
 	}
 
 
-	private String formHTMLList(final String... warnings)
+
+	private String formHTMLList(final List<String> warnings)
 	{
 		String composite="<ul>";
 
 		for (String s : warnings)
-		   if (s != null && s.length() != 0)
-               composite += "<li>" + s + "</li>";
+			if (s != null && s.length() != 0)
+				composite += "<li>" + s + "</li>";
 
 		return composite + "</ul>";
 	}
