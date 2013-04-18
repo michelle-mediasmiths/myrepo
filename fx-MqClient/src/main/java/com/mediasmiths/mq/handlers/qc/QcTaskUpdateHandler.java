@@ -1,29 +1,27 @@
 package com.mediasmiths.mq.handlers.qc;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
-import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskUpdateHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.util.List;
+import java.util.Set;
 
 public class QcTaskUpdateHandler extends TaskUpdateHandler
 {
@@ -49,6 +47,10 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	@Inject
 	@Named("fxcommon.serialiser")
 	private JAXBSerialiser serialiser;
+
+	@Inject
+	@Named("purge.presentation.flag.removed.days.default")
+	private int defaultPurgeTime;
 
 	@Override
 	public String getName()
@@ -307,7 +309,28 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 				//create channel conditions found during qc event
 				ChannelConditionsFound ccf = new ChannelConditionsFound();
 				ccf.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
-				
+
+
+				// add item (if unmatched) to the purge candidate list.
+
+			    if (currentAttributes.getAttribute(Attribute.ASSET_PARENT_ID) == null)
+			    {
+				    try
+				    {
+					    AssetType assetType = currentAttributes.getAttribute(Attribute.ASSET_TYPE);
+
+					    taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType),
+					                                                            currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+					                                                            defaultPurgeTime);
+				    }
+				    catch (MayamClientException e)
+				    {
+						log.error("Unable to create purge candidate task for (channel conditions):  " + currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID), e);
+				    }
+
+			    }
+
+
 				try
 				{
 					Set<String> channelGroups = mayamClient.getChannelGroupsForItem(currentAttributes);
