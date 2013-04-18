@@ -329,18 +329,11 @@
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
 		<eventname>PreviewFurtherAnalysis</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
-			<subject>Preview Fail Item in MAM: MediaId(%s) Title(%s)</subject>
-			<body>There is a new item on the Pass-Reorder worklist. Please resolve this matter. Dear Promo Producer, please check with your Programmer whether the status of this item will affect your promo production work.</body>
+			<subject>MediaId(%s) Title(%s) Further Analysis required.</subject>
+			<body>Item needs Further Analysis and has been placed on the Further Analysis worklist. Please resolve issue.</body>
 			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
-				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress> 
 				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>

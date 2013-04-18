@@ -48,6 +48,7 @@ import com.mediasmiths.mq.handlers.ingest.PurgeTaskUpdateForUnmatchedHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
+import com.mediasmiths.mq.handlers.preview.PreviewTaskEscalationHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.qc.QcCompleteHandler;
@@ -119,6 +120,8 @@ public class IncomingListener extends MqClientListener
 	PreviewTaskFinishHandler previewTaskFinishHandler;
 	@Inject
 	PreviewTaskFailHandler previewTaskFailHandler;
+	@Inject
+	PreviewTaskEscalationHandler previewTaskEscalationHandler;
 	@Inject
 	QcCompleteHandler qcCompleteHandler;
 	@Inject
@@ -277,6 +280,7 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(comLoggingHandler, currentAttributes);
 				passEventToHandler(previewTaskFinishHandler, currentAttributes);
 				passEventToHandler(previewTaskFailHandler, currentAttributes);
+				passEventToHandler(previewTaskEscalationHandler, currentAttributes);
 				passEventToHandler(fixAndStitchFinishHandler, currentAttributes);
 				passEventToHandler(fixAndStitchRevertHandler, currentAttributes);
 				passEventToHandler(fixAndStitchCancelHandler, currentAttributes);
