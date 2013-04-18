@@ -5,8 +5,11 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.MediaStatus;
+import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.AttributeHandler;
 import com.mediasmiths.mq.transferqueue.TransferItem;
@@ -16,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MediaMoveHandler extends AttributeHandler
@@ -58,11 +62,11 @@ public class MediaMoveHandler extends AttributeHandler
 		try
 		{
 			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(
-					AssetType.ITEM,
+					assetType,
 					assetID);
 			AttributeMap peerAttributes = tasksClient.assetApi().getAsset(
-						AssetType.ITEM,
-						messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+					assetType,
+					messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
 			String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 			
@@ -119,10 +123,35 @@ public class MediaMoveHandler extends AttributeHandler
 				// queue transfer
 				transferManager.add(new TransferItem(unmatchedAssetID,unmatchedAssetHouseID, assetPeerId, timeout));
 			}
+			
+
+			List<AttributeMap> ingestTasks = taskController.getTasksForAsset(MayamTaskListType.INGEST, assetType, Attribute.ASSET_ID, assetID);
+			for (AttributeMap ingestTask: ingestTasks)
+			{
+				ingestTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+				taskController.saveTask(ingestTask);
+			}
+				
+			if (ingestTasks.size() > 1)
+			{
+				log.warn("More than 1 ingest task found for asset : " + assetID + ", " + ingestTasks.size() + "tasks found.");
+			}
+				
+			List<AttributeMap> previewTasks = taskController.getTasksForAsset(MayamTaskListType.PREVIEW, assetType, Attribute.ASSET_ID, assetID);
+			for (AttributeMap previewTask: previewTasks)
+			{
+				previewTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+				taskController.saveTask(previewTask);
+			}
+				
+			if (previewTasks.size() > 1)
+			{
+				log.warn("More than 1 preview task found for asset : " + assetID + ", " + previewTasks.size() + "tasks found.");
+			}
 		}
 		catch (Exception e)
 		{
-			log.error("Exception in the Mayam client while handling unmatched task update Message : " + e.getMessage(), e);
+			log.error("Exception in the Mayam client while handling Media Move Message : " + e.getMessage(), e);
 		}
 
 	}
