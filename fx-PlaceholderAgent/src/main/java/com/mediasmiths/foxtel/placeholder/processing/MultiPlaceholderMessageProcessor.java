@@ -103,10 +103,20 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         }
         catch (MayamClientException e)
         {
-            logger.error(String.format("MayamClientException querying if material %s exists",
-                                       action.getMaterial().getMaterialID()), e);
-            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
+	        logger.error(String.format("MayamClientException querying if material %s exists",
+	                                   action.getMaterial().getMaterialID()), e);
+	        throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
         }
+	    catch (MessageProcessingFailedException e)
+	    {
+		    throw e;
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unknown Processing Exception: ", e);
+
+		    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
+	    }
     }
 
     public void addOrUpdatePackage(AddOrUpdatePackage action) throws MessageProcessingFailedException, MessageValidationException
@@ -134,10 +144,19 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         }
         catch (MayamClientException e)
         {
-            logger.error(
-                    String.format("MayamClientException querying if package %s exists", action.getPackage().getPresentationID()),
-                    e);
-            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
+	        logger.error(String.format("MayamClientException querying if package %s exists",
+	                                   action.getPackage().getPresentationID()), e);
+	        throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
+        }
+        catch (MessageProcessingFailedException e)
+        {
+	        throw e;
+        }
+        catch (Throwable e)
+        {
+	        logger.error("Unknown Processing Exception: ", e);
+
+	        throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
         }
     }
 
@@ -159,25 +178,32 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         }
         else
         {
-            ErrorReport errorReport = new ErrorReport();
-            errorReport.setBmsOp(opName);
-            errorReport.setMediaId(mediaId);
-            errorReport.setStatus(result.toString());
+	        try
+	        {
+		        ErrorReport errorReport = new ErrorReport();
+		        errorReport.setBmsOp(opName);
+		        errorReport.setMediaId(mediaId);
+		        errorReport.setStatus(result.toString());
 
-            if (title==null)
-            {
-                errorReport.setTitle("Unknown in this context.");
-            }
-            else
-            {
-                errorReport.setTitle(title);
+		        if (title==null)
+		        {
+		            errorReport.setTitle("Unknown in this context.");
+		        }
+		        else
+		        {
+		            errorReport.setTitle(title);
 
-            }
-            eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "BMSFailure", errorReport);
+		        }
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "BMSFailure", errorReport);
 
-            logger.error(String.format("Failed to process action, result was %s", result));
+		        logger.error(String.format("Failed to process action, result was %s", result));
+	        }
+	        catch (Exception e)
+	        {
+		        logger.error("Unable to create event error report.", e);
+	        }
 
-            throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
+	        throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION);
         }
     }
 
@@ -207,38 +233,62 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             logger.error(String.format("MayamClientException querying if title %s exists", action.getTitleID()), e);
             throw new MessageProcessingFailedException(MessageProcessingFailureReason.MAYAM_CLIENT_EXCEPTION, e);
         }
+        catch (MessageProcessingFailedException e)
+        {
+	        throw e;
+        }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unknown Processing Exception: ", e);
+
+		    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
+	    }
     }
 
     private void sendMaterialOrderStatus(AddOrUpdateMaterial action)
     {
-        com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
+	    try
+	    {
+		    com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
 
-        Source source = action.getMaterial().getSource();
-        if(source != null && source.getAggregation() != null && source.getAggregation().getAggregator() != null){
-            addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
-        }
+		    Source source = action.getMaterial().getSource();
+		    if(source != null && source.getAggregation() != null && source.getAggregation().getAggregator() != null){
+		        addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
+		    }
 
-        addOrUpdateMaterial.setCompletionDate(action.getMaterial().getRequiredBy());
-        addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
+		    addOrUpdateMaterial.setCompletionDate(action.getMaterial().getRequiredBy());
+		    addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
 
-        //send event
-        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
+		    //send event
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
+	    }
+	    catch (Throwable e)
+	    {
+			logger.error("Unable to send event report.", e);
+	    }
     }
 
     private void sendTitleOrderStatus(CreateOrUpdateTitle action)
     {
 
-        com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle createOrUpdateTitle = new com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle();
+	    try
+	    {
+		    com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle createOrUpdateTitle = new com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle();
 
-        List<String> channelsList = getChannels(action.getRights());
+		    List<String> channelsList = getChannels(action.getRights());
 
-        String channelsString = StringUtils.join(channelsList, ',');
-        createOrUpdateTitle.setChannels(channelsString);
-        createOrUpdateTitle.setTitle(action.getTitleDescription().getProgrammeTitle());
-        createOrUpdateTitle.setTitleID(action.getTitleID());
+		    String channelsString = StringUtils.join(channelsList, ',');
+		    createOrUpdateTitle.setChannels(channelsString);
+		    createOrUpdateTitle.setTitle(action.getTitleDescription().getProgrammeTitle());
+		    createOrUpdateTitle.setTitleID(action.getTitleID());
 
-        //send event
-        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", createOrUpdateTitle);
+		    //send event
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", createOrUpdateTitle);
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unable to send event report.", e);
+	    }
 
     }
 
@@ -246,11 +296,18 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
     private void sendPurgeTitle(final PurgeTitle action)
     {
-        com.mediasmiths.foxtel.ip.common.events.PurgeTitle pt = new com.mediasmiths.foxtel.ip.common.events.PurgeTitle();
+	    try
+	    {
+		    com.mediasmiths.foxtel.ip.common.events.PurgeTitle pt = new com.mediasmiths.foxtel.ip.common.events.PurgeTitle();
 
-        pt.setTitleID(action.getTitleID());
+		    pt.setTitleID(action.getTitleID());
 
-        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "PurgeTitle", pt);
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "PurgeTitle", pt);
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unable to send event report.", e);
+	    }
 
     }
 
@@ -283,44 +340,65 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
     private void sendPackageOrderStatus(AddOrUpdatePackage action){
 
-        com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage addOrUpdatePackage = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage();
+	    try
+	    {
+		    com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage addOrUpdatePackage = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage();
 
-        addOrUpdatePackage.setTitleID(action.getTitleID());
-        addOrUpdatePackage.setMaterialID(action.getPackage().getMaterialID());
-        addOrUpdatePackage.setPackageID(action.getPackage().getPresentationID());
-        addOrUpdatePackage.setRequiredBy(action.getPackage().getTargetDate());
+		    addOrUpdatePackage.setTitleID(action.getTitleID());
+		    addOrUpdatePackage.setMaterialID(action.getPackage().getMaterialID());
+		    addOrUpdatePackage.setPackageID(action.getPackage().getPresentationID());
+		    addOrUpdatePackage.setRequiredBy(action.getPackage().getTargetDate());
 
-        //send event
-        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage", addOrUpdatePackage);
+		    //send event
+		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdatePackage", addOrUpdatePackage);
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unable to send event report.", e);
+	    }
     }
 
 
     private void sendPurgePackage(MayamClientErrorCode opCode, DeletePackage action)
     {
 
-        if (opCode == MayamClientErrorCode.SUCCESS)
-        {
-            PurgePackage pc = new PurgePackage();
-            pc.setPackageID(action.getPackage().getPresentationID());
-            pc.setTitleID(action.getTitleID());
+	    try
+	    {
+		    if (opCode == MayamClientErrorCode.SUCCESS)
+		    {
+		        PurgePackage pc = new PurgePackage();
+		        pc.setPackageID(action.getPackage().getPresentationID());
+		        pc.setTitleID(action.getTitleID());
 
-            eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeletePackage", pc);
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeletePackage", pc);
 
-        }
+		    }
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unable to send event report.", e);
+	    }
     }
 
 
     private void sendPurgeMaterial(MayamClientErrorCode opCode, DeleteMaterial action)
     {
 
-        if (opCode == MayamClientErrorCode.SUCCESS)
-        {
-            PurgeMaterial pc = new PurgeMaterial();
-            pc.setMaterialID(action.getMaterial().getMaterialID());
-            pc.setTitleID(action.getTitleID());
+	    try
+	    {
+		    if (opCode == MayamClientErrorCode.SUCCESS)
+		    {
+		        PurgeMaterial pc = new PurgeMaterial();
+		        pc.setMaterialID(action.getMaterial().getMaterialID());
+		        pc.setTitleID(action.getTitleID());
 
-            eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", pc);
-        }
+		        eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", pc);
+		    }
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unable to send event report.", e);
+	    }
     }
 
 
@@ -328,22 +406,48 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     {
         messageValidator.validateDeleteMaterial(action);
 
-        MayamClientErrorCode result = mayamClient.deleteMaterial(action);
+	    MayamClientErrorCode result = null;
 
-        sendPurgeMaterial(result, action);
+	    try
+	    {
+		    result = mayamClient.deleteMaterial(action);
 
-        checkResult(result, action.getClass().getName(), action.getMaterial().getMaterialID(), action.getTitleID());
+		    sendPurgeMaterial(result, action);
+
+		    checkResult(result, action.getClass().getName(), action.getMaterial().getMaterialID(), action.getTitleID());
+	    }
+	    catch (MessageProcessingFailedException e)
+	    {
+		    throw e;
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unknown Processing Exception: ", e);
+
+		    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
+	    }
 
     }
 
     public void deletePackage(DeletePackage action) throws MessageProcessingFailedException, MessageValidationException
     {
 	    messageValidator.validateDeletePackage(action);
+	    try
+	    {
+		    MayamClientErrorCode result = mayamClient.deletePackage(action);
+		    sendPurgePackage(result, action);
+		    checkResult(result, action.getClass().getName(), action.getPackage().getPresentationID(), action.getTitleID());
+	    }
+	    catch (MessageProcessingFailedException e)
+	    {
+		    throw e;
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unknown Processing Exception: ", e);
 
-        MayamClientErrorCode result = mayamClient.deletePackage(action);
-        sendPurgePackage(result, action);
-        checkResult(result, action.getClass().getName(), action.getPackage().getPresentationID(), action.getTitleID());
-
+		    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
+	    }
     }
 
 
@@ -352,14 +456,27 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
     {
 	    messageValidator.validatePurgeTitle(action);
 
-        MayamClientErrorCode result = mayamClient.purgeTitle(action);
+	    try
+	    {
+		    MayamClientErrorCode result = mayamClient.purgeTitle(action);
 
-        checkResult(result, action.getClass().getName(), action.getTitleID(), null);
+		    checkResult(result, action.getClass().getName(), action.getTitleID(), null);
 
-        if (result == MayamClientErrorCode.SUCCESS)
-        {
-            sendPurgeTitle(action);
-        }
+		    if (result == MayamClientErrorCode.SUCCESS)
+		    {
+			    sendPurgeTitle(action);
+		    }
+	    }
+	    catch (MessageProcessingFailedException e)
+	    {
+		    throw e;
+	    }
+	    catch (Throwable e)
+	    {
+		    logger.error("Unknown Processing Exception: ", e);
+
+		    throw new MessageProcessingFailedException(MessageProcessingFailureReason.UNKNOWN_PROCESSING_FAILURE);
+	    }
     }
 
 

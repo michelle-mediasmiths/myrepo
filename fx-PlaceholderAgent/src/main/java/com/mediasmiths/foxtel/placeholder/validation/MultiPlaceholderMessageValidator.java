@@ -65,97 +65,117 @@ public class MultiPlaceholderMessageValidator extends
 	@Override
 	protected MessageValidationResult validateMessage(PickupPackage pp, PlaceholderMessage message) {
 
-		Actions actions = message.getActions();
-		String messageID = message.getMessageID();
-		String senderID = message.getSenderID();
-		Object privateMessageData = message.getPrivateMessageData();
+		try
+		{
+			Actions actions = message.getActions();
+			String messageID = message.getMessageID();
+			String senderID = message.getSenderID();
+			Object privateMessageData = message.getPrivateMessageData();
 
-		if (!validateMesageID(pp.getNameForExtension("xml"), messageID)) {
-			return MessageValidationResult.INVALID_MESSAGE_ID;
+			if (!validateMesageID(pp.getNameForExtension("xml"), messageID)) {
+				return MessageValidationResult.INVALID_MESSAGE_ID;
+			}
+
+			if (!validateSenderID(senderID)) {
+				return MessageValidationResult.INVALID_SENDER_ID;
+			}
+
+			if (!validatePrivateMessageData(privateMessageData)) {
+				return MessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
+			}
+
+			return MessageValidationResult.IS_VALID;
 		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
 
-		if (!validateSenderID(senderID)) {
-			return MessageValidationResult.INVALID_SENDER_ID;
+			return MessageValidationResult.UNKOWN_VALIDATION_FAILURE;
 		}
-
-		if (!validatePrivateMessageData(privateMessageData)) {
-			return MessageValidationResult.INVALID_PRIVATE_MESSAGE_DATA;
-		}
-
-		return MessageValidationResult.IS_VALID;
 	}
 
 
 	public void validateAddOrUpdatePackage(AddOrUpdatePackage action) throws MessageValidationException
 	{
 
-
-		logger.debug("Validating an AddOrUpdatePackage");
-
-		final String titleID = action.getTitleID();
-
-		//reject empty titleIDs
-		if (StringUtils.isEmpty(titleID))
-		{
-			throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
-		}
-
-		if (action.getPackage() != null)
-		{
-			final String packageID = action.getPackage().getPresentationID();
-
-			//reject empty packageID
-			if (StringUtils.isEmpty(packageID))
-			{
-				throw new MessageValidationException(MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY);
-			}
-		}
-
-		String materialID = action.getPackage().getMaterialID();
-
-		//reject empty materialIDs
-		if (StringUtils.isEmpty(materialID))
-		{
-			throw new MessageValidationException( MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY);
-		}
-
-		boolean materialExists = false;
-
-		// check that material\item for package exists
 		try
 		{
-			materialExists = mayamClient.materialExists(materialID);
+			logger.debug("Validating an AddOrUpdatePackage");
+
+			final String titleID = action.getTitleID();
+
+			//reject empty titleIDs
+			if (StringUtils.isEmpty(titleID))
+			{
+				throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
+			}
+
+			if (action.getPackage() != null)
+			{
+				final String packageID = action.getPackage().getPresentationID();
+
+				//reject empty packageID
+				if (StringUtils.isEmpty(packageID))
+				{
+					throw new MessageValidationException(MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY);
+				}
+			}
+
+			String materialID = action.getPackage().getMaterialID();
+
+			//reject empty materialIDs
+			if (StringUtils.isEmpty(materialID))
+			{
+				throw new MessageValidationException(MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY);
+			}
+
+			boolean materialExists = false;
+
+			// check that material\item for package exists
+			try
+			{
+				materialExists = mayamClient.materialExists(materialID);
+			}
+			catch (MayamClientException e)
+			{
+				// catch this exception for logging purposes then throw back up, or
+				// should we have a new exception type with e as its cause?
+				logger.error(String.format("MayamClientException %s when querying if material %s exists",
+				                           e.getErrorcode().toString(),
+				                           materialID), e);
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			if (!materialExists)
+			{
+				logger.error("NO_EXISTING_MATERIAL_FOR_PACKAGE");
+				throw new MessageValidationException(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE);
+			}
+
+			MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action.getPackage().getConsumerAdvice());
+
+			if (consumerAdviceValid != MessageValidationResult.IS_VALID)
+			{
+				logger.warn(String.format("Consumer advice \"%s\" fails validation for reason %s",
+				                          action.getPackage().getConsumerAdvice(),
+				                          consumerAdviceValid));
+				throw new MessageValidationException(MessageValidationResult.CONSUMER_ADVICE_INVALID);
+			}
+
+			validateMaterialIsForGivenTitle(materialID, titleID);
+
+			validatePackageIsForGivenMaterial(materialID, action.getPackage().getPresentationID());
 		}
-		catch (MayamClientException e)
+		catch (MessageValidationException e)
 		{
-			// catch this exception for logging purposes then throw back up, or
-			// should we have a new exception type with e as its cause?
-			logger.error(String.format("MayamClientException %s when querying if material %s exists",
-			                           e.getErrorcode().toString(),
-			                           materialID), e);
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			throw e;
 		}
-
-		if (!materialExists)
+		catch (Throwable e)
 		{
-			logger.error("NO_EXISTING_MATERIAL_FOR_PACKAGE");
-			throw new MessageValidationException(MessageValidationResult.NO_EXISTING_MATERIAL_FOR_PACKAGE);
+			logger.error("Unknown validation error: ", e);
+
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
 		}
-
-		MessageValidationResult consumerAdviceValid = validateConsumerAdvice(action.getPackage().getConsumerAdvice());
-
-		if (consumerAdviceValid != MessageValidationResult.IS_VALID)
-		{
-			logger.warn(String.format("Consumer advice \"%s\" fails validation for reason %s",
-			                          action.getPackage().getConsumerAdvice(),
-			                          consumerAdviceValid));
-			throw new MessageValidationException(MessageValidationResult.CONSUMER_ADVICE_INVALID);
-		}
-
-		validateMaterialIsForGivenTitle(materialID, titleID);
-
-		validatePackageIsForGivenMaterial(materialID, action.getPackage().getPresentationID());
-
 	}
 
 
@@ -169,60 +189,71 @@ public class MultiPlaceholderMessageValidator extends
 
 	public void validateDeletePackage(DeletePackage action) throws MessageValidationException
 	{
-
-		logger.info("Validating a DeletePackage");
-
-		String packageID = action.getPackage().getPresentationID();
-
-		//reject empty packageIDs
-		if (StringUtils.isEmpty(packageID))
-		{
-			throw new MessageValidationException(MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY);
-		}
-
-		//reject empty title IDs
-		if (StringUtils.isEmpty(action.getTitleID()))
-		{
-			throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
-		}
-
-		boolean packageProtected = false;
 		try
 		{
-			packageProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying isMaterialForPackageProtected for package %s",
-			                           packageID), e);
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			logger.info("Validating a DeletePackage");
 
-		boolean packageExists = false;
-		try
-		{
-			packageExists = mayamClient.packageExists(packageID);
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying packageExists for package %s", packageID), e);
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			String packageID = action.getPackage().getPresentationID();
 
-		if (packageProtected)
-		{
-			logger.error("PACKAGES_MATERIAL_IS_PROTECTED");
-			throw new MessageValidationException(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED);
+			//reject empty packageIDs
+			if (StringUtils.isEmpty(packageID))
+			{
+				throw new MessageValidationException(MessageValidationResult.PACKAGEID_IS_NULL_OR_EMPTY);
+			}
+
+			//reject empty title IDs
+			if (StringUtils.isEmpty(action.getTitleID()))
+			{
+				throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
+			}
+
+			boolean packageProtected = false;
+			try
+			{
+				packageProtected = mayamClient.isTitleOrDescendentsProtected(action.getTitleID());
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying isMaterialForPackageProtected for package %s",
+				                           packageID), e);
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			boolean packageExists = false;
+			try
+			{
+				packageExists = mayamClient.packageExists(packageID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying packageExists for package %s", packageID), e);
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			if (packageProtected)
+			{
+				logger.error("PACKAGES_MATERIAL_IS_PROTECTED");
+				throw new MessageValidationException(MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED);
+			}
+
+			if (!packageExists)
+			{
+				logger.error("PACKAGE_DOES_NOT_EXIST");
+				throw new MessageValidationException(MessageValidationResult.PACKAGE_DOES_NOT_EXIST);
+			}
+
+			validatePackageIDisForTitleID(packageID, action.getTitleID());
 		}
-
-		if (!packageExists)
+		catch (MessageValidationException e)
 		{
-			logger.error("PACKAGE_DOES_NOT_EXIST");
-			throw new MessageValidationException(MessageValidationResult.PACKAGE_DOES_NOT_EXIST);
+			throw e;
 		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
 
-		validatePackageIDisForTitleID(packageID, action.getTitleID());
-
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
+		}
 
 	}
 
@@ -230,115 +261,139 @@ public class MultiPlaceholderMessageValidator extends
 	public void validateDeleteMaterial(DeleteMaterial action) throws MessageValidationException
 	{
 
-
-		logger.info("Validationg a DeleteMaterial");
-
-		String materialID = action.getMaterial().getMaterialID();
-
-		//reject empty materialIDs
-		if (StringUtils.isEmpty(materialID))
-		{
-			throw new MessageValidationException(MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY);
-		}
-
-		String titleID = action.getTitleID();
-
-		//reject empty titleIDs
-		if (StringUtils.isEmpty(titleID))
-		{
-			throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
-		}
-
-		boolean materialProtected = false;
 		try
 		{
-			materialProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s", titleID),
-			             e);
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			logger.info("Validationg a DeleteMaterial");
 
-		boolean materialExists = false;
-		try
-		{
-			materialExists = mayamClient.materialExists(materialID);
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying materialExists for material %s", materialID), e);
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			String materialID = action.getMaterial().getMaterialID();
 
-		if (materialProtected)
-		{
-			logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
-			throw new MessageValidationException(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED);
-		}
-		if (!materialExists)
-		{
-			logger.error("MATERIAL_DOES_NOT_EXIST");
-			throw new MessageValidationException(MessageValidationResult.MATERIAL_DOES_NOT_EXIST);
-		}
+			//reject empty materialIDs
+			if (StringUtils.isEmpty(materialID))
+			{
+				throw new MessageValidationException(MessageValidationResult.MATERIALID_IS_NULL_OR_EMPTY);
+			}
 
-		validateMaterialIsForGivenTitle(materialID, titleID);
+			String titleID = action.getTitleID();
+
+			//reject empty titleIDs
+			if (StringUtils.isEmpty(titleID))
+			{
+				throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
+			}
+
+			boolean materialProtected = false;
+			try
+			{
+				materialProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s",
+				                           titleID), e);
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			boolean materialExists = false;
+			try
+			{
+				materialExists = mayamClient.materialExists(materialID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying materialExists for material %s", materialID), e);
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			if (materialProtected)
+			{
+				logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
+				throw new MessageValidationException(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED);
+			}
+			if (!materialExists)
+			{
+				logger.error("MATERIAL_DOES_NOT_EXIST");
+				throw new MessageValidationException(MessageValidationResult.MATERIAL_DOES_NOT_EXIST);
+			}
+
+			validateMaterialIsForGivenTitle(materialID, titleID);
+		}
+		catch (MessageValidationException e)
+		{
+			throw e;
+		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
+
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
+		}
 
 	}
 
 	public void validatePurgeTitle(PurgeTitle action) throws MessageValidationException
 	{
-
-		logger.info("Validating a PurgeTitle");
-
-		// 24.1.1.1 Title purge requests
-		// check that the title is not marked as protected in ardome
-		// check that lower level entries are not procteted, as this should
-		// cause the request to fail
-		String titleID = action.getTitleID();
-
-		//reject empty titleIDs
-		if (StringUtils.isEmpty(titleID))
-		{
-			throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
-		}
-
-		boolean titleProtected = false;
 		try
 		{
-			titleProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s", titleID),
-			             e);
+			logger.info("Validating a PurgeTitle");
 
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			// 24.1.1.1 Title purge requests
+			// check that the title is not marked as protected in ardome
+			// check that lower level entries are not procteted, as this should
+			// cause the request to fail
+			String titleID = action.getTitleID();
 
-		boolean titleExists = false;
-		try
-		{
-			titleExists = mayamClient.titleExists(titleID);
-		}
-		catch (MayamClientException e)
-		{
-			logger.error(String.format("MayamClientException when querying titleExists for title %s", titleID), e);
+			//reject empty titleIDs
+			if (StringUtils.isEmpty(titleID))
+			{
+				throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
+			}
 
-			throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
-		}
+			boolean titleProtected = false;
+			try
+			{
+				titleProtected = mayamClient.isTitleOrDescendentsProtected(titleID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying isTitleOrDescendentsProtected for title %s",
+				                           titleID), e);
 
-		if (titleProtected)
-		{
-			logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
-			throw new MessageValidationException(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED);
-		}
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
 
-		if (!titleExists)
+			boolean titleExists = false;
+			try
+			{
+				titleExists = mayamClient.titleExists(titleID);
+			}
+			catch (MayamClientException e)
+			{
+				logger.error(String.format("MayamClientException when querying titleExists for title %s", titleID), e);
+
+				throw new MessageValidationException(MessageValidationResult.MAYAM_CLIENT_ERROR);
+			}
+
+			if (titleProtected)
+			{
+				logger.error("TITLE_OR_DESCENDENTS_IS_PROTECTED");
+				throw new MessageValidationException(MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED);
+			}
+
+			if (!titleExists)
+			{
+				logger.error("NO_EXISTING_TITLE_TO_PURGE");
+				throw new MessageValidationException(MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE);
+			}
+		}
+		catch (MessageValidationException e)
 		{
-			logger.error("NO_EXISTING_TITLE_TO_PURGE");
-			throw new MessageValidationException(MessageValidationResult.NO_EXISTING_TITLE_TO_PURGE);
+			throw e;
+		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
+
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
 		}
 	}
 
@@ -352,6 +407,8 @@ public class MultiPlaceholderMessageValidator extends
 	 */
 	public void validateAddOrUpdateMaterial(AddOrUpdateMaterial action) throws MessageValidationException
 	{
+		try
+		{
 			logger.info("Validating an AddOrUpdateMaterial");
 
 			String materialID = null;
@@ -391,7 +448,17 @@ public class MultiPlaceholderMessageValidator extends
 			}
 
 			validateMaterialIsForGivenTitle(materialID, titleID);
+		}
+		catch (MessageValidationException e)
+		{
+			throw e;
+		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
 
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
+		}
 	}
 
 	private void validateMaterialIsForGivenTitle(String materialID, String titleID) throws MessageValidationException
@@ -498,57 +565,70 @@ public class MultiPlaceholderMessageValidator extends
 	 */
 	public void validateCreateOrUpdateTitle(CreateOrUpdateTitle action) throws MessageValidationException
 	{
-
-		logger.debug("Validating CreateOrUpdateTitle");
-
-
-		final String titleID = action.getTitleID();
-
-		//reject empty titleIDs
-		if (StringUtils.isEmpty(titleID))
+		try
 		{
-			throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
-		}
 
-		RightsType rights = action.getRights();
+			logger.debug("Validating CreateOrUpdateTitle");
 
-		boolean atLeastOneKnownChannel = false;
 
-		for (License l : rights.getLicense())
-		{
-			XMLGregorianCalendar startDate = l.getLicensePeriod().getStartDate();
-			XMLGregorianCalendar endDate = l.getLicensePeriod().getEndDate();
+			final String titleID = action.getTitleID();
 
-			if (startDate.compare(endDate) == DatatypeConstants.GREATER)
+			//reject empty titleIDs
+			if (StringUtils.isEmpty(titleID))
 			{
-				logger.error("End date before start date");
-				logger.error("LICENSE_DATES_NOT_IN_ORDER");
-				//print log message but dont reject based on licence information
+				throw new MessageValidationException(MessageValidationResult.TITLEID_IS_NULL_OR_EMPTY);
 			}
 
-			Channels channels = l.getChannels();
-			if (channels != null)
-			{
-				for (ChannelType channel : channels.getChannel())
-				{
-					if (!channelValidator.isTagValid(channel.getChannelTag()))
-					{
-						logger.warn(String.format("Channel tag unknown '%s' but message wont be rejected because of it",
-						                          channel.getChannelTag()));
+			RightsType rights = action.getRights();
 
-					}
-					else
+			boolean atLeastOneKnownChannel = false;
+
+			for (License l : rights.getLicense())
+			{
+				XMLGregorianCalendar startDate = l.getLicensePeriod().getStartDate();
+				XMLGregorianCalendar endDate = l.getLicensePeriod().getEndDate();
+
+				if (startDate.compare(endDate) == DatatypeConstants.GREATER)
+				{
+					logger.error("End date before start date");
+					logger.error("LICENSE_DATES_NOT_IN_ORDER");
+					//print log message but dont reject based on licence information
+				}
+
+				Channels channels = l.getChannels();
+				if (channels != null)
+				{
+					for (ChannelType channel : channels.getChannel())
 					{
-						atLeastOneKnownChannel = true;
+						if (!channelValidator.isTagValid(channel.getChannelTag()))
+						{
+							logger.warn(String.format("Channel tag unknown '%s' but message wont be rejected because of it",
+							                          channel.getChannelTag()));
+
+						}
+						else
+						{
+							atLeastOneKnownChannel = true;
+						}
 					}
 				}
 			}
-		}
 
-		if (!atLeastOneKnownChannel)
+			if (!atLeastOneKnownChannel)
+			{
+				logger.error("message did not contain any known channels");
+				throw new MessageValidationException(MessageValidationResult.CHANNEL_NAME_INVALID);
+			}
+		}
+		catch (MessageValidationException e)
 		{
-			logger.error("message did not contain any known channels");
-			throw new MessageValidationException(MessageValidationResult.CHANNEL_NAME_INVALID);
+			throw e;
+		}
+		catch (Throwable e)
+		{
+			logger.error("Unknown validation error: ", e);
+
+			throw new MessageValidationException(MessageValidationResult.UNKOWN_VALIDATION_FAILURE);
 		}
 	}
 
