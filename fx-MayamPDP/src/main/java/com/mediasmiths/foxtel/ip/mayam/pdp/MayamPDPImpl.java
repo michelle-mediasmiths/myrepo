@@ -120,6 +120,10 @@ public class MayamPDPImpl implements MayamPDP
 	@Inject
 	@Named("message.action.permission")
 	String permissionErrorActionMessage;
+	
+	@Inject
+	@Named("message.delete.prevention")
+	String messageDeletePrevention;
 
 	// ---------------
 
@@ -476,18 +480,64 @@ public class MayamPDPImpl implements MayamPDP
 			PrivilegedOperations operation = PrivilegedOperations.DELETE;
 			dumpPayload(attributeMap);
 			defaultValidation(attributeMap);
-			String houseID =attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+			String houseID = attributeMap.getAttributeAsString(Attribute.HOUSE_ID);
+			AssetType assetType = attributeMap.getAttribute(Attribute.ASSET_TYPE);
+			boolean hasTXpackages = false;
+			
+			AttributeMap assetAttribute = null;
+			try
+			{
+				assetAttribute = client.assetApi().getAssetBySiteId(assetType,
+						attributeMap.getAttributeAsString(Attribute.HOUSE_ID));
+				
+			}
+			catch (RemoteException e)
+			{
+				logger.error("Unable to find: " +  attributeMap.getAttributeAsString(Attribute.HOUSE_ID), e);
 
+				throw e;
+			}
+			
+			if (null != assetAttribute)
+			{
+				String assetID = assetAttribute.getAttributeAsString(Attribute.ASSET_ID);
+				
+				try
+				{
+					logger.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, assetID));
+					List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(assetType, assetID);
+					logger.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
+					if (packages.size() > 0)
+					{
+						hasTXpackages = true;
+					}
+				
+				}
+				catch (Exception e)
+				{
+					logger.error("exception in finding packages for asset " + assetID, e);
+				}
+				
+			}
+			
 			boolean permission = userCanPerformOperation(operation, attributeMap);
 
 			if (permission)
 			{
-				return getConfirmStatus(String.format("Are you sure you wish to delete item %s",houseID));
+				if (hasTXpackages)
+				{
+					return getErrorStatus(messageDeletePrevention);
+				} else
+				{
+					return getConfirmStatus(String.format("Are you sure you wish to delete item %s",houseID));
+				}
+				
 			}
 			else
 			{
 				return getActionPermissionsErrorStatus(operation);
 			}
+			
 		}
 		catch (Exception e)
 		{
@@ -1221,7 +1271,6 @@ public class MayamPDPImpl implements MayamPDP
 			return new HashSet<FoxtelGroups>();
 		}
 
-
 	}
 
 	private boolean userCanPerformOperation(final PrivilegedOperations operation, final AttributeMap attributeMap)
@@ -1277,6 +1326,16 @@ public class MayamPDPImpl implements MayamPDP
 		return mapper.serialize(attributeMap);
 	}
 
+	private String getDeletePreventionMessage(PrivilegedOperations operation)
+	{
+		AttributeMap permissionErrorStatus = client.createAttributeMap();
+
+		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
+		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorTaskMessage, operation.toString()));
+
+		return  mapper.serialize(permissionErrorStatus);
+		
+	}
 
 
 	private String formHTMLList(final String... warnings)
