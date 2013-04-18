@@ -17,6 +17,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.DateUtil;
+import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
@@ -48,10 +49,13 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Named("tx.delivery.location")
 	private String txDeliveryLocation;
 
-
 	@Inject
 	@Named("ao.tx.delivery.location")
 	private String aoDeliveryLocation;
+
+	@Inject
+	@Named("highres.transfer.location")
+	private String highResTransferLocation;
 
 	@Inject
 	private TranscodePriorities transcodePriorities;
@@ -171,8 +175,20 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
 						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
 				{
-					log.error("Material unavailable or not found on hires storage", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Material unavailable or not on Hires storage");
+					log.warn("Material unavailable or not found on hires storage", e);
+					
+					String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
+					AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+					String jobNum = tasksClient.assetApi().requestHighresXfer(assetType, assetId, highResTransferLocation);
+				
+					log.warn("Requesting High Res Transfer. Job : " + jobNum);
+					
+					Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+					AttributeMap existingTask = taskController.getTask(taskId);
+					existingTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+					taskController.saveTask(existingTask);
+					
+					log.warn("Setting task to Sys Wait state : " + taskId);
 				}
 				else
 				{
