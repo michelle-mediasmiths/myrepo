@@ -214,7 +214,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
         com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
 
         Source source = action.getMaterial().getSource();
-        if(source.getAggregation() != null && source.getAggregation().getAggregator() != null){
+        if(source != null && source.getAggregation() != null && source.getAggregation().getAggregator() != null){
             addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
         }
 
