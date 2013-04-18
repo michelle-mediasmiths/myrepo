@@ -73,6 +73,13 @@ public class ConformJobHandler extends JobHandler
 				item = materialController.getMaterialByAssetId(assetID);
 				materialID = item.getAttributeAsString(Attribute.HOUSE_ID);
 				log.info(String.format("Found item with house id %s", materialID));
+				
+				if(materialID==null){
+					log.info("HOUSE_ID was null, falling back to ASSET_SITE_ID");
+					materialID = item.getAttributeAsString(Attribute.ASSET_SITE_ID);
+					log.info(String.format("Found item with site id %s", materialID));	
+				}
+				
 			
 			}
 			catch (MayamClientException mce)
@@ -116,6 +123,7 @@ public class ConformJobHandler extends JobHandler
 					AssetType assetType = item.getAttribute(Attribute.ASSET_TYPE);
 					String contentType = item.getAttribute(Attribute.CONT_MAT_TYPE);
 					String houseID = item.getAttributeAsString(Attribute.HOUSE_ID);
+					String siteID =  item.getAttributeAsString(Attribute.ASSET_SITE_ID);
 					String sourceHouseID = item.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 					
 					if (sourceHouseID == null) //item is not a compliance item
@@ -144,8 +152,8 @@ public class ConformJobHandler extends JobHandler
 						
 							try
 							{
-								log.debug(String.format("Asset Type: %s houseID %s numberOfDays %d",assetType,houseID,numberOfDays));
-								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType), houseID, numberOfDays);
+								log.debug(String.format("Asset Type: %s houseID %s siteID %s numberOfDays %d",assetType,houseID,siteID,numberOfDays));
+								taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.fromAssetType(assetType), siteID, numberOfDays);
 								log.info("New Purge Candidate Task created");
 							}						
 							catch (Exception e)
