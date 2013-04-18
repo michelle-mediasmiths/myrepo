@@ -260,6 +260,30 @@ public class MayamPackageController extends MayamController implements PackageCo
 
 			if (material != null)
 			{
+				
+				try
+				{
+					log.debug("updating classification and first tx date on material");
+					AttributeMap materialUpdate = taskController.updateMapForAsset(material);
+					if (txPackage.getClassification() != null)
+					{
+						materialUpdate.setAttribute(Attribute.CONT_CLASSIFICATION, txPackage.getClassification().toString());
+					}
+
+					if (txPackage.getTargetDate() != null)
+					{
+						materialUpdate.setAttribute(
+								Attribute.TX_FIRST,
+								dateUtil.fromXMLGregorianCalendar(txPackage.getTargetDate()));
+					}
+
+					client.assetApi().updateAsset(materialUpdate);
+				}
+				catch (RemoteException e)
+				{
+					log.error("error updating classification and first tx date on material", e);
+				}
+				
 				try
 				{
 					try
@@ -543,7 +567,7 @@ public class MayamPackageController extends MayamController implements PackageCo
 					{
 						AttributeMap task = getPendingTxPackageTask(presentationID);
 						AttributeMap updateMap = taskController.updateMapForTask(task);
-						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 						log.info("Removing pending tx package " + presentationID);
 						taskController.saveTask(updateMap);
 					}
