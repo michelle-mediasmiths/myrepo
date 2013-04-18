@@ -489,42 +489,99 @@ public class MayamPackageController extends MayamController implements PackageCo
 	public MayamClientErrorCode deletePackage(String presentationID, int gracePeriod)
 	{
 		SegmentList segmentList = null;
+		boolean isPending = false;
+		AttributeMap attributes;
+
 		try
 		{
-			segmentList = getSegmentList(presentationID);
+			try
+			{
+				log.debug("looking for pending tx package");
+				segmentList = getPendingTxPackage(presentationID, null);
+
+				if (segmentList != null)
+				{
+					isPending = true;
+					attributes = segmentList.getAttributeMap();
+				}
+			}
+			catch (PackageNotFoundException pnfe)
+			{
+				log.debug("pending tx package not found for package " + presentationID, pnfe);
+			}
+
+			if (segmentList == null)
+			{
+
+				log.debug("looking for real tx package");
+				segmentList = getSegmentList(presentationID);
+
+				if (segmentList != null)
+				{
+					attributes = segmentList.getAttributeMap();
+				}
+				else
+				{
+					log.warn("Unable to locate segment list for package " + presentationID);
+				}
+			}
 		}
-		catch (PackageNotFoundException e1)
+		catch (MayamClientException e1)
 		{
-			log.error(String.format("Failed to find package %s", presentationID));
-			return MayamClientErrorCode.PACKAGE_FIND_FAILED;
+			log.error("unable to fetch package for update", e1);
+			return e1.getErrorcode();
 		}
 
 		if (segmentList != null)
 		{
-			if ( ! isProtected(segmentList,presentationID))
+			if (!isProtected(segmentList, presentationID))
 			{
-				
-				try
+				if (isPending)
 				{
-					taskController.cancelAllOpenTasksForAsset(MayamAssetType.PACKAGE.getAssetType(), Attribute.HOUSE_ID, presentationID);
+
+					try
+					{
+						AttributeMap task = getPendingTxPackageTask(presentationID);
+						AttributeMap updateMap = taskController.updateMapForTask(task);
+						task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						log.info("Removing pending tx package " + presentationID);
+						taskController.saveTask(updateMap);
+					}
+					catch (MayamClientException e)
+					{
+						log.error("error deleting pending tx package", e);
+						return e.getErrorcode();
+					}
+
 				}
-				catch (MayamClientException e)
-				{	
-					log.error("error cancelling open tasks for asset during delete",e);
-				}
-				
-				try
+				else
 				{
-					log.warn("no grace period for segment lists");
-					client.segmentApi().deleteSegmentList(segmentList.getId());
-				}
-				catch (RemoteException e)
-				{
-					log.error("Error deleting package : " + presentationID, e);
-					return MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+					try
+					{
+						taskController.cancelAllOpenTasksForAsset(
+								MayamAssetType.PACKAGE.getAssetType(),
+								Attribute.HOUSE_ID,
+								presentationID);
+					}
+					catch (MayamClientException e)
+					{
+						log.error("error cancelling open tasks for asset during delete", e);
+					}
+
+					try
+					{
+						log.warn("no grace period for segment lists");
+						client.segmentApi().deleteSegmentList(segmentList.getId());
+					}
+					catch (RemoteException e)
+					{
+						log.error("Error deleting package : " + presentationID, e);
+						return MayamClientErrorCode.PACKAGE_DELETE_FAILED;
+					}
 				}
 			}
-			else{
+			else
+			{
 				log.info("Package's parent item is protect, will not perform delete");
 			}
 		}
