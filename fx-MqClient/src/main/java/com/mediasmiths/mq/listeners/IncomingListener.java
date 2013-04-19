@@ -408,7 +408,7 @@ public class IncomingListener extends MqClientListener
 
 		try
 		{
-			passEventToHandler(mediaMoveHandler, messageAttributes);
+			//passEventToHandler(mediaMoveHandler, messageAttributes);
 		}
 		catch (Exception e)
 		{
