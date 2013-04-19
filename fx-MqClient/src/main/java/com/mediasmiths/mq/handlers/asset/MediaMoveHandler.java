@@ -62,110 +62,106 @@ public class MediaMoveHandler extends AttributeHandler
 
 		AttributeMap unmatchedTask = null;
 		try {
-			unmatchedTask = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetID);
-			if (unmatchedTask != null)
-			{
-				return;
-			}
-			
+			unmatchedTask = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetID);			
 		} catch (MayamClientException e1) {
 		}
-
-		try
+		if (unmatchedTask == null)
 		{
-			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(
-					assetType,
-					assetID);
-			AttributeMap peerAttributes = tasksClient.assetApi().getAsset(
-					assetType,
-					messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
-
-			String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
-			
-			boolean isAssociated = AssetProperties.isMaterialAssociated(assetAttributes);
-
-			if (targetAsset != null && targetAsset.length() != 0 && !isAssociated)
-			{ 
-				log.warn("Asset is not associated and has a target asset, exiting");
-				return;
-			}
-
-			if (isAssociated)
+			try
 			{
-				// Content matched as associated media should not be added as a revision of the item.
-				// It should be attached as a new associated item to the subprogram
-				// If possible, the title of this media should be set to the filename,
-				// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
-				log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
-				log.info("Match Peer: " + assetAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to " + targetAsset);
-
-				AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetAttributes.getAttributeAsString(Attribute.HOUSE_ID));
-
-				associatedMaterial.setAttribute(
-						Attribute.ASSET_PARENT_ID,
-						peerAttributes.getAttributeAsString(Attribute.ASSET_PARENT_ID));
-				associatedMaterial.setAttribute(
-						Attribute.PARENT_HOUSE_ID,
-						peerAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-				associatedMaterial.setAttribute(
-						Attribute.SOURCE_HOUSE_ID,
-						peerAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-
-				tasksClient.assetApi().updateAsset(associatedMaterial);
-
-				String format = materialController.getFormat(associatedMaterial);
-				log.debug(String.format("Format returned was %s; now closing task", format));
-				setFormat(messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID), format);
-			}
-			else
-			{
-				log.info("Attempting to create new revision");
-
-				final String unmatchedAssetID = messageAttributes.getAttribute(Attribute.ASSET_ID).toString();
-				final String unmatchedAssetHouseID = assetAttributes.getAttribute(Attribute.HOUSE_ID).toString();
-				final String assetPeerId = messageAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(
+						assetType,
+						assetID);
+				AttributeMap peerAttributes = tasksClient.assetApi().getAsset(
+						assetType,
+						messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+	
+				String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 				
-				// copy metadata from unmatched asset to peer
-				copyUnmatchedAttributes(unmatchedAssetID, assetPeerId);
-
-				setContentFormatOnUmatchedAssetsPeer(unmatchedAssetID, assetPeerId);
-
-				// We're only willing to wait this long until we assume the transfer has timed out
-				Date timeout = transferTimeout.start().getDate();
-				// queue transfer
-				transferManager.add(new TransferItem(unmatchedAssetID,unmatchedAssetHouseID, assetPeerId, timeout));
-			}
-			
-
-			List<AttributeMap> ingestTasks = taskController.getTasksForAsset(MayamTaskListType.INGEST, assetType, Attribute.ASSET_ID, assetID);
-			for (AttributeMap ingestTask: ingestTasks)
-			{
-				ingestTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
-				taskController.saveTask(ingestTask);
-			}
+				boolean isAssociated = AssetProperties.isMaterialAssociated(assetAttributes);
+	
+				if (targetAsset != null && targetAsset.length() != 0 && !isAssociated)
+				{ 
+					log.warn("Asset is not associated and has a target asset, exiting");
+					return;
+				}
+	
+				if (isAssociated)
+				{
+					// Content matched as associated media should not be added as a revision of the item.
+					// It should be attached as a new associated item to the subprogram
+					// If possible, the title of this media should be set to the filename,
+					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
+					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
+					log.info("Match Peer: " + assetAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to " + targetAsset);
+	
+					AttributeMap associatedMaterial = materialController.getMaterialAttributes(assetAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+	
+					associatedMaterial.setAttribute(
+							Attribute.ASSET_PARENT_ID,
+							peerAttributes.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+					associatedMaterial.setAttribute(
+							Attribute.PARENT_HOUSE_ID,
+							peerAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+					associatedMaterial.setAttribute(
+							Attribute.SOURCE_HOUSE_ID,
+							peerAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+	
+					tasksClient.assetApi().updateAsset(associatedMaterial);
+	
+					String format = materialController.getFormat(associatedMaterial);
+					log.debug(String.format("Format returned was %s; now closing task", format));
+					setFormat(messageAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID), format);
+				}
+				else
+				{
+					log.info("Attempting to create new revision");
+	
+					final String unmatchedAssetID = messageAttributes.getAttribute(Attribute.ASSET_ID).toString();
+					final String unmatchedAssetHouseID = assetAttributes.getAttribute(Attribute.HOUSE_ID).toString();
+					final String assetPeerId = messageAttributes.getAttribute(Attribute.ASSET_PEER_ID).toString();
+					
+					// copy metadata from unmatched asset to peer
+					copyUnmatchedAttributes(unmatchedAssetID, assetPeerId);
+	
+					setContentFormatOnUmatchedAssetsPeer(unmatchedAssetID, assetPeerId);
+	
+					// We're only willing to wait this long until we assume the transfer has timed out
+					Date timeout = transferTimeout.start().getDate();
+					// queue transfer
+					transferManager.add(new TransferItem(unmatchedAssetID,unmatchedAssetHouseID, assetPeerId, timeout));
+				}
 				
-			if (ingestTasks.size() > 1)
-			{
-				log.warn("More than 1 ingest task found for asset : " + assetID + ", " + ingestTasks.size() + "tasks found.");
+	
+				List<AttributeMap> ingestTasks = taskController.getTasksForAsset(MayamTaskListType.INGEST, assetType, Attribute.ASSET_ID, assetID);
+				for (AttributeMap ingestTask: ingestTasks)
+				{
+					ingestTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+					taskController.saveTask(ingestTask);
+				}
+					
+				if (ingestTasks.size() > 1)
+				{
+					log.warn("More than 1 ingest task found for asset : " + assetID + ", " + ingestTasks.size() + "tasks found.");
+				}
+					
+				List<AttributeMap> previewTasks = taskController.getTasksForAsset(MayamTaskListType.PREVIEW, assetType, Attribute.ASSET_ID, assetID);
+				for (AttributeMap previewTask: previewTasks)
+				{
+					previewTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+					taskController.saveTask(previewTask);
+				}
+					
+				if (previewTasks.size() > 1)
+				{
+					log.warn("More than 1 preview task found for asset : " + assetID + ", " + previewTasks.size() + "tasks found.");
+				}
 			}
-				
-			List<AttributeMap> previewTasks = taskController.getTasksForAsset(MayamTaskListType.PREVIEW, assetType, Attribute.ASSET_ID, assetID);
-			for (AttributeMap previewTask: previewTasks)
+			catch (Exception e)
 			{
-				previewTask.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-				taskController.saveTask(previewTask);
-			}
-				
-			if (previewTasks.size() > 1)
-			{
-				log.warn("More than 1 preview task found for asset : " + assetID + ", " + previewTasks.size() + "tasks found.");
+				log.error("Exception in the Mayam client while handling Media Move Message : " + e.getMessage(), e);
 			}
 		}
-		catch (Exception e)
-		{
-			log.error("Exception in the Mayam client while handling Media Move Message : " + e.getMessage(), e);
-		}
-
 	}
 
 	private void setContentFormatOnUmatchedAssetsPeer(final String unmatchedAssetID, final String assetPeerId)
