@@ -85,12 +85,12 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				log.error("error rejecting tx delivery task",e);
 			}
 		}
-		else
+		else if (!messageAttributes.getAttribute(Attribute.TASK_STATE).equals(TaskState.SYS_WAIT))
 		{
-
+			//If in Sys Wait state then ignore until task is reopened after high res transfer is complete
+			
 			Long taskID = messageAttributes.getAttribute(Attribute.TASK_ID);
 
-			
 			try
 			{
 				String packageID = messageAttributes.getAttribute(Attribute.HOUSE_ID);			
