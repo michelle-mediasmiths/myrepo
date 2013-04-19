@@ -26,6 +26,7 @@ import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
+import com.mediasmiths.mq.handlers.asset.TransferJobHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
 import com.mediasmiths.mq.handlers.button.ProtectButton;
@@ -128,6 +129,8 @@ public class IncomingListener extends MqClientListener
 	SegmentationCompleteHandler segmentationHandler;
 	@Inject
 	IngestJobHandler ingestJobHandler;
+	@Inject
+	TransferJobHandler transferJobHandler;
 	@Inject
 	UnmatchedJobHandler unmatchedJobHandler;
 	@Inject
@@ -343,6 +346,10 @@ public class IncomingListener extends MqClientListener
 					{
 						passEventToHandler(conformJobHandler, jobMessage);
 					}
+				}
+				else if (jobType.equals(JobType.TRANSFER))
+				{
+					passEventToHandler(transferJobHandler, jobMessage);
 				}
 			}
 		}
