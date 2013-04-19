@@ -9,6 +9,7 @@ import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.AttributeHandler;
@@ -58,6 +59,17 @@ public class MediaMoveHandler extends AttributeHandler
 		}
 		
 		String assetID = messageAttributes.getAttribute(Attribute.ASSET_ID);
+
+		AttributeMap unmatchedTask = null;
+		try {
+			unmatchedTask = taskController.getOnlyOpenTaskForAssetByAssetID(MayamTaskListType.UNMATCHED_MEDIA, assetID);
+			if (unmatchedTask != null)
+			{
+				return;
+			}
+			
+		} catch (MayamClientException e1) {
+		}
 
 		try
 		{
