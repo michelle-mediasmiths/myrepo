@@ -200,7 +200,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		{
 			String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
 			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-			String jobNum = tasksClient.assetApi().requestHighresXfer(assetType, assetId, highResTransferLocation);
+			
+			AttributeMap assetAttributes = tasksClient.assetApi().getAsset(assetType, assetId);
+			String itemAssetId = assetAttributes.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
+			
+			String jobNum = tasksClient.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
 		
 			log.warn("Requesting High Res Transfer. Job : " + jobNum);
 			
