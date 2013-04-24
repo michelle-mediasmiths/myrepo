@@ -8,6 +8,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
+import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.mq.MqContentType;
@@ -179,7 +180,7 @@ public class IncomingListener extends MqClientListener
 			logger.trace("IncomingListener onMessage");
 			logger.trace("Message is: " + msg.toString());
 			MqContentType type = msg.getType();
-
+			
 			String origin = msg.getProperties().get(MqMessage.PROP_ORIGIN_DESTINATION);
 			String changeType = msg.getProperties().get(MAYAM_CHANGE_TYPE_PROPERTY);
 
@@ -349,7 +350,11 @@ public class IncomingListener extends MqClientListener
 				}
 				else if (jobType.equals(JobType.TRANSFER))
 				{
-					passEventToHandler(transferJobHandler, jobMessage);
+					JobSubType subType = jobMessage.getJobSubType();
+					if (subType.equals(JobSubType.TSM))
+					{
+						passEventToHandler(transferJobHandler, jobMessage);
+					}
 				}
 			}
 		}
