@@ -1,5 +1,6 @@
 package com.mediasmiths.mq.handlers.asset;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ public class TransferJobHandler extends JobHandler
 		List<AttributeMap> childAssets = null;
 		try {
 			tasksClient.assetApi().getAsset(AssetType.ITEM, assetId);
-			childAssets = tasksClient.assetApi().getAssetChildren(AssetType.ITEM, assetId, AssetType.PACKAGE);
+			childAssets = new ArrayList<AttributeMap>();
 			SegmentListList segmentLists = tasksClient.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetId);
 			for (SegmentList segList:segmentLists)
 			{
