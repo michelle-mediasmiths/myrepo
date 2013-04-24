@@ -8,6 +8,8 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
+import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
@@ -28,8 +30,12 @@ public class TransferJobHandler extends JobHandler
 		List<AttributeMap> childAssets = null;
 		try {
 			tasksClient.assetApi().getAsset(AssetType.ITEM, assetId);
-			childAssets = tasksClient.assetApi().getAssetChildren(AssetType.ITEM, assetId, AssetType.SEGMENT_LIST);
-			childAssets.addAll(tasksClient.assetApi().getAssetChildren(AssetType.ITEM, assetId, AssetType.PACKAGE));
+			childAssets = tasksClient.assetApi().getAssetChildren(AssetType.ITEM, assetId, AssetType.PACKAGE);
+			SegmentListList segmentLists = tasksClient.segmentApi().getSegmentListsForAsset(AssetType.ITEM, assetId);
+			for (SegmentList segList:segmentLists)
+			{
+				childAssets.add(segList.getAttributeMap());
+			}
 		} catch (RemoteException e1) {
 			log.error("Remote Exception thrown while retrieving children for asset : " + assetId, e1);
 			e1.printStackTrace();
