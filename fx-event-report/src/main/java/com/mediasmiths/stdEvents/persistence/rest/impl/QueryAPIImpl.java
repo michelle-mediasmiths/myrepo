@@ -3,8 +3,10 @@ package com.mediasmiths.stdEvents.persistence.rest.impl;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 
 import org.apache.log4j.Logger;
@@ -26,6 +28,9 @@ public class QueryAPIImpl implements QueryAPI
 
 	@Inject
 	protected EventEntityDao eventDao;
+	
+	@Inject
+	protected AggregatedBMSDao bmsDao;
 
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -42,6 +47,13 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		List<EventEntity> events = eventDao.getAll();
 		return events;
+	}
+	
+	@Transactional
+	public List<AggregatedBMS> getAllBMS()
+	{
+		List<AggregatedBMS> bms = bmsDao.getAll();
+		return bms;
 	}
 
 	@Transactional

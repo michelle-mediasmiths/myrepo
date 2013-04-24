@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
 /**
@@ -27,6 +28,10 @@ public interface QueryAPI
 	@GET
 	@Path("/allEvents")
 	public List<EventEntity> getAllEvents();
+	
+	@GET
+	@Path("/allBMS")
+	public List<AggregatedBMS> getAllBMS();
 	
 	@GET
 	@Path("getbynamespace/{namespace}")

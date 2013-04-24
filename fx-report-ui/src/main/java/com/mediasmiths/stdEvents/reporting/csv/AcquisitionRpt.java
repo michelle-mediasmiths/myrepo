@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 
@@ -107,6 +108,9 @@ public class AcquisitionRpt
 		
 		List<CreateOrUpdateTitle> titles = report.titles;
 		List<AddOrUpdatePackage> packages = report.packages;
+
+//		UNCOMMENT TO USE WITH BMS AGGREGATION
+//		List<AggregatedBMS> bms = report.bms;
 		
 		logger.info("Titles: " + titles.size() + " Packages: " + packages.size());
 		
@@ -136,6 +140,11 @@ public class AcquisitionRpt
 					}
 				}
 			}
+			
+//			for (AggregatedBMS b : bms) {
+//				if ((b.getMaterialID() != null) && (b.getMaterialID().equals(content.getMaterialID())))
+//						content.setChannels(b.getChannels());
+//			}
 			
 			acqs.add(content);
 		}

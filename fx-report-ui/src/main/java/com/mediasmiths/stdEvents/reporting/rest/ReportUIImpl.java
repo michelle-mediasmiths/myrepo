@@ -33,6 +33,7 @@ import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
@@ -131,6 +132,12 @@ public class ReportUIImpl implements ReportUI
 			Acquisition acq = (Acquisition) unmarshallRpt(event);
 			acqs.add(acq);
 		}
+	}
+	
+	public List<AggregatedBMS> bms = new ArrayList<AggregatedBMS>();
+	public void populateBMS() 
+	{
+		bms = queryApi.getAllBMS();
 	}
 	
 	@Inject

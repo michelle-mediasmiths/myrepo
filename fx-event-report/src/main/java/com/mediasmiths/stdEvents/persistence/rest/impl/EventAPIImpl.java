@@ -63,7 +63,7 @@ public class EventAPIImpl implements EventAPI
 			// Save event to the all events table.
 		logger.info("Saving to Event table EVENT_NAME: " + event.getEventName() + " NAMESPACE: " + event.getNamespace());
 		
-		if ((event.getEventName().equals("CreateOrUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
+		if ((event.getEventName().equals("CreateorUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
 			logger.info("BMS message detected");
 			bmsDao.updateBMS(event);
 		}

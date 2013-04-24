@@ -5,9 +5,11 @@ import com.google.inject.AbstractModule;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 
+import com.mediasmiths.stdEvents.persistence.db.impl.AggregatedBMSDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.EventEntityDaoImpl;
 import com.mediasmiths.stdEvents.persistence.db.impl.EventingDaoImpl;
 
@@ -29,24 +31,11 @@ public class ReportingModule extends AbstractModule
 		bind(EventAPI.class).to(EventAPIImpl.class);
 		bind(ReportUI.class).to(ReportUIImpl.class);
 		bind(QueryAPI.class).to(QueryAPIImpl.class);
+		bind(AggregatedBMSDao.class).to(AggregatedBMSDaoImpl.class);
 		
 		RestResourceRegistry.register(ReportUI.class);
 		
 		bind(PopupAPI.class).to(PopupImpl.class);
 		RestResourceRegistry.register(PopupAPI.class);
-		
-//		Properties props = new Properties();
-//		try {
-//			props.load(new FileReader("/Users/alisonboal/Documents/forge/PersistenceParent/fx-report-ui/service.properties"));
-//			Names.bindProperties(binder(), props);
-//		}
-//		catch (FileNotFoundException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
 	}
 }

@@ -176,7 +176,7 @@ public class ManualQARpt
 		{
 			if (event.getTaskStatus().contains("FINISHED"))
 				total ++;
-			if (event.getEscalated().equals("1"))
+			if ((event.getEscalated().equals("1")) || event.getEscalated().equals("2"))
 				escalated ++;
 			if (event.getTaskStatus().contains("FAILED"))
 				failed ++;

@@ -23,6 +23,7 @@ import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
@@ -81,19 +82,7 @@ public class PurgeContentRpt
 	{
 		List<CreateOrUpdateTitle> titles = report.titles;
 		
-//		List<EventEntity> materialEvents = queryApi.getByEventName("AddOrUpdateMaterial");
-//		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
-//		for (EventEntity event : materialEvents) {
-//			AddOrUpdateMaterial material = (AddOrUpdateMaterial) unmarshall(event);
-//			materials.add(material);
-//		}
-//		
-//		List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
-//		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-//		for (EventEntity event : packageEvents) {
-//			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
-//			packages.add(pack);
-//		}
+		List<AggregatedBMS> bms = report.bms;
 		
 		logger.info("Creating purgeContent list");
 		List<PurgeContent> purgeList = new ArrayList<PurgeContent>();
@@ -126,6 +115,13 @@ public class PurgeContentRpt
 				PurgePackage pack = (PurgePackage) unmarshall(event);
 				purge.setEntityType("TX Package");
 				purge.setMaterialID(pack.getPackageID());						
+			}
+			
+			for (AggregatedBMS b : bms) {
+				if ((b.getTitleID().equals(purge.getMaterialID())) || (b.getMaterialID().equals(purge.getMaterialID())) || (b.getPackageID().equals(purge.getMaterialID()))) {
+					purge.setTitle(b.getTitle());
+					purge.setChannels(b.getChannels());
+				}
 			}
 
 			purgeList.add(purge);
