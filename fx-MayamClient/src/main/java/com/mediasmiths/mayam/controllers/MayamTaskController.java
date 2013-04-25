@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mayam.wf.attributes.shared.type.AssetAccess;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
@@ -51,6 +52,14 @@ public class MayamTaskController extends MayamController
 	{
 		return client;
 	}
+
+	@Inject
+	@Named("task.list.wfe.group.nonao")
+	String nonAOGroup;
+
+	@Inject
+	@Named("task.list.wfe.group.ao")
+	String aoGroup;
 
 	@Inject
 	private final MayamAccessRightsController accessRightsController;
@@ -323,6 +332,29 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.ERROR_MSG, message);
 		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
 		initialAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.getText());
+
+		try
+		{
+			AssetAccess accessRights = initialAttributes.getAttribute(Attribute.ASSET_ACCESS);
+			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+
+			entry.setEntityType(AssetAccess.EntityType.GROUP);
+			if (isAOItem)
+				entry.setEntity(aoGroup);
+			else
+				entry.setEntity(nonAOGroup);
+
+			entry.setRead(true);
+			entry.setWrite(true);
+
+			accessRights.getStandard().add(entry);
+			initialAttributes.setAttribute(Attribute.ASSET_ACCESS, accessRights);
+		}
+		catch (Exception e)
+		{
+			log.error("Setting Rights. AO=" + isAOItem, e);
+		}
+
 		AttributeMap createTask;
 		try
 		{
