@@ -1,52 +1,36 @@
 package com.mediasmiths.mayam;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.apache.commons.lang.RandomStringUtils;
-import org.apache.log4j.Logger;
-
-import au.com.foxtel.cf.mam.pms.Aggregation;
-import au.com.foxtel.cf.mam.pms.Aggregator;
-import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.CreateOrUpdateTitle;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.DeletePackage;
-import au.com.foxtel.cf.mam.pms.Library;
 import au.com.foxtel.cf.mam.pms.MaterialType;
-import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.PackageType;
-import au.com.foxtel.cf.mam.pms.PresentationFormatType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
-import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
-import au.com.foxtel.cf.mam.pms.Source;
-import au.com.foxtel.cf.mam.pms.TapeType;
-
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
+import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
-import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
+import com.mediasmiths.foxtel.generated.ruzz.DetailType;
 import com.mediasmiths.mayam.validation.MayamValidator;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
  
 public class MayamClientStub implements MayamClient
 {
@@ -648,6 +632,14 @@ public class MayamClientStub implements MayamClient
 
 	@Override
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	@Override
+	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAO) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		return 0;
