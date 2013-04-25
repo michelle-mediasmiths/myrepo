@@ -166,7 +166,6 @@ public interface MayamClient
 	/**
 	 * updates a tx package using the material exchange ProgrammeMaterialType.Presentation.Package type
 	 * @param txPackage
-	 * @param materialID 
 	 * @return
 	 */
 	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage);
@@ -197,15 +196,14 @@ public interface MayamClient
 	 * Returns the file path to the high resolution media attatched to a material 
 	 * 
 	 * @param materialID
-	 * @param location
-	 * @return 
+	 * @return
 	 */
 	public String pathToMaterial(String materialID, boolean acceptNonPreferredLocations) throws MayamClientException;
 
 	/**
 	 * Return a single task of a given type for the specified asset
 	 * @param type
-	 * @param id
+	 * @param assetid
 	 * @return
 	 * @throws MayamClientException
 	 */
@@ -220,26 +218,35 @@ public interface MayamClient
 
 	/**
 	 * Called to indicate that a given task for an asset should be considered failed or erronous
-	 * @param txDelivery
+	 * @param taskType
 	 * @param id
 	 * @throws MayamClientException
 	 */
 	public void failTaskForAsset(MayamTaskListType taskType, String id) throws MayamClientException;
 
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
-	
+
+	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAOContent) throws MayamClientException;
+
+
 	public long createWFEErrorTaskForPackage(String packageID, String message);
 	public long createWFEErrorTaskForMaterial(String materialID, String message);
 	public long createWFEErrorTaskForTitle(String titleID, String message);
 	
 	/**
 	 * returns the Programme representation of a given package
-	 * @param Programme getProgramme(String materialID) throws MayamClientException;
+	 * @param packageID
 	 * @return
 	 * @throws MayamClientException
 	 */
 	Programme getProgramme(String packageID) throws MayamClientException;
 
+	/**
+	 *
+	 * @param packageID
+	 * @return
+	 * @throws MayamClientException
+	 */
 	RuzzIF getRuzzProgramme(String packageID) throws MayamClientException;
 	
 	/**

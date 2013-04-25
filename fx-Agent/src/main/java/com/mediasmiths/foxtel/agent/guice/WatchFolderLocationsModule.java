@@ -1,22 +1,23 @@
 package com.mediasmiths.foxtel.agent.guice;
 
-import java.io.File;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.validation.ConfigValidationFailureException;
 import com.mediasmiths.std.io.PropertyFile;
+import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public class WatchFolderLocationsModule extends AbstractModule {
 
 	private static Logger logger = Logger
 			.getLogger(WatchFolderLocationsModule.class);
 
+	@Singleton
 	@Provides
 	@Named("watchfolder.locations")
 	public WatchFolders provideWatchFolderLocations(

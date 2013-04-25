@@ -550,6 +550,22 @@ public class MayamClientImpl implements MayamClient
 		return tasksController.createWFEErrorTaskNoAsset(id, title, message);
 	}
 
+	/**
+	 *
+	 * @param id
+	 * @param title
+	 * @param message
+	 * @param isAOItem
+	 * @return status
+	 * @throws MayamClientException
+	 * create an error task with permissions set based on whether this is AO content
+	 */
+	@Override
+	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAOItem) throws MayamClientException
+	{
+		return tasksController.createWFEErrorTaskNoAsset(id, title, message, isAOItem);
+	}
+
 	@Override
 	public boolean isTitleAO(String titleID) throws MayamClientException
 	{

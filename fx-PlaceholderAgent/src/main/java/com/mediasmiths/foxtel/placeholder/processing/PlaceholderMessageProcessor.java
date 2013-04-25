@@ -1,20 +1,5 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ChannelType;
@@ -27,7 +12,6 @@ import au.com.foxtel.cf.mam.pms.PlaceholderMessage;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
-
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -46,7 +30,19 @@ import com.mediasmiths.foxtel.placeholder.validation.PlaceholderMessageValidator
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Processes placeholder messages taken from a queue
@@ -466,7 +462,8 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					String.format(
 							"Failed to validate %s for reason %s",
 							resultPackage.getPp().getPickUp("xml").getAbsolutePath(),
-							resultPackage.getResult()));
+							resultPackage.getResult()),
+					isAOPickUpLocation(resultPackage.getPp()));
 		}
 		catch (MayamClientException e)
 		{

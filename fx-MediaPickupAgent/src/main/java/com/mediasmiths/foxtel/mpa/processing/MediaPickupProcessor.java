@@ -1,18 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-import java.util.Set;
-
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
@@ -31,6 +18,17 @@ import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.foxtel.mpa.delivery.Importer;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
+import java.util.Set;
 
 public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 {
@@ -96,7 +94,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					String.format(
 							"Failed to validate %s for reason %s",
 							pp.getPickUp("xml").getAbsolutePath(),
-							resultPackage.getResult()));
+							resultPackage.getResult()),
+					isAOPickUpLocation(resultPackage.getPp()));
 		}
 		catch (MayamClientException e)
 		{

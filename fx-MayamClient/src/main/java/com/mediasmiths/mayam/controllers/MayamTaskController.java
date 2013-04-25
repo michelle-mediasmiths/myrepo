@@ -21,8 +21,6 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Calendar;
@@ -297,6 +295,28 @@ public class MayamTaskController extends MayamController
 	// creates an error task for some situation where there is no underly asset to create the task for
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException{
 		
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.ASSET_SITE_ID, id);
+		initialAttributes.setAttribute(Attribute.ASSET_TITLE, title);
+		initialAttributes.setAttribute(Attribute.ERROR_MSG, message);
+		initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		initialAttributes.setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.WFE_ERROR.getText());
+		AttributeMap createTask;
+		try
+		{
+			createTask = client.taskApi().createTask(initialAttributes);
+		}
+		catch (RemoteException e)
+		{
+			log.error(String.format("failed to create wfe error task ID {%s} Title {%s} message {%s}", id, title,message),e);
+			throw new MayamClientException(MayamClientErrorCode.TASK_CREATE_FAILED,e);
+		}
+		return createTask.getAttribute(Attribute.TASK_ID);
+	}
+
+	// creates an error task for some situation where there is no underly asset to create the task for
+	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAOItem) throws MayamClientException{
+
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.ASSET_SITE_ID, id);
 		initialAttributes.setAttribute(Attribute.ASSET_TITLE, title);

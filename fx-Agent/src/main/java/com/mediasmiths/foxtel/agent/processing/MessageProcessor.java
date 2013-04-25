@@ -1,8 +1,10 @@
 package com.mediasmiths.foxtel.agent.processing;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.queue.IFilePickup;
 import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.agent.validation.MessageValidationResult;
@@ -44,6 +46,11 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	private final ReceiptWriter receiptWriter;
 	protected final com.mediasmiths.foxtel.ip.event.EventService eventService;
 
+
+	@Inject
+	@Named("watchfolder.locations")
+	WatchFolders watchedFolders;
+
 	private IFilePickup filePickup;
 
 	public IFilePickup getFilePickup()
@@ -66,6 +73,12 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 		this.messageValidator = messageValidator;
 		this.receiptWriter = receiptWriter;
 		this.eventService = eventService;
+	}
+
+
+	protected boolean isAOPickUpLocation(PickupPackage pp)
+	{
+		return watchedFolders.isAo(pp.getRootPath());
 	}
 
 	/**
