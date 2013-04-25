@@ -36,7 +36,7 @@
   </wsdl:binding>
   <wsdl:service name="restService">
     <wsdl:port name="httpPort" binding="createJob:restBinding">
-      <http:address location="http://10.111.224.110:8080/fx-TcAdapter/transcoder/jobs"/>
+      <http:address location="http://10.111.224.213:8080/fx-TcAdapter/transcoder/jobs"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

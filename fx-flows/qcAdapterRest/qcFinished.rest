@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.110:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" ID="_6tHuABa-EeKqpuzjrTcpXg">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-qcAdapter/rest/qc/job/{jobname}/finished" ID="_6tHuABa-EeKqpuzjrTcpXg">
   <rest:operation verb="GET" name="qcFinished" ID="_6tHuAha-EeKqpuzjrTcpXg">
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_6tHuAxa-EeKqpuzjrTcpXg"/>
     <rest:fault type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="fault" headerDirection="request" contentType="text/html" ID="_JuCFYHH5EeKofd0UxythbA"/>

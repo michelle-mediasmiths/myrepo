@@ -44,7 +44,7 @@
   </wsdl:binding>
   <wsdl:service name="restService">
     <wsdl:port name="httpPort" binding="autoQcError:restBinding">
-      <http:address location="http://10.111.224.110:8080/fx-WFAdapter/rest/wf/qc/autoQcError"/>
+      <http:address location="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/qc/autoQcError"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

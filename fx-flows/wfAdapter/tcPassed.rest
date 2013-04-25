@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.110:8080/fx-WFAdapter/rest/wf/tc/tcPassed" ID="_WJDLQCHOEeKyysgOm3-sfQ">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcPassed" ID="_WJDLQCHOEeKyysgOm3-sfQ">
   <rest:operation verb="PUT" name="tcPassed" ID="_WJDLRiHOEeKyysgOm3-sfQ">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}tcPassedNotification" name="body" headerDirection="request" contentType="application/xml" ID="_WJDLRyHOEeKyysgOm3-sfQ"/>
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="response" headerDirection="request" contentType="text/plain" ID="_WJDLSCHOEeKyysgOm3-sfQ"/>

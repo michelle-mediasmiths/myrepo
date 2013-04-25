@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.110:8080/fx-TcAdapter/transcoder/job/{guid}" ID="_k475IGk1EeKkF6Cl22xM4g">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" ID="_k475IGk1EeKkF6Cl22xM4g">
   <rest:operation verb="DELETE" name="deleteJob" ID="_k475JGk1EeKkF6Cl22xM4g"/>
   <rest:url type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}string" name="guid" headerDirection="request" contentType="text/xml" ID="_nkPo0Gk1EeKkF6Cl22xM4g"/>
 </rest:descriptor>
