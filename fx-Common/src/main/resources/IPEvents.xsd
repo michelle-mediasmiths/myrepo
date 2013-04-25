@@ -748,7 +748,20 @@
             </xs:complexContent>
 		</xs:complexType>
 	</xs:element>
-    
+
+
+	<xs:element name="CreationComplete">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="IPEvent">
+					<xs:sequence>
+						<xs:element name="mediaID" type="xs:string" />
+						<xs:element name="completionDate" type="xs:dateTime" />
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
     
 
 	<xs:simpleType name="smpteTimecode" final="restriction">

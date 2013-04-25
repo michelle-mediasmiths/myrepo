@@ -19,7 +19,7 @@ import com.mayam.wf.attributes.shared.type.Job.JobSubType;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
-import com.mediasmiths.foxtel.ip.common.events.report.CreationComplete;
+import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;

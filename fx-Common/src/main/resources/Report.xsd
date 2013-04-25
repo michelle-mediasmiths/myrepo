@@ -33,15 +33,6 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:element name="CreationComplete">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="mediaID" type="xs:string" />
-				<xs:element name="completionDate" type="xs:dateTime" />
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
 	<xs:element name="Acquisition">
 		<xs:complexType>
 			<xs:sequence>
