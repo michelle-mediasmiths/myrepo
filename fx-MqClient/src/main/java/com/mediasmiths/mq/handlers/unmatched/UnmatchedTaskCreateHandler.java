@@ -2,18 +2,27 @@ package com.mediasmiths.mq.handlers.unmatched;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.ws.client.FilterResult;
+import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
 
 public class UnmatchedTaskCreateHandler extends TaskStateChangeHandler
 {
 
 	private final static Logger log = Logger.getLogger(UnmatchedTaskCreateHandler.class);
+	
+	@Inject
+	@Named("purge.associated.material.without.title.days")
+	private int purgeTimeForAssociatedMaterialWithoutTitle;
 	
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
@@ -63,7 +72,25 @@ public class UnmatchedTaskCreateHandler extends TaskStateChangeHandler
 		catch(Exception e){
 			log.error("error finding aggregator for unmatched item",e);
 		}
+		
+		
+		String contMatType = (String) messageAttributes.getAttribute(Attribute.CONT_MAT_TYPE);
 
+		if (contMatType != null && contMatType.equals(MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE))
+		{
+			log.info("unmatched task created for associated content, adding to purge candidate list");
+			try
+			{
+				taskController.createOrUpdatePurgeCandidateTaskForAsset(
+						MayamAssetType.MATERIAL,
+						messageAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						purgeTimeForAssociatedMaterialWithoutTitle);
+			}
+			catch (MayamClientException e)
+			{
+				log.error("error adding assset to purge canndiate list", e);
+			}
+		}
 	}
 
 	@Override
