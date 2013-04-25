@@ -52,20 +52,26 @@ public class TranscodePriorities
 
 		// current priority is not a manual escalation priority
 
-		// check if txDate is in the past
-		boolean txDatePassed = isInPast(txDate);
-
-		if (txDatePassed)
+		if (type.equals(TranscodeJobType.CAPTION_PROXY) || type.equals(TranscodeJobType.TX))
 		{
-			// tx date is passed return either highest or lowest priority for the given job type
-			return priorityForTxDatePassedJob(type, txDate);
-		}
 
-		// tx date is in the future
-		
-		if(txDate==null){
-			log.warn("tx date null assuming far in the future");
-			return config.getLowestPriorityForJobType(type);
+			// check if txDate is in the past
+			boolean txDatePassed = isInPast(txDate);
+
+			if (txDatePassed)
+			{
+				// tx date is passed return either highest or lowest priority for the given job type
+				return priorityForTxDatePassedJob(type, txDate);
+			}
+
+			// tx date is in the future
+
+			if (txDate == null)
+			{
+				log.warn("tx date null assuming far in the future");
+				return config.getLowestPriorityForJobType(type);
+			}
+
 		}
 		
 		switch (type)

@@ -214,7 +214,7 @@ public class TranscodePrioritiesTest
 		Date txDate = lastMinute.toDate();
 
 		Integer actual = toTest.getPriorityForNewTranscodeJob(TranscodeJobType.COMPLIANCE_PROXY, txDate);
-		Integer expected = Integer.valueOf(5);
+		Integer expected = Integer.valueOf(1); // tx date doesnt affect compliance proxy priority
 
 		assertEquals(expected, actual);
 
@@ -230,7 +230,7 @@ public class TranscodePrioritiesTest
 		Date txDate = lastMinute.toDate();
 
 		Integer actual = toTest.getPriorityForNewTranscodeJob(TranscodeJobType.PUBLICITY_PROXY, txDate);
-		Integer expected = Integer.valueOf(5);
+		Integer expected = Integer.valueOf(1); // tx date doesnt affect publicity proxy priority
 
 		assertEquals(expected, actual);
 
