@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
-<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://mamwkf01.mam.foxtel.com.au:8080/fx-WFAdapter/rest/wf/tx/delivered" ID="_mDy_IGxpEeKUJq4x9Li65w">
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.110:8080/fx-WFAdapter/rest/wf/tx/delivered" ID="_mDy_IGxpEeKUJq4x9Li65w">
   <rest:operation verb="PUT" name="txDeliveryComplete" ID="_mDy_JGxpEeKUJq4x9Li65w">
     <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}txDeliveryFinished" name="body" headerDirection="request" contentType="application/xml" ID="_mDy_JWxpEeKUJq4x9Li65w"/>
     <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}anyType" name="response" headerDirection="request" contentType="text/xml" ID="_mDy_JmxpEeKUJq4x9Li65w"/>
