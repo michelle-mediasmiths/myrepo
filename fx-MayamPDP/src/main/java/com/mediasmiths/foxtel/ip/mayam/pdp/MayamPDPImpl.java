@@ -186,6 +186,7 @@ public class MayamPDPImpl implements MayamPDP
 		try
 		{
 			List<String> warnings = new ArrayList<String>();
+			List<String> errors = new ArrayList<String>();
 
 			logger.debug("Segment Mismatch Check.");
 
@@ -198,7 +199,7 @@ public class MayamPDPImpl implements MayamPDP
 			Integer requestedNumber = attributeMap.getAttribute(Attribute.REQ_NUMBER);
 			
 			if(requestedNumber==null){
-				return getErrorStatus(messageSegmentNoRequestedNumberOfSegments);
+				errors.add(messageSegmentNoRequestedNumberOfSegments);
 			}
 			
 			int numberOfSegmentsRequested = requestedNumber.intValue();	
@@ -237,15 +238,14 @@ public class MayamPDPImpl implements MayamPDP
 					else
 					{
 						logger.debug("User cannot override a segment mismatch for " + presentationID);
-
-						return getErrorStatus(messageSegmentMismatchRefuseOverride);
+						errors.add(messageSegmentMismatchRefuseOverride);
 					}
 				}
 			}
 			else
 			{
 				logger.info("Unable to retrieve Segment List. Return Map for  " + presentationID);
-				return getErrorStatus("A technical fault has occurred while retrieving segment list");
+				errors.add("A technical fault has occurred while retrieving segment list");
 			}
 
 			// Classification Check
@@ -253,8 +253,7 @@ public class MayamPDPImpl implements MayamPDP
 			if (classification == null || classification.equals(""))
 			{
 				logger.debug("The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
-
-				return getErrorStatus("The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
+				errors.add("The TX Package has not been classified. Please contact the channel owner and ensure that this is provided");
 			}
 
 			// QC Parallel Check
@@ -276,47 +275,49 @@ public class MayamPDPImpl implements MayamPDP
 
 			AudioTrackList audioTracks = parentAsset.getAttribute(Attribute.AUDIO_TRACKS);
 
-			if (audioTracks == null) // add a no audio track warning.
+			if (audioTracks == null) // add a no audio track error.
 			{
-				warnings.add(messageNoAudioTracks);
+				errors.add(messageNoAudioTracks);
 			}
 
 			if (parentAsset != null)
 			{
 				boolean isQcPassed = AssetProperties.isQCPassed(parentAsset);
 
-				logger.debug("Is QC passed");
+				logger.debug("Is QC passed " + isQcPassed);
 
 				if (isQcPassed)
 				{
 					logger.info("QC is Passed on Presentation Id " + presentationID);
-
-					warnings.add(messageTXSend);
-					return getConfirmStatus(formHTMLList(warnings));
 				}
-
-				Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
-				if (qcParallelAttribute != null && qcParallelAttribute)
+				else
 				{
-					logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: " + presentationID);
+					Boolean qcParallelAttribute = parentAsset.getAttribute(Attribute.QC_PARALLEL_ALLOWED);
+					if (qcParallelAttribute != null && qcParallelAttribute)
+					{
+						logger.info("Qc Parallel is set but Qc Status has not yet been passed, warning the user: "
+								+ presentationID);
 
-					warnings.add(messageQCParallelWarning);
-					warnings.add(messageTXSend);
-
-					return getConfirmStatus(formHTMLList(warnings));
+						warnings.add(messageQCParallelWarning);
+					}
+					else
+					{
+						errors.add("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
+					}
 				}
 			}
-			else 
+			
+			if (errors.size() > 0)
 			{
-				logger.info("Unable to locate parent asset for : " + presentationID);
-
-				warnings.add("Unable to locate parent asset to check QC status");
+				errors.addAll(warnings); //include warnings in the error message				
+				return getErrorStatus(formHTMLList(errors));
+			}
+			else
+			{
 				warnings.add(messageTXSend);
-
 				return getConfirmStatus(formHTMLList(warnings));
 			}
 			
-			return  getErrorStatus("Item is not QC passed. QC Parallel is not set  - you cannot proceed to Tx.");
 		}
 		catch (Exception e)
 		{
@@ -324,6 +325,9 @@ public class MayamPDPImpl implements MayamPDP
 
 			return getErrorStatus("PDP Comms Error:  unable to retrieve required data to complete Segmentation operation, contact support");
 		}
+		
+		
+		
 	}
 
 
