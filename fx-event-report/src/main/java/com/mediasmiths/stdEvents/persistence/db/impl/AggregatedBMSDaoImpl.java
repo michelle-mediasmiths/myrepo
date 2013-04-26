@@ -85,7 +85,8 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 					bms.setChannels(title.getChannels());
 					bms.setPackageID(pack.getPackageID());
 					bms.setMaterialID(pack.getMaterialID());
-					bms.setRequiredBy(pack.getRequiredBy().toString());
+					if (pack.getRequiredBy() != null)
+						bms.setRequiredBy(pack.getRequiredBy().toString());
 					save(bms);
 					logger.info("SAVED: " + title.getPackageID() + " " + title.getMaterialID() + " " + title.getRequiredBy());
 				}
@@ -98,7 +99,8 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 			for (AggregatedBMS pack : packages) {
 				if (pack.getCompletionDate() == null) {
 					logger.info("new material");
-					pack.setCompletionDate(material.getCompletionDate().toString());
+					if (material.getCompletionDate() != null)
+						pack.setCompletionDate(material.getCompletionDate().toString());
 					pack.setAggregatorID(material.getAggregatorID());
 					saveOrUpdate(pack);
 					logger.info("SAVED: " + pack.getCompletionDate() + " " + pack.getAggregatorID());
@@ -109,9 +111,11 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 					bms.setChannels(pack.getChannels());
 					bms.setPackageID(pack.getPackageID());
 					bms.setMaterialID(pack.getMaterialID());
-					bms.setRequiredBy(pack.getRequiredBy().toString());
+					if (pack.getRequiredBy() != null)
+						bms.setRequiredBy(pack.getRequiredBy().toString());
 					bms.setAggregatorID(material.getAggregatorID());
-					bms.setCompletionDate(material.getCompletionDate().toString());
+					if (pack.getCompletionDate() != null)
+						bms.setCompletionDate(material.getCompletionDate().toString());
 					save(bms);
 					logger.info("SAVED: " + bms.getCompletionDate() + " " + bms.getAggregatorID());
 				}
