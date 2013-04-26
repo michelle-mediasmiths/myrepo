@@ -74,7 +74,8 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 				if (title.getPackageID() == null) {
 					title.setPackageID(pack.getPackageID());
 					title.setMaterialID(pack.getMaterialID());
-					title.setRequiredBy(pack.getRequiredBy().toString());
+					if (pack.getRequiredBy() != null)
+						title.setRequiredBy(pack.getRequiredBy().toString());
 					saveOrUpdate(title);
 					logger.info("SAVED: " + title.getPackageID() + " " + title.getMaterialID() + " " + title.getRequiredBy());
 				} else {
