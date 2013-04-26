@@ -40,6 +40,8 @@ import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -808,7 +810,7 @@ public class MayamClientImpl implements MayamClient
 
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.UNMATCHED_MEDIA.getText());
-		criteria.getFilterEqualities().setAttribute(Attribute.SERIES_TITLE, fileName);
+		criteria.getFilterEqualities().setAttribute(Attribute.SERIES_TITLE, FilenameUtils.getBaseName(fileName));
 		criteria.getSortOrders().add(new SortOrder(Attribute.TASK_CREATED, SortOrder.Direction.DESC));
 		FilterResult result;
 		try
