@@ -106,6 +106,7 @@ public class IngestCompleteHandler extends TaskUpdateHandler
 	{
 		MediaStatus hr = attributes.getAttribute(Attribute.MEDST_HR);
         MediaStatus lr = attributes.getAttribute(Attribute.MEDST_LR);
+        Boolean ingestFinishedReceived = attributes.getAttribute(Attribute.APP_FLAG);
 
         log.debug("MEDST_HR : " + hr);
 
@@ -145,10 +146,30 @@ public class IngestCompleteHandler extends TaskUpdateHandler
             }
             else
             {
-                    log.debug("MEDST_LR is READY, material is ready for qc");
+                    log.debug("MEDST_LR is READY");
             }
 
         }
+        
+        log.debug("INGEST_FINISHED_RECEIVED : "+ingestFinishedReceived);
+
+		if (ingestFinishedReceived == null)
+		{
+			log.debug("INGEST_FINISHED_RECEIVED (APP_FLAG) is null, material is not ready for qc");
+			return false;
+		}
+		else
+		{
+			if (ingestFinishedReceived.booleanValue())
+			{
+				log.debug("INGEST_FINISHED_RECEIVED (APP_FLAG) is true");
+			}
+			else
+			{
+				log.debug("INGEST_FINISHED_RECEIVED (APP_FLAG) is false, material is not ready for qc");
+				return false;
+			}
+		}
 
         String assetID = attributes.getAttribute(Attribute.ASSET_ID);
 

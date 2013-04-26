@@ -25,6 +25,7 @@ import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import com.mediasmiths.std.util.jaxb.exception.JAXBRuntimeException;
 
 public class IngestJobHandler extends JobHandler
 {
@@ -138,20 +139,20 @@ public class IngestJobHandler extends JobHandler
 	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
 	{
 		log.info(String.format("Import finished for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
-		log.debug("Pending updating ingest to FINISHED");
-//		JobSubType jobSubType = jobMessage.getJobSubType();
-//		if (null == jobSubType || (!jobSubType.equals(JobSubType.DART)))
-//		{
-//			AttributeMap updateMap = taskController.updateMapForTask(task);
-//			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-//			updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
-//			taskController.saveTask(updateMap);
-//		}
+		log.debug("Recording that ingest finished has been seen for this asset");
 		
-		try {
+		AttributeMap updateMap = taskController.updateMapForTask(task);
+		
+		updateMap.setAttribute(Attribute.INGEST_NOTES, ""); //clear ingest notes from any previous failure
+		updateMap.setAttribute(Attribute.APP_FLAG, Boolean.TRUE); //record that ingest finished event has been seen for this asset
+		
+		taskController.saveTask(updateMap);
+		
+		try
+		{
 			GregorianCalendar c = new GregorianCalendar();
 			Date dateUpdated = jobMessage.getJobUpdated();
-			if(null == dateUpdated)
+			if (null == dateUpdated)
 			{
 				log.debug("Job message had no jobUpdated date set; setting it to now.");
 				dateUpdated = new Date();
@@ -160,9 +161,13 @@ public class IngestJobHandler extends JobHandler
 			XMLGregorianCalendar eventUpdateTime = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 			sendImportCompleteEvent(task.getAttributeAsString(Attribute.HOUSE_ID), eventUpdateTime);
 		}
-		catch(DatatypeConfigurationException e)
+		catch (DatatypeConfigurationException e)
 		{
 			log.error("Datatype Configuration exception thrown while converting update time for %s : " + assetId, e);
+		}
+		catch (JAXBRuntimeException e)
+		{
+			log.error("jaxb exception", e);
 		}
 	}
 
@@ -171,6 +176,7 @@ public class IngestJobHandler extends JobHandler
 		log.info(String.format("Import failed for asset %s (%s)",task.getAttributeAsString(Attribute.HOUSE_ID),assetId));
 		AttributeMap updateMap = taskController.updateMapForTask(task);
 		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.WARNING);
+		updateMap.setAttribute(Attribute.APP_FLAG, Boolean.FALSE); //we got an ingest job event but it wasnt a pass
 
 		String jobID = jobMessage.getJobId();
 		JobType jobType = jobMessage.getJobType();
