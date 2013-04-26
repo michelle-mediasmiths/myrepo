@@ -70,6 +70,9 @@ public class AggregatedBMS
 	@Column(name="ID")
 	private Long id;
 	
+	@Column(name="TIME")
+	protected long time;
+	
 	@Column(name="TITLE_ID")
     @XmlElement(required = true)
     protected String titleID;
@@ -102,7 +105,17 @@ public class AggregatedBMS
     @XmlElement
     protected String requiredBy;
 
-    /**
+    public long getTime()
+	{
+		return time;
+	}
+
+	public void setTime(long time)
+	{
+		this.time = time;
+	}
+
+	/**
      * Gets the value of the titleID property.
      * 
      * @return

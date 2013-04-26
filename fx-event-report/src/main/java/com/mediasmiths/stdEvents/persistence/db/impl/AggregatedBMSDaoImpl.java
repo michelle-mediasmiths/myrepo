@@ -57,7 +57,8 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 		
 		if (event.getEventName().equals("CreateorUpdateTitle")) {
 			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event.getPayload());
-			AggregatedBMS bms = new AggregatedBMS();			
+			AggregatedBMS bms = new AggregatedBMS();
+			bms.setTime(event.getTime());
 			bms.setTitleID(title.getTitleID());
 			bms.setTitle(title.getTitle());
 			bms.setChannels(title.getChannels());
