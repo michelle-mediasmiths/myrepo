@@ -1972,7 +1972,7 @@
           <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_R4q4cXHhEeKIgPAPmx2ukA"/>
         </vertices>
         <vertices xmi:type="bpmn:Activity" xmi:id="_tTwb8XHeEeKIgPAPmx2ukA" iD="_tTwb8HHeEeKIgPAPmx2ukA" outgoingEdges="_xjUMoXHeEeKIgPAPmx2ukA" incomingEdges="_uUKJAXHeEeKIgPAPmx2ukA" name="record result"/>
-        <vertices xmi:type="bpmn:Activity" xmi:id="_w-0YcXHeEeKIgPAPmx2ukA" iD="_w-0YcHHeEeKIgPAPmx2ukA" outgoingEdges="_2km8QXHeEeKIgPAPmx2ukA _23I2sXHeEeKIgPAPmx2ukA" incomingEdges="_xjUMoXHeEeKIgPAPmx2ukA" activityType="GatewayDataBasedExclusive"/>
+        <vertices xmi:type="bpmn:Activity" xmi:id="_w-0YcXHeEeKIgPAPmx2ukA" iD="_w-0YcHHeEeKIgPAPmx2ukA" outgoingEdges="_2km8QXHeEeKIgPAPmx2ukA _23I2sXHeEeKIgPAPmx2ukA" incomingEdges="_iEKtka5kEeKd-v7zjSQ-MQ" activityType="GatewayDataBasedExclusive"/>
         <vertices xmi:type="bpmn:Activity" xmi:id="_zx6LIXHeEeKIgPAPmx2ukA" iD="_zx6LIHHeEeKIgPAPmx2ukA" outgoingEdges="_4R4WYXHeEeKIgPAPmx2ukA" incomingEdges="_23I2sXHeEeKIgPAPmx2ukA" name="error\warning"/>
         <vertices xmi:type="bpmn:Activity" xmi:id="_1b8rEXHeEeKIgPAPmx2ukA" iD="_1b8rEHHeEeKIgPAPmx2ukA" outgoingEdges="_5b5ScXHeEeKIgPAPmx2ukA" incomingEdges="_2km8QXHeEeKIgPAPmx2ukA" name="success"/>
         <vertices xmi:type="bpmn:Activity" xmi:id="_3RAIMXHeEeKIgPAPmx2ukA" iD="_3RAIMHHeEeKIgPAPmx2ukA" associations="_jZ_aIHHhEeKIgPAPmx2ukA _j2IjkHHhEeKIgPAPmx2ukA" incomingEdges="_4R4WYXHeEeKIgPAPmx2ukA" name="send failure message">
@@ -1984,6 +1984,7 @@
           <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_iYzp8XHhEeKIgPAPmx2ukA"/>
         </vertices>
         <vertices xmi:type="bpmn:Activity" xmi:id="_6Ukm4XHeEeKIgPAPmx2ukA" iD="_6Ukm4HHeEeKIgPAPmx2ukA" incomingEdges="_6zYp0XHeEeKIgPAPmx2ukA" name="set success variable"/>
+        <vertices xmi:type="bpmn:Activity" xmi:id="_g_m5Qa5kEeKd-v7zjSQ-MQ" iD="_g_m5QK5kEeKd-v7zjSQ-MQ" outgoingEdges="_iEKtka5kEeKd-v7zjSQ-MQ" incomingEdges="_xjUMoXHeEeKIgPAPmx2ukA" name="wait a while o allow cerify to write report" activityType="EventIntermediateTimer"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="__9w5cXHdEeKIgPAPmx2ukA" iD="__9w5cHHdEeKIgPAPmx2ukA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_F5jicXHeEeKIgPAPmx2ukA" iD="_F5jicHHeEeKIgPAPmx2ukA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_glcWQXHeEeKIgPAPmx2ukA" iD="_glcWQHHeEeKIgPAPmx2ukA"/>
@@ -1997,6 +1998,7 @@
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_4R4WYXHeEeKIgPAPmx2ukA" iD="_4R4WYHHeEeKIgPAPmx2ukA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_5b5ScXHeEeKIgPAPmx2ukA" iD="_5b5ScHHeEeKIgPAPmx2ukA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_6zYp0XHeEeKIgPAPmx2ukA" iD="_6zYp0HHeEeKIgPAPmx2ukA"/>
+        <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_iEKtka5kEeKd-v7zjSQ-MQ" iD="_iEKtkK5kEeKd-v7zjSQ-MQ"/>
         <eventHandlers xmi:type="bpmn:Activity" xmi:id="_95MkMXHeEeKIgPAPmx2ukA" iD="_95MkMHHeEeKIgPAPmx2ukA" outgoingEdges="_EyFHkXHfEeKIgPAPmx2ukA" activityType="EventIntermediateError"/>
       </vertices>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_CmwfgXHfEeKIgPAPmx2ukA" iD="_CmwfgHHfEeKIgPAPmx2ukA" incomingEdges="_EyFHkXHfEeKIgPAPmx2ukA" name="qc error">

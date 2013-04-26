@@ -281,6 +281,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		Collection<File> reports = getQCFiles(jobName);
 
+		if (reports.size() == 0)
+		{
+			log.warn("no qc reports found for " + jobName);
+		}
+
 		// attach report(s) to item
 
 		for (File file : reports)
