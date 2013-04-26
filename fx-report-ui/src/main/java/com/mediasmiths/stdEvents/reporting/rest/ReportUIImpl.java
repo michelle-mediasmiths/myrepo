@@ -254,6 +254,17 @@ public class ReportUIImpl implements ReportUI
 		return valid;
 	}
 	
+	private List<AggregatedBMS> getInDateBMS(List<AggregatedBMS> events)
+	{
+			List<AggregatedBMS> valid = new ArrayList<AggregatedBMS>();
+			for (AggregatedBMS bms : events) {
+				boolean within = checkDate(bms.getTime());
+				if (within)
+					valid.add(bms);
+			}
+			return valid;
+	}
+	
 	@Transactional
 	public void saveReportName(@QueryParam("name") String name)
 	{
@@ -275,6 +286,17 @@ public class ReportUIImpl implements ReportUI
 		logger.info("start: " + start + " end: " + end);
 		logger.info("name: " + name + " rpt: " + rpt);
 		logger.info("type: " + type);
+		
+		if(start.equals("")) {
+			startDate = new Date();
+			start = startDate.toString();
+		}
+		if (end.equals("")) {
+			endDate = new Date();
+			end = endDate.toString();
+		}
+		
+		logger.info("WERE NULL start: " + start + " end: " + end);
 		
 		saveStartDate(start);
 		saveEndDate(end);
@@ -352,10 +374,15 @@ public class ReportUIImpl implements ReportUI
 	public void getOrderStatusCSV()
 	{
 		
- 		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
- 		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
- 		logger.info("List size: " + orders.size());
-		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
+// 		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
+ 		populateBMS();
+// 		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
+// 		logger.info("List size: " + orders.size());
+//		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
+		
+		List<AggregatedBMS> orders = getInDateBMS(bms);
+		logger.info("List size: " + orders.size());
+		orderStatus.writeOrderStatus(bms, startDate, endDate, REPORT_NAME);
 	}
 	
 	private List<OrderStatus> getReportList(List<EventEntity> events)

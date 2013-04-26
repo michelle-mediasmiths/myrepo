@@ -4,7 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.supercsv.cellprocessor.Optional;
@@ -20,6 +24,7 @@ import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 
@@ -44,7 +49,7 @@ public class OrderStatusRpt
 	public int overdue=0;
 	public int unmatched=0;
 		
-	public void writeOrderStatus(List<EventEntity> events, Date startDate, Date endDate, String reportName)
+	public void writeOrderStatus(List<AggregatedBMS> events, Date startDate, Date endDate, String reportName)
 	{
 		logger.info("List size: " + events.size());
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
@@ -73,61 +78,32 @@ public class OrderStatusRpt
 		}	
 		return placeholder;
 	}
-		
-	 
-	public List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
+	
+	public List<OrderStatus> getReportList(List<AggregatedBMS> events, Date startDate, Date endDate)
 	{
-		logger.info("Creating orderStatus list");
+		logger.info("USING AGGREGATED BMS TABLE");
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
 		
-		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
-			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
-			packages.add(currentPack);
-		}
-		logger.info("AddOrUpdatePackage messages deserialised, total: " + packages.size());
-		
-		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
-		for (EventEntity material : queryApi.getByEventNameWindow("AddOrUpdateMaterial", MAX)) {
-			AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(material);
-			materials.add(currentMaterial);
-		}
-		logger.info("AddOrUpdateMaterial messages deserialised, total: " + materials.size());
-		
-		for (EventEntity event : events)
+		for (AggregatedBMS bms : events) 
 		{
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			
-			AddOrUpdatePackage matchingPack = new AddOrUpdatePackage();
-			for (AddOrUpdatePackage pack : packages) 
-			{
-				if (pack.getTitleID().equals(title.getTitleID())) {
-					matchingPack = pack;
-					logger.info("package found");
-				}
-			}
-			
-			AddOrUpdateMaterial matchingMaterial = new AddOrUpdateMaterial();
-			for (AddOrUpdateMaterial material : materials)
-			{
-				if (material.getMaterialID().equals(matchingPack.getMaterialID())) {
-					matchingMaterial = material;
-					logger.info("material found");
-				}
-			}
-			
 			OrderStatus order = new OrderStatus();
 			order.setDateRange(startDate + " - " + endDate);
-			order.setTitle(title.getTitle());
-			order.setMaterialID(matchingPack.getMaterialID());
-			order.setChannels(title.getChannels());
-			order.setRequiredBy(matchingPack.getRequiredBy());
-			if (event.getEventName().equals("UnmatchedContentAvailable"))
-				order.setTaskType("Unmatched");
-			else
-				order.setTaskType("Ingest");
-			order.setCompletionDate(matchingMaterial.getCompletionDate());
-			
+			order.setTitle(bms.getTitle());
+			order.setMaterialID(bms.getMaterialID());
+			order.setChannels(bms.getChannels());
+			order.setTaskType("Ingest");
+			order.setAggregatorID(bms.getAggregatorID());
+			if ((bms.getRequiredBy() != null) && (bms.getCompletionDate() != null)) {
+				try
+				{
+					order.setRequiredBy(DatatypeFactory.newInstance().newXMLGregorianCalendar(bms.getRequiredBy()));
+					order.setCompletionDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(bms.getCompletionDate()));
+				}
+				catch (DatatypeConfigurationException e)
+				{
+					e.printStackTrace();
+				}
+			}
 			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
 			{
 				if (order.getRequiredBy().toGregorianCalendar().after(order.getCompletionDate().toGregorianCalendar()))
@@ -140,12 +116,83 @@ public class OrderStatusRpt
 				if (order.getRequiredBy().toGregorianCalendar().before(new Date()))
 					order.setOverdueInDateRange("1");
 			}
-
+			
 			orders.add(order);
-			logger.info("Order: " + title.getTitle() + " " + title);
 		}
 		return orders;
 	}
+	 
+//	public List<OrderStatus> getReportList (List<EventEntity> events, Date startDate, Date endDate)
+//	{
+//		logger.info("Creating orderStatus list");
+//		List<OrderStatus> orders = new ArrayList<OrderStatus>();
+//		
+//		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+//		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
+//			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
+//			packages.add(currentPack);
+//		}
+//		logger.info("AddOrUpdatePackage messages deserialised, total: " + packages.size());
+//		
+//		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
+//		for (EventEntity material : queryApi.getByEventNameWindow("AddOrUpdateMaterial", MAX)) {
+//			AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(material);
+//			materials.add(currentMaterial);
+//		}
+//		logger.info("AddOrUpdateMaterial messages deserialised, total: " + materials.size());
+//		
+//		for (EventEntity event : events)
+//		{
+//			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+//			
+//			AddOrUpdatePackage matchingPack = new AddOrUpdatePackage();
+//			for (AddOrUpdatePackage pack : packages) 
+//			{
+//				if (pack.getTitleID().equals(title.getTitleID())) {
+//					matchingPack = pack;
+//					logger.info("package found");
+//				}
+//			}
+//			
+//			AddOrUpdateMaterial matchingMaterial = new AddOrUpdateMaterial();
+//			for (AddOrUpdateMaterial material : materials)
+//			{
+//				if (material.getMaterialID().equals(matchingPack.getMaterialID())) {
+//					matchingMaterial = material;
+//					logger.info("material found");
+//				}
+//			}
+//			
+//			OrderStatus order = new OrderStatus();
+//			order.setDateRange(startDate + " - " + endDate);
+//			order.setTitle(title.getTitle());
+//			order.setMaterialID(matchingPack.getMaterialID());
+//			order.setChannels(title.getChannels());
+//			order.setRequiredBy(matchingPack.getRequiredBy());
+//			if (event.getEventName().equals("UnmatchedContentAvailable"))
+//				order.setTaskType("Unmatched");
+//			else
+//				order.setTaskType("Ingest");
+//			order.setCompletionDate(matchingMaterial.getCompletionDate());
+//			
+//			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
+//			{
+//				if (order.getRequiredBy().toGregorianCalendar().after(order.getCompletionDate().toGregorianCalendar()))
+//					order.setCompletedInDateRange("1");
+//				else
+//					order.setOverdueInDateRange("1");
+//			}
+//			else if (order.getRequiredBy() != null)
+//			{
+//				if (order.getRequiredBy().toGregorianCalendar().before(new Date()))
+//					order.setOverdueInDateRange("1");
+//			}
+//
+//			orders.add(order);
+//			logger.info("Order: " + title.getTitle() + " " + title);
+//		}
+//		return orders;
+//	}
 	
 	private void createCsv(List<OrderStatus> titles, String reportName)
 	{
