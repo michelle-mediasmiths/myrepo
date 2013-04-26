@@ -67,7 +67,8 @@ public class UnmatchedJobHandler extends JobHandler
 					if(StringUtils.isEmpty(currenttitle)){		
 						try
 						{
-							String fileName = getFileName((String) material.getAttribute(Attribute.ASSET_ID));
+							String fileName = material.getAttributeAsString(Attribute.SERIES_TITLE);
+							log.debug("SERIES_TITLE : "+fileName);
 							updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
 						}
 						catch (Exception e)
@@ -107,23 +108,6 @@ public class UnmatchedJobHandler extends JobHandler
 				}
 			}
 		}
-	}
-
-	private String getFileName(String assetID)
-	{
-		String path;
-		try
-		{
-			path = materialController.getAssetPath(assetID);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("error getting path to file for asset "+ assetID);
-			return "";
-		}
-		
-		return FilenameUtils.getName(path);
-		
 	}
 
 	@Override
