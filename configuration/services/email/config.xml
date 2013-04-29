@@ -5,9 +5,9 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>AutoQCFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>Auto QC Fail in MAM: TaksId(%s), TitleId(%s), Title(%s)</subject>
-			<body><![CDATA[Item is on the Auto QC Fail worklist. Asset(%s).<p/>Please resolve this matter within 90-days otherwise item will be purged without further notification.]]></body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Auto QC Fail in MAM: TaskId(%s), TitleId(%s), Title(%s)</subject>
+			<body><![CDATA[Item has been given a warning state on the QC tasklist. Asset(%s).<p/>Please resolve this matter within 90 days otherwise the item will be purged without further notification.]]></body>
+			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -24,9 +24,9 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>CerifyQCError</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>QC Server Issue: MasterID(%s), Title(%s)</subject>
-			<body>Cerify has not processed this item. Please resolve the cause of issue.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>QC Server Issue: Material ID(%s), Title(%s)</subject>
+			<body>Cerify has not processed this item. Please resolve the cause of the issue.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -37,9 +37,9 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QCProblemwithTCMedia</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>URGENT ISSUE: Quarantined item in MAM MasterID(%s), Title(%s)</subject>
-			<body>Cerify has found an issue with Title (%s), AssetId(%s) so MAM has quarantined it. Please resolve urgently.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>URGENT ISSUE: Quarantined item in MAM Material ID(%s), Title(%s)</subject>
+			<body>Cerify has found an issue with Title (%s), AssetId(%s) so MAM has quarantined it. Please resolve this issue urgently.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -50,11 +50,11 @@
 		<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
-			<subject>Auto QC Fail in MAM: Master ID (%s), Title(%s)</subject>
-			<body>Item called Title(%s), Master ID(%s) is on the Auto QC Fail worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.                                                                                                                                                                                                  
+			<subject>Auto QC Fail in MAM: Material ID (%s), Title(%s)</subject>
+			<body>Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning state. Please resolve this matter within 90 days otherwise item will be purged without further notification.                                                                                                                                                                                                  
 			Dear Promo Producer, please check whether this failed item impacts your promo production work.
 			</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -73,7 +73,7 @@
 			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
 				<subject>Channel conditions found during qc for material %s</subject>
 				<body>Channel conditions were reported for this material during QC, it will be sent to Cerify</body>
-				<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+				<emailaddresses> 
 					<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 					<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -90,9 +90,9 @@
 			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 			<eventname>ChannelConditionsFoundInRuzzXml</eventname>
 			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.channelconditions.ChannelConditionEmailTemplater">
-				<subject>Channel conditions found in companion xml for material %s</subject>
-				<body>Channel conditions were present in this material's ruzz companion xml, it has been marked as requiring auto qc once ingest completes</body>
-				<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+				<subject>Channel conditions found in companion XML for material %s</subject>
+				<body>Channel conditions were present in this material's Ruzz companion XML, it has been marked as requiring auto QC once ingest completes</body>
+				<emailaddresses> 
 					<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 					<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 					<emailaddress>GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -110,9 +110,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>FailedInSendtoTX</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>URGENT ISSUE: TX transcode failed MasterId(%s) Title(%s)</subject>
-			<body>Item remains on send-to-TX list and has not transcoded and has not transferred to play out. Please resolve URGENTLY.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>URGENT ISSUE: TX transcode failed Material ID(%s) Title(%s)</subject>
+			<body>Item remains on the TX Delivery tasklist but it has not been transcoded and has therefore not been transferred to play out. Please resolve URGENTLY.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -123,9 +123,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>PublicityFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>Master(%s), Title(%s). Publicity transcode failed in MAM.</subject>
-			<body>Item has failed Publicity transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Master(%s), Title(%s). The Publicity transcode failed.</subject>
+			<body>Item has failed Publicity transcode, therefore it has not been created or sent to the external location.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -134,9 +134,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>Transcoded</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>MasterId(%s) TitleId(%s). 3rd Party proxy item sent to external location.</subject>
-			<body>Item is located at the export folder.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Material ID(%s) TitleId(%s). Proxy item has been sent to the external location.</subject>
+			<body>Item is located in the export folder.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -145,9 +145,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>CaptionProxySuccess</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>MasterId(%s) TitleId(%s). Caption proxy item sent to external location</subject>
-			<body>Item is located %s.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Material ID(%s) TitleId(%s). The Caption proxy has been sent to the external location</subject>
+			<body>Item is located here: %s.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -156,9 +156,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>CaptionProxyFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>URGENT: MasterId(%s) TitleId(%s). Caption proxy transcode failed in MAM.</subject>
-			<body>Item has failed Caption proxy transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>URGENT: Material ID(%s) TitleId(%s). Caption proxy transcode failed in MAM.</subject>
+			<body>Item has failed Caption proxy transcode, therefore has not been created or sent to the external location.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -167,9 +167,9 @@
         <namespace>http://www.foxtel.com.au/ip/tc</namespace>
         <eventname>PublicityProxySuccess</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-            <subject>MasterId(%s) Title(%s). Publicity proxy item sent to external location</subject>
-            <body>Item is located %s.</body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+            <subject>Material ID(%s) Title(%s). Publicity proxy item sent to the external location</subject>
+            <body>Item is located here: %s.</body>
+            <emailaddresses> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
@@ -178,9 +178,9 @@
         <namespace>http://www.foxtel.com.au/ip/tc</namespace>
         <eventname>PublicityProxyFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-            <subject>URGENT: MasterId(%s) Title(%s). Publicity proxy transcode failed in MAM.</subject>
-            <body>Item has failed Compliance proxy transcode, therefore has not been created or sent to external location.</body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+            <subject>URGENT: Material ID(%s) Title(%s). Publicity proxy transcode failed in MAM.</subject>
+            <body>Item has failed Compliance proxy transcode, therefore has not been created or sent to the external location.</body>
+            <emailaddresses> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
@@ -189,9 +189,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ClassificationProxySuccess</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>MasterId(%s) Title(%s). Classification proxy item sent to external location</subject>
-			<body>Item is located %s.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Material ID(%s) Title(%s). Classification proxy item sent to the external location</subject>
+			<body>Item is located here: %s.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -200,9 +200,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ClassificationProxyFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>MasterId(%s) Title(%s). Classification proxy transcode failed in MAM.</subject>
-			<body>Item has failed Classification transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Material ID(%s) Title(%s). Classification proxy transcode failed in MAM.</subject>
+			<body>Item has failed Classification transcode, therefore has not been created or sent to the external location.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -211,9 +211,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>ExportFailure</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>Title(%s), MediaId(%s). 3rd Party proxy transcode failed in MAM.</subject>
-			<body>>Item has failed 3rd Party transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Title(%s), Material ID(%s). Proxy transcode failed in MAM.</subject>
+			<body>>Item has failed to transcode, therefore has not been created or sent to the external location.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -222,9 +222,9 @@
 		<namespace>http://www.foxtel.com.au/ip/tc</namespace>
 		<eventname>TCFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata.TcNotificationEmailTemplate">
-			<subject>TX transcode failed: MasterId(%s) Title(%s)</subject>
-			<body>Item remains on "send to TX" list and has not transcoded and has not transfered to play out. Please resolve URGENTLY.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>TX transcode failed: Material ID(%s) Title(%s)</subject>
+			<body>Item remains on "send to TX" list and has not transcoded and has not been transferred to play out. Please resolve URGENTLY.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -236,7 +236,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.PurgeEmailTemplate">
 			<subject>%s (%s) Purge Not Processed</subject>
 			<body>Purge request not processed, as item is "MAM Protected"</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress channelGroup="LS">GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="FC">GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="GE">GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
@@ -253,7 +253,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ManualPurgeEmailTemplate">
 			<subject>%s (%s) Manual Purge Actioned.</subject>
 			<body>Item will be deleted from MAM in 24 hours. Purge was initiated on %s.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
@@ -267,9 +267,9 @@
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
 		<eventname>PreviewFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
-			<subject>Preview Fail Item in MAM: MediaId(%s) Title(%s)</subject>
-			<body><![CDATA[There is a new item on the Preview Fail worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Preview Fail Item in MAM: Material ID(%s) Title(%s)</subject>
+			<body><![CDATA[There is an asset that has been marked as failed on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
+			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -293,9 +293,9 @@
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
 		<eventname>PreviewPassedReorder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
-			<subject>Pass-Reorder Item in MAM: MediaId(%s) Title(%s)</subject>
-			<body><![CDATA[There is a new item on the Pass-Reorder worklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Pass-Reorder Item in MAM: Material ID(%s) Title(%s)</subject>
+			<body><![CDATA[There is an asset that has been marked as pass & reorder on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
+			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -304,6 +304,7 @@
 				<emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -311,9 +312,9 @@
         <namespace>http://www.foxtel.com.au/ip/preview</namespace>
         <eventname>PreviewFixReorder</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
-            <subject>Fix-Reorder Item in MAM: MediaId(%s) Title(%s)</subject>
+            <subject>Fix-Reorder Item in MAM: Material ID(%s) Title(%s)</subject>
             <body><![CDATA[This item has been marked as fix and reorder.<p/> Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+            <emailaddresses>
                 <emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
                 <emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="LS">GS-MAM_LS_Promo@foxtel.com.au</emailaddress>
@@ -322,6 +323,7 @@
                 <emailaddress channelGroup="AO">GS-MAM_AO_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
     </MailData>
@@ -329,9 +331,9 @@
 		<namespace>http://www.foxtel.com.au/ip/preview</namespace>
 		<eventname>PreviewFurtherAnalysis</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
-			<subject>MediaId(%s) Title(%s) Further Analysis required.</subject>
-			<body>Item needs Further Analysis and has been placed on the Further Analysis worklist. Please resolve issue.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<subject>Material ID(%s) Title(%s) Further Analysis required.</subject>
+			<body>Item needs Further Analysis and has been had its status raised to Escalated on the Preview tasklist. Please resolve this issue.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress> 
 				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
@@ -350,8 +352,8 @@
 		<eventname>DeliveryFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
 			<subject>PackageId(%s) TaskId(%s). Delivery Failed</subject>
-			<body>Item has failed 3rd Party transcode, therefore has not been created or sent to external location.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<body>Item has failed the transcode, therefore has not been created or sent to external location.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -362,8 +364,8 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.DeliveryDetailsEmailTemplate">
 			<subject>PackageId(%s) TaskId(%s). Delivered
 			</subject>
-			<body>Item is delivered to stage  %s.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<body>Item is located here: %s.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -375,7 +377,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.CommErrorNotificationEmailTemplate">
 			<subject>URGENT: MAM COMMUNICATION FAILURE</subject>
 			<body>MAM is trying to communicate with an interfacing system. no response has been since %s period</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -384,9 +386,9 @@
 		<namespace>http://www.foxtel.com.au/ip/system</namespace>
 		<eventname>ComplianceLoggingMarker</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.ComplianceLoggingMarkerEmailTemplate">
-			<subject>MediaId(%s) Title(%s). Extract of Marked Up item</subject>
+			<subject>Material ID(%s) Title(%s). Extract of Marked Up item</subject>
 			<body><![CDATA[Marked up item details can be found below:<p/> %s]]></body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -394,11 +396,11 @@
 	<!-- Content -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>ContentWithoutMasterID</eventname>
+		<eventname>ContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Unmatched Item in MAM: File(%s) missing</subject>
-			<body>There is a new item on the Unmatched worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -410,8 +412,8 @@
 		<eventname>PlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Unmatched Item in MAM:  File(%s) ID is missing</subject>
-			<body>>There is a new item on the Unmatched worklist. Please resolve this matter within 90-days otherwise item will be purged without further notification.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 			</emailaddresses>
@@ -423,7 +425,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Placeholder File(%s) already has media</subject>
 			<body>Media already exists for this placeholder (%s). Check item and contact ESS.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Preview@foxtel.com.au</emailaddress>
@@ -437,7 +439,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome import has failed for AssetId(%s), JobId(%s).</subject>
 			<body>Item has failed to successfully auto-import to Ardome.</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -450,7 +452,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome import has failed, for AssetId(%s), JobId(%s)</subject>
 			<body>Item has failed to successfully auto-import to Ardome</body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -463,7 +465,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome import has failed for Media File with AssetId(%s), JobId(%s)</subject>
 			<body>Item has failed to successfully auto-import to Ardome </body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -476,7 +478,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
 			<subject>Ardome EMERGENCY import has failed for AssetId(%s), JobId(%s)</subject>
 			<body>Item has failed to successfully auto-import to Ardome </body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_AO_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
@@ -489,7 +491,7 @@
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>A material exchange message has arrived with an unexpected delivery version for material File(%s)</subject>
 			<body>A material exchange message has arrived with an unexpected delivery version for material %s </body>
-			<emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
@@ -500,7 +502,7 @@
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
             <subject>A material exchange message has been quarantined File(%s)</subject>
             <body>A material exchange has arrived to the wrong location: it has been quarantined to %s. </body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+            <emailaddresses>
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
                 <emailaddress>GS-MAM_AO_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -511,9 +513,9 @@
         <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
         <eventname>BMSFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
-            <subject>A BMS Message Fails because %s, during BMS(%s), MediaId(%s), Title(%s)</subject>
+            <subject>A BMS Message Fails because %s, during BMS(%s), Material ID(%s), Title(%s)</subject>
             <body>BMS Message Failure.</body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress> 
+            <emailaddresses> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
@@ -522,9 +524,9 @@
         <namespace>"http://www.foxtel.com.au/ip/bms"</namespace>
         <eventname>IBMSRollBackDeleteMaterialFails</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
-            <subject>IBMS Transaction could not delete material with ID MaterialId(%s)</subject>
+            <subject>IBMS Transaction could not delete material with ID Material ID(%s)</subject>
             <body>IBMS Placeholder message rollback failure. It is URGENT this material is deleted manually as automated delete has failed.</body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+            <emailaddresses>
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
@@ -535,7 +537,7 @@
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.BMSErrorEmailTemplate">
             <subject>IBMS Transaction could not delete title with ID titleId(%s)</subject>
             <body>IBMS Placeholder message rollback failure. It is URGENT this title is deleted manually as automated delete has failed.</body>
-            <emailaddresses><emailaddress>terry.harmer@mediasmiths.com</emailaddress>
+            <emailaddresses>
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
