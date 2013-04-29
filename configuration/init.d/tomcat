@@ -45,6 +45,7 @@ case "$1" in
   			if [ "${owner}" = "$(hostname)" ] ;
   			then
   				#I own the virtual ip it's ok to start (it also means we are already running)
+  				echo $(date) "- Start called but I am already running" | tee -a ${LOG_FILE}
 				exec "$TOMCAT_DIR/bin/start.sh"
 			else
 				echo $(date) "- Refusing to start, Tomcat appears to be running on ${owner}" | tee -a ${LOG_FILE}
