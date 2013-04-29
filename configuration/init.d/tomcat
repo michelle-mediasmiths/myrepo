@@ -12,12 +12,8 @@
 # Author: Peter Wright
 #
 # Updated : 29/04/13 Bryce Mcleod
-#			- Refuse to start if this machine does not own the configured virtual ip
 #           - When stopping be polite at first (call stop.sh) wait a while, if tomcat hasn't stopped then don't be so polite (call kill.sh)
 #
-
-VIRTUAL_IP="10.111.224.213"
-VIRTUAL_IP_DEVICE="bond0"
 
 LOG_FILE="/var/log/mediasmiths/tomcatservice.log"
 
@@ -32,22 +28,7 @@ case "$1" in
   debug)
 	exec "$TOMCAT_DIR/bin/debug.sh"
 	;;
-  start)
-  
-	#check if we own the virtual ip address for the service
-	ifconfig ${VIRTUAL_IP_DEVICE} | grep "inet ${VIRTUAL_IP}" > /dev/null		
-	#return code from grep will be zero if the address is present in the output of ifconfig [device]
-  	
-  	if [ $? -gt 0 ];
-  	then
-  		echo $(date) "- I don't seem to own the address ${VIRTUAL_IP} on device ${VIRTUAL_IP_DEVICE}, cowardly refusing to start" | tee -a ${LOG_FILE}
-  		exit 1
-  	else  
-		exec "$TOMCAT_DIR/bin/start.sh"
-	fi
-	
-	;;
-	restart|force-reload)
+  start|restart|force-reload)
 		exec "$TOMCAT_DIR/bin/start.sh"
 	;;
   stop)
