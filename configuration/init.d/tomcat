@@ -13,12 +13,15 @@
 #
 # Updated : 29/04/13 Bryce Mcleod
 #           - When stopping be polite at first (call stop.sh) wait a while, if tomcat hasn't stopped then don't be so polite (call kill.sh)
+#			- Try and determine if tomcat is already running on the virtual ip on a different machine, refuse to start if that appears to be the case
 #
 
 LOG_FILE="/var/log/mediasmiths/tomcatservice.log"
 
 export TOMCAT_DIR="/opt/ipwf/applications/apache-tomcat-7.0.32"
 export JAVA_HOME=/opt/java/jdk1.7.0_09
+
+VIRTUAL_IP=10.111.224.213
 
 # Do NOT "set -e"
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
@@ -28,7 +31,33 @@ case "$1" in
   debug)
 	exec "$TOMCAT_DIR/bin/debug.sh"
 	;;
-  start|restart|force-reload)
+  start)
+  		#***** webapps/ROOT/index.html on the tomcat instances are set to the hostname of the machine they are on ***** 
+  		
+  		#try to connect to VIRTUAL_IP:8080 to look for a running tomcat
+		#use a short timeout as in a failover scenario we wont get a response
+  		owner=$(curl --connect-timeout 1 ${VIRTUAL_IP}:8080)
+  		
+  		if [ $? -eq 0 ] ;
+  		then
+  			#connected to tomcat and got a response
+  			
+  			if [ "${owner}" = "$(hostname)" ] ;
+  			then
+  				#I own the virtual ip it's ok to start
+				exec "$TOMCAT_DIR/bin/start.sh"
+			else
+				echo $(date) "- Refusing to start, Tomcat appears to be running on ${owner}" | tee -a ${LOG_FILE}
+				exit 1
+  			fi
+  			
+		else
+			#timed out or request failed assume its ok to start up		
+			exec "$TOMCAT_DIR/bin/start.sh"
+  		fi
+  		
+  	;;
+  restart|force-reload)
 		exec "$TOMCAT_DIR/bin/start.sh"
 	;;
   stop)
