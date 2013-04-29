@@ -44,6 +44,10 @@ public enum FoxtelGroups
 	GS_MAM_AO_Conforming("GS-MAM_AO_Conforming"),
 	GS_MAM_AO_Publicity("GS-MAM_AO_Publicity"),
 	GS_MAM_FULL_SysAdmin("GS-MAM_FULL_SysAdmin"),
+	GS_MAM_FULL_SuperUser("GS-MAM_FULL_SuperUser"),
+	GS_MAM_AO_SuperUser("GS-MAM_AO_SuperUser"),
+	GS_MAM_FULL_TechAdmin("GS-MAM_FULL_TechAdmin"),
+	GS_MAM_AO_TechAdmin("GS-MAM_AO_TechAdmin"),
 	admin("admin"),
 	ardendo("ardendo"),
 	Test_Full_Class("Test_Full_Class");
