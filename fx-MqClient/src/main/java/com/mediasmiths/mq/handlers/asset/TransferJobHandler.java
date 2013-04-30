@@ -104,7 +104,6 @@ public class TransferJobHandler extends JobHandler
 		for (AttributeMap task : tasks)
 		{
 			log.info("Tx delivery task found for assetId : " + assetId);
-			Long taskId = task.getAttribute(Attribute.TASK_LIST_ID);
 
 			if (jobStatus.equals(JobStatus.STARTED))
 			{
