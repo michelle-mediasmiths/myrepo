@@ -1129,7 +1129,13 @@ public class MayamPDPImpl implements MayamPDP
 		{
 			final AttributeMap currentAttributes = mapper.deserialize(attributeMapStr);
 			dumpPayload(currentAttributes);
-			defaultValidation(currentAttributes);
+			validateAttributeMap(
+					currentAttributes,
+					Attribute.ASSET_ID,
+					Attribute.ASSET_TYPE,
+					Attribute.ASSET_PEER_ID,
+					Attribute.CONT_RESTRICTED_MATERIAL,
+					Attribute.TASK_UPDATED_BY);
 
 			AttributeMap peerAttributes = client.assetApi().getAsset(
 					AssetType.ITEM,
