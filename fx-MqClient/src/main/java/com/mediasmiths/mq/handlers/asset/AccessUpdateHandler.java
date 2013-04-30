@@ -43,9 +43,8 @@ public class AccessUpdateHandler extends UpdateAttributeHandler
 				List<AttributeMap> openTasks = taskController.getAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetId);
 				for (AttributeMap task: openTasks)
 				{
-					AttributeMap updatedTaskRights = accessRightsController.updateAccessRights(task.copy());
-					AttributeMap updateTask = taskController.updateMapForTask(updatedTaskRights);
-					updateTask.setAttribute(Attribute.ASSET_ACCESS, updatedTaskRights.getAttribute(Attribute.ASSET_ACCESS));
+					AttributeMap updateTask = taskController.updateMapForTask(task);
+					updateTask.setAttribute(Attribute.ASSET_ACCESS, withNewAccessRights.getAttribute(Attribute.ASSET_ACCESS));
 					tasksClient.taskApi().updateTask(updateTask);
 				}
 			}
