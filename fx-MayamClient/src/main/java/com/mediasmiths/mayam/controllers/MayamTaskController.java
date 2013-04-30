@@ -243,6 +243,13 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY,exportButtonAttributes.getAttribute(Attribute.TASK_CREATED_BY));
 		
 		MayamAssetType assetType = MayamAssetType.MATERIAL;
+		
+		AssetType at = (AssetType) exportButtonAttributes.getAttribute(Attribute.ASSET_TYPE);
+		if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
+		{
+			assetType = MayamAssetType.PACKAGE;
+		}
+		
 		String siteId = exportButtonAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID);
 		
 		return createTask(siteId,assetType, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
