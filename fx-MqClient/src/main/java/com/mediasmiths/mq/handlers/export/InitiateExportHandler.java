@@ -536,15 +536,15 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		{
 			case CAPTION_PROXY:
 				{
-					return captionOutputExtension;
+					return String.format(".%s",captionOutputExtension);
 				}
 			case COMPLIANCE_PROXY:
 				{
-					return complianceOutputExtension;
+					return String.format(".%s",complianceOutputExtension);
 				}
 			case PUBLICITY_PROXY:
 				{
-					return publicityOutputExtension;
+					return String.format(".%s",publicityOutputExtension);
 				}
 			case TX:
 				throw new IllegalArgumentException("Unexpected job type");
