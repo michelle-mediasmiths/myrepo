@@ -230,7 +230,7 @@ public class ConformJobHandler extends JobHandler
 	{
 		// Retrieve and close the Fix and Stitch task
 		try {
-			List<AttributeMap> fixAndStitchTasks = taskController.getOpenTasksForAsset(MayamTaskListType.FIX_STITCH_EDIT, MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
+			List<AttributeMap> fixAndStitchTasks = taskController.getOpenTasksForAsset(MayamTaskListType.FIX_STITCH_EDIT, Attribute.HOUSE_ID, materialID);
 	
 			if (fixAndStitchTasks != null && fixAndStitchTasks.size() > 0)
 			{
