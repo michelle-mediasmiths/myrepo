@@ -170,6 +170,8 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
 				{
 					log.warn("Material unavailable or not found on hires storage, attempting to initiate transfer", e);
+					try
+					{
 					materialController.initiateHighResTransfer(requestAttributes);
 					
 					AttributeMap task;
@@ -177,6 +179,17 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 					AttributeMap updateMap = taskController.updateMapForTask(task);
 					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
 					taskController.saveTask(updateMap);
+					}
+					catch (RemoteException e1)
+					{
+						log.error("Error retrieving task to update its status", e1);
+						taskController.setTaskToErrorWithMessage(taskID, "Error retrieving task attributes to update its status");					
+					}
+					catch (MayamClientException e2)
+					{
+						log.error("Error saving task with updated status", e2);
+						taskController.setTaskToErrorWithMessage(taskID, "Error saving task with updated status");	
+					}
 				}
 				else
 				{
