@@ -245,7 +245,7 @@ public class MayamTaskController extends MayamController
 		MayamAssetType assetType = MayamAssetType.MATERIAL;
 		
 		AssetType at = (AssetType) exportButtonAttributes.getAttribute(Attribute.ASSET_TYPE);
-		if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
+		if (MayamAssetType.PACKAGE.getAssetType().equals(at))
 		{
 			assetType = MayamAssetType.PACKAGE;
 		}
