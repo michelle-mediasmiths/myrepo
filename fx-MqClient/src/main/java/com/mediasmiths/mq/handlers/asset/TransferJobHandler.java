@@ -32,6 +32,11 @@ public class TransferJobHandler extends JobHandler
 		log.trace(String.format("assetId %s jobStatus %s", assetId, jobStatus.toString()));
 
 		
+		if(assetId==null){
+			log.error("null asset id in tranfer message");
+			return; //no asset id cant do anything
+		}
+		
 		//first reopen tasks for the itme that are in sys_wait state then extend to any packages
 		
 		try
