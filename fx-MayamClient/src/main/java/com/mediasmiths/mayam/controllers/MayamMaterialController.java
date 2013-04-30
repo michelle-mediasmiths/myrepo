@@ -1661,7 +1661,6 @@ public class MayamMaterialController extends MayamController
 			//check if there are any pending tx package tasks with bms information
 			List<AttributeMap> pendingTxTasks = taskController.getOpenTasksForAsset(
 					MayamTaskListType.PENDING_TX_PACKAGE,
-					AssetType.ITEM,
 					Attribute.ASSET_ID,
 					materialAssetID,
 					Collections.<Attribute, Object> singletonMap(
@@ -1678,41 +1677,49 @@ public class MayamMaterialController extends MayamController
 		return false;
 	}
 
-	public void initiateHighResTransfer(AttributeMap messageAttributes)
+	public void initiateHighResTransfer(AttributeMap taskAttributes)
 	{
 		try
 		{
-			String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
-			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
-			
-			AttributeMap assetAttributes = client.assetApi().getAsset(assetType, assetId);
-			String itemAssetId = assetAttributes.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
-			
-			String jobNum = client.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
-		
-			log.warn("Requesting High Res Transfer. Job : " + jobNum);
-			
-			if (messageAttributes.getAttribute(Attribute.TASK_ID) != null)
+			String assetId = taskAttributes.getAttribute(Attribute.ASSET_ID);
+			AssetType assetType = taskAttributes.getAttribute(Attribute.ASSET_TYPE);
+
+			String itemAssetId = null;
+			if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
 			{
-				Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
-				AttributeMap existingTask = taskController.getTask(taskId);
-				existingTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
-				taskController.saveTask(existingTask);
-				
-				log.warn("Setting task to Sys Wait state : " + taskId);
+				// message attributes describe a package
+				itemAssetId = taskAttributes.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
 			}
+			else if (MayamAssetType.MATERIAL.getAssetType().equals(assetType))
+			{
+				// message attributes describe an item
+				itemAssetId = assetId;
+			}
+			else
+			{
+				throw new IllegalArgumentException("Unexpected asset type " + assetType);
+			}
+
+			String jobNum = client.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
+
+			log.warn("Requesting High Res Transfer. Job : " + jobNum);
+			log.warn("Setting task to Sys Wait state : " + taskAttributes.getAttributeAsString(Attribute.TASK_ID));
+
+			AttributeMap updateMap = taskController.updateMapForTask(taskAttributes);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+			taskController.saveTask(updateMap);
 		}
 		catch (RemoteException e)
 		{
 			log.error("error initiating high res transfer", e);
-			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
-			taskController.setTaskToErrorWithMessage(taskId, "Error initiating high res transfer");
+			Long taskId = taskAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskAttributes, "Error initiating high res transfer");
 		}
 		catch (MayamClientException e)
 		{
 			log.error("error saving task to sys wait state", e);
-			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
-			taskController.setTaskToErrorWithMessage(taskId, "Error saving task to sys wait state");
+			Long taskId = taskAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskAttributes, "Error saving task to sys wait state");
 		}
 	}
 

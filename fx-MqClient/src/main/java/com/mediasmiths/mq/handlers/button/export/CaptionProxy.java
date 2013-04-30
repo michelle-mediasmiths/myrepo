@@ -10,14 +10,6 @@ import org.apache.log4j.Logger;
 
 public class CaptionProxy extends ExportProxyButton
 {
-
-	@Inject
-	@Named("export.caption.path.prefix")
-	private String outputPath;
-	@Inject
-	@Named("export.caption.extention")
-	private String outputExtension;
-	
 	private final static Logger log = Logger.getLogger(CaptionProxy.class);	
 	
 	@Override
@@ -31,24 +23,6 @@ public class CaptionProxy extends ExportProxyButton
 	public String getName()
 	{
 		return getJobType().getText();
-	}
-
-	@Override
-	protected String getTranscodeDestination(AttributeMap materialAttributes)
-	{
-		return outputPath;
-	}
-
-	@Override
-	protected TCOutputPurpose getPurpose()
-	{
-		return TCOutputPurpose.CAPTIONING;
-	} 
-
-	@Override
-	protected String getOutputFileExtension()
-	{
-		return String.format(".%s",outputExtension);
 	}
 
 	@Override

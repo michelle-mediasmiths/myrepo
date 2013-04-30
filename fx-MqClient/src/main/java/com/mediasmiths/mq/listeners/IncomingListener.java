@@ -39,6 +39,7 @@ import com.mediasmiths.mq.handlers.button.export.ComplianceProxy;
 import com.mediasmiths.mq.handlers.button.export.PublicityProxy;
 import com.mediasmiths.mq.handlers.compliance.ComplianceEditingHandler;
 import com.mediasmiths.mq.handlers.compliance.ComplianceLoggingHandler;
+import com.mediasmiths.mq.handlers.export.InitiateExportHandler;
 import com.mediasmiths.mq.handlers.fixstitch.ConformJobHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
@@ -172,6 +173,8 @@ public class IncomingListener extends MqClientListener
 	IngestCompleteHandler ingestCompleteHandler;
 	@Inject
 	PurgeTaskUpdateForUnmatchedHandler purgeTaskUpdateForUnmatchedHandler;
+	@Inject
+	InitiateExportHandler initiateExportHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
 	{
@@ -247,6 +250,7 @@ public class IncomingListener extends MqClientListener
 		passEventToHandler(taskCreateHandler, messageAttributes);
 		passEventToHandler(initiateQcHandler, messageAttributes);
 		passEventToHandler(initiateTxHandler, messageAttributes);
+		passEventToHandler(initiateExportHandler, messageAttributes);
 		passEventToHandler(previewTaskCreateHandler, messageAttributes);
 		passEventToHandler(unmatchedTaskCreate, messageAttributes);
 
@@ -290,8 +294,9 @@ public class IncomingListener extends MqClientListener
 				passEventToHandler(fixAndStitchCancelHandler, currentAttributes);
 				passEventToHandler(segmentationHandler, currentAttributes);
 				passEventToUpdateHandler(purgeCandidateExtendHandler, currentAttributes, beforeAttributes, afterAttributes);
-				//initiate tx handler is present for both task create and state change in order to enable 'retry'
+				//initiate tx handler, export and qc is present for both task create and state change in order to enable 'retry'
 				passEventToHandler(initiateTxHandler, currentAttributes);
+				passEventToHandler(initiateExportHandler, currentAttributes);
 				passEventToHandler(initiateQcHandler, currentAttributes);
 			}
 		}

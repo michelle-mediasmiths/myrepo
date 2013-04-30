@@ -149,17 +149,17 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			catch (PackageNotFoundException pnfe)
 			{
 				log.error("package not found when attempting to initiate tx delivery!", pnfe);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 			}
 			catch (UnsupportedEncodingException e)
 			{
 				log.error("error invoking tx delivery", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 			}
 			catch (JAXBException e)
 			{
 				log.error("error invoking tx delivery", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 			}
 			catch (MayamClientException e)
 			{
@@ -167,7 +167,7 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				if (MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED.equals(e.getErrorcode()))
 				{
 					log.error("Error getting material's location", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Error getting material's location");
+					taskController.setTaskToErrorWithMessage(messageAttributes, "Error getting material's location");
 				}
 				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
 						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
@@ -178,13 +178,13 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				else
 				{
 					log.error("error initiating tx delivery", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+					taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 				}
 			}
 			catch (MuleException e)
 			{
 				log.error("error initiating tx delivery",e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating tx workflow");
+				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
 			}
 
 		}

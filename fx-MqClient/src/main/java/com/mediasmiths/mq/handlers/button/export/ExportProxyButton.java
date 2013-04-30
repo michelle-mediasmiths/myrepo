@@ -1,13 +1,8 @@
 package com.mediasmiths.mq.handlers.button.export;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-import org.mule.api.MuleException;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -15,30 +10,15 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.StringList;
-import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
-import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
-import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
-import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
-import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
-import com.mediasmiths.foxtel.tc.rest.api.TCLocation;
-import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
-import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
-import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
-import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
-import com.mediasmiths.foxtel.wf.adapter.model.InvokeExport;
 import com.mediasmiths.mayam.MayamAssetType;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.button.ButtonClickHandler;
 import com.mediasmiths.mule.worflows.MuleWorkflowController;
-
-import com.mediasmiths.foxtel.ip.common.events.ExportStart;
-import com.mediasmiths.foxtel.ip.event.EventService; 
 
 public abstract class ExportProxyButton extends ButtonClickHandler
 {
@@ -66,17 +46,16 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	@Inject
 	protected ChannelProperties channelProperties;
-	
+
 	@Inject
 	private EventService eventService;
-	
+
 	@Inject
 	private TranscodePriorities transcodePriorities;
-	
+
 	@Override
 	protected void buttonClicked(AttributeMap requestAttributes)
 	{
-
 		// asset could be an item, could be a segmentlist
 		AssetType assetType = requestAttributes.getAttribute(Attribute.ASSET_TYPE);
 
@@ -86,8 +65,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 		{
+			log.debug("export is for a package");
 			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			materialAttributes = materialController.getMaterialAttributes(materialID);
+		}
+		else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
+		{
+			materialAttributes = requestAttributes;
 		}
 		else
 		{
@@ -100,158 +84,18 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 		if (!isAO)
 		{
 
-			String outputFileName = (String) requestAttributes.getAttribute(Attribute.OP_FILENAME);
-			String buglocation = (String) requestAttributes.getAttribute(Attribute.VISUAL_BUG);
-			String timecodePosition = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
-			String timecodeColour = (String) requestAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
-
-			StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
 			String materialID = (String) materialAttributes.getAttribute(Attribute.HOUSE_ID);
-			String packageID = (String ) requestAttributes.getAttribute(Attribute.HOUSE_ID);
-			boolean isSurround = AssetProperties.isMaterialSurround(materialAttributes);
-			boolean isSD = AssetProperties.isMaterialSD(materialAttributes);
-
-			// If 'No Bug' has been selected then ignore any text in the bug location field
-			Boolean noBug = requestAttributes.getAttribute(Attribute.VISUAL_BUG_FLAG);
-			log.debug("visual bug flag: " + requestAttributes.getAttributeAsString(Attribute.VISUAL_BUG_FLAG));
-			log.debug("buglocation : " + buglocation);
-			if (noBug != null && (noBug.booleanValue() == true))
-			{
-				log.debug("'no bug' option was selected");
-				buglocation = null;
-			}
-			log.debug("buglocation : " + buglocation);
-
-			String title = (String) materialAttributes.getAttribute(Attribute.ASSET_TITLE);
-
-			Date firstTX = (Date) requestAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
-			if (firstTX == null)
-			{
-				log.warn("null firstTX date!");
-			}
 
 			// create export task
-			long taskID;
 			try
 			{
-				taskID = createExportTask(materialID, requestAttributes, materialAttributes, getJobType());
+				long taskID = createExportTask(requestAttributes, getJobType());
 			}
 			catch (MayamClientException e1)
 			{
 				log.error("error creating export task", e1);
 				return;
 			}
-
-			// construct transcode job parameters
-			TCJobParameters jobParams;
-			try
-			{
-				jobParams = jobParams(
-						isSurround,
-						isSD,
-						outputFileName,
-						buglocation,
-						timecodePosition,
-						timecodeColour,
-						channels,
-						materialID,
-						materialAttributes,
-						taskID,
-						firstTX);
-			}
-			catch (MayamClientException e)
-			{
-				if (MayamClientErrorCode.FILE_LOCATON_QUERY_FAILED.equals(e.getErrorcode()))
-				{
-					log.error("Error getting material's location", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Error getting material's location");
-				}
-				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
-						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
-				{
-					log.warn("Material unavailable or not found on hires storage, attempting to initiate transfer", e);
-					try
-					{
-					materialController.initiateHighResTransfer(requestAttributes);
-					
-					AttributeMap task;
-					task = taskController.getTask(taskID);
-					AttributeMap updateMap = taskController.updateMapForTask(task);
-					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
-					taskController.saveTask(updateMap);
-					}
-					catch (RemoteException e1)
-					{
-						log.error("Error retrieving task to update its status", e1);
-						taskController.setTaskToErrorWithMessage(taskID, "Error retrieving task attributes to update its status");					
-					}
-					catch (MayamClientException e2)
-					{
-						log.error("Error saving task with updated status", e2);
-						taskController.setTaskToErrorWithMessage(taskID, "Error saving task with updated status");	
-					}
-				}
-				else
-				{
-					log.error("error constructing job params for export proxy", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Error constructing transcode paramters");
-				}
-	
-				return;
-			}
-			catch (Exception e)
-			{
-				log.error("error constructing job params for export proxy", e);
-				taskController.setTaskToErrorWithMessage(taskID, e.getMessage());
-				return;
-			}
-
-			// invoke export flow
-			try
-			{
-				initiateWorkflow(title, materialID,packageID, jobParams, taskID);
-				ExportStart export = new ExportStart();
-				export.setMaterialID(materialID);
-				export.setChannels(channels.toString());
-				eventService.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportStart", export);
-			}
-			catch (UnsupportedEncodingException e)
-			{
-				log.error("error initiating export workflow", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
-				return;
-			}
-			catch (JAXBException e)
-			{
-				log.error("error initiating export workflow", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
-				return;
-			}
-			catch (MuleException e)
-			{
-				log.error("error initiating export workflow", e);
-				taskController.setTaskToErrorWithMessage(taskID, "Error initiating export workflow");
-				return;
-			}
-
-			// set task to active state
-			try
-			{
-				AttributeMap task;
-				task = taskController.getTask(taskID);
-				AttributeMap updateMap = taskController.updateMapForTask(task);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.ACTIVE);
-				taskController.saveTask(updateMap);
-			}
-			catch (RemoteException e)
-			{
-				log.error("error setting task " + taskID + " to state ACTIVE", e);
-			}
-			catch (MayamClientException e)
-			{
-				log.error("error setting task " + taskID + " to state ACTIVE", e);
-			}
-
 		}
 		else
 		{
@@ -262,245 +106,9 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	protected abstract TranscodeJobType getJobType();
 
-	private void initiateWorkflow(String assetTitle, String materialID, String packageID, TCJobParameters jobParams, long taskID)
-			throws UnsupportedEncodingException,
-			JAXBException,
-			MuleException
+	private long createExportTask(AttributeMap requestAttributes, TranscodeJobType transcodeJobType) throws MayamClientException
 	{
-		InvokeExport ie = new InvokeExport();
-		ie.setAssetID(materialID);
-		ie.setTaskID(taskID);
-		ie.setTcParams(jobParams);
-		ie.setTitle(assetTitle);
-		ie.setCreated(new Date());
-		ie.setJobType(getJobType().getText());
-		ie.setPackageID(packageID);
-
-		mule.initiateExportWorkflow(ie);
+		return taskController.createExportTask(requestAttributes, transcodeJobType.getText());
 	}
-
-	private long createExportTask(
-			String materialID,
-			AttributeMap requestAttributes,
-			AttributeMap materialAttributes,
-			TranscodeJobType transcodeJobType) throws MayamClientException
-	{
-		return taskController.createExportTask(materialID, requestAttributes, materialAttributes, transcodeJobType.getText());
-	}
-
-	private TCJobParameters jobParams(
-			boolean isSurround,
-			boolean isSD,
-			String outputFileName,
-			String buglocation,
-			String timecodePosition,
-			String timecodeColour,
-			StringList channels,
-			String materialID,
-			AttributeMap materialAttributes,
-			long taskID,
-			Date firstTX) throws MayamClientException
-	{
-		TCJobParameters jobParams = new TCJobParameters();
-		String channel = null;
-
-		// get the first channel
-		if (channels != null && channels.get(0) != null)
-		{
-			String firstChannel = channels.get(0);
-			channel = firstChannel;
-		}
-		else
-		{
-			throw new IllegalArgumentException("no channels in asset metadata");
-		}
-
-		log.debug("buglocation: " + buglocation);
-		if (buglocation != null && !buglocation.equals("--"))
-		{
-			TCBugOptions bug = bug(buglocation, channel);
-			jobParams.bug = bug;
-		}
-
-		if (isSurround)
-		{
-			jobParams.audioType = TCAudioType.DOLBY_E;
-		}
-		else
-		{
-			jobParams.audioType = TCAudioType.STEREO;
-		}
-
-		if (isSD)
-		{
-			jobParams.resolution = TCResolution.SD;
-		}
-		else
-		{
-			jobParams.resolution = TCResolution.HD;
-		}
-
-		String separatorAndExtension = getOutputFileExtension();
-
-		if (outputFileName != null)
-		{
-			jobParams.outputFileBasename = outputFileName + separatorAndExtension;
-		}
-		else
-		{
-			jobParams.outputFileBasename = materialID + separatorAndExtension;
-		}
-
-		jobParams.timecode = timecode(timecodeColour, timecodePosition);
-		jobParams.purpose = getPurpose();
-
-		jobParams.priority = getPriority(firstTX);
-
-		jobParams.inputFile = mayamClient.pathToMaterial(materialID,false);
-		jobParams.outputFolder = exportOutputLocation + "/" + taskID;
-
-		jobParams.ftpupload = new TCFTPUpload();
-		jobParams.ftpupload.filename = jobParams.outputFileBasename;
-		jobParams.ftpupload.folder = getTranscodeDestination(materialAttributes);
-		jobParams.ftpupload.user = exportFTPUser;
-		jobParams.ftpupload.password = exportFTPPassword;
-		jobParams.ftpupload.server = exportFTPServer;
-
-		return jobParams;
-	}
-
-	/**
-	 * returns a string to be added to the end of output file name, eg .mpg
-	 * 
-	 * @return
-	 */
-	protected abstract String getOutputFileExtension();
-
-	protected abstract String getTranscodeDestination(AttributeMap materialAttributes);
-
-	private int getPriority(Date firstTx){
-		Integer priority = transcodePriorities.getPriorityForNewTranscodeJob(getJobType(),firstTx).intValue();
-		log.debug("priority is "+priority.intValue());
-		return priority.intValue();
-	}
-
-	protected abstract TCOutputPurpose getPurpose();
-
-	private TCTimecodeOptions timecode(String timecodeColour, String timecodePosition)
-	{
-
-		if (timecodeColour != null && timecodeColour.length() == 3 && timecodePosition != null)
-		{
-			TCTimecodeOptions ret = new TCTimecodeOptions();
-			ret.background = timeCodeColour(timecodeColour.charAt(2));
-			ret.foreground = timeCodeColour(timecodeColour.charAt(0));
-			ret.location = timeCodeLocation(timecodePosition);
-			return ret;
-		}
-		else
-		{
-			log.warn(String.format(
-					"No timecode options specified or timecode options were invalid color: %s position %s",
-					timecodeColour,
-					timecodePosition));
-		}
-
-		return null;
-	}
-
-	private TCLocation timeCodeLocation(String timecodePosition)
-	{
-		if (timecodePosition.equals("Bottom"))
-		{
-			return TCLocation.BOTTOM;
-		}
-		else if (timecodePosition.equals("Top"))
-		{
-			return TCLocation.TOP;
-		}
-
-		throw new IllegalArgumentException("Unknown timecode position " + timecodePosition);
-	}
-
-	private TCTimecodeColour timeCodeColour(char charAt)
-	{
-		if (charAt == 'W' || charAt == 'w')
-		{
-			return TCTimecodeColour.WHITE;
-		}
-		else if (charAt == 'B' || charAt == 'b')
-		{
-			return TCTimecodeColour.BLACK;
-		}
-		else if (charAt == 'T' || charAt == 't')
-		{
-			return TCTimecodeColour.TRANSPARENT;
-		}
-
-		throw new IllegalArgumentException("Unknown timecode colour");
-	}
-
-	private TCBugOptions bug(String buglocation, String channel)
-	{
-		// a bug location has been specified
-		TCBugOptions bug = new TCBugOptions();
-		bug.channel = channel;
-		bug.position = location(buglocation);
-		return bug;
-	}
-
-	private TCLocation location(String location)
-	{
-		if (location.equals("TL"))
-		{
-			return TCLocation.TOP_LEFT;
-		}
-		else if (location.equals("TR"))
-		{
-			return TCLocation.TOP_RIGHT;
-		}
-		else if (location.equals("BL"))
-		{
-			return TCLocation.BOTTOM_LEFT;
-		}
-		else if (location.equals("BR"))
-		{
-			return TCLocation.BOTTOM_RIGHT;
-		}
-		else if (location.equals("T"))
-		{
-			return TCLocation.TOP;
-		}
-		else if (location.equals("B"))
-		{
-			return TCLocation.BOTTOM;
-		}
-
-		throw new IllegalArgumentException("unrecognised bug location");
-	}
-
-	protected String getExportLocationForFirstChannel(AttributeMap materialAttributes)
-	{
-		StringList channels = materialAttributes.getAttribute(Attribute.CHANNELS);
-
-		if (channels.size() == 0)
-		{
-			throw new IllegalArgumentException("no channels found for material, cannot pick export location");
-		}
-
-		String channelTag = channels.get(0);
-		String channelGroup = channelProperties.channelGroupForChannel(channelTag);
-		String exportLocation = channelProperties.exportPathForChannelGroup(channelGroup);
-		return exportLocation;
-
-	}
-
-	protected final static long ONE_DAY = 1000l * 3600l * 24;
-	protected final static long TWO_DAYS = ONE_DAY * 2;
-	protected final static long THREE_DAYS = ONE_DAY * 3;
-	protected final static long SEVEN_DAYS = ONE_DAY * 7;
-	protected final static long EIGHT_DAYS = ONE_DAY * 8;
-	protected final static long TWENTY_THREE_HOURS = 1000l * 3600l * 23;
-	protected final static long FORTY_SEVEN_HOURS = 1000l * 3600l * 47;
 
 }

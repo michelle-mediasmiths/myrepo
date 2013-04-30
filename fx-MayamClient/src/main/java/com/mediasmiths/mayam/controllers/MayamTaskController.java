@@ -78,7 +78,6 @@ public class MayamTaskController extends MayamController
 
 		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(
 				MayamTaskListType.INGEST,
-				MayamAssetType.MATERIAL.getAssetType(),
 				Attribute.HOUSE_ID,
 				materialID);
 		if (openTasksForAsset.isEmpty())
@@ -150,7 +149,7 @@ public class MayamTaskController extends MayamController
 		
 		log.info(String.format("Creating purge candidate task for asset "+siteID));
 		
-		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.PURGE_CANDIDATE_LIST, assetType.getAssetType(), Attribute.HOUSE_ID, siteID);
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.PURGE_CANDIDATE_LIST, Attribute.HOUSE_ID, siteID);
 		
 		Calendar date = Calendar.getInstance();
 		date.add(Calendar.DAY_OF_MONTH, numberOfDays);
@@ -232,7 +231,7 @@ public class MayamTaskController extends MayamController
 	}
 
 	
-	public long createExportTask(String materialID,AttributeMap exportButtonAttributes, AttributeMap materialAttributes, String jobType) throws MayamClientException
+	public long createExportTask(AttributeMap exportButtonAttributes,String jobType) throws MayamClientException
 	{
 			
 		AttributeMap initialAttributes = client.createAttributeMap();
@@ -244,7 +243,9 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY,exportButtonAttributes.getAttribute(Attribute.TASK_CREATED_BY));
 		
 		MayamAssetType assetType = MayamAssetType.MATERIAL;
-		return createTask(materialID,assetType, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
+		String siteId = exportButtonAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID);
+		
+		return createTask(siteId,assetType, MayamTaskListType.EXTENDED_PUBLISHING,initialAttributes);
 	}
 	
 
@@ -679,6 +680,24 @@ public class MayamTaskController extends MayamController
 		}
 	}
 	
+	public void setTaskToErrorWithMessage(AttributeMap taskAttributes, String message){
+		
+		log.info(String.format("Failing task with error message {%s}",message));
+		
+		AttributeMap updateMapForTask = updateMapForTask(taskAttributes);
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		updateMapForTask.setAttribute(Attribute.ERROR_MSG, message);
+		try
+		{
+			saveTask(updateMapForTask);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error setting task to failed state",e);
+			return;
+		}
+	}
+	
 	/**
 	 * Returns tasks for item
 	 * @param taskList
@@ -718,14 +737,13 @@ public class MayamTaskController extends MayamController
 	/**
 	 *  Returns all tasks of the specified type that are not in end states
 	 * @param taskList
-	 * @param assetType
 	 * @param idAttribute
 	 * @param id
 	 * @param equalities - extra equalities to filter on
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id, Map<Attribute, Object> equalities) throws MayamClientException{
+	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList,Attribute idAttribute, String id, Map<Attribute, Object> equalities) throws MayamClientException{
 		log.info(String.format(
 				"Searching for task of type %s for asset %s using id attribute %s",
 				taskList.getText(),
@@ -773,8 +791,8 @@ public class MayamTaskController extends MayamController
 	 * @return
 	 * @throws MayamClientException
 	 */
-	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
-		return getOpenTasksForAsset(taskList, assetType, idAttribute, id, Collections.<Attribute, Object>emptyMap());
+	public List<AttributeMap> getOpenTasksForAsset(MayamTaskListType taskList, Attribute idAttribute, String id) throws MayamClientException{
+		return getOpenTasksForAsset(taskList,idAttribute, id, Collections.<Attribute, Object>emptyMap());
 	}
 	
 	public List<AttributeMap> getAllOpenTasksForAsset( AssetType assetType, Attribute idAttribute, String id) throws MayamClientException{
