@@ -169,8 +169,14 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 				else if (MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE.equals(e.getErrorcode())
 						|| MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION.equals(e.getErrorcode()))
 				{
-					log.error("Material unavailable or not found on hires storage", e);
-					taskController.setTaskToErrorWithMessage(taskID, "Material unavailable or not on Hires storage");
+					log.warn("Material unavailable or not found on hires storage, attempting to initiate transfer", e);
+					materialController.initiateHighResTransfer(requestAttributes);
+					
+					AttributeMap task;
+					task = taskController.getTask(taskID);
+					AttributeMap updateMap = taskController.updateMapForTask(task);
+					updateMap.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+					taskController.saveTask(updateMap);
 				}
 				else
 				{

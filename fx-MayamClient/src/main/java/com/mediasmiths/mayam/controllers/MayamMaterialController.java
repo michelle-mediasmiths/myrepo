@@ -97,6 +97,10 @@ public class MayamMaterialController extends MayamController
 	private String allPreferredPaths;
 
 	@Inject
+	@Named("highres.transfer.location")
+	private String highResTransferLocation;
+	
+	@Inject
 	private FileFormatVerification fileformatVerification;
 
 	@Inject
@@ -1674,6 +1678,43 @@ public class MayamMaterialController extends MayamController
 		return false;
 	}
 
+	public void initiateHighResTransfer(AttributeMap messageAttributes)
+	{
+		try
+		{
+			String assetId = messageAttributes.getAttribute(Attribute.ASSET_ID);
+			AssetType assetType = messageAttributes.getAttribute(Attribute.ASSET_TYPE);
+			
+			AttributeMap assetAttributes = client.assetApi().getAsset(assetType, assetId);
+			String itemAssetId = assetAttributes.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
+			
+			String jobNum = client.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
+		
+			log.warn("Requesting High Res Transfer. Job : " + jobNum);
+			
+			if (messageAttributes.getAttribute(Attribute.TASK_ID) != null)
+			{
+				Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+				AttributeMap existingTask = taskController.getTask(taskId);
+				existingTask.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
+				taskController.saveTask(existingTask);
+				
+				log.warn("Setting task to Sys Wait state : " + taskId);
+			}
+		}
+		catch (RemoteException e)
+		{
+			log.error("error initiating high res transfer", e);
+			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskId, "Error initiating high res transfer");
+		}
+		catch (MayamClientException e)
+		{
+			log.error("error saving task to sys wait state", e);
+			Long taskId = messageAttributes.getAttribute(Attribute.TASK_ID);
+			taskController.setTaskToErrorWithMessage(taskId, "Error saving task to sys wait state");
+		}
+	}
 
 	
 }
