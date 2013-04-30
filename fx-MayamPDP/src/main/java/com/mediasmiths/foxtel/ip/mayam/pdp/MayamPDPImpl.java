@@ -23,6 +23,10 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -133,6 +137,10 @@ public class MayamPDPImpl implements MayamPDP
 	@Named("message.audio.notracks")
 	String messageNoAudioTracks;
 
+	@Inject
+	@Named("message.matching.aomismatch")
+	String matchingAoMismatch;
+	
 
 	// ---------------
 
@@ -1109,6 +1117,47 @@ public class MayamPDPImpl implements MayamPDP
 			return getErrorStatus("PDP Comms Error:  unable to retrieve required data to complete publicityProxy operation");
 		}
 	}
+	
+	@Override
+	@Path("matchallowed")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String matchAllowed(String attributeMapStr) throws RemoteException
+	{
+		try
+		{
+			final AttributeMap currentAttributes = mapper.deserialize(attributeMapStr);
+			dumpPayload(currentAttributes);
+			defaultValidation(currentAttributes);
+
+			AttributeMap peerAttributes = client.assetApi().getAsset(
+					AssetType.ITEM,
+					currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
+
+			// check for AO mismatched
+			// dont want to allow an ao item to be matched to non ao placholder item (or other way round)
+			boolean itemIsAO = AssetProperties.isAO(currentAttributes);
+			boolean peerIsAO = AssetProperties.isAO(peerAttributes);
+
+			if (itemIsAO != peerIsAO)
+			{
+				logger.info(String.format("AO Mismatch between current item (%b) and selected peer (%b)", itemIsAO, peerIsAO));
+				return getErrorStatus(matchingAoMismatch);
+			}
+			else
+			{
+				return okStatus;
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("PDP Comms Error:  unable to retrieve required data to complete match allowed operation", e);
+			return getErrorStatus("PDP Comms Error:  unable to retrieve required data to complete match allowed operation");
+		}
+	}
+
+
 
 	private String getTaskPermissionErrorStatus(PrivilegedOperations operation)
 	{
@@ -1390,6 +1439,5 @@ public class MayamPDPImpl implements MayamPDP
 
 		return composite + "</ul>";
 	}
-
 
 }

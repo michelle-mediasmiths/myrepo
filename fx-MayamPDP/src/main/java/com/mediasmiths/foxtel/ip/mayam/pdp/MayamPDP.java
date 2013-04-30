@@ -160,5 +160,12 @@ public interface MayamPDP
 	@Produces("application/json")
 	@Consumes("application/json")
 	public String fileHeaderVerifyOverride(String attributeMapStr) throws RemoteException;
+	
+	@Path("matchallowed")
+	@POST
+	@Produces("application/json")
+	@Consumes("application/json")
+	public String matchAllowed(String attributeMapStr) throws RemoteException;
+
 
 }
