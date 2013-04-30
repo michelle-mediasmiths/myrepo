@@ -19,9 +19,9 @@ public class QcParallel extends ButtonClickHandler
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
 	{
-		log.info(String.format("QC Parallel clicked for item with house id %s", messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+		log.info(String.format("QC Parallel clicked for item with house id %s setting value to %s", messageAttributes.getAttributeAsString(Attribute.HOUSE_ID), messageAttributes.getAttributeAsString(Attribute.QC_PARALLEL_ALLOWED)));
 		AttributeMap update = taskController.updateMapForAsset(messageAttributes);
-		update.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.TRUE);
+		update.setAttribute(Attribute.QC_PARALLEL_ALLOWED, messageAttributes.getAttribute(Attribute.QC_PARALLEL_ALLOWED));
 		try
 		{
 			tasksClient.assetApi().updateAsset(update);
