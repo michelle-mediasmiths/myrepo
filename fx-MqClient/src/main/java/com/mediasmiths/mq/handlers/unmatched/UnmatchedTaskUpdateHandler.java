@@ -79,11 +79,27 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						currentAttributes.getAttributeAsString(Attribute.HOUSE_ID),
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID)));
 
-				AttributeMap assetAttributes = tasksClient.assetApi().getAsset(
+				AttributeMap peerAttributes = tasksClient.assetApi().getAsset(
 						AssetType.ITEM,
 						currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
-				String targetAsset = assetAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+				
+				//check for AO mismatched
+				//dont want to allow an ao item to be matched to non ao placholder item (or other way round)
+				boolean itemIsAO = AssetProperties.isAO(currentAttributes);
+				boolean peerIsAO = AssetProperties.isAO(peerAttributes); 
+				
+				if (itemIsAO != peerIsAO)
+				{
+					log.info(String.format("AO Mismatch between current item (%b) and selected peer (%b)", itemIsAO, peerIsAO));
+					
+					AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+					updateMap.setAttribute(Attribute.ASSET_PEER_ID, null); //clear the selected peer
+					taskController.saveTask(updateMap);
+					return;
+				}
+
+				String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
 
 				boolean isAssociated = AssetProperties.isMaterialAssociated(currentAttributes);
 
@@ -94,7 +110,7 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 							Attribute.ERROR_MSG,
 							"Cannot match asset to placeholder as placeholder already has media attached");
 					taskController.saveTask(currentAttributes);
-					return;
+					return; //ao mismatch, do not perform matching
 				}
 
 				if (isAssociated)
