@@ -41,10 +41,6 @@ public class UnmatchedMaterialProcessor
 	}
 
 	@Inject
-	@Named("ao.quarrentine.folder")
-	private String aoQuarrentineFolder;
-
-	@Inject
 	public UnmatchedMaterialProcessor(
 			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders, 
 			EventService events)
@@ -64,18 +60,8 @@ public class UnmatchedMaterialProcessor
 		 */
 
 		String sourceFolder = FilenameUtils.getFullPathNoEndSeparator(mxf.getAbsolutePath());
-
-		String destinationFolder;
-
-		if (watchFolders.isAo(sourceFolder))
-		{
-			destinationFolder = aoQuarrentineFolder;
-		}
-		else
-		{
-			destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getAbsolutePath()));
-		}
-
+		String destinationFolder = watchFolders.destinationFor(FilenameUtils.getFullPathNoEndSeparator(mxf.getAbsolutePath()));
+		
 		try
 		{
 			StringBuilder sb = new StringBuilder(destinationFolder);
@@ -113,22 +99,6 @@ public class UnmatchedMaterialProcessor
 
 			// send event
 			events.saveEvent("UnmatchedContentAvailable", destination);
-
-			if (destinationFolder.equals(aoQuarrentineFolder))
-			{
-				try
-				{
-					MediaPickupNotification n = new MediaPickupNotification();
-					n.setFilelocation(aoQuarrentineFolder);
-					n.setTime((new Date()).toString());
-					events.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
-				}
-				catch (Exception e)
-				{
-					logger.error("Unable to send Quarantine event ", e);
-				}
-			}
-
 		}
 		catch (IOException e)
 		{
