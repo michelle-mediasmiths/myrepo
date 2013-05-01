@@ -53,7 +53,7 @@ public class SegmentUtilTest
 			s.setSegmentNumber(1);
 			s.setSegmentTitle("title");		
 			
-			String expected = "1_00:00:00:00_00:00:01:00_00:00:01:00_title\n";
+			String expected = "1_00:00:00:00_00:00:01:01_00:00:01:00_title\n";
 			String actual = SegmentUtil.ruzzSegmentToString(s);
 			System.out.println(actual);
 			assertEquals(expected, actual);
@@ -93,7 +93,7 @@ public class SegmentUtilTest
 			s.setSegmentNumber(1);
 			s.setSegmentTitle("title");		
 			
-			String expected = "00:01:01:14";			
+			String expected = "00:01:01:15";			
 			String actual = SegmentUtil.fillEomAndDurationOfSegment(s).getDuration();
 			assertEquals(expected, actual);
 		}
@@ -202,7 +202,7 @@ public class SegmentUtilTest
 			String actual = SegmentUtil.presentationToHumanString(presentation);
 			System.out.println(actual);
 			
-			String expected = "PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:16_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:15_pack2title1\n2_00:04:01:16_00:01:09:01_00:05:10:17_pack2title2\n\n";
+			String expected = "PACKAGE1\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:01_00:03:01:17_00:04:01:17_title1\n2_00:04:00:01_00:03:10:17_00:07:10:17_title2\n\nPACKAGE2\nN____SOM_______DURATION_____EOM_______TITLE\n1_00:01:00:00_00:03:01:16_00:04:01:15_pack2title1\n2_00:04:01:16_00:01:09:02_00:05:10:17_pack2title2\n\n";
 			
 			System.out.println(expected);
 			//if this test is failing the following may be uncommented to see where the first differnece in the expected and actual strings are
