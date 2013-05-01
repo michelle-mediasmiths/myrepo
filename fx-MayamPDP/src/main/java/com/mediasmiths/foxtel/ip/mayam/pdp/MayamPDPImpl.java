@@ -1057,7 +1057,7 @@ public class MayamPDPImpl implements MayamPDP
 			return getErrorStatus("PDP Comms Error:  unable to retrieve required data to complete complianceProxy operation");
 		}
 	}
-
+	
 	@Override
 	public String captionsProxy(final String attributeMapStr)
 	{
@@ -1072,6 +1072,9 @@ public class MayamPDPImpl implements MayamPDP
 
 			if (permission)
 			{
+				
+				
+				
 				return  okStatus;
 			}
 			else

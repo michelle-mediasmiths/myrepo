@@ -108,6 +108,9 @@
 				<configuration>
 					<includes>
 						<include>**/*FXT*.class</include>
+						<include>**/Test*.java</include>
+						<include>**/*Test.java</include>
+						<include>**/*TestCase.java</include>
 					</includes>
 				</configuration>
 			</plugin>		
