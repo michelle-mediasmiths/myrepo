@@ -652,17 +652,6 @@ public class MayamMaterialController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
 		}
 	}
-
-
-//	@Inject
-//	@Named("segmentation.data.stash.folder")
-//	private String segmentationDataStashPath;
-//	
-//	public String segdataFilePathForMaterial(String materialId)
-//	{
-//		return segmentationDataStashPath+IOUtils.DIR_SEPARATOR+materialId+".xml";
-//	}
-//	
 	
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
