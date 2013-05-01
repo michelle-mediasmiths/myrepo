@@ -20,14 +20,10 @@ public class QcProfileSelector
 	private String incomingSDStereo;
 	@Inject @Named("qc.profile.incoming.sd.surround")
 	private String incomingSDSurround;
-	@Inject @Named("qc.profile.incoming.sd.internal")
-	private String incomingSDInternal;
 	@Inject @Named("qc.profile.incoming.hd.stereo")
 	private String incomingHDStereo;
 	@Inject @Named("qc.profile.incoming.hd.surround")
 	private String incomingHDSurround;
-	@Inject @Named("qc.profile.incoming.hd.internal")
-	private String incomingHDInternal;
 	@Inject @Named("qc.profile.incoming.sd.8audiotrack")
 	private String dartSDInternal;
 	@Inject @Named("qc.profile.incoming.hd.8audiotrack")
