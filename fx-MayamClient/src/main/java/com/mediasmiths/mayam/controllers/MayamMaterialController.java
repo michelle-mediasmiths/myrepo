@@ -124,6 +124,11 @@ public class MayamMaterialController extends MayamController
 
 	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
+		if(material==null){
+			log.warn("Null material object or no house ID, unable to create asset");
+			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
+		}
+		
 		log.info(String.format("Creating Material %s for title %s", material.getMaterialID(),titleID));
 		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
@@ -656,6 +661,12 @@ public class MayamMaterialController extends MayamController
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
 	{
+		if (material == null)
+		{
+			log.warn("Null material object or no house ID, unable to update asset");
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
+		}
+		
 		log.info(String.format("Updating material %s for title %s",material.getMaterialID(), title.getTitleID()));
 		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
@@ -872,6 +883,12 @@ public class MayamMaterialController extends MayamController
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
+		if (material == null)
+		{
+			log.warn("Null material object or no house ID, unable to update asset");
+			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
+		}
+		
 		log.info(String.format("Updating material %s",material.getMaterialID()));
 		
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
