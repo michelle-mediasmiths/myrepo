@@ -20,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
 import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -95,7 +96,12 @@ public class IngestJobHandler extends JobHandler
 			{
 				itemHasIngestTaskJobFinished(jobMessage, assetId, task);
 			}
-			else {
+			else if (jobStatus.equals(JobStatus.ABORTED))
+			{
+				itemHasIngestTaskJobCancelled(jobMessage, assetId, task);
+			}
+			else
+			{
 				log.warn("Ingnoring message due to unknown jobStatus " + jobStatus + " for Ingest task on asset id : " + assetId);
 			}
 		}
@@ -104,35 +110,36 @@ public class IngestJobHandler extends JobHandler
 		}
 	}
 	
-	private void itemHasNoIngestTask(Job jobMessage, String assetId, JobStatus jobStatus)
-			throws MayamClientException{
-	
-		if ( ! jobStatus.equals(JobStatus.FINISHED)){ //if there is no ingest task we not interested in jobs that have not finished
-			log.info("Job has not finished and there is no ingest task, no action taken");
-			return;
-		}
-		
-		AttributeMap material;
+	private void itemHasIngestTaskJobCancelled(Job jobMessage, String assetId, AttributeMap task)
+	{
+		log.info("Ingest was aborted, setting task back to OPEN state");
+		AttributeMap updateMapForTask = taskController.updateMapForTask(task);
+		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 		try
 		{
-			material = materialController.getMaterialByAssetId(assetId);
+			taskController.saveTask(task);
 		}
-		catch (MayamClientException e1)
+		catch (MayamClientException e)
 		{
-			log.error("error fetching asset "+ assetId,e1);
-			return;
+			log.error("error moving ingest task for asset " + assetId + " to open state", e);
+			try
+			{
+				taskController.createWFEErorTask(
+						MayamAssetType.MATERIAL,
+						task.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						"error moving ingest task for asset " + assetId + " to open state");
+			}
+			catch (MayamClientException e1)
+			{
+				log.error("error creating error task", e);
+				// give up
+			}
 		}
+	}
 
-		String contentMaterialType = material.getAttribute(Attribute.CONT_MAT_TYPE);
-		
-		if(contentMaterialType == null){
-			log.warn("No content type set on asset "+assetId);
-		}
-		else if (contentMaterialType.equals(MayamContentTypes.UNMATCHED)) //check if content type is unmatched
-		{
-			log.info("An ingest job has finished for some unmatched content");
-		}
-		
+	private void itemHasNoIngestTask(Job jobMessage, String assetId, JobStatus jobStatus)
+			throws MayamClientException{	
+		log.debug("Asset has no ingest task");		
 	}
 	
 
