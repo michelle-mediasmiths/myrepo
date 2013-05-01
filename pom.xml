@@ -67,6 +67,7 @@
         <module>fx-MailAgentClient</module>
         <module>fx-MayamPDP</module>
         <module>fx-TranscodePriorities</module>
+        <module>fx-ExtendedPublishing</module>
 
     </modules>
 

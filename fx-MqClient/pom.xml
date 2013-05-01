@@ -51,6 +51,12 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-ExtendedPublishing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>com.mayam.wf</groupId>
 			<artifactId>wf-siteconfig</artifactId>
 			<version>${mayam.wf.siteconfig.version}</version>
