@@ -25,26 +25,25 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
-		//ingest task finished, open qc task
+		// ingest task finished, open qc task
 		try
 		{
 			String assetID = messageAttributes.getAttribute(Attribute.HOUSE_ID);
 			String previewStatus = messageAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
-			
-			taskController.createQCTaskForMaterial(assetID, previewStatus,messageAttributes);
-			
-			if (AssetProperties.isQCParallel(messageAttributes)) {
+
+			taskController.createQCTaskForMaterial(assetID, previewStatus, messageAttributes);
+
+			if (AssetProperties.isQCParallel(messageAttributes))
+			{
 				log.info(String.format("QC Parallel is set for item with house id %s, creating preview task for it", assetID));
 				taskController.createPreviewTaskForMaterial(assetID);
 			}
-			
+
 		}
 		catch (Exception e)
 		{
 			log.error("Exception in the Mayam client when creating qc task: ", e);
 		}
-		
-		
 	}
 
 	@Override

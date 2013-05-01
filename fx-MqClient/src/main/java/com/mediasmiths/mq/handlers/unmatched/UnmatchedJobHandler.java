@@ -90,16 +90,10 @@ public class UnmatchedJobHandler extends JobHandler
 					String houseID = material.getAttributeAsString(Attribute.HOUSE_ID);
 					try
 					{
-						List<AttributeMap> tasksForAsset = taskController.getTasksForAsset(
-								MayamTaskListType.QC_VIEW,
-								AssetType.ITEM,
-								Attribute.ASSET_ID,
-								assetId);
-
-						if (tasksForAsset == null || tasksForAsset.isEmpty())
-						{
-							taskController.createQCTaskForMaterial(houseID, null, material);
-						}
+						log.debug("UmatchedJobHandler attempting to create qcTask");
+						//not entirely sure if required or not given that all assets have ingest tasks now
+						//the method being called will guard against addiontional qc tasks being created
+						taskController.createQCTaskForMaterial(houseID, null, material);
 					}
 					catch (MayamClientException e)
 					{

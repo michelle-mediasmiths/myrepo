@@ -99,17 +99,26 @@ public class MayamTaskController extends MayamController
 		if (!MayamPreviewResults.isPreviewPass(previewStatus) && !AssetProperties.isQCPassed(material))
 		{
 
-			log.info(String.format("Creating qc task for asset " + materialID));
+			List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.QC_VIEW, Attribute.HOUSE_ID, materialID);
+			if (openTasksForAsset.isEmpty())
+			{
+				log.debug("no unclosed qc tasks for asset");
+				log.info(String.format("Creating qc task for asset " + materialID));
 
-			AttributeMap initialAttributes = client.createAttributeMap();
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
-			initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
-			initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); // reset qc status when creating new task
-			createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
+				AttributeMap initialAttributes = client.createAttributeMap();
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1_NOTES, "");
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS2_NOTES, "");
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3, QcStatus.TBD);
+				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS3_NOTES, "");
+				initialAttributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD); // reset qc status when creating new task
+				createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.QC_VIEW, initialAttributes);
+			}
+			else
+			{
+				log.info("There is already at least one unclosed qc task for asset, will not create another");
+			}
 		}
 		else
 		{
@@ -182,10 +191,24 @@ public class MayamTaskController extends MayamController
 	}
 
 	
-	public long createUnmatchedTaskForMaterial(String assetID) throws MayamClientException{
-		//Add to Unmatched worklist
-		log.info(String.format("Creating unmatched task for asset "+assetID));
-		return createTask(assetID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
+	public void createUnmatchedTaskForMaterial(String houseID) throws MayamClientException
+	{
+		// Add to Unmatched worklist
+		log.info(String.format("Creating unmatched task for asset " + houseID));
+
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(
+				MayamTaskListType.UNMATCHED_MEDIA,
+				Attribute.HOUSE_ID,
+				houseID);
+		if (openTasksForAsset.isEmpty())
+		{
+			log.debug("no existing unmatched task for asset");
+			createTask(houseID, MayamAssetType.MATERIAL, MayamTaskListType.UNMATCHED_MEDIA);
+		}
+		else
+		{
+			log.info("There is already at least one unclosed unmatched task for asset, will not create another");
+		}
 	}
 	
 	public List<AttributeMap> getUmatchedTasksForItem(String houseID) throws MayamClientException
@@ -434,6 +457,8 @@ public class MayamTaskController extends MayamController
 					throw new MayamClientException(MayamClientErrorCode.FAILURE);
 				}
 
+				log.debug("Created task with id:" + taskID);
+				
 				return taskID.longValue();
 
 			}

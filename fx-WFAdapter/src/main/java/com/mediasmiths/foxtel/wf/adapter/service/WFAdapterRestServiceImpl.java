@@ -133,9 +133,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private String aoXMLFTPDestinationPath;
 
 	@Inject
-	@Named("ao.tx.delivery.ftp.xml.source.path")
-	private String aoXMLFTPSourcePath = "ready/";
-	@Inject
 	@Named("ao.tx.delivery.ftp.gxf.source.path")
 	private String aoGXFFTPSourcePath = "ready/";
 
@@ -598,8 +595,18 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (ao)
 			{
-				// should probably be its own intalio workflow step but doing it here for now
-				return aoFXPtransfer(segmentXmlFile, gxfFile);
+				// ftp xml file
+				boolean segmentxmlTransferred = aoXMLFtp(segmentXmlFile);
+
+				if (segmentxmlTransferred)
+				{
+					// should probably be its own intalio workflow step but doing it here for now
+					return aoFXPtransfer(gxfFile);
+				}
+				else
+				{
+					return false;
+				}
 			}
 
 			return true;
@@ -612,10 +619,34 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	private boolean aoFXPtransfer(File segmentXmlFile, File gxfFile)
+	private boolean aoXMLFtp(File segmentXmlFile)
+	{
+		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
+
+		boolean xmlFtp = Ftp.ftpTransfer(
+				aoXMLFTPDestinationHost,
+				aoXMLFTPDestinationUser,
+				aoXMLFTPDestinationPass,
+				segmentXmlFile.getAbsolutePath(),
+				aoXMLFTPDestinationPath,
+				segmentFileName);
+
+		if (xmlFtp)
+		{
+			log.info("xml upload complete");
+			return true;
+		}
+		else
+		{
+			log.error("xml upload failed");
+			return false;
+		}
+
+	}
+
+	private boolean aoFXPtransfer(File gxfFile)
 	{
 
-		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
 		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
 
 		// upload gxf
