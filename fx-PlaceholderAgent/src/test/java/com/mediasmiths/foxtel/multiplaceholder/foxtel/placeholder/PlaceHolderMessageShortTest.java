@@ -58,12 +58,6 @@ public abstract class PlaceHolderMessageShortTest
 		}
 
 		@Override
-		public boolean isValidFormatForTag(String channelTag, String channelFormat)
-		{
-			return true;
-		}
-
-		@Override
 		public boolean isTagValid(String channelTag)
 		{
 			return true;
