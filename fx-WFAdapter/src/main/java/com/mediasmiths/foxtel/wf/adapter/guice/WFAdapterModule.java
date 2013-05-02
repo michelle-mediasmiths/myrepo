@@ -52,9 +52,9 @@ public class WFAdapterModule extends AbstractModule
 	@Named("outputruzz.serialiser")
 	JAXBSerialiser provideRUZZJAXBSerialiser(@Named("outputruzz.context") JAXBContext context)
 	{
-
-		return JAXBSerialiser.getInstance(context);
-
+		JAXBSerialiser serialiser = JAXBSerialiser.getInstance(context);
+		serialiser.setPrettyOutput(true);
+		return serialiser;
 	}
 
 	@Provides
@@ -79,9 +79,9 @@ public class WFAdapterModule extends AbstractModule
 	@Named("mex.serialiser")
 	JAXBSerialiser provideMEXJAXBSerialiser(@Named("mex.context") JAXBContext context)
 	{
-
-		return JAXBSerialiser.getInstance(context);
-
+		JAXBSerialiser serialiser = JAXBSerialiser.getInstance(context);
+		serialiser.setPrettyOutput(true);
+		return serialiser;
 	}
 	
 	@Provides
