@@ -15,8 +15,12 @@ cp ../fx-report-ui/target/fx-report-ui.war /tmp/bundle
 cp ../fx-MailAgent/target/fx-MailAgent.war /tmp/bundle
 cp ../fx-MayamPDP/target/fx-MayamPDP.war /tmp/bundle/
 
-cd /tmp/bundle
-tar -cvzf mediasmiths-wfe-bundle.tar.gz *
+mkdir /tmp/bundle/config
+rm -r /tmp/bundle/config/*
+
+cp ../configuration/*.properties /tmp/bundle/config
+cp -r ../configuration/services /tmp/bundle/config
+
 
 
 
