@@ -16,12 +16,6 @@ public class ChannelPropertiesStub implements ChannelProperties
 	}
 
 	@Override
-	public boolean isValidFormatForTag(String channelTag, String channelFormat)
-	{
-		return true;
-	}
-
-	@Override
 	public boolean isTagValid(String channelTag)
 	{
 		if ("FOX".equals(channelTag))
