@@ -19,9 +19,6 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 	@Named("channel.names")
 	private PropertyFile channelNames;
 	@Inject
-	@Named("channel.formats")
-	private PropertyFile channelFormats;
-	@Inject
 	@Named("channel.groups")
 	private PropertyFile channelGroupsMap;
 	@Inject
@@ -31,12 +28,6 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 	@Inject
 	public ChannelPropertiesImpl() throws IOException
 	{
-	}
-	
-	public ChannelPropertiesImpl(PropertyFile channelNames, PropertyFile channelFormats)
-	{
-		this.channelNames = channelNames;
-		this.channelFormats = channelFormats;	 
 	}
 	
 	@Override
