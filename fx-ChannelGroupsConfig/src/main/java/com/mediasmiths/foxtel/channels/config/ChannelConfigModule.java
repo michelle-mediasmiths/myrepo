@@ -22,15 +22,6 @@ public class ChannelConfigModule extends AbstractModule
 	{
 		return PropertyFile.find(pathToPropertiesFile);
 	}
-
-	@Provides
-	@Singleton
-	@Named("channel.formats")
-	public PropertyFile provideChannelFormats(@Named("channel.formats.config.location") String pathToPropertiesFile)
-	{
-
-		return PropertyFile.find(pathToPropertiesFile);
-	}
 	
 	@Provides
 	@Singleton

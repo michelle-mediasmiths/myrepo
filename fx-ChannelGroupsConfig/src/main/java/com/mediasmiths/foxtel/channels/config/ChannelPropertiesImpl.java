@@ -46,12 +46,6 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 	}
 
 	@Override
-	public boolean isValidFormatForTag(String channelTag, String channelFormat) {
-		String expectedFormat = channelFormats.get(channelTag);
-		return channelFormat.equals(expectedFormat);
-	}
-
-	@Override
 	public boolean isTagValid(String channelTag)
 	{
 		return channelNames.containsKey(channelTag);

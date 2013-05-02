@@ -41,18 +41,4 @@ public class ChannelValidatorImplTest {
 		when(channelProperties.get(anyString())).thenReturn("failure");
 		assertFalse(validator.isValidNameForTag("channelTag", "success"));	
 	}
-	
-	@Test
-	public void isValidFormatForTagSuccess() 
-	{
-		when(formatProperties.get(anyString())).thenReturn("success");
-		assertTrue(validator.isValidFormatForTag("channelTag", "success"));	
-	}
-	
-	@Test
-	public void isValidFormatForTagFail() 
-	{
-		when(formatProperties.get(anyString())).thenReturn("failure");
-		assertFalse(validator.isValidFormatForTag("channelTag", "success"));	
-	}
 }
