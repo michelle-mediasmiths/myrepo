@@ -14,6 +14,7 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
@@ -141,6 +142,12 @@ public class MayamPDPImpl implements MayamPDP
 	@Named("message.matching.aomismatch")
 	String matchingAoMismatch;
 	
+	@Inject
+	private OutputPaths exPubOutputPaths;
+
+	@Inject(optional = true)
+	@Named("extended.publishing.crs.enabled")
+	private boolean exPubCRsEnabled = false;
 
 	// ---------------
 
@@ -1072,9 +1079,6 @@ public class MayamPDPImpl implements MayamPDP
 
 			if (permission)
 			{
-				
-				
-				
 				return  okStatus;
 			}
 			else
