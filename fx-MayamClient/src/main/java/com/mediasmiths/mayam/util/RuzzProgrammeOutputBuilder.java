@@ -23,6 +23,7 @@ import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.util.Comparators;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -31,6 +32,8 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -93,8 +96,17 @@ public class RuzzProgrammeOutputBuilder
 			s.getSegment().add(rzSeg);
 		}
 
+		//sort by segment number
+		Collections.sort(segments, new Comparator<Segment>()
+		{
+			@Override
+			public int compare(Segment o1, Segment o2)
+			{
+				return Integer.compare(o1.getNumber(), o2.getNumber());
+			}
+		});
+		
 		ret.getSegments().add(s);
-
 		return ret;
 	}
 
@@ -222,7 +234,7 @@ public class RuzzProgrammeOutputBuilder
 		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
 		if (title == null)
 		{
-			programmeDetail.setTitle("No Title set in Metadata.");
+			programmeDetail.setTitle("No Title set )in Metadata.");
 		}
 		else
 		{

@@ -8,6 +8,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.P
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
+import com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
@@ -15,6 +16,8 @@ import com.mediasmiths.std.types.TimecodeRange;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -206,6 +209,20 @@ public class SegmentUtil
 				ret.getSegment().add(meSeg);
 			}
 		}
+		
+		//sort by segment number
+		Collections.sort(ret.getSegment(), new Comparator<SegmentListType.Segment>()
+		{
+
+			@Override
+			public int compare(
+					com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType.Segment o1,
+					com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType.Segment o2)
+			{
+				return Integer.compare(o1.getNumber(), o2.getNumber());
+			}
+
+		});
 
 		return ret;
 	}
