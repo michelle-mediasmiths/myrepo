@@ -15,11 +15,11 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="Pool" bpdm:ID="_0kXf4HE7EeKXOL1w3D1sTw">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" myRole="Pool_for_transcode" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_0kXf4HE7EeKXOL1w3D1sTw:_4lhoMHE7EeKXOL1w3D1sTw, _0kXf4HE7EeKXOL1w3D1sTw:_FxaasHE8EeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndPoolForHttpPortPlkVar" partnerLinkType="diag:transcodeAndPoolForHttpPortPlk" myRole="Pool_for_transcode" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_0kXf4HE7EeKXOL1w3D1sTw:_4lhoMHE7EeKXOL1w3D1sTw, _0kXf4HE7EeKXOL1w3D1sTw:_FxaasHE8EeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_6yMUEHE7EeKXOL1w3D1sTw" bpdm:messageIds="inc:_6xnsUHE7EeKXOL1w3D1sTw,_Gmr10HE8EeKXOL1w3D1sTw"/>
-            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_7Z8QkHE7EeKXOL1w3D1sTw" bpdm:messageIds=" out:_7ZwDUHE7EeKXOL1w3D1sTw,_HA9XAHE8EeKXOL1w3D1sTw">
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_6yMUEHE7EeKXOL1w3D1sTw" bpdm:messageIds="inc:_xLZQkLM0EeKieaePm6sHlw,_ROUagLM1EeKieaePm6sHlw"/>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_7Z8QkHE7EeKXOL1w3D1sTw" bpdm:messageIds=" out:_xtIrsLM0EeKieaePm6sHlw,_RlQ64LM1EeKieaePm6sHlw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="delete:delete_output" bpdm:linkedPart="response" bpdm:binding="delete:restBinding" bpdm:opMsgType="1" bpdm:operation="delete"></bpel:literal>
                 </bpel:from>
@@ -27,15 +27,15 @@
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_4lhoMHE7EeKXOL1w3D1sTw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_6xnsUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_7ZwDUHE7EeKXOL1w3D1sTw"></bpdm:linkset>
+                <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_FxaasHE8EeKXOL1w3D1sTw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_ROUagLM1EeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_0kXf4HE7EeKXOL1w3D1sTw" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_RlQ64LM1EeKieaePm6sHlw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
-                <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_FxaasHE8EeKXOL1w3D1sTw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_Gmr10HE8EeKXOL1w3D1sTw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_0kXf4HE7EeKXOL1w3D1sTw" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_HA9XAHE8EeKXOL1w3D1sTw"></bpdm:linkset>
+                <bpdm:messagingtask operation="delete" partnerLink="transcodeAndPoolForHttpPortPlkVar" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_4lhoMHE7EeKXOL1w3D1sTw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_xLZQkLM0EeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_xtIrsLM0EeKieaePm6sHlw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>

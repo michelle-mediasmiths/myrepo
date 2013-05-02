@@ -21,60 +21,60 @@
     </bpdm:dependencies>
     <bpel:scope bpdm:label="tcadapter" bpdm:ID="_UR5XgHEOEeKgV8mGUipbQA">
         <bpel:partnerLinks>
-            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk1Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk1" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="deleteJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_1oM05XEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
-            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk0Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk0" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="createJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/jobs" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_Yl1R4HEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
-            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk2Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk2" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="queryJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_iLXowHEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
-            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk3Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk3" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="setPriority:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://mamwkf01.mam.foxtel.com.au:8080/fx-TcAdapter/transcoder/job/{guid}/priority?priority=${priority}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_l6KC8aapEeKMKJRBWwHUjA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk0Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk0" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="createJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/jobs" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_Yl1R4HEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk2Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk2" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="queryJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_iLXowHEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk3Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk3" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="setPriority:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}/priority?priority={priority}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_l6KC8aapEeKMKJRBWwHUjA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
+            <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk1Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk1" myRole="tcadapter_for_transcode" bpdm:enableSharing="false" bpdm:providedService="deleteJob:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:providedIsDefault="true" bpdm:clientTasks="_UR5XgHEOEeKgV8mGUipbQA:_1oM05XEOEeKgV8mGUipbQA" bpdm:isManaged="true" bpdm:otherPoolId="_ZRM1AHEMEeKgV8mGUipbQA"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input" binding="createJob:restBinding" operation="createJob" opMsgType="0" bpdm:id="_bGyyxXEOEeKgV8mGUipbQA" bpdm:messageIds="inc:_bGl-cHEOEeKgV8mGUipbQA"/>
-            <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output" binding="createJob:restBinding" operation="createJob" opMsgType="1" bpdm:id="_bZVUQHEOEeKgV8mGUipbQA" bpdm:messageIds=" out:_bZJuEHEOEeKgV8mGUipbQA">
+            <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input" binding="createJob:restBinding" operation="createJob" opMsgType="0" bpdm:id="_SaZv9bMxEeKieaePm6sHlw" bpdm:messageIds="inc:_SaOw0LMxEeKieaePm6sHlw"/>
+            <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output" binding="createJob:restBinding" operation="createJob" opMsgType="1" bpdm:id="_S2cywLMxEeKieaePm6sHlw" bpdm:messageIds=" out:_S2P-cLMxEeKieaePm6sHlw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="createJob:createJob_output" bpdm:linkedPart="response" bpdm:binding="createJob:restBinding" bpdm:opMsgType="1" bpdm:operation="createJob"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input" binding="queryJob:restBinding" operation="queryJob" opMsgType="0" bpdm:id="_jXYv9XEOEeKgV8mGUipbQA" bpdm:messageIds="inc:_jXJfYHEOEeKgV8mGUipbQA"/>
-            <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output" binding="queryJob:restBinding" operation="queryJob" opMsgType="1" bpdm:id="_jsjusHEOEeKgV8mGUipbQA" bpdm:messageIds=" out:_jsVsQHEOEeKgV8mGUipbQA">
+            <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input" binding="queryJob:restBinding" operation="queryJob" opMsgType="0" bpdm:id="_unf31bMxEeKieaePm6sHlw" bpdm:messageIds="inc:_unTqkLMxEeKieaePm6sHlw"/>
+            <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output" binding="queryJob:restBinding" operation="queryJob" opMsgType="1" bpdm:id="_u8WGcLMxEeKieaePm6sHlw" bpdm:messageIds=" out:_u8LuYLMxEeKieaePm6sHlw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="queryJob:queryJob_output" bpdm:linkedPart="response" bpdm:binding="queryJob:restBinding" bpdm:opMsgType="1" bpdm:operation="queryJob"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="deleteJobDeleteJobRequestMsg" messageType="deleteJob:deleteJob_input" binding="deleteJob:restBinding" operation="deleteJob" opMsgType="0" bpdm:id="_217zUHEOEeKgV8mGUipbQA" bpdm:messageIds="inc:_21nqQHEOEeKgV8mGUipbQA"/>
-            <bpel:variable name="deleteJobDeleteJobResponseMsg" messageType="deleteJob:deleteJob_output" binding="deleteJob:restBinding" operation="deleteJob" opMsgType="1" bpdm:id="_3XOigHEOEeKgV8mGUipbQA" bpdm:messageIds=" out:_3W_5AHEOEeKgV8mGUipbQA">
-                <bpel:from>
-                    <bpel:literal bpdm:linkedMessageType="deleteJob:deleteJob_output"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
-            <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input" binding="setPriority:restBinding" operation="setPriority" opMsgType="0" bpdm:id="_mvFf1aapEeKMKJRBWwHUjA" bpdm:messageIds="inc:_muoz4KapEeKMKJRBWwHUjA"/>
-            <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output" binding="setPriority:restBinding" operation="setPriority" opMsgType="1" bpdm:id="_nNsucKapEeKMKJRBWwHUjA" bpdm:messageIds=" out:_nNeE8KapEeKMKJRBWwHUjA">
+            <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input" binding="setPriority:restBinding" operation="setPriority" opMsgType="0" bpdm:id="_ITL9cLMzEeKieaePm6sHlw" bpdm:messageIds="inc:_ITAXQLMzEeKieaePm6sHlw"/>
+            <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output" binding="setPriority:restBinding" operation="setPriority" opMsgType="1" bpdm:id="_Iq3doLMzEeKieaePm6sHlw" bpdm:messageIds=" out:_IqtFkLMzEeKieaePm6sHlw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="setPriority:setPriority_output" bpdm:linkedPart="response" bpdm:binding="setPriority:restBinding" bpdm:opMsgType="1" bpdm:operation="setPriority"></bpel:literal>
+                </bpel:from>
+            </bpel:variable>
+            <bpel:variable name="deleteJobDeleteJobRequestMsg" messageType="deleteJob:deleteJob_input" binding="deleteJob:restBinding" operation="deleteJob" opMsgType="0" bpdm:id="_UhqshbMzEeKieaePm6sHlw" bpdm:messageIds="inc:_Uhbb8LMzEeKieaePm6sHlw"/>
+            <bpel:variable name="deleteJobDeleteJobResponseMsg" messageType="deleteJob:deleteJob_output" binding="deleteJob:restBinding" operation="deleteJob" opMsgType="1" bpdm:id="_U6KsELMzEeKieaePm6sHlw" bpdm:messageIds=" out:_U6AUALMzEeKieaePm6sHlw">
+                <bpel:from>
+                    <bpel:literal bpdm:linkedMessageType="deleteJob:deleteJob_output"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
                 <bpdm:messagingtask operation="createJob" partnerLink="transcodeAndTcadapterForHttpPortPlk0Var" portType="createJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="createJob" bpdm:ID="_Yl1R4HEOEeKgV8mGUipbQA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="createJobCreateJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_input" bpdm:binding="createJob:restBinding" bpdm:ID="_bGl-cHEOEeKgV8mGUipbQA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="createJobCreateJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_output" bpdm:binding="createJob:restBinding" bpdm:ID="_bZJuEHEOEeKgV8mGUipbQA"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="deleteJob" partnerLink="transcodeAndTcadapterForHttpPortPlk1Var" portType="deleteJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="deleteJob" bpdm:ID="_1oM05XEOEeKgV8mGUipbQA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteJobDeleteJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="deleteJob:deleteJob_input" bpdm:binding="deleteJob:restBinding" bpdm:ID="_21nqQHEOEeKgV8mGUipbQA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteJobDeleteJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="deleteJob:deleteJob_output" bpdm:binding="deleteJob:restBinding" bpdm:ID="_3W_5AHEOEeKgV8mGUipbQA"></bpdm:linkset>
-                </bpdm:messagingtask>
-            </bpel:sequence>
-            <bpel:sequence>
-                <bpdm:messagingtask operation="queryJob" partnerLink="transcodeAndTcadapterForHttpPortPlk2Var" portType="queryJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="queryJob" bpdm:ID="_iLXowHEOEeKgV8mGUipbQA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="queryJobQueryJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_input" bpdm:binding="queryJob:restBinding" bpdm:ID="_jXJfYHEOEeKgV8mGUipbQA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="queryJobQueryJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_output" bpdm:binding="queryJob:restBinding" bpdm:ID="_jsVsQHEOEeKgV8mGUipbQA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="createJobCreateJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_input" bpdm:binding="createJob:restBinding" bpdm:ID="_SaOw0LMxEeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="createJobCreateJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="createJob:createJob_output" bpdm:binding="createJob:restBinding" bpdm:ID="_S2P-cLMxEeKieaePm6sHlw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
                 <bpdm:messagingtask operation="setPriority" partnerLink="transcodeAndTcadapterForHttpPortPlk3Var" portType="setPriority:restInterface" isMyRole="true" enableSharing="false" bpdm:label="setPriority" bpdm:ID="_l6KC8aapEeKMKJRBWwHUjA">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="setPrioritySetPriorityRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_input" bpdm:binding="setPriority:restBinding" bpdm:ID="_muoz4KapEeKMKJRBWwHUjA"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="setPrioritySetPriorityResponseMsg" bpdm:msgVarScopeId="_UR5XgHEOEeKgV8mGUipbQA" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_output" bpdm:binding="setPriority:restBinding" bpdm:ID="_nNeE8KapEeKMKJRBWwHUjA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="setPrioritySetPriorityRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_input" bpdm:binding="setPriority:restBinding" bpdm:ID="_ITAXQLMzEeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="setPrioritySetPriorityResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="setPriority:setPriority_output" bpdm:binding="setPriority:restBinding" bpdm:ID="_IqtFkLMzEeKieaePm6sHlw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="queryJob" partnerLink="transcodeAndTcadapterForHttpPortPlk2Var" portType="queryJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="queryJob" bpdm:ID="_iLXowHEOEeKgV8mGUipbQA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="queryJobQueryJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_input" bpdm:binding="queryJob:restBinding" bpdm:ID="_unTqkLMxEeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="queryJobQueryJobResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="queryJob:queryJob_output" bpdm:binding="queryJob:restBinding" bpdm:ID="_u8LuYLMxEeKieaePm6sHlw"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="deleteJob" partnerLink="transcodeAndTcadapterForHttpPortPlk1Var" portType="deleteJob:restInterface" isMyRole="true" enableSharing="false" bpdm:label="deleteJob" bpdm:ID="_1oM05XEOEeKgV8mGUipbQA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteJobDeleteJobRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="deleteJob:deleteJob_input" bpdm:binding="deleteJob:restBinding" bpdm:ID="_Uhbb8LMzEeKieaePm6sHlw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteJobDeleteJobResponseMsg" bpdm:msgVarScopeId="_UR5XgHEOEeKgV8mGUipbQA" bpdm:variableIsManaged="true" bpdm:messageType="deleteJob:deleteJob_output" bpdm:binding="deleteJob:restBinding" bpdm:ID="_U6AUALMzEeKieaePm6sHlw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
