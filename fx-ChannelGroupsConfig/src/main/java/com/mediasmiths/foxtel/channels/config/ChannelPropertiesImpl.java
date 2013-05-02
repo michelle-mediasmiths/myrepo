@@ -26,9 +26,15 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 	private PropertyFile channelGroupsExportPaths;
 	
 	@Inject
-	public ChannelPropertiesImpl() throws IOException
+	public ChannelPropertiesImpl()
 	{
 	}
+	
+	public ChannelPropertiesImpl(PropertyFile channelNames)
+	{
+		this.channelNames=channelNames;
+	}
+	
 	
 	@Override
 	public boolean isValidNameForTag(String channelTag, String channelName) {

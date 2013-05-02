@@ -15,7 +15,6 @@ import com.mediasmiths.std.io.PropertyFile;
 public class ChannelValidatorImplTest {
 	ChannelPropertiesImpl validator;
 	PropertyFile channelProperties;
-	PropertyFile formatProperties;
 	
 	public ChannelValidatorImplTest() {
 		super();
@@ -25,8 +24,7 @@ public class ChannelValidatorImplTest {
 	public void setup()
 	{
 		channelProperties = mock(PropertyFile.class);
-		formatProperties = mock(PropertyFile.class);
-		validator = new ChannelPropertiesImpl(channelProperties, formatProperties);
+		validator = new ChannelPropertiesImpl(channelProperties); 
 	}
 	
 	@Test
