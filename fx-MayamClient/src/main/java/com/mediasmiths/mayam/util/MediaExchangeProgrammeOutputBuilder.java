@@ -213,7 +213,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		 DateTime txDate;
 		 if (targetDate == null)
 		 {
-			 txDate = lastCentury;
+			 txDate = new DateTime(); //MAM-506 if tx first date missing then use the current date
 		 }
 	     else
 		 {
@@ -224,7 +224,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			 catch (Exception e)
 			 {
 				 log.error("Unable to parse date " + targetDate);
-				 txDate = lastCentury;
+				 txDate = new DateTime();
 			 }
 		 }
 		programmeDetail.setDueDate(getGregorian(txDate));
@@ -477,14 +477,11 @@ public class MediaExchangeProgrammeOutputBuilder
 
 		org.joda.time.DateTime pTime = new org.joda.time.DateTime(dateTime);
 
-		return getGregorian(pTime.plusMonths(3));
+		return getGregorian(pTime.plusYears(3));
 
 	}
 
 
 	private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
-
-	private static final org.joda.time.DateTime lastCentury = DEFAULT_DATE_FORMAT.parseDateTime("1900-01-01 00:00:00");
-
 
 }

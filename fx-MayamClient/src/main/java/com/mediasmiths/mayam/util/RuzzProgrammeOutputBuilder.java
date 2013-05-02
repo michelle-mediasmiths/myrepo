@@ -30,6 +30,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
@@ -233,8 +235,9 @@ public class RuzzProgrammeOutputBuilder
 
 		try
 		{
-            if (mayamValue == null)
-	            return getGregorian(lastCentury);
+            if (mayamValue == null){
+	            return getGregorian(new Date());
+            }
 
 			return getGregorian(mayamValue);
 
@@ -242,7 +245,7 @@ public class RuzzProgrammeOutputBuilder
 		catch (Throwable e)
 		{
 			log.error("error setting target date on programme detail for package " + mayamValue, e);
-			return getGregorian(lastCentury);
+			return getGregorian(new Date());
 		}
 	}
 
@@ -371,12 +374,5 @@ public class RuzzProgrammeOutputBuilder
 		return getGregorian(pTime.plusMonths(3));
 
 	}
-
-
 	private static final DateTimeFormatter DEFAULT_DATE_FORMAT = DateTimeFormat.forPattern("YYYY-MM-dd HH:mm:ss");
-
-	private static final org.joda.time.DateTime lastCentury = DEFAULT_DATE_FORMAT.parseDateTime("1900-01-01 00:00:00");
-
-
-
 }
