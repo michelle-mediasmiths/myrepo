@@ -41,9 +41,10 @@ public class WatchedFilesConfigModule extends AbstractModule
 
 		File[] watchedPaths = new File[watchFolders.size()];
 
-		for (int i=0; i<watchFolders.size(); i++)
-		{
-			watchedPaths[i] = new File(watchFolders.get(i).getSource());
+		int i=0;
+		for(WatchFolder wf : watchFolders.values()){
+		
+			watchedPaths[i] = new File(wf.getSource());
 			if (!acceptableFilePermissions(watchedPaths[i]))
 			{
 				logger.error("Watched path is not usable: " + watchedPaths[i]);
@@ -51,6 +52,7 @@ public class WatchedFilesConfigModule extends AbstractModule
 				throw new IllegalArgumentException("Watched path is not usable: " + watchedPaths[i]);
 
 			}
+			i++;
 		}
 
 		return watchedPaths;
@@ -80,6 +82,7 @@ public class WatchedFilesConfigModule extends AbstractModule
 
 			if (f.getStabilitytime() == null)
 			{
+				logger.trace("no stability time specified for "+file.getAbsolutePath());
 				ret.put(file, defaultStabilitytime);
 			}
 			else

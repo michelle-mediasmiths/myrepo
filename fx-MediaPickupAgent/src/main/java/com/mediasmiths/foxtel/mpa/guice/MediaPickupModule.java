@@ -190,20 +190,20 @@ public class MediaPickupModule extends AbstractModule {
 
 		List<File> watchedPaths = new ArrayList<File>();
 
-		for (int i = 0; i < watchFolders.size(); i++)
+		for (WatchFolder wf : watchFolders.values())
 		{
-			WatchFolder wf = watchFolders.get(i);
 			if (wf.isRuzz() == isRuzz)
 			{
 				File source = new File(wf.getSource());
 				if (!acceptableFilePermissions(source))
 				{
-					logger.error("Watched path is not usable: " +source);
+					logger.error("Watched path is not usable: " + source);
 
 					throw new IllegalArgumentException("Watched path is not usable: " + source);
 
 				}
-				else{
+				else
+				{
 					watchedPaths.add(source);
 				}
 			}

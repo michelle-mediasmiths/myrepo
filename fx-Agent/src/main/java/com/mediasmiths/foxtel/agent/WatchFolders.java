@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.agent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class WatchFolders extends HashMap<String, WatchFolder>
 			this.add(new WatchFolder(s));
 		}
 	}
-
+	
 	public boolean isAo(String src)
 	{
 

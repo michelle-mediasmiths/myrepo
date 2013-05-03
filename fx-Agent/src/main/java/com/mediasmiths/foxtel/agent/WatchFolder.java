@@ -5,8 +5,8 @@ public class WatchFolder {
 	private String source; //location to watch for files in
 	private String delivery; //delivery location (if applicable to current agent)
 	private boolean isAO;
-	private boolean isRuzz;
-	private Long stabilityTime; 
+	private boolean isRuzz=false;
+	private Long stabilityTime=null; 
 	
 	public boolean isRuzz()
 	{
