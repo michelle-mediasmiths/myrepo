@@ -6,6 +6,7 @@ public class WatchFolder {
 	private String delivery; //delivery location (if applicable to current agent)
 	private boolean isAO;
 	private boolean isRuzz;
+	private Long stabilityTime; 
 	
 	public boolean isRuzz()
 	{
@@ -37,6 +38,15 @@ public class WatchFolder {
 	
 	public WatchFolder(String source){
 		setSource(source);
+	}
+	
+	public void setStabilityTime(Long stabilityTime)
+	{
+		this.stabilityTime = stabilityTime;
+	}
+	
+	public Long getStabilitytime(){
+		return this.stabilityTime;
 	}
 	
 	

@@ -7,12 +7,15 @@ import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.PickupNotification;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.std.io.filter.FilenameExtensionFilter;
+
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Map;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -47,12 +50,12 @@ public class SingleFilePickUp implements IFilePickup
 	@Named("filepickup.heartbeat_window")
 	long HEARTBEAT_WINDOW;
 
-
 	/** the time in milliseconds that a file must not grow before being passed for processing */
+	/** maps a folder location to a stability time */
 	@Inject
-	@Named("filepickup.file.stability_time")
-	long STABILITY_TIME;
-
+	@Named("filepickup.watched.directories.stabilitytimes")
+	Map<File,Long> stabilityTimes;
+	
 	/** The time in milliseconds that an active agent should sleep between file arrive check intervals */
 	@Inject
 	@Named("filepickup.sleep_time")
@@ -348,9 +351,11 @@ public class SingleFilePickUp implements IFilePickup
 		long now = System.currentTimeMillis();
 		long then = f.lastModified();
 
-		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,STABILITY_TIME));
+		Long stabilityTime = stabilityTimes.get(FilenameUtils.getFullPathNoEndSeparator(f.getAbsolutePath()));
+		
+		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,stabilityTime));
 
-		return (System.currentTimeMillis() - f.lastModified()) >= STABILITY_TIME;
+		return (System.currentTimeMillis() - f.lastModified()) >= stabilityTime;
 	}
 
 

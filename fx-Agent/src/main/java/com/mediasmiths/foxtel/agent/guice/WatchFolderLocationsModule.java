@@ -74,6 +74,16 @@ public class WatchFolderLocationsModule extends AbstractModule {
 				}
 			}
 			
+			String stabilityTimeParamName = "watchfolder.locations[" + i + "].stability_time";
+			if(conf.containsKey(stabilityTimeParamName)){
+				
+				String stabilityTimestr = conf.get(stabilityTimeParamName);
+				logger.trace(String.format("%s=%s", stabilityTimeParamName, stabilityTimestr));
+				
+				long stabilityTime = Long.parseLong(stabilityTimestr);
+				watchFolder.setStabilityTime(stabilityTime);
+			}
+			
 			locations.add(watchFolder);
 		}
 

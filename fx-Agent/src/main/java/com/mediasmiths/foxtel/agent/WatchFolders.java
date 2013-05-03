@@ -1,11 +1,14 @@
 package com.mediasmiths.foxtel.agent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-public class WatchFolders extends ArrayList<WatchFolder>
+import com.google.inject.name.Named;
+
+public class WatchFolders extends HashMap<String, WatchFolder>
 {
 
 	private static final long serialVersionUID = 1L;
@@ -29,7 +32,7 @@ public class WatchFolders extends ArrayList<WatchFolder>
 	public boolean isAo(String src)
 	{
 
-		for (WatchFolder f : this)
+		for (WatchFolder f : this.values())
 		{
 			if (src.startsWith(f.getSource()))
 			{
@@ -50,7 +53,7 @@ public class WatchFolders extends ArrayList<WatchFolder>
 	public boolean isRuzz(String src)
 	{
 
-		for (WatchFolder f : this)
+		for (WatchFolder f : this.values())
 		{
 			if (src.startsWith(f.getSource()))
 			{
@@ -71,7 +74,7 @@ public class WatchFolders extends ArrayList<WatchFolder>
 	public String destinationFor(String src)
 	{
 
-		for (WatchFolder f : this)
+		for (WatchFolder f : this.values())
 		{
 
 			if (src.startsWith(f.getSource()))
@@ -90,8 +93,7 @@ public class WatchFolders extends ArrayList<WatchFolder>
 
 	}
 
-	@Override
-	public boolean add(WatchFolder watchFolder)
+	public void add(WatchFolder watchFolder)
 	{
 		log.debug(String.format(
 				"Adding watchfolder source: %s  delivery %s isAo %b isRuzz %b",
@@ -99,7 +101,7 @@ public class WatchFolders extends ArrayList<WatchFolder>
 				watchFolder.getDelivery(),
 				watchFolder.isAO(),
 				watchFolder.isRuzz()));
-		return super.add(watchFolder);
+		super.put(watchFolder.getSource(),watchFolder);
 	}
 
 }

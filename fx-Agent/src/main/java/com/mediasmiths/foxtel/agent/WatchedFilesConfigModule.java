@@ -3,6 +3,8 @@ package com.mediasmiths.foxtel.agent;
 import static com.mediasmiths.foxtel.agent.Config.WATCHFOLDER_LOCATIONS;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -54,6 +56,40 @@ public class WatchedFilesConfigModule extends AbstractModule
 		return watchedPaths;
 
 	}
+	
+	@Singleton
+	@Provides
+	@Named("filepickup.watched.directories.stabilitytimes")
+	public Map<File, Long> provideStabilityTimes(
+			@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
+			@Named("filepickup.watched.directories") File[] watchedDirectories,
+			@Named("filepickup.file.stability_time") Long defaultStabilitytime)
+	{
+
+		Map<File, Long> ret = new HashMap<File, Long>();
+
+		for (File file : watchedDirectories)
+		{
+			WatchFolder f = watchFolders.get(file.getAbsolutePath());
+
+			if (f == null)
+			{
+				throw new IllegalArgumentException("Could not find watchfolder config for file" + file.getAbsolutePath()
+						+ " check config");
+			}
+
+			if (f.getStabilitytime() == null)
+			{
+				ret.put(file, defaultStabilitytime);
+			}
+			else
+			{
+				ret.put(file, f.getStabilitytime());
+			}
+		}
+		return ret;
+	}
+	
 
 	/**
 	 *

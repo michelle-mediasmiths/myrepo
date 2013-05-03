@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An implementation of the FilePickUpProcessingQueue where the directory structure is used as the processing queue and the ordering
@@ -49,12 +50,11 @@ public class MultiFilePickUp implements IFilePickup
 	@Named("filepickup.heartbeat_window")
     long HEARTBEAT_WINDOW;
 
-
 	/** the time in milliseconds that a file must not grow before being passed for processing */
+	/** maps a folder location to a stability time */
 	@Inject
-	@Named("filepickup.file.stability_time")
-	protected
-	long STABILITY_TIME;
+	@Named("filepickup.watched.directories.stabilitytimes")
+	Map<File,Long> stabilityTimes;
 
 	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */
 	@Inject
@@ -97,7 +97,6 @@ public class MultiFilePickUp implements IFilePickup
 	@Inject
 	@Named("agent.events.pickupTimingType")
 	String eventName;
-
 
 	@Inject
 	@Named("filepickup.watched.directories.max_file_size_bytes")
@@ -448,9 +447,11 @@ public class MultiFilePickUp implements IFilePickup
 		long now = System.currentTimeMillis();
 		long then = f.lastModified();
 
-		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,STABILITY_TIME));
+		Long stabilityTime = stabilityTimes.get(FilenameUtils.getFullPathNoEndSeparator(f.getAbsolutePath()));
+				
+		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,stabilityTime));
 
-		return (System.currentTimeMillis() - f.lastModified()) >= STABILITY_TIME;
+		return (System.currentTimeMillis() - f.lastModified()) >= stabilityTime;
 	}
 
 
