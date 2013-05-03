@@ -141,52 +141,6 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 					log.error("Exception thrown by Mayam whille updating archive policy for material : " + materialID, e);
 				}
 			}
-			
-			if (attributeChanged(Attribute.PRESENTATION_FLAG, before, after, currentAttributes))
-			{
-				try {
-					Boolean presentationFlag = currentAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
-					log.info("Presentation flag for " + materialID + "set to " + presentationFlag); 
-					
-					if (presentationFlag != null && presentationFlag.equals(Boolean.TRUE))
-					{	
-						AttributeMap task = taskController.getOnlyTaskForAssetBySiteID(MayamTaskListType.PURGE_CANDIDATE_LIST, materialID);
-						if (task != null) 
-						{
-							log.info("Presentation flag for " + materialID + "set, removing purge candidate task"); 
-							task.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-							taskController.saveTask(task);
-						}
-						else {
-							log.warn("Presentation flag for " + materialID + "set but failed to find a purge candidate task to remove"); 
-						}
-					}
-					else if (presentationFlag != null && presentationFlag.equals(Boolean.FALSE))
-					{
-						int numberOfDays = defaultPurgeTime;
-						String contentType = currentAttributes.getAttribute(Attribute.CONT_CATEGORY);
-						if (contentType != null)
-						{
-							if (contentType.equals(MayamContentTypes.EPK)) 
-							{
-								numberOfDays = associatedPurgeTime;
-							}
-							else if (contentType.equals(MayamContentTypes.EDIT_CLIPS))
-							{
-								numberOfDays = editClipsPurgeTime;
-							}
-							else if (contentType.equals(MayamContentTypes.PUBLICITY))
-							{
-								numberOfDays = publicityPurgeTime;
-							}
-						}
-						taskController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, numberOfDays);	
-					}
-				} catch (MayamClientException e) {
-					log.error("Exception thrown while removing Purge Candidate Task for material : " + materialID, e);
-					e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -217,22 +171,7 @@ public class MaterialUpdateHandler extends UpdateAttributeHandler
 		}
 	}
 
-	@Inject
-	@Named("purge.presentation.flag.removed.days.default")
-	private int defaultPurgeTime;
 	
-	@Inject
-	@Named("purge.presentation.flag.removed.days.editclips")
-	private int editClipsPurgeTime;
-	
-	@Inject
-	@Named("purge.presentation.flag.removed.days.associated")
-	private int associatedPurgeTime;
-	
-	@Inject
-	@Named("purge.presentation.flag.removed.days.publicity")
-	private int publicityPurgeTime;
-
 	@Override
 	public String getName()
 	{

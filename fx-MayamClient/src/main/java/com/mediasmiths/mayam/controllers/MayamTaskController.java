@@ -367,6 +367,11 @@ public class MayamTaskController extends MayamController
 		try
 		{
 			AssetAccess accessRights = initialAttributes.getAttribute(Attribute.ASSET_ACCESS);
+			
+			if(accessRights==null){
+				accessRights = new AssetAccess();				
+			}
+			
 			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
 
 			entry.setEntityType(AssetAccess.EntityType.GROUP);

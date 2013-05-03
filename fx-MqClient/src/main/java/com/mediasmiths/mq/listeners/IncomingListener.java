@@ -53,6 +53,7 @@ import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskEscalationHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
+import com.mediasmiths.mq.handlers.purge.PurgeCandidateUpdateHandler;
 import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.qc.QcCompleteHandler;
 import com.mediasmiths.mq.handlers.qc.QcTaskUpdateHandler;
@@ -174,6 +175,8 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	PurgeTaskUpdateForUnmatchedHandler purgeTaskUpdateForUnmatchedHandler;
 	@Inject
+	PurgeCandidateUpdateHandler purgeCandidateUpdateHandler;
+	@Inject
 	InitiateExportHandler initiateExportHandler;
 	
 	public void onMessage(MqMessage msg) throws Throwable
@@ -277,6 +280,7 @@ public class IncomingListener extends MqClientListener
 			passEventToUpdateHandler(pendingTxUpdate,currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(unmatchedTaskUpdateHandler, currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(purgeTaskUpdateForUnmatchedHandler,currentAttributes, beforeAttributes, afterAttributes);
+			passEventToUpdateHandler(purgeCandidateUpdateHandler,currentAttributes, beforeAttributes, afterAttributes);
 			passEventToUpdateHandler(ingestCompleteHandler,currentAttributes, beforeAttributes, afterAttributes);
 			
 			if (!initialState.equals(newState))
