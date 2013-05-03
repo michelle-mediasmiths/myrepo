@@ -4,6 +4,8 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -85,6 +87,11 @@ public abstract class MaterialProcessingTest {
 		materialxml = TestUtil.getFileOfTypeInFolder("xml", incomingPath,rString);
 	
 		filesPendingProcessingQueue = new MaterialExchangeFilesPendingProcessingQueue(new File[] {new File(incomingPath)});
+		
+		Map<File,Long> stabilityTimes = new HashMap<File,Long>();
+		stabilityTimes.put(new File(incomingPath), 100l);
+		filesPendingProcessingQueue.setStabilityTimes(stabilityTimes);
+		
 		filesPendingProcessingQueue.setStabilityTime(100l);
 		
 		WatchFolders wf = new WatchFolders();

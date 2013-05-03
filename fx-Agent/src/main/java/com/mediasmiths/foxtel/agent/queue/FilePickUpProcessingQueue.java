@@ -10,6 +10,7 @@ import java.util.List;
  *
  * Author: Harmer
  */
+@Deprecated
 public interface FilePickUpProcessingQueue
 {
 

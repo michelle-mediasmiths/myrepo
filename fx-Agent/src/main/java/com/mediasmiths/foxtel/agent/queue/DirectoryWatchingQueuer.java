@@ -47,7 +47,7 @@ public class DirectoryWatchingQueuer extends DirectoryWatcher implements
 		setFormatCheck(true);
 		
 		sourcePaths = new ArrayList<String>();
-		for(WatchFolder wf : watchFolders){
+		for(WatchFolder wf : watchFolders.values()){
 			sourcePaths.add(wf.getSource());
 		}
 		

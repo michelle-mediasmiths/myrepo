@@ -351,7 +351,7 @@ public class SingleFilePickUp implements IFilePickup
 		long now = System.currentTimeMillis();
 		long then = f.lastModified();
 
-		Long stabilityTime = stabilityTimes.get(FilenameUtils.getFullPathNoEndSeparator(f.getAbsolutePath()));
+		Long stabilityTime = stabilityTimes.get(f.getParentFile());
 		
 		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,stabilityTime));
 

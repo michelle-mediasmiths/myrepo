@@ -1,6 +1,8 @@
 package com.mediasmiths.foxtel.mpa.queue;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Set;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -15,7 +17,13 @@ public class MaterialExchangeFilesPendingProcessingQueue extends MultiFilePickUp
 	}
 	
 	public void setStabilityTime(long l){
-		this.STABILITY_TIME = l;
+		
+		Set<File> keys = stabilityTimes.keySet();
+		
+		for (File f : keys)
+		{
+			stabilityTimes.put(f,Long.valueOf(l));
+		}
 	}
 	
 }

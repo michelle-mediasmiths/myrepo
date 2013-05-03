@@ -28,6 +28,7 @@ import java.util.List;
  *     after HEARTBEAT_WINDOW milliseconds.
  *
  */
+@Deprecated
 public class FilePickUpFromDirectories implements FilePickUpProcessingQueue
 {
 

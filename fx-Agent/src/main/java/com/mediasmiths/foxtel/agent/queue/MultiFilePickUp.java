@@ -54,7 +54,7 @@ public class MultiFilePickUp implements IFilePickup
 	/** maps a folder location to a stability time */
 	@Inject
 	@Named("filepickup.watched.directories.stabilitytimes")
-	Map<File,Long> stabilityTimes;
+	protected Map<File,Long> stabilityTimes;
 
 	/** the time in milliseconds that a file must not grow before being consider part of a timed out partial pickup */
 	@Inject
@@ -447,7 +447,7 @@ public class MultiFilePickUp implements IFilePickup
 		long now = System.currentTimeMillis();
 		long then = f.lastModified();
 
-		Long stabilityTime = stabilityTimes.get(FilenameUtils.getFullPathNoEndSeparator(f.getAbsolutePath()));
+		Long stabilityTime = stabilityTimes.get(f.getParentFile());
 				
 		if(logger.isDebugEnabled()) logger.debug(String.format("now %d then %d STABILITY_TIME %d",now,then,stabilityTime));
 
@@ -610,6 +610,11 @@ public class MultiFilePickUp implements IFilePickup
 	{
 
 		return MAX_FILE_SIZE != -1 && candidate.length() > MAX_FILE_SIZE;
+	}
+
+	public void setStabilityTimes(Map<File, Long> stabilityTimes)
+	{
+		this.stabilityTimes = stabilityTimes;
 	}
 
 }
