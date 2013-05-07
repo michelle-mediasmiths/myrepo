@@ -143,6 +143,10 @@ public class MayamPDPImpl implements MayamPDP
 	String matchingAoMismatch;
 	
 	@Inject
+	@Named("message.matching.presentation.flag.is.yes")
+	String matchingPresentationFlagIsYes;
+	
+	@Inject
 	private OutputPaths exPubOutputPaths;
 
 	@Inject(optional = true)
@@ -1148,6 +1152,14 @@ public class MayamPDPImpl implements MayamPDP
 					AssetType.ITEM,
 					currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID));
 
+			boolean isPresentation = AssetProperties.isPresentation(currentAttributes);
+			
+			if (isPresentation)
+			{
+				logger.info("Attempt to match an item with presentation flag = yes/true");
+				return getErrorStatus(matchingPresentationFlagIsYes);
+			}
+			
 			// check for AO mismatched
 			// dont want to allow an ao item to be matched to non ao placholder item (or other way round)
 			boolean itemIsAO = AssetProperties.isAO(currentAttributes);

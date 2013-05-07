@@ -120,6 +120,20 @@ public class AssetProperties
 		return false;
 
 	}
+	
+	public static boolean isPresentation(AttributeMap materialAttributes)
+	{
+		Boolean presentationFlag = materialAttributes.getAttribute(Attribute.PRESENTATION_FLAG);
+
+		if (presentationFlag == null)
+		{
+			return false;
+		}
+		else
+		{
+			return presentationFlag.booleanValue();
+		}
+	}
 
 	public static boolean isClassificationSet(AttributeMap packageAttributes)
 	{
