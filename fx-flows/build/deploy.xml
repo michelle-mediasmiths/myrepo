@@ -44,6 +44,9 @@
   <dd:provide partnerLink="transcodeAndCallerPlkVar">
     <dd:service name="this:CanonicServiceForCaller" port="canonicPort"></dd:service>
   </dd:provide>
+  <dd:invoke partnerLink="transcodeAndFsForHttpPortPlkVar">
+    <dd:service name="delete:restService" port="httpPort"></dd:service>
+  </dd:invoke>
   <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk0Var">
     <dd:service name="createJob:restService" port="httpPort"></dd:service>
   </dd:invoke>
@@ -53,23 +56,20 @@
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var">
     <dd:service name="isTaskCancelled:restService" port="httpPort"></dd:service>
   </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var">
+    <dd:service name="deleteJob:restService" port="httpPort"></dd:service>
+  </dd:invoke>
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var">
     <dd:service name="tcGetPriority:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk3Var">
     <dd:service name="setPriority:restService" port="httpPort"></dd:service>
   </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndTCAdapterForHttpPortPlk1Var">
-    <dd:service name="deleteJob:restService" port="httpPort"></dd:service>
-  </dd:invoke>
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var">
     <dd:service name="tcPassed:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var">
     <dd:service name="tcFailure:restService" port="httpPort"></dd:service>
-  </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndFsForHttpPortPlkVar">
-    <dd:service name="delete:restService" port="httpPort"></dd:service>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var">
     <dd:service name="autoQCRequiredForTX:restService" port="httpPort"></dd:service>
