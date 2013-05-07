@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:Caller="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Caller" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:TCAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/TCAdapter" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:fs="http://ns.mediasmithsforge.com/foxtel/tx-delivery/fs" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Transcode" name="Transcode" bpmn:id="_i0TRQGuNEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -35,14 +35,8 @@
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
     <bpel:variable name="TranscodeSuccess" type="xs:boolean"/>
     <bpel:variable name="TranscodeErrorCount" type="xs:integer"/>
-    <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input"/>
-    <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output"/>
-    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input"/>
-    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
     <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest"/>
     <bpel:variable name="auto_QCEventStartMessageRequest" messageType="Auto_QC:EventStartMessageRequest"/>
-    <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
-    <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
     <bpel:variable name="TaskIsCancelled" type="xs:boolean"/>
     <bpel:variable name="TranscodeJobID" type="xs:string"/>
     <bpel:variable name="TranscodeJobResult" type="xs:string"/>
@@ -51,29 +45,17 @@
     <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse"/>
     <bpel:variable name="tcPriority" type="xs:int"/>
     <bpel:variable name="TranscodeStatus" type="xs:string"/>
+    <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input"/>
+    <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output"/>
+    <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
+    <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
+    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input"/>
+    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
+    <bpel:variable name="QCRequired" type="xs:boolean"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
     <bpel:assign name="init-variables-Transcode" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ">
-      <bpel:copy bpmn:label="$tcTotalFailureTcTotalFailureRequestMsg">
-        <bpel:from>
-          <bpel:literal>
-<wfAdapter:tcTotalFailure>
-  <wfAdapter:assetID></wfAdapter:assetID>
-  <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
-  <wfAdapter:taskID></wfAdapter:taskID>
-  <wfAdapter:title></wfAdapter:title>
-</wfAdapter:tcTotalFailure></bpel:literal>
-        </bpel:from>
-        <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body</bpel:to>
-      </bpel:copy>
-      <bpel:copy bpmn:label="$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg">
-        <bpel:from>
-          <bpel:literal>
-<autoQCRequiredForTX:taskID_urlType></autoQCRequiredForTX:taskID_urlType></bpel:literal>
-        </bpel:from>
-        <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
-      </bpel:copy>
       <bpel:copy bpmn:label="$deliveryEventStartMessageRequest">
         <bpel:from>
           <bpel:literal>
@@ -158,13 +140,6 @@
         </bpel:from>
         <bpel:to>$auto_QCEventStartMessageRequest.body</bpel:to>
       </bpel:copy>
-      <bpel:copy bpmn:label="$isTaskCancelledIsCancelledRequestMsg">
-        <bpel:from>
-          <bpel:literal>
-<isTaskCancelled:taskid_urlType></isTaskCancelled:taskid_urlType></bpel:literal>
-        </bpel:from>
-        <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
-      </bpel:copy>
     </bpel:assign>
     <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_pmy4wGuNEeK7FdvgH5F2kQ">
       <bpel:copy>
@@ -219,8 +194,8 @@
                     <ext:retryDelay>60</ext:retryDelay>
                   </ext:failureHandling>
                   <bpel:variables>
-                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                     <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
+                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                   </bpel:variables>
                   <bpel:sequence>
                     <bpel:assign name="init-variables-SubProcess" bpmn:id="_9SE0kLcQEeKdLrMPHFRfaw">
@@ -256,8 +231,8 @@
                 <ext:retryDelay>60</ext:retryDelay>
               </ext:failureHandling>
               <bpel:variables>
-                <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input"/>
                 <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output"/>
+                <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input"/>
               </bpel:variables>
               <bpel:sequence>
                 <bpel:assign name="init-variables-SubProcess" bpmn:id="_cj8HQLcMEeKdLrMPHFRfaw">
@@ -323,8 +298,8 @@
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
                     <bpel:variables>
-                      <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
                       <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output"/>
+                      <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input"/>
                     </bpel:variables>
                     <bpel:sequence>
                       <bpel:assign name="init-variables-SubProcess" bpmn:id="_3LDIwLcMEeKdLrMPHFRfaw">
@@ -361,8 +336,8 @@
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
                     <bpel:variables>
-                      <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
                       <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
+                      <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
                     </bpel:variables>
                     <bpel:sequence>
                       <bpel:assign name="init-variables-SubProcess" bpmn:id="_o5w_ALcNEeKdLrMPHFRfaw">
@@ -399,8 +374,8 @@
                           <ext:retryDelay>60</ext:retryDelay>
                         </ext:failureHandling>
                         <bpel:variables>
-                          <bpel:variable name="deleteJobDeleteJobRequestMsg" messageType="deleteJob:deleteJob_input"/>
                           <bpel:variable name="deleteJobDeleteJobResponseMsg" messageType="deleteJob:deleteJob_output"/>
+                          <bpel:variable name="deleteJobDeleteJobRequestMsg" messageType="deleteJob:deleteJob_input"/>
                         </bpel:variables>
                         <bpel:sequence>
                           <bpel:assign name="init-variables-SubProcess" bpmn:id="_OWHrwLcOEeKdLrMPHFRfaw">
@@ -431,8 +406,8 @@
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
                           <bpel:variables>
-                            <bpel:variable name="tcGetPriorityGetpriorityRequestMsg" messageType="tcGetPriority:getpriority_input"/>
                             <bpel:variable name="tcGetPriorityGetpriorityResponseMsg" messageType="tcGetPriority:getpriority_output"/>
+                            <bpel:variable name="tcGetPriorityGetpriorityRequestMsg" messageType="tcGetPriority:getpriority_input"/>
                           </bpel:variables>
                           <bpel:sequence>
                             <bpel:assign name="init-variables-SubProcess" bpmn:id="_aslSILcOEeKdLrMPHFRfaw">
@@ -482,8 +457,8 @@
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
                           <bpel:variables>
-                            <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input"/>
                             <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output"/>
+                            <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input"/>
                           </bpel:variables>
                           <bpel:sequence>
                             <bpel:assign name="init-variables-SubProcess" bpmn:id="_ieDqYLcOEeKdLrMPHFRfaw">
@@ -533,8 +508,8 @@
                     <ext:retryDelay>60</ext:retryDelay>
                   </ext:failureHandling>
                   <bpel:variables>
-                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                     <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
+                    <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                   </bpel:variables>
                   <bpel:sequence>
                     <bpel:assign name="init-variables-SubProcess" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
@@ -644,8 +619,8 @@
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
                           <bpel:variables>
-                            <bpel:variable name="tcFailureTcFailureRequestMsg" messageType="tcFailure:tcFailure_input"/>
                             <bpel:variable name="tcFailureTcFailureResponseMsg" messageType="tcFailure:tcFailure_output"/>
+                            <bpel:variable name="tcFailureTcFailureRequestMsg" messageType="tcFailure:tcFailure_input"/>
                           </bpel:variables>
                           <bpel:sequence>
                             <bpel:assign name="init-variables-SubProcess" bpmn:id="_GocjgLcQEeKdLrMPHFRfaw">
@@ -690,8 +665,8 @@
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
                           <bpel:variables>
-                            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                             <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
+                            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input"/>
                           </bpel:variables>
                           <bpel:sequence>
                             <bpel:assign name="init-variables-SubProcess" bpmn:id="_PKs4cLcQEeKdLrMPHFRfaw">
@@ -729,13 +704,40 @@
       <bpel:condition>$TranscodeSuccess</bpel:condition>
       <bpel:sequence>
         <bpel:empty bpmn:label="Transcode Finished Successfuly" name="Transcode_Finished_Successfuly" bpmn:id="_Q02FQGuREeK7FdvgH5F2kQ"/>
-        <bpel:assign bpmn:label="check if cancelled" name="check_if_cancelled" bpmn:id="_bfFisG64EeKvjs-uExigJg">
-          <bpel:copy>
-            <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-            <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
-          </bpel:copy>
-        </bpel:assign>
-        <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="check if cancelled" name="check_if_cancelled-1" bpmn:id="_bfFisG64EeKvjs-uExigJg"></bpel:invoke>
+        <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_rLuoULcSEeKdLrMPHFRfaw">
+          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:retryFor>10</ext:retryFor>
+            <ext:retryDelay>60</ext:retryDelay>
+          </ext:failureHandling>
+          <bpel:variables>
+            <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
+            <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
+          </bpel:variables>
+          <bpel:sequence>
+            <bpel:assign name="init-variables-SubProcess" bpmn:id="_rLuoULcSEeKdLrMPHFRfaw">
+              <bpel:copy bpmn:label="$isTaskCancelledIsCancelledRequestMsg">
+                <bpel:from>
+                  <bpel:literal>
+<isTaskCancelled:taskid_urlType></isTaskCancelled:taskid_urlType></bpel:literal>
+                </bpel:from>
+                <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:assign bpmn:label="Check if Cancelled" name="Check_if_Cancelled" bpmn:id="_rL2kILcSEeKdLrMPHFRfaw">
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+                <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="Check if Cancelled" name="Check_if_Cancelled-1" bpmn:id="_rL2kILcSEeKdLrMPHFRfaw"></bpel:invoke>
+            <bpel:assign bpmn:label="Record cancelled check result" name="Record_cancelled_check_result-1" bpmn:id="_b2VWMLcTEeKdLrMPHFRfaw">
+              <bpel:copy>
+                <bpel:from>$isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:from>
+                <bpel:to>$TaskIsCancelled</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+          </bpel:sequence>
+        </bpel:scope>
         <bpel:if>
           <bpel:condition>true() = $isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:condition>
           <bpel:sequence>
@@ -745,15 +747,42 @@
           <bpel:else>
             <bpel:sequence>
               <bpel:empty bpmn:label="not canceled" name="not_canceled" bpmn:id="_qE8Y0G64EeKvjs-uExigJg"/>
-              <bpel:assign bpmn:label="Check If QC Required" name="Check_If_QC_Required" bpmn:id="_ULatkGuTEeK7FdvgH5F2kQ">
-                <bpel:copy>
-                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-                  <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" operation="autoQcRequiredForTX" inputVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" outputVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpmn:label="Check If QC Required" name="Check_If_QC_Required-1" bpmn:id="_ULatkGuTEeK7FdvgH5F2kQ"></bpel:invoke>
+              <bpel:scope bpmn:label="SubProcess" name="SubProcess-12" bpmn:id="_myKxoLcTEeKdLrMPHFRfaw">
+                <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                  <ext:retryFor>10</ext:retryFor>
+                  <ext:retryDelay>60</ext:retryDelay>
+                </ext:failureHandling>
+                <bpel:variables>
+                  <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input"/>
+                  <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
+                </bpel:variables>
+                <bpel:sequence>
+                  <bpel:assign name="init-variables-SubProcess" bpmn:id="_myKxoLcTEeKdLrMPHFRfaw">
+                    <bpel:copy bpmn:label="$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg">
+                      <bpel:from>
+                        <bpel:literal>
+<autoQCRequiredForTX:taskID_urlType></autoQCRequiredForTX:taskID_urlType></bpel:literal>
+                      </bpel:from>
+                      <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                  <bpel:assign bpmn:label="Check if QC Required" name="Check_if_QC_Required" bpmn:id="_myRfULcTEeKdLrMPHFRfaw">
+                    <bpel:copy>
+                      <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+                      <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                  <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" operation="autoQcRequiredForTX" inputVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" outputVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpmn:label="Check if QC Required" name="Check_if_QC_Required-1" bpmn:id="_myRfULcTEeKdLrMPHFRfaw"></bpel:invoke>
+                  <bpel:assign bpmn:label="Record if qc required" name="Record_if_qc_required" bpmn:id="_y1qYsLcTEeKdLrMPHFRfaw">
+                    <bpel:copy>
+                      <bpel:from>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()</bpel:from>
+                      <bpel:to>$QCRequired</bpel:to>
+                    </bpel:copy>
+                  </bpel:assign>
+                </bpel:sequence>
+              </bpel:scope>
               <bpel:if>
-                <bpel:condition>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text() = true()</bpel:condition>
+                <bpel:condition>true() = $QCRequired</bpel:condition>
                 <bpel:sequence>
                   <bpel:empty bpmn:label="QC Required" name="QC_Required" bpmn:id="_clWM8GuTEeK7FdvgH5F2kQ"/>
                   <bpel:assign bpmn:label="QC" name="QC" bpmn:id="_0ciuwGuXEeK7FdvgH5F2kQ">
@@ -816,25 +845,51 @@
       </bpel:elseif>
       <bpel:else>
         <bpel:sequence>
-          <bpel:assign bpmn:label="Transcode Failed" name="Transcode_Failed" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ">
-            <bpel:copy>
-              <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
-              <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:title</bpel:to>
-            </bpel:copy>
-            <bpel:copy>
-              <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-              <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:taskID</bpel:to>
-            </bpel:copy>
-            <bpel:copy>
-              <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
-              <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
-            </bpel:copy>
-            <bpel:copy>
-              <bpel:from>true()</bpel:from>
-              <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
-            </bpel:copy>
-          </bpel:assign>
-          <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk5Var" portType="tcTotalFailure:restInterface" operation="tcTotalFailure" inputVariable="tcTotalFailureTcTotalFailureRequestMsg" outputVariable="tcTotalFailureTcTotalFailureResponseMsg" bpmn:label="Transcode Failed" name="Transcode_Failed-1" bpmn:id="_SNxnEGuREeK7FdvgH5F2kQ"></bpel:invoke><bpel:throw faultName="this:Error_End_Event"/>
+          <bpel:scope bpmn:label="SubProcess" name="SubProcess-13" bpmn:id="_Z6NdMLcSEeKdLrMPHFRfaw">
+            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+              <ext:retryFor>10</ext:retryFor>
+              <ext:retryDelay>60</ext:retryDelay>
+            </ext:failureHandling>
+            <bpel:variables>
+              <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input"/>
+              <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output"/>
+            </bpel:variables>
+            <bpel:sequence>
+              <bpel:assign name="init-variables-SubProcess" bpmn:id="_Z6NdMLcSEeKdLrMPHFRfaw">
+                <bpel:copy bpmn:label="$tcTotalFailureTcTotalFailureRequestMsg">
+                  <bpel:from>
+                    <bpel:literal>
+<wfAdapter:tcTotalFailure>
+  <wfAdapter:assetID></wfAdapter:assetID>
+  <wfAdapter:forTXDelivery></wfAdapter:forTXDelivery>
+  <wfAdapter:taskID></wfAdapter:taskID>
+  <wfAdapter:title></wfAdapter:title>
+</wfAdapter:tcTotalFailure></bpel:literal>
+                  </bpel:from>
+                  <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:assign bpmn:label="Transcode Failed" name="Transcode_Failed" bpmn:id="_Z6YcULcSEeKdLrMPHFRfaw">
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
+                  <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:assetID</bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>true()</bpel:from>
+                  <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:forTXDelivery</bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
+                  <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:taskID</bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title/text()</bpel:from>
+                  <bpel:to>$tcTotalFailureTcTotalFailureRequestMsg.body/wfAdapter:title</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:invoke partnerLink="transcodeAndWFAdapterForHttpPortPlk5Var" portType="tcTotalFailure:restInterface" operation="tcTotalFailure" inputVariable="tcTotalFailureTcTotalFailureRequestMsg" outputVariable="tcTotalFailureTcTotalFailureResponseMsg" bpmn:label="Transcode Failed" name="Transcode_Failed-1" bpmn:id="_Z6YcULcSEeKdLrMPHFRfaw"></bpel:invoke>
+            </bpel:sequence>
+          </bpel:scope><bpel:throw faultName="this:Error_End_Event"/>
           
         </bpel:sequence>
       </bpel:else>

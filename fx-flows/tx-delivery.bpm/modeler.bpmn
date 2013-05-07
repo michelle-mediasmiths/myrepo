@@ -159,15 +159,7 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_pmy4wWuNEeK7FdvgH5F2kQ" iD="_pmy4wGuNEeK7FdvgH5F2kQ" outgoingEdges="_HPuFcWuOEeK7FdvgH5F2kQ" incomingEdges="_qz4-AWuNEeK7FdvgH5F2kQ" name="Initialise Variables"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_MBGCYWuREeK7FdvgH5F2kQ" iD="_MBGCYGuREeK7FdvgH5F2kQ" outgoingEdges="_UewyQWuREeK7FdvgH5F2kQ _U5EIoWuREeK7FdvgH5F2kQ _Q1O7MW7QEeKkE6ll_3FDMA" incomingEdges="_OmAPIWuREeK7FdvgH5F2kQ" name="Check Transcode Result" activityType="GatewayDataBasedExclusive"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_Q02FQWuREeK7FdvgH5F2kQ" iD="_Q02FQGuREeK7FdvgH5F2kQ" outgoingEdges="_coYtEW64EeKvjs-uExigJg" incomingEdges="_UewyQWuREeK7FdvgH5F2kQ" name="Transcode Finished Successfuly"/>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_SNxnEWuREeK7FdvgH5F2kQ" iD="_SNxnEGuREeK7FdvgH5F2kQ" associations="_z3ONcGuSEeK7FdvgH5F2kQ _0Kg84GuSEeK7FdvgH5F2kQ" outgoingEdges="_cm1FkWuREeK7FdvgH5F2kQ" incomingEdges="_U5EIoWuREeK7FdvgH5F2kQ" name="Transcode Failed">
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_z27SgWuSEeK7FdvgH5F2kQ"/>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_0KE4AWuSEeK7FdvgH5F2kQ"/>
-    </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_ZzA6IWuREeK7FdvgH5F2kQ" iD="_ZzA6IGuREeK7FdvgH5F2kQ" incomingEdges="_cm1FkWuREeK7FdvgH5F2kQ" activityType="EventEndError"/>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_ULatkWuTEeK7FdvgH5F2kQ" iD="_ULatkGuTEeK7FdvgH5F2kQ" associations="_j79OIGuTEeK7FdvgH5F2kQ _kTAcMGuTEeK7FdvgH5F2kQ" outgoingEdges="_YBOhgWuTEeK7FdvgH5F2kQ" incomingEdges="_tWXtUW64EeKvjs-uExigJg" name="Check If QC Required">
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_j7oeAWuTEeK7FdvgH5F2kQ"/>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_kSe3wWuTEeK7FdvgH5F2kQ"/>
-    </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_XOIQoWuTEeK7FdvgH5F2kQ" iD="_XOIQoGuTEeK7FdvgH5F2kQ" outgoingEdges="_eQvXwWuTEeK7FdvgH5F2kQ _ej_q8WuTEeK7FdvgH5F2kQ" incomingEdges="_YBOhgWuTEeK7FdvgH5F2kQ" activityType="GatewayDataBasedExclusive"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_bM2I8WuTEeK7FdvgH5F2kQ" iD="_bM2I8GuTEeK7FdvgH5F2kQ" outgoingEdges="_16KjUWuXEeK7FdvgH5F2kQ" incomingEdges="_eQvXwWuTEeK7FdvgH5F2kQ" name="QC not Required"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_clWM8WuTEeK7FdvgH5F2kQ" iD="_clWM8GuTEeK7FdvgH5F2kQ" outgoingEdges="_2KooQWuXEeK7FdvgH5F2kQ" incomingEdges="_ej_q8WuTEeK7FdvgH5F2kQ" name="QC Required"/>
@@ -178,10 +170,6 @@
     <vertices xmi:type="bpmn:Activity" xmi:id="_0ciuwWuXEeK7FdvgH5F2kQ" iD="_0ciuwGuXEeK7FdvgH5F2kQ" associations="__P0tQGxqEeKv3LhB37uiLw _Y6jwoGxsEeKv3LhB37uiLw" outgoingEdges="_21GhkWuXEeK7FdvgH5F2kQ" incomingEdges="_2KooQWuXEeK7FdvgH5F2kQ" name="QC">
       <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#__PfWEWxqEeKv3LhB37uiLw"/>
       <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_Y6L9MWxsEeKv3LhB37uiLw"/>
-    </vertices>
-    <vertices xmi:type="bpmn:Activity" xmi:id="_bfFisW64EeKvjs-uExigJg" iD="_bfFisG64EeKvjs-uExigJg" associations="_mJJRoG64EeKvjs-uExigJg _mc1psG64EeKvjs-uExigJg" outgoingEdges="_ocvr8W64EeKvjs-uExigJg" incomingEdges="_coYtEW64EeKvjs-uExigJg" name="check if cancelled">
-      <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_mIqwgW64EeKvjs-uExigJg"/>
-      <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_mcBKUW64EeKvjs-uExigJg"/>
     </vertices>
     <vertices xmi:type="bpmn:Activity" xmi:id="_gVScoW64EeKvjs-uExigJg" iD="_gVScoG64EeKvjs-uExigJg" outgoingEdges="_rEXOcW64EeKvjs-uExigJg _rxSl4W64EeKvjs-uExigJg" incomingEdges="_ocvr8W64EeKvjs-uExigJg" activityType="GatewayDataBasedExclusive"/>
     <vertices xmi:type="bpmn:Activity" xmi:id="_pQKs8W64EeKvjs-uExigJg" iD="_pQKs8G64EeKvjs-uExigJg" outgoingEdges="_x3PeMW69EeKvjs-uExigJg" incomingEdges="_rEXOcW64EeKvjs-uExigJg _Q1O7MW7QEeKkE6ll_3FDMA" name="canceled"/>
@@ -352,6 +340,40 @@
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_BySQYbcREeKdLrMPHFRfaw" iD="_BySQYLcREeKdLrMPHFRfaw"/>
       </vertices>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_EE82kbcREeKdLrMPHFRfaw" iD="_EE82kLcREeKdLrMPHFRfaw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_Z6NdMbcSEeKdLrMPHFRfaw" iD="_Z6NdMLcSEeKdLrMPHFRfaw" outgoingEdges="_cm1FkWuREeK7FdvgH5F2kQ" incomingEdges="_U5EIoWuREeK7FdvgH5F2kQ">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_pASrgLcSEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pASrgbcSEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pQcnYLcSEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+      </eAnnotations>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_Z6YcUbcSEeKdLrMPHFRfaw" iD="_Z6YcULcSEeKdLrMPHFRfaw" associations="_z3ONcGuSEeK7FdvgH5F2kQ _0Kg84GuSEeK7FdvgH5F2kQ" name="Transcode Failed">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_z27SgWuSEeK7FdvgH5F2kQ"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_0KE4AWuSEeK7FdvgH5F2kQ"/>
+      </vertices>
+    </vertices>
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_rLuoUbcSEeKdLrMPHFRfaw" iD="_rLuoULcSEeKdLrMPHFRfaw" outgoingEdges="_ocvr8W64EeKvjs-uExigJg" incomingEdges="_coYtEW64EeKvjs-uExigJg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ST26YLcTEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ST26YbcTEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Sivq8LcTEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+      </eAnnotations>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_rL2kIbcSEeKdLrMPHFRfaw" iD="_rL2kILcSEeKdLrMPHFRfaw" associations="_mJJRoG64EeKvjs-uExigJg _mc1psG64EeKvjs-uExigJg" outgoingEdges="_dy37YbcTEeKdLrMPHFRfaw" name="Check if Cancelled">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_mIqwgW64EeKvjs-uExigJg"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_mcBKUW64EeKvjs-uExigJg"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_b2VWMbcTEeKdLrMPHFRfaw" iD="_b2VWMLcTEeKdLrMPHFRfaw" incomingEdges="_dy37YbcTEeKdLrMPHFRfaw" name="Record cancelled check result"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_dy37YbcTEeKdLrMPHFRfaw" iD="_dy37YLcTEeKdLrMPHFRfaw"/>
+    </vertices>
+    <vertices xmi:type="bpmn:SubProcess" xmi:id="_myKxobcTEeKdLrMPHFRfaw" iD="_myKxoLcTEeKdLrMPHFRfaw" outgoingEdges="_YBOhgWuTEeK7FdvgH5F2kQ" incomingEdges="_tWXtUW64EeKvjs-uExigJg">
+      <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8TOfULcTEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8TOfUbcTEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
+        <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8mEi0LcTEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+      </eAnnotations>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_myRfUbcTEeKdLrMPHFRfaw" iD="_myRfULcTEeKdLrMPHFRfaw" associations="_j79OIGuTEeK7FdvgH5F2kQ _kTAcMGuTEeK7FdvgH5F2kQ" outgoingEdges="_zRq_QbcTEeKdLrMPHFRfaw" name="Check if QC Required">
+        <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_j7oeAWuTEeK7FdvgH5F2kQ"/>
+        <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_kSe3wWuTEeK7FdvgH5F2kQ"/>
+      </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_y1qYsbcTEeKdLrMPHFRfaw" iD="_y1qYsLcTEeKdLrMPHFRfaw" incomingEdges="_zRq_QbcTEeKdLrMPHFRfaw" name="Record if qc required"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_zRq_QbcTEeKdLrMPHFRfaw" iD="_zRq_QLcTEeKdLrMPHFRfaw"/>
     </vertices>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_qz4-AWuNEeK7FdvgH5F2kQ" iD="_qz4-AGuNEeK7FdvgH5F2kQ"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_HPuFcWuOEeK7FdvgH5F2kQ" iD="_HPuFcGuOEeK7FdvgH5F2kQ"/>
@@ -2066,22 +2088,22 @@
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_eMBFQWuSEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/tcFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest}restService/httpPort/tcFailure/output/tcFailureResponse"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_z27SgWuSEeK7FdvgH5F2kQ" iD="_z27SgGuSEeK7FdvgH5F2kQ" source="_SNxnEWuREeK7FdvgH5F2kQ" target="_yXjxgGuSEeK7FdvgH5F2kQ">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_z27SgWuSEeK7FdvgH5F2kQ" iD="_z27SgGuSEeK7FdvgH5F2kQ" source="_Z6YcUbcSEeKdLrMPHFRfaw" target="_yXjxgGuSEeK7FdvgH5F2kQ">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_z2-84GuSEeK7FdvgH5F2kQ" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_z2-84WuSEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/input/tcTotalFailureRequest"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_0KE4AWuSEeK7FdvgH5F2kQ" iD="_0KE4AGuSEeK7FdvgH5F2kQ" source="_yXjxgGuSEeK7FdvgH5F2kQ" target="_SNxnEWuREeK7FdvgH5F2kQ">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_0KE4AWuSEeK7FdvgH5F2kQ" iD="_0KE4AGuSEeK7FdvgH5F2kQ" source="_yXjxgGuSEeK7FdvgH5F2kQ" target="_Z6YcUbcSEeKdLrMPHFRfaw">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0KJJcGuSEeK7FdvgH5F2kQ" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0KJJcWuSEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/tcTotalFailure.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest}restService/httpPort/tcTotalFailure/output/tcTotalFailureResponse"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_j7oeAWuTEeK7FdvgH5F2kQ" iD="_j7oeAGuTEeK7FdvgH5F2kQ" source="_ULatkWuTEeK7FdvgH5F2kQ" target="_hsKVwGuTEeK7FdvgH5F2kQ">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_j7oeAWuTEeK7FdvgH5F2kQ" iD="_j7oeAGuTEeK7FdvgH5F2kQ" source="_myRfUbcTEeKdLrMPHFRfaw" target="_hsKVwGuTEeK7FdvgH5F2kQ">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_j7sIYGuTEeK7FdvgH5F2kQ" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_j7sIYWuTEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/autoQCRequiredForTX.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest}restService/httpPort/autoQcRequiredForTX/input/autoQcRequiredForTXRequest"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_kSe3wWuTEeK7FdvgH5F2kQ" iD="_kSe3wGuTEeK7FdvgH5F2kQ" source="_hsKVwGuTEeK7FdvgH5F2kQ" target="_ULatkWuTEeK7FdvgH5F2kQ">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_kSe3wWuTEeK7FdvgH5F2kQ" iD="_kSe3wGuTEeK7FdvgH5F2kQ" source="_hsKVwGuTEeK7FdvgH5F2kQ" target="_myRfUbcTEeKdLrMPHFRfaw">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kSiiIGuTEeK7FdvgH5F2kQ" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kSiiIWuTEeK7FdvgH5F2kQ" key="douri" value="project:///wfAdapter/autoQCRequiredForTX.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest}restService/httpPort/autoQcRequiredForTX/output/autoQcRequiredForTXResponse"/>
     </eAnnotations>
@@ -2127,12 +2149,12 @@
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_OOkD0WxzEeK5yedkU6Xcmg" key="douri" value="project:///wfAdapter/autoQcError.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest}restService/httpPort/autoQcError/output/autoQcErrorResponse"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mIqwgW64EeKvjs-uExigJg" iD="_mIqwgG64EeKvjs-uExigJg" source="_bfFisW64EeKvjs-uExigJg" target="_khKAKW64EeKvjs-uExigJg">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mIqwgW64EeKvjs-uExigJg" iD="_mIqwgG64EeKvjs-uExigJg" source="_rL2kIbcSEeKdLrMPHFRfaw" target="_khKAKW64EeKvjs-uExigJg">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mIvB8G64EeKvjs-uExigJg" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mIvB8W64EeKvjs-uExigJg" key="douri" value="project:///wfAdapter/isTaskCancelled.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest}restService/httpPort/isCancelled/input/isCancelledRequest"/>
     </eAnnotations>
   </messages>
-  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mcBKUW64EeKvjs-uExigJg" iD="_mcBKUG64EeKvjs-uExigJg" source="_khKAKW64EeKvjs-uExigJg" target="_bfFisW64EeKvjs-uExigJg">
+  <messages xmi:type="bpmn:MessagingEdge" xmi:id="_mcBKUW64EeKvjs-uExigJg" iD="_mcBKUG64EeKvjs-uExigJg" source="_khKAKW64EeKvjs-uExigJg" target="_rL2kIbcSEeKdLrMPHFRfaw">
     <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_mcHQ8G64EeKvjs-uExigJg" source="attachedDataobject">
       <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mcHQ8W64EeKvjs-uExigJg" key="douri" value="project:///wfAdapter/isTaskCancelled.wsdl?messageForBoundOperation={http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest}restService/httpPort/isCancelled/output/isCancelledResponse"/>
     </eAnnotations>
