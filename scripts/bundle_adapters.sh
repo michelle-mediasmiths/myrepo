@@ -21,6 +21,9 @@ rm -r /tmp/bundle/config/*
 cp ../configuration/*.properties /tmp/bundle/config
 cp -r ../configuration/services /tmp/bundle/config
 
+mkdir /tmp/bundle/muleapps
+rm -r /tmp/bundle/muleapps/*
 
-
+cp ../muleapps/mamWFSProxies/bin/mamWFSProxies.zip /tmp/bundle/muleapps
+cp ../muleapps/wfs-intalio/bin/wfs-intalio.zip /tmp/bundle/muleapps
 
