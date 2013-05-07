@@ -33,10 +33,9 @@ public class TranscodePrioritiesModule extends AbstractModule
 	@Override
 	protected void configure()
 	{
-		PropertyFile properties = PropertyFile.find("transcodepriorities.properties"); // would be nicer if this was configurable
+		PropertyFile properties = PropertyFile.find("services/transcodepriorities.properties"); // would be nicer if this was configurable
 		
-		log.debug(properties.toString());
-		
+		log.debug(properties.toString());		
 		Names.bindProperties(this.binder(), properties.toProperties());
 	}
 
