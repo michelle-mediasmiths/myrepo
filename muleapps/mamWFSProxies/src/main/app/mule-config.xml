@@ -25,7 +25,7 @@
 	
 	<pattern:http-proxy name="http-proxy-mayam-tasks-ws">
     	<http:inbound-endpoint address="http://0.0.0.0:8085/tasks-ws" />
-	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8084/tasks-ws" />
+	    <http:outbound-endpoint address="http://mammym-pkg.mam.foxtel.com.au:8084/tasks-ws" />
 	</pattern:http-proxy>
 
 	<pattern:http-proxy name="http-proxy-cerify">
