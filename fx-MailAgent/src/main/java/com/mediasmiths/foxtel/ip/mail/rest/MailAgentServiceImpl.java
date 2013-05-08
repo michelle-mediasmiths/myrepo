@@ -30,6 +30,10 @@ public class MailAgentServiceImpl implements MailAgentService
 	@Inject
 	@Named("email.configuration")
 	EventMailConfiguration emailConfig;
+	
+	@Inject
+	@Named("mail.agent.send.mails")
+	Boolean sendMails;	
 
 	public MailAgentServiceImpl() throws Exception
 	{
@@ -156,6 +160,9 @@ public class MailAgentServiceImpl implements MailAgentService
 				logger.debug("Preparing to send mail to: " + emailAddress);
 
 			logger.info("Sending email to: " + emailAddress + " with Subject: " + m.getSubject());
+			
+			if(sendMails.booleanValue()){
+			
 			try
 			{
 
@@ -194,6 +201,11 @@ public class MailAgentServiceImpl implements MailAgentService
 			{
 				logger.error("MessagingException (is your configuration right?): " + e);
 				throw e;
+			}
+			}
+			else
+			{
+				logger.info("email sending has been disabled, email body read"+m.getBody());
 			}
 
 		}
