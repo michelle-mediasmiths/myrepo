@@ -17,6 +17,7 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +64,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 	 }
 	
 	@Transactional
-	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, ArrayList <String> channels, boolean restrictedAccess, Boolean adultOnly) 
+	 public List<MayamAccessRights> retrieve(String qcStatus, String qaStatus, Boolean qcParallel, String assetType, Set <String> channelsOwners, boolean restrictedAccess, Boolean adultOnly) 
 	 {
 		
 		log.debug("Rereiving mayam access rights");
@@ -81,13 +82,13 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		}
 		log.debug("assetType is " + assetType);
 
-		if (channels == null)
+		if (channelsOwners == null)
 		{
-			log.debug("channels is null");
+			log.debug("channelsOwners is null");
 		}
 		else
 		{
-			log.debug("channels is " + StringUtils.join(channels.toArray()));
+			log.debug("channelsOwners is " + StringUtils.join(channelsOwners.toArray()));
 		}
 		log.debug("restrictedAccess is " + restrictedAccess);
 
@@ -123,16 +124,13 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 			  criteria.add(Restrictions.eq("adultOnly", Boolean.FALSE));
 		  }
 		  
-		  if (channels != null)
+		  if (channelsOwners != null)
 		  {
 
 		  	  Disjunction restrictions = Restrictions.disjunction();
 		  	  restrictions.add(Restrictions.eq("channelOwner", "*"));
 
-			  Set<String> groups = channelProperties.groupsForChannels(channels);
-			  log.trace(String.format("%d groups returned for assets channels", groups.size()));
-
-			  for (String group : groups)
+			  for (String group : channelsOwners)
 			  {
 			  	  restrictions.add(Restrictions.eq("channelOwner", group));
 			  }
@@ -157,12 +155,24 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 
 		StringList channels = attributeMap.getAttribute(Attribute.CHANNELS);
 		ArrayList<String> channelList = new ArrayList<String>();
+		Set<String> channelOwnerList = new HashSet<String>();
+		
 		if (channels != null)
 		{
 			for (int i = 0; i < channels.size(); i++)
 			{
 				channelList.add(channels.get(i));
 			}
+		}
+		
+		if (channelList.isEmpty())
+		{
+			ArrayList<String> channelGroups = attributeMap.getAttribute(Attribute.CHANNEL_GROUPS);
+			channelOwnerList.addAll(channelGroups);
+		}
+		else {
+			channelOwnerList = channelProperties.groupsForChannels(channels);
+			log.trace(String.format("%d groups returned for assets channels", channelOwnerList.size()));
 		}
 
 		String contentFormat = attributeMap.getAttributeAsString(Attribute.CONT_MAT_TYPE);
@@ -251,7 +261,7 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 				qaStatusString,
 				qcParallel,
 				contentType,
-				channelList,
+				channelOwnerList,
 				retrictedAccess,
 				adultOnly);
 	}
