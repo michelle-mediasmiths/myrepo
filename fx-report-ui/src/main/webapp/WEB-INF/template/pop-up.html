@@ -9,6 +9,15 @@
 <head>
 <title>Report</title>
 <link th:substituteby="includes :: htmlhead" />
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+  
+  <script>
+  $(document).ready(function() {
+    $(".datepicker").datepicker({ dateFormat: "dd-mm-yy" });
+  });
+  </script>
 </head>
 
 <body>
@@ -19,9 +28,8 @@
  	<form class="form-search" method="POST" th:action="@{/rest/query/choose_report}">
  		<table id="reportFormTbl" class="table table-striped tablesorter">
  			<tbody>
- 				<tr><td><label>StartDate: </label></td> <td><input id="startDate" name="start" type="date"/></td><td></td></tr>
-				<tr><td><label>EndDate: </label></td> <td><input id="endDate" name="end" type="date" /></td><td></td></tr>
-				
+ 				<tr><td><label>StartDate: </label></td> <td><input class="datepicker" name="start" type="date"/></td><td></td></tr>
+				<tr><td><label>EndDate: </label></td> <td><input class="datepicker" name="end" type="date" /></td><td></td></tr>
 				<tr>
 					<td><label>ReportName: </label></td> <td><input name="name" type="text" class="input-small search-query" value="REPORT_NAME"/></td><td></td>
 				</tr>				
