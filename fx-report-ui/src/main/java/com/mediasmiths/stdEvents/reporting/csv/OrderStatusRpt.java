@@ -10,6 +10,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -43,8 +44,9 @@ public class OrderStatusRpt
 	public int overdue=0;
 	public int unmatched=0;
 		
-	public void writeOrderStatus(List<AggregatedBMS> events, Date startDate, Date endDate, String reportName)
+	public void writeOrderStatus(final List<AggregatedBMS> events, final DateTime startDate, final DateTime endDate, final String reportName)
 	{
+		logger.debug(">>>writeOrderStatus");
 		logger.info("List size: " + events.size());
 		List<OrderStatus> orders = getReportList(events, startDate, endDate);
 		setStats(orders);
@@ -54,9 +56,10 @@ public class OrderStatusRpt
 		orders.add(addStats("Total Unmatched", Integer.toString(unmatched)));
 		
 		createCsv(orders, reportName);
+		logger.debug("<<<writeOrderStatus");
 	}
 	
-	public List<OrderStatus> getReportList(List<AggregatedBMS> events, Date startDate, Date endDate)
+	public List<OrderStatus> getReportList(final List<AggregatedBMS> events, final DateTime startDate, final DateTime endDate)
 	{
 		logger.info("USING AGGREGATED BMS TABLE");
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();

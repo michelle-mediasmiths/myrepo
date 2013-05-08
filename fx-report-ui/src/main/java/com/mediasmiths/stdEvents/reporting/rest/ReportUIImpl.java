@@ -11,6 +11,10 @@ import javax.ws.rs.QueryParam;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -77,6 +81,8 @@ public class ReportUIImpl implements ReportUI
 
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+	
 	int startDay;
 	int startMonth;
 	int startYear;
@@ -136,6 +142,7 @@ public class ReportUIImpl implements ReportUI
 	 */
 	public List<AggregatedBMS> populateBMS() 
 	{
+		logger.debug(">>>populateBMS");
 		return queryApi.getAllBMS();
 	}
 	
@@ -246,15 +253,21 @@ public class ReportUIImpl implements ReportUI
 		return valid;
 	}
 	
-	private List<AggregatedBMS> getInDateBMS(List<AggregatedBMS> events)
+	private List<AggregatedBMS> getInDateBMS(final List<AggregatedBMS> events, final DateTime start, final DateTime end)
 	{
-			List<AggregatedBMS> valid = new ArrayList<AggregatedBMS>();
-			for (AggregatedBMS bms : events) {
-				boolean within = checkDate(bms.getTime());
-				if (within)
-					valid.add(bms);
+		logger.debug(String.format("Date range checked from %s to %s", start, end));
+		Interval interval = new Interval(start, end);
+		List <AggregatedBMS> valid = new ArrayList<AggregatedBMS>();
+		for (AggregatedBMS bms : events)
+		{
+			DateTime eventTime = new DateTime(bms.getTime());
+			logger.debug(String.format("Checking if event time %s within range.", eventTime));
+			if (interval.contains(eventTime))
+			{
+				valid.add(bms);
 			}
-			return valid;
+		}
+		return valid;
 	}
 	
 	@Transactional
@@ -276,50 +289,17 @@ public class ReportUIImpl implements ReportUI
 	public String chooseReport(final String start, final String end, final String reportName, final String rptType)
 	{
 		logger.debug(">>>chooseReport");
-		logger.debug("start: " + start + " end: " + end);
-		logger.debug("name: " + reportName + " rpt: " + rptType);
+		logger.debug("Received startdate: " + start + " enddate: " + end);
+		logger.debug("Received reportname: " + reportName + " rptType: " + rptType);
 		
-		Date startD = new Date();
-		Date endD = new Date();
-	
-		if(StringUtils.isBlank(start)) 
-		{
-			startD = new Date();
-			logger.debug(String.format("start date was null, setting to: %s" , startD.toString()));
-		}
-		else 
-		{
-			try
-			{
-				startD = new SimpleDateFormat("yyyy-MM-dd").parse(start);
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		if (StringUtils.isBlank(end)) {
-			endD = new Date();
-			logger.debug(String.format("end date was null, setting to: %s" , endD.toString()));
-		}
-		else
-		{
-			try
-			{
-				endD = new SimpleDateFormat("yyyy-MM-dd").parse(end);
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
-		}
-				
-		//saveReportName(reportName);
+		DateTime startDate = StringUtils.isBlank(start) ? new DateTime() : dateFormatter.parseDateTime(start);
+		DateTime endDate = StringUtils.isBlank(end) ? new DateTime() : dateFormatter.parseDateTime(end);
+		logger.debug(String.format("Start date formatted: %s", startDate.toString()));
+		logger.debug(String.format("End date formatted: %s", endDate.toString()));
 		
 		if (rptType.equals("OrderStatus")) {
 			logger.info("generating OrderStatus__");
-				getOrderStatusCSV(startD, endD, reportName);
+				getOrderStatusCSV(startDate, endDate, reportName);
 		}
 		else if (rptType.equals("AcquisitionDelivery")) {
 			logger.info("generating AcquisitionDelivery__");
@@ -355,12 +335,12 @@ public class ReportUIImpl implements ReportUI
 	}
 
 	@Transactional(readOnly=true)
-	public void getOrderStatusCSV(Date start, Date end, String reportName)
+	public void getOrderStatusCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getOrderStatusCSV");
 		
 		List<AggregatedBMS> bms = populateBMS();
-		List<AggregatedBMS> orders = getInDateBMS(bms);
+		List<AggregatedBMS> orders = getInDateBMS(bms, start, end);
 		logger.info("List size: " + orders.size());
 		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
 		orderStatus.writeOrderStatus(orders, start, end, reportName);
