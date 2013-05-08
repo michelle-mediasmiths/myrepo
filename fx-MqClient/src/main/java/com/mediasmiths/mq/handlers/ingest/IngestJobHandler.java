@@ -115,7 +115,7 @@ public class IngestJobHandler extends JobHandler
 		updateMapForTask.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
 		try
 		{
-			taskController.saveTask(task);
+			taskController.saveTask(updateMapForTask);
 		}
 		catch (MayamClientException e)
 		{
