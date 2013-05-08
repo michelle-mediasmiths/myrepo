@@ -7,12 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -32,7 +29,6 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -134,10 +130,13 @@ public class ReportUIImpl implements ReportUI
 		}
 	}
 	
-	public List<AggregatedBMS> bms = new ArrayList<AggregatedBMS>();
-	public void populateBMS() 
+	/**
+	 * Returns all the records in the BMS table
+	 * @return
+	 */
+	public List<AggregatedBMS> populateBMS() 
 	{
-		bms = queryApi.getAllBMS();
+		return queryApi.getAllBMS();
 	}
 	
 	@Inject
@@ -155,13 +154,6 @@ public class ReportUIImpl implements ReportUI
 	public String getPopup()
 	{
 		TemplateCall call = templater.template("pop-up");
-		return call.process();
-	}
-	
-	@Transactional
-	public String getParent()
-	{
-		TemplateCall call = templater.template("parent");
 		return call.process();
 	}
 	
@@ -281,108 +273,98 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional(readOnly=true)
-	public String chooseReport(@QueryParam("start")String start, @QueryParam("end")String end, @QueryParam("name")String name, @QueryParam("rpt")String rpt, @QueryParam("type") String type)
+	public String chooseReport(final String start, final String end, final String reportName, final String rptType)
 	{
-		logger.info("start: " + start + " end: " + end);
-		logger.info("name: " + name + " rpt: " + rpt);
-		logger.info("type: " + type);
+		logger.debug(">>>chooseReport");
+		logger.debug("start: " + start + " end: " + end);
+		logger.debug("name: " + reportName + " rpt: " + rptType);
 		
-		if(start.equals("")) {
-			startDate = new Date();
-			start = startDate.toString();
+		Date startD = new Date();
+		Date endD = new Date();
+	
+		if(StringUtils.isBlank(start)) 
+		{
+			startD = new Date();
+			logger.debug(String.format("start date was null, setting to: %s" , startD.toString()));
 		}
-		if (end.equals("")) {
-			endDate = new Date();
-			end = endDate.toString();
-		}
-		
-		logger.info("WERE NULL start: " + start + " end: " + end);
-		
-		saveStartDate(start);
-		saveEndDate(end);
-		saveReportName(name);
-		
-		boolean csv = false;
-		boolean ui = false;
-		if (type.equals("csv"))
-			csv = true;
-		else if (type.equals("ui"))
-			ui = true;
-		logger.info("csv=" + csv + " ui=" + ui);
-		
-		if (rpt.equals("OrderStatus")) {
-			logger.info("generating OrderStatus__");
-			if (csv)
-				getOrderStatusCSV();
-			if (ui) 
-				return getOrderStatusUI();
-		}
-		else if (rpt.equals("AcquisitionDelivery")) {
-			logger.info("generating AcquisitionDelivery__");
-			if (csv)
-				getAquisitionReportCSV();
-			if (ui)
-				return getAquisitionReportUI();
-		}
-		else if (rpt.equals("ManualQA")) {
-			logger.info("generating ManualQA__");
-			if (csv)
-				getManualQACSV();
-			if (ui)
-				return getManualQAUI();
-		}
-		else if (rpt.equals("AutoQC")) {
-			logger.info("generating AutoQC__");
-			if (csv)
-				getAutoQCCSV();
-			if (ui) {
-				return getAutoQCUI();
+		else 
+		{
+			try
+			{
+				startD = new SimpleDateFormat("yyyy-MM-dd").parse(start);
+			}
+			catch (ParseException e)
+			{
+				e.printStackTrace();
 			}
 		}
-		else if (rpt.equals("PurgeContent")) {
+		
+		if (StringUtils.isBlank(end)) {
+			endD = new Date();
+			logger.debug(String.format("end date was null, setting to: %s" , endD.toString()));
+		}
+		else
+		{
+			try
+			{
+				endD = new SimpleDateFormat("yyyy-MM-dd").parse(end);
+			}
+			catch (ParseException e)
+			{
+				e.printStackTrace();
+			}
+		}
+				
+		//saveReportName(reportName);
+		
+		if (rptType.equals("OrderStatus")) {
+			logger.info("generating OrderStatus__");
+				getOrderStatusCSV(startD, endD, reportName);
+		}
+		else if (rptType.equals("AcquisitionDelivery")) {
+			logger.info("generating AcquisitionDelivery__");
+				getAquisitionReportCSV();
+
+		}
+		else if (rptType.equals("ManualQA")) {
+			logger.info("generating ManualQA__");
+				getManualQACSV();
+		}
+		else if (rptType.equals("AutoQC")) {
+			logger.info("generating AutoQC__");
+				getAutoQCCSV();
+		}
+		else if (rptType.equals("PurgeContent")) {
 			logger.info("generating PurgeContent__");
-			if (csv)
 				getPurgeContentCSV();
-			if (ui)
-				return getPurgeContentUI();
 		}
-		else if (rpt.equals("ComplianceEdits")) {
+		else if (rptType.equals("ComplianceEdits")) {
 			logger.info("generating ComplianceEdits__");
-			if (csv)
 				getComplianceEditCSV();
-			if(ui)
-				return getComplianceEditsUI();
 		}
-		else if (rpt.equals("Export")) {
+		else if (rptType.equals("Export")) {
 			logger.info("generating Export");
-			if (csv)
 				getExportCSV();
-			if (ui)
-				return getExportUI();
 		}
-		else if (rpt.equals("Watchfolder")) {
+		else if (rptType.equals("Watchfolder")) {
 			logger.info("generating Watchfolder__");
-			if (csv)
-				getWatchFolderStorageCSV();
-			if (ui)
-				return getWatchFolderStorageUI();
+				getWatchFolderStorageCSV();;
 		}
+		logger.debug("<<<chooseReport");
 		return null;		
 	}
 
 	@Transactional(readOnly=true)
-	public void getOrderStatusCSV()
+	public void getOrderStatusCSV(Date start, Date end, String reportName)
 	{
+		logger.debug(">>>getOrderStatusCSV");
 		
-// 		logger.info("writeOrderStatus: " + REPORT_NAME + " max: " + MAX);
- 		populateBMS();
-// 		List<EventEntity> orders = getInDate(queryApi.getByEventNameWindow("CreateorUpdateTitle", MAX));
-// 		logger.info("List size: " + orders.size());
-//		orderStatus.writeOrderStatus(orders, startDate, endDate, REPORT_NAME);
-		
+		List<AggregatedBMS> bms = populateBMS();
 		List<AggregatedBMS> orders = getInDateBMS(bms);
 		logger.info("List size: " + orders.size());
-		orderStatus.writeOrderStatus(bms, startDate, endDate, REPORT_NAME);
+		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
+		orderStatus.writeOrderStatus(orders, start, end, reportName);
+		logger.debug("<<<getOrderStatusCSV");
 	}
 	
 	private List<OrderStatus> getReportList(List<EventEntity> events)

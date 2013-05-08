@@ -9,13 +9,14 @@
 <head>
 <title>Report</title>
 <link th:substituteby="includes :: htmlhead" />
-<img id="foxtelLogo" src="../../img/foxtelLogoTrans.png" width="173" height="33" align="right" style="opacity:0.6"/>
 </head>
 
 <body>
+	<img id="foxtelLogo" src="../../img/foxtelLogoTrans.png" width="173" height="33" align="right" style="opacity:0.6"/>
+
 	<div>
 		
- 	<form class="form-search" method="GET" th:action="@{/rest/query/choose_report/start/end/name/rpt/type}">
+ 	<form class="form-search" method="POST" th:action="@{/rest/query/choose_report}">
  		<table id="reportFormTbl" class="table table-striped tablesorter">
  			<tbody>
  				<tr><td><label>StartDate: </label></td> <td><input id="startDate" name="start" type="date"/></td><td></td></tr>
@@ -38,9 +39,6 @@
 							<option value="Watchfolder">Watch Folder Storage</option>
 						</select>
 					</td>
-				
-					<td><label>CSV </label><input type="radio" name="type" value="csv"></input>
-					<label>/ On Screen </label><input type="radio" name="type" value="ui"></input></td>
 				
 					<td><button class="btn-primary" id="rptBtn" type="submit">GenerateReport</button></td>
 				</tr>
