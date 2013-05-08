@@ -82,7 +82,7 @@ public class PurgeContentRpt
 	{
 		List<CreateOrUpdateTitle> titles = report.titles;
 		
-		List<AggregatedBMS> bms = report.bms;
+		List<AggregatedBMS> bms = new ArrayList<AggregatedBMS>();
 		
 		logger.info("Creating purgeContent list");
 		List<PurgeContent> purgeList = new ArrayList<PurgeContent>();
