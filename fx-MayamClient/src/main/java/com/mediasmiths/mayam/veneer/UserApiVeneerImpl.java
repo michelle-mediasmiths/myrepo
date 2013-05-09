@@ -3,16 +3,18 @@ package com.mediasmiths.mayam.veneer;
 import java.util.Set;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.UserApi;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class UserApiVeneerImpl implements UserApiVeneer
 {
 	protected final UserApi userApi;
 
 	@Inject
-	public UserApiVeneerImpl(TasksClient tasksClient)
+	public UserApiVeneerImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient)
 	{
 		this.userApi = tasksClient.userApi();
 	}

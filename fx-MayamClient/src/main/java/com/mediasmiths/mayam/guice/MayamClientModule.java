@@ -38,6 +38,9 @@ public class MayamClientModule extends AbstractModule
 {
 
 	private final static Logger log = Logger.getLogger(MayamClientModule.class);
+	public static final String SETUP_TASKS_CLIENT = "SETUP.TASKS.CLIENT";
+	private static final String MAYAM_AUTH_TOKEN = "mayam.endpoint";
+	private static final String MAYAM_ENDPOINT = "mayam.auth.token";
 	
 	@Override
 	protected void configure()
@@ -57,6 +60,18 @@ public class MayamClientModule extends AbstractModule
 		bind(UserApiVeneer.class).to(UserApiVeneerImpl.class);
 		bind(TasksClientVeneer.class).to(TasksClientVeneerImpl.class);
 		
+	}
+	
+	@Provides
+	@Singleton
+	@Named(SETUP_TASKS_CLIENT)
+	public TasksClient getSetupTasksClient(TasksClient tc,@Named(MAYAM_ENDPOINT) String endpoint,
+			@Named(MAYAM_AUTH_TOKEN) String token) throws MalformedURLException{
+
+		log.info(String.format("Using mayam endpoint %s and auth token %s", endpoint,token));
+
+		URL url = new URL(endpoint);
+		return tc.setup(url, token);
 	}
 	
 	@Provides

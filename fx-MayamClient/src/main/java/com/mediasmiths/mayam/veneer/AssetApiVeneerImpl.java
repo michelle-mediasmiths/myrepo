@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
@@ -11,13 +12,14 @@ import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.AssetApi;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class AssetApiVeneerImpl implements AssetApiVeneer
 {
 	protected final AssetApi assetApi;
 	
 	@Inject
-	public AssetApiVeneerImpl(TasksClient tasksClient){
+	public AssetApiVeneerImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient){
 		this.assetApi = tasksClient.assetApi();
 	}
 

@@ -5,12 +5,14 @@ import java.net.URL;
 import javax.inject.Provider;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeMultiMap;
 import com.mayam.wf.attributes.shared.AttributeRangeMap;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class TasksClientVeneerImpl implements TasksClientVeneer
 {
@@ -22,7 +24,7 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 
 	@Inject
 	public TasksClientVeneerImpl(
-			TasksClient tasksClient,
+			@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient,
 			AssetApiVeneer assetApiVeneer,
 			TaskApiVeneer taskApiVeneer,
 			SegmentApiVeneer segmentApiVeneer,

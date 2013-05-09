@@ -1,19 +1,21 @@
 package com.mediasmiths.mayam.veneer;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.SegmentApi;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class SegmentApiVeneerImpl implements SegmentApiVeneer
 {
 	protected final SegmentApi segmentApi;
 	
 	@Inject
-	public SegmentApiVeneerImpl(TasksClient tasksClient){
+	public SegmentApiVeneerImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient){
 		this.segmentApi=tasksClient.segmentApi();
 	}
 
