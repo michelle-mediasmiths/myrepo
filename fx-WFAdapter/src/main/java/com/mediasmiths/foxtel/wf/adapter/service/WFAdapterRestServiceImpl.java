@@ -253,7 +253,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		// comment out as version 7 220213
 		
-		com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification qcPass = new com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification();
+		com.mediasmiths.foxtel.ip.common.events.AutoQCPassNotification qcPass = new com.mediasmiths.foxtel.ip.common.events.AutoQCPassNotification();
 		qcPass.setAssetId(notification.getAssetId());
 		qcPass.setForTXDelivery(notification.isForTXDelivery());
 		qcPass.setMaterialID(String.valueOf(notification.getTaskID()));
