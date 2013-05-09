@@ -30,6 +30,10 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 	@Inject
 	protected UserApiVeneer userApiVeneer;
 
+	public TasksClientVeneerImpl(){
+		
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#hashCode()
 	 */
