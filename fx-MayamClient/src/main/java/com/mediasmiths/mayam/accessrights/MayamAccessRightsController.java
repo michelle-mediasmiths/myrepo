@@ -168,7 +168,10 @@ public class MayamAccessRightsController extends HibernateDao<MayamAccessRights,
 		if (channelList.isEmpty())
 		{
 			ArrayList<String> channelGroups = attributeMap.getAttribute(Attribute.CHANNEL_GROUPS);
-			channelOwnerList.addAll(channelGroups);
+			if (channelGroups != null)
+			{
+				channelOwnerList.addAll(channelGroups);
+			}
 		}
 		else {
 			channelOwnerList = channelProperties.groupsForChannels(channels);
