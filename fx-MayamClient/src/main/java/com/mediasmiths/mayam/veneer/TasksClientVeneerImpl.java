@@ -10,28 +10,29 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeMultiMap;
 import com.mayam.wf.attributes.shared.AttributeRangeMap;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.AssetApi;
-import com.mayam.wf.ws.client.SegmentApi;
-import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.UserApi;
 
 public class TasksClientVeneerImpl implements TasksClientVeneer
 {
-	
-	@Inject
-	protected TasksClient tasksClient;
-	@Inject
-	protected AssetApiVeneer assetApiVeneer;
-	@Inject
-	protected TaskApiVeneer taskApiVeneer;
-	@Inject
-	protected SegmentApiVeneer segmentApiVeneer;
-	@Inject
-	protected UserApiVeneer userApiVeneer;
+	private final TasksClient tasksClient;
+	private final AssetApiVeneer assetApiVeneer;
+	private final TaskApiVeneer taskApiVeneer;
+	private final SegmentApiVeneer segmentApiVeneer;
+	private final UserApiVeneer userApiVeneer;
 
-	public TasksClientVeneerImpl(){
-		
+	@Inject
+	public TasksClientVeneerImpl(
+			TasksClient tasksClient,
+			AssetApiVeneer assetApiVeneer,
+			TaskApiVeneer taskApiVeneer,
+			SegmentApiVeneer segmentApiVeneer,
+			UserApiVeneer userApiVeneer)
+	{
+		this.tasksClient = tasksClient;
+		this.assetApiVeneer = assetApiVeneer;
+		this.taskApiVeneer = taskApiVeneer;
+		this.segmentApiVeneer = segmentApiVeneer;
+		this.userApiVeneer = userApiVeneer;
 	}
 	
 	/* (non-Javadoc)
