@@ -52,10 +52,10 @@ public class MayamClientModule extends AbstractModule
 		bind(PackageController.class).to(MayamPackageController.class);
 		
 		bind(AssetApiVeneer.class).to(AssetApiVeneerImpl.class);
-		bind(TasksClientVeneer.class).to(TasksClientVeneerImpl.class);
 		bind(SegmentApiVeneer.class).to(SegmentApiVeneerImpl.class);
 		bind(TaskApiVeneer.class).to(TaskApiVeneerImpl.class);
 		bind(UserApiVeneer.class).to(UserApiVeneerImpl.class);
+		bind(TasksClientVeneer.class).to(TasksClientVeneerImpl.class);
 		
 	}
 	
