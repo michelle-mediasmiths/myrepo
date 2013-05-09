@@ -22,11 +22,13 @@ import com.mayam.wf.attributes.shared.AttributeValidationException;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.AttributeValidationException.FailureType;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.veneer.TaskApiVeneer;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamAttributeControllerTest {
 	
 	MayamAttributeController controller;
-	TasksClient client;
+	TasksClientVeneer client;
 	AttributeValidator validator;
 	AttributeMap map;
 	
@@ -40,7 +42,7 @@ public class MayamAttributeControllerTest {
 		map = mock(AttributeMap.class);
 		map.injectHelpers(mock(AttributeValidator.class), mock(AttributeDescription.Producer.class));
 
-		client = mock(TasksClient.class);
+		client = mock(TasksClientVeneer.class);
 		when(client.createAttributeMap()).thenReturn(map);
 		
 		validator = mock(AttributeValidator.class);

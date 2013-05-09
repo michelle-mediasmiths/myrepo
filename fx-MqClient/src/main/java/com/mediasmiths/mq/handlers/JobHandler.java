@@ -8,12 +8,12 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public abstract class JobHandler implements Handler
 {
-	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
-	protected TasksClient tasksClient;
+	protected TasksClientVeneer tasksClient;
 	
 	@Inject
 	protected MayamTaskController taskController;

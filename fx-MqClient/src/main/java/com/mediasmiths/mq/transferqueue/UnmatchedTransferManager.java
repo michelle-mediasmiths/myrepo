@@ -15,6 +15,7 @@ import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
@@ -39,7 +40,7 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 	public UnmatchedTransferManager(
 			ShutdownManager shutdownManager,
 			TransferQueue queue,
-			@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient,
+			TasksClientVeneer tasksClient,
 			MayamTaskController taskController)
 	{
 		super(queue, tasksClient);

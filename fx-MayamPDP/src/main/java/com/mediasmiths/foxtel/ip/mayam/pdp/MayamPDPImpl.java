@@ -22,6 +22,8 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -157,7 +159,7 @@ public class MayamPDPImpl implements MayamPDP
 
 	private Logger logger = Logger.getLogger(MayamPDP.class);
 
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 	private final MayamTaskController taskController;
 
 	@Inject
@@ -179,7 +181,7 @@ public class MayamPDPImpl implements MayamPDP
 	private  AttributeMapMapper mapper;
 	
 	@Inject
-	public MayamPDPImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient client,
+	public MayamPDPImpl(TasksClientVeneer client,
 	                    MayamTaskController taskController,
 	                    AttributeMapMapper mapper)
 	{

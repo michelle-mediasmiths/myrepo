@@ -34,6 +34,8 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+
 import org.apache.log4j.Logger;
 
 import java.math.BigInteger;
@@ -44,11 +46,9 @@ import java.util.List;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
-
 public class MayamTitleController extends MayamController{
 	private static final String TITLE_AGL_NAME = "episode";
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 	private final static Logger log = Logger.getLogger(MayamTitleController.class);
 	
 	private final static String AO_CHANNEL_TAG = "AO";
@@ -57,8 +57,8 @@ public class MayamTitleController extends MayamController{
 	private DateUtil dateUtil;
 	
 	@Inject
-	public MayamTitleController(@Named(SETUP_TASKS_CLIENT)TasksClient mayamClient) {
-		client = mayamClient;
+	public MayamTitleController(TasksClientVeneer client) {
+		this.client=client;
 	}
 	
 	@Inject

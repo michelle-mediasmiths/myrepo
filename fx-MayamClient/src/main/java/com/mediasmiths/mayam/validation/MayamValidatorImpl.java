@@ -21,16 +21,17 @@ import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamValidatorImpl implements MayamValidator {
-	private TasksClient client;
+	private TasksClientVeneer client;
 	
 	protected final static Logger log=Logger.getLogger(MayamValidatorImpl.class);
 	
 	@Inject
-	public MayamValidatorImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient mayamClient) 
+	public MayamValidatorImpl(TasksClientVeneer client) 
 	{
-		client = mayamClient;
+		this.client=client;
 	}
 		
 	/* (non-Javadoc)

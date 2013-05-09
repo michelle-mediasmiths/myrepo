@@ -22,6 +22,8 @@ import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+
 import org.apache.log4j.Logger;
 
 import java.util.Calendar;
@@ -34,8 +36,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
-
 public class MayamTaskController extends MayamController
 {
 	private final Logger log = Logger.getLogger(MayamTaskController.class);
@@ -46,9 +46,9 @@ public class MayamTaskController extends MayamController
 	                                                               TaskState.REMOVED);
 
 
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 
-	public TasksClient getTasksClient()
+	public TasksClientVeneer getTasksClient()
 	{
 		return client;
 	}
@@ -65,9 +65,9 @@ public class MayamTaskController extends MayamController
 	private final MayamAccessRightsController accessRightsController;
 
 	@Inject
-	public MayamTaskController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamAccessRightsController rightsController)
+	public MayamTaskController(TasksClientVeneer client, MayamAccessRightsController rightsController)
 	{
-		client = mayamClient;
+		this.client=client;
 		accessRightsController = rightsController;
 	}
 	

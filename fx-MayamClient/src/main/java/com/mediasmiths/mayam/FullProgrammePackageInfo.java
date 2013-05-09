@@ -10,6 +10,8 @@ import com.mayam.wf.ws.client.AssetApi;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
+import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+
 import org.apache.log4j.Logger;
 
 import java.util.List;
@@ -32,7 +34,7 @@ public class FullProgrammePackageInfo
 	                                MayamPackageController packageController,
 	                                MayamMaterialController materialController,
 	                                MayamTitleController titleController,
-	                                final AssetApi assetApi) throws MayamClientException
+	                                final AssetApiVeneer assetApi) throws MayamClientException
 	{
 
 		this.packageId = packageId;

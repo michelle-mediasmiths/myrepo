@@ -52,6 +52,7 @@ import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.io.PropertyFile;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -71,8 +72,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
-
 public class MayamMaterialController extends MayamController
 {
 
@@ -84,7 +83,7 @@ public class MayamMaterialController extends MayamController
 	public static final String AO_ASSOCIATED_MATERIAL_AGL_NAME = "ao-associated";
 	public static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
 
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 	private final MayamTaskController taskController;
 	private final static Logger log = Logger.getLogger(MayamMaterialController.class);
 
@@ -113,13 +112,13 @@ public class MayamMaterialController extends MayamController
 	private DateUtil dateUtil;
 	
 	@Inject
-	private PackageController packageController; //dont know if guice will let this inject or not (mutual dependency... but one is constructer injection, the other has member injection, it might be ok)
+	private PackageController packageController; 
 	
 	@Inject
-	public MayamMaterialController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, MayamTaskController mayamTaskController)
+	public MayamMaterialController(TasksClientVeneer client, MayamTaskController mayamTaskController)
 	{
-		client = mayamClient;
-		taskController = mayamTaskController;
+		this.client = client;
+		this.taskController = mayamTaskController;
 	}
 
 	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)

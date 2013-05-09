@@ -18,6 +18,7 @@ import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
@@ -78,9 +79,8 @@ public class IncomingListener extends MqClientListener
 	public static final String ATTRIBUTE_PAIR = "mayam#attribute-pairs";
 	public static final String JOB_MESSAGE_TYPE = "mayam#job";
 
-	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
-	private TasksClient client;
+	private TasksClientVeneer client;
 	@Inject
 	private MayamTaskController taskController;
 	@Inject

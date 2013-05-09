@@ -6,20 +6,21 @@ import com.mayam.wf.attributes.shared.AttributeValidationException;
 import com.mayam.wf.attributes.shared.AttributeValidator;
 import com.mayam.wf.attributes.shared.BasicAttributeValidator;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamAttributeController extends MayamController{
 	private final AttributeValidator validator;
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 	private AttributeMap attributes;
 	
 	// Constructors for creating new Attribute Maps
-	public MayamAttributeController(TasksClient mayamClient) {
+	public MayamAttributeController(TasksClientVeneer mayamClient) {
 		validator = new BasicAttributeValidator();
 		client = mayamClient;
 		attributes = client.createAttributeMap();
 	}
 	
-	public MayamAttributeController(TasksClient mayamClient, AttributeValidator attributeValidator) {
+	public MayamAttributeController(TasksClientVeneer mayamClient, AttributeValidator attributeValidator) {
 		validator = attributeValidator;
 		client = mayamClient;
 		attributes = client.createAttributeMap();

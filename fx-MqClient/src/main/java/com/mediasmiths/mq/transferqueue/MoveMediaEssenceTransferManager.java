@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
 import com.mediasmiths.std.threading.Daemon;
 import com.mediasmiths.std.threading.Timeout;
@@ -16,7 +17,7 @@ public abstract class MoveMediaEssenceTransferManager  extends Daemon implements
 
 	private static final Logger log = Logger.getLogger(MoveMediaEssenceTransferManager.class);
 	
-	protected final TasksClient tasksClient;
+	protected final TasksClientVeneer tasksClient;
 	private final TransferQueue queue;
 	
 	/**
@@ -26,7 +27,7 @@ public abstract class MoveMediaEssenceTransferManager  extends Daemon implements
 	
 	public MoveMediaEssenceTransferManager(
 			TransferQueue queue,
-			TasksClient tasksClient)
+			TasksClientVeneer tasksClient)
 	{
 		this.queue = queue;
 		this.tasksClient = tasksClient;

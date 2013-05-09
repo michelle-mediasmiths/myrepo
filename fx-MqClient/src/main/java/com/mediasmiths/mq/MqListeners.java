@@ -22,6 +22,7 @@ import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.mq.listeners.IncomingListener;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
@@ -31,7 +32,7 @@ public class MqListeners extends Daemon implements StoppableService {
 	private ArrayList<Detachable> listeners;
 	
 	
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 	
 	private final MayamTaskController taskController;
 	
@@ -60,7 +61,7 @@ public class MqListeners extends Daemon implements StoppableService {
 	}
 	
 	@Inject
-	public MqListeners(@Named(MayamClientModule.SETUP_TASKS_CLIENT)TasksClient client, MayamTaskController taskController,Mq mq,IncomingListener incomingListener,MediasmithsDestinations destinations, ShutdownManager shutdownManager) 
+	public MqListeners(TasksClientVeneer client, MayamTaskController taskController,Mq mq,IncomingListener incomingListener,MediasmithsDestinations destinations, ShutdownManager shutdownManager) 
 	{
 		log.info("MqListeners startup");
 		this.client=client;
