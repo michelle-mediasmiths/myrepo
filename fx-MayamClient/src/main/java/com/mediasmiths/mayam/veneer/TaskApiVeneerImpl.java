@@ -1,19 +1,21 @@
 package com.mediasmiths.mayam.veneer;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.guice.MayamClientModule;
 
 public class TaskApiVeneerImpl implements TaskApiVeneer
 {
 	protected final TaskApi tasksApi;
 	
 	@Inject
-	public TaskApiVeneerImpl(TasksClient tasksClient){
+	public TaskApiVeneerImpl(@Named(MayamClientModule.SETUP_TASKS_CLIENT) TasksClient tasksClient){
 		this.tasksApi=tasksClient.taskApi();
 	}
 

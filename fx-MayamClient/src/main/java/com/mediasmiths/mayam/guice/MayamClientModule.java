@@ -39,8 +39,8 @@ public class MayamClientModule extends AbstractModule
 
 	private final static Logger log = Logger.getLogger(MayamClientModule.class);
 	public static final String SETUP_TASKS_CLIENT = "SETUP.TASKS.CLIENT";
-	private static final String MAYAM_AUTH_TOKEN = "mayam.endpoint";
-	private static final String MAYAM_ENDPOINT = "mayam.auth.token";
+	private static final String MAYAM_AUTH_TOKEN =  "mayam.auth.token";
+	private static final String MAYAM_ENDPOINT ="mayam.endpoint";
 	
 	@Override
 	protected void configure()
