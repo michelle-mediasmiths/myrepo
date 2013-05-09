@@ -60,11 +60,11 @@ final class TasksWSInvocationRetryable implements Retryable<Object>
 	}
 
 	
-	private boolean containsException(Throwable t, Class<?> exceptionClass)
+	private boolean containsException(Throwable t, Class exceptionClass)
 	{
 		if (t == null)
 			return false;
-		if (t.getClass() == exceptionClass)
+		if (exceptionClass.isAssignableFrom(t.getClass()))
 			return true;
 		return containsException(t.getCause(), exceptionClass);
 	}
