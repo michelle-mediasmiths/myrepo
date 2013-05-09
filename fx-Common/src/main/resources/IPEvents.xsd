@@ -223,7 +223,8 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="autoQCResultNotification">
+  <xs:element name="autoQCResultNotification">
+    <xs:complexType>
         <xs:complexContent>
             <xs:annotation>
                 <xs:documentation>A type to represent an ArdomeJobFailure event
@@ -240,6 +241,7 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    </xs:element> 
     
     <xs:complexType name="autoQCFullResultNotification">
         <xs:complexContent>
