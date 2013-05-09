@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.veneer;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.exception.RemoteException;
@@ -11,6 +12,7 @@ public class TaskApiVeneerImpl implements TaskApiVeneer
 {
 	protected final TaskApi tasksApi;
 	
+	@Inject
 	public TaskApiVeneerImpl(TasksClient tasksClient){
 		this.tasksApi=tasksClient.taskApi();
 	}
