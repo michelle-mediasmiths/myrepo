@@ -22,18 +22,13 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 
 	final Class<? extends Throwable>[] retryExceptions = new Class []{SocketException.class, MqException.class, SocketTimeoutException.class};
 	
-	@Inject
-	@Named("retry.backofftime")
 	private long backOffTime = 1000;
 	
 	@Inject
 	@Named("retry.maxattempts")
-	private int maxattempts = 5;
+	private int maxattempts = 10;
 	
 	TimeUnit backoffUnit = TimeUnit.MILLISECONDS;
-	
-	@Inject
-	@Named("retry.backoffExponent")
 	double backoffExponent = 2.0d;
 	
 	@Override
