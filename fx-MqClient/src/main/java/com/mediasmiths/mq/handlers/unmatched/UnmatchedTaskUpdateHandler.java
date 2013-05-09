@@ -100,17 +100,21 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				}
 
 				String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+				boolean isCompliance = targetAsset != null && targetAsset.length() != 0;
+				boolean isPlaceholder = AssetProperties.isMaterialPlaceholder(peerAttributes);
+				boolean isAssociated = AssetProperties.isMaterialAssociated(peerAttributes);
 
-				boolean isAssociated = AssetProperties.isMaterialAssociated(currentAttributes);
-
-				if (targetAsset != null && targetAsset.length() != 0 && !isAssociated)
+				if (isCompliance && !isAssociated)
 				{ // refuse to match it.
-					currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-					currentAttributes.setAttribute(
-							Attribute.ERROR_MSG,
-							"Cannot match asset to placeholder as placeholder already has media attached");
-					taskController.saveTask(currentAttributes);
-					return; //ao mismatch, do not perform matching
+					clearPeerSetError(currentAttributes, "Cannot match asset to selected placeholder as it is a compliance item");
+					return;
+				}
+				
+				if(!isPlaceholder && !isAssociated){
+					//refuse to match, selected item is not a placholder
+					// refuse to match it.
+					clearPeerSetError(currentAttributes, "Cannot match asset to selected item, it already has media");
+					return;
 				}
 
 				if (isAssociated)
@@ -167,9 +171,6 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					associatedMaterial.setAttribute(
 							Attribute.PARENT_HOUSE_ID,
 							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-					associatedMaterial.setAttribute(
-							Attribute.SOURCE_HOUSE_ID,
-							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 
@@ -179,16 +180,16 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					// close unmatched task
 					transferManager.closeTask(currentAttributes);
 
-					log.debug(String.format("PeerId returned %s, now setting format.", matchId));
-
-					// set the format (hd/sd, don't have a way of detecting 3d)
-					setFormat(matchId, format);
-
-					if (!taskFailure)
-					{
-						removeUnmatchedAssetFromTaskLists(houseID);
-						log.info("Unmatched task removed for asset : " + houseID);
-					}
+//					log.debug(String.format("PeerId returned %s, now setting format.", matchId));
+//
+//					// set the format (hd/sd, don't have a way of detecting 3d)
+//					setFormat(matchId, format);
+//
+//					if (!taskFailure)
+//					{
+//						removeUnmatchedAssetFromTaskLists(houseID);
+//						log.info("Unmatched task removed for asset : " + houseID);
+//					}
 				}
 				else
 				{
@@ -385,6 +386,15 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 		{
 			log.error("Exception thrown by Mayam while updating asset : " + peerAssetID, e);
 		}
+	}
+	
+	private void clearPeerSetError(AttributeMap currentAttributes, String errorMessage) throws MayamClientException{
+		AttributeMap updateMap = taskController.updateMapForTask(currentAttributes);
+		updateMap.setAttribute(Attribute.ASSET_PEER_ID, null); //clear the selected peer
+		updateMap.setAttribute(
+				Attribute.ERROR_MSG,
+				errorMessage);
+		taskController.saveTask(updateMap);
 	}
 
 	@Override
