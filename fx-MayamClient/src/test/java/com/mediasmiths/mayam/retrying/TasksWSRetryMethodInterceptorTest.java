@@ -3,6 +3,8 @@ package com.mediasmiths.mayam.retrying;
 import java.net.ConnectException;
 import java.net.SocketException;
 
+import org.junit.Ignore;
+
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
@@ -15,6 +17,7 @@ import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.io.PropertyFile;
 import com.mediasmiths.std.util.Logging;
 
+@Ignore //not a junit test
 public class TasksWSRetryMethodInterceptorTest
 {
 	public static void main(String[] args) throws Exception

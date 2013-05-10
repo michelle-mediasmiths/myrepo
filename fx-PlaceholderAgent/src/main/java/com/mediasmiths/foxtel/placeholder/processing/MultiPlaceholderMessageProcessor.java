@@ -59,7 +59,7 @@ import java.util.Set;
 public class MultiPlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage>
 {
 
-    private static Logger logger = Logger.getLogger(PlaceholderMessageProcessor.class);
+    private static Logger logger = Logger.getLogger(MultiPlaceholderMessageProcessor.class);
 
     private final MayamClient mayamClient;
 
@@ -256,7 +256,6 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		        addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
 		    }
 
-		    addOrUpdateMaterial.setCompletionDate(action.getMaterial().getRequiredBy());
 		    addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
 
 		    //send event

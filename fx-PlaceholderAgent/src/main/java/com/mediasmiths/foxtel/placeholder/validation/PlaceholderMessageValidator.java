@@ -38,7 +38,7 @@ import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.validation.MayamValidator;
-
+@Deprecated
 public class PlaceholderMessageValidator extends
 		MessageValidator<PlaceholderMessage> {
 

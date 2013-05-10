@@ -51,6 +51,7 @@ import java.util.Set;
  * @see PlaceholderMessageValidator
  * 
  */
+@Deprecated
 public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMessage>
 {
 
