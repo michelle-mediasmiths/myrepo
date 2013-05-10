@@ -1,10 +1,12 @@
 package com.mediasmiths.mayam.veneer;
 
+import com.google.inject.ImplementedBy;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
 
+@ImplementedBy(TaskApiVeneerImpl.class)
 public interface TaskApiVeneer
 {
 

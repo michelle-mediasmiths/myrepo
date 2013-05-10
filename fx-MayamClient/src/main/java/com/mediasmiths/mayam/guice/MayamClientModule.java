@@ -53,13 +53,6 @@ public class MayamClientModule extends AbstractModule
 		bind(MayamClient.class).to(MayamClientImpl.class);
 		bind(MayamValidator.class).to(MayamValidatorImpl.class);
 		bind(PackageController.class).to(MayamPackageController.class);
-		
-		bind(AssetApiVeneer.class).to(AssetApiVeneerImpl.class);
-		bind(SegmentApiVeneer.class).to(SegmentApiVeneerImpl.class);
-		bind(TaskApiVeneer.class).to(TaskApiVeneerImpl.class);
-		bind(UserApiVeneer.class).to(UserApiVeneerImpl.class);
-		bind(TasksClientVeneer.class).to(TasksClientVeneerImpl.class);
-		
 	}
 	
 	@Provides

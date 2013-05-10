@@ -1,20 +1,18 @@
 package com.mediasmiths.mayam.retrying;
 
-import java.util.EnumSet;
-
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 
 import com.mediasmiths.std.threading.retry.Retryable;
 
-final class TasksWSInvocationRetryable implements Retryable<Object>
+final class TasksWSInvocationRetry implements Retryable<Object>
 {
-	private static final Logger log = Logger.getLogger(TasksWSInvocationRetryable.class);
+	private static final Logger log = Logger.getLogger(TasksWSInvocationRetry.class);
 
 	final MethodInvocation invocation;
 	final Class<? extends Throwable>[] retryExceptions;
 
-	public TasksWSInvocationRetryable(MethodInvocation invocation,
+	public TasksWSInvocationRetry(MethodInvocation invocation,
 	                           final Class<? extends Throwable>[] retryExceptions)
 	{
 		this.invocation = invocation;
@@ -60,6 +58,7 @@ final class TasksWSInvocationRetryable implements Retryable<Object>
 	}
 
 	
+	@SuppressWarnings("unchecked")
 	private boolean containsException(Throwable t, Class exceptionClass)
 	{
 		if (t == null)

@@ -8,6 +8,7 @@ import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.ws.client.UserApi;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.retrying.TasksWSRetryable;
 
 public class UserApiVeneerImpl implements UserApiVeneer
 {
@@ -19,16 +20,21 @@ public class UserApiVeneerImpl implements UserApiVeneer
 		this.userApi = tasksClient.userApi();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.UserApiVeneer#getUserGroups(java.lang.String)
 	 */
 	@Override
+	@TasksWSRetryable
 	public Set<String> getUserGroups(String username) throws RemoteException
 	{
 		return userApi.getUserGroups(username);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.UserApiVeneer#hashCode()
 	 */
 	@Override
@@ -37,7 +43,9 @@ public class UserApiVeneerImpl implements UserApiVeneer
 		return userApi.hashCode();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.UserApiVeneer#equals(java.lang.Object)
 	 */
 	@Override
@@ -46,7 +54,9 @@ public class UserApiVeneerImpl implements UserApiVeneer
 		return userApi.equals(obj);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.UserApiVeneer#toString()
 	 */
 	@Override

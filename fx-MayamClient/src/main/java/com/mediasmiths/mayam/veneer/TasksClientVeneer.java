@@ -4,17 +4,15 @@ import java.net.URL;
 
 import javax.inject.Provider;
 
+import com.google.inject.ImplementedBy;
 import com.mayam.wf.attributes.server.AttributeMapMapper;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.AttributeMultiMap;
 import com.mayam.wf.attributes.shared.AttributeRangeMap;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.AssetApi;
-import com.mayam.wf.ws.client.SegmentApi;
-import com.mayam.wf.ws.client.TaskApi;
 import com.mayam.wf.ws.client.TasksClient;
-import com.mayam.wf.ws.client.UserApi;
 
+@ImplementedBy(TasksClientVeneerImpl.class)
 public interface TasksClientVeneer
 {
 

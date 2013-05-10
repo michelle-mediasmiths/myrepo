@@ -1,10 +1,12 @@
 package com.mediasmiths.mayam.veneer;
 
+import com.google.inject.ImplementedBy;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.exception.RemoteException;
 
+@ImplementedBy(SegmentApiVeneerImpl.class)
 public interface SegmentApiVeneer
 {
 

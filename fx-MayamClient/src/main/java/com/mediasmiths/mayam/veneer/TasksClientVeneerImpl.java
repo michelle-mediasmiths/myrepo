@@ -13,6 +13,7 @@ import com.mayam.wf.attributes.shared.AttributeRangeMap;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.retrying.TasksWSRetryable;
 
 public class TasksClientVeneerImpl implements TasksClientVeneer
 {
@@ -36,8 +37,10 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		this.segmentApiVeneer = segmentApiVeneer;
 		this.userApiVeneer = userApiVeneer;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#hashCode()
 	 */
 	@Override
@@ -46,7 +49,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return tasksClient.hashCode();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#injectHelpers(com.mayam.wf.attributes.server.AttributeMapMapper, javax.inject.Provider, javax.inject.Provider, javax.inject.Provider)
 	 */
 	@Override
@@ -59,7 +64,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		tasksClient.injectHelpers(mapper, mapProvider, rangeMapProvider, multiMapProvider);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#setup(java.net.URL, java.lang.String)
 	 */
 	@Override
@@ -68,7 +75,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return tasksClient.setup(baseUrl, apiToken);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#equals(java.lang.Object)
 	 */
 	@Override
@@ -77,7 +86,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return tasksClient.equals(obj);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#segmentApi()
 	 */
 	@Override
@@ -86,7 +97,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return segmentApiVeneer;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#taskApi()
 	 */
 	@Override
@@ -95,7 +108,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return taskApiVeneer;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#assetApi()
 	 */
 	@Override
@@ -104,7 +119,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return assetApiVeneer;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#userApi()
 	 */
 	@Override
@@ -113,7 +130,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return userApiVeneer;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#createAttributeMap()
 	 */
 	@Override
@@ -122,7 +141,9 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return tasksClient.createAttributeMap();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#deserializAttributeMap(java.lang.String)
 	 */
 	@Override
@@ -131,34 +152,45 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 		return tasksClient.deserializAttributeMap(serialized);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#testAlwaysReturnTask()
 	 */
 	@Override
+	@TasksWSRetryable
 	public AttributeMap testAlwaysReturnTask()
 	{
 		return tasksClient.testAlwaysReturnTask();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#testAlwaysThrowException()
 	 */
 	@Override
+	@TasksWSRetryable
 	public void testAlwaysThrowException()
 	{
 		tasksClient.testAlwaysThrowException();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#testPutMap(com.mayam.wf.attributes.shared.AttributeMap)
 	 */
 	@Override
+	@TasksWSRetryable
 	public AttributeMap testPutMap(AttributeMap map) throws RemoteException
 	{
 		return tasksClient.testPutMap(map);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mediasmiths.mayam.veneer.TasksClientVeneer#toString()
 	 */
 	@Override
@@ -166,5 +198,5 @@ public class TasksClientVeneerImpl implements TasksClientVeneer
 	{
 		return tasksClient.toString();
 	}
-	
+
 }

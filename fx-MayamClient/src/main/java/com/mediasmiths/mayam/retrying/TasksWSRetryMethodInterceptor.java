@@ -9,8 +9,6 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mayam.wf.mq.MqException;
 import com.mediasmiths.std.threading.Timeout;
 import com.mediasmiths.std.threading.retry.RetryManager;
@@ -20,14 +18,11 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 {
 	private static final Logger log = Logger.getLogger(TasksWSRetryMethodInterceptor.class);
 
+	@SuppressWarnings("unchecked")
 	final Class<? extends Throwable>[] retryExceptions = new Class []{SocketException.class, MqException.class, SocketTimeoutException.class};
 	
-	private long backOffTime = 1000;
-	
-	@Inject
-	@Named("retry.maxattempts")
-	private int maxattempts = 10;
-	
+	private long backOffTime = 1000;	
+	private int maxattempts = 8;	
 	TimeUnit backoffUnit = TimeUnit.MILLISECONDS;
 	double backoffExponent = 2.0d;
 	
@@ -44,7 +39,7 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 				          " on " + invocation.getThis() + " with " +
 				          Arrays.asList(invocation.getArguments()));
 
-			return mgr.run(new TasksWSInvocationRetryable(invocation, retryExceptions));
+			return mgr.run(new TasksWSInvocationRetry(invocation, retryExceptions));
 		}
 		catch (Throwable t)
 		{

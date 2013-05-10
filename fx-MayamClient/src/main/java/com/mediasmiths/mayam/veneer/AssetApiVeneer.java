@@ -3,12 +3,14 @@ package com.mediasmiths.mayam.veneer;
 import java.util.List;
 import java.util.Map;
 
+import com.google.inject.ImplementedBy;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.exception.RemoteException;
 
+@ImplementedBy(AssetApiVeneerImpl.class)
 public interface AssetApiVeneer
 {
 
