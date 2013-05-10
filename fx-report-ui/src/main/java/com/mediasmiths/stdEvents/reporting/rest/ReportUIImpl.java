@@ -465,7 +465,7 @@ public class ReportUIImpl implements ReportUI
 		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX), start.toDate(), end.toDate()));
 		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX), start.toDate(), end.toDate()));
 		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX), start.toDate(), end.toDate()));
-		autoQc.writeAutoQc(events, start, end, reportName);
+		//autoQc.writeAutoQc(events, start, end, reportName);
 	}
 
 //	@Transactional(readOnly=true)
