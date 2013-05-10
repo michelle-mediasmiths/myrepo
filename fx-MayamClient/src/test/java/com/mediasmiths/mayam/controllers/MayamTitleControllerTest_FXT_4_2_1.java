@@ -33,15 +33,18 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+import com.mediasmiths.mayam.veneer.TaskApiVeneer;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamTitleControllerTest_FXT_4_2_1 {
 	
 	private static Logger logger = Logger.getLogger(MayamTitleControllerTest_FXT_4_2_1.class);
 
 	MayamTitleController controller;
-	TasksClient client;
-	AssetApi assetApi;
-	TaskApi taskApi;
+	TasksClientVeneer client;
+	AssetApiVeneer assetApi;
+	TaskApiVeneer taskApi;
 	Material.Title title;
 	CreateOrUpdateTitle cuTitle;
 	TitleDescriptionType titleDescription;
@@ -68,9 +71,9 @@ public class MayamTitleControllerTest_FXT_4_2_1 {
 	@Before
 	public void setup()
 	{
-		client = mock(TasksClient.class);
-		assetApi = mock(AssetApi.class);
-		taskApi = mock(TaskApi.class);
+		client = mock(TasksClientVeneer.class);
+		assetApi = mock(AssetApiVeneer.class);
+		taskApi = mock(TaskApiVeneer.class);
 		when(client.assetApi()).thenReturn(assetApi);
 		when(client.taskApi()).thenReturn(taskApi);
 		

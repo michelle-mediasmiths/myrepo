@@ -38,6 +38,10 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+import com.mediasmiths.mayam.veneer.SegmentApiVeneer;
+import com.mediasmiths.mayam.veneer.TaskApiVeneer;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamPackageControllerTest_FXT_4_2_2 {
 	private static Logger logger = Logger.getLogger(MayamPackageControllerTest_FXT_4_2_2.class);
@@ -45,10 +49,10 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	MayamPackageController controller;
 	MayamMaterialController materialController;
 	MayamTaskController taskController;
-	TasksClient client;
-	AssetApi assetApi;
-	TaskApi taskApi;
-	SegmentApi segmentApi;
+	TasksClientVeneer client;
+	AssetApiVeneer assetApi;
+	TaskApiVeneer taskApi;
+	SegmentApiVeneer segmentApi;
 	PackageType txPackage;
 	AttributeMap map;
 	ProgrammeMaterialType.Presentation.Package updatePackage;
@@ -74,10 +78,10 @@ public class MayamPackageControllerTest_FXT_4_2_2 {
 	@Before
 	public void setup() throws DatatypeConfigurationException
 	{
-		client = mock(TasksClient.class);
-		assetApi = mock(AssetApi.class);
-		taskApi = mock(TaskApi.class);
-		segmentApi = mock(SegmentApi.class);
+		client = mock(TasksClientVeneer.class);
+		assetApi = mock(AssetApiVeneer.class);
+		taskApi = mock(TaskApiVeneer.class);
+		segmentApi = mock(SegmentApiVeneer.class);
 		materialController=mock(MayamMaterialController.class);
 		taskController=mock(MayamTaskController.class);
 		when(client.assetApi()).thenReturn(assetApi);

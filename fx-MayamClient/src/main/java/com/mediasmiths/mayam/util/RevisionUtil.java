@@ -8,16 +8,17 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class RevisionUtil
 {
-	public static String findHighestRevision(String itemId, TasksClient client) throws RemoteException
+	public static String findHighestRevision(String itemId, TasksClientVeneer client) throws RemoteException
 	{
 		List<AttributeMap> maps = getAllRevisionsForItem(itemId, client);
 		return findHighestRevisionID(maps);
 	}
 
-	public static List<AttributeMap> getAllRevisionsForItem(String itemID, TasksClient client) throws RemoteException
+	public static List<AttributeMap> getAllRevisionsForItem(String itemID, TasksClientVeneer client) throws RemoteException
 	{
 		return client.assetApi().getAssetChildren(AssetType.ITEM, itemID, AssetType.REVISION);
 	}
@@ -51,7 +52,7 @@ public class RevisionUtil
 		return ret;
 	}
 
-	public static List<AttributeMap> findAllButHighestRevision(String itemId, TasksClient client) throws RemoteException
+	public static List<AttributeMap> findAllButHighestRevision(String itemId, TasksClientVeneer client) throws RemoteException
 	{
 
 		List<AttributeMap> allRevisions = getAllRevisionsForItem(itemId, client);

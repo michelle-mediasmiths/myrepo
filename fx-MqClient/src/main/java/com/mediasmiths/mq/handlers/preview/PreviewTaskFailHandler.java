@@ -51,7 +51,7 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 		updateAssetMap.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_FAIL);
 		try
 		{
-			taskController.getTasksClient().assetApi().updateAsset(updateAssetMap);
+			tasksClient.assetApi().updateAsset(updateAssetMap);
 		}
 		catch (RemoteException e)
 		{

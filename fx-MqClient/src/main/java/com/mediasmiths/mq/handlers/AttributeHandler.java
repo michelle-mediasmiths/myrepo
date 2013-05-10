@@ -12,12 +12,12 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public abstract class AttributeHandler implements Handler
 {
-	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
-	protected TasksClient tasksClient;
+	protected TasksClientVeneer tasksClient;
 	
 	@Inject
 	protected MayamClientImpl mayamClient;

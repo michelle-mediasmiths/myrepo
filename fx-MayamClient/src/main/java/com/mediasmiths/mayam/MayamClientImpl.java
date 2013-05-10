@@ -40,6 +40,7 @@ import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
@@ -59,9 +60,8 @@ public class MayamClientImpl implements MayamClient
 
 	private final static Logger log = Logger.getLogger(MayamClientImpl.class);
 
-	@Named(MayamClientModule.SETUP_TASKS_CLIENT)
 	@Inject
-	TasksClient client;
+	TasksClientVeneer client;
 
 	@Inject
 	MayamTitleController titleController;

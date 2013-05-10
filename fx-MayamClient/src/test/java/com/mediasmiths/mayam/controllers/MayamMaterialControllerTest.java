@@ -37,12 +37,14 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
+import com.mediasmiths.mayam.veneer.AssetApiVeneer;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 
 public class MayamMaterialControllerTest {
 
 	MayamMaterialController controller;
-	TasksClient client;
-	AssetApi assetApi;
+	TasksClientVeneer client;
+	AssetApiVeneer assetApi;
 	MaterialType material;
 	ProgrammeMaterialType programmeMaterial;
 	AttributeMap map;
@@ -69,8 +71,8 @@ public class MayamMaterialControllerTest {
 	@Before
 	public void setup() throws DatatypeConfigurationException
 	{
-		client = mock(TasksClient.class);
-		assetApi = mock(AssetApi.class);
+		client = mock(TasksClientVeneer.class);
+		assetApi = mock(AssetApiVeneer.class);
 		taskController = mock(MayamTaskController.class);
 		when(client.assetApi()).thenReturn(assetApi);
 		controller = new MayamMaterialController(client, taskController);

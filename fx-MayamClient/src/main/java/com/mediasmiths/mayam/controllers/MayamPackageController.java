@@ -52,15 +52,14 @@ import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.types.Framerate;
-
-import static com.mediasmiths.mayam.guice.MayamClientModule.SETUP_TASKS_CLIENT;
 
 public class MayamPackageController extends MayamController implements PackageController
 {
 	private static final String VERSION_AGL_NAME = "version";
 
-	private final TasksClient client;
+	private final TasksClientVeneer client;
 
 	protected final static Logger log = Logger.getLogger(MayamPackageController.class);
 
@@ -75,9 +74,9 @@ public class MayamPackageController extends MayamController implements PackageCo
 	private Unmarshaller materialExchangeUnMarshaller;
 	
 	@Inject
-	public MayamPackageController(@Named(SETUP_TASKS_CLIENT) TasksClient mayamClient, DateUtil dateUtil, MayamMaterialController materialController, MayamTaskController taskController)
+	public MayamPackageController(TasksClientVeneer client, DateUtil dateUtil, MayamMaterialController materialController, MayamTaskController taskController)
 	{
-		client = mayamClient;
+		this.client = client;
 		this.dateUtil = dateUtil;
 		this.materialController = materialController;
 		this.taskController = taskController;
