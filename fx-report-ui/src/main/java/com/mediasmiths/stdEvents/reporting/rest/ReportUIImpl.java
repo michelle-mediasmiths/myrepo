@@ -434,39 +434,16 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional(readOnly=true)
-	public String getOrderStatusUI()
-	{
-		final TemplateCall call = templater.template("order_status");
-		List<OrderStatus> orders = getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "CreateorUpdateTitle", MAX)));
-		call.set("orders", orders);
-		logger.info("OrderStatusUI complete");
-		return call.process();
-	}
-
-	@Transactional(readOnly=true)
-	public String getAquisitionReportUI()
-	{
-		populateTitles();
-		populatePackages();
-		populateAcq();
-		final TemplateCall call = templater.template("acquisition_delivery");
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
-		AcquisitionRpt report = new AcquisitionRpt();
-		List<Acquisition> materials = report.getReportList(events, startDate, endDate);
-		call.set("materials", materials);
-		return call.process();
-	}
-	
-	@Transactional(readOnly=true)
 	public void getAquisitionReportCSV()
 	{
+		logger.debug(">>>getAcquisitionReportCSV");
 		populateTitles();
 		populatePackages();
 		populateAcq();
 		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
 		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
 		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
+		logger.debug("<<<getAcquisitionReportCSV");
 	}
 
 	@Transactional(readOnly=true)

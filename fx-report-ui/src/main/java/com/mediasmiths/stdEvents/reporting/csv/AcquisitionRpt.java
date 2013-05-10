@@ -53,6 +53,7 @@ public class AcquisitionRpt
 	
 	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate, String reportName)
 	{
+		logger.debug(">>>writeAcquisitionDelivery");
 		List<Acquisition> titles = getReportList(materials, startDate, endDate);
 		setStats(titles);
 		
@@ -62,6 +63,7 @@ public class AcquisitionRpt
 		titles.add(addStats("% By Tape", Double.toString(perTape)));
 		
 		createCSV(titles, reportName);	
+		logger.debug("<<<writeAcquisitionDelivery");
 	}
 	
 	private Acquisition unmarshall(EventEntity event)
@@ -83,28 +85,9 @@ public class AcquisitionRpt
 		return (Acquisition) title;
 	}
 	
-	private Object unmarshallBMS (EventEntity event) 
-	{
-		Object title = null;
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-		
-		try{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			title = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return title;
-	}
-	
 	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
 	{
-		logger.info("Creating acquisition list");
+		logger.debug(">>>getReportList");
 		
 		List<CreateOrUpdateTitle> titles = report.titles;
 		List<AddOrUpdatePackage> packages = report.packages;
@@ -148,6 +131,7 @@ public class AcquisitionRpt
 			
 			acqs.add(content);
 		}
+		logger.debug("<<<getReportList");
 		return acqs;
 	}
 	
