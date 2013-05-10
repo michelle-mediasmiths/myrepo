@@ -39,21 +39,21 @@ public class CarbonProjectBuilder
 	 */
 	@Inject(optional = true)
 	@Named("carbon.timecode-filter.filename")
-	String timecodeFilterResource = "pcp/filter-timecode.xml";
+	String timecodeFilterResource = "services/pcp/filter-timecode.xml";
 
 	/**
 	 * Classpath resource for the prototype bug filter XML
 	 */
 	@Inject(optional = true)
 	@Named("carbon.bug-filter.filename")
-	String bugFilterResource = "pcp/filter-bug.xml";
+	String bugFilterResource = "services/pcp/filter-bug.xml";
 
 	/**
 	 * Classpath resrouce for the prototype ftpupload XML
 	 */
 	@Inject(optional = true)
 	@Named("carbon.ftpupload.filename")
-	String ftpUploadResource="pcp/ftpupload.xml";
+	String ftpUploadResource="services/pcp/ftpupload.xml";
 	
 	/**
 	 * The folder where Carbon bugs are placed. We expect the bugs to be named:
@@ -358,7 +358,7 @@ public class CarbonProjectBuilder
 		if (profile == null)
 			throw new IllegalArgumentException("No suitable Carbon base project found!");
 
-		final Element xml = loadXML("pcp/" + profile.getFilename());
+		final Element xml = loadXML("services/pcp/" + profile.getFilename());
 
 		return new CarbonProject(xml);
 	}
