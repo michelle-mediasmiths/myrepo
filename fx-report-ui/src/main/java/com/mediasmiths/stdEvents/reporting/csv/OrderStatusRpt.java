@@ -71,7 +71,7 @@ public class OrderStatusRpt
 			order.setTitle(bms.getTitle());
 			order.setMaterialID(bms.getMaterialID());
 			order.setChannels(bms.getChannels());
-			//order.setTaskType("Ingest");
+			order.setTaskType("Ingest");
 			order.setAggregatorID(bms.getAggregatorID());
 			if ((bms.getRequiredBy() != null) && (bms.getCompletionDate() != null)) {
 				try

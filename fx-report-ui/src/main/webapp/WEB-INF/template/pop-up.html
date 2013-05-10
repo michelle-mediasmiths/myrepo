@@ -11,11 +11,15 @@
 <link th:substituteby="includes :: htmlhead" />
 <link href="css/jquery-ui.css" th:href="@{/css/jquery-ui.css}" rel="stylesheet" type="text/css"/>
   <script src="js/jquery-1.6.2.min.js" th:src="@{/js/jquery-1.6.2.min.js}"></script>
+  <script src="js/jquery-ui.min.js" th:src="@{/js/jquery-ui.min.js}"></script>
   <script src="js/jquery-1.9.1.min.js" th:src="@{/js/jquery-1.9.1.min.js}"></script>
+  
+  <script src="js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+  <script src="jquery-ui.js" th:src="@{/js/jquery-ui.js}"></script>
   
   <script>
   $(document).ready(function() {
-    $(".datepicker").datepicker({ dateFormat: "dd-MM-yyyy" });
+    $(".datepicker").datepicker({ dateFormat: "dd-mm-yy" });
   });
   </script>
 </head>
