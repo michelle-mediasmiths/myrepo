@@ -31,7 +31,6 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 		logger.info("Finding BMS...");
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq(column, id));
-		logger.info(uniqueResult(criteria));
 		return getList(criteria);
 	}
 	
