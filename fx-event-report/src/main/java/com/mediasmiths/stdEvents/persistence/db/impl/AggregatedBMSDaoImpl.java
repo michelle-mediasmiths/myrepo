@@ -34,6 +34,16 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 		logger.info(uniqueResult(criteria));
 		return getList(criteria);
 	}
+	
+	@Transactional
+	public List<AggregatedBMS> completionDateNotNull()
+	{
+		logger.debug(">>>completionDateNotNull");
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.isNotNull("completionDate"));
+		logger.debug("<<<completionDateNotNull");
+		return getList(criteria);
+	}
 
 	@Transactional
 	public Object unmarshall(String payload)

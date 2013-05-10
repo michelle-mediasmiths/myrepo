@@ -107,7 +107,7 @@ public class ExportRpt
 		
 		List<CreateOrUpdateTitle> titles = report.titles;
 		List<AddOrUpdatePackage> packages = report.packages;
-		List<Acquisition> acqs = report.acqs;
+//		List<Acquisition> acqs = report.acqs;
 
 //		UNCOMMENT TO USE AGGREGATED BMS
 //		List<AggregatedBMS> bms = report.bms;
@@ -146,11 +146,11 @@ public class ExportRpt
 				}
 			}
 			
-			for (Acquisition acq : acqs) {
-				if (acq.getMaterialID().equals(matchingPackage.getMaterialID())) {
-					export.setTitleLength(acq.getTitleLength());
-				}
-			}
+//			for (Acquisition acq : acqs) {
+//				if (acq.getMaterialID().equals(matchingPackage.getMaterialID())) {
+//					export.setTitleLength(acq.getTitleLength());
+//				}
+//			}
 			
 //			for (AggregatedBMS b : bms) {
 //				if (b.getTitleID().equals(export.getMaterialID())) {

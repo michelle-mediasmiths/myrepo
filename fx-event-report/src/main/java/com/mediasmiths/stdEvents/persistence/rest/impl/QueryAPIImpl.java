@@ -11,10 +11,15 @@ import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 
 import org.apache.log4j.Logger;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import javax.swing.text.DateFormatter;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -54,6 +59,30 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		List<AggregatedBMS> bms = bmsDao.getAll();
 		return bms;
+	}
+	
+	@Transactional
+	public List<AggregatedBMS> getCompletedBefore(Date endDate) 
+	{
+		logger.debug(">>>getCompletedBefore");
+		
+		List<AggregatedBMS> bms = bmsDao.completionDateNotNull();
+		List<AggregatedBMS> inDate = new ArrayList<AggregatedBMS>();
+		for (AggregatedBMS order : bms) {
+			String dateString = order.getCompletionDate();
+			try
+			{
+				Date compDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(dateString);
+				if (compDate.before(endDate)) 
+					inDate.add(order);
+			}
+			catch (ParseException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		logger.debug("<<<getCompletedBefore");
+		return inDate;
 	}
 
 	@Transactional

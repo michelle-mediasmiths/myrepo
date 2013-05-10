@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -51,10 +52,10 @@ public class AcquisitionRpt
 	private double perFile=0;
 	private double perTape=0;
 	
-	public void writeAcquisitionDelivery(List<EventEntity> materials, Date startDate, Date endDate, String reportName)
+	public void writeAcquisitionDelivery(List<EventEntity> materials, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate, String reportName)
 	{
 		logger.debug(">>>writeAcquisitionDelivery");
-		List<Acquisition> titles = getReportList(materials, startDate, endDate);
+		List<Acquisition> titles = getReportList(materials, bms, startDate, endDate);
 		setStats(titles);
 		
 		titles.add(addStats("No By File", Integer.toString(noFile)));
@@ -85,17 +86,17 @@ public class AcquisitionRpt
 		return (Acquisition) title;
 	}
 	
-	public List<Acquisition> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<Acquisition> getReportList(List<EventEntity> events, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate)
 	{
 		logger.debug(">>>getReportList");
 		
-		List<CreateOrUpdateTitle> titles = report.titles;
-		List<AddOrUpdatePackage> packages = report.packages;
+//		List<CreateOrUpdateTitle> titles = report.titles;
+//		List<AddOrUpdatePackage> packages = report.packages;
 
 //		UNCOMMENT TO USE WITH BMS AGGREGATION
 //		List<AggregatedBMS> bms = report.bms;
 		
-		logger.info("Titles: " + titles.size() + " Packages: " + packages.size());
+//		logger.info("Titles: " + titles.size() + " Packages: " + packages.size());
 		
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		for (EventEntity event : events)
@@ -107,27 +108,27 @@ public class AcquisitionRpt
 			if (content.isFileDelivery())
 				content.setFileDel("1");
 			
-			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
-			for(AddOrUpdatePackage pack : packages) {
-				if ((pack.getMaterialID() != null) && (content.getMaterialID() != null)) {
-					if (pack.getMaterialID().equals(content.getMaterialID())) {
-						matchingPackage = pack;
-					}
-				}
-			}
-			
-			for (CreateOrUpdateTitle title : titles) {
-				if ((title.getTitleID() != null) && (matchingPackage.getTitleID() != null)) {
-					if (title.getTitleID().equals(matchingPackage.getTitleID())) {
-						content.setChannels(title.getChannels());
-					}
-				}
-			}
-			
-//			for (AggregatedBMS b : bms) {
-//				if ((b.getMaterialID() != null) && (b.getMaterialID().equals(content.getMaterialID())))
-//						content.setChannels(b.getChannels());
+//			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
+//			for(AddOrUpdatePackage pack : packages) {
+//				if ((pack.getMaterialID() != null) && (content.getMaterialID() != null)) {
+//					if (pack.getMaterialID().equals(content.getMaterialID())) {
+//						matchingPackage = pack;
+//					}
+//				}
 //			}
+//			
+//			for (CreateOrUpdateTitle title : titles) {
+//				if ((title.getTitleID() != null) && (matchingPackage.getTitleID() != null)) {
+//					if (title.getTitleID().equals(matchingPackage.getTitleID())) {
+//						content.setChannels(title.getChannels());
+//					}
+//				}
+//			}
+			
+			for (AggregatedBMS b : bms) {
+				if ((b.getMaterialID() != null) && (b.getMaterialID().equals(content.getMaterialID())))
+						content.setChannels(b.getChannels());
+			}
 			
 			acqs.add(content);
 		}

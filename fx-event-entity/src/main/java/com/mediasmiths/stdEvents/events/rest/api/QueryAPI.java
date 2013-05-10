@@ -1,5 +1,6 @@
 package com.mediasmiths.stdEvents.events.rest.api;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -32,6 +33,10 @@ public interface QueryAPI
 	@GET
 	@Path("/allBMS")
 	public List<AggregatedBMS> getAllBMS();
+	
+	@GET
+	@Path("/completedBefore")
+	public List<AggregatedBMS> getCompletedBefore(Date endDate);
 	
 	@GET
 	@Path("getbynamespace/{namespace}")

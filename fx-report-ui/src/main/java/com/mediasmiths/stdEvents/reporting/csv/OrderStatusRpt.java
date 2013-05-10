@@ -96,7 +96,7 @@ public class OrderStatusRpt
 			else if (order.getRequiredBy() != null)
 			{
 				logger.debug("required by date not null");
-				if (order.getRequiredBy().toGregorianCalendar().before(new Date()))
+				if (order.getRequiredBy().toGregorianCalendar().before(endDate))
 					order.setOverdueInDateRange("1");
 			}
 			

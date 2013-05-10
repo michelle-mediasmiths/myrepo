@@ -123,17 +123,16 @@ public class ReportUIImpl implements ReportUI
 		}
 	}
 	
-	public List<EventEntity> acqEvents = new ArrayList<EventEntity>();
-	public List<Acquisition> acqs = new ArrayList<Acquisition>();
-	
-	public void populateAcq()
+	public List<Acquisition> populateAcq()
 	{
-		acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
+		List<Acquisition> acqs = new ArrayList<Acquisition>();
+		List<EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
 		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
 		for (EventEntity event : acqEvents) {
 			Acquisition acq = (Acquisition) unmarshallRpt(event);
 			acqs.add(acq);
 		}
+		return acqs;
 	}
 	
 	/**
@@ -227,29 +226,32 @@ public class ReportUIImpl implements ReportUI
 		logger.info("End date: " + endDate + " End long: " + endLong);
 	}
 	
-	public boolean checkDate(Long eventTime)
+	public boolean checkDate(Long eventTime, Date start, Date end)
 	{
+		logger.debug(">>>checkDate");
 		boolean within = false;
-		
-		int startComp = eventTime.compareTo(startLong);
-		int endComp = eventTime.compareTo(endLong);
-		if ((startComp > 0) && (endComp < 0))
+		Date event = new Date(eventTime);
+		logger.debug("eventDate: " + eventTime + " " + event);
+		if ((event.after(start)) && (event.before(end)))
 		{
 			within = true;
 		}
+		logger.debug("<<<checkDate");
 		return within;
 	}
 	
-	private List<EventEntity> getInDate(List<EventEntity> events)
+	private List<EventEntity> getInDate(List<EventEntity> events, Date start, Date end)
 	{
+		logger.debug(">>>getInDate");
 		List <EventEntity> valid = new ArrayList<EventEntity>();
 		for (EventEntity event : events)
 		{
 			logger.info("event.getTime()" + event.getTime());
-			boolean within = checkDate(event.getTime());
+			boolean within = checkDate(event.getTime(), start, end);
 			if (within)
 				valid.add(event);
 		}
+		logger.debug("<<<getInDate");
 		return valid;
 	}
 	
@@ -303,50 +305,37 @@ public class ReportUIImpl implements ReportUI
 		}
 		else if (rptType.equals("AcquisitionDelivery")) {
 			logger.info("generating AcquisitionDelivery__");
-				getAquisitionReportCSV();
+				getAquisitionReportCSV(startDate, endDate, reportName);
 
 		}
 		else if (rptType.equals("ManualQA")) {
 			logger.info("generating ManualQA__");
-				getManualQACSV();
+				getManualQACSV(startDate, endDate, reportName);
 		}
-		else if (rptType.equals("AutoQC")) {
-			logger.info("generating AutoQC__");
-				getAutoQCCSV();
-		}
-		else if (rptType.equals("PurgeContent")) {
-			logger.info("generating PurgeContent__");
-				getPurgeContentCSV();
-		}
-		else if (rptType.equals("ComplianceEdits")) {
-			logger.info("generating ComplianceEdits__");
-				getComplianceEditCSV();
-		}
-		else if (rptType.equals("Export")) {
-			logger.info("generating Export");
-				getExportCSV();
-		}
-		else if (rptType.equals("Watchfolder")) {
-			logger.info("generating Watchfolder__");
-				getWatchFolderStorageCSV();;
-		}
+//		else if (rptType.equals("AutoQC")) {
+//			logger.info("generating AutoQC__");
+//				getAutoQCCSV();
+//		}
+//		else if (rptType.equals("PurgeContent")) {
+//			logger.info("generating PurgeContent__");
+//				getPurgeContentCSV();
+//		}
+//		else if (rptType.equals("ComplianceEdits")) {
+//			logger.info("generating ComplianceEdits__");
+//				getComplianceEditCSV();
+//		}
+//		else if (rptType.equals("Export")) {
+//			logger.info("generating Export");
+//				getExportCSV();
+//		}
+//		else if (rptType.equals("Watchfolder")) {
+//			logger.info("generating Watchfolder__");
+//				getWatchFolderStorageCSV();;
+//		}
 		logger.debug("<<<chooseReport");
 		return null;		
 	}
 
-	@Transactional(readOnly=true)
-	public void getOrderStatusCSV(final DateTime start, final DateTime end, final String reportName)
-	{
-		logger.debug(">>>getOrderStatusCSV");
-		
-		List<AggregatedBMS> bms = populateBMS();
-		List<AggregatedBMS> orders = getInDateBMS(bms, start, end);
-		logger.info("List size: " + orders.size());
-		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
-		orderStatus.writeOrderStatus(orders, start, end, reportName);
-		logger.debug("<<<getOrderStatusCSV");
-	}
-	
 	private List<OrderStatus> getReportList(List<EventEntity> events)
 	{
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();
@@ -434,161 +423,150 @@ public class ReportUIImpl implements ReportUI
 	}
 	
 	@Transactional(readOnly=true)
-	public void getAquisitionReportCSV()
+	public void getOrderStatusCSV(final DateTime start, final DateTime end, final String reportName)
+	{
+		logger.debug(">>>getOrderStatusCSV");
+		
+		List<AggregatedBMS> bms = populateBMS();
+		List<AggregatedBMS> orders = getInDateBMS(bms, start, end);
+		logger.info("List size: " + orders.size());
+		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
+		orderStatus.writeOrderStatus(orders, start, end, reportName);
+		
+		logger.debug("<<<getOrderStatusCSV");
+	}
+	
+	@Transactional(readOnly=true)
+	public void getAquisitionReportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getAcquisitionReportCSV");
-		populateTitles();
-		populatePackages();
-		populateAcq();
-		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX));
-		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX)));
-		acquisition.writeAcquisitionDelivery(materials, startDate, endDate, REPORT_NAME);
+		
+		List<AggregatedBMS> bms = queryApi.getCompletedBefore(end.toDate());
+		
+		List<EventEntity> materials = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX), start.toDate(), end.toDate());
+		materials.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX), start.toDate(), end.toDate()));
+		acquisition.writeAcquisitionDelivery(materials, bms, start, end, reportName);
+		
 		logger.debug("<<<getAcquisitionReportCSV");
 	}
 
 	@Transactional(readOnly=true)
-	public void getManualQACSV()
+	public void getManualQACSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		populateAcq();
-		List<EventEntity> preview = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQA", MAX));
-		manualQa.writeManualQA(preview, startDate, endDate, REPORT_NAME);
+		List<Acquisition> acqs = populateAcq();
+		List<EventEntity> preview = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQA", MAX), start.toDate(), end.toDate());
+		manualQa.writeManualQA(preview, acqs, start, end, reportName);
 	}
 	
 	@Transactional(readOnly=true)
-	public String getManualQAUI()
+	public void getAutoQCCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		populateAcq();
-		TemplateCall call = templater.template("manual_qa");
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQA", MAX));
-		ManualQARpt report = new ManualQARpt();
-		List<ManualQA> qas = report.getReportList(events, startDate, endDate);
-		call.set("qas", qas);
-		return call.process();
+		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX), start.toDate(), end.toDate());
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX), start.toDate(), end.toDate()));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX), start.toDate(), end.toDate()));
+		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX), start.toDate(), end.toDate()));
+		autoQc.writeAutoQc(events, start, end, reportName);
 	}
 
-	@Transactional(readOnly=true)
-	public void getAutoQCCSV()
-	{
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX)));
-		autoQc.writeAutoQc(events, startDate, endDate, REPORT_NAME);
-	}
-	
-	@Transactional(readOnly=true)
-	public String getAutoQCUI()
-	{
-		final TemplateCall call = templater.template("auto_qc");
-		List<EventEntity> events = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX)));
-		events.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX)));
-		AutoQCRpt report = new AutoQCRpt();
-		List<AutoQC> qcs = report.getReportList(events, startDate, endDate);
-		call.set("qcs", qcs);
-		return call.process();
-	}
-
-	@Transactional(readOnly=true)
-	public void getTaskListCSV()
-	{
-		List<EventEntity> tasks = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "TaskListReport", MAX));
-		taskList.writeTaskList(tasks, startDate, endDate, REPORT_NAME);
-	}	
-	
-	@Transactional(readOnly=true)
-	public void getPurgeContentCSV()
-	{
-		populateTitles();
-		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX));
-		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)));
-		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)));
-		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
-	}
-	
-	@Transactional(readOnly=true)
-	public String getPurgeContentUI()
-	{
-		populateTitles();
-		TemplateCall call = templater.template("purge_content");
-		PurgeContentRpt report = new PurgeContentRpt();
-		List<PurgeContent> purged = report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX)), startDate, endDate);
-		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)), startDate, endDate));
-		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)), startDate, endDate));
-		call.set("purged", purged);
-		return call.process();
-	}
-
-	@Transactional(readOnly=true)
-	public void getComplianceEditCSV()
-	{
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX));
-		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
-	}
-	
-	@Transactional(readOnly=true)
-	public String getComplianceEditsUI()
-	{
-		TemplateCall call = templater.template("compliance_edit");
-		ComplianceRpt report = new ComplianceRpt();
-		List<ComplianceLogging> compliance = report.getReportList(getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX)), startDate, endDate);
-		call.set("compliance", compliance);
-		return call.process();
-	}
-	
-	@Transactional(readOnly=true)
-	public void getExportCSV()
-	{
-		populateTitles();
-		populatePackages();
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
-		export.writeExport(events, startDate, endDate, REPORT_NAME);
-	}
-	
-	@Transactional(readOnly=true)
-	public String getExportUI()
-	{
-		TemplateCall call = templater.template("export");
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
-		List<Export> exports = export.getReportList(events, startDate, endDate);
-		call.set("exports", exports);
-		return call.process();
-	}
-	
-	@Transactional(readOnly=true)
-	public void getWatchFolderStorageCSV()
-	{
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
-		watchFolder.writeWatchFolder(events, startDate, endDate, REPORT_NAME);
-	}
-	
-	@Transactional(readOnly=true)
-	public String getWatchFolderStorageUI()
-	{
-		TemplateCall call = templater.template("watch_folder");
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
-		List<Watchfolder> files = watchFolder.getWatchFolderList(events, startDate, endDate);
-		call.set("files", files);
-		return call.process();
-	}
-	
-	@Transactional(readOnly=true)
-	public void getTranscoderLoadCSV()
-	{
-		List<EventEntity> events = queryApi.getByNamespaceWindow("http://www.foxtel.com.au/ip/tc", MAX);
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : events) {
-			boolean within = checkDate(event.getTime());
-			if (within)
-				valid.add(event);
-		}
-		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate, REPORT_NAME);
-	}
+//	@Transactional(readOnly=true)
+//	public void getTaskListCSV()
+//	{
+//		List<EventEntity> tasks = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "TaskListReport", MAX));
+//		taskList.writeTaskList(tasks, startDate, endDate, REPORT_NAME);
+//	}	
+//	
+//	@Transactional(readOnly=true)
+//	public void getPurgeContentCSV()
+//	{
+//		populateTitles();
+//		List<EventEntity> purged = getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX));
+//		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)));
+//		purged.addAll(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)));
+//		purgeContent.writePurgeTitles(purged, startDate, endDate, REPORT_NAME);
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public String getPurgeContentUI()
+//	{
+//		populateTitles();
+//		TemplateCall call = templater.template("purge_content");
+//		PurgeContentRpt report = new PurgeContentRpt();
+//		List<PurgeContent> purged = report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX)), startDate, endDate);
+//		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX)), startDate, endDate));
+//		purged.addAll(report.getReportList(getInDate(queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX)), startDate, endDate));
+//		call.set("purged", purged);
+//		return call.process();
+//	}
+//
+//	@Transactional(readOnly=true)
+//	public void getComplianceEditCSV()
+//	{
+//		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX));
+//		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public String getComplianceEditsUI()
+//	{
+//		TemplateCall call = templater.template("compliance_edit");
+//		ComplianceRpt report = new ComplianceRpt();
+//		List<ComplianceLogging> compliance = report.getReportList(getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX)), startDate, endDate);
+//		call.set("compliance", compliance);
+//		return call.process();
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public void getExportCSV()
+//	{
+//		populateTitles();
+//		populatePackages();
+//		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
+//		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
+//		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
+//		export.writeExport(events, startDate, endDate, REPORT_NAME);
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public String getExportUI()
+//	{
+//		TemplateCall call = templater.template("export");
+//		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
+//		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
+//		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
+//		List<Export> exports = export.getReportList(events, startDate, endDate);
+//		call.set("exports", exports);
+//		return call.process();
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public void getWatchFolderStorageCSV()
+//	{
+//		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
+//		watchFolder.writeWatchFolder(events, startDate, endDate, REPORT_NAME);
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public String getWatchFolderStorageUI()
+//	{
+//		TemplateCall call = templater.template("watch_folder");
+//		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
+//		List<Watchfolder> files = watchFolder.getWatchFolderList(events, startDate, endDate);
+//		call.set("files", files);
+//		return call.process();
+//	}
+//	
+//	@Transactional(readOnly=true)
+//	public void getTranscoderLoadCSV()
+//	{
+//		List<EventEntity> events = queryApi.getByNamespaceWindow("http://www.foxtel.com.au/ip/tc", MAX);
+//		List<EventEntity> valid = new ArrayList<EventEntity>();
+//		for (EventEntity event : events) {
+//			boolean within = checkDate(event.getTime());
+//			if (within)
+//				valid.add(event);
+//		}
+//		transcoderLoad.writeTranscoderLoad(valid, startDate, endDate, REPORT_NAME);
+//	}
 
 	@Transactional(readOnly=true)
 	public String displayPath(@QueryParam("path")String path)

@@ -10,6 +10,8 @@ public interface AggregatedBMSDao extends Dao<AggregatedBMS, Long>
 {
 	public List<AggregatedBMS> findByAnId(String column, String id);
 	
+	public List<AggregatedBMS> completionDateNotNull();
+	
 	public Object unmarshall(String payload);
 	
 	public void updateBMS (EventEntity event);

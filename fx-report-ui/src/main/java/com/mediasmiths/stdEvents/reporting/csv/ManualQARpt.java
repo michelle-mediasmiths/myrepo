@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -47,10 +48,10 @@ public class ManualQARpt
 	private int reordered=0;
 	private int hr=0;
 	
-	public void writeManualQA(List<EventEntity> events, Date startDate, Date endDate, String reportName)
+	public void writeManualQA(List<EventEntity> events, List<Acquisition> acqs, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<ManualQA> manualQAs = getReportList(events, startDate, endDate);
-		setStats(manualQAs);
+		List<ManualQA> manualQAs = getReportList(events, acqs, startDate, endDate);
+		//setStats(manualQAs);
 		
 		manualQAs.add(addStats("Total QA'd", Integer.toString(total)));
 		manualQAs.add(addStats("Total Escalated", Integer.toString(escalated)));
@@ -81,12 +82,10 @@ public class ManualQARpt
 		return title;
 	}
 	
-	public List<ManualQA> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<ManualQA> getReportList(List<EventEntity> events, List<Acquisition> acqs, DateTime startDate, DateTime endDate)
 	{
 		logger.info("Creating manualQA list");
 		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
-		
-		List<Acquisition> acqs = report.acqs;
 		
 		for (EventEntity event : events)
 		{
