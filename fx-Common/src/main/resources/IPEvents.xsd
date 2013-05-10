@@ -39,6 +39,25 @@
                 </xs:extension>
             </xs:complexContent>
     </xs:complexType>
+    
+    <xs:element name="ArdomeImportFailure">
+		<xs:complexType>
+		<xs:complexContent>
+			<xs:annotation>
+				<xs:documentation>A type to represent an ArdomeImportFailure event
+				</xs:documentation>
+			</xs:annotation>
+			<xs:extension base="fns:IPEvent">
+				<xs:sequence>
+					<xs:element name="assetID" type="xs:string" />
+					<xs:element name="jobID" type="xs:string" />
+					<xs:element name="filePath" type="xs:string"/>
+                    <xs:element name="filename" type="xs:string"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 
 
     <xs:element name="CommFailure">
