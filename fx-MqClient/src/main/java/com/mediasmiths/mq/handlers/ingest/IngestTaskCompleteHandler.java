@@ -2,24 +2,16 @@ package com.mediasmiths.mq.handlers.ingest;
 
 import java.util.Date;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.apache.log4j.Logger;
-
-import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
-import au.com.foxtel.cf.mam.pms.Source;
 
 import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
-import com.sun.xml.bind.Util;
 
 public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 {
