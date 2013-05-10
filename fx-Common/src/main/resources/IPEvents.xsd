@@ -103,6 +103,22 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:complexType name="QcServerFail">
+            <xs:complexContent>
+                <xs:annotation>
+                    <xs:documentation>The definition a QC Server Failure Event
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:extension base="fns:IPEvent">
+                    <xs:sequence>
+                        <xs:element name="materialID" type="xs:string"/>
+                        <xs:element name="assetID" type="xs:string"/>
+                        <xs:element name="title" type="xs:string"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+    </xs:complexType>
+    
     <xs:complexType name="deliveryDetails">
             <xs:complexContent>
                 <xs:annotation>
