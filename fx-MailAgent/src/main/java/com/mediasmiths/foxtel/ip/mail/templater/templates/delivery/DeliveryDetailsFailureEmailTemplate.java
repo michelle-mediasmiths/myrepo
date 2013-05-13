@@ -21,7 +21,7 @@ public class DeliveryDetailsFailureEmailTemplate extends MailTemplate implements
 
          DeliveryDetails dd = (DeliveryDetails)obj;
 
-		t.setSubject(String.format(getSubject(), dd.getMasterId(), dd.getTitle()));
+		t.setSubject(String.format(getSubject(), dd.getMaterialID(), dd.getTitle()));
 		t.setEmailaddresses(getEmailaddresses());
 		t.setBody(String.format(getBody()));
 
