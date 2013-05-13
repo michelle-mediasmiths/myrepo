@@ -27,6 +27,9 @@
     <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" initializePartnerRole="yes" partnerRole="Auto_QC_for_Transcode"/>
     <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode"/>
   </bpel:partnerLinks>
+  <bpel:correlationSets>
+    <bpel:correlationSet name="corr-PackageID" properties="this:packageid"/>
+  </bpel:correlationSets>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
     <bpel:variable name="TranscodeSuccess" type="xs:boolean"/>
@@ -44,7 +47,11 @@
     <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
   </bpel:variables>
   <bpel:sequence>
-    <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ"></bpel:receive>
+    <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ">
+      <bpel:correlations>
+        <bpel:correlation set="corr-PackageID" initiate="yes"/>
+      </bpel:correlations>
+    </bpel:receive>
     <bpel:assign name="init-variables-Transcode" bpmn:id="_lpG7MGuNEeK7FdvgH5F2kQ">
       <bpel:copy bpmn:label="$auto_QCEventStartMessageRequest">
         <bpel:from>
