@@ -4,7 +4,7 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 
-public class ArdomeFailureEmailTemplate extends MailTemplate implements EmailTemplateGenerator
+public class ArdomeImportFailureEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
 
 	@Override
