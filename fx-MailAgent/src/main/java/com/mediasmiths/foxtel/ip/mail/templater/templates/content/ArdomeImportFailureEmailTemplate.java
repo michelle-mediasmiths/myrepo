@@ -19,8 +19,8 @@ public class ArdomeFailureEmailTemplate extends MailTemplate implements EmailTem
 		ArdomeImportFailure aif = (ArdomeImportFailure) obj;
 		MailTemplate t = new MailTemplate();
 
-		t.setSubject(String.format(getSubject(), aif.getFilename(), aif.getJobID()));
-		t.setBody(getBody());
+		t.setSubject(String.format(getSubject()));
+		t.setBody(getBody(), aif.getFilename(), aif.getJobID());
 		t.setEmailaddresses(getEmailaddresses());
 		return t;
 	}
