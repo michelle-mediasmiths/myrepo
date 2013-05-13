@@ -25,8 +25,8 @@ final class TasksWSInvocationRetry implements Retryable<Object>
 	{
 		try
 		{
-			if (log.isDebugEnabled())
-				log.debug("Invoking " + this.toString() + " for attempt #" + attempt);
+			if (log.isTraceEnabled())
+				log.trace("Invoking " + this.toString() + " for attempt #" + attempt);
 
 			return invocation.proceed();
 		}

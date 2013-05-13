@@ -31,6 +31,9 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForcaller" type="this:Forcaller" bpdm:isSynchronized="true"/>
+            <vprop:propertyAlias propertyName="this:materialid" messageType="this:EventStartMessageRequest" part="body">
+                <vprop:query>tns:assetID/text()</vprop:query>
+            </vprop:propertyAlias>
         </bpdm:namespaceContributor>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_XSVUkHEMEeKgV8mGUipbQA" bpdm:label="caller"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/wfAdapter.xsd"/>
@@ -64,6 +67,9 @@
             <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk1Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode" bpdm:invokedService="tcFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Qjw3ELM0EeKieaePm6sHlw:_Qj2WoLM0EeKieaePm6sHlw" bpdm:isManaged="true" bpdm:otherPoolId="_mijEYHEOEeKgV8mGUipbQA"/>
             <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk4Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk4" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_lqBpsLM1EeKieaePm6sHlw:_lqIXYLM1EeKieaePm6sHlw" bpdm:isManaged="true" bpdm:otherPoolId="_mijEYHEOEeKgV8mGUipbQA"/>
         </bpel:partnerLinks>
+        <bpel:correlationSets>
+            <bpel:correlationSet name="corr-materialID" properties="this:materialid"/>
+        </bpel:correlationSets>
         <bpel:variables>
             <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_fTyChXEMEeKgV8mGUipbQA" bpdm:messageIds="inc:_fTpfoHEMEeKgV8mGUipbQA"/>
             <bpel:variable name="TranscodeErrorCount" type="xs:integer"/>
@@ -76,7 +82,9 @@
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="this:Forcaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_b0q3UHEMEeKgV8mGUipbQA">
-                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_fTpfoHEMEeKgV8mGUipbQA"></bpdm:linkset>
+                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="thisEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="this:EventStartMessageRequest" bpdm:ID="_fTpfoHEMEeKgV8mGUipbQA">
+                    <bpel:correlation set="corr-materialID" initiate="yes" bpdm:isSource="false"></bpel:correlation>
+                </bpdm:linkset>
             </bpdm:messagingtask>
             <bpdm:messagingtask bpdm:label="Initialise Variables" bpdm:ID="_cP-TQHEMEeKgV8mGUipbQA">
                 <bpdm:linkset bpdm:type="assignments">
@@ -190,27 +198,7 @@
                             </bpel:scope>
                             <bpel:scope bpdm:label="loop until complete or cancelled" bpdm:ID="_wL8dAHENEeKgV8mGUipbQA">
                                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
-                                    <bpel:condition bpdm:loopType="repeatUntil">("INCOMPLETE" != $TranscodeStatus) or ($TaskIsCancelled = true())
-<mapper:mapperLink>
-  <mapper:vertice id="14378647" targetPath="$repeat until" targetedBy="32477607-arg2"></mapper:vertice>
-  <mapper:vertice id="32477607" dimension="78x24" location="523,192">
-    <mapper:value>or</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="2917521" dimension="78x24" location="360,132" targetedBy="32477607-arg0">
-    <mapper:value>!=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="24936492" dimension="97x24" location="216,96" targetedBy="2917521-arg0">
-    <mapper:value>"INCOMPLETE"</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="25873098" sourcePath="$TranscodeStatus" targetedBy="2917521-arg1"></mapper:vertice>
-  <mapper:vertice id="12779214" dimension="78x24" location="312,264" targetedBy="32477607-arg1">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="30340062" sourcePath="$TaskIsCancelled" targetedBy="12779214-arg0"></mapper:vertice>
-  <mapper:vertice id="9075852" dimension="78x24" location="168,312" targetedBy="12779214-arg1">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                                    <bpel:condition bpdm:loopType="repeatUntil">("INCOMPLETE" != $TranscodeStatus) or ($TaskIsCancelled = true())<mapper:mapperLink><mapper:vertice id="14378647" targetPath="$repeat until" targetedBy="32477607-arg2"></mapper:vertice><mapper:vertice id="32477607" dimension="78x24" location="523,192"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="2917521" dimension="78x24" location="360,132" targetedBy="32477607-arg0"><mapper:value>!=</mapper:value></mapper:vertice><mapper:vertice id="24936492" dimension="97x24" location="216,96" targetedBy="2917521-arg0"><mapper:value>"INCOMPLETE"</mapper:value></mapper:vertice><mapper:vertice id="25873098" sourcePath="$TranscodeStatus" targetedBy="2917521-arg1"></mapper:vertice><mapper:vertice id="12779214" dimension="78x24" location="312,264" targetedBy="32477607-arg1"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="30340062" sourcePath="$TaskIsCancelled" targetedBy="12779214-arg0"></mapper:vertice><mapper:vertice id="9075852" dimension="78x24" location="168,312" targetedBy="12779214-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                                 </bpdm:linkset>
                                 <bpel:sequence>
                                     <bpdm:messagingtask eventType="intermediate: timer" bpdm:label="Timer_Intermediate_Event" bpdm:ID="_0EO9MHENEeKgV8mGUipbQA">

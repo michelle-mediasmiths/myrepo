@@ -25,6 +25,9 @@
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk1Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk4Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk4" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
   </bpel:partnerLinks>
+  <bpel:correlationSets>
+    <bpel:correlationSet name="corr-materialID" properties="this:materialid"/>
+  </bpel:correlationSets>
   <bpel:variables>
     <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
     <bpel:variable name="TranscodeErrorCount" type="xs:integer"/>
@@ -36,7 +39,11 @@
     <bpel:variable name="tcPriority" type="xs:int"/>
   </bpel:variables>
   <bpel:sequence>
-    <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:Forcaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_b0q3UHEMEeKgV8mGUipbQA"></bpel:receive>
+    <bpel:receive partnerLink="transcodeAndCallerPlkVar" portType="this:Forcaller" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_b0q3UHEMEeKgV8mGUipbQA">
+      <bpel:correlations>
+        <bpel:correlation set="corr-materialID" initiate="yes"/>
+      </bpel:correlations>
+    </bpel:receive>
     <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_cP-TQHEMEeKgV8mGUipbQA">
       <bpel:copy>
         <bpel:from>false()</bpel:from>

@@ -33,8 +33,8 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 
 		try
 		{
-			if (log.isDebugEnabled())
-				log.debug("Attempting retryable invoke of " +
+			if (log.isTraceEnabled())
+				log.trace("Attempting retryable invoke of " +
 				          invocation.getMethod().toGenericString() +
 				          " on " + invocation.getThis() + " with " +
 				          Arrays.asList(invocation.getArguments()));
@@ -43,8 +43,8 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 		}
 		catch (Throwable t)
 		{
-			if (log.isDebugEnabled())
-				log.debug("Retrying invoke of " +
+			if (log.isTraceEnabled())
+				log.trace("Retrying invoke of " +
 				          invocation.getMethod().toGenericString() +
 				          " on " + invocation.getThis() + " with " +
 				          Arrays.asList(invocation.getArguments()) + " failed.", t);
