@@ -20,7 +20,7 @@ public class ArdomeImportFailureEmailTemplate extends MailTemplate implements Em
 		MailTemplate t = new MailTemplate();
 
 		t.setSubject(String.format(getSubject()));
-		t.setBody(getBody(), aif.getFilename(), aif.getJobID());
+		t.setBody(String.format(getBody(), aif.getFilename(), aif.getJobID()));
 		t.setEmailaddresses(getEmailaddresses());
 		return t;
 	}

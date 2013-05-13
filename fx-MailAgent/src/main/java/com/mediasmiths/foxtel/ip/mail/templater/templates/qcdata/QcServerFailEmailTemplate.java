@@ -30,7 +30,7 @@ public class QcServerFailEmailTemplate extends MailTemplate implements EmailTemp
 		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
 		
 		t.setSubject(String.format(getSubject()));
-		t.setBody(String.format(getBody(), aqce.getMaterialID(), aqce.getTitle()));
+		t.setBody(String.format(getBody(), qcsf.getMaterialID(), qcsf.getTitle()));
 
 		return t;
 
