@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:WFAdapter__2="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter__2" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:txDeliveryFinished="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" xmlns:txDeliveryComplete="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:txDeliveryFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Delivery" name="Delivery" bpmn:id="_HwWekGuUEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:getDeliveryLocation="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:WFAdapter__2="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter__2" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:txDeliveryFinished="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFinished.rest" xmlns:txDeliveryComplete="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryComplete.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:txDeliveryFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/txDeliveryFailure.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:writeSegmentXML="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeSegmentXML.rest" xmlns:Auto_QC="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Delivery" name="Delivery" bpmn:id="_HwWekGuUEeK7FdvgH5F2kQ" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" location="fsAdapter/move.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getDeliveryLocation.rest" location="wfAdapter/getDeliveryLocation.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -10,7 +10,7 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" location="tx-delivery-Delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
-    <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" myRole="Delivery_for_Transcode"/>
+    <bpel:partnerLink name="auto_QcAndDeliveryPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndDelivery" myRole="Delivery_for_Auto_QC"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk1Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
     <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Delivery"/>
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk0Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
@@ -20,8 +20,6 @@
     <bpel:partnerLink name="deliveryAndWFAdapter__2ForHttpPortPlk2Var" partnerLinkType="TX_Delivery:DeliveryAndWFAdapter__2ForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter__2_for_Delivery"/>
   </bpel:partnerLinks>
   <bpel:variables>
-    <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
-    <bpel:variable name="thisEventStartMessageResponse" messageType="this:EventStartMessageResponse"/>
     <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteRequestMsg" messageType="txDeliveryComplete:txDeliveryComplete_input"/>
     <bpel:variable name="txDeliveryCompleteTxDeliveryCompleteResponseMsg" messageType="txDeliveryComplete:txDeliveryComplete_output"/>
     <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
@@ -33,17 +31,11 @@
     <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output"/>
     <bpel:variable name="DeliveryLocation" type="xs:string"/>
     <bpel:variable name="getDeliveryLocationGetDeliveryLocationResponseMsg" messageType="getDeliveryLocation:getDeliveryLocation_output"/>
+    <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest"/>
   </bpel:variables>
   <bpel:sequence>
-    <bpel:receive partnerLink="transcodeAndDeliveryPlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ"></bpel:receive>
+    <bpel:receive partnerLink="auto_QcAndDeliveryPlkVar" portType="this:ForAuto_QC" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ"></bpel:receive>
     <bpel:assign name="init-variables-Delivery" bpmn:id="_x0Nh8GuUEeK7FdvgH5F2kQ">
-      <bpel:copy bpmn:label="$thisEventStartMessageResponse">
-        <bpel:from>
-          <bpel:literal>
-<this:EventStartMessageResponse></this:EventStartMessageResponse></bpel:literal>
-        </bpel:from>
-        <bpel:to>$thisEventStartMessageResponse.body</bpel:to>
-      </bpel:copy>
       <bpel:copy bpmn:label="$txDeliveryCompleteTxDeliveryCompleteRequestMsg">
         <bpel:from>
           <bpel:literal>
@@ -305,7 +297,7 @@
             </bpel:copy>
           </bpel:assign>
           <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk2Var" portType="txDeliveryComplete:restInterface" operation="txDeliveryComplete" inputVariable="txDeliveryCompleteTxDeliveryCompleteRequestMsg" outputVariable="txDeliveryCompleteTxDeliveryCompleteResponseMsg" bpmn:label="notify complete" name="notify_complete-1" bpmn:id="_5K55QG7iEeKkE6ll_3FDMA"></bpel:invoke>
-          <bpel:reply partnerLink="transcodeAndDeliveryPlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageResponse" bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"></bpel:reply>
+          <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
         </bpel:sequence>
       </bpel:else>
     </bpel:if>

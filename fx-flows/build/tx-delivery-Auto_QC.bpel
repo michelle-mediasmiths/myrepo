@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Auto QC" name="Auto_QC" bpmn:id="_mbM9EGxqEeKv3LhB37uiLw" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:FS_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/FS_Adapter" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:qcJobResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobResult.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:TX_Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:QC_Adapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/QC_Adapter" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:WFAdapter="http://ns.mediasmithsforge.com/foxtel/tx-delivery/WFAdapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:Delivery="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" xmlns:Transcode="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Transcode" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="Auto QC" name="Auto_QC" bpmn:id="_mbM9EGxqEeKv3LhB37uiLw" targetNamespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" location="fsAdapter/move.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" location="qcAdapterRest/qcStart.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" location="wfAdapter/autoQCRequiredForTX.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" location="wfAdapter/autoQcError.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" location="wfAdapter/autoQcFailed.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" location="wfAdapter/autoQcPassed.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -12,17 +13,20 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" location="wfAdapter/isTaskCancelled.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery" location="tx-delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Auto_QC" location="tx-delivery-Auto_QC.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tx-delivery/Delivery" location="tx-delivery-Delivery.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
     <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" myRole="Auto_QC_for_Transcode"/>
-    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="QC_Adapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="QC_Adapter_for_Auto_QC"/>
-    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk5Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk5" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="QC_Adapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndQC_AdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndQC_AdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="QC_Adapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
+    <bpel:partnerLink name="auto_QcAndDeliveryPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
-    <bpel:partnerLink name="auto_QcAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:Auto_QcAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Auto_QC"/>
     <bpel:partnerLink name="auto_QcAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndFS_AdapterForHttpPortPlk" initializePartnerRole="yes" partnerRole="FS_Adapter_for_Auto_QC"/>
   </bpel:partnerLinks>
   <bpel:variables>
@@ -34,7 +38,6 @@
     <bpel:variable name="AutoQCJobIdent" type="xs:string"/>
     <bpel:variable name="AutoQCResult" type="xs:string"/>
     <bpel:variable name="TaskIsCancelled" type="xs:boolean"/>
-    <bpel:variable name="thisEventStartMessageResponse" messageType="this:EventStartMessageResponse"/>
     <bpel:variable name="getProfileForQCGetProfileForQCRequestMsg" messageType="getProfileForQC:getProfileForQC_input"/>
     <bpel:variable name="getProfileForQCGetProfileForQCResponseMsg" messageType="getProfileForQC:getProfileForQC_output"/>
     <bpel:variable name="QCProfile" type="xs:string"/>
@@ -43,16 +46,53 @@
     <bpel:variable name="QuarrentineFileLoc" type="xs:string"/>
     <bpel:variable name="autoQcErrorAutoQcErrorRequestMsg" messageType="autoQcError:autoQcError_input"/>
     <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output"/>
+    <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest"/>
+    <bpel:variable name="QCRequired" type="xs:boolean"/>
   </bpel:variables>
   <bpel:sequence>
     <bpel:receive partnerLink="auto_QcAndTranscodePlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageRequest" createInstance="yes" bpmn:label="Message_Start_Event" name="Message_Start_Event" bpmn:id="_-UyoYGxqEeKv3LhB37uiLw"></bpel:receive>
     <bpel:assign name="init-variables-Auto_QC" bpmn:id="_-UyoYGxqEeKv3LhB37uiLw">
-      <bpel:copy bpmn:label="$thisEventStartMessageResponse">
+      <bpel:copy bpmn:label="$deliveryEventStartMessageRequest">
         <bpel:from>
           <bpel:literal>
-<this:EventStartMessageResponse></this:EventStartMessageResponse></bpel:literal>
+<Delivery:EventStartMessageRequest>
+  <tns:AO></tns:AO>
+  <tns:created></tns:created>
+  <tns:packageID></tns:packageID>
+  <tns:requiredDate></tns:requiredDate>
+  <tns:taskID></tns:taskID>
+  <tns:tcParams>
+    <tcAdapter:purpose></tcAdapter:purpose>
+    <tcAdapter:resolution></tcAdapter:resolution>
+    <tcAdapter:audioType></tcAdapter:audioType>
+    <tcAdapter:description></tcAdapter:description>
+    <tcAdapter:inputFile></tcAdapter:inputFile>
+    <tcAdapter:outputFolder></tcAdapter:outputFolder>
+    <tcAdapter:outputFileBasename></tcAdapter:outputFileBasename>
+    <tcAdapter:bug>
+      <tcAdapter:channel></tcAdapter:channel>
+      <tcAdapter:position></tcAdapter:position>
+      <tcAdapter:opacity></tcAdapter:opacity>
+    </tcAdapter:bug>
+    <tcAdapter:timecode>
+      <tcAdapter:location></tcAdapter:location>
+      <tcAdapter:size></tcAdapter:size>
+      <tcAdapter:background></tcAdapter:background>
+      <tcAdapter:foreground></tcAdapter:foreground>
+    </tcAdapter:timecode>
+    <tcAdapter:priority></tcAdapter:priority>
+    <tcAdapter:ftpupload>
+      <tcAdapter:filename></tcAdapter:filename>
+      <tcAdapter:folder></tcAdapter:folder>
+      <tcAdapter:server></tcAdapter:server>
+      <tcAdapter:user></tcAdapter:user>
+      <tcAdapter:password></tcAdapter:password>
+    </tcAdapter:ftpupload>
+  </tns:tcParams>
+  <tns:title></tns:title>
+</Delivery:EventStartMessageRequest></bpel:literal>
         </bpel:from>
-        <bpel:to>$thisEventStartMessageResponse.body</bpel:to>
+        <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
       </bpel:copy>
     </bpel:assign>
     <bpel:assign bpmn:label="Initialise Variables" name="Initialise_Variables" bpmn:id="_IwqxYGxrEeKv3LhB37uiLw">
@@ -84,335 +124,389 @@
         <bpel:from>concat(concat(concat(concat("/storage/mam/watch01/tx-exports/broadcast/failed/", $thisEventStartMessageRequest.body/tns:packageID/text()), "_"), $thisEventStartMessageRequest.body/tns:taskID/text()), ".gxf")</bpel:from>
         <bpel:to>$QuarrentineFileLoc</bpel:to>
       </bpel:copy>
+      <bpel:copy>
+        <bpel:from>false()</bpel:from>
+        <bpel:to>$QCRequired</bpel:to>
+      </bpel:copy>
     </bpel:assign>
-    <bpel:scope bpmn:label="SubProcess" name="SubProcess" bpmn:id="_56usALcVEeKdLrMPHFRfaw">
+    <bpel:scope bpmn:label="SubProcess" name="SubProcess" bpmn:id="_FQof0LuhEeKie49fOWHWlg">
       <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
         <ext:retryFor>10</ext:retryFor>
         <ext:retryDelay>60</ext:retryDelay>
       </ext:failureHandling>
       <bpel:variables>
-        <bpel:variable name="getProfileForQCGetProfileForQCRequestMsg" messageType="getProfileForQC:getProfileForQC_input"/>
-        <bpel:variable name="getProfileForQCGetProfileForQCResponseMsg" messageType="getProfileForQC:getProfileForQC_output"/>
+        <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input"/>
+        <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output"/>
       </bpel:variables>
       <bpel:sequence>
-        <bpel:assign name="init-variables-SubProcess" bpmn:id="_56usALcVEeKdLrMPHFRfaw">
-          <bpel:copy bpmn:label="$getProfileForQCGetProfileForQCRequestMsg">
+        <bpel:assign name="init-variables-SubProcess" bpmn:id="_FQof0LuhEeKie49fOWHWlg">
+          <bpel:copy bpmn:label="$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg">
             <bpel:from>
               <bpel:literal>
-<getProfileForQC:assetID_urlType></getProfileForQC:assetID_urlType></bpel:literal>
+<autoQCRequiredForTX:taskID_urlType></autoQCRequiredForTX:taskID_urlType></bpel:literal>
             </bpel:from>
-            <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.assetID</bpel:to>
-          </bpel:copy>
-          <bpel:copy bpmn:label="$getProfileForQCGetProfileForQCRequestMsg">
-            <bpel:from>
-              <bpel:literal>
-<getProfileForQC:isForTX_urlType></getProfileForQC:isForTX_urlType></bpel:literal>
-            </bpel:from>
-            <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.isForTX</bpel:to>
+            <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
           </bpel:copy>
         </bpel:assign>
-        <bpel:assign bpmn:label="Pick Profile" name="Pick_Profile" bpmn:id="_565rILcVEeKdLrMPHFRfaw">
+        <bpel:assign bpmn:label="Check if QC Required" name="Check_if_QC_Required" bpmn:id="_FQv0kLuhEeKie49fOWHWlg">
           <bpel:copy>
-            <bpel:from>true()</bpel:from>
-            <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.isForTX</bpel:to>
-          </bpel:copy>
-          <bpel:copy>
-            <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-            <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.assetID</bpel:to>
+            <bpel:from>$thisEventStartMessageRequest.body/tns:taskID</bpel:from>
+            <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID</bpel:to>
           </bpel:copy>
         </bpel:assign>
-        <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk3Var" portType="getProfileForQC:restInterface" operation="getProfileForQC" inputVariable="getProfileForQCGetProfileForQCRequestMsg" outputVariable="getProfileForQCGetProfileForQCResponseMsg" bpmn:label="Pick Profile" name="Pick_Profile-1" bpmn:id="_565rILcVEeKdLrMPHFRfaw"></bpel:invoke>
-        <bpel:assign bpmn:label="Record Profile" name="Record_Profile" bpmn:id="_KnkcwLcWEeKdLrMPHFRfaw">
+        <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" operation="autoQcRequiredForTX" inputVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" outputVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpmn:label="Check if QC Required" name="Check_if_QC_Required-1" bpmn:id="_FQv0kLuhEeKie49fOWHWlg"></bpel:invoke>
+        <bpel:assign bpmn:label="Record if QC required" name="Record_if_QC_required" bpmn:id="_KH80ELuhEeKie49fOWHWlg">
           <bpel:copy>
-            <bpel:from>$getProfileForQCGetProfileForQCResponseMsg.response/tns:profile/text()</bpel:from>
-            <bpel:to>$QCProfile</bpel:to>
+            <bpel:from>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()</bpel:from>
+            <bpel:to>$QCRequired</bpel:to>
           </bpel:copy>
         </bpel:assign>
       </bpel:sequence>
     </bpel:scope>
-    <bpel:scope bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times" bpmn:id="_5xoHUHHdEeKIgPAPmx2ukA">
-      <bpel:repeatUntil bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times-1">
-        <bpel:scope bpmn:label="attempt qc" name="attempt_qc" bpmn:id="_8tQyAHHdEeKIgPAPmx2ukA">
-          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-            <ext:faultOnFailure>true</ext:faultOnFailure>
-          </ext:failureHandling>
-          <bpel:variables>
-            <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input"/>
-            <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output"/>
-            <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input"/>
-            <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output"/>
-            <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input"/>
-            <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output"/>
-            <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input"/>
-            <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
-          </bpel:variables>
-          <bpel:faultHandlers>
-            <bpel:catchAll>
-              <bpel:sequence>
-                <bpel:empty bpmn:label="error" name="error" bpmn:id="_CmxtoHHfEeKIgPAPmx2ukA"/>
-                <bpel:assign bpmn:label="increment error count" name="increment_error_count" bpmn:id="_Fyqa0HHfEeKIgPAPmx2ukA">
-                  <bpel:copy>
-                    <bpel:from>$AutoQCErrorCount + 1</bpel:from>
-                    <bpel:to>$AutoQCErrorCount</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:wait bpmn:label="wait before retry" name="wait_before_retry" bpmn:id="_HnwUMHHfEeKIgPAPmx2ukA">
-                  <bpel:for>"PT60S"</bpel:for>
-                </bpel:wait>
-              </bpel:sequence>
-            </bpel:catchAll>
-          </bpel:faultHandlers>
-          <bpel:sequence>
-            <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_ZfZzsLcWEeKdLrMPHFRfaw">
-              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                <ext:retryFor>10</ext:retryFor>
-                <ext:retryDelay>60</ext:retryDelay>
-              </ext:failureHandling>
-              <bpel:variables>
-                <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input"/>
-                <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output"/>
-              </bpel:variables>
-              <bpel:sequence>
-                <bpel:assign name="init-variables-SubProcess" bpmn:id="_ZfZzsLcWEeKdLrMPHFRfaw">
-                  <bpel:copy bpmn:label="$qcStartQcStartRequestMsg">
-                    <bpel:from>
-                      <bpel:literal>
+    <bpel:if>
+      <bpel:condition>$QCRequired = false()</bpel:condition>
+      <bpel:sequence>
+        <bpel:empty bpmn:label="QC not required" name="QC_not_required" bpmn:id="_vQ-VILuhEeKie49fOWHWlg"/>
+        <bpel:assign bpmn:label="Delivery Flow" name="Delivery_Flow" bpmn:id="_RzAQsLugEeKie49fOWHWlg">
+          <bpel:copy>
+            <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
+            <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
+          </bpel:copy>
+        </bpel:assign>
+        <bpel:invoke partnerLink="auto_QcAndDeliveryPlkVar" portType="Delivery:ForAuto_QC" operation="EventStartMessage" inputVariable="deliveryEventStartMessageRequest" bpmn:label="Delivery Flow" name="Delivery_Flow-1" bpmn:id="_RzAQsLugEeKie49fOWHWlg"></bpel:invoke>
+        <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event" bpmn:id="_wok2sLugEeKie49fOWHWlg"/>
+      </bpel:sequence>
+      <bpel:else>
+        <bpel:sequence>
+          <bpel:empty bpmn:label="QC required" name="QC_required" bpmn:id="_t-CGkLuhEeKie49fOWHWlg"/>
+          <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_56usALcVEeKdLrMPHFRfaw">
+            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+              <ext:retryFor>10</ext:retryFor>
+              <ext:retryDelay>60</ext:retryDelay>
+            </ext:failureHandling>
+            <bpel:variables>
+              <bpel:variable name="getProfileForQCGetProfileForQCResponseMsg" messageType="getProfileForQC:getProfileForQC_output"/>
+              <bpel:variable name="getProfileForQCGetProfileForQCRequestMsg" messageType="getProfileForQC:getProfileForQC_input"/>
+            </bpel:variables>
+            <bpel:sequence>
+              <bpel:assign name="init-variables-SubProcess" bpmn:id="_56usALcVEeKdLrMPHFRfaw">
+                <bpel:copy bpmn:label="$getProfileForQCGetProfileForQCRequestMsg">
+                  <bpel:from>
+                    <bpel:literal>
+<getProfileForQC:assetID_urlType></getProfileForQC:assetID_urlType></bpel:literal>
+                  </bpel:from>
+                  <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.assetID</bpel:to>
+                </bpel:copy>
+                <bpel:copy bpmn:label="$getProfileForQCGetProfileForQCRequestMsg">
+                  <bpel:from>
+                    <bpel:literal>
+<getProfileForQC:isForTX_urlType></getProfileForQC:isForTX_urlType></bpel:literal>
+                  </bpel:from>
+                  <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.isForTX</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:assign bpmn:label="Pick Profile" name="Pick_Profile" bpmn:id="_565rILcVEeKdLrMPHFRfaw">
+                <bpel:copy>
+                  <bpel:from>true()</bpel:from>
+                  <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.isForTX</bpel:to>
+                </bpel:copy>
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                  <bpel:to>$getProfileForQCGetProfileForQCRequestMsg.assetID</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk4Var" portType="getProfileForQC:restInterface" operation="getProfileForQC" inputVariable="getProfileForQCGetProfileForQCRequestMsg" outputVariable="getProfileForQCGetProfileForQCResponseMsg" bpmn:label="Pick Profile" name="Pick_Profile-1" bpmn:id="_565rILcVEeKdLrMPHFRfaw"></bpel:invoke>
+              <bpel:assign bpmn:label="Record Profile" name="Record_Profile" bpmn:id="_KnkcwLcWEeKdLrMPHFRfaw">
+                <bpel:copy>
+                  <bpel:from>$getProfileForQCGetProfileForQCResponseMsg.response/tns:profile/text()</bpel:from>
+                  <bpel:to>$QCProfile</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+            </bpel:sequence>
+          </bpel:scope>
+          <bpel:scope bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times" bpmn:id="_5xoHUHHdEeKIgPAPmx2ukA">
+            <bpel:repeatUntil bpmn:label="attempt qc up to three times" name="attempt_qc_up_to_three_times-1">
+              <bpel:scope bpmn:label="attempt qc" name="attempt_qc" bpmn:id="_8tQyAHHdEeKIgPAPmx2ukA">
+                <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                  <ext:faultOnFailure>true</ext:faultOnFailure>
+                </ext:failureHandling>
+                <bpel:variables>
+                  <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input"/>
+                  <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output"/>
+                  <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input"/>
+                  <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output"/>
+                  <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input"/>
+                  <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output"/>
+                  <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input"/>
+                  <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
+                </bpel:variables>
+                <bpel:faultHandlers>
+                  <bpel:catchAll>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="error" name="error" bpmn:id="_CmxtoHHfEeKIgPAPmx2ukA"/>
+                      <bpel:assign bpmn:label="increment error count" name="increment_error_count" bpmn:id="_Fyqa0HHfEeKIgPAPmx2ukA">
+                        <bpel:copy>
+                          <bpel:from>$AutoQCErrorCount + 1</bpel:from>
+                          <bpel:to>$AutoQCErrorCount</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:wait bpmn:label="wait before retry" name="wait_before_retry" bpmn:id="_HnwUMHHfEeKIgPAPmx2ukA">
+                        <bpel:for>"PT60S"</bpel:for>
+                      </bpel:wait>
+                    </bpel:sequence>
+                  </bpel:catchAll>
+                </bpel:faultHandlers>
+                <bpel:sequence>
+                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-2" bpmn:id="_ZfZzsLcWEeKdLrMPHFRfaw">
+                    <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:retryFor>10</ext:retryFor>
+                      <ext:retryDelay>60</ext:retryDelay>
+                    </ext:failureHandling>
+                    <bpel:variables>
+                      <bpel:variable name="qcStartQcStartResponseMsg" messageType="qcStart:qcStart_output"/>
+                      <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input"/>
+                    </bpel:variables>
+                    <bpel:sequence>
+                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_ZfZzsLcWEeKdLrMPHFRfaw">
+                        <bpel:copy bpmn:label="$qcStartQcStartRequestMsg">
+                          <bpel:from>
+                            <bpel:literal>
 <qcAdapter:qcStartRequest>
   <qcAdapter:file></qcAdapter:file>
   <qcAdapter:ident></qcAdapter:ident>
   <qcAdapter:priority></qcAdapter:priority>
   <qcAdapter:profile></qcAdapter:profile>
 </qcAdapter:qcStartRequest></bpel:literal>
-                    </bpel:from>
-                    <bpel:to>$qcStartQcStartRequestMsg.body</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:assign bpmn:label="Create QC Job" name="Create_QC_Job" bpmn:id="_Zff6ULcWEeKdLrMPHFRfaw">
-                  <bpel:copy>
-                    <bpel:from>$AutoQCFileLocation</bpel:from>
-                    <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:file</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                    <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:ident</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>"Medium"</bpel:from>
-                    <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:priority</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$QCProfile</bpel:from>
-                    <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:profile</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk3Var" portType="qcStart:restInterface" operation="qcStart" inputVariable="qcStartQcStartRequestMsg" outputVariable="qcStartQcStartResponseMsg" bpmn:label="Create QC Job" name="Create_QC_Job-1" bpmn:id="_Zff6ULcWEeKdLrMPHFRfaw"></bpel:invoke>
-                <bpel:assign bpmn:label="Record Job ID" name="Record_Job_ID" bpmn:id="_a-9h8LcWEeKdLrMPHFRfaw">
-                  <bpel:copy>
-                    <bpel:from>$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()</bpel:from>
-                    <bpel:to>$AutoQCJobIdent</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-              </bpel:sequence>
-            </bpel:scope>
-            <bpel:scope bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled" bpmn:id="_Bc4i0HHeEeKIgPAPmx2ukA">
-              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                <ext:faultOnFailure>true</ext:faultOnFailure>
-              </ext:failureHandling>
-              <bpel:variables>
-                <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input"/>
-                <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output"/>
-                <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
-                <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
-                <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input"/>
-                <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output"/>
-              </bpel:variables>
-              <bpel:repeatUntil bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled-1">
-                <bpel:sequence>
-                  <bpel:wait bpmn:label="wait between polls" name="wait_between_polls" bpmn:id="_Hp43oHHeEeKIgPAPmx2ukA">
-                    <bpel:for>"PT30S"</bpel:for>
-                  </bpel:wait>
-                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-2" bpmn:id="_IfwmQLcXEeKdLrMPHFRfaw">
+                          </bpel:from>
+                          <bpel:to>$qcStartQcStartRequestMsg.body</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:assign bpmn:label="Create QC Job" name="Create_QC_Job" bpmn:id="_Zff6ULcWEeKdLrMPHFRfaw">
+                        <bpel:copy>
+                          <bpel:from>$AutoQCFileLocation</bpel:from>
+                          <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:file</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                          <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:ident</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>"Medium"</bpel:from>
+                          <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:priority</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$QCProfile</bpel:from>
+                          <bpel:to>$qcStartQcStartRequestMsg.body/qcAdapter:profile</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk3Var" portType="qcStart:restInterface" operation="qcStart" inputVariable="qcStartQcStartRequestMsg" outputVariable="qcStartQcStartResponseMsg" bpmn:label="Create QC Job" name="Create_QC_Job-1" bpmn:id="_Zff6ULcWEeKdLrMPHFRfaw"></bpel:invoke>
+                      <bpel:assign bpmn:label="Record Job ID" name="Record_Job_ID" bpmn:id="_a-9h8LcWEeKdLrMPHFRfaw">
+                        <bpel:copy>
+                          <bpel:from>$qcStartQcStartResponseMsg.response/qcAdapter:identifier/qcAdapter:jobname/text()</bpel:from>
+                          <bpel:to>$AutoQCJobIdent</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                    </bpel:sequence>
+                  </bpel:scope>
+                  <bpel:scope bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled" bpmn:id="_Bc4i0HHeEeKIgPAPmx2ukA">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                      <ext:retryFor>10</ext:retryFor>
-                      <ext:retryDelay>60</ext:retryDelay>
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                     </ext:failureHandling>
                     <bpel:variables>
                       <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input"/>
                       <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output"/>
-                    </bpel:variables>
-                    <bpel:sequence>
-                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_IfwmQLcXEeKdLrMPHFRfaw">
-                        <bpel:copy bpmn:label="$qcFinishedQcFinishedRequestMsg">
-                          <bpel:from>
-                            <bpel:literal>
-<qcFinished:jobname_urlType></qcFinished:jobname_urlType></bpel:literal>
-                          </bpel:from>
-                          <bpel:to>$qcFinishedQcFinishedRequestMsg.jobname</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:assign bpmn:label="Check if finished" name="Check_if_finished" bpmn:id="_IfzCgLcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$AutoQCJobIdent</bpel:from>
-                          <bpel:to>$qcFinishedQcFinishedRequestMsg.jobname</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk0Var" portType="qcFinished:restInterface" operation="qcFinished" inputVariable="qcFinishedQcFinishedRequestMsg" outputVariable="qcFinishedQcFinishedResponseMsg" bpmn:label="Check if finished" name="Check_if_finished-1" bpmn:id="_IfzCgLcXEeKdLrMPHFRfaw"></bpel:invoke>
-                      <bpel:assign bpmn:label="record finished status" name="record_finished_status" bpmn:id="_JmvccLcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$qcFinishedQcFinishedResponseMsg.response/text()</bpel:from>
-                          <bpel:to>$AutoQCFinished</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                    </bpel:sequence>
-                  </bpel:scope>
-                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-3" bpmn:id="_WUx1ULcXEeKdLrMPHFRfaw">
-                    <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                      <ext:retryFor>10</ext:retryFor>
-                      <ext:retryDelay>60</ext:retryDelay>
-                    </ext:failureHandling>
-                    <bpel:variables>
                       <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
                       <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
+                      <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input"/>
+                      <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output"/>
                     </bpel:variables>
-                    <bpel:sequence>
-                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_WUx1ULcXEeKdLrMPHFRfaw">
-                        <bpel:copy bpmn:label="$isTaskCancelledIsCancelledRequestMsg">
-                          <bpel:from>
-                            <bpel:literal>
+                    <bpel:repeatUntil bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled-1">
+                      <bpel:sequence>
+                        <bpel:wait bpmn:label="wait between polls" name="wait_between_polls" bpmn:id="_Hp43oHHeEeKIgPAPmx2ukA">
+                          <bpel:for>"PT30S"</bpel:for>
+                        </bpel:wait>
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-3" bpmn:id="_IfwmQLcXEeKdLrMPHFRfaw">
+                          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:retryFor>10</ext:retryFor>
+                            <ext:retryDelay>60</ext:retryDelay>
+                          </ext:failureHandling>
+                          <bpel:variables>
+                            <bpel:variable name="qcFinishedQcFinishedResponseMsg" messageType="qcFinished:qcFinished_output"/>
+                            <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input"/>
+                          </bpel:variables>
+                          <bpel:sequence>
+                            <bpel:assign name="init-variables-SubProcess" bpmn:id="_IfwmQLcXEeKdLrMPHFRfaw">
+                              <bpel:copy bpmn:label="$qcFinishedQcFinishedRequestMsg">
+                                <bpel:from>
+                                  <bpel:literal>
+<qcFinished:jobname_urlType></qcFinished:jobname_urlType></bpel:literal>
+                                </bpel:from>
+                                <bpel:to>$qcFinishedQcFinishedRequestMsg.jobname</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:assign bpmn:label="Check if finished" name="Check_if_finished" bpmn:id="_IfzCgLcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$AutoQCJobIdent</bpel:from>
+                                <bpel:to>$qcFinishedQcFinishedRequestMsg.jobname</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk0Var" portType="qcFinished:restInterface" operation="qcFinished" inputVariable="qcFinishedQcFinishedRequestMsg" outputVariable="qcFinishedQcFinishedResponseMsg" bpmn:label="Check if finished" name="Check_if_finished-1" bpmn:id="_IfzCgLcXEeKdLrMPHFRfaw"></bpel:invoke>
+                            <bpel:assign bpmn:label="record finished status" name="record_finished_status" bpmn:id="_JmvccLcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$qcFinishedQcFinishedResponseMsg.response/text()</bpel:from>
+                                <bpel:to>$AutoQCFinished</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                          </bpel:sequence>
+                        </bpel:scope>
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-4" bpmn:id="_WUx1ULcXEeKdLrMPHFRfaw">
+                          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:retryFor>10</ext:retryFor>
+                            <ext:retryDelay>60</ext:retryDelay>
+                          </ext:failureHandling>
+                          <bpel:variables>
+                            <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output"/>
+                            <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input"/>
+                          </bpel:variables>
+                          <bpel:sequence>
+                            <bpel:assign name="init-variables-SubProcess" bpmn:id="_WUx1ULcXEeKdLrMPHFRfaw">
+                              <bpel:copy bpmn:label="$isTaskCancelledIsCancelledRequestMsg">
+                                <bpel:from>
+                                  <bpel:literal>
 <isTaskCancelled:taskid_urlType></isTaskCancelled:taskid_urlType></bpel:literal>
-                          </bpel:from>
-                          <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:assign bpmn:label="Check if cancelled" name="Check_if_cancelled" bpmn:id="_WU0RkLcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                          <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk4Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="Check if cancelled" name="Check_if_cancelled-1" bpmn:id="_WU0RkLcXEeKdLrMPHFRfaw"></bpel:invoke>
-                      <bpel:assign bpmn:label="Record cancelled status" name="Record_cancelled_status" bpmn:id="_XsRMsLcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:from>
-                          <bpel:to>$TaskIsCancelled</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                    </bpel:sequence>
+                                </bpel:from>
+                                <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:assign bpmn:label="Check if cancelled" name="Check_if_cancelled" bpmn:id="_WU0RkLcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                <bpel:to>$isTaskCancelledIsCancelledRequestMsg.taskid</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk5Var" portType="isTaskCancelled:restInterface" operation="isCancelled" inputVariable="isTaskCancelledIsCancelledRequestMsg" outputVariable="isTaskCancelledIsCancelledResponseMsg" bpmn:label="Check if cancelled" name="Check_if_cancelled-1" bpmn:id="_WU0RkLcXEeKdLrMPHFRfaw"></bpel:invoke>
+                            <bpel:assign bpmn:label="Record cancelled status" name="Record_cancelled_status" bpmn:id="_XsRMsLcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$isTaskCancelledIsCancelledResponseMsg.response/text()</bpel:from>
+                                <bpel:to>$TaskIsCancelled</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                          </bpel:sequence>
+                        </bpel:scope>
+                        <bpel:if>
+                          <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
+                          <bpel:scope bpmn:label="SubProcess" name="SubProcess-5" bpmn:id="_tzjz8LcXEeKdLrMPHFRfaw">
+                            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                              <ext:retryFor>10</ext:retryFor>
+                              <ext:retryDelay>60</ext:retryDelay>
+                            </ext:failureHandling>
+                            <bpel:variables>
+                              <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output"/>
+                              <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input"/>
+                            </bpel:variables>
+                            <bpel:sequence>
+                              <bpel:assign name="init-variables-SubProcess" bpmn:id="_tzjz8LcXEeKdLrMPHFRfaw">
+                                <bpel:copy bpmn:label="$qcJobCancelQcCancelJobRequestMsg">
+                                  <bpel:from>
+                                    <bpel:literal>
+<qcJobCancel:jobname_urlType></qcJobCancel:jobname_urlType></bpel:literal>
+                                  </bpel:from>
+                                  <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
+                                </bpel:copy>
+                              </bpel:assign>
+                              <bpel:assign bpmn:label="Cancelled, stop job" name="Cancelled__stop_job" bpmn:id="_tzmQMLcXEeKdLrMPHFRfaw">
+                                <bpel:copy>
+                                  <bpel:from>$AutoQCJobIdent</bpel:from>
+                                  <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
+                                </bpel:copy>
+                              </bpel:assign>
+                              <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk1Var" portType="qcJobCancel:restInterface" operation="qcCancelJob" inputVariable="qcJobCancelQcCancelJobRequestMsg" outputVariable="qcJobCancelQcCancelJobResponseMsg" bpmn:label="Cancelled, stop job" name="Cancelled__stop_job-1" bpmn:id="_tzmQMLcXEeKdLrMPHFRfaw"></bpel:invoke>
+                            </bpel:sequence>
+                          </bpel:scope>
+                          <bpel:else>
+                            <bpel:sequence>
+                              <bpel:empty bpmn:label="not cancelled" name="not_cancelled" bpmn:id="_bFGTIHHeEeKIgPAPmx2ukA"/>
+                            </bpel:sequence>
+                          </bpel:else>
+                        </bpel:if>
+                      </bpel:sequence>
+                      <bpel:condition>($AutoQCFinished = true()) or ($TaskIsCancelled = true())</bpel:condition>
+                    </bpel:repeatUntil>
                   </bpel:scope>
                   <bpel:if>
                     <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
-                    <bpel:scope bpmn:label="SubProcess" name="SubProcess-4" bpmn:id="_tzjz8LcXEeKdLrMPHFRfaw">
-                      <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                        <ext:retryFor>10</ext:retryFor>
-                        <ext:retryDelay>60</ext:retryDelay>
-                      </ext:failureHandling>
-                      <bpel:variables>
-                        <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input"/>
-                        <bpel:variable name="qcJobCancelQcCancelJobResponseMsg" messageType="qcJobCancel:qcCancelJob_output"/>
-                      </bpel:variables>
-                      <bpel:sequence>
-                        <bpel:assign name="init-variables-SubProcess" bpmn:id="_tzjz8LcXEeKdLrMPHFRfaw">
-                          <bpel:copy bpmn:label="$qcJobCancelQcCancelJobRequestMsg">
-                            <bpel:from>
-                              <bpel:literal>
-<qcJobCancel:jobname_urlType></qcJobCancel:jobname_urlType></bpel:literal>
-                            </bpel:from>
-                            <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
-                          </bpel:copy>
-                        </bpel:assign>
-                        <bpel:assign bpmn:label="Cancelled, stop job" name="Cancelled__stop_job" bpmn:id="_tzmQMLcXEeKdLrMPHFRfaw">
-                          <bpel:copy>
-                            <bpel:from>$AutoQCJobIdent</bpel:from>
-                            <bpel:to>$qcJobCancelQcCancelJobRequestMsg.jobname</bpel:to>
-                          </bpel:copy>
-                        </bpel:assign>
-                        <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk1Var" portType="qcJobCancel:restInterface" operation="qcCancelJob" inputVariable="qcJobCancelQcCancelJobRequestMsg" outputVariable="qcJobCancelQcCancelJobResponseMsg" bpmn:label="Cancelled, stop job" name="Cancelled__stop_job-1" bpmn:id="_tzmQMLcXEeKdLrMPHFRfaw"></bpel:invoke>
-                      </bpel:sequence>
-                    </bpel:scope>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="cancelled" name="cancelled" bpmn:id="_o8SFYHHeEeKIgPAPmx2ukA"/>
+                    </bpel:sequence>
                     <bpel:else>
                       <bpel:sequence>
-                        <bpel:empty bpmn:label="not cancelled" name="not_cancelled" bpmn:id="_bFGTIHHeEeKIgPAPmx2ukA"/>
-                      </bpel:sequence>
-                    </bpel:else>
-                  </bpel:if>
-                </bpel:sequence>
-                <bpel:condition>($AutoQCFinished = true()) or ($TaskIsCancelled = true())</bpel:condition>
-              </bpel:repeatUntil>
-            </bpel:scope>
-            <bpel:if>
-              <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
-              <bpel:sequence>
-                <bpel:empty bpmn:label="cancelled" name="cancelled" bpmn:id="_o8SFYHHeEeKIgPAPmx2ukA"/>
-              </bpel:sequence>
-              <bpel:else>
-                <bpel:sequence>
-                  <bpel:empty bpmn:label="not cancelled" name="not_cancelled-1" bpmn:id="_ms748HHeEeKIgPAPmx2ukA"/>
-                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-5" bpmn:id="_9HU48LcXEeKdLrMPHFRfaw">
-                    <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                      <ext:retryFor>10</ext:retryFor>
-                      <ext:retryDelay>60</ext:retryDelay>
-                    </ext:failureHandling>
-                    <bpel:variables>
-                      <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input"/>
-                      <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output"/>
-                    </bpel:variables>
-                    <bpel:sequence>
-                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_9HU48LcXEeKdLrMPHFRfaw">
-                        <bpel:copy bpmn:label="$qcResultQcResultRequestMsg">
-                          <bpel:from>
-                            <bpel:literal>
+                        <bpel:empty bpmn:label="not cancelled" name="not_cancelled-1" bpmn:id="_ms748HHeEeKIgPAPmx2ukA"/>
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-6" bpmn:id="_9HU48LcXEeKdLrMPHFRfaw">
+                          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:retryFor>10</ext:retryFor>
+                            <ext:retryDelay>60</ext:retryDelay>
+                          </ext:failureHandling>
+                          <bpel:variables>
+                            <bpel:variable name="qcResultQcResultResponseMsg" messageType="qcResult:qcResult_output"/>
+                            <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input"/>
+                          </bpel:variables>
+                          <bpel:sequence>
+                            <bpel:assign name="init-variables-SubProcess" bpmn:id="_9HU48LcXEeKdLrMPHFRfaw">
+                              <bpel:copy bpmn:label="$qcResultQcResultRequestMsg">
+                                <bpel:from>
+                                  <bpel:literal>
 <qcResult:jobname_urlType></qcResult:jobname_urlType></bpel:literal>
-                          </bpel:from>
-                          <bpel:to>$qcResultQcResultRequestMsg.jobname</bpel:to>
-                        </bpel:copy>
-                        <bpel:copy bpmn:label="$qcResultQcResultRequestMsg">
-                          <bpel:from>
-                            <bpel:literal>
+                                </bpel:from>
+                                <bpel:to>$qcResultQcResultRequestMsg.jobname</bpel:to>
+                              </bpel:copy>
+                              <bpel:copy bpmn:label="$qcResultQcResultRequestMsg">
+                                <bpel:from>
+                                  <bpel:literal>
 <qcResult:path_urlType></qcResult:path_urlType></bpel:literal>
-                          </bpel:from>
-                          <bpel:to>$qcResultQcResultRequestMsg.path</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:assign bpmn:label="Get Result" name="Get_Result" bpmn:id="_9HZxcLcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$AutoQCFileLocation</bpel:from>
-                          <bpel:to>$qcResultQcResultRequestMsg.path</bpel:to>
-                        </bpel:copy>
-                        <bpel:copy>
-                          <bpel:from>$AutoQCJobIdent</bpel:from>
-                          <bpel:to>$qcResultQcResultRequestMsg.jobname</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                      <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk2Var" portType="qcResult:restInterface" operation="qcResult" inputVariable="qcResultQcResultRequestMsg" outputVariable="qcResultQcResultResponseMsg" bpmn:label="Get Result" name="Get_Result-1" bpmn:id="_9HZxcLcXEeKdLrMPHFRfaw"></bpel:invoke>
-                      <bpel:assign bpmn:label="Record Result" name="Record_Result" bpmn:id="__ZVX0LcXEeKdLrMPHFRfaw">
-                        <bpel:copy>
-                          <bpel:from>$qcResultQcResultResponseMsg.response/qcAdapter:result/text()</bpel:from>
-                          <bpel:to>$AutoQCResult</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                    </bpel:sequence>
-                  </bpel:scope>
-                  <bpel:wait bpmn:label="wait a while to allow cerify to write report" name="wait_a_while_to_allow_cerify_to_write_report" bpmn:id="_g_m5QK5kEeKd-v7zjSQ-MQ">
-                    <bpel:for>"PT30S"</bpel:for>
-                  </bpel:wait>
-                  <bpel:if>
-                    <bpel:condition>$AutoQCResult = "success"</bpel:condition>
-                    <bpel:sequence>
-                      <bpel:empty bpmn:label="success" name="success" bpmn:id="_1b8rEHHeEeKIgPAPmx2ukA"/>
-                      <bpel:scope bpmn:label="SubProcess" name="SubProcess-6" bpmn:id="_hwhDYLcYEeKdLrMPHFRfaw">
-                        <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                          <ext:retryFor>10</ext:retryFor>
-                          <ext:retryDelay>60</ext:retryDelay>
-                        </ext:failureHandling>
-                        <bpel:variables>
-                          <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input"/>
-                          <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
-                        </bpel:variables>
-                        <bpel:sequence>
-                          <bpel:assign name="init-variables-SubProcess" bpmn:id="_hwhDYLcYEeKdLrMPHFRfaw">
-                            <bpel:copy bpmn:label="$autoQcPassedAutoQcPassedRequestMsg">
-                              <bpel:from>
-                                <bpel:literal>
+                                </bpel:from>
+                                <bpel:to>$qcResultQcResultRequestMsg.path</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:assign bpmn:label="Get Result" name="Get_Result" bpmn:id="_9HZxcLcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$AutoQCFileLocation</bpel:from>
+                                <bpel:to>$qcResultQcResultRequestMsg.path</bpel:to>
+                              </bpel:copy>
+                              <bpel:copy>
+                                <bpel:from>$AutoQCJobIdent</bpel:from>
+                                <bpel:to>$qcResultQcResultRequestMsg.jobname</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                            <bpel:invoke partnerLink="auto_QcAndQC_AdapterForHttpPortPlk2Var" portType="qcResult:restInterface" operation="qcResult" inputVariable="qcResultQcResultRequestMsg" outputVariable="qcResultQcResultResponseMsg" bpmn:label="Get Result" name="Get_Result-1" bpmn:id="_9HZxcLcXEeKdLrMPHFRfaw"></bpel:invoke>
+                            <bpel:assign bpmn:label="Record Result" name="Record_Result" bpmn:id="__ZVX0LcXEeKdLrMPHFRfaw">
+                              <bpel:copy>
+                                <bpel:from>$qcResultQcResultResponseMsg.response/qcAdapter:result/text()</bpel:from>
+                                <bpel:to>$AutoQCResult</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                          </bpel:sequence>
+                        </bpel:scope>
+                        <bpel:wait bpmn:label="wait a while to allow cerify to write report" name="wait_a_while_to_allow_cerify_to_write_report" bpmn:id="_g_m5QK5kEeKd-v7zjSQ-MQ">
+                          <bpel:for>"PT30S"</bpel:for>
+                        </bpel:wait>
+                        <bpel:if>
+                          <bpel:condition>$AutoQCResult = "success"</bpel:condition>
+                          <bpel:sequence>
+                            <bpel:empty bpmn:label="success" name="success" bpmn:id="_1b8rEHHeEeKIgPAPmx2ukA"/>
+                            <bpel:scope bpmn:label="SubProcess" name="SubProcess-7" bpmn:id="_hwhDYLcYEeKdLrMPHFRfaw">
+                              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                                <ext:retryFor>10</ext:retryFor>
+                                <ext:retryDelay>60</ext:retryDelay>
+                              </ext:failureHandling>
+                              <bpel:variables>
+                                <bpel:variable name="autoQcPassedAutoQcPassedResponseMsg" messageType="autoQcPassed:autoQcPassed_output"/>
+                                <bpel:variable name="autoQcPassedAutoQcPassedRequestMsg" messageType="autoQcPassed:autoQcPassed_input"/>
+                              </bpel:variables>
+                              <bpel:sequence>
+                                <bpel:assign name="init-variables-SubProcess" bpmn:id="_hwhDYLcYEeKdLrMPHFRfaw">
+                                  <bpel:copy bpmn:label="$autoQcPassedAutoQcPassedRequestMsg">
+                                    <bpel:from>
+                                      <bpel:literal>
 <tns:autoQCPassNotification>
   <tns:assetId></tns:assetId>
   <tns:forTXDelivery></tns:forTXDelivery>
@@ -420,59 +514,59 @@
   <tns:title></tns:title>
   <tns:jobName></tns:jobName>
 </tns:autoQCPassNotification></bpel:literal>
-                              </bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body</bpel:to>
-                            </bpel:copy>
-                          </bpel:assign>
-                          <bpel:assign bpmn:label="Send Succcess Message" name="Send_Succcess_Message" bpmn:id="_hwnKALcYEeKdLrMPHFRfaw">
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:assetId</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>true()</bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:forTXDelivery</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:title</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$AutoQCJobIdent</bpel:from>
-                              <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName</bpel:to>
-                            </bpel:copy>
-                          </bpel:assign>
-                          <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk2Var" portType="autoQcPassed:restInterface" operation="autoQcPassed" inputVariable="autoQcPassedAutoQcPassedRequestMsg" outputVariable="autoQcPassedAutoQcPassedResponseMsg" bpmn:label="Send Succcess Message" name="Send_Succcess_Message-1" bpmn:id="_hwnKALcYEeKdLrMPHFRfaw"></bpel:invoke>
-                        </bpel:sequence>
-                      </bpel:scope>
-                      <bpel:assign bpmn:label="set success variable" name="set_success_variable" bpmn:id="_6Ukm4HHeEeKIgPAPmx2ukA">
-                        <bpel:copy>
-                          <bpel:from>true()</bpel:from>
-                          <bpel:to>$AutoQCSuccess</bpel:to>
-                        </bpel:copy>
-                      </bpel:assign>
-                    </bpel:sequence>
-                    <bpel:else>
-                      <bpel:sequence>
-                        <bpel:empty bpmn:label="error\warning" name="error_warning" bpmn:id="_zx6LIHHeEeKIgPAPmx2ukA"/>
-                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-7" bpmn:id="_PB7dULcYEeKdLrMPHFRfaw">
-                          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                            <ext:retryFor>10</ext:retryFor>
-                            <ext:retryDelay>60</ext:retryDelay>
-                          </ext:failureHandling>
-                          <bpel:variables>
-                            <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input"/>
-                            <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output"/>
-                          </bpel:variables>
-                          <bpel:sequence>
-                            <bpel:assign name="init-variables-SubProcess" bpmn:id="_PB7dULcYEeKdLrMPHFRfaw">
-                              <bpel:copy bpmn:label="$autoQcFailedAutoQcFailedRequestMsg">
-                                <bpel:from>
-                                  <bpel:literal>
+                                    </bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body</bpel:to>
+                                  </bpel:copy>
+                                </bpel:assign>
+                                <bpel:assign bpmn:label="Send Succcess Message" name="Send_Succcess_Message" bpmn:id="_hwnKALcYEeKdLrMPHFRfaw">
+                                  <bpel:copy>
+                                    <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:assetId</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>true()</bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:forTXDelivery</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:taskID</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:title</bpel:to>
+                                  </bpel:copy>
+                                  <bpel:copy>
+                                    <bpel:from>$AutoQCJobIdent</bpel:from>
+                                    <bpel:to>$autoQcPassedAutoQcPassedRequestMsg.body/tns:jobName</bpel:to>
+                                  </bpel:copy>
+                                </bpel:assign>
+                                <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk3Var" portType="autoQcPassed:restInterface" operation="autoQcPassed" inputVariable="autoQcPassedAutoQcPassedRequestMsg" outputVariable="autoQcPassedAutoQcPassedResponseMsg" bpmn:label="Send Succcess Message" name="Send_Succcess_Message-1" bpmn:id="_hwnKALcYEeKdLrMPHFRfaw"></bpel:invoke>
+                              </bpel:sequence>
+                            </bpel:scope>
+                            <bpel:assign bpmn:label="set success variable" name="set_success_variable" bpmn:id="_6Ukm4HHeEeKIgPAPmx2ukA">
+                              <bpel:copy>
+                                <bpel:from>true()</bpel:from>
+                                <bpel:to>$AutoQCSuccess</bpel:to>
+                              </bpel:copy>
+                            </bpel:assign>
+                          </bpel:sequence>
+                          <bpel:else>
+                            <bpel:sequence>
+                              <bpel:empty bpmn:label="error\warning" name="error_warning" bpmn:id="_zx6LIHHeEeKIgPAPmx2ukA"/>
+                              <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_PB7dULcYEeKdLrMPHFRfaw">
+                                <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                                  <ext:retryFor>10</ext:retryFor>
+                                  <ext:retryDelay>60</ext:retryDelay>
+                                </ext:failureHandling>
+                                <bpel:variables>
+                                  <bpel:variable name="autoQcFailedAutoQcFailedResponseMsg" messageType="autoQcFailed:autoQcFailed_output"/>
+                                  <bpel:variable name="autoQcFailedAutoQcFailedRequestMsg" messageType="autoQcFailed:autoQcFailed_input"/>
+                                </bpel:variables>
+                                <bpel:sequence>
+                                  <bpel:assign name="init-variables-SubProcess" bpmn:id="_PB7dULcYEeKdLrMPHFRfaw">
+                                    <bpel:copy bpmn:label="$autoQcFailedAutoQcFailedRequestMsg">
+                                      <bpel:from>
+                                        <bpel:literal>
 <tns:autoQCFailureNotification>
   <tns:assetId></tns:assetId>
   <tns:forTXDelivery></tns:forTXDelivery>
@@ -480,91 +574,93 @@
   <tns:title></tns:title>
   <tns:jobName></tns:jobName>
 </tns:autoQCFailureNotification></bpel:literal>
-                                </bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body</bpel:to>
-                              </bpel:copy>
-                            </bpel:assign>
-                            <bpel:assign bpmn:label="Send Failure Message" name="Send_Failure_Message" bpmn:id="_PB_uwLcYEeKdLrMPHFRfaw">
-                              <bpel:copy>
-                                <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:assetId</bpel:to>
-                              </bpel:copy>
-                              <bpel:copy>
-                                <bpel:from>true()</bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:forTXDelivery</bpel:to>
-                              </bpel:copy>
-                              <bpel:copy>
-                                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID</bpel:to>
-                              </bpel:copy>
-                              <bpel:copy>
-                                <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:title</bpel:to>
-                              </bpel:copy>
-                              <bpel:copy>
-                                <bpel:from>$AutoQCJobIdent</bpel:from>
-                                <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName</bpel:to>
-                              </bpel:copy>
-                            </bpel:assign>
-                            <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk1Var" portType="autoQcFailed:restInterface" operation="autoQcFailed" inputVariable="autoQcFailedAutoQcFailedRequestMsg" outputVariable="autoQcFailedAutoQcFailedResponseMsg" bpmn:label="Send Failure Message" name="Send_Failure_Message-1" bpmn:id="_PB_uwLcYEeKdLrMPHFRfaw"></bpel:invoke>
-                          </bpel:sequence>
-                        </bpel:scope>
+                                      </bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body</bpel:to>
+                                    </bpel:copy>
+                                  </bpel:assign>
+                                  <bpel:assign bpmn:label="Send Failure Message" name="Send_Failure_Message" bpmn:id="_PB_uwLcYEeKdLrMPHFRfaw">
+                                    <bpel:copy>
+                                      <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:assetId</bpel:to>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                      <bpel:from>true()</bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:forTXDelivery</bpel:to>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                      <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:taskID</bpel:to>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                      <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:title</bpel:to>
+                                    </bpel:copy>
+                                    <bpel:copy>
+                                      <bpel:from>$AutoQCJobIdent</bpel:from>
+                                      <bpel:to>$autoQcFailedAutoQcFailedRequestMsg.body/tns:jobName</bpel:to>
+                                    </bpel:copy>
+                                  </bpel:assign>
+                                  <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk2Var" portType="autoQcFailed:restInterface" operation="autoQcFailed" inputVariable="autoQcFailedAutoQcFailedRequestMsg" outputVariable="autoQcFailedAutoQcFailedResponseMsg" bpmn:label="Send Failure Message" name="Send_Failure_Message-1" bpmn:id="_PB_uwLcYEeKdLrMPHFRfaw"></bpel:invoke>
+                                </bpel:sequence>
+                              </bpel:scope>
+                            </bpel:sequence>
+                          </bpel:else>
+                        </bpel:if>
                       </bpel:sequence>
                     </bpel:else>
                   </bpel:if>
                 </bpel:sequence>
-              </bpel:else>
-            </bpel:if>
-          </bpel:sequence>
-        </bpel:scope>
-        <bpel:condition>(($AutoQCFinished = true()) or ($AutoQCErrorCount&gt;= 3)) or ($TaskIsCancelled = true())</bpel:condition>
-      </bpel:repeatUntil>
-    </bpel:scope>
-    <bpel:if>
-      <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
-      <bpel:sequence>
-        <bpel:empty bpmn:label="cancelled" name="cancelled-1" bpmn:id="_Q2DPwHHfEeKIgPAPmx2ukA"/>
-        <bpel:assign bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_NYNu0GxsEeKv3LhB37uiLw">
-          <bpel:copy>
-            <bpel:from>"finished"</bpel:from>
-            <bpel:to>$thisEventStartMessageResponse.body</bpel:to>
-          </bpel:copy>
-        </bpel:assign>
-        <bpel:reply partnerLink="auto_QcAndTranscodePlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageResponse" bpmn:label="Message_End_Event" name="Message_End_Event-1" bpmn:id="_NYNu0GxsEeKv3LhB37uiLw"></bpel:reply>
-      </bpel:sequence>
-      <bpel:elseif>
-        <bpel:condition>$AutoQCSuccess = true()</bpel:condition>
-        <bpel:sequence>
-          <bpel:empty bpmn:label="success" name="success-1" bpmn:id="_PyQQcHHfEeKIgPAPmx2ukA"/>
-          <bpel:empty bpmn:label="QC Stage Finished" name="QC_Stage_Finished" bpmn:id="_LGs_MGxsEeKv3LhB37uiLw"/>
-          <bpel:assign bpmn:label="Message_End_Event" name="Message_End_Event-2" bpmn:id="_NYNu0GxsEeKv3LhB37uiLw">
-            <bpel:copy>
-              <bpel:from>"finished"</bpel:from>
-              <bpel:to>$thisEventStartMessageResponse.body</bpel:to>
-            </bpel:copy>
-          </bpel:assign>
-          <bpel:reply partnerLink="auto_QcAndTranscodePlkVar" portType="this:ForTranscode" operation="EventStartMessage" variable="thisEventStartMessageResponse" bpmn:label="Message_End_Event" name="Message_End_Event-3" bpmn:id="_NYNu0GxsEeKv3LhB37uiLw"></bpel:reply>
-        </bpel:sequence>
-      </bpel:elseif>
-      <bpel:else>
-        <bpel:sequence>
-          <bpel:empty bpmn:label="error or failure" name="error_or_failure" bpmn:id="_TWP7oHHfEeKIgPAPmx2ukA"/>
+              </bpel:scope>
+              <bpel:condition>(($AutoQCFinished = true()) or ($AutoQCErrorCount&gt;= 3)) or ($TaskIsCancelled = true())</bpel:condition>
+            </bpel:repeatUntil>
+          </bpel:scope>
           <bpel:if>
-            <bpel:condition>$AutoQCErrorCount&gt;= 3</bpel:condition>
-            <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_-3OeYLcZEeKdLrMPHFRfaw">
-              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                <ext:retryFor>10</ext:retryFor>
-                <ext:retryDelay>60</ext:retryDelay>
-              </ext:failureHandling>
-              <bpel:variables>
-                <bpel:variable name="autoQcErrorAutoQcErrorRequestMsg" messageType="autoQcError:autoQcError_input"/>
-                <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output"/>
-              </bpel:variables>
+            <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
+            <bpel:sequence>
+              <bpel:empty bpmn:label="cancelled" name="cancelled-1" bpmn:id="_Q2DPwHHfEeKIgPAPmx2ukA"/>
+              <bpel:assign bpmn:label="Delivery Flow" name="Delivery_Flow-2" bpmn:id="_RzAQsLugEeKie49fOWHWlg">
+                <bpel:copy>
+                  <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
+                  <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
+                </bpel:copy>
+              </bpel:assign>
+              <bpel:invoke partnerLink="auto_QcAndDeliveryPlkVar" portType="Delivery:ForAuto_QC" operation="EventStartMessage" inputVariable="deliveryEventStartMessageRequest" bpmn:label="Delivery Flow" name="Delivery_Flow-3" bpmn:id="_RzAQsLugEeKie49fOWHWlg"></bpel:invoke>
+              <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-1" bpmn:id="_wok2sLugEeKie49fOWHWlg"/>
+            </bpel:sequence>
+            <bpel:elseif>
+              <bpel:condition>$AutoQCSuccess = true()</bpel:condition>
               <bpel:sequence>
-                <bpel:assign name="init-variables-SubProcess" bpmn:id="_-3OeYLcZEeKdLrMPHFRfaw">
-                  <bpel:copy bpmn:label="$autoQcErrorAutoQcErrorRequestMsg">
-                    <bpel:from>
-                      <bpel:literal>
+                <bpel:empty bpmn:label="success" name="success-1" bpmn:id="_PyQQcHHfEeKIgPAPmx2ukA"/>
+                <bpel:empty bpmn:label="QC Stage Finished" name="QC_Stage_Finished" bpmn:id="_LGs_MGxsEeKv3LhB37uiLw"/>
+                <bpel:assign bpmn:label="Delivery Flow" name="Delivery_Flow-4" bpmn:id="_RzAQsLugEeKie49fOWHWlg">
+                  <bpel:copy>
+                    <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
+                    <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to>
+                  </bpel:copy>
+                </bpel:assign>
+                <bpel:invoke partnerLink="auto_QcAndDeliveryPlkVar" portType="Delivery:ForAuto_QC" operation="EventStartMessage" inputVariable="deliveryEventStartMessageRequest" bpmn:label="Delivery Flow" name="Delivery_Flow-5" bpmn:id="_RzAQsLugEeKie49fOWHWlg"></bpel:invoke>
+                <bpel:empty bpmn:label="Empty_End_Event" name="Empty_End_Event-2" bpmn:id="_wok2sLugEeKie49fOWHWlg"/>
+              </bpel:sequence>
+            </bpel:elseif>
+            <bpel:else>
+              <bpel:sequence>
+                <bpel:empty bpmn:label="error or failure" name="error_or_failure" bpmn:id="_TWP7oHHfEeKIgPAPmx2ukA"/>
+                <bpel:if>
+                  <bpel:condition>$AutoQCErrorCount&gt;= 3</bpel:condition>
+                  <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_-3OeYLcZEeKdLrMPHFRfaw">
+                    <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:retryFor>10</ext:retryFor>
+                      <ext:retryDelay>60</ext:retryDelay>
+                    </ext:failureHandling>
+                    <bpel:variables>
+                      <bpel:variable name="autoQcErrorAutoQcErrorResponseMsg" messageType="autoQcError:autoQcError_output"/>
+                      <bpel:variable name="autoQcErrorAutoQcErrorRequestMsg" messageType="autoQcError:autoQcError_input"/>
+                    </bpel:variables>
+                    <bpel:sequence>
+                      <bpel:assign name="init-variables-SubProcess" bpmn:id="_-3OeYLcZEeKdLrMPHFRfaw">
+                        <bpel:copy bpmn:label="$autoQcErrorAutoQcErrorRequestMsg">
+                          <bpel:from>
+                            <bpel:literal>
 <tns:autoQCErrorNotification>
   <tns:assetId></tns:assetId>
   <tns:forTXDelivery></tns:forTXDelivery>
@@ -572,83 +668,86 @@
   <tns:title></tns:title>
   <tns:jobName></tns:jobName>
 </tns:autoQCErrorNotification></bpel:literal>
-                    </bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:assign bpmn:label="Auto QC Error" name="Auto_QC_Error" bpmn:id="_-3VzILcZEeKdLrMPHFRfaw">
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:assetId</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>true()</bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:forTXDelivery</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:title</bpel:to>
-                  </bpel:copy>
-                  <bpel:copy>
-                    <bpel:from>$AutoQCJobIdent</bpel:from>
-                    <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:jobName</bpel:to>
-                  </bpel:copy>
-                </bpel:assign>
-                <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk0Var" portType="autoQcError:restInterface" operation="autoQcError" inputVariable="autoQcErrorAutoQcErrorRequestMsg" outputVariable="autoQcErrorAutoQcErrorResponseMsg" bpmn:label="Auto QC Error" name="Auto_QC_Error-1" bpmn:id="_-3VzILcZEeKdLrMPHFRfaw"></bpel:invoke>
-              </bpel:sequence>
-            </bpel:scope>
-            <bpel:elseif>
-              <bpel:condition>($AutoQCFinished = true()) and ($AutoQCSuccess = false())</bpel:condition>
-              <bpel:sequence>
-                <bpel:empty bpmn:label="qc failure" name="qc_failure" bpmn:id="_Cz84IG7YEeKkE6ll_3FDMA"/>
-              </bpel:sequence>
-            </bpel:elseif>
-            <bpel:elseif>
-              <bpel:condition>not($AutoQCErrorCount&gt;= 3) and not(($AutoQCFinished = true()) and ($AutoQCSuccess = false()))</bpel:condition>
-              <bpel:throw faultName="bpmn:noGateChosen"/>
-            </bpel:elseif>
-          </bpel:if>
-          <bpel:empty bpmn:label="join" name="join" bpmn:id="_Cgh80LcZEeKdLrMPHFRfaw"/>
-          <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="__9zhYLcYEeKdLrMPHFRfaw">
-            <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-              <ext:retryFor>10</ext:retryFor>
-              <ext:retryDelay>60</ext:retryDelay>
-            </ext:failureHandling>
-            <bpel:variables>
-              <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input"/>
-              <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
-            </bpel:variables>
-            <bpel:sequence>
-              <bpel:assign name="init-variables-SubProcess" bpmn:id="__9zhYLcYEeKdLrMPHFRfaw">
-                <bpel:copy bpmn:label="$moveMoveRequestMsg">
-                  <bpel:from>
-                    <bpel:literal>
+                          </bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:assign bpmn:label="Auto QC Error" name="Auto_QC_Error" bpmn:id="_-3VzILcZEeKdLrMPHFRfaw">
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:packageID/text()</bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:assetId</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>true()</bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:forTXDelivery</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:taskID</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:title</bpel:to>
+                        </bpel:copy>
+                        <bpel:copy>
+                          <bpel:from>$AutoQCJobIdent</bpel:from>
+                          <bpel:to>$autoQcErrorAutoQcErrorRequestMsg.body/tns:jobName</bpel:to>
+                        </bpel:copy>
+                      </bpel:assign>
+                      <bpel:invoke partnerLink="auto_QcAndWFAdapterForHttpPortPlk1Var" portType="autoQcError:restInterface" operation="autoQcError" inputVariable="autoQcErrorAutoQcErrorRequestMsg" outputVariable="autoQcErrorAutoQcErrorResponseMsg" bpmn:label="Auto QC Error" name="Auto_QC_Error-1" bpmn:id="_-3VzILcZEeKdLrMPHFRfaw"></bpel:invoke>
+                    </bpel:sequence>
+                  </bpel:scope>
+                  <bpel:elseif>
+                    <bpel:condition>($AutoQCFinished = true()) and ($AutoQCSuccess = false())</bpel:condition>
+                    <bpel:sequence>
+                      <bpel:empty bpmn:label="qc failure" name="qc_failure" bpmn:id="_Cz84IG7YEeKkE6ll_3FDMA"/>
+                    </bpel:sequence>
+                  </bpel:elseif>
+                  <bpel:elseif>
+                    <bpel:condition>not($AutoQCErrorCount&gt;= 3) and not(($AutoQCFinished = true()) and ($AutoQCSuccess = false()))</bpel:condition>
+                    <bpel:throw faultName="bpmn:noGateChosen"/>
+                  </bpel:elseif>
+                </bpel:if>
+                <bpel:empty bpmn:label="join" name="join" bpmn:id="_Cgh80LcZEeKdLrMPHFRfaw"/>
+                <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="__9zhYLcYEeKdLrMPHFRfaw">
+                  <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                    <ext:retryFor>10</ext:retryFor>
+                    <ext:retryDelay>60</ext:retryDelay>
+                  </ext:failureHandling>
+                  <bpel:variables>
+                    <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output"/>
+                    <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input"/>
+                  </bpel:variables>
+                  <bpel:sequence>
+                    <bpel:assign name="init-variables-SubProcess" bpmn:id="__9zhYLcYEeKdLrMPHFRfaw">
+                      <bpel:copy bpmn:label="$moveMoveRequestMsg">
+                        <bpel:from>
+                          <bpel:literal>
 <FSAdapter:moveRequest>
   <FSAdapter:from></FSAdapter:from>
   <FSAdapter:to></FSAdapter:to>
 </FSAdapter:moveRequest></bpel:literal>
-                  </bpel:from>
-                  <bpel:to>$moveMoveRequestMsg.body</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:assign bpmn:label="Move media to quarrentine location" name="Move_media_to_quarrentine_location" bpmn:id="__96PELcYEeKdLrMPHFRfaw">
-                <bpel:copy>
-                  <bpel:from>$AutoQCFileLocation</bpel:from>
-                  <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
-                </bpel:copy>
-                <bpel:copy>
-                  <bpel:from>$QuarrentineFileLoc</bpel:from>
-                  <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
-                </bpel:copy>
-              </bpel:assign>
-              <bpel:invoke partnerLink="auto_QcAndFS_AdapterForHttpPortPlkVar" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="Move media to quarrentine location" name="Move_media_to_quarrentine_location-1" bpmn:id="__96PELcYEeKdLrMPHFRfaw"></bpel:invoke>
-            </bpel:sequence>
-          </bpel:scope><bpel:throw faultName="this:Error_End_Event"/>
-          
+                        </bpel:from>
+                        <bpel:to>$moveMoveRequestMsg.body</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:assign bpmn:label="Move media to quarrentine location" name="Move_media_to_quarrentine_location" bpmn:id="__96PELcYEeKdLrMPHFRfaw">
+                      <bpel:copy>
+                        <bpel:from>$AutoQCFileLocation</bpel:from>
+                        <bpel:to>$moveMoveRequestMsg.body/FSAdapter:from</bpel:to>
+                      </bpel:copy>
+                      <bpel:copy>
+                        <bpel:from>$QuarrentineFileLoc</bpel:from>
+                        <bpel:to>$moveMoveRequestMsg.body/FSAdapter:to</bpel:to>
+                      </bpel:copy>
+                    </bpel:assign>
+                    <bpel:invoke partnerLink="auto_QcAndFS_AdapterForHttpPortPlkVar" portType="move:restInterface" operation="move" inputVariable="moveMoveRequestMsg" outputVariable="moveMoveResponseMsg" bpmn:label="Move media to quarrentine location" name="Move_media_to_quarrentine_location-1" bpmn:id="__96PELcYEeKdLrMPHFRfaw"></bpel:invoke>
+                  </bpel:sequence>
+                </bpel:scope><bpel:throw faultName="this:Error_End_Event"/>
+                
+              </bpel:sequence>
+            </bpel:else>
+          </bpel:if>
         </bpel:sequence>
       </bpel:else>
     </bpel:if>

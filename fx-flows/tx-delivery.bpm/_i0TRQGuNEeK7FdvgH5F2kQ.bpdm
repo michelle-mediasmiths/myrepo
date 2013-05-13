@@ -1,7 +1,7 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:fs="http://thisdiagram/fs" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:WFAdapter="http://thisdiagram/WFAdapter" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" bpdm:prefix="deleteJob" bpdm:comment="contrib=&apos;project:///tcAdapter/deleteJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
@@ -17,9 +17,8 @@
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram" bpdm:prefix="diag" bpdm:comment="contrib=&apos;partner-pool:///_cOjsVGuNEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" bpdm:prefix="tcPassed" bpdm:comment="contrib=&apos;project:///wfAdapter/tcPassed.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/fs" bpdm:prefix="fs" bpdm:comment="contrib=&apos;partner-pool:///_YutRgHFEEeKXOL1w3D1sTw"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/WFAdapter" bpdm:prefix="WFAdapter" bpdm:comment="contrib=&apos;partner-pool:///_-kFOMGuREeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Auto_QC" bpdm:prefix="Auto_QC" bpdm:comment="contrib=&apos;partner-pool:///_mbM9EGxqEeKv3LhB37uiLw"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Delivery" bpdm:prefix="Delivery" bpdm:comment="contrib=&apos;partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/Transcode" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
@@ -46,7 +45,6 @@
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcFailure.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/tcTotalFailure.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/autoQCRequiredForTX.wsdl"/>
-        <bpdm:namespaceContributor bpdm:url="partner-pool:///_HwWekGuUEeK7FdvgH5F2kQ" bpdm:label="Delivery"/>
         <bpdm:namespaceContributor bpdm:url="partner-pool:///_mbM9EGxqEeKv3LhB37uiLw" bpdm:label="Auto QC"/>
         <bpdm:namespaceContributor bpdm:url="project:///wfAdapter/isTaskCancelled.wsdl"/>
         <bpdm:namespaceContributor bpdm:url="project:///tcAdapter/deleteJob.wsdl"/>
@@ -59,29 +57,22 @@
     <bpel:scope bpdm:label="Transcode" bpdm:ID="_i0TRQGuNEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
             <bpel:partnerLink name="transcodeAndCallerPlkVar" partnerLinkType="TX_Delivery:TranscodeAndCaller" myRole="Transcode_for_Caller" bpdm:enableSharing="false" bpdm:providedService="this:CanonicServiceForCaller" bpdm:providedPort="canonicPort" bpdm:provideSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Transcode/Caller" bpdm:providedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_lpG7MGuNEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_cOjsVGuNEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_GocjgLcQEeKdLrMPHFRfaw:_GohcALcQEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="isTaskCancelled:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:invokedIsDefault="true" bpdm:clientTasks="_rLuoULcSEeKdLrMPHFRfaw:_rL2kILcSEeKdLrMPHFRfaw, _o5w_ALcNEeKdLrMPHFRfaw:_o5zbQLcNEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="autoQCRequiredForTX:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/autoQCRequired?taskID={taskID}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_myKxoLcTEeKdLrMPHFRfaw:_myRfULcTEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndDeliveryPlkVar" partnerLinkType="TX_Delivery:TranscodeAndDelivery" initializePartnerRole="yes" partnerRole="Delivery_for_Transcode" bpdm:invokedService="Delivery:CanonicServiceForTranscode" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Delivery/Transcode" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_xcqdQGuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcGetPriority:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/priority" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aslSILcOEeKdLrMPHFRfaw:_asoVcLcOEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_GocjgLcQEeKdLrMPHFRfaw:_GohcALcQEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="auto_QcAndTranscodePlkVar" partnerLinkType="TX_Delivery:Auto_QcAndTranscode" initializePartnerRole="yes" partnerRole="Auto_QC_for_Transcode" bpdm:invokedService="Auto_QC:CanonicServiceForTranscode" bpdm:invokedPort="canonicPort" bpdm:invokedSOAPAddress="${deploy_serverUrl}${deploy_baseSoapServicesUrl}/${deploy_bundleNcName}/${diagram_relativeURL}/Auto_QC/Transcode" bpdm:invokedIsDefault="true" bpdm:clientTasks="_i0TRQGuNEeK7FdvgH5F2kQ:_0ciuwGuXEeK7FdvgH5F2kQ" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcGetPriority:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/priority" bpdm:invokedIsDefault="true" bpdm:clientTasks="_aslSILcOEeKdLrMPHFRfaw:_asoVcLcOEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="createJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/jobs" bpdm:invokedIsDefault="true" bpdm:clientTasks="_cj8HQLcMEeKdLrMPHFRfaw:_cj8uULcMEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk1Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="deleteJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_OWHrwLcOEeKdLrMPHFRfaw:_OWKIALcOEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk2Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk2" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="queryJob:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_3LDIwLcMEeKdLrMPHFRfaw:_3LDv0LcMEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
             <bpel:partnerLink name="transcodeAndFsForHttpPortPlkVar" partnerLinkType="TX_Delivery:TranscodeAndFsForHttpPortPlk" initializePartnerRole="yes" partnerRole="fs_for_Transcode" bpdm:invokedService="delete:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" bpdm:invokedIsDefault="true" bpdm:clientTasks="_9SE0kLcQEeKdLrMPHFRfaw:_9SFboLcQEeKdLrMPHFRfaw, _PKs4cLcQEeKdLrMPHFRfaw:_PKxw8LcQEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_YutRgHFEEeKXOL1w3D1sTw"/>
             <bpel:partnerLink name="transcodeAndTCAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndTCAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="TCAdapter_for_Transcode" bpdm:invokedService="setPriority:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-TcAdapter/transcoder/job/{guid}/priority?priority={priority}" bpdm:invokedIsDefault="true" bpdm:clientTasks="_ieDqYLcOEeKdLrMPHFRfaw:_ieGtsLcOEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_KQmcgGuOEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk5Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk5" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Z6NdMLcSEeKdLrMPHFRfaw:_Z6YcULcSEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcPassed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_D-4gQLcQEeKdLrMPHFRfaw:_D-9_0LcQEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk0Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk0" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="isTaskCancelled:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/task/{taskid}/cancelled" bpdm:invokedIsDefault="true" bpdm:clientTasks="_rLuoULcSEeKdLrMPHFRfaw:_rL2kILcSEeKdLrMPHFRfaw, _o5w_ALcNEeKdLrMPHFRfaw:_o5zbQLcNEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk3Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcPassed:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcPassed" bpdm:invokedIsDefault="true" bpdm:clientTasks="_D-4gQLcQEeKdLrMPHFRfaw:_D-9_0LcQEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="transcodeAndWFAdapterForHttpPortPlk4Var" partnerLinkType="TX_Delivery:TranscodeAndWFAdapterForHttpPortPlk4" initializePartnerRole="yes" partnerRole="WFAdapter_for_Transcode" bpdm:invokedService="tcTotalFailure:restService" bpdm:invokedPort="httpPort" bpdm:invokedSOAPAddress="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tc/tcFailedTotal" bpdm:invokedIsDefault="true" bpdm:clientTasks="_Z6NdMLcSEeKdLrMPHFRfaw:_Z6YcULcSEeKdLrMPHFRfaw" bpdm:isManaged="true" bpdm:otherPoolId="_-kFOMGuREeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
             <bpel:variable name="thisEventStartMessageRequest" messageType="this:EventStartMessageRequest" bpdm:id="_nN9ZIGuNEeK7FdvgH5F2kQ" bpdm:messageIds="inc:_nN35kGuNEeK7FdvgH5F2kQ"/>
             <bpel:variable name="TranscodeSuccess" type="xs:boolean"/>
             <bpel:variable name="TranscodeErrorCount" type="xs:integer"/>
-            <bpel:variable name="deliveryEventStartMessageRequest" messageType="Delivery:EventStartMessageRequest" bpdm:id="_6o9NsGuXEeK7FdvgH5F2kQ" bpdm:messageIds=" out:_6o5jUGuXEeK7FdvgH5F2kQ">
-                <bpel:from bpdm:toPart="body">
-                    <bpel:literal bpdm:linkedMessageType="Delivery:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
-                </bpel:from>
-            </bpel:variable>
             <bpel:variable name="auto_QCEventStartMessageRequest" messageType="Auto_QC:EventStartMessageRequest" bpdm:id="__PjngGxqEeKv3LhB37uiLw" bpdm:messageIds=" out:__PfWEGxqEeKv3LhB37uiLw">
                 <bpel:from bpdm:toPart="body">
                     <bpel:literal bpdm:linkedMessageType="Auto_QC:EventStartMessageRequest" bpdm:linkedPart="body"></bpel:literal>
@@ -90,18 +81,13 @@
             <bpel:variable name="TaskIsCancelled" type="xs:boolean"/>
             <bpel:variable name="TranscodeJobID" type="xs:string"/>
             <bpel:variable name="TranscodeJobResult" type="xs:string"/>
-            <bpel:variable name="deliveryEventStartMessageResponse" messageType="Delivery:EventStartMessageResponse" bpdm:id="_yKf9JW7YEeKkE6ll_3FDMA" bpdm:messageIds="inc:_yKHioG7YEeKkE6ll_3FDMA"/>
             <bpel:variable name="TCFilePath" type="xs:string"/>
-            <bpel:variable name="auto_QCEventStartMessageResponse" messageType="Auto_QC:EventStartMessageResponse" bpdm:id="_Y6VuNWxsEeKv3LhB37uiLw" bpdm:messageIds="inc:_Y6L9MGxsEeKv3LhB37uiLw"/>
             <bpel:variable name="tcPriority" type="xs:int"/>
             <bpel:variable name="TranscodeStatus" type="xs:string"/>
             <bpel:variable name="tcTotalFailureTcTotalFailureRequestMsg" messageType="tcTotalFailure:tcTotalFailure_input" binding="tcTotalFailure:restBinding" operation="tcTotalFailure" opMsgType="1" bpdm:id="_z3GRoGuSEeK7FdvgH5F2kQ"/>
             <bpel:variable name="tcTotalFailureTcTotalFailureResponseMsg" messageType="tcTotalFailure:tcTotalFailure_output" binding="tcTotalFailure:restBinding" operation="tcTotalFailure" opMsgType="1" bpdm:id="_0KYaBmuSEeK7FdvgH5F2kQ"/>
             <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="1" bpdm:id="_mI7PMG64EeKvjs-uExigJg"/>
             <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="1" bpdm:id="_mclyEm64EeKvjs-uExigJg"/>
-            <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="1" bpdm:id="_j70EMGuTEeK7FdvgH5F2kQ"/>
-            <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="1" bpdm:id="_kS2rNWuTEeK7FdvgH5F2kQ"/>
-            <bpel:variable name="QCRequired" type="xs:boolean"/>
         </bpel:variables>
         <bpel:sequence>
             <bpdm:messagingtask eventType="start: message" operation="EventStartMessage" partnerLink="transcodeAndCallerPlkVar" portType="this:ForCaller" isMyRole="true" enableSharing="false" bpdm:label="Message_Start_Event" bpdm:ID="_lpG7MGuNEeK7FdvgH5F2kQ">
@@ -279,7 +265,7 @@
                                             </bpel:variable>
                                         </bpel:variables>
                                         <bpel:sequence>
-                                            <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if cancelled" bpdm:ID="_o5zbQLcNEeKdLrMPHFRfaw">
+                                            <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="isTaskCancelled:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if cancelled" bpdm:ID="_o5zbQLcNEeKdLrMPHFRfaw">
                                                 <bpdm:linkset bpdm:type="assignments">
                                                     <bpel:copy>
                                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
@@ -342,7 +328,7 @@
                                                     </bpel:variable>
                                                 </bpel:variables>
                                                 <bpel:sequence>
-                                                    <bpdm:messagingtask operation="getpriority" partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcGetPriority:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Query Priority rules" bpdm:ID="_asoVcLcOEeKdLrMPHFRfaw">
+                                                    <bpdm:messagingtask operation="getpriority" partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcGetPriority:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Query Priority rules" bpdm:ID="_asoVcLcOEeKdLrMPHFRfaw">
                                                         <bpdm:linkset bpdm:type="assignments">
                                                             <bpel:copy>
                                                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:created/text()</bpel:from>
@@ -446,7 +432,7 @@
                                                     </bpel:variable>
                                                 </bpel:variables>
                                                 <bpel:sequence>
-                                                    <bpdm:messagingtask operation="tcPassed" partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success Message" bpdm:ID="_D-9_0LcQEeKdLrMPHFRfaw">
+                                                    <bpdm:messagingtask operation="tcPassed" partnerLink="transcodeAndWFAdapterForHttpPortPlk3Var" portType="tcPassed:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Success Message" bpdm:ID="_D-9_0LcQEeKdLrMPHFRfaw">
                                                         <bpdm:linkset bpdm:type="assignments">
                                                             <bpel:copy>
                                                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
@@ -491,7 +477,7 @@
                                                     </bpel:variable>
                                                 </bpel:variables>
                                                 <bpel:sequence>
-                                                    <bpdm:messagingtask operation="tcFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk2Var" portType="tcFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Failure Message" bpdm:ID="_GohcALcQEeKdLrMPHFRfaw">
+                                                    <bpdm:messagingtask operation="tcFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="tcFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Send Failure Message" bpdm:ID="_GohcALcQEeKdLrMPHFRfaw">
                                                         <bpdm:linkset bpdm:type="assignments">
                                                             <bpel:copy>
                                                                 <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
@@ -592,7 +578,7 @@
                             </bpel:variable>
                         </bpel:variables>
                         <bpel:sequence>
-                            <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk1Var" portType="isTaskCancelled:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if Cancelled" bpdm:ID="_rL2kILcSEeKdLrMPHFRfaw">
+                            <bpdm:messagingtask operation="isCancelled" partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="isTaskCancelled:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if Cancelled" bpdm:ID="_rL2kILcSEeKdLrMPHFRfaw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
@@ -615,17 +601,7 @@
                     </bpel:scope>
                     <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_gVScoG64EeKvjs-uExigJg" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
                         <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_rEXOcG64EeKvjs-uExigJg" bpdm:targetDisplayName="[GatewayDataBasedExclusive - canceled]">
-                            <bpel:condition>$TaskIsCancelled = true()
-<mapper:mapperLink>
-  <mapper:vertice id="1989679" targetPath="$condition" targetedBy="3387669-arg2"></mapper:vertice>
-  <mapper:vertice id="3387669" dimension="78x24" location="523,161">
-    <mapper:value>=</mapper:value>
-  </mapper:vertice>
-  <mapper:vertice id="29678247" sourcePath="$TaskIsCancelled" targetedBy="3387669-arg0"></mapper:vertice>
-  <mapper:vertice id="8786106" dimension="78x24" location="276,264" targetedBy="3387669-arg1">
-    <mapper:value>true()</mapper:value>
-  </mapper:vertice>
-</mapper:mapperLink></bpel:condition>
+                            <bpel:condition>$TaskIsCancelled = true()<mapper:mapperLink><mapper:vertice id="1989679" targetPath="$condition" targetedBy="3387669-arg2"></mapper:vertice><mapper:vertice id="3387669" dimension="78x24" location="523,161"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="29678247" sourcePath="$TaskIsCancelled" targetedBy="3387669-arg0"></mapper:vertice><mapper:vertice id="8786106" dimension="78x24" location="276,264" targetedBy="3387669-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                         </bpdm:linkset>
                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_rxSl4G64EeKvjs-uExigJg" bpdm:targetDisplayName="default"></bpdm:linkset>
                         <bpel:sequence>
@@ -634,94 +610,18 @@
                         </bpel:sequence>
                         <bpel:sequence>
                             <bpdm:messagingtask bpdm:label="not canceled" bpdm:ID="_qE8Y0G64EeKvjs-uExigJg"></bpdm:messagingtask>
-                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_myKxoLcTEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
-                                <bpel:variables>
-                                    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="1" bpdm:messageIds="inc:_kSe3wGuTEeK7FdvgH5F2kQ"/>
-                                    <bpel:variable name="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" messageType="autoQCRequiredForTX:autoQcRequiredForTX_input" binding="autoQCRequiredForTX:restBinding" operation="autoQcRequiredForTX" opMsgType="0" bpdm:messageIds=" out:_j7oeAGuTEeK7FdvgH5F2kQ">
-                                        <bpel:from bpdm:toPart="taskID">
-                                            <bpel:literal bpdm:linkedMessageType="autoQCRequiredForTX:autoQcRequiredForTX_input" bpdm:linkedPart="taskID" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:opMsgType="0" bpdm:operation="autoQcRequiredForTX"></bpel:literal>
-                                        </bpel:from>
-                                    </bpel:variable>
-                                </bpel:variables>
-                                <bpel:sequence>
-                                    <bpdm:messagingtask operation="autoQcRequiredForTX" partnerLink="transcodeAndWFAdapterForHttpPortPlk0Var" portType="autoQCRequiredForTX:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Check if QC Required" bpdm:ID="_myRfULcTEeKdLrMPHFRfaw">
-                                        <bpdm:linkset bpdm:type="assignments">
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID/text()</bpel:from>
-                                                <bpel:to>$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID/text()</bpel:to><mapper:mapperLink><mapper:vertice id="8359621" targetPath="$autoQCRequiredForTXAutoQcRequiredForTXRequestMsg.taskID/text()" targetedBy="25982735-arg0"></mapper:vertice><mapper:vertice id="25982735" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:taskID/text()"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                        </bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="autoQCRequiredForTXAutoQcRequiredForTXRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequiredForTX:autoQcRequiredForTX_input" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:ID="_j7oeAGuTEeK7FdvgH5F2kQ"></bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="autoQCRequiredForTXAutoQcRequiredForTXResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="autoQCRequiredForTX:autoQcRequiredForTX_output" bpdm:binding="autoQCRequiredForTX:restBinding" bpdm:ID="_kSe3wGuTEeK7FdvgH5F2kQ"></bpdm:linkset>
-                                    </bpdm:messagingtask>
-                                    <bpdm:messagingtask bpdm:label="Record if qc required" bpdm:ID="_y1qYsLcTEeKdLrMPHFRfaw">
-                                        <bpdm:linkset bpdm:type="assignments">
-                                            <bpel:copy>
-                                                <bpel:from>$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()</bpel:from>
-                                                <bpel:to>$QCRequired</bpel:to><mapper:mapperLink><mapper:vertice id="30105508" targetPath="$QCRequired" targetedBy="3372895-arg0"></mapper:vertice><mapper:vertice id="3372895" sourcePath="$autoQCRequiredForTXAutoQcRequiredForTXResponseMsg.autoQcRequiredForTX/text()"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                        </bpdm:linkset>
-                                    </bpdm:messagingtask>
-                                </bpel:sequence>
-                            </bpel:scope>
-                            <bpdm:gateway bpdm:label="Exclusive_Data-based_Gateway" bpdm:ID="_XOIQoGuTEeK7FdvgH5F2kQ" bpdm:gatewayType="data_xor" bpdm:isMerge="false">
-                                <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_eQvXwGuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="default"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="case" bpdm:default="false" bpdm:ID="_ej_q8GuTEeK7FdvgH5F2kQ" bpdm:targetDisplayName="[GatewayDataBasedExclusive - QC Required]">
-                                    <bpel:condition>true() = $QCRequired<mapper:mapperLink><mapper:vertice id="2901654" targetPath="$condition" targetedBy="12670611-arg1"></mapper:vertice><mapper:vertice id="12670611" dimension="78x24" location="537,669"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="3943891" dimension="78x24" location="283,720" targetedBy="12670611-arg0"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="15828613" sourcePath="$QCRequired" targetedBy="12670611-arg2"></mapper:vertice></mapper:mapperLink></bpel:condition>
-                                </bpdm:linkset>
-                                <bpel:sequence>
-                                    <bpdm:messagingtask bpdm:label="QC not Required" bpdm:ID="_bM2I8GuTEeK7FdvgH5F2kQ">
-                                        <bpdm:linkset bpdm:type="assignments">
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
-                                                <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to><mapper:mapperLink><mapper:vertice id="20787877" targetPath="$deliveryEventStartMessageRequest.body" targetedBy="18661782-arg0"></mapper:vertice><mapper:vertice id="18661782" sourcePath="$thisEventStartMessageRequest.body"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                        </bpdm:linkset>
-                                    </bpdm:messagingtask>
-                                </bpel:sequence>
-                                <bpel:sequence>
-                                    <bpdm:messagingtask bpdm:label="QC Required" bpdm:ID="_clWM8GuTEeK7FdvgH5F2kQ"></bpdm:messagingtask>
-                                    <bpdm:messagingtask operation="EventStartMessage" partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" isMyRole="false" enableSharing="false" bpdm:label="QC" bpdm:ID="_0ciuwGuXEeK7FdvgH5F2kQ">
-                                        <bpdm:linkset bpdm:type="assignments">
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:AO</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:AO</bpel:to><mapper:mapperLink><mapper:vertice id="10144235" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:AO" targetedBy="19527205-arg0"></mapper:vertice><mapper:vertice id="19527205" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:AO"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:packageID</bpel:to><mapper:mapperLink><mapper:vertice id="18065359" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:packageID" targetedBy="5997470-arg0"></mapper:vertice><mapper:vertice id="5997470" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:packageID"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:requiredDate</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:requiredDate</bpel:to><mapper:mapperLink><mapper:vertice id="9199612" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:requiredDate" targetedBy="11985709-arg0"></mapper:vertice><mapper:vertice id="11985709" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:requiredDate"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:tcParams</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:tcParams</bpel:to><mapper:mapperLink><mapper:vertice id="19001189" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:tcParams" targetedBy="5553774-arg0"></mapper:vertice><mapper:vertice id="5553774" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:tcParams"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:taskID</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:taskID</bpel:to><mapper:mapperLink><mapper:vertice id="4339601" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:taskID" targetedBy="24148036-arg0"></mapper:vertice><mapper:vertice id="24148036" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:taskID"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                            <bpel:copy>
-                                                <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:title</bpel:from>
-                                                <bpel:to>$auto_QCEventStartMessageRequest.body/wfAdapter:title</bpel:to><mapper:mapperLink><mapper:vertice id="29804232" targetPath="$auto_QCEventStartMessageRequest.body/wfAdapter:title" targetedBy="31239288-arg0"></mapper:vertice><mapper:vertice id="31239288" sourcePath="$thisEventStartMessageRequest.body/wfAdapter:title"></mapper:vertice></mapper:mapperLink>
-                                            </bpel:copy>
-                                        </bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="auto_QCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageRequest" bpdm:ID="__PfWEGxqEeKv3LhB37uiLw"></bpdm:linkset>
-                                        <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="auto_QCEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageResponse" bpdm:ID="_Y6L9MGxsEeKv3LhB37uiLw"></bpdm:linkset>
-                                    </bpdm:messagingtask>
-                                </bpel:sequence>
-                            </bpdm:gateway>
-                            <bpdm:messagingtask operation="EventStartMessage" partnerLink="transcodeAndDeliveryPlkVar" portType="Delivery:ForTranscode" isMyRole="false" enableSharing="false" bpdm:label="Deliver" bpdm:ID="_xcqdQGuXEeK7FdvgH5F2kQ">
+                            <bpdm:messagingtask operation="EventStartMessage" partnerLink="auto_QcAndTranscodePlkVar" portType="Auto_QC:ForTranscode" isMyRole="false" enableSharing="false" bpdm:label="QC Flow" bpdm:ID="_0ciuwGuXEeK7FdvgH5F2kQ">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body</bpel:from>
-                                        <bpel:to>$deliveryEventStartMessageRequest.body</bpel:to><mapper:mapperLink><mapper:vertice id="3493152" targetPath="$deliveryEventStartMessageRequest.body" targetedBy="14986591-arg0"></mapper:vertice><mapper:vertice id="14986591" sourcePath="$thisEventStartMessageRequest.body"></mapper:vertice></mapper:mapperLink>
+                                        <bpel:to>$auto_QCEventStartMessageRequest.body</bpel:to>
+<mapper:mapperLink>
+  <mapper:vertice id="33021631" targetPath="$auto_QCEventStartMessageRequest.body" targetedBy="33410779-arg0"></mapper:vertice>
+  <mapper:vertice id="33410779" sourcePath="$thisEventStartMessageRequest.body"></mapper:vertice>
+</mapper:mapperLink>
                                     </bpel:copy>
                                 </bpdm:linkset>
-                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="deliveryEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageRequest" bpdm:ID="_6o5jUGuXEeK7FdvgH5F2kQ"></bpdm:linkset>
-                                <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="invoke-receive" bpdm:messageVariable="deliveryEventStartMessageResponse" bpdm:variableIsManaged="true" bpdm:messageType="Delivery:EventStartMessageResponse" bpdm:ID="_yKHioG7YEeKkE6ll_3FDMA"></bpdm:linkset>
+                                <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="invoke-request" bpdm:messageVariable="auto_QCEventStartMessageRequest" bpdm:variableIsManaged="true" bpdm:messageType="Auto_QC:EventStartMessageRequest" bpdm:ID="__PfWEGxqEeKv3LhB37uiLw"></bpdm:linkset>
                             </bpdm:messagingtask>
                             <bpdm:messagingtask eventType="end: empty" bpdm:label="Empty_End_Event" bpdm:ID="_avNdkG67EeKvjs-uExigJg"></bpdm:messagingtask>
                         </bpel:sequence>
@@ -738,7 +638,7 @@
                             </bpel:variable>
                         </bpel:variables>
                         <bpel:sequence>
-                            <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk5Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Transcode Failed" bpdm:ID="_Z6YcULcSEeKdLrMPHFRfaw">
+                            <bpdm:messagingtask operation="tcTotalFailure" partnerLink="transcodeAndWFAdapterForHttpPortPlk4Var" portType="tcTotalFailure:restInterface" isMyRole="false" enableSharing="false" bpdm:label="Transcode Failed" bpdm:ID="_Z6YcULcSEeKdLrMPHFRfaw">
                                 <bpdm:linkset bpdm:type="assignments">
                                     <bpel:copy>
                                         <bpel:from>$thisEventStartMessageRequest.body/wfAdapter:packageID/text()</bpel:from>
