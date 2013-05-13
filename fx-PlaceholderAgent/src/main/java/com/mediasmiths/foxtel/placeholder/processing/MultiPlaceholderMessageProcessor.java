@@ -256,6 +256,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		        addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
 		    }
 
+		    addOrUpdateMaterial.setTitleID(action.getTitleID());
 		    addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
 
 		    //send event

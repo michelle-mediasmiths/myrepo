@@ -66,6 +66,7 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 				Date completedDate = currentAttributes.getAttribute(Attribute.TASK_UPDATED);
 				addOrUpdateMaterial.setCompletionDate(dateUtil.fromDate(completedDate));
 				addOrUpdateMaterial.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+				addOrUpdateMaterial.setTitleID(currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 
 				// send event
 				eventsService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
