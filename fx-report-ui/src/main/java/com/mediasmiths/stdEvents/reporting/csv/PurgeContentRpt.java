@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -46,9 +47,9 @@ public class PurgeContentRpt
 	private int posponed=0;
 	private int purgedAmt=0;
 	
-	public void writePurgeTitles(List<EventEntity> events, Date startDate, Date endDate, String reportName)
+	public void writePurgeTitles(List<EventEntity> events, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<PurgeContent> purged = getReportList(events, startDate, endDate);
+		List<PurgeContent> purged = getReportList(events, bms, startDate, endDate);
 		setStats(purged);
 		
 		purged.add(addStats("Amount Protected", Integer.toString(protect)));
@@ -78,11 +79,8 @@ public class PurgeContentRpt
 		return purge;
 	}
 	
-	public List<PurgeContent> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<PurgeContent> getReportList(List<EventEntity> events, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate)
 	{
-		List<CreateOrUpdateTitle> titles = report.titles;
-		
-		List<AggregatedBMS> bms = new ArrayList<AggregatedBMS>();
 		
 		logger.info("Creating purgeContent list");
 		List<PurgeContent> purgeList = new ArrayList<PurgeContent>();
@@ -97,10 +95,6 @@ public class PurgeContentRpt
 				PurgeTitle title = (PurgeTitle) unmarshall(event);
 				purge.setEntityType("Item");
 				purge.setMaterialID(title.getTitleID());
-				for (CreateOrUpdateTitle createTitle : titles) {
-					if (purge.getMaterialID().equals(createTitle.getTitleID()))
-						purge.setTitle(createTitle.getTitle());
-				}
 			}
 			
 			if (event.getEventName().equals("DeleteMaterial"))
