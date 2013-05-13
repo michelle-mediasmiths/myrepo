@@ -12,6 +12,7 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -46,7 +47,7 @@ public class AutoQCRpt
 	private int failed=0;
 	private int overridden=0;
 	
-	public void writeAutoQc(List<EventEntity> passed, Date startDate, Date endDate, String reportName)
+	public void writeAutoQc(List<EventEntity> passed, DateTime startDate, DateTime endDate, String reportName)
 	{
 		List<AutoQC> autoQcs = getReportList(passed, startDate, endDate);
 		setStats(autoQcs);
@@ -82,7 +83,7 @@ public class AutoQCRpt
 		return title;
 	}
 	
-	public List<AutoQC> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<AutoQC> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
 		logger.info("Creating autoQC list");
 		List<AutoQC> autoQcs = new ArrayList<AutoQC>();

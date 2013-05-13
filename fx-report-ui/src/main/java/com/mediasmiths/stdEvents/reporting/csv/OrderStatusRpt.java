@@ -44,7 +44,7 @@ public class OrderStatusRpt
 	public int overdue=0;
 	public int unmatched=0;
 		
-	public void writeOrderStatus(final List<AggregatedBMS> events, final DateTime startDate, final DateTime endDate, final String reportName)
+	public void writeOrderStatus(final List<AggregatedBMS> events, final String startDate, final String endDate, final String reportName)
 	{
 		logger.debug(">>>writeOrderStatus");
 		logger.info("List size: " + events.size());
@@ -59,7 +59,7 @@ public class OrderStatusRpt
 		logger.debug("<<<writeOrderStatus");
 	}
 	
-	public List<OrderStatus> getReportList(final List<AggregatedBMS> events, final DateTime startDate, final DateTime endDate)
+	public List<OrderStatus> getReportList(final List<AggregatedBMS> events, final String startDate, final String endDate)
 	{
 		logger.info("USING AGGREGATED BMS TABLE");
 		List<OrderStatus> orders = new ArrayList<OrderStatus>();

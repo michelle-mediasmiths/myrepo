@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -33,7 +34,7 @@ public class TaskListRpt
 	@Inject 
 	private QueryAPI queryApi;
 	
-	public void writeTaskList(List<EventEntity> events, Date startDate, Date endDate, String reportName)
+	public void writeTaskList(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
 		List<TaskList> tasks = getReportList(events, startDate, endDate);
 		createCsv(tasks, reportName);		
@@ -59,7 +60,7 @@ public class TaskListRpt
 		return (TaskList)title;
 	}
 	
-	public List<TaskList> getReportList(List<EventEntity> events, Date startDate, Date endDate)
+	public List<TaskList> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
 		List<TaskList> tasks = new ArrayList<TaskList>();
 		for (EventEntity event : events)
