@@ -82,7 +82,7 @@ public class ReportUIImpl implements ReportUI
 	public static transient final Logger logger = Logger.getLogger(ReportUIImpl.class);
 	
 	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
-	private static final DateTimeFormatter toReadable = DateTimeFormat.forPattern("HH:mm:ss dd-MM-yyyy");
+	private static final DateTimeFormatter toReadable = DateTimeFormat.forPattern("dd-MM-yyyy");
 	
 	int startDay;
 	int startMonth;
