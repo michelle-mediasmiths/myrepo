@@ -46,6 +46,10 @@ bmpdp : mayampdp
 bmpdptest : mayampdp
 	rsync -v fx-MayamPDP/target/fx-MayamPDP.war sysadmin@10.111.224.101:mediasmiths/bundle/fx-MayamPDP-test.war
 
+bmreports : reports
+	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.22:/opt/tomcat/webapps
+	
+
 uploadall : install
 	-mkdir /tmp/bundle/
 	-rm /tmp/bundle/*.war
@@ -81,7 +85,9 @@ wfadapter:
 
 mayampdp:
 	$(MVN) clean package -am --projects fx-MayamPDP
-	
+
+reports:
+	$(MVN) clean package -am --projects fx-report-ui
 	
 #
 #

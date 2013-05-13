@@ -255,21 +255,10 @@ public class ReportUIImpl implements ReportUI
 		return valid;
 	}
 	
-	private List<AggregatedBMS> getInDateBMS(final List<AggregatedBMS> events, final DateTime start, final DateTime end)
+	private List<AggregatedBMS> getInDateBMS(final DateTime start, final DateTime end)
 	{
 		logger.debug(String.format("Date range checked from %s to %s", start, end));
-		Interval interval = new Interval(start, end);
-		List <AggregatedBMS> valid = new ArrayList<AggregatedBMS>();
-		for (AggregatedBMS bms : events)
-		{
-			DateTime eventTime = new DateTime(bms.getTime());
-			logger.debug(String.format("Checking if event time %s within range.", eventTime));
-			if (interval.contains(eventTime))
-			{
-				valid.add(bms);
-			}
-		}
-		return valid;
+		return queryApi.getAllBMSbyDate(start, end);
 	}
 	
 	@Transactional
@@ -427,8 +416,7 @@ public class ReportUIImpl implements ReportUI
 	{
 		logger.debug(">>>getOrderStatusCSV");
 		
-		List<AggregatedBMS> bms = populateBMS();
-		List<AggregatedBMS> orders = getInDateBMS(bms, start, end);
+		List<AggregatedBMS> orders = getInDateBMS(start, end);
 		logger.info("List size: " + orders.size());
 		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
 		orderStatus.writeOrderStatus(orders, start, end, reportName);

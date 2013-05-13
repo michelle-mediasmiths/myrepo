@@ -71,7 +71,7 @@ public class AggregatedBMS
 	private Long id;
 	
 	@Column(name="TIME")
-	protected long time;
+	protected Long time;
 	
 	@Column(name="TITLE_ID")
     @XmlElement(required = true)
@@ -105,12 +105,12 @@ public class AggregatedBMS
     @XmlElement
     protected String requiredBy;
 
-    public long getTime()
+    public Long getTime()
 	{
 		return time;
 	}
 
-	public void setTime(long time)
+	public void setTime(Long time)
 	{
 		this.time = time;
 	}

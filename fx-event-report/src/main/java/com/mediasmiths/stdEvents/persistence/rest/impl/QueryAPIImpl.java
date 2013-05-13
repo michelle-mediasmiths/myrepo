@@ -10,6 +10,7 @@ import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -226,5 +227,13 @@ public class QueryAPIImpl implements QueryAPI
 				return ( (hours < 10 ? "0" : "") + hours
 				+ ":" + (minutes < 10 ? "0" : "") + minutes
 				+ ":" + (seconds< 10 ? "0" : "") + seconds );
+	}
+
+	@Override
+	@GET
+	@Path("/BMSbydate")
+	public List<AggregatedBMS> getAllBMSbyDate(DateTime start, DateTime end)
+	{
+		return bmsDao.withinDate(start,end);
 	}
 }

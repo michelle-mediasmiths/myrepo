@@ -168,19 +168,19 @@ public class OrderStatusRpt
 				if ((event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
 					delivered++;
 				
-				logger.info("getting outstanding");
+				logger.trace("getting outstanding");
 				if ((!event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
 					outstanding++;	
 			}
 			
-			logger.info("getting overdue");
+			logger.trace("getting overdue");
 			if (event.getOverdueInDateRange() != null)
 			{
 				if ((event.getOverdueInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
 					overdue++;
 			}
 			
-			logger.info("getting unmatched");
+			logger.trace("getting unmatched");
 			if (event.getTaskType() != null)
 			{
 				if (event.getTaskType().equals("Unmatched"))

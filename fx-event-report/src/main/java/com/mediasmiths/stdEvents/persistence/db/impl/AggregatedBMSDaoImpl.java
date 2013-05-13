@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial;
 import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
@@ -41,6 +42,19 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.isNotNull("completionDate"));
 		logger.debug("<<<completionDateNotNull");
+		return getList(criteria);
+	}
+	
+	@Transactional 
+	public List<AggregatedBMS> withinDate(DateTime start, DateTime end){
+		
+		Criteria criteria = createCriteria();
+		Long startL = start.getMillis();
+		Long endL = end.getMillis();
+		
+		criteria.add(Restrictions.ge("time", startL));
+		criteria.add(Restrictions.lt("time", endL));
+		
 		return getList(criteria);
 	}
 

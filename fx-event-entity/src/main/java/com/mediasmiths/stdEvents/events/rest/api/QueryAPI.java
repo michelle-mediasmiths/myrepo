@@ -9,6 +9,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
+import org.joda.time.DateTime;
+
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
@@ -33,6 +35,10 @@ public interface QueryAPI
 	@GET
 	@Path("/allBMS")
 	public List<AggregatedBMS> getAllBMS();
+	
+	@GET
+	@Path("/BMSbydate")
+	public List<AggregatedBMS> getAllBMSbyDate(final DateTime start, final DateTime end);
 	
 	@GET
 	@Path("/completedBefore")
