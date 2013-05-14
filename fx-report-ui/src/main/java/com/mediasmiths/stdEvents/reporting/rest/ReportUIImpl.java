@@ -256,12 +256,6 @@ public class ReportUIImpl implements ReportUI
 		return valid;
 	}
 	
-	private List<AggregatedBMS> getInDateBMS(final DateTime start, final DateTime end)
-	{
-		logger.debug(String.format("Date range checked from %s to %s", start, end));
-		return queryApi.getAllBMSbyDate(start, end);
-	}
-	
 	@Transactional
 	public void saveReportName(@QueryParam("name") String name)
 	{
@@ -325,56 +319,6 @@ public class ReportUIImpl implements ReportUI
 		logger.debug("<<<chooseReport");
 		return null;		
 	}
-
-	private List<OrderStatus> getReportList(List<EventEntity> events)
-	{
-		List<OrderStatus> orders = new ArrayList<OrderStatus>();
-		
-		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-		for (EventEntity pack : queryApi.getByEventNameWindow("AddOrUpdatePackage", MAX)) {
-			AddOrUpdatePackage currentPack = (AddOrUpdatePackage) unmarshall(pack);
-			packages.add(currentPack);
-		}
-		List<AddOrUpdateMaterial> materials = new ArrayList<AddOrUpdateMaterial>();
-		for (EventEntity material : queryApi.getByEventNameWindow("AddOrUpdateMaterial", MAX)) {
-			AddOrUpdateMaterial currentMaterial = (AddOrUpdateMaterial) unmarshall(material); 
-			materials.add(currentMaterial);
-		}
-		
-		for (EventEntity event : events)
-		{
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			
-			AddOrUpdatePackage matchingPack = new AddOrUpdatePackage();
-			for (AddOrUpdatePackage pack : packages) {
-				if (pack.getTitleID().equals(title.getTitleID())) {
-					matchingPack = pack;
-				}
-			}
-			AddOrUpdateMaterial matchingMaterial = new AddOrUpdateMaterial();
-			for (AddOrUpdateMaterial material : materials) {
-				if (material.getMaterialID().equals(matchingPack.getMaterialID())) {
-					matchingMaterial = material;
-				}
-			}
-			
-			OrderStatus order = new OrderStatus();
-			order.setDateRange(startDate + " - " + endDate);
-			order.setTitle(title.getTitle());
-			order.setMaterialID(matchingPack.getMaterialID());
-			order.setChannels(title.getChannels());
-			order.setRequiredBy(matchingPack.getRequiredBy());
-			if (event.getEventName().equals("UnmatchedContentAvailable"))
-				order.setTaskType("Unmatched");
-			else
-				order.setTaskType("Ingest");
-			order.setCompletionDate(matchingMaterial.getCompletionDate());
-			
-			orders.add(order);
-		}
-		logger.info("Orders length: " + orders.size());
-		return orders;
-	}
 	
 	private Object unmarshall(EventEntity event)
 	{
@@ -417,17 +361,23 @@ public class ReportUIImpl implements ReportUI
 	{
 		logger.debug(">>>getOrderStatusCSV");
 		
-		List<AggregatedBMS> orders = getInDateBMS(start, end);
-		String startDate = start.toString(toReadable);
-		String endDate = end.toString(toReadable);
+		List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders = getOrdersInDateRange(start ,end);
+		
+		String startDate = start.toString(dateFormatter);
+		String endDate = end.toString(dateFormatter);
 		logger.info("dates readable start: " + startDate + " end: " + endDate);
 		logger.info("List size: " + orders.size());
 		logger.debug(String.format("Requesting order status report for date range: %s to %s; report name will be: %s ", start.toString(), end.toString(), reportName));
-		orderStatus.writeOrderStatus(orders, startDate, endDate, reportName);
+		orderStatus.writeOrderStatus(orders, start, end, reportName);
 		
 		logger.debug("<<<getOrderStatusCSV");
 	}
 	
+	private List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> getOrdersInDateRange(DateTime start, DateTime end)
+	{
+		return queryApi.getOrdersInDateRange(start, end);
+	}
+
 	@Transactional(readOnly=true)
 	public void getAquisitionReportCSV(final DateTime start, final DateTime end, final String reportName)
 	{

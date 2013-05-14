@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 {
+	public static final String UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER = "Unmatched asset matched to this placeholder";
+
 	private static final Logger log = Logger.getLogger(UnmatchedTransferManager.class);
 
 	private final MayamTaskController taskController;
@@ -205,7 +207,7 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 			log.info(String.format("Import finished for asset %s (%s)", task.getAttributeAsString(Attribute.HOUSE_ID), peerID));
 			AttributeMap updateMap = taskController.updateMapForTask(task);
 			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			updateMap.setAttribute(Attribute.INGEST_NOTES, "Unmatched asset matched to this placeholder");
+			updateMap.setAttribute(Attribute.INGEST_NOTES, UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER);
 			taskController.saveTask(updateMap);
 		}
 		catch (MayamClientException e)

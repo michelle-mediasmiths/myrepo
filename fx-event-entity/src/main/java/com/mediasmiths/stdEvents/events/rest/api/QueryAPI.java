@@ -13,6 +13,7 @@ import org.joda.time.DateTime;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 
 /**
  * Used to query the database with criteria to create specific lists of events
@@ -83,6 +84,10 @@ public interface QueryAPI
 	@Path("/getbyeventnamewindow/{eventname}/{max}")
 	@Produces("text/plain")
 	public List<EventEntity> getByEventNameWindow (@PathParam("eventname")String eventName, @PathParam("max")int max);
+
+	@GET
+	@Path("/OrdersByDate")
+	List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end);
 	
 	
 }

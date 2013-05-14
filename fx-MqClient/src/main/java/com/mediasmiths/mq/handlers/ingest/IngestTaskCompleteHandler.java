@@ -12,6 +12,7 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
 
 public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 {
@@ -64,9 +65,36 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 
 				addOrUpdateMaterial.setAggregatorID(currentAttributes.getAttributeAsString(Attribute.AGGREGATOR));
 				Date completedDate = currentAttributes.getAttribute(Attribute.TASK_UPDATED);
-				addOrUpdateMaterial.setCompletionDate(dateUtil.fromDate(completedDate));
-				addOrUpdateMaterial.setMaterialID(currentAttributes.getAttributeAsString(Attribute.HOUSE_ID));
-				addOrUpdateMaterial.setTitleID(currentAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+
+				if (completedDate != null)
+				{
+					addOrUpdateMaterial.setCompletionDate(dateUtil.fromDate(completedDate));
+				}
+				else
+				{
+					log.warn("task updated date is null!");
+				}
+				addOrUpdateMaterial.setMaterialID((String) currentAttributes.getAttribute(Attribute.HOUSE_ID));
+				addOrUpdateMaterial.setTitleID((String) currentAttributes.getAttribute(Attribute.PARENT_HOUSE_ID));
+				addOrUpdateMaterial.setOrderReference((String) currentAttributes.getAttribute(Attribute.REQ_REFERENCE));
+				
+				Date requiredBy = currentAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
+				
+				if (requiredBy != null)
+				{
+					addOrUpdateMaterial.setRequiredBy(dateUtil.fromDate(requiredBy));
+				}
+				
+				String ingestNotes = (String) currentAttributes.getAttribute(Attribute.INGEST_NOTES);
+				
+				if (UnmatchedTransferManager.UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER.equals(ingestNotes))
+				{
+					addOrUpdateMaterial.setTaskType("UNMATCHED");
+				}
+				else
+				{
+					addOrUpdateMaterial.setTaskType("INGEST");
+				}
 
 				// send event
 				eventsService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);

@@ -48,7 +48,10 @@ bmpdptest : mayampdp
 
 bmreports : reports
 	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.22:/opt/tomcat/webapps
+	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.22:/opt/tomcat/webapps
 	
+bmevents : events	
+	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.22:/opt/tomcat/webapps
 
 uploadall : install
 	-mkdir /tmp/bundle/
@@ -87,7 +90,10 @@ mayampdp:
 	$(MVN) clean package -am --projects fx-MayamPDP
 
 reports:
-	$(MVN) clean package -am --projects fx-report-ui
+	$(MVN) clean package -am --projects fx-report-ui,fx-event-ui
+
+events:
+	$(MVN) clean package -am --projects fx-event-ui
 	
 #
 #

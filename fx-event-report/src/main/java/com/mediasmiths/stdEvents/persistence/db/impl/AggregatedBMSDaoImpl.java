@@ -77,7 +77,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 	public void updateBMS(EventEntity event)
 	{
 		logger.info("updateBMS() eventName: " + event.getEventName());
-		
+
 		if (event.getEventName().equals("CreateorUpdateTitle")) {
 			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event.getPayload());
 			AggregatedBMS bms = new AggregatedBMS();
@@ -88,7 +88,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 			save(bms);
 			logger.info("SAVED" + bms.getTitleID() + " " + bms.getTitle());
 		}
-		
+
 		if (event.getEventName().equals("AddOrUpdatePackage")) {
 			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event.getPayload());
 			List<AggregatedBMS> titles = findByAnId("titleID", pack.getTitleID());
@@ -115,7 +115,7 @@ public class AggregatedBMSDaoImpl extends HibernateDao<AggregatedBMS, Long> impl
 				}
 			}
 		}
-		
+
 		if (event.getEventName().equals("AddOrUpdateMaterial")) {
 			AddOrUpdateMaterial material = (AddOrUpdateMaterial) unmarshall(event.getPayload());
 			List<AggregatedBMS> packages = findByAnId("materialID", material.getMaterialID());

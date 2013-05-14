@@ -2,198 +2,284 @@ package com.mediasmiths.stdEvents.reporting.csv;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvBeanWriter;
-import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 
 public class OrderStatusRpt
 {
 	public static final transient Logger logger = Logger.getLogger(OrderStatusRpt.class);
-	
-	//Edit this variable to change where your reports get saved to
+
 	@Inject
 	@Named("reportLoc")
 	public String REPORT_LOC;
-	
+
 	@Inject
 	private QueryAPI queryApi;
-	
+
 	@Inject
 	@Named("windowMax")
 	public int MAX;
-	
-	public int delivered=0;
-	public int outstanding=0;
-	public int overdue=0;
-	public int unmatched=0;
-		
-	public void writeOrderStatus(final List<AggregatedBMS> events, final String startDate, final String endDate, final String reportName)
+
+	public void writeOrderStatus(
+			final List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
+			final DateTime start,
+			final DateTime end,
+			final String reportName)
 	{
 		logger.debug(">>>writeOrderStatus");
-		logger.info("List size: " + events.size());
-		List<OrderStatus> orders = getReportList(events, startDate, endDate);
-		setStats(orders);
-		orders.add(addStats("Total Delivered", Integer.toString(delivered)));
-		orders.add(addStats("Total Outstanding", Integer.toString(outstanding)));
-		orders.add(addStats("Total Overdue", Integer.toString(overdue)));
-		orders.add(addStats("Total Unmatched", Integer.toString(unmatched)));
-		
-		createCsv(orders, reportName);
+		logger.info("List size: " + orders.size());
+
+		fillTransientFields(orders, start, end);
+		OrderStatusStats stats = getStats(orders);
+
+		createCsv(orders, stats, reportName, start, end);
 		logger.debug("<<<writeOrderStatus");
 	}
-	
-	public List<OrderStatus> getReportList(final List<AggregatedBMS> events, final String startDate, final String endDate)
+
+	// fills in some information not returned by the sql query, perhaps the query could be modified to include this information but we will see how this goes
+	private void fillTransientFields(
+			List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
+			DateTime start,
+			DateTime end)
 	{
-		logger.info("USING AGGREGATED BMS TABLE");
-		List<OrderStatus> orders = new ArrayList<OrderStatus>();
-		
-		for (AggregatedBMS bms : events) 
+		Interval interval = new Interval(start, end);
+
+		for (OrderStatus orderStatus : orders)
 		{
-			OrderStatus order = new OrderStatus();
-			order.setDateRange(startDate + " - " + endDate);
-			order.setTitle(bms.getTitle());
-			order.setMaterialID(bms.getMaterialID());
-			order.setChannels(bms.getChannels());
-			order.setTaskType("Ingest");
-			order.setAggregatorID(bms.getAggregatorID());
-			if ((bms.getRequiredBy() != null) && (bms.getCompletionDate() != null)) {
-				try
-				{
-					order.setRequiredBy(DatatypeFactory.newInstance().newXMLGregorianCalendar(bms.getRequiredBy()));
-					order.setCompletionDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(bms.getCompletionDate()));
-				}
-				catch (DatatypeConfigurationException e)
-				{
-					e.printStackTrace();
-				}
-			}
-			
-			if ((order.getRequiredBy() != null) && (order.getCompletionDate() != null))
+			if (orderStatus.getRequiredBy() != null)
 			{
-				logger.debug("required by and completion dates were set, checking if within range");
-				if (order.getRequiredBy().toGregorianCalendar().after(order.getCompletionDate().toGregorianCalendar()))
-					order.setCompletedInDateRange("1");
+
+				DateTime requiredByDate = new DateTime(orderStatus.getRequiredBy());
+
+				if (orderStatus.getCompleted() != null)
+				{
+					// have required by and completed date
+					DateTime completedDate = new DateTime(orderStatus.getCompleted());
+
+					// determine if complete in date range
+					if (interval.contains(completedDate))
+					{
+						orderStatus.setComplete(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setComplete(Boolean.FALSE);
+					}
+
+					// determine if overdue in date range
+					if (completedDate.isAfter(requiredByDate))
+					{
+						orderStatus.setOverdue(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setOverdue(Boolean.FALSE);
+					}
+
+				}
 				else
-					order.setOverdueInDateRange("1");
+				{
+					// no completed date
+					orderStatus.setComplete(Boolean.FALSE);
+
+					// determine if overdue in date range
+					if (end.isAfter(requiredByDate))
+					{
+						orderStatus.setOverdue(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setOverdue(Boolean.FALSE);
+					}
+				}
 			}
-			else if (order.getRequiredBy() != null)
+			else
 			{
-				logger.debug("required by date not null");
-				if (order.getRequiredBy().toGregorianCalendar().before(endDate))
-					order.setOverdueInDateRange("1");
+				// no required by date so cant be overdue
+				orderStatus.setOverdue(Boolean.FALSE);
+
+				if (orderStatus.getCompleted() != null)
+				{
+					// have completed date
+					DateTime completedDate = new DateTime(orderStatus.getCompleted());
+
+					// determine if complete in date range
+					if (interval.contains(completedDate))
+					{
+						orderStatus.setComplete(Boolean.TRUE);
+					}
+					else
+					{
+						orderStatus.setComplete(Boolean.FALSE);
+					}
+				}
 			}
-			
-			orders.add(order);
 		}
-		return orders;
+
 	}
-	 
-	private void createCsv(List<OrderStatus> titles, String reportName)
+
+	private static final String formatString = "dd-MM-yyyy";
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
+	private static final DateFormat df = new SimpleDateFormat(formatString);
+
+	private void createCsv(
+			List<OrderStatus> orderStatuses,
+			OrderStatusStats stats,
+			String reportName,
+			DateTime start,
+			DateTime end)
 	{
-		ICsvBeanWriter beanWriter = null;
-		try {
+		ICsvMapWriter csvwriter = null;
+
+		try
+		{
 			logger.info("reportName: " + reportName);
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
+			FileWriter fileWriter = new FileWriter(REPORT_LOC + reportName + ".csv");
+			csvwriter = new CsvMapWriter(fileWriter, CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String [] header = {"dateRange", "title", "materialID", "channels", "orderRef", "requiredBy", "completedInDateRange", "overdueInDateRange", "aggregatorID", "taskType", "completionDate"};
+			final String[] header = { "DateRange", "Title", "MaterialID", "Channels", "OrderReference", "RequiredBy",
+					"CompletedInDateRange", "OverdueInDateRange", "AggregatorID", "TaskType", "CompletionDate" };
 			final CellProcessor[] processors = getProcessor();
-			beanWriter.writeHeader(header);
-				
-			
-			for (OrderStatus title : titles)
+			csvwriter.writeHeader(header);
+
+			final String startDate = start.toString(dateFormatter);
+			final String endDate = end.toString(dateFormatter);
+			final String dateRange = String.format("%s-%s", startDate, endDate);
+
+			for (OrderStatus order : orderStatuses)
 			{
-				beanWriter.write(title, header, processors);
+				final Map<String, Object> orderMap = new HashMap<String, Object>();
+
+				orderMap.put(header[0], dateRange);
+				if (order.getTitle() != null)
+				{
+					orderMap.put(header[1], order.getTitle().getTitle());
+					orderMap.put(header[3], StringUtils.join(order.getTitle().getChannels(), ';'));
+				}
+				else
+				{
+					orderMap.put(header[1], null);
+					orderMap.put(header[3], null);
+				}
+				orderMap.put(header[2], order.getMaterialid());
+				orderMap.put(header[4], order.getOrderReference());
+				if (order.getRequiredBy() == null)
+				{
+					orderMap.put(header[5], order.getRequiredBy());
+				}
+				else
+				{
+					orderMap.put(header[5], df.format(order.getRequiredBy()));
+				}
+				orderMap.put(header[6], order.getComplete());
+				orderMap.put(header[7], order.getOverdue());
+				orderMap.put(header[8], order.getAggregatorID());
+				orderMap.put(header[9], order.getTaskType());
+				if (order.getCompleted() == null)
+				{
+					orderMap.put(header[10], order.getCompleted());
+				}
+				else
+				{
+					orderMap.put(header[10], df.format(order.getCompleted()));
+				}
+				csvwriter.write(orderMap, header, processors);
 			}
+
+			StringBuilder statsString = new StringBuilder();
+			statsString.append(String.format("Total Delivered %d\n", stats.delivered));
+			statsString.append(String.format("Total Outstanding %d\n", stats.outstanding));
+			statsString.append(String.format("Total Overdue %d\n", stats.overdue));
+			statsString.append(String.format("Total Unmatched %d\n", stats.unmatched));
+
+			csvwriter.flush();
+			IOUtils.write(statsString.toString(), fileWriter);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		finally {
-			if (beanWriter != null)
+		finally
+		{
+			if (csvwriter != null)
 			{
 				try
 				{
-					beanWriter.close();
+					csvwriter.close();
 				}
-				catch(IOException e)
+				catch (IOException e)
 				{
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
+
 	private CellProcessor[] getProcessor()
 	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
+		final CellProcessor[] processors = new CellProcessor[] { new Optional(), new Optional(), new Optional(), new Optional(),
+				new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional() };
 		return processors;
 	}
-	
-	public void setStats (List<OrderStatus> events)
+
+	class OrderStatusStats
 	{
+
+		public int delivered = 0;
+		public int outstanding = 0;
+		public int overdue = 0;
+		public int unmatched = 0;
+
+	}
+
+	public OrderStatusStats getStats(List<OrderStatus> events)
+	{
+
+		OrderStatusStats stats = new OrderStatusStats();
+
 		for (OrderStatus event : events)
 		{
-			if ((event.getCompletedInDateRange() != null) && (event.getTaskType() != null))
+
+			if (event.getComplete().booleanValue())
 			{
-				if ((event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
-					delivered++;
-				
-				logger.trace("getting outstanding");
-				if ((!event.getCompletedInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
-					outstanding++;	
+				stats.delivered++;
 			}
-			
-			logger.trace("getting overdue");
-			if (event.getOverdueInDateRange() != null)
+			else if (!event.getComplete().booleanValue() && event.getRequiredBy() != null)
 			{
-				if ((event.getOverdueInDateRange().equals("1")) && (event.getTaskType().equalsIgnoreCase("Ingest")))
-					overdue++;
+				stats.outstanding++;
 			}
-			
-			logger.trace("getting unmatched");
-			if (event.getTaskType() != null)
+
+			if (event.getOverdue().booleanValue() && event.getTaskType().equals(OrderStatus.TaskType.INGEST))
 			{
-				if (event.getTaskType().equals("Unmatched"))
-					unmatched++;
+				stats.overdue++;
 			}
-		}	
-	}
-	
-	private OrderStatus addStats(String name, String value)
-	{
-		OrderStatus stat = new OrderStatus();
-		stat.setTitle(name);
-		stat.setMaterialID(value);
-		return stat;
+
+			if (event.getTaskType().equals(OrderStatus.TaskType.UNMATCHED))
+			{
+				stats.unmatched++;
+			}
+		}
+		return stats;
 	}
 }

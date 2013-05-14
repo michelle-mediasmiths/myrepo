@@ -642,7 +642,10 @@
                         <xs:element name="materialID" type="xs:string"/>
                         <xs:element name="aggregatorID" type="xs:string"/>
                         <xs:element name="completionDate" type="xs:dateTime"/>
+                        <xs:element name="requiredBy" type="xs:dateTime"/>
                         <xs:element name="titleID" type="xs:string" minOccurs="0"/>
+                        <xs:element name="orderReference" type="xs:string"/>
+                        <xs:element name="taskType" type="xs:string"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>

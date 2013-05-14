@@ -30,7 +30,7 @@ public class EventModule extends AbstractModule
 
 		bind(EventingDao.class).to(EventingDaoImpl.class);
 		bind(AggregatedBMSDao.class).to(AggregatedBMSDaoImpl.class);
-
+				
 		RestResourceRegistry.register(EventUI.class);
 		RestResourceRegistry.register(EventAPI.class);
 	}

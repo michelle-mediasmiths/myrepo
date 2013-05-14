@@ -11,6 +11,8 @@ import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
 import com.mediasmiths.stdEvents.persistence.rest.impl.eventmapping.EventTypeMapper;
 import org.apache.log4j.Logger;
 
@@ -30,6 +32,12 @@ public class EventAPIImpl implements EventAPI
 	
 	@Inject
 	protected AggregatedBMSDao bmsDao;
+	
+	@Inject
+	protected TitleDao titleDao;
+	
+	@Inject
+	protected OrderDao orderDao;
 	
 	private final EventingDao eventingDao;
 
@@ -63,10 +71,6 @@ public class EventAPIImpl implements EventAPI
 			// Save event to the all events table.
 		logger.info("Saving to Event table EVENT_NAME: " + event.getEventName() + " NAMESPACE: " + event.getNamespace());
 		
-		if ((event.getEventName().equals("CreateorUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
-			logger.info("BMS message detected");
-			bmsDao.updateBMS(event);
-		}
 		
 		eventDao.saveOrUpdate(event);
 		
@@ -76,10 +80,36 @@ public class EventAPIImpl implements EventAPI
 		eventingEntity.setEventId(event.id);
 		logger.info("Saving to Eventing table");
 		eventingDao.save(eventingEntity);
+		
+		logger.info("Saving event information for reporting");
+		
+		if((event.getEventName().equals("CreateorUpdateTitle"))){
+			createOrUpdateTitle(event);
+		}
+		
+		if( (event.getEventName().equals("AddOrUpdateMaterial"))){
+			addOrUpdateMaterial(event);
+		}
+		
+		if ((event.getEventName().equals("CreateorUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
+			logger.info("BMS message detected");
+			bmsDao.updateBMS(event);
+		}
+		
 
 		logger.info("Event saved");
 	}
 	
+	private void addOrUpdateMaterial(EventEntity event)
+	{
+		orderDao.addOrUpdateMaterial(event);	
+	}
+
+	private void createOrUpdateTitle(EventEntity event)
+	{
+		titleDao.createOrUpdateTitle(event);
+	}
+
 	@Transactional
 	public EventEntity getById(@PathParam("id") Long id)
 	{

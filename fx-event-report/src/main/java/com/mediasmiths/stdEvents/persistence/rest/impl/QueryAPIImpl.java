@@ -5,9 +5,11 @@ import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -38,6 +40,9 @@ public class QueryAPIImpl implements QueryAPI
 	@Inject
 	protected AggregatedBMSDao bmsDao;
 
+	@Inject
+	protected OrderDao orderDao;
+	
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
 	@Transactional
@@ -236,4 +241,13 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		return bmsDao.withinDate(start,end);
 	}
+	
+	@Override
+	@GET
+	@Path("/OrdersByDate")
+	public List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end)
+	{
+		return orderDao.getOrdersInDateRange(start,end);
+	}
+	
 }

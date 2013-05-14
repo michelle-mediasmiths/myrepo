@@ -245,28 +245,39 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 	    }
     }
 
-    private void sendMaterialOrderStatus(AddOrUpdateMaterial action)
-    {
-	    try
-	    {
-		    com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
+	private void sendMaterialOrderStatus(AddOrUpdateMaterial action)
+	{
+		try
+		{
+			com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
 
-		    Source source = action.getMaterial().getSource();
-		    if(source != null && source.getAggregation() != null && source.getAggregation().getAggregator() != null){
-		        addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
-		    }
+			Source source = action.getMaterial().getSource();
+			if (source != null && source.getAggregation() != null)
+			{
+				if (source.getAggregation().getAggregator() != null)
+				{
+					addOrUpdateMaterial.setAggregatorID(source.getAggregation().getAggregator().getAggregatorID());
+				}
 
-		    addOrUpdateMaterial.setTitleID(action.getTitleID());
-		    addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
+				if (source.getAggregation().getOrder() != null)
+				{
+					addOrUpdateMaterial.setOrderReference(source.getAggregation().getOrder().getOrderReference());
+				}
 
-		    //send event
-		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
-	    }
-	    catch (Throwable e)
-	    {
+			}
+
+			addOrUpdateMaterial.setRequiredBy(action.getMaterial().getRequiredBy());
+			addOrUpdateMaterial.setTitleID(action.getTitleID());
+			addOrUpdateMaterial.setMaterialID(action.getMaterial().getMaterialID());
+
+			// send event
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "AddOrUpdateMaterial", addOrUpdateMaterial);
+		}
+		catch (Throwable e)
+		{
 			logger.error("Unable to send event report.", e);
-	    }
-    }
+		}
+	}
 
     private void sendTitleOrderStatus(CreateOrUpdateTitle action)
     {
