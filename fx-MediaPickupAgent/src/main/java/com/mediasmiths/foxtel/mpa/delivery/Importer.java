@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.ruzz.RuzzIngestRecord;
+import com.mediasmiths.foxtel.ip.common.events.FilePickupDetails;
 import com.mediasmiths.foxtel.ip.common.events.MediaPickupNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -91,8 +92,8 @@ public class Importer {
 					src.getAbsolutePath(), dst.getAbsolutePath(), attempt), e);
 			
 			FilePickupDetails fpd = new FilePickupDetails();
-			fpd.setFileName(src.getName());
-			fpd.setTimeProcessed((new Date()).toString());
+			fpd.setFilename(src.getName());
+			fpd.setTimeProcessed((new Date().getTime()));
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "FilePickUpNotification", fpd);
 
 			// allows a configurable number of retries
