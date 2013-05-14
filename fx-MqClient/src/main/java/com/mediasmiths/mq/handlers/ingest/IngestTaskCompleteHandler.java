@@ -63,7 +63,7 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 			{
 				com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial addOrUpdateMaterial = new com.mediasmiths.foxtel.ip.common.events.AddOrUpdateMaterial();
 
-				addOrUpdateMaterial.setAggregatorID(currentAttributes.getAttributeAsString(Attribute.AGGREGATOR));
+				addOrUpdateMaterial.setAggregatorID((String) currentAttributes.getAttribute(Attribute.AGGREGATOR));
 				Date completedDate = currentAttributes.getAttribute(Attribute.TASK_UPDATED);
 
 				if (completedDate != null)
