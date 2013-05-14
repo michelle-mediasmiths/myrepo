@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata;
 
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.TcNotification;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 
@@ -34,7 +35,9 @@ public class TcNotificationEmailTemplate extends MailTemplate implements EmailTe
 		t.setSubject(String.format(getSubject(), obj.getAssetID(), obj.getTitle()));
 		t.setBody(String.format(getBody(), obj.getDeliveryLocation()));
 		t.setEmailaddresses(getEmailaddresses());
+		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(obj.getEmailaddresses().getEmailaddress()));
 
+		
 		return t;
 	}
 
