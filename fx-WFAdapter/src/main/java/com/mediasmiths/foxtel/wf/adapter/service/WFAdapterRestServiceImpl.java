@@ -423,12 +423,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
 	
 			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+			Emailaddresses emails = null;
 			if (username != null)
 			{
 				String email = String.format("%s@foxtel.com.au",username);
-				Emailaddresses emails = new Emailaddresses();
+				emails = new Emailaddresses();
 				emails.getEmailaddress().add(email);
-				notification.setEmailaddresses(emails);
+				
 			}
 			
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
@@ -438,7 +439,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						false);
+						false,emails);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
@@ -447,7 +448,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						         notification,
 						         TC_EVENT_NAMESPACE,
 						         new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						         false);
+						         false,emails);
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
@@ -456,7 +457,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						false);
+						false,emails);
 			}
 			else
 			{
@@ -465,7 +466,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-						false);
+						false,emails);
 			}
 		}
 	}
@@ -502,12 +503,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			log.debug("Task Button: " + taskListID);
 			
 			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+			Emailaddresses emails = null;
+			
 			if (username != null)
 			{
 				String email = String.format("%s@foxtel.com.au",username);
-				Emailaddresses emails = new Emailaddresses();
+				emails = new Emailaddresses();
 				emails.getEmailaddress().add(email);
-				notification.setEmailaddresses(emails);
 			}
 			
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
@@ -518,7 +520,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true,
-						deliveryLocation);
+						deliveryLocation,emails);
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
@@ -528,7 +530,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true,
-						deliveryLocation);
+						deliveryLocation,emails);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
@@ -538,7 +540,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true,
-						deliveryLocation);
+						deliveryLocation,emails);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
@@ -801,8 +803,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TCNotification payload,
 			String nameSpace,
 			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
-			boolean success){
-		saveEvent(name, payload, nameSpace, eventNotify, success, null);
+			boolean success, Emailaddresses emailaddress){
+		saveEvent(name, payload, nameSpace, eventNotify, success, null,emailaddress);
 	}
 	
 	protected void saveEvent(
@@ -810,7 +812,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TCNotification payload,
 			String nameSpace,
 			com.mediasmiths.foxtel.ip.common.events.TcNotification eventNotify,
-			boolean success, String deliveryLocation)
+			boolean success, String deliveryLocation, Emailaddresses emailaddress)
 	{
 		try
 		{
@@ -821,6 +823,11 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (success)
 			{
 				eventNotify.setDeliveryLocation(deliveryLocation);
+			}
+
+			if (emailaddress != null)
+			{
+				eventNotify.setEmailaddresses(emailaddress);
 			}
 			events.saveEvent(nameSpace, name, eventNotify);
 
