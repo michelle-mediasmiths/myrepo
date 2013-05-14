@@ -27,6 +27,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
+import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -421,6 +422,15 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			AttributeMap task = mayamClient.getTask(taskId);
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
 	
+			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+			if (username != null)
+			{
+				String email = String.format("%s@foxtel.com.au",username);
+				Emailaddresses emails = new Emailaddresses();
+				emails.getEmailaddress().add(email);
+				notification.setEmailaddresses(emails);
+			}
+			
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				saveEvent(
@@ -490,6 +500,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			AttributeMap task = mayamClient.getTask(taskId);
 			String taskListID = task.getAttribute(Attribute.OP_TYPE);
 			log.debug("Task Button: " + taskListID);
+			
+			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+			if (username != null)
+			{
+				String email = String.format("%s@foxtel.com.au",username);
+				Emailaddresses emails = new Emailaddresses();
+				emails.getEmailaddress().add(email);
+				notification.setEmailaddresses(emails);
+			}
+			
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				saveEvent(

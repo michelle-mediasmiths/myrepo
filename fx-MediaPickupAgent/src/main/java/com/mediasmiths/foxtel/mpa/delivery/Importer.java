@@ -88,6 +88,11 @@ public class Importer {
 			logger.error(String.format(
 					"Error moving file from %s to %s on attempt number %d",
 					src.getAbsolutePath(), dst.getAbsolutePath(), attempt), e);
+			
+			FilePickupDetails fpd = new FilePickupDetails();
+			fpd.setFilelocation(src.getAbsolutePath());
+			fpd.setTime((new Date()).toString());
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "FilePickUpNotification", fpd);
 
 			// allows a configurable number of retries
 			if (attempt == deliveryAttemptsToMake) {
@@ -132,7 +137,12 @@ public class Importer {
 					.format("There has been a failure to archive companion xml for material %s though the material successfully moved to the Viz Ardome auto import location",
 							pi.getMaterialEnvelope().getMasterID()));
 			eventService.saveEvent("error", sb.toString());
-
+		
+			MediaPickupNotification mpn = new MediaPickupNotification();
+			mpn.setFilelocation(src.getAbsolutePath());
+			mpn.setTime((new Date()).toString());
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutCompanionXML", mpn);
+			
 			return;
 		}
 		saveEvent(pi,fileSize);

@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -48,16 +49,27 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 					qcRequired = Boolean.FALSE;
 				}
 
+				long taskId = -1;
+				
 				// check classification is set, awaiting a means of seeing if the user wishes to override this requirement
 				if (!AssetProperties.isClassificationSet(messageAttributes))
 				{
 					log.info(String.format("Classification not set on package %s reopening segmentation task", houseID));
-					taskController.createErrorTXDeliveryTaskForPackage(houseID, "Classification not set");
+					taskId = taskController.createErrorTXDeliveryTaskForPackage(houseID, "Classification not set");
 				}
 				else
 				{
 					log.debug("Creating tx delivery task");
-					taskController.createTXDeliveryTaskForPackage(houseID, qcRequired.booleanValue());
+					taskId = taskController.createTXDeliveryTaskForPackage(houseID, qcRequired.booleanValue());
+				}
+				
+				String username = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);
+				if (username != null)
+				{
+					AttributeMap task = taskController.getTask(taskId);
+					AttributeMap taskUpdate = taskController.updateMapForAsset(task);
+					taskUpdate.setAttribute(Attribute.TASK_CREATED_BY, username);
+					tasksClient.taskApi().updateTask(taskUpdate);
 				}
 			}
 		}
@@ -72,7 +84,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 			tx.setAssetID(parentHouseID);
 			tx.setTitle(title);
 			tx.setTaskID(taskID);
-			
+						
 			// send email regarding failed to send to TX
 			eventsService.saveEvent("http://www.foxtel.com.au/ip/tc", "FailedInSendtoTX", tx);
 		}
