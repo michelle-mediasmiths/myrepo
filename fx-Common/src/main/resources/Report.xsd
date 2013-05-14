@@ -15,24 +15,6 @@
 		</xs:sequence>
 	</xs:complexType>
 	
-	<xs:element name="OrderStatus">
-		<xs:complexType>
-			<xs:sequence>
-				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="title" type="xs:string"/>
-				<xs:element name="materialID" type="xs:string"/>
-				<xs:element name="channels" type="xs:string" minOccurs="0"/>
-				<xs:element name="orderRef" type="xs:string" minOccurs="0"/>
-				<xs:element name="requiredBy" type="xs:dateTime" minOccurs="0"/>
-				<xs:element name="completedInDateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="overdueInDateRange" type="xs:string" minOccurs="0"/>
-				<xs:element name="aggregatorID" type="xs:string" minOccurs="0"/>
-				<xs:element name="taskType" type="xs:string" minOccurs="0"/>
-				<xs:element name="completionDate" type="xs:dateTime" minOccurs="0"/>
-			</xs:sequence>
-		</xs:complexType>
-	</xs:element>
-	
 	<xs:element name="Acquisition">
 		<xs:complexType>
 			<xs:sequence>
