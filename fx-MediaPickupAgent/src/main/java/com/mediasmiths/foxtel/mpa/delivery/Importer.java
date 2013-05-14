@@ -26,6 +26,7 @@ import com.mediasmiths.foxtel.mpa.MediaEnvelope;
 import com.mediasmiths.foxtel.mpa.PendingImport;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
+
 public class Importer {
 
 	private static Logger logger = Logger.getLogger(Importer.class);
@@ -90,8 +91,8 @@ public class Importer {
 					src.getAbsolutePath(), dst.getAbsolutePath(), attempt), e);
 			
 			FilePickupDetails fpd = new FilePickupDetails();
-			fpd.setFilelocation(src.getAbsolutePath());
-			fpd.setTime((new Date()).toString());
+			fpd.setFileName(src.getName());
+			fpd.setTimeProcessed((new Date()).toString());
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "FilePickUpNotification", fpd);
 
 			// allows a configurable number of retries
