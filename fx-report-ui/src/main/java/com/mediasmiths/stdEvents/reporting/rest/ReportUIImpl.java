@@ -26,7 +26,6 @@ import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
 import com.mediasmiths.foxtel.ip.common.events.report.ComplianceLogging;
 import com.mediasmiths.foxtel.ip.common.events.report.Export;
 import com.mediasmiths.foxtel.ip.common.events.report.ManualQA;
-import com.mediasmiths.foxtel.ip.common.events.report.OrderStatus;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.foxtel.ip.common.events.report.Watchfolder;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
