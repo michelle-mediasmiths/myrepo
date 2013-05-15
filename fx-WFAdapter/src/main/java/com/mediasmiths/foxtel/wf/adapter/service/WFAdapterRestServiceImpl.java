@@ -351,12 +351,33 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// auto qc was for tx delivery
 				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
+				
+				TcEvent tce = new TcEvent();
+				AttributeMap task = mayamClient.getTask(notification.getTaskID());
+				if (task != null)
+				{
+					tce.setAssetID(notification.getAssetId());
+					tce.setPackageID(task.getAttributeAsString(Attribute.HOUSE_ID));
+					tce.setTitle(notification.getTitle());
+					events.saveEvent("http://foxtel.com.au/ip/tc", "QcServerFailureDuringTranscode", tce);
+				}
 			}
 			else
 			{
 				// auto qc was for qc task
 				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
 				mayamClient.autoQcErrorForMaterial(notification.getAssetId(), notification.getTaskID());
+				
+				AttributeMap task = mayamClient.getTask(notification.getTaskID());
+				if (task != null)
+				{
+					QcServerFail qcsf = new QcServerFail();
+					String assetID = notification.getAssetId();
+					qcsf.setAssetID(assetID);
+					qcsf.setMaterialID(task.getAttributeAsString(Attribute.HOUSE_ID));
+					qcsf.setTitle(notification.getTitle());
+					events.saveEvent("http://foxtel.com.au/ip/qc", "QcServerFail", qcsf);
+				}
 			}
 		}
 		catch (MayamClientException e)
@@ -570,7 +591,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		d.setTaskId(notification.getTaskID() + "");
 
 		// events.saveEvent(TX_EVENT_NAMESPACE, "DeliveryFailed", d);
-
+		
+		TcEvent tce = new TcEvent();
+		String packageID = notification.getPackageID();
+		tce.setPackageID(packageID);
+		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
+		tce.setTitle(title);
+		events.saveEvent("http://foxtel.com.au/ip/tc", "TranscodeDeliveryFailed", tce);
 	}
 
 	@Override
@@ -633,6 +661,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 		catch (IOException e)
 		{
+			TcEvent tce = new TcEvent();
+			tce.setPackageID(packageID);
+			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
+			tce.setTitle(title);
+			events.saveEvent("http://foxtel.com.au/ip/tc", "FailedToGenerateXML", tce);
+			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
 			throw e;
 		}
