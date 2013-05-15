@@ -222,7 +222,16 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		ie.setTitle(assetTitle);
 		ie.setCreated(new Date());
 		ie.setJobType(jobType.getText());
-		ie.setPackageID(packageID);
+		
+		if (packageID == null)
+		{
+			log.debug("package id is null, using empty string instead");
+			ie.setPackageID("");
+		}
+		else
+		{
+			ie.setPackageID(packageID);
+		}
 
 		mule.initiateExportWorkflow(ie);
 	}

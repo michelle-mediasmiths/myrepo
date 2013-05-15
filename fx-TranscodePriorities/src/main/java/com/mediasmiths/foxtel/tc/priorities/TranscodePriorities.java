@@ -68,7 +68,7 @@ public class TranscodePriorities
 
 			if (txDate == null)
 			{
-				log.warn("tx date null assuming far in the future");
+				log.trace("tx date null assuming far in the future");
 				return config.getLowestPriorityForJobType(type);
 			}
 
@@ -125,7 +125,7 @@ public class TranscodePriorities
 
 		if (txDate == null)
 		{
-			log.warn("tx date is in null, will assume it is a long time from now");
+			log.trace("tx date is in null, will assume it is a long time from now");
 			return false;
 		}
 
@@ -133,7 +133,7 @@ public class TranscodePriorities
 		
 		if (txDateTime.isBeforeNow())
 		{
-			log.debug("tx date passed");
+			log.trace("tx date passed");
 			return true;
 		}
 
@@ -176,7 +176,7 @@ public class TranscodePriorities
 				return priorityRule.getPriority();
 			}
 		}
-		log.debug("no rules matched, using lowest priority");
+		log.trace("no rules matched, using lowest priority");
 		return config.getLowestPriorityForJobType(type);
 	}
 	
@@ -192,7 +192,7 @@ public class TranscodePriorities
 				return priorityRule.getPriority();
 			}
 		}
-		log.debug("no rules matched, using lowest priority");
+		log.trace("no rules matched, using lowest priority");
 		return config.getLowestPriorityForJobType(type);
 	}
 

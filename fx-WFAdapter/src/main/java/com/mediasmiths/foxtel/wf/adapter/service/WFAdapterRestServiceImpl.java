@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
@@ -933,8 +934,17 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		Date created = request.getCreated();		
 		String packageID = request.getPackageID();
 		
-		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
-		Date firstTX = (Date) packageAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
+		Date firstTX = null;
+		
+		if (!StringUtils.isEmpty(packageID))
+		{
+			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+			firstTX = (Date) packageAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
+		}
+		else
+		{
+			log.trace("No package id specified, transcode is assumed to be against an item only");
+		}
 	
 		Integer currentPriority = request.getCurrentPriority();
 		String strJobType = request.getJobType();
