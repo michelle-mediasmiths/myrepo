@@ -216,15 +216,26 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 		ret.outputFolder = outputLocation;
 		ret.priority = getPriorityForTXJob(requiredDate);
 
+		if(materialIsSD){
+			ret.resolution = TCResolution.SD;
+		}
+		else{
+			ret.resolution = TCResolution.HD;
+		}
+		
 		if (isPackageSD)
 		{
 			ret.purpose = TCOutputPurpose.TX_SD;
-			ret.resolution = TCResolution.SD;
 		}
 		else
 		{
 			ret.purpose = TCOutputPurpose.TX_HD;
-			ret.resolution = TCResolution.HD;
+			ret.resolution = TCResolution.HD; //people shouldnt be up converting but in case they are then this is set to HD for HD outputs
+			
+			if(materialIsSD)
+			{
+				log.warn("An upscale has been requested!");
+			}
 		}
 
 		// no timecode for tx delivery

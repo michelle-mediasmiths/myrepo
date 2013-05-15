@@ -26,7 +26,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	TX_SD_STEREO_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO, "TX_SD_STEREO.pcp"),
+	TX_SD_STEREO_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO, "TX_SD_STEREO_FROM_HD.pcp"),
 	/**
 	 * SD GXF with Stereo audio
 	 * <ul>
@@ -57,7 +57,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	TX_SD_DOLBYE_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE.pcp"),
+	TX_SD_DOLBYE_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE_FROM_HD.pcp"),
 
 	/**
 	 * SD GXF with Stereo and DolbyE
