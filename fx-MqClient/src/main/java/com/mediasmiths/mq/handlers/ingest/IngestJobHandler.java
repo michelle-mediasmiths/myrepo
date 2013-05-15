@@ -26,6 +26,8 @@ import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.std.util.jaxb.exception.JAXBRuntimeException;
 
+import events.common.ip.foxtel.mediasmiths.com._001._000.ArdomeImportFailure;
+
 public class IngestJobHandler extends JobHandler
 {
 	private final static Logger log = Logger.getLogger(IngestJobHandler.class);
@@ -196,8 +198,8 @@ public class IngestJobHandler extends JobHandler
 		{
 			log.error("Error setting failure reason on ingest task", e);
 		}
-		
-		sendImportFailureEvent(assetId, jobID);
+
+		sendImportFailureEvent(assetId, jobID, task.getAttributeAsString(Attribute.HOUSE_ID));
 	}
 
 	private void itemHasIngestTaskJobStarted(String assetId, AttributeMap task) throws MayamClientException
@@ -208,11 +210,12 @@ public class IngestJobHandler extends JobHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void sendImportFailureEvent(String assetId, String jobID)
+	private void sendImportFailureEvent(String assetId, String jobID, String houseID)
 	{
-		ArdomeJobFailure ajf = new ArdomeJobFailure();
+		ArdomeImportFailure ajf = new ArdomeImportFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
+		ajf.setFilename(houseID);
 		
 		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
