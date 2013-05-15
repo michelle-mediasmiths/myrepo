@@ -17,7 +17,7 @@ import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
+import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
 import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -25,8 +25,6 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.std.util.jaxb.exception.JAXBRuntimeException;
-
-import events.common.ip.foxtel.mediasmiths.com._001._000.ArdomeImportFailure;
 
 public class IngestJobHandler extends JobHandler
 {
