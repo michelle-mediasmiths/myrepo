@@ -100,24 +100,24 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 				}
 
 				String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
-				boolean isCompliance = targetAsset != null && targetAsset.length() != 0;
-				boolean isPlaceholder = AssetProperties.isMaterialPlaceholder(peerAttributes);
-				boolean isAssociated = AssetProperties.isMaterialAssociated(peerAttributes);
+				boolean peerIsComplianceItem = targetAsset != null && targetAsset.length() != 0;
+				boolean peerIsPlaceholder = AssetProperties.isMaterialPlaceholder(peerAttributes);
+				boolean unmatchedItemIsAssociatedContent = AssetProperties.isMaterialAssociated(currentAttributes);
 
-				if (isCompliance && !isAssociated)
+				if (peerIsComplianceItem && !unmatchedItemIsAssociatedContent)
 				{ // refuse to match it.
 					clearPeerSetError(currentAttributes, "Cannot match asset to selected placeholder as it is a compliance item");
 					return;
 				}
 				
-				if(!isPlaceholder && !isAssociated){
+				if(!peerIsPlaceholder && !unmatchedItemIsAssociatedContent){
 					//refuse to match, selected item is not a placholder
 					// refuse to match it.
 					clearPeerSetError(currentAttributes, "Cannot match asset to selected item, it already has media");
 					return;
 				}
 
-				if (isAssociated)
+				if (unmatchedItemIsAssociatedContent)
 				{
 					// Content matched as associated media should not be added as a revision of the item.
 					// It should be attached as a new associated item to the subprogram
