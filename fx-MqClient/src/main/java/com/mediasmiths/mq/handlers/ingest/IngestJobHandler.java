@@ -17,7 +17,7 @@ import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
+import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
 import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
@@ -196,8 +196,8 @@ public class IngestJobHandler extends JobHandler
 		{
 			log.error("Error setting failure reason on ingest task", e);
 		}
-		
-		sendImportFailureEvent(assetId, jobID);
+
+		sendImportFailureEvent(assetId, jobID, task.getAttributeAsString(Attribute.HOUSE_ID));
 	}
 
 	private void itemHasIngestTaskJobStarted(String assetId, AttributeMap task) throws MayamClientException
@@ -208,11 +208,12 @@ public class IngestJobHandler extends JobHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void sendImportFailureEvent(String assetId, String jobID)
+	private void sendImportFailureEvent(String assetId, String jobID, String houseID)
 	{
-		ArdomeJobFailure ajf = new ArdomeJobFailure();
+		ArdomeImportFailure ajf = new ArdomeImportFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
+		ajf.setFilename(houseID);
 		
 		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
