@@ -29,6 +29,8 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
+import com.mediasmiths.foxtel.ip.common.events.TcEvent;
+import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
