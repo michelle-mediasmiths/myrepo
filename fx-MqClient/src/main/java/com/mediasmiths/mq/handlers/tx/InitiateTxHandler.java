@@ -28,6 +28,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
+import com.mediasmiths.foxtel.transcode.TranscodeRules;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -62,6 +63,9 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	{
 		return "Initiate TX Delivery";
 	}
+	
+	@Inject
+	TranscodeRules transcodeOutputRules;
 
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
@@ -201,15 +205,8 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	{
 		TCJobParameters ret = new TCJobParameters();
 
-		if (materialIsSurround)
-		{
-			ret.audioType = TCAudioType.DOLBY_E;
-		}
-		else
-		{
-			ret.audioType = TCAudioType.STEREO;
-		}
-
+		ret.audioType = transcodeOutputRules.audioTypeForTranscode(materialIsSD, materialIsSurround, isPackageSD);
+		
 		// no bug for tx delivery
 		ret.bug = null;
 		ret.description = String.format("TX Delivery for package %s", packageID);

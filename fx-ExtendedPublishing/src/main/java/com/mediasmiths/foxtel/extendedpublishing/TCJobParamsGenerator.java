@@ -18,6 +18,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
+import com.mediasmiths.foxtel.transcode.TranscodeRules;
 
 public class TCJobParamsGenerator
 {
@@ -46,6 +47,9 @@ public class TCJobParamsGenerator
 	@Inject
 	OutputPaths outputPaths;
 	
+	@Inject
+	TranscodeRules transcodeOutputRules;
+	
 	public TCJobParameters jobParams(
 			boolean isSurround,
 			boolean isSD,
@@ -69,14 +73,7 @@ public class TCJobParamsGenerator
 			jobParams.bug = bug;
 		}
 
-		if (isSurround)
-		{
-			jobParams.audioType = TCAudioType.DOLBY_E;
-		}
-		else
-		{
-			jobParams.audioType = TCAudioType.STEREO;
-		}
+		jobParams.audioType = transcodeOutputRules.audioTypeForTranscode(isSD, isSurround, isSD);
 
 		if (isSD)
 		{
