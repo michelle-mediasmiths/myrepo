@@ -72,7 +72,7 @@ public class QcProfileSelector
 	{
 		boolean isMaterialSD = AssetProperties.isMaterialSD(materialAttributes);
 		boolean isMaterialSurround = AssetProperties.isMaterialSurround(materialAttributes);
-		boolean isFromDartOrVizCapture = AssetProperties.isFromDARTorVizCapture(materialAttributes);
+		boolean isFromDartOrVizCapture = AssetProperties.isFromDARTorVizCaptureorRuzz(materialAttributes);
 		
 		if (isFromDartOrVizCapture)
 		{
