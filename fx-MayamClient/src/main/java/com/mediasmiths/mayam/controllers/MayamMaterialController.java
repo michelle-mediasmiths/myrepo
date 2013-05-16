@@ -1221,6 +1221,9 @@ public class MayamMaterialController extends MayamController
 		 
 		 //TODO : update any other metadata
 		 
+		 //set aggregator to Ruzz
+		 updateMap.setAttribute(Attribute.AGGREGATOR, "Ruzz");
+		 
 		try
 		{
 			client.assetApi().updateAsset(updateMap);

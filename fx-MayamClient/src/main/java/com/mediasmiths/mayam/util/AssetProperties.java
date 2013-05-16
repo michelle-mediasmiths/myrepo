@@ -32,7 +32,7 @@ public class AssetProperties
 		}
 	}
 	
-	public static boolean isFromDARTorVizCapture(AttributeMap map)
+	public static boolean isFromDARTorVizCaptureorRuzz(AttributeMap map)
 	{
 
 		String agg = map.getAttribute(Attribute.AGGREGATOR);
@@ -54,6 +54,11 @@ public class AssetProperties
 			return true;
 		}
 
+		if("ruzz".equals(agg))
+		{
+			return true;
+		}
+		
 		return false;
 
 	}
