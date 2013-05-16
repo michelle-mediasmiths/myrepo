@@ -51,15 +51,16 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		String timecodePosition = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
 		String timecodeColour = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
 
-//		StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
+		StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
 
-		String channel = (String) messageAttributes.getAttribute(Attribute.CHANNEL);
-
-//		// get the first channel
-//		if (channels != null && channels.get(0) != null)
-//		{
-//			channel = channels.get(0);
-//		}
+//		String channel = (String) messageAttributes.getAttribute(Attribute.CHANNEL);
+		String channel = null;
+		
+		// get the first channel
+		if (channels != null && channels.get(0) != null)
+		{
+			channel = channels.get(0);
+		}
 
 		String materialID;
 		String packageID;
