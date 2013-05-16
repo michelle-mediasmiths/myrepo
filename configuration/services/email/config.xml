@@ -106,7 +106,7 @@
 	<MailData>
 			<namespace>http://www.foxtel.com.au/ip/qc</namespace>
 			<eventname>QcServerFail</eventname>
-			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.QcServerFailEmailTemplater">
+			<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.QcServerFailEmailTemplate">
 				<subject>QC Server Issue: Server failure while processing %s, %s</subject>
 				<body>Cerify has not processed this item. Please resolve the cause of issue.</body>
 				<emailaddresses> 
@@ -466,9 +466,9 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>ArdomeImportFailure</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.delivery.ArdomeImportFailureEmailTemplate">
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeImportFailureEmailTemplate">
 			<subject>Ardome import has failed</subject>
-			<body>Item with (%s) & (%s) has failed to successfully auto-import into Ardome </body>
+			<body>Item with (%s) and (%s) has failed to successfully auto-import into Ardome </body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_AO@foxtel.com.au</emailaddress>
