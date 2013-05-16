@@ -62,6 +62,12 @@
 		
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TranscodeOutputRules</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
 			<artifactId>fx-WFAdapterAPI</artifactId>
 			<version>${project.version}</version>
 		</dependency>

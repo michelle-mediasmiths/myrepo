@@ -6,6 +6,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
+import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
+import com.mediasmiths.foxtel.transcode.TranscodeRules;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -38,6 +40,9 @@ public class QcProfileSelector
 	@Inject @Named("qc.profile.tx.hd.surround")
 	private String txHDSurround;
 	
+	
+	@Inject
+	TranscodeRules transcodeOutputRules;
 	
 	private static final Logger log = Logger.getLogger(QcProfileSelector.class);
 	
@@ -128,13 +133,16 @@ public class QcProfileSelector
 	private String getProfileForPackage(AttributeMap packageAttributes, AttributeMap materialAttributes)
 	{
 		boolean isPackageSD = AssetProperties.isPackageSD(packageAttributes);
-		boolean isDolbyE = AssetProperties.isMaterialSurround(materialAttributes);
+		boolean materialIsSurround = AssetProperties.isMaterialSurround(materialAttributes);
+		boolean materialIsSD = AssetProperties.isMaterialSD(materialAttributes);
+		
+		TCAudioType outputType = transcodeOutputRules.audioTypeForTranscode(materialIsSD, materialIsSurround, isPackageSD);
 
 		final String profile;
 
 		if (isPackageSD)
 		{
-			if (isDolbyE)
+			if (outputType.equals(TCAudioType.DOLBY_E))
 			{
 				profile = txSDSurround;
 			}
@@ -145,7 +153,7 @@ public class QcProfileSelector
 		}
 		else
 		{
-			if (isDolbyE)
+			if (outputType.equals(TCAudioType.DOLBY_E))
 			{
 				profile = txHDSurround;
 			}
