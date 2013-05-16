@@ -67,7 +67,7 @@ public class TCJobParamsGenerator
 		TCJobParameters jobParams = new TCJobParameters();
 
 		log.debug("buglocation: " + buglocation);
-		if (buglocation != null && !buglocation.equals("--"))
+		if (buglocation != null && !buglocation.equals("--") && channelTag!=null)
 		{
 			TCBugOptions bug = bug(buglocation, channelTag);
 			jobParams.bug = bug;

@@ -51,15 +51,15 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		String timecodePosition = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
 		String timecodeColour = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
 
-		StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
+//		StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
 
-		String channel = null;
+		String channel = (String) messageAttributes.getAttribute(Attribute.CHANNEL);
 
-		// get the first channel
-		if (channels != null && channels.get(0) != null)
-		{
-			channel = channels.get(0);
-		}
+//		// get the first channel
+//		if (channels != null && channels.get(0) != null)
+//		{
+//			channel = channels.get(0);
+//		}
 
 		String materialID;
 		String packageID;
@@ -165,7 +165,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			initiateWorkflow(title, materialID, packageID, jobParams, taskID, jobType);
 			ExportStart export = new ExportStart();
 			export.setMaterialID(materialID);
-			export.setChannels(channels.toString());
+			export.setChannels(channel);
 			eventService.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportStart", export);
 		}
 		catch (UnsupportedEncodingException e)

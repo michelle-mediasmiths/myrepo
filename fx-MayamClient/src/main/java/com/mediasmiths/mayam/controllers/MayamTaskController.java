@@ -263,6 +263,12 @@ public class MayamTaskController extends MayamController
 		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_POSITION,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION));
 		initialAttributes.setAttribute(Attribute.VISUAL_TIMECODE_COLOR,exportButtonAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR));
 		initialAttributes.setAttribute(Attribute.OP_TYPE, jobType);
+		
+		initialAttributes.setAttribute(Attribute.CHANNEL,exportButtonAttributes.getAttribute(Attribute.CHANNEL));
+		initialAttributes.setAttribute(Attribute.OP_FLAG,exportButtonAttributes.getAttribute(Attribute.OP_FLAG));
+		initialAttributes.setAttribute(Attribute.OP_FMT,exportButtonAttributes.getAttribute(Attribute.OP_FMT));
+		
+		
 		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY,exportButtonAttributes.getAttribute(Attribute.TASK_CREATED_BY));
 		
 		MayamAssetType assetType = MayamAssetType.MATERIAL;
