@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cnpsXML CreatedByAppVersion="3.21.1" ProjectID.DWD="161428257">
 	<Sources>
-		<Module_0 Duration.QWD="16202160000" Inpoint.QWD="-1" MultiSource.DWD="1" Outpoint.QWD="-1">
+		<Module_0 Duration.QWD="910440000" Inpoint.QWD="-1" MultiSource.DWD="1" Outpoint.QWD="-1">
 			<ModuleData>
 				<StreamTypeTable StreamPtr_0.DWD="0" StreamPtr_1.DWD="0" StreamSelector_0.DWD="0" StreamSelector_1.DWD="2" StreamType_0.DWD="0" StreamType_1.DWD="0"/>
 				<SourceModules>
-					<MultiSrcModule_0 CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" Filename="Y:\hr\hr02\2013\03\07\e2e-3161480_0164160.mxf" MultiSource.DWD="0">
+					<MultiSrcModule_0 CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" Filename="Z:\E2E\test\cc\MAMOP42test.mxf" MultiSource.DWD="0">
 						<ModuleData/>
 					</MultiSrcModule_0>
 				</SourceModules>
 			</ModuleData>
-			<Filter_0/>
+			<Filter_0>
+				<Module_0 ModuleGUID="{E348410C-78D8-4A74-BF3F-84E80BE99973}" PresetGUID="{E348410C-78D8-4A74-BF3F-84E80BE99973}">
+					<ModuleData/>
+				</Module_0>
+				<Module_1 ModuleGUID="{585D8AD6-0BE6-49DA-A53C-19C2BD4CF5C0}" PresetGUID="{585D8AD6-0BE6-49DA-A53C-19C2BD4CF5C0}">
+					<ModuleData op42_23_autoMode.DWD="1" op42_23_line.DWD="21" op47_23_clearMode.DWD="3" op47_23_codingType.DWD="0" op47_23_insertMode.DWD="2" op47_23_lines="*" op47_23_packingMode.DWD="0" op47_23_targetFormat.DWD="1"/>
+				</Module_1>
+			</Filter_0>
 			<Filter_1/>
 		</Module_0>
 	</Sources>
 	<Destinations>
 		<Module_0 ModuleGUID="{6E4DA4A1-9B23-483D-BE18-F07C6376A414}" PresetGUID="{6E4DA4A1-9B23-483D-BE18-F07C6376A414}">
-			<ModuleData CML_P_BaseFileName="%s_GXF_SD" CML_P_ForcedSplitMinutes.DWD="0" CML_P_Path="Z:\E2E\SD_TX" CML_P_SourceSegmentSel.DWD="0" CML_P_SourceSegmentStart.DWD="-1" CML_P_SourceSegmentStartDbl.DBL="0.000000" CML_P_SourceSegmentTime.DWD="-1" CML_P_SourceSegmentTimeDbl.DBL="0.000000" CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" Delviery_20_Mode.DWD="0" DestFileUseSource.DWD="1" Login_20_Name="" Login_20_Passwd="" Server_20_Name_20_or_20_IP="" WriteAr.DWD="1" ancillary_data_track.DWD="1" aspect_ratio_code.DWD="1" audio_tracks.DWD="2" bitrate.DWD="15000" bitrate_mode.DWD="2" chroma_format.DWD="1" compressed_24.DWD="0" constructed_stream.DWD="0" d10_bitrate.DWD="0" dc_precision.DWD="10" ftp_20_path="" gop.DWD="2" gxf_audio_media_type.DWD="9" gxf_timecode_offset_mode.DWD="0" gxf_video_media_type.DWD="12" gxf_video_standard_compression.DWD="4" max_gop_frames.DWD="8" max_ip_distance.DWD="2" profile_level.DWD="11" quality_code.DWD="8" randomize_name.DWD="1" remove_extension.DWD="0" striped_timecode.DWD="1" track_numbers_dolbyE="1,2" use_closed_gop.DWD="1" use_strict_gop_bitrate.DWD="0" use_uncompressed_vbi.DWD="1"/>
+			<ModuleData CML_P_BaseFileName="%s_CCsdsd" CML_P_ForcedSplitMinutes.DWD="0" CML_P_Path="Z:\E2E\mjb-e2e\rhozet-out\media" CML_P_SourceSegmentSel.DWD="0" CML_P_SourceSegmentStart.DWD="-1" CML_P_SourceSegmentStartDbl.DBL="0.000000" CML_P_SourceSegmentTime.DWD="-1" CML_P_SourceSegmentTimeDbl.DBL="0.000000" CreatorMachine="MAMTRC01" CreatorUser="RhozetAdmin" Delviery_20_Mode.DWD="0" DestFileUseSource.DWD="1" Login_20_Name="" Login_20_Passwd="" Server_20_Name_20_or_20_IP="" WriteAr.DWD="1" ancillary_data_track.DWD="1" aspect_ratio_code.DWD="1" audio_tracks.DWD="2" bitrate.DWD="15000" bitrate_mode.DWD="2" chroma_format.DWD="1" compressed_24.DWD="0" constructed_stream.DWD="0" d10_bitrate.DWD="0" dc_precision.DWD="10" ftp_20_path="" gop.DWD="2" gxf_audio_media_type.DWD="9" gxf_timecode_offset_mode.DWD="0" gxf_video_media_type.DWD="12" gxf_video_standard_compression.DWD="5" max_gop_frames.DWD="8" max_ip_distance.DWD="2" profile_level.DWD="11" quality_code.DWD="8" randomize_name.DWD="1" remove_extension.DWD="0" striped_timecode.DWD="1" track_numbers_dolbyE="1,2" use_closed_gop.DWD="1" use_strict_gop_bitrate.DWD="0" use_uncompressed_vbi.DWD="0"/>
 			<Filter_0/>
 			<Filter_1/>
 		</Module_0>
