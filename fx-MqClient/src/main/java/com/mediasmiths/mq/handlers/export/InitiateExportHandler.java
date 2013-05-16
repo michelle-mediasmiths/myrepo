@@ -223,10 +223,10 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		ie.setCreated(new Date());
 		ie.setJobType(jobType.getText());
 		
-		if (packageID == null)
+		if (packageID == null || "".equals(packageID))
 		{
-			log.debug("package id is null, using empty string instead");
-			ie.setPackageID("");
+			log.debug("package id is null");
+			ie.setPackageID("NA");
 		}
 		else
 		{

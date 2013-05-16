@@ -936,7 +936,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		Date firstTX = null;
 		
-		if (!StringUtils.isEmpty(packageID))
+		if (!StringUtils.isEmpty(packageID) && ! "NA".equals(packageID))
 		{
 			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
 			firstTX = (Date) packageAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
