@@ -359,7 +359,7 @@ public class CarbonProjectBuilder
 			throw new IllegalArgumentException("No suitable Carbon base project found!");
 
 		
-		log.info(String.format("Loading profile %s "+profile.getFilename()));
+		log.info(String.format("Loading profile %s",profile.getFilename()));
 		
 		final Element xml = loadXML("services/pcp/" + profile.getFilename());
 
