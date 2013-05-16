@@ -95,7 +95,7 @@ public class TCJobParamsGenerator
 			jobParams.outputFileBasename = materialID + separatorAndExtension;
 		}
 
-		jobParams.timecode = timecode(timecodeColour, timecodePosition);
+		jobParams.timecode = timecode(timecodeColour, timecodePosition, jobType);
 		jobParams.purpose = getPurpose(jobType);
 
 		jobParams.priority = getPriority(firstTX, jobType);
@@ -153,8 +153,17 @@ public class TCJobParamsGenerator
 		}
 	}
 
-	public TCTimecodeOptions timecode(String timecodeColour, String timecodePosition)
+	public TCTimecodeOptions timecode(String timecodeColour, String timecodePosition, TranscodeJobType jobType)
 	{
+
+		//CR001 - Caption proxies
+		//Timecode position must be at the top of the screen.
+		//Timecode must be white text on a black background. 
+		//The timecode font and font size will be fixed.
+		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
+			timecodeColour="WoB";
+			timecodePosition="Top";
+		}
 
 		if (timecodeColour != null && timecodeColour.length() == 3 && timecodePosition != null)
 		{
