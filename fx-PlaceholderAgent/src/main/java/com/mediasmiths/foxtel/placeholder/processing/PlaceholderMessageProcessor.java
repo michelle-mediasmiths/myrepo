@@ -514,6 +514,10 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 			catch(MayamClientException e){
 				logger.error("error getting channel groups for title",e);
 			}
+		    catch(Exception e1)
+		    {
+		    	logger.error("Exception thrown while populating ProtectedPurgeFail message",e1);
+		    }
 
 			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
 		}
