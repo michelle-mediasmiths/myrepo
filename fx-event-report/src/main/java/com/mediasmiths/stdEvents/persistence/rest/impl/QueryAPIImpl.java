@@ -1,5 +1,18 @@
 package com.mediasmiths.stdEvents.persistence.rest.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import javax.xml.bind.DatatypeConverter;
+
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
@@ -10,24 +23,6 @@ import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
-
-import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import javax.swing.text.DateFormatter;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.xml.bind.DatatypeConverter;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -113,7 +108,7 @@ public class QueryAPIImpl implements QueryAPI
 	}
 	
 	@Transactional
-	public List<EventEntity> getByNamespaceWindow(@PathParam("namespace") String namespace, @PathParam("max") int max)
+	public List<EventEntity> getByNamespaceWindow(final String namespace, final int max)
 	{
 		List<EventEntity> events = eventDao.namespacePaginated(namespace, 0, max);
 		List<EventEntity> all = new ArrayList<EventEntity>();
@@ -129,7 +124,7 @@ public class QueryAPIImpl implements QueryAPI
 	}
 	
 	@Transactional
-	public List<EventEntity> getByEventNameWindow(@PathParam("eventname") String eventname, @PathParam("max") int max)
+	public List<EventEntity> getByEventNameWindow(final String eventname, final int max)
 	{
 		List<EventEntity> events = eventDao.eventnamePaginated(eventname, 0, max);
 		logger.info("List size: " + events.size());
@@ -147,7 +142,7 @@ public class QueryAPIImpl implements QueryAPI
 	}
 	
 	@Transactional
-	public List<EventEntity> getEventsWindow(@PathParam("namespace")String namespace, @PathParam("eventname")String eventname, @PathParam("max")int max)
+	public List<EventEntity> getEventsWindow(final String namespace, final String eventname, final int max)
 	{
 		logger.info("max @ queryAPIImpl: " + max);
 		List<EventEntity> events = eventDao.findUniquePaginated(namespace, eventname, 0, max);
@@ -235,16 +230,12 @@ public class QueryAPIImpl implements QueryAPI
 	}
 
 	@Override
-	@GET
-	@Path("/BMSbydate")
 	public List<AggregatedBMS> getAllBMSbyDate(DateTime start, DateTime end)
 	{
 		return bmsDao.withinDate(start,end);
 	}
 	
 	@Override
-	@GET
-	@Path("/OrdersByDate")
 	public List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end)
 	{
 		return orderDao.getOrdersInDateRange(start,end);

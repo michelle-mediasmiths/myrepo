@@ -11,8 +11,7 @@ public interface ReportUI
 {
 	@POST
 	@Path("/choose_report")
-	@Produces("text/html")
-	public String chooseReport(@FormParam("start")String start, @FormParam("end")String end, @FormParam("name")String name, @FormParam("rpt")String rpt);
+	public void chooseReport(@FormParam("start")String start, @FormParam("end")String end, @FormParam("name")String name, @FormParam("rpt")String rpt);
 	
 	@GET
 	@Path("/popup")

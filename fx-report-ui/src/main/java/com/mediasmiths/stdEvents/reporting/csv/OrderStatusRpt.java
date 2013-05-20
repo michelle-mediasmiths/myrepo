@@ -40,6 +40,10 @@ public class OrderStatusRpt
 	@Inject
 	@Named("windowMax")
 	public int MAX;
+	
+	private static final String formatString = "dd-MM-yyyy";
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
+	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	public void writeOrderStatus(
 			final List<com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus> orders,
@@ -138,10 +142,6 @@ public class OrderStatusRpt
 		}
 
 	}
-
-	private static final String formatString = "dd-MM-yyyy";
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern(formatString);
-	private static final DateFormat df = new SimpleDateFormat(formatString);
 
 	private void createCsv(
 			List<OrderStatus> orderStatuses,

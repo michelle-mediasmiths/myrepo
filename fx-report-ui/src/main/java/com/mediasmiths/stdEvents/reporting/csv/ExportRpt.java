@@ -98,8 +98,8 @@ public class ExportRpt
 		logger.info("Creating export list");
 		List<Export> exports = new ArrayList<Export>();
 		
-		List<CreateOrUpdateTitle> titles = report.titles;
-		List<AddOrUpdatePackage> packages = report.packages;
+		//List<CreateOrUpdateTitle> titles = report.titles;
+		//List<AddOrUpdatePackage> packages = report.packages;
 //		List<Acquisition> acqs = report.acqs;
 
 //		UNCOMMENT TO USE AGGREGATED BMS
@@ -125,19 +125,19 @@ public class ExportRpt
 				export.setExportType("Classification");
 			}
 			
-			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
-			for (AddOrUpdatePackage pack : packages) {
-				if (pack.getMaterialID().equals(export.getMaterialID())) {
-					matchingPackage = pack;
-				}
-			}
+//			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
+//			for (AddOrUpdatePackage pack : packages) {
+//				if (pack.getMaterialID().equals(export.getMaterialID())) {
+//					matchingPackage = pack;
+//				}
+//			}
 			
-			for (CreateOrUpdateTitle title : titles) {
-				if (title.getTitleID().equals(matchingPackage.getTitleID())) {
-					export.setTitle(title.getTitle());
-					export.setChannels(title.getChannels());
-				}
-			}
+//			for (CreateOrUpdateTitle title : titles) {
+//				if (title.getTitleID().equals(matchingPackage.getTitleID())) {
+//					export.setTitle(title.getTitle());
+//					export.setChannels(title.getChannels());
+//				}
+//			}
 			
 //			for (Acquisition acq : acqs) {
 //				if (acq.getMaterialID().equals(matchingPackage.getMaterialID())) {
