@@ -77,16 +77,16 @@
 			<artifactId>fx-TranscodePriorities</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-TxFtpDelivery</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<!-- end mediasmiths dependencies -->
 
 
-		<dependency>
-			<groupId>commons-net</groupId>
-			<artifactId>commons-net</artifactId>
-			<version>3.2</version>
-		</dependency>
-		
 	</dependencies>
 	<build>
 		<finalName>fx-WFAdapter</finalName>

@@ -7,9 +7,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
@@ -36,6 +39,9 @@ import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
 import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
+import com.mediasmiths.foxtel.tx.ftp.TransferStatus;
+import com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery;
+import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -47,6 +53,8 @@ import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.RemoveTransferRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.StartFxpTransferRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
@@ -637,7 +645,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		deliveryLocationFile.mkdirs();
 
 		File segmentXmlFile = new File(String.format("%s/%s.xml", deliveryLocation, packageID));
-		File gxfFile = new File(String.format("%s/%s.gxf", deliveryLocation, packageID));
 		try
 		{
 			log.debug("Writing segmentinfo to " + segmentXmlFile);
@@ -648,16 +655,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// ftp xml file
 				boolean segmentxmlTransferred = aoXMLFtp(segmentXmlFile);
-
-				if (segmentxmlTransferred)
-				{
-					// should probably be its own intalio workflow step but doing it here for now
-					return aoFXPtransfer(gxfFile);
-				}
-				else
-				{
-					return false;
-				}
+				return segmentxmlTransferred;				
 			}
 
 			return true;
@@ -700,56 +698,6 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			return false;
 		}
 
-	}
-
-	private boolean aoFXPtransfer(File gxfFile)
-	{
-
-		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
-
-		// upload gxf
-		boolean gxfUpload = ftpProxyTransfer(
-				aoGXFFTPSourcePath,
-				gxfFileName,
-				aoGXFFTPDestinationPath,
-				gxfFileName,
-				aoGXFFTPDestinationHost,
-				aoGXFFTPDestinationUser,
-				aoGXFFTPDestinationPass);
-
-		if (gxfUpload)
-		{
-			log.info("gxf upload complete");
-			return true;
-		}
-		else
-		{
-			log.error("gxf upload failed");
-			return false;
-		}
-
-	}
-
-	private boolean ftpProxyTransfer(
-			String sourcePath,
-			String sourceFileName,
-			String targetPath,
-			String targetFile,
-			String targetHost,
-			String targetUser,
-			String targetPass)
-	{
-		return Fxp.ftpProxyTransfer(
-				sourcePath,
-				sourceFileName,
-				aoFTPProxyHost,
-				aoFTPProxyUser,
-				aoFTPProxyPass,
-				targetPath,
-				targetFile,
-				targetHost,
-				targetUser,
-				targetPass);
 	}
 
 	@Override
@@ -968,5 +916,77 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		}
 
 		return ret;
+	}
+
+	@Inject
+	TxFtpDelivery ftpDelivery;
+	
+	@Override
+	@PUT
+	@Path("/tx/startFxpTransfer")
+	public boolean startFxpTransfer(StartFxpTransferRequest startTransfer) throws MayamClientException
+	{
+		String deliveryLocation = deliveryLocationForPackage(startTransfer.getPackageID());
+		File gxfFile = new File(String.format("%s/%s.gxf", deliveryLocation, startTransfer.getPackageID()));
+
+		String gxfFileName = FilenameUtils.getName(gxfFile.getAbsolutePath());
+
+		boolean uploadStarted = ftpDelivery.startFtpProxyTransfer(
+				aoGXFFTPSourcePath,
+				gxfFileName,
+				aoFTPProxyHost,
+				aoFTPProxyUser,
+				aoFTPProxyPass,
+				aoGXFFTPDestinationPath,
+				gxfFileName,
+				aoGXFFTPDestinationHost,
+				aoGXFFTPDestinationUser,
+				aoGXFFTPDestinationPass,
+				startTransfer.getTaskID());
+
+		if (uploadStarted)
+		{
+			log.info("gxf upload started");
+			return true;
+		}
+		else
+		{
+			log.error("gxf upload failed");
+			return false;
+		}
+	}
+
+	@Override
+	@GET
+	@Path("/fx/fxpTransferStatus")
+	public String fxpTransferStatus(@QueryParam("taskID") Long taskID)
+	{
+		try
+		{
+			return ftpDelivery.getTransferStatus(taskID).name();
+		}
+		catch (IOException e)
+		{
+			log.error("Exception querying transfer status, assuming failure");
+			return TransferStatus.FAILED.name();
+		}
+	}
+
+	@Override
+	@PUT
+	@Path("/tx/abortFxpTransfer")
+	public void abortFxpTransfer(AbortFxpTransferRequest abort)
+	{
+		log.info("abort requested for fxp transfer for task id" + abort.getTaskID());
+		ftpDelivery.abortTransfer(abort.getTaskID());
+	}
+
+	@Override
+	@PUT
+	@Path("/tx/removeFxpTransfer")
+	public void removeTransfer(RemoveTransferRequest remove)
+	{
+		log.info("removing transfer for task id"+remove.getTaskID());
+		ftpDelivery.removeTransfer(remove.getTaskID());
 	}
 }

@@ -69,7 +69,7 @@
         <module>fx-TranscodePriorities</module>
         <module>fx-TranscodeOutputRules</module>
         <module>fx-ExtendedPublishing</module>
-
+        <module>fx-TxFtpDelivery</module>
     </modules>
 
 	<properties>
