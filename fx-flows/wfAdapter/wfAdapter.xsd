@@ -2,6 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
   <xs:import namespace="http://ns.mediasmiths.com/foxtel/tc/adapter" schemaLocation="../tcAdapter/tcAdapter.xsd"/>
+ <xs:element name="abortFxpTransferRequest" type="tns:abortFxpTransferRequest"/>
 
   <xs:element name="assetTransferForQCRequest" type="tns:assetTransferForQCRequest"/>
 
@@ -30,6 +31,10 @@
   <xs:element name="materialTransferForTCRequest" type="tns:materialTransferForTCRequest"/>
 
   <xs:element name="materialTransferForTCResponse" type="tns:materialTransferForTCResponse"/>
+
+  <xs:element name="removeTransferRequest" type="tns:removeTransferRequest"/>
+
+  <xs:element name="startFxpTransferRequest" type="tns:startFxpTransferRequest"/>
 
   <xs:element name="tcFailureNotification" type="tns:tcFailureNotification"/>
 
@@ -66,14 +71,9 @@
     </xs:complexContent>
   </xs:complexType>
 
-  <xs:complexType name="getTCJobParametersReq">
-    <xs:sequence/>
-  </xs:complexType>
-
-  <xs:complexType name="materialTransferForTCRequest">
+  <xs:complexType name="abortFxpTransferRequest">
     <xs:sequence>
-      <xs:element name="assetID" type="xs:string"/>
-      <xs:element name="forTX" type="xs:boolean"/>
+      <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>
   </xs:complexType>
 
@@ -84,17 +84,48 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="tcPassedNotification">
-    <xs:complexContent>
-      <xs:extension base="tns:tcNotification">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="ftpupload" type="ns1:tcftpUpload"/>
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
+  <xs:complexType name="startFxpTransferRequest">
+    <xs:sequence>
+      <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
+    </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="autoQCFailureNotification">
+  <xs:complexType name="getPriorityRequest">
+    <xs:sequence>
+      <xs:element name="created" type="xs:dateTime"/>
+      <xs:element name="currentPriority" type="xs:int"/>
+      <xs:element name="jobType" type="xs:string"/>
+      <xs:element name="packageID" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getQCProfileResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="profile" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeExport">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="jobType" type="xs:string"/>
+      <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="taskID" type="xs:long"/>
+      <xs:element name="tcParams" type="ns1:tcJobParameters"/>
+      <xs:element name="title" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getPriorityResponse">
+    <xs:sequence>
+      <xs:element name="changed" type="xs:boolean"/>
+      <xs:element name="priority" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCErrorNotification">
     <xs:complexContent>
       <xs:extension base="tns:autoQCResultNotification">
         <xs:sequence/>
@@ -121,13 +152,51 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="getPriorityRequest">
+  <xs:complexType name="assetTransferForQCResponse">
     <xs:sequence>
-      <xs:element name="created" type="xs:dateTime"/>
-      <xs:element name="currentPriority" type="xs:int"/>
-      <xs:element name="jobType" type="xs:string"/>
-      <xs:element name="packageID" type="xs:string"/>
+      <xs:element minOccurs="0" name="destination" type="xs:string"/>
     </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioTXFlow">
+    <xs:sequence>
+      <xs:element name="AO" type="xs:boolean"/>
+      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
+      <xs:element name="packageID" type="xs:string"/>
+      <xs:element name="requiredDate" type="xs:dateTime"/>
+      <xs:element name="taskID" type="xs:long"/>
+      <xs:element name="tcParams" type="ns1:tcJobParameters"/>
+      <xs:element name="title" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="getTCJobParametersReq">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="materialTransferForTCRequest">
+    <xs:sequence>
+      <xs:element name="assetID" type="xs:string"/>
+      <xs:element name="forTX" type="xs:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="tcPassedNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:tcNotification">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="ftpupload" type="ns1:tcftpUpload"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="autoQCFailureNotification">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="assetTransferForQCRequest">
@@ -146,68 +215,23 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="getQCProfileResponse">
+  <xs:complexType name="removeTransferRequest">
     <xs:sequence>
-      <xs:element minOccurs="0" name="profile" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="invokeExport">
-    <xs:sequence>
-      <xs:element name="assetID" type="xs:string"/>
-      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
-      <xs:element minOccurs="0" name="jobType" type="xs:string"/>
-      <xs:element name="packageID" type="xs:string"/>
       <xs:element name="taskID" type="xs:long"/>
-      <xs:element name="tcParams" type="ns1:tcJobParameters"/>
-      <xs:element name="title" type="xs:string"/>
     </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="assetTransferForQCResponse">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="destination" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="autoQCErrorNotification">
-    <xs:complexContent>
-      <xs:extension base="tns:autoQCResultNotification">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-
-  <xs:complexType name="getPriorityResponse">
-    <xs:sequence>
-      <xs:element name="changed" type="xs:boolean"/>
-      <xs:element name="priority" type="xs:int"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="invokeIntalioTXFlow">
-    <xs:sequence>
-      <xs:element name="AO" type="xs:boolean"/>
-      <xs:element minOccurs="0" name="created" type="xs:dateTime"/>
-      <xs:element name="packageID" type="xs:string"/>
-      <xs:element name="requiredDate" type="xs:dateTime"/>
-      <xs:element name="taskID" type="xs:long"/>
-      <xs:element name="tcParams" type="ns1:tcJobParameters"/>
-      <xs:element name="title" type="xs:string"/>
-    </xs:sequence>
-  </xs:complexType>
-
-  <xs:complexType name="invokeIntalioQCFlow">
-    <xs:complexContent>
-      <xs:extension base="tns:autoQCRequest">
-        <xs:sequence/>
-      </xs:extension>
-    </xs:complexContent>
   </xs:complexType>
 
   <xs:complexType name="autoQCPassNotification">
     <xs:complexContent>
       <xs:extension base="tns:autoQCResultNotification">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="invokeIntalioQCFlow">
+    <xs:complexContent>
+      <xs:extension base="tns:autoQCRequest">
         <xs:sequence/>
       </xs:extension>
     </xs:complexContent>

@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/startFxpTransfer" ID="_k1IlIMFDEeK0bdupt1rWrA">
+  <rest:operation verb="PUT" name="startFxpTransfer" ID="_k1IlJMFDEeK0bdupt1rWrA">
+    <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}startFxpTransferRequest" name="body" headerDirection="request" contentType="application/xml" ID="_k1IlJcFDEeK0bdupt1rWrA"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_k1IlJsFDEeK0bdupt1rWrA"/>
+  </rest:operation>
+</rest:descriptor>

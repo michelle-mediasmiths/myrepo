@@ -1,6 +1,7 @@
 package com.mediasmiths.mq.handlers.tx;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -29,6 +30,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
 import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.transcode.TranscodeRules;
+import com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -67,6 +69,24 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 	@Inject
 	TranscodeRules transcodeOutputRules;
 
+	
+	//ftp related members are for checking if tx delivery output already exists for ao content
+	@Inject
+	TxFtpDelivery ftpDelivery;
+	
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.host")
+	private String aoGXFFTPDestinationHost;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.user")
+	private String aoGXFFTPDestinationUser;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.pass")
+	private String aoGXFFTPDestinationPass;
+	@Inject
+	@Named("ao.tx.delivery.ftp.gxf.path")
+	private String aoGXFFTPDestinationPath;
+	
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
@@ -129,8 +149,20 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				String companionFilePath = tcParams.outputFolder + "/" + tcParams.outputFileBasename + ".xml";
 				File essenceFile = new File(essenceFilePath);
 				File companionFile = new File(companionFilePath);
+								
+				boolean fxpFileExists = false;
 				
-				if (essenceFile.exists() || companionFile.exists())
+				if (isAO)
+				{
+					fxpFileExists = ftpDelivery.fileExists(
+							aoGXFFTPDestinationPath,
+							packageID,
+							aoGXFFTPDestinationHost,
+							aoGXFFTPDestinationUser,
+							aoGXFFTPDestinationPass);
+				}
+
+				if (fxpFileExists || essenceFile.exists() || companionFile.exists())
 				{
 					String errorMessage = "File already exists at tx delivery target, will not attempt tx delivery";
 					log.error(errorMessage);
@@ -164,6 +196,10 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			{
 				log.error("error invoking tx delivery", e);
 				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
+			}
+			catch(IOException e){
+				log.error("Error querying ao output ftp location", e);
+				taskController.setTaskToErrorWithMessage(messageAttributes, "Error querying ao output ftp location");
 			}
 			catch (MayamClientException e)
 			{

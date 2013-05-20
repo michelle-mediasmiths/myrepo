@@ -325,7 +325,7 @@
 		<eventname>PreviewPassedReorder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Pass-Reorder Item in MAM: Material ID(%s) Title(%s)</subject>
-			<body><![CDATA[There is an asset that has been marked as pass & reorder on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
+			<body><![CDATA[There is an asset that has been marked as pass & reorder on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work. <p/>%s]]></body>
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -343,7 +343,7 @@
         <eventname>PreviewFixReorder</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
             <subject>Fix-Reorder Item in MAM: Material ID(%s) Title(%s)</subject>
-            <body><![CDATA[This item has been marked as fix and reorder.<p/> Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
+            <body><![CDATA[This item has been marked as fix and reorder.<p/> Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work. <p/>%s ]]></body>
             <emailaddresses>
                 <emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
                 <emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -352,7 +352,7 @@
                 <emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-		    <emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+		    	<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
     </MailData>
@@ -361,16 +361,16 @@
 		<eventname>PreviewFurtherAnalysis</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Material ID(%s) Title(%s) Further Analysis required.</subject>
-			<body>Item needs Further Analysis and has had its status raised to Escalated on the Preview tasklist. Please resolve this issue.</body>
+			<body><![CDATA[Item needs Further Analysis and has had its status raised to Escalated on the Preview tasklist. Please resolve this issue. <p/>%s ]]></body>
 			<emailaddresses> 
-				<emailaddress>GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress> 
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>

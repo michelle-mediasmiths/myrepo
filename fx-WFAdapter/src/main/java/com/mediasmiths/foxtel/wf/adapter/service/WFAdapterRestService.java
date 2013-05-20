@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.xml.bind.JAXBException;
 
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
+import com.mediasmiths.foxtel.wf.adapter.model.AbortFxpTransferRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
@@ -24,6 +25,8 @@ import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.InvokeIntalioTXFlow;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.MaterialTransferForTCResponse;
+import com.mediasmiths.foxtel.wf.adapter.model.RemoveTransferRequest;
+import com.mediasmiths.foxtel.wf.adapter.model.StartFxpTransferRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.TCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
@@ -154,6 +157,22 @@ public interface WFAdapterRestService
 	@Path("/tx/deliveryLocation")
 	@Produces("text/plain")
 	public String deliveryLocationForPackage(@QueryParam("packageID") String packageID) throws MayamClientException;
+	
+	@PUT
+	@Path("/tx/startFxpTransfer")
+	public boolean startFxpTransfer(StartFxpTransferRequest startTransfer) throws MayamClientException;
+	
+	@PUT
+	@Path("/tx/abortFxpTransfer")
+	public void abortFxpTransfer(AbortFxpTransferRequest abort) throws IOException;
+	
+	@PUT
+	@Path("/tx/removeFxpTransfer")
+	public void removeTransfer(RemoveTransferRequest remove);
+	
+	@GET
+	@Path("/fx/fxpTransferStatus")
+	public String fxpTransferStatus(@QueryParam("taskID") Long taskID);
 	
 	/**
 	 * @param packageID

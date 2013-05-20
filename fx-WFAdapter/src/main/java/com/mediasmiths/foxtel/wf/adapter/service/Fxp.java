@@ -11,6 +11,8 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
+//see com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery
+@Deprecated
 public class Fxp
 {
 	public static void main(String[] args)

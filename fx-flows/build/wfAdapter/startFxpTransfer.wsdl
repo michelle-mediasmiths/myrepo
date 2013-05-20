@@ -1,0 +1,42 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions xmlns:adapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension/http" xmlns:startFxpTransfer="http://ns.mediasmithsforge.com/foxtel/wfAdapter/startFxpTransfer.rest" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/startFxpTransfer.rest">
+  <wsdl:types>
+    <xs:schema targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter">
+      <xs:include schemaLocation="wfAdapter.xsd"/>
+    </xs:schema>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/startFxpTransfer.rest">
+      <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+      <xs:element type="xs:boolean" name="response_startFxpTransfer_outputType"/>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="startFxpTransfer_input">
+    <wsdl:part name="body" element="adapter:startFxpTransferRequest"/>
+  </wsdl:message>
+  <wsdl:message name="startFxpTransfer_output">
+    <wsdl:part name="response" element="startFxpTransfer:response_startFxpTransfer_outputType"/>
+  </wsdl:message>
+  <wsdl:portType name="restInterface">
+    <wsdl:operation name="startFxpTransfer">
+      <wsdl:input message="startFxpTransfer:startFxpTransfer_input"/>
+      <wsdl:output message="startFxpTransfer:startFxpTransfer_output"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="restBinding" type="startFxpTransfer:restInterface">
+    <wsdl:operation name="startFxpTransfer">
+      <ode:binding verb="PUT"/>
+      <http:operation location=""/>
+      <wsdl:input>
+        <http:urlReplacement/>
+        <mime:content type="application/xml" part="body"/>
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content type="text/plain" part="response"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="restService">
+    <wsdl:port name="httpPort" binding="startFxpTransfer:restBinding">
+      <http:address location="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/tx/startFxpTransfer"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

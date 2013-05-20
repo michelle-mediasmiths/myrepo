@@ -193,9 +193,8 @@
             <xs:complexContent>
                 <xs:extension base="autoQCResultNotification">
                     <xs:sequence>
-                        <xs:element name="assetId" type="xs:string"/>
-                        <xs:element name="title" type="xs:string"/>
                         <xs:element name="date" type="xs:string"/>
+                        <xs:element name="previewNotes" type="xs:string"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
