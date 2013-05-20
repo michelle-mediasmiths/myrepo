@@ -352,7 +352,7 @@
                 <emailaddress channelGroup="GE">GS-MAM_GE_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="ME">GS-MAM_ME_Promo@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="OD">GS-MAM_OD_Promo@foxtel.com.au</emailaddress>
-		    <emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
+		    	<emailaddress channelGroup="MV">GS-MAM_MV_Promo@foxtel.com.au</emailaddress>
             </emailaddresses>
         </MailTemplate>
     </MailData>
@@ -363,14 +363,14 @@
 			<subject>Material ID(%s) Title(%s) Further Analysis required.</subject>
 			<body><![CDATA[Item needs Further Analysis and has had its status raised to Escalated on the Preview tasklist. Please resolve this issue. <p/>%s ]]></body>
 			<emailaddresses> 
-				<emailaddress>GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress> 
-				<emailaddress>GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="LS">GS-MAM_LS_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="FC">GS-MAM_FC_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="GE">GS-MAM_GE_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="ME">GS-MAM_ME_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="OD">GS-MAM_OD_Programmer@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="MV">GS-MAM_MV_Programmer@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
