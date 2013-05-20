@@ -154,12 +154,21 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 				
 				if (isAO)
 				{
-					fxpFileExists = ftpDelivery.fileExists(
-							aoGXFFTPDestinationPath,
-							packageID,
-							aoGXFFTPDestinationHost,
-							aoGXFFTPDestinationUser,
-							aoGXFFTPDestinationPass);
+					try
+					{
+						fxpFileExists = ftpDelivery.fileExists(
+								aoGXFFTPDestinationPath,
+								packageID,
+								aoGXFFTPDestinationHost,
+								aoGXFFTPDestinationUser,
+								aoGXFFTPDestinationPass);
+					}
+					catch (Exception e)
+					{
+						log.error("Error querying ao output ftp location", e);
+						taskController.setTaskToErrorWithMessage(messageAttributes, "Error querying ao output ftp location");
+						return;
+					}
 				}
 
 				if (fxpFileExists || essenceFile.exists() || companionFile.exists())
@@ -225,6 +234,11 @@ public class InitiateTxHandler extends TaskStateChangeHandler
 			{
 				log.error("error initiating tx delivery",e);
 				taskController.setTaskToErrorWithMessage(messageAttributes, "Error initiating tx workflow");
+			}
+			catch(Throwable t)
+			{
+				log.error("Error initiating tx delivery", t);
+				taskController.setTaskToErrorWithMessage(messageAttributes,  "Error initiating tx workflow");
 			}
 
 		}
