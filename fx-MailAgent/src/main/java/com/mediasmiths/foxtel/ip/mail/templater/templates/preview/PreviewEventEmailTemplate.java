@@ -33,7 +33,7 @@ public class PreviewEventEmailTemplate extends MailTemplate implements EmailTemp
 		
 		t.setSubject(String.format(getSubject(), pe.getAssetId(), pe.getTitle()));
 		
-		t.setBody(getBody());
+		t.setBody(String.format(getBody(), pe.getPreviewNotes()));
 
 		return t;
 
