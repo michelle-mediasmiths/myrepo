@@ -3,9 +3,9 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
@@ -13,6 +13,7 @@ import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
+
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
@@ -24,130 +25,184 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 
-import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
-import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
-import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
-
 public class AcquisitionRpt
 {
-	public static final transient Logger logger = Logger.getLogger(AcquisitionRpt.class);
-	
-	//Edit this variable to change where your reports get saved to
+	public static final transient Logger log = Logger.getLogger(AcquisitionRpt.class);
+
+	// Edit this variable to change where your reports get saved to
 	@Inject
 	@Named("reportLoc")
 	public String REPORT_LOC;
-	
+
 	@Inject
 	private QueryAPI queryApi;
-	@Inject
-	private ReportUI reportUi;
-	
-	private ReportUIImpl report = new ReportUIImpl();
-	
-	private List<String> channels = new ArrayList<String>();
-	private List<String> formats = new ArrayList<String>();
-	
-	private int noFile=0;
-	private int noTape=0;
-	private double perFile=0;
-	private double perTape=0;
-	
-	public void writeAcquisitionDelivery(List<EventEntity> materials, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate, String reportName)
+
+	public void writeAcquisitionDelivery(
+			final List<EventEntity> materials,
+			final List<AggregatedBMS> bms,
+			final DateTime startDate,
+			final DateTime endDate,
+			final String reportName)
 	{
-		logger.debug(">>>writeAcquisitionDelivery");
+		log.debug(">>>writeAcquisitionDelivery");
 		List<Acquisition> titles = getReportList(materials, bms, startDate, endDate);
-		setStats(titles);
-		
+
+		int noFile = 0;
+		int noTape = 0;
+
+		for (Acquisition event : titles)
+		{
+			if (event.isFileDelivery())
+				noFile++;
+			if (event.isTapeDelivery())
+				noTape++;
+		}
+
 		titles.add(addStats("No By File", Integer.toString(noFile)));
 		titles.add(addStats("No By Tape", Integer.toString(noTape)));
-		titles.add(addStats("% By File", Double.toString(perFile)));
-		titles.add(addStats("% By Tape", Double.toString(perTape)));
-		
-		createCSV(titles, reportName);	
-		logger.debug("<<<writeAcquisitionDelivery");
-	}
-	
-	private Acquisition unmarshall(EventEntity event)
-	{
-		Object title = new Acquisition();
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-		
-		try{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			title = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return (Acquisition) title;
-	}
-	
-	public List<Acquisition> getReportList(List<EventEntity> events, List<AggregatedBMS> bms, DateTime startDate, DateTime endDate)
-	{
-		logger.debug(">>>getReportList");
-		
-//		List<CreateOrUpdateTitle> titles = report.titles;
-//		List<AddOrUpdatePackage> packages = report.packages;
+		titles.add(addStats("% By File", Double.toString((noFile / titles.size()) * 100)));
+		titles.add(addStats("% By Tape", Double.toString((noTape / titles.size()) * 100)));
 
-//		UNCOMMENT TO USE WITH BMS AGGREGATION
-//		List<AggregatedBMS> bms = report.bms;
-		
-//		logger.info("Titles: " + titles.size() + " Packages: " + packages.size());
-		
+		createCSV(titles, reportName);
+		log.debug("<<<writeAcquisitionDelivery");
+	}
+
+	private List<Acquisition> getReportList(
+			final List<EventEntity> events,
+			final List<AggregatedBMS> bms,
+			final DateTime startDate,
+			final DateTime endDate)
+	{
+		log.debug(">>>getReportList");
+
+		List<CreateOrUpdateTitle> titles = getTitles();
+		List<AddOrUpdatePackage> packages = getPackages();
+
+		log.info(String.format("Titles: %d; Packages: %d", titles.size(), packages.size()));
+
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		for (EventEntity event : events)
 		{
 			Acquisition content = (Acquisition) unmarshall(event);
 			content.setDateRange(startDate + " - " + endDate);
-			if (content.isTapeDelivery())
-				content.setTapeDel("1");
+			
 			if (content.isFileDelivery())
+			{
 				content.setFileDel("1");
-			
-//			AddOrUpdatePackage matchingPackage = new AddOrUpdatePackage();
-//			for(AddOrUpdatePackage pack : packages) {
-//				if ((pack.getMaterialID() != null) && (content.getMaterialID() != null)) {
-//					if (pack.getMaterialID().equals(content.getMaterialID())) {
-//						matchingPackage = pack;
-//					}
-//				}
-//			}
-//			
-//			for (CreateOrUpdateTitle title : titles) {
-//				if ((title.getTitleID() != null) && (matchingPackage.getTitleID() != null)) {
-//					if (title.getTitleID().equals(matchingPackage.getTitleID())) {
-//						content.setChannels(title.getChannels());
-//					}
-//				}
-//			}
-			
-			for (AggregatedBMS b : bms) {
-				if ((b.getMaterialID() != null) && (b.getMaterialID().equals(content.getMaterialID())))
-						content.setChannels(b.getChannels());
 			}
+			else if (content.isTapeDelivery())
+			{
+				content.setTapeDel("1");
+			}
+
+			final String contentMatId = content.getMaterialID();
 			
+			AddOrUpdatePackage matchingPackage = null;
+			
+			for (AddOrUpdatePackage pack : packages)
+			{
+				if (StringUtils.isNotBlank(pack.getMaterialID()) && StringUtils.isNotBlank(contentMatId))
+				{
+					if (pack.getMaterialID().equals(contentMatId))
+					{
+						matchingPackage = pack;
+						break;
+					}
+				}
+			}
+
+			for (CreateOrUpdateTitle title : titles)
+			{
+				if (StringUtils.isNotBlank(title.getTitleID()) && StringUtils.isNotBlank(matchingPackage.getTitleID()))
+				{
+					if (title.getTitleID().equals(matchingPackage.getTitleID()))
+					{
+						content.setChannels(title.getChannels());
+						break;
+					}
+				}
+			}
+
+			for (AggregatedBMS b : bms)
+			{
+				final String matId = b.getMaterialID();
+				if (StringUtils.isNotBlank(matId) && (matId.equals(contentMatId)))
+				{
+					content.setChannels(b.getChannels());
+				}
+			}
+
 			acqs.add(content);
 		}
-		logger.debug("<<<getReportList");
+		log.debug("<<<getReportList");
 		return acqs;
 	}
-	
-	private void createCSV(List<Acquisition> titles, String reportName)
+
+	// TODO - should these be within the date range provided?
+	private List<CreateOrUpdateTitle> getTitles()
 	{
+		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
+
+		final List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
+		for (EventEntity event : titleEvents)
+		{
+			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
+			titles.add(title);
+		}
+		return titles;
+	}
+
+	// TODO - should these be within the date range provided?
+	private List<AddOrUpdatePackage> getPackages()
+	{
+		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
+
+		final List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
+		for (EventEntity event : packageEvents)
+		{
+			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
+			packages.add(pack);
+		}
+
+		return packages;
+	}
+
+	private Object unmarshall(final EventEntity event)
+	{
+		Object obj = null;
+		String payload = event.getPayload();
+		log.info("Unmarshalling payload " + payload);
+
+		try
+		{
+			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
+			log.info("Deserialising payload");
+			obj = JAXB_SERIALISER.deserialise(payload);
+			log.info("Object created");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return obj;
+	}
+
+	private void createCSV(final List<Acquisition> titles, final String reportName)
+	{
+		log.debug(">>>createCSV");
 		ICsvBeanWriter beanWriter = null;
-		try {
-			logger.info("reportName: " + reportName);
-			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
-			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel", "format", "filesize", "titleLength"};
-			final CellProcessor[] processors = getProcessor();
+		try
+		{
+			log.info(String.format("Writing Report Name: %s to %s", reportName, REPORT_LOC));
+			beanWriter = new CsvBeanWriter(
+					new FileWriter(new StringBuilder(REPORT_LOC).append(reportName).append(".csv").toString()),
+					CsvPreference.STANDARD_PREFERENCE);
+
+			final String[] header = { "dateRange", "title", "materialID", "channels", "aggregatorID", "tapeDel", "fileDel",
+					"format", "filesize", "titleLength" };
 			beanWriter.writeHeader(header);
-				
-			
+
+			final CellProcessor[] processors = getProcessor();
 			for (Acquisition title : titles)
 			{
 				beanWriter.write(title, header, processors);
@@ -155,53 +210,37 @@ public class AcquisitionRpt
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			log.error(String.format(
+					"An exception was caught whilst writing Acquisition Report %s for the following reason: %s",
+					reportName,
+					e.getMessage()));
 		}
-		finally {
+		finally
+		{
 			if (beanWriter != null)
 			{
 				try
 				{
 					beanWriter.close();
 				}
-				catch(IOException e)
+				catch (IOException e)
 				{
-					e.printStackTrace();
+					log.error(String.format(
+							"An exception was caught whilst closing the report writer for the following reason: %s",
+							e.getMessage()));
 				}
 			}
 		}
+		log.debug("<<<createCSV");
 	}
-	
+
 	private CellProcessor[] getProcessor()
 	{
-		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(), 
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
-		};
+		final CellProcessor[] processors = new CellProcessor[] { new Optional(), new Optional(), new Optional(), new Optional(),
+				new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional() };
 		return processors;
 	}
-	
-	private void setStats(List<Acquisition> events)
-	{
-		for (Acquisition event : events)
-		{
-			if (event.isFileDelivery())
-				noFile ++;
-			if (event.isTapeDelivery())
-				noTape ++;
-			perFile = (noFile / events.size()) * 100;
-			perTape = (noTape / events.size()) * 100;
-		}
-	}
-	
+
 	private Acquisition addStats(String name, String value)
 	{
 		Acquisition acq = new Acquisition();
