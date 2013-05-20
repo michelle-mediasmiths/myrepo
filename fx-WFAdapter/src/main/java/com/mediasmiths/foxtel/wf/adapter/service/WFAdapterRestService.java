@@ -171,7 +171,7 @@ public interface WFAdapterRestService
 	public void removeTransfer(RemoveTransferRequest remove);
 	
 	@GET
-	@Path("/fx/fxpTransferStatus")
+	@Path("/tx/fxpTransferStatus")
 	public String fxpTransferStatus(@QueryParam("taskID") Long taskID);
 	
 	/**
