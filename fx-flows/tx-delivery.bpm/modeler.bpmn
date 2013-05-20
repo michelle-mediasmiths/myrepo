@@ -1087,7 +1087,7 @@
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_CZEHoMFFEeK6DtOy-Yu5NA" source="forEachSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_CZEHocFFEeK6DtOy-Yu5NA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
         </eAnnotations>
-        <vertices xmi:type="bpmn:SubProcess" xmi:id="_Ew8sYcFCEeK6DtOy-Yu5NA" iD="_Ew8sYMFCEeK6DtOy-Yu5NA" outgoingEdges="_LyGa8cFCEeK6DtOy-Yu5NA">
+        <vertices xmi:type="bpmn:SubProcess" xmi:id="_Ew8sYcFCEeK6DtOy-Yu5NA" iD="_Ew8sYMFCEeK6DtOy-Yu5NA" outgoingEdges="_LyGa8cFCEeK6DtOy-Yu5NA" incomingEdges="_mjSHAcFZEeK6DtOy-Yu5NA">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_LNYSYMFEEeK6DtOy-Yu5NA" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_LNYSYcFEEeK6DtOy-Yu5NA" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Ljj9wMFEEeK6DtOy-Yu5NA" key="odeFailureRetryFor" value="10"/>
@@ -1196,11 +1196,13 @@
           <vertices xmi:type="bpmn:Activity" xmi:id="_W02WscFCEeK6DtOy-Yu5NA" iD="_W02WsMFCEeK6DtOy-Yu5NA" incomingEdges="_XwEBwcFCEeK6DtOy-Yu5NA" name="Record Status"/>
           <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_XwEBwcFCEeK6DtOy-Yu5NA" iD="_XwEBwMFCEeK6DtOy-Yu5NA"/>
         </vertices>
+        <vertices xmi:type="bpmn:Activity" xmi:id="_l2w_QcFZEeK6DtOy-Yu5NA" iD="_l2w_QMFZEeK6DtOy-Yu5NA" outgoingEdges="_mjSHAcFZEeK6DtOy-Yu5NA" name="wait 30secs" activityType="EventIntermediateTimer"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_LyGa8cFCEeK6DtOy-Yu5NA" iD="_LyGa8MFCEeK6DtOy-Yu5NA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_NO6-QcFCEeK6DtOy-Yu5NA" iD="_NO6-QMFCEeK6DtOy-Yu5NA" conditionType="Default" isDefault="true"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_P4JqUcFCEeK6DtOy-Yu5NA" iD="_P4JqUMFCEeK6DtOy-Yu5NA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_UXVLYcFCEeK6DtOy-Yu5NA" iD="_UXVLYMFCEeK6DtOy-Yu5NA"/>
         <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_ZhlCscFCEeK6DtOy-Yu5NA" iD="_ZhlCsMFCEeK6DtOy-Yu5NA"/>
+        <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_mjSHAcFZEeK6DtOy-Yu5NA" iD="_mjSHAMFZEeK6DtOy-Yu5NA"/>
       </vertices>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_CC5xwcFCEeK6DtOy-Yu5NA" iD="_CC5xwMFCEeK6DtOy-Yu5NA"/>
     </vertices>
