@@ -8,6 +8,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
@@ -158,6 +162,29 @@ public class QueryAPIImpl implements QueryAPI
 		}
 		return all;
 	}
+	
+	@Transactional
+	public List<EventEntity> getEventsWindowDateRange(
+			@PathParam("namespace") String namespace,
+			@PathParam("eventname") String eventName,
+			@PathParam("max") int max,
+			@PathParam("start") DateTime start,
+			@PathParam("end") DateTime end)
+	{
+		logger.info("max @ queryAPIImpl: " + max);
+		List<EventEntity> events = eventDao.findUniquePaginatedDate(namespace, eventName, 0, max, start, end);
+		List<EventEntity> all = new ArrayList<EventEntity>();
+		all.addAll(events);
+		int startInt=0;
+		while (events.size()==max) {
+			events = eventDao.findUniquePaginatedDate(namespace, eventName, startInt, max, start, end);
+			startInt = startInt + max;
+			all.addAll(events);
+			logger.info("start: " + startInt + " Size: " + events.size());
+			logger.info("Results: " + events);
+		}
+		return all;
+	}
 
 	@Transactional
 	public List<EventEntity> getByEventName(String eventName)
@@ -240,5 +267,7 @@ public class QueryAPIImpl implements QueryAPI
 	{
 		return orderDao.getOrdersInDateRange(start,end);
 	}
+
+	
 	
 }

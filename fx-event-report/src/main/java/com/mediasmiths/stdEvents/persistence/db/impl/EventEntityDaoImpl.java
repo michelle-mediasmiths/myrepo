@@ -9,6 +9,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.DateTime;
 
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.hibernate.dao.HibernateDao;
@@ -131,6 +132,20 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		criteria.setFirstResult(start);
 		criteria.setMaxResults(max);
 		logger.info("Finished search");
+		return getList(criteria);
+	}
+	
+	@Override
+	public List<EventEntity> findUniquePaginatedDate(String namespace, String eventname, int start, int max, DateTime startDate, DateTime endDate)
+	{
+		logger.info("Finding events from " + start + " namespace " + namespace + " eventname: " + eventname + " max: " + max + " startDate: " + startDate + " endDate: " + endDate);;
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("namespace", namespace));
+		criteria.add(Restrictions.eq("eventName", eventname));
+		criteria.add(Restrictions.between("time", startDate.getMillis(), endDate.getMillis()));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		logger.info("finished search");
 		return getList(criteria);
 	}
 

@@ -67,6 +67,9 @@ public class AcquisitionRpt
 		log.debug("<<<writeAcquisitionDelivery");
 	}
 
+	/*
+	 * pseudo code to change logic
+	 */
 	private List<Acquisition> getReportList(
 			final List<EventEntity> events,
 			final List<AggregatedBMS> bms,
@@ -84,6 +87,7 @@ public class AcquisitionRpt
 		for (EventEntity event : events)
 		{
 			Acquisition content = (Acquisition) unmarshall(event);
+			//TODO: format date
 			content.setDateRange(startDate + " - " + endDate);
 			
 			if (content.isFileDelivery())
@@ -139,6 +143,7 @@ public class AcquisitionRpt
 	}
 
 	// TODO - should these be within the date range provided?
+	//search on date range
 	private List<CreateOrUpdateTitle> getTitles()
 	{
 		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
