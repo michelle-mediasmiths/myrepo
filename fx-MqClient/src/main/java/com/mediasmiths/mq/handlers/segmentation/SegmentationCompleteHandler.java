@@ -67,7 +67,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				if (username != null)
 				{
 					AttributeMap task = taskController.getTask(taskId);
-					AttributeMap taskUpdate = taskController.updateMapForAsset(task);
+					AttributeMap taskUpdate = taskController.updateMapForTask(task);
 					taskUpdate.setAttribute(Attribute.TASK_CREATED_BY, username);
 					tasksClient.taskApi().updateTask(taskUpdate);
 				}
