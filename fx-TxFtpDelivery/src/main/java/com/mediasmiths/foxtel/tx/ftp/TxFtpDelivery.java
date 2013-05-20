@@ -30,11 +30,14 @@ public class TxFtpDelivery implements StoppableService
 	private final String fxpStatusFolder;
 	
 	@Inject
-	public TxFtpDelivery(ActiveFXPTransfers activeTransfers, ShutdownManager shutDownManager, 	@Named("fxp.transfer.status.folder") String fxpStatusFolder){
+	public TxFtpDelivery(ActiveFXPTransfers activeTransfers, ShutdownManager shutDownManager,@Named("fxp.transfer.status.folder") String fxpStatusFolder, @Named("fxp.transfer.fail.existing.on.startup") boolean failexistingTransfersOnStartup){
 		this.activeTransfers=activeTransfers;
 		shutDownManager.register(this);
 		this.fxpStatusFolder=fxpStatusFolder;
-		findAndFailActiveTransfers();
+		if (failexistingTransfersOnStartup)
+		{
+			findAndFailActiveTransfers();
+		}
 	}
 	
 	private void findAndFailActiveTransfers()
