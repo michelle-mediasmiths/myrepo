@@ -88,7 +88,8 @@ public class PreviewTaskEscalationHandler extends TaskStateChangeHandler
 		//pf.setDate((new Date()).toString());
 		pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
 		pf.setAssetId(houseID);
-
+		pf.setPreviewNotes(messageAttributes.getAttributeAsString(Attribute.QC_PREVIEW_NOTES));
+		
 		try
 		{
 			Set<String> channelGroups = mayamClient.getChannelGroupsForItem(messageAttributes);
