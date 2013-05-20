@@ -164,7 +164,7 @@ public interface WFAdapterRestService
 	
 	@PUT
 	@Path("/tx/abortFxpTransfer")
-	public void abortFxpTransfer(AbortFxpTransferRequest abort);
+	public void abortFxpTransfer(AbortFxpTransferRequest abort) throws IOException;
 	
 	@PUT
 	@Path("/tx/removeFxpTransfer")

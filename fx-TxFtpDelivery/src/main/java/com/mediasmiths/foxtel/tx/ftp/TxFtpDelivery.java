@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
+import java.util.Collection;
 
 import javax.inject.Inject;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
@@ -24,13 +27,118 @@ public class TxFtpDelivery implements StoppableService
 	private final static Logger log = Logger.getLogger(TxFtpDelivery.class);
 	
 	ActiveFXPTransfers activeTransfers;
+	private final String fxpStatusFolder;
 	
 	@Inject
-	public TxFtpDelivery(ActiveFXPTransfers activeTransfers, ShutdownManager shutDownManager){
+	public TxFtpDelivery(ActiveFXPTransfers activeTransfers, ShutdownManager shutDownManager, 	@Named("fxp.transfer.status.folder") String fxpStatusFolder){
 		this.activeTransfers=activeTransfers;
 		shutDownManager.register(this);
+		this.fxpStatusFolder=fxpStatusFolder;
+		findAndFailActiveTransfers();
 	}
 	
+	private void findAndFailActiveTransfers()
+	{
+		Collection<File> files = FileUtils.listFiles(new File(fxpStatusFolder), new IOFileFilter()
+		{
+			
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return name.toLowerCase().endsWith("txt");
+			}
+			
+			@Override
+			public boolean accept(File file)
+			{
+				return file.getName().toLowerCase().endsWith("txt");
+			}
+		}, new IOFileFilter()
+		{
+			
+			@Override
+			public boolean accept(File dir, String name)
+			{
+				return false;
+			}
+			
+			@Override
+			public boolean accept(File file)
+			{
+				return false;
+			}
+		});		
+		
+		for (File file : files)
+		{
+			try
+			{
+				String contents = FileUtils.readFileToString(file);
+
+				if (contents.equals(TransferStatus.STARTED.name())) //started transfer found, set to failed as there is no way to resume
+				{
+					try
+					{
+						FileUtils.writeStringToFile(file, TransferStatus.FAILED.name());
+					}
+					catch (IOException e)
+					{
+						log.error("error writing to file " + file.getAbsolutePath(), e);
+					}
+				}
+
+			}
+			catch (IOException e)
+			{
+				log.error("error reading: " + file.getAbsolutePath(), e);
+			}
+		}
+	}
+	
+	public boolean fileExists(String remotePath, String remoteFileName, String host, String user, String pass) throws IOException
+	{
+		FTPClient client = new FTPClient();
+		connect(host, client);
+
+		if (!client.login(user, pass))
+		{
+			log.error("Could not login to " + host);
+			throw new IOException("Could not login to " + host);
+		}
+
+		log.debug("Changing to destination directory on target");
+
+		boolean changeWorkingDirectory = client.changeWorkingDirectory(remotePath);
+
+		if (changeWorkingDirectory)
+		{
+			log.debug("Successfully changed working directory on target");
+		}
+		else
+		{
+			log.error("failed to change to destination directory on target");
+			throw new IOException("failed to change to destination directory on target");
+		}
+		try
+		{
+			FTPFile[] listFiles = client.listFiles();
+
+			for (FTPFile ftpFile : listFiles)
+			{
+				if (ftpFile.getName().equals(remoteFileName))
+				{
+					return true;
+				}
+
+			}
+		}
+		finally
+		{
+			disconnect(client);
+		}
+		return false;
+	}
+
 	public boolean startFtpProxyTransfer(
 			String sourcePath,
 			String sourceFileName,
@@ -203,14 +311,14 @@ public class TxFtpDelivery implements StoppableService
 		}
 	}
 
-	protected static void disconnect(FTPClient proxy)
+	protected static void disconnect(FTPClient client)
 	{
 		try
 		{
-			if (proxy.isConnected())
+			if (client.isConnected())
 			{
-				proxy.logout();
-				proxy.disconnect();
+				client.logout();
+				client.disconnect();
 			}
 		}
 		catch (IOException e1)
@@ -218,10 +326,7 @@ public class TxFtpDelivery implements StoppableService
 			// do nothing
 		}
 	}
-	
-	@Inject
-	@Named("fxp.transfer.status.folder")
-	private String fxpStatusFolder;
+
 	
 	
 	protected synchronized void setTransferStatus(Long taskID, TransferStatus status) throws IOException{
@@ -266,9 +371,10 @@ public class TxFtpDelivery implements StoppableService
 		}
 	}
 
-	public void abortTransfer(Long taskID)
+	public void abortTransfer(Long taskID) throws IOException
 	{
 		ActiveFXPTransfer activeFXPTransfer = activeTransfers.get(taskID);
 		activeFXPTransfer.tryAbort();
+		setTransferStatus(taskID, TransferStatus.ABORTED);
 	}
 }

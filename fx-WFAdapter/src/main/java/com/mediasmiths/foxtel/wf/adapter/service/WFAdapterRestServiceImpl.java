@@ -924,6 +924,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/tx/startFxpTransfer")
+	@Consumes("application/xml")
+	@Produces("text/plain")
 	public boolean startFxpTransfer(StartFxpTransferRequest startTransfer) throws MayamClientException
 	{
 		String deliveryLocation = deliveryLocationForPackage(startTransfer.getPackageID());
@@ -958,7 +960,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@Override
 	@GET
-	@Path("/fx/fxpTransferStatus")
+	@Path("/tx/fxpTransferStatus")
+	@Produces("text/plain")
 	public String fxpTransferStatus(@QueryParam("taskID") Long taskID)
 	{
 		try
@@ -975,7 +978,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/tx/abortFxpTransfer")
-	public void abortFxpTransfer(AbortFxpTransferRequest abort)
+	@Consumes("application/xml")
+	public void abortFxpTransfer(AbortFxpTransferRequest abort) throws IOException
 	{
 		log.info("abort requested for fxp transfer for task id" + abort.getTaskID());
 		ftpDelivery.abortTransfer(abort.getTaskID());
@@ -984,6 +988,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Override
 	@PUT
 	@Path("/tx/removeFxpTransfer")
+	@Consumes("application/xml")
 	public void removeTransfer(RemoveTransferRequest remove)
 	{
 		log.info("removing transfer for task id"+remove.getTaskID());

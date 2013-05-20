@@ -1,7 +1,7 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/FS_Adapter" xmlns:TX_Delivery="http://thisdiagram" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/FS_Adapter">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:move="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:this="http://thisdiagram/FS_Adapter" xmlns:TX_Delivery="http://thisdiagram" xmlns:Delivery="http://thisdiagram/Delivery" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/FS_Adapter">
     <bpdm:dependencies version="6000089">
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/move.rest" bpdm:prefix="move" bpdm:comment="contrib=&apos;project:///fsAdapter/move.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
@@ -19,18 +19,18 @@
     <bpel:scope bpdm:label="FS Adapter" bpdm:ID="_PVVBAGuWEeK7FdvgH5F2kQ">
         <bpel:partnerLinks>
             <bpel:partnerLink name="auto_QcAndFS_AdapterForHttpPortPlkVar" partnerLinkType="TX_Delivery:Auto_QcAndFS_AdapterForHttpPortPlk" myRole="FS_Adapter_for_Auto_QC" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_WGJMcHFHEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_mbM9EGxqEeKv3LhB37uiLw"/>
-            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_3Kh2UHHqEeKIgPAPmx2ukA" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
-            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk1Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk1" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_ITxeMXFGEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk0Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk0" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="delete:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/delete" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_3Kh2UHHqEeKIgPAPmx2ukA, _PVVBAGuWEeK7FdvgH5F2kQ:_K9MPZcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_p2KusMFGEeK6DtOy-Yu5NA" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
+            <bpel:partnerLink name="fS_AdapterAndDeliveryForHttpPortPlk1Var" partnerLinkType="TX_Delivery:FS_AdapterAndDeliveryForHttpPortPlk1" myRole="FS_Adapter_for_Delivery" bpdm:enableSharing="false" bpdm:providedService="move:restService" bpdm:providedPort="httpPort" bpdm:provideSOAPAddress="http://10.111.224.213:8080/fx-FSAdapter/rest/fs/move" bpdm:providedIsDefault="true" bpdm:clientTasks="_PVVBAGuWEeK7FdvgH5F2kQ:_jiM2QcFGEeK6DtOy-Yu5NA, _PVVBAGuWEeK7FdvgH5F2kQ:_ITxeMXFGEeKXOL1w3D1sTw" bpdm:isManaged="true" bpdm:otherPoolId="_HwWekGuUEeK7FdvgH5F2kQ"/>
         </bpel:partnerLinks>
         <bpel:variables>
-            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_ozP85W63EeKvjs-uExigJg" bpdm:messageIds="inc:_35hDQHHqEeKIgPAPmx2ukA"/>
-            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_pD_HkG63EeKvjs-uExigJg" bpdm:messageIds=" out:_4US6wHHqEeKIgPAPmx2ukA">
+            <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:id="_ozP85W63EeKvjs-uExigJg" bpdm:messageIds="inc:_35hDQHHqEeKIgPAPmx2ukA,_rC4ZcMFGEeK6DtOy-Yu5NA,_L0x-sMFGEeK6DtOy-Yu5NA"/>
+            <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:id="_pD_HkG63EeKvjs-uExigJg" bpdm:messageIds=" out:_Ma4VYMFGEeK6DtOy-Yu5NA,_4US6wHHqEeKIgPAPmx2ukA,_ryZx4MFGEeK6DtOy-Yu5NA">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="delete:delete_output" bpdm:linkedPart="response" bpdm:binding="delete:restBinding" bpdm:opMsgType="1" bpdm:operation="delete"></bpel:literal>
                 </bpel:from>
             </bpel:variable>
-            <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input" binding="move:restBinding" operation="move" opMsgType="0" bpdm:id="_I_MZxXFGEeKXOL1w3D1sTw" bpdm:messageIds="inc:_XOSgQHFHEeKXOL1w3D1sTw,_I_BaoHFGEeKXOL1w3D1sTw"/>
-            <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:id="_JWT5QHFGEeKXOL1w3D1sTw" bpdm:messageIds=" out:_YCT-MHFHEeKXOL1w3D1sTw,_JWKIQHFGEeKXOL1w3D1sTw">
+            <bpel:variable name="moveMoveRequestMsg" messageType="move:move_input" binding="move:restBinding" operation="move" opMsgType="0" bpdm:id="_I_MZxXFGEeKXOL1w3D1sTw" bpdm:messageIds="inc:_XOSgQHFHEeKXOL1w3D1sTw,_kx8m4MFGEeK6DtOy-Yu5NA,_I_BaoHFGEeKXOL1w3D1sTw"/>
+            <bpel:variable name="moveMoveResponseMsg" messageType="move:move_output" binding="move:restBinding" operation="move" opMsgType="1" bpdm:id="_JWT5QHFGEeKXOL1w3D1sTw" bpdm:messageIds=" out:_YCT-MHFHEeKXOL1w3D1sTw,_lZHUkMFGEeK6DtOy-Yu5NA,_JWKIQHFGEeKXOL1w3D1sTw">
                 <bpel:from bpdm:toPart="response">
                     <bpel:literal bpdm:linkedMessageType="move:move_output" bpdm:linkedPart="response" bpdm:binding="move:restBinding" bpdm:opMsgType="1" bpdm:operation="move"></bpel:literal>
                 </bpel:from>
@@ -38,9 +38,15 @@
         </bpel:variables>
         <bpel:flow>
             <bpel:sequence>
-                <bpdm:messagingtask operation="move" partnerLink="auto_QcAndFS_AdapterForHttpPortPlkVar" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_WGJMcHFHEeKXOL1w3D1sTw">
-                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_XOSgQHFHEeKXOL1w3D1sTw"></bpdm:linkset>
-                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_YCT-MHFHEeKXOL1w3D1sTw"></bpdm:linkset>
+                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_K9MPZcFGEeK6DtOy-Yu5NA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_L0x-sMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_Ma4VYMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="move" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk1Var" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_jiM2QcFGEeK6DtOy-Yu5NA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_kx8m4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_lZHUkMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
             <bpel:sequence>
@@ -53,6 +59,18 @@
                 <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_3Kh2UHHqEeKIgPAPmx2ukA">
                     <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_35hDQHHqEeKIgPAPmx2ukA"></bpdm:linkset>
                     <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_4US6wHHqEeKIgPAPmx2ukA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="delete" partnerLink="fS_AdapterAndDeliveryForHttpPortPlk0Var" portType="delete:restInterface" isMyRole="true" enableSharing="false" bpdm:label="delete" bpdm:ID="_p2KusMFGEeK6DtOy-Yu5NA">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="deleteDeleteRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_input" bpdm:binding="delete:restBinding" bpdm:ID="_rC4ZcMFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="deleteDeleteResponseMsg" bpdm:msgVarScopeId="_PVVBAGuWEeK7FdvgH5F2kQ" bpdm:variableIsManaged="true" bpdm:messageType="delete:delete_output" bpdm:binding="delete:restBinding" bpdm:ID="_ryZx4MFGEeK6DtOy-Yu5NA"></bpdm:linkset>
+                </bpdm:messagingtask>
+            </bpel:sequence>
+            <bpel:sequence>
+                <bpdm:messagingtask operation="move" partnerLink="auto_QcAndFS_AdapterForHttpPortPlkVar" portType="move:restInterface" isMyRole="true" enableSharing="false" bpdm:label="move" bpdm:ID="_WGJMcHFHEeKXOL1w3D1sTw">
+                    <bpdm:linkset bpdm:type="incomingMessage" bpdm:bpeltype="receive" bpdm:messageVariable="moveMoveRequestMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_input" bpdm:binding="move:restBinding" bpdm:ID="_XOSgQHFHEeKXOL1w3D1sTw"></bpdm:linkset>
+                    <bpdm:linkset bpdm:type="outgoingMessage" bpdm:bpeltype="reply" bpdm:messageVariable="moveMoveResponseMsg" bpdm:variableIsManaged="true" bpdm:messageType="move:move_output" bpdm:binding="move:restBinding" bpdm:ID="_YCT-MHFHEeKXOL1w3D1sTw"></bpdm:linkset>
                 </bpdm:messagingtask>
             </bpel:sequence>
         </bpel:flow>
