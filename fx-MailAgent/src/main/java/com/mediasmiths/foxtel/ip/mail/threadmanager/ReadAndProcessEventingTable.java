@@ -36,11 +36,11 @@ public class ReadAndProcessEventingTable
 	public void processEventList()
 	{
 		if (logger.isTraceEnabled())
-			logger.info("ReadAndProcessEventingTable called: ");
+			logger.trace("ReadAndProcessEventingTable called: ");
 
 		List<EventingTableEntity> eventing = eventingTableDao.getAll(0, 1000);
 
-		if (logger.isTraceEnabled()) logger.info("Entities in eventing table: " + eventing.size());
+		if (logger.isTraceEnabled()) logger.trace("Entities in eventing table: " + eventing.size());
 
 		for (EventingTableEntity eventEntity : eventing)
 		{
@@ -49,7 +49,7 @@ public class ReadAndProcessEventingTable
 				Long eventID = eventEntity.getEventId();
 
 				if (logger.isTraceEnabled())
-					logger.info("eventTableID and eventingTableID Id: " + eventID);
+					logger.trace("eventTableID and eventingTableID Id: " + eventID);
 
 				EventTableEntity event = eventTableDao.getById(eventID);
 

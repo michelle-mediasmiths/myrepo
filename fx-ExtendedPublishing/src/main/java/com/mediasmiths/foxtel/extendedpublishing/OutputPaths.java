@@ -70,7 +70,7 @@ public class OutputPaths
 	public String getLocalPathToExportDestination(String channelTag, TranscodeJobType jobType,String filename, String extension){
 		
 		String folder = getLocalPathToExportDestinationFolder(channelTag,jobType);
-		String file = String.format("%s%s", extension);
+		String file = String.format("%s%s", filename, extension);
 		String fullPath = String.format("%s%s%s",folder,IOUtils.DIR_SEPARATOR, file);
 		
 		
