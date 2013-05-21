@@ -29,6 +29,8 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
@@ -61,8 +63,10 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
+import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClient;
+import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 
@@ -993,5 +997,35 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info("removing transfer for task id"+remove.getTaskID());
 		ftpDelivery.removeTransfer(remove.getTaskID());
+	}
+	
+	@Inject
+	OutputPaths outputPaths;
+
+	@Override
+	@POST
+	@Path("/export/writeCompanions")
+	@Consumes("application/xml")
+	@Produces("text/plain")
+	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException
+	{
+		Long taskID = request.getTaskID().longValue();
+		AttributeMap task = mayamClient.getTask(taskID);
+		
+		Boolean writeMetadata = (Boolean) task.getAttribute(Attribute.OP_FLAG);
+		
+		if (writeMetadata != null && writeMetadata.booleanValue() == true)
+		{
+			TranscodeJobType jobType = TranscodeJobType.fromText((String) task.getAttribute(Attribute.OP_TYPE));
+			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
+			{
+				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID));
+				String filename = String.format("%s.xml",(String) task.getAttribute(Attribute.OP_FILENAME));
+				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename);
+				mexSerialiser.serialise(programme, new File(metadataFileLocation));
+			}
+		}
+		
+		return true;
 	}
 }

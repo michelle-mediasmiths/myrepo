@@ -32,6 +32,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.TCPassedNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.TCTotalFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFailure;
 import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
+import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
 import com.mediasmiths.mayam.MayamClientException;
 
 @Path("/wf")
@@ -267,6 +268,18 @@ public interface WFAdapterRestService
 	@Produces("application/xml")
 	@Consumes("application/xml")
 	public GetPriorityResponse getTCPriority(GetPriorityRequest request) throws MayamClientException;
+	
+	/**
+	 * writes metadata and scripts if required by export task
+	 * @param request
+	 * @return
+	 * @throws MayamClientException
+	 */
+	@POST
+	@Path("/export/writeCompanions")
+	@Consumes("application/xml")
+	@Produces("text/plain")
+	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException;
 	
 }
 
