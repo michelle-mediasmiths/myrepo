@@ -23,6 +23,7 @@ import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 
 public class AcquisitionRpt
@@ -47,22 +48,6 @@ public class AcquisitionRpt
 		log.debug(">>>writeAcquisitionDelivery");
 		List<Acquisition> titles = getReportList(materials, bms, startDate, endDate);
 
-		int noFile = 0;
-		int noTape = 0;
-
-		for (Acquisition event : titles)
-		{
-			if (event.isFileDelivery())
-				noFile++;
-			if (event.isTapeDelivery())
-				noTape++;
-		}
-
-		titles.add(addStats("No By File", Integer.toString(noFile)));
-		titles.add(addStats("No By Tape", Integer.toString(noTape)));
-		titles.add(addStats("% By File", Double.toString((noFile / titles.size()) * 100)));
-		titles.add(addStats("% By Tape", Double.toString((noTape / titles.size()) * 100)));
-
 		createCSV(titles, reportName);
 		log.debug("<<<writeAcquisitionDelivery");
 	}
@@ -77,99 +62,36 @@ public class AcquisitionRpt
 			final DateTime endDate)
 	{
 		log.debug(">>>getReportList");
-
-		List<CreateOrUpdateTitle> titles = getTitles();
-		List<AddOrUpdatePackage> packages = getPackages();
-
-		log.info(String.format("Titles: %d; Packages: %d", titles.size(), packages.size()));
-
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		for (EventEntity event : events)
+		List<OrderStatus> orders = getOrders(startDate, endDate);
+
+		for (EventEntity event : events) 
 		{
-			Acquisition content = (Acquisition) unmarshall(event);
-			//TODO: format date
-			content.setDateRange(startDate + " - " + endDate);
+			Acquisition acq = (Acquisition) unmarshall(event);
 			
-			if (content.isFileDelivery())
-			{
-				content.setFileDel("1");
-			}
-			else if (content.isTapeDelivery())
-			{
-				content.setTapeDel("1");
-			}
-
-			final String contentMatId = content.getMaterialID();
+			acq.setDateRange(startDate + " - " + endDate);
 			
-			AddOrUpdatePackage matchingPackage = null;
-			
-			for (AddOrUpdatePackage pack : packages)
+			for (OrderStatus order : orders) 
 			{
-				if (StringUtils.isNotBlank(pack.getMaterialID()) && StringUtils.isNotBlank(contentMatId))
+				String materialID = order.getMaterialid();
+				if (materialID.equals(acq.getMaterialID())) 
 				{
-					if (pack.getMaterialID().equals(contentMatId))
-					{
-						matchingPackage = pack;
-						break;
-					}
+					acq.setChannels(order.getTitle().getChannels().toString());
+					break;
 				}
 			}
-
-			for (CreateOrUpdateTitle title : titles)
-			{
-				if (StringUtils.isNotBlank(title.getTitleID()) && StringUtils.isNotBlank(matchingPackage.getTitleID()))
-				{
-					if (title.getTitleID().equals(matchingPackage.getTitleID()))
-					{
-						content.setChannels(title.getChannels());
-						break;
-					}
-				}
-			}
-
-			for (AggregatedBMS b : bms)
-			{
-				final String matId = b.getMaterialID();
-				if (StringUtils.isNotBlank(matId) && (matId.equals(contentMatId)))
-				{
-					content.setChannels(b.getChannels());
-				}
-			}
-
-			acqs.add(content);
+			
+			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
+			acqs.add(acq);
 		}
+		
 		log.debug("<<<getReportList");
 		return acqs;
 	}
 
-	// TODO - should these be within the date range provided?
-	//search on date range
-	private List<CreateOrUpdateTitle> getTitles()
-	{
-		List<CreateOrUpdateTitle> titles = new ArrayList<CreateOrUpdateTitle>();
-
-		final List<EventEntity> titleEvents = queryApi.getByEventName("CreateOrUpdateTitle");
-		for (EventEntity event : titleEvents)
-		{
-			CreateOrUpdateTitle title = (CreateOrUpdateTitle) unmarshall(event);
-			titles.add(title);
-		}
-		return titles;
-	}
-
-	// TODO - should these be within the date range provided?
-	private List<AddOrUpdatePackage> getPackages()
-	{
-		List<AddOrUpdatePackage> packages = new ArrayList<AddOrUpdatePackage>();
-
-		final List<EventEntity> packageEvents = queryApi.getByEventName("AddOrUpdatePackage");
-		for (EventEntity event : packageEvents)
-		{
-			AddOrUpdatePackage pack = (AddOrUpdatePackage) unmarshall(event);
-			packages.add(pack);
-		}
-
-		return packages;
+	private List<OrderStatus> getOrders(DateTime start, DateTime end)
+	{		
+		return queryApi.getOrdersInDateRange(start, end);
 	}
 
 	private Object unmarshall(final EventEntity event)

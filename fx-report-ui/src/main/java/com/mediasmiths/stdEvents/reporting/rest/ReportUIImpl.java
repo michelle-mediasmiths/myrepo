@@ -309,14 +309,11 @@ public class ReportUIImpl implements ReportUI
 
 		List<AggregatedBMS> bms = queryApi.getCompletedBefore(end.toDate());
 
-		List<EventEntity> materials = getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", MAX),
-				start.toDate(),
-				end.toDate());
-		materials.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", MAX),
-				start.toDate(),
-				end.toDate()));
+		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", 
+				MAX, start.toDateTime(), end.toDateTime());
+										
+		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", 
+				MAX, start.toDateTime(), end.toDateTime()));
 		acquisition.writeAcquisitionDelivery(materials, bms, start, end, reportName);
 
 		logger.debug("<<<getAcquisitionReportCSV");
