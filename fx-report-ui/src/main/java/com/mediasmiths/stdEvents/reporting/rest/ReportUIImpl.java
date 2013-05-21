@@ -302,12 +302,11 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getManualQACSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<Acquisition> acqs = populateAcquisitions();
-		List<EventEntity> preview = getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/preview", "ManualQA", MAX),
-				start.toDate(),
-				end.toDate());
-		manualQa.writeManualQA(preview, acqs, start, end, reportName);
+		logger.debug(">>>getManualQACSV");
+		List<EventEntity> preview = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/preview", "ManualQA", 
+				MAX, start, end);
+		manualQa.writeManualQA(preview, start, end, reportName);
+		logger.debug("<<<getManualQACSV");
 	}
 
 	@Transactional(readOnly = true)
