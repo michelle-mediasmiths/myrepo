@@ -38,6 +38,13 @@
 			<artifactId>fx-TcAdapterAPI</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.mediasmiths.foxtel</groupId>
+			<artifactId>fx-ExtendedPublishing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
 
 		<dependency>
 			<groupId>com.mediasmiths.foxtel</groupId>
