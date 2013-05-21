@@ -238,25 +238,6 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 
-/*	private Object unmarshall(final EventEntity event)
-	{
-		Object placeholder = null;
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-		try
-		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			placeholder = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return placeholder;
-	}*/
-
 	private Object unmarshallRpt(final EventEntity event)
 	{
 		Object rpt = null;
@@ -306,15 +287,14 @@ public class ReportUIImpl implements ReportUI
 	private void getAquisitionReportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
 		logger.debug(">>>getAcquisitionReportCSV");
-
-		List<AggregatedBMS> bms = queryApi.getCompletedBefore(end.toDate());
+		logger.debug("start: " + start + " end: " + end);
 
 		List<EventEntity> materials = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "ProgrammeContentAvailable", 
-				MAX, start.toDateTime(), end.toDateTime());
+				MAX, start, end);
 										
 		materials.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/content", "MarketingContentAvailable", 
-				MAX, start.toDateTime(), end.toDateTime()));
-		acquisition.writeAcquisitionDelivery(materials, bms, start, end, reportName);
+				MAX, start, end));
+		acquisition.writeAcquisitionDelivery(materials, start, end, reportName);
 
 		logger.debug("<<<getAcquisitionReportCSV");
 	}
