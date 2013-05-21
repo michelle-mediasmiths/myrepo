@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -37,6 +39,8 @@ public class AcquisitionRpt
 
 	@Inject
 	private QueryAPI queryApi;
+	
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
 	public void writeAcquisitionDelivery(
 			final List<EventEntity> materials,
@@ -84,14 +88,18 @@ public class AcquisitionRpt
 			final DateTime endDate)
 	{
 		log.debug(">>>getReportList");
+		
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		List<OrderStatus> orders = getOrders(startDate, endDate);
+		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
 
 		for (EventEntity event : events) 
 		{
 			Acquisition acq = (Acquisition) unmarshall(event);
 			
-			acq.setDateRange(startDate + " - " + endDate);
+			acq.setDateRange(startF + " - " + endF);
 			
 			for (OrderStatus order : orders) 
 			{
