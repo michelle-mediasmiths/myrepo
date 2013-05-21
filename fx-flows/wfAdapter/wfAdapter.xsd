@@ -2,7 +2,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" elementFormDefault="qualified" targetNamespace="http://ns.mediasmiths.com/foxtel/wf/adapter" version="1.0">
 
   <xs:import namespace="http://ns.mediasmiths.com/foxtel/tc/adapter" schemaLocation="../tcAdapter/tcAdapter.xsd"/>
- <xs:element name="abortFxpTransferRequest" type="tns:abortFxpTransferRequest"/>
+ 
+  <xs:element name="abortFxpTransferRequest" type="tns:abortFxpTransferRequest"/>
 
   <xs:element name="assetTransferForQCRequest" type="tns:assetTransferForQCRequest"/>
 
@@ -45,6 +46,8 @@
   <xs:element name="txDeliveryFailure" type="tns:txDeliveryFailure"/>
 
   <xs:element name="txDeliveryFinished" type="tns:txDeliveryFinished"/>
+
+  <xs:element name="writeExportCompanions" type="tns:writeExportCompanions"/>
 
   <xs:complexType name="tcFailureNotification">
     <xs:complexContent>
@@ -216,6 +219,12 @@
   </xs:complexType>
 
   <xs:complexType name="removeTransferRequest">
+    <xs:sequence>
+      <xs:element name="taskID" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="writeExportCompanions">
     <xs:sequence>
       <xs:element name="taskID" type="xs:long"/>
     </xs:sequence>

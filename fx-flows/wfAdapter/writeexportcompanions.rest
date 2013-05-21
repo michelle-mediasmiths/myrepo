@@ -1,0 +1,7 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<rest:descriptor xmlns:rest="http://www.intalio/designer/business-process-data-modeling/rest" resourceURL="http://10.111.224.213:8080/fx-WFAdapter/rest/wf/export/writeCompanions" ID="_zMqrUMIHEeKcLP0RXPSM9Q">
+  <rest:operation verb="POST" name="write companions" ID="_zMqrUcIHEeKcLP0RXPSM9Q">
+    <rest:input type="project:///wfAdapter/wfAdapter.xsd?xsdelement={http://ns.mediasmiths.com/foxtel/wf/adapter}writeExportCompanions" name="body" headerDirection="request" contentType="application/xml" ID="_zMqrUsIHEeKcLP0RXPSM9Q"/>
+    <rest:output type="builtin:///xsd?xsdtype={http://www.w3.org/2001/XMLSchema}boolean" name="response" headerDirection="request" contentType="text/plain" ID="_zMrSYMIHEeKcLP0RXPSM9Q"/>
+  </rest:operation>
+</rest:descriptor>
