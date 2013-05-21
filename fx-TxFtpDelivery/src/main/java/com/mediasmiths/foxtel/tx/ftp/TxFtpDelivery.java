@@ -266,7 +266,11 @@ public class TxFtpDelivery implements StoppableService
 			log.info("Transfer ready to start");
 			
 			ActiveFXPTransfer trans = new ActiveFXPTransfer(proxy, target, taskID, this);
-			activeTransfers.put(taskID,trans);
+			
+			synchronized (activeTransfers)
+			{
+				activeTransfers.put(taskID,trans);	
+			}			
 			return true;
 		}
 		else
@@ -344,7 +348,7 @@ public class TxFtpDelivery implements StoppableService
 		return ticketFile;
 	}
 	
-	public synchronized TransferStatus getTransferStatus(Long taskID) throws IOException{
+	public TransferStatus getTransferStatus(Long taskID) throws IOException{
 	
 		File statusFile = getStatusFileForTask(taskID);
 		String contents = FileUtils.readFileToString(statusFile);
@@ -379,5 +383,16 @@ public class TxFtpDelivery implements StoppableService
 		ActiveFXPTransfer activeFXPTransfer = activeTransfers.get(taskID);
 		activeFXPTransfer.tryAbort();
 		setTransferStatus(taskID, TransferStatus.ABORTED);
+	}
+	
+	/**
+	 * called by an active transfer when it is finished
+	 * @param taskID
+	 */
+	public void removeActiveTransferForTask(Long taskID){
+		synchronized (activeTransfers)
+		{
+			activeTransfers.remove(taskID);	
+		}				
 	}
 }

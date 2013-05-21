@@ -54,24 +54,31 @@ public class ActiveFXPTransfer implements Runnable
 		{
 			TxFtpDelivery.disconnect(proxy);
 			TxFtpDelivery.disconnect(target);
-		}
+			ftpDelivery.removeActiveTransferForTask(taskID);
+		}	
 	}
 	
 	public void tryAbort()
 	{
+
 		try
 		{
-			proxy.abor(); //abor() will wait for a reply, could this still block?
-			target.abor();
+			if (proxy.isConnected() || target.isConnected())
+			{
+				proxy.abor(); // abor() will wait for a reply, could this still block?
+				target.abor();
+			}
 		}
 		catch (IOException e)
 		{
 			log.warn("exception during abor()", e);
 		}
+
 		finally
 		{
 			TxFtpDelivery.disconnect(proxy);
 			TxFtpDelivery.disconnect(target);
 		}
+
 	}
 }
