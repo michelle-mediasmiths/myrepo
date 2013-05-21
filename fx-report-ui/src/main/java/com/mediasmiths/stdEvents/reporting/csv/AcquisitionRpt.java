@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -19,7 +17,6 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
@@ -92,7 +89,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		for (EventEntity event : events) 
 		{
-			Acquisition acq = (Acquisition) unmarshall(event);
+			Acquisition acq = (Acquisition) unmarshallReport(event);
 			
 			acq.setDateRange(new StringBuilder(startF).append(" - ").append(endF).toString());
 			

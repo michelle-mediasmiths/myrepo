@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -18,7 +16,6 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -80,7 +77,7 @@ public class ManualQARpt extends ReportUtils
 		
 		for (EventEntity event : events)
 		{
-			ManualQANotification qa = (ManualQANotification) unmarshall(event);
+			ManualQANotification qa = (ManualQANotification) unmarshallEvent(event);
 			
 			String startF = startDate.toString(dateFormatter);
 			String endF = endDate.toString(dateFormatter);
