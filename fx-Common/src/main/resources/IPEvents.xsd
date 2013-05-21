@@ -772,6 +772,7 @@
 		  <xs:complexContent>
                 <xs:extension base="IPEvent">
 			<xs:sequence>
+				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
 				<xs:element name="title" type="xs:string" />
 				<xs:element name="materialID" type="xs:string"/>
 				<xs:element name="channels" type="xs:string"/>
