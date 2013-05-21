@@ -2,9 +2,11 @@
 <xs:schema xmlns="http://com.mediasmiths.foxtel.ip.common.events/001/000"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://com.mediasmiths.foxtel.ip.common.email/001/000"
 	xmlns:fns="http://com.mediasmiths.foxtel.ip.common.email/001/000"
+	xmlns:evt="http://com.mediasmiths.foxtel.ip.common.events/001/000"
 	elementFormDefault="qualified" attributeFormDefault="unqualified"
 	version="1.0">
-
+	
+	<xs:import namespace="http://com.mediasmiths.foxtel.ip.common.events/001/000" schemaLocation="IPEvents.xsd"/>
 
 	<xs:element name="FoxtelEmailConfiguration">
 		<xs:complexType>
@@ -35,7 +37,16 @@
 				minOccurs="1" />
 			<xs:element name="emailaddresses" type="fns:emailaddresses"
 				maxOccurs="1" />
-            <xs:element name="fileAttachments" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="fileAttachments" type="xs:string" minOccurs="0" maxOccurs="unbounded" >
+            	<xs:annotation>
+					<xs:documentation>A list of filepaths to attach</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="attachments" type="evt:eventAttachment"  minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A list of attachments represented as base64 strings</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 		<xs:attribute name="class" type="xs:string" />
 	</xs:complexType>

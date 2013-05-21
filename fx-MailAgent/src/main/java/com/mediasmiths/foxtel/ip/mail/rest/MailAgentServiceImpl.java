@@ -171,18 +171,18 @@ public class MailAgentServiceImpl implements MailAgentService
 					// Sending normal email so unprocessed xml can be viewed
 					logger.info("Could not find generator, sending normal email.");
 
-					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null);
+					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null, null);
 				}
 				else
 				{
-					if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
-					{
-					     emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()));
-					}
-					else
-					{
-						emailService.createEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()), m.getFileAttachments());
-					}
+//					if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
+//					{
+//					     emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()),m.getFileAttachments(),m.getAttachments());
+//					}
+//					else
+//					{
+						emailService.createEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()), m.getFileAttachments(),m.getAttachments());
+//					}
 
 					// emailService.createEmail(email, m.getSubject(), m.getBody());
 				}
@@ -197,11 +197,11 @@ public class MailAgentServiceImpl implements MailAgentService
 				throw e;
 
 			}
-			catch (MessagingException e)
-			{
-				logger.error("MessagingException (is your configuration right?): " + e);
-				throw e;
-			}
+//			catch (MessagingException e)
+//			{
+//				logger.error("MessagingException (is your configuration right?): " + e);
+//				throw e;
+//			}
 			}
 			else
 			{

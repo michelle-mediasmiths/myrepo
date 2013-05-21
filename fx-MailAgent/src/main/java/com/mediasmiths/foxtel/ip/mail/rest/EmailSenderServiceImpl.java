@@ -1,7 +1,11 @@
 package com.mediasmiths.foxtel.ip.mail.rest;
 
 import com.google.inject.Inject;
+import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.mail.data.EmailProperties;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.HtmlEmail;
@@ -16,6 +20,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.Properties;
+
+import org.apache.commons.codec.binary.Base64;
 
 public class EmailSenderServiceImpl implements EmailSenderService
 {
@@ -42,7 +48,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 	 * @return email
 	 */
 	@Override
-	public MultiPartEmail createEmail(String to, String subject, String body, List<String> attachmentFilePaths) throws EmailException
+	public MultiPartEmail createEmail(String to, String subject, String body, List<String> attachmentFilePaths, List<EventAttachment> eventAttachments) throws EmailException
 	{
 		if (logger.isTraceEnabled())
 			logger.info("Creating mail message");
@@ -60,15 +66,33 @@ public class EmailSenderServiceImpl implements EmailSenderService
 			{
 				try
 				{
-					logger.debug("Attaching report at: " + path);
+					logger.debug("Attaching file at: " + path);
 					EmailAttachment a = new EmailAttachment();
-					a.setName("Cerify report: " + path);
+					a.setName(FilenameUtils.getName(path));
 					a.setPath(path);
 					email.attach(a);
 				}
 				catch (EmailException e)
 				{
 					logger.error("Attachment of " + path + " failed.", e);
+				}
+			}
+		}
+		
+		if (eventAttachments != null)
+		{
+			for (EventAttachment eventAttachment : eventAttachments)
+			{
+				try
+				{
+					String value = eventAttachment.getValue();
+					byte[] decoded = Base64.decodeBase64(value.getBytes());
+					ByteArrayDataSource source = new ByteArrayDataSource(decoded, "application/octet-stream");
+					email.attach(source, eventAttachment.getFilename(), "");
+				}
+				catch (Exception e)
+				{
+					logger.error("error adding attachment");
 				}
 			}
 		}
@@ -88,53 +112,53 @@ public class EmailSenderServiceImpl implements EmailSenderService
 
 		return email;
 	}
-
-	/**
-	 * Used to create email, email content may have html (e.g. bold for foxtel emails)
-	 * 
-	 * @param to
-	 * @param subject
-	 * @param body
-	 * @throws EmailException
-	 * @throws AddressException
-	 * @throws javax.mail.MessagingException
-	 */
-	@Override
-	public void createMimeEmail(String to, String subject, String body)
-			throws EmailException,
-			AddressException,
-			javax.mail.MessagingException
-	{
-		if (logger.isTraceEnabled())
-			logger.info("Creating Mime mail message");
-
-		Properties props = System.getProperties();
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", emailProperties.hostName);
-		props.put("mail.smtp.user", emailProperties.emailAddress);
-		props.put("mail.smtp.password", emailProperties.password);
-		props.put("mail.smtp.port", emailProperties.smtpPort);
-		props.put("mail.smtp.auth", "false");
-
-		logger.info("Creating Mime mail message to... " + to);
-
-		Session session = Session.getDefaultInstance(props, null);
-		MimeMessage message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(emailProperties.emailAddress));
-
-		InternetAddress toAddress = new InternetAddress(to);
-
-		message.addRecipient(Message.RecipientType.TO, toAddress);
-
-		message.setSubject(subject);
-		message.setContent(body, "text/html");
-
-		Transport transport = session.getTransport("smtp");
-		transport.connect(emailProperties.hostName, emailProperties.emailAddress, emailProperties.password);
-		transport.sendMessage(message, message.getAllRecipients());
-		transport.close();
-
-	}
+//
+//	/**
+//	 * Used to create email, email content may have html (e.g. bold for foxtel emails)
+//	 * 
+//	 * @param to
+//	 * @param subject
+//	 * @param body
+//	 * @throws EmailException
+//	 * @throws AddressException
+//	 * @throws javax.mail.MessagingException
+//	 */
+//	@Override
+//	public void createMimeEmail(String to, String subject, String body)
+//			throws EmailException,
+//			AddressException,
+//			javax.mail.MessagingException
+//	{
+//		if (logger.isTraceEnabled())
+//			logger.info("Creating Mime mail message");
+//
+//		Properties props = System.getProperties();
+//		props.put("mail.smtp.starttls.enable", "true");
+//		props.put("mail.smtp.host", emailProperties.hostName);
+//		props.put("mail.smtp.user", emailProperties.emailAddress);
+//		props.put("mail.smtp.password", emailProperties.password);
+//		props.put("mail.smtp.port", emailProperties.smtpPort);
+//		props.put("mail.smtp.auth", "false");
+//
+//		logger.info("Creating Mime mail message to... " + to);
+//
+//		Session session = Session.getDefaultInstance(props, null);
+//		MimeMessage message = new MimeMessage(session);
+//		message.setFrom(new InternetAddress(emailProperties.emailAddress));
+//
+//		InternetAddress toAddress = new InternetAddress(to);
+//
+//		message.addRecipient(Message.RecipientType.TO, toAddress);
+//
+//		message.setSubject(subject);
+//		message.setContent(body, "text/html");
+//
+//		Transport transport = session.getTransport("smtp");
+//		transport.connect(emailProperties.hostName, emailProperties.emailAddress, emailProperties.password);
+//		transport.sendMessage(message, message.getAllRecipients());
+//		transport.close();
+//
+//	}
 
 	/**
 	 * Creates the email attachment given the filepath
@@ -170,18 +194,18 @@ public class EmailSenderServiceImpl implements EmailSenderService
 			logger.info("Email sent");
 
 	}
-
-	@Override
-	public void sendEmailwithAttachment(MultiPartEmail email, EmailAttachment attachment) throws EmailException
-	{
-		if (logger.isTraceEnabled())
-			logger.info("Sending mail with attachment: " + email.toString());
-
-		email.attach(attachment);
-		email.send();
-		if (logger.isTraceEnabled())
-			logger.info("Email sent!");
-
-	}
+//
+//	@Override
+//	public void sendEmailwithAttachment(MultiPartEmail email, EmailAttachment attachment) throws EmailException
+//	{
+//		if (logger.isTraceEnabled())
+//			logger.info("Sending mail with attachment: " + email.toString());
+//
+//		email.attach(attachment);
+//		email.send();
+//		if (logger.isTraceEnabled())
+//			logger.info("Email sent!");
+//
+//	}
 
 }

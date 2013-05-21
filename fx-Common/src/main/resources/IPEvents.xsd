@@ -19,9 +19,21 @@
 					<xs:documentation>A list of affected channel groups, the presence of which may be used to indicate that emails arising from events should go only to specific addresses</xs:documentation>
 				</xs:annotation>
 			</xs:element>
+			<xs:element name="attachments" type="eventAttachment"  minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>A list of attachments represented as base64 strings</xs:documentation>
+				</xs:annotation>
+			</xs:element>
 		</xs:sequence>
 	</xs:complexType>
 
+	<xs:complexType name="eventAttachment">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="filename" type="xs:string" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
 
     <xs:complexType name="FilePickupDetails">
             <xs:complexContent>
