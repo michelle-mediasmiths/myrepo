@@ -229,6 +229,9 @@
                   <bpel:scope bpmn:label="loop until finished failed or cancelled" name="loop_until_finished_failed_or_cancelled" bpmn:id="_AL3-sMFCEeK6DtOy-Yu5NA">
                     <bpel:repeatUntil bpmn:label="loop until finished failed or cancelled" name="loop_until_finished_failed_or_cancelled-1">
                       <bpel:sequence>
+                        <bpel:wait bpmn:label="wait 30secs" name="wait_30secs" bpmn:id="_l2w_QMFZEeK6DtOy-Yu5NA">
+                          <bpel:for>"PT30S"</bpel:for>
+                        </bpel:wait>
                         <bpel:scope bpmn:label="SubProcess" name="SubProcess-4" bpmn:id="_Ew8sYMFCEeK6DtOy-Yu5NA">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                             <ext:retryFor>10</ext:retryFor>
@@ -326,7 +329,13 @@
                                       <bpel:to>$abortFxpTransferAbortFxpTransferRequestMsg.body</bpel:to>
                                     </bpel:copy>
                                   </bpel:assign>
-                                  <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk0Var" portType="abortFxpTransfer:restInterface" operation="abortFxpTransfer" inputVariable="abortFxpTransferAbortFxpTransferRequestMsg" outputVariable="abortFxpTransferAbortFxpTransferResponseMsg" bpmn:label="abort transfer" name="abort_transfer" bpmn:id="_OuZM8MFCEeK6DtOy-Yu5NA"></bpel:invoke>
+                                  <bpel:assign bpmn:label="abort transfer" name="abort_transfer" bpmn:id="_OuZM8MFCEeK6DtOy-Yu5NA">
+                                    <bpel:copy>
+                                      <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                                      <bpel:to>$abortFxpTransferAbortFxpTransferRequestMsg.body/tns:taskID</bpel:to>
+                                    </bpel:copy>
+                                  </bpel:assign>
+                                  <bpel:invoke partnerLink="deliveryAndWFAdapter__2ForHttpPortPlk0Var" portType="abortFxpTransfer:restInterface" operation="abortFxpTransfer" inputVariable="abortFxpTransferAbortFxpTransferRequestMsg" outputVariable="abortFxpTransferAbortFxpTransferResponseMsg" bpmn:label="abort transfer" name="abort_transfer-1" bpmn:id="_OuZM8MFCEeK6DtOy-Yu5NA"></bpel:invoke>
                                 </bpel:sequence>
                               </bpel:scope>
                             </bpel:sequence>
@@ -506,7 +515,7 @@
                   <bpel:empty bpmn:label="Message_End_Event" name="Message_End_Event" bpmn:id="_sjGPwG7YEeKkE6ll_3FDMA"/>
                 </bpel:sequence>
                 <bpel:elseif>
-                  <bpel:condition>$FxpTransferStatus = true()</bpel:condition>
+                  <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
                   <bpel:sequence>
                     <bpel:empty bpmn:label="cancelled" name="cancelled-2" bpmn:id="_kqwWkMFCEeK6DtOy-Yu5NA"/>
                     <bpel:scope bpmn:label="SubProcess" name="SubProcess-12" bpmn:id="_oOZccMFCEeK6DtOy-Yu5NA">

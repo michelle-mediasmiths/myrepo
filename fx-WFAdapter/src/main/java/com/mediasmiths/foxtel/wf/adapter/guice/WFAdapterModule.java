@@ -10,6 +10,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.foxtel.tx.ftp.TxFtpDelivery;
 import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestService;
 import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestServiceImpl;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
@@ -28,6 +29,7 @@ public class WFAdapterModule extends AbstractModule
 		// make the wfe types marshaler the default instance
 		// the marshaler in events service is not named and we have multiple marshalers used for different schemas
 		bind(JAXBSerialiser.class).toProvider(WfeSerialiserProvider.class);
+		bind(TxFtpDelivery.class).asEagerSingleton();
 	}
 
 	@Provides

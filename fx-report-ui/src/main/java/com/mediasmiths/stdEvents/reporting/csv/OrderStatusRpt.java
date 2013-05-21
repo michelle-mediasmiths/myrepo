@@ -138,6 +138,11 @@ public class OrderStatusRpt
 						orderStatus.setComplete(Boolean.FALSE);
 					}
 				}
+				else
+				{
+					// no completed date
+					orderStatus.setComplete(Boolean.FALSE);
+				}
 			}
 		}
 
