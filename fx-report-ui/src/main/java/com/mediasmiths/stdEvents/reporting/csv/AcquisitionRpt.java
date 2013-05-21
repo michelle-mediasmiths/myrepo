@@ -117,6 +117,9 @@ public class AcquisitionRpt
 				}
 			}
 			
+			double gb = Integer.parseInt(acq.getFilesize()) / 1073741824;
+			acq.setFilesize(Double.toString(gb));
+			
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{

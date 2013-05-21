@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -37,28 +39,42 @@ public class ManualQARpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	private ReportUIImpl report = new ReportUIImpl();
-	
-	private List<String> channels = new ArrayList<String>();
-	
-	private int total=0;
-	private int escalated=0;
-	private int failed=0;
-	private int reordered=0;
-	private int hr=0;
-	
-	public void writeManualQA(List<EventEntity> events, List<Acquisition> acqs, DateTime startDate, DateTime endDate, String reportName)
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
+
+	public void writeManualQA(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<ManualQA> manualQAs = getReportList(events, acqs, startDate, endDate);
-		//setStats(manualQAs);
+		logger.debug(">>>writeManualQA");
+		List<ManualQANotification> manualQAs = getReportList(events, startDate, endDate);
+
+		int total=0;
+		int failed=0;
+		int reordered=0;
+		int escalated=0;
+		
+		for (ManualQANotification qa : manualQAs)
+		{
+			total ++;
+			if (qa.getTaskStatus().contains("FAILED"))
+			{
+				failed ++;
+			}
+			if (qa.getReordered().contains("1"))
+			{
+				reordered ++;
+			}
+			if (qa.getEscalated().contains("1"))
+			{
+				escalated ++;
+			}
+		}
 		
 		manualQAs.add(addStats("Total QA'd", Integer.toString(total)));
-		manualQAs.add(addStats("Total Escalated", Integer.toString(escalated)));
 		manualQAs.add(addStats("Total Failed QA", Integer.toString(failed)));
 		manualQAs.add(addStats("Total Needs Reordered", Integer.toString(reordered)));
-		manualQAs.add(addStats("Total QA'd HR", Integer.toString(hr)));
+		manualQAs.add(addStats("Total Escalated", Integer.toString(escalated)));
 		
 		createCsv(manualQAs, reportName);
+		logger.debug("<<<writeManualQA");
 	}
 	
 	private Object unmarshall(EventEntity event)
@@ -81,37 +97,28 @@ public class ManualQARpt
 		return title;
 	}
 	
-	public List<ManualQA> getReportList(List<EventEntity> events, List<Acquisition> acqs, DateTime startDate, DateTime endDate)
+	public List<ManualQANotification> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
-		logger.info("Creating manualQA list");
-		List<ManualQA> manualQAList = new ArrayList<ManualQA>();
+		logger.debug(">>>getReportList");
+		
+		List<ManualQANotification> manualQAs = new ArrayList<ManualQANotification>();
 		
 		for (EventEntity event : events)
 		{
-			ManualQANotification notification = (ManualQANotification) unmarshall(event);
-			ManualQA manualQA = new ManualQA();
+			ManualQANotification qa = (ManualQANotification) unmarshall(event);
 			
-			manualQA.setDateRange(startDate + " - " + endDate);
-			manualQA.setTitle(notification.getTitle());
-			manualQA.setMaterialID(notification.getMaterialID());
-			manualQA.setChannels(notification.getChannels());
-			manualQA.setAggregatorID(notification.getAggregatorID());
-			manualQA.setTaskStatus(notification.getTaskStatus());
-			manualQA.setPreviewStatus(notification.getPreviewStatus());
-			manualQA.setEscalated(notification.getEscalated());
-			manualQA.setReordered(notification.getReordered());
+			String startF = startDate.toString(dateFormatter);
+			String endF = endDate.toString(dateFormatter);
 			
-			for (Acquisition acq : acqs) {
-				if (acq.getMaterialID().equals(manualQA.getMaterialID()))
-					manualQA.setTitleLength(acq.getTitleLength());
-			}
+			qa.setDateRange(startF + " - " + endF);
 			
-			manualQAList.add(manualQA);
-		}		
-		return manualQAList;
+			manualQAs.add(qa);
+		}
+		logger.debug("<<<getReportList");	
+		return manualQAs;
 	}
 				
-	private void createCsv(List<ManualQA> titles, String reportName)
+	private void createCsv(List<ManualQANotification> titles, String reportName)
 	{
 		ICsvBeanWriter beanWriter = null;
 		try {
@@ -123,7 +130,7 @@ public class ManualQARpt
 			beanWriter.writeHeader(header);
 				
 			
-			for (ManualQA title : titles)
+			for (ManualQANotification title : titles)
 			{
 				beanWriter.write(title, header, processors);
 			}
@@ -168,26 +175,9 @@ public class ManualQARpt
 		return processors;
 	}
 	
-	private void setStats(List<ManualQA> events)
+	private ManualQANotification addStats(String name, String value)
 	{
-		for (ManualQA event : events)
-		{
-			if (event.getTaskStatus().contains("FINISHED"))
-				total ++;
-			if ((event.getEscalated().equals("1")) || event.getEscalated().equals("2"))
-				escalated ++;
-			if (event.getTaskStatus().contains("FAILED"))
-				failed ++;
-			if (event.getReordered().equals("1"))
-				reordered ++;
-			if (event.getHrPreview().equals("1"))
-				hr ++;
-		}
-	}
-	
-	private ManualQA addStats(String name, String value)
-	{
-		ManualQA qa = new ManualQA();
+		ManualQANotification qa = new ManualQANotification();
 		qa.setTitle(name);
 		qa.setMaterialID(value);
 		return qa;
