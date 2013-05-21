@@ -63,9 +63,16 @@ public class OutputPaths
 	
 	public String getLocalPathToExportDestination(String channelTag, TranscodeJobType jobType, String filename){
 		
+		String extension = getOutputFileExtension(jobType);
+		return getLocalPathToExportDestination(channelTag,jobType,filename,extension);
+	}
+	
+	public String getLocalPathToExportDestination(String channelTag, TranscodeJobType jobType,String filename, String extension){
+		
 		String folder = getLocalPathToExportDestinationFolder(channelTag,jobType);
-		String file = String.format("%s%s", filename,getOutputFileExtension(jobType));
+		String file = String.format("%s%s", extension);
 		String fullPath = String.format("%s%s%s",folder,IOUtils.DIR_SEPARATOR, file);
+		
 		
 		return fullPath;
 	}

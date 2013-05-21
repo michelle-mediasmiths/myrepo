@@ -1020,8 +1020,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
 				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID));
-				String filename = String.format("%s.xml",(String) task.getAttribute(Attribute.OP_FILENAME));
-				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename);
+				String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
+				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
 				mexSerialiser.serialise(programme, new File(metadataFileLocation));
 			}
 		}
