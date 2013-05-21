@@ -1212,11 +1212,11 @@ public class MayamMaterialController extends MayamController
 		
 	
 		 if(details.getTitle() != null){
-			 updateMap.setAttribute(Attribute.ASSET_TITLE, details.getTitle());
+			log.debug("have not updated title information");
 		 }
 		
 		 if(details.getFormat() != null){
-			 log.warn("have not updated format");
+			 log.debug("have not updated format information");
 		 }
 		 
 		 //TODO : update any other metadata
