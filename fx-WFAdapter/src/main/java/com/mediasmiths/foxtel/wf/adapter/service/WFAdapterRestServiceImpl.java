@@ -567,6 +567,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				EventAttachment attachment = new EventAttachment();
 				attachment.setValue(encodedString);
 				attachment.setFilename(String.format("%s.xml",packageId));
+				attachment.setMime("application/xml");
 				
 				saveEvent(
 						"CaptionProxySuccess",

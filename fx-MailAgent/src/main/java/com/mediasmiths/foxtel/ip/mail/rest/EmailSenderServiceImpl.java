@@ -87,7 +87,7 @@ public class EmailSenderServiceImpl implements EmailSenderService
 				{
 					String value = eventAttachment.getValue();
 					byte[] decoded = Base64.decodeBase64(value.getBytes());
-					ByteArrayDataSource source = new ByteArrayDataSource(decoded, "application/octet-stream");
+					ByteArrayDataSource source = new ByteArrayDataSource(decoded, eventAttachment.getMime());
 					email.attach(source, eventAttachment.getFilename(), "");
 				}
 				catch (Exception e)
