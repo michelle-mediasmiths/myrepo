@@ -6,10 +6,8 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
-import com.mediasmiths.foxtel.tc.rest.api.TCAudioType;
 import com.mediasmiths.foxtel.tc.rest.api.TCBugOptions;
 import com.mediasmiths.foxtel.tc.rest.api.TCFTPUpload;
 import com.mediasmiths.foxtel.tc.rest.api.TCJobParameters;
@@ -18,7 +16,6 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
-import com.mediasmiths.foxtel.transcode.TranscodeRules;
 
 public class TCJobParamsGenerator
 {
@@ -44,6 +41,14 @@ public class TCJobParamsGenerator
 	// where transcoded files go before ftp upload + deletion
 	private String exportOutputLocation;
 
+	@Inject
+	@Named("export.caption.timecode.colour")
+	private String captionTimeCodeColour;
+	
+	@Inject
+	@Named("export.caption.timecode.position")
+	private String captionTimeCodePosition;
+	
 	@Inject
 	OutputPaths outputPaths;
 	
@@ -161,8 +166,8 @@ public class TCJobParamsGenerator
 		//Timecode must be white text on a black background. 
 		//The timecode font and font size will be fixed.
 		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
-			timecodeColour="WoB";
-			timecodePosition="Top";
+			timecodeColour=captionTimeCodeColour;
+			timecodePosition=captionTimeCodePosition;
 		}
 
 		if (timecodeColour != null && timecodeColour.length() == 3 && timecodePosition != null)
