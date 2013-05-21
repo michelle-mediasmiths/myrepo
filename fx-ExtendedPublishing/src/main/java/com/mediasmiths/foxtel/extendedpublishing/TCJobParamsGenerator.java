@@ -16,6 +16,7 @@ import com.mediasmiths.foxtel.tc.rest.api.TCOutputPurpose;
 import com.mediasmiths.foxtel.tc.rest.api.TCResolution;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeColour;
 import com.mediasmiths.foxtel.tc.rest.api.TCTimecodeOptions;
+import com.mediasmiths.foxtel.transcode.TranscodeRules;
 
 public class TCJobParamsGenerator
 {

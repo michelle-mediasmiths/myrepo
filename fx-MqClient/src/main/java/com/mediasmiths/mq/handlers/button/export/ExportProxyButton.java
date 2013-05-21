@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -61,10 +62,13 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		log.debug("Asset type is " + assetType.toString());
 
+		
+		boolean isPackage=false;
 		AttributeMap materialAttributes;
 
 		if (assetType.equals(MayamAssetType.PACKAGE.getAssetType()))
 		{
+			isPackage=true;
 			log.debug("export is for a package");
 			String materialID = (String) requestAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			materialAttributes = materialController.getMaterialAttributes(materialID);
@@ -81,6 +85,16 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 		boolean isAO = AssetProperties.isAO(materialAttributes);
 
+		try
+		{
+			requestAttributes = setExportAttributes(requestAttributes,materialAttributes,isPackage);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error setting export attributes",e);
+			return;
+		}
+		
 		if (!isAO)
 		{
 
@@ -106,6 +120,11 @@ public abstract class ExportProxyButton extends ButtonClickHandler
 
 	protected abstract TranscodeJobType getJobType();
 
+	protected AttributeMap setExportAttributes(AttributeMap requestAttributes, AttributeMap materialAttributes, boolean exportIsForPackage) throws RemoteException{
+		//allow customisation of export request attributes
+		return requestAttributes;
+	}
+	
 	private long createExportTask(AttributeMap requestAttributes, TranscodeJobType transcodeJobType) throws MayamClientException
 	{
 		return taskController.createExportTask(requestAttributes, transcodeJobType.getText());

@@ -1,32 +1,40 @@
 package com.mediasmiths.foxtel.extendedpublishing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.apache.log4j.Logger;
-import org.jukito.JukitoModule;
-import org.jukito.JukitoRunner;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.name.Names;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.std.io.PropertyFile;
 
-@RunWith(JukitoRunner.class)
 public class OutputPathsTest
 {
 	protected final static Logger log = Logger.getLogger(OutputPathsTest.class);
 
-	public static class Module extends JukitoModule
+	@Before
+	public void before()
 	{
-		protected void configureTest()
-		{
-			PropertyFile properties = PropertyFile.find("environment.properties");
-			Names.bindProperties(this.binder(), properties.toProperties());
-			bind(ChannelProperties.class).to(ChannelPropertiesStub.class);
-		}
+
+		Injector injector = Guice.createInjector(new AbstractModule(){
+			@Override
+			protected void configure()
+			{
+				PropertyFile properties = PropertyFile.find("environment.properties");
+				Names.bindProperties(this.binder(), properties.toProperties());
+				
+				bind(ChannelProperties.class).to(ChannelPropertiesStub.class);
+			}
+		});
+		// get instance of class to test
+		toTest = injector.getInstance(OutputPaths.class);
 	}
 
 	@Inject
@@ -121,5 +129,11 @@ public class OutputPathsTest
 		toTest.getLocalPathToExportDestination("FOX", TranscodeJobType.TX, "export");
 	}
 	
+	
+	@Test
+	public void testCaptionFileName(){
+		assertEquals("ABC12345-BigBang_S02E10_v01", toTest.getFileNameForCaptionExport("ABC12345", "Big Bang Theory",Integer.valueOf(2), Integer.valueOf(10), Integer.valueOf(1)));
+		
+	}
 	
 }

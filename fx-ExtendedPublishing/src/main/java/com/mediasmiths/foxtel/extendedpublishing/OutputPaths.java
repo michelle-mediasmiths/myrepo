@@ -3,8 +3,11 @@ package com.mediasmiths.foxtel.extendedpublishing;
 import java.io.File;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 
@@ -16,7 +19,18 @@ public class OutputPaths
 
 	@Inject
 	protected ChannelProperties channelProperties;
+	
+	@Inject
+	@Named("export.caption.filename.formatstring")
+	private String captionFileNameFormatString;
+	
+	@Inject
+	@Named("export.caption.filename.titlehint.length")
+	private Integer captionFileNameTitleHintLength;
+	
 
+	private final static Logger log = Logger.getLogger(OutputPaths.class);
+	
 	/**
 	 * Returns the ftp path to the destination for the given channel and job type
 	 * @param channelTag
@@ -153,6 +167,23 @@ public class OutputPaths
 				throw new IllegalArgumentException("Unexpected job type");
 
 		}
+	}
+	
+	public String getFileNameForCaptionExport(String presentationID, String programmeTitle, Integer seriesNumber, Integer episodeNumber, Integer exportVersion){
+		
+		if (programmeTitle == null)
+		{
+			programmeTitle = "";
+		}
+
+		programmeTitle = StringUtils.trimToEmpty(programmeTitle).replace(" ","");
+		programmeTitle = StringUtils.left(programmeTitle, captionFileNameTitleHintLength);
+		
+		String filename = String.format(captionFileNameFormatString, presentationID,programmeTitle, seriesNumber, episodeNumber, exportVersion);
+		
+		log.debug("Caption export filename: " +filename);
+		
+		return filename;
 	}
 
 }
