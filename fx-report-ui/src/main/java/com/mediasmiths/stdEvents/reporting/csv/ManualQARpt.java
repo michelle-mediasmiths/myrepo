@@ -3,7 +3,6 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -19,15 +18,12 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
-import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.foxtel.ip.common.events.report.ManualQA;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.ManualQART;
-import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 
-public class ManualQARpt
+public class ManualQARpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(ManualQARpt.class);
 	
@@ -39,7 +35,6 @@ public class ManualQARpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
 	public void writeManualQA(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
@@ -75,26 +70,6 @@ public class ManualQARpt
 		
 		createCsv(manualQAs, reportName);
 		logger.debug("<<<writeManualQA");
-	}
-	
-	private Object unmarshall(EventEntity event)
-	{
-		Object title = null;
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-
-		try
-		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			title = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return title;
 	}
 	
 	public List<ManualQANotification> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
@@ -157,20 +132,8 @@ public class ManualQARpt
 	private CellProcessor[] getProcessor()
 	{
 		final CellProcessor[] processors = new CellProcessor[] {
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional(),
-				new Optional()
+				new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), 
+				new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional(), new Optional()
 		};
 		return processors;
 	}
