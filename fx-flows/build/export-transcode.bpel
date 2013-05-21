@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:Pool="http://ns.mediasmithsforge.com/foxtel/export/Pool" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/export/caller" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcadapter="http://ns.mediasmithsforge.com/foxtel/export/tcadapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="transcode" name="transcode" bpmn:id="_ZRM1AHEMEeKgV8mGUipbQA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export/transcode">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:this="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:Pool="http://ns.mediasmithsforge.com/foxtel/export/Pool" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:writeexportcompanions="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeexportcompanions.rest" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/export/caller" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcadapter="http://ns.mediasmithsforge.com/foxtel/export/tcadapter" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="transcode" name="transcode" bpmn:id="_ZRM1AHEMEeKgV8mGUipbQA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export/transcode">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -10,6 +10,7 @@
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" location="wfAdapter/tcGetPriority.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" location="wfAdapter/tcPassed.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" location="wfAdapter/tcTotalFailure.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
+  <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeexportcompanions.rest" location="wfAdapter/writeexportcompanions.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/export" location="export.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/export/transcode" location="export-transcode.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:partnerLinks>
@@ -21,8 +22,9 @@
     <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk1Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk1" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk2Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk2" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="transcodeAndTcadapterForHttpPortPlk3Var" partnerLinkType="diag:transcodeAndTcadapterForHttpPortPlk3" initializePartnerRole="yes" partnerRole="tcadapter_for_transcode"/>
-    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk3Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk1Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk1" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk5Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk5" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
+    <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk3Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk3" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
     <bpel:partnerLink name="wfadapterAndTranscodeForHttpPortPlk4Var" partnerLinkType="diag:wfadapterAndTranscodeForHttpPortPlk4" initializePartnerRole="yes" partnerRole="wfadapter_for_transcode"/>
   </bpel:partnerLinks>
   <bpel:correlationSets>
@@ -441,62 +443,6 @@
                           <bpel:to>$TranscodeSuccess</bpel:to>
                         </bpel:copy>
                       </bpel:assign>
-                      <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_4ZHQ8LMzEeKieaePm6sHlw">
-                        <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
-                          <ext:retryFor>10</ext:retryFor>
-                          <ext:retryDelay>60</ext:retryDelay>
-                        </ext:failureHandling>
-                        <bpel:variables>
-                          <bpel:variable name="tcPassedTcPassedRequestMsg" messageType="tcPassed:tcPassed_input"/>
-                          <bpel:variable name="tcPassedTcPassedResponseMsg" messageType="tcPassed:tcPassed_output"/>
-                        </bpel:variables>
-                        <bpel:sequence>
-                          <bpel:assign name="init-variables-SubProcess" bpmn:id="_4ZHQ8LMzEeKieaePm6sHlw">
-                            <bpel:copy bpmn:label="$tcPassedTcPassedRequestMsg">
-                              <bpel:from>
-                                <bpel:literal>
-<tns:tcPassedNotification>
-  <tns:assetID></tns:assetID>
-  <tns:forTXDelivery></tns:forTXDelivery>
-  <tns:taskID></tns:taskID>
-  <tns:title></tns:title>
-  <tns:ftpupload>
-    <tcAdapter:filename></tcAdapter:filename>
-    <tcAdapter:folder></tcAdapter:folder>
-    <tcAdapter:server></tcAdapter:server>
-    <tcAdapter:user></tcAdapter:user>
-    <tcAdapter:password></tcAdapter:password>
-  </tns:ftpupload>
-</tns:tcPassedNotification></bpel:literal>
-                              </bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>
-                            </bpel:copy>
-                          </bpel:assign>
-                          <bpel:assign bpmn:label="Send Success Message" name="Send_Success_Message" bpmn:id="_4ZMJcLMzEeKieaePm6sHlw">
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:assetID/text()</bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:assetID</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>false()</bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:taskID</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title</bpel:to>
-                            </bpel:copy>
-                            <bpel:copy>
-                              <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
-                              <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
-                            </bpel:copy>
-                          </bpel:assign>
-                          <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="Send Success Message" name="Send_Success_Message-1" bpmn:id="_4ZMJcLMzEeKieaePm6sHlw"></bpel:invoke>
-                        </bpel:sequence>
-                      </bpel:scope>
                     </bpel:sequence>
                     <bpel:else>
                       <bpel:sequence>
@@ -507,7 +453,7 @@
                             <bpel:to>$TranscodeErrorCount</bpel:to>
                           </bpel:copy>
                         </bpel:assign>
-                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_Qjw3ELM0EeKieaePm6sHlw">
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_Qjw3ELM0EeKieaePm6sHlw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
@@ -553,7 +499,7 @@
                           </bpel:sequence>
                         </bpel:scope>
                         <bpel:empty bpmn:label="join" name="join-1" bpmn:id="_05NmILM0EeKieaePm6sHlw"/>
-                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_qCy2MLM0EeKieaePm6sHlw">
+                        <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_qCy2MLM0EeKieaePm6sHlw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
@@ -598,6 +544,92 @@
       <bpel:condition>$TranscodeSuccess = true()</bpel:condition>
       <bpel:sequence>
         <bpel:empty bpmn:label="success" name="success" bpmn:id="_u1kjIHEREeKgV8mGUipbQA"/>
+        <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_X5t3gMIHEeK5gKDdeHD_PQ">
+          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:retryFor>10</ext:retryFor>
+            <ext:retryDelay>60</ext:retryDelay>
+          </ext:failureHandling>
+          <bpel:variables>
+            <bpel:variable name="writeexportcompanionsWrite_companionsRequestMsg" messageType="writeexportcompanions:write_companions_input"/>
+            <bpel:variable name="writeexportcompanionsWrite_companionsResponseMsg" messageType="writeexportcompanions:write_companions_output"/>
+          </bpel:variables>
+          <bpel:sequence>
+            <bpel:assign name="init-variables-SubProcess" bpmn:id="_X5t3gMIHEeK5gKDdeHD_PQ">
+              <bpel:copy bpmn:label="$writeexportcompanionsWrite_companionsRequestMsg">
+                <bpel:from>
+                  <bpel:literal>
+<tns:writeExportCompanions>
+  <tns:taskID></tns:taskID>
+</tns:writeExportCompanions></bpel:literal>
+                </bpel:from>
+                <bpel:to>$writeexportcompanionsWrite_companionsRequestMsg.body</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:assign bpmn:label="write metadata if required" name="write_metadata_if_required" bpmn:id="_X56EwMIHEeK5gKDdeHD_PQ">
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                <bpel:to>$writeexportcompanionsWrite_companionsRequestMsg.body/tns:taskID</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk5Var" portType="writeexportcompanions:restInterface" operation="write_companions" inputVariable="writeexportcompanionsWrite_companionsRequestMsg" outputVariable="writeexportcompanionsWrite_companionsResponseMsg" bpmn:label="write metadata if required" name="write_metadata_if_required-1" bpmn:id="_X56EwMIHEeK5gKDdeHD_PQ"></bpel:invoke>
+          </bpel:sequence>
+        </bpel:scope>
+        <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_bVFyMMIHEeK5gKDdeHD_PQ">
+          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:retryFor>10</ext:retryFor>
+            <ext:retryDelay>60</ext:retryDelay>
+          </ext:failureHandling>
+          <bpel:variables>
+            <bpel:variable name="tcPassedTcPassedRequestMsg" messageType="tcPassed:tcPassed_input"/>
+            <bpel:variable name="tcPassedTcPassedResponseMsg" messageType="tcPassed:tcPassed_output"/>
+          </bpel:variables>
+          <bpel:sequence>
+            <bpel:assign name="init-variables-SubProcess" bpmn:id="_bVFyMMIHEeK5gKDdeHD_PQ">
+              <bpel:copy bpmn:label="$tcPassedTcPassedRequestMsg">
+                <bpel:from>
+                  <bpel:literal>
+<tns:tcPassedNotification>
+  <tns:assetID></tns:assetID>
+  <tns:forTXDelivery></tns:forTXDelivery>
+  <tns:taskID></tns:taskID>
+  <tns:title></tns:title>
+  <tns:ftpupload>
+    <tcAdapter:filename></tcAdapter:filename>
+    <tcAdapter:folder></tcAdapter:folder>
+    <tcAdapter:server></tcAdapter:server>
+    <tcAdapter:user></tcAdapter:user>
+    <tcAdapter:password></tcAdapter:password>
+  </tns:ftpupload>
+</tns:tcPassedNotification></bpel:literal>
+                </bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:assign bpmn:label="send success message" name="send_success_message" bpmn:id="_bVPjMMIHEeK5gKDdeHD_PQ">
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/tns:assetID/text()</bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:assetID</bpel:to>
+              </bpel:copy>
+              <bpel:copy>
+                <bpel:from>false()</bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:forTXDelivery</bpel:to>
+              </bpel:copy>
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/tns:taskID/text()</bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:taskID</bpel:to>
+              </bpel:copy>
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/tns:title/text()</bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:title</bpel:to>
+              </bpel:copy>
+              <bpel:copy>
+                <bpel:from>$thisEventStartMessageRequest.body/tns:tcParams/tcAdapter:ftpupload</bpel:from>
+                <bpel:to>$tcPassedTcPassedRequestMsg.body/tns:ftpupload</bpel:to>
+              </bpel:copy>
+            </bpel:assign>
+            <bpel:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var" portType="tcPassed:restInterface" operation="tcPassed" inputVariable="tcPassedTcPassedRequestMsg" outputVariable="tcPassedTcPassedResponseMsg" bpmn:label="send success message" name="send_success_message-1" bpmn:id="_bVPjMMIHEeK5gKDdeHD_PQ"></bpel:invoke>
+          </bpel:sequence>
+        </bpel:scope>
       </bpel:sequence>
       <bpel:elseif>
         <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
@@ -608,7 +640,7 @@
       <bpel:else>
         <bpel:sequence>
           <bpel:empty bpmn:label="error" name="error-1" bpmn:id="_wM9M0HEREeKgV8mGUipbQA"/>
-          <bpel:scope bpmn:label="SubProcess" name="SubProcess-11" bpmn:id="_lqBpsLM1EeKieaePm6sHlw">
+          <bpel:scope bpmn:label="SubProcess" name="SubProcess-12" bpmn:id="_lqBpsLM1EeKieaePm6sHlw">
             <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
               <ext:retryFor>10</ext:retryFor>
               <ext:retryDelay>60</ext:retryDelay>
