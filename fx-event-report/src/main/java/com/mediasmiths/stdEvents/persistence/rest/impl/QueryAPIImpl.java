@@ -165,13 +165,15 @@ public class QueryAPIImpl implements QueryAPI
 	
 	@Transactional
 	public List<EventEntity> getEventsWindowDateRange(
-			@PathParam("namespace") String namespace,
-			@PathParam("eventname") String eventName,
-			@PathParam("max") int max,
-			@PathParam("start") DateTime start,
-			@PathParam("end") DateTime end)
+			String namespace,
+			String eventName,
+			int max,
+			DateTime start,
+			DateTime end)
 	{
+		logger.debug(">>>getEventsWindowDateRange");
 		logger.info("max @ queryAPIImpl: " + max);
+		logger.debug("start: " + start + " end: " + end);
 		List<EventEntity> events = eventDao.findUniquePaginatedDate(namespace, eventName, 0, max, start, end);
 		List<EventEntity> all = new ArrayList<EventEntity>();
 		all.addAll(events);
@@ -183,6 +185,7 @@ public class QueryAPIImpl implements QueryAPI
 			logger.info("start: " + startInt + " Size: " + events.size());
 			logger.info("Results: " + events);
 		}
+		logger.debug("<<<getEventsWindowDateRange");
 		return all;
 	}
 

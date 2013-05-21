@@ -138,14 +138,17 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 	@Override
 	public List<EventEntity> findUniquePaginatedDate(String namespace, String eventname, int start, int max, DateTime startDate, DateTime endDate)
 	{
+		logger.debug(">>>findUniquePaginatedDate");
 		logger.info("Finding events from " + start + " namespace " + namespace + " eventname: " + eventname + " max: " + max + " startDate: " + startDate + " endDate: " + endDate);;
 		Criteria criteria = createCriteria();
 		criteria.add(Restrictions.eq("namespace", namespace));
 		criteria.add(Restrictions.eq("eventName", eventname));
+		logger.debug("start: " + startDate.getMillis() + " end: " + endDate.getMillis());
 		criteria.add(Restrictions.between("time", startDate.getMillis(), endDate.getMillis()));
 		criteria.setFirstResult(start);
 		criteria.setMaxResults(max);
 		logger.info("finished search");
+		logger.debug("<<<findUniquePaginated");	
 		return getList(criteria);
 	}
 

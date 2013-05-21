@@ -8,6 +8,8 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -37,48 +39,92 @@ public class AcquisitionRpt
 
 	@Inject
 	private QueryAPI queryApi;
+	
+	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
 	public void writeAcquisitionDelivery(
 			final List<EventEntity> materials,
-			final List<AggregatedBMS> bms,
 			final DateTime startDate,
 			final DateTime endDate,
 			final String reportName)
 	{
 		log.debug(">>>writeAcquisitionDelivery");
-		List<Acquisition> titles = getReportList(materials, bms, startDate, endDate);
+		List<Acquisition> titles = getReportList(materials, startDate, endDate);
+		
+		int noFile = 0;
+		int noTape = 0;
+		int total = 0;
+		
+		for (Acquisition acq :titles)
+		{
+			if (acq.isFileDelivery()) {
+				noFile ++;
+			}
+			else if (acq.isTapeDelivery()) {
+				noTape ++;
+			}
+			total ++;
+		}
+		
+		log.debug("noFile: " + noFile + " noTape: " + noTape);
+		
+		double perFile = (noFile / total) * 100;
+		double perTape = (noTape / total) * 100;
+		
+		log.debug("perFile: " + perFile + " perTape: " + perTape);
+		
+		titles.add(addStats("No By File", Integer.toString(noFile)));
+		titles.add(addStats("No By Tape", Integer.toString(noTape)));
+		titles.add(addStats("% By File", Double.toString(perFile)));
+		titles.add(addStats("% By Tape", Double.toString(perTape)));
 
 		createCSV(titles, reportName);
 		log.debug("<<<writeAcquisitionDelivery");
 	}
 
-	/*
-	 * pseudo code to change logic
-	 */
 	private List<Acquisition> getReportList(
 			final List<EventEntity> events,
-			final List<AggregatedBMS> bms,
 			final DateTime startDate,
 			final DateTime endDate)
 	{
 		log.debug(">>>getReportList");
+		
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
 		List<OrderStatus> orders = getOrders(startDate, endDate);
+		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
 
 		for (EventEntity event : events) 
 		{
 			Acquisition acq = (Acquisition) unmarshall(event);
 			
-			acq.setDateRange(startDate + " - " + endDate);
+			acq.setDateRange(startF + " - " + endF);
 			
 			for (OrderStatus order : orders) 
 			{
 				String materialID = order.getMaterialid();
 				if (materialID.equals(acq.getMaterialID())) 
 				{
-					acq.setChannels(order.getTitle().getChannels().toString());
-					break;
+					log.debug("matching order found, materialID: " + materialID);
+					if (order.getTitle() != null)
+					{
+						log.debug("title: " + order.getTitle().getTitle());
+						log.debug("channels: " + order.getTitle().getChannels());
+						acq.setChannels(order.getTitle().getChannels().toString());
+						break;
+					}
 				}
+			}
+			
+			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
+			if (acq.isFileDelivery())
+			{
+				acq.setFileDel("1");
+			}
+			else if (acq.isTapeDelivery())
+			{
+				acq.setTapeDel("1");
 			}
 			
 			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
