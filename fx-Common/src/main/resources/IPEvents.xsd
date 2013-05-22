@@ -616,7 +616,7 @@
     <xs:element name="purgeTitle">
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="purgeMessage">
+                <xs:extension base="PurgeMessage">
                     <xs:sequence>
                         <xs:element name="titleID" type="xs:string"/>
                     </xs:sequence>
@@ -684,7 +684,7 @@
         </xs:complexType>
     </xs:element>
     
-    <xs:complexType name="purgeMessage">
+    <xs:complexType name="PurgeMessage">
     	<xs:complexContent>
     		<xs:extension base="IPEvent">
     			<xs:sequence>
