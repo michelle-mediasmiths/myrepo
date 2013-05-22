@@ -279,6 +279,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					assetID);
 
 			boolean isConditions = false;
+			boolean isRuzzConditions=false;
 			
 			if(conditions!=null && !conditions.isEmpty()){
 				
@@ -293,8 +294,16 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					}
 				}
 			}
+			// editnotes populated if channel conditions are present in ruzz companion xml (flexi cart)
+			String editNotes = currentAttributes.getAttribute(Attribute.EDIT_NOTES);
+			if (editNotes != null)
+			{
+				isConditions = true;
+				isRuzzConditions=true;
+				conditions.add(editNotes);
+			}
 			
-			if (isConditions)
+			if (isConditions || isRuzzConditions)
 			{
 				log.info(String.format("QC : %d conditions returned for asset", conditions.size()));
 				String stConditions = StringUtils.join(conditions, '\n');
@@ -312,7 +321,6 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 
 
 				// add item (if unmatched) to the purge candidate list.
-
 			    if (currentAttributes.getAttribute(Attribute.ASSET_PARENT_ID) == null)
 			    {
 				    try
@@ -341,9 +349,11 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 					log.error("error determinging channel groups for event", e);
 				}
 
-				
-				log.debug("saving event "+CHANNEL_CONDITIONS_FOUND_DURING_QC);
-				eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);				
+				if (!isRuzzConditions) //when channel conditions from ruzz are detected during media pickup and email is already sent
+				{
+					log.debug("saving event " + CHANNEL_CONDITIONS_FOUND_DURING_QC);
+					eventsService.saveEvent(qcEventNamespace, CHANNEL_CONDITIONS_FOUND_DURING_QC, ccf);
+				}
 			}
 			else
 			{

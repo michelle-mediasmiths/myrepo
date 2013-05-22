@@ -859,7 +859,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public void requireAutoQCForMaterial(String materialID) throws MayamClientException
+	public void ruzzQCMessagesDetected(String materialID) throws MayamClientException
 	{
 	}
 

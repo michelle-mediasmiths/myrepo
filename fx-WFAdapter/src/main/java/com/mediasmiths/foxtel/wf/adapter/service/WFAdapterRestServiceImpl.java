@@ -1035,18 +1035,26 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		Long taskID = request.getTaskID().longValue();
 		AttributeMap task = mayamClient.getTask(taskID);
 		
-		Boolean writeMetadata = (Boolean) task.getAttribute(Attribute.OP_FLAG);
+		final Boolean writeMetadata = (Boolean) task.getAttribute(Attribute.OP_FLAG);
+		final TranscodeJobType jobType = TranscodeJobType.fromText((String) task.getAttribute(Attribute.OP_TYPE));
+		final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
 		
 		if (writeMetadata != null && writeMetadata.booleanValue() == true)
 		{
-			TranscodeJobType jobType = TranscodeJobType.fromText((String) task.getAttribute(Attribute.OP_TYPE));
 			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
 				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID));
-				String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
+			
 				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
 				mexSerialiser.serialise(programme, new File(metadataFileLocation));
 			}
+		}
+		
+		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
+			//write any attached files (scripts?) to disk
+			//cant really differentiate between different filetypes so this will probably output qc reports and the like as well
+			
+			
 		}
 		
 		return true;

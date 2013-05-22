@@ -82,6 +82,8 @@ public class MayamMaterialController extends MayamController
 	public static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
 	public static final String AO_ASSOCIATED_MATERIAL_AGL_NAME = "ao-associated";
 	public static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
+	
+	public static final String RUZZ_CHANNEL_CONDITIONS = "Ruzz channel conditions";
 
 	private final TasksClientVeneer client;
 	private final MayamTaskController taskController;

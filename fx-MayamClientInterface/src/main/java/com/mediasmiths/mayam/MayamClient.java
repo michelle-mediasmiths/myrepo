@@ -328,7 +328,7 @@ public interface MayamClient
 
 	public void setNaturalBreaks(String materialID, String naturalBreaks)throws MayamClientException;
 
-	public void requireAutoQCForMaterial(String materialID)throws MayamClientException;
+	public void ruzzQCMessagesDetected(String materialID)throws MayamClientException;
 
 	public void autoQcErrorForMaterial(String assetId, long taskID) throws MayamClientException;
 

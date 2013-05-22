@@ -1119,11 +1119,13 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
-	public void requireAutoQCForMaterial(String materialID) throws MayamClientException
+	public void ruzzQCMessagesDetected(String materialID) throws MayamClientException
 	{
 		AttributeMap materialAttributes = materialController.getMaterialAttributes(materialID);
 		AttributeMap updateMapForAsset = tasksController.updateMapForAsset(materialAttributes);
 		updateMapForAsset.setAttribute(Attribute.QC_REQUIRED, Boolean.TRUE);
+		updateMapForAsset.setAttribute(Attribute.EDIT_NOTES, MayamMaterialController.RUZZ_CHANNEL_CONDITIONS);
+		
 		try
 		{
 			client.assetApi().updateAsset(updateMapForAsset);

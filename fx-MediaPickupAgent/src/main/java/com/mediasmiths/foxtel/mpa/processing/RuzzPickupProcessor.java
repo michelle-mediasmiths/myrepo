@@ -154,7 +154,7 @@ public class RuzzPickupProcessor extends MediaPickupProcessor<RuzzIngestRecord>
 			logger.info("channel conditions present in ruzz xml, marking asset as requiring autoqc");
 			try
 			{
-				mayamClient.requireAutoQCForMaterial(materialID);
+				mayamClient.ruzzQCMessagesDetected(materialID);
 
 				// create channel conditions found in ruzz xml event
 				ChannelConditionsFound ccf = new ChannelConditionsFound();
