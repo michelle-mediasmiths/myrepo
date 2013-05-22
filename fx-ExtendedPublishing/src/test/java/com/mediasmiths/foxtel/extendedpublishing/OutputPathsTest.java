@@ -111,6 +111,78 @@ public class OutputPathsTest
 		assertEquals(expected,actual);
 	}
 	
+	@Test
+	public void testPublicityFTPPathGenericChannel()
+	{
+		String expected = "exports/Exports/Generic/Publicity";
+		String actual = toTest.getFTPPathToExportDestinationFolder("generic", TranscodeJobType.PUBLICITY_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testPublicityLocalPathGenericChannel()
+	{
+		String expected = "/storage/corp/exports/Exports/Generic/Publicity";
+		String actual = toTest.getLocalPathToExportDestinationFolder("generic", TranscodeJobType.PUBLICITY_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testPublicityLocalFullPathGenericChannel(){
+		String expected = "/storage/corp/exports/Exports/Generic/Publicity/export.wmv";
+		String actual = toTest.getLocalPathToExportDestination("generic", TranscodeJobType.PUBLICITY_PROXY, "export");
+		assertEquals(expected,actual);
+	}
+	
+
+	@Test
+	public void testComplianceFTPPathGenericChannel()
+	{
+		String expected = "exports/Exports/Generic/Compliance";
+		String actual = toTest.getFTPPathToExportDestinationFolder("generic", TranscodeJobType.COMPLIANCE_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testComplianceLocalPathGenericChannel()
+	{
+		String expected = "/storage/corp/exports/Exports/Generic/Compliance";
+		String actual = toTest.getLocalPathToExportDestinationFolder("generic", TranscodeJobType.COMPLIANCE_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testComplianceLocalFullPathGenericChannel(){
+		String expected = "/storage/corp/exports/Exports/Generic/Compliance/export.wmv";
+		String actual = toTest.getLocalPathToExportDestination("generic", TranscodeJobType.COMPLIANCE_PROXY, "export");
+		assertEquals(expected,actual);
+	}
+	
+	
+	@Test
+	public void testCaptionFTPPathGenericChannel()
+	{
+		String expected = "captions/CaptionFTP/Unassigned";
+		String actual = toTest.getFTPPathToExportDestinationFolder("generic", TranscodeJobType.CAPTION_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testCaptionLocalPathGenericChannel()
+	{
+		String expected = "/storage/corp/captions/CaptionFTP/Unassigned";
+		String actual = toTest.getLocalPathToExportDestinationFolder("generic", TranscodeJobType.CAPTION_PROXY);
+		assertEquals(expected,actual);
+	}
+	
+	@Test
+	public void testCaptionLocalFullPathGenericChannel(){
+		String expected = "/storage/corp/captions/CaptionFTP/Unassigned/export.mpg";
+		String actual = toTest.getLocalPathToExportDestination("generic", TranscodeJobType.CAPTION_PROXY, "export");
+		assertEquals(expected,actual);
+	}
+	
+	
 	@Test(expected = IllegalArgumentException.class)
 	public void testTXFTPPath(){
 		//the functionality being tested is for exports, expect exceptions if the TX transcode job type is used

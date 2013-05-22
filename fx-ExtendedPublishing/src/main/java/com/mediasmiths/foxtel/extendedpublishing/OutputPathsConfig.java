@@ -48,6 +48,10 @@ public class OutputPathsConfig
 	@Inject
 	@Named("export.publicity.extention")
 	private String publicityOutputExtension;
+	
+	@Inject
+	@Named("export.channel.generic.output.folder")
+	private String genericChannelOutputFolder;
 
 	public String getCaptionOutputPath()
 	{
@@ -157,5 +161,15 @@ public class OutputPathsConfig
 	public void setPublicityOutputExtension(String publicityOutputExtension)
 	{
 		this.publicityOutputExtension = publicityOutputExtension;
+	}
+
+	public void setGenericChannelOutputFolder(String genericChannelOutputFolder)
+	{
+		this.genericChannelOutputFolder=genericChannelOutputFolder;
+	}
+	
+	public String getGenericChannelOutputFolder()
+	{
+		return genericChannelOutputFolder;
 	}
 }

@@ -147,6 +147,11 @@ public class OutputPaths
 
 	private String getExportLocationForChannel(String channelTag)
 	{
+		
+		if("generic".equals(channelTag.toLowerCase())){
+			return outputPathsConfig.getGenericChannelOutputFolder();
+		}
+		
 		String channelGroup = channelProperties.channelGroupForChannel(channelTag);
 		String exportLocation = channelProperties.exportPathForChannelGroup(channelGroup);
 		return exportLocation;
