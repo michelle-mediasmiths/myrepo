@@ -616,7 +616,7 @@
     <xs:element name="purgeTitle">
         <xs:complexType>
             <xs:complexContent>
-                <xs:extension base="IPEvent">
+                <xs:extension base="purgeMessage">
                     <xs:sequence>
                         <xs:element name="titleID" type="xs:string"/>
                     </xs:sequence>
@@ -683,6 +683,22 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+    
+    <xs:complexType name="purgeMessage">
+    	<xs:complexContent>
+    		<xs:extension base="IPEvent">
+    			<xs:sequence>
+    				<xs:element name="dateRange" type="xs:string"/>
+    				<xs:element name="entityType" type="xs:string"/>
+    				<xs:element name="title" type="xs:string"/>
+    				<xs:element name="channels" type="xs:string"/>
+    				<xs:element name="protected" type="xs:string"/>
+    				<xs:element name="extended" type="xs:string"/>
+    				<xs:element name="expires" type="xs:dateTime"/>
+    			</xs:sequence>
+    		</xs:extension>
+    	</xs:complexContent>
+    </xs:complexType>
     
     <xs:element name="AggregatedBMS">
     	<xs:complexType>
