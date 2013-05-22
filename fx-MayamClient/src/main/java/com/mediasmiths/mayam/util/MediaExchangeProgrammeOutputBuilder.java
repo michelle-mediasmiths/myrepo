@@ -56,7 +56,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	private Media getProgrammeMedia(FullProgrammePackageInfo pack)
 	{
 		Programme.Media programmeMedia = new Programme.Media();
-		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(pack.getSegmentList());
+		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(pack);
 		AudioTracks pmat = getProgrammeMediaAudioTracks(pack);
 
 		programmeMedia.setSegments(mexSegments);

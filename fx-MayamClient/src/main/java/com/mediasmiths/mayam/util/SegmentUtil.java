@@ -1,5 +1,6 @@
 package com.mediasmiths.mayam.util;
 
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
@@ -9,6 +10,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType;
+import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.SampleCount;
 import com.mediasmiths.std.types.Timecode;
@@ -185,8 +187,10 @@ public class SegmentUtil
 		
 	}
 	
-	public static Segments convertMayamSegmentListToMediaExchangeSegments(SegmentList segmentList)
+	public static Segments convertMayamSegmentListToMediaExchangeSegments(FullProgrammePackageInfo pack)
 	{
+		SegmentList segmentList = pack.getSegmentList();
+		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
 		Segments ret = new Segments();
 
 		if (segmentList != null && segmentList.getEntries() != null)
@@ -204,7 +208,7 @@ public class SegmentUtil
 				meSeg.setEOM(eom);
 				meSeg.setDuration(duration);
 				meSeg.setNumber(s.getNumber());
-				meSeg.setTitle(s.getTitle());
+				meSeg.setTitle(title);
 
 				ret.getSegment().add(meSeg);
 			}
