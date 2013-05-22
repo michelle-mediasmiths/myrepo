@@ -34,4 +34,6 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 			DateTime startDate,
 			DateTime end);
 
+	public List<EventEntity> eventnamePaginatedDate(String eventname, int start, int max, DateTime startDate, DateTime endDate);
+
 }

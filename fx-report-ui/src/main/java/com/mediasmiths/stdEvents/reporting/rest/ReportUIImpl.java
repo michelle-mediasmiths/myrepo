@@ -346,9 +346,8 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getComplianceEditCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		//TODO - IMPLEMENT
-		/*List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("ComplianceLoggingMarker", MAX));
-		compliance.writeCompliance(events, startDate, endDate, REPORT_NAME);*/
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("ComplianceLoggingMarker", MAX, start, end);
+		compliance.writeCompliance(events, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)

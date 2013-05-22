@@ -3,15 +3,10 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
@@ -21,13 +16,12 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
-import com.mediasmiths.foxtel.ip.common.events.report.ComplianceLogging;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.ComplianceLoggingRT;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 
-public class ComplianceRpt
+public class ComplianceRpt extends ReportUtils
 {
 	public static final transient Logger logger = Logger.getLogger(ComplianceRpt.class);
 	
@@ -38,73 +32,67 @@ public class ComplianceRpt
 	@Inject
 	private QueryAPI queryApi;
 	
-	public void writeCompliance(List<EventEntity> events, Date startDate, Date endDate, String reportName)
+	public void writeCompliance(List<EventEntity> events, DateTime startDate, DateTime endDate, String reportName)
 	{
-		List<ComplianceLogging> comps = getReportList(events, startDate, endDate);
-		comps.add(addStats("No. of Titles", Integer.toString(comps.size())));
+		List<ComplianceLoggingMarker> comps = getReportList(events, startDate, endDate);
+		
+		int total = 0;
+		
+		for (ComplianceLoggingMarker clm : comps)
+		{
+			total ++;
+		}
+		
+		comps.add(addStats("No of Titles", Integer.toString(total)));
 		
 		createCsv(comps, reportName);
 	}
 	
-	private Object unmarshall(EventEntity event)
+	public List<ComplianceLoggingMarker> getReportList(List<EventEntity> events, DateTime startDate, DateTime endDate)
 	{
-		Object title = null;
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-
-		try
+		logger.debug(">>>getReportList");
+		
+		List<ComplianceLoggingMarker> clms = new ArrayList<ComplianceLoggingMarker>();
+		
+		for (EventEntity event : events) 
 		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			title = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
+			ComplianceLoggingMarker clm = (ComplianceLoggingMarker) unmarshallEvent(event);
+			
+			String startF = startDate.toString(dateFormatter);
+			String endF = endDate.toString(dateFormatter);
+			
+			clm.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
+			
+			clm.setMaterialId(clm.getTitleField());
+			clm.setTaskStart(new DateTime(event.getTime()).toString());
+			
+			Title title = queryApi.getTitleById(clm.getMaterialId());
+			if (title != null)
+			{
+				logger.info("Title found: " + title.getTitleId());
+				clm.setTitle(title.getTitle());
+				clm.setChannels(title.getChannels().toString());
+			}
+			clms.add(clm);
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return title;
+		
+		logger.debug("<<<getReportList");
+		return clms;
 	}
 	
-	public List<ComplianceLogging> getReportList(List<EventEntity> events, Date startDate, Date endDate)
-	{
-		logger.info("Creating complianceLogging report");
-		List<ComplianceLogging> comps = new ArrayList<ComplianceLogging>();
-		for (EventEntity event : events)
-		{
-			ComplianceLoggingMarker comp = (ComplianceLoggingMarker) unmarshall(event);
-			ComplianceLogging rpt = new ComplianceLogging();
-			rpt.setDateRange(startDate + " - " + endDate);
-			rpt.setTitle(comp.getTitleField());
-			rpt.setMaterialID(comp.getMasterID());
-			GregorianCalendar taskFinish = new GregorianCalendar();
-			taskFinish.setTimeInMillis(event.getTime());
-			try
-			{
-				rpt.setTaskFinish(DatatypeFactory.newInstance().newXMLGregorianCalendar(taskFinish));
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				e.printStackTrace();
-			}
-			comps.add(rpt);
-		}
-		return comps;
-	}
-	
-	private void createCsv(List<ComplianceLogging> titles, String reportName)
+	private void createCsv(List<ComplianceLoggingMarker> titles, String reportName)
 	{
 		ICsvBeanWriter beanWriter = null;
 		try {
 			logger.info("reportName: " + reportName);
 			beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + reportName + ".csv"), CsvPreference.STANDARD_PREFERENCE);
 			logger.info("Saving to: " + REPORT_LOC);
-			final String[] header = {"dateRange", "title", "materialID", "channels", "taskStatus", "taskStart", "taskFinish", "externalCompliance"};
+			final String[] header = {"dateRange", "title", "materialId", "channels", "taskStatus", "taskStart", "taskFinish", "externalCompliance"};
 			final CellProcessor[] processors = getProcessor();
 			beanWriter.writeHeader(header);
 				
 			
-			for (ComplianceLogging title : titles)
+			for (ComplianceLoggingMarker title : titles)
 			{
 				beanWriter.write(title, header, processors);
 			}
@@ -143,65 +131,11 @@ public class ComplianceRpt
 		return processors;
 	}
 	
-	private ComplianceLogging addStats(String name, String value)
+	private ComplianceLoggingMarker addStats(String name, String value)
 	{
-		ComplianceLogging comp = new ComplianceLogging();
-		comp.setTitle(name);
-		comp.setMaterialID(value);
-		return comp;
+		ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
+		clm.setTitle(name);
+		clm.setMaterialId(value);
+		return clm;
 	}
 }
-
-//ICsvBeanWriter beanWriter = null;
-//try{
-//	beanWriter = new CsvBeanWriter(new FileWriter(REPORT_LOC + "complianceEditCsv.csv"), CsvPreference.STANDARD_PREFERENCE);
-//	final String[] header = {"dateRange", "title", "materialID", "channel", "taskStatus", "taskStart", "taskFinish", "externalCompliance"};
-//	final CellProcessor[] processors = getComplianceProcessor();
-//	beanWriter.writeHeader(header);
-//	
-//	ComplianceLoggingRT total = new ComplianceLoggingRT("Number of Titles", null);
-//	ComplianceLoggingRT time = new ComplianceLoggingRT("Average Completion Time", null);
-//	comps.add(total);
-//	comps.add(time);
-//	
-//	for (ComplianceLoggingRT comp : comps)
-//	{
-//		beanWriter.write(comp, header, processors);
-//	}
-//}
-//catch (IOException e)
-//{
-//	e.printStackTrace();
-//}
-//finally {
-//	if (beanWriter != null)
-//	{
-//		try
-//		{
-//			beanWriter.close();
-//		}
-//		catch(IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-//	}
-//}
-//
-//String payload = event.getPayload();
-//ComplianceLoggingRT comp = new ComplianceLoggingRT();
-//
-//comp.setDateRange(startDate + " - " + endDate);
-//if (payload.contains("title"))
-//	comp.setTitle(payload.substring(payload.indexOf("title")+6, payload.indexOf("</title")));
-//if (payload.contains("materialID"))
-//	comp.setMaterialID(payload.substring(payload.indexOf("materialID")+11, payload.indexOf("</materialID")));
-//if (payload.contains("channel"))
-//	comp.setChannel(payload.substring(payload.indexOf("channel")+8, payload.indexOf("</channel")));
-//if (payload.contains("taskStatus"))
-//	comp.setTaskStatus(payload.substring(payload.indexOf("taskStatus")+11, payload.indexOf("</taskStatus")));
-//if (payload.contains("taskStart"))
-//	comp.setTaskStart(payload.substring(payload.indexOf("taskStart")+10, payload.indexOf("</taskStart")));
-//if (payload.contains("taskFinish"))
-//	comp.setTaskFinish(payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinish")));
-//if (payload.contains("externalCompliance"))
-//	comp.setExternalCompliance(payload.substring(payload.indexOf("externalCompliance")+19, payload.indexOf("</externalCompliance")));

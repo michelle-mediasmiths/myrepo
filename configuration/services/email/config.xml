@@ -303,7 +303,7 @@
 		<eventname>PreviewFailed</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.preview.PreviewEventEmailTemplate">
 			<subject>Preview Fail Item in MAM: Material ID(%s) Title(%s)</subject>
-			<body><![CDATA[There is an asset that has been marked as failed on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work.]]></body>
+			<body><![CDATA[There is an asset that has been marked as failed on the Preview tasklist. Please resolve this matter.<p/>Dear Promo Producer,<p/>please check with your Programmer whether the status of this item will affect your promo production work. <p/>%s]]></body>
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>

@@ -164,5 +164,18 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		return getList(criteria);
 	}
 
-
+	@Override
+	public List<EventEntity> eventnamePaginatedDate(String eventname, int start, int max, DateTime startDate, DateTime endDate)
+	{
+		logger.debug(">>>eventnamePaginatedDate");
+		logger.info("Finding events from " + start + " eventname: " + eventname + " max: " + max);
+		Criteria criteria = createCriteria();
+		criteria.add(Restrictions.eq("eventName", eventname));
+		logger.debug("start: " + startDate.getMillis() + " end: " + endDate.getMillis());
+		criteria.add(Restrictions.between("time", startDate.getMillis(), endDate.getMillis()));
+		criteria.setFirstResult(start);
+		criteria.setMaxResults(max);
+		logger.debug("<<<eventnamePaginated");
+		return getList(criteria);
+	}
 }
