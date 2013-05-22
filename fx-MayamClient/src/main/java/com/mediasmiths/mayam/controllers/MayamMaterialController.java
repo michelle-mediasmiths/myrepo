@@ -1544,7 +1544,7 @@ public class MayamMaterialController extends MayamController
 		}
 		
 		
-		List<String> urls = fileinfo.getUrls();
+		List<String> urls = fileinfo.getMediaUrls();
 		
 		if(urls == null || urls.size()==0){
 			log.error("no urls for media found!");
