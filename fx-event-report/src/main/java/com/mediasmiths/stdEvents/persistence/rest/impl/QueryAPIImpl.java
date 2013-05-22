@@ -19,10 +19,12 @@ import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.TitleDao;
 
 public class QueryAPIImpl implements QueryAPI
 {
@@ -37,6 +39,9 @@ public class QueryAPIImpl implements QueryAPI
 
 	@Inject
 	protected OrderDao orderDao;
+	
+	@Inject
+	protected TitleDao titleDao;
 	
 	private static final transient Logger logger = Logger.getLogger(QueryAPIImpl.class);
 
@@ -267,6 +272,10 @@ public class QueryAPIImpl implements QueryAPI
 		return orderDao.getOrdersInDateRange(start,end);
 	}
 
-	
+	@Override 
+	public Title getTitleById(String id)
+	{
+		return titleDao.getById(id);
+	}
 	
 }

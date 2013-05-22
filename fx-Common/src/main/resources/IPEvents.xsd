@@ -219,6 +219,14 @@
             <xs:complexContent>
                 <xs:extension base="fns:IPEvent">
                     <xs:sequence>
+                    	<xs:element name="dateRange" type="xs:string"/>
+                    	<xs:element name="title" type="xs:string"/>
+                    	<xs:element name="materialId" type="xs:string"/>
+                    	<xs:element name="channels" type="xs:string"/>
+                    	<xs:element name="taskStatus" type="xs:string"/>
+                    	<xs:element name="taskStart" type="xs:string"/>
+                    	<xs:element name="taskFinish" type="xs:string"/>
+                    	<xs:element name="externalCompliance" type="xs:string"/>
                         <xs:element type="xs:string" name="MasterID"/>
                         <xs:element type="xs:string" name="TitleField"/>
                         <xs:element type="xs:string" name="Loggerdetails"/>
