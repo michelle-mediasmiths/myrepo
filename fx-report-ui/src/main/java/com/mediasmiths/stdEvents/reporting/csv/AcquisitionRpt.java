@@ -5,30 +5,25 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.supercsv.cellprocessor.Optional;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.AddOrUpdatePackage;
-import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
+import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 
-public class AcquisitionRpt
+public class AcquisitionRpt extends ReportUtils
 {
 	public static final transient Logger log = Logger.getLogger(AcquisitionRpt.class);
 
@@ -39,8 +34,6 @@ public class AcquisitionRpt
 
 	@Inject
 	private QueryAPI queryApi;
-	
-	private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("dd-MM-yyyy");
 
 	public void writeAcquisitionDelivery(
 			final List<EventEntity> materials,
@@ -50,11 +43,11 @@ public class AcquisitionRpt
 	{
 		log.debug(">>>writeAcquisitionDelivery");
 		List<Acquisition> titles = getReportList(materials, startDate, endDate);
-		
+
 		int noFile = 0;
 		int noTape = 0;
 		int total = 0;
-		
+
 		for (Acquisition acq :titles)
 		{
 			if (acq.isFileDelivery()) {
@@ -65,14 +58,14 @@ public class AcquisitionRpt
 			}
 			total ++;
 		}
-		
+
 		log.debug("noFile: " + noFile + " noTape: " + noTape);
-		
+
 		double perFile = (noFile / total) * 100;
 		double perTape = (noTape / total) * 100;
-		
+
 		log.debug("perFile: " + perFile + " perTape: " + perTape);
-		
+
 		titles.add(addStats("No By File", Integer.toString(noFile)));
 		titles.add(addStats("No By Tape", Integer.toString(noTape)));
 		titles.add(addStats("% By File", Double.toString(perFile)));
@@ -88,19 +81,19 @@ public class AcquisitionRpt
 			final DateTime endDate)
 	{
 		log.debug(">>>getReportList");
-		
+
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		List<OrderStatus> orders = getOrders(startDate, endDate);
-		
+		List<OrderStatus> orders = queryApi.getOrdersInDateRange(startDate, endDate);
+
 		String startF = startDate.toString(dateFormatter);
 		String endF = endDate.toString(dateFormatter);
 
 		for (EventEntity event : events) 
 		{
-			Acquisition acq = (Acquisition) unmarshall(event);
-			
+			Acquisition acq = (Acquisition) unmarshallReport(event);
+
 			acq.setDateRange(startF + " - " + endF);
-			
+
 			for (OrderStatus order : orders) 
 			{
 				String materialID = order.getMaterialid();
@@ -116,10 +109,12 @@ public class AcquisitionRpt
 					}
 				}
 			}
-			
-			double gb = Integer.parseInt(acq.getFilesize()) / 1073741824;
-			acq.setFilesize(Double.toString(gb));
-			
+
+
+			long filesize = Long.valueOf(acq.getFilesize()).longValue();
+			log.debug("filesize long: " + filesize);
+			acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
+
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
@@ -129,38 +124,13 @@ public class AcquisitionRpt
 			{
 				acq.setTapeDel("1");
 			}
-			
+
 			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
 			acqs.add(acq);
 		}
-		
+
 		log.debug("<<<getReportList");
 		return acqs;
-	}
-
-	private List<OrderStatus> getOrders(DateTime start, DateTime end)
-	{		
-		return queryApi.getOrdersInDateRange(start, end);
-	}
-
-	private Object unmarshall(final EventEntity event)
-	{
-		Object obj = null;
-		String payload = event.getPayload();
-		log.info("Unmarshalling payload " + payload);
-
-		try
-		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
-			log.info("Deserialising payload");
-			obj = JAXB_SERIALISER.deserialise(payload);
-			log.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return obj;
 	}
 
 	private void createCSV(final List<Acquisition> titles, final String reportName)
@@ -224,4 +194,4 @@ public class AcquisitionRpt
 		acq.setMaterialID(value);
 		return acq;
 	}
-}
+}	
