@@ -691,6 +691,7 @@
     				<xs:element name="dateRange" type="xs:string"/>
     				<xs:element name="entityType" type="xs:string"/>
     				<xs:element name="title" type="xs:string"/>
+    				<xs:element name="materialID" type="xs:string"/>
     				<xs:element name="channels" type="xs:string"/>
     				<xs:element name="protected" type="xs:string"/>
     				<xs:element name="extended" type="xs:string"/>

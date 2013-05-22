@@ -334,20 +334,13 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getPurgeContentCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<AggregatedBMS> bms = populateBMS();
-		List<EventEntity> purged = getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "PurgeTitle", MAX),
-				start.toDate(),
-				end.toDate());
-		purged.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", MAX),
-				start.toDate(),
-				end.toDate()));
-		purged.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/bms", "DeletePackage", MAX),
-				start.toDate(),
-				end.toDate()));
-		purgeContent.writePurgeTitles(purged, bms, start, end, reportName);
+		List<EventEntity> purged = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "PurgeTitle",
+				MAX, start, end);
+		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "DeleteMaterial", 
+				MAX, start, end));
+		purged.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/bms", "DeletePackage", 
+				MAX, start, end));
+		purgeContent.writePurgeTitles(purged, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)
