@@ -14,6 +14,7 @@ import org.joda.time.DateTime;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 
 /**
  * Used to query the database with criteria to create specific lists of events
@@ -93,6 +94,8 @@ public interface QueryAPI
 	@GET
 	@Path("/OrdersByDate")
 	List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end);
+
+	public Title getTitleById(String id);
 	
 	
 }

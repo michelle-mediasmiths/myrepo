@@ -15,11 +15,14 @@ import org.supercsv.prefs.CsvPreference;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mediasmiths.foxtel.ip.common.events.PurgeMaterial;
 import com.mediasmiths.foxtel.ip.common.events.PurgeMessage;
+import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 
@@ -47,7 +50,6 @@ public class PurgeContentRpt extends ReportUtils
 		logger.debug(">>>getReportList");
 		
 		final List<PurgeMessage> purged = new ArrayList<PurgeMessage>();
-		final List<OrderStatus> orders = queryApi.getOrdersInDateRange(startDate, endDate);
 		
 		for (EventEntity event : events)
 		{
@@ -58,25 +60,33 @@ public class PurgeContentRpt extends ReportUtils
 			
 			purge.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			
+			String titleID = null;
+			
 			if (event.getEventName().equals("PurgeTitle"))
 			{
 				PurgeTitle title = (PurgeTitle) unmarshallEvent(event);
 				purge.setMaterialID(title.getTitleID());
 				purge.setEntityType("Item");
+				titleID = title.getTitleID();
+			}
+			else if (event.getEventName().equals("DeleteMaterial"))
+			{
+				PurgeMaterial material = (PurgeMaterial) unmarshallEvent(event);
+				purge.setMaterialID(material.getMaterialID());
+				purge.setEntityType("Sub-programme");
+				titleID = material.getTitleID();
+			}
+			else if (event.getEventName().equals("DeletePackage"))
+			{
+				PurgePackage pack = (PurgePackage) unmarshallEvent(event);
+				purge.setMaterialID(pack.getPackageID());
+				purge.setEntityType("Tx-package");
+				titleID = pack.getTitleID();
 			}
 			
-			for (OrderStatus order : orders) 
-			{
-				if (order.getMaterialid().equals(purge.getMaterialID()))
-				{
-					logger.debug("found matching order: " + order.getMaterialid());
-					if (order.getTitle() != null) 
-					{
-						purge.setTitle(order.getTitle().getChannels().toString());
-						purge.setTitle(order.getTitle().getTitle());
-					}
-				}
-			}
+			Title details = queryApi.getTitleById(titleID);
+			purge.setTitle(details.getTitle());
+			purge.setChannels(details.getChannels().toString());
 			
 			purged.add(purge);
 		}
