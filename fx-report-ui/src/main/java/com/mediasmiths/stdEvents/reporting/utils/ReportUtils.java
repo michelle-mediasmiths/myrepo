@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 
@@ -33,23 +34,23 @@ public abstract class ReportUtils
 		return object;
 	}
 	
-	public Object unmarshallReport(EventEntity event) 
+	public Object unmarshallReport(final EventEntity event)
 	{
 		logger.info(">>>unmarshallReport");
-		Object object = null;
+		Object obj = null;
 		String payload = event.getPayload();
-		logger.debug("Unmarshalling payload " + payload);
-		
+		logger.info("Unmarshalling payload " + payload);
+
 		try
 		{
 			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
-			object = JAXB_SERIALISER.deserialise(payload);
+			obj = JAXB_SERIALISER.deserialise(payload);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		logger.debug("<<<unmarshallReport");
-		return object;
+		return obj;
 	}
 }

@@ -17,6 +17,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
+import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
@@ -33,7 +34,7 @@ public class AcquisitionRpt extends ReportUtils
 
 	@Inject
 	private QueryAPI queryApi;
-	
+
 	public void writeAcquisitionDelivery(
 			final List<EventEntity> materials,
 			final DateTime startDate,
@@ -42,11 +43,11 @@ public class AcquisitionRpt extends ReportUtils
 	{
 		log.debug(">>>writeAcquisitionDelivery");
 		List<Acquisition> titles = getReportList(materials, startDate, endDate);
-		
+
 		int noFile = 0;
 		int noTape = 0;
 		int total = 0;
-		
+
 		for (Acquisition acq :titles)
 		{
 			if (acq.isFileDelivery()) {
@@ -57,14 +58,14 @@ public class AcquisitionRpt extends ReportUtils
 			}
 			total ++;
 		}
-		
+
 		log.debug("noFile: " + noFile + " noTape: " + noTape);
-		
-		final double perFile = (noFile / total) * 100;
-		final double perTape = (noTape / total) * 100;
-		
+
+		double perFile = (noFile / total) * 100;
+		double perTape = (noTape / total) * 100;
+
 		log.debug("perFile: " + perFile + " perTape: " + perTape);
-		
+
 		titles.add(addStats("No By File", Integer.toString(noFile)));
 		titles.add(addStats("No By Tape", Integer.toString(noTape)));
 		titles.add(addStats("% By File", Double.toString(perFile)));
@@ -80,19 +81,19 @@ public class AcquisitionRpt extends ReportUtils
 			final DateTime endDate)
 	{
 		log.debug(">>>getReportList");
-		
-		final List<Acquisition> acqs = new ArrayList<Acquisition>();
-		final List<OrderStatus> orders = getOrders(startDate, endDate);
-		
-		final String startF = startDate.toString(dateFormatter);
-		final String endF = endDate.toString(dateFormatter);
+
+		List<Acquisition> acqs = new ArrayList<Acquisition>();
+		List<OrderStatus> orders = queryApi.getOrdersInDateRange(startDate, endDate);
+
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
 
 		for (EventEntity event : events) 
 		{
 			Acquisition acq = (Acquisition) unmarshallReport(event);
-			
-			acq.setDateRange(new StringBuilder(startF).append(" - ").append(endF).toString());
-			
+
+			acq.setDateRange(startF + " - " + endF);
+
 			for (OrderStatus order : orders) 
 			{
 				String materialID = order.getMaterialid();
@@ -108,10 +109,12 @@ public class AcquisitionRpt extends ReportUtils
 					}
 				}
 			}
-			
+
+
 			long filesize = Long.valueOf(acq.getFilesize()).longValue();
+			log.debug("filesize long: " + filesize);
 			acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
-			
+
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
@@ -121,20 +124,15 @@ public class AcquisitionRpt extends ReportUtils
 			{
 				acq.setTapeDel("1");
 			}
-			
+
 			log.info(acq.getMaterialID() + " " + acq.getTitle() + " " + acq.getChannels());
 			acqs.add(acq);
 		}
-		
+
 		log.debug("<<<getReportList");
 		return acqs;
 	}
 
-	private List<OrderStatus> getOrders(DateTime start, DateTime end)
-	{		
-		return queryApi.getOrdersInDateRange(start, end);
-	}
-	
 	private void createCSV(final List<Acquisition> titles, final String reportName)
 	{
 		log.debug(">>>createCSV");
@@ -196,4 +194,4 @@ public class AcquisitionRpt extends ReportUtils
 		acq.setMaterialID(value);
 		return acq;
 	}
-}
+}	

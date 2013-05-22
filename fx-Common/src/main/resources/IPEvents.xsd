@@ -695,6 +695,7 @@
     				<xs:element name="channels" type="xs:string"/>
     				<xs:element name="protected" type="xs:string"/>
     				<xs:element name="extended" type="xs:string"/>
+    				<xs:element name="purged" type="xs:string"/>
     				<xs:element name="expires" type="xs:dateTime"/>
     			</xs:sequence>
     		</xs:extension>
