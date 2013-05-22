@@ -8,6 +8,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.log4j.Logger;
@@ -145,6 +148,27 @@ public class QueryAPIImpl implements QueryAPI
 		logger.info("List size (all): " + all.size());
 		return all;
 	}
+
+	@Transactional
+	public List<EventEntity> getByEventNameWindowDateRange(
+			String eventName,
+			int max,
+			DateTime start,
+			DateTime end)
+	{
+		List<EventEntity> events = eventDao.eventnamePaginatedDate(eventName, 0, max, start, end);
+		List<EventEntity> all = new ArrayList<EventEntity>();
+		all.addAll(events);
+		int startInt = 0;
+		while (events.size()==max) {
+			events = eventDao.eventnamePaginatedDate(eventName, startInt, max, start, end);
+			startInt = startInt + max;
+			all.addAll(events);
+			logger.info("Results: " + events);
+		}
+		
+		return all;
+	}
 	
 	@Transactional
 	public List<EventEntity> getEventsWindow(final String namespace, final String eventname, final int max)
@@ -276,6 +300,5 @@ public class QueryAPIImpl implements QueryAPI
 	public Title getTitleById(String id)
 	{
 		return titleDao.getById(id);
-	}
-	
+	}	
 }

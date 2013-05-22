@@ -82,6 +82,11 @@ public interface QueryAPI
 	public List<EventEntity> getEventsWindow (@PathParam("namespace")String namespace, @PathParam("eventname")String eventName, @PathParam("max")int max);
 	
 	@GET
+	@Path("/get_report-window_date")
+	@Produces("text/plain")
+	public List<EventEntity> getByEventNameWindowDateRange (String eventName, int max, DateTime start, DateTime end);
+	
+	@GET
 	@Path("/get_report_window_date")
 	@Produces("text/plain")
 	public List<EventEntity> getEventsWindowDateRange (String namespace, String eventName, int max, DateTime start, DateTime end);
