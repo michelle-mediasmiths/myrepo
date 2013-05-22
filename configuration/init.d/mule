@@ -15,7 +15,17 @@ MULE_USER=sysadmin
 JAVA_HOME=/opt/java/jdk1.7.0_09
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:$JAVA_HOME/bin
 
+case $1 in
+start|stop|restart|status)
+	# pass arg 1 onto mule script
+	exec sudo -u $MULE_USER env JAVA_HOME=$JAVA_HOME PATH=$PATH $MULE_HOME/bin/mule $1
+	;;
+force-reload)
+	# perform a restart
+	exec sudo -u $MULE_USER env JAVA_HOME=$JAVA_HOME PATH=$PATH $MULE_HOME/bin/mule restart
+	;;
+esac
 
-# Invoke Mule
-exec sudo -u $MULE_USER env JAVA_HOME=$JAVA_HOME PATH=$PATH $MULE_HOME/bin/mule $1
+
+
 
