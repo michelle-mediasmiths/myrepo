@@ -231,7 +231,7 @@ public class SegmentUtil
 		return ret;
 	}
 	
-	public static com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment convertMayamSegmentToRuzzSegment(Segment s){
+	public static com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment convertMayamSegmentToRuzzSegment(Segment s, String title){
 		
 		com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment rzSeg = new com.mediasmiths.foxtel.generated.outputruzz.SegmentListType.Segment();
 		
@@ -244,7 +244,7 @@ public class SegmentUtil
 		rzSeg.setEOM(eom);
 		rzSeg.setDuration(duration);
 		rzSeg.setNumber(s.getNumber());
-		rzSeg.setTitle(s.getTitle());
+		rzSeg.setTitle(title);
 		
 		return rzSeg;
 	}

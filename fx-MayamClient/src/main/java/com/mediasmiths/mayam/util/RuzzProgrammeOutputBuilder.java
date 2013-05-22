@@ -92,8 +92,7 @@ public class RuzzProgrammeOutputBuilder
 
 		for (Segment segment : segments)
 		{
-			SegmentListType.Segment rzSeg = SegmentUtil.convertMayamSegmentToRuzzSegment(segment);
-			rzSeg.setTitle(pack.getTitleAttributes().getAttribute(Attribute.SERIES_TITLE));
+			SegmentListType.Segment rzSeg = SegmentUtil.convertMayamSegmentToRuzzSegment(pack, pack.getTitleAttributes().getAttribute(Attribute.SERIES_TITLE));
 			s.getSegment().add(rzSeg);
 		}
 
