@@ -585,7 +585,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				String encodedString = new String(encoded);
 				EventAttachment attachment = new EventAttachment();
 				attachment.setValue(encodedString);
-				attachment.setFilename(String.format("%s.text",materialid));
+				attachment.setFilename(String.format("%s.txt",materialid));
 				attachment.setMime("text/plain");
 				
 				saveEvent(
