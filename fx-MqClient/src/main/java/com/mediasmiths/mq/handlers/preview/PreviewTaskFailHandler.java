@@ -63,7 +63,8 @@ public class PreviewTaskFailHandler extends TaskStateChangeHandler
 			PreviewFailed pf = new PreviewFailed();
 //			pf.setDate((new Date()).toString());
 			pf.setTitle(messageAttributes.getAttribute(Attribute.ASSET_TITLE).toString());
-			pf.setAssetId(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)); 
+			pf.setAssetId(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
+			pf.setPreviewNotes(messageAttributes.getAttributeAsString(Attribute.QC_PREVIEW_NOTES));
 
 			try
 			{
