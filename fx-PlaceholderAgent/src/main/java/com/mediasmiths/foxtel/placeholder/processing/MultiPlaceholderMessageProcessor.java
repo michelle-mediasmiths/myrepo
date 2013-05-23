@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.placeholder.processing;
 
+import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.AddOrUpdateMaterial;
 import au.com.foxtel.cf.mam.pms.AddOrUpdatePackage;
 import au.com.foxtel.cf.mam.pms.ChannelType;
@@ -556,11 +557,33 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 		    try
 		    {
 			    PlaceholderMessage message = resultPackage.getMessage();
-						PlaceholderMessage deleteMessage = message;
-						Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
+				PlaceholderMessage deleteMessage = message;
+				logger.info("Delete Message is : " + deleteMessage.toString());
+				
+				if (deleteMessage == null)
+				{
+					logger.error("Delete Message is null");
+				}
+				
+				Actions actions = deleteMessage.getActions();
+				logger.info("Actions are : " + actions.toString());
+				if (actions == null)
+				{
+					logger.error("Actions are null");
+				}
+				
+				List<Object> actionsList = actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial();
+				if (actionsList == null)
+				{
+					logger.error("Actions List is null");
+				}
+				
+						
+				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
-						String titleID = null;
-		        if (action instanceof PurgeTitle)
+				String titleID = null;
+		        
+				if (action instanceof PurgeTitle)
 		        {
 		            ppf.setAssetType("EPISODE");
 
