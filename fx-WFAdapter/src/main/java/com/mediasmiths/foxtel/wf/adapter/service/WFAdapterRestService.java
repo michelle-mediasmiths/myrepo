@@ -282,5 +282,10 @@ public interface WFAdapterRestService
 	@Produces("text/plain")
 	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException, IOException;
 	
+	@GET
+	@Path("materialInfo")
+	@Produces("text/plain")
+	public String getTextualMaterialInfo(@QueryParam("materialID") String materialID) throws MayamClientException;
+	
 }
 

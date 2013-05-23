@@ -1077,4 +1077,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		return true;
 	}
+
+	@Override
+	@GET
+	@Path("materialInfo")
+	@Produces("text/plain")
+	public String getTextualMaterialInfo(@QueryParam("materialID") String materialID) throws MayamClientException
+	{
+		return  mayamClient.getTextualMetatadaForMaterialExport(materialID);
+	}
 }
