@@ -40,7 +40,7 @@
 	
 	<pattern:http-proxy name="http-proxy-intalio">
     	<http:inbound-endpoint address="http://0.0.0.0:8089/ode" />
-	    <http:outbound-endpoint address="http://mamwkf01.mam.foxtel.com.au:8081/ode" />
+	    <http:outbound-endpoint address="http://mamint-pkg.mam.foxtel.com.au:8081/ode" />
 	</pattern:http-proxy>
 
 </mule>
