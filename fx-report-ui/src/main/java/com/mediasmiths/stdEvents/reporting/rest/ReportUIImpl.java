@@ -1,7 +1,5 @@
 package com.mediasmiths.stdEvents.reporting.rest;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -12,12 +10,9 @@ import org.joda.time.format.DateTimeFormatter;
 
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
-import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -137,30 +132,6 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 
-	private List<Acquisition> populateAcquisitions()
-	{
-		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		List<EventEntity> acqEvents = queryApi.getByEventName("ProgrammeContentAvailable");
-		acqEvents.addAll(queryApi.getByEventName("MarketingContentAvailable"));
-		for (EventEntity event : acqEvents)
-		{
-			Acquisition acq = (Acquisition) unmarshallRpt(event);
-			acqs.add(acq);
-		}
-		return acqs;
-	}
-
-	/**
-	 * Returns all the records in the BMS table
-	 * 
-	 * @return
-	 */
-	private List<AggregatedBMS> populateBMS()
-	{
-		logger.debug(">>>populateBMS");
-		return queryApi.getAllBMS();
-	}
-
 	@Transactional
 	private String getReport()
 	{
@@ -201,60 +172,12 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 
-	private boolean checkDate(final Long eventTime, final Date start, final Date end)
-	{
-		logger.debug(">>>checkDate");
-		boolean within = false;
-		Date event = new Date(eventTime);
-		logger.debug("eventDate: " + eventTime + " " + event);
-		if ((event.after(start)) && (event.before(end)))
-		{
-			within = true;
-		}
-		logger.debug("<<<checkDate");
-		return within;
-	}
-
-	private List<EventEntity> getInDate(final List<EventEntity> events, final Date start, final Date end)
-	{
-		logger.debug(">>>getInDate");
-		List<EventEntity> valid = new ArrayList<EventEntity>();
-		for (EventEntity event : events)
-		{
-			logger.info("event.getTime()" + event.getTime());
-			boolean within = checkDate(event.getTime(), start, end);
-			if (within)
-				valid.add(event);
-		}
-		logger.debug("<<<getInDate");
-		return valid;
-	}
-
 	@Transactional
 	private String getById(final Long id)
 	{
 		final TemplateCall call = templater.template("search");
 		call.set("events", queryApi.getById(id));
 		return call.process();
-	}
-
-	private Object unmarshallRpt(final EventEntity event)
-	{
-		Object rpt = null;
-		String payload = event.getPayload();
-		logger.info("Unmarshalling payload " + payload);
-		try
-		{
-			JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance(com.mediasmiths.foxtel.ip.common.events.report.ObjectFactory.class);
-			logger.info("Deserialising payload");
-			rpt = JAXB_SERIALISER.deserialise(payload);
-			logger.info("Object created");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-		return rpt;
 	}
 
 	@Transactional(readOnly = true)
@@ -312,22 +235,14 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getAutoQCCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", MAX),
-				start.toDate(),
-				end.toDate());
-		events.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", MAX),
-				start.toDate(),
-				end.toDate()));
-		events.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", MAX),
-				start.toDate(),
-				end.toDate()));
-		events.addAll(getInDate(
-				queryApi.getEventsWindow("http://www.foxtel.com.au/ip/qc", "CerifyQCError", MAX),
-				start.toDate(),
-				end.toDate()));
+		List<EventEntity> events = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", 
+				MAX, start, end);
+		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", 
+				MAX, start, end));
+		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", 
+				MAX, start, end));
+		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "CerifyQCError", 
+				MAX, start, end));
 		autoQc.writeAutoQc(events, start, end, reportName);
 	}
 
@@ -353,21 +268,17 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getExportCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		//TODO - IMPLEMENT
-		/*populateTitles();
-		populatePackages();
-		List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("CaptionProxySuccess", MAX));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ComplianceProxySuccess", MAX)));
-		events.addAll(getInDate(queryApi.getByEventNameWindow("ClassificationProxySuccess", MAX)));
-		export.writeExport(events, startDate, endDate, REPORT_NAME);*/
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("CaptionProxySuccess", MAX, start, end);
+		events.addAll(queryApi.getByEventNameWindowDateRange("ComplianceProxySuccess", MAX, start, end));
+		events.addAll(queryApi.getByEventNameWindowDateRange("ClassificationProxySuccess", MAX, start, end));
+		export.writeExport(events, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)
 	private void getWatchFolderStorageCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		//TODO - IMPLEMENT
-		/*List<EventEntity> events = getInDate(queryApi.getByEventNameWindow("FilePickUp", MAX));
-		watchFolder.writeWatchFolder(events, startDate, endDate, REPORT_NAME);*/
+		List<EventEntity> events = queryApi.getByEventNameWindowDateRange("FilePickUpNotification", MAX, start, end);
+		watchFolder.writeWatchFolder(events, start, end, reportName);
 	}
 
 	@Transactional(readOnly = true)

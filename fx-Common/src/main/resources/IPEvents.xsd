@@ -44,10 +44,12 @@
                 </xs:annotation>
                 <xs:extension base="fns:IPEvent">
                     <xs:sequence>
+                    	<xs:element name="dateRange" type="xs:string"/>
                         <xs:element name="filePath" type="xs:string"/>
                         <xs:element name="filename" type="xs:string"/>
                         <xs:element name="timeDiscovered" type="xs:long"/>
                         <xs:element name="timeProcessed" type="xs:long"/>
+                        <xs:element name="aggregator" type="xs:string"/>
                     </xs:sequence>
                 </xs:extension>
             </xs:complexContent>
@@ -311,10 +313,21 @@
             </xs:annotation>
             <xs:extension base="fns:IPEvent">
                 <xs:sequence>
-                    <xs:element name="assetId" type="xs:string"/>
+                	<xs:element name="dateRange" type="xs:string"/>
+                	<xs:element name="title" type="xs:string"/>
                     <xs:element name="materialID" type="xs:string"/>
+                    <xs:element name="channels" type="xs:string"/>
+                    <xs:element name="contentType" type="xs:string"/>
+                    <xs:element name="operator" type="xs:string"/>
+                    <xs:element name="qcStatus" type="xs:string"/>
+                    <xs:element name="taskStart" type="xs:string"/>
+                    <xs:element name="taskFinish" type="xs:string"/>
+                    <xs:element name="warningTime" type="xs:string"/>
+                    <xs:element name="manualOverride" type="xs:string"/>
+                    <xs:element name="failureParameter" type="xs:string"/>
+                    <xs:element name="titleLength" type="xs:string"/>
+                    <xs:element name="assetId" type="xs:string"/>
                     <xs:element name="forTXDelivery" type="xs:boolean"/>
-                    <xs:element name="title" type="xs:string"/>
                     <xs:element name="qcReportFilePath" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
