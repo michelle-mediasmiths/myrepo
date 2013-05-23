@@ -217,6 +217,7 @@
             <body>Item is located here: %s.</body>
             <emailaddresses> 
                 <emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+                <emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
             </emailaddresses>
         </MailTemplate>
     </MailData>
@@ -228,6 +229,7 @@
             <body>Item has failed Publicity proxy transcode, therefore has not been created or sent to the external location.</body>
             <emailaddresses> 
                 <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+                <emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
             </emailaddresses>
         </MailTemplate>
     </MailData>
@@ -239,6 +241,7 @@
 			<body>Item is located here: %s.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_SysAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
@@ -250,6 +253,7 @@
 			<body>Item has failed Classification transcode, therefore has not been created or sent to the external location.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>bryce.mcleod@mediasmiths.com</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>

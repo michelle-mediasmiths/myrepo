@@ -45,40 +45,10 @@ public class ExportMarkersButton extends ButtonClickHandler
 			
 			log.info(String.format("using email address %s for user %s",email, user));
 			
-			MarkerList markers = materialController.getMarkers(messageAttributes);
-			
-			if(markers == null){
-				log.warn(String.format("no markers found for item %s", messageAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
-				return;
-			}
-			
-			StringBuilder sb = new StringBuilder();
-			
-			for (Marker marker : markers)
-			{
-				String id = marker.getId();
-				String mediaId = marker.getMediaId();
-				Timecode in = marker.getIn();
-				Timecode duration = marker.getDuration();
-				String title = marker.getTitle();
-				Type type = marker.getType();
-
-				String str = String.format(
-						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}\n",
-						id,
-						mediaId,
-						in.toSmpte(),
-						duration.toSmpte(),
-						title,
-						type.toString(),user);
-				
-				log.debug(str);
-				sb.append(str);
-			}
-			
+			String markers = materialController.getMarkersString(messageAttributes, user);
 			
 			ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
-			clm.setLoggerdetails(sb.toString());
+			clm.setLoggerdetails(markers);
 			clm.setMasterID(messageAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			clm.setTitleField(messageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 			Emailaddresses emails = new Emailaddresses();

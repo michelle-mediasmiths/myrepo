@@ -40,6 +40,7 @@ import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
+import com.mediasmiths.mayam.util.TextualMetadataForItemOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
@@ -463,6 +464,14 @@ public class MayamClientImpl implements MayamClient
 		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController, client.assetApi());
 		return RuzzProgrammeOutputBuilder.buildProgramme(pack, titleController);
 				
+	}
+
+	@Override
+	public String getTextualMetatadaForMaterialExport(String materialId) throws MayamClientException
+	{
+		//fetch all the information
+		FullMaterialInfo info = new FullMaterialInfo(materialId, packageController, materialController, titleController, client.assetApi(), client.segmentApi());
+		return TextualMetadataForItemOutputBuilder.buildInfoString(info);
 	}
 	
 
@@ -1195,4 +1204,5 @@ public class MayamClientImpl implements MayamClient
 
 		return getChannelGroupsForItem(materialAttributes);
 	}
+
 }

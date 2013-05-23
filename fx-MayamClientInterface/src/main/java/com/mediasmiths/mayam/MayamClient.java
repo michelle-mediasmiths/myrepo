@@ -242,6 +242,11 @@ public interface MayamClient
 	Programme getProgramme(String packageID) throws MayamClientException;
 
 	/**
+	 * returns a string containing material and package metadata used to accompany compliance and publicity exports
+	 */
+	String getTextualMetatadaForMaterialExport(String materialId) throws MayamClientException;
+	
+	/**
 	 *
 	 * @param packageID
 	 * @return

@@ -579,6 +579,16 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
+				
+				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
+				String metadata = mayamClient.getTextualMetatadaForMaterialExport(materialid);
+				byte[] encoded = Base64.encodeBase64(metadata.getBytes());
+				String encodedString = new String(encoded);
+				EventAttachment attachment = new EventAttachment();
+				attachment.setValue(encodedString);
+				attachment.setFilename(String.format("%s.text",materialid));
+				attachment.setMime("text/plain");
+				
 				saveEvent(
 						"ClassificationProxySuccess",
 						notification,
@@ -1030,9 +1040,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	@Path("/export/writeCompanions")
 	@Consumes("application/xml")
 	@Produces("text/plain")
-	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException
+	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException, IOException
 	{
+		
 		Long taskID = request.getTaskID().longValue();
+		log.info("Write export companion request received for task : "+taskID);
+		
 		AttributeMap task = mayamClient.getTask(taskID);
 		
 		final Boolean writeMetadata = (Boolean) task.getAttribute(Attribute.OP_FLAG);
@@ -1044,16 +1057,21 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
 				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID));
-			
 				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
 				mexSerialiser.serialise(programme, new File(metadataFileLocation));
+			}
+			else if(jobType.equals(TranscodeJobType.COMPLIANCE_PROXY) || jobType.equals(TranscodeJobType.PUBLICITY_PROXY)){
+				String materialId = (String)task.getAttribute(Attribute.HOUSE_ID);
+				String textualMetadata = mayamClient.getTextualMetatadaForMaterialExport(materialId);
+				
+				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".txt");
+				FileUtils.writeStringToFile(new File(metadataFileLocation),textualMetadata);
 			}
 		}
 		
 		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
 			//write any attached files (scripts?) to disk
 			//cant really differentiate between different filetypes so this will probably output qc reports and the like as well
-			
 			
 		}
 		

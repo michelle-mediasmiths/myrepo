@@ -16,10 +16,13 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
+import com.mayam.wf.attributes.shared.type.Marker;
 import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.attributes.shared.type.Timecode;
+import com.mayam.wf.attributes.shared.type.Marker.Type;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
@@ -1488,11 +1491,64 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
+	public String getMarkersString(AttributeMap materialAttributes, String user) throws MayamClientException
+	{
+		MarkerList markers = getMarkers(materialAttributes);
+
+		if (markers == null)
+		{
+			log.warn(String.format("no markers found for item %s", materialAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+			return "";
+		}
+
+		StringBuilder sb = new StringBuilder();
+
+		for (Marker marker : markers)
+		{
+			String id = marker.getId();
+			String mediaId = marker.getMediaId();
+			Timecode in = marker.getIn();
+			Timecode duration = marker.getDuration();
+			String title = marker.getTitle();
+			Type type = marker.getType();
+			String str;
+
+			if (user == null)
+			{
+				str = String.format(
+						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s}\n",
+						id,
+						mediaId,
+						in.toSmpte(),
+						duration.toSmpte(),
+						title,
+						type.toString());
+			}
+			else
+			{
+				str = String.format(
+						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}\n",
+						id,
+						mediaId,
+						in.toSmpte(),
+						duration.toSmpte(),
+						title,
+						type.toString(),
+						user);
+			}
+
+			log.debug(str);
+			sb.append(str);
+		}
+
+		return sb.toString();
+
+	}
+	
 	public MarkerList getMarkers(AttributeMap messageAttributes) throws MayamClientException
 	{
 		
 		String assetID = messageAttributes.getAttributeAsString(Attribute.ASSET_ID);
-		String user = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);
 		String revisionId = null;
 		try
 		{

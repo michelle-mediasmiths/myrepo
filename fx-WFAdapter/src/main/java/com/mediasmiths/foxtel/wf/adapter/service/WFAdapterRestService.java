@@ -274,12 +274,13 @@ public interface WFAdapterRestService
 	 * @param request
 	 * @return
 	 * @throws MayamClientException
+	 * @throws IOException 
 	 */
 	@POST
 	@Path("/export/writeCompanions")
 	@Consumes("application/xml")
 	@Produces("text/plain")
-	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException;
+	public boolean writeExportCompanions(WriteExportCompanions request) throws MayamClientException, IOException;
 	
 }
 

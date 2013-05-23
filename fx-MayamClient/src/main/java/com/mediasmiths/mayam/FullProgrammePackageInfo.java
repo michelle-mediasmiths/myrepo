@@ -16,6 +16,10 @@ import org.apache.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * Given a package id, loads all the info for that package, parent material and grandparent title
+ *
+ */
 public class FullProgrammePackageInfo
 {
 
