@@ -208,4 +208,10 @@ public class OutputPathsTest
 		
 	}
 	
+	@Test
+	public void testCaptionFileNameNonEpisodic(){
+		assertEquals("ABC12345-BigBang_v01", toTest.getFileNameForCaptionExport("ABC12345", "Big Bang Theory",null,null, Integer.valueOf(1)));
+		
+	}
+	
 }

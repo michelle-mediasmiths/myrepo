@@ -25,8 +25,14 @@ public class OutputPaths
 	private String captionFileNameFormatString;
 	
 	@Inject
+	@Named("export.caption.filename.non.episodic.formatstring")
+	private String captionFileNameNonEpisodicFormatString;
+	
+	@Inject
 	@Named("export.caption.filename.titlehint.length")
 	private Integer captionFileNameTitleHintLength;
+	
+	
 	
 
 	private final static Logger log = Logger.getLogger(OutputPaths.class);
@@ -191,7 +197,22 @@ public class OutputPaths
 		programmeTitle = StringUtils.trimToEmpty(programmeTitle).replace(" ","");
 		programmeTitle = StringUtils.left(programmeTitle, captionFileNameTitleHintLength);
 		
-		String filename = String.format(captionFileNameFormatString, presentationID,programmeTitle, seriesNumber, episodeNumber, exportVersion);
+		String filename;
+		
+		if (episodeNumber == null && seriesNumber == null)
+		{
+			filename = String.format(captionFileNameNonEpisodicFormatString, presentationID, programmeTitle, exportVersion);
+		}
+		else
+		{
+			filename = String.format(
+					captionFileNameFormatString,
+					presentationID,
+					programmeTitle,
+					seriesNumber,
+					episodeNumber,
+					exportVersion);
+		}
 		
 		log.debug("Caption export filename: " +filename);
 		
