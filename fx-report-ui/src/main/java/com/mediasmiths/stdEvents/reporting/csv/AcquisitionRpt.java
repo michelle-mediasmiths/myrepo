@@ -17,7 +17,6 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.report.Acquisition;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
@@ -83,7 +82,6 @@ public class AcquisitionRpt extends ReportUtils
 		log.debug(">>>getReportList");
 
 		List<Acquisition> acqs = new ArrayList<Acquisition>();
-		List<OrderStatus> orders = queryApi.getOrdersInDateRange(startDate, endDate);
 
 		String startF = startDate.toString(dateFormatter);
 		String endF = endDate.toString(dateFormatter);
@@ -94,22 +92,14 @@ public class AcquisitionRpt extends ReportUtils
 
 			acq.setDateRange(startF + " - " + endF);
 
-			for (OrderStatus order : orders) 
+			OrderStatus order = queryApi.getOrderStatusById(acq.getMaterialID());
+			if (order.getTitle() != null)
 			{
-				String materialID = order.getMaterialid();
-				if (materialID.equals(acq.getMaterialID())) 
-				{
-					log.debug("matching order found, materialID: " + materialID);
-					if (order.getTitle() != null)
-					{
-						log.debug("title: " + order.getTitle().getTitle());
-						log.debug("channels: " + order.getTitle().getChannels());
-						acq.setChannels(order.getTitle().getChannels().toString());
-						break;
-					}
-				}
+				log.debug("title: " + order.getTitle().getTitle());
+				log.debug("channels: " + order.getTitle().getChannels());
+				acq.setChannels(order.getTitle().getChannels().toString());
+				break;
 			}
-
 
 			long filesize = Long.valueOf(acq.getFilesize()).longValue();
 			log.debug("filesize long: " + filesize);

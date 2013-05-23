@@ -102,5 +102,6 @@ public interface QueryAPI
 
 	public Title getTitleById(String id);
 	
+	public OrderStatus getOrderStatusById (String id);
 	
 }
