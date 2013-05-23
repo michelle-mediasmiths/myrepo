@@ -29,7 +29,7 @@ public class FullMaterialInfo
 	private AttributeMap materialAttributes;
 	private SegmentListList packages;
 	private String markers;
-	String titleID;
+	String titleId;
 	AttributeMap titleAttributes;
 
 	public FullMaterialInfo(
@@ -46,7 +46,7 @@ public class FullMaterialInfo
 		materialAttributes = materialController.getMaterialAttributes(materialID);
 
 		// get the title
-		String titleId = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+		titleId = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 		String titleAssetID = materialAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
 		try
 		{
@@ -57,7 +57,8 @@ public class FullMaterialInfo
 			log.error("Unable to locate asset with ID: " + titleAssetID, e);
 
 			titleAttributes = titleController.getTitle(titleId);
-
+			titleId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
+			
 			log.error("Using the parent house id title as a fall back: " + titleId);
 		}
 		
@@ -78,7 +79,7 @@ public class FullMaterialInfo
 
 	public String getTitleID()
 	{
-		return titleID;
+		return titleId;
 	}
 
 	public String getMaterialID()
