@@ -129,6 +129,7 @@
           <bpel:sequence>
             <bpel:scope bpmn:label="SubProcess" name="SubProcess-1" bpmn:id="_D76GELMxEeKieaePm6sHlw">
               <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                <ext:faultOnFailure>true</ext:faultOnFailure>
                 <ext:retryFor>10</ext:retryFor>
                 <ext:retryDelay>60</ext:retryDelay>
               </ext:failureHandling>
@@ -189,6 +190,9 @@
               </bpel:sequence>
             </bpel:scope>
             <bpel:scope bpmn:label="loop until complete or cancelled" name="loop_until_complete_or_cancelled" bpmn:id="_wL8dAHENEeKgV8mGUipbQA">
+              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                <ext:faultOnFailure>true</ext:faultOnFailure>
+              </ext:failureHandling>
               <bpel:repeatUntil bpmn:label="loop until complete or cancelled" name="loop_until_complete_or_cancelled-1">
                 <bpel:sequence>
                   <bpel:wait bpmn:label="Timer_Intermediate_Event" name="Timer_Intermediate_Event" bpmn:id="_0EO9MHENEeKgV8mGUipbQA">
@@ -196,6 +200,7 @@
                   </bpel:wait>
                   <bpel:scope bpmn:label="SubProcess" name="SubProcess-2" bpmn:id="_qGUysLMxEeKieaePm6sHlw">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                       <ext:retryFor>10</ext:retryFor>
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
@@ -234,6 +239,7 @@
                   </bpel:scope>
                   <bpel:scope bpmn:label="SubProcess" name="SubProcess-3" bpmn:id="_Ff_5kLMyEeKieaePm6sHlw">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                       <ext:retryFor>10</ext:retryFor>
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
@@ -403,6 +409,7 @@
                 <bpel:empty bpmn:label="join" name="join" bpmn:id="_05NmILM0EeKieaePm6sHlw"/>
                 <bpel:scope bpmn:label="SubProcess" name="SubProcess-7" bpmn:id="_qCy2MLM0EeKieaePm6sHlw">
                   <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                    <ext:faultOnFailure>true</ext:faultOnFailure>
                     <ext:retryFor>10</ext:retryFor>
                     <ext:retryDelay>60</ext:retryDelay>
                   </ext:failureHandling>
@@ -457,6 +464,7 @@
                         </bpel:assign>
                         <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_Qjw3ELM0EeKieaePm6sHlw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:faultOnFailure>true</ext:faultOnFailure>
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
@@ -503,6 +511,7 @@
                         <bpel:empty bpmn:label="join" name="join-1" bpmn:id="_05NmILM0EeKieaePm6sHlw"/>
                         <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_qCy2MLM0EeKieaePm6sHlw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:faultOnFailure>true</ext:faultOnFailure>
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>
@@ -548,6 +557,7 @@
         <bpel:empty bpmn:label="success" name="success" bpmn:id="_u1kjIHEREeKgV8mGUipbQA"/>
         <bpel:scope bpmn:label="SubProcess" name="SubProcess-10" bpmn:id="_X5t3gMIHEeK5gKDdeHD_PQ">
           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:faultOnFailure>true</ext:faultOnFailure>
             <ext:retryFor>10</ext:retryFor>
             <ext:retryDelay>60</ext:retryDelay>
           </ext:failureHandling>
