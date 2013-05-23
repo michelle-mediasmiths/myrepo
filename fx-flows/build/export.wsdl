@@ -1,10 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns2="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:writeexportcompanions="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeexportcompanions.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:transcode="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export">
+<wsdl:definitions xmlns:tns="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:tns1="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:tns2="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:exportFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/exportFailed.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:writeexportcompanions="http://ns.mediasmithsforge.com/foxtel/wfAdapter/writeexportcompanions.rest" xmlns:diag="http://ns.mediasmithsforge.com/foxtel/export" xmlns:transcode="http://ns.mediasmithsforge.com/foxtel/export/transcode" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/export/wfadapter" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" targetNamespace="http://ns.mediasmithsforge.com/foxtel/export">
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" location="fsAdapter/delete.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" location="tcAdapter/createJob.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" location="tcAdapter/deleteJob.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" location="tcAdapter/queryJob.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" location="tcAdapter/setPriority.wsdl"/>
+    <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/exportFailed.rest" location="wfAdapter/exportFailed.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" location="wfAdapter/isTaskCancelled.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" location="wfAdapter/tcFailure.wsdl"/>
     <wsdl:import namespace="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" location="wfAdapter/tcGetPriority.wsdl"/>
@@ -31,21 +32,24 @@
         <pnlk:role name="tcadapter_for_transcode" portType="setPriority:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk0">
-        <pnlk:role name="wfadapter_for_transcode" portType="isTaskCancelled:restInterface"/>
+        <pnlk:role name="wfadapter_for_transcode" portType="exportFailed:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk1">
-        <pnlk:role name="wfadapter_for_transcode" portType="tcFailure:restInterface"/>
+        <pnlk:role name="wfadapter_for_transcode" portType="isTaskCancelled:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk2">
-        <pnlk:role name="wfadapter_for_transcode" portType="tcGetPriority:restInterface"/>
+        <pnlk:role name="wfadapter_for_transcode" portType="tcFailure:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk3">
-        <pnlk:role name="wfadapter_for_transcode" portType="tcPassed:restInterface"/>
+        <pnlk:role name="wfadapter_for_transcode" portType="tcGetPriority:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk4">
-        <pnlk:role name="wfadapter_for_transcode" portType="tcTotalFailure:restInterface"/>
+        <pnlk:role name="wfadapter_for_transcode" portType="tcPassed:restInterface"/>
     </pnlk:partnerLinkType>
     <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk5">
+        <pnlk:role name="wfadapter_for_transcode" portType="tcTotalFailure:restInterface"/>
+    </pnlk:partnerLinkType>
+    <pnlk:partnerLinkType name="wfadapterAndTranscodeForHttpPortPlk6">
         <pnlk:role name="wfadapter_for_transcode" portType="writeexportcompanions:restInterface"/>
     </pnlk:partnerLinkType>
 </wsdl:definitions>
