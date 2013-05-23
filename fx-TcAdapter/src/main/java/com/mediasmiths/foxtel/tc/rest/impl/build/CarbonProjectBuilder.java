@@ -82,14 +82,14 @@ public class CarbonProjectBuilder
 
 	public CarbonProject build(TCJobParameters parameters)
 	{
-		CarbonProject project = loadProject(pickProfile(parameters));
-
-		customise(project, parameters);
+		CarbonBaseProfile profile = pickProfile(parameters);
+		CarbonProject project = loadProject(profile);
+		customise(project, parameters, profile);
 
 		return project;
 	}
 
-	private void customise(final CarbonProject project, final TCJobParameters parameters)
+	private void customise(final CarbonProject project, final TCJobParameters parameters, CarbonBaseProfile profile)
 	{
 		// Optionally add the Timecode filter
 		if (parameters.timecode != null)
@@ -108,7 +108,7 @@ public class CarbonProjectBuilder
 		
 		if(parameters.ftpupload != null)
 		{
-			ftpUpload = buildFTPUpload(parameters.ftpupload);
+			ftpUpload = buildFTPUpload(parameters.ftpupload, profile);
 		}
 		
 		setInputFile(project, parameters.inputFile);
@@ -116,12 +116,16 @@ public class CarbonProjectBuilder
 		setOutputFile(project, parameters.outputFolder, parameters.outputFileBasename,ftpUpload);		
 	}
 
-	private CarbonFTPUpload buildFTPUpload(TCFTPUpload ftpupload)
+	private CarbonFTPUpload buildFTPUpload(TCFTPUpload ftpupload, CarbonBaseProfile profile)
 	{
 		// Load bug filter resource template
 		final Element xml = loadXML(ftpUploadResource);
 		CarbonFTPUpload upload = new CarbonFTPUpload(xml);
-		upload.setRemoteFTPFile(ftpupload.filename);
+		
+		if (profile.isSingleFileOutput())
+		{
+			upload.setRemoteFTPFile(ftpupload.filename);
+		}
 		upload.setRemoteFTPFolder(ftpupload.folder);
 		upload.setFTPPassword(ftpupload.password);
 		upload.setFTPUsername(ftpupload.user);

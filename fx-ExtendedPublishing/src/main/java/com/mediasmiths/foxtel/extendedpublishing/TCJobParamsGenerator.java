@@ -45,17 +45,17 @@ public class TCJobParamsGenerator
 	@Inject
 	@Named("export.caption.timecode.colour")
 	private String captionTimeCodeColour;
-	
+
 	@Inject
 	@Named("export.caption.timecode.position")
 	private String captionTimeCodePosition;
-	
+
 	@Inject
 	OutputPaths outputPaths;
-	
+
 	@Inject
 	TranscodeRules transcodeOutputRules;
-	
+
 	public TCJobParameters jobParams(
 			boolean isSurround,
 			boolean isSD,
@@ -68,12 +68,13 @@ public class TCJobParamsGenerator
 			long taskID,
 			Date firstTX,
 			TranscodeJobType jobType,
-			String inputFile)
+			String inputFile,
+			String requestedFormat)
 	{
 		TCJobParameters jobParams = new TCJobParameters();
 
 		log.debug("buglocation: " + buglocation);
-		if (buglocation != null && !buglocation.equals("--") && channelTag!=null)
+		if (buglocation != null && !buglocation.equals("--") && channelTag != null)
 		{
 			TCBugOptions bug = bug(buglocation, channelTag);
 			jobParams.bug = bug;
@@ -102,7 +103,7 @@ public class TCJobParamsGenerator
 		}
 
 		jobParams.timecode = timecode(timecodeColour, timecodePosition, jobType);
-		jobParams.purpose = getPurpose(jobType);
+		jobParams.purpose = getPurpose(jobType, requestedFormat);
 
 		jobParams.priority = getPriority(firstTX, jobType);
 
@@ -135,7 +136,7 @@ public class TCJobParamsGenerator
 		return priority.intValue();
 	}
 
-	public TCOutputPurpose getPurpose(TranscodeJobType jobType)
+	public TCOutputPurpose getPurpose(TranscodeJobType jobType, String requestedFormat)
 	{
 		switch (jobType)
 		{
@@ -145,11 +146,25 @@ public class TCJobParamsGenerator
 				}
 			case COMPLIANCE_PROXY:
 				{
-					return TCOutputPurpose.MPG4;
+					if ("dvd".equals(requestedFormat))
+					{
+						return TCOutputPurpose.DVD;
+					}
+					else
+					{
+						return TCOutputPurpose.MPG4;
+					}
 				}
 			case PUBLICITY_PROXY:
 				{
-					return TCOutputPurpose.MPG4;
+					if ("dvd".equals(requestedFormat))
+					{
+						return TCOutputPurpose.DVD;
+					}
+					else
+					{
+						return TCOutputPurpose.MPG4;
+					}
 				}
 			case TX:
 				throw new IllegalArgumentException("Unexpected job type");
@@ -162,13 +177,14 @@ public class TCJobParamsGenerator
 	public TCTimecodeOptions timecode(String timecodeColour, String timecodePosition, TranscodeJobType jobType)
 	{
 
-		//CR001 - Caption proxies
-		//Timecode position must be at the top of the screen.
-		//Timecode must be white text on a black background. 
-		//The timecode font and font size will be fixed.
-		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
-			timecodeColour=captionTimeCodeColour;
-			timecodePosition=captionTimeCodePosition;
+		// CR001 - Caption proxies
+		// Timecode position must be at the top of the screen.
+		// Timecode must be white text on a black background.
+		// The timecode font and font size will be fixed.
+		if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
+		{
+			timecodeColour = captionTimeCodeColour;
+			timecodePosition = captionTimeCodePosition;
 		}
 
 		if (timecodeColour != null && timecodeColour.length() == 3 && timecodePosition != null)

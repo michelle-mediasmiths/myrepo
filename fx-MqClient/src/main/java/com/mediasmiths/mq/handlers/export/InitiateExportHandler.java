@@ -50,16 +50,17 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		String buglocation = (String) messageAttributes.getAttribute(Attribute.VISUAL_BUG);
 		String timecodePosition = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
 		String timecodeColour = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
+		String requestedFormat = (String) messageAttributes.getAttribute(Attribute.OP_FMT);
 
-//		StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
+		// StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
 
 		String channel = (String) messageAttributes.getAttribute(Attribute.CHANNEL);
-		
-//		// get the first channel
-//		if (channels != null && channels.get(0) != null)
-//		{
-//			channel = channels.get(0);
-//		}
+
+		// // get the first channel
+		// if (channels != null && channels.get(0) != null)
+		// {
+		// channel = channels.get(0);
+		// }
 
 		String materialID;
 		String packageID;
@@ -150,7 +151,8 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 					taskID,
 					firstTX,
 					jobType,
-					inputFile);
+					inputFile,
+					requestedFormat);
 		}
 		catch (Exception e)
 		{
@@ -222,7 +224,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		ie.setTitle(assetTitle);
 		ie.setCreated(new Date());
 		ie.setJobType(jobType.getText());
-		
+
 		if (packageID == null || "".equals(packageID))
 		{
 			log.debug("package id is null");

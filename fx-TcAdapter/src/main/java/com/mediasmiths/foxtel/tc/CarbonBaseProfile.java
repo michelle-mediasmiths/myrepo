@@ -17,7 +17,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	TX_HD_STEREO(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.STEREO, "TX_HD_STEREO.pcp"),
+	TX_HD_STEREO(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.STEREO, "TX_HD_STEREO.pcp",true),
 	/**
 	 * SD GXF (from HD source) with Stereo audio
 	 * <ul>
@@ -26,7 +26,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	TX_SD_STEREO_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO, "TX_SD_STEREO_FROM_HD.pcp"),
+	TX_SD_STEREO_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.STEREO, "TX_SD_STEREO_FROM_HD.pcp",true),
 	/**
 	 * SD GXF with Stereo audio
 	 * <ul>
@@ -35,7 +35,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	TX_SD_STEREO(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.STEREO, "TX_SD_STEREO.pcp"),
+	TX_SD_STEREO(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.STEREO, "TX_SD_STEREO.pcp",true),
 
 	/**
 	 * HD GXF with Stereo and DolbyE
@@ -46,7 +46,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	TX_HD_DOLBYE(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_HD_DOLBYE.pcp"),
+	TX_HD_DOLBYE(TCOutputPurpose.TX_HD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_HD_DOLBYE.pcp",true),
 
 	/**
 	 * SD GXF (from HD source) with Stereo and DolbyE
@@ -57,7 +57,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	TX_SD_DOLBYE_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE_FROM_HD.pcp"),
+	TX_SD_DOLBYE_FROM_HD_SOURCE(TCOutputPurpose.TX_SD, TCResolution.HD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE_FROM_HD.pcp",true),
 
 	/**
 	 * SD GXF with Stereo and DolbyE
@@ -67,7 +67,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	TX_SD_DOLBYE(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE.pcp"),
+	TX_SD_DOLBYE(TCOutputPurpose.TX_SD, TCResolution.SD, TCAudioType.DOLBY_E, "TX_SD_DOLBYE.pcp",true),
 
 	/**
 	 * VCD for captioning
@@ -76,7 +76,7 @@ public enum CarbonBaseProfile
 	 * <li>Does not seem to matter whether Stereo/DolbyE</li>
 	 * </ul>
 	 */
-	CAPTIONING(TCOutputPurpose.CAPTIONING, null, null, "VCD_ALL_ALL.pcp"),
+	CAPTIONING(TCOutputPurpose.CAPTIONING, null, null, "VCD_ALL_ALL.pcp",true),
 	/**
 	 * Delivery content for DVD (where the source has DolbyE audio)
 	 * <ul>
@@ -85,7 +85,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	DVD_DOLBYE(TCOutputPurpose.DVD, null, TCAudioType.DOLBY_E, "DVD_ALL_DOLBYE.pcp"),
+	DVD_DOLBYE(TCOutputPurpose.DVD, null, TCAudioType.DOLBY_E, "DVD_ALL_DOLBYE.pcp",false),
 	/**
 	 * Delivery content for DVD (where the source has only Stereo audio)
 	 * <ul>
@@ -93,7 +93,7 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	DVD_STEREO(TCOutputPurpose.DVD, null, TCAudioType.STEREO, "DVD_ALL_STEREO.pcp"),
+	DVD_STEREO(TCOutputPurpose.DVD, null, TCAudioType.STEREO, "DVD_ALL_STEREO.pcp",false),
 	/**
 	 * Delivery content for single MPG4 file (where the source has DolbyE audio)
 	 * <ul>
@@ -102,7 +102,7 @@ public enum CarbonBaseProfile
 	 * <li>A3 and A4 are DolbyE</li>
 	 * </ul>
 	 */
-	MPG4_DOLBYE(TCOutputPurpose.MPG4, null, TCAudioType.DOLBY_E, "MPG4_ALL_DOLBYE.pcp"),
+	MPG4_DOLBYE(TCOutputPurpose.MPG4, null, TCAudioType.DOLBY_E, "MPG4_ALL_DOLBYE.pcp",true),
 	/**
 	 * Delivery content for single MPG4 file (where the source has only Stereo audio)
 	 * <ul>
@@ -110,19 +110,21 @@ public enum CarbonBaseProfile
 	 * <li>A1 and A2 are Stereo tracks</li>
 	 * </ul>
 	 */
-	MPG4_STEREO(TCOutputPurpose.MPG4, null, TCAudioType.STEREO, "MPG4_ALL_STEREO.pcp");
+	MPG4_STEREO(TCOutputPurpose.MPG4, null, TCAudioType.STEREO, "MPG4_ALL_STEREO.pcp",true);
 	
 	private final TCAudioType audioType;
 	private final TCOutputPurpose purpose;
 	private final TCResolution source;
 	private final String filename;
+	private final boolean singleFileOutput;
 
-	CarbonBaseProfile(TCOutputPurpose purpose, TCResolution source, TCAudioType audio, String filename)
+	CarbonBaseProfile(TCOutputPurpose purpose, TCResolution source, TCAudioType audio, String filename, boolean singleFileOutput)
 	{
 		this.purpose = purpose;
 		this.source = source;
 		this.audioType = audio;
 		this.filename = filename;
+		this.singleFileOutput=singleFileOutput;
 	}
 
 	/**
@@ -160,5 +162,9 @@ public enum CarbonBaseProfile
 	public String getFilename()
 	{
 		return filename;
+	}
+	
+	public boolean isSingleFileOutput(){
+		return singleFileOutput;
 	}
 }
