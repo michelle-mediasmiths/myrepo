@@ -118,6 +118,7 @@ public class TextualMetadataForItemOutputBuilder
 							"\tPresentation ID : %s Segment Count : %d : SOM %s : EOM %s\n",
 							presentationID,
 							segmentList.getEntries().size(),
+							somString,
 							eomString));
 				}
 				else
