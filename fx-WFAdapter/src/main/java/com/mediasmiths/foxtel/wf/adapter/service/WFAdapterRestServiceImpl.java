@@ -1063,7 +1063,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				String materialId = (String)task.getAttribute(Attribute.HOUSE_ID);
 				String textualMetadata = mayamClient.getTextualMetatadaForMaterialExport(materialId);
 				
-				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".txt");
+				String metadataFileLocation = outputPaths.getLocalPathToExportDestination((String) task.getAttribute(Attribute.CHANNEL),jobType, filename, ".txt");
 				FileUtils.writeStringToFile(new File(metadataFileLocation),textualMetadata);
 			}
 		}
