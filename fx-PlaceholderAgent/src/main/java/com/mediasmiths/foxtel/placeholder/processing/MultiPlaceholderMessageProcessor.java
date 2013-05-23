@@ -780,7 +780,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
             {
 	            logger.error("Placeholder validation error: " + e.result, e);
 
-	            validationExceptions.add(new MessageValidationResultPackage(envelope.getPickupPackage(), e.result));
+	            validationExceptions.add(new MessageValidationResultPackage(envelope.getPickupPackage(), message, e.result));
 
             }
             catch (MessageProcessingFailedException e)
