@@ -594,17 +594,26 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true,
-						deliveryLocation,emails,null);
+						deliveryLocation,emails,attachment);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
+				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
+				String metadata = mayamClient.getTextualMetatadaForMaterialExport(materialid);
+				byte[] encoded = Base64.encodeBase64(metadata.getBytes());
+				String encodedString = new String(encoded);
+				EventAttachment attachment = new EventAttachment();
+				attachment.setValue(encodedString);
+				attachment.setFilename(String.format("%s.text",materialid));
+				attachment.setMime("text/plain");
+				
 				saveEvent(
 						"PublicityProxySuccess",
 						notification,
 						TC_EVENT_NAMESPACE,
 						new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
 						true,
-						deliveryLocation,emails,null);
+						deliveryLocation,emails,attachment);
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
