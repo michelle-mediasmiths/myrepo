@@ -19,6 +19,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.AssetTransferForQCResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.ExportFailedRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
@@ -286,6 +287,11 @@ public interface WFAdapterRestService
 	@Path("materialInfo")
 	@Produces("text/plain")
 	public String getTextualMaterialInfo(@QueryParam("materialID") String materialID) throws MayamClientException;
+	
+	@POST
+	@Path("/export/failed")
+	@Consumes("application/xml")
+	public void exportFailed(ExportFailedRequest request) throws MayamClientException;
 	
 }
 

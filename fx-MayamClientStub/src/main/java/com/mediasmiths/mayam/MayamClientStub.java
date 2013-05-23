@@ -814,7 +814,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public void exportFailed(long taskID) throws MayamClientException
+	public void exportFailed(long taskID, String reason) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		

@@ -1005,7 +1005,7 @@ public class MayamClientImpl implements MayamClient
 	}
 	
 	@Override
-	public void exportFailed(long taskID) throws MayamClientException
+	public void exportFailed(long taskID, String reason) throws MayamClientException
 	{
 		AttributeMap task;
 		try
@@ -1020,6 +1020,7 @@ public class MayamClientImpl implements MayamClient
 		
 		AttributeMap update = tasksController.updateMapForTask(task);
 		update.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
+		update.setAttribute(Attribute.ERROR_MSG, reason);
 		tasksController.saveTask(update);
 	}
 

@@ -110,7 +110,7 @@ public class TextualMetadataForItemOutputBuilder
 					Timecode som = segmentList.getEntries().get(0).getIn();
 					String somString = som.toSmpte();
 					String eomString = SegmentUtil.calculateEOM(
-							segmentList.getEntries().get(segmentList.getEntries().size()).getDuration().toSmpte(),
+							segmentList.getEntries().get(segmentList.getEntries().size()-1).getDuration().toSmpte(),
 							com.mediasmiths.std.types.Timecode.getInstance(somString));
 
 					sb.append(String.format(

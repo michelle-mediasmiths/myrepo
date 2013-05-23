@@ -321,7 +321,7 @@ public interface MayamClient
 
 	public void exportCompleted(long taskID) throws MayamClientException;
 
-	void exportFailed(long taskID) throws MayamClientException;
+	void exportFailed(long taskID, String reason) throws MayamClientException;
 
 	public void addMaterialToPurgeCandidateList(String materialID, int daysUntilPurge) throws MayamClientException;
 

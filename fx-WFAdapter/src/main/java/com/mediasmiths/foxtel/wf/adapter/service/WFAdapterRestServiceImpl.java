@@ -51,6 +51,7 @@ import com.mediasmiths.foxtel.wf.adapter.model.AutoQCErrorNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCPassNotification;
 import com.mediasmiths.foxtel.wf.adapter.model.AutoQCResultNotification;
+import com.mediasmiths.foxtel.wf.adapter.model.ExportFailedRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityRequest;
 import com.mediasmiths.foxtel.wf.adapter.model.GetPriorityResponse;
 import com.mediasmiths.foxtel.wf.adapter.model.GetQCProfileResponse;
@@ -425,15 +426,13 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			if (notification.isForTXDelivery())
 			{
-				// auto qc was for tx delivery
 				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
 
 				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
 			}
 			else
 			{
-				// auto qc was for export task
-				mayamClient.exportFailed(notification.getTaskID());
+				mayamClient.exportFailed(notification.getTaskID(), "Transcode failed");
 
 				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
 			}
@@ -1085,5 +1084,17 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public String getTextualMaterialInfo(@QueryParam("materialID") String materialID) throws MayamClientException
 	{
 		return  mayamClient.getTextualMetatadaForMaterialExport(materialID);
+	}
+
+	@Override
+	@POST
+	@Path("/export/failed")
+	@Consumes("application/xml")
+	public void exportFailed(ExportFailedRequest request) throws MayamClientException
+	{
+		Long taskId = request.getTaskID();
+		String error = request.getFailureReason();
+		log.info(String.format("Task %s failed for reason %s",taskId, error));
+		mayamClient.exportFailed(taskId.longValue(), error);
 	}
 }
