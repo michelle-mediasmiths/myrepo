@@ -909,4 +909,11 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public String getTextualMetatadaForMaterialExport(String materialId) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
