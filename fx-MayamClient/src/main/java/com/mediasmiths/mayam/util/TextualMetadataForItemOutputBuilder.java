@@ -13,6 +13,7 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mediasmiths.mayam.FullMaterialInfo;
+import com.mediasmiths.std.types.Framerate;
 
 public class TextualMetadataForItemOutputBuilder
 {
@@ -111,7 +112,7 @@ public class TextualMetadataForItemOutputBuilder
 					String somString = som.toSmpte();
 					String eomString = SegmentUtil.calculateEOM(
 							segmentList.getEntries().get(segmentList.getEntries().size()-1).getDuration().toSmpte(),
-							com.mediasmiths.std.types.Timecode.getInstance(somString));
+							com.mediasmiths.std.types.Timecode.getInstance(somString,Framerate.HZ_25));
 
 					sb.append(String.format(
 							"\tPresentation ID : %s Segment Count : %d : SOM %s : EOM %s\n",
