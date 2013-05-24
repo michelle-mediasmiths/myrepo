@@ -40,15 +40,23 @@ public class PreviewExportJobs
 
 		svc = injector.getInstance(JAXRSProxyClientFactory.class).createClient(
 				TCRestService.class,
-				URI.create("http://localhost:8080/fx-TcAdapter"));
+				URI.create("http://192.168.2.22:8080/fx-TcAdapter"));
 	
-		String complianceJob = generateComplianceJob();
+		String complianceJob = generateComplianceJob(TCOutputPurpose.MPG4);
 		System.out.println("***************************");
-		System.out.println("Compliance");
+		System.out.println("Compliance mpg");
 		System.out.println("***************************");
 		System.out.println(complianceJob);
 		System.out.println("***************************");
 
+		complianceJob = generateComplianceJob(TCOutputPurpose.DVD);
+			System.out.println("***************************");
+			System.out.println("Compliance dvd");
+			System.out.println("***************************");
+			System.out.println(complianceJob);
+			System.out.println("***************************");
+
+		
 		String captionJob = generateCaptionJob();
 		System.out.println("***************************");
 		System.out.println("Caption");
@@ -56,9 +64,16 @@ public class PreviewExportJobs
 		System.out.println(captionJob);
 		System.out.println("***************************");
 
-		String publicityJob = generatePublicityJob();
+		String publicityJob = generatePublicityJob(TCOutputPurpose.MPG4);
 		System.out.println("***************************");
-		System.out.println("Publicity");
+		System.out.println("Publicity mpg");
+		System.out.println("***************************");
+		System.out.println(publicityJob);
+		System.out.println("***************************");
+		
+		publicityJob = generatePublicityJob(TCOutputPurpose.DVD);
+		System.out.println("***************************");
+		System.out.println("Publicity dvd");
 		System.out.println("***************************");
 		System.out.println(publicityJob);
 		System.out.println("***************************");
