@@ -17,6 +17,7 @@ import javax.xml.bind.JAXBException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -157,6 +158,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	@Inject
 	private TranscodePriorities transcodePriorities;
+
+	@Inject
+	@Named("export.caption.write.associated.files")
+	private Boolean writeAssociatedFilesForCaptionExports;
 	
 	@Override
 	public String ping()
@@ -1079,8 +1084,24 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		
 		if(jobType.equals(TranscodeJobType.CAPTION_PROXY)){
 			//write any attached files (scripts?) to disk
-			//cant really differentiate between different filetypes so this will probably output qc reports and the like as well
+			//cant really differentiate between different filetypes so this will output qc reports and the like as well
 			
+			if (writeAssociatedFilesForCaptionExports)
+			{
+				log.info("writing associated files");
+				String materialAssetID = task.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
+				log.debug("using materialAssetID :" + materialAssetID);
+				List<String> dataFilesPath = mayamClient.getDataFilesPath(materialAssetID);
+				
+				for(int i=0;i<dataFilesPath.size();i++){
+					String filePath = outputPaths.getLocalPathToExportDestination("",jobType, filename + "_associated", "."+i);
+					FileUtils.copyFile(new File(dataFilesPath.get(i)), new File(filePath));
+				}
+			}
+			else
+			{
+				log.info("not writing associated files");
+			}
 		}
 		
 		return true;

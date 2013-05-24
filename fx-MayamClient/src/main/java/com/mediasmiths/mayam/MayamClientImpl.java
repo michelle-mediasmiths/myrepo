@@ -423,6 +423,12 @@ public class MayamClientImpl implements MayamClient
 		log.debug(String.format("Asset path returned %s for materialID %s.", assetPath, materialID));
 		return assetPath;
 	}
+	
+	@Override
+	public List<String> getDataFilesPath(String materialAssetID) throws MayamClientException
+	{
+		return materialController.getDataFilesPath(materialAssetID);
+	}
 
 	@Override
 	public AttributeMap getOnlyTaskForAsset(MayamTaskListType type, String id) throws MayamClientException

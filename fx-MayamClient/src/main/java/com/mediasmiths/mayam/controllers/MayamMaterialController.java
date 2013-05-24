@@ -67,6 +67,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
@@ -1586,6 +1587,48 @@ public class MayamMaterialController extends MayamController
 	
 	public String getAssetPath(String assetID) throws MayamClientException{
 		return getAssetPath(assetID,true);
+	}
+	
+	public List<String> getDataFilesPath(String materialAssetID) throws MayamClientException{
+		FileFormatInfo fileinfo;
+		try
+		{
+			fileinfo = client.assetApi().getFormatInfo(MayamAssetType.MATERIAL.getAssetType(), materialAssetID);
+		}
+		catch (RemoteException e)
+		{
+			log.error("error getting file format info for asset "+materialAssetID,e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
+		}
+		
+		List<String> urls = fileinfo.getDataUrls();
+		
+		List <String> preferredLocations = Arrays.asList(allPreferredPaths.split(","));
+		List<String> paths = new ArrayList<String>();
+		
+		nextUrl: for (int i = 0; i < urls.size(); i++)
+		{
+
+			String url = urls.get(i);
+
+			String nixPath = pathResolver.nixPath(PathType.FTP, url);
+			for (String preferredLoc : preferredLocations)
+			{
+				if (nixPath.contains(preferredLoc))
+				{
+					log.debug("Preferred location found:" + nixPath);
+					paths.add(nixPath);
+				}
+				continue nextUrl;
+			}
+		}
+		
+		if(urls.size()!=paths.size()){
+			log.warn("could not resolve a location for every associated file");
+		}
+		
+		return paths;
+		
 	}
 	
 	public String getAssetPath(String assetID, boolean acceptNonPreferredLocations) throws MayamClientException{
