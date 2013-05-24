@@ -16,6 +16,7 @@ import org.supercsv.prefs.CsvPreference;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.ManualQANotification;
+import com.mediasmiths.foxtel.ip.common.events.PreviewFailed;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
@@ -74,15 +75,35 @@ public class ManualQARpt extends ReportUtils
 		logger.debug(">>>getReportList");
 		
 		List<ManualQANotification> manualQAs = new ArrayList<ManualQANotification>();
+		List<EventEntity> pfa = queryApi.getByEventNameWindowDateRange("PreviewFurtherAnalysis", 500, startDate, endDate);
+		List<PreviewFailed> previews = new ArrayList<PreviewFailed>();
+		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
+		
+		for (EventEntity event :pfa)
+		{
+			PreviewFailed preview = (PreviewFailed) unmarshallEvent(event);
+			previews.add(preview);
+		}
 		
 		for (EventEntity event : events)
 		{
 			ManualQANotification qa = (ManualQANotification) unmarshallEvent(event);
 			
-			String startF = startDate.toString(dateFormatter);
-			String endF = endDate.toString(dateFormatter);
-			
 			qa.setDateRange(startF + " - " + endF);
+			
+			for (PreviewFailed preview : previews)
+			{
+				if (preview.getAssetId() != null)
+				{
+					if (preview.getAssetId().equals(qa.getMaterialID()))
+					{
+						logger.debug("matching preview further analysis event found " + preview.getAssetId());
+						qa.setTimeEscalated(preview.getDate());
+					}
+				}
+			}
 			
 			manualQAs.add(qa);
 		}

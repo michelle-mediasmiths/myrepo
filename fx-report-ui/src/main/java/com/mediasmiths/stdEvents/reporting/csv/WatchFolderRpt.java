@@ -44,12 +44,12 @@ public class WatchFolderRpt extends ReportUtils
 		
 		List<FilePickupDetails> files = new ArrayList<FilePickupDetails>();
 		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
+		
 		for (EventEntity event : events) 
 		{
 			FilePickupDetails file = (FilePickupDetails) unmarshallEvent(event);
-			
-			String startF = startDate.toString(dateFormatter);
-			String endF = endDate.toString(dateFormatter);
 			
 			file.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			file.setTimeDiscovered(event.getTime());

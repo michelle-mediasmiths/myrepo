@@ -70,10 +70,15 @@ public class ExportRpt extends ReportUtils
 		
 		List<Export> exports = new ArrayList<Export>();
 		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
+		
 		for (EventEntity event : events)
 		{
 			TcEvent tc = (TcEvent) unmarshallEvent(event);
 			Export export = new Export();
+			
+			export.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			
 			if (event.getEventName().equals("CaptionProxySuccess"))
 			{
@@ -91,10 +96,18 @@ public class ExportRpt extends ReportUtils
 				export.setExportType("classification");
 			}
 			
-			OrderStatus order = queryApi.getOrderStatusById(export.getMaterialID());
-			if (order.getTitle() != null)
+			if (export.getMaterialID() != null)
 			{
-				export.setChannels(order.getTitle().getChannels().toString());
+				OrderStatus order = queryApi.getOrderStatusById(export.getMaterialID());
+				if (order != null)
+				{
+					logger.debug("matching title found " + export.getMaterialID());
+					if (order.getTitle() != null)
+					{
+						export.setChannels(order.getTitle().getChannels().toString());
+						export.setTitle(order.getTitle().getTitle());
+					}
+				}
 			}
 			exports.add(export);
 		}

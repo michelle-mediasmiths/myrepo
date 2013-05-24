@@ -47,20 +47,28 @@ public class AutoQCRpt extends ReportUtils
 		
 		List<AutoQCResultNotification> aqcs = new ArrayList<AutoQCResultNotification>();
 		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
+		
 		for (EventEntity event : events)
 		{
 			AutoQCResultNotification aqc = (AutoQCResultNotification) unmarshallEvent(event);
 			
-			String startF = startDate.toString(dateFormatter);
-			String endF = endDate.toString(dateFormatter);
-			
 			aqc.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			
-			OrderStatus order = queryApi.getOrderStatusById(aqc.getMaterialID());
-			if (order.getTitle() != null)
+			if (aqc.getMaterialID() != null)
 			{
-				aqc.setChannels(order.getTitle().getChannels().toString());
+				OrderStatus order = queryApi.getOrderStatusById(aqc.getMaterialID());
+				if (order != null)
+				{
+					logger.debug("matching order found " + aqc.getMaterialID());
+					if (order.getTitle() != null)
+					{
+						aqc.setChannels(order.getTitle().getChannels().toString());
+					}
+				}
 			}
+			
 			aqcs.add(aqc);
 		}
 		
