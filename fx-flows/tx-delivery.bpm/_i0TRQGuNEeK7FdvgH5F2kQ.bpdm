@@ -1,12 +1,12 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fs="http://thisdiagram/fs" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:tcFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tcTotalFailure="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" xmlns:deleteJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" xmlns:wfAdapter="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:autoQCRequiredForTX="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:createJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" xmlns:setPriority="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" xmlns:queryJob="http://ns.mediasmithsforge.com/foxtel/tcAdapter/queryJob.rest" xmlns:tcGetPriority="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcGetPriority.rest" xmlns:diag="http://thisdiagram" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:tcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcPassed.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fs="http://thisdiagram/fs" xmlns:Auto_QC="http://thisdiagram/Auto_QC" xmlns:this="http://thisdiagram/Transcode" xmlns:tns="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/Transcode">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcFailure.rest" bpdm:prefix="tcFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/tcTotalFailure.rest" bpdm:prefix="tcTotalFailure" bpdm:comment="contrib=&apos;project:///wfAdapter/tcTotalFailure.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/deleteJob.rest" bpdm:prefix="deleteJob" bpdm:comment="contrib=&apos;project:///tcAdapter/deleteJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="wfAdapter" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" bpdm:prefix="autoQCRequiredForTX" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequiredForTX.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema-instance" bpdm:prefix="xsi"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQCRequiredForTX.rest" bpdm:prefix="autoQCRequiredForTX" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQCRequiredForTX.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/fs/adapter" bpdm:prefix="FSAdapter" bpdm:comment="contrib=&apos;project:///fsAdapter/FSAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/createJob.rest" bpdm:prefix="createJob" bpdm:comment="contrib=&apos;project:///tcAdapter/createJob.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/tcAdapter/setPriority.rest" bpdm:prefix="setPriority" bpdm:comment="contrib=&apos;project:///tcAdapter/setPriority.wsdl"></bpdm:namespaceDefinition>
@@ -189,7 +189,7 @@
                             </bpel:catchAll>
                         </bpel:faultHandlers>
                         <bpel:sequence>
-                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_cj8HQLcMEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_cj8HQLcMEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                 <bpel:variables>
                                     <bpel:variable name="createJobCreateJobResponseMsg" messageType="createJob:createJob_output" binding="createJob:restBinding" operation="createJob" opMsgType="1" bpdm:messageIds="inc:_1s85kG6_EeKvjs-uExigJg"/>
                                     <bpel:variable name="createJobCreateJobRequestMsg" messageType="createJob:createJob_input" binding="createJob:restBinding" operation="createJob" opMsgType="0" bpdm:messageIds=" out:_1WXlkG6_EeKvjs-uExigJg">
@@ -219,7 +219,7 @@
                                     </bpdm:messagingtask>
                                 </bpel:sequence>
                             </bpel:scope>
-                            <bpel:scope bpdm:label="Poll until job finishes or fails" bpdm:ID="_uNk3cLcMEeKdLrMPHFRfaw">
+                            <bpel:scope bpdm:label="Poll until job finishes or fails" bpdm:ID="_uNk3cLcMEeKdLrMPHFRfaw" bpdm:faultOnFailure="true">
                                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
                                     <bpel:condition bpdm:loopType="repeatUntil">($TranscodeStatus != "INCOMPLETE") or ($TaskIsCancelled = true())<mapper:mapperLink><mapper:vertice id="5178806" targetPath="$repeat until" targetedBy="14115150-arg2"></mapper:vertice><mapper:vertice id="14115150" dimension="78x24" location="480,408"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="32555980" dimension="78x24" location="228,420" targetedBy="14115150-arg0"><mapper:value>!=</mapper:value></mapper:vertice><mapper:vertice id="31369647" sourcePath="$TranscodeStatus" targetedBy="32555980-arg0"></mapper:vertice><mapper:vertice id="24559074" dimension="145x24" location="48,468" targetedBy="32555980-arg1"><mapper:value>"INCOMPLETE"</mapper:value></mapper:vertice><mapper:vertice id="25786848" dimension="78x24" location="347,457" targetedBy="14115150-arg1"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="13280655" sourcePath="$TaskIsCancelled" targetedBy="25786848-arg0"></mapper:vertice><mapper:vertice id="19198572" dimension="78x24" location="228,516" targetedBy="25786848-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                                 </bpdm:linkset>
@@ -229,7 +229,7 @@
                                             <bpel:for>"PT30S"<mapper:mapperLink><mapper:vertice id="5349227" targetPath="$duration" targetedBy="3536182-arg0"></mapper:vertice><mapper:vertice id="3536182" dimension="78x24" location="615,130"><mapper:value>"PT30S"</mapper:value></mapper:vertice></mapper:mapperLink></bpel:for>
                                         </bpdm:linkset>
                                     </bpdm:messagingtask>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_3LDIwLcMEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_3LDIwLcMEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="queryJobQueryJobResponseMsg" messageType="queryJob:queryJob_output" binding="queryJob:restBinding" operation="queryJob" opMsgType="1" bpdm:messageIds="inc:_4RQ3MGuPEeK7FdvgH5F2kQ"/>
                                             <bpel:variable name="queryJobQueryJobRequestMsg" messageType="queryJob:queryJob_input" binding="queryJob:restBinding" operation="queryJob" opMsgType="0" bpdm:messageIds=" out:_37y9gGuPEeK7FdvgH5F2kQ">
@@ -263,7 +263,7 @@
                                             </bpdm:messagingtask>
                                         </bpel:sequence>
                                     </bpel:scope>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_o5w_ALcNEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_o5w_ALcNEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="isTaskCancelledIsCancelledResponseMsg" messageType="isTaskCancelled:isCancelled_output" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="1" bpdm:messageIds="inc:_vfaLgG66EeKvjs-uExigJg"/>
                                             <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="0" bpdm:messageIds=" out:_vNbqsG66EeKvjs-uExigJg">
@@ -326,7 +326,7 @@
                                         </bpel:sequence>
                                         <bpel:sequence>
                                             <bpdm:messagingtask bpdm:label="not cancelled" bpdm:ID="_ATp2kLcOEeKdLrMPHFRfaw"></bpdm:messagingtask>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_aslSILcOEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_aslSILcOEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="tcGetPriorityGetpriorityResponseMsg" messageType="tcGetPriority:getpriority_output" binding="tcGetPriority:restBinding" operation="getpriority" opMsgType="1" bpdm:messageIds="inc:_bQmN0KaqEeKMKJRBWwHUjA"/>
                                                     <bpel:variable name="tcGetPriorityGetpriorityRequestMsg" messageType="tcGetPriority:getpriority_input" binding="tcGetPriority:restBinding" operation="getpriority" opMsgType="0" bpdm:messageIds=" out:_aaDnYKaqEeKMKJRBWwHUjA">
@@ -368,7 +368,7 @@
                                                     </bpdm:messagingtask>
                                                 </bpel:sequence>
                                             </bpel:scope>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ieDqYLcOEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ieDqYLcOEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="setPrioritySetPriorityResponseMsg" messageType="setPriority:setPriority_output" binding="setPriority:restBinding" operation="setPriority" opMsgType="1" bpdm:messageIds="inc:_nkHN4KaqEeKMKJRBWwHUjA"/>
                                                     <bpel:variable name="setPrioritySetPriorityRequestMsg" messageType="setPriority:setPriority_input" binding="setPriority:restBinding" operation="setPriority" opMsgType="0" bpdm:messageIds=" out:_nOwB4KaqEeKMKJRBWwHUjA">
@@ -510,7 +510,7 @@
                                                 </bpel:sequence>
                                             </bpel:scope>
                                             <bpdm:messagingtask bpdm:label="join" bpdm:ID="_MgriMLcQEeKdLrMPHFRfaw"></bpdm:messagingtask>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_PKs4cLcQEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_PKs4cLcQEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:messageIds="inc:_fkVFgHFEEeKXOL1w3D1sTw"/>
                                                     <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:messageIds=" out:_fOq-kHFEEeKXOL1w3D1sTw">
@@ -538,7 +538,7 @@
                                 <bpel:sequence>
                                     <bpdm:messagingtask bpdm:label="cancelled" bpdm:ID="_O_I-ILcPEeKdLrMPHFRfaw"></bpdm:messagingtask>
                                     <bpdm:messagingtask bpdm:label="join" bpdm:ID="_MgriMLcQEeKdLrMPHFRfaw"></bpdm:messagingtask>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_PKs4cLcQEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_PKs4cLcQEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="deleteDeleteResponseMsg" messageType="delete:delete_output" binding="delete:restBinding" operation="delete" opMsgType="1" bpdm:messageIds="inc:_fkVFgHFEEeKXOL1w3D1sTw"/>
                                             <bpel:variable name="deleteDeleteRequestMsg" messageType="delete:delete_input" binding="delete:restBinding" operation="delete" opMsgType="0" bpdm:messageIds=" out:_fOq-kHFEEeKXOL1w3D1sTw">

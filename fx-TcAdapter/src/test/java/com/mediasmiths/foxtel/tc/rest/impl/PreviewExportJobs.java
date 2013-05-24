@@ -66,10 +66,10 @@ public class PreviewExportJobs
 	}
 
 
-	private static String generatePublicityJob() throws Exception
+	private static String generatePublicityJob(TCOutputPurpose p) throws Exception
 	{
 		TCJobParameters jobParams = new TCJobParameters();
-		jobParams.purpose = TCOutputPurpose.DVD;
+		jobParams.purpose = p;
 		jobParams.audioType = TCAudioType.STEREO;
 		jobParams.resolution = TCResolution.SD;
 
@@ -91,7 +91,10 @@ public class PreviewExportJobs
 		jobParams.priority = 1;
 
 		jobParams.ftpupload = getBaseFtpUploadParameters();
-		jobParams.ftpupload.filename = jobParams.outputFileBasename;
+		if(p==TCOutputPurpose.MPG4){
+			jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
+		}
+			
 		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
 
 		return svc.createPCPXML(jobParams);
@@ -125,10 +128,10 @@ public class PreviewExportJobs
 
 	}
 
-	private static String generateComplianceJob() throws Exception
+	private static String generateComplianceJob(TCOutputPurpose p) throws Exception
 	{
 		TCJobParameters jobParams = new TCJobParameters();
-		jobParams.purpose = TCOutputPurpose.DVD;
+		jobParams.purpose = p;
 		jobParams.audioType = TCAudioType.STEREO;
 		jobParams.resolution = TCResolution.SD;
 
@@ -150,7 +153,11 @@ public class PreviewExportJobs
 		jobParams.priority = 1;
 
 		jobParams.ftpupload = getBaseFtpUploadParameters();
-		jobParams.ftpupload.filename = jobParams.outputFileBasename + ".mpg";
+		
+		if(p==TCOutputPurpose.MPG4){
+		jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
+		}
+		
 		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance";
 
 		return svc.createPCPXML(jobParams);

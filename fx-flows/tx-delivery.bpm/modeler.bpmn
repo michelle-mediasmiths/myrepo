@@ -117,6 +117,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_k1pewLcMEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k1qF0LcMEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_lLKbwLcMEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_cjiiIMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_cj8uUbcMEeKdLrMPHFRfaw" iD="_cj8uULcMEeKdLrMPHFRfaw" outgoingEdges="_g5lR0bcMEeKdLrMPHFRfaw" name="Create Transcode Job">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_1WXlkW6_EeKvjs-uExigJg"/>
@@ -129,11 +130,15 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_b4DcMLcNEeKdLrMPHFRfaw" source="forEachSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_b4DcMbcNEeKdLrMPHFRfaw" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
           </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_d3mLAMRTEeKQcIwIPfbS4g" source="odeFailureHandlingSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_d3mLAcRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
+          </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_yW0kwbcMEeKdLrMPHFRfaw" iD="_yW0kwLcMEeKdLrMPHFRfaw" outgoingEdges="_6YUWAbcMEeKdLrMPHFRfaw" activityType="EventIntermediateTimer"/>
           <vertices xmi:type="bpmn:SubProcess" xmi:id="_3LDIwbcMEeKdLrMPHFRfaw" iD="_3LDIwLcMEeKdLrMPHFRfaw" outgoingEdges="_qlx04bcNEeKdLrMPHFRfaw" incomingEdges="_6YUWAbcMEeKdLrMPHFRfaw">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_8_o9kLcMEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8_o9kbcMEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_9USX4LcMEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_fweYMMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_3LDv0bcMEeKdLrMPHFRfaw" iD="_3LDv0LcMEeKdLrMPHFRfaw" outgoingEdges="_59VDIbcMEeKdLrMPHFRfaw" name="Get Status">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_37y9gWuPEeK7FdvgH5F2kQ"/>
@@ -146,6 +151,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_5FdxkLcNEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5FdxkbcNEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_5Wvu0LcNEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_hHtQ4MRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_o5zbQbcNEeKdLrMPHFRfaw" iD="_o5zbQLcNEeKdLrMPHFRfaw" outgoingEdges="_ugYpQbcNEeKdLrMPHFRfaw" name="Check if cancelled">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_vNbqsW66EeKvjs-uExigJg"/>
@@ -171,6 +177,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ARvVkLcPEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ARvVkbcPEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_AlQugLcPEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k_ezsMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_asoVcbcOEeKdLrMPHFRfaw" iD="_asoVcLcOEeKdLrMPHFRfaw" outgoingEdges="_h71HEbcOEeKdLrMPHFRfaw" name="Query Priority rules">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_aaDnYaaqEeKMKJRBWwHUjA"/>
@@ -183,6 +190,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_BReUQLcPEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BReUQbcPEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_BiWB0LcPEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_mJBOoMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_ieGtsbcOEeKdLrMPHFRfaw" iD="_ieGtsLcOEeKdLrMPHFRfaw" name="Set Priority">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_nOwB4aaqEeKMKJRBWwHUjA"/>
@@ -231,6 +239,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_0T8b8LcQEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0T8b8bcQEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_0jIugLcQEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pZ8z4MRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_PKxw8bcQEeKdLrMPHFRfaw" iD="_PKxw8LcQEeKdLrMPHFRfaw" name="Delete Partial Files">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_fOq-kXFEEeKXOL1w3D1sTw"/>
@@ -2100,6 +2109,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_SPeM0LcXEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SPeM0bcXEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_SceHALcXEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yO6pcMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_IfzCgbcXEeKdLrMPHFRfaw" iD="_IfzCgLcXEeKdLrMPHFRfaw" associations="_ZS_xcHHgEeKIgPAPmx2ukA _ZomOAHHgEeKIgPAPmx2ukA" outgoingEdges="_L9WHcbcXEeKdLrMPHFRfaw" name="Check if finished">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_ZSzkMXHgEeKIgPAPmx2ukA"/>
@@ -2112,6 +2122,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yA0ekLcXEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yA0ekbcXEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yKRVgLcXEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_zJ7gMMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_WU0RkbcXEeKdLrMPHFRfaw" iD="_WU0RkLcXEeKdLrMPHFRfaw" associations="_g6QdwHHgEeKIgPAPmx2ukA _hSNDsHHgEeKIgPAPmx2ukA" outgoingEdges="_ZV6rEbcXEeKdLrMPHFRfaw" name="Check if cancelled">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_g5__EXHgEeKIgPAPmx2ukA"/>
@@ -2148,6 +2159,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_os21ULcWEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_os21UbcWEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_o6qn0LcWEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_vzkBUMRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_Zff6UbcWEeKdLrMPHFRfaw" iD="_Zff6ULcWEeKdLrMPHFRfaw" associations="_nhklcHHfEeKIgPAPmx2ukA _n1CUAHHfEeKIgPAPmx2ukA" outgoingEdges="_cDsVYbcWEeKdLrMPHFRfaw" name="Create QC Job">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_nhXKEXHfEeKIgPAPmx2ukA"/>
@@ -2160,6 +2172,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_PnBucLcYEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_PnBucbcYEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_P2ZAILcYEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_2RK98MRTEeKQcIwIPfbS4g" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_9HZxcbcXEeKdLrMPHFRfaw" iD="_9HZxcLcXEeKdLrMPHFRfaw" associations="_RhCbkHHhEeKIgPAPmx2ukA _R5IygHHhEeKIgPAPmx2ukA" outgoingEdges="_A75WwbcYEeKdLrMPHFRfaw" name="Get Result">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_RgwHsXHhEeKIgPAPmx2ukA"/>
