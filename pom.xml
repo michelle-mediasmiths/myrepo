@@ -58,7 +58,6 @@
 		<module>fx-event-ui</module>
 		<module>fx-filepickup-api</module>
 		<module>fx-qcAdapter</module>
-		<module>fx-report-gen</module>
 		<module>fx-report-ui</module>
   		<module>fx-IbmsHelper</module>
         <module>fx-heartbeat-api</module>
