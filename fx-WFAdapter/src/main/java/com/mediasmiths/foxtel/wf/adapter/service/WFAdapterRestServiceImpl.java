@@ -1096,7 +1096,14 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				
 				for(int i=0;i<dataFilesPath.size();i++){
 					String filePath = outputPaths.getLocalPathToExportDestination("",jobType, filename + "_associated", "."+i);
-					FileUtils.copyFile(new File(dataFilesPath.get(i)), new File(filePath));
+					try
+					{
+						FileUtils.copyFile(new File(dataFilesPath.get(i)), new File(filePath));
+					}
+					catch (IOException e)
+					{
+						log.error(String.format("error copying from %s to %s", dataFilesPath.get(i), filePath), e);
+					}
 				}
 			}
 			else
