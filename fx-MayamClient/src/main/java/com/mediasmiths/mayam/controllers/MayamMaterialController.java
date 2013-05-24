@@ -1603,24 +1603,15 @@ public class MayamMaterialController extends MayamController
 		
 		List<String> urls = fileinfo.getDataUrls();
 		
-		List <String> preferredLocations = Arrays.asList(allPreferredPaths.split(","));
 		List<String> paths = new ArrayList<String>();
 		
-		nextUrl: for (int i = 0; i < urls.size(); i++)
+		for (int i = 0; i < urls.size(); i++)
 		{
 
 			String url = urls.get(i);
 
 			String nixPath = pathResolver.nixPath(PathType.FTP, url);
-			for (String preferredLoc : preferredLocations)
-			{
-				if (nixPath.contains(preferredLoc))
-				{
-					log.debug("Preferred location found:" + nixPath);
-					paths.add(nixPath);
-				}
-				continue nextUrl;
-			}
+			paths.add(nixPath);
 		}
 		
 		if(urls.size()!=paths.size()){
