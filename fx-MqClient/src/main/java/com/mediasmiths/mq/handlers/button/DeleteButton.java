@@ -74,7 +74,7 @@ public class DeleteButton extends ButtonClickHandler
 			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
 			ph.setActions(a);
 
-			String title = "";
+			String title = messageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			
 			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType, title);
 			
