@@ -916,4 +916,11 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public List<String> getDataFilesPath(String materialAssetID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
