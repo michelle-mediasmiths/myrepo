@@ -132,54 +132,6 @@ public class ReportUIImpl implements ReportUI
 		return call.process();
 	}
 
-	@Transactional
-	private String getReport()
-	{
-		TemplateCall call = templater.template("report");
-		return call.process();
-	}
-
-	@Transactional
-	private String getByNamespace(final String namespace)
-	{
-		final TemplateCall call = templater.template("search");
-		call.set("events", queryApi.getByNamespace(namespace));
-		return call.process();
-	}
-
-	@Transactional
-	private String getByNamespaceWindow(final String namespace)
-	{
-		final TemplateCall call = templater.template("search");
-		logger.info("ReportUIImpl max: " + MAX);
-		call.set("events", queryApi.getByNamespaceWindow(namespace, MAX));
-		return call.process();
-	}
-
-	@Transactional
-	private String getByEventName(final String eventname)
-	{
-		final TemplateCall call = templater.template("search");
-		call.set("events", queryApi.getByEventName(eventname));
-		return call.process();
-	}
-
-	@Transactional
-	private String getByNamespaceEventname(final String namespace, final String eventname)
-	{
-		final TemplateCall call = templater.template("search");
-		call.set("events", queryApi.getEvents(namespace, eventname));
-		return call.process();
-	}
-
-	@Transactional
-	private String getById(final Long id)
-	{
-		final TemplateCall call = templater.template("search");
-		call.set("events", queryApi.getById(id));
-		return call.process();
-	}
-
 	@Transactional(readOnly = true)
 	private void getOrderStatusCSV(final DateTime start, final DateTime end, final String reportName)
 	{

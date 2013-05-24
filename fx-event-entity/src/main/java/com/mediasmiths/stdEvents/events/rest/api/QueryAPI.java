@@ -35,16 +35,8 @@ public interface QueryAPI
 	public List<EventEntity> getAllEvents();
 	
 	@GET
-	@Path("/allBMS")
-	public List<AggregatedBMS> getAllBMS();
-	
-	@GET
 	@Path("/BMSbydate")
 	public List<AggregatedBMS> getAllBMSbyDate(final DateTime start, final DateTime end);
-	
-	@GET
-	@Path("/completedBefore")
-	public List<AggregatedBMS> getCompletedBefore(Date endDate);
 	
 	@GET
 	@Path("getbynamespace/{namespace}")
@@ -65,21 +57,6 @@ public interface QueryAPI
 	@Path("/event/{id}")
 	@Produces("text/plain")
 	public void deleteById (@PathParam("id")Long id);
-
-	@GET
-	@Path("/avCompletionTime")
-	@Produces("text/plain")
-	public String getAvCompletionTime(List<EventEntity> events);
-	
-	@GET
-	@Path("getbynamespacewindow/{namespace}/{max}")
-	@Produces("text/plain")
-	public List<EventEntity> getByNamespaceWindow(@PathParam("namespace")String namespace, @PathParam("max")int max);
-	
-	@GET
-	@Path("/get_report-window/{namespace}/{eventname}/{max}")
-	@Produces("text/plain")
-	public List<EventEntity> getEventsWindow (@PathParam("namespace")String namespace, @PathParam("eventname")String eventName, @PathParam("max")int max);
 	
 	@GET
 	@Path("/get_report-window_date")
@@ -90,11 +67,6 @@ public interface QueryAPI
 	@Path("/get_report_window_date")
 	@Produces("text/plain")
 	public List<EventEntity> getEventsWindowDateRange (String namespace, String eventName, int max, DateTime start, DateTime end);
-	
-	@GET
-	@Path("/getbyeventnamewindow/{eventname}/{max}")
-	@Produces("text/plain")
-	public List<EventEntity> getByEventNameWindow (@PathParam("eventname")String eventName, @PathParam("max")int max);
 
 	@GET
 	@Path("/OrdersByDate")

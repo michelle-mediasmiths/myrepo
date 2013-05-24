@@ -59,37 +59,6 @@ public class QueryAPIImpl implements QueryAPI
 		List<EventEntity> events = eventDao.getAll();
 		return events;
 	}
-	
-	@Transactional
-	public List<AggregatedBMS> getAllBMS()
-	{
-		List<AggregatedBMS> bms = bmsDao.getAll();
-		return bms;
-	}
-	
-	@Transactional
-	public List<AggregatedBMS> getCompletedBefore(Date endDate) 
-	{
-		logger.debug(">>>getCompletedBefore");
-		
-		List<AggregatedBMS> bms = bmsDao.completionDateNotNull();
-		List<AggregatedBMS> inDate = new ArrayList<AggregatedBMS>();
-		for (AggregatedBMS order : bms) {
-			String dateString = order.getCompletionDate();
-			try
-			{
-				Date compDate = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH).parse(dateString);
-				if (compDate.before(endDate)) 
-					inDate.add(order);
-			}
-			catch (ParseException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		logger.debug("<<<getCompletedBefore");
-		return inDate;
-	}
 
 	@Transactional
 	public EventEntity getById(Long id)
@@ -108,42 +77,7 @@ public class QueryAPIImpl implements QueryAPI
 	public List<EventEntity> getByNamespace(String namespace)
 	{
 		List<EventEntity> events = eventDao.findByNamespace(namespace);
-		//eventDao.printXML(events);
 		return events;
-	}
-	
-	@Transactional
-	public List<EventEntity> getByNamespaceWindow(final String namespace, final int max)
-	{
-		List<EventEntity> events = eventDao.namespacePaginated(namespace, 0, max);
-		List<EventEntity> all = new ArrayList<EventEntity>();
-		int start = 0;
-		while (events.size()==max) {
-			events = eventDao.namespacePaginated(namespace, start, max);
-			start = start + max;
-			all.addAll(events);
-			logger.info("start: " + start + " Size: " + events.size());
-			logger.info("Results: " + events);
-		}
-		return all;
-	}
-	
-	@Transactional
-	public List<EventEntity> getByEventNameWindow(final String eventname, final int max)
-	{
-		List<EventEntity> events = eventDao.eventnamePaginated(eventname, 0, max);
-		logger.info("List size: " + events.size());
-		List<EventEntity> all = events;
-		int start = 0;
-		while (events.size()==max) {
-			events = eventDao.eventnamePaginated(eventname, start, max);
-			start = start + max;
-			all.addAll(events);
-			logger.info("start: " + start + " Size: " + events.size());
-			logger.info("Results: " + events);
-		}
-		logger.info("List size (all): " + all.size());
-		return all;
 	}
 
 	@Transactional
@@ -164,24 +98,6 @@ public class QueryAPIImpl implements QueryAPI
 			logger.info("Results: " + events);
 		}
 		
-		return all;
-	}
-	
-	@Transactional
-	public List<EventEntity> getEventsWindow(final String namespace, final String eventname, final int max)
-	{
-		logger.info("max @ queryAPIImpl: " + max);
-		List<EventEntity> events = eventDao.findUniquePaginated(namespace, eventname, 0, max);
-		List<EventEntity> all = new ArrayList<EventEntity>();
-		all.addAll(events);
-		int start=0;
-		while (events.size()==max) {
-			events = eventDao.findUniquePaginated(namespace, eventname, start, max);
-			start = start + max;
-			all.addAll(events);
-			logger.info("start: " + start + " Size: " + events.size());
-			logger.info("Results: " + events);
-		}
 		return all;
 	}
 	
@@ -217,68 +133,6 @@ public class QueryAPIImpl implements QueryAPI
 		List<EventEntity> events = eventDao.findByEventName(eventName);
 		//eventDao.printXML(events);
 		return events;
-	}
-
-	@Transactional                                     
-	public List<EventEntity> getCompliance()
-	{
-		List<EventEntity> events = getAllEvents();
-		List<EventEntity> compliance = new ArrayList<EventEntity>();
-		for (EventEntity event : events)
-		{
-			String payload = event.getPayload();
-			if (payload.contains("ParentMaterialID"))
-			{
-				compliance.add(event);
-			}
-		}
-		return compliance;
-	}
-
-	@Transactional
-	public String getAvCompletionTime(List<EventEntity> events)
-	{
-		double totalTime = 0;
-		int number = 0;
-		for (EventEntity event : events)
-		{
-			String payload = event.getPayload();
-			if ((payload.contains("taskStart")) && (payload.contains("taskFinish")))
-			{
-				String startString = payload.substring(payload.indexOf("taskStart")+10, payload.indexOf("</taskStart"));
-				String finishString = payload.substring(payload.indexOf("taskFinish")+11, payload.indexOf("</taskFinsh"));
-				if ((! startString.isEmpty()) && (! finishString.isEmpty()))
-				{
-					//use date time format
-					Calendar taskStart = DatatypeConverter.parseDateTime(startString);
-					Calendar taskFinish = DatatypeConverter.parseDateTime(finishString);
-					double diff = (taskFinish.getTimeInMillis()) - (taskStart.getTimeInMillis());
-					logger.info("diff: " + diff);
-					totalTime += diff;
-					number ++;
-				}
-			}
-			
-		}
-		double average = totalTime/number;
-		int avInt = (int) Math.round(average);
-		String formatted = millisToHHMMSS(avInt);
-		logger.info("double average: " + average + " int average: " + avInt + " string: " + formatted);
-		return formatted;
-	}
-	
-	private String millisToHHMMSS(int millis)
-	{
-		int secs = millis /1000;
-		
-		int hours = secs / 3600,
-			remainder = secs % 3600,
-			minutes = remainder / 60,
-			seconds = remainder % 60;
-
-				return ( (hours < 10 ? "0" : "") + hours
-				+ ":" + (minutes < 10 ? "0" : "") + minutes
-				+ ":" + (seconds< 10 ? "0" : "") + seconds );
 	}
 
 	@Override

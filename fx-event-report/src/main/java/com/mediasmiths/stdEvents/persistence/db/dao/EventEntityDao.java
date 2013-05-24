@@ -18,14 +18,6 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 		
 	public void saveFile (String eventString);
 
-	public ArrayList<EventEntity> toBeanArray (List<EventEntity> events);
-	
-	public List<EventEntity> namespacePaginated(String namespace, int start, int max);
-	
-	public List<EventEntity> eventnamePaginated(String eventname, int start, int max);	
-	
-	public List<EventEntity> findUniquePaginated(String namespace, String eventName, int start, int max);
-
 	public List<EventEntity> findUniquePaginatedDate(
 			String namespace,
 			String eventname,
