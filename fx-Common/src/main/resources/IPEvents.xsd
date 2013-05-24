@@ -512,6 +512,7 @@
                 <xs:sequence>
                     <xs:element name="assetType" type="xs:string"/>
                     <xs:element name="houseId" type="xs:string"/>
+                    <xs:element name="title" type="xs:string"/>
                     <xs:element name="time" type="xs:string"/>
                 </xs:sequence>
             </xs:extension>

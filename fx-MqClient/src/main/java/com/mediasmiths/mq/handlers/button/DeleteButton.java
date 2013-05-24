@@ -74,7 +74,9 @@ public class DeleteButton extends ButtonClickHandler
 			a.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().add(dm);
 			ph.setActions(a);
 
-			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType);
+			String title = "";
+			
+			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType, title);
 			
 		}
 		catch (Exception e)
@@ -99,13 +101,14 @@ public class DeleteButton extends ButtonClickHandler
 	}
 
 
-	private void sendManualPurgeEvent(String houseId, String assetType)
+	private void sendManualPurgeEvent(String houseId, String assetType, String title)
 	{
 		ManualPurge manualPurge = new ManualPurge();
 		manualPurge.setHouseId(houseId);
 		manualPurge.setAssetType(assetType);
 		manualPurge.setTime(((new Date()).toString()));
-
+		manualPurge.setTitle(title);
+		
 		String eventName = MANUAL_PURGE;
 		String namespace = bmsEventsNamespace;
 
