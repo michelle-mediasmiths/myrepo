@@ -1,6 +1,5 @@
 package com.mediasmiths.stdEvents.persistence.db.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;

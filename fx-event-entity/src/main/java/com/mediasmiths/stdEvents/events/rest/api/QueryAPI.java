@@ -1,6 +1,5 @@
 package com.mediasmiths.stdEvents.events.rest.api;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.DELETE;

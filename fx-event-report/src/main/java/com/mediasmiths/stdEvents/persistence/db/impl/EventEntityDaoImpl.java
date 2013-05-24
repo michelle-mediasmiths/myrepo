@@ -3,7 +3,6 @@ package com.mediasmiths.stdEvents.persistence.db.impl;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;

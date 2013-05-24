@@ -16,8 +16,6 @@ import com.mediasmiths.stdEvents.persistence.db.impl.EventingDaoImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.EventAPIImpl;
 import com.mediasmiths.stdEvents.persistence.rest.impl.QueryAPIImpl;
 
-import com.mediasmiths.stdEvents.reporting.popup.PopupAPI;
-import com.mediasmiths.stdEvents.reporting.popup.PopupImpl;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUI;
 import com.mediasmiths.stdEvents.reporting.rest.ReportUIImpl;
 
@@ -34,8 +32,5 @@ public class ReportingModule extends AbstractModule
 		bind(AggregatedBMSDao.class).to(AggregatedBMSDaoImpl.class);
 		
 		RestResourceRegistry.register(ReportUI.class);
-		
-		bind(PopupAPI.class).to(PopupImpl.class);
-		RestResourceRegistry.register(PopupAPI.class);
 	}
 }
