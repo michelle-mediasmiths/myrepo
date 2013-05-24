@@ -53,13 +53,13 @@ public class ComplianceRpt extends ReportUtils
 		logger.debug(">>>getReportList");
 		
 		List<ComplianceLoggingMarker> clms = new ArrayList<ComplianceLoggingMarker>();
+				
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
 		
 		for (EventEntity event : events) 
 		{
 			ComplianceLoggingMarker clm = (ComplianceLoggingMarker) unmarshallEvent(event);
-			
-			String startF = startDate.toString(dateFormatter);
-			String endF = endDate.toString(dateFormatter);
 			
 			clm.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			

@@ -320,6 +320,7 @@
                     <xs:element name="contentType" type="xs:string"/>
                     <xs:element name="operator" type="xs:string"/>
                     <xs:element name="qcStatus" type="xs:string"/>
+                    <xs:element name="taskStatus" type="xs:string"/>
                     <xs:element name="taskStart" type="xs:string"/>
                     <xs:element name="taskFinish" type="xs:string"/>
                     <xs:element name="warningTime" type="xs:string"/>

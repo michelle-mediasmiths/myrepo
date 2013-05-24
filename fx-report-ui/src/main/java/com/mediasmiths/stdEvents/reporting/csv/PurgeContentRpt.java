@@ -50,12 +50,12 @@ public class PurgeContentRpt extends ReportUtils
 		
 		final List<PurgeMessage> purged = new ArrayList<PurgeMessage>();
 		
+		String startF = startDate.toString(dateFormatter);
+		String endF = endDate.toString(dateFormatter);
+		
 		for (EventEntity event : events)
 		{
 			PurgeMessage purge = new PurgeMessage();
-			
-			String startF = startDate.toString(dateFormatter);
-			String endF = endDate.toString(dateFormatter);
 			
 			purge.setDateRange(new StringBuilder().append(startF).append(" - ").append(endF).toString());
 			
