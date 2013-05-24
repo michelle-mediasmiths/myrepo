@@ -1,6 +1,5 @@
 package com.mediasmiths.stdEvents.persistence.db.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -17,14 +16,6 @@ public interface EventEntityDao extends Dao<EventEntity, Long>
 	public List<EventEntity> findUnique(String namespace, String eventName);
 		
 	public void saveFile (String eventString);
-
-	public ArrayList<EventEntity> toBeanArray (List<EventEntity> events);
-	
-	public List<EventEntity> namespacePaginated(String namespace, int start, int max);
-	
-	public List<EventEntity> eventnamePaginated(String eventname, int start, int max);	
-	
-	public List<EventEntity> findUniquePaginated(String namespace, String eventName, int start, int max);
 
 	public List<EventEntity> findUniquePaginatedDate(
 			String namespace,

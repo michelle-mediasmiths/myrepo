@@ -1,12 +1,10 @@
 package com.mediasmiths.stdEvents.persistence.db.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.jfree.util.Log;
 
 import com.mediasmiths.foxtel.ip.common.events.CreateOrUpdateTitle;
 import com.mediasmiths.std.guice.database.annotation.Transactional;

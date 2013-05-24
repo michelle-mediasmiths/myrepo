@@ -3,7 +3,6 @@ package com.mediasmiths.stdEvents.persistence.db.impl;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -91,49 +90,6 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 			e.printStackTrace();
 		}
 	}
-
-	/*@Override
-	public void deleteEventing(Long id)
-	{
-		Eventing eventing = getById(id);
-		eventingType = null;
-		eventingDao.deleteById(id);
-	}*/
-
-	public ArrayList<EventEntity> toBeanArray(List<EventEntity> items)
-	{	
-		ArrayList<EventEntity> events = new ArrayList<EventEntity>();
-		for (EventEntity event : items)
-		{
-			events.add(event);
-		}
-		return events;
-	}
-
-	@Transactional
-	public List<EventEntity> namespacePaginated(String namespace, int start, int max)
-	{
-		logger.info("Finding events from " + start + " namespace: " + namespace + " max: " + max);
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("namespace", namespace));
-		criteria.setFirstResult(start);
-		criteria.setMaxResults(max);
-		logger.info("Finished search");
-		return getList(criteria);
-	}
-
-	@Override
-	public List<EventEntity> findUniquePaginated(String namespace, String eventName, int start, int max)
-	{
-		logger.info("Finding events from " + start + " namespace " + namespace + " eventname: " + eventName + " max: " + max);
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("namespace", namespace));
-		criteria.add(Restrictions.eq("eventName", eventName));
-		criteria.setFirstResult(start);
-		criteria.setMaxResults(max);
-		logger.info("Finished search");
-		return getList(criteria);
-	}
 	
 	@Override
 	public List<EventEntity> findUniquePaginatedDate(String namespace, String eventname, int start, int max, DateTime startDate, DateTime endDate)
@@ -151,19 +107,7 @@ public class EventEntityDaoImpl extends HibernateDao<EventEntity, Long> implemen
 		logger.debug("<<<findUniquePaginated");	
 		return getList(criteria);
 	}
-
-	@Override
-	public List<EventEntity> eventnamePaginated(String eventname, int start, int max)
-	{
-		logger.info("Finding events from " + start + " eventname: " + eventname + " max: " + max);
-		Criteria criteria = createCriteria();
-		criteria.add(Restrictions.eq("eventName", eventname));
-		criteria.setFirstResult(start);
-		criteria.setMaxResults(max);
-		logger.info("Finished search");
-		return getList(criteria);
-	}
-
+	
 	@Override
 	public List<EventEntity> eventnamePaginatedDate(String eventname, int start, int max, DateTime startDate, DateTime endDate)
 	{

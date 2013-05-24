@@ -21,7 +21,6 @@ import com.mediasmiths.foxtel.ip.common.events.PurgePackage;
 import com.mediasmiths.foxtel.ip.common.events.PurgeTitle;
 import com.mediasmiths.foxtel.ip.common.events.report.PurgeContent;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
-import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;

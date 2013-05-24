@@ -3,13 +3,7 @@ package com.mediasmiths.stdEvents.reporting.csv;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-
-import javax.xml.bind.DatatypeConverter;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
@@ -23,11 +17,9 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
 import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
-import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.QueryAPI;
-import com.mediasmiths.stdEvents.report.entity.AutoQCRT;
 import com.mediasmiths.stdEvents.reporting.utils.ReportUtils;
 
 public class AutoQCRpt extends ReportUtils
