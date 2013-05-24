@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -1086,7 +1087,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			//write any attached files (scripts?) to disk
 			//cant really differentiate between different filetypes so this will output qc reports and the like as well
 			
-			if (writeAssociatedFilesForCaptionExports)
+			if (writeAssociatedFilesForCaptionExports.booleanValue())
 			{
 				log.info("writing associated files");
 				String materialAssetID = task.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
