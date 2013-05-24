@@ -14,29 +14,29 @@
   <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk2Var">
     <dd:service name="queryJob:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk0Var">
-    <dd:service name="exportFailed:restService" port="httpPort"/>
-  </dd:invoke>
-  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk3Var">
-    <dd:service name="setPriority:restService" port="httpPort"/>
+  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk1Var">
+    <dd:service name="isTaskCancelled:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk1Var">
     <dd:service name="deleteJob:restService" port="httpPort"/>
   </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk1Var">
-    <dd:service name="isTaskCancelled:restService" port="httpPort"/>
-  </dd:invoke>
-  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk4Var">
-    <dd:service name="tcPassed:restService" port="httpPort"/>
-  </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk3Var">
     <dd:service name="tcGetPriority:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="transcodeAndTcadapterForHttpPortPlk3Var">
+    <dd:service name="setPriority:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk2Var">
     <dd:service name="tcFailure:restService" port="httpPort"/>
   </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk0Var">
+    <dd:service name="exportFailed:restService" port="httpPort"/>
+  </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk6Var">
     <dd:service name="writeexportcompanions:restService" port="httpPort"/>
+  </dd:invoke>
+  <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk4Var">
+    <dd:service name="tcPassed:restService" port="httpPort"/>
   </dd:invoke>
   <dd:invoke partnerLink="wfadapterAndTranscodeForHttpPortPlk5Var">
     <dd:service name="tcTotalFailure:restService" port="httpPort"/>

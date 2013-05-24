@@ -529,7 +529,7 @@
     </vertices>
     <vertices xmi:type="bpmn:SubProcess" xmi:id="_11G_McOyEeKw3vcinKvoDQ" iD="_11G_MMOyEeKw3vcinKvoDQ" incomingEdges="_4JjuEcOyEeKw3vcinKvoDQ">
       <vertices xmi:type="bpmn:Activity" xmi:id="_11eyocOyEeKw3vcinKvoDQ" iD="_11eyoMOyEeKw3vcinKvoDQ" outgoingEdges="_WA7mccOzEeKw3vcinKvoDQ" name="metadata write failed"/>
-      <vertices xmi:type="bpmn:SubProcess" xmi:id="_VGA2UcOzEeKw3vcinKvoDQ" iD="_VGA2UMOzEeKw3vcinKvoDQ" incomingEdges="_WA7mccOzEeKw3vcinKvoDQ">
+      <vertices xmi:type="bpmn:SubProcess" xmi:id="_VGA2UcOzEeKw3vcinKvoDQ" iD="_VGA2UMOzEeKw3vcinKvoDQ" outgoingEdges="_VGISYcR0EeKac7w4PUUiHA" incomingEdges="_WA7mccOzEeKw3vcinKvoDQ">
         <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_Xs4x8MOzEeKw3vcinKvoDQ" source="odeFailureHandlingSource">
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_Xs4x8cOzEeKw3vcinKvoDQ" key="odeFailureRetryDelay" value="60"/>
           <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_X-thwMOzEeKw3vcinKvoDQ" key="odeFailureRetryFor" value="10"/>
@@ -563,7 +563,9 @@
           <incomingMessages xmi:type="bpmn:MessagingEdge" href="#_kQdAMcOzEeKw3vcinKvoDQ"/>
         </vertices>
       </vertices>
+      <vertices xmi:type="bpmn:Activity" xmi:id="_USDKEcR0EeKac7w4PUUiHA" iD="_USDKEMR0EeKac7w4PUUiHA" incomingEdges="_VGISYcR0EeKac7w4PUUiHA" activityType="EventEndEmpty"/>
       <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_WA7mccOzEeKw3vcinKvoDQ" iD="_WA7mcMOzEeKw3vcinKvoDQ"/>
+      <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_VGISYcR0EeKac7w4PUUiHA" iD="_VGISYMR0EeKac7w4PUUiHA"/>
     </vertices>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_gKpZEXEMEeKgV8mGUipbQA" iD="_gKpZEHEMEeKgV8mGUipbQA"/>
     <sequenceEdges xmi:type="bpmn:SequenceEdge" xmi:id="_8qMi4XEMEeKgV8mGUipbQA" iD="_8qMi4HEMEeKgV8mGUipbQA"/>
