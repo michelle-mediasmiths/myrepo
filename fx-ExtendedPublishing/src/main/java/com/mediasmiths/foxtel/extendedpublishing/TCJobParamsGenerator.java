@@ -117,17 +117,7 @@ public class TCJobParamsGenerator
 
 		jobParams.ftpupload = new TCFTPUpload();
 		jobParams.ftpupload.filename = jobParams.outputFileBasename;
-
-		if (isDVD)
-		{
-			jobParams.ftpupload.folder = outputPaths.getFTPPathToExportDestinationFolder(channelTag, jobType) + "/"
-					+ outputFileName;
-		}
-		else
-		{
-			jobParams.ftpupload.folder = outputPaths.getFTPPathToExportDestinationFolder(channelTag, jobType);
-		}
-		
+		jobParams.ftpupload.folder = outputPaths.getFTPPathToExportDestinationFolder(channelTag, jobType);
 		jobParams.ftpupload.user = exportFTPUser;
 		jobParams.ftpupload.password = exportFTPPassword;
 		jobParams.ftpupload.server = exportFTPServer;

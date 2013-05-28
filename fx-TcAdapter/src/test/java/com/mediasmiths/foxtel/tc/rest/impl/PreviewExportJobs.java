@@ -29,9 +29,9 @@ public class PreviewExportJobs
 
 	static String inputFileLocation = "/Volumes/foxtel/tcinput/input.mxf";
 	static String transcodeBaseOutputLocation = "/Volumes/foxtel/tcoutput/";
-
+	
 	static TCRestService svc;
-
+	
 	public static void main(String[] args) throws Exception
 	{
 		Injector injector = GuiceInjectorBootstrap.createInjector(
@@ -41,7 +41,7 @@ public class PreviewExportJobs
 		svc = injector.getInstance(JAXRSProxyClientFactory.class).createClient(
 				TCRestService.class,
 				URI.create("http://192.168.2.22:8080/fx-TcAdapter"));
-
+	
 		String complianceJob = generateComplianceJob(TCOutputPurpose.MPG4);
 		System.out.println("***************************");
 		System.out.println("Compliance mpg");
@@ -50,12 +50,13 @@ public class PreviewExportJobs
 		System.out.println("***************************");
 
 		complianceJob = generateComplianceJob(TCOutputPurpose.DVD);
-		System.out.println("***************************");
-		System.out.println("Compliance dvd");
-		System.out.println("***************************");
-		System.out.println(complianceJob);
-		System.out.println("***************************");
+			System.out.println("***************************");
+			System.out.println("Compliance dvd");
+			System.out.println("***************************");
+			System.out.println(complianceJob);
+			System.out.println("***************************");
 
+		
 		String captionJob = generateCaptionJob();
 		System.out.println("***************************");
 		System.out.println("Caption");
@@ -69,15 +70,16 @@ public class PreviewExportJobs
 		System.out.println("***************************");
 		System.out.println(publicityJob);
 		System.out.println("***************************");
-
+		
 		publicityJob = generatePublicityJob(TCOutputPurpose.DVD);
 		System.out.println("***************************");
 		System.out.println("Publicity dvd");
 		System.out.println("***************************");
 		System.out.println(publicityJob);
 		System.out.println("***************************");
-
+		
 	}
+
 
 	private static String generatePublicityJob(TCOutputPurpose p) throws Exception
 	{
@@ -104,18 +106,14 @@ public class PreviewExportJobs
 		jobParams.priority = 1;
 
 		jobParams.ftpupload = getBaseFtpUploadParameters();
-		if (p == TCOutputPurpose.MPG4)
-		{
-			jobParams.ftpupload.filename = jobParams.outputFileBasename + ".mpg";
-			jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
+		if(p==TCOutputPurpose.MPG4){
+			jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
 		}
-		else
-		{
-			jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity/" + jobParams.outputFileBasename;
-		}
+			
+		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Publicity";
 
 		return svc.createPCPXML(jobParams);
-		// return svc.createJob(jobParams);
+//		return svc.createJob(jobParams);
 	}
 
 	private static String generateCaptionJob() throws Exception
@@ -160,7 +158,7 @@ public class PreviewExportJobs
 		jobParams.bug.channel = "LST";
 		jobParams.bug.position = TCLocation.TOP_LEFT;
 		jobParams.bug.opacity = 80.0d;
-
+		
 		jobParams.timecode = new TCTimecodeOptions();
 		jobParams.timecode.background = TCTimecodeColour.WHITE;
 		jobParams.timecode.foreground = TCTimecodeColour.BLACK;
@@ -170,16 +168,12 @@ public class PreviewExportJobs
 		jobParams.priority = 1;
 
 		jobParams.ftpupload = getBaseFtpUploadParameters();
-
-		if (p == TCOutputPurpose.MPG4)
-		{
-			jobParams.ftpupload.filename = jobParams.outputFileBasename + ".mpg";
-			jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance";
+		
+		if(p==TCOutputPurpose.MPG4){
+		jobParams.ftpupload.filename =  jobParams.outputFileBasename + ".mpg";
 		}
-		else
-		{
-			jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance" + "/" + jobParams.outputFileBasename;
-		}
+		
+		jobParams.ftpupload.folder = "exports/Exports/Lifestyle/Compliance";
 
 		return svc.createPCPXML(jobParams);
 
@@ -189,12 +183,13 @@ public class PreviewExportJobs
 	{
 		TCFTPUpload ftpupload = new TCFTPUpload();
 
-		// ftpupload.server = "10.111.224.151";
-		// ftpupload.user = "mamexportftp";
-		// ftpupload.password = "ftp3xp0rt";
-		ftpupload.server = "192.168.2.30";
-		ftpupload.user = "targetuser";
+//		ftpupload.server = "10.111.224.151";
+//		ftpupload.user = "mamexportftp";
+//		ftpupload.password = "ftp3xp0rt";
+		ftpupload.server = "192.168.2.68";
+		ftpupload.user = "user";
 		ftpupload.password = "password";
+		
 
 		return ftpupload;
 
