@@ -1,7 +1,11 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -1092,17 +1096,23 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				log.info("writing associated files");
 				String materialAssetID = task.getAttribute(Attribute.ASSET_GRANDPARENT_ID);
 				log.debug("using materialAssetID :" + materialAssetID);
-				List<String> dataFilesPath = mayamClient.getDataFilesPath(materialAssetID);
+				List<String> dataFilesUrls = mayamClient.getDataFilesUrls(materialAssetID);
 				
-				for(int i=0;i<dataFilesPath.size();i++){
-					String filePath = outputPaths.getLocalPathToExportDestination("",jobType, filename + "_associated", "."+i);
+				for (int i = 0; i < dataFilesUrls.size(); i++)
+				{
+
+					String filePath = outputPaths.getLocalPathToExportDestination("", jobType, filename + "_associated", "." + i);
 					try
 					{
-						FileUtils.copyFile(new File(dataFilesPath.get(i)), new File(filePath));
+						URL url = new URL(dataFilesUrls.get(i));
+						URLConnection con = url.openConnection();
+						BufferedInputStream in = new BufferedInputStream(con.getInputStream());
+						FileOutputStream out = new FileOutputStream(new File(filePath));
+						IOUtils.copy(in, out);
 					}
 					catch (IOException e)
 					{
-						log.error(String.format("error copying from %s to %s", dataFilesPath.get(i), filePath), e);
+						log.error(String.format("error copying from %s to %s", dataFilesUrls.get(i), filePath), e);
 					}
 				}
 			}

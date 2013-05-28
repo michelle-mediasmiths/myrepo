@@ -425,9 +425,9 @@ public class MayamClientImpl implements MayamClient
 	}
 	
 	@Override
-	public List<String> getDataFilesPath(String materialAssetID) throws MayamClientException
+	public List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException
 	{
-		return materialController.getDataFilesPath(materialAssetID);
+		return materialController.getDataFilesUrls(materialAssetID);
 	}
 
 	@Override

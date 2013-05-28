@@ -1589,7 +1589,7 @@ public class MayamMaterialController extends MayamController
 		return getAssetPath(assetID,true);
 	}
 	
-	public List<String> getDataFilesPath(String materialAssetID) throws MayamClientException{
+	public List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException{
 		FileFormatInfo fileinfo;
 		try
 		{
@@ -1603,22 +1603,7 @@ public class MayamMaterialController extends MayamController
 		
 		List<String> urls = fileinfo.getDataUrls();
 		
-		List<String> paths = new ArrayList<String>();
-		
-		for (int i = 0; i < urls.size(); i++)
-		{
-
-			String url = urls.get(i);
-
-			String nixPath = pathResolver.nixPath(PathType.FTP, url);
-			paths.add(nixPath);
-		}
-		
-		if(urls.size()!=paths.size()){
-			log.warn("could not resolve a location for every associated file");
-		}
-		
-		return paths;
+		return urls;
 		
 	}
 	

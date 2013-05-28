@@ -345,6 +345,6 @@ public interface MayamClient
 
 	SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException;
 
-	List<String> getDataFilesPath(String materialAssetID) throws MayamClientException;
+	List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException;
 	
 }
