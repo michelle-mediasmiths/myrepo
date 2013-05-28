@@ -186,8 +186,8 @@ public class PreviewExportJobs
 //		ftpupload.server = "10.111.224.151";
 //		ftpupload.user = "mamexportftp";
 //		ftpupload.password = "ftp3xp0rt";
-		ftpupload.server = "192.168.2.68";
-		ftpupload.user = "user";
+		ftpupload.server = "192.168.2.30";
+		ftpupload.user = "targetuser";
 		ftpupload.password = "password";
 		
 
