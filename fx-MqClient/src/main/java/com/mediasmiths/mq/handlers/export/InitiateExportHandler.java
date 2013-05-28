@@ -1,10 +1,13 @@
 package com.mediasmiths.mq.handlers.export;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 import org.mule.api.MuleException;
 
@@ -15,6 +18,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.extendedpublishing.TCJobParamsGenerator;
 import com.mediasmiths.foxtel.ip.common.events.ExportStart;
 import com.mediasmiths.foxtel.ip.event.EventService;
@@ -41,6 +45,9 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 
 	@Inject
 	private TCJobParamsGenerator tcJobsParamGenerator;
+	
+	@Inject
+	OutputPaths outputPaths;
 
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
@@ -159,6 +166,29 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			log.error("error constructing job params for export proxy", e);
 			taskController.setTaskToErrorWithMessage(taskID, e.getMessage());
 			return;
+		}
+		
+		boolean isDVD = false;
+		if ("dvd".equals(requestedFormat)){
+			isDVD = true;
+		}
+		
+		if (isDVD)
+		{
+			// we need to make the output folder on the corporate storage because rhozet wont
+			String localPathToExportDestination = outputPaths.getLocalPathToExportDestination(
+					channel,
+					jobType,
+					outputFileName,
+					isDVD);
+
+			File folder = new File(localPathToExportDestination);
+			if (!folder.mkdirs())
+			{
+				log.error("Error creating folder at export destination : "+localPathToExportDestination);
+				taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
+				return;
+			}
 		}
 
 		// invoke export flow
