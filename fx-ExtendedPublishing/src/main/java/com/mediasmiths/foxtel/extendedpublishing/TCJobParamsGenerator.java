@@ -73,6 +73,11 @@ public class TCJobParamsGenerator
 	{
 		TCJobParameters jobParams = new TCJobParameters();
 
+		boolean isDVD = false;
+		if ("dvd".equals(requestedFormat)){
+			isDVD = true;
+		}
+		
 		log.debug("buglocation: " + buglocation);
 		if (buglocation != null && !buglocation.equals("--") && channelTag != null)
 		{
@@ -91,7 +96,7 @@ public class TCJobParamsGenerator
 			jobParams.resolution = TCResolution.HD;
 		}
 
-		String separatorAndExtension = outputPaths.getOutputFileExtension(jobType);
+		String separatorAndExtension = outputPaths.getOutputFileExtension(jobType,isDVD);
 
 		if (outputFileName != null)
 		{

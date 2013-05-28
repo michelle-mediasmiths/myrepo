@@ -1110,7 +1110,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 						FileOutputStream out = new FileOutputStream(new File(filePath));
 						IOUtils.copy(in, out);
 					}
-					catch (IOException e)
+					catch (Exception e)
 					{
 						log.error(String.format("error copying from %s to %s", dataFilesUrls.get(i), filePath), e);
 					}

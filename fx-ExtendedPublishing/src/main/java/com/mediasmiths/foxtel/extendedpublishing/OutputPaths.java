@@ -55,10 +55,9 @@ public class OutputPaths
 	 * @param filename
 	 * @return
 	 */
-	public boolean fileExistsAtExportDestination(String channelTag, TranscodeJobType jobType, String filename)
+	public boolean fileExistsAtExportDestination(String channelTag, TranscodeJobType jobType, String filename, boolean isDVD)
 	{
-		String pathToExportDestination = getLocalPathToExportDestination(channelTag, jobType, filename);
-
+		String pathToExportDestination = getLocalPathToExportDestination(channelTag, jobType, filename,isDVD);
 		File f = new File(pathToExportDestination);
 		return f.exists();
 	}
@@ -67,9 +66,9 @@ public class OutputPaths
 		return getOutputPathForExport(channelTag, jobType, false);
 	}
 	
-	public String getLocalPathToExportDestination(String channelTag, TranscodeJobType jobType, String filename){
+	public String getLocalPathToExportDestination(String channelTag, TranscodeJobType jobType, String filename, boolean isDVD){
 		
-		String extension = getOutputFileExtension(jobType);
+		String extension = getOutputFileExtension(jobType, isDVD);
 		return getLocalPathToExportDestination(channelTag,jobType,filename,extension);
 	}
 	
@@ -163,30 +162,37 @@ public class OutputPaths
 		return exportLocation;
 	}
 
-	public String getOutputFileExtension(TranscodeJobType jobType)
+	public String getOutputFileExtension(TranscodeJobType jobType, boolean isDVD)
 	{
-		switch (jobType)
+		if (isDVD)
 		{
-			case CAPTION_PROXY:
-				{
-					return String.format(".%s", outputPathsConfig.getCaptionOutputExtension());
-				}
-			case COMPLIANCE_PROXY:
-				{
-					return String.format(".%s", outputPathsConfig.getComplianceOutputExtension());
-				}
-			case PUBLICITY_PROXY:
-				{
-					return String.format(".%s", outputPathsConfig.getPublicityOutputExtension());
-				}
-			case TX:
-				throw new IllegalArgumentException("Unexpected job type");
-			default:
-				throw new IllegalArgumentException("Unexpected job type");
+			return "";
+		}
+		else
+		{
+			switch (jobType)
+			{
+				case CAPTION_PROXY:
+					{
+						return String.format(".%s", outputPathsConfig.getCaptionOutputExtension());
+					}
+				case COMPLIANCE_PROXY:
+					{
+						return String.format(".%s", outputPathsConfig.getComplianceOutputExtension());
+					}
+				case PUBLICITY_PROXY:
+					{
+						return String.format(".%s", outputPathsConfig.getPublicityOutputExtension());
+					}
+				case TX:
+					throw new IllegalArgumentException("Unexpected job type");
+				default:
+					throw new IllegalArgumentException("Unexpected job type");
 
+			}
 		}
 	}
-	
+
 	public String getFileNameForCaptionExport(String presentationID, String programmeTitle, Integer seriesNumber, Integer episodeNumber, Integer exportVersion){
 		
 		if (programmeTitle == null)
