@@ -7,6 +7,7 @@ import com.mayam.wf.attributes.shared.type.AudioTrackList;
 import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
 import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
@@ -37,6 +38,10 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Primarily used to output tx package information but some information can be overriden to provide companion xml for different outputs, eg caption exports
+ *
+ */
 public class MediaExchangeProgrammeOutputBuilder
 {
 	private static Logger log = Logger.getLogger(MediaExchangeProgrammeOutputBuilder.class);
@@ -48,10 +53,10 @@ public class MediaExchangeProgrammeOutputBuilder
 	TasksClient tasks;
 	
 	public Programme buildProgramme(FullProgrammePackageInfo pack){
-		return buildProgramme(pack, pack.getPackageId()+".gxf");
+		return buildProgramme(pack, pack.getPackageId()+".gxf", false, null);
 	}
 	
-	public Programme buildProgramme(FullProgrammePackageInfo pack, String filename)
+	public Programme buildProgramme(FullProgrammePackageInfo pack, String filename, boolean overrideAudioInfo, AudioListType overrideAudioFormat)
 	{
 		Programme ret = new Programme();
 
@@ -61,18 +66,18 @@ public class MediaExchangeProgrammeOutputBuilder
 		ret.setDetail(programmeDetail);
 
 		// programme media
-		Programme.Media programmeMedia = getProgrammeMedia(pack,filename);
+		Programme.Media programmeMedia = getProgrammeMedia(pack,filename, overrideAudioInfo,overrideAudioFormat);
 
 		ret.setMedia(programmeMedia);
 
 		return ret;
 	}
 
-	private Media getProgrammeMedia(FullProgrammePackageInfo pack, String filename)
+	private Media getProgrammeMedia(FullProgrammePackageInfo pack, String filename, boolean overrideAudioInfo, AudioListType overrideAudioFormat)
 	{
 		Programme.Media programmeMedia = new Programme.Media();
 		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(pack);
-		AudioTracks pmat = getProgrammeMediaAudioTracks(pack);
+		AudioTracks pmat = getProgrammeMediaAudioTracks(pack, overrideAudioInfo, overrideAudioFormat);
 
 		programmeMedia.setSegments(mexSegments);
 		programmeMedia.setAudioTracks(pmat);
@@ -83,22 +88,33 @@ public class MediaExchangeProgrammeOutputBuilder
 		return programmeMedia;
 	}
 
-	private  Programme.Media.AudioTracks getProgrammeMediaAudioTracks(FullProgrammePackageInfo pack)
+	private  Programme.Media.AudioTracks getProgrammeMediaAudioTracks(FullProgrammePackageInfo pack, boolean overrideAudioInfo, AudioListType overrideAudioFormat)
 	{
-		AudioTrackList audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
-		
-		if (audioTracks == null || audioTracks.size() == 0)
-		{
-			log.error("No audio tracks found when processing package " + pack.getPackageId());
-			return new Programme.Media.AudioTracks();
-		}
-		else
-		{
-			AudioListType audioListType = getAudioEncoding(pack);
+			AudioTrackList audioTracks ;
+			AudioListType audioListType;
+			
+			if (overrideAudioInfo)
+			{
+				log.debug("overriding audio format info");
+				audioListType = overrideAudioFormat;
+				audioTracks = buildOverrideTrackList(audioListType);
+			}
+			else
+			{
+				audioTracks = pack.getMaterialAttributes().getAttribute(Attribute.AUDIO_TRACKS);
+				
+				if(audioTracks == null || audioTracks.size() == 0)
+				{
+					log.error("No audio tracks found when processing package " + pack.getPackageId());
+					return new Programme.Media.AudioTracks();
+				}
+				
+				audioListType = getAudioEncoding(pack);
+			}
 			
 			Programme.Media.AudioTracks ats = new Programme.Media.AudioTracks();
 
-			log.warn("Tracks defined: " + audioTracks.size());
+			log.debug("Tracks defined: " + audioTracks.size());
 			
 			if (audioListType == AudioListType.MONO)
 			{
@@ -135,12 +151,60 @@ public class MediaExchangeProgrammeOutputBuilder
 				
 			}
 			return ats;
-		}
 
 	}
 
 
 	
+	private AudioTrackList buildOverrideTrackList(AudioListType audioListType)
+	{
+		AudioTrackList ret = new AudioTrackList();
+		
+		AudioTrack one = new AudioTrack();
+		one.setEncoding(EncodingType.LINEAR);
+		one.setName("one");
+		one.setNumber(1);
+		
+		AudioTrack two = new AudioTrack();
+		two.setEncoding(EncodingType.LINEAR);
+		two.setName("two");
+		two.setNumber(2);
+		
+		AudioTrack three = new AudioTrack();
+		three.setEncoding(EncodingType.DOLBY_E);
+		three.setName("three");
+		three.setNumber(3);
+		
+		AudioTrack four = new AudioTrack();
+		four.setEncoding(EncodingType.DOLBY_E);
+		four.setName("four");
+		four.setNumber(4);
+		
+		switch (audioListType)
+		{
+			case DIGITAL:
+				break;
+			case MONO:
+				ret.add(one);
+				break;
+			case STEREO:
+				ret.add(one);
+				ret.add(two);
+				break;
+			case SURROUND:
+				ret.add(one);
+				ret.add(two);
+				ret.add(three);
+				ret.add(four);
+				break;
+			default:
+				break;
+		}
+		
+		return ret;
+		
+	}
+
 	private  Programme.Media.AudioTracks.Track mappingAudioTrack(AudioTrackList audioTracks, int i)
 	{
 		AudioTrack track = audioTracks.get(i);

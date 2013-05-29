@@ -37,6 +37,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
+import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
@@ -567,7 +568,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				try
 				{
 					String mediaFilename = filename + outputPaths.getOutputFileExtension(TranscodeJobType.CAPTION_PROXY, false);
-					Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+					Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename, true, AudioListType.STEREO);
 					segmentXml = mexSerialiser.serialise(programme);
 				}
 				catch (Exception e)
@@ -1079,7 +1080,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
 				String mediaFilename = filename + outputPaths.getOutputFileExtension(jobType, false);
-				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename, true, AudioListType.STEREO);
 				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
 				mexSerialiser.serialise(programme, new File(metadataFileLocation));
 			}
