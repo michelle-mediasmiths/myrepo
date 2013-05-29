@@ -464,6 +464,16 @@ public class MayamClientImpl implements MayamClient
 	}
 	
 	@Override
+	public Programme getProgramme(String packageID, String filename) throws MayamClientException
+	{
+
+		//fetch the packages information		
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(packageID, packageController, materialController, titleController, client.assetApi());
+		//build the Programme Object
+		return mediaExchangeBuilder.buildProgramme(pack,filename);
+	}
+	
+	@Override
 	public RuzzIF getRuzzProgramme(String packageID) throws MayamClientException
 	{
 		//fetch the packages information		

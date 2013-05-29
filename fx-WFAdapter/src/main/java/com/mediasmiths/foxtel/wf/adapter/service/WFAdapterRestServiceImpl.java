@@ -562,15 +562,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				String packageId = task.getAttributeAsString(Attribute.HOUSE_ID);
+				final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
 				String segmentXml= "";
 				try
 				{
-					segmentXml = getSegmentXML(packageId);
+					String mediaFilename = filename + outputPaths.getOutputFileExtension(TranscodeJobType.CAPTION_PROXY, false);
+					Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+					segmentXml = mexSerialiser.serialise(programme);
 				}
-				catch (JAXBException e)
+				catch (Exception e)
 				{
-						log.error("jaxbexception ",e);
+						log.error("exception fetching package xml ",e);
 				}
+				
 				byte[] encoded = Base64.encodeBase64(segmentXml.getBytes());
 				String encodedString = new String(encoded);
 				EventAttachment attachment = new EventAttachment();
@@ -1074,7 +1078,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		{
 			if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
 			{
-				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID));
+				String mediaFilename = filename + outputPaths.getOutputFileExtension(jobType, false);
+				Programme programme = mayamClient.getProgramme((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
 				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
 				mexSerialiser.serialise(programme, new File(metadataFileLocation));
 			}

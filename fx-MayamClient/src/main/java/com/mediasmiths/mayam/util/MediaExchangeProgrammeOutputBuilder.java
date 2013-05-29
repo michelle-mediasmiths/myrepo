@@ -43,8 +43,11 @@ public class MediaExchangeProgrammeOutputBuilder
 	@Inject
 	TasksClient tasks;
 	
+	public Programme buildProgramme(FullProgrammePackageInfo pack){
+		return buildProgramme(pack, pack.getPackageId()+".gxf");
+	}
 	
-	public Programme buildProgramme(FullProgrammePackageInfo pack)
+	public Programme buildProgramme(FullProgrammePackageInfo pack, String filename)
 	{
 		Programme ret = new Programme();
 
@@ -54,14 +57,14 @@ public class MediaExchangeProgrammeOutputBuilder
 		ret.setDetail(programmeDetail);
 
 		// programme media
-		Programme.Media programmeMedia = getProgrammeMedia(pack);
+		Programme.Media programmeMedia = getProgrammeMedia(pack,filename);
 
 		ret.setMedia(programmeMedia);
 
 		return ret;
 	}
 
-	private Media getProgrammeMedia(FullProgrammePackageInfo pack)
+	private Media getProgrammeMedia(FullProgrammePackageInfo pack, String filename)
 	{
 		Programme.Media programmeMedia = new Programme.Media();
 		Segments mexSegments = SegmentUtil.convertMayamSegmentListToMediaExchangeSegments(pack);
@@ -71,7 +74,7 @@ public class MediaExchangeProgrammeOutputBuilder
 		programmeMedia.setAudioTracks(pmat);
 
 		programmeMedia.setId(pack.getPackageId());
-		programmeMedia.setFilename(pack.getPackageId() + ".gxf");
+		programmeMedia.setFilename(filename);
 
 		return programmeMedia;
 	}
