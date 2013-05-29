@@ -13,7 +13,6 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.LogUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
@@ -1035,6 +1034,40 @@ public class MayamTaskController extends MayamController
 		catch (Exception e)
 		{
 			log.error("error searching for or closing purge candidate tasks for titles child associated materials", e);
+		}
+	}
+
+
+	public void closeIngestTaskForAssetAsUmatched(String assetID)
+	{
+		AttributeMap task;
+		try
+		{
+			task = getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, assetID);
+
+			if (task == null)
+			{
+				log.warn("no ingest task found for assetID " + assetID);
+				return;
+			}
+
+			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
+
+			if (MayamTaskController.END_STATES.contains(currentState))
+			{
+				log.warn("Ingest task for asset is already in a closed state  " + currentState);
+				return;
+			}
+
+			log.info(String.format("Import finished for asset %s (%s)", task.getAttributeAsString(Attribute.HOUSE_ID), assetID));
+			AttributeMap updateMap = updateMapForTask(task);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
+			updateMap.setAttribute(Attribute.INGEST_NOTES, MayamMaterialController.UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER);
+			saveTask(updateMap);
+		}
+		catch (MayamClientException e)
+		{
+			log.error("Error closing ingest task for asset " + assetID, e);
 		}
 	}
 	

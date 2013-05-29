@@ -1698,6 +1698,7 @@ public class MayamMaterialController extends MayamController
 	@Inject
 	@Named("ff.sd.video.imagex")
 	private int sdVideoX;
+	public static final String UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER = "Unmatched asset matched to this placeholder";
 	
 	public String getFormat(AttributeMap currentAttributes) throws RemoteException
 	{

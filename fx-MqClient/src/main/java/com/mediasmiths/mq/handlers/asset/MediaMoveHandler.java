@@ -72,6 +72,9 @@ public class MediaMoveHandler extends AttributeHandler
 				taskController.createIngestTaskForMaterial(assetAttributes.getAttributeAsString(Attribute.HOUSE_ID));
 			}
 			
+			//close ingest task for peer
+			taskController.closeIngestTaskForAssetAsUmatched(peerID);
+			
 		}
 		catch (Exception e)
 		{

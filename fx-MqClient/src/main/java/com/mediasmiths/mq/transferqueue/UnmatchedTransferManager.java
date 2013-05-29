@@ -32,11 +32,9 @@ import java.util.concurrent.TimeUnit;
 @Singleton
 public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 {
-	public static final String UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER = "Unmatched asset matched to this placeholder";
+	public static final Logger log = Logger.getLogger(UnmatchedTransferManager.class);
 
-	private static final Logger log = Logger.getLogger(UnmatchedTransferManager.class);
-
-	private final MayamTaskController taskController;
+	public final MayamTaskController taskController;
 
 	@Inject
 	public UnmatchedTransferManager(
@@ -93,7 +91,7 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 
 			// close open ingest task for the target asset
 			log.debug(String.format("Closing ingest task for asset with assetId %s", assetPeerID));
-			closeIngestTaskForAsset(assetPeerID);
+			taskController.closeIngestTaskForAssetAsUmatched(assetPeerID);
 
 			// close purge candidate task for unmatched asset
 			log.debug(String.format("Closing purge candidate task for asset with assetId %s", unmatchedAssetID));
@@ -183,39 +181,6 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 		}
 	}
 	
-	public void closeIngestTaskForAsset(String peerID)
-	{
-		AttributeMap task;
-		try
-		{
-			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.INGEST, peerID);
-
-			if (task == null)
-			{
-				log.warn("no ingest task found for assetID " + peerID);
-				return;
-			}
-
-			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-
-			if (MayamTaskController.END_STATES.contains(currentState))
-			{
-				log.warn("Ingest task for asset is already in a closed state  " + currentState);
-				return;
-			}
-
-			log.info(String.format("Import finished for asset %s (%s)", task.getAttributeAsString(Attribute.HOUSE_ID), peerID));
-			AttributeMap updateMap = taskController.updateMapForTask(task);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.FINISHED);
-			updateMap.setAttribute(Attribute.INGEST_NOTES, UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER);
-			taskController.saveTask(updateMap);
-		}
-		catch (MayamClientException e)
-		{
-			log.error("Error closing ingest task for asset " + peerID, e);
-		}
-	}
-
 	public void closeTask(AttributeMap messageAttributes)
 	{
 		log.debug("Closing task");

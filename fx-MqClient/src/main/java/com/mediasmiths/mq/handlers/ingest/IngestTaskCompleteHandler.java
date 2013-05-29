@@ -10,9 +10,9 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
-import com.mediasmiths.mq.transferqueue.UnmatchedTransferManager;
 
 public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 {
@@ -87,7 +87,7 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 				
 				String ingestNotes = (String) currentAttributes.getAttribute(Attribute.INGEST_NOTES);
 				
-				if (UnmatchedTransferManager.UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER.equals(ingestNotes))
+				if (MayamMaterialController.UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER.equals(ingestNotes))
 				{
 					addOrUpdateMaterial.setTaskType("UNMATCHED");
 				}
