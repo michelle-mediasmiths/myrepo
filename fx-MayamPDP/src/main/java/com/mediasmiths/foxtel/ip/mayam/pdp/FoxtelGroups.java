@@ -51,7 +51,8 @@ public enum FoxtelGroups
 	admin("admin"),
 	ardendo("ardendo"),
 	Test_Full_Class("Test_Full_Class"),
-	GS_MAM_FULL_Class("GS-MAM_FULL_Class");
+	GS_MAM_FULL_Class("GS-MAM_FULL_Class"),
+	GS_MAM_AO("GS-MAM_AO");
 
 	private final String text;
 
