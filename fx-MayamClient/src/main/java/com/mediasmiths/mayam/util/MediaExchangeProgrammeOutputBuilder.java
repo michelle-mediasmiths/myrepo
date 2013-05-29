@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.type.AudioTrack;
 import com.mayam.wf.attributes.shared.type.AudioTrackList;
+import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
+import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
@@ -15,6 +17,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.AudioTrack
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
+import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +31,7 @@ import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.GregorianCalendar;
+import java.util.Map;
 
 public class MediaExchangeProgrammeOutputBuilder
 {
@@ -36,6 +40,10 @@ public class MediaExchangeProgrammeOutputBuilder
 	@Inject
 	ChannelPropertiesConfiguration channelProperties;
 
+	@Inject
+	TasksClient tasks;
+	
+	
 	public Programme buildProgramme(FullProgrammePackageInfo pack)
 	{
 		Programme ret = new Programme();
@@ -252,10 +260,30 @@ public class MediaExchangeProgrammeOutputBuilder
 		}
 		else
 		{
-			programmeDetail.setSOM("0:0:0:0");
-			programmeDetail.setEOM("0:0:0:0");
-			programmeDetail.setDuration("0:0:0:0");
-			log.warn("Producing Programme type for empty segment list! package" + pack.getPackageId());
+			try
+			{
+				log.info("Producing programme type for empty segment list, looking up file format info for in and out timecodes "
+						+ pack.getPackageId());
+
+				FileFormatInfo techReport = tasks.assetApi().getFormatInfo(
+						MayamAssetType.MATERIAL.getAssetType(),
+						(String) pack.getMaterialAttributes().getAttribute(Attribute.ASSET_ID));
+
+				String tcIn = techReport.getTcIn();
+				String tcOut = techReport.getTcOut();
+				String duration = SegmentUtil.getDuration(tcIn, tcOut);
+
+				programmeDetail.setSOM(tcIn);
+				programmeDetail.setEOM(tcOut);
+				programmeDetail.setDuration(duration);
+			}
+			catch (Exception e)
+			{
+				log.warn("error fetching tech report for material " + pack.getMaterialID(), e);
+				programmeDetail.setSOM("00:00:00:00");
+				programmeDetail.setEOM("00:00:00:00");
+				programmeDetail.setDuration("00:00:00:00");
+			}
 		}
 	}
 

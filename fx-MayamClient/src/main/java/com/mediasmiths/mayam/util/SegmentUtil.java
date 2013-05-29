@@ -348,6 +348,16 @@ public class SegmentUtil
 		
 		return sb.toString();
 	}
+
+	public static String getDuration(String som, String eom)
+	{
+		log.debug(String.format("GetDuration som %s eom %s",som,eom));
+		Timecode in = Timecode.getInstance(som, Framerate.HZ_25);
+		Timecode out = Timecode.getInstance(eom, Framerate.HZ_25);
+		Timecode duration = out.subtract(in.getSampleCount());
+		log.debug(String.format("duration %s",duration));
+		return duration.toSMPTEString();
+	}
 	
 	
 }
