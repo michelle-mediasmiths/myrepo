@@ -258,7 +258,7 @@ public class MediaExchangeProgrammeOutputBuilder
 			
 			List<Segment> entries = pack.getSegmentList().getEntries();
 			//ensure that entries are in order so that som and eom are correct
-			//there is another sort later on when this segmentation information is in a format
+			//there is another sort later on when this segmentation information is in a different format
 			//while not ideal, these lists aren't long so there ought not be a significant overhead doing this
 			Collections.sort(entries, new Comparator<Segment>()
 			{
