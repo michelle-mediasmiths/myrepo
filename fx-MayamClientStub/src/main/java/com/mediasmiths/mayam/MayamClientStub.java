@@ -923,4 +923,11 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public Programme getProgramme(String packageID, String filename) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
