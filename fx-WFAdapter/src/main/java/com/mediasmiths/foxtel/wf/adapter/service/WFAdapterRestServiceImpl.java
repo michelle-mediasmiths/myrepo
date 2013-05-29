@@ -1151,4 +1151,37 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		log.info(String.format("Task %s failed for reason %s",taskId, error));
 		mayamClient.exportFailed(taskId.longValue(), error);
 	}
+	
+	@Override
+	@GET
+	@Path("/export/previewMetadata")
+	public String previewExportMetadata(@QueryParam("taskID") Long taskID) throws MayamClientException
+	{
+		// just for testing, use the task id of an existing export task to see the metadata that would be produced for it
+		AttributeMap task = mayamClient.getTask(taskID);
+
+		final TranscodeJobType jobType = TranscodeJobType.fromText((String) task.getAttribute(Attribute.OP_TYPE));
+		final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
+
+		if (jobType.equals(TranscodeJobType.CAPTION_PROXY))
+		{
+			String mediaFilename = filename + outputPaths.getOutputFileExtension(jobType, false);
+			Programme programme = mayamClient.getProgramme(
+					(String) task.getAttribute(Attribute.HOUSE_ID),
+					mediaFilename,
+					true,
+					AudioListType.STEREO);
+			return mexSerialiser.serialise(programme);
+		}
+		else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY) || jobType.equals(TranscodeJobType.PUBLICITY_PROXY))
+		{
+			String materialId = (String) task.getAttribute(Attribute.HOUSE_ID);
+			String textualMetadata = mayamClient.getTextualMetatadaForMaterialExport(materialId);
+
+			return textualMetadata;
+		}
+		else{
+			return "None for jobType " +jobType;
+		}
+	}
 }

@@ -292,6 +292,10 @@ public interface WFAdapterRestService
 	@Path("/export/failed")
 	@Consumes("application/xml")
 	public void exportFailed(ExportFailedRequest request) throws MayamClientException;
+
+	@GET
+	@Path("/export/previewMetadata")
+	public String previewExportMetadata(@QueryParam("taskID") Long taskID) throws MayamClientException;
 	
 }
 
