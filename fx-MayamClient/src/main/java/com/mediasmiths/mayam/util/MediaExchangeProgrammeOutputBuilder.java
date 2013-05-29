@@ -30,7 +30,11 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Map;
 
 public class MediaExchangeProgrammeOutputBuilder
@@ -251,6 +255,20 @@ public class MediaExchangeProgrammeOutputBuilder
 	{
 		if (pack.getSegments() != null && !pack.getSegments().isEmpty())
 		{
+			
+			List<Segment> entries = pack.getSegmentList().getEntries();
+			//ensure that entries are in order so that som and eom are correct
+			//there is another sort later on when this segmentation information is in a format
+			//while not ideal, these lists aren't long so there ought not be a significant overhead doing this
+			Collections.sort(entries, new Comparator<Segment>()
+			{
+				@Override
+				public int compare(Segment o1, Segment o2)
+				{
+					return Integer.compare(o1.getNumber(), o2.getNumber());
+				}
+			});
+			
 			programmeDetail.setSOM(pack.getSegmentList().getEntries().get(0).getIn().toSmpte());
 			Segment lastSegment = pack.getSegmentList().getEntries().get(pack.getSegmentList().getEntries().size() - 1);
 			programmeDetail.setEOM(SegmentUtil.calculateEOM(lastSegment.getDuration().toSmpte(),
