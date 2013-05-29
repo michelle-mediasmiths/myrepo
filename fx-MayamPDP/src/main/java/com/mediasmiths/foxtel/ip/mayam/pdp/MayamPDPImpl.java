@@ -1191,7 +1191,7 @@ public class MayamPDPImpl implements MayamPDP
 		AttributeMap permissionErrorStatus =client.createAttributeMap();
 
 		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorTaskMessage, operation.toString()));
+		permissionErrorStatus.setAttribute(Attribute.FORM_MSG_ERROR, String.format(permissionErrorTaskMessage, operation.toString()));
 
 		return  mapper.serialize(permissionErrorStatus);
 	}
@@ -1201,7 +1201,7 @@ public class MayamPDPImpl implements MayamPDP
 		AttributeMap permissionErrorStatus =client.createAttributeMap();
 
 		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorActionMessage, operation.toString()));
+		permissionErrorStatus.setAttribute(Attribute.FORM_MSG_ERROR, String.format(permissionErrorActionMessage, operation.toString()));
 
 		return  mapper.serialize(permissionErrorStatus);
 	}
@@ -1229,7 +1229,7 @@ public class MayamPDPImpl implements MayamPDP
 			logger.warn("Exception searching for tasks");
 			returnMap.clear();
 			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-			returnMap.setAttribute(Attribute.ERROR_MSG, String.format(messageTaskTechnical, houseID));
+			returnMap.setAttribute(Attribute.FORM_MSG_ERROR, String.format(messageTaskTechnical, houseID));
 		}
 
 		if (result != null && result.getTotalMatches() > 0)
@@ -1237,7 +1237,7 @@ public class MayamPDPImpl implements MayamPDP
 			logger.debug("found tasks");
 			returnMap.clear();
 			returnMap.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-			returnMap.setAttribute(Attribute.ERROR_MSG, String.format(messageTaskMultiple, task.getText()));
+			returnMap.setAttribute(Attribute.FORM_MSG_ERROR, String.format(messageTaskMultiple, task.getText()));
 		}
 
 		logger.debug("found no tasks");
@@ -1427,7 +1427,7 @@ public class MayamPDPImpl implements MayamPDP
 
 		AttributeMap errorStatus = new AttributeMap();
 		errorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-		errorStatus.setAttribute(Attribute.ERROR_MSG, msg);
+		errorStatus.setAttribute(Attribute.FORM_MSG_ERROR, msg);
 
 		logger.info("Return Map : " + mapper.serialize(errorStatus));
 		return mapper.serialize(errorStatus);
@@ -1448,7 +1448,7 @@ public class MayamPDPImpl implements MayamPDP
 		AttributeMap permissionErrorStatus = client.createAttributeMap();
 
 		permissionErrorStatus.setAttribute(Attribute.OP_STAT, StatusCodes.ERROR.toString());
-		permissionErrorStatus.setAttribute(Attribute.ERROR_MSG, String.format(permissionErrorTaskMessage, operation.toString()));
+		permissionErrorStatus.setAttribute(Attribute.FORM_MSG_ERROR, String.format(permissionErrorTaskMessage, operation.toString()));
 
 		return  mapper.serialize(permissionErrorStatus);
 		
