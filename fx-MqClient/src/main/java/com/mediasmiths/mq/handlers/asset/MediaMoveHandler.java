@@ -96,13 +96,18 @@ public class MediaMoveHandler extends AttributeHandler
 			{
 				try
 				{
-					AttributeMap refetch = taskController.getTask((Long)task.getAttribute(Attribute.TASK_ID));
-					AttributeMap updateMap = taskController.updateMapForTask(refetch);
-					taskController.saveTask(updateMap);
+					AttributeMap refetch = taskController.getTask((Long) task.getAttribute(Attribute.TASK_ID));
+					state = refetch.getAttribute(Attribute.TASK_STATE);
+					if (!MayamTaskController.END_STATES.contains(state))
+					{
+						AttributeMap updateMap = taskController.updateMapForTask(refetch);
+						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+						taskController.saveTask(updateMap);
+					}
 				}
 				catch (RemoteException e)
 				{
-					log.error("error refetching task",e);
+					log.error("error refetching task", e);
 				}
 			}
 		}
