@@ -8,10 +8,8 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.AttributeHandler;
 
@@ -87,29 +85,12 @@ public class MediaMoveHandler extends AttributeHandler
 
 	private List<AttributeMap> removeTasksOfType(final String assetID, final MayamTaskListType type) throws MayamClientException
 	{
-		List<AttributeMap> tasks = taskController.getTasksForAsset(type, AssetType.ITEM, Attribute.ASSET_ID, assetID);
-		for (AttributeMap task : tasks)
+		List<AttributeMap> tasks = taskController.getOpenTasksForAsset(type, Attribute.ASSET_ID, assetID);
+		for (AttributeMap task: tasks)
 		{
-			TaskState state = task.getAttribute(Attribute.TASK_STATE);
-
-			if (!MayamTaskController.END_STATES.contains(state))
-			{
-				try
-				{
-					AttributeMap refetch = taskController.getTask((Long) task.getAttribute(Attribute.TASK_ID));
-					state = refetch.getAttribute(Attribute.TASK_STATE);
-					if (!MayamTaskController.END_STATES.contains(state))
-					{
-						AttributeMap updateMap = taskController.updateMapForTask(refetch);
-						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-						taskController.saveTask(updateMap);
-					}
-				}
-				catch (RemoteException e)
-				{
-					log.error("error refetching task", e);
-				}
-			}
+			AttributeMap updateMap = taskController.updateMapForTask(task);
+			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+			taskController.saveTask(updateMap);
 		}
 		return tasks;
 	}
