@@ -8,6 +8,7 @@ import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -93,9 +94,16 @@ public class MediaMoveHandler extends AttributeHandler
 
 			if (!MayamTaskController.END_STATES.contains(state))
 			{
-				AttributeMap updateMap = taskController.updateMapForTask(task);
-				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-				taskController.saveTask(task);
+				try
+				{
+					AttributeMap refetch = taskController.getTask((Long)task.getAttribute(Attribute.TASK_ID));
+					AttributeMap updateMap = taskController.updateMapForTask(refetch);
+					taskController.saveTask(updateMap);
+				}
+				catch (RemoteException e)
+				{
+					log.error("error refetching task",e);
+				}
 			}
 		}
 		return tasks;
