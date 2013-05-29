@@ -10,6 +10,7 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.AttributeHandler;
 
@@ -85,12 +86,17 @@ public class MediaMoveHandler extends AttributeHandler
 
 	private List<AttributeMap> removeTasksOfType(final String assetID, final MayamTaskListType type) throws MayamClientException
 	{
-		List<AttributeMap> tasks = taskController.getOpenTasksForAsset(type, Attribute.ASSET_ID, assetID);
-		for (AttributeMap task: tasks)
+		List<AttributeMap> tasks = taskController.getTasksForAsset(type, AssetType.ITEM, Attribute.ASSET_ID, assetID);
+		for (AttributeMap task : tasks)
 		{
-			AttributeMap updateMap = taskController.updateMapForTask(task);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-			taskController.saveTask(task);
+			TaskState state = task.getAttribute(Attribute.TASK_STATE);
+
+			if (!MayamTaskController.END_STATES.contains(state))
+			{
+				AttributeMap updateMap = taskController.updateMapForTask(task);
+				updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+				taskController.saveTask(task);
+			}
 		}
 		return tasks;
 	}
