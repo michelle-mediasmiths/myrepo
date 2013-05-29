@@ -8,7 +8,6 @@ import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.AudioTrack.EncodingType;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioTrackType;
 import com.mediasmiths.foxtel.generated.mediaexchange.ClassificationType;
@@ -19,6 +18,7 @@ import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.ResolutionType;
 import com.mediasmiths.mayam.FullProgrammePackageInfo;
 import com.mediasmiths.mayam.MayamAssetType;
+import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.types.Framerate;
 import com.mediasmiths.std.types.Timecode;
 import org.apache.commons.lang.StringUtils;
@@ -50,7 +50,7 @@ public class MediaExchangeProgrammeOutputBuilder
 	ChannelPropertiesConfiguration channelProperties;
 
 	@Inject
-	TasksClient tasks;
+	TasksClientVeneer tasks;
 	
 	public Programme buildProgramme(FullProgrammePackageInfo pack){
 		return buildProgramme(pack, pack.getPackageId()+".gxf", false, null);
