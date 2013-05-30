@@ -223,7 +223,7 @@
                 <styles xmi:type="notation:FillStyle" xmi:id="_87XrA3HTEeKzdrjGTgFYAA"/>
                 <styles xmi:type="notation:LineStyle" xmi:id="_87XrBHHTEeKzdrjGTgFYAA" lineColor="0"/>
                 <element xmi:type="bpmn:SubProcess" href="modeler.bpmn#_87Wc4HHTEeKzdrjGTgFYAA"/>
-                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_87XrBXHTEeKzdrjGTgFYAA" x="307" y="17" width="1085" height="170"/>
+                <layoutConstraint xmi:type="notation:Bounds" xmi:id="_87XrBXHTEeKzdrjGTgFYAA" x="301" y="17" width="1085" height="170"/>
               </children>
               <children xmi:type="notation:Node" xmi:id="_iwWTIHHUEeKzdrjGTgFYAA" type="2001">
                 <children xmi:type="notation:Node" xmi:id="_iwW6MHHUEeKzdrjGTgFYAA" type="4001"/>

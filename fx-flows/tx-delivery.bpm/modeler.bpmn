@@ -2135,6 +2135,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_xb9eALcXEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xb9eAbcXEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_xpu0QLcXEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_KM9nsMkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <vertices xmi:type="bpmn:Activity" xmi:id="_tzmQMbcXEeKdLrMPHFRfaw" iD="_tzmQMLcXEeKdLrMPHFRfaw" associations="_MiBj4HHhEeKIgPAPmx2ukA _M5BHkHHhEeKIgPAPmx2ukA" name="Cancelled, stop job">
               <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_MhxFMXHhEeKIgPAPmx2ukA"/>

@@ -29,6 +29,9 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_yaO8oHHVEeKzdrjGTgFYAA" source="forEachSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_yaO8oXHVEeKzdrjGTgFYAA" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
           </eAnnotations>
+          <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ewYBYMkaEeKyYtEbZpVzJg" source="odeFailureHandlingSource">
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ewYBYckaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
+          </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_CU8XwXHUEeKzdrjGTgFYAA" iD="_CU8XwHHUEeKzdrjGTgFYAA" outgoingEdges="_CyqOgXHUEeKzdrjGTgFYAA" name="wait between polls" activityType="EventIntermediateTimer"/>
           <vertices xmi:type="bpmn:Activity" xmi:id="_T0OSEXHUEeKzdrjGTgFYAA" iD="_T0OSEHHUEeKzdrjGTgFYAA" outgoingEdges="_bdXNsXHUEeKzdrjGTgFYAA _bv8ygXHUEeKzdrjGTgFYAA" incomingEdges="_UWU5kXHUEeKzdrjGTgFYAA" name="cancelled?" activityType="GatewayDataBasedExclusive"/>
           <vertices xmi:type="bpmn:Activity" xmi:id="_YTsuEXHUEeKzdrjGTgFYAA" iD="_YTsuEHHUEeKzdrjGTgFYAA" incomingEdges="_bv8ygXHUEeKzdrjGTgFYAA" name="not cancelled"/>
@@ -36,6 +39,10 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_peHZkLPpEeKiiatE-BLCBg" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_peHZkbPpEeKiiatE-BLCBg" key="odeFailureRetryFor" value="10"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pqC8wLPpEeKiiatE-BLCBg" key="odeFailureRetryDelay" value="60"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_blmugMkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
+            </eAnnotations>
+            <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bKnboMkaEeKyYtEbZpVzJg" source="skipAsScope">
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bKnbockaEeKyYtEbZpVzJg" key="skip" value="false"/>
             </eAnnotations>
             <artifacts xmi:type="bpmn:DataObject" xmi:id="_NHxPEbPpEeKiiatE-BLCBg" iD="_NHxPELPpEeKiiatE-BLCBg">
               <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_NHxPErPpEeKiiatE-BLCBg" source="attachedDataobject">
@@ -72,6 +79,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_7-NQoLPpEeKiiatE-BLCBg" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7-NQobPpEeKiiatE-BLCBg" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8jzRALPpEeKiiatE-BLCBg" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_dBgEwMkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <artifacts xmi:type="bpmn:DataObject" xmi:id="_jQlgUbPpEeKiiatE-BLCBg" iD="_jQlgULPpEeKiiatE-BLCBg">
               <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_jQlgUrPpEeKiiatE-BLCBg" source="attachedDataobject">
@@ -108,6 +116,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_69qZoLPpEeKiiatE-BLCBg" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_69qZobPpEeKiiatE-BLCBg" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_7SxG8LPpEeKiiatE-BLCBg" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_p5jVQMkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <artifacts xmi:type="bpmn:DataObject" xmi:id="_1uuPkbPpEeKiiatE-BLCBg" iD="_1uuPkLPpEeKiiatE-BLCBg">
               <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_1uuPkrPpEeKiiatE-BLCBg" source="attachedDataobject">
@@ -157,6 +166,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_71jgYLPoEeKiiatE-BLCBg" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_71jgYbPoEeKiiatE-BLCBg" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_8DDJ0LPoEeKiiatE-BLCBg" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_a6MaAMkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <artifacts xmi:type="bpmn:DataObject" xmi:id="_lkc10bPoEeKiiatE-BLCBg" iD="_lkc10LPoEeKiiatE-BLCBg">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_lkc10rPoEeKiiatE-BLCBg" source="attachedDataobject">
@@ -193,6 +203,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_GqDS0LPrEeKiiatE-BLCBg" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_GqDS0bPrEeKiiatE-BLCBg" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_HEE8YLPrEeKiiatE-BLCBg" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_iLHC4MkaEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <artifacts xmi:type="bpmn:DataObject" xmi:id="_X7sPMbPqEeKiiatE-BLCBg" iD="_X7sPMLPqEeKiiatE-BLCBg">
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_X7sPMrPqEeKiiatE-BLCBg" source="attachedDataobject">

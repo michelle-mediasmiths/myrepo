@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
+<bpel:process xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ode="http://www.apache.org/ode/type/extension" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://ns.mediasmithsforge.com/foxtel/qc" xmlns:wfadapter="http://ns.mediasmithsforge.com/foxtel/qc/wfadapter" xmlns:qcadapter="http://ns.mediasmithsforge.com/foxtel/qc/qcadapter" xmlns:this="http://ns.mediasmithsforge.com/foxtel/qc/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:caller="http://ns.mediasmithsforge.com/foxtel/qc/caller" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpmn="http://www.intalio.com/bpms" xmlns:atomic="http://ode.apache.org/atomicScope" queryLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" expressionLanguage="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath2.0" bpmn:label="workflow" name="workflow" bpmn:id="_Aq5isHHSEeKzdrjGTgFYAA" targetNamespace="http://ns.mediasmithsforge.com/foxtel/qc/workflow">
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" location="qcAdapterRest/qcFinished.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" location="qcAdapterRest/qcJobCancel.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
   <bpel:import namespace="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" location="qcAdapterRest/qcResult.wsdl" importType="http://schemas.xmlsoap.org/wsdl/"/>
@@ -193,6 +193,7 @@
           <bpel:sequence>
             <bpel:scope bpmn:label="SubProcess" name="SubProcess-2" bpmn:id="_TR8HwLPoEeKiiatE-BLCBg">
               <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                <ext:faultOnFailure>true</ext:faultOnFailure>
                 <ext:retryFor>10</ext:retryFor>
                 <ext:retryDelay>60</ext:retryDelay>
               </ext:failureHandling>
@@ -243,6 +244,9 @@
               </bpel:sequence>
             </bpel:scope>
             <bpel:scope bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled" bpmn:id="_87V10HHTEeKzdrjGTgFYAA">
+              <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                <ext:faultOnFailure>true</ext:faultOnFailure>
+              </ext:failureHandling>
               <bpel:repeatUntil bpmn:label="loop until finished or cancelled" name="loop_until_finished_or_cancelled-1">
                 <bpel:sequence>
                   <bpel:wait bpmn:label="wait between polls" name="wait_between_polls" bpmn:id="_CU8XwHHUEeKzdrjGTgFYAA">
@@ -250,6 +254,7 @@
                   </bpel:wait>
                   <bpel:scope bpmn:label="SubProcess" name="SubProcess-3" bpmn:id="_FsLnQLPpEeKiiatE-BLCBg">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                       <ext:retryFor>10</ext:retryFor>
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
@@ -284,6 +289,7 @@
                   </bpel:scope>
                   <bpel:scope bpmn:label="SubProcess" name="SubProcess-4" bpmn:id="_cmHMYLPpEeKiiatE-BLCBg">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                       <ext:retryFor>10</ext:retryFor>
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>
@@ -320,6 +326,7 @@
                     <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
                     <bpel:scope bpmn:label="SubProcess" name="SubProcess-5" bpmn:id="_ymEckLPpEeKiiatE-BLCBg">
                       <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                        <ext:faultOnFailure>true</ext:faultOnFailure>
                         <ext:retryFor>10</ext:retryFor>
                         <ext:retryDelay>60</ext:retryDelay>
                       </ext:failureHandling>
@@ -366,6 +373,7 @@
                   <bpel:empty bpmn:label="not cancelled" name="not_cancelled-1" bpmn:id="_k0xB8HHUEeKzdrjGTgFYAA"/>
                   <bpel:scope bpmn:label="SubProcess" name="SubProcess-6" bpmn:id="_SbPeYLPqEeKiiatE-BLCBg">
                     <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                      <ext:faultOnFailure>true</ext:faultOnFailure>
                       <ext:retryFor>10</ext:retryFor>
                       <ext:retryDelay>60</ext:retryDelay>
                     </ext:failureHandling>

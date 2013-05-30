@@ -1,4 +1,4 @@
-﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://thisdiagram" xmlns:qcadapter="http://thisdiagram/qcadapter" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
+﻿<bpel:process xmlns:bpdm="http://www.intalio/designer/business-process-data-modeling" xmlns:mapper="http://www.intalio.com/designer/mapper" xmlns:isTaskCancelled="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" xmlns:tns="http://ns.mediasmiths.com/foxtel/wf/adapter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:FSAdapter="http://ns.mediasmiths.com/foxtel/fs/adapter" xmlns:qcFinished="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcFinished.rest" xmlns:autoQcError="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcError.rest" xmlns:autoQcPassed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcPassed.rest" xmlns:AutoQC="http://thisdiagram" xmlns:qcadapter="http://thisdiagram/qcadapter" xmlns:this="http://thisdiagram/workflow" xmlns:assetTransferForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" xmlns:delete="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" xmlns:qcAdapter="http://ns.mediasmiths.com/foxtel/qc/adapter" xmlns:qcResult="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:qcJobCancel="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" xmlns:getProfileForQC="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" xmlns:autoQcFailed="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" xmlns:tcAdapter="http://ns.mediasmiths.com/foxtel/tc/adapter" xmlns:qcStart="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:bpel="http://docs.oasis-open.org/wsbpel/2.0/process/executable" xmlns:vprop="http://docs.oasis-open.org/wsbpel/2.0/varprop" xmlns:pnlk="http://docs.oasis-open.org/wsbpel/2.0/plnktype" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ode="http://www.apache.org/ode/type/extension" targetNamespace="http://thisdiagram/workflow">
     <bpdm:dependencies version="6000089">
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/isTaskCancelled.rest" bpdm:prefix="isTaskCancelled" bpdm:comment="contrib=&apos;project:///wfAdapter/isTaskCancelled.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/wf/adapter" bpdm:prefix="tns" bpdm:comment="contrib=&apos;project:///wfAdapter/wfAdapter.xsd"></bpdm:namespaceDefinition>
@@ -11,17 +11,18 @@
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/qcadapter" bpdm:prefix="qcadapter" bpdm:comment="contrib=&apos;partner-pool:///_X_P2IHHWEeKzdrjGTgFYAA"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://thisdiagram/workflow" bpdm:prefix="this" bpdm:type="this_process"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/assetTransferForQC.rest" bpdm:prefix="assetTransferForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/assetTransferForQC.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/fsAdapter/delete.rest" bpdm:prefix="delete" bpdm:comment="contrib=&apos;project:///fsAdapter/delete.wsdl"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/qc/adapter" bpdm:prefix="qcAdapter" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcAdapter.xsd"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcResult.rest" bpdm:prefix="qcResult" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcResult.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/2001/XMLSchema" bpdm:prefix="xs"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcJobCancel.rest" bpdm:prefix="qcJobCancel" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcJobCancel.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/getProfileForQC.rest" bpdm:prefix="getProfileForQC" bpdm:comment="contrib=&apos;project:///wfAdapter/getProfileForQC.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/wfAdapter/autoQcFailed.rest" bpdm:prefix="autoQcFailed" bpdm:comment="contrib=&apos;project:///wfAdapter/autoQcFailed.wsdl"></bpdm:namespaceDefinition>
-        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmiths.com/foxtel/tc/adapter" bpdm:prefix="tcAdapter" bpdm:comment="contrib=&apos;project:///tcAdapter/tcAdapter.xsd"></bpdm:namespaceDefinition>
+        <bpdm:namespaceDefinition bpdm:uri="http://ns.mediasmithsforge.com/foxtel/qcAdapterRest/qcStart.rest" bpdm:prefix="qcStart" bpdm:comment="contrib=&apos;project:///qcAdapterRest/qcStart.wsdl"></bpdm:namespaceDefinition>
         <bpdm:namespaceDefinition bpdm:uri="http://www.w3.org/XML/1998/namespace" bpdm:prefix="xml"></bpdm:namespaceDefinition>
         <bpdm:namespaceContributor bpdm:url="thisprocess://this-process-types" bpdm:label="process defined this-process-types">
+            <vprop:property name="materialid" type="xs:string"/>
             <wsdl:portType name="Forcaller">
                 <wsdl:operation name="EventStartMessage" bpdm:source="partner-pool:///_kq5JsHHTEeKzdrjGTgFYAA">
                     <wsdl:input message="this:EventStartMessageRequest" name="EventStartMessage"/>
@@ -32,7 +33,6 @@
                 <wsdl:part name="body" element="this:EventStartMessageRequest"/>
             </wsdl:message>
             <bpel:binding name="CanonicBindingForcaller" type="this:Forcaller" bpdm:isSynchronized="true"/>
-            <vprop:property name="materialid" type="xs:string"/>
             <vprop:propertyAlias propertyName="this:materialid" messageType="this:EventStartMessageRequest" part="body">
                 <vprop:query>tns:assetId/text()</vprop:query>
             </vprop:propertyAlias>
@@ -228,7 +228,7 @@
                             </bpel:catchAll>
                         </bpel:faultHandlers>
                         <bpel:sequence>
-                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_TR8HwLPoEeKiiatE-BLCBg" bpdm:retryFor="10" bpdm:retryDelay="60">
+                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_TR8HwLPoEeKiiatE-BLCBg" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                 <bpel:variables>
                                     <bpel:variable name="qcStartQcStartRequestMsg" messageType="qcStart:qcStart_input" binding="qcStart:restBinding" operation="qcStart" opMsgType="0" bpdm:id="_lkc10LPoEeKiiatE-BLCBg" bpdm:messageIds=" out:_lkR2sLPoEeKiiatE-BLCBg">
                                         <bpel:from bpdm:toPart="body">
@@ -271,7 +271,7 @@
                                     </bpdm:messagingtask>
                                 </bpel:sequence>
                             </bpel:scope>
-                            <bpel:scope bpdm:label="loop until finished or cancelled" bpdm:ID="_87V10HHTEeKzdrjGTgFYAA">
+                            <bpel:scope bpdm:label="loop until finished or cancelled" bpdm:ID="_87V10HHTEeKzdrjGTgFYAA" bpdm:faultOnFailure="true">
                                 <bpdm:linkset bpdm:type="loop" bpdm:loopType="repeatUntil">
                                     <bpel:condition bpdm:loopType="repeatUntil">(true() = $TaskIsCancelled) or ($QCFinished = true())<mapper:mapperLink><mapper:vertice id="4865808" targetPath="$repeat until" targetedBy="8542810-arg2"></mapper:vertice><mapper:vertice id="8542810" dimension="78x24" location="408,190"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="12396134" dimension="78x24" location="240,144" targetedBy="8542810-arg0"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="31070991" dimension="78x24" location="114,196" targetedBy="12396134-arg0"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="33364728" sourcePath="$TaskIsCancelled" targetedBy="12396134-arg1"></mapper:vertice><mapper:vertice id="4156490" dimension="78x24" location="249,227" targetedBy="8542810-arg1"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="14037839" sourcePath="$QCFinished" targetedBy="4156490-arg0"></mapper:vertice><mapper:vertice id="23206857" dimension="78x24" location="128,275" targetedBy="4156490-arg1"><mapper:value>true()</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                                 </bpdm:linkset>
@@ -281,7 +281,7 @@
                                             <bpel:for>"PT30S"<mapper:mapperLink><mapper:vertice id="32421316" targetPath="$duration" targetedBy="14931515-arg0"></mapper:vertice><mapper:vertice id="14931515" dimension="78x24" location="300,64"><mapper:value>"PT30S"</mapper:value></mapper:vertice></mapper:mapperLink></bpel:for>
                                         </bpdm:linkset>
                                     </bpdm:messagingtask>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_FsLnQLPpEeKiiatE-BLCBg" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_FsLnQLPpEeKiiatE-BLCBg" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="qcFinishedQcFinishedRequestMsg" messageType="qcFinished:qcFinished_input" binding="qcFinished:restBinding" operation="qcFinished" opMsgType="0" bpdm:id="_NHxPELPpEeKiiatE-BLCBg" bpdm:messageIds=" out:_NHlo4LPpEeKiiatE-BLCBg">
                                                 <bpel:from bpdm:toPart="jobname">
@@ -312,7 +312,7 @@
                                             </bpdm:messagingtask>
                                         </bpel:sequence>
                                     </bpel:scope>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_cmHMYLPpEeKiiatE-BLCBg" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_cmHMYLPpEeKiiatE-BLCBg" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="isTaskCancelledIsCancelledRequestMsg" messageType="isTaskCancelled:isCancelled_input" binding="isTaskCancelled:restBinding" operation="isCancelled" opMsgType="0" bpdm:id="_jQlgULPpEeKiiatE-BLCBg" bpdm:messageIds=" out:_jQYE8LPpEeKiiatE-BLCBg">
                                                 <bpel:from bpdm:toPart="taskid">
@@ -349,7 +349,7 @@
                                         </bpdm:linkset>
                                         <bpdm:linkset bpdm:type="case" bpdm:default="true" bpdm:ID="_bv8ygHHUEeKzdrjGTgFYAA" bpdm:targetDisplayName="default"></bpdm:linkset>
                                         <bpel:sequence>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ymEckLPpEeKiiatE-BLCBg" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_ymEckLPpEeKiiatE-BLCBg" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="qcJobCancelQcCancelJobRequestMsg" messageType="qcJobCancel:qcCancelJob_input" binding="qcJobCancel:restBinding" operation="qcCancelJob" opMsgType="0" bpdm:id="_1uuPkLPpEeKiiatE-BLCBg" bpdm:messageIds=" out:_1uipYLPpEeKiiatE-BLCBg">
                                                         <bpel:from bpdm:toPart="jobname">
@@ -386,7 +386,7 @@
                                 </bpdm:linkset>
                                 <bpel:sequence>
                                     <bpdm:messagingtask bpdm:label="not cancelled" bpdm:ID="_k0xB8HHUEeKzdrjGTgFYAA"></bpdm:messagingtask>
-                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_SbPeYLPqEeKiiatE-BLCBg" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                    <bpel:scope bpdm:label="SubProcess" bpdm:ID="_SbPeYLPqEeKiiatE-BLCBg" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                         <bpel:variables>
                                             <bpel:variable name="qcResultQcResultRequestMsg" messageType="qcResult:qcResult_input" binding="qcResult:restBinding" operation="qcResult" opMsgType="0" bpdm:id="_X7sPMLPqEeKiiatE-BLCBg" bpdm:messageIds=" out:_X7hQELPqEeKiiatE-BLCBg">
                                                 <bpel:from bpdm:toPart="jobname">
