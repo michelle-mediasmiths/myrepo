@@ -133,6 +133,9 @@
     <bpel:scope bpmn:label="Attempt transcode up to three times" name="Attempt_transcode_up_to_three_times" bpmn:id="_wTxkYLcLEeKdLrMPHFRfaw">
       <bpel:repeatUntil bpmn:label="Attempt transcode up to three times" name="Attempt_transcode_up_to_three_times-1">
         <bpel:scope bpmn:label="Attempt Transcode" name="Attempt_Transcode" bpmn:id="_XFpSkLcMEeKdLrMPHFRfaw">
+          <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+            <ext:faultOnFailure>true</ext:faultOnFailure>
+          </ext:failureHandling>
           <bpel:faultHandlers>
             <bpel:catchAll>
               <bpel:sequence>
@@ -517,6 +520,7 @@
                       </bpel:assign>
                       <bpel:scope bpmn:label="SubProcess" name="SubProcess-8" bpmn:id="_D-4gQLcQEeKdLrMPHFRfaw">
                         <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                          <ext:faultOnFailure>true</ext:faultOnFailure>
                           <ext:retryFor>10</ext:retryFor>
                           <ext:retryDelay>60</ext:retryDelay>
                         </ext:failureHandling>
@@ -579,6 +583,7 @@
                         </bpel:assign>
                         <bpel:scope bpmn:label="SubProcess" name="SubProcess-9" bpmn:id="_GocjgLcQEeKdLrMPHFRfaw">
                           <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                            <ext:faultOnFailure>true</ext:faultOnFailure>
                             <ext:retryFor>10</ext:retryFor>
                             <ext:retryDelay>60</ext:retryDelay>
                           </ext:failureHandling>

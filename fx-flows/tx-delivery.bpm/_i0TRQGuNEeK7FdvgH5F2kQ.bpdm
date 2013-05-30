@@ -142,7 +142,7 @@
                     <bpel:condition bpdm:loopType="repeatUntil">($TaskIsCancelled = true()) or (($TranscodeSuccess = true()) or ($TranscodeErrorCount&gt;= 3))<mapper:mapperLink><mapper:vertice id="8765609" targetPath="$repeat until" targetedBy="7786722-arg2"></mapper:vertice><mapper:vertice id="7786722" dimension="78x24" location="444,144"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="30622885" dimension="78x24" location="168,192" targetedBy="7786722-arg0"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="10988025" sourcePath="$TaskIsCancelled" targetedBy="30622885-arg0"></mapper:vertice><mapper:vertice id="13597200" dimension="78x24" location="72,216" targetedBy="30622885-arg1"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="29760630" dimension="78x24" location="336,84" targetedBy="7786722-arg1"><mapper:value>or</mapper:value></mapper:vertice><mapper:vertice id="2336102" dimension="78x24" location="168,36" targetedBy="29760630-arg0"><mapper:value>=</mapper:value></mapper:vertice><mapper:vertice id="16696488" sourcePath="$TranscodeSuccess" targetedBy="2336102-arg0"></mapper:vertice><mapper:vertice id="27160875" dimension="78x24" location="60,60" targetedBy="2336102-arg1"><mapper:value>true()</mapper:value></mapper:vertice><mapper:vertice id="19704267" dimension="78x24" location="168,120" targetedBy="29760630-arg1"><mapper:value>&gt;=</mapper:value></mapper:vertice><mapper:vertice id="15858607" sourcePath="$TranscodeErrorCount" targetedBy="19704267-arg0"></mapper:vertice><mapper:vertice id="28991337" dimension="78x24" location="72,156" targetedBy="19704267-arg1"><mapper:value>3</mapper:value></mapper:vertice></mapper:mapperLink></bpel:condition>
                 </bpdm:linkset>
                 <bpel:sequence>
-                    <bpel:scope bpdm:label="Attempt Transcode" bpdm:ID="_XFpSkLcMEeKdLrMPHFRfaw">
+                    <bpel:scope bpdm:label="Attempt Transcode" bpdm:ID="_XFpSkLcMEeKdLrMPHFRfaw" bpdm:faultOnFailure="true">
                         <bpel:faultHandlers>
                             <bpel:catchAll>
                                 <bpdm:eventHandler bpdm:label="Error_Intermediate_Event" bpdm:ID="_CrizoLcREeKdLrMPHFRfaw" bpdm:type="error"></bpdm:eventHandler>
@@ -430,7 +430,7 @@
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                             </bpdm:messagingtask>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_D-4gQLcQEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_D-4gQLcQEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="tcPassedTcPassedResponseMsg" messageType="tcPassed:tcPassed_output" binding="tcPassed:restBinding" operation="tcPassed" opMsgType="0" bpdm:messageIds="inc:_djeekGuSEeK7FdvgH5F2kQ"/>
                                                     <bpel:variable name="tcPassedTcPassedRequestMsg" messageType="tcPassed:tcPassed_input" binding="tcPassed:restBinding" operation="tcPassed" opMsgType="0" bpdm:messageIds=" out:_dO-OMGuSEeK7FdvgH5F2kQ">
@@ -475,7 +475,7 @@
                                                     </bpel:copy>
                                                 </bpdm:linkset>
                                             </bpdm:messagingtask>
-                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_GocjgLcQEeKdLrMPHFRfaw" bpdm:retryFor="10" bpdm:retryDelay="60">
+                                            <bpel:scope bpdm:label="SubProcess" bpdm:ID="_GocjgLcQEeKdLrMPHFRfaw" bpdm:faultOnFailure="true" bpdm:retryFor="10" bpdm:retryDelay="60">
                                                 <bpel:variables>
                                                     <bpel:variable name="tcFailureTcFailureResponseMsg" messageType="tcFailure:tcFailure_output" binding="tcFailure:restBinding" operation="tcFailure" opMsgType="1" bpdm:messageIds="inc:_eL6XkGuSEeK7FdvgH5F2kQ"/>
                                                     <bpel:variable name="tcFailureTcFailureRequestMsg" messageType="tcFailure:tcFailure_input" binding="tcFailure:restBinding" operation="tcFailure" opMsgType="0" bpdm:messageIds=" out:_d5RvcGuSEeK7FdvgH5F2kQ">

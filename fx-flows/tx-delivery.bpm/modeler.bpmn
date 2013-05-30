@@ -113,6 +113,9 @@
         <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="__3P5UbcLEeKdLrMPHFRfaw" key="loopTypeDetailsKey" value="loopTypeRepeatUntil"/>
       </eAnnotations>
       <vertices xmi:type="bpmn:SubProcess" xmi:id="_XFpSkbcMEeKdLrMPHFRfaw" iD="_XFpSkLcMEeKdLrMPHFRfaw" name="Attempt Transcode">
+        <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_idUXwMkbEeKyYtEbZpVzJg" source="odeFailureHandlingSource">
+          <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_idUXwckbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
+        </eAnnotations>
         <vertices xmi:type="bpmn:SubProcess" xmi:id="_cj8HQbcMEeKdLrMPHFRfaw" iD="_cj8HQLcMEeKdLrMPHFRfaw" outgoingEdges="_22pJkbcNEeKdLrMPHFRfaw">
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_k1pewLcMEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k1qF0LcMEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
@@ -218,6 +221,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_TMM_ALcQEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TMM_AbcQEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_TabBMLcQEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ju24IMkbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_D-9_0bcQEeKdLrMPHFRfaw" iD="_D-9_0LcQEeKdLrMPHFRfaw" name="Send Success Message">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_dO-OMWuSEeK7FdvgH5F2kQ"/>
@@ -228,6 +232,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_kqokwLcQEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kqokwbcQEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_k0coELcQEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_kP3TcMkbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_GohcAbcQEeKdLrMPHFRfaw" iD="_GohcALcQEeKdLrMPHFRfaw" name="Send Failure Message">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_d5RvcWuSEeK7FdvgH5F2kQ"/>
@@ -2186,6 +2191,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ea7AkLcYEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ea7AkbcYEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_eriPcLcYEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_orACAMkbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_PB_uwbcYEeKdLrMPHFRfaw" iD="_PB_uwLcYEeKdLrMPHFRfaw" associations="_jZ_aIHHhEeKIgPAPmx2ukA _j2IjkHHhEeKIgPAPmx2ukA" name="Send Failure Message">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_jZqqAXHhEeKIgPAPmx2ukA"/>
@@ -2196,6 +2202,7 @@
           <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_ePzq0LcaEeKdLrMPHFRfaw" source="odeFailureHandlingSource">
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ePzq0bcaEeKdLrMPHFRfaw" key="odeFailureRetryDelay" value="60"/>
             <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_ef4uMLcaEeKdLrMPHFRfaw" key="odeFailureRetryFor" value="10"/>
+            <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_pN8-EMkbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
           </eAnnotations>
           <vertices xmi:type="bpmn:Activity" xmi:id="_hwnKAbcYEeKdLrMPHFRfaw" iD="_hwnKALcYEeKdLrMPHFRfaw" associations="_h9QWYHHhEeKIgPAPmx2ukA _iZfmcHHhEeKIgPAPmx2ukA" name="Send Succcess Message">
             <outgoingMessages xmi:type="bpmn:MessagingEdge" href="#_h88NUXHhEeKIgPAPmx2ukA"/>

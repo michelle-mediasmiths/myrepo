@@ -276,6 +276,7 @@
                     <bpel:condition>$TaskIsCancelled = true()</bpel:condition>
                     <bpel:scope bpmn:label="SubProcess" name="SubProcess-4" bpmn:id="_R_wwcLMzEeKieaePm6sHlw">
                       <ext:failureHandling xmlns:ext="http://ode.apache.org/activityRecovery">
+                        <ext:faultOnFailure>true</ext:faultOnFailure>
                         <ext:retryFor>10</ext:retryFor>
                         <ext:retryDelay>60</ext:retryDelay>
                       </ext:failureHandling>

@@ -205,6 +205,7 @@
             <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_bKZ7ELMzEeKieaePm6sHlw" source="odeFailureHandlingSource">
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bKZ7EbMzEeKieaePm6sHlw" key="odeFailureRetryDelay" value="60"/>
               <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_bg4hYLMzEeKieaePm6sHlw" key="odeFailureRetryFor" value="10"/>
+              <details xmi:type="ecore:EStringToStringMapEntry" xmi:id="_r8fn8MkbEeKyYtEbZpVzJg" key="odeFailureFaultOnFailure" value="true"/>
             </eAnnotations>
             <artifacts xmi:type="bpmn:DataObject" xmi:id="_UhoQQbMzEeKieaePm6sHlw" iD="_UhoQQLMzEeKieaePm6sHlw">
               <eAnnotations xmi:type="ecore:EAnnotation" xmi:id="_UhoQQrMzEeKieaePm6sHlw" source="attachedDataobject">
