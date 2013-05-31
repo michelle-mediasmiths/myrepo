@@ -52,7 +52,7 @@ public class OrderStatusRpt
 			final String reportName)
 	{
 		logger.debug(">>>writeOrderStatus");
-		logger.info("List size: " + orders.size());
+		logger.debug("List size: " + orders.size());
 
 		fillTransientFields(orders, start, end);
 		OrderStatusStats stats = getStats(orders);
@@ -170,7 +170,7 @@ public class OrderStatusRpt
 
 			final String startDate = start.toString(dateFormatter);
 			final String endDate = end.toString(dateFormatter);
-			final String dateRange = String.format("%s-%s", startDate, endDate);
+			final String dateRange = String.format("%s - %s", startDate, endDate);
 
 			for (OrderStatus order : orderStatuses)
 			{

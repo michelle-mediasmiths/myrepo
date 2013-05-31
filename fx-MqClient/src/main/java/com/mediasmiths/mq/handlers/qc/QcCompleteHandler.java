@@ -1,16 +1,13 @@
 package com.mediasmiths.mq.handlers.qc;
 
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamContentTypes;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -55,7 +52,6 @@ public class QcCompleteHandler extends TaskStateChangeHandler
 		{
 			log.info("Asset was not programme or unmatched material");
 		}
-
 	}
 
 	private void preview(String houseID)

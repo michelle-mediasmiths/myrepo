@@ -11,6 +11,7 @@ import javax.ws.rs.Produces;
 import org.joda.time.DateTime;
 
 import com.mediasmiths.stdEvents.coreEntity.db.entity.AggregatedBMS;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.Title;
@@ -71,6 +72,10 @@ public interface QueryAPI
 	@Path("/OrdersByDate")
 	List<OrderStatus> getOrdersInDateRange(DateTime start, DateTime end);
 
+	@GET
+	@Path("AutoQcByDate")
+	List<AutoQC> getAutoQcInDateRange(DateTime start, DateTime end);
+	
 	public Title getTitleById(String id);
 	
 	public OrderStatus getOrderStatusById (String id);

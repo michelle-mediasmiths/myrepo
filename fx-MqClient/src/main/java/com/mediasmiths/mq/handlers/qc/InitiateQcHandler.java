@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers.qc;
 
 import org.apache.log4j.Logger;
 
+import com.google.inject.Inject;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.MediaStatus;
@@ -16,6 +17,9 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 {
 	private final static Logger log = Logger.getLogger(InitiateQcHandler.class);
 
+	@Inject
+	private QcEvent qcEvent;
+	
 	@Override
 	protected void stateChanged(AttributeMap messageAttributes)
 	{
@@ -46,6 +50,7 @@ public class InitiateQcHandler extends TaskStateChangeHandler
 			}
 			else
 			{
+				qcEvent.sendAutoQcEvent(messageAttributes);
 				fileformatVerification(messageAttributes);
 			}
 		}

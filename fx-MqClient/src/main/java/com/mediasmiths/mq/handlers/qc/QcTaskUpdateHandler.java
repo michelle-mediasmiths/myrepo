@@ -8,8 +8,11 @@ import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
+import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
+import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
+import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
@@ -20,6 +23,7 @@ import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -52,6 +56,9 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 	@Named("purge.presentation.flag.removed.days.default")
 	private int defaultPurgeTime;
 
+	@Inject
+	private QcEvent qcEvent;
+		
 	@Override
 	public String getName()
 	{
@@ -452,6 +459,7 @@ public class QcTaskUpdateHandler extends TaskUpdateHandler
 		}
 	}
 
+	
 	@Override
 	public MayamTaskListType getTaskType()
 	{

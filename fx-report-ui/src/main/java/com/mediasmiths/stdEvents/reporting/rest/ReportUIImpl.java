@@ -13,6 +13,7 @@ import com.google.inject.name.Named;
 import com.mediasmiths.std.guice.database.annotation.Transactional;
 import com.mediasmiths.std.guice.thymeleaf.ThymeleafTemplater;
 import com.mediasmiths.std.guice.web.rest.templating.TemplateCall;
+import com.mediasmiths.stdEvents.coreEntity.db.entity.AutoQC;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.coreEntity.db.entity.OrderStatus;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
@@ -187,15 +188,14 @@ public class ReportUIImpl implements ReportUI
 	@Transactional(readOnly = true)
 	private void getAutoQCCSV(final DateTime start, final DateTime end, final String reportName)
 	{
-		List<EventEntity> events = queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "AutoQCPassed", 
-				MAX, start, end);
-		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "QcFailedReOrder", 
-				MAX, start, end));
-		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "QcProblemwithTcMedia", 
-				MAX, start, end));
-		events.addAll(queryApi.getEventsWindowDateRange("http://www.foxtel.com.au/ip/qc", "CerifyQCError", 
-				MAX, start, end));
-		autoQc.writeAutoQc(events, start, end, reportName);
+		
+		List<AutoQC> autoQcItems = getAutoQcInDateRange(start, end);
+		autoQc.writeAutoQc(autoQcItems, start, end, reportName);
+	}
+
+	private List<AutoQC> getAutoQcInDateRange(DateTime start, DateTime end)
+	{
+		return queryApi.getAutoQcInDateRange(start, end);
 	}
 
 	@Transactional(readOnly = true)

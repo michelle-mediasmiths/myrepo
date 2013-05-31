@@ -25,7 +25,7 @@ public abstract class TaskStateChangeHandler extends AttributeHandler
 		if (getTaskType() == null || taskListID.equals(getTaskType().getText()))
 		{
 			TaskState taskState = messageAttributes.getAttribute(Attribute.TASK_STATE);
-			if (taskState == getTaskState())
+			if (handlesAnyTaskState() || taskState == getTaskState())
 			{
 				String houseID = messageAttributes.getAttributeAsString(Attribute.HOUSE_ID);
 				logger.debug(String.format("{%s} Begin, %s", getName(), houseID));
@@ -45,5 +45,8 @@ public abstract class TaskStateChangeHandler extends AttributeHandler
 
 	public abstract TaskState getTaskState();
 	
+	public boolean handlesAnyTaskState(){
+		return false;
+	}
 
 }

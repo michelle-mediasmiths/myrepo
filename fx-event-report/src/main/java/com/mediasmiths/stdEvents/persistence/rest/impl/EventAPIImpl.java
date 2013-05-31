@@ -9,6 +9,7 @@ import com.mediasmiths.stdEvents.coreEntity.db.entity.EventEntity;
 import com.mediasmiths.stdEvents.events.db.entity.EventingEntity;
 import com.mediasmiths.stdEvents.events.rest.api.EventAPI;
 import com.mediasmiths.stdEvents.persistence.db.dao.AggregatedBMSDao;
+import com.mediasmiths.stdEvents.persistence.db.dao.AutoQCDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventEntityDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.EventingDao;
 import com.mediasmiths.stdEvents.persistence.db.dao.OrderDao;
@@ -38,6 +39,9 @@ public class EventAPIImpl implements EventAPI
 	
 	@Inject
 	protected OrderDao orderDao;
+	
+	@Inject
+	protected AutoQCDao autoQcDao;
 	
 	private final EventingDao eventingDao;
 
@@ -91,6 +95,10 @@ public class EventAPIImpl implements EventAPI
 			addOrUpdateMaterial(event);
 		}
 		
+		if( (event.getEventName().equals("AutoQCReport"))){
+			autoQcReport(event);
+		}
+		
 		if ((event.getEventName().equals("CreateorUpdateTitle")) || (event.getEventName().equals("AddOrUpdateMaterial")) ||(event.getEventName().equals("AddOrUpdatePackage"))) {
 			logger.info("BMS message detected");
 			bmsDao.updateBMS(event);
@@ -100,6 +108,11 @@ public class EventAPIImpl implements EventAPI
 		logger.info("Event saved");
 	}
 	
+	private void autoQcReport(EventEntity event)
+	{
+		autoQcDao.autoQCMessage(event);
+	}
+
 	private void addOrUpdateMaterial(EventEntity event)
 	{
 		orderDao.addOrUpdateMaterial(event);	

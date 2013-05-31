@@ -57,6 +57,7 @@ import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateUpdateHandler;
 import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
 import com.mediasmiths.mq.handlers.qc.QcCompleteHandler;
+import com.mediasmiths.mq.handlers.qc.QcStateChangeHandler;
 import com.mediasmiths.mq.handlers.qc.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.segmentation.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.tx.InitiateTxHandler;
@@ -138,6 +139,8 @@ public class IncomingListener extends MqClientListener
 	UnmatchedJobHandler unmatchedJobHandler;
 	@Inject
 	QcTaskUpdateHandler qcTaskUpdateHandler;
+	@Inject
+	QcStateChangeHandler qcStateChangeHandler;
 	@Inject
 	UnmatchedTaskUpdateHandler unmatchedTaskUpdateHandler;
 	@Inject
@@ -288,6 +291,7 @@ public class IncomingListener extends MqClientListener
 				//tasks
 				passEventToHandler(ingestTaskCompleteHandler,currentAttributes);
 				passEventToHandler(qcCompleteHandler, currentAttributes);
+				passEventToHandler(qcStateChangeHandler, currentAttributes);
 				passEventToHandler(compEditHandler, currentAttributes);
 				passEventToHandler(comLoggingHandler, currentAttributes);
 				passEventToHandler(previewTaskFinishHandler, currentAttributes);

@@ -203,6 +203,7 @@
         </xs:complexType>
     </xs:element>
 
+	
     <xs:element name="PreviewFailed">
         <xs:complexType>
             <xs:complexContent>
@@ -665,6 +666,28 @@
             </xs:complexContent>
         </xs:complexType>
     </xs:element>
+
+	<xs:element name="AutoQCEvent">
+			<xs:complexType>
+				<xs:complexContent>
+					<xs:extension base="fns:IPEvent">
+						<xs:sequence>
+						 	<xs:element name="materialID" type="xs:string"/>
+						 	<xs:element name="assetTitle" type="xs:string"/>
+						 	<xs:element name="contentType" type="xs:string"/>
+						 	<xs:element name="operator" type="xs:string"/>
+						 	<xs:element name="taskStatus" type="xs:string"/>
+						 	<xs:element name="qcStatus" type="xs:string"/>
+						 	<xs:element name="taskStart" type="xs:dateTime"/>
+						 	<xs:element name="taskFinish" type="xs:dateTime" minOccurs="0"/>
+						 	<xs:element name="warningTime" type="xs:dateTime" minOccurs="0"/>
+						 	<xs:element name="overriden" type="xs:boolean" minOccurs="0"/>
+						 	<xs:element name="failureParameter" type="xs:string" minOccurs="0"/>
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>	
+		</xs:element>
 
     <xs:element name="purgeMaterial">
         <xs:complexType>
