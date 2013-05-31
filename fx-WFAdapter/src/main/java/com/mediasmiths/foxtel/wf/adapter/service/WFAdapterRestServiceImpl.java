@@ -1106,11 +1106,19 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				
 				for (int i = 0; i < dataFilesUrls.size(); i++)
 				{
-
+					
 					String filePath = outputPaths.getLocalPathToExportDestination("", jobType, filename + "_associated", "." + i);
 					try
 					{
 						URL url = new URL(dataFilesUrls.get(i));
+						String path = url.getPath();
+						
+						int indexOfExtension = path.lastIndexOf(".");
+						
+						if(indexOfExtension > 0){
+							filePath += path.substring(indexOfExtension);
+						}
+						
 						URLConnection con = url.openConnection();
 						BufferedInputStream in = new BufferedInputStream(con.getInputStream());
 						FileOutputStream out = new FileOutputStream(new File(filePath));
