@@ -11,7 +11,6 @@ import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCFailureNotification;
 import com.mediasmiths.foxtel.ip.common.events.ChannelConditionsFound;
-import com.mediasmiths.foxtel.ip.common.events.report.AutoQC;
 import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
