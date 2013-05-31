@@ -49,7 +49,7 @@ public class AutoQCRpt extends ReportUtils
 
 	public void writeAutoQc(List<AutoQC> events, DateTime start, DateTime end, String reportName)
 	{
-		logger.debug(">>>writeOrderStatus");
+		logger.debug(">>>writeAutoQC");
 		logger.debug("List size: " + events.size());
 
 		AutoQCStats stats = getStats(events,start,end);

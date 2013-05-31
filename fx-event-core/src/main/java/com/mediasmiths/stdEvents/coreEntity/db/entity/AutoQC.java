@@ -4,10 +4,9 @@ import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,7 +17,8 @@ public class AutoQC
 {
 	@Id
 	private String materialid;
-	@OneToOne(mappedBy="AutoQC")
+	@OneToOne(optional=true)
+	@PrimaryKeyJoinColumn
 	private OrderStatus orderStatus;
 	@Basic
 	private String assetTitle;

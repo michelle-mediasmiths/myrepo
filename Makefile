@@ -46,6 +46,14 @@ bmpdp : mayampdp
 bmpdptest : mayampdp
 	rsync -v fx-MayamPDP/target/fx-MayamPDP.war sysadmin@10.111.224.101:mediasmiths/bundle/fx-MayamPDP-test.war
 
+reportslocal : reports
+	/opt/tomcat/bin/stop.sh
+	cp fx-report-ui/target/fx-report-ui.war /opt/tomcat/webapps
+	cp fx-event-ui/target/fx-event-ui.war /opt/tomcat/webapps
+	rm -r /opt/tomcat/webapps/fx-report-ui
+	rm -r /opt/tomcat/webapps/fx-event-ui
+	/opt/tomcat/bin/start.sh
+
 bmreports : reports
 	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.22:/opt/tomcat/webapps
 	rsync -v fx-event-ui/target/fx-event-ui.war root@192.168.2.22:/opt/tomcat/webapps

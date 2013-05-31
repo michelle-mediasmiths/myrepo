@@ -55,7 +55,7 @@
 		</xs:complexType>
 	</xs:element>
 	
-	<xs:element name="AutoQC">
+	<!-- xs:element name="AutoQC">
 		<xs:complexType>
 			<xs:sequence>
 				<xs:element name="dateRange" type="xs:string" minOccurs="0"/>
@@ -74,7 +74,7 @@
 				<xs:element name="titleLength" type="xs:string"/>
 				</xs:sequence>
 		</xs:complexType>
-	</xs:element>
+	</xs:element-->
 	
 	<xs:element name="TaskList">
 		<xs:complexType>
