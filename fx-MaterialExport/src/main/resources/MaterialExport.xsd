@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://foxtel.tv/mam/schemas/MaterialExport/1/0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:altova="http://www.altova.com/xml-schema-extensions" targetNamespace="http://foxtel.tv/mam/schemas/MaterialExport/1/0" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="MaterialExport">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ProgrammeTitle">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="100"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="EpisodeTitle" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="100"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="EpisodeNumber" type="xs:nonNegativeInteger" minOccurs="0"/>
+				<xs:element name="SeriesNumber" type="xs:nonNegativeInteger" minOccurs="0"/>
+				<xs:element name="ProductionNumber" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="50"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="YearOfProduction" type="yearType" minOccurs="0"/>
+				<xs:element name="CountryOfProduction" minOccurs="0">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:maxLength value="50"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="PresentationInformation" type="presentationInformationType"/>
+			</xs:sequence>
+			<xs:attribute name="titleID" type="xs:string" use="required"/>
+			<xs:attribute name="exportDate" type="xs:dateTime" use="required"/>
+			<xs:attribute name="mediaFile" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:simpleType name="timecodeType" final="restriction">
+		<xs:annotation>
+			<xs:documentation>This type defines the format that must be used for timecode values.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([0-1][0-9]|[2][0-3]):([0-5][0-9]):([0-5][0-9]):([0-1][0-9]|[2][0-4])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="yearType">
+		<xs:annotation>
+			<xs:appinfo>
+				<altova:exampleValues>
+					<altova:example value="2012"/>
+				</altova:exampleValues>
+			</xs:appinfo>
+			<xs:documentation>Defines the format for specifying a year date.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:nonNegativeInteger">
+			<xs:pattern value="\d\d\d\d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="segmentType">
+		<xs:sequence>
+			<xs:element name="SegmentTitle" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>The segment title. If there's a descriptive segment title it should be provided here.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="100"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SegmentNumber">
+				<xs:annotation>
+					<xs:documentation>The segment number.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:positiveInteger">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="99"/>
+						<xs:totalDigits value="2"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="SegmentStart" type="timecodeType">
+				<xs:annotation>
+					<xs:documentation>The Start Of Message timecode for the first frame of  active vision for the segment.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:choice>
+				<xs:annotation>
+					<xs:documentation>You have a choice of providing EOM or the duration.</xs:documentation>
+				</xs:annotation>
+				<xs:element name="SegmentEnd" type="timecodeType">
+					<xs:annotation>
+						<xs:documentation>The End Of Message timecode for the last frame of  active vision for the segment.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="SegmentDuration" type="timecodeType">
+					<xs:annotation>
+						<xs:documentation>The duration, using timecode format, of the segment.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="channelType">
+		<xs:sequence>
+			<xs:element name="ChannelName" type="xs:string" minOccurs="0"/>
+		</xs:sequence>
+		<xs:attribute name="channelTag" type="xs:string" use="required"/>
+	</xs:complexType>
+	<xs:complexType name="presentationInformationType">
+		<xs:sequence>
+			<xs:element name="Duration" type="timecodeType"/>
+			<xs:element name="SegmentationInformation">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Segment" type="segmentType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="LicensedChannels">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Channel" type="channelType" maxOccurs="unbounded"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="presentationID" type="xs:string" use="required"/>
+		<xs:attribute name="presentationStartDate" type="xs:dateTime" use="required"/>
+	</xs:complexType>
+</xs:schema>
