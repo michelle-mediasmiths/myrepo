@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.joda.time.DateTime;
 
@@ -127,6 +128,7 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 		criteria.add(Restrictions.or(
 				Restrictions.between("created", start.toDate(), end.toDate()),
 				Restrictions.between("completed", start.toDate(), end.toDate())));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return getList(criteria);
 	}

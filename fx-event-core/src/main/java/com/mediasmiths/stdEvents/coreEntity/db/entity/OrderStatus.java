@@ -1,18 +1,13 @@
 package com.mediasmiths.stdEvents.coreEntity.db.entity;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -28,7 +23,7 @@ public class OrderStatus
 {
 	@Id
 	private String materialid;
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
 	private Title title;
 	@Basic
 	private String orderReference;
@@ -47,11 +42,7 @@ public class OrderStatus
 	private transient Boolean complete;
 	@Transient
 	private transient Boolean overdue;
-	
-	@OneToOne(optional=true,fetch=FetchType.LAZY)
-	@PrimaryKeyJoinColumn
-	private AutoQC autoQc;
-	
+
 	public String getMaterialid()
 	{
 		return materialid;
@@ -153,14 +144,4 @@ public class OrderStatus
 	}
 
 	public enum TaskType{INGEST,UNMATCHED}
-
-	public AutoQC getAutoQc()
-	{
-		return autoQc;
-	}
-
-	public void setAutoQc(AutoQC autoQc)
-	{
-		this.autoQc = autoQc;
-	};
 }

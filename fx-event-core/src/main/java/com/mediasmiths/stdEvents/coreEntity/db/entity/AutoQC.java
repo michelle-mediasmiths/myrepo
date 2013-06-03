@@ -3,8 +3,11 @@ package com.mediasmiths.stdEvents.coreEntity.db.entity;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -17,8 +20,7 @@ public class AutoQC
 {
 	@Id
 	private String materialid;
-	@OneToOne(optional=true)
-	@PrimaryKeyJoinColumn
+	@ManyToOne(optional=true,fetch=FetchType.EAGER)
 	private OrderStatus orderStatus;
 	@Basic
 	private String assetTitle;

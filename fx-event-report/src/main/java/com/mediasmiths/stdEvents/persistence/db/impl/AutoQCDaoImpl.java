@@ -119,6 +119,7 @@ public class AutoQCDaoImpl extends HibernateDao<AutoQC, String> implements AutoQ
 				Restrictions.between("taskCreated", start.toDate(), end.plusDays(1).toDate()),
 				Restrictions.between("taskFinished", start.toDate(), end.plusDays(1).toDate()),
 				Restrictions.between("warningTime", start.toDate(), end.plusDays(1).toDate())));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		
 		return getList(criteria);
 	}
