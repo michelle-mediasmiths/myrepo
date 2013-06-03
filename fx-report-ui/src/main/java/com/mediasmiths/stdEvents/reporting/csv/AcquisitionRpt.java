@@ -88,7 +88,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		for (OrderStatus event : events) 
 		{
-			Acquisition acq = (Acquisition) unmarshallReport(test);
+			Acquisition acq = (Acquisition) unmarshallReport(event);
 
 			acq.setDateRange(startF + " - " + endF);
 
