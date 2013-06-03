@@ -157,7 +157,14 @@ public class AutoQCRpt extends ReportUtils
 				aqcMap.put(header[12], a.getFailureParameter());
 
 				// TODO; title length (required title length from order status, though could maybe just include it in the autoqc type
-				aqcMap.put(header[13], null);
+				if (a.getOrderStatus() != null && a.getOrderStatus().getTitleLength() != null)
+				{
+					aqcMap.put(header[13], a.getOrderStatus().getTitleLength());
+				}
+				else
+				{
+					aqcMap.put(header[13], null);
+				}
 				csvwriter.write(aqcMap, header, processors);
 			}
 			
