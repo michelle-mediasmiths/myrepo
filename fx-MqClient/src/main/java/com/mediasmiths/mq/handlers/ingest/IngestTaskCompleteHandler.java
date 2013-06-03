@@ -78,6 +78,9 @@ public class IngestTaskCompleteHandler extends TaskStateChangeHandler
 				addOrUpdateMaterial.setTitleID((String) currentAttributes.getAttribute(Attribute.PARENT_HOUSE_ID));
 				addOrUpdateMaterial.setOrderReference((String) currentAttributes.getAttribute(Attribute.REQ_REFERENCE));
 				
+				addOrUpdateMaterial.setFilesize(currentAttributes.getAttributeAsString(Attribute.MEDIA_FILE_SIZE));
+				addOrUpdateMaterial.setTitleLength(currentAttributes.getAttributeAsString(Attribute.ASSET_DURATION));
+				
 				Date requiredBy = currentAttributes.getAttribute(Attribute.COMPLETE_BY_DATE);
 				
 				if (requiredBy != null)

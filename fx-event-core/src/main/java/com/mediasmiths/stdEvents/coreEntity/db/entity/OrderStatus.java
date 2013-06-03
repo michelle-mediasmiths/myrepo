@@ -47,6 +47,10 @@ public class OrderStatus
 	private transient Boolean complete;
 	@Transient
 	private transient Boolean overdue;
+	@Transient
+	private transient String fileSize;
+	@Transient
+	private transient String titleLength;
 	
 	@OneToOne(optional=true,fetch=FetchType.LAZY)
 	@PrimaryKeyJoinColumn
@@ -150,6 +154,26 @@ public class OrderStatus
 	public void setOverdue(Boolean overdue)
 	{
 		this.overdue = overdue;
+	}
+	
+	public String getFileSize()
+	{
+		return fileSize;
+	}
+
+	public void setFileSize(String fileSize)
+	{
+		this.fileSize = fileSize;
+	}
+	
+	public String getTitleLength()
+	{
+		return titleLength;
+	}
+
+	public void setTitleLength(String titleLength)
+	{
+		this.titleLength = titleLength;
 	}
 
 	public enum TaskType{INGEST,UNMATCHED}

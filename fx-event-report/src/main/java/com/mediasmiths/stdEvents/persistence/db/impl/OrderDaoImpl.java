@@ -46,6 +46,9 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 
 		String titleID = aoum.getTitleID();
 		
+		String fileSize = aoum.getFileSize();
+		String titleLength = aoum.getTitleLength();
+		
 		Date requiredBy = null;
 
 		if (aoum.getRequiredBy() != null)
@@ -101,6 +104,16 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 		if (aggregatorID != null)
 		{
 			order.setAggregatorID(aggregatorID);
+		}
+		
+		if (fileSize != null)
+		{
+			order.setFileSize(fileSize);
+		}
+		
+		if (titleLength != null)
+		{
+			order.setTitleLength(titleLength);
 		}
 
 		TaskType currentTaskType = order.getTaskType();
