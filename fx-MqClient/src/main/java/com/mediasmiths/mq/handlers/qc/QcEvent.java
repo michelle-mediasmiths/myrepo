@@ -39,7 +39,6 @@ public class QcEvent
 			qce.setMaterialID((String) a.getAttribute(Attribute.HOUSE_ID));
 			qce.setContentType((String) a.getAttribute(Attribute.CONT_MAT_TYPE));
 			qce.setOperator((String) a.getAttribute(Attribute.ASSIGNED_USER));
-			qce.setTaskStatus((String) a.getAttribute(Attribute.TASK_STATE));
 
 			Date created = a.getAttribute(Attribute.TASK_CREATED);
 			if (created != null)
@@ -49,6 +48,11 @@ public class QcEvent
 
 			TaskState state = a.getAttribute(Attribute.TASK_STATE);
 
+			if (state != null)
+			{
+				qce.setTaskStatus(ts.toString());
+			}
+			
 			if (TaskState.WARNING == state)
 			{
 				Date updated = a.getAttribute(Attribute.TASK_UPDATED);
