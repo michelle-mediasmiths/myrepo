@@ -35,7 +35,7 @@ public class AcquisitionRpt extends ReportUtils
 	private QueryAPI queryApi;
 
 	public void writeAcquisitionDelivery(
-			final List<EventEntity> materials,
+			final List<OrderStatus> materials,
 			final DateTime startDate,
 			final DateTime endDate,
 			final String reportName)
@@ -75,7 +75,7 @@ public class AcquisitionRpt extends ReportUtils
 	}
 
 	private List<Acquisition> getReportList(
-			final List<EventEntity> events,
+			final List<OrderStatus> events,
 			final DateTime startDate,
 			final DateTime endDate)
 	{
@@ -86,7 +86,7 @@ public class AcquisitionRpt extends ReportUtils
 		String startF = startDate.toString(dateFormatter);
 		String endF = endDate.toString(dateFormatter);
 
-		for (EventEntity event : events) 
+		for (OrderStatus event : events) 
 		{
 			Acquisition acq = (Acquisition) unmarshallReport(event);
 

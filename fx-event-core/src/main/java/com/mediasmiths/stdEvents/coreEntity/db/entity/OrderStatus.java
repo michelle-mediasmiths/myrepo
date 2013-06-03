@@ -42,7 +42,15 @@ public class OrderStatus
 	private transient Boolean complete;
 	@Transient
 	private transient Boolean overdue;
-
+	@Basic
+	private transient Long fileSize;
+	@Basic
+	private transient Integer titleLength;
+	
+	@OneToOne(optional=true,fetch=FetchType.LAZY)
+	@PrimaryKeyJoinColumn
+	private AutoQC autoQc;
+	
 	public String getMaterialid()
 	{
 		return materialid;
@@ -141,6 +149,26 @@ public class OrderStatus
 	public void setOverdue(Boolean overdue)
 	{
 		this.overdue = overdue;
+	}
+	
+	public Long getFileSize()
+	{
+		return fileSize;
+	}
+
+	public void setFileSize(Long fileSize)
+	{
+		this.fileSize = fileSize;
+	}
+	
+	public Integer getTitleLength()
+	{
+		return titleLength;
+	}
+
+	public void setTitleLength(Integer titleLength)
+	{
+		this.titleLength = titleLength;
 	}
 
 	public enum TaskType{INGEST,UNMATCHED}
