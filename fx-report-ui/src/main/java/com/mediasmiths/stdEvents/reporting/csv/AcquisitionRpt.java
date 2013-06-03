@@ -88,7 +88,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		for (OrderStatus event : events) 
 		{
-			Acquisition acq = (Acquisition) unmarshallReport(event);
+			Acquisition acq = newAcquisition(event);
 
 			acq.setDateRange(startF + " - " + endF);
 
@@ -177,6 +177,24 @@ public class AcquisitionRpt extends ReportUtils
 		return processors;
 	}
 
+	private Acquisition newAcquisition(OrderStatus order)
+	{
+		Acquisition acq = new Acquisition();
+		acq.setAggregatorID(order.getAggregatorID());
+		acq.setFilesize(order.getFileSize());
+		acq.setMaterialID(order.getMaterialid());
+		acq.setTitle(order.getTitle().getTitle());
+		String channels = "";
+		for (String channel: order.getTitle().getChannels())
+		{
+			channels += (channel + ", ");
+		}
+		acq.setChannels(channels);
+		acq.setTitleLength(order.getTitleLength());
+		acq.setTitleLength(order.getFileSize());
+		return acq;
+	}
+	
 	private Acquisition addStats(String name, String value)
 	{
 		Acquisition acq = new Acquisition();
