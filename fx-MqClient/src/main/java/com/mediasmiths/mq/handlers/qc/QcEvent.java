@@ -50,7 +50,7 @@ public class QcEvent
 
 			if (state != null)
 			{
-				qce.setTaskStatus(ts.toString());
+				qce.setTaskStatus(state.toString());
 			}
 			
 			if (TaskState.WARNING == state)
