@@ -69,6 +69,7 @@
         <module>fx-TranscodeOutputRules</module>
         <module>fx-ExtendedPublishing</module>
         <module>fx-TxFtpDelivery</module>
+        <module>fx-MaterialExport</module>
     </modules>
 
 	<properties>
