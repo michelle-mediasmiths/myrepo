@@ -99,11 +99,11 @@ public class QcEvent
 				}
 				else
 				{
-					if (QcStatus.PASS != ffv)
+					if (QcStatus.FAIL == ffv)
 					{
 						qce.setFailureParameter("File Format Verification");
 					}
-					else if (QcStatus.PASS != cerify)
+					else if (QcStatus.FAIL == cerify)
 					{
 						qce.setFailureParameter("Cerify");
 					}
