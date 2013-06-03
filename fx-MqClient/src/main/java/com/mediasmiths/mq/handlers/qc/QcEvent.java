@@ -73,7 +73,7 @@ public class QcEvent
 
 				if (updated != null)
 				{
-					qce.setTaskStart(dateUtil.fromDate(updated));
+					qce.setTaskFinish(dateUtil.fromDate(updated));
 				}
 				else
 				{
