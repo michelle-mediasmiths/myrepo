@@ -86,12 +86,12 @@ public class QcEvent
 
 				if (QcStatus.PASS == assetQcStatus)
 				{
-					if (QcStatus.PASS != ffv)
+					if (QcStatus.FAIL == ffv)
 					{
 						qce.setFailureParameter("File Format Verification");
 						qce.setOverriden(Boolean.TRUE);
 					}
-					else if (QcStatus.PASS != cerify)
+					else if (QcStatus.FAIL == cerify)
 					{
 						qce.setFailureParameter("Cerify");
 						qce.setOverriden(Boolean.TRUE);
