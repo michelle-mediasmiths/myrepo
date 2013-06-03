@@ -46,7 +46,7 @@ public class OrderDaoImpl extends HibernateDao<OrderStatus, String> implements O
 
 		String titleID = aoum.getTitleID();
 		
-		String fileSize = aoum.getFileSize();
+		String fileSize = aoum.getFilesize();
 		String titleLength = aoum.getTitleLength();
 		
 		Date requiredBy = null;
