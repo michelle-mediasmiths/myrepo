@@ -1,5 +1,16 @@
 package com.mediasmiths.mayam.controllers;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.xml.bind.Marshaller;
+
+import org.apache.log4j.Logger;
 
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
@@ -8,6 +19,7 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
 import au.com.foxtel.cf.mam.pms.Source;
+
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -21,10 +33,7 @@ import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.attributes.shared.type.Timecode;
-import com.mayam.wf.attributes.shared.type.Marker.Type;
 import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
@@ -57,24 +66,6 @@ import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.io.PropertyFile;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
-import java.io.File;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class MayamMaterialController extends MayamController
 {
@@ -86,7 +77,7 @@ public class MayamMaterialController extends MayamController
 	public static final String ASSOCIATED_MATERIAL_AGL_NAME = "associated";
 	public static final String AO_ASSOCIATED_MATERIAL_AGL_NAME = "ao-associated";
 	public static final String ASSOCIATED_MATERIAL_CONTENT_TYPE = "PE";
-	
+
 	public static final String RUZZ_CHANNEL_CONDITIONS = "Ruzz channel conditions";
 
 	private final TasksClientVeneer client;
@@ -96,7 +87,7 @@ public class MayamMaterialController extends MayamController
 	@Inject
 	@Named("material.exchange.marshaller")
 	private Marshaller materialExchangeMarshaller;
-	
+
 	@Inject
 	@Named("preferred.storage.locations")
 	private String allPreferredPaths;
@@ -104,22 +95,62 @@ public class MayamMaterialController extends MayamController
 	@Inject
 	@Named("highres.transfer.location")
 	private String highResTransferLocation;
-	
+
 	@Inject
 	private FileFormatVerification fileformatVerification;
 
 	@Inject
 	private MayamAccessRightsController accessRightsController;
-	
+
 	@Inject
 	private PathResolver pathResolver;
-	
+
 	@Inject
 	private DateUtil dateUtil;
+
+	@Inject
+	private PackageController packageController;
 	
 	@Inject
-	private PackageController packageController; 
+	@Named("ff.sd.video.imagex")
+	private int sdVideoX;
 	
+	public static final String UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER = "Unmatched asset matched to this placeholder";
+	
+	// Asset Title
+	// AdultContent
+	// ProgrammeTitle
+	// Show
+	// Series/Season Number
+	// Episode Number
+	// Episode Title
+	// Production Country
+	// Production Number
+	// Production Year
+	// Style
+	// Channels
+	public static EnumSet<Attribute> materialsAttributesInheritedFromTitle = EnumSet.of(
+			Attribute.ASSET_TITLE,
+			Attribute.CONT_RESTRICTED_MATERIAL,
+			Attribute.CONT_RESTRICTED_ACCESS,
+			Attribute.SERIES_TITLE,
+			Attribute.SERIES_TITLE,
+			Attribute.SHOW,
+			Attribute.SEASON_NUMBER,
+			Attribute.EPISODE_NUMBER,
+			Attribute.EPISODE_TITLE,
+			Attribute.LOCATION,
+			Attribute.PRODUCTION_NUMBER,
+			Attribute.SERIES_YEAR,
+			Attribute.CONT_CATEGORY,
+			Attribute.CHANNELS,
+			Attribute.CHANNEL_GROUPS,
+			Attribute.PURGE_PROTECTED,
+			Attribute.LICENSE_START,
+			Attribute.LICENSE_END);
+
+	public static EnumSet<Attribute> associatedMaterialsAttributesNotInheritedFromTitle = EnumSet.of(Attribute.ASSET_TITLE);
+
 	@Inject
 	public MayamMaterialController(TasksClientVeneer client, MayamTaskController mayamTaskController)
 	{
@@ -129,23 +160,24 @@ public class MayamMaterialController extends MayamController
 
 	public MayamClientErrorCode createMaterial(MaterialType material, String titleID)
 	{
-		if(material==null){
+		if (material == null)
+		{
 			log.warn("Null material object or no house ID, unable to create asset");
 			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
-		
-		log.info(String.format("Creating Material %s for title %s", material.getMaterialID(),titleID));
-		
+
+		log.info(String.format("Creating Material %s for title %s", material.getMaterialID(), titleID));
+
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		MayamAttributeController attributes = new MayamAttributeController(client);
 		boolean attributesValid = true;
 		boolean createCompLoggingTask = false;
-		String parentAssetID = null; //parent asset id to use if a compliance logging task is to be created
+		String parentAssetID = null; // parent asset id to use if a compliance logging task is to be created
 
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
-		
+
 		if (material != null && material.getMaterialID() != null && !material.getMaterialID().equals(""))
 		{
 			// setting parent_house_id is an unsupported operation
@@ -155,7 +187,6 @@ public class MayamMaterialController extends MayamController
 				AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				if (title != null)
 				{
-
 					Boolean isProtected = title.getAttribute(Attribute.PURGE_PROTECTED);
 
 					if (isProtected != null)
@@ -166,8 +197,8 @@ public class MayamMaterialController extends MayamController
 					String assetId = title.getAttribute(Attribute.ASSET_ID);
 					attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
 
-					updateMaterialAttributesFromTitle(attributes, title,false);
-					
+					updateMaterialAttributesFromTitle(attributes, title, false);
+
 					Boolean isAO = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
 
 					if (isAO != null && isAO.equals(Boolean.TRUE))
@@ -204,7 +235,6 @@ public class MayamMaterialController extends MayamController
 				{
 					attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(false));
 				}
-
 			}
 			else
 			{
@@ -225,16 +255,13 @@ public class MayamMaterialController extends MayamController
 					{
 						// As per Foxtel and Mayam decision, Aggregator Name will not be stored in AGL
 						attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, aggregator.getAggregatorID());
-						// attributesValid &= attributes.setAttribute(Attribute.APP_SRC, aggregator.getAggregatorName());
 					}
 					if (order != null)
 					{
 						// Order Created field not required
-						// attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated());
 						attributesValid &= attributes.setAttribute(Attribute.REQ_REFERENCE, order.getOrderReference());
 					}
 				}
-
 
 				Compile compile = source.getCompile();
 				if (compile != null)
@@ -250,7 +277,7 @@ public class MayamMaterialController extends MayamController
 
 						// If the item is a compliance placeholder then automatically set qc status to true (MAM-316)
 						attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.PASS);
-						
+
 					}
 					catch (RemoteException e)
 					{
@@ -260,21 +287,14 @@ public class MayamMaterialController extends MayamController
 					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
 				}
 
-				/*
-				 * No longer supported Library library = source.getLibrary(); if (library != null) { List<TapeType> tapeList = library.getTape(); if (tapeList != null) { IdSet tapeIds = new IdSet();
-				 * for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
-				 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
-				 * 
-				 */
-				
-				//required by \ complete by date					
+				// required by \ complete by date
 				if (material.getRequiredBy() != null)
 				{
 					Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
-					log.debug("Setting required by date: "+requiredByDate);						
+					log.debug("Setting required by date: " + requiredByDate);
 					attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
 				}
-				
+
 			}
 
 			if (!attributesValid)
@@ -284,14 +304,16 @@ public class MayamMaterialController extends MayamController
 			}
 
 			AttributeMap newAsset = null;
-			try{
+			try
+			{
 				newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
 			}
-			catch(Exception e){
-				log.error("error determining access rights for new asset",e);
+			catch (Exception e)
+			{
+				log.error("error determining access rights for new asset", e);
 				newAsset = attributes.getAttributes();
 			}
-			
+
 			AttributeMap result;
 			try
 			{
@@ -322,7 +344,6 @@ public class MayamMaterialController extends MayamController
 					{
 						try
 						{
-
 							taskController.createIngestTaskForMaterial(material.getMaterialID());
 							log.debug("created ingest task");
 						}
@@ -351,48 +372,16 @@ public class MayamMaterialController extends MayamController
 		return returnCode;
 	}
 
-	// Asset Title
-	// AdultContent
-	// ProgrammeTitle
-	// Show
-	// Series/Season Number
-	// Episode Number
-	// Episode Title
-	// Production Country
-	// Production Number
-	// Production Year
-	// Style
-	// Channels
-	public static EnumSet<Attribute> materialsAttributesInheritedFromTitle = EnumSet.of(
-			Attribute.ASSET_TITLE,
-			Attribute.CONT_RESTRICTED_MATERIAL,
-			Attribute.CONT_RESTRICTED_ACCESS,
-			Attribute.SERIES_TITLE,
-			Attribute.SERIES_TITLE,
-			Attribute.SHOW,
-			Attribute.SEASON_NUMBER,
-			Attribute.EPISODE_NUMBER,
-			Attribute.EPISODE_TITLE,
-			Attribute.LOCATION,
-			Attribute.PRODUCTION_NUMBER,
-			Attribute.SERIES_YEAR,
-			Attribute.CONT_CATEGORY,
-			Attribute.CHANNELS,
-			Attribute.CHANNEL_GROUPS,
-			Attribute.PURGE_PROTECTED,
-			Attribute.LICENSE_START,
-			Attribute.LICENSE_END);
-
-	public static EnumSet<Attribute> associatedMaterialsAttributesNotInheritedFromTitle = EnumSet.of(Attribute.ASSET_TITLE);
 
 	private void updateMaterialAttributesFromTitle(MayamAttributeController attributes, AttributeMap title, boolean associated)
 	{
 		// copy metadata from title onto material
 		for (Attribute a : materialsAttributesInheritedFromTitle)
 		{
-			if((! associated) || (! associatedMaterialsAttributesNotInheritedFromTitle.contains(a))){
+			if ((!associated) || (!associatedMaterialsAttributesNotInheritedFromTitle.contains(a)))
+			{
 				attributes.copyAttribute(a, title);
-			}			
+			}
 		}
 
 	}
@@ -407,31 +396,31 @@ public class MayamMaterialController extends MayamController
 					MayamAssetType.TITLE.getAssetType(),
 					(String) title.getAttribute(Attribute.ASSET_ID),
 					MayamAssetType.MATERIAL.getAssetType());
-			log.debug(""+materials.size() +" materials returned for title");
+			log.debug("" + materials.size() + " materials returned for title");
 		}
 		catch (RemoteException e1)
 		{
 			log.error("error getting materials for title " + title.getAttributeAsString(Attribute.ASSET_ID), e1);
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED, e1);
 		}
-		
-		
-	
+
 		for (AttributeMap material : materials)
 		{
 
 			String type = (String) material.getAttribute(Attribute.CONT_MAT_TYPE);
 			boolean associated = false;
-			
-			if(ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(type)){
-				associated=true;
+
+			if (ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(type))
+			{
+				associated = true;
 			}
-						
+
 			AttributeMap update = taskController.updateMapForAsset(material);
-			
+
 			for (Attribute a : materialsAttributesInheritedFromTitle)
 			{
-				if((! associated) || (! associatedMaterialsAttributesNotInheritedFromTitle.contains(a))){
+				if ((!associated) || (!associatedMaterialsAttributesNotInheritedFromTitle.contains(a)))
+				{
 					update.setAttribute(a, title.getAttribute(a));
 				}
 			}
@@ -460,14 +449,14 @@ public class MayamMaterialController extends MayamController
 	public String createMaterial(MarketingMaterialType material, String titleID, Details details, Title title)
 			throws MayamClientException
 	{
-		log.info(String.format("Creating Marketing Material for title %s",titleID));
-		
+		log.info(String.format("Creating Marketing Material for title %s", titleID));
+
 		MayamAttributeController attributes = new MayamAttributeController(client);
-		
+
 		attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 		attributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		attributes.setAttribute(Attribute.QC_PARALLEL_ALLOWED, Boolean.FALSE);
-		
+
 		boolean attributesValid = true;
 
 		if (material != null)
@@ -478,13 +467,13 @@ public class MayamMaterialController extends MayamController
 				AttributeMap titleAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
 				if (titleAttributes != null)
 				{
-					//Terry - Update the attribute with the correct parent
+					// Terry - Update the attribute with the correct parent
 					// MAM-196 Jonas states that we must associate with the title's parent and not the title.
 					String associatingAssetId = titleAttributes.getAttribute(Attribute.ASSET_ID);
 					String associatingHouseId = titleAttributes.getAttribute(Attribute.HOUSE_ID);
 					log.debug("Associating asset with id=" + associatingAssetId + ", houseId = " + associatingHouseId);
 					attributes.setAttribute(Attribute.ASSET_PARENT_ID, associatingAssetId);
-					//attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
+					// attributes.setAttribute(Attribute.PARENT_HOUSE_ID, associatingHouseId);
 					updateMaterialAttributesFromTitle(attributes, titleAttributes, true);
 				}
 				else
@@ -501,13 +490,13 @@ public class MayamMaterialController extends MayamController
 			}
 
 			attributesValid &= attributes.setAttribute(Attribute.ASSET_TYPE, MayamAssetType.MATERIAL.getAssetType());
-			
+
 			attributesValid &= attributes.setAttribute(Attribute.CONT_MAT_TYPE, ASSOCIATED_MATERIAL_CONTENT_TYPE);
 			attributesValid &= attributes.setAttribute(Attribute.QC_STATUS, QcStatus.TBD);
 			attributesValid &= attributes.setAttribute(Attribute.QC_PREVIEW_STATUS, QcStatus.TBD);
 
 			attributes.setAttribute(Attribute.ASSET_TITLE, title.getProgrammeTitle());
-			
+
 			attributesValid &= attributes.setAttribute(
 					Attribute.CONT_ASPECT_RATIO,
 					MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
@@ -523,7 +512,7 @@ public class MayamMaterialController extends MayamController
 			{
 				attributesValid &= attributes.setAttribute(Attribute.METADATA_FORM, ASSOCIATED_MATERIAL_AGL_NAME);
 			}
-			
+
 			// As per Foxtel and Mayam decision, duration and timecodes will be detected in Ardome, no need to store
 			// attributesValid &= attributes.setAttribute(Attribute., material.getFirstFrameTimecode());
 			// attributesValid &= attributes.setAttribute(Attribute., material.getLastFrameTimecode());
@@ -607,14 +596,16 @@ public class MayamMaterialController extends MayamController
 			}
 
 			AttributeMap newAsset = null;
-			try{
+			try
+			{
 				newAsset = accessRightsController.updateAccessRights(attributes.getAttributes());
 			}
-			catch(Exception e){
-				log.error("error determining access rights for new asset",e);
+			catch (Exception e)
+			{
+				log.error("error determining access rights for new asset", e);
 				newAsset = attributes.getAttributes();
 			}
-			
+
 			AttributeMap result;
 			try
 			{
@@ -662,7 +653,7 @@ public class MayamMaterialController extends MayamController
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
 		}
 	}
-	
+
 	// Material - Updating a media asset in Mayam
 	public boolean updateMaterial(ProgrammeMaterialType material, Details details, Title title) throws MayamClientException
 	{
@@ -671,220 +662,186 @@ public class MayamMaterialController extends MayamController
 			log.warn("Null material object or no house ID, unable to update asset");
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UNAVAILABLE);
 		}
-		
-		log.info(String.format("Updating material %s for title %s",material.getMaterialID(), title.getTitleID()));
-		
+
+		log.info(String.format("Updating material %s for title %s", material.getMaterialID(), title.getTitleID()));
+
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
 		boolean isPlaceholder = false;
 
-		if (material != null)
+		MayamAttributeController attributes = null;
+		AttributeMap assetAttributes = null;
+
+		try
 		{
-			MayamAttributeController attributes = null;
-			AttributeMap assetAttributes = null;
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
 
-			try
+			isPlaceholder = AssetProperties.isMaterialPlaceholder(assetAttributes);
+		}
+		catch (RemoteException e1)
+		{
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
+			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED, e1);
+		}
+
+		if (assetAttributes != null)
+		{
+			attributes = new MayamAttributeController(client.createAttributeMap());
+			attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+			attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
+
+			attributesValid &= attributes.setAttribute(
+					Attribute.CONT_ASPECT_RATIO,
+					MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
+			attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+
+			// FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
+			if (material.getOriginalConform() != null)
 			{
-				assetAttributes = client.assetApi().getAssetBySiteId(
-						MayamAssetType.MATERIAL.getAssetType(),
-						material.getMaterialID());
-				
-				isPlaceholder = AssetProperties.isMaterialPlaceholder(assetAttributes);
-			}
-			catch (RemoteException e1)
-			{
-				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
-				throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED,e1);
-			}
 
-			if (assetAttributes != null)
-			{
-				attributes = new MayamAttributeController(client.createAttributeMap());
-				attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
-				attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
+				log.debug("programme material message contains original conform information");
+				SegmentationType originalConform = material.getOriginalConform();
 
-				attributesValid &= attributes.setAttribute(
-						Attribute.CONT_ASPECT_RATIO,
-						MayamAspectRatios.mayamAspectRatioMappings.get(material.getAspectRatio()));
-				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
-
-
-				// FX-113 - original conform information should be converted to a human readable format for the natural breaks structure
-				if (material.getOriginalConform() != null)
-				{
-
-					log.debug("programme material message contains original conform information");
-					SegmentationType originalConform = material.getOriginalConform();
-
-					try
-					{
-						String presentationString = SegmentUtil.originalConformToHumanString(originalConform);
-						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
-					}
-					catch (Exception e)
-					{
-						log.error("error setting original conform information in SEGMENTATION_NOTES", e);
-					}
-
-				}
-				else if (material.getPresentation() != null)
-				{
-					Presentation presentation = material.getPresentation();
-					
-//					//stash to file for populating segmentation information later on  (if bms sends tx pacakge creation *after* material exchange happens)
-//					try
-//					{
-//						String presentationString = presentationToString(presentation);
-//						FileUtils.writeStringToFile(new File(segdataFilePathForMaterial(material.getMaterialID())),presentationString);
-//					}
-//					catch (JAXBException e)
-//					{
-//						log.error("Error marshalling presentation for material " + material.getMaterialID(), e);
-//					}
-//					catch(Exception e){
-//						log.error("error saving presentation info for material",e);
-//					}
-					
-					List<Package> presentationInfo = presentation.getPackage();
-
-					for (Package pack : presentationInfo)
-					{
-						String packageID = pack.getPresentationID();
-						Segmentation segmentation = pack.getSegmentation();
-
-						try
-						{
-							packageController.createOrUpdatePendingTxPackagesSegmentInfo(
-									assetAttributes,
-									material.getMaterialID(),
-									packageID,
-									segmentation);
-						}
-						catch (Exception e)
-						{
-							log.error("error creation or updating pending tx package with segmentation information", e);
-							// something has gone wrong populating the pending tx package task allow processing to continue so at least the natural breaks field gets populated
-							try
-							{
-								taskController.createWFEErorTask(
-										MayamAssetType.MATERIAL,
-										material.getMaterialID(),
-										"Error processing segmentation information in material exchange message");
-							}
-							catch (MayamClientException mce)
-							{
-								log.error("error creating error task", mce);
-							}
-						}
-					}
-
-					// save the segmentation information to the natural breaks string
-					try
-					{
-						String presentationString = SegmentUtil.presentationToHumanString(presentation);
-						attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
-					}
-					catch (Exception e)
-					{
-						log.error("error converting segmentation information to human string for natual breaks field", e);
-					}
-					
-				}
-
-				AudioTracks audioTracks = material.getAudioTracks();
-				if (audioTracks != null)
-				{
-					List<Track> tracks = audioTracks.getTrack();
-					if (tracks != null)
-					{
-						AudioTrackList audioTrackList = new AudioTrackList();
-						for (int i = 0; i < tracks.size(); i++)
-						{
-							AudioTrack audioTrack = new AudioTrack();
-							Track track = tracks.get(i);
-							audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString())));
-							audioTrack.setName(track.getTrackName().toString());
-							audioTrack.setNumber(track.getTrackNumber());
-							audioTrackList.add(audioTrack);
-						}
-						attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
-					}
-				}
-
-				Distributor distributor = title.getDistributor();
-				if (distributor != null)
-				{
-					attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
-				}
-
-				Supplier supplier = details.getSupplier();
-				if (supplier != null)
-				{
-					attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, supplier.getSupplierID());
-				}
-
-				if (material.getFormat() != null)
-				{
-					attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
-				}
-
-				if(details.getDeliveryVersion() != null){
-					int deliveryVersion = details.getDeliveryVersion().intValue();
-					attributesValid &= attributes.setAttribute(Attribute.VERSION_NUMBER, Integer.valueOf(deliveryVersion));
-				}
-				
-				if (!attributesValid)
-				{
-					log.warn("Material updated but one or more attributes was invalid");
-					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
-				}
-
-				AttributeMap result;
 				try
 				{
-					log.debug("updating material " + material.getMaterialID());
-					result = client.assetApi().updateAsset(attributes.getAttributes());
-					if (result == null)
+					String presentationString = SegmentUtil.originalConformToHumanString(originalConform);
+					attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
+				}
+				catch (Exception e)
+				{
+					log.error("error setting original conform information in SEGMENTATION_NOTES", e);
+				}
+
+			}
+			else if (material.getPresentation() != null)
+			{
+				Presentation presentation = material.getPresentation();
+
+				List<Package> presentationInfo = presentation.getPackage();
+
+				for (Package pack : presentationInfo)
+				{
+					String packageID = pack.getPresentationID();
+					Segmentation segmentation = pack.getSegmentation();
+
+					try
 					{
-						log.warn("Mayam failed to update Material");
-						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
+						packageController.createOrUpdatePendingTxPackagesSegmentInfo(
+								assetAttributes,
+								material.getMaterialID(),
+								packageID,
+								segmentation);
+					}
+					catch (Exception e)
+					{
+						log.error("error creation or updating pending tx package with segmentation information", e);
+						// something has gone wrong populating the pending tx package task allow processing to continue so at least the natural breaks field gets populated
+						try
+						{
+							taskController.createWFEErorTask(
+									MayamAssetType.MATERIAL,
+									material.getMaterialID(),
+									"Error processing segmentation information in material exchange message");
+						}
+						catch (MayamClientException mce)
+						{
+							log.error("error creating error task", mce);
+						}
 					}
 				}
-				catch (RemoteException e)
+
+				// save the segmentation information to the natural breaks string
+				try
 				{
-					log.error("Exception thrown by Mayam while trying to update Material", e);
-					throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED,e);
+					String presentationString = SegmentUtil.presentationToHumanString(presentation);
+					attributesValid &= attributes.setAttribute(Attribute.SEGMENTATION_NOTES, presentationString);
+				}
+				catch (Exception e)
+				{
+					log.error("error converting segmentation information to human string for natual breaks field", e);
+				}
+
+			}
+
+			AudioTracks audioTracks = material.getAudioTracks();
+			if (audioTracks != null)
+			{
+				List<Track> tracks = audioTracks.getTrack();
+				if (tracks != null)
+				{
+					AudioTrackList audioTrackList = new AudioTrackList();
+					for (int i = 0; i < tracks.size(); i++)
+					{
+						AudioTrack audioTrack = new AudioTrack();
+						Track track = tracks.get(i);
+						audioTrack.setEncoding(AudioTrack.EncodingType.valueOf(MayamAudioEncoding.mayamAudioEncodings.get(track.getTrackEncoding().toString())));
+						audioTrack.setName(track.getTrackName().toString());
+						audioTrack.setNumber(track.getTrackNumber());
+						audioTrackList.add(audioTrack);
+					}
+					attributesValid &= attributes.setAttribute(Attribute.AUDIO_TRACKS, audioTrackList);
 				}
 			}
-			else
+
+			Distributor distributor = title.getDistributor();
+			if (distributor != null)
 			{
-				log.warn("Unable to retrieve asset :" + material.getMaterialID());
-				returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
+				attributesValid &= attributes.setAttribute(Attribute.DIST_NAME, title.getDistributor().getDistributorName());
+			}
+
+			Supplier supplier = details.getSupplier();
+			if (supplier != null)
+			{
+				attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, supplier.getSupplierID());
+			}
+
+			if (material.getFormat() != null)
+			{
+				attributesValid &= attributes.setAttribute(Attribute.CONT_FMT, material.getFormat());
+			}
+
+			if (details.getDeliveryVersion() != null)
+			{
+				int deliveryVersion = details.getDeliveryVersion().intValue();
+				attributesValid &= attributes.setAttribute(Attribute.VERSION_NUMBER, Integer.valueOf(deliveryVersion));
+			}
+
+			if (!attributesValid)
+			{
+				log.warn("Material updated but one or more attributes was invalid");
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
+
+			AttributeMap result;
+			try
+			{
+				log.debug("updating material " + material.getMaterialID());
+				result = client.assetApi().updateAsset(attributes.getAttributes());
+				if (result == null)
+				{
+					log.warn("Mayam failed to update Material");
+					returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
+				}
+			}
+			catch (RemoteException e)
+			{
+				log.error("Exception thrown by Mayam while trying to update Material", e);
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED, e);
 			}
 		}
 		else
 		{
-			log.warn("Null material object, unable to update asset");
-			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
-		}	
-		
-		if(returnCode!= MayamClientErrorCode.SUCCESS){
+			log.warn("Unable to retrieve asset :" + material.getMaterialID());
+			returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
+		}
+
+		if (returnCode != MayamClientErrorCode.SUCCESS)
+		{
 			throw new MayamClientException(returnCode);
 		}
-		
+
 		return isPlaceholder;
 	}
-
-//	private String presentationToString(Presentation p) throws JAXBException
-//	{
-//		JAXBElement<Presentation> j = new JAXBElement<ProgrammeMaterialType.Presentation>(
-//				new QName("", "Presentation"),
-//				Presentation.class,
-//				p);
-//		StringWriter sw = new StringWriter();
-//		materialExchangeMarshaller.marshal(j, sw);
-//		return sw.toString();
-//	}
 
 	public MayamClientErrorCode updateMaterial(MaterialType material)
 	{
@@ -893,170 +850,132 @@ public class MayamMaterialController extends MayamController
 			log.warn("Null material object or no house ID, unable to update asset");
 			return MayamClientErrorCode.MATERIAL_UNAVAILABLE;
 		}
-		
-		log.info(String.format("Updating material %s",material.getMaterialID()));
-		
+
+		log.info(String.format("Updating material %s", material.getMaterialID()));
+
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
 		boolean attributesValid = true;
-		if (material != null)
-		{
-			AttributeMap assetAttributes = null;
-			MayamAttributeController attributes = null;
 
+		AttributeMap assetAttributes = null;
+		MayamAttributeController attributes = null;
+
+		try
+		{
+			assetAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.MATERIAL.getAssetType(), material.getMaterialID());
+		}
+		catch (RemoteException e1)
+		{
+			log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
+			e1.printStackTrace();
+			returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
+		}
+
+		if (assetAttributes != null)
+		{
+			attributes = new MayamAttributeController(client.createAttributeMap());
+
+			String titleID = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
 			try
 			{
-				assetAttributes = client.assetApi().getAssetBySiteId(
-						MayamAssetType.MATERIAL.getAssetType(),
-						material.getMaterialID());
+
+				AttributeMap titleAttributes = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), titleID);
+				if (titleAttributes != null)
+				{
+					updateMaterialAttributesFromTitle(attributes, titleAttributes, false);
+				}
 			}
-			catch (RemoteException e1)
+			catch (RemoteException e)
 			{
-				log.error("Exception thrown by Mayam while attempting to retrieve asset :" + material.getMaterialID());
-				e1.printStackTrace();
+				// let the method continue to try and update what we can, though if the title for this material doesnt exist something has gone wrong
+				log.error("MayamException while trying to retrieve title : " + titleID, e);
+			}
+
+			attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
+			attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
+
+			if (material.getQualityCheckTask() != null)
+			{
+				if (material.getQualityCheckTask().equals(QualityCheckEnumType.AUTOMATIC_ON_INGEST))
+				{
+					attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(true));
+				}
+				else
+				{
+					attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(false));
+				}
+
+			}
+
+			attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
+
+			Source source = material.getSource();
+			if (source != null)
+			{
+				Aggregation aggregation = source.getAggregation();
+				if (aggregation != null)
+				{
+					Aggregator aggregator = aggregation.getAggregator();
+					Order order = aggregation.getOrder();
+
+					if (aggregator != null)
+					{
+						// Aggregator Name will not be stored, only ID
+						attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, aggregator.getAggregatorID());
+					}
+					if (order != null)
+					{
+						attributesValid &= attributes.setAttribute(Attribute.REQ_REFERENCE, order.getOrderReference());
+					}
+				}
+
+				Compile compile = source.getCompile();
+				if (compile != null)
+				{
+					attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
+				}
+
+				// required by \ complete by date
+				if (material.getRequiredBy() != null)
+				{
+					Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
+					log.debug("Setting required by date: " + requiredByDate);
+					attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
+				}
+
+			}
+
+			if (!attributesValid)
+			{
+				log.warn("Material updated but one or more attributes was invalid");
+				returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
+			}
+
+			AttributeMap result;
+			try
+			{
+				log.debug("updating material " + material.getMaterialID());
+				result = client.assetApi().updateAsset(attributes.getAttributes());
+				if (result == null)
+				{
+					log.warn("Mayam failed to update Material");
+					returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
+				}
+				else
+				{
+					log.info("material updated");
+				}
+			}
+			catch (RemoteException e)
+			{
+				e.printStackTrace();
+				log.error("Exception thrown by Mayam while trying to update Material");
 				returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
-			}
-
-			if (assetAttributes != null)
-			{
-
-				attributes = new MayamAttributeController(client.createAttributeMap());
-
-				String titleID = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-				try
-				{
-
-					AttributeMap titleAttributes = client.assetApi().getAssetBySiteId(
-							MayamAssetType.TITLE.getAssetType(),
-							titleID);
-					if (titleAttributes != null)
-					{
-						updateMaterialAttributesFromTitle(attributes, titleAttributes,false);
-					}
-				}
-				catch (RemoteException e)
-				{
-					log.error("MayamException while trying to retrieve title : " + titleID, e);
-					// let the method continue to try and update what we can, though if the title for this material doesnt exist something has gone wrong
-				}
-
-				attributes.setAttribute(Attribute.ASSET_ID, assetAttributes.getAttribute(Attribute.ASSET_ID));
-				attributes.setAttribute(Attribute.ASSET_TYPE, assetAttributes.getAttribute(Attribute.ASSET_TYPE));
-
-				if (material.getQualityCheckTask() != null)
-				{
-					if (material.getQualityCheckTask().equals(QualityCheckEnumType.AUTOMATIC_ON_INGEST))
-					{
-						attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(true));
-					}
-					else
-					{
-						attributesValid &= attributes.setAttribute(Attribute.QC_REQUIRED, new Boolean(false));
-					}
-
-				}
-
-				attributesValid &= attributes.setAttribute(Attribute.REQ_FMT, material.getRequiredFormat());
-
-				Source source = material.getSource();
-				if (source != null)
-				{
-					Aggregation aggregation = source.getAggregation();
-					if (aggregation != null)
-					{
-						Aggregator aggregator = aggregation.getAggregator();
-						Order order = aggregation.getOrder();
-
-						if (aggregator != null)
-						{
-							// Aggregator Name will not be stored, only ID
-							attributesValid &= attributes.setAttribute(Attribute.AGGREGATOR, aggregator.getAggregatorID());
-						}
-						if (order != null)
-						{
-							// attributesValid &= attributes.setAttribute(Attribute.OP_DATE, order.getOrderCreated().toGregorianCalendar().getTime());
-							attributesValid &= attributes.setAttribute(Attribute.REQ_REFERENCE, order.getOrderReference());
-						}
-					}
-
-					Compile compile = source.getCompile();
-					if (compile != null)
-					{
-						try
-						{
-							AttributeMap parentMaterial = client.assetApi().getAssetBySiteId(
-									MayamAssetType.MATERIAL.getAssetType(),
-									compile.getParentMaterialID());
-							if (parentMaterial != null)
-							{
-								// String assetId = parentMaterial.getAttribute(Attribute.ASSET_ID);
-								// attributesValid &= attributes.setAttribute(Attribute.ASSET_PARENT_ID, assetId);
-							}
-						}
-						catch (RemoteException e)
-						{
-							log.error(
-									"Exception thrown by Mayam while trying to retrieve parent Material : "
-											+ compile.getParentMaterialID(),
-									e);
-						}
-
-						attributesValid &= attributes.setAttribute(Attribute.SOURCE_HOUSE_ID, compile.getParentMaterialID());
-					}
-
-					/*
-					 * No longer supported Library library = source.getLibrary(); if (library != null) { List<TapeType> tapeList = library.getTape(); if (tapeList != null) { IdSet tapeIds = new
-					 * IdSet(); for (int i = 0; i < tapeList.size(); i++) { TapeType tape = tapeList.get(i); if (tape != null) { tapeIds.add(tape.getPresentationID()); } } attributesValid &=
-					 * attributes.setAttribute(Attribute.SOURCE_IDS, tapeIds); } }
-					 */
-					
-					//required by \ complete by date					
-					if (material.getRequiredBy() != null)
-					{
-						Date requiredByDate = dateUtil.fromXMLGregorianCalendar(material.getRequiredBy());
-						log.debug("Setting required by date: "+requiredByDate);						
-						attributesValid &= attributes.setAttribute(Attribute.COMPLETE_BY_DATE, requiredByDate);
-					}
-					
-				}
-
-				if (!attributesValid)
-				{
-					log.warn("Material updated but one or more attributes was invalid");
-					returnCode = MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES;
-				}
-
-				AttributeMap result;
-				try
-				{
-					log.debug("updating material " + material.getMaterialID());
-					result = client.assetApi().updateAsset(attributes.getAttributes());
-					if (result == null)
-					{
-						log.warn("Mayam failed to update Material");
-						returnCode = MayamClientErrorCode.MATERIAL_UPDATE_FAILED;
-					}
-					else
-					{
-						log.info("material updated");
-					}
-				}
-				catch (RemoteException e)
-				{
-					e.printStackTrace();
-					log.error("Exception thrown by Mayam while trying to update Material");
-					returnCode = MayamClientErrorCode.MAYAM_EXCEPTION;
-				}
-			}
-			else
-			{
-				log.warn("Unable to retrieve asset :" + material.getMaterialID());
-				returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
 			}
 		}
 		else
 		{
-			log.warn("Null material object, unable to update asset");
-			returnCode = MayamClientErrorCode.MATERIAL_UNAVAILABLE;
+			log.warn("Unable to retrieve asset :" + material.getMaterialID());
+			returnCode = MayamClientErrorCode.MATERIAL_FIND_FAILED;
 		}
 
 		return returnCode;
@@ -1080,7 +999,7 @@ public class MayamMaterialController extends MayamController
 			log.trace(e1);
 		}
 
-		log.info(String.format("Material %s found: %b ",materialID, materialFound));
+		log.info(String.format("Material %s found: %b ", materialID, materialFound));
 		return materialFound;
 	}
 
@@ -1104,9 +1023,10 @@ public class MayamMaterialController extends MayamController
 		try
 		{
 			AttributeMap asset = client.assetApi().getAsset(MayamAssetType.MATERIAL.getAssetType(), assetID);
-			
-			if(asset==null) throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-			
+
+			if (asset == null)
+				throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
+
 			return asset;
 		}
 		catch (RemoteException e)
@@ -1119,7 +1039,7 @@ public class MayamMaterialController extends MayamController
 	public MayamClientErrorCode deleteMaterial(String materialID, int gracePeriod)
 	{
 		MayamClientErrorCode returnCode = MayamClientErrorCode.SUCCESS;
-		if (! isProtected(materialID))
+		if (!isProtected(materialID))
 		{
 			try
 			{
@@ -1127,36 +1047,50 @@ public class MayamMaterialController extends MayamController
 						MayamAssetType.MATERIAL.getAssetType(),
 						materialID);
 
-				if(assetAttributes==null){
-					log.warn("delete request for material that doesnt exist "+materialID);
+				if (assetAttributes == null)
+				{
+					log.warn("delete request for material that doesnt exist " + materialID);
 					return MayamClientErrorCode.MATERIAL_FIND_FAILED;
 				}
-				
-				deleteAssetsPackages(MayamAssetType.MATERIAL.getAssetType(),(String)assetAttributes.getAttributeAsString(Attribute.ASSET_ID),materialID,gracePeriod);
-				
+
+				deleteAssetsPackages(
+						MayamAssetType.MATERIAL.getAssetType(),
+						(String) assetAttributes.getAttributeAsString(Attribute.ASSET_ID),
+						materialID,
+						gracePeriod);
+
 				String parentId = assetAttributes.getAttribute(Attribute.PARENT_HOUSE_ID);
-				
+
 				try
 				{
-					taskController.cancelAllOpenTasksForAsset(MayamAssetType.MATERIAL.getAssetType(), Attribute.HOUSE_ID, materialID);
+					taskController.cancelAllOpenTasksForAsset(
+							MayamAssetType.MATERIAL.getAssetType(),
+							Attribute.HOUSE_ID,
+							materialID);
 				}
 				catch (MayamClientException e)
 				{
-					log.error("error cancelling open tasks for asset during delete",e);
+					log.error("error cancelling open tasks for asset during delete", e);
 				}
-				
+
 				client.assetApi().deleteAsset(
 						MayamAssetType.MATERIAL.getAssetType(),
-						assetAttributes.getAttributeAsString(Attribute.ASSET_ID),gracePeriod);
-				
-				if (parentId != null) {
+						assetAttributes.getAttributeAsString(Attribute.ASSET_ID),
+						gracePeriod);
+
+				if (parentId != null)
+				{
 					AttributeMap title = client.assetApi().getAssetBySiteId(MayamAssetType.TITLE.getAssetType(), parentId);
-					if (title != null) {
+					if (title != null)
+					{
 						String assetId = title.getAttribute(Attribute.ASSET_ID);
-						List<AttributeMap> childAssets = client.assetApi().getAssetChildren(MayamAssetType.TITLE.getAssetType(), assetId, MayamAssetType.MATERIAL.getAssetType());
+						List<AttributeMap> childAssets = client.assetApi().getAssetChildren(
+								MayamAssetType.TITLE.getAssetType(),
+								assetId,
+								MayamAssetType.MATERIAL.getAssetType());
 						if (childAssets == null || childAssets.isEmpty())
 						{
-							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId,gracePeriod);
+							client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId, gracePeriod);
 							log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
 						}
 						else if (childAssets.size() == 1)
@@ -1165,13 +1099,13 @@ public class MayamMaterialController extends MayamController
 							String childId = childAsset.getAttribute(Attribute.ASSET_ID);
 							if (childId != null && childId.equals(assetAttributes.getAttributeAsString(Attribute.ASSET_ID)))
 							{
-								client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId,gracePeriod);
+								client.assetApi().deleteAsset(MayamAssetType.TITLE.getAssetType(), assetId, gracePeriod);
 								log.info("Orphaned title " + assetId + " deleted after purge of material " + materialID);
 							}
 						}
 					}
 				}
-				
+
 			}
 			catch (RemoteException e)
 			{
@@ -1212,24 +1146,25 @@ public class MayamMaterialController extends MayamController
 	public void updateMaterial(DetailType details, String materialID) throws MayamClientException
 	{
 		log.warn("no attempt made to update material " + materialID);
-		
+
 		AttributeMap materialAttributes = getMaterialAttributes(materialID);
 		AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
-		
-	
-		 if(details.getTitle() != null){
+
+		if (details.getTitle() != null)
+		{
 			log.debug("have not updated title information");
-		 }
-		
-		 if(details.getFormat() != null){
-			 log.debug("have not updated format information");
-		 }
-		 
-		 //TODO : update any other metadata
-		 
-		 //set aggregator to Ruzz
-		 updateMap.setAttribute(Attribute.AGGREGATOR, "Ruzz");
-		 
+		}
+
+		if (details.getFormat() != null)
+		{
+			log.debug("have not updated format information");
+		}
+
+		// TODO : update any other metadata
+
+		// set aggregator to Ruzz
+		updateMap.setAttribute(Attribute.AGGREGATOR, "Ruzz");
+
 		try
 		{
 			client.assetApi().updateAsset(updateMap);
@@ -1297,8 +1232,9 @@ public class MayamMaterialController extends MayamController
 		AttributeMap update = taskController.updateMapForTask(qcTaskAttributes);
 
 		FileFormatVerificationResult ffvResult = fileformatVerification.verifyFileFormat(formatInfo, qcTaskAttributes);
-		
-		if(ffvResult.isPass()){
+
+		if (ffvResult.isPass())
+		{
 			log.info("ffv passed");
 			update.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.PASS);
 			update.setAttribute(Attribute.QC_SUBSTATUS2, QcStatus.TBD);
@@ -1350,12 +1286,14 @@ public class MayamMaterialController extends MayamController
 		{
 			boolean aggregatorRequiresAutoQc = serviceProperties.getBoolean("aggregators." + aggregator.toLowerCase()
 					+ ".requiresQC", false);
-			if(aggregatorRequiresAutoQc){
+			if (aggregatorRequiresAutoQc)
+			{
 				return true;
 			}
 		}
-		
-		if(AssetProperties.isQCParallel(messageAttributes)){
+
+		if (AssetProperties.isQCParallel(messageAttributes))
+		{
 			return true;
 		}
 
@@ -1396,9 +1334,9 @@ public class MayamMaterialController extends MayamController
 		AssetType assetType = materialAttributes.getAttribute(Attribute.ASSET_TYPE);
 		String assetID = materialAttributes.getAttribute(Attribute.ASSET_ID);
 		String houseID = materialAttributes.getAttributeAsString(Attribute.HOUSE_ID);
-		
+
 		String previewStatus = (String) materialAttributes.getAttribute(Attribute.QC_PREVIEW_RESULT);
-		
+
 		if (MayamPreviewResults.isPreviewPass(previewStatus))
 		{
 			log.info("Ignoring uningest request for material, material has passed preview");
@@ -1416,23 +1354,23 @@ public class MayamMaterialController extends MayamController
 				throw new MayamClientException(MayamClientErrorCode.UNINGEST_FAILED, e);
 			}
 
-			deleteAssetsPackages(assetType, assetID, houseID,0);
-			
+			deleteAssetsPackages(assetType, assetID, houseID, 0);
+
 			try
 			{
 				Set<MayamTaskListType> taskTypesToKeepOpen = new HashSet<MayamTaskListType>();
 				taskTypesToKeepOpen.add(MayamTaskListType.PENDING_TX_PACKAGE);
-				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID,taskTypesToKeepOpen);
+				taskController.cancelAllOpenTasksForAsset(assetType, Attribute.ASSET_ID, assetID, taskTypesToKeepOpen);
 			}
 			catch (MayamClientException e)
 			{
 				log.error("error cancelling open tasks for assset", e);
 			}
-			
+
 			// create ingest task
 			log.debug("creating new ingest task");
 			taskController.createIngestTaskForMaterial(houseID);
-			
+
 			try
 			{
 				AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
@@ -1443,7 +1381,7 @@ public class MayamMaterialController extends MayamController
 			catch (RemoteException e)
 			{
 				log.error("error clearing segmentation notes during uningest", e);
-				//segmentation notes are only for reference, just going to catch this exception
+				// segmentation notes are only for reference, just going to catch this exception
 			}
 
 		}
@@ -1455,10 +1393,10 @@ public class MayamMaterialController extends MayamController
 		{
 			log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, assetID));
 			List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(assetType, assetID);
-			log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
+			log.info(String.format("Found %d packages for asset %s", packages.size(), houseID));
 			for (SegmentList segmentList : packages)
 			{
-				
+
 				log.debug(String.format("Removing tasks of segment %s", segmentList.getId()));
 				try
 				{
@@ -1472,7 +1410,7 @@ public class MayamMaterialController extends MayamController
 					log.error("error closing open tasks for asset", e);
 					// dont rethrow, we still want the delete to go ahead;
 				}
-				
+
 				log.debug(String.format("Deleting segment %s", segmentList.getId()));
 				try
 				{
@@ -1492,64 +1430,41 @@ public class MayamMaterialController extends MayamController
 		}
 	}
 
-	public String getMarkersString(AttributeMap materialAttributes, String user) throws MayamClientException
+	public String getMarkersString(final AttributeMap materialAttributes, final String user) throws MayamClientException
 	{
-		MarkerList markers = getMarkers(materialAttributes);
+		final MarkerList markers = getMarkers(materialAttributes);
 
 		if (markers == null)
 		{
-			log.warn(String.format("no markers found for item %s", materialAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
+			log.warn(String.format("No markers found for item %s", materialAttributes.getAttributeAsString(Attribute.HOUSE_ID)));
 			return "";
 		}
 
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder markerSb = new StringBuilder();
 
 		for (Marker marker : markers)
 		{
-			String id = marker.getId();
-			String mediaId = marker.getMediaId();
-			Timecode in = marker.getIn();
-			Timecode duration = marker.getDuration();
-			String title = marker.getTitle();
-			Type type = marker.getType();
-			String str;
-
-			if (user == null)
+			markerSb.append("Marker id: {").append(marker.getId())
+			.append("} mediaID: {").append(marker.getMediaId())
+			.append("} In: {").append(marker.getIn().toSmpte())
+			.append("} Duration: {").append(marker.getDuration().toSmpte())
+			.append("} Title: {").append(marker.getTitle())
+			.append("} Type: {").append(marker.getType().toString()).append("}");
+			
+			if(null != user)
 			{
-				str = String.format(
-						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s}\n",
-						id,
-						mediaId,
-						in.toSmpte(),
-						duration.toSmpte(),
-						title,
-						type.toString());
+				markerSb.append(" Requested by : {").append(user).append("}");
 			}
-			else
-			{
-				str = String.format(
-						"Marker id {%s} mediaID {%s} In: {%s} Duration: {%s} Title: {%s} Type : {%s} Requested by : {%s}\n",
-						id,
-						mediaId,
-						in.toSmpte(),
-						duration.toSmpte(),
-						title,
-						type.toString(),
-						user);
-			}
-
-			log.debug(str);
-			sb.append(str);
+			
+			markerSb.append("<br/>");
 		}
-
-		return sb.toString();
-
+		log.debug(String.format("Returning markers: %s", markerSb.toString()));
+		return markerSb.toString();
 	}
-	
-	public MarkerList getMarkers(AttributeMap messageAttributes) throws MayamClientException
+
+	private MarkerList getMarkers(final AttributeMap messageAttributes) throws MayamClientException
 	{
-		
-		String assetID = messageAttributes.getAttributeAsString(Attribute.ASSET_ID);
+		final String assetID = messageAttributes.getAttributeAsString(Attribute.ASSET_ID);
 		String revisionId = null;
 		try
 		{
@@ -1557,21 +1472,21 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("Error finding highest reivsion for asset "+ assetID,e);		
-			throw new MayamClientException(MayamClientErrorCode.REVISION_FIND_FAILED,e);
+			log.error("Error finding highest reivsion for asset " + assetID, e);
+			throw new MayamClientException(MayamClientErrorCode.REVISION_FIND_FAILED, e);
 		}
-		
+
 		MarkerList markers = null;
-		
+
 		try
 		{
 			markers = client.assetApi().getMarkers(AssetType.ITEM, assetID, revisionId);
 		}
 		catch (RemoteException e)
 		{
-			log.error(String.format("Error fetching markerts for revision %s asset %s",revisionId,assetID));
+			log.error(String.format("Error fetching markerts for revision %s asset %s", revisionId, assetID));
 		}
-		
+
 		if (markers == null)
 		{
 			log.info(String.format("No markers found for revision %s asset %s", revisionId, assetID));
@@ -1579,17 +1494,18 @@ public class MayamMaterialController extends MayamController
 		}
 		else
 		{
-			log.info(String.format("found %d markers  ",markers.size()));
-			
+			log.info(String.format("Found %d markers  ", markers.size()));
 			return markers;
-		}		
+		}
 	}
-	
-	public String getAssetPath(String assetID) throws MayamClientException{
-		return getAssetPath(assetID,true);
+
+	public String getAssetPath(String assetID) throws MayamClientException
+	{
+		return getAssetPath(assetID, true);
 	}
-	
-	public List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException{
+
+	public List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException
+	{
 		FileFormatInfo fileinfo;
 		try
 		{
@@ -1597,17 +1513,18 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("error getting file format info for asset "+materialAssetID,e);
-			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
+			log.error("error getting file format info for asset " + materialAssetID, e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED, e);
 		}
-		
+
 		List<String> urls = fileinfo.getDataUrls();
-		
+
 		return urls;
-		
+
 	}
-	
-	public String getAssetPath(String assetID, boolean acceptNonPreferredLocations) throws MayamClientException{
+
+	public String getAssetPath(String assetID, boolean acceptNonPreferredLocations) throws MayamClientException
+	{
 
 		FileFormatInfo fileinfo;
 		try
@@ -1616,31 +1533,30 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("error getting file format info for asset "+assetID,e);
-			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED,e);
+			log.error("error getting file format info for asset " + assetID, e);
+			throw new MayamClientException(MayamClientErrorCode.FILE_FORMAT_QUERY_FAILED, e);
 		}
-		
-		
+
 		List<String> urls = fileinfo.getMediaUrls();
-		
-		if(urls == null || urls.size()==0){
+
+		if (urls == null || urls.size() == 0)
+		{
 			log.error("no urls for media found!");
 			throw new MayamClientException(MayamClientErrorCode.FILE_LOCATON_UNAVAILABLE);
 		}
-		
-	
+
 		String nixPath = null;
-		List <String> preferredLocations = Arrays.asList(allPreferredPaths.split(","));
-		
+		List<String> preferredLocations = Arrays.asList(allPreferredPaths.split(","));
+
 		log.info("No of URLs returned is :" + urls.size());
-		
-		for (String url: urls)
+
+		for (String url : urls)
 		{
 			log.info("Attempting to resolve path for url :" + url);
 			try
 			{
 				nixPath = pathResolver.nixPath(PathType.FTP, url);
-				for (String preferredLoc: preferredLocations)
+				for (String preferredLoc : preferredLocations)
 				{
 					if (nixPath.contains(preferredLoc))
 					{
@@ -1651,7 +1567,7 @@ public class MayamMaterialController extends MayamController
 			}
 			catch (UnknownPathException e)
 			{
-				log.error(String.format("Unable to resolve storage path for ftp location %s",url),e);
+				log.error(String.format("Unable to resolve storage path for ftp location %s", url), e);
 			}
 		}
 		if (acceptNonPreferredLocations)
@@ -1667,21 +1583,22 @@ public class MayamMaterialController extends MayamController
 		{
 			throw new MayamClientException(MayamClientErrorCode.FILE_NOT_IN_PREFERRED_LOCATION);
 		}
-		
+
 	}
 
 	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException
 	{
-		log.info(String.format("Setting natural breaks string {%s} on material {%s}", naturalBreaks,materialID));
-		
+		log.info(String.format("Setting natural breaks string {%s} on material {%s}", naturalBreaks, materialID));
+
 		AttributeMap materialAttributes = getMaterialAttributes(materialID);
-		if(materialAttributes==null){
+		if (materialAttributes == null)
+		{
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
 		}
-		
+
 		AttributeMap updateMap = taskController.updateMapForAsset(materialAttributes);
-		updateMap.setAttribute(Attribute.SEGMENTATION_NOTES,naturalBreaks);
-		
+		updateMap.setAttribute(Attribute.SEGMENTATION_NOTES, naturalBreaks);
+
 		try
 		{
 			client.assetApi().updateAsset(updateMap);
@@ -1689,17 +1606,12 @@ public class MayamMaterialController extends MayamController
 		}
 		catch (RemoteException e)
 		{
-			log.error("error setting natual breaks on material",e);
+			log.error("error setting natual breaks on material", e);
 			throw new MayamClientException(MayamClientErrorCode.MATERIAL_UPDATE_FAILED);
 		}
-		
+
 	}
-	
-	@Inject
-	@Named("ff.sd.video.imagex")
-	private int sdVideoX;
-	public static final String UNMATCHED_ASSET_MATCHED_TO_THIS_PLACEHOLDER = "Unmatched asset matched to this placeholder";
-	
+
 	public String getFormat(AttributeMap currentAttributes) throws RemoteException
 	{
 		String format = "HD";
@@ -1729,22 +1641,22 @@ public class MayamMaterialController extends MayamController
 				log.error("error creating error task!", e1);
 			}
 		}
-
 		return format;
 	}
-	
+
 	public boolean materialHasTXPackages(String houseID, String materialAssetID) throws RemoteException, MayamClientException
 	{
 		log.info(String.format("Searching for packages of asset %s (%s) for deletion", houseID, materialAssetID));
 		List<SegmentList> packages = client.segmentApi().getSegmentListsForAsset(AssetType.ITEM, materialAssetID);
-		log.info(String.format("Found %d packages for asset %s",packages.size(), houseID));
+		log.info(String.format("Found %d packages for asset %s", packages.size(), houseID));
 		if (packages.size() > 0)
 		{
 			return true;
 		}
-		else{
+		else
+		{
 			log.info("found no segment lists for asset, searching for pending tx package tasks");
-			//check if there are any pending tx package tasks with bms information
+			// check if there are any pending tx package tasks with bms information
 			List<AttributeMap> pendingTxTasks = taskController.getOpenTasksForAsset(
 					MayamTaskListType.PENDING_TX_PACKAGE,
 					Attribute.ASSET_ID,
@@ -1752,23 +1664,24 @@ public class MayamMaterialController extends MayamController
 					Collections.<Attribute, Object> singletonMap(
 							Attribute.AUX_SRC,
 							MayamPackageController.PENDING_TX_PACKAGE_SOURCE_BMS));
-			
-			if(! pendingTxTasks.isEmpty()){
+
+			if (!pendingTxTasks.isEmpty())
+			{
 				log.info("open pending tx package with bms information found");
 				return true;
 			}
 			log.info("no pending tx package tasks with bms info found");
-		}		
-		
+		}
+
 		return false;
 	}
 
-	public void initiateHighResTransfer(AttributeMap taskAttributes)
+	public void initiateHighResTransfer(final AttributeMap taskAttributes)
 	{
 		try
 		{
-			String assetId = taskAttributes.getAttribute(Attribute.ASSET_ID);
-			AssetType assetType = taskAttributes.getAttribute(Attribute.ASSET_TYPE);
+			final String assetId = taskAttributes.getAttribute(Attribute.ASSET_ID);
+			final AssetType assetType = taskAttributes.getAttribute(Attribute.ASSET_TYPE);
 
 			String itemAssetId = null;
 			if (MayamAssetType.PACKAGE.getAssetType().equals(assetType))
@@ -1786,28 +1699,25 @@ public class MayamMaterialController extends MayamController
 				throw new IllegalArgumentException("Unexpected asset type " + assetType);
 			}
 
-			String jobNum = client.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
+			final String jobNum = client.assetApi().requestHighresXfer(AssetType.ITEM, itemAssetId, highResTransferLocation);
 
 			log.warn("Requesting High Res Transfer. Job : " + jobNum);
 			log.warn("Setting task to Sys Wait state : " + taskAttributes.getAttributeAsString(Attribute.TASK_ID));
 
-			AttributeMap updateMap = taskController.updateMapForTask(taskAttributes);
+			final AttributeMap updateMap = taskController.updateMapForTask(taskAttributes);
 			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.SYS_WAIT);
 			taskController.saveTask(updateMap);
 		}
 		catch (RemoteException e)
 		{
 			log.error("error initiating high res transfer", e);
-			Long taskId = taskAttributes.getAttribute(Attribute.TASK_ID);
 			taskController.setTaskToErrorWithMessage(taskAttributes, "Error initiating high res transfer");
 		}
 		catch (MayamClientException e)
 		{
 			log.error("error saving task to sys wait state", e);
-			Long taskId = taskAttributes.getAttribute(Attribute.TASK_ID);
 			taskController.setTaskToErrorWithMessage(taskAttributes, "Error saving task to sys wait state");
 		}
 	}
 
-	
 }

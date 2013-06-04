@@ -9,13 +9,8 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.Marker;
-import com.mayam.wf.attributes.shared.type.MarkerList;
-import com.mayam.wf.attributes.shared.type.Timecode;
-import com.mayam.wf.attributes.shared.type.Marker.Type;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
-import com.mediasmiths.foxtel.ip.common.events.ObjectFactory;
 import com.mediasmiths.mayam.MayamButtonType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
@@ -45,7 +40,7 @@ public class ExportMarkersButton extends ButtonClickHandler
 			
 			log.info(String.format("using email address %s for user %s",email, user));
 			
-			String markers = materialController.getMarkersString(messageAttributes, user);
+			final String markers = materialController.getMarkersString(messageAttributes, user);
 			
 			ComplianceLoggingMarker clm = new ComplianceLoggingMarker();
 			clm.setLoggerdetails(markers);
