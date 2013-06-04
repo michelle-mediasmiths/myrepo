@@ -11,4 +11,5 @@ public interface ChannelProperties {
 	String exportPathForChannelGroup(String channelGroupName);
 	Set<String> groupsForChannels(List<String> channelTags);
 	Collection<? extends String> groupsForEmail(List<String> channels, boolean isAo);
+	String nameForTag(String channelTag);
 }

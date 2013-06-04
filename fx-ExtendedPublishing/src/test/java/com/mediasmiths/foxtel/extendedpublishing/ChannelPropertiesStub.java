@@ -72,4 +72,15 @@ public class ChannelPropertiesStub implements ChannelProperties
 		return result;
 	}
 
+	@Override
+	public String nameForTag(String channelTag)
+	{
+		if ("FOX".equals(channelTag))
+		{
+			return "FOX 8";
+		}
+
+		return null;
+	}
+
 }

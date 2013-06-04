@@ -5,6 +5,7 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.Segment;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.AssetApi;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
@@ -14,6 +15,7 @@ import com.mediasmiths.mayam.veneer.AssetApiVeneer;
 
 import org.apache.log4j.Logger;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -125,5 +127,49 @@ public class FullProgrammePackageInfo
 	public AttributeMap getTitleAttributes()
 	{
 		return titleAttributes;
+	}
+
+	public String getLocation()
+	{
+		return (String) titleAttributes.getAttribute(Attribute.LOCATION);
+	}
+
+	public Integer getEpisodeNumber()
+	{
+		return (Integer) titleAttributes.getAttribute(Attribute.EPISODE_NUMBER);
+	}
+
+	public String getEpisodeTitle()
+	{
+		return (String) titleAttributes.getAttribute(Attribute.EPISODE_TITLE);
+	}
+	
+	public String getProductionNumber()
+	{
+		return (String) titleAttributes.getAttribute(Attribute.PRODUCTION_NUMBER);
+	}
+	
+	public String getProgrammeTitle()
+	{
+		return (String) titleAttributes.getAttribute(Attribute.SERIES_TITLE);
+	}
+	
+	public Integer getSeriesNumber()
+	{
+		return (Integer) titleAttributes.getAttribute(Attribute.SEASON_NUMBER);
+	}
+	
+	public String getSeriesYear()
+	{
+		return (String) titleAttributes.getAttribute(Attribute.SERIES_YEAR);
+	}
+	
+	public Date getFirstTX()
+	{
+		return (Date) packageAttributes.getAttribute(Attribute.TX_FIRST);
+	}
+
+	public List<String> getChannels(){
+		return (StringList) titleAttributes.getAttribute(Attribute.CHANNELS);
 	}
 }

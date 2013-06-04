@@ -14,6 +14,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
@@ -350,4 +351,5 @@ public interface MayamClient
 
 	Programme getProgramme(String packageID, String filename,boolean overrideAudioInfo, AudioListType overrideAudioFormat) throws MayamClientException;
 	
+	MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException;
 }

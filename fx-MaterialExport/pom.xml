@@ -50,8 +50,8 @@
 				<version>0.8.2</version>
 				<configuration>
 					<schemaDirectory>src/main/resources</schemaDirectory>
-					<outputDirectory>src/main/java/com/mediasmiths/foxtel/generated/mediaexchange</outputDirectory>
-					<generatePackage>com.mediasmiths.foxtel.generated.mediaexchange</generatePackage>
+					<outputDirectory>src/main/java/com/mediasmiths/foxtel/generated/materialexport</outputDirectory>
+					<generatePackage>com.mediasmiths.foxtel.generated.materialexport</generatePackage>
 					<strict>true</strict>
 					<extension>true</extension>
 				</configuration>

@@ -87,6 +87,12 @@ public abstract class PlaceHolderMessageShortTest
 		{
 			return Collections.<String>emptySet();
 		}
+
+		@Override
+		public String nameForTag(String channelTag)
+		{
+			return null;
+		}
 	};
 	protected final AlertInterface alert = mock(AlertInterface.class);
 	protected final String alertRecipient = "alert@foxtel.com.au";

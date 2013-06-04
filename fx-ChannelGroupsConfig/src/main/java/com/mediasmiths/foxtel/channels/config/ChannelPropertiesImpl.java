@@ -102,4 +102,10 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 		return result;
 	}
 
+	@Override
+	public String nameForTag(String channelTag)
+	{
+		return channelNames.get(channelTag);
+	}
+
 }

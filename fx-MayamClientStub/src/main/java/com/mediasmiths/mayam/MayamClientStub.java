@@ -16,6 +16,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Suppli
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
+import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
@@ -927,6 +928,13 @@ public class MayamClientStub implements MayamClient
 	@Override
 	public Programme getProgramme(String packageID, String filename, boolean overrideAudioInfo, AudioListType overrideAudioFormat)
 			throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
 		return null;

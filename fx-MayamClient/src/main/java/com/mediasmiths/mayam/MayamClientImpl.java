@@ -27,6 +27,7 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
+import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
 import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
@@ -39,6 +40,7 @@ import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mayam.util.MaterialExportBuilder;
 import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.RuzzProgrammeOutputBuilder;
 import com.mediasmiths.mayam.util.TextualMetadataForItemOutputBuilder;
@@ -83,6 +85,9 @@ public class MayamClientImpl implements MayamClient
 
 	@Inject
 	MediaExchangeProgrammeOutputBuilder mediaExchangeBuilder;
+	
+	@Inject
+	MaterialExportBuilder materialExportBuilder;
 
 
 	@Inject
@@ -473,6 +478,21 @@ public class MayamClientImpl implements MayamClient
 		//build the Programme Object
 		return mediaExchangeBuilder.buildProgramme(pack,filename,overrideAudioInfo,overrideAudioFormat);
 	}
+	
+	@Override
+	public MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException
+	{
+		// fetch the packages information
+		FullProgrammePackageInfo pack = new FullProgrammePackageInfo(
+				packageId,
+				packageController,
+				materialController,
+				titleController,
+				client.assetApi());
+		// build the Programme Object
+		return materialExportBuilder.buildMaterialExport(pack, filename);
+	}
+
 	
 	@Override
 	public RuzzIF getRuzzProgramme(String packageID) throws MayamClientException
@@ -1222,5 +1242,8 @@ public class MayamClientImpl implements MayamClient
 
 		return getChannelGroupsForItem(materialAttributes);
 	}
+
+	
+	
 
 }

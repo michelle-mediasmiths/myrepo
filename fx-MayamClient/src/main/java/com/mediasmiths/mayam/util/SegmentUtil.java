@@ -7,6 +7,8 @@ import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
+import com.mediasmiths.foxtel.generated.materialexport.PresentationInformationType.SegmentationInformation;
+import com.mediasmiths.foxtel.generated.materialexport.SegmentType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme.Media.Segments;
 import com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType;
@@ -224,6 +226,48 @@ public class SegmentUtil
 					com.mediasmiths.foxtel.generated.mediaexchange.SegmentListType.Segment o2)
 			{
 				return Integer.compare(o1.getNumber(), o2.getNumber());
+			}
+
+		});
+
+		return ret;
+	}
+	
+	public static SegmentationInformation convertMayamSegmentListToMaterialExportSegments(FullProgrammePackageInfo pack)
+	{
+		SegmentList segmentList = pack.getSegmentList();
+		String title = pack.getTitleAttributes().getAttributeAsString(Attribute.SERIES_TITLE);
+		SegmentationInformation ret = new SegmentationInformation();
+
+		if (segmentList != null && segmentList.getEntries() != null)
+		{
+			for (Segment s : segmentList.getEntries())
+			{
+				SegmentType meSeg = new SegmentType();
+
+				String som = s.getIn().toSmpte();
+				String duration = s.getDuration().toSmpte();
+				Timecode startTC = Timecode.getInstance(som, Framerate.HZ_25);
+				String eom = calculateEOM(duration, startTC);
+
+				meSeg.setSegmentStart(som);
+				meSeg.setSegmentEnd(eom);
+				meSeg.setSegmentNumber(s.getNumber());
+				meSeg.setSegmentTitle(title);
+				ret.getSegment().add(meSeg);			
+			}
+		}
+		
+		//sort by segment number
+		Collections.sort(ret.getSegment(), new Comparator<SegmentType>()
+		{
+
+			@Override
+			public int compare(
+					SegmentType o1,
+					SegmentType o2)
+			{
+				return Integer.compare(o1.getSegmentNumber(), o2.getSegmentNumber());
 			}
 
 		});
