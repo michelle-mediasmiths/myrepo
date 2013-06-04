@@ -171,6 +171,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					associatedMaterial.setAttribute(
 							Attribute.PARENT_HOUSE_ID,
 							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+					associatedMaterial.setAttribute(
+							Attribute.AUX_VAL,
+							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 
 					tasksClient.assetApi().updateAsset(associatedMaterial);
 
