@@ -43,9 +43,9 @@ public class OrderStatus
 	@Transient
 	private transient Boolean overdue;
 	@Basic
-	private transient Long fileSize;
+	private Long fileSize;
 	@Basic
-	private transient Integer titleLength;
+	private Integer titleLength;
 	
 	@OneToOne(optional=true,fetch=FetchType.LAZY)
 	@PrimaryKeyJoinColumn
