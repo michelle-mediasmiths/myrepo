@@ -1,6 +1,7 @@
 package com.mediasmiths.foxtel.channels.config;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,6 +89,17 @@ public class ChannelPropertiesImpl implements ChannelProperties {
 		
 		return groups;
 		
+	}
+
+	@Override
+	public Collection<? extends String> groupsForEmail(List<String> channels, boolean isAo)
+	{
+		Set<String> result = groupsForChannels(channels);
+		
+		if(isAo){
+			result.add("AO");
+		}
+		return result;
 	}
 
 }

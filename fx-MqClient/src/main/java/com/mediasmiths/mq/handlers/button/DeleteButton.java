@@ -1,6 +1,8 @@
 package com.mediasmiths.mq.handlers.button;
 
 import java.util.Date;
+import java.util.Set;
+
 import au.com.foxtel.cf.mam.pms.Actions;
 import au.com.foxtel.cf.mam.pms.DeleteMaterial;
 import au.com.foxtel.cf.mam.pms.Material;
@@ -10,9 +12,12 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
+import com.mayam.wf.attributes.shared.type.StringList;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.common.events.ManualPurge;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamButtonType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.log4j.Logger;
 
@@ -34,6 +39,9 @@ public class DeleteButton extends ButtonClickHandler
 	@Inject
 	@Named("manual.delete.grace.period.seconds")
 	private int gracePeriod = 86400;
+	
+	@Inject
+	protected ChannelProperties channelProperties;
 	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
@@ -75,8 +83,7 @@ public class DeleteButton extends ButtonClickHandler
 			ph.setActions(a);
 
 			String title = messageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
-			
-			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType, title);
+			sendManualPurgeEvent((String) messageAttributes.getAttribute(Attribute.HOUSE_ID), assetType, title,(StringList)messageAttributes.getAttribute(Attribute.CHANNELS), AssetProperties.isAO(messageAttributes));
 			
 		}
 		catch (Exception e)
@@ -101,13 +108,14 @@ public class DeleteButton extends ButtonClickHandler
 	}
 
 
-	private void sendManualPurgeEvent(String houseId, String assetType, String title)
+	private void sendManualPurgeEvent(String houseId, String assetType, String title, StringList channels, boolean isAo)
 	{
 		ManualPurge manualPurge = new ManualPurge();
 		manualPurge.setHouseId(houseId);
 		manualPurge.setAssetType(assetType);
 		manualPurge.setTime(((new Date()).toString()));
 		manualPurge.setTitle(title);
+		manualPurge.getChannelGroup().addAll(channelProperties.groupsForEmail(channels,isAo));		
 		
 		String eventName = MANUAL_PURGE;
 		String namespace = bmsEventsNamespace;

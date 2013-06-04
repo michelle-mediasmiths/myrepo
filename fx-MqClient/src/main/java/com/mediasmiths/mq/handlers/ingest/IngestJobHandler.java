@@ -2,6 +2,7 @@ package com.mediasmiths.mq.handlers.ingest;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -208,12 +209,13 @@ public class IngestJobHandler extends JobHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void sendImportFailureEvent(String assetId, String jobID, String houseID)
+	private void sendImportFailureEvent(String assetId, String jobID, String houseID, Set<String> groups)
 	{
 		ArdomeImportFailure ajf = new ArdomeImportFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
 		ajf.setFilename(houseID);
+		ajf.getChannelGroup().addAll(groups);
 		
 		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
