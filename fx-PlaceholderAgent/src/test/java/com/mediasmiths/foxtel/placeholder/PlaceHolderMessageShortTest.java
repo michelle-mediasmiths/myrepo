@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -80,6 +81,12 @@ public abstract class PlaceHolderMessageShortTest
 
 		@Override
 		public Set<String> groupsForChannels(List<String> channelTags)
+		{
+			return Collections.<String>emptySet();
+		}
+
+		@Override
+		public Collection<? extends String> groupsForEmail(List<String> channels, boolean isAo)
 		{
 			return Collections.<String>emptySet();
 		}
