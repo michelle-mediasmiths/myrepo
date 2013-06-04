@@ -6,6 +6,7 @@ import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.PurgeNotification;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
+import java.util.List;
 
 public class ManualPurgeEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
