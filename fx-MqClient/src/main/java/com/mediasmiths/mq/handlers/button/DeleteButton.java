@@ -40,9 +40,6 @@ public class DeleteButton extends ButtonClickHandler
 	@Named("manual.delete.grace.period.seconds")
 	private int gracePeriod = 86400;
 	
-	@Inject
-	protected ChannelProperties channelProperties;
-	
 	@Override
 	protected void buttonClicked(AttributeMap messageAttributes)
 	{

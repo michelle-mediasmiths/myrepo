@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.ws.client.TasksClient;
+import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
@@ -23,7 +24,10 @@ public abstract class JobHandler implements Handler
 	
 	@Inject
 	protected EventService eventsService;
-		
+	
+	@Inject
+	protected ChannelProperties channelProperties;
+	
 	public abstract void process(Job jobMessage) ; 
 
 	public abstract String getName();

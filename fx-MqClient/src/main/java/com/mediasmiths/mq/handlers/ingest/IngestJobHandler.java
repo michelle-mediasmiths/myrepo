@@ -17,12 +17,14 @@ import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
 import com.mayam.wf.attributes.shared.type.Job.JobStatus;
 import com.mayam.wf.attributes.shared.type.Job.JobType;
+import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
 import com.mediasmiths.foxtel.ip.common.events.CreationComplete;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
+import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.JobHandler;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import com.mediasmiths.std.util.jaxb.exception.JAXBRuntimeException;
@@ -198,7 +200,7 @@ public class IngestJobHandler extends JobHandler
 			log.error("Error setting failure reason on ingest task", e);
 		}
 
-		sendImportFailureEvent(assetId, jobID, task.getAttributeAsString(Attribute.HOUSE_ID));
+		sendImportFailureEvent(assetId, jobID, task.getAttributeAsString(Attribute.HOUSE_ID),(StringList)task.getAttribute(Attribute.CHANNELS), AssetProperties.isAO(task));
 	}
 
 	private void itemHasIngestTaskJobStarted(String assetId, AttributeMap task) throws MayamClientException
@@ -209,13 +211,15 @@ public class IngestJobHandler extends JobHandler
 		taskController.saveTask(updateMap);
 	}
 
-	private void sendImportFailureEvent(String assetId, String jobID, String houseID, Set<String> groups)
+	private void sendImportFailureEvent(String assetId, String jobID, String houseID, StringList channels, boolean isAo)
 	{
+		
+		
 		ArdomeImportFailure ajf = new ArdomeImportFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
 		ajf.setFilename(houseID);
-		ajf.getChannelGroup().addAll(groups);
+		ajf.getChannelGroup().addAll(channelProperties.groupsForEmail(channels,isAo));	
 		
 		String event = fxcommonSerialiser.serialise(ajf);
 		String eventName = "ArdomeImportFailure";
