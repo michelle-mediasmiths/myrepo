@@ -1,5 +1,6 @@
 package com.mediasmiths.foxtel.extendedpublishing;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,6 +59,17 @@ public class ChannelPropertiesStub implements ChannelProperties
 		}
 		return ret;
 
+	}
+
+	@Override
+	public Collection<? extends String> groupsForEmail(List<String> channels, boolean isAo)
+	{
+		Set<String> result = groupsForChannels(channels);
+		
+		if(isAo){
+			result.add("AO");
+		}
+		return result;
 	}
 
 }
