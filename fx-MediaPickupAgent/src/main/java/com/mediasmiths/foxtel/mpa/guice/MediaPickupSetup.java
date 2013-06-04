@@ -22,7 +22,8 @@ public class MediaPickupSetup implements GuiceSetup
 		modules.add(new WatchFolderLocationsModule());
 		modules.add(new WatchedFilesConfigModule());
 		modules.add(new ChannelConfigModule());
-		
+		modules.add(new EventServiceModule());
+
 		if (config.getBoolean("stub.out.mayam", false))
 		{
 			modules.add(new MayamClientStubModule());
@@ -33,7 +34,7 @@ public class MediaPickupSetup implements GuiceSetup
 		}
 		
 		modules.add(new MediaPickupModule());
-		modules.add(new EventServiceModule());
+
 	}
 
 	@Override
