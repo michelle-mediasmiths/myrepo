@@ -213,8 +213,6 @@ public class IngestJobHandler extends JobHandler
 
 	private void sendImportFailureEvent(String assetId, String jobID, String houseID, StringList channels, boolean isAo)
 	{
-		
-		
 		ArdomeImportFailure ajf = new ArdomeImportFailure();
 		ajf.setAssetID(assetId);
 		ajf.setJobID(jobID);
