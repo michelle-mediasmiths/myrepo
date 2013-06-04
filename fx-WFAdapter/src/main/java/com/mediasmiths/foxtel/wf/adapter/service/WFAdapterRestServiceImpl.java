@@ -573,6 +573,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				{
 					String mediaFilename = filename + outputPaths.getOutputFileExtension(TranscodeJobType.CAPTION_PROXY, false);
 					MaterialExport md = mayamClient.getMaterialExport((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+					materialExportSerialiser.setPrettyOutput(true);
 					segmentXml = materialExportSerialiser.serialise(md);
 				}
 				catch (Exception e)
@@ -1086,6 +1087,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				String mediaFilename = filename + outputPaths.getOutputFileExtension(jobType, false);
 				MaterialExport md = mayamClient.getMaterialExport((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
 				String metadataFileLocation = outputPaths.getLocalPathToExportDestination("",jobType, filename, ".xml");
+				materialExportSerialiser.setPrettyOutput(true);
 				materialExportSerialiser.serialise(md, new File(metadataFileLocation));
 			}
 			else if(jobType.equals(TranscodeJobType.COMPLIANCE_PROXY) || jobType.equals(TranscodeJobType.PUBLICITY_PROXY)){
@@ -1180,6 +1182,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String mediaFilename = filename + outputPaths.getOutputFileExtension(jobType, false);
 			
 			MaterialExport materialExport = mayamClient.getMaterialExport((String) task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+			materialExportSerialiser.setPrettyOutput(true);
 			return materialExportSerialiser.serialise(materialExport);
 		}
 		else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY) || jobType.equals(TranscodeJobType.PUBLICITY_PROXY))
