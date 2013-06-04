@@ -53,6 +53,9 @@ reportslocal : reports
 	rm -r /opt/tomcat/webapps/fx-report-ui
 	rm -r /opt/tomcat/webapps/fx-event-ui
 	/opt/tomcat/bin/start.sh
+	
+wfadapterlocal : wfadapter
+	cp fx-WFAdapter/target/fx-WFAdapter.war /opt/tomcat/webapps
 
 bmreports : reports
 	rsync -v fx-report-ui/target/fx-report-ui.war root@192.168.2.22:/opt/tomcat/webapps

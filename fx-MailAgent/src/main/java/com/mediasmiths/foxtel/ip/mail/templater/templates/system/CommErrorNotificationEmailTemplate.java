@@ -14,18 +14,30 @@ public class CommErrorNotificationEmailTemplate extends MailTemplate implements 
 		return obj.getClass().equals(CommFailure.class);
 	}
 
+
 	@Override
 	public MailTemplate customiseTemplate(Object obj, String comment)
 	{
-        MailTemplate t = new MailTemplate();
-		CommFailure cf = (CommFailure)obj;
+		MailTemplate t = new MailTemplate();
+		CommFailure cf = (CommFailure) obj;
 
-		t.setBody(getBody());
+		StringBuilder detail = new StringBuilder();
+		detail.append("Source : ")
+		      .append(cf.getSource())
+		      .append("<br/>")
+		      .append("Target : ")
+		      .append(cf.getTarget())
+		      .append("<br/>")
+		      .append("Error : ")
+		      .append(cf.getFailureShortDesc())
+		      .append("<br/>")
+		      .append(cf.getFailureLongDescription())
+		      .append("<br/>");
+
+		t.setBody(String.format(getBody(), detail.toString()));
 		t.setEmailaddresses(getEmailaddresses());
 		t.setSubject(getSubject());
 
 		return t;
 	}
-
-
 }

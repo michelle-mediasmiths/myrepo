@@ -54,9 +54,7 @@
 		<eventname>QcFailedReOrder</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata.AutoQcEmailTemplate">
 			<subject>Auto QC Fail in MAM: Material ID (%s), Title(%s)</subject>
-			<body>Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning state. Please resolve this matter within 90 days otherwise item will be purged without further notification.
-				                                                                                                                                                                                                  
-			Dear Promo Producer, please check whether this failed item impacts your promo production work.
+			<body><![CDATA[Item called Title(%s), Material ID(%s) is on the QC tasklist with a warning state. Please resolve this matter within 90 days otherwise item will be purged without further notification.<br/>Dear Promo Producer, please check whether this failed item impacts your promo production work.]]>
 			</body>
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -538,6 +536,20 @@
 			<emailaddresses> 
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/system</namespace>
+		<eventname>CommError</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.system.CommErrorNotificationEmailTemplate">
+			<subject>URGENT: WFE COMMUNICATION FAILURE</subject>
+			<body>WFE is trying to communicate with an interfacing system but has failed after multiple retries %s</body>
+			<emailaddresses> 
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_BOPS@foxtel.com.au</emailaddress>
 				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>

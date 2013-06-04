@@ -16,6 +16,7 @@ public class TasksWSRetryModule extends AbstractModule
 	protected void configure()
 	{
 		TasksWSRetryMethodInterceptor interceptor = new TasksWSRetryMethodInterceptor();
+		requestInjection(interceptor);
 		bindInterceptor(Matchers.subclassesOf(TasksClientVeneer.class), Matchers.annotatedWith(TasksWSRetryable.class), interceptor);
 		bindInterceptor(Matchers.subclassesOf(TaskApiVeneer.class),  Matchers.annotatedWith(TasksWSRetryable.class), interceptor);
 		bindInterceptor(Matchers.subclassesOf(AssetApiVeneer.class),  Matchers.annotatedWith(TasksWSRetryable.class), interceptor);
