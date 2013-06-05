@@ -64,14 +64,17 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 				          invocation.getMethod().toGenericString() +
 				          " on " + invocation.getThis() + " with " +
 				          Arrays.asList(invocation.getArguments()) + " failed.", t);
-
+			
+			//bm 05/06/13 - need to send this event when final retry fails not when there is just any failure!
+			/*
             CommFailure cf = new CommFailure();
             cf.setFailureShortDesc("Error communicating with tasks-ws");
             cf.setFailureLongDescription(t.getLocalizedMessage());
             cf.setSource("WFE");
             cf.setTarget("tasks-ws");
             eventsService.saveEvent(systemEventsNamespace,"CommError",cf);
-
+			 */
+			
 			throw t;
 		}
 	}
