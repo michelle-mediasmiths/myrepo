@@ -22,7 +22,7 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 		ComplianceLoggingMarker clm = (ComplianceLoggingMarker)obj;
 
 		t.setEmailaddresses(getEmailaddresses());
-		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(clm.getEmailaddresses().getEmailaddress()));
+		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(clm.getEmailaddresses()));
 
 		t.setSubject(String.format(getSubject(), clm.getMasterID(), clm.getTitleField()));
 

@@ -23,8 +23,9 @@ public class DeliveryDetailsFailureEmailTemplate extends MailTemplate implements
          ExtendedPublishingDetails dd = (ExtendedPublishingDetails)obj;
 
 		t.setSubject(String.format(getSubject(), dd.getMaterialID(), dd.getTitle()));
+
 		t.setEmailaddresses(getEmailaddresses());
-		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(dd.getEmailaddresses().getEmailaddress()));
+		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(dd.getEmailaddresses()));
 
 		t.setBody(String.format(getBody()));
 
