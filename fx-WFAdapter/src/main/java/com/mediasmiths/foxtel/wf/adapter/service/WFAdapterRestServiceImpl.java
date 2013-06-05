@@ -231,6 +231,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				// id is a package id
 				saveEvent("QCProblemWithTCMedia", notification, QC_EVENT_NAMESPACE);
+				saveEvent("CerifyQCError", notification, QC_EVENT_NAMESPACE);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC FAILED");
 				// attach qc report if qc is failed
 				attachQcReports(notification.getAssetId(), notification.getJobName());
