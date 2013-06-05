@@ -1,51 +1,19 @@
 package com.mediasmiths.foxtel.wf.adapter.service;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
-import javax.swing.text.StyledEditorKit.BoldAction;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.xml.bind.JAXBException;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.IOFileFilter;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
-import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
-import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
+import com.mediasmiths.foxtel.ip.common.events.TcEvent;
+import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.foxtel.tc.priorities.TranscodePriorities;
@@ -76,10 +44,36 @@ import com.mediasmiths.foxtel.wf.adapter.model.TXDeliveryFinished;
 import com.mediasmiths.foxtel.wf.adapter.model.WriteExportCompanions;
 import com.mediasmiths.foxtel.wf.adapter.util.TxUtil;
 import com.mediasmiths.mayam.MayamClient;
-import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.xml.bind.JAXBException;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
@@ -336,7 +330,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	/**
 	 *
-	 * @param jobName
+	 * @param jobName the name of the cerify job to fetch the report(s) for
 	 * @return the list of cerify QC report files defines for the jobname.
 	 *
 	 */
@@ -352,13 +346,22 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				return false; // dont look in sub directories
 			}
 
+
 			@Override
 			public boolean accept(File file)
 			{
-				String name = FilenameUtils.getName(file.getAbsolutePath());
-				if (name.startsWith(jobName))
+				if (jobName != null && (!"".equals(jobName)))
 				{
-					return true;
+
+					String name = FilenameUtils.getName(file.getAbsolutePath());
+					if (name.startsWith(jobName))
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
 				}
 				else
 				{
@@ -528,13 +531,8 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
 
-		if (notification.isForTXDelivery())
-		{
-			// saveEvent("Transcoded", notification, TC_EVENT_NAMESPACE, new com.mediasmiths.foxtel.ip.common.events.TcNotification());
-		}
-		else
-		// extended publishing
-		{
+		if (! notification.isForTXDelivery())
+		{ // extended publishing
 			String deliveryLocation = "";
 
 			if (notification.getFtpupload() != null)
