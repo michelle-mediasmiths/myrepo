@@ -73,7 +73,7 @@ public class FullProgrammePackageInfo
 
 
 		// get the title
-		String titleId = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+		titleID = materialAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
 		String titleAssetID = materialAttributes.getAttribute(Attribute.ASSET_PARENT_ID);
 		try
 		{
@@ -83,9 +83,9 @@ public class FullProgrammePackageInfo
 		{
 			log.error("Unable to locate asset with ID: " + titleAssetID, e);
 
-			titleAttributes = titleController.getTitle(titleId);
+			titleAttributes = titleController.getTitle(titleID);
 
-			log.error("Using the parent house id title as a fall back: " + titleId);
+			log.error("Using the parent house id title as a fall back: " + titleID);
 		}
 	}
 	
