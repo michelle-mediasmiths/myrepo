@@ -26,11 +26,20 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 
 		t.setSubject(String.format(getSubject(), clm.getMasterID(), clm.getTitleField()));
 
-		t.setBody(String.format(getBody(), clm.getLoggerdetails()));
+		t.setBody(String.format(getBody(), convertEndOfLineForEmail(clm.getLoggerdetails())));
 
 		return t;
 
 	}
 
-
+	/**
+	 * End of line is currently set up in MayamMaterialController to be a '\n'; for emails, this needs to be translated to
+	 * <br/> to output the new lines properly.
+	 * @param markerDetails
+	 * @return
+	 */
+	private String convertEndOfLineForEmail(final String markerDetails)
+	{
+		return markerDetails.replaceAll("(\n)", "<br/>");
+	}
 }
