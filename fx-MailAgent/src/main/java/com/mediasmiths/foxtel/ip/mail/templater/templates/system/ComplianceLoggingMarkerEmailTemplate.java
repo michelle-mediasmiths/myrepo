@@ -5,8 +5,12 @@ import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 
+import org.apache.log4j.Logger;
+
 public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implements EmailTemplateGenerator
 {
+
+	private final static Logger log = Logger.getLogger(ComplianceLoggingMarkerEmailTemplate.class);
 
 	@Override
 	public boolean handles(Object obj)
@@ -26,7 +30,13 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 
 		t.setSubject(String.format(getSubject(), clm.getMasterID(), clm.getTitleField()));
 
-		t.setBody(String.format(getBody(), convertEndOfLineForEmail(clm.getLoggerdetails())));
+		log.debug("Logger details before:"+clm.getLoggerdetails());
+
+		String converted =  convertEndOfLineForEmail(clm.getLoggerdetails());
+
+		log.debug("Converted details:"+converted);
+
+		t.setBody(String.format(getBody(),converted));
 
 		return t;
 
@@ -40,6 +50,6 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 	 */
 	private String convertEndOfLineForEmail(final String markerDetails)
 	{
-		return markerDetails.replaceAll("(\n)", "<br/>");
+		return markerDetails.replace("(\n)", "<br/>");
 	}
 }
