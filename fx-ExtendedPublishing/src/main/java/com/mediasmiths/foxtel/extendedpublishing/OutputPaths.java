@@ -1,15 +1,14 @@
 package com.mediasmiths.foxtel.extendedpublishing;
 
-import java.io.File;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
 
 public class OutputPaths
 {
@@ -192,6 +191,28 @@ public class OutputPaths
 					throw new IllegalArgumentException("Unexpected job type");
 
 			}
+		}
+	}
+
+
+	public String getUserDeliveryLocation(TranscodeJobType jobType, String folder, String filename)
+	{
+
+		final String relativePath = String.format("%s/%s", folder, filename);
+
+		final String uncRelativePath = relativePath.replace('/', '\\'); //reverse slashes
+
+		switch (jobType)
+		{
+			case COMPLIANCE_PROXY:
+				return String.format("%s%s", outputPathsConfig.getCompliancePathUncPrefix(), uncRelativePath);
+			case PUBLICITY_PROXY:
+				return String.format("%s%s", outputPathsConfig.getPublicityPathUncPrefix(), uncRelativePath);
+			case CAPTION_PROXY:
+				return String.format("%s%s", outputPathsConfig.getCaptionPathUncPrefix(), uncRelativePath);
+			default:
+				log.warn("Unexpected job type" + jobType);
+				return relativePath;
 		}
 	}
 
