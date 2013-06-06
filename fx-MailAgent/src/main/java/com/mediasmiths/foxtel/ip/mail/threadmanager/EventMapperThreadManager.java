@@ -47,10 +47,12 @@ public class EventMapperThreadManager extends Daemon implements StoppableService
 			deleteItemsIntable.deleteEventing();
 		}
 		else
+		{
 			logger.info("Items in eventing and event table not deleted");
+		}
 
 		if (logger.isTraceEnabled())
-			logger.info("Starting worker service running");
+			logger.trace("Starting worker service running");
 
 		while (isRunning())
 		{
@@ -60,15 +62,15 @@ public class EventMapperThreadManager extends Daemon implements StoppableService
 			}
 			catch (Throwable t)
 			{
-				if (logger.isTraceEnabled())
-					logger.info("A major error has occured in workerservice", t);
+				logger.error("A major error has occured in workerservice", t);
 				betweenChecks.sleep();
 			}
 			if (logger.isTraceEnabled())
-				logger.info("Going to sleep");
+				logger.trace("Going to sleep");
 			betweenChecks.sleep();
 		}
 	}
+
 
 	public void shutdown()
 	{

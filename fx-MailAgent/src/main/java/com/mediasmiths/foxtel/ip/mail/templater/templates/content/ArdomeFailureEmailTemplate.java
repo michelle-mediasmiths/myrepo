@@ -1,8 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.content;
 
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.ArdomeJobFailure;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class ArdomeFailureEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -21,7 +22,7 @@ public class ArdomeFailureEmailTemplate extends MailTemplate implements EmailTem
 
 		t.setSubject(String.format(getSubject(), ajf.getAssetID(), ajf.getJobID()));
 		t.setBody(getBody());
-		t.setEmailaddresses(getEmailaddresses());
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), ajf.getChannelGroup()));
 		return t;
 	}
 

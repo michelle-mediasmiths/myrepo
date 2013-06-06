@@ -1,10 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.guice;
 
-import org.hibernate.cfg.Configuration;
-
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventTableEntity;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventingTableEntity;
 import com.mediasmiths.std.guice.hibernate.module.HibernateModule;
+import org.hibernate.cfg.Configuration;
 
 public class MailAgentDatabaseModule extends HibernateModule
 {

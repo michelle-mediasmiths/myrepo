@@ -241,15 +241,23 @@ public class MayamTaskController extends MayamController
 		
 		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);		
 	}
-			
-	public long createTXDeliveryTaskForPackage(String presentationID, boolean requireAutoQC) throws MayamClientException{
-		 		
-		log.info(String.format("Creating tx delivery task task for package "+presentationID+" qcrequired: "+requireAutoQC));
 
-		 AttributeMap initialAttributes = client.createAttributeMap();
-		 initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
+
+	public long createTXDeliveryTaskForPackage(String presentationID,
+	                                           boolean requireAutoQC,
+	                                           String createdBy) throws MayamClientException
+	{
+
+		log.info(String.format("Creating tx delivery task task for package %s qc required: %b createdBy: %s ",
+		                       presentationID,
+		                       requireAutoQC,
+		                       createdBy));
+
+		AttributeMap initialAttributes = client.createAttributeMap();
+		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
 		initialAttributes.setAttribute(Attribute.QC_REQUIRED, requireAutoQC);
-		 return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);	
+		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY, createdBy);
+		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
 	}
 
 	

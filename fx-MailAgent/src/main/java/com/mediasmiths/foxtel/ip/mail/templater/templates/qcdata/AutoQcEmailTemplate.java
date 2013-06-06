@@ -1,12 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.qcdata;
 
-import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCResultNotification;
-import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-
-import java.util.List;
 
 public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -24,10 +21,7 @@ public class AutoQcEmailTemplate extends MailTemplate implements EmailTemplateGe
 		MailTemplate t = new MailTemplate();
 
 		AutoQCResultNotification aqce = (AutoQCResultNotification) obj;
-
-		Emailaddresses emailaddresses = getEmailaddresses();
-		List<String> channelGroups = aqce.getChannelGroup();
-		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), aqce.getChannelGroup()));
 		
 		t.setSubject(String.format(getSubject(), aqce.getAssetId(), aqce.getTitle()));
 

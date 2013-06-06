@@ -53,6 +53,18 @@ public class OutputPathsConfig
 	@Named("export.channel.generic.output.folder")
 	private String genericChannelOutputFolder;
 
+	@Inject
+	@Named("export.publicity.path.uncprefix")
+	private String publicityPathUncPrefix;
+
+	@Inject
+	@Named("export.compliance.path.uncprefix")
+	private String compliancePathUncPrefix;
+
+	@Inject
+	@Named("export.caption.path.uncprefix")
+	private String captionPathUncPrefix;
+
 	public String getCaptionOutputPath()
 	{
 		return captionOutputPath;
@@ -171,5 +183,20 @@ public class OutputPathsConfig
 	public String getGenericChannelOutputFolder()
 	{
 		return genericChannelOutputFolder;
+	}
+
+	public String getPublicityPathUncPrefix()
+	{
+		return publicityPathUncPrefix;
+	}
+
+	public String getCompliancePathUncPrefix()
+	{
+		return compliancePathUncPrefix;
+	}
+
+	public String getCaptionPathUncPrefix()
+	{
+		return captionPathUncPrefix;
 	}
 }

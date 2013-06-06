@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.data.db.dao;
 
-import java.util.List;
-
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventTableEntity;
 import com.mediasmiths.std.guice.database.dao.Dao;
+
+import java.util.List;
 
 public interface EventTableDao extends Dao<EventTableEntity, Long>
 {

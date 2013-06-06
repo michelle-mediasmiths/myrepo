@@ -2,6 +2,7 @@ package com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata;
 
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class TcEventEmailTemplate extends MailTemplate implements EmailTemplateGenerator
@@ -27,7 +28,7 @@ public class TcEventEmailTemplate extends MailTemplate implements EmailTemplateG
 		
 		t.setSubject(String.format(getSubject(), tce.getPackageID(), tce.getTitle()));
 		t.setBody(String.format(getBody()));
-		t.setEmailaddresses(getEmailaddresses());
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), tce.getChannelGroup()));
 
 		return t;
 	}

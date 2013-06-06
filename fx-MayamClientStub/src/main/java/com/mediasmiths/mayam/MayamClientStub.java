@@ -11,25 +11,15 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details.Supplier;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.mayam.validation.MayamValidator;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -58,12 +48,6 @@ public class MayamClientStub implements MayamClient
 
 	private final static String [] CHANNELS = new String[] {"D3F","ARN","BIO","HIT","COM","CIN","FOX","HST","LHO","LST","LSY","FBO","AO","MEV","FKC","FOD","AED","SOH", "MO1", "MO2", "MO3", "MO5", "MO6", "MO7", "SHF", "SHH"};
 
-	@Override
-	public void shutdown()
-	{
-		log.warn("unimplementented method in mayam client stub");
-
-	}
 
 	@Override
 	public MayamClientErrorCode createTitle(CreateOrUpdateTitle title)
@@ -354,11 +338,6 @@ public class MayamClientStub implements MayamClient
 		return updatePackage(txPackage.getPresentationID());
 	}
 
-	@Override
-	public MayamClientErrorCode updatePackage(Package txPackage)
-	{
-		return updatePackage(txPackage.getPresentationID());
-	}
 
 	@Override
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage)
@@ -416,11 +395,6 @@ public class MayamClientStub implements MayamClient
 		}
 	}
 
-	@Override
-	public MayamValidator getValidator()
-	{
-		return new MayamValidatorStub();
-	}
 
 	@Override
 	public ArrayList<String> getChannelLicenseTagsForMaterial(String materialID) throws MayamClientException
@@ -461,13 +435,7 @@ public class MayamClientStub implements MayamClient
 		log.info("unimplemented save task in mayam client stub");
 	}
 
-	@Override
-	public void failTaskForAsset(MayamTaskListType txDelivery, String id) throws MayamClientException
-	{
-		log.info("unimplemented failTaskForAsset in mayam client stub");
-	}
-
-//	public ProgrammeMaterialType getProgrammeType(String materialID) throws MayamClientException
+	//	public ProgrammeMaterialType getProgrammeType(String materialID) throws MayamClientException
 //	{
 //		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
 //		{
@@ -547,84 +515,6 @@ public class MayamClientStub implements MayamClient
 		return EXISTING_MATERIAL_ID;
 	}
 
-	@Override
-	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException
-	{
-		log.info("unimplemented createTxDeliveryFailureTask in mayam client stub");
-	}
-
-	@Override
-	public Title getTitle(String titleID, boolean includePackages) throws MayamClientException
-	{
-		if (titleID.equals(NEW_TITLE_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
-		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
-		{
-			Title t = new Title();
-			t.setTitleID(titleID);
-			
-			return t;
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
-		}
-		
-	
-	}
-
-	@Override
-	public String getTitleOfPackage(String packageID) throws MayamClientException
-	{
-		if (packageID.equals(EXISTING_PACKAGE_ID)|| packageID.equals(PROTECTED_PACKAGE_ID))
-		{
-			return EXISTING_TITLE_ID;
-
-		}
-		else if (packageID.equals(ERROR_PACKAGE_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.PACKAGE_FIND_FAILED);
-		}
-	}
-
-	@Override
-	public Details getSupplierDetails(String materialID) throws MayamClientException
-	{
-		if (materialID.equals(EXISTING_MATERIAL_ID) || materialID.startsWith(PLACEHOLDER_MATERIAL))
-		{
-			Supplier supplier = new Supplier();
-			supplier.setSupplierID(RandomStringUtils.randomAlphabetic(10));
-
-			Details details = new Details();
-			details.setSupplier(supplier);
-			try
-			{
-				details.setDateOfDelivery(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar()));
-			}
-			catch (DatatypeConfigurationException e)
-			{
-				log.error("error in mayam client stub", e);
-			}
-			details.setDeliveryVersion(new BigInteger("1"));
-
-			return details;
-
-		}
-		else if (materialID.equals(ERROR_MATERIAL_ID))
-		{
-			throw new MayamClientException(MayamClientErrorCode.FAILURE);
-		}
-		else
-		{
-			throw new MayamClientException(MayamClientErrorCode.MATERIAL_FIND_FAILED);
-		}
-	}
 
 	@Override
 	public void updateMaterial(DetailType details, String materialID)
@@ -789,7 +679,7 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
-	public TaskState getTaskState(long taskid) throws MayamClientException {
+	public TaskState getTaskState(long taskID) throws MayamClientException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -889,6 +779,13 @@ public class MayamClientStub implements MayamClient
 
 
 	@Override
+	public Set<String> getChannelGroupsForPackage(final String packageId) throws MayamClientException
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+
+	@Override
 	public SegmentList getTxPackage(String presentationID, String materialID)
 			throws PackageNotFoundException,
 			MayamClientException
@@ -918,13 +815,6 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
-	@Override
-	public Programme getProgramme(String packageID, String filename, boolean overrideAudioInfo, AudioListType overrideAudioFormat)
-			throws MayamClientException
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException

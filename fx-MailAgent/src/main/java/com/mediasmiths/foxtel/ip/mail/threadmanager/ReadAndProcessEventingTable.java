@@ -1,12 +1,12 @@
 package com.mediasmiths.foxtel.ip.mail.threadmanager;
 
+import com.foxtel.ip.mailclient.ServiceCallerEntity;
+import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.dao.EventingTableDao;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventTableEntity;
 import com.mediasmiths.foxtel.ip.mail.data.db.entity.EventingTableEntity;
 import com.mediasmiths.foxtel.ip.mail.rest.MailAgentServiceImpl;
-import com.foxtel.ip.mailclient.ServiceCallerEntity;
-import com.google.inject.Inject;
 import org.apache.log4j.Logger;
 
 import java.util.List;

@@ -11,9 +11,7 @@ import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -40,8 +38,6 @@ public class EventMailConfiguration
 
 			if (mailDataList == null)
 				throw new Exception("Configuration file is empty");
-
-			List<MailData> genTemplates = new ArrayList<>();
 
 			for (MailData md : mailDataList.getMailData())
 			{
@@ -94,16 +90,14 @@ public class EventMailConfiguration
 	 */
 	public EmailTemplateGenerator getTemplate(String eventName, String nameSpace)
 	{
-		List<EmailTemplateGenerator> mailTemplateList = new ArrayList<>();
-
-		if (logger.isTraceEnabled())
-			logger.info("Attempting to find mailtemplate for : " + eventName + " and " + nameSpace);
+		if (logger.isInfoEnabled()){
+			logger.info(String.format("Attempting to find mailtemplate for event with name : \"%s\" and namespace \"%s", eventName,nameSpace));
+		}
 
 		MailData m = eventMapping.get(hashFor(nameSpace, eventName));
 
 		if (m != null)
 		{
-
 			Object mailTemplate = m.getMailTemplate();
 
 			System.out.println(mailTemplate.getClass().getName());

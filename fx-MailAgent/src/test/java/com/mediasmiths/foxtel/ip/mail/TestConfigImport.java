@@ -5,10 +5,9 @@ import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.mail.process.EventMailConfiguration;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.junit.Ignore;
 
 import java.io.File;
-
-import org.junit.Ignore;
 
 @Ignore //surefire will try and run this file as a unit test as it has "Test" in the name
 public class TestConfigImport

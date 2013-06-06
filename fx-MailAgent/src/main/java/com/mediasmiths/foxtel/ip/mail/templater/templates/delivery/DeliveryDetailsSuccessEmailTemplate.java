@@ -23,8 +23,7 @@ public class DeliveryDetailsSuccessEmailTemplate extends MailTemplate implements
          ExtendedPublishingDetails dd = (ExtendedPublishingDetails)obj;
 
 		t.setSubject(String.format(getSubject(), dd.getMaterialID(), dd.getTitle()));
-		t.setEmailaddresses(getEmailaddresses());
-		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(dd.getEmailaddresses()));
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), dd.getChannelGroup()));
 
 		t.setBody(String.format(getBody(), dd.getFileLocation()));
 

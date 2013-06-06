@@ -1,21 +1,18 @@
 package com.mediasmiths.mayam.util.test;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
-import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.std.guice.apploader.GuiceSetup;
 import com.mediasmiths.std.guice.apploader.impl.GuiceInjectorBootstrap;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
 import com.mediasmiths.std.io.PropertyFile;
+import org.apache.log4j.Logger;
+
+import java.util.List;
 
 public class MayamClientTest
 {
@@ -74,9 +71,6 @@ public class MayamClientTest
 		}
 
 	}	
-	
-	@Inject
-	private MayamClient mayamClient;
 	
 	public MayamClientTest(){
 		
