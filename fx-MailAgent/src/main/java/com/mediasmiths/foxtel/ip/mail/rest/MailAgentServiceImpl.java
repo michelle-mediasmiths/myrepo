@@ -30,10 +30,10 @@ public class MailAgentServiceImpl implements MailAgentService
 	@Inject
 	@Named("email.configuration")
 	EventMailConfiguration emailConfig;
-	
+
 	@Inject
 	@Named("mail.agent.send.mails")
-	Boolean sendMails;	
+	Boolean sendMails;
 
 	public MailAgentServiceImpl() throws Exception
 	{
@@ -91,7 +91,7 @@ public class MailAgentServiceImpl implements MailAgentService
 		else
 		{
 			if (logger.isInfoEnabled())
-				logger.info("Nothing matching eventname and namespace");
+				logger.info(String.format("No email configured for name: \"%s\" and namespace \"%s\"",caller.eventName,caller.namespace));
 		}
 	}
 
@@ -151,63 +151,40 @@ public class MailAgentServiceImpl implements MailAgentService
 		return t;
 	}
 
+
 	private void sendEmailsForEvent(final MailTemplate m) throws EmailException, MessagingException
 	{
 
 		for (Emailaddress emailAddress : m.getEmailaddresses().getEmailaddress())
 		{
-			if (logger.isDebugEnabled())
-				logger.debug("Preparing to send mail to: " + emailAddress);
+			logger.info("Sending email to: " + emailAddress.getValue() + " with Subject: " + m.getSubject());
 
-			logger.info("Sending email to: " + emailAddress + " with Subject: " + m.getSubject());
-			
-			if(sendMails.booleanValue()){
-			
-			try
+			if (sendMails.booleanValue())
 			{
-
-				if (m.getSubject().equals("Email Error: Could not find generator"))
+				try
 				{
-					// Sending normal email so unprocessed xml can be viewed
-					logger.info("Could not find generator, sending normal email.");
 
-					emailService.createEmail(emailAddress.getValue(), m.getSubject(), m.getBody(), null, null);
+					emailService.createEmail(emailAddress.getValue(),
+					                         m.getSubject(),
+					                         getFormattedXML(m.getBody()),
+					                         m.getFileAttachments(),
+					                         m.getAttachments());
+
+					if (logger.isInfoEnabled())
+					{
+						logger.info("Sent email to: " + emailAddress);
+					}
 				}
-				else
+				catch (EmailException e)
 				{
-//					if (m.getFileAttachments() == null || m.getFileAttachments().isEmpty())
-//					{
-//					     emailService.createMimeEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()),m.getFileAttachments(),m.getAttachments());
-//					}
-//					else
-//					{
-						emailService.createEmail(emailAddress.getValue(), m.getSubject(),  getFormattedXML(m.getBody()), m.getFileAttachments(),m.getAttachments());
-//					}
-
-					// emailService.createEmail(email, m.getSubject(), m.getBody());
+					logger.error("EmailException: " + e);
+					throw e;
 				}
-				if (logger.isInfoEnabled())
-				{
-					logger.info("Sent email to: " + emailAddress);
-				}
-			}
-			catch (EmailException e)
-			{
-				logger.error("EmailException: " + e);
-				throw e;
-
-			}
-//			catch (MessagingException e)
-//			{
-//				logger.error("MessagingException (is your configuration right?): " + e);
-//				throw e;
-//			}
 			}
 			else
 			{
-				logger.info("email sending has been disabled, email body read"+m.getBody());
+				logger.info("email sending has been disabled, email body read" + m.getBody());
 			}
-
 		}
 	}
 
@@ -218,7 +195,7 @@ public class MailAgentServiceImpl implements MailAgentService
 
 	/**
 	 * Some payloads may be url encoded, decodes them if they are
-	 * 
+	 *
 	 * @param encodedString
 	 * @return
 	 */

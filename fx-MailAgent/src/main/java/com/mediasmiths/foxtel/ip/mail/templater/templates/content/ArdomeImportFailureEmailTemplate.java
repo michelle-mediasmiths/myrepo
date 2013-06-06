@@ -1,12 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.content;
 
-import java.util.List;
-
-import com.mediasmiths.foxtel.ip.mail.templater.EmailListGroupFilter;
-import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
-import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.ArdomeImportFailure;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
+import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
 public class ArdomeImportFailureEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {
@@ -25,12 +22,8 @@ public class ArdomeImportFailureEmailTemplate extends MailTemplate implements Em
 
 		t.setSubject(String.format(getSubject()));
 		t.setBody(String.format(getBody(), aif.getFilename(), aif.getJobID()));
-	
-		Emailaddresses emailaddresses = getEmailaddresses();
-		List<String> channelGroups = aif.getChannelGroup();
-		
-		t.setEmailaddresses(EmailListGroupFilter.filterByGroups(channelGroups, emailaddresses));
-		t.setEmailaddresses(getEmailaddresses());
+
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), aif.getChannelGroup()));
 		return t;
 	}
 

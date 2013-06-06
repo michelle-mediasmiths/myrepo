@@ -1,12 +1,11 @@
 package com.mediasmiths.foxtel.ip.mail.templater;
 
-import java.util.List;
-
+import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
+import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
-import com.mediasmiths.foxtel.ip.common.email.Emailaddresses;
+import java.util.List;
 
 public class EmailListGroupFilter
 {
@@ -22,10 +21,11 @@ public class EmailListGroupFilter
 	 * @param original
 	 * @return
 	 */
-	public static Emailaddresses filterByGroups(final List<String> channelGroups, final Emailaddresses original){
+	protected static Emailaddresses filterByGroups(final List<String> channelGroups, final Emailaddresses original){
 				
 		if (channelGroups.isEmpty())
 		{
+			log.debug("Event not associated with any channel groups");
 			return original; //if no channel groups then no filtering required
 		}
 		else

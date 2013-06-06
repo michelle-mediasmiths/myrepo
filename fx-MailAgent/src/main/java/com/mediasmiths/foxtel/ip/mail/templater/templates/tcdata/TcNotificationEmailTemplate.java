@@ -37,8 +37,7 @@ public class TcNotificationEmailTemplate extends MailTemplate implements EmailTe
 		t.setSubject(String.format(getSubject(), obj.getAssetID(), obj.getTitle()));
 		t.setBody(String.format(getBody(), obj.getDeliveryLocation()));
 
-		t.setEmailaddresses(getEmailaddresses());
-		t.getEmailaddresses().getEmailaddress().addAll(EmailListTransform.toEmailAddressList(obj.getEmailaddresses()));
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(),obj.getChannelGroup(),obj.getEmailaddresses()));
 
 		t.getAttachments().addAll(obj.getAttachments());
 

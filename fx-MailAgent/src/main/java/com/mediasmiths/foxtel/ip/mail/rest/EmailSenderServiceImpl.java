@@ -3,7 +3,7 @@ package com.mediasmiths.foxtel.ip.mail.rest;
 import com.google.inject.Inject;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.mail.data.EmailProperties;
-
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.mail.ByteArrayDataSource;
 import org.apache.commons.mail.EmailAttachment;
@@ -12,16 +12,7 @@ import org.apache.commons.mail.HtmlEmail;
 import org.apache.commons.mail.MultiPartEmail;
 import org.apache.log4j.Logger;
 
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.util.List;
-import java.util.Properties;
-
-import org.apache.commons.codec.binary.Base64;
 
 public class EmailSenderServiceImpl implements EmailSenderService
 {
@@ -113,39 +104,20 @@ public class EmailSenderServiceImpl implements EmailSenderService
 		return email;
 	}
 
-
-	/**
-	 * Creates the email attachment given the filepath
-	 * 
-	 * @param path
-	 * @return attachment
-	 */
-	@Override
-	public EmailAttachment createAttachment(String path)
-	{
-
-		EmailAttachment attachment = new EmailAttachment();
-		attachment.setPath(path);
-		attachment.setDisposition(EmailAttachment.ATTACHMENT);
-		attachment.setDescription("FoxtelAttachement");
-		attachment.setName("Attachment");
-
-		return attachment;
-	}
-
 	/**
 	 * 
 	 * 
 	 * @param email
 	 */
-	public void sendEmail(MultiPartEmail email) throws EmailException
+	private void sendEmail(MultiPartEmail email) throws EmailException
 	{
-		if (logger.isTraceEnabled())
-			logger.info("Email about to be sent: " + email.toString());
+		if (logger.isDebugEnabled())
+			logger.debug("Email about to be sent");
 
 		email.send();
+
 		if (logger.isTraceEnabled())
-			logger.info("Email sent");
+			logger.trace("Email sent");
 
 	}
 
