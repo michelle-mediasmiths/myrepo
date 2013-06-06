@@ -374,8 +374,37 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	@Override
 	protected void processPickupPackageNoXML(PickupPackage pp)
 	{
+		MediaPickupNotification pickupNotification = new MediaPickupNotification();
+		pickupNotification.setFilelocation(pp.getPickUp("mxf").getAbsolutePath());
+		pickupNotification.setTime((new Date()).toString());
+
+		logger.debug("MAM-614 TEST 1");
 		logger.info("received a pickup package with no xml " + pp.getRootName());
 		importMediaAsUnmatched(pp.getPickUp("mxf"));
+		logger.debug("MAM-614 TEST 2");
+
+		boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
+
+		if(folderIsAO)
+		{
+			//AO
+			logger.debug("No XML   AO1  test");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutCompanionXML", pickupNotification);
+
+			logger.debug("No XML   AO2  test");
+
+		}
+		else
+		{
+			//NonAO
+			logger.debug("No XML   1  test");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutCompanionXML", pickupNotification);
+
+			logger.debug("No XML   2 test");
+
+		}
 	}
 
 	/**

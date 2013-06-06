@@ -177,6 +177,7 @@ public abstract class MessageProcessor<T> extends Daemon implements StoppableSer
 	protected void processPickupPackageNoXML(PickupPackage pp)
 	{
 		logger.info("received a pickup package with no xml, not doing anything with it");
+		logger.debug("MP test 1");
 	}
 
 	protected void processingError(PickupPackage pp)

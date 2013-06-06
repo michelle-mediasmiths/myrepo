@@ -448,26 +448,46 @@
 	<!-- Content -->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>ContentWithoutMaterialID</eventname>
+		<eventname>NonAOContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>Unmatched Item in MAM: File(%s) missing</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>AOContentWithoutMaterialID</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
+			<subject>Unmatched Item in MAM: File(%s) missing</subject>
+			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>ContentWithoutCompanionXML</eventname>
+		<eventname>NonAOContentWithoutCompanionXML</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
 			<subject>XML file is missing/corrupt</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>				
+			</emailaddresses>
+		</MailTemplate>
+	</MailData>
+	<MailData>
+		<namespace>http://www.foxtel.com.au/ip/content</namespace>
+		<eventname>AOContentWithoutCompanionXML</eventname>
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
+			<subject>XML file is missing/corrupt</subject>
+			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
+			<emailaddresses>				
+				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>				
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
