@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
+import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessingFailedException;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
 import com.mediasmiths.foxtel.agent.queue.IFilePickup;
@@ -40,6 +41,15 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	
 	@Inject
 	private Importer importer;
+
+	@Inject
+	@Named("watchfolder.locations")
+	private WatchFolders watchFolders;
+
+	public void setWatchFolders(WatchFolders watchFolders)
+	{
+		this.watchFolders = watchFolders;
+	}
 	
 	private UnmatchedMaterialProcessor unmatchedMaterialProcessor;
 
@@ -119,6 +129,33 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 						sendPlaceholderAlreadyHasMediaEvent(pickupNotification, message);
 						break;
 					}
+				case MATERIALID_IS_NULL_OR_EMPTY:
+				{
+					logger.debug("Material ID Missing");
+
+					boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
+
+					if(folderIsAO)
+					{
+						//AO
+						logger.debug("Material ID Missing  AO1  test");
+
+						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutMaterialID", pickupNotification);
+
+						logger.debug("Material ID Missing  AO1  test");
+						break;
+					}
+					else
+					{
+						//NonAO
+						logger.debug("Material ID Missing  1  test");
+
+						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutMaterialID", pickupNotification);
+
+						logger.debug("Material ID Missing   2 test");
+						break;
+					}
+				}
 				case TITLE_DOES_NOT_EXIST:
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
 					break;

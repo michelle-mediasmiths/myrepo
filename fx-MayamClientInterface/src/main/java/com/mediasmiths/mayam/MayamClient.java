@@ -283,8 +283,6 @@ public interface MayamClient
 
 	boolean packageExists(String presentationID) throws MayamClientException;
 	
-	public boolean isTitleAO(String titleID) throws MayamClientException;
-
 	public boolean isPackageAO(String packageID) throws MayamClientException;
 
 	public void autoQcFailedForMaterial(String assetId, long taskID) throws MayamClientException;

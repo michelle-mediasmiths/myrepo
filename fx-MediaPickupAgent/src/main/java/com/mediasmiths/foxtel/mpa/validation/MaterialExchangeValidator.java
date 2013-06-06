@@ -1,11 +1,5 @@
 package com.mediasmiths.foxtel.mpa.validation;
 
-import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.xml.sax.SAXException;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -22,6 +16,11 @@ import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.mpa.Util;
 import com.mediasmiths.mayam.MayamClient;
 import com.mediasmiths.mayam.MayamClientException;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.Unmarshaller;
 
 public class MaterialExchangeValidator extends MessageValidator<Material>
 {
@@ -68,7 +67,9 @@ public class MaterialExchangeValidator extends MessageValidator<Material>
 		boolean materialIsAO = isMaterialAO(message);
 		boolean isAggregatorAO = isAggregatorAO(message);
 		boolean withMedia = pp.isComplete();
-		
+		logger.debug(folderIsAO + "Debug 1");
+		logger.debug(materialIsAO + "Debug 2");
+		logger.debug(isAggregatorAO + "Debug 3");
 		if((folderIsAO != materialIsAO) || (folderIsAO != isAggregatorAO)){
 				return MessageValidationResult.AO_MISMATCH; 
 		}
