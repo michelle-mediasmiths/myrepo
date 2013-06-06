@@ -1,9 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.delivery;
 
+import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.DeliveryDetails;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.ip.common.events.DeliveryDetails;
-import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
 
 public class DeliverNotificationEmailTemplate extends MailTemplate implements EmailTemplateGenerator
 {

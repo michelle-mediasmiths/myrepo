@@ -1,10 +1,9 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.system;
 
+import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
+import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
-import com.mediasmiths.foxtel.ip.common.events.ComplianceLoggingMarker;
-import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
-
 import org.apache.log4j.Logger;
 
 public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implements EmailTemplateGenerator
@@ -25,7 +24,9 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
         MailTemplate t = new MailTemplate();
 		ComplianceLoggingMarker clm = (ComplianceLoggingMarker)obj;
 
-		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(),clm.getChannelGroup(),clm.getEmailaddresses()));
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(),
+		                                                           clm.getChannelGroup(),
+		                                                           clm.getEmailaddresses()));
 
 		t.setSubject(String.format(getSubject(), clm.getMasterID(), clm.getTitleField()));
 

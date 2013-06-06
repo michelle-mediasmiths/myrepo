@@ -22,7 +22,7 @@ public class BMSErrorEmailTemplate extends MailTemplate implements EmailTemplate
 		ErrorReport cf = (ErrorReport)obj;
 
 		t.setBody(getBody());
-		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), dd.getChannelGroup()));
+		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), cf.getChannelGroup()));
 		t.setSubject(String.format(getSubject(), cf.getStatus(), cf.getBmsOp(), cf.getMediaId(), cf.getTitle()));
 
 		return t;
