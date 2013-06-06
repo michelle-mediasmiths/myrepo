@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.ip.mail.rest;
 import com.foxtel.ip.mailclient.MailAgentService;
 import com.foxtel.ip.mailclient.ServiceCallerEntity;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.ip.common.email.Emailaddress;
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
@@ -28,8 +29,7 @@ public class MailAgentServiceImpl implements MailAgentService
 	protected EmailSenderService emailService;
 
 	@Inject
-	@Named("email.configuration")
-	EventMailConfiguration emailConfig;
+	private Provider<EventMailConfiguration> emailConfigProvider;
 
 	@Inject
 	@Named("mail.agent.send.mails")
@@ -64,9 +64,10 @@ public class MailAgentServiceImpl implements MailAgentService
 	public void sendMail(ServiceCallerEntity caller) throws Exception
 	{
 
-		if (logger.isInfoEnabled())
-			logger.info("Preparing to send mail, MailAgentServiceImpl Called");
+		if (logger.isTraceEnabled())
+			logger.trace("SendMail called, will search configuration to see if any mails match this event name and namespace");
 
+		EventMailConfiguration emailConfig = emailConfigProvider.get();
 		EmailTemplateGenerator mailTemplate = emailConfig.getTemplate(caller.eventName, caller.namespace);
 
 		if (mailTemplate != null)
