@@ -42,7 +42,7 @@ public class QcProfileSelector
 	
 	
 	@Inject
-	TranscodeRules transcodeOutputRules;
+	private TranscodeRules transcodeOutputRules;
 	
 	private static final Logger log = Logger.getLogger(QcProfileSelector.class);
 	

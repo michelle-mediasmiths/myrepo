@@ -26,7 +26,7 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 	private EventMailConfiguration lastKnownConfig = null;
 	private DateTime configLastLoaded = DateTime.now();
 
-	private JAXBSerialiser jaxb = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.email");
+	private final JAXBSerialiser jaxb = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.email");
 
 
 	@Override
@@ -60,7 +60,7 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 			{
 				EventMailConfiguration findMailTemplateListFromFile = new EventMailConfiguration(configFile, jaxb);
 				logger.debug("EventMailConfiguration loaded successfully!");
-				
+
 				configLastLoaded = DateTime.now();
 				lastKnownConfig = findMailTemplateListFromFile;
 				return findMailTemplateListFromFile;

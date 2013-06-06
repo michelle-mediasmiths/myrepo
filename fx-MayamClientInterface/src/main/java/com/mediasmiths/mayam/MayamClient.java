@@ -11,15 +11,12 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
-import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Title;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
 import com.mediasmiths.foxtel.generated.materialexport.MaterialExport;
-import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.mayam.validation.MayamValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +24,6 @@ import java.util.Set;
 
 public interface MayamClient
 {
-
-	public void shutdown();
 
 	/**
 	 * Creates a title, called by placeholder management agent
@@ -67,26 +62,6 @@ public interface MayamClient
 	 * @return
 	 */
 	public MayamClientErrorCode purgeTitle(PurgeTitle title);
-
-	/**
-	 * 
-	 * returns representation of title used in mediaexchange schema, includeVersionInfo is false when called as part of tx delivery as only information for the package being delivered is required
-	 * 
-	 * @param titleID
-	 * @param includeVersionInfo
-	 * @return
-	 * @throws MayamClientException
-	 */
-	public Title getTitle(String titleID, boolean includeVersionInfo) throws MayamClientException;
-
-	/**
-	 * returns the title id a given package is associated with
-	 * 
-	 * @param packageID
-	 * @return
-	 * @throws MayamClientException
-	 */
-	public String getTitleOfPackage(String packageID) throws MayamClientException;
 
 	/**
 	 * returns true if a title with the given id exists
@@ -140,8 +115,6 @@ public interface MayamClient
 	 * @throws MayamClientException
 	 */
 	public boolean materialExists(String materialID) throws MayamClientException;
-	
-	public Details getSupplierDetails(String materialID) throws MayamClientException; //called when producing companion xml for tx delivery
 
 	/**
 	 * returns true if the specified material has not had media\essence ingested
@@ -164,13 +137,6 @@ public interface MayamClient
 	 * @return
 	 */
 	public MayamClientErrorCode updatePackage(PackageType txPackage);
-	
-	/**
-	 * updates a tx package using the material exchange ProgrammeMaterialType.Presentation.Package type
-	 * @param txPackage
-	 * @return
-	 */
-	public MayamClientErrorCode updatePackage(ProgrammeMaterialType.Presentation.Package txPackage);
 
 	/**
 	 * actions a placeholder management delete package message
@@ -180,8 +146,6 @@ public interface MayamClient
 	public MayamClientErrorCode deletePackage(DeletePackage deletePackage);
 
 	public boolean isTitleOrDescendentsProtected(String titleID) throws MayamClientException;
-
-	public MayamValidator getValidator();
 
 	/**
 	 * Returns a list of channels that have licences for this material
@@ -218,18 +182,9 @@ public interface MayamClient
 	 */
 	public void saveTask(AttributeMap task) throws MayamClientException;
 
-	/**
-	 * Called to indicate that a given task for an asset should be considered failed or erronous
-	 * @param taskType
-	 * @param id
-	 * @throws MayamClientException
-	 */
-	public void failTaskForAsset(MayamTaskListType taskType, String id) throws MayamClientException;
-
 	public long createWFEErrorTaskNoAsset(String id, String title, String message) throws MayamClientException;
 
 	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAOContent) throws MayamClientException;
-
 
 	public long createWFEErrorTaskForPackage(String packageID, String message);
 	public long createWFEErrorTaskForMaterial(String materialID, String message);
@@ -263,15 +218,6 @@ public interface MayamClient
 	 * @throws MayamClientException
 	 */
 	String getMaterialIDofPackageID(String packageID) throws MayamClientException;
-
-	/**
-	 * called by wfapapter when it learns of a tx delivery failure
-	 * @param packageID
-	 * @param failureReason
-	 * @throws MayamClientException
-	 */
-	
-	public void createTxDeliveryFailureTask(String packageID, String failureReason) throws MayamClientException;
 
 	/**
 	 * updates a material based on the ruzz ingest DetailsType
@@ -315,7 +261,7 @@ public interface MayamClient
 
 	public void txDeliveryFailed(String packageID, long taskID, String stage) throws MayamClientException;
 
-	public TaskState getTaskState(long taskid) throws MayamClientException;
+	public TaskState getTaskState(long taskID) throws MayamClientException;
 
 	public boolean titleIsAO(String titleID) throws MayamClientException;
 
@@ -347,7 +293,5 @@ public interface MayamClient
 
 	List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException;
 
-	Programme getProgramme(String packageID, String filename,boolean overrideAudioInfo, AudioListType overrideAudioFormat) throws MayamClientException;
-	
 	MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException;
 }
