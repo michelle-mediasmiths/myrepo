@@ -530,7 +530,7 @@
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>ArdomeImportFailure</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeFailureEmailTemplate">
+		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeImportFailureEmailTemplate">
 			<subject>Ardome import has failed.</subject>
 			<body>Item with Filename(%s) and JobId(%s) has failed to successfully auto-import into Ardome.</body>
 			<emailaddresses> 
