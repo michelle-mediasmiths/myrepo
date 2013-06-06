@@ -58,16 +58,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		String timecodePosition = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_POSITION);
 		String timecodeColour = (String) messageAttributes.getAttribute(Attribute.VISUAL_TIMECODE_COLOR);
 		String requestedFormat = (String) messageAttributes.getAttribute(Attribute.OP_FMT);
-
-		// StringList channels = messageAttributes.getAttribute(Attribute.CHANNELS);
-
 		String channel = (String) messageAttributes.getAttribute(Attribute.CHANNEL);
-
-		// // get the first channel
-		// if (channels != null && channels.get(0) != null)
-		// {
-		// channel = channels.get(0);
-		// }
 
 		String materialID;
 		String packageID;
@@ -137,7 +128,7 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			{
 				log.warn("Material unavailable or not found on hires storage, attempting to initiate transfer", e);
 				materialController.initiateHighResTransfer(messageAttributes);
-				;
+				
 				return;
 			}
 		}
@@ -173,22 +164,50 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			isDVD = true;
 		}
 		
+		String localPathToExportDestination = outputPaths.getLocalPathToExportDestination(
+				channel,
+				jobType,
+				outputFileName,
+				isDVD);
+		
 		if (isDVD)
 		{
 			// we need to make the output folder on the corporate storage because rhozet wont
-			String localPathToExportDestination = outputPaths.getLocalPathToExportDestination(
-					channel,
-					jobType,
-					outputFileName,
-					isDVD);
-
 			File folder = new File(localPathToExportDestination);
+			if (folder.exists())
+			{
+				File[] files = folder.listFiles();
+				if (files != null)
+				{
+					for (File file: files)
+					{
+						file.delete();
+					}
+				}
+			}
+			
 			if (!folder.mkdirs())
 			{
 				log.error("Error creating folder at export destination : "+localPathToExportDestination);
 				taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
 				return;
 			}
+		}
+		else {
+			//Check if file already exists in output location and remove to avoid conflicts
+			boolean fileExists = outputPaths.fileExistsAtExportDestination(
+					channel,
+					jobType,
+					outputFileName,
+					isDVD);
+			
+
+			if (fileExists)
+			{
+				File outputFile = new File(localPathToExportDestination);
+				outputFile.delete();
+			}
+			
 		}
 
 		// invoke export flow
