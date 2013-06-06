@@ -34,7 +34,7 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 	{
 		if (lastKnownConfig == null || DateTime.now().isAfter(configLastLoaded.plusMillis(reloadInterval)))
 		{
-			logger.info("Looking for config file: " + configLocation);
+			logger.trace("Looking for config file: " + configLocation);
 
 			File configFile = new File(configLocation);
 			if (!configFile.exists() || !configFile.canRead())
@@ -64,7 +64,7 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 		}
 		else
 		{
-			logger.debug("Config loaded too recently, returning previously known value");
+			logger.trace("Config loaded too recently, returning previously known value");
 			return lastKnownConfig;
 		}
 	}
