@@ -1126,7 +1126,11 @@ public class MayamClientImpl implements MayamClient
 		return getChannelGroupsForItem(materialAttributes);
 	}
 
-	
-	
 
+	@Override
+	public Set<String> getChannelGroupsForPackage(final String packageId) throws MayamClientException
+	{
+		String materialID = getMaterialIDofPackageID(packageId);
+		return getChannelGroupsForItem(materialID);
+	}
 }

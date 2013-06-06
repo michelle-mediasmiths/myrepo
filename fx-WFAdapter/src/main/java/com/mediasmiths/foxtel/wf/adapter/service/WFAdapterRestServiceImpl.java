@@ -75,6 +75,7 @@ import java.net.URLConnection;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class WFAdapterRestServiceImpl implements WFAdapterRestService
 {
@@ -446,6 +447,9 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				mayamClient.txDeliveryFailed(notification.getAssetID(), notification.getTaskID(), "TRANSCODE");
 
 				String packageID = notification.getAssetID();
+
+				final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
+				tcFailure.withChannelGroup(channelGroups);
 
 				events.saveEvent("http://www.foxtel.com.au/ip/tc", "TCFailed", tcFailure);
 			}

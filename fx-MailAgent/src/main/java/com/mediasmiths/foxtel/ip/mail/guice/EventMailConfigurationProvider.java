@@ -41,19 +41,10 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 			{
 
 				logger.error("Config file does not exist or is unreadable " + configLocation);
-
-				if (lastKnownConfig != null)
-				{
-					logger.warn("Reusing last known config");
-					return lastKnownConfig;
-				}
-				else
-				{
-					throw new RuntimeException("Configuration file does not exist or is unreadable " +
-					                           configLocation +
-					                           " looking in " +
-					                           configFile.getAbsolutePath());
-				}
+				throw new RuntimeException("Configuration file does not exist or is unreadable " +
+				                           configLocation +
+				                           " looking in " +
+				                           configFile.getAbsolutePath());
 			}
 
 			try
@@ -68,15 +59,7 @@ public class EventMailConfigurationProvider implements Provider<EventMailConfigu
 			catch (Throwable t)
 			{
 				logger.error("Error loading configuration", t);
-				if (lastKnownConfig != null)
-				{
-					logger.warn("Reusing last known config");
-					return lastKnownConfig;
-				}
-				else
-				{
-					throw new RuntimeException("Error loading config from " + configLocation, t);
-				}
+				throw new RuntimeException("Error loading config from " + configLocation, t);
 			}
 		}
 		else

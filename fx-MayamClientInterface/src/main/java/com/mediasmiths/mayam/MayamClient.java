@@ -287,6 +287,8 @@ public interface MayamClient
 	
 	Set<String> getChannelGroupsForItem(String materialId) throws MayamClientException;
 
+	Set<String> getChannelGroupsForPackage(String packageId) throws MayamClientException;
+
 	SegmentList getTxPackage(String presentationID, String materialID) throws PackageNotFoundException, MayamClientException;
 
 	SegmentList getTxPackage(String presentationID) throws PackageNotFoundException, MayamClientException;

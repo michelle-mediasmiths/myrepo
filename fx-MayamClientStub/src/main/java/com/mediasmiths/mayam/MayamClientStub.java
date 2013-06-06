@@ -779,6 +779,13 @@ public class MayamClientStub implements MayamClient
 
 
 	@Override
+	public Set<String> getChannelGroupsForPackage(final String packageId) throws MayamClientException
+	{
+		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	}
+
+
+	@Override
 	public SegmentList getTxPackage(String presentationID, String materialID)
 			throws PackageNotFoundException,
 			MayamClientException
