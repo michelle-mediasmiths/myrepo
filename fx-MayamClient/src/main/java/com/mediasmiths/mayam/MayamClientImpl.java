@@ -7,20 +7,17 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.PackageType;
 import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.CommentLog;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
 import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
-import com.mayam.wf.attributes.shared.type.Job.JobType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.StringList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.channels.config.ChannelProperties;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
@@ -32,13 +29,11 @@ import com.mediasmiths.foxtel.generated.mediaexchange.AudioListType;
 import com.mediasmiths.foxtel.generated.mediaexchange.Programme;
 import com.mediasmiths.foxtel.generated.outputruzz.RuzzIF;
 import com.mediasmiths.foxtel.generated.ruzz.DetailType;
-import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.util.MaterialExportBuilder;
 import com.mediasmiths.mayam.util.MediaExchangeProgrammeOutputBuilder;
@@ -47,7 +42,6 @@ import com.mediasmiths.mayam.util.TextualMetadataForItemOutputBuilder;
 import com.mediasmiths.mayam.validation.MayamValidator;
 import com.mediasmiths.mayam.validation.MayamValidatorImpl;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
-
 import org.apache.commons.io.FilenameUtils;
 import org.apache.log4j.Logger;
 
@@ -614,29 +608,6 @@ public class MayamClientImpl implements MayamClient
 	public long createWFEErrorTaskNoAsset(String id, String title, String message, boolean isAOItem) throws MayamClientException
 	{
 		return tasksController.createWFEErrorTaskNoAsset(id, title, message, isAOItem);
-	}
-
-	@Override
-	public boolean isTitleAO(String titleID) throws MayamClientException
-	{
-
-		boolean isAO = false;
-		AttributeMap title = titleController.getTitle(titleID);
-		if (title != null)
-		{
-			Boolean adult = title.getAttribute(Attribute.CONT_RESTRICTED_MATERIAL);
-	
-			if (adult != null)
-			{
-				isAO = adult.booleanValue();
-			}
-			else
-			{
-				log.error("CONT_RESTRICTED_MATERIAL attribute missing from title " + titleID);
-				throw new MayamClientException(MayamClientErrorCode.ONE_OR_MORE_INVALID_ATTRIBUTES);
-			}
-		}
-		return isAO;
 	}
 
 	@Override
