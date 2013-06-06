@@ -58,8 +58,15 @@ public class TextualMetadataForItemOutputBuilder
 			sb.append(String.format("TX Date : %s\n", txDate));
 		}
 
-		sb.append(String.format("Channels : %s\n", StringUtils.join(channels, ',')));
-		sb.append(packagesSection);
+		if (channels != null)
+		{
+			sb.append(String.format("Channels : %s\n", StringUtils.join(channels, ',')));
+		}
+
+		if (packagesSection != null)
+		{
+			sb.append(packagesSection);
+		}
 
 		if (previewComment != null)
 		{
@@ -111,8 +118,8 @@ public class TextualMetadataForItemOutputBuilder
 					Timecode som = segmentList.getEntries().get(0).getIn();
 					String somString = som.toSmpte();
 					String eomString = SegmentUtil.calculateEOM(
-							segmentList.getEntries().get(segmentList.getEntries().size()-1).getDuration().toSmpte(),
-							com.mediasmiths.std.types.Timecode.getInstance(somString,Framerate.HZ_25));
+							segmentList.getEntries().get(segmentList.getEntries().size() - 1).getDuration().toSmpte(),
+							com.mediasmiths.std.types.Timecode.getInstance(somString, Framerate.HZ_25));
 
 					sb.append(String.format(
 							"\tPresentation ID : %s Segment Count : %d : SOM %s : EOM %s\n",

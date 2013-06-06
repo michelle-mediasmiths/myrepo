@@ -23,6 +23,7 @@ public class PlaceholderAgentSetup implements GuiceSetup
 		modules.add(new ChannelConfigModule());
 		modules.add(new WatchFolderLocationsModule());
 		modules.add(new WatchedFilesConfigModule());
+		modules.add(new EventServiceModule());
 
 		if (config.getBoolean("stub.out.mayam", false))
 		{
@@ -42,7 +43,6 @@ public class PlaceholderAgentSetup implements GuiceSetup
 			modules.add(new MultiPlaceholderMessageModule());
 		}
 
-		modules.add(new EventServiceModule());
 	}
 
 	@Override

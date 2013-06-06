@@ -547,81 +547,86 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 
 
 
-	private void sendErrorEvent(final MessageValidationResultPackage<PlaceholderMessage> resultPackage,
-	                            final MessageValidationResult result)
+	private void sendErrorEvent(
+			final MessageValidationResultPackage<PlaceholderMessage> resultPackage,
+			final MessageValidationResult result)
 	{
-		if(result==MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED || result==MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
+		if (result == MessageValidationResult.TITLE_OR_DESCENDANT_IS_PROTECTED
+				|| result == MessageValidationResult.PACKAGES_MATERIAL_IS_PROTECTED)
 		{
-		    ProtectedPurgeFail ppf = createPurgeFailedMessage();
+			ProtectedPurgeFail ppf = createPurgeFailedMessage();
 
-		    try
-		    {
-			    PlaceholderMessage message = resultPackage.getMessage();
+			try
+			{
+				PlaceholderMessage message = resultPackage.getMessage();
 				PlaceholderMessage deleteMessage = message;
+
 				logger.info("Delete Message is : " + deleteMessage.toString());
-				
+
 				if (deleteMessage == null)
 				{
 					logger.error("Delete Message is null");
 				}
-				
+
 				Actions actions = deleteMessage.getActions();
 				logger.info("Actions are : " + actions.toString());
 				if (actions == null)
 				{
 					logger.error("Actions are null");
 				}
-				
+
 				List<Object> actionsList = actions.getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial();
 				if (actionsList == null)
 				{
 					logger.error("Actions List is null");
 				}
-				
-						
+
 				Object action = deleteMessage.getActions().getCreateOrUpdateTitleOrPurgeTitleOrAddOrUpdateMaterial().get(0);
 
 				String titleID = null;
-		        
+
 				if (action instanceof PurgeTitle)
-		        {
-		            ppf.setAssetType("EPISODE");
+				{
+					ppf.setAssetType("EPISODE");
 
-		            titleID = ((PurgeTitle) action).getTitleID();
+					titleID = ((PurgeTitle) action).getTitleID();
 
-		            ppf.setHouseId(titleID);
-		        }
-		        else if (action instanceof DeleteMaterial)
-		        {
-		            ppf.setAssetType("ITEM");
-		            titleID = ((DeleteMaterial) action).getTitleID();
-		            ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
-		        }
-		        else if (action instanceof DeletePackage)
-		        {
-		            ppf.setAssetType("SEGMENT_LIST");
-		            titleID = ((DeletePackage) action).getTitleID();
-		            ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
-		        }
+					ppf.setHouseId(titleID);
+				}
+				else if (action instanceof DeleteMaterial)
+				{
+					ppf.setAssetType("ITEM");
+					titleID = ((DeleteMaterial) action).getTitleID();
+					ppf.setHouseId(((DeleteMaterial) action).getMaterial().getMaterialID());
+				}
+				else if (action instanceof DeletePackage)
+				{
+					ppf.setAssetType("SEGMENT_LIST");
+					titleID = ((DeletePackage) action).getTitleID();
+					ppf.setHouseId(((DeletePackage) action).getPackage().getPresentationID());
+				}
 
-		        if(titleID != null){
-		            Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
-		            ppf.getChannelGroup().addAll(channelsForTitle);
-		        }
+				if (titleID != null)
+				{
+					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
+					ppf.getChannelGroup().addAll(channelsForTitle);
+				}
 
-		    }
-		    catch(MayamClientException e){
-		        logger.error("error getting channel groups for title",e);
-		    }
-		    catch(Exception e1)
-		    {
-		    	logger.error("Exception thrown while populating ProtectedPurgeFail message",e1);
-		    }
+			}
+			catch (MayamClientException e)
+			{
+				logger.error("error getting channel groups for title", e);
+			}
+			catch (Exception e1)
+			{
+				logger.error("Exception thrown while populating ProtectedPurgeFail message", e1);
+			}
 
-		    eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail",ppf);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/bms", "ProtectedPurgeFail", ppf);
 		}
-		else{
-		    eventService.saveEvent("failed",resultPackage.getMessage());
+		else
+		{
+			eventService.saveEvent("failed", resultPackage.getMessage());
 		}
 	}
 

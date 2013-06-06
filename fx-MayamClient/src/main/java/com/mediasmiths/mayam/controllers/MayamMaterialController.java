@@ -1,17 +1,5 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.xml.bind.Marshaller;
-
-import org.apache.log4j.Logger;
-
 import au.com.foxtel.cf.mam.pms.Aggregation;
 import au.com.foxtel.cf.mam.pms.Aggregator;
 import au.com.foxtel.cf.mam.pms.Compile;
@@ -19,7 +7,6 @@ import au.com.foxtel.cf.mam.pms.MaterialType;
 import au.com.foxtel.cf.mam.pms.Order;
 import au.com.foxtel.cf.mam.pms.QualityCheckEnumType;
 import au.com.foxtel.cf.mam.pms.Source;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -33,6 +20,7 @@ import com.mayam.wf.attributes.shared.type.MarkerList;
 import com.mayam.wf.attributes.shared.type.QcStatus;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
+import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material.Details;
@@ -66,6 +54,17 @@ import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.io.PropertyFile;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Marshaller;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MayamMaterialController extends MayamController
 {
@@ -1444,19 +1443,36 @@ public class MayamMaterialController extends MayamController
 
 		for (Marker marker : markers)
 		{
-			markerSb.append("Marker id: {").append(marker.getId())
-			.append("} mediaID: {").append(marker.getMediaId())
-			.append("} In: {").append(marker.getIn().toSmpte())
-			.append("} Duration: {").append(marker.getDuration().toSmpte())
-			.append("} Title: {").append(marker.getTitle())
-			.append("} Type: {").append(marker.getType().toString()).append("}");
+			final Timecode inTc = marker.getIn();
+			if (null != inTc)
+			{
+				markerSb.append("In: ").append(inTc.toSmpte());
+			}
+
+			final Timecode duration = marker.getDuration();
+			if(null != duration)
+			{
+				markerSb.append("; Duration: ").append(duration.toSmpte());
+			}
+
+			final String title = marker.getTitle();
+			if(StringUtils.isNotBlank(title))
+			{
+				markerSb.append("; Title: ").append(title);
+			}
+
+			final Marker.Type markerType = marker.getType();
+			if(null != markerType)
+			{
+				markerSb.append("; Type: ").append(markerType.toString());
+			}
 			
 			if(null != user)
 			{
-				markerSb.append(" Requested by : {").append(user).append("}");
+				markerSb.append(" Requested by: ").append(user);
 			}
 			
-			markerSb.append("<br/>");
+			markerSb.append("\n");
 		}
 		log.debug(String.format("Returning markers: %s", markerSb.toString()));
 		return markerSb.toString();
@@ -1494,7 +1510,7 @@ public class MayamMaterialController extends MayamController
 		}
 		else
 		{
-			log.info(String.format("Found %d markers  ", markers.size()));
+			log.info(String.format("Found %d markers ", markers.size()));
 			return markers;
 		}
 	}
