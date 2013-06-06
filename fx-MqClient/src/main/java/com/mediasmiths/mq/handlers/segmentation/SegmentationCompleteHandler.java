@@ -1,16 +1,13 @@
 package com.mediasmiths.mq.handlers.segmentation;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.TcNotification;
-import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
 
 public class SegmentationCompleteHandler extends TaskStateChangeHandler
 {
@@ -50,7 +47,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				}
 
 				long taskId = -1;
-				
+
 				// check classification is set, awaiting a means of seeing if the user wishes to override this requirement
 				if (!AssetProperties.isClassificationSet(messageAttributes))
 				{
@@ -60,7 +57,10 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				else
 				{
 					log.debug("Creating tx delivery task");
-					taskId = taskController.createTXDeliveryTaskForPackage(houseID, qcRequired.booleanValue());
+					String userWhoFinishedSegmentationTask = messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY);
+					taskId = taskController.createTXDeliveryTaskForPackage(houseID,
+					                                                       qcRequired.booleanValue(),
+					                                                       userWhoFinishedSegmentationTask);
 				}
 				
 				String username = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);

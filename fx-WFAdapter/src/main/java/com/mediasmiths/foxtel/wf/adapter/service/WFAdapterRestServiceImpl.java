@@ -390,7 +390,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				// auto qc was for tx delivery
 				saveAutoQCEvent("CerifyQCError", notification);
 				mayamClient.txDeliveryFailed(notification.getAssetId(), notification.getTaskID(), "AUTO QC ERROR");
-				
+
 				TcEvent tce = new TcEvent();
 				AttributeMap task = mayamClient.getTask(notification.getTaskID());
 				if (task != null)
@@ -398,7 +398,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					tce.setAssetID(notification.getAssetId());
 					tce.setPackageID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					tce.setTitle(notification.getTitle());
-					events.saveEvent("http://foxtel.com.au/ip/tc", "QcServerFailureDuringTranscode", tce);
+					events.saveEvent(TC_EVENT_NAMESPACE, "QcServerFailureDuringTranscode", tce);
 				}
 			}
 			else
@@ -457,6 +457,10 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			{
 				mayamClient.exportFailed(notification.getTaskID(), "Transcode failed");
 
+				String materialID = notification.getAssetID();
+				final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+				tcFailure.withChannelGroup(channelGroups);
+
 				events.saveEvent("http://www.foxtel.com.au/ip/tc", "ExportFailure", tcFailure);
 			}
 		}
@@ -476,63 +480,72 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 		log.info(String.format("Received notification of TC failure asset id %s", notification.getAssetID()));
 
+		long taskId = notification.getTaskID();
+		AttributeMap task = mayamClient.getTask(taskId);
+		String taskListID = task.getAttribute(Attribute.OP_TYPE);
+
+		String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
+		Emailaddresses emails = null;
+		if (username != null)
+		{
+			String email = String.format("%s@foxtel.com.au",username);
+			emails = new Emailaddresses();
+			emails.getEmailaddress().add(email);
+		}
+
 		if (! notification.isForTXDelivery())
 		{
-			long taskId = notification.getTaskID();
-			AttributeMap task = mayamClient.getTask(taskId);
-			String taskListID = task.getAttribute(Attribute.OP_TYPE);
-	
-			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
-			Emailaddresses emails = null;
-			if (username != null)
-			{
-				String email = String.format("%s@foxtel.com.au",username);
-				emails = new Emailaddresses();
-				emails.getEmailaddress().add(email);
-				
-			}
-			
+
+			String materialID = notification.getAssetID();
+			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+
 			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				saveTCEvent("CaptionProxyFailure",
-				            notification, new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+				            notification,
 				            false,
-				            emails,
-				            null);
+				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
 				saveTCEvent("PublicityProxyFailure",
-				            notification, new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+				            notification,
 				            false,
-				            emails,
-				            null);
+				            emails,channelGroups);
 			}
 			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
 				saveTCEvent("ClassificationProxyFailure",
-				            notification, new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
+				            notification,
 				            false,
-				            emails,
-				            null);
+				            emails,channelGroups);
 			}
 			else
 			{
-				saveTCEvent("TCFailed",
-				            notification, new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-				            false,
-				            emails,
-				            null);
+				log.warn("Unknown job typ for export");
 			}
 		}
+		else
+		{
+			String packageID = notification.getAssetID();
+			final Set<String> channelGroups = mayamClient.getChannelGroupsForPackage(packageID);
+
+
+			saveTCEvent("TCFailed",
+			            notification,
+			            false,
+			            emails,
+			            channelGroups);
+		}
 	}
+
 
 	@Override
 	public void notifyTCPassed(TCPassedNotification notification) throws MayamClientException
 	{
 		log.info(String.format("Received notification of TC passed asset id %s", notification.getAssetID()));
 
-		if (! notification.isForTXDelivery())
+		if (!notification.isForTXDelivery())
 		{ // extended publishing
 			String deliveryLocation = "";
 
@@ -550,93 +563,105 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 			long taskId = notification.getTaskID();
 			AttributeMap task = mayamClient.getTask(taskId);
-			String taskListID = task.getAttribute(Attribute.OP_TYPE);
-			log.debug("Task Button: " + taskListID);
-			
+			String jobType = task.getAttribute(Attribute.OP_TYPE);
+			log.debug("Export Job Type: " + jobType);
+
 			String username = task.getAttributeAsString(Attribute.TASK_CREATED_BY);
 			Emailaddresses emails = null;
-			
+
 			if (username != null)
 			{
-				String email = String.format("%s@foxtel.com.au",username);
+				String email = String.format("%s@foxtel.com.au", username);
+				log.debug("Users email:" + email);
 				emails = new Emailaddresses();
 				emails.getEmailaddress().add(email);
 			}
-			
-			if (taskListID.equals(TranscodeJobType.CAPTION_PROXY.getText()))
+
+			String materialID = notification.getAssetID();
+			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+
+			if (jobType.equals(TranscodeJobType.CAPTION_PROXY.getText()))
 			{
 				String packageId = task.getAttributeAsString(Attribute.HOUSE_ID);
 				final String filename = (String) task.getAttribute(Attribute.OP_FILENAME);
-				String segmentXml= "";
+				String metadata = "";
 				try
 				{
 					String mediaFilename = filename + outputPaths.getOutputFileExtension(TranscodeJobType.CAPTION_PROXY, false);
-					MaterialExport md = mayamClient.getMaterialExport((String)task.getAttribute(Attribute.HOUSE_ID), mediaFilename);
+					MaterialExport md = mayamClient.getMaterialExport((String) task.getAttribute(Attribute.HOUSE_ID),
+					                                                  mediaFilename);
 					materialExportSerialiser.setPrettyOutput(true);
-					segmentXml = materialExportSerialiser.serialise(md);
+					metadata = materialExportSerialiser.serialise(md);
 				}
 				catch (Exception e)
 				{
-						log.error("exception fetching package xml ",e);
+					log.error("exception fetching package xml ", e);
 				}
-				
-				byte[] encoded = Base64.encodeBase64(segmentXml.getBytes());
-				String encodedString = new String(encoded);
-				EventAttachment attachment = new EventAttachment();
-				attachment.setValue(encodedString);
-				attachment.setFilename(String.format("%s.xml",packageId));
-				attachment.setMime("application/xml");
-				
-				saveTCEvent("CaptionProxySuccess",
-				            notification,
-				            new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-				            true,
-				            deliveryLocation,
-				            emails,
-				            attachment);
+
+				sendExportSuccessEvent(notification,
+				                       deliveryLocation,
+				                       emails,
+				                       packageId,
+				                       "xml",
+				                       "application/xml",
+				                       channelGroups,
+				                       metadata,
+				                       "CaptionProxySuccess");
 			}
-			else if (taskListID.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
+			else if (jobType.equals(TranscodeJobType.COMPLIANCE_PROXY.getText()))
 			{
-				
+
 				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
 				String metadata = mayamClient.getTextualMetatadaForMaterialExport(materialid);
-				byte[] encoded = Base64.encodeBase64(metadata.getBytes());
-				String encodedString = new String(encoded);
-				EventAttachment attachment = new EventAttachment();
-				attachment.setValue(encodedString);
-				attachment.setFilename(String.format("%s.txt",materialid));
-				attachment.setMime("text/plain");
-				
-				saveTCEvent("ClassificationProxySuccess",
-				            notification,
-				            new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-				            true,
-				            deliveryLocation,
-				            emails,
-				            attachment);
+				sendExportSuccessEvent(notification,
+				                       deliveryLocation,
+				                       emails,
+				                       materialid,
+				                       "txt",
+				                       "text/plain",
+				                       channelGroups,
+				                       metadata,
+				                       "ClassificationProxySuccess");
 			}
-			else if (taskListID.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
+			else if (jobType.equals(TranscodeJobType.PUBLICITY_PROXY.getText()))
 			{
 				String materialid = task.getAttributeAsString(Attribute.HOUSE_ID);
 				String metadata = mayamClient.getTextualMetatadaForMaterialExport(materialid);
-				byte[] encoded = Base64.encodeBase64(metadata.getBytes());
-				String encodedString = new String(encoded);
-				EventAttachment attachment = new EventAttachment();
-				attachment.setValue(encodedString);
-				attachment.setFilename(String.format("%s.text",materialid));
-				attachment.setMime("text/plain");
-				
-				saveTCEvent("PublicityProxySuccess",
-				            notification,
-				            new com.mediasmiths.foxtel.ip.common.events.TcNotification(),
-				            true,
-				            deliveryLocation,
-				            emails,
-				            attachment);
+				sendExportSuccessEvent(notification,
+				                       deliveryLocation,
+				                       emails,
+				                       materialid,
+				                       "txt",
+				                       "text/plain",
+				                       channelGroups,
+				                       metadata,
+				                       "PublicityProxySuccess");
 			}
 			mayamClient.exportCompleted(notification.getTaskID());
 		}
 	}
+
+
+	private void sendExportSuccessEvent(final TCPassedNotification notification,
+	                                    final String deliveryLocation,
+	                                    final Emailaddresses emails,
+	                                    final String filename,
+	                                    final String extension,
+	                                    final String mimeType,
+	                                    final Set<String> channelGroups,
+	                                    final String metadata,
+	                                    String eventName)
+	{
+		byte[] encoded = Base64.encodeBase64(metadata.getBytes());
+		String encodedString = new String(encoded);
+		EventAttachment attachment = new EventAttachment();
+		attachment.setValue(encodedString);
+		attachment.setFilename(String.format("%s.%s", filename, extension));
+		attachment.setMime(mimeType);
+
+		saveTCEvent(eventName, notification, true, deliveryLocation, emails, attachment, channelGroups);
+	}
+
 
 	@Override
 	public Boolean autoQCRequiredForTxTask(final Long taskID) throws MayamClientException
@@ -841,43 +866,46 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	// TC Events
 
+
 	protected void saveTCEvent(String name,
-	                           TCNotification payload, TcNotification eventNotify,
+	                           TCNotification notificationReceived,
 	                           boolean success,
 	                           Emailaddresses emailaddress,
-	                           EventAttachment attachment){
-		saveTCEvent(name, payload, eventNotify, success, null, emailaddress, attachment);
+	                           Set<String> channelGroups)
+	{
+		saveTCEvent(name, notificationReceived, success, null, emailaddress, null, channelGroups);
 	}
-	
+
+
 	protected void saveTCEvent(String name,
-	                           TCNotification payload,
-	                           TcNotification eventNotify,
+	                           TCNotification notificationReceived,
 	                           boolean success,
 	                           String deliveryLocation,
 	                           Emailaddresses emailaddress,
-	                           EventAttachment attachment)
+	                           EventAttachment attachment,
+	                           Set<String> channelGroups)
 	{
 		try
 		{
 			log.debug("Save event: " + TC_EVENT_NAMESPACE + ":" + name);
-			eventNotify.setAssetID(payload.getAssetID());
-			eventNotify.setTitle(payload.getTitle());
-			eventNotify.setTaskID(payload.getTaskID() + "");
+			TcNotification event = new TcNotification();
+			event.setAssetID(notificationReceived.getAssetID());
+			event.setTitle(notificationReceived.getTitle());
+			event.setTaskID(notificationReceived.getTaskID() + "");
 			if (attachment != null)
 			{
-				eventNotify.getAttachments().add(attachment);
+				event.getAttachments().add(attachment);
 			}
 			if (success)
 			{
-				eventNotify.setDeliveryLocation(deliveryLocation);
+				event.setDeliveryLocation(deliveryLocation);
 			}
 
 			if (emailaddress != null)
 			{
-				eventNotify.setEmailaddresses(emailaddress);
+				event.setEmailaddresses(emailaddress);
 			}
-			events.saveEvent(TC_EVENT_NAMESPACE, name, eventNotify);
-
+			events.saveEvent(TC_EVENT_NAMESPACE, name, event);
 		}
 		catch (Exception e)
 		{
