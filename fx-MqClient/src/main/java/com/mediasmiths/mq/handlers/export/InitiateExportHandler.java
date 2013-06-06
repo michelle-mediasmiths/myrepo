@@ -190,12 +190,13 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 					}
 				}
 			}
-			
-			if (!folder.mkdirs())
-			{
-				log.error("Error creating folder at export destination : "+localPathToExportDestination);
-				taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
-				return;
+			else {
+				if (!folder.mkdirs())
+				{
+					log.error("Error creating folder at export destination : "+localPathToExportDestination);
+					taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
+					return;
+				}
 			}
 		}
 		else {
