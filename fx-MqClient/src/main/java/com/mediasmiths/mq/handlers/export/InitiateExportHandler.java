@@ -181,16 +181,22 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 				{
 					for (File file: files)
 					{
-						file.delete();
+						if (!file.delete())
+						{
+							log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
+							taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
+							return;
+						}
 					}
 				}
 			}
-			
-			if (!folder.mkdirs())
-			{
-				log.error("Error creating folder at export destination : "+localPathToExportDestination);
-				taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
-				return;
+			else {
+				if (!folder.mkdirs())
+				{
+					log.error("Error creating folder at export destination : "+localPathToExportDestination);
+					taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
+					return;
+				}
 			}
 		}
 		else {
@@ -205,7 +211,12 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			if (fileExists)
 			{
 				File outputFile = new File(localPathToExportDestination);
-				outputFile.delete();
+				if (!outputFile.delete())
+				{
+					log.error("Error removing existing file at export destination : "+localPathToExportDestination);
+					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
+					return;
+				}
 			}
 			
 		}
