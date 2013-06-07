@@ -1460,10 +1460,10 @@ public class MayamMaterialController extends MayamController
 				markerSb.append("; Title: ").append(title);
 			}
 
-			final Marker.Type markerType = marker.getType();
+			final String markerType = marker.getTypeStr();
 			if(null != markerType)
 			{
-				markerSb.append("; Type: ").append(markerType.toString());
+				markerSb.append("; Type: ").append(markerType);
 			}
 			
 			if(null != user)
