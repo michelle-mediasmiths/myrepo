@@ -5,9 +5,7 @@ import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
-import com.mayam.wf.attributes.shared.type.MediaStatus;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
@@ -293,10 +291,9 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 			try
 			{
-				taskController.createWFEErorTask(
-						MayamAssetType.MATERIAL,
-						peerID,
-						"Error determining content format during unmatched asset workflow");
+				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
+				                                  peerID,
+				                                  "Error determining content format during unmatched asset workflow");
 			}
 			catch (Exception e1)
 			{

@@ -682,7 +682,7 @@ public class MayamClientImpl implements MayamClient
 	{
 		try
 		{
-			return tasksController.createWFEErorTask(type, siteId, message);
+			return tasksController.createWFEErrorTask(type, siteId, message);
 		}
 		catch (MayamClientException e)
 		{

@@ -2,7 +2,6 @@ package com.mediasmiths.mq.handlers.ingest;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Set;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -125,10 +124,9 @@ public class IngestJobHandler extends JobHandler
 			log.error("error moving ingest task for asset " + assetId + " to open state", e);
 			try
 			{
-				taskController.createWFEErorTask(
-						MayamAssetType.MATERIAL,
-						task.getAttributeAsString(Attribute.ASSET_SITE_ID),
-						"error moving ingest task for asset " + assetId + " to open state");
+				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
+				                                  task.getAttributeAsString(Attribute.ASSET_SITE_ID),
+				                                  "error moving ingest task for asset " + assetId + " to open state");
 			}
 			catch (MayamClientException e1)
 			{

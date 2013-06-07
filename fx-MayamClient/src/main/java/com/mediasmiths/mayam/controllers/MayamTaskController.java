@@ -305,7 +305,7 @@ public class MayamTaskController extends MayamController
 		 createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PENDING_TX_PACKAGE, initialAttributes);
 	}
 	
-	public long createWFEErorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
+	public long createWFEErrorTask(MayamAssetType type, String siteId, String message)throws MayamClientException
 	{
 		AttributeMap asset = null;
 		try
