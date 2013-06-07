@@ -139,21 +139,17 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					if(folderIsAO)
 					{
 						//AO
-						logger.debug("Material ID Missing  AO1  test");
-
+						logger.debug("Material ID Missing AO");
 						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutMaterialID", pickupNotification);
-
-						logger.debug("Material ID Missing  AO1  test");
+						logger.debug("Material ID Missing AO");
 						break;
 					}
 					else
 					{
 						//NonAO
-						logger.debug("Material ID Missing  1  test");
-
+						logger.debug("Material ID Missing");
 						eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutMaterialID", pickupNotification);
-
-						logger.debug("Material ID Missing   2 test");
+						logger.debug("Material ID Missing");
 						break;
 					}
 				}
@@ -200,32 +196,30 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 
 	}
-	private void placeholderCannotBeIdentified(MediaPickupNotification pickupNotification, T message,boolean folderIsAO)
+
+	private void placeholderCannotBeIdentified(MediaPickupNotification pickupNotification, T message, boolean folderIsAO)
 	{
 
 		//boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
-		if(folderIsAO)
+		if (folderIsAO)
 		{
 			//AO
-			logger.debug("1  AO Placeholder does not exist");
-
+			logger.debug("AO Placeholder does not exist");
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOPlaceHolderCannotBeIdentified", pickupNotification);
-
-			logger.debug("2  AO Placeholder does not exist");
-
+			logger.debug("AO Placeholder does not exist");
 		}
 		else
 		{
 			//NonAO
-			logger.debug("1 Non AO Placeholder does not exist");
-
-			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOPlaceHolderCannotBeIdentified", pickupNotification);
-
-			logger.debug("2 Non AO Placeholder does not exist");
-
+			logger.debug("Non AO Placeholder does not exist");
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content",
+			                       "NonAOPlaceHolderCannotBeIdentified",
+			                       pickupNotification);
+			logger.debug("Non AO Placeholder does not exist");
 		}
-
 	}
+
+
 	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
 	{
 		try
@@ -242,10 +236,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 				logger.error("error determining channel groups for event", e);
 			}
 
-			eventService.saveEvent(
-					"http://www.foxtel.com.au/ip/content",
-					"PlaceholderAlreadyHasMedia",
-					pickupNotification);
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceholderAlreadyHasMedia", pickupNotification);
 		}
 		catch (Exception e)
 		{
@@ -408,6 +399,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 	}
 
+
 	@Override
 	protected void processPickupPackageNoXML(PickupPackage pp)
 	{
@@ -415,32 +407,22 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		pickupNotification.setFilelocation(pp.getPickUp("mxf").getAbsolutePath());
 		pickupNotification.setTime((new Date()).toString());
 
-		logger.debug("MAM-614 TEST 1");
 		logger.info("received a pickup package with no xml " + pp.getRootName());
 		importMediaAsUnmatched(pp.getPickUp("mxf"));
-		logger.debug("MAM-614 TEST 2");
 
 		boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
 
-		if(folderIsAO)
+		if (folderIsAO)
 		{
 			//AO
-			logger.debug("No XML   AO1  test");
-
+			logger.debug("No XML AO");
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOContentWithoutCompanionXML", pickupNotification);
-
-			logger.debug("No XML   AO2  test");
-
 		}
 		else
 		{
 			//NonAO
-			logger.debug("No XML   1  test");
-
+			logger.debug("No XML");
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOContentWithoutCompanionXML", pickupNotification);
-
-			logger.debug("No XML   2 test");
-
 		}
 	}
 
