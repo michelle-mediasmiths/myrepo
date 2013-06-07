@@ -31,6 +31,7 @@ public class MayamClientStub implements MayamClient
 
 	public final static String NEW_TITLE_ID = "NEW_TITLE";
 	public final static String EXISTING_TITLE_ID = "EXISTING_TITLE";
+	public final static String EXISTING_AO_TITLE_ID = "EXISTING_AO_TITLE";
 	public final static String ERROR_TITLE_ID = "ERROR_TITLE";
 	public final static String PROTECTED_TITLE_ID = "PROTECTED_TITLE";
 
@@ -67,7 +68,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID)|| titleID.equals(EXISTING_AO_TITLE_ID))
 		{
 			return MayamClientErrorCode.TITLE_CREATION_FAILED;
 		}
@@ -98,7 +99,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.TITLE_FIND_FAILED;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID)|| titleID.equals(EXISTING_AO_TITLE_ID))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -120,7 +121,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return MayamClientErrorCode.TITLE_FIND_FAILED;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID)|| titleID.equals(EXISTING_AO_TITLE_ID))
 		{
 			return MayamClientErrorCode.SUCCESS;
 		}
@@ -144,7 +145,7 @@ public class MayamClientStub implements MayamClient
 		{
 			return false;
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID)|| titleID.equals(EXISTING_AO_TITLE_ID))
 		{
 			return true;
 		}
@@ -188,7 +189,7 @@ public class MayamClientStub implements MayamClient
 		{
 			throw new MayamClientException(MayamClientErrorCode.TITLE_FIND_FAILED);
 		}
-		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID))
+		else if (titleID.equals(EXISTING_TITLE_ID) || titleID.equals(PROTECTED_TITLE_ID)|| titleID.equals(EXISTING_AO_TITLE_ID))
 		{
 			return EXISTING_MATERIAL_ID;
 		}
@@ -551,12 +552,18 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+
 	@Override
 	public boolean titleIsAO(String titleID) throws MayamClientException
 	{
-		// TODO Auto-generated method stub
+		if (EXISTING_AO_TITLE_ID.equals(titleID))
+		{
+			return true;
+		}
+
 		return false;
 	}
+
 
 	@Override
 	public boolean isPackageAO(String packageID) throws MayamClientException
