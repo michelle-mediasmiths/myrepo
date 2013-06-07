@@ -402,38 +402,24 @@
         </xs:complexContent>
     </xs:complexType>
 
-	<xs:complexType name="tcEvent">
-        <xs:complexContent>
-            <xs:extension base="fns:IPEvent">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="taskID" type="xs:string"/>
-                    <xs:element minOccurs="0" name="assetID" type="xs:string"/>
-                    <xs:element minOccurs="0" name="title" type="xs:string"/>
-                    <xs:element minOccurs="0" name="packageID" type="xs:string"/>
-                    <xs:element minOccurs="0" name="deliveryLocation" type="xs:string"></xs:element>
-                    <xs:element name="emailaddresses" type="emailaddresses"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
+	<xs:element name="tcEvent">
+		<xs:complexType>
+			<xs:complexContent>
+				<xs:extension base="fns:IPEvent">
+					<xs:sequence>
+						<xs:element minOccurs="0" name="taskID" type="xs:string"/>
+						<xs:element minOccurs="0" name="assetID" type="xs:string"/>
+						<xs:element minOccurs="0" name="title" type="xs:string"/>
+						<xs:element minOccurs="0" name="packageID" type="xs:string"/>
+						<xs:element minOccurs="0" name="deliveryLocation" type="xs:string"></xs:element>
+						<xs:element name="emailaddresses" type="emailaddresses"/>
+					</xs:sequence>
+				</xs:extension>
+			</xs:complexContent>
+		</xs:complexType>
+	</xs:element>
 
-	<xs:element name="tcPassedNotification">
-    	<xs:complexType>
-    		<xs:complexContent>
-    			<xs:extension base="tcEvent"/>
-    		</xs:complexContent>
-    	</xs:complexType>
-    </xs:element>
-    
-    <xs:element name="tcNotification">
-    	<xs:complexType>
-    		<xs:complexContent>
-    			<xs:extension base="tcEvent"></xs:extension>
-    		</xs:complexContent>
-    	</xs:complexType>
-    </xs:element>
-    
-    <xs:complexType name="materialTransferForTCResponse">
+	<xs:complexType name="materialTransferForTCResponse">
         <xs:sequence>
             <xs:element minOccurs="0" name="destination" type="xs:string" />
         </xs:sequence>

@@ -1,7 +1,7 @@
 package com.mediasmiths.foxtel.ip.mail.templater.templates.tcdata;
 
 import com.mediasmiths.foxtel.ip.common.email.MailTemplate;
-import com.mediasmiths.foxtel.ip.common.events.TcNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailListTransform;
 import com.mediasmiths.foxtel.ip.mail.templater.EmailTemplateGenerator;
 
@@ -18,7 +18,7 @@ public class TcNotificationEmailTemplate extends MailTemplate implements EmailTe
 	@Override
 	public boolean handles(Object obj)
 	{
-		return obj instanceof TcNotification;
+		return obj instanceof TcEvent;
 	}
 
 
@@ -26,11 +26,11 @@ public class TcNotificationEmailTemplate extends MailTemplate implements EmailTe
 	public MailTemplate customiseTemplate(Object obj, String comment)
 	{
 
-		return getTemplate((TcNotification) obj);
+		return getTemplate((TcEvent) obj);
 	}
 
 
-	MailTemplate getTemplate(TcNotification obj)
+	MailTemplate getTemplate(TcEvent obj)
 	{
 		MailTemplate t = new MailTemplate();
 

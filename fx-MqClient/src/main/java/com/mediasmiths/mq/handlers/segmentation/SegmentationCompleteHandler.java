@@ -3,7 +3,7 @@ package com.mediasmiths.mq.handlers.segmentation;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.foxtel.ip.common.events.TcNotification;
+import com.mediasmiths.foxtel.ip.common.events.TcEvent;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
@@ -79,7 +79,7 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 			
 			String title = messageAttributes.getAttributeAsString(Attribute.ASSET_TITLE);
 			String taskID = messageAttributes.getAttributeAsString(Attribute.TASK_ID);
-			TcNotification tx = new TcNotification();
+			TcEvent tx = new TcEvent();
 			tx.setPackageID(houseID);
 			tx.setAssetID(parentHouseID);
 			tx.setTitle(title);

@@ -13,7 +13,6 @@ import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
-import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -434,7 +433,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetID(),
 				notification.isForTXDelivery()));
 
-		com.mediasmiths.foxtel.ip.common.events.TcNotification tcFailure = new com.mediasmiths.foxtel.ip.common.events.TcNotification();
+		TcEvent tcFailure = new TcEvent();
 
 		try
 		{
@@ -892,7 +891,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		try
 		{
 			log.debug("Save event: " + TC_EVENT_NAMESPACE + ":" + name);
-			TcNotification event = new TcNotification();
+			TcEvent event = new TcEvent();
 			event.setAssetID(notificationReceived.getAssetID());
 			event.setTitle(notificationReceived.getTitle());
 			event.setTaskID(notificationReceived.getTaskID() + "");
