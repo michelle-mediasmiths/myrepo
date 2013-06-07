@@ -747,8 +747,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TcEvent tce = new TcEvent();
 			tce.setPackageID(packageID);
 			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+			String materialID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+
 			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			tce.setTitle(title);
+			tce.withChannelGroup(channelGroups);
 			events.saveEvent("http://foxtel.com.au/ip/tc", "FailedToGenerateXML", tce);
 			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
@@ -757,7 +761,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	private boolean aoXMLFtp(File segmentXmlFile)
+	private boolean aoXMLFtp(File segmentXmlFile) throws IOException
 	{
 		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
 
@@ -777,7 +781,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			log.error("xml upload failed");
-			return false;
+			throw new IOException("xml upload failed");
 		}
 
 	}
