@@ -552,6 +552,13 @@ public class MayamClientStub implements MayamClient
 	}
 
 	@Override
+	public boolean titleIsAO(String titleID) throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public boolean isPackageAO(String packageID) throws MayamClientException
 	{
 		// TODO Auto-generated method stub
@@ -682,13 +689,6 @@ public class MayamClientStub implements MayamClient
 	public TaskState getTaskState(long taskID) throws MayamClientException {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean titleIsAO(String titleID) throws MayamClientException
-	{
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	@Override
