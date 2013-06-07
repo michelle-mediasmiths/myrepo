@@ -22,23 +22,26 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 
 	@Inject
 	protected EventService eventsService;
-	
-	@SuppressWarnings("unchecked")
-	final Class<? extends Throwable>[] retryExceptions = new Class []{SocketException.class, MqException.class, SocketTimeoutException.class};
 
-    @Inject
-    @Named("tasks.retry.backofftime")
+	@SuppressWarnings("unchecked")
+	final Class<? extends Throwable>[] retryExceptions = new Class[]{SocketException.class,
+	                                                                 MqException.class,
+	                                                                 SocketTimeoutException.class};
+
+	@Inject
+	@Named("tasks.retry.backofftime")
 	private Long backOffTime = 1250l;
-    @Inject
-    @Named("tasks.retry.maxattempts")
+	@Inject
+	@Named("tasks.retry.maxattempts")
 	private Integer maxattempts = 8;
 	TimeUnit backoffUnit = TimeUnit.MILLISECONDS;
-    @Named("tasks.retry.exponent")
+	@Named("tasks.retry.exponent")
 	private Double backoffExponent = 2.0d;
 
-    @Inject
-    @Named("system.events.namespace")
-    private String systemEventsNamespace;
+	@Inject
+	@Named("system.events.namespace")
+	private String systemEventsNamespace;
+
 
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable
@@ -85,7 +88,7 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 		cf.setFailureLongDescription(e.getCause().getLocalizedMessage());
 		cf.setSource("WFE");
 		cf.setTarget("tasks-ws");
-		eventsService.saveEvent(systemEventsNamespace,"CommError",cf);
+		eventsService.saveEvent(systemEventsNamespace, "CommError", cf);
 	}
 
 
