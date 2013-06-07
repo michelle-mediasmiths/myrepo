@@ -74,6 +74,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	protected void messageValidationFailed(MessageValidationResultPackage<T> resultPackage)
 	{
 		final PickupPackage pp = resultPackage.getPp();
+		boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
 
 		logger.warn(String.format(
 				"Validation of Material message %s failed for reason %s",
@@ -133,7 +134,7 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 				{
 					logger.debug("Material ID Missing");
 
-					boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
+					//boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
 
 					if(folderIsAO)
 					{
@@ -157,9 +158,14 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					}
 				}
 				case TITLE_DOES_NOT_EXIST:
-					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "ContentWithoutMasterID", pickupNotification);
+				{
+
+					logger.debug("No matching placeholder found for the title");
+
+					placeholderCannotBeIdentified(pickupNotification, message,folderIsAO);
 					break;
-				case MATERIAL_HAS_ALREADY_PASSED_PREVIEW :
+				}
+				case MATERIAL_HAS_ALREADY_PASSED_PREVIEW:
 				{
 						if (pp.isComplete())
 						{
@@ -169,8 +175,12 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 						break;
 				}
 				case MATERIAL_DOES_NOT_EXIST:
+				{
+					logger.debug("No matching placeholder found for the material");
+					placeholderCannotBeIdentified(pickupNotification, message,folderIsAO);
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
+				}
 				case UNEXPECTED_DELIVERY_VERSION:
 					if (pp.isComplete())
 					{
@@ -182,13 +192,40 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 					// eventService.saveEvent("http://www.foxtel.com.au/ip/content", "PlaceHolderCannotBeIdentified", pickupNotification);
 					break;
 			}
+
 		}
 		catch (Exception e)
 		{
 			logger.error("Unable to send events: ", e);
 		}
-	}
 
+	}
+	private void placeholderCannotBeIdentified(MediaPickupNotification pickupNotification, T message,boolean folderIsAO)
+	{
+
+		//boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
+		if(folderIsAO)
+		{
+			//AO
+			logger.debug("1  AO Placeholder does not exist");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOPlaceHolderCannotBeIdentified", pickupNotification);
+
+			logger.debug("2  AO Placeholder does not exist");
+
+		}
+		else
+		{
+			//NonAO
+			logger.debug("1 Non AO Placeholder does not exist");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOPlaceHolderCannotBeIdentified", pickupNotification);
+
+			logger.debug("2 Non AO Placeholder does not exist");
+
+		}
+
+	}
 	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
 	{
 		try

@@ -1,24 +1,5 @@
 package com.mediasmiths.foxtel.mpa.processing;
 
-import static org.mockito.Mockito.mock;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.datatype.DatatypeConfigurationException;
-
-import org.apache.commons.lang.RandomStringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.ArgumentMatcher;
-import org.xml.sax.SAXException;
-
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
 import com.mediasmiths.foxtel.agent.WatchFolder;
 import com.mediasmiths.foxtel.agent.WatchFolders;
@@ -35,6 +16,23 @@ import com.mediasmiths.foxtel.mpa.guice.MediaPickupModule;
 import com.mediasmiths.foxtel.mpa.queue.MaterialExchangeFilesPendingProcessingQueue;
 import com.mediasmiths.foxtel.mpa.validation.MaterialExchangeValidator;
 import com.mediasmiths.mayam.MayamClient;
+import org.apache.commons.lang.RandomStringUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.mockito.ArgumentMatcher;
+import org.xml.sax.SAXException;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.mockito.Mockito.mock;
 
 public abstract class MaterialProcessingTest {
 
@@ -106,6 +104,7 @@ public abstract class MaterialProcessingTest {
 		processor = new MaterialExchangeProcessor(filesPendingProcessingQueue,
 				 validator, receiptWriter, unmarshaller, marshaller,
 				mayamClient, eventService,unmatchedProcessor);
+		processor.setWatchFolders(wf);
 
 		processor.startThread();
 	}
