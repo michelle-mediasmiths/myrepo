@@ -17,7 +17,6 @@ import com.mayam.wf.exception.RemoteException;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
-import com.mediasmiths.mayam.controllers.MayamPackageController;
 import com.mediasmiths.mq.handlers.JobHandler;
 
 public class TransferJobHandler extends JobHandler
@@ -133,10 +132,9 @@ public class TransferJobHandler extends JobHandler
 					log.error("error setting tx delivery task to open state", e);
 					try
 					{
-						taskController.createWFEErorTask(
-								MayamAssetType.PACKAGE,
-								assetAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
-								"error setting task to open state after high res transfer");
+						taskController.createWFEErrorTask(MayamAssetType.PACKAGE,
+						                                  assetAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						                                  "error setting task to open state after high res transfer");
 					}
 					catch (MayamClientException e1)
 					{

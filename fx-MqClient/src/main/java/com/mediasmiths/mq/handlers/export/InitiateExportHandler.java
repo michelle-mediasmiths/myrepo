@@ -1,6 +1,7 @@
 package com.mediasmiths.mq.handlers.export;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
@@ -181,11 +182,25 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 				{
 					for (File file: files)
 					{
-						if (!file.delete())
+						if (file.isDirectory())
 						{
-							log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
-							taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
-							return;
+							try {
+								FileUtils.deleteDirectory(file);
+							}
+							catch(IOException e)
+							{
+								log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
+								taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
+								return;
+							}
+						}
+						else {
+							if (!file.delete())
+							{
+								log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
+								taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
+								return;
+							}
 						}
 					}
 				}

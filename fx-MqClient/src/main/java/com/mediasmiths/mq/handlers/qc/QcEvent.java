@@ -1,9 +1,5 @@
 package com.mediasmiths.mq.handlers.qc;
 
-import java.util.Date;
-
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
@@ -13,6 +9,9 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mediasmiths.foxtel.ip.common.events.AutoQCEvent;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.mayam.DateUtil;
+import org.apache.log4j.Logger;
+
+import java.util.Date;
 
 public class QcEvent
 {
@@ -81,6 +80,12 @@ public class QcEvent
 				}
 
 				QcStatus assetQcStatus = a.getAttribute(Attribute.QC_STATUS);
+
+				if (assetQcStatus != null)
+				{
+					qce.setQcStatus(assetQcStatus.toString());
+				}
+
 				QcStatus ffv = a.getAttribute(Attribute.QC_SUBSTATUS1);
 				QcStatus cerify = a.getAttribute(Attribute.QC_SUBSTATUS2);
 

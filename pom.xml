@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.mediasmiths.foxtel</groupId>
@@ -59,18 +60,18 @@
 		<module>fx-filepickup-api</module>
 		<module>fx-qcAdapter</module>
 		<module>fx-report-ui</module>
-  		<module>fx-IbmsHelper</module>
-        <module>fx-heartbeat-api</module>
+		<module>fx-IbmsHelper</module>
+		<module>fx-heartbeat-api</module>
 		<module>fx-ChannelGroupsConfig</module>
-        <module>fx-MailAgent</module>
-        <module>fx-MailAgentClient</module>
-        <module>fx-MayamPDP</module>
-        <module>fx-TranscodePriorities</module>
-        <module>fx-TranscodeOutputRules</module>
-        <module>fx-ExtendedPublishing</module>
-        <module>fx-TxFtpDelivery</module>
-        <module>fx-MaterialExport</module>
-    </modules>
+		<module>fx-MailAgent</module>
+		<module>fx-MailAgentClient</module>
+		<module>fx-MayamPDP</module>
+		<module>fx-TranscodePriorities</module>
+		<module>fx-TranscodeOutputRules</module>
+		<module>fx-ExtendedPublishing</module>
+		<module>fx-TxFtpDelivery</module>
+		<module>fx-MaterialExport</module>
+	</modules>
 
 	<properties>
 		<junit.version>4.10</junit.version>
@@ -80,7 +81,7 @@
 		<worklists.version>0.9.9.9.46</worklists.version>
 		<mayam.wf.mq.version>0.9.9.9.40</mayam.wf.mq.version>
 		<mayam.wf.siteconfig.version>0.9.9.9.14</mayam.wf.siteconfig.version>
-		<stdlib.version>3.5.0</stdlib.version>
+		<stdlib.version>3.6.2</stdlib.version>
 		<events.version>1.10</events.version>
 		<commons.lang.version>2.5</commons.lang.version>
 	</properties>
@@ -102,7 +103,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
-			</plugin>	
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -114,19 +115,19 @@
 						<include>**/*TestCase.java</include>
 					</includes>
 				</configuration>
-			</plugin>		
+			</plugin>
 		</plugins>
-		
-		 <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <excludes>
-          <exclude>**/service.properties</exclude>
-        </excludes>
-      </resource>
 
-    </resources>
-		
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>**/service.properties</exclude>
+				</excludes>
+			</resource>
+
+		</resources>
+
 	</build>
 
 	<repositories>
@@ -153,7 +154,7 @@
 			</snapshots>
 		</repository>
 		<repository>
-		
+
 			<id>Codehaus</id>
 			<name>codehaus</name>
 			<url>http://repository.codehaus.org</url>

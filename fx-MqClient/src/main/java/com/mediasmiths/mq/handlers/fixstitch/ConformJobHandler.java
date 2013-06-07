@@ -1,6 +1,5 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -210,10 +209,9 @@ public class ConformJobHandler extends JobHandler
 					log.warn("There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
 					try
 					{
-						taskController.createWFEErorTask(
-								MayamAssetType.MATERIAL,
-								materialID,
-								"There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
+						taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
+						                                  materialID,
+						                                  "There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
 					}
 					catch (MayamClientException e)
 					{
