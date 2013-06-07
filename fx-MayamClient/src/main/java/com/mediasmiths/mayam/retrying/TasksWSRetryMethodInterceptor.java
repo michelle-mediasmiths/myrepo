@@ -1,22 +1,20 @@
 package com.mediasmiths.mayam.retrying;
 
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
-
+import com.google.inject.Inject;
 import com.google.inject.name.Named;
+import com.mayam.wf.mq.MqException;
 import com.mediasmiths.foxtel.ip.common.events.CommFailure;
+import com.mediasmiths.foxtel.ip.event.EventService;
+import com.mediasmiths.std.threading.Timeout;
+import com.mediasmiths.std.threading.retry.backoff.ExponentialBackoff;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.apache.log4j.Logger;
 
-import com.google.inject.Inject;
-import com.mayam.wf.mq.MqException;
-import com.mediasmiths.foxtel.ip.event.EventService;
-import com.mediasmiths.std.threading.Timeout;
-import com.mediasmiths.std.threading.retry.RetryManager;
-import com.mediasmiths.std.threading.retry.backoff.ExponentialBackoff;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 {
@@ -45,7 +43,7 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 	@Override
 	public Object invoke(final MethodInvocation invocation) throws Throwable
 	{
-		RetryManager mgr = buildRetryManager();
+		TasksWSRetryManager mgr = buildRetryManager();
 
 		try
 		{
@@ -57,6 +55,17 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 
 			return mgr.run(new TasksWSInvocationRetry(invocation, retryExceptions));
 		}
+		catch (TaskWSRetriesExhausted e)
+		{
+			log.warn("Reties exhausted for invoke of " +
+			         invocation.getMethod().toGenericString() +
+			         " on " + invocation.getThis() + " with " +
+			         Arrays.asList(invocation.getArguments()) + " failed.", e);
+
+			sendCommFailureEvent(e);
+
+			throw e.getCause();
+		}
 		catch (Throwable t)
 		{
 			if (log.isTraceEnabled())
@@ -64,27 +73,28 @@ final class TasksWSRetryMethodInterceptor implements MethodInterceptor
 				          invocation.getMethod().toGenericString() +
 				          " on " + invocation.getThis() + " with " +
 				          Arrays.asList(invocation.getArguments()) + " failed.", t);
-			
-			//bm 05/06/13 - need to send this event when final retry fails not when there is just any failure!
-			/*
-            CommFailure cf = new CommFailure();
-            cf.setFailureShortDesc("Error communicating with tasks-ws");
-            cf.setFailureLongDescription(t.getLocalizedMessage());
-            cf.setSource("WFE");
-            cf.setTarget("tasks-ws");
-            eventsService.saveEvent(systemEventsNamespace,"CommError",cf);
-			 */
-			
 			throw t;
 		}
 	}
 
-	private RetryManager buildRetryManager()
+
+	private void sendCommFailureEvent(final TaskWSRetriesExhausted e)
+	{
+		CommFailure cf = new CommFailure();
+		cf.setFailureShortDesc("Error communicating with tasks-ws");
+		cf.setFailureLongDescription(e.getCause().getLocalizedMessage());
+		cf.setSource("WFE");
+		cf.setTarget("tasks-ws");
+		eventsService.saveEvent(systemEventsNamespace,"CommError",cf);
+	}
+
+
+	private TasksWSRetryManager buildRetryManager()
 	{
 		final Timeout initial = new Timeout(backOffTime, backoffUnit);
 
 		ExponentialBackoff backoff = new ExponentialBackoff(initial, backoffExponent);
 
-		return new RetryManager(backoff, maxattempts);
+		return new TasksWSRetryManager(backoff, maxattempts);
 	}
 }
