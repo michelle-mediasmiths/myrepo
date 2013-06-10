@@ -450,7 +450,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>NonAOContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM: File(%s) missing</subject>
+			<subject>Unmatched Item in MAM: Material ID missing</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
@@ -461,7 +461,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>AOContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM: File(%s) missing</subject>
+			<subject>Unmatched Item in MAM: Material ID missing</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -526,7 +526,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>NonAOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  File(%s) ID is missing</subject>
+			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
 			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
@@ -537,7 +537,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>AOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  File(%s) ID is missing</subject>
+			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
 			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>				
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
