@@ -1468,7 +1468,7 @@ public class MayamMaterialController extends MayamController
 			
 			if(null != user)
 			{
-				markerSb.append(" Requested by: ").append(user);
+				markerSb.append("; Requested by: ").append(user);
 			}
 			
 			markerSb.append("\n");
