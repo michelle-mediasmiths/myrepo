@@ -296,4 +296,6 @@ public interface MayamClient
 	List<String> getDataFilesUrls(String materialAssetID) throws MayamClientException;
 
 	MaterialExport getMaterialExport(String packageId, String filename) throws MayamClientException;
+
+	AttributeMap getTitle(String titleId);
 }
