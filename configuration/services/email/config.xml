@@ -491,21 +491,7 @@
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
-	</MailData>
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>FilePickUpNotification</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.FilePickUpNotificationEmailTemplate">
-			<subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
-			<body>(%s) has failed to has failed to move from WFE drop folder to Ardome import folder</body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
+	</MailData>	
 <!-- DUPLICATE OF SAME EVENT BELOW	
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
@@ -589,8 +575,8 @@
         <namespace>http://www.foxtel.com.au/ip/content</namespace>
         <eventname>NonAOMediaImportToArdomeFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-            <subject>Media sent to the failed folder(%s)</subject>
-            <body>Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
+            <body>%s has failed to has failed to move from WFE drop folder to Ardome import folder</body>
             <emailaddresses>
                 <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
 		    	<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -601,8 +587,8 @@
         <namespace>http://www.foxtel.com.au/ip/content</namespace>
         <eventname>AOMediaImportToArdomeFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-            <subject>Media sent to the failed folder(%s)</subject>
-            <body>AO Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
+            <body>%s has failed to has failed to move from WFE drop folder to Ardome import folder</body>
             <emailaddresses>
 		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
