@@ -1049,7 +1049,7 @@ public class MayamClientImpl implements MayamClient
 		try{
 			returnMap = titleController.getTitle(titleId);
 		}
-		catch(RemoteException e)
+		catch(MayamClientException e)
 		{
 			log.error("Exception thrown by Mayam while retrieving title : " + titleId, e);
 		}
