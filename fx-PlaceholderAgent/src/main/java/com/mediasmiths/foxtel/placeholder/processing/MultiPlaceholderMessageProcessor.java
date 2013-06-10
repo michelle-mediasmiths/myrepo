@@ -42,6 +42,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import javax.ws.rs.HEAD;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
@@ -612,7 +613,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 					AttributeMap title = mayamClient.getTitle(titleID);
 					if (title != null)
 					{
-						ppf.setTitle(title.getAttribute(Attribute.ASSET_TITLE));
+						ppf.setTitle(title.getAttributeAsString(Attribute.ASSET_TITLE));
 					}
 					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
 					ppf.getChannelGroup().addAll(channelsForTitle);

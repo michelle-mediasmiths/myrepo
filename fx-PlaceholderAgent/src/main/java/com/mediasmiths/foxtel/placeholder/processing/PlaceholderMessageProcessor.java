@@ -511,7 +511,7 @@ public class PlaceholderMessageProcessor extends MessageProcessor<PlaceholderMes
 					AttributeMap title = mayamClient.getTitle(titleID);
 					if (title != null)
 					{
-						ppf.setTitle(title.getAttribute(Attribute.ASSET_TITLE));
+						ppf.setTitle(title.getAttributeAsString(Attribute.ASSET_TITLE));
 					}
 					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
 					ppf.getChannelGroup().addAll(channelsForTitle);
