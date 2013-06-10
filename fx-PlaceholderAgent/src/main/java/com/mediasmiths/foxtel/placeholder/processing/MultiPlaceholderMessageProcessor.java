@@ -15,6 +15,7 @@ import au.com.foxtel.cf.mam.pms.PurgeTitle;
 import au.com.foxtel.cf.mam.pms.RightsType;
 import au.com.foxtel.cf.mam.pms.Source;
 import com.google.inject.Inject;
+import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mediasmiths.foxtel.agent.MessageEnvelope;
 import com.mediasmiths.foxtel.agent.ReceiptWriter;
@@ -611,7 +612,7 @@ public class MultiPlaceholderMessageProcessor extends MessageProcessor<Placehold
 					AttributeMap title = mayamClient.getTitle(titleID);
 					if (title != null)
 					{
-						ppf.setTitle(title);
+						ppf.setTitle(title.getAttribute(Attribute.ASSET_TITLE));
 					}
 					Set<String> channelsForTitle = mayamClient.getChannelGroupsForTitle(titleID);
 					ppf.getChannelGroup().addAll(channelsForTitle);
