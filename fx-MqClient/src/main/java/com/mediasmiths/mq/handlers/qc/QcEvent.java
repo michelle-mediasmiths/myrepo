@@ -66,6 +66,14 @@ public class QcEvent
 				}
 			}
 
+			QcStatus assetQcStatus = a.getAttribute(Attribute.QC_STATUS);
+
+			if (assetQcStatus != null)
+			{
+				qce.setQcStatus(assetQcStatus.toString());
+			}
+
+
 			if (TaskState.FINISHED == state || TaskState.FINISHED_FAILED == state)
 			{
 				Date updated = a.getAttribute(Attribute.TASK_UPDATED);
@@ -77,13 +85,6 @@ public class QcEvent
 				else
 				{
 					log.warn("task updated date is null!");
-				}
-
-				QcStatus assetQcStatus = a.getAttribute(Attribute.QC_STATUS);
-
-				if (assetQcStatus != null)
-				{
-					qce.setQcStatus(assetQcStatus.toString());
 				}
 
 				QcStatus ffv = a.getAttribute(Attribute.QC_SUBSTATUS1);
