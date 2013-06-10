@@ -32,5 +32,6 @@ public class ReportingModule extends AbstractModule
 		bind(AggregatedBMSDao.class).to(AggregatedBMSDaoImpl.class);
 		
 		RestResourceRegistry.register(ReportUI.class);
+		bind(ReportUIImpl.class).asEagerSingleton();
 	}
 }

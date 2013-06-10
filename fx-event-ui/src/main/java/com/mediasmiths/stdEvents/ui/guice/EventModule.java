@@ -33,5 +33,7 @@ public class EventModule extends AbstractModule
 				
 		RestResourceRegistry.register(EventUI.class);
 		RestResourceRegistry.register(EventAPI.class);
+
+		bind(EventUIImpl.class).asEagerSingleton();
 	}
 }

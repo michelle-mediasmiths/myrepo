@@ -13,7 +13,6 @@ import com.mediasmiths.foxtel.ip.common.events.Emailaddresses;
 import com.mediasmiths.foxtel.ip.common.events.EventAttachment;
 import com.mediasmiths.foxtel.ip.common.events.QcServerFail;
 import com.mediasmiths.foxtel.ip.common.events.TcEvent;
-import com.mediasmiths.foxtel.ip.common.events.TcNotification;
 import com.mediasmiths.foxtel.ip.common.events.TxDelivered;
 import com.mediasmiths.foxtel.ip.event.EventService;
 import com.mediasmiths.foxtel.tc.priorities.TranscodeJobType;
@@ -434,7 +433,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 				notification.getAssetID(),
 				notification.isForTXDelivery()));
 
-		com.mediasmiths.foxtel.ip.common.events.TcNotification tcFailure = new com.mediasmiths.foxtel.ip.common.events.TcNotification();
+		TcEvent tcFailure = new TcEvent();
 
 		try
 		{
@@ -747,8 +746,12 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			TcEvent tce = new TcEvent();
 			tce.setPackageID(packageID);
 			AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
+			String materialID = packageAttributes.getAttributeAsString(Attribute.PARENT_HOUSE_ID);
+			final Set<String> channelGroups = mayamClient.getChannelGroupsForItem(materialID);
+
 			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			tce.setTitle(title);
+			tce.withChannelGroup(channelGroups);
 			events.saveEvent("http://foxtel.com.au/ip/tc", "FailedToGenerateXML", tce);
 			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
@@ -757,7 +760,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 
 	}
 
-	private boolean aoXMLFtp(File segmentXmlFile)
+	private boolean aoXMLFtp(File segmentXmlFile) throws IOException
 	{
 		String segmentFileName = FilenameUtils.getName(segmentXmlFile.getAbsolutePath());
 
@@ -777,7 +780,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		else
 		{
 			log.error("xml upload failed");
-			return false;
+			throw new IOException("xml upload failed");
 		}
 
 	}
@@ -888,7 +891,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		try
 		{
 			log.debug("Save event: " + TC_EVENT_NAMESPACE + ":" + name);
-			TcNotification event = new TcNotification();
+			TcEvent event = new TcEvent();
 			event.setAssetID(notificationReceived.getAssetID());
 			event.setTitle(notificationReceived.getTitle());
 			event.setTaskID(notificationReceived.getTaskID() + "");

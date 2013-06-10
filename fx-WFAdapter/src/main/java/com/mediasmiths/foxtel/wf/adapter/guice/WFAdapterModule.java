@@ -1,9 +1,5 @@
 package com.mediasmiths.foxtel.wf.adapter.guice;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import org.apache.log4j.Logger;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provides;
@@ -15,6 +11,10 @@ import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestService;
 import com.mediasmiths.foxtel.wf.adapter.service.WFAdapterRestServiceImpl;
 import com.mediasmiths.std.guice.serviceregistry.rest.RestResourceRegistry;
 import com.mediasmiths.std.util.jaxb.JAXBSerialiser;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 public class WFAdapterModule extends AbstractModule
 {
@@ -30,6 +30,7 @@ public class WFAdapterModule extends AbstractModule
 		// the marshaler in events service is not named and we have multiple marshalers used for different schemas
 		bind(JAXBSerialiser.class).toProvider(WfeSerialiserProvider.class);
 		bind(TxFtpDelivery.class).asEagerSingleton();
+		bind(WFAdapterRestServiceImpl.class).asEagerSingleton();
 	}
 
 	@Provides
