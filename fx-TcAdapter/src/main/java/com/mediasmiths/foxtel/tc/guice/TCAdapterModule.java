@@ -14,6 +14,7 @@ public class TCAdapterModule extends AbstractModule
 	{
 		bind(TCRestService.class).to(TCRestServiceImpl.class);
 		RestResourceRegistry.register(TCRestService.class);
+		bind(TCRestServiceImpl.class).asEagerSingleton();
 	}
 
 }

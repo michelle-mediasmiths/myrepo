@@ -11,6 +11,7 @@ public class QCAdapterModule extends AbstractModule {
 	protected void configure() {
 		bind(QCRestService.class).to(QCRestServiceImpl.class);
 		RestResourceRegistry.register(QCRestService.class);
+		bind(QCRestServiceImpl.class).asEagerSingleton();
 	}
 
 }

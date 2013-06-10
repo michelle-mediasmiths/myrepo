@@ -11,6 +11,7 @@ public class FSAdapterModule extends AbstractModule {
 	protected void configure() {
 		bind(FSRestService.class).to(FSRestServiceImpl.class);
 		RestResourceRegistry.register(FSRestService.class);
+		bind(FSRestServiceImpl.class).asEagerSingleton();
 	}
 
 }

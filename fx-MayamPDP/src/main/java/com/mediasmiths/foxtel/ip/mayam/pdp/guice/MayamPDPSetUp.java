@@ -27,6 +27,7 @@ public class MayamPDPSetUp extends AbstractModule
 	{
 		bind(MayamPDP.class).to(MayamPDPImpl.class);
 		RestResourceRegistry.register(MayamPDP.class);
+		bind(MayamPDPImpl.class).asEagerSingleton();
 	}
 
 
