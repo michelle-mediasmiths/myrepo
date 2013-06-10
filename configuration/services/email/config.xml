@@ -585,6 +585,30 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>
+	<MailData>
+        <namespace>http://www.foxtel.com.au/ip/content</namespace>
+        <eventname>NonAOMediaImportToArdomeFailure</eventname>
+        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
+            <subject>Media sent to the failed folder(%s)</subject>
+            <body>Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <emailaddresses>
+                <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
+		    	<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
+            </emailaddresses>
+        </MailTemplate>
+    </MailData>
+    <MailData>
+        <namespace>http://www.foxtel.com.au/ip/content</namespace>
+        <eventname>AOMediaImportToArdomeFailure</eventname>
+        <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
+            <subject>Media sent to the failed folder(%s)</subject>
+            <body>AO Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <emailaddresses>
+		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
+                <emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
+            </emailaddresses>
+        </MailTemplate>
+    </MailData>
 <!-- NOT IN EMAIL SPEC DOC
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>

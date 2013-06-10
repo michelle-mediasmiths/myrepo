@@ -226,6 +226,30 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 		}
 
 	}
+
+	/*private void mediaImportToArdomeFailure(MediaPickupNotification pickupNotification, T message,boolean folderIsAO)
+	{
+		if(folderIsAO)
+		{
+			//AO
+			logger.debug("1  AO Placeholder does not exist");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOMediaImportToArdomeFailure", pickupNotification);
+
+			logger.debug("2  AO Placeholder does not exist");
+
+		}
+		else
+		{
+			//NonAO
+			logger.debug("1 Non AO Placeholder does not exist");
+
+			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOMediaImportToArdomeFailure", pickupNotification);
+
+			logger.debug("2 Non AO Placeholder does not exist");
+
+		}
+	}*/
 	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
 	{
 		try
@@ -528,7 +552,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
 			pickupNotification.setTime((new Date()).toString());
 			pickupNotification.setFilelocation(aoQuarrentineFolder + IOUtils.DIR_SEPARATOR + f.getName());
-
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
 		}
 		catch (IOException e)

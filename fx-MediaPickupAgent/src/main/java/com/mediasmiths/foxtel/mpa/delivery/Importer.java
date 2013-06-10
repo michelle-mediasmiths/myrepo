@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mediasmiths.foxtel.agent.WatchFolders;
 import com.mediasmiths.foxtel.agent.processing.MessageProcessor;
+import com.mediasmiths.foxtel.agent.queue.PickupPackage;
 import com.mediasmiths.foxtel.generated.MaterialExchange.MarketingMaterialType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.Material;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
@@ -43,10 +44,14 @@ public class Importer
 	public static final JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events.report");
 
 
+
+
+
 	@Inject
 	public Importer(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 	                @Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
 	                com.mediasmiths.foxtel.ip.event.EventService eventService)
+
 	{
 		this.watchFolders = watchFolders;
 		this.deliveryAttemptsToMake = Integer.parseInt(deliveryAttemptsToMake);
@@ -246,6 +251,8 @@ public class Importer
 	{
 		try
 		{
+			PickupPackage pp =pi.getMaterialEnvelope().getPickupPackage();
+
 			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
 			String failureFolder = MessageProcessor.getFailureFolderForFile(src);
 			File baseDestination = new File(failureFolder,
@@ -278,11 +285,37 @@ public class Importer
 				MediaPickupNotification n = new MediaPickupNotification();
 				n.setFilelocation(dst.getAbsolutePath());
 				n.setTime((new Date()).toString());
-				eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
+
+				//mediaPickupProcessor.
+
+				//MediaPickupProcessor.mediaImportToArdomeFailure("http://www.foxtel.com.au/ip/content", "Quarantine", n)
+				boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
+				if(folderIsAO)
+				{
+					//AO
+					logger.debug("1  AO auto import fail");
+
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOMediaImportToArdomeFailure", n);
+
+					logger.debug("2  AO auto import fail");
+
+				}
+				else
+				{
+					//NonAO
+					logger.debug("1 Non AO auto import fail");
+
+					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOMediaImportToArdomeFailure", n);
+
+					logger.debug("2 Non AO auto import fail");
+
+				}
+
+				//eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
 			}
 			catch (Exception e)
 			{
-				logger.error("Unable to send Quarantine event ", e);
+				logger.error("Unable to send Failure Folder event ", e);
 			}
 		}
 		finally
