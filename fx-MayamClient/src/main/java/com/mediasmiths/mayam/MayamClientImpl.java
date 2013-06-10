@@ -1041,6 +1041,20 @@ public class MayamClientImpl implements MayamClient
 		}
 		return returnMap;
 	}
+	
+	@Override
+	public AttributeMap getTitle(String titleId)
+	{
+		AttributeMap returnMap = null;
+		try{
+			returnMap = titleController.getTitle(titleId);
+		}
+		catch(MayamClientException e)
+		{
+			log.error("Exception thrown by Mayam while retrieving title : " + titleId, e);
+		}
+		return returnMap;
+	}
 
 	@Override
 	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException

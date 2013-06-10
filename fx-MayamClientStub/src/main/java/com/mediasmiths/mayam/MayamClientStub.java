@@ -830,4 +830,10 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+	@Override
+	public AttributeMap getTitle(String titleId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
