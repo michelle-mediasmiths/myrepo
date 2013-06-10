@@ -44,9 +44,6 @@ public class Importer
 	public static final JAXBSerialiser JAXB_SERIALISER = JAXBSerialiser.getInstance("com.mediasmiths.foxtel.ip.common.events.report");
 
 
-
-
-
 	@Inject
 	public Importer(@Named(WATCHFOLDER_LOCATIONS) WatchFolders watchFolders,
 	                @Named(DELIVERY_ATTEMPT_COUNT) String deliveryAttemptsToMake,
@@ -251,7 +248,7 @@ public class Importer
 	{
 		try
 		{
-			PickupPackage pp =pi.getMaterialEnvelope().getPickupPackage();
+			PickupPackage pp = pi.getMaterialEnvelope().getPickupPackage();
 
 			File src = pi.getMaterialEnvelope().getPickupPackage().getPickUp("mxf");
 			String failureFolder = MessageProcessor.getFailureFolderForFile(src);
@@ -290,7 +287,7 @@ public class Importer
 
 				//MediaPickupProcessor.mediaImportToArdomeFailure("http://www.foxtel.com.au/ip/content", "Quarantine", n)
 				boolean folderIsAO = watchFolders.isAo(pp.getRootPath());
-				if(folderIsAO)
+				if (folderIsAO)
 				{
 					//AO
 					logger.debug("1  AO auto import fail");
@@ -298,7 +295,6 @@ public class Importer
 					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "AOMediaImportToArdomeFailure", n);
 
 					logger.debug("2  AO auto import fail");
-
 				}
 				else
 				{
@@ -308,7 +304,6 @@ public class Importer
 					eventService.saveEvent("http://www.foxtel.com.au/ip/content", "NonAOMediaImportToArdomeFailure", n);
 
 					logger.debug("2 Non AO auto import fail");
-
 				}
 
 				//eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", n);
