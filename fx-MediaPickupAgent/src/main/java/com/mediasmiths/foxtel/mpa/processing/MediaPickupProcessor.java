@@ -220,6 +220,8 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 	}
 
 
+
+
 	private void sendPlaceholderAlreadyHasMediaEvent(MediaPickupNotification pickupNotification, T message)
 	{
 		try
@@ -510,7 +512,6 @@ public abstract class MediaPickupProcessor<T> extends MessageProcessor<T>
 			MediaPickupNotification pickupNotification = new MediaPickupNotification();
 			pickupNotification.setTime((new Date()).toString());
 			pickupNotification.setFilelocation(aoQuarrentineFolder + IOUtils.DIR_SEPARATOR + f.getName());
-
 			eventService.saveEvent("http://www.foxtel.com.au/ip/content", "Quarantine", pickupNotification);
 		}
 		catch (IOException e)
