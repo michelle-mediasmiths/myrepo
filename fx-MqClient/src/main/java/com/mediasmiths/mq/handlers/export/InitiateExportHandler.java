@@ -86,6 +86,8 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			throw new IllegalArgumentException("can only export items or packages");
 		}
 
+		log.debug("Initiating export for asset" +materialID);
+
 		Date firstTX = (Date) messageAttributes.getAttribute(Attribute.TX_FIRST); // package first tx date
 		if (firstTX == null)
 		{
@@ -159,81 +161,32 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			taskController.setTaskToErrorWithMessage(taskID, e.getMessage());
 			return;
 		}
-		
-		boolean isDVD = false;
-		if ("dvd".equals(requestedFormat)){
-			isDVD = true;
-		}
-		
-		String localPathToExportDestination = outputPaths.getLocalPathToExportDestination(
-				channel,
-				jobType,
-				outputFileName,
-				isDVD);
-		
-		if (isDVD)
-		{
-			// we need to make the output folder on the corporate storage because rhozet wont
-			File folder = new File(localPathToExportDestination);
-			if (folder.exists())
-			{
-				File[] files = folder.listFiles();
-				if (files != null)
-				{
-					for (File file: files)
-					{
-						if (file.isDirectory())
-						{
-							try {
-								FileUtils.deleteDirectory(file);
-							}
-							catch(IOException e)
-							{
-								log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
-								taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
-								return;
-							}
-						}
-						else {
-							if (!file.delete())
-							{
-								log.error("Error removing existing file at DVD export destination : "+localPathToExportDestination);
-								taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
-								return;
-							}
-						}
-					}
-				}
-			}
-			else {
-				if (!folder.mkdirs())
-				{
-					log.error("Error creating folder at export destination : "+localPathToExportDestination);
-					taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
-					return;
-				}
-			}
-		}
-		else {
-			//Check if file already exists in output location and remove to avoid conflicts
-			boolean fileExists = outputPaths.fileExistsAtExportDestination(
-					channel,
-					jobType,
-					outputFileName,
-					isDVD);
-			
 
-			if (fileExists)
+		boolean isDVD = false;
+		if ("dvd".equals(requestedFormat))
+		{
+			isDVD = true;
+			log.debug("Export requested in dvd format");
+		}
+		else
+		{
+			log.debug("Export not requested in dvd format");
+		}
+
+		try
+		{
+			if (!prepareDestination(outputFileName, channel, jobType, taskID, isDVD))
 			{
-				File outputFile = new File(localPathToExportDestination);
-				if (!outputFile.delete())
-				{
-					log.error("Error removing existing file at export destination : "+localPathToExportDestination);
-					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
-					return;
-				}
+				log.error("Failed to prepare destination");
+				return;
 			}
-			
+		}
+		catch (Exception e)
+		{
+			log.error("Error deleting files at export destination or creating folder for dvd export", e);
+			taskController.setTaskToErrorWithMessage(taskID,
+			                                         "Error delete files at export destination or creating folder for dvd export");
+			return;
 		}
 
 		// invoke export flow
@@ -283,6 +236,109 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		}
 
 	}
+
+
+	/**
+	 * Creates destination folder for dvd exports, if it already exists then it is cleared
+	 * <p/>
+	 * If export is for a single file then if the target already exists it is deleted
+	 *
+	 * @param outputFileName
+	 * @param channel
+	 * @param jobType
+	 * @param taskID
+	 * @param isDVD
+	 *
+	 * @return
+	 */
+	private boolean prepareDestination(final String outputFileName,
+	                                   final String channel,
+	                                   final TranscodeJobType jobType,
+	                                   final Long taskID,
+	                                   final boolean isDVD)
+	{
+		String localPathToExportDestination = outputPaths.getLocalPathToExportDestination(channel,
+		                                                                                  jobType,
+		                                                                                  outputFileName,
+		                                                                                  isDVD);
+		if (isDVD)
+		{
+			// we need to make the output folder on the corporate storage because rhozet wont
+			File folder = new File(localPathToExportDestination);
+			if (folder.exists())
+			{
+				if(folder.isDirectory()){
+
+					try
+					{
+						log.debug(String.format("Destination folder %s exists, cleaning", folder.getAbsolutePath()));
+						FileUtils.cleanDirectory(folder);
+					}
+					catch (IOException e)
+					{
+						log.error("Error removing existing file at DVD export destination : " + localPathToExportDestination);
+						taskController.setTaskToErrorWithMessage(taskID,
+						                                         "Error removing existing file at DVD export destination");
+						return false;
+					}
+				}
+				else
+				{
+					//there is a file where we were expecting a folder
+					if (!FileUtils.deleteQuietly(folder))
+					{
+						log.error("Error removing existing file at export destination : " + localPathToExportDestination);
+						taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
+						return false;
+					}
+
+					if (createFolderForDVDOutput(taskID, localPathToExportDestination, folder))
+					{
+						return true;
+					}
+				}
+			}
+			else
+			{
+				if (createFolderForDVDOutput(taskID, localPathToExportDestination, folder))
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			//Check if file already exists in output location and remove to avoid conflicts
+			boolean fileExists = outputPaths.fileExistsAtExportDestination(channel, jobType, outputFileName, isDVD);
+
+			if (fileExists)
+			{
+				log.info(String.format("Destination file %s already exists, deleting", localPathToExportDestination));
+				File outputFile = new File(localPathToExportDestination);
+
+				if (!FileUtils.deleteQuietly(outputFile))
+				{
+					log.error("Error removing existing file at export destination : " + localPathToExportDestination);
+					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+
+	private boolean createFolderForDVDOutput(final Long taskID, final String localPathToExportDestination, final File folder)
+	{
+		if (!folder.mkdirs())
+		{
+			log.error("Error creating folder at export destination : " + localPathToExportDestination);
+			taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
+			return true;
+		}
+		return false;
+	}
+
 
 	private void initiateWorkflow(
 			String assetTitle,

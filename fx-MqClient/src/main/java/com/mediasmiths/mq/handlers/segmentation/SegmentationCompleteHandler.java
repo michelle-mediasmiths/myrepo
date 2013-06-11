@@ -56,20 +56,11 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 				}
 				else
 				{
-					log.debug("Creating tx delivery task");
+					log.debug("Creating tx delivery task if no other already exists");
 					String userWhoFinishedSegmentationTask = messageAttributes.getAttribute(Attribute.TASK_UPDATED_BY);
 					taskId = taskController.createTXDeliveryTaskForPackage(houseID,
 					                                                       qcRequired.booleanValue(),
 					                                                       userWhoFinishedSegmentationTask);
-				}
-				
-				String username = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);
-				if (username != null)
-				{
-					AttributeMap task = taskController.getTask(taskId);
-					AttributeMap taskUpdate = taskController.updateMapForTask(task);
-					taskUpdate.setAttribute(Attribute.TASK_CREATED_BY, username);
-					tasksClient.taskApi().updateTask(taskUpdate);
 				}
 			}
 		}

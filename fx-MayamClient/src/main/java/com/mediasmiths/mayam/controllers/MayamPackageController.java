@@ -1,44 +1,21 @@
 package com.mediasmiths.mayam.controllers;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.StringReader;
-import java.math.BigInteger;
-import java.util.Date;
-import java.util.List;
-
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.hibernate.cfg.annotations.ListBinder;
-
-import au.com.foxtel.cf.mam.pms.ClassificationEnumType;
 import au.com.foxtel.cf.mam.pms.PackageType;
-import au.com.foxtel.cf.mam.pms.PresentationFormatType;
-
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.FilterCriteria;
+import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
 import com.mayam.wf.attributes.shared.type.SegmentList;
+import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
-import com.mayam.wf.attributes.shared.type.FilterCriteria.SortOrder;
-import com.mayam.wf.attributes.shared.type.SegmentList.SegmentListBuilder;
-import com.mayam.wf.ws.client.FilterResult;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mayam.wf.exception.RemoteException;
+import com.mayam.wf.ws.client.FilterResult;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
-import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation.Package.Segmentation;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType;
 import com.mediasmiths.foxtel.generated.MaterialExchange.SegmentationType.Segment;
@@ -46,7 +23,6 @@ import com.mediasmiths.mayam.DateUtil;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientErrorCode;
 import com.mediasmiths.mayam.MayamClientException;
-import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.PackageNotFoundException;
 import com.mediasmiths.mayam.util.AssetProperties;
@@ -54,6 +30,11 @@ import com.mediasmiths.mayam.util.RevisionUtil;
 import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.types.Framerate;
+import org.apache.log4j.Logger;
+
+import javax.xml.bind.Unmarshaller;
+import java.util.Date;
+import java.util.List;
 
 public class MayamPackageController extends MayamController implements PackageController
 {
@@ -235,9 +216,8 @@ public class MayamPackageController extends MayamController implements PackageCo
 		}
 
 		// create segmentation task
-		long taskID = taskController.createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
-		log.info("Segmentation task created with id :" + taskID);
-	
+		long taskID = taskController.createSegmentationTaskForPackage(presentationID);
+		log.info(String.format("Segmentation task for package %s has  id  %s",presentationID,taskID));
 	}
 
 	/**

@@ -1,10 +1,7 @@
 package com.mediasmiths.mq.listeners;
 
-import org.apache.log4j.Logger;
-
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.Job;
@@ -14,20 +11,17 @@ import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.mq.MqContentType;
 import com.mayam.wf.mq.MqMessage;
 import com.mayam.wf.mq.MqMessage.AttributeMapPair;
-import com.mayam.wf.ws.client.TasksClient;
-import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
+import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
+import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
+import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
-import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
+import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
-import com.mediasmiths.mq.handlers.asset.AccessUpdateHandler;
-import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
-import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.asset.TransferJobHandler;
 import com.mediasmiths.mq.handlers.button.DeleteButton;
 import com.mediasmiths.mq.handlers.button.ExportMarkersButton;
@@ -46,13 +40,14 @@ import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchCancelHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchFinishHandler;
 import com.mediasmiths.mq.handlers.fixstitch.FixAndStitchRevertHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestCompleteHandler;
-import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.IngestJobHandler;
+import com.mediasmiths.mq.handlers.ingest.IngestTaskCompleteHandler;
 import com.mediasmiths.mq.handlers.ingest.PurgeTaskUpdateForUnmatchedHandler;
+import com.mediasmiths.mq.handlers.pendingtx.PendingTxUpdateHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskCreateHandler;
+import com.mediasmiths.mq.handlers.preview.PreviewTaskEscalationHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFailHandler;
 import com.mediasmiths.mq.handlers.preview.PreviewTaskFinishHandler;
-import com.mediasmiths.mq.handlers.preview.PreviewTaskEscalationHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateExtendHandler;
 import com.mediasmiths.mq.handlers.purge.PurgeCandidateUpdateHandler;
 import com.mediasmiths.mq.handlers.qc.InitiateQcHandler;
@@ -62,10 +57,9 @@ import com.mediasmiths.mq.handlers.qc.QcTaskUpdateHandler;
 import com.mediasmiths.mq.handlers.segmentation.SegmentationCompleteHandler;
 import com.mediasmiths.mq.handlers.tx.InitiateTxHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedAssetCreateHandler;
-import com.mediasmiths.mq.handlers.unmatched.UnmatchedJobHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskCreateHandler;
 import com.mediasmiths.mq.handlers.unmatched.UnmatchedTaskUpdateHandler;
-import com.mediasmiths.mq.handlers.pendingtx.PendingTxUpdateHandler;
+import org.apache.log4j.Logger;
 
 @Singleton
 public class IncomingListener extends MqClientListener
@@ -87,8 +81,6 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	private MayamAccessRightsController accessRightsController;
 
-	@Inject
-	PackageUpdateHandler packageUpdateHandler;
 	@Inject
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
@@ -135,8 +127,6 @@ public class IncomingListener extends MqClientListener
 	IngestJobHandler ingestJobHandler;
 	@Inject
 	TransferJobHandler transferJobHandler;
-	@Inject
-	UnmatchedJobHandler unmatchedJobHandler;
 	@Inject
 	QcTaskUpdateHandler qcTaskUpdateHandler;
 	@Inject
@@ -355,7 +345,6 @@ public class IncomingListener extends MqClientListener
 				if (jobType.equals(JobType.INGEST) || jobType.equals(JobType.IMPORT) || jobType.equals(JobType.CONFORM))
 				{
 					passEventToHandler(ingestJobHandler, jobMessage);
-					passEventToHandler(unmatchedJobHandler, jobMessage);
 					if(jobType.equals(JobType.CONFORM))
 					{
 						passEventToHandler(conformJobHandler, jobMessage);

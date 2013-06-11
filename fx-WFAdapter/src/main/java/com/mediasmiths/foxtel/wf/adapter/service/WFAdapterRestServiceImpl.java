@@ -414,7 +414,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 					qcsf.setAssetID(assetID);
 					qcsf.setMaterialID(task.getAttributeAsString(Attribute.HOUSE_ID));
 					qcsf.setTitle(notification.getTitle());
-					events.saveEvent("http://foxtel.com.au/ip/qc", "QcServerFail", qcsf);
+					events.saveEvent(QC_EVENT_NAMESPACE, "QcServerFail", qcsf);
 				}
 			}
 		}
@@ -521,7 +521,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 			else
 			{
-				log.warn("Unknown job typ for export");
+				log.warn("Unknown job type for export");
 			}
 		}
 		else
@@ -691,7 +691,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		AttributeMap packageAttributes = mayamClient.getPackageAttributes(packageID);
 		String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 		tce.setTitle(title);
-		events.saveEvent("http://foxtel.com.au/ip/tc", "TranscodeDeliveryFailed", tce);
+		events.saveEvent(TC_EVENT_NAMESPACE, "TranscodeDeliveryFailed", tce);
 	}
 
 	@Override
@@ -752,7 +752,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			String title = packageAttributes.getAttributeAsString(Attribute.SERIES_TITLE);
 			tce.setTitle(title);
 			tce.withChannelGroup(channelGroups);
-			events.saveEvent("http://foxtel.com.au/ip/tc", "FailedToGenerateXML", tce);
+			events.saveEvent(TC_EVENT_NAMESPACE, "FailedToGenerateXML", tce);
 			
 			log.error(String.format("Error writing companion xml for package %s", packageID), e);
 			throw e;

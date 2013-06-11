@@ -15,19 +15,18 @@ public class MediaPickUpNotificationEmailTemplate extends MailTemplate implement
 		return obj instanceof MediaPickupNotification;
 	}
 
+
 	@Override
 	public MailTemplate customiseTemplate(Object obj, String comment)
 	{
 		MailTemplate t = new MailTemplate();
 
-		MediaPickupNotification m = (MediaPickupNotification)obj;
+		MediaPickupNotification m = (MediaPickupNotification) obj;
 		t.setEmailaddresses(EmailListTransform.buildRecipientsList(getEmailaddresses(), m.getChannelGroup()));
-		
+
 		t.setBody(getBody());
 		t.setSubject(String.format(getSubject(), m.getFilelocation()));
 		t.setBody(String.format(getBody(), m.getFilelocation()));
 		return t;
 	}
-
-
 }

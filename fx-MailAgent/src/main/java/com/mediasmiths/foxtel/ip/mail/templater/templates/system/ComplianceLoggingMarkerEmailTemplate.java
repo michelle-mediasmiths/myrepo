@@ -50,6 +50,6 @@ public class ComplianceLoggingMarkerEmailTemplate  extends MailTemplate implemen
 	 */
 	private String convertEndOfLineForEmail(final String markerDetails)
 	{
-		return markerDetails.replace("(\n)", "<br/>");
+		return markerDetails.replace("\n", "<br/>");
 	}
 }

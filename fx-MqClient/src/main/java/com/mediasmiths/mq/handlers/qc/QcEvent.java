@@ -27,6 +27,7 @@ public class QcEvent
 
 	private final static Logger log = Logger.getLogger(QcEvent.class);
 
+
 	public void sendAutoQcEvent(AttributeMap a)
 	{
 		try
@@ -51,7 +52,7 @@ public class QcEvent
 			{
 				qce.setTaskStatus(state.toString());
 			}
-			
+
 			if (TaskState.WARNING == state)
 			{
 				Date updated = a.getAttribute(Attribute.TASK_UPDATED);
@@ -66,6 +67,14 @@ public class QcEvent
 				}
 			}
 
+			QcStatus assetQcStatus = a.getAttribute(Attribute.QC_STATUS);
+
+			if (assetQcStatus != null)
+			{
+				qce.setQcStatus(assetQcStatus.toString());
+			}
+
+
 			if (TaskState.FINISHED == state || TaskState.FINISHED_FAILED == state)
 			{
 				Date updated = a.getAttribute(Attribute.TASK_UPDATED);
@@ -77,13 +86,6 @@ public class QcEvent
 				else
 				{
 					log.warn("task updated date is null!");
-				}
-
-				QcStatus assetQcStatus = a.getAttribute(Attribute.QC_STATUS);
-
-				if (assetQcStatus != null)
-				{
-					qce.setQcStatus(assetQcStatus.toString());
 				}
 
 				QcStatus ffv = a.getAttribute(Attribute.QC_SUBSTATUS1);
@@ -112,6 +114,11 @@ public class QcEvent
 					{
 						qce.setFailureParameter("Cerify");
 					}
+				}
+
+				if (QcStatus.PASS_MANUAL == assetQcStatus)
+				{
+					qce.setOverriden(Boolean.TRUE);
 				}
 			}
 

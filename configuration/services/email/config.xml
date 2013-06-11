@@ -450,7 +450,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>NonAOContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM: File(%s) missing</subject>
+			<subject>Unmatched Item in MAM: Material ID missing</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
@@ -461,7 +461,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>AOContentWithoutMaterialID</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM: File(%s) missing</subject>
+			<subject>Unmatched Item in MAM: Material ID missing</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -491,21 +491,7 @@
 				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
 			</emailaddresses>
 		</MailTemplate>
-	</MailData>
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>FilePickUpNotification</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.FilePickUpNotificationEmailTemplate">
-			<subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
-			<body>(%s) has failed to has failed to move from WFE drop folder to Ardome import folder</body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
+	</MailData>	
 <!-- DUPLICATE OF SAME EVENT BELOW	
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
@@ -526,7 +512,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>NonAOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  File(%s) ID is missing</subject>
+			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
 			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
@@ -537,7 +523,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>AOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  File(%s) ID is missing</subject>
+			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
 			<body>>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>				
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -589,8 +575,8 @@
         <namespace>http://www.foxtel.com.au/ip/content</namespace>
         <eventname>NonAOMediaImportToArdomeFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-            <subject>Media sent to the failed folder(%s)</subject>
-            <body>Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
+            <body>%s has failed to has failed to move from WFE drop folder to Ardome import folder</body>
             <emailaddresses>
                 <emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
 		    	<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
@@ -601,8 +587,8 @@
         <namespace>http://www.foxtel.com.au/ip/content</namespace>
         <eventname>AOMediaImportToArdomeFailure</eventname>
         <MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-            <subject>Media sent to the failed folder(%s)</subject>
-            <body>AO Media has failed to auto import in to Ardome: it has been sent to the failed folder to %s. </body>
+            <subject>Media has failed to move from WFE drop folder to Ardome import folder</subject>
+            <body>%s has failed to has failed to move from WFE drop folder to Ardome import folder</body>
             <emailaddresses>
 		    	<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
                 <emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>

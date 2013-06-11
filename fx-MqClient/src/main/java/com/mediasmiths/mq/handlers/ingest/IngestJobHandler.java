@@ -7,6 +7,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import com.mayam.wf.exception.RemoteException;
+import com.mediasmiths.mayam.MayamContentTypes;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
@@ -34,7 +37,7 @@ public class IngestJobHandler extends JobHandler
 	
 	@Inject
 	@Named("fxcommon.serialiser")
-	JAXBSerialiser fxcommonSerialiser;
+	private JAXBSerialiser fxcommonSerialiser;
 	
 	@Inject(optional=false)
 	@Named("content.events.namespace")
@@ -136,11 +139,96 @@ public class IngestJobHandler extends JobHandler
 		}
 	}
 
+
 	private void itemHasNoIngestTask(Job jobMessage, String assetId, JobStatus jobStatus)
-			throws MayamClientException{	
-		log.debug("Asset has no ingest task");		
+	{
+		log.debug("Asset has no ingest task");
+
+		Job.JobSubType jobSubType = jobMessage.getJobSubType();
+
+		if (jobStatus.equals(JobStatus.FINISHED))
+		{
+			if (assetId != null)
+			{
+				AttributeMap material;
+				try
+				{
+					log.debug("Fetching asset to check if it is unmatched");
+					material = materialController.getMaterialByAssetId(assetId);
+				}
+				catch (MayamClientException e1)
+				{
+					log.error("error fetching asset " + assetId, e1);
+					return;
+				}
+
+				String contentMaterialType = material.getAttribute(Attribute.CONT_MAT_TYPE);
+
+				boolean isUnmatched = contentMaterialType != null && contentMaterialType.equals(MayamContentTypes.UNMATCHED);
+				boolean isUnmatchedDart = false;
+
+				if (jobSubType.equals(Job.JobSubType.DART))
+				{
+					//logging this purely to see if in the future we need to bother with the isUnmatchedDart
+					//as this is from the original 'UnmatchedJobHandler' whose logic has been moved to this class
+					//we now know there is not an ingest task at this stage, and as dart items are ingested to placeholders this check may be redundant!
+					log.info("Job subtype is dart");
+					isUnmatchedDart = true;
+				}
+
+				//check content type is unmatched
+				if (isUnmatched && (!isUnmatchedDart))
+				{
+					log.debug("Item is unmatched item, job sub type is not dart");
+
+					//attempt to set the source as import or ingest
+					AttributeMap updateMap = taskController.updateMapForAsset(material);
+					updateMap.setAttribute(Attribute.OP_TYPE, jobSubType.toString());
+
+					String currenttitle = material.getAttributeAsString(Attribute.ASSET_TITLE);
+
+					if (StringUtils.isEmpty(currenttitle))
+					{
+						log.debug("Current ASSET_TITLE of unmatched item is empty, populating from SERIES_TITLE");
+						try
+						{
+							String fileName = material.getAttributeAsString(Attribute.SERIES_TITLE);
+							log.debug("SERIES_TITLE : " + fileName);
+							updateMap.setAttribute(Attribute.ASSET_TITLE, fileName);
+						}
+						catch (Exception e)
+						{
+							log.error("error setting asset title on unmatched item", e);
+						}
+					}
+
+					try
+					{
+						log.debug("Updating item to set OP_TYPE and optionally ASSET_TITLE");
+						tasksClient.assetApi().updateAsset(updateMap);
+					}
+					catch (RemoteException e)
+					{
+						log.error("Error setting OP_TYPE on unmatched material", e);
+					}
+
+					// create qc task for material if there hasnt been one before
+					String houseID = material.getAttributeAsString(Attribute.HOUSE_ID);
+					try
+					{
+						log.debug("Attempting to create qcTask for unmatched item");
+						//there is no ingest task for this asset so we create a qc task now that it is ingested
+						taskController.createQCTaskForMaterial(houseID, null, material);
+					}
+					catch (MayamClientException e)
+					{
+						log.error("Error searching for or creating qc task for asset " + assetId, e);
+					}
+				}
+			}
+		}
 	}
-	
+
 
 	private void itemHasIngestTaskJobFinished(Job jobMessage, String assetId, AttributeMap task) throws MayamClientException
 	{

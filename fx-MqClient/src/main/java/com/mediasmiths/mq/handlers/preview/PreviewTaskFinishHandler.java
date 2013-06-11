@@ -169,7 +169,8 @@ public class PreviewTaskFinishHandler extends TaskStateChangeHandler
 			for (SegmentList segmentList : lists)
 			{
 				String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
-				taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+				long taskID = taskController.createSegmentationTaskForPackage(houseID);
+				log.info(String.format("Segmentation task for package %s has  id  %s",houseID,taskID));
 			}
 		}
 	}

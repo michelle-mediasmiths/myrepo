@@ -1,17 +1,15 @@
 package com.mediasmiths.mq.handlers.fixstitch;
 
-import org.apache.log4j.Logger;
-
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
 import com.mayam.wf.attributes.shared.type.AssetType;
 import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.SegmentListList;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamPreviewResults;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mq.handlers.TaskStateChangeHandler;
+import org.apache.log4j.Logger;
 
 public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 {
@@ -44,7 +42,9 @@ public class FixAndStitchFinishHandler  extends TaskStateChangeHandler
 				for (SegmentList segmentList : lists)
 				{
 					String houseID = segmentList.getAttributeMap().getAttribute(Attribute.HOUSE_ID);
-					long taskID = taskController.createTask(houseID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION);
+					// create segmentation task
+					long taskID = taskController.createSegmentationTaskForPackage(houseID);
+					log.info(String.format("Segmentation task for package %s has  id  %s",houseID,taskID));
 				}
 			}
 			
