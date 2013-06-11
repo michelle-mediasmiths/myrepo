@@ -521,7 +521,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 			}
 			else
 			{
-				log.warn("Unknown job typ for export");
+				log.warn("Unknown job type for export");
 			}
 		}
 		else

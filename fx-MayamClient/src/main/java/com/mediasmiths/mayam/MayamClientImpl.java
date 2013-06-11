@@ -927,6 +927,8 @@ public class MayamClientImpl implements MayamClient
 	@Override
 	public void exportFailed(long taskID, String reason) throws MayamClientException
 	{
+		log.info("Export task failed: "+taskID);
+
 		AttributeMap task;
 		try
 		{
