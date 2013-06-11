@@ -27,6 +27,7 @@ public class QcEvent
 
 	private final static Logger log = Logger.getLogger(QcEvent.class);
 
+
 	public void sendAutoQcEvent(AttributeMap a)
 	{
 		try
@@ -51,7 +52,7 @@ public class QcEvent
 			{
 				qce.setTaskStatus(state.toString());
 			}
-			
+
 			if (TaskState.WARNING == state)
 			{
 				Date updated = a.getAttribute(Attribute.TASK_UPDATED);
@@ -113,6 +114,11 @@ public class QcEvent
 					{
 						qce.setFailureParameter("Cerify");
 					}
+				}
+
+				if (QcStatus.PASS_MANUAL == assetQcStatus)
+				{
+					qce.setOverriden(Boolean.TRUE);
 				}
 			}
 
