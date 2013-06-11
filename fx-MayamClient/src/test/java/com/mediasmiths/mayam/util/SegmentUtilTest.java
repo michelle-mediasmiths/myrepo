@@ -1,6 +1,7 @@
 package com.mediasmiths.mayam.util;
 
 import com.mayam.wf.attributes.shared.type.Segment;
+import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.Timecode;
 import com.mayam.wf.attributes.shared.type.Timecode.InvalidTimecodeException;
 import com.mediasmiths.foxtel.generated.MaterialExchange.ProgrammeMaterialType.Presentation;
@@ -11,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class SegmentUtilTest
 {
@@ -143,6 +146,114 @@ public class SegmentUtilTest
 			assertEquals(expected, actual);
 			
 			
+		}
+
+		@Test
+		public void testSegmentNotOverlapping() throws InvalidTimecodeException
+		{
+			Segment one = new Segment();
+			one.setIn(new Timecode("00:15:00:05"));
+			one.setDuration(new Timecode("00:05:00:00"));
+
+			Segment two = new Segment();
+			two.setIn(new Timecode("00:21:00:00"));
+			two.setDuration(new Timecode("00:06:00:00"));
+
+			Segment three = new Segment();
+			three.setIn(new Timecode("00:28:00:00"));
+			three.setDuration(new Timecode("00:03:00:00"));
+
+			Segment four = new Segment();
+			four.setIn(new Timecode("00:32:00:00"));
+			four.setDuration(new Timecode("00:02:00:00"));
+
+			List<Segment> list = new ArrayList<>();
+			list.add(one);
+			list.add(two);
+			list.add(three);
+			list.add(four);
+
+
+			SegmentList segmentList = new SegmentList();
+			segmentList.getEntries().addAll(list);
+
+			//Boolean status = true;
+			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			assertTrue(actual);
+			System.out.println("successfully run through and the result is" + "       " + actual);
+
+		}
+
+		@Test
+		public void testSegmentOverlapping() throws InvalidTimecodeException
+		{
+			Segment one = new Segment();
+			one.setIn(new Timecode("00:16:00:00"));
+			one.setDuration(new Timecode("00:00:00:06"));
+
+			Segment two = new Segment();
+			two.setIn(new Timecode("00:16:00:04"));
+			two.setDuration(new Timecode("00:00:00:09"));
+
+			Segment three = new Segment();
+			three.setIn(new Timecode("00:26:00:00"));
+			three.setDuration(new Timecode("00:03:00:00"));
+
+			Segment four = new Segment();
+			four.setIn(new Timecode("00:34:00:00"));
+			four.setDuration(new Timecode("00:02:00:00"));
+
+			List<Segment> list = new ArrayList<>();
+			list.add(one);
+			list.add(two);
+			list.add(three);
+			list.add(four);
+
+
+			SegmentList segmentList = new SegmentList();
+			segmentList.getEntries().addAll(list);
+
+			//Boolean status = true;
+			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			assertFalse(actual);
+			System.out.println("  failed for overlapping and the result is  ********" + actual);
+
+		}
+
+		@Test
+		public void testSegmentOverlappingByFrame() throws InvalidTimecodeException
+		{
+			Segment one = new Segment();
+			one.setIn(new Timecode("00:16:00:05"));
+			one.setDuration(new Timecode("00:00:00:01"));
+
+			Segment two = new Segment();
+			two.setIn(new Timecode("00:16:00:07"));
+			two.setDuration(new Timecode("00:00:00:09"));
+
+			Segment three = new Segment();
+			three.setIn(new Timecode("00:27:00:00"));
+			three.setDuration(new Timecode("00:03:00:00"));
+
+			Segment four = new Segment();
+			four.setIn(new Timecode("00:34:00:00"));
+			four.setDuration(new Timecode("00:02:00:00"));
+
+			List<Segment> list = new ArrayList<>();
+			list.add(one);
+			list.add(two);
+			list.add(three);
+			list.add(four);
+
+
+			SegmentList segmentList = new SegmentList();
+			segmentList.getEntries().addAll(list);
+
+			//Boolean status = true;
+			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			assertTrue(actual);
+			System.out.println("  Passes for one frame difference  and the result is ********" + actual);
+
 		}
 		
 		@Test

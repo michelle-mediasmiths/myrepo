@@ -13,17 +13,15 @@ import com.mayam.wf.attributes.shared.type.SegmentList;
 import com.mayam.wf.attributes.shared.type.TaskState;
 import com.mayam.wf.exception.RemoteException;
 import com.mayam.wf.ws.client.FilterResult;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.foxtel.extendedpublishing.OutputPaths;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamMaterialController;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
 import com.mediasmiths.mayam.controllers.MayamTitleController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.util.AssetProperties;
+import com.mediasmiths.mayam.util.SegmentUtil;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
-
 import org.apache.log4j.Logger;
 
 import javax.ws.rs.Consumes;
@@ -67,6 +65,10 @@ public class MayamPDPImpl implements MayamPDP
 	@Inject
 	@Named("message.segment.mismatch.notoverride")
 	String messageSegmentMismatchRefuseOverride;
+
+	@Inject
+	@Named("message.segment.ovelapping")
+	String messageSegmentOvelapping;
 
 	@Inject
 	@Named("message.segment.no.requested.segments")
@@ -209,6 +211,8 @@ public class MayamPDPImpl implements MayamPDP
 			List<String> warnings = new ArrayList<String>();
 			List<String> errors = new ArrayList<String>();
 
+			SegmentUtil su = new SegmentUtil();
+
 			logger.debug("Segment Mismatch Check.");
 
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
@@ -242,25 +246,35 @@ public class MayamPDPImpl implements MayamPDP
 			{
 				int segmentsSize = segmentList.getEntries().size();
 
-				logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
-
-				if (numberOfSegmentsRequested != segmentsSize)
+				if (su.segmentationOverlap(segmentList) == true)
 				{
-					logger.info("Number of Segments Mismatch discovered. For Presentation ID : " + presentationID);
+					logger.debug("Segmentation ovelap checking");
 
-					boolean permission = userCanPerformOperation(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, attributeMap);
+					logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
 
-					if (permission)
+					if (numberOfSegmentsRequested != segmentsSize)
 					{
-						logger.debug("User can override a segment mismatch for " + presentationID);
+						logger.info("Number of Segments Mismatch discovered. For Presentation ID : " + presentationID);
 
-						warnings.add(messageSegmentMismatchOverride);
+						boolean permission = userCanPerformOperation(PrivilegedOperations.SEGMENT_MISMATCH_OVERRIDE, attributeMap);
+
+						if (permission)
+						{
+							logger.debug("User can override a segment mismatch for " + presentationID);
+
+							warnings.add(messageSegmentMismatchOverride);
+						}
+						else
+						{
+							logger.debug("User cannot override a segment mismatch for " + presentationID);
+							errors.add(messageSegmentMismatchRefuseOverride);
+						}
 					}
-					else
-					{
-						logger.debug("User cannot override a segment mismatch for " + presentationID);
-						errors.add(messageSegmentMismatchRefuseOverride);
-					}
+				}
+				else
+				{
+					logger.debug("Segmentation overlap found");
+					errors.add(messageSegmentOvelapping);
 				}
 			}
 			else
