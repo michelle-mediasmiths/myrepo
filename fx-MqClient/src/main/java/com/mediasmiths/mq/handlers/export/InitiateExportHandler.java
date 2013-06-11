@@ -260,12 +260,12 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			{
 				try
 				{
-					log.debug(String.format("Destination folder %s exists, cleaning" + folder.getAbsolutePath()));
+					log.debug(String.format("Destination folder %s exists, cleaning",folder.getAbsolutePath()));
 					FileUtils.cleanDirectory(folder);
 				}
 				catch (IOException e)
 				{
-					log.error("Error removing existing file at DVD export destination : " + localPathToExportDestination);
+					log.error("Error removing existing file at DVD export destination : "  +localPathToExportDestination);
 					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
 					return false;
 				}

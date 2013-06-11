@@ -267,7 +267,7 @@ public class CerifyClient
 	 */
 	public ControlMediaSetResponse deleteMediaset(String mediasetName) throws MediaSetDoesntExistFault, BaseCeritalkFault, RemoteException
 	{
-		log.info(String.format("Start delete mediaset %s" + mediasetName));
+		log.info(String.format("Start delete mediaset %s",mediasetName));
 		ControlMediaSet request = new ControlMediaSet();
 		request.setMediaSetName(mediasetName);
 		request.setAction(MediaSetActionType.delete);

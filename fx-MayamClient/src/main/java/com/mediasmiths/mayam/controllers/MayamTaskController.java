@@ -73,7 +73,7 @@ public class MayamTaskController extends MayamController
 	
 	public void createIngestTaskForMaterial(String materialID) throws MayamClientException
 	{
-		log.info(String.format("Creating ingest task for asset " + materialID));
+		log.info(String.format("Creating ingest task for asset %s ", materialID));
 
 		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(
 				MayamTaskListType.INGEST,
@@ -102,7 +102,7 @@ public class MayamTaskController extends MayamController
 			if (openTasksForAsset.isEmpty())
 			{
 				log.debug("no unclosed qc tasks for asset");
-				log.info(String.format("Creating qc task for asset " + materialID));
+				log.info(String.format("Creating qc task for asset  %s",materialID));
 
 				AttributeMap initialAttributes = client.createAttributeMap();
 				initialAttributes.setAttribute(Attribute.QC_SUBSTATUS1, QcStatus.TBD);
@@ -130,7 +130,7 @@ public class MayamTaskController extends MayamController
 	public long createComplianceLoggingTaskForMaterial(String materialID,String parentAssetID) throws MayamClientException
 	{
 		
-		log.info(String.format("Creating compliance logging task for asset "+materialID+" whose source material has asset id "+parentAssetID));
+		log.info(String.format("Creating compliance logging task for asset %s whose source material has asset id %s ",materialID,parentAssetID));
 		
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.ASSET_PEER_ID, parentAssetID);
@@ -140,7 +140,7 @@ public class MayamTaskController extends MayamController
 	
 	public long createPreviewTaskForMaterial(String materialID) throws MayamClientException{
 		
-		log.info(String.format("Creating preview task for asset "+materialID));		
+		log.info(String.format("Creating preview task for asset %s ",materialID));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.QC_PREVIEW_RESULT, MayamPreviewResults.PREVIEW_NOT_DONE);
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.PREVIEW,initialAttributes);
@@ -148,14 +148,14 @@ public class MayamTaskController extends MayamController
 	
 	public long createFixStictchTaskForMaterial(String materialID) throws MayamClientException{
 		
-		log.info(String.format("Creating preview task for asset "+materialID));		
+		log.info(String.format("Creating preview task for asset %s",materialID));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		return createTask(materialID, MayamAssetType.MATERIAL, MayamTaskListType.FIX_STITCH_EDIT,initialAttributes);
 	}
 	
 	public void createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType assetType, String siteID, int numberOfDays) throws MayamClientException{
 		
-		log.info(String.format("Creating purge candidate task for asset "+siteID));
+		log.info(String.format("Creating purge candidate task for asset %s ",siteID));
 		
 		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.PURGE_CANDIDATE_LIST, Attribute.HOUSE_ID, siteID);
 		
@@ -193,7 +193,7 @@ public class MayamTaskController extends MayamController
 	public void createUnmatchedTaskForMaterial(String houseID) throws MayamClientException
 	{
 		// Add to Unmatched worklist
-		log.info(String.format("Creating unmatched task for asset " + houseID));
+		log.info(String.format("Creating unmatched task for asset %s",houseID));
 
 		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(
 				MayamTaskListType.UNMATCHED_MEDIA,
@@ -233,7 +233,7 @@ public class MayamTaskController extends MayamController
 	}
 	
 	public long createErrorTXDeliveryTaskForPackage(String presentationID, String errorMessage) throws MayamClientException{
-		log.info(String.format("Creating tx delivery task task for package "+presentationID));
+		log.info(String.format("Creating tx delivery task task for package %s",presentationID));
 		AttributeMap initialAttributes = client.createAttributeMap();
 		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.FALSE);
 		initialAttributes.setAttribute(Attribute.ERROR_MSG, errorMessage);	
