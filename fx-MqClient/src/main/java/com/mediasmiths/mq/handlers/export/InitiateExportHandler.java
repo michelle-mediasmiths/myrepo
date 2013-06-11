@@ -173,9 +173,19 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			log.debug("Export not requested in dvd format");
 		}
 
-		if (!prepareDestination(outputFileName, channel, jobType, taskID, isDVD))
+		try
 		{
-			log.error("Failed to prepare destination");
+			if (!prepareDestination(outputFileName, channel, jobType, taskID, isDVD))
+			{
+				log.error("Failed to prepare destination");
+				return;
+			}
+		}
+		catch (Exception e)
+		{
+			log.error("Error deleting files at export destination or creating folder for dvd export", e);
+			taskController.setTaskToErrorWithMessage(taskID,
+			                                         "Error delete files at export destination or creating folder for dvd export");
 			return;
 		}
 
@@ -251,31 +261,47 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 		                                                                                  jobType,
 		                                                                                  outputFileName,
 		                                                                                  isDVD);
-
 		if (isDVD)
 		{
 			// we need to make the output folder on the corporate storage because rhozet wont
 			File folder = new File(localPathToExportDestination);
 			if (folder.exists())
 			{
-				try
-				{
-					log.debug(String.format("Destination folder %s exists, cleaning",folder.getAbsolutePath()));
-					FileUtils.cleanDirectory(folder);
+				if(folder.isDirectory()){
+
+					try
+					{
+						log.debug(String.format("Destination folder %s exists, cleaning", folder.getAbsolutePath()));
+						FileUtils.cleanDirectory(folder);
+					}
+					catch (IOException e)
+					{
+						log.error("Error removing existing file at DVD export destination : " + localPathToExportDestination);
+						taskController.setTaskToErrorWithMessage(taskID,
+						                                         "Error removing existing file at DVD export destination");
+						return false;
+					}
 				}
-				catch (IOException e)
+				else
 				{
-					log.error("Error removing existing file at DVD export destination : "  +localPathToExportDestination);
-					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at DVD export destination");
-					return false;
+					//there is a file where we were expecting a folder
+					if (!FileUtils.deleteQuietly(folder))
+					{
+						log.error("Error removing existing file at export destination : " + localPathToExportDestination);
+						taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
+						return false;
+					}
+
+					if (createFolderForDVDOutput(taskID, localPathToExportDestination, folder))
+					{
+						return true;
+					}
 				}
 			}
 			else
 			{
-				if (!folder.mkdirs())
+				if (createFolderForDVDOutput(taskID, localPathToExportDestination, folder))
 				{
-					log.error("Error creating folder at export destination : " + localPathToExportDestination);
-					taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
 					return true;
 				}
 			}
@@ -289,7 +315,8 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			{
 				log.info(String.format("Destination file %s already exists, deleting", localPathToExportDestination));
 				File outputFile = new File(localPathToExportDestination);
-				if (!outputFile.delete())
+
+				if (!FileUtils.deleteQuietly(outputFile))
 				{
 					log.error("Error removing existing file at export destination : " + localPathToExportDestination);
 					taskController.setTaskToErrorWithMessage(taskID, "Error removing existing file at export destination");
@@ -298,6 +325,18 @@ public class InitiateExportHandler extends TaskStateChangeHandler
 			}
 		}
 		return true;
+	}
+
+
+	private boolean createFolderForDVDOutput(final Long taskID, final String localPathToExportDestination, final File folder)
+	{
+		if (!folder.mkdirs())
+		{
+			log.error("Error creating folder at export destination : " + localPathToExportDestination);
+			taskController.setTaskToErrorWithMessage(taskID, "Error creating folder at export destination");
+			return true;
+		}
+		return false;
 	}
 
 
