@@ -46,7 +46,9 @@ public class AcquisitionRpt extends ReportUtils
 		int noFile = 0;
 		int noTape = 0;
 		int total = 0;
-
+		double perFile = 0;
+		double perTape = 0;
+		
 		for (Acquisition acq :titles)
 		{
 			if (acq.isFileDelivery()) {
@@ -60,9 +62,12 @@ public class AcquisitionRpt extends ReportUtils
 
 		log.debug("noFile: " + noFile + " noTape: " + noTape);
 
-		double perFile = (noFile / total) * 100;
-		double perTape = (noTape / total) * 100;
-
+		if (total <= 0)
+		{
+			perFile = (noFile / total) * 100;
+			perTape = (noTape / total) * 100;
+		}
+		
 		log.debug("perFile: " + perFile + " perTape: " + perTape);
 
 		titles.add(addStats("No By File", Integer.toString(noFile)));
@@ -96,7 +101,7 @@ public class AcquisitionRpt extends ReportUtils
 			if (order.getTitle() != null)
 			{
 				log.debug("title: " + order.getTitle().getTitle());
-				log.debug("channels: " + order.getTitle().getChannels());
+				log.debug("channels: " + order.getTitle().getChannels().toString());
 				acq.setChannels(order.getTitle().getChannels().toString());
 				break;
 			}
