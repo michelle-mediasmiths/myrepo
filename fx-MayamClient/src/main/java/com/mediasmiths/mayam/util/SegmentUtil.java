@@ -199,12 +199,20 @@ public class SegmentUtil
 						Timecode aEnd = Timecode.getInstance(aEom, Framerate.HZ_25);
 						Timecode bEnd = Timecode.getInstance(bEom, Framerate.HZ_25);
 
+
+						log.debug(String.format("Segment A  Start: %s End :%s", aSom, aEom));
+						log.debug(String.format("Segment B  Start: %s End :%s", bSom, bEom));
+
 						if (aEnd.lt(bStart))
 						{
+							log.debug("No overlap");
+
 							status = true;
 						}
 						else
 						{
+							log.debug("Overlap");
+
 							status = false;
 							break outerloop;
 						}
