@@ -253,11 +253,48 @@ public class MayamTaskController extends MayamController
 		                       requireAutoQC,
 		                       createdBy));
 
-		AttributeMap initialAttributes = client.createAttributeMap();
-		initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
-		initialAttributes.setAttribute(Attribute.QC_REQUIRED, requireAutoQC);
-		initialAttributes.setAttribute(Attribute.TASK_CREATED_BY, createdBy);
-		return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
+
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.TX_DELIVERY,
+		                                                            Attribute.HOUSE_ID,
+		                                                            presentationID);
+		if (openTasksForAsset.isEmpty())
+		{
+			log.debug("no unclosed tx delivery tasks for asset");
+
+			AttributeMap initialAttributes = client.createAttributeMap();
+			initialAttributes.setAttribute(Attribute.TX_READY, Boolean.TRUE);
+			initialAttributes.setAttribute(Attribute.QC_REQUIRED, requireAutoQC);
+			initialAttributes.setAttribute(Attribute.TASK_CREATED_BY, createdBy);
+			return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.TX_DELIVERY, initialAttributes);
+		}
+		else
+		{
+			log.info("There is already at least one unclosed tx delivery task for asset, will not create another");
+			return openTasksForAsset.get(0).getAttribute(Attribute.TASK_ID);
+		}
+	}
+
+	public long createSegmentationTaskForPackage(String presentationID) throws MayamClientException
+	{
+
+		log.info(String.format("Creating segmentation task for package %s ", presentationID));
+
+		List<AttributeMap> openTasksForAsset = getOpenTasksForAsset(MayamTaskListType.SEGMENTATION,
+		                                                            Attribute.HOUSE_ID,
+		                                                            presentationID);
+		if (openTasksForAsset.isEmpty())
+		{
+			log.debug("no unclosed segmentation tasks for asset");
+
+			AttributeMap initialAttributes = client.createAttributeMap();
+			initialAttributes.setAttribute(Attribute.TASK_STATE, TaskState.OPEN);
+			return createTask(presentationID, MayamAssetType.PACKAGE, MayamTaskListType.SEGMENTATION, initialAttributes);
+		}
+		else
+		{
+			log.info("There is already at least one unclosed segmentation task for asset, will not create another");
+			return openTasksForAsset.get(0).getAttribute(Attribute.TASK_ID);
+		}
 	}
 
 	
@@ -835,7 +872,6 @@ public class MayamTaskController extends MayamController
 	/**
 	 * Returns all tasks of the specified type that are not in end states
 	 * @param taskList
-	 * @param assetType
 	 * @param idAttribute
 	 * @param id
 	 * @return

@@ -19,7 +19,6 @@ import com.mediasmiths.mq.handlers.asset.DartRecordingTitleAssociationHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialProtectHandler;
 import com.mediasmiths.mq.handlers.asset.MaterialUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.MediaMoveHandler;
-import com.mediasmiths.mq.handlers.asset.PackageUpdateHandler;
 import com.mediasmiths.mq.handlers.asset.TaskCreateHandler;
 import com.mediasmiths.mq.handlers.asset.TemporaryContentHandler;
 import com.mediasmiths.mq.handlers.asset.TitleUpdateHandler;
@@ -82,8 +81,6 @@ public class IncomingListener extends MqClientListener
 	@Inject
 	private MayamAccessRightsController accessRightsController;
 
-	@Inject
-	PackageUpdateHandler packageUpdateHandler;
 	@Inject
 	TemporaryContentHandler temporaryContentHandler;
 	@Inject
