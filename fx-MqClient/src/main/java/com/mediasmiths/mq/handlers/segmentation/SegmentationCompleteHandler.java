@@ -62,15 +62,6 @@ public class SegmentationCompleteHandler extends TaskStateChangeHandler
 					                                                       qcRequired.booleanValue(),
 					                                                       userWhoFinishedSegmentationTask);
 				}
-				
-				String username = messageAttributes.getAttributeAsString(Attribute.TASK_UPDATED_BY);
-				if (username != null)
-				{
-					AttributeMap task = taskController.getTask(taskId);
-					AttributeMap taskUpdate = taskController.updateMapForTask(task);
-					taskUpdate.setAttribute(Attribute.TASK_CREATED_BY, username);
-					tasksClient.taskApi().updateTask(taskUpdate);
-				}
 			}
 		}
 		catch (Exception e)
