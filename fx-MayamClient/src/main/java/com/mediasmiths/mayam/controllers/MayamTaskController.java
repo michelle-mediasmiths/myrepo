@@ -22,7 +22,7 @@ import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.accessrights.MayamAccessRightsController;
 import com.mediasmiths.mayam.util.AssetProperties;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
-
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.util.Calendar;
@@ -418,22 +418,35 @@ public class MayamTaskController extends MayamController
 		{
 			AssetAccess accessRights = initialAttributes.getAttribute(Attribute.ASSET_ACCESS);
 			
-			if(accessRights==null){
+			if(accessRights==null)
+			{
 				accessRights = new AssetAccess();				
 			}
-			
-			AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
 
-			entry.setEntityType(AssetAccess.EntityType.GROUP);
+			final String[] groups;
+
 			if (isAOItem)
-				entry.setEntity(aoGroup);
+			{
+				groups = StringUtils.split(aoGroup, ',');
+
+			}
 			else
-				entry.setEntity(nonAOGroup);
+			{
+				groups = StringUtils.split(nonAOGroup, ',');
 
-			entry.setRead(true);
-			entry.setWrite(true);
+			}
 
-			accessRights.getStandard().add(entry);
+			for(String group : groups)
+			{
+				AssetAccess.ControlList.Entry entry = new AssetAccess.ControlList.Entry();
+				entry.setEntityType(AssetAccess.EntityType.GROUP);
+
+				entry.setEntity(group);
+				entry.setRead(true);
+				entry.setWrite(true);
+
+				accessRights.getStandard().add(entry);
+			}
 			initialAttributes.setAttribute(Attribute.ASSET_ACCESS, accessRights);
 		}
 		catch (Exception e)
