@@ -62,7 +62,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		log.debug("noFile: " + noFile + " noTape: " + noTape);
 
-		if (total <= 0)
+		if (total > 0)
 		{
 			perFile = (noFile / total) * 100;
 			perTape = (noTape / total) * 100;
@@ -103,13 +103,15 @@ public class AcquisitionRpt extends ReportUtils
 				log.debug("title: " + order.getTitle().getTitle());
 				log.debug("channels: " + order.getTitle().getChannels().toString());
 				acq.setChannels(order.getTitle().getChannels().toString());
-				break;
 			}
 
-			long filesize = Long.valueOf(acq.getFilesize()).longValue();
-			log.debug("filesize long: " + filesize);
-			acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
-
+			if (acq.getFilesize() != null)
+			{
+				long filesize = Long.valueOf(acq.getFilesize()).longValue();
+				log.debug("filesize long: " + filesize);
+				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
+			}
+			
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
