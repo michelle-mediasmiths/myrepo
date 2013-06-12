@@ -836,4 +836,18 @@ public class MayamClientStub implements MayamClient
 		return null;
 	}
 
+
+	@Override
+	public List<AttributeMap> getSuspectPurgePendingList() throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void cancelSuspectPurgeCandidates() throws MayamClientException
+	{
+		// TODO Auto-generated method stub
+	}
 }

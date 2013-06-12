@@ -281,7 +281,7 @@ public class SegmentUtilTest
 			one.setDuration(new Timecode("00:00:00:01"));
 
 			Segment two = new Segment();
-			two.setIn(new Timecode("00:16:00:07"));
+			two.setIn(new Timecode("00:16:00:06"));
 			two.setDuration(new Timecode("00:00:00:09"));
 
 			Segment three = new Segment();

@@ -1362,7 +1362,7 @@ public class MayamMaterialController extends MayamController
 			}
 			catch (MayamClientException e)
 			{
-				log.error("error cancelling open tasks for assset", e);
+				log.error("error cancelling open tasks for asset", e);
 			}
 
 			// create ingest task

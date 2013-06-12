@@ -953,6 +953,46 @@ public class MayamClientImpl implements MayamClient
 	}
 
 	@Override
+	public List<AttributeMap> getSuspectPurgePendingList() throws MayamClientException
+	{
+		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
+		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
+		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.REMOVED);
+		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.FINISHED);
+		criteria.getFilterAlternatives().addAsExclusion(Attribute.ASSET_PARENT_ID, null); //exclude items that dont have a parent
+
+		FilterResult result;
+		try
+		{
+			result = client.taskApi().getTasks(criteria, 10000, 0);
+			return result.getMatches();
+		}
+		catch (RemoteException e1)
+		{
+			log.error("error searching for purge candidates",e1);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e1);
+		}
+	}
+
+
+	@Override
+	public void cancelSuspectPurgeCandidates() throws MayamClientException
+	{
+		log.info("Cancelling suspect purge candidates");
+		final List<AttributeMap> suspectPurgePendingList = getSuspectPurgePendingList();
+
+		for (AttributeMap task : suspectPurgePendingList)
+		{
+			log.info(String.format("Task ID %s Asset Title %s Asset ID %s",
+			                       task.getAttributeAsString(Attribute.TASK_ID),
+			                       task.getAttributeAsString(Attribute.ASSET_TITLE),
+			                       task.getAttributeAsString(Attribute.ASSET_ID)));
+			tasksController.cancelTask(task);
+		}
+	}
+
+
+	@Override
 	public List<AttributeMap> getAllPurgeCandidatesPendingDeletion() throws MayamClientException
 	{
 		final FilterCriteria criteria = client.taskApi().createFilterCriteria();
@@ -973,6 +1013,7 @@ public class MayamClientImpl implements MayamClient
 		}
 	}
 
+
 	@Override
 	public boolean deletePurgeCandidates() throws MayamClientException
 	{
@@ -982,15 +1023,15 @@ public class MayamClientImpl implements MayamClient
 		
 		boolean allsuccess = true;
 
-		for (AttributeMap asset : allPurgeCandidatesPendingDeletion)
+		for (AttributeMap task : allPurgeCandidatesPendingDeletion)
 		{
 			try
 			{
-				AssetType assetType = asset.getAttribute(Attribute.ASSET_TYPE);
-				String houseID = asset.getAttributeAsString(Attribute.HOUSE_ID);
+				AssetType assetType = task.getAttribute(Attribute.ASSET_TYPE);
+				String houseID = task.getAttributeAsString(Attribute.HOUSE_ID);
 
 				if(houseID==null){
-					log.info(String.format("house id null for asset %s", asset.getAttribute(Attribute.ASSET_ID)));
+					log.info(String.format("house id null for asset %s", task.getAttribute(Attribute.ASSET_ID)));
 				}
 				else
 				if (assetType.equals(MayamAssetType.TITLE.getAssetType()))
@@ -1005,7 +1046,7 @@ public class MayamClientImpl implements MayamClient
 					if (deleteMaterial == MayamClientErrorCode.MATERIAL_FIND_FAILED)
 					{
 						log.info("failed to find material for deletion, it may have already been deleted, closing purge candidate task");
-						AttributeMap updateMap = tasksController.updateMapForTask(asset);
+						AttributeMap updateMap = tasksController.updateMapForTask(task);
 						updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
 						tasksController.saveTask(updateMap);
 					}
@@ -1057,6 +1098,7 @@ public class MayamClientImpl implements MayamClient
 		}
 		return returnMap;
 	}
+
 
 	@Override
 	public void setNaturalBreaks(String materialID, String naturalBreaks) throws MayamClientException

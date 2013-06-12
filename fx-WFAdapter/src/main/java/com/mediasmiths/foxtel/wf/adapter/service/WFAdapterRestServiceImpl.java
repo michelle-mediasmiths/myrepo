@@ -837,24 +837,46 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	public String getPurgePendingList() throws MayamClientException
 	{
 		List<AttributeMap> purgeTasks = mayamClient.getAllPurgeCandidatesPendingDeletion();
+		return getPurgeCandidateTasksAsString(purgeTasks);
 
+	}
+
+
+	@Override
+	public String getSuspectPurgePendingList() throws MayamClientException
+	{
+		return getPurgeCandidateTasksAsString(mayamClient.getSuspectPurgePendingList());
+	}
+
+
+	@Override
+	public void deleteSuspectPurgePendingList() throws MayamClientException
+	{
+		mayamClient.cancelSuspectPurgeCandidates();
+	}
+
+
+	private String getPurgeCandidateTasksAsString(final List<AttributeMap> purgeTasks)
+	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tASSET_TITLE\tDATE\n");
+		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tCONTENT_TYPE\tASSET_TITLE\tDATE\tSTATE\n");
 
 		for (AttributeMap attributeMap : purgeTasks)
 		{
 			sb.append(String.format(
-					"%s\t%s\t%s\t%s\t%s\n",
+					"%s\t%s\t%s\t%s\t%s\t%s\t%s\n",
 					attributeMap.getAttributeAsString(Attribute.TASK_ID),
 					attributeMap.getAttributeAsString(Attribute.ASSET_ID),
 					attributeMap.getAttributeAsString(Attribute.ASSET_TYPE),
+					attributeMap.getAttributeAsString(Attribute.CONT_MAT_TYPE),
 					attributeMap.getAttributeAsString(Attribute.ASSET_TITLE),
+					attributeMap.getAttributeAsString(Attribute.TASK_STATE),
 					attributeMap.getAttributeAsString(Attribute.OP_DATE)));
 		}
 
 		return sb.toString();
-
 	}
+
 
 	@Override
 	public boolean performPendingPerges() throws MayamClientException
@@ -862,14 +884,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 		return mayamClient.deletePurgeCandidates();
 	}
 
-	// //// -------------------- Eventing
-
-	// temporary serialiser until moved within event service.
-
-
 	// TC Events
-
-
 	protected void saveTCEvent(String name,
 	                           TCNotification notificationReceived,
 	                           boolean success,
