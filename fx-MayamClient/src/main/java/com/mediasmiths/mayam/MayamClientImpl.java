@@ -1056,7 +1056,11 @@ public class MayamClientImpl implements MayamClient
 				}
 				else if (assetType.equals(MayamAssetType.MATERIAL.getAssetType()))
 				{
-					log.debug("delete item " + houseID);
+					log.debug(String.format("Deleting purge candidate item id %s (%s) - %s ",
+					                        houseID,
+					                        task.getAttributeAsString(Attribute.ASSET_ID),
+					                        task.getAttributeAsString(Attribute.ASSET_TITLE)));
+
 					MayamClientErrorCode deleteMaterial = materialController.deleteMaterial(houseID,0);
 					if (deleteMaterial == MayamClientErrorCode.MATERIAL_FIND_FAILED)
 					{
