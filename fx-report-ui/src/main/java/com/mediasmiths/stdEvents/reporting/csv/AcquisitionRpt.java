@@ -105,10 +105,13 @@ public class AcquisitionRpt extends ReportUtils
 				acq.setChannels(order.getTitle().getChannels().toString());
 			}
 
-			long filesize = Long.valueOf(acq.getFilesize()).longValue();
-			log.debug("filesize long: " + filesize);
-			acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
-
+			if (acq.getFilesize() != null)
+			{
+				long filesize = Long.valueOf(acq.getFilesize()).longValue();
+				log.debug("filesize long: " + filesize);
+				acq.setFilesize(FileUtils.byteCountToDisplaySize(filesize));
+			}
+			
 			log.debug("file: " + acq.isFileDelivery() + " tape: " + acq.isTapeDelivery());
 			if (acq.isFileDelivery())
 			{
