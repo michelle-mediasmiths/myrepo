@@ -62,7 +62,7 @@ public class AcquisitionRpt extends ReportUtils
 
 		log.debug("noFile: " + noFile + " noTape: " + noTape);
 
-		if (total <= 0)
+		if (total > 0)
 		{
 			perFile = (noFile / total) * 100;
 			perTape = (noTape / total) * 100;
