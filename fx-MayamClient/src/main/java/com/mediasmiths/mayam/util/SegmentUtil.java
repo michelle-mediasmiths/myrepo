@@ -167,14 +167,22 @@ public class SegmentUtil
 		return total.toSMPTEString();
 		
 	}
+
+
+	/**
+	 * Returns true if none of the segments in the passed segment lists overlap
+	 * @param segmentList
+	 * @return
+	 */
 	public static boolean segmentationOverlap(SegmentList segmentList)
 	{
-		Boolean status = false;
+		Boolean status = true;
 
 		try
 		{
 			if (segmentList != null && segmentList.getEntries() != null )
 			{
+
 				outerloop:
 					for(int i = 0; i<=segmentList.getEntries().size() - 2; i++)
 					{
@@ -218,10 +226,14 @@ public class SegmentUtil
 						}
 					}
 			}
+			else
+			{
+				log.warn("Null or empty segmentlist passed to segmentationOverlap");
+			}
 		}
 		catch(Throwable e)
 		{
-			log.error("Found null pointer exception", e);
+			log.error("Error performing segment overlap check", e);
 		}
 		return status;
 	}
