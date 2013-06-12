@@ -209,9 +209,9 @@ public class ConformJobHandler extends JobHandler
 					log.warn("There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
 					try
 					{
-						taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-						                                  materialID,
-						                                  "There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
+						taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+						                                          materialID,
+						                                          "There was at least one error reasociating segmentlists after a conform completed, did not mark old revisions for deletion");
 					}
 					catch (MayamClientException e)
 					{

@@ -2,29 +2,19 @@ package com.mediasmiths.mq.transferqueue;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.google.inject.name.Named;
 import com.mayam.wf.attributes.shared.Attribute;
 import com.mayam.wf.attributes.shared.AttributeMap;
-import com.mayam.wf.attributes.shared.type.AssetType;
-import com.mayam.wf.attributes.shared.type.FileFormatInfo;
 import com.mayam.wf.attributes.shared.type.TaskState;
-import com.mayam.wf.exception.RemoteException;
-import com.mayam.wf.ws.client.TasksClient;
 import com.mediasmiths.mayam.MayamAssetType;
 import com.mediasmiths.mayam.MayamClientException;
 import com.mediasmiths.mayam.MayamTaskListType;
 import com.mediasmiths.mayam.controllers.MayamTaskController;
-import com.mediasmiths.mayam.guice.MayamClientModule;
 import com.mediasmiths.mayam.veneer.TasksClientVeneer;
 import com.mediasmiths.std.guice.common.shutdown.iface.ShutdownManager;
-import com.mediasmiths.std.guice.common.shutdown.iface.StoppableService;
-import com.mediasmiths.std.threading.Daemon;
-import com.mediasmiths.std.threading.Timeout;
 import org.apache.log4j.Logger;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Keeps track of active transfers, polling until they complete. The transfers are backed by a file queue
@@ -152,32 +142,51 @@ public class UnmatchedTransferManager extends MoveMediaEssenceTransferManager
 
 	public void closePurgeCandidateTaskForAsset(String assetID)
 	{
-		AttributeMap task;
+		List<AttributeMap> tasks;
 		try
 		{
-			task = taskController.getOnlyTaskForAssetByAssetID(MayamTaskListType.PURGE_CANDIDATE_LIST, assetID);
+			log.info("closing purge candidate tasks for asset "+assetID);
+			tasks=taskController.getOpenTasksForAsset(MayamTaskListType.PURGE_CANDIDATE_LIST,Attribute.ASSET_ID,assetID);
 
-			if (task == null)
+			if (tasks == null || tasks.size()==00)
 			{
 				log.warn("no purge candidate task found for assetID " + assetID);
 				return;
 			}
 
-			TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
-
-			if (MayamTaskController.END_STATES.contains(currentState))
+			for (AttributeMap task : tasks)
 			{
-				log.warn("Purge Candidate task for asset is already in a closed state  " + currentState);
-				return;
-			}
 
-			AttributeMap updateMap = taskController.updateMapForTask(task);
-			updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
-			taskController.saveTask(updateMap);
+				TaskState currentState = task.getAttribute(Attribute.TASK_STATE);
+
+				if (MayamTaskController.END_STATES.contains(currentState))
+				{
+					log.warn("Purge Candidate task for asset is already in a closed state  " + currentState);
+					return;
+				}
+				taskController.cancelTask(task);
+			}
 		}
 		catch (MayamClientException e)
 		{
 			log.error("Error closing purge candidate task for asset " + assetID, e);
+			try
+			{
+				taskController.createWFEErrorTaskByAssetID(MayamAssetType.MATERIAL,assetID, "Error closing purge candidate task for asset ");
+			}
+			catch (MayamClientException e1)
+			{
+				log.error("Error creating error task for asset!",e1);
+				try
+				{
+					taskController.createWFEErrorTaskNoAsset(assetID, assetID, "Error closing purge candidate task for asset");
+				}
+				catch (MayamClientException e2)
+				{
+					log.error("Error creating error task with no asset");
+					//give up
+				}
+			}
 		}
 	}
 	

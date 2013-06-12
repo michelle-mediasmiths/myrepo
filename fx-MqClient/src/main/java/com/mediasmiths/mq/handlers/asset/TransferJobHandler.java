@@ -132,9 +132,9 @@ public class TransferJobHandler extends JobHandler
 					log.error("error setting tx delivery task to open state", e);
 					try
 					{
-						taskController.createWFEErrorTask(MayamAssetType.PACKAGE,
-						                                  assetAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
-						                                  "error setting task to open state after high res transfer");
+						taskController.createWFEErrorTaskBySiteID(MayamAssetType.PACKAGE,
+						                                          assetAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+						                                          "error setting task to open state after high res transfer");
 					}
 					catch (MayamClientException e1)
 					{

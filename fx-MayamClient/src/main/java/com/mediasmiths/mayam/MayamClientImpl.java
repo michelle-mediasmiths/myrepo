@@ -682,7 +682,7 @@ public class MayamClientImpl implements MayamClient
 	{
 		try
 		{
-			return tasksController.createWFEErrorTask(type, siteId, message);
+			return tasksController.createWFEErrorTaskBySiteID(type, siteId, message);
 		}
 		catch (MayamClientException e)
 		{
@@ -970,8 +970,12 @@ public class MayamClientImpl implements MayamClient
 
 			for (AttributeMap task : matches)
 			{
-				if (task.getAttribute(Attribute.ASSET_PARENT_ID) != null)
+				String contentType = task.getAttribute(Attribute.CONT_MAT_TYPE);
+
+				if (MayamMaterialController.ASSOCIATED_MATERIAL_CONTENT_TYPE.equals(contentType) &&
+				    task.getAttribute(Attribute.ASSET_PARENT_ID) != null)
 				{
+					//associated material that has a parent title
 					ret.add(task);
 				}
 			}

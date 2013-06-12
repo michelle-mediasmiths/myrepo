@@ -127,9 +127,9 @@ public class IngestJobHandler extends JobHandler
 			log.error("error moving ingest task for asset " + assetId + " to open state", e);
 			try
 			{
-				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-				                                  task.getAttributeAsString(Attribute.ASSET_SITE_ID),
-				                                  "error moving ingest task for asset " + assetId + " to open state");
+				taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+				                                          task.getAttributeAsString(Attribute.ASSET_SITE_ID),
+				                                          "error moving ingest task for asset " + assetId + " to open state");
 			}
 			catch (MayamClientException e1)
 			{

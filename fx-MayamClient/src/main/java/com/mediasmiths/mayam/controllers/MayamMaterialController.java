@@ -737,9 +737,9 @@ public class MayamMaterialController extends MayamController
 						// something has gone wrong populating the pending tx package task allow processing to continue so at least the natural breaks field gets populated
 						try
 						{
-							taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-							                                  material.getMaterialID(),
-							                                  "Error processing segmentation information in material exchange message");
+							taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+							                                          material.getMaterialID(),
+							                                          "Error processing segmentation information in material exchange message");
 						}
 						catch (MayamClientException mce)
 						{
@@ -1646,9 +1646,9 @@ public class MayamMaterialController extends MayamController
 			log.error("error determining format for asset", e);
 			try
 			{
-				taskController.createWFEErrorTask(MayamAssetType.MATERIAL,
-				                                  currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
-				                                  "Error determining content format");
+				taskController.createWFEErrorTaskBySiteID(MayamAssetType.MATERIAL,
+				                                          currentAttributes.getAttributeAsString(Attribute.ASSET_SITE_ID),
+				                                          "Error determining content format");
 			}
 			catch (Exception e1)
 			{
