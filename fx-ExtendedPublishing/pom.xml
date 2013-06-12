@@ -51,6 +51,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.mayam.wf</groupId>
+			<artifactId>tasks-ws-client-with-dependencies</artifactId>
+			<version>${worklists.version}</version>
+			<classifier>dependencies</classifier>
+		</dependency>
+
+		<dependency>
 			<groupId>org.jukito</groupId>
 			<artifactId>jukito</artifactId>
 			<version>1.1.2</version>

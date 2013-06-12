@@ -316,23 +316,36 @@ public class OutputPathsTest
 	@Test
 	public void testUserDeliveryLocationCaption()
 	{
-		assertEquals("\\\\server\\captionmountname\\path\\to\\file.ext",
-		             toTest.getUserDeliveryLocation(TranscodeJobType.CAPTION_PROXY, "path/to", "file.ext"));
+		assertEquals("\\\\sydmmsvs01\\Captions\\CaptionFTP\\Unassigned\\export.mpg",
+		             toTest.getUserDeliveryLocation("generic", TranscodeJobType.CAPTION_PROXY, "export", false));
 	}
 
 
 	@Test
-	public void testUserDeliveryLocationPublicity()
+	public void testUserDeliveryLocationPublicitySingleFile()
 	{
-		assertEquals("\\\\server\\publicitymountname\\path\\to\\file.ext",
-		             toTest.getUserDeliveryLocation(TranscodeJobType.PUBLICITY_PROXY, "path/to", "file.ext"));
+		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\Generic\\Publicity\\export.wmv",
+		             toTest.getUserDeliveryLocation("generic", TranscodeJobType.PUBLICITY_PROXY, "export", false));
 	}
 
+	@Test
+	public void testUserDeliveryLocationPublicityDVD()
+	{
+		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\Generic\\Publicity\\export",
+		             toTest.getUserDeliveryLocation("generic", TranscodeJobType.PUBLICITY_PROXY, "export", true));
+	}
 
 	@Test
-	public void testUserDeliveryLocationCompliance()
+	public void testUserDeliveryLocationComplianceSingleFile()
 	{
-		assertEquals("\\\\server\\compliancemountname\\path\\to\\file.ext",
-		             toTest.getUserDeliveryLocation(TranscodeJobType.COMPLIANCE_PROXY, "path/to", "file.ext"));
+		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\Generic\\Compliance\\export.wmv",
+		             toTest.getUserDeliveryLocation("generic", TranscodeJobType.COMPLIANCE_PROXY, "export", false));
+	}
+
+	@Test
+	public void testUserDeliveryLocationComplianceDVD()
+	{
+		assertEquals("\\\\sydfpvs02\\MAM-Output\\Exports\\Generic\\Compliance\\export",
+		             toTest.getUserDeliveryLocation("generic", TranscodeJobType.COMPLIANCE_PROXY, "export", true));
 	}
 }
