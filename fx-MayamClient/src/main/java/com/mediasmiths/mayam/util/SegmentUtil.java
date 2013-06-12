@@ -174,16 +174,21 @@ public class SegmentUtil
 	 * @param segmentList
 	 * @return
 	 */
-	public static boolean segmentationOverlap(SegmentList segmentList)
+	public static boolean noSegmentationOverlap(SegmentList segmentList)
 	{
-		Boolean status = true;
+		Boolean result= true;
 
 		try
 		{
 			if (segmentList != null && segmentList.getEntries() != null )
 			{
-
-				outerloop:
+				if(segmentList.getEntries().size() == 1)
+				{
+					return result;
+				}
+				else
+				{
+					loop:
 					for(int i = 0; i<=segmentList.getEntries().size() - 2; i++)
 					{
 						int j = i + 1;
@@ -215,27 +220,30 @@ public class SegmentUtil
 						{
 							log.debug("No overlap");
 
-							status = true;
+							result = true;
 						}
 						else
 						{
 							log.debug("Overlap");
 
-							status = false;
-							break outerloop;
+							result = false;
+							break loop;
 						}
 					}
+				}
 			}
 			else
 			{
 				log.warn("Null or empty segmentlist passed to segmentationOverlap");
 			}
+
+
 		}
 		catch(Throwable e)
 		{
 			log.error("Error performing segment overlap check", e);
 		}
-		return status;
+		return result;
 	}
 
 

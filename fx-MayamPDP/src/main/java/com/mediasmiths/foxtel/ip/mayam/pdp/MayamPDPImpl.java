@@ -211,8 +211,6 @@ public class MayamPDPImpl implements MayamPDP
 			List<String> warnings = new ArrayList<String>();
 			List<String> errors = new ArrayList<String>();
 
-			SegmentUtil su = new SegmentUtil();
-
 			logger.debug("Segment Mismatch Check.");
 
 			final AttributeMap attributeMap = mapper.deserialize(attributeMapStr);
@@ -246,9 +244,11 @@ public class MayamPDPImpl implements MayamPDP
 			{
 				int segmentsSize = segmentList.getEntries().size();
 
-				if (su.segmentationOverlap(segmentList) == true)
+				logger.debug("Segmentation ovelap checking");
+
+				if (SegmentUtil.noSegmentationOverlap(segmentList) == true)
 				{
-					logger.debug("Segmentation ovelap checking");
+					logger.debug("No segmentation overlaps found");
 
 					logger.debug("Mayam PDP - Segment Mismatch Check - Number of Segments: " + segmentsSize + ", Number Requested: " + numberOfSegmentsRequested);
 

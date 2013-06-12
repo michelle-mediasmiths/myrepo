@@ -178,9 +178,8 @@ public class SegmentUtilTest
 			segmentList.getEntries().addAll(list);
 
 			//Boolean status = true;
-			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 			assertTrue(actual);
-			System.out.println("successfully run through and the result is" + "       " + actual);
 
 		}
 
@@ -214,9 +213,8 @@ public class SegmentUtilTest
 			segmentList.getEntries().addAll(list);
 
 			//Boolean status = true;
-			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 			assertFalse(actual);
-			System.out.println("  failed for overlapping and the result is  ********" + actual);
 
 		}
 
@@ -232,7 +230,7 @@ public class SegmentUtilTest
 
 		SegmentList segmentList = new SegmentList();
 		segmentList.getEntries().add(one);
-		Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 		assertTrue(actual);
 	}
 
@@ -251,7 +249,7 @@ public class SegmentUtilTest
 		SegmentList segmentList = new SegmentList();
 		segmentList.getEntries().add(one);
 		segmentList.getEntries().add(two);
-		Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 		assertTrue(actual);
 	}
 
@@ -269,7 +267,7 @@ public class SegmentUtilTest
 		SegmentList segmentList = new SegmentList();
 		segmentList.getEntries().add(one);
 		segmentList.getEntries().add(two);
-		Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+		Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 		assertFalse(actual);
 	}
 
@@ -303,9 +301,8 @@ public class SegmentUtilTest
 			segmentList.getEntries().addAll(list);
 
 			//Boolean status = true;
-			Boolean actual = SegmentUtil.segmentationOverlap(segmentList);
+			Boolean actual = SegmentUtil.noSegmentationOverlap(segmentList);
 			assertTrue(actual);
-			System.out.println("  Passes for one frame difference  and the result is ********" + actual);
 
 		}
 
