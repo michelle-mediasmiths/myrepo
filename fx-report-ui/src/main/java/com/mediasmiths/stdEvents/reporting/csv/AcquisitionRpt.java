@@ -103,7 +103,6 @@ public class AcquisitionRpt extends ReportUtils
 				log.debug("title: " + order.getTitle().getTitle());
 				log.debug("channels: " + order.getTitle().getChannels().toString());
 				acq.setChannels(order.getTitle().getChannels().toString());
-				break;
 			}
 
 			long filesize = Long.valueOf(acq.getFilesize()).longValue();
