@@ -952,6 +952,7 @@ public class MayamClientImpl implements MayamClient
 		tasksController.createOrUpdatePurgeCandidateTaskForAsset(MayamAssetType.MATERIAL, materialID, daysUntilPurge);
 	}
 
+
 	@Override
 	public List<AttributeMap> getSuspectPurgePendingList() throws MayamClientException
 	{
@@ -959,18 +960,28 @@ public class MayamClientImpl implements MayamClient
 		criteria.getFilterEqualities().setAttribute(Attribute.TASK_LIST_ID, MayamTaskListType.PURGE_CANDIDATE_LIST.getText());
 		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.REMOVED);
 		criteria.getFilterAlternatives().addAsExclusion(Attribute.TASK_STATE, TaskState.FINISHED);
-		criteria.getFilterAlternatives().addAsExclusion(Attribute.ASSET_PARENT_ID, null); //exclude items that dont have a parent
 
 		FilterResult result;
 		try
 		{
 			result = client.taskApi().getTasks(criteria, 10000, 0);
-			return result.getMatches();
+			final List<AttributeMap> matches = result.getMatches();
+			final ArrayList<AttributeMap> ret = new ArrayList<>();
+
+			for (AttributeMap task : matches)
+			{
+				if (task.getAttribute(Attribute.ASSET_PARENT_ID) != null)
+				{
+					ret.add(task);
+				}
+			}
+
+			return ret;
 		}
 		catch (RemoteException e1)
 		{
-			log.error("error searching for purge candidates",e1);
-			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED,e1);
+			log.error("error searching for purge candidates", e1);
+			throw new MayamClientException(MayamClientErrorCode.TASK_SEARCH_FAILED, e1);
 		}
 	}
 

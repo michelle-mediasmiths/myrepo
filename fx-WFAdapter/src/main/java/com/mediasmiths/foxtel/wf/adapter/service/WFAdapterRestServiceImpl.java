@@ -859,7 +859,7 @@ public class WFAdapterRestServiceImpl implements WFAdapterRestService
 	private String getPurgeCandidateTasksAsString(final List<AttributeMap> purgeTasks)
 	{
 		StringBuilder sb = new StringBuilder();
-		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tCONTENT_TYPE\tASSET_TITLE\tDATE\tSTATE\n");
+		sb.append("TASK_ID\tASSET_ID\tASSET_TYPE\tCONTENT_TYPE\tASSET_TITLE\tSTATE\tDATE\n");
 
 		for (AttributeMap attributeMap : purgeTasks)
 		{
