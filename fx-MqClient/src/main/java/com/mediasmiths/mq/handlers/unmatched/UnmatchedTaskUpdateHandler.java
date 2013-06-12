@@ -97,8 +97,8 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 					return;
 				}
 
-				String targetAsset = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
-				boolean peerIsComplianceItem = targetAsset != null && targetAsset.length() != 0;
+				String complianceSource = peerAttributes.getAttributeAsString(Attribute.SOURCE_HOUSE_ID);
+				boolean peerIsComplianceItem = complianceSource != null && complianceSource.length() != 0;
 				boolean peerIsPlaceholder = AssetProperties.isMaterialPlaceholder(peerAttributes);
 				boolean unmatchedItemIsAssociatedContent = AssetProperties.isMaterialAssociated(currentAttributes);
 
@@ -117,20 +117,22 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 
 				if (unmatchedItemIsAssociatedContent)
 				{
+					//associate content can be associated with the target items subprogramme\title - the media does not need moved to the target placeholder
+
 					// Content matched as associated media should not be added as a revision of the item.
 					// It should be attached as a new associated item to the subprogram
 					// If possible, the title of this media should be set to the filename,
 					// so that a user can easily distinguish what is the programme asset and what is associated media by looking at its title within the item hierarchy.
-					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
-					log.info("Match Peer: " + currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to "
-							+ targetAsset);
 
-					AttributeMap associatedMaterial = materialController.getMaterialAttributes(houseID);
-
-					// MAM-196 Jonas states we need to use the target's ASSET_PARENT_ID and make the association with that.
 
 					// this is the matching material - need to fetch its attributes to use its parent/parent house id
 					String matchId = currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID);
+
+
+					log.info("Match found for Associated asset, attempting to attach new associated item to subprogram");
+					log.info("Match Peer: " + currentAttributes.getAttributeAsString(Attribute.ASSET_PEER_ID) + " to " + matchId);
+
+					AttributeMap associatedMaterial = materialController.getMaterialAttributes(houseID);
 
 					if (matchId == null)
 					{
@@ -151,46 +153,37 @@ public class UnmatchedTaskUpdateHandler extends TaskUpdateHandler
 						taskFailure = true;
 						log.debug("Peer map is null: unable to deduce parent. Peer:" + matchId);
 						currentAttributes.setAttribute(Attribute.TASK_STATE, TaskState.ERROR);
-						currentAttributes.setAttribute(Attribute.ERROR_MSG, "Cannot match asset as unable to find peer asset "
-								+ matchId + " to link to " + targetAsset);
+						currentAttributes.setAttribute(Attribute.ERROR_MSG,
+						                               "Cannot match asset as unable to find peer asset " +
+						                               matchId +
+						                               " to link to " +
+						                               complianceSource);
 						taskController.saveTask(currentAttributes);
-						throw new Exception("unable to find peer asset " + matchId + " to link to " + targetAsset);
+						throw new Exception("unable to find peer asset " + matchId);
 					}
 					else
 					{
-						log.debug("Associate via parent: " + materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID)
-								+ " parentHouseId: " + materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+						log.debug("Associate via parent: " +
+						          materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID) +
+						          " parentHouseId: " +
+						          materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 					}
 
-					// Terry - Update the attribute with the correct parent
-					associatedMaterial.setAttribute(
-							Attribute.ASSET_PARENT_ID,
-							materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID));
-					associatedMaterial.setAttribute(
-							Attribute.PARENT_HOUSE_ID,
-							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
-					associatedMaterial.setAttribute(
-							Attribute.AUX_VAL,
-							materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+					// Update the attribute with the correct parent
+					associatedMaterial.setAttribute(Attribute.ASSET_PARENT_ID,
+					                                materialMatch.getAttributeAsString(Attribute.ASSET_PARENT_ID));
+					associatedMaterial.setAttribute(Attribute.PARENT_HOUSE_ID,
+					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
+					associatedMaterial.setAttribute(Attribute.AUX_VAL,
+					                                materialMatch.getAttributeAsString(Attribute.PARENT_HOUSE_ID));
 
+					log.debug("Closing purge candidate task for item");
+					transferManager.closePurgeCandidateTaskForAsset((String) currentAttributes.getAttribute(Attribute.ASSET_ID));
+					log.debug("Updating item to associate with target title");
 					tasksClient.assetApi().updateAsset(associatedMaterial);
-
-					String format = materialController.getFormat(associatedMaterial);
-					log.debug(String.format("Format returned was %s; now closing task", format));
 
 					// close unmatched task
 					transferManager.closeTask(currentAttributes);
-
-//					log.debug(String.format("PeerId returned %s, now setting format.", matchId));
-//
-//					// set the format (hd/sd, don't have a way of detecting 3d)
-//					setFormat(matchId, format);
-//
-//					if (!taskFailure)
-//					{
-//						removeUnmatchedAssetFromTaskLists(houseID);
-//						log.info("Unmatched task removed for asset : " + houseID);
-//					}
 				}
 				else
 				{

@@ -3,6 +3,7 @@ package com.mediasmiths.foxtel.wf.adapter.service;
 import java.io.IOException;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -247,7 +248,27 @@ public interface WFAdapterRestService
 	@Path("/purge/list")
 	@Produces("text/plain")
 	public String getPurgePendingList() throws MayamClientException;
-	
+
+	/**
+	 * Lists items pending purge that perhaps should not be
+	 * @return
+	 * @throws MayamClientException
+	 */
+	@GET
+	@Path("/purge/suspectList")
+	@Produces("text/plain")
+	public String getSuspectPurgePendingList() throws MayamClientException;
+
+	/**
+	 * Lists items pending purge that perhaps should not be
+	 * @return
+	 * @throws MayamClientException
+	 */
+	@DELETE
+	@Path("/purge/suspectList")
+	@Produces("text/plain")
+	public void deleteSuspectPurgePendingList() throws MayamClientException;
+
 	/**
 	 * Performs pending purges
 	 * @return

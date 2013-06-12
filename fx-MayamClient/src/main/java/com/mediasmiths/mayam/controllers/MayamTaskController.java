@@ -1114,5 +1114,20 @@ public class MayamTaskController extends MayamController
 			log.error("Error closing ingest task for asset " + assetID, e);
 		}
 	}
-	
+
+
+	public void cancelTask(final AttributeMap task) throws MayamClientException
+	{
+		AttributeMap updateMap = updateMapForTask(task);
+		updateMap.setAttribute(Attribute.TASK_STATE, TaskState.REMOVED);
+		log.debug("cancelling/removing task " + task.getAttributeAsString(Attribute.TASK_ID));
+		try
+		{
+			client.taskApi().updateTask(updateMap);
+		}
+		catch (RemoteException e)
+		{
+			throw new MayamClientException(MayamClientErrorCode.TASK_UPDATE_FAILED, e);
+		}
+	}
 }
