@@ -244,7 +244,7 @@ public class MayamPDPImpl implements MayamPDP
 			{
 				int segmentsSize = segmentList.getEntries().size();
 
-				logger.debug("Segmentation ovelap checking");
+				logger.debug("Segmentation overlap checking");
 
 				if (SegmentUtil.noSegmentationOverlap(segmentList) == true)
 				{
