@@ -2,7 +2,7 @@ package com.mediasmiths.foxtel.ip.common.events;
 
 public class EventNames
 {
-	public static final String ARDOME_IMPORT_FAILURE_NON_AO = "ArdomeImportFailure";
+	public static final String ARDOME_IMPORT_FAILURE_NON_AO = "ArdomeImportFailureNonAO";
 	public static final String ARDOME_IMPORT_FAILURE_AO = "ArdomeImportFailureAO";
 	public static final String COMPLIANCE_LOGGING_MARKER = "ComplianceLoggingMarker";
 	public static final String CREATION_COMPLETE = "CreationComplete";

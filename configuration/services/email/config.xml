@@ -492,27 +492,11 @@
 			</emailaddresses>
 		</MailTemplate>
 	</MailData>	
-<!-- DUPLICATE OF SAME EVENT BELOW	
-	<MailData>
-		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>ArdomeImportFailure</eventname>
-		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeImportFailureEmailTemplate">
-			<subject>Ardome import has failed</subject>
-			<body>Item with (%s) and (%s) has failed to successfully auto-import into Ardome</body>
-			<emailaddresses> 
-				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
-				<emailaddress>GS-MAM_FULL_TechAdmin@foxtel.com.au</emailaddress>
-				<emailaddress channelGroup="AO">GS-MAM_AO_TechAdmin@foxtel.com.au</emailaddress>
-			</emailaddresses>
-		</MailTemplate>
-	</MailData>
--->
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>NonAOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
+			<subject>Unmatched Item in MAM: Placeholder cannot be identified</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses> 
 				<emailaddress>GS-MAM_FULL_Ordering@foxtel.com.au</emailaddress>				
@@ -523,7 +507,7 @@
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
 		<eventname>AOPlaceHolderCannotBeIdentified</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.material.MediaPickUpNotificationEmailTemplate">
-			<subject>Unmatched Item in MAM:  Placeholder cannot be identified</subject>
+			<subject>Unmatched Item in MAM: Placeholder cannot be identified</subject>
 			<body>There is a new item on the Unmatched tasklist. Please resolve this matter within 90 days otherwise the item will be purged without further notification.</body>
 			<emailaddresses>				
 				<emailaddress channelGroup="AO">GS-MAM_AO@foxtel.com.au</emailaddress>
@@ -545,7 +529,7 @@
 	</MailData>
 	<MailData>
 		<namespace>http://www.foxtel.com.au/ip/content</namespace>
-		<eventname>ArdomeImportFailure</eventname>
+		<eventname>ArdomeImportFailureNonAO</eventname>
 		<MailTemplate class="com.mediasmiths.foxtel.ip.mail.templater.templates.content.ArdomeImportFailureEmailTemplate">
 			<subject>Ardome import has failed.</subject>
 			<body>Item with Filename(%s) and JobId(%s) has failed to successfully auto-import into Ardome.</body>
